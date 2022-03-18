@@ -33,7 +33,7 @@ class RemoveUserValidationRulesPlugin
      * @param callable $proceed
      * @param DataObject $validator
      * @return DataObject
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundAddPasswordRules(
         UserValidationRules $subject,
@@ -55,7 +55,7 @@ class RemoveUserValidationRulesPlugin
      * @param DataObject $validator
      * @param string $passwordConfirmation
      * @return DataObject
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundAddPasswordConfirmationRule(
         UserValidationRules $subject,

@@ -27,6 +27,8 @@ class RemovePasswordFieldsPlugin
     }
 
     /**
+     * Remove Password field when AdminAdobeIMS module is enabled
+     *
      * @param Fieldset $subject
      * @param AbstractElement $result
      * @param string $elementId
@@ -35,7 +37,7 @@ class RemovePasswordFieldsPlugin
      * @param bool $after
      * @param bool $isAdvanced
      * @return AbstractElement
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterAddField(
         Fieldset $subject,
@@ -45,14 +47,12 @@ class RemovePasswordFieldsPlugin
         $config,
         $after = false,
         $isAdvanced = false
-    ): AbstractElement
-    {
+    ): AbstractElement {
         if ($this->imsConfig->enabled() !== true) {
             return $result;
         }
 
-        if (
-            $subject->getId() === 'base_fieldset'
+        if ($subject->getId() === 'base_fieldset'
             && (
                 $elementId === 'password'
                 || $elementId === 'confirmation'

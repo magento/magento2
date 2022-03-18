@@ -65,8 +65,10 @@ class ReplaceVerifyIdentityWithImsPlugin
      * @param string $password
      * @return bool
      * @throws AuthenticationException
+     * @throws AuthorizationException
+     * @throws NoSuchEntityException
      */
-    public function aroundVerifyIdentity(User $subject, callable $proceed, $password): bool
+    public function aroundVerifyIdentity(User $subject, callable $proceed, string $password): bool
     {
         if ($this->imsConfig->enabled() !== true) {
             return $proceed($password);
@@ -85,13 +87,16 @@ class ReplaceVerifyIdentityWithImsPlugin
         );
     }
 
-
     /**
      * Get and verify IMS Token for current user
      *
-     * @throws AuthorizationException|NoSuchEntityException
+     * @param User $user
+     * @return bool
+     * @throws AuthenticationException
+     * @throws AuthorizationException
+     * @throws NoSuchEntityException
      */
-    private function verifyImsToken(User $user)
+    private function verifyImsToken(User $user): bool
     {
         $userProfile = $this->userProfileRepository->getByUserId((int) $user->getId());
         if (!$userProfile) {

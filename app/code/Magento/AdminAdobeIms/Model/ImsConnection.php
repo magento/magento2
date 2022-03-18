@@ -31,10 +31,12 @@ class ImsConnection
      * @var ImsConfig
      */
     private ImsConfig $imsConfig;
+
     /**
      * @var Json
      */
     private Json $json;
+
     /**
      * @var GetToken
      */
@@ -114,12 +116,12 @@ class ImsConnection
     private function validateResponse(Curl $curl): void
     {
         if (isset($curl->getHeaders()['location'])) {
-            if (
-                preg_match(
-                    '/error=([a-z_]+)/i',
-                    $curl->getHeaders()['location'],
-                    $error
-                ) && isset($error[0], $error[1])
+            if (preg_match(
+                '/error=([a-z_]+)/i',
+                $curl->getHeaders()['location'],
+                $error
+                )
+                && isset($error[0], $error[1])
             ) {
                 throw new InvalidArgumentException(
                     __('Could not connect to Adobe IMS Service: %1.', $error[1])
@@ -137,6 +139,8 @@ class ImsConnection
     /**
      * Verify if access_token is valid
      *
+     * @param string $code
+     * @return bool
      * @throws AuthorizationException
      */
     public function verifyToken(string $code): bool
@@ -164,6 +168,8 @@ class ImsConnection
     }
 
     /**
+     * Get token response
+     *
      * @param string $code
      * @return TokenResponseInterface
      * @throws AdobeImsTokenAuthorizationException
@@ -180,6 +186,8 @@ class ImsConnection
     }
 
     /**
+     * Get profile url
+     *
      * @param string $code
      * @return array|bool|float|int|mixed|string|null
      * @throws AuthorizationException

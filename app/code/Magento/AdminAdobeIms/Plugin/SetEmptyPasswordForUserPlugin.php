@@ -29,16 +29,18 @@ class SetEmptyPasswordForUserPlugin
     }
 
     /**
+     * Return current password or at least empty string and not null
+     *
      * This plugin is required, because \Magento\User\Model\User::_getEncodedPassword
      * will throw an error, when password is null
      *
      * @param User $subject
-     * @param $result
+     * @param string|null $result
      * @return string|null
      * @throws Exception
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetPassword(User $subject, $result): ?string
+    public function afterGetPassword(User $subject, ?string $result): ?string
     {
         if ($this->imsConfig->enabled() !== true) {
             return $result;

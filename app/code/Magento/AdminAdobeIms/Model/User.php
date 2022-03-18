@@ -26,6 +26,8 @@ class User extends AdminUser
     }
 
     /**
+     * Load user by email
+     *
      * @param string $email
      * @return array
      */

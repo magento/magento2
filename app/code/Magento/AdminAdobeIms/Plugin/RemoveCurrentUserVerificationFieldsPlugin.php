@@ -29,14 +29,21 @@ class RemoveCurrentUserVerificationFieldsPlugin
     }
 
     /**
+     * Do not add user verification fieldset when AdminAdobeIms module is enabled
+     *
      * @param Form $subject
      * @param callable $proceed
      * @param AbstractElement $element
      * @param bool $after
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @return Form|void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundAddElement(Form $subject, callable $proceed, AbstractElement $element, $after = false)
-    {
+    public function aroundAddElement(
+        Form $subject,
+        callable $proceed,
+        AbstractElement $element,
+        bool $after = false
+    ) {
         if ($this->imsConfig->enabled() !== true) {
             return $proceed($element, $after);
         }

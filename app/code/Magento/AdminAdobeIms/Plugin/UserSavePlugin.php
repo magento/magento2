@@ -29,7 +29,9 @@ class UserSavePlugin
     }
 
     /**
-     * We create a random password for the user, because User  Object needs to have a password
+     * Generate a random password for new user when AdminAdobeIMS Module is enabled
+     *
+     * We create a random password for the user, because User Object needs to have a password
      * and this way we do not need to update the db_schema or add a lot of complex preferences
      *
      * @param User $subject
