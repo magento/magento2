@@ -9,6 +9,8 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Console\Command;
 
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,16 +27,24 @@ class AdminAdobeImsDisableCommand extends Command
     private ImsConfig $imsConfig;
 
     /**
+     * @var TypeListInterface
+     */
+    private TypeListInterface $cacheTypeList;
+
+    /**
      * @param ImsConfig $imsConfig
+     * @param TypeListInterface $cacheTypeList
      */
     public function __construct(
-        ImsConfig $imsConfig
+        ImsConfig $imsConfig,
+        TypeListInterface $cacheTypeList
     ) {
         parent::__construct();
         $this->imsConfig = $imsConfig;
 
         $this->setName('admin:adobe-ims:disable')
             ->setDescription('Disable Adobe IMS Module');
+        $this->cacheTypeList = $cacheTypeList;
     }
 
     /**
@@ -44,6 +54,7 @@ class AdminAdobeImsDisableCommand extends Command
     {
         try {
             $this->imsConfig->disableModule();
+            $this->cacheTypeList->cleanType(Config::TYPE_IDENTIFIER);
             $output->writeln(__('Admin Adobe IMS integration is disabled'));
 
             return Cli::RETURN_SUCCESS;
