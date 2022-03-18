@@ -38,4 +38,19 @@
         <plugin name="captcha_reset_attempt_for_backend_observer_plugin"
                 type="Magento\AdminAdobeIms\Plugin\ResetAttemptForBackendObserverPlugin"/>
     </type>
+
+    <virtualType name="Magento\AdminAdobeIms\Logger\Handler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/admin_adobe_ims.log</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger">
+        <arguments>
+            <argument name="enabled" xsi:type="string">1</argument>
+            <argument name="name" xsi:type="string">admin_adobe_ims_logger</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Magento\AdminAdobeIms\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
