@@ -32,7 +32,7 @@ class SetEmptyPasswordForUserPlugin
      * Return current password or at least empty string and not null
      *
      * This plugin is required, because \Magento\User\Model\User::_getEncodedPassword
-     * will throw an error, when password is null
+     *  will throw an error, when password is null
      *
      * @param User $subject
      * @param string|null $result
