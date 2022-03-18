@@ -29,11 +29,11 @@ class DisablePasswordResetPlugin
      * Since the password reset module treats 0 as disabled we can just return 0 when our module is enabled
      *
      * @param ObserverConfig $subject
-     * @param float $result
-     * @return float
+     * @param int $result
+     * @return int
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetAdminPasswordLifetime(ObserverConfig $subject, float $result): float
+    public function afterGetAdminPasswordLifetime(ObserverConfig $subject, int $result): int
     {
         if ($this->imsConfig->enabled() === false) {
             return $result;
