@@ -127,10 +127,10 @@ Done:
 2. Remove admin user set of passwords, [edit user, create new user]
 3. Check that it is still updating the admin user information,
 4. Disable the password rules when creating a new user
+5. Remove password refresh options from config,
+   1. Validate that events dont happen on login,
 
 Open:
-1. Remove password refresh options from config,
-   1. Validate that crons etc dont happen
-2. Validate that when disabled the fields work again,
-3. Update Wiki
-4. Functional tests
+1. Validate that when disabled the fields work again,
+2. Update Wiki
+3. Functional tests
