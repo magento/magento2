@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+declare (strict_types=1);
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -11,7 +12,6 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Get product type ID by product ID.
- *
  */
 class GetProductTypeById
 {
@@ -35,7 +35,7 @@ class GetProductTypeById
      * @param int $productId
      * @return string
      */
-    public function execute(int $productId)
+    public function execute(int $productId): string
     {
         $connection = $this->resource->getConnection();
         $productTable = $this->resource->getTableName('catalog_product_entity');
