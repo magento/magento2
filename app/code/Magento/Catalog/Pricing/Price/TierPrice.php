@@ -210,13 +210,14 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     protected function filterTierPrices(array $priceList)
     {
         $qtyCache = [];
+        $minPrice = $this->priceInfo->getPrice(FinalPrice::PRICE_CODE)->getValue();
         $allCustomersGroupId = $this->groupManagement->getAllCustomersGroup()->getId();
         foreach ($priceList as $priceKey => &$price) {
-            if ($price['price'] >= $this->priceInfo->getPrice(FinalPrice::PRICE_CODE)->getValue()) {
+            if ($price['price'] >= $minPrice) {
                 unset($priceList[$priceKey]);
                 continue;
             }
-
+            $minPrice = $price['price'];
             if (isset($price['price_qty']) && $price['price_qty'] == 1) {
                 unset($priceList[$priceKey]);
                 continue;
