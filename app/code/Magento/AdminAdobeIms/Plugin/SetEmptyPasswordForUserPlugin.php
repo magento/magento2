@@ -34,11 +34,11 @@ class SetEmptyPasswordForUserPlugin
      *
      * @param User $subject
      * @param $result
-     * @return string
+     * @return string|null
      * @throws Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function afterGetPassword(User $subject, $result): string
+    public function afterGetPassword(User $subject, $result): ?string
     {
         if ($this->imsConfig->enabled() !== true) {
             return $result;
