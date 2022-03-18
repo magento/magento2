@@ -250,6 +250,11 @@ class UpdateItemQtyTest extends TestCase
      */
     public function testExecuteWithNonNumericItemQty(): void
     {
+        $error = [
+            'success' => false,
+            'error_message' => 'Invalid Item Quantity Requested.'
+        ];
+        $jsonResult = json_encode($error);
         $this->requestMock
             ->method('getParam')
             ->withConsecutive(['item_id', null], ['item_qty', null])
@@ -257,29 +262,18 @@ class UpdateItemQtyTest extends TestCase
 
         $this->sidebarMock->expects($this->once())
             ->method('getResponseData')
-            ->with('A non-numeric value found')
-            ->willReturn(
-                [
-                    'success' => false,
-                    'error_message' => 'A non-numeric value found'
-                ]
-            );
+            ->with('Invalid Item Quantity Requested.')
+            ->willReturn($error);
 
         $this->jsonHelperMock->expects($this->once())
             ->method('jsonEncode')
-            ->with(
-                [
-                    'success' => false,
-                    'error_message' => 'A non-numeric value found'
-                ]
-            )
-            ->willReturn('json encoded');
+            ->with($error)
+            ->willReturn($jsonResult);
 
         $this->responseMock->expects($this->once())
             ->method('representJson')
-            ->with('json encoded')
-            ->willReturn('json represented');
+            ->willReturn($jsonResult);
 
-        $this->assertEquals('json represented', $this->updateItemQty->execute());
+        $this->assertEquals($jsonResult, $this->updateItemQty->execute());
     }
 }

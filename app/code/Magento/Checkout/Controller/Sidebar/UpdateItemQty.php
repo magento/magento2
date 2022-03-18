@@ -74,7 +74,7 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
         $itemQty = (int)$this->getRequest()->getParam('item_qty');
 
         if ($itemQty <= 0) {
-            return  $this->jsonResponse(__('A non-numeric value found'));
+            return  $this->jsonResponse(__('Invalid Item Quantity Requested.'));
         }
         $itemQty = $this->quantityProcessor->prepareQuantity($itemQty);
 
@@ -98,6 +98,7 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
      */
     protected function jsonResponse($error = '')
     {
+
         return $this->getResponse()->representJson(
             $this->jsonHelper->jsonEncode($this->sidebar->getResponseData($error))
         );
