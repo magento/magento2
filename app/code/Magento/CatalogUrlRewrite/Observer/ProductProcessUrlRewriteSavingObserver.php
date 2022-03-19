@@ -104,6 +104,7 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
         if ((int)$product->getVisibility() === Visibility::VISIBILITY_NOT_VISIBLE) {
             $isGlobalScope = $product->getStoreId() == Store::DEFAULT_STORE_ID;
             $storesToRemove[] = $isGlobalScope ? $product->getStoreIds() : $product->getStoreId();
+            $storesToRemove = array_filter($storesToRemove);
         }
         if ($storesToRemove) {
             $this->urlPersist->deleteByData(
