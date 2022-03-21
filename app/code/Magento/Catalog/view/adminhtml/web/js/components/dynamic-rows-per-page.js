@@ -52,7 +52,7 @@ define([
                 perPageSize: true
             },
             listens: {
-                'perPageSize': 'onPageSizeChange',
+                'perPageSize': 'onPageSizeChange'
             },
             modules: {
                 sizes: '${ $.sizesConfig.name }'
@@ -102,7 +102,7 @@ define([
          * Handles changes of the page size.
          */
         onPageSizeChange: function () {
-            if (!!this.getRecordCount()) {
+            if (this.getRecordCount()) {
                 if (this.perPageSize !== undefined) {
                     this.pageSize = this.perPageSize;
                     this.reload();
@@ -112,6 +112,6 @@ define([
             } else {
                 this.perPageSize  = this.pageSize;
             }
-        },
+        }
     });
 });
