@@ -10,6 +10,8 @@ namespace Magento\AdminAdobeIms\Authorization;
 
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\Jwt\Claim\PrivateClaim;
 use Magento\Framework\Jwt\Header\PrivateHeaderParameter;
 use Magento\Framework\Jwt\JwkFactory;
@@ -55,6 +57,14 @@ class AdobeImsTokenUserContextTest  extends WebapiAbstract
      * @var JwkFactory
      */
     private $jwkFactory;
+    /**
+     * @var WriterInterface
+     */
+    private $configWriter;
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * @return void
@@ -69,6 +79,32 @@ class AdobeImsTokenUserContextTest  extends WebapiAbstract
         $this->userProfileRepository = $objectManager->get(UserProfileRepositoryInterface::class);
         $this->userModel = $objectManager->get(User::class);
         $this->jwkFactory = $objectManager->get(JwkFactory::class);
+        $this->configWriter = $objectManager->get(WriterInterface::class);
+        $this->scopeConfig = $objectManager->get(ScopeConfigInterface::class);
+    }
+
+    public function testUseAdobeAccessTokenModuleDisabled()
+    {
+        $this->configWriter->save(\Magento\AdminAdobeIms\Service\ImsConfig::XML_PATH_ENABLED, 0);
+        $this->scopeConfig->clean();
+
+        $token = $this->createAccessToken();
+        $noExceptionOccurred = false;
+        try {
+            $this->runWebApiCall($token);
+            $noExceptionOccurred = true;
+        } catch (\SoapFault $e) {
+            $this->assertStringContainsString(
+                'The consumer isn\'t authorized to access %resources.',
+                $e->getMessage(),
+                'SoapFault does not contain expected message.'
+            );
+        } catch (\Exception $exception) {
+            $this->assertUnauthorizedAccessException($exception);
+        }
+        if ($noExceptionOccurred) {
+            $this->fail("Exception was expected to be thrown when admin user does not exist.");
+        }
     }
 
     /**
@@ -78,6 +114,8 @@ class AdobeImsTokenUserContextTest  extends WebapiAbstract
     {
         $adminUserNameFromFixture = 'webapi_user';
         $token = $this->createAccessToken();
+        $this->configWriter->save(\Magento\AdminAdobeIms\Service\ImsConfig::XML_PATH_ENABLED, 1);
+        $this->scopeConfig->clean();
         $this->runWebApiCall($token);
         $this->assertAdobeUserIsSaved($adminUserNameFromFixture);
     }
@@ -86,21 +124,17 @@ class AdobeImsTokenUserContextTest  extends WebapiAbstract
     {
         $token = $this->createAccessToken();
         $noExceptionOccurred = false;
-        $expectedMessage = 'The consumer isn\'t authorized to access %resources.';
         try {
             $this->runWebApiCall($token);
             $noExceptionOccurred = true;
         } catch (\SoapFault $e) {
             $this->assertStringContainsString(
-                $expectedMessage,
+                'The consumer isn\'t authorized to access %resources.',
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'
             );
         } catch (\Exception $exception) {
-            $exceptionData = $this->processRestExceptionResult($exception);
-            $this->assertEquals($expectedMessage, $exceptionData['message']);
-            $this->assertEquals(['resources' => 'Magento_Backend::store'], $exceptionData['parameters']);
-            $this->assertEquals(HTTPExceptionCodes::HTTP_UNAUTHORIZED, $exception->getCode());
+            $this->assertUnauthorizedAccessException($exception);
         }
         if ($noExceptionOccurred) {
             $this->fail("Exception was expected to be thrown when admin user does not exist.");
@@ -214,6 +248,20 @@ class AdobeImsTokenUserContextTest  extends WebapiAbstract
         if ($userProfile->getId()) {
             $this->assertEquals(self::TEST_ADOBE_USER_ID, $userProfile->getData('adobe_user_id'));
         }
+    }
+
+    /**
+     * Make sure that status code and message are correct in case of authentication failure.
+     *
+     * @param \Exception $exception
+     */
+    private function assertUnauthorizedAccessException($exception)
+    {
+        $expectedMessage = 'The consumer isn\'t authorized to access %resources.';
+        $exceptionData = $this->processRestExceptionResult($exception);
+        $this->assertEquals($expectedMessage, $exceptionData['message']);
+        $this->assertEquals(['resources' => 'Magento_Backend::store'], $exceptionData['parameters']);
+        $this->assertEquals(HTTPExceptionCodes::HTTP_UNAUTHORIZED, $exception->getCode());
     }
 
 }
