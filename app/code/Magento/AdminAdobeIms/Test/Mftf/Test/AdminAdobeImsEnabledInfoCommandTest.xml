@@ -18,10 +18,10 @@
             <group value="admin_ims"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminEnableAdobeImsActionGroup" stepKey="enableIms" />
+            <actionGroup ref="AdminEnableAdobeImsActionGroup" stepKey="enableAdminAdobeImsModule" />
         </before>
         <after>
-            <actionGroup ref="AdminDisableAdobeImsActionGroup" stepKey="disableAdminImsAuthModule" />
+            <actionGroup ref="AdminDisableAdobeImsActionGroup" stepKey="disableAdminAdobeImsModule" />
         </after>
 
         <magentoCLI command="admin:adobe-ims:info" stepKey="infoAdminAdobeIms"/>
