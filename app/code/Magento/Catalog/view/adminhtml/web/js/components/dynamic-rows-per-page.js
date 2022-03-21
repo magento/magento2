@@ -109,6 +109,8 @@ define([
                 } else {
                     this.perPageSize = this.pageSize;
                 }
+            } else {
+                this.perPageSize  = this.pageSize;
             }
         },
     });
