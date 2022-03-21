@@ -7,14 +7,18 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontReorderAsGuestTest">
+    <test name="StorefrontReorderAsGuestTest" deprecated="Use StorefrontReorderAsGuestCustomerTest instead">
         <annotations>
             <stories value="Reorder"/>
-            <title value="Make reorder as guest on Frontend"/>
+            <title value="DEPRECATED. Make reorder as guest on Frontend"/>
             <description value="Make reorder as guest on Frontend"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-34465"/>
             <group value="sales"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontReorderAsGuestCustomerTest instead</issueId>
+            </skip> 
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Create simple product.-->

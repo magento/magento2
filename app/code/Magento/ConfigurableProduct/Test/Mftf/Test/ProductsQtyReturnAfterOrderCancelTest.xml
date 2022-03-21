@@ -22,6 +22,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use AdminCheckProductQtyAfterOrderCancellingTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

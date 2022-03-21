@@ -29,8 +29,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     protected $_rootResource;
 
     /**
-     * Rules collection factory
-     *
      * @var \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory
      */
     protected $_rulesCollectionFactory;
@@ -43,8 +41,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     protected $_aclRetriever;
 
     /**
-     * Acl resource provider
-     *
      * @var \Magento\Framework\Acl\AclResource\ProviderInterface
      */
     protected $_aclResourceProvider;
@@ -55,8 +51,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     protected $_integrationData;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      * @since 100.1.0
      */
@@ -205,7 +199,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      */
     public function getTree()
     {
-        return $this->_integrationData->mapResources($this->getAclResources());
+        return $this->_integrationData->mapResources($this->getAclResources(), $this->getSelectedResources());
     }
 
     /**

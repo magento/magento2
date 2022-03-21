@@ -30,10 +30,11 @@
             <argument name="customer" value="$$createCustomer$$"/>
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
         <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="createShipmentForOrder"/>
         <actionGroup ref="FilterShipmentGridByOrderIdActionGroup" stepKey="filterForNewlyCreatedShipment">
-            <argument name="orderId" value="$orderId"/>
+            <argument name="orderId" value="$orderNumber"/>
         </actionGroup>
         <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="selectShipmentFromGrid"/>
         <actionGroup ref="AdminAddTrackingNumberToShipmentActionGroup" stepKey="addTrackingNumber">

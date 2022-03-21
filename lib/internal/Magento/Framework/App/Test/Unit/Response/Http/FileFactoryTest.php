@@ -78,8 +78,8 @@ class FileFactoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateIfContentDoesntHaveRequiredKeys(): void
     {
         $this->expectException('InvalidArgumentException');
@@ -87,8 +87,8 @@ class FileFactoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateIfFileNotExist(): void
     {
         $this->expectException('Exception');
@@ -110,8 +110,8 @@ class FileFactoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateArrayContent(): void
     {
         $file = 'some_file';
@@ -151,8 +151,8 @@ class FileFactoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateArrayContentRm(): void
     {
         $file = 'some_file';
@@ -192,8 +192,8 @@ class FileFactoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateStringContent(): void
     {
         $this->dirMock->expects($this->never())

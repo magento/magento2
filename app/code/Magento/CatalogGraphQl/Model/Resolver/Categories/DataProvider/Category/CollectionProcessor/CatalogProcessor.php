@@ -49,7 +49,27 @@ class CatalogProcessor implements CollectionProcessorInterface
         ContextInterface $context = null
     ): Collection {
         $this->collectionProcessor->process($searchCriteria, $collection);
+        $store = $context->getExtensionAttributes()->getStore();
+        $this->addRootCategoryFilterForStore($collection, (string) $store->getRootCategoryId());
 
         return $collection;
+    }
+
+    /**
+     * Add filtration based on the store root category id
+     *
+     * @param Collection $collection
+     * @param string $rootCategoryId
+     */
+    private function addRootCategoryFilterForStore(Collection $collection, string $rootCategoryId) : void
+    {
+        $select = $collection->getSelect();
+        $connection = $collection->getConnection();
+        $select->where(
+            $connection->quoteInto(
+                'e.path LIKE ? OR e.entity_id=' . $connection->quote($rootCategoryId, 'int'),
+                '%/' . $rootCategoryId . '/%'
+            )
+        );
     }
 }

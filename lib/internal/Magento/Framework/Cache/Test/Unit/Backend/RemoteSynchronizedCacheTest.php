@@ -367,8 +367,8 @@ class RemoteSynchronizedCacheTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveWithMismatchedRemoteData(): void
     {
         $remoteData = '1';

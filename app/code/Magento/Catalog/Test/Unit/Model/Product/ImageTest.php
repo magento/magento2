@@ -17,6 +17,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Image\Factory;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -140,7 +141,7 @@ class ImageTest extends TestCase
 
         $this->mediaDirectory = $this->getMockBuilder(Write::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['create', 'isFile', 'isExist', 'getAbsolutePath'])
+            ->onlyMethods(['create', 'isFile', 'isExist', 'getAbsolutePath', 'isDirectory', 'getDriver', 'delete'])
             ->getMock();
 
         $this->filesystem = $this->createMock(Filesystem::class);
@@ -503,13 +504,54 @@ class ImageTest extends TestCase
     }
 
     /**
+     * @param bool $isRenameSuccessful
+     * @param string $expectedDirectoryToDelete
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @dataProvider clearCacheDataProvider
      */
-    public function testClearCache(): void
-    {
+    public function testClearCache(
+        bool $isRenameSuccessful,
+        string $expectedDirectoryToDelete
+    ): void {
+        $driver = $this->createMock(DriverInterface::class);
+        $this->mediaDirectory->method('getAbsolutePath')
+            ->willReturnCallback(
+                function (string $path) {
+                    return 'path/to/media/' . $path;
+                }
+            );
+        $this->mediaDirectory->expects($this->exactly(2))
+            ->method('isDirectory')
+            ->willReturnOnConsecutiveCalls(false, true);
+        $this->mediaDirectory->expects($this->once())
+            ->method('getDriver')
+            ->willReturn($driver);
+        $driver->expects($this->once())
+            ->method('rename')
+            ->with(
+                'path/to/media/catalog/product/cache',
+                $this->matchesRegularExpression('/^path\/to\/media\/catalog\/product\/\.[0-9A-ZA-z-_]{3}$/')
+            )
+            ->willReturn($isRenameSuccessful);
+        $this->mediaDirectory->expects($this->once())
+            ->method('delete')
+            ->with($this->matchesRegularExpression($expectedDirectoryToDelete));
+
         $this->coreFileHelper->expects($this->once())->method('deleteFolder')->willReturn(true);
         $this->cacheManager->expects($this->once())->method('clean');
         $this->image->clearCache();
+    }
+
+    /**
+     * @return array
+     */
+    public function clearCacheDataProvider(): array
+    {
+        return [
+            [true, '/^catalog\/product\/\.[0-9A-ZA-z-_]{3}$/'],
+            [false, '/^catalog\/product\/cache$/'],
+        ];
     }
 
     /**

@@ -13,7 +13,7 @@
             <description>EXTENDS: FilterOrderGridByIdActionGroup. Clicks on the 1st row of the Admin Orders grid.</description>
         </annotations>
 
-        <click selector="{{AdminDataGridTableSection.firstRow}}" after="clickOrderApplyFilters" stepKey="openOrderViewPage"/>
+        <click selector="{{AdminOrdersGridSection.exactOrderId(orderId)}}" after="clickOrderApplyFilters" stepKey="openOrderViewPage"/>
         <waitForPageLoad after="openOrderViewPage" stepKey="waitForOrderViewPageOpened"/>
     </actionGroup>
 </actionGroups>

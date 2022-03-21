@@ -20,22 +20,16 @@ use PHPUnit\Framework\TestCase;
 class ManagerTest extends TestCase
 {
     /**
-     * Integration service mock
-     *
      * @var IntegrationServiceInterface|MockObject
      */
     protected $integrationServiceMock;
 
     /**
-     * Authorization service mock
-     *
      * @var AuthorizationServiceInterface|MockObject
      */
     protected $integrationAuthorizationServiceMock;
 
     /**
-     * API setup plugin
-     *
      * @var Manager
      */
     protected $apiSetupPlugin;

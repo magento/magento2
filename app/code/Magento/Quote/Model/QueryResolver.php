@@ -33,8 +33,6 @@ class QueryResolver
     private $cacheId;
 
     /**
-     * Cache tags
-     *
      * @var array
      */
     private $cacheTags = [];
@@ -77,6 +75,7 @@ class QueryResolver
 
     /**
      * Initialise data for configuration
+     *
      * @return void
      */
     protected function initData()
@@ -84,6 +83,7 @@ class QueryResolver
         $data = $this->cache->load($this->cacheId);
         if (false === $data) {
             $singleQuery = $this->config->getConnectionName('checkout_setup') == 'default' ? true : false;
+            $data = [];
             $data['checkout'] = $singleQuery;
             $this->cache->save($this->serializer->serialize($data), $this->cacheId, $this->cacheTags);
         } else {

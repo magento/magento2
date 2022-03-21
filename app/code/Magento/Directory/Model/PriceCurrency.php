@@ -164,6 +164,6 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
      */
     public function roundPrice($price, $precision = self::DEFAULT_PRECISION)
     {
-        return round($price, $precision);
+        return round((float) $price, $precision);
     }
 }

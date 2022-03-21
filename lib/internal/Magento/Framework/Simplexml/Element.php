@@ -66,6 +66,7 @@ class Element extends \SimpleXMLElement
      * @return boolean
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
+    #[\ReturnTypeWillChange]
     public function hasChildren()
     {
         if (!$this->children()) {

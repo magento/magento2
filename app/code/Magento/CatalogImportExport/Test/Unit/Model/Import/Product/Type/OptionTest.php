@@ -43,14 +43,14 @@ class OptionTest extends AbstractImportTestCase
     const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
 
     /**
-     * Test store parameters
+     * Parameters for Test stores.
      *
      * @var array
      */
     protected $_testStores = ['admin' => 0, 'new_store_view' => 1];
 
     /**
-     * Tables array to inject into model
+     * An array with tables to inject into model.
      *
      * @var array
      */
@@ -65,28 +65,24 @@ class OptionTest extends AbstractImportTestCase
     ];
 
     /**
-     * Test entity
-     *
      * @var Option
      */
     protected $model;
 
     /**
-     * Test model mock
-     *
      * @var Option
      */
     protected $modelMock;
 
     /**
-     * Parent product entity
+     * Parent product.
      *
      * @var Product
      */
     protected $productEntity;
 
     /**
-     * Array of expected (after import) option titles
+     * Array of expected (after import) option titles.
      *
      * @var array
      */
@@ -98,7 +94,7 @@ class OptionTest extends AbstractImportTestCase
     ];
 
     /**
-     * Array of expected (after import) option prices
+     * Array of expected (after import) option prices.
      *
      * @var array
      */
@@ -108,7 +104,7 @@ class OptionTest extends AbstractImportTestCase
     ];
 
     /**
-     * Array of expected (after import) option type prices
+     * Array of expected (after import) option type prices.
      *
      * @var array
      */
@@ -120,7 +116,7 @@ class OptionTest extends AbstractImportTestCase
     ];
 
     /**
-     * Array of expected (after import) option type titles
+     * Array of expected (after import) option type titles.
      *
      * @var array
      */
@@ -132,14 +128,14 @@ class OptionTest extends AbstractImportTestCase
     ];
 
     /**
-     * Expected updates to catalog_product_entity table after custom options import
+     * Array of expected updates to catalog_product_entity table after custom options import.
      *
      * @var array
      */
     protected $_expectedUpdate = [1 => ['entity_id' => 1, 'has_options' => 1, 'required_options' => 1]];
 
     /**
-     * Array of expected (after import) options
+     * Array of expected (after import) options.
      *
      * @var array
      */
@@ -195,7 +191,7 @@ class OptionTest extends AbstractImportTestCase
     ];
 
     /**
-     * Array of expected (after import) option type values
+     * Array of expected (after import) option type values.
      *
      * @var array
      */
@@ -207,21 +203,21 @@ class OptionTest extends AbstractImportTestCase
     ];
 
     /**
-     * Where which should be generate in case of deleting custom options
+     * "WHERE" which should be generate in case of deleting custom options.
      *
      * @var string
      */
     protected $_whereForOption = 'product_id IN (1)';
 
     /**
-     * Where which should be generate in case of deleting custom option types
+     * "WHERE" which should be generate in case of deleting custom option types.
      *
      * @var string
      */
     protected $_whereForType = 'option_id IN (4, 5)';
 
     /**
-     * Page size for product option collection iterator
+     * A Page Size for product option collection iterator.
      *
      * @var int
      */
@@ -1039,8 +1035,8 @@ class OptionTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testParseRequiredData(): void
     {
         $modelData = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextBunch'])
@@ -1055,7 +1051,8 @@ class OptionTest extends AbstractImportTestCase
                         '_custom_option_type' => 'field',
                         '_custom_option_title' => 'Title'
                     ]
-                ], null
+                ],
+                null
             );
 
         $productModel = $this->getMockBuilder(\stdClass::class)->addMethods(['getProductEntitiesInfo'])
@@ -1095,8 +1092,8 @@ class OptionTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testClearProductsSkuToId(): void
     {
         $this->setPropertyValue($this->modelMock, '_productsSkuToId', 'value');

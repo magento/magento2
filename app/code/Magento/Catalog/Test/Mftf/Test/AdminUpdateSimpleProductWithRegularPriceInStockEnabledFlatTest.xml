@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatCatalogTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -115,7 +116,9 @@
         <!-- Verify customer see updated simple product (from the above step) on the storefront page -->
         <amOnPage url="{{StorefrontProductPage.url(simpleProductEnabledFlat.urlKey)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{simpleProductEnabledFlat.name}}" stepKey="seeSimpleProductNameOnStoreFrontPage"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeSimpleProductNameOnStoreFrontPage">
+            <argument name="value" value="{{simpleProductEnabledFlat.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{simpleProductEnabledFlat.price}}" stepKey="seeSimpleProductPriceOnStoreFrontPage"/>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeSimpleProductSkuOnStoreFrontPage">
             <argument name="productSku" value="{{simpleProductEnabledFlat.sku}}"/>

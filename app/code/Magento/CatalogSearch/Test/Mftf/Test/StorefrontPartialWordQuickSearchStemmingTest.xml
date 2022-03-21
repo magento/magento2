@@ -18,6 +18,7 @@
             <testCaseId value="MC-41570"/>
             <useCaseId value="MC-40981"/>
             <group value="SearchEngineElasticsearch"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Create category-->

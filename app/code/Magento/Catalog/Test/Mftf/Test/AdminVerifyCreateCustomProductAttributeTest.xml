@@ -32,6 +32,10 @@
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteCreatedAttribute">
                 <argument name="productAttributeLabel" value="{{ProductAttributeFrontendLabel.label}}"/>
             </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminPanel"/>
         </after>
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToProductPage">

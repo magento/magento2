@@ -38,8 +38,8 @@ class ConverterTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDataModelToArray(): void
     {
         $childConditionMock = $this->getMockForAbstractClass(ConditionInterface::class);
@@ -82,8 +82,8 @@ class ConverterTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testArrayToDataModel(): void
     {
         $array = [

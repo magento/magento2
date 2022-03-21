@@ -21,6 +21,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use StorefrontSwatchAttributeDisplayedInWidgetCMSTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -37,6 +38,10 @@
             <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
                 <argument name="productAttributeLabel" value="{{visualSwatchAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
             <!--delete root category-->
             <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>

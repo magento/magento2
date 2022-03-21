@@ -107,7 +107,7 @@ class DeadlockRetrierTest extends TestCase
 
         $this->modelMock
             ->method('getId')
-            ->willReturnOnConsecutiveCalls($this->throwException(new DeadlockException()),2);
+            ->willReturnOnConsecutiveCalls($this->throwException(new DeadlockException()), 2);
 
         $this->retrier->execute(
             function () {

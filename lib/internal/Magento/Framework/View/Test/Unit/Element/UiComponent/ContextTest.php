@@ -51,7 +51,9 @@ class ContextTest extends TestCase
             ->getMock();
         $request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['getHeader'])
             ->getMock();
+        $request->method('getHeader')->willReturn('');
         $buttonProviderFactory =
             $this->getMockBuilder(ButtonProviderFactory::class)
                 ->disableOriginalConstructor()

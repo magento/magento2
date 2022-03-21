@@ -16,10 +16,7 @@ use RegexIterator;
  */
 class ComponentRegistrarFixture
 {
-    /**
-     * Annotation name
-     */
-    const ANNOTATION_NAME = 'magentoComponentsDir';
+    public const ANNOTATION_NAME = 'magentoComponentsDir';
 
     /**#@+
      * Properties of components registrar

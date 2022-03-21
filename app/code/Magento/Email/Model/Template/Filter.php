@@ -11,6 +11,7 @@ use Exception;
 use Magento\Cms\Block\Block;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\Css\PreProcessor\Adapter\CssInliner;
 use Magento\Framework\Escaper;
@@ -30,14 +31,13 @@ use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Store\Model\Information as StoreInformation;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\Variable;
 use Magento\Variable\Model\VariableFactory;
 use Psr\Log\LoggerInterface;
-use Magento\Store\Model\Information as StoreInformation;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Core Email Template Filter Model
@@ -61,45 +61,33 @@ class Filter extends Template
     const TRANS_DIRECTIVE_REGEX = '/^\s*([\'"])([^\1]*?)(?<!\\\)\1(\s.*)?$/si';
 
     /**
-     * Use absolute links flag
-     *
      * @var bool
      */
     protected $_useAbsoluteLinks = false;
 
     /**
-     * Whether to allow SID in store directive: NO
-     *
      * @var bool
      * @deprecated SID is not being used as query parameter anymore.
      */
     protected $_useSessionInUrl = false;
 
     /**
-     * Modifier Callbacks
-     *
      * @var array
      * @deprecated 101.0.4 Use the new Directive Processor interfaces
      */
     protected $_modifiers = ['nl2br' => ''];
 
     /**
-     * Whether template being filtered is child of another template
-     *
      * @var bool
      */
     private $isChildTemplate = false;
 
     /**
-     * List of CSS files to inline
-     *
      * @var []
      */
     private $inlineCssFiles = [];
 
     /**
-     * Store id
-     *
      * @var int
      */
     protected $_storeId;
@@ -153,22 +141,16 @@ class Filter extends Template
     protected $_layoutFactory;
 
     /**
-     * Setup callbacks for filters
-     *
      * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * Layout directive params
-     *
      * @var array
      */
     protected $_directiveParams;
 
     /**
-     * App state
-     *
      * @var State
      */
     protected $_appState;
@@ -591,6 +573,13 @@ class Filter extends Template
             unset($params['url']);
         }
 
+        /**
+         * Pass extra parameter to distinguish stores urls for property Magento\Framework\Url $cacheUrl
+         * in multi-store environment
+         */
+        $this->urlModel->setScope($this->_storeManager->getStore());
+        $params['_escape_params'] = $this->_storeManager->getStore()->getCode();
+
         return $this->urlModel->getUrl($path, $params);
     }
 
@@ -854,8 +843,8 @@ class Filter extends Template
             if ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_COUNTRY_CODE) {
                 $configValue = $storeInformationObj->getData('country');
             } elseif ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_REGION_CODE) {
-                $configValue = $storeInformationObj->getData('region')?
-                    $storeInformationObj->getData('region'):
+                $configValue = $storeInformationObj->getData('region') ?
+                    $storeInformationObj->getData('region') :
                     $configValue;
             }
         }

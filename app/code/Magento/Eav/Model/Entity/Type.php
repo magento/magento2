@@ -303,7 +303,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      */
     public function getEntityTablePrefix()
     {
-        $tablePrefix = trim($this->_data['value_table_prefix']);
+        $tablePrefix = isset($this->_data['value_table_prefix']) ? trim($this->_data['value_table_prefix']) : '';
 
         if (empty($tablePrefix)) {
             $tablePrefix = $this->getEntityTable();

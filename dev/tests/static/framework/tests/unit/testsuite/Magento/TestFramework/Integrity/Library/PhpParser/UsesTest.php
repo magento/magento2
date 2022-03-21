@@ -6,6 +6,7 @@
 namespace Magento\TestFramework\Integrity\Library\PhpParser;
 
 /**
+ * Check Uses parsing
  */
 class UsesTest extends \PHPUnit\Framework\TestCase
 {
@@ -43,10 +44,10 @@ class UsesTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function hasUsesDataProvider()
+    public function hasUsesDataProvider(): array
     {
         return [
-            'simple' => [
+            'simple_php7' => [
                 [
                     0 => [T_USE, 'use '],
                     1 => [T_STRING, 'Magento'],
@@ -59,7 +60,7 @@ class UsesTest extends \PHPUnit\Framework\TestCase
                     8 => ';',
                 ],
             ],
-            'several_simple' => [
+            'several_simple_php7' => [
                 [
                     0 => [T_USE, 'use '],
                     1 => [T_STRING, 'Magento'],
@@ -83,7 +84,7 @@ class UsesTest extends \PHPUnit\Framework\TestCase
                     19 => ';',
                 ],
             ],
-            'several_with_comma_separate' => [
+            'several_with_comma_separate_php7' => [
                 [
                     0 => [T_USE, 'use '],
                     1 => [T_STRING, 'Magento'],
@@ -101,6 +102,36 @@ class UsesTest extends \PHPUnit\Framework\TestCase
                     13 => [T_STRING, 'Model'],
                     14 => [T_NS_SEPARATOR, '\\'],
                     15 => [T_STRING, 'Object2 '],
+                    16 => [T_AS, 'as '],
+                    17 => [T_STRING, 'OtherObject'],
+                    18 => ';',
+                ],
+            ],
+            'simple' => [
+                [
+                    0 => [T_USE, 'use '],
+                    1 => [T_NAME_QUALIFIED, 'Magento\\Core\\Model\\Object'],
+                    2 => ';',
+                ],
+            ],
+            'several_simple' => [
+                [
+                    0 => [T_USE, 'use '],
+                    1 => [T_NAME_QUALIFIED, 'Magento\\Core\\Model\\Object'],
+                    2 => ';',
+                    3 => [T_USE, 'use '],
+                    4 => [T_NAME_QUALIFIED, 'Magento\\Core\\Model\\Object2'],
+                    5 => [T_AS, 'as '],
+                    6 => [T_STRING, 'OtherObject'],
+                    7 => ';',
+                ],
+            ],
+            'several_with_comma_separate' => [
+                [
+                    0 => [T_USE, 'use '],
+                    1 => [T_NAME_QUALIFIED, 'Magento\\Core\\Model\\Object'],
+                    8 => ',',
+                    5 => [T_NAME_QUALIFIED, 'Magento\\Core\\Model\\Object2'],
                     16 => [T_AS, 'as '],
                     17 => [T_STRING, 'OtherObject'],
                     18 => ';',
@@ -142,10 +173,10 @@ class UsesTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function classNamesDataProvider()
+    public function classNamesDataProvider(): array
     {
         return [
-            'class_from_uses' => [
+            'class_from_uses_php7' => [
                 'Object2',
                 [
                     0 => [T_USE, 'use '],
@@ -159,7 +190,7 @@ class UsesTest extends \PHPUnit\Framework\TestCase
                     8 => ';'
                 ],
             ],
-            'class_from_uses_with_as' => [
+            'class_from_uses_with_as_php7' => [
                 'ObjectOther',
                 [
                     0 => [T_USE, 'use '],
@@ -174,6 +205,25 @@ class UsesTest extends \PHPUnit\Framework\TestCase
                     9 => [T_STRING, 'ObjectOther'],
                     10 => ';'
                 ],
+            ],
+            'class_from_uses' => [
+                'Object2',
+                [
+                    0 => [T_USE, 'use '],
+                    1 => [T_NAME_QUALIFIED, 'Magento\\Core\\Model\\Object2'],
+                    2 => ';'
+                ],
+            ],
+            'class_from_uses_with_as' => [
+                'ObjectOther',
+                [
+                    0 => [T_USE, 'use '],
+                    1 => [T_NAME_QUALIFIED, 'Magento\\Core\\Model\\Object2'],
+                    2 => [T_WHITESPACE, ' '],
+                    3 => [T_AS, 'as '],
+                    4 => [T_STRING, 'ObjectOther'],
+                    5 => ';'
+                ]
             ]
         ];
     }

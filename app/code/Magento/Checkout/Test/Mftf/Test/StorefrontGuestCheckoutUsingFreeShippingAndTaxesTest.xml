@@ -18,6 +18,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use StorefrontVerifyGuestCheckoutUsingFreeShippingAndTaxesTest</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

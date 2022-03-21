@@ -1,7 +1,5 @@
 <?php
 /**
- * Catalog super product configurable part block
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -21,7 +19,6 @@ use Magento\Store\Model\Store;
 /**
  * Confugurable product view type
  *
- * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -29,8 +26,6 @@ use Magento\Store\Model\Store;
 class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $catalogProduct = null;
@@ -44,8 +39,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $currentCustomer;
 
     /**
-     * Prices
-     *
      * @var array
      */
     protected $_prices = [];
@@ -348,8 +341,13 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             ];
 
             if (isset($tierPrice['excl_tax_price'])) {
-                $excludingTax = $tierPrice['excl_tax_price'];
-                $tierPriceData['excl_tax_price'] = $this->localeFormat->getNumber($excludingTax->getBaseAmount());
+                $exclTax = $tierPrice['excl_tax_price'];
+                $tierPriceData['excl_tax_price'] = $this->localeFormat->getNumber($exclTax->getBaseAmount());
+            }
+
+            if (isset($tierPrice['incl_excl_tax_price'])) {
+                $inclExclTax = $tierPrice['incl_excl_tax_price'];
+                $tierPriceData['incl_excl_tax_price'] = $this->localeFormat->getNumber($inclExclTax->getBaseAmount());
             }
             $tierPrices[] = $tierPriceData;
         }

@@ -81,8 +81,8 @@ class UploadJsTest extends ThemeTest
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteWithoutTheme(): void
     {
         $themeId = 23;
@@ -123,8 +123,8 @@ class UploadJsTest extends ThemeTest
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteWithException(): void
     {
         $themeId = 23;
@@ -169,8 +169,8 @@ class UploadJsTest extends ThemeTest
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecute(): void
     {
         $themeId = 23;

@@ -44,6 +44,11 @@
                 <argument name="label" value="{{ProductAttributeFrontendLabel.label}}"/>
             </actionGroup>
 
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

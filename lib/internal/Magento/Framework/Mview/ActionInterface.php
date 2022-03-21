@@ -8,6 +8,7 @@ namespace Magento\Framework\Mview;
 /**
  * Interface \Magento\Framework\Mview\ActionInterface
  *
+ * @api
  */
 interface ActionInterface
 {
@@ -16,7 +17,6 @@ interface ActionInterface
      *
      * @param int[] $ids
      * @return void
-     * @api
      */
     public function execute($ids);
 }

@@ -23,6 +23,9 @@ use ReflectionClass;
 
 /**
  * Provides tests for \Magento\TestFramework\Application.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
  */
 class ApplicationTest extends \PHPUnit\Framework\TestCase
 {
