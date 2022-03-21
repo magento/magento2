@@ -20,9 +20,7 @@ define([
                 }
             };
 
-            if ($.validator.validateElement($('[name="current_password"]'))) {
-                window.deleteConfirm(params.message, params.url, postData);
-            }
+            window.deleteConfirm(params.message, params.url, postData);
         });
     };
 });

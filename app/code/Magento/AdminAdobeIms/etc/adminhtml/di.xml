@@ -12,6 +12,11 @@
     <preference for="Magento\Backend\Model\Auth\Credential\StorageInterface"
                 type="Magento\AdminAdobeIms\Model\User" />
 
+    <preference for="Magento\User\Controller\Adminhtml\User\Save"
+                type="Magento\AdminAdobeIms\Controller\Adminhtml\User\Save"/>
+    <preference for="Magento\User\Controller\Adminhtml\User\Delete"
+                type="Magento\AdminAdobeIms\Controller\Adminhtml\User\Delete"/>
+
     <type name="Magento\Framework\View\Result\Layout">
         <plugin name="add_adobe_ims_layout_handle"
                 type="Magento\AdminAdobeIms\Plugin\AddAdobeImsLayoutHandlePlugin" />

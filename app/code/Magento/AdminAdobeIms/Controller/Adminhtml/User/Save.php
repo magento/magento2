@@ -4,13 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\User\Controller\Adminhtml\User;
+namespace Magento\AdminAdobeIms\Controller\Adminhtml\User;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
 use Magento\User\Model\Spi\NotificationExceptionInterface;
+use Magento\User\Block\User\Edit\Tab\Main;
 
 /**
  * Save admin user.
@@ -83,16 +84,8 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
         }
 
         /** Before updating admin user data, ensure that password of current admin user is entered and is correct */
-        $currentUserPasswordField = \Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD;
-        $isCurrentUserPasswordValid = isset($data[$currentUserPasswordField])
-            && !empty($data[$currentUserPasswordField]) && is_string($data[$currentUserPasswordField]);
         try {
-            if (!($isCurrentUserPasswordValid)) {
-                throw new AuthenticationException(
-                    __('The password entered for the current user is invalid. Verify the password and try again.')
-                );
-            }
-            $currentUser->performIdentityCheck($data[$currentUserPasswordField]);
+            $currentUser->performIdentityCheck($data[Main::CURRENT_USER_PASSWORD_FIELD] ?? '');
             $model->save();
 
             $this->messageManager->addSuccess(__('You saved the user.'));
