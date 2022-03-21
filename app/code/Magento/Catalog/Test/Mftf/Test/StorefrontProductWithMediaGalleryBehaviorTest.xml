@@ -19,6 +19,9 @@
             <group value="catalog"/>
             <group value="productVideo"/>
             <group value="pr_exclude"/>
+            <skip>
+                <issueId value="AC-2668"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
