@@ -102,3 +102,21 @@ We use the `admin_emails_new_user_created_template` Template for the content, an
 They are called `admin_adobe_ims_email_header_template` and `admin_adobe_ims_email_footer_template`.
 
 The notification mail will be sent inside our `AdminNotificationService` where we can add and modify the template variables.
+
+# Error Handling
+For the AdminAdobeIms Module we have two specific error messages and one general error message which are shown on the Admin Login page when an error occured.
+
+###AdobeImsTokenAuthorizationException
+Will be thrown when there was an error during the authorization. \
+e. g. a call to AdobeIMS fails or there was no matching admin found in the magento database.
+
+###AdobeImsOrganizationAuthorizationException
+Will be thrown when the admin user who wants to log in does not have the configured organization ID assigned to his AdobeIMS Profile.
+
+### Error logging
+Whenever an exception is thrown during the Adobe IMS Login, we will log the specific exception message but show a general error message on the admin login form.
+
+Errors are logged into the `/var/log/admin_adobe_ims.log` file. 
+
+Logging can be enabled or disabled in the config on changing the value for `adobe_ims\integration\logging_enabled` or in the Magento Admin Configuration under `Advanced > Developer > Debug`. \
+There you can switch the toggle for `Enable Logging for Admin Adobe IMS Module`

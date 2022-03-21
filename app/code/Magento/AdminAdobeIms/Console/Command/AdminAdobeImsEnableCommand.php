@@ -11,6 +11,8 @@ namespace Magento\AdminAdobeIms\Console\Command;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Service\ImsCommandOptionService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\Exception\LocalizedException;
@@ -55,19 +57,27 @@ class AdminAdobeImsEnableCommand extends Command
     private ImsCommandOptionService $imsCommandOptionService;
 
     /**
+     * @var TypeListInterface
+     */
+    private TypeListInterface $cacheTypeList;
+
+    /**
      * @param ImsConfig $imsConfig
      * @param ImsConnection $imsConnection
      * @param ImsCommandOptionService $imsCommandOptionService
+     * @param TypeListInterface $cacheTypeList
      */
     public function __construct(
         ImsConfig $imsConfig,
         ImsConnection $imsConnection,
-        ImsCommandOptionService $imsCommandOptionService
+        ImsCommandOptionService $imsCommandOptionService,
+        TypeListInterface $cacheTypeList
     ) {
         parent::__construct();
         $this->imsConfig = $imsConfig;
         $this->imsConnection = $imsConnection;
         $this->imsCommandOptionService = $imsCommandOptionService;
+        $this->cacheTypeList = $cacheTypeList;
 
         $this->setName('admin:adobe-ims:enable')
             ->setDescription('Enable Adobe IMS Module.')
@@ -160,6 +170,7 @@ class AdminAdobeImsEnableCommand extends Command
         $testAuth = $this->imsConnection->testAuth($clientId);
         if ($testAuth) {
             $this->imsConfig->enableModule($clientId, $clientSecret, $organizationId);
+            $this->cacheTypeList->cleanType(Config::TYPE_IDENTIFIER);
             return true;
         }
 

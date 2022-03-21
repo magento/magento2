@@ -10,6 +10,7 @@ namespace Magento\AdminAdobeIms\Model;
 
 use Magento\Backend\Model\Auth as BackendAuth;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\Plugin\AuthenticationException as PluginAuthenticationException;
 
 class Auth extends BackendAuth
@@ -60,7 +61,7 @@ class Auth extends BackendAuth
                 ['user_name' => $username, 'exception' => $e]
             );
             throw $e;
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->_eventManager->dispatch(
                 'backend_auth_user_login_failed',
                 ['user_name' => $username, 'exception' => $e]
