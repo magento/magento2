@@ -120,7 +120,7 @@ class ImsConnection
                 '/error=([a-z_]+)/i',
                 $curl->getHeaders()['location'],
                 $error
-                )
+            )
                 && isset($error[0], $error[1])
             ) {
                 throw new InvalidArgumentException(

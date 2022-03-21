@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignoreFile
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
