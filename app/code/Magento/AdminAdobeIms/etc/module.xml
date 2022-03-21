@@ -14,6 +14,8 @@
             <module name="Magento_Backend"/>
             <module name="Magento_User"/>
             <module name="Magento_Captcha"/>
+            <module name="Magento_Store"/>
+            <module name="Magento_Email"/>
         </sequence>
     </module>
 </config>
