@@ -13,6 +13,7 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\InvalidArgumentException;
+use Magento\Framework\Jwt\Jwk;
 use Magento\Framework\Jwt\JwkFactory;
 use Magento\Framework\Jwt\Jws\JwsSignatureJwks;
 use Magento\Framework\Jwt\JwtManagerInterface;
@@ -99,7 +100,7 @@ class TokenReader implements TokenReaderInterface
             if (!$jwk = $this->getJWK($token)) {
                 throw new AuthenticationException(__('Failed to get JWK'));
             }
-            $jwt = $this->jwtManager->read($token, ['RS256' => new JwsSignatureJwks($jwk)]);
+            $jwt = $this->jwtManager->read($token, [Jwk::ALGORITHM_RS256 => new JwsSignatureJwks($jwk)]);
         } catch (JwtException $exception) {
             $this->logger->error($exception->getMessage());
             throw new AuthenticationException(__('Failed to read JWT token'));
@@ -138,8 +139,8 @@ class TokenReader implements TokenReaderInterface
     /**
      * JSON Web Key (JWK) to verify JSON Web Signature (JWS)
      *
-     * @param $token
-     * @return false|\Magento\Framework\Jwt\Jwk
+     * @param string $token
+     * @return false|Jwk
      */
     private function getJWK($token)
     {
@@ -174,6 +175,7 @@ class TokenReader implements TokenReaderInterface
 
     /**
      * @param string $certificateValue
+     * @return void
      */
     private function saveCertificateInCache(string $certificateValue)
     {
