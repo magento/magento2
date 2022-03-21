@@ -20,6 +20,7 @@ use Magento\Framework\UrlInterface;
 class ImsConfig extends Config
 {
     public const XML_PATH_ENABLED = 'adobe_ims/integration/enabled';
+    public const XML_PATH_LOGGING_ENABLED = 'adobe_ims/integration/logging_enabled';
     public const XML_PATH_ORGANIZATION_ID = 'adobe_ims/integration/organization_id';
     public const XML_PATH_API_KEY = 'adobe_ims/integration/api_key';
     public const XML_PATH_PRIVATE_KEY = 'adobe_ims/integration/private_key';
@@ -80,6 +81,18 @@ class ImsConfig extends Config
     {
         return (bool) $this->scopeConfig->getValue(
             self::XML_PATH_ENABLED
+        );
+    }
+
+    /**
+     * Check if module error-logging is enabled
+     *
+     * @return bool
+     */
+    public function loggingEnabled(): bool
+    {
+        return (bool) $this->scopeConfig->getValue(
+            self::XML_PATH_LOGGING_ENABLED
         );
     }
 

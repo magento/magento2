@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Service;
 
+use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
 use Magento\AdminAdobeIms\Model\Auth;
 use Magento\AdminAdobeIms\Model\User;
 use Magento\AdobeIms\Model\LogIn;
@@ -52,15 +53,15 @@ class AdminLoginProcessService
      * @param array $profile
      * @param TokenResponseInterface $tokenResponse
      * @return void
-     * @throws AuthenticationException
-     * @throws CouldNotSaveException
+     * @throws AdobeImsTokenAuthorizationException
+     * @throws CouldNotSaveException|AuthenticationException
      */
     public function execute(array $profile, TokenResponseInterface $tokenResponse): void
     {
         $adminUser = $this->adminUser->loadByEmail($profile['email']);
         if (empty($adminUser['user_id'])) {
-            throw new AuthenticationException(
-                __('An authentication error occurred. Verify and try again.')
+            throw new AdobeImsTokenAuthorizationException(
+                __('No matching admin user found for Adobe ID.')
             );
         }
 
