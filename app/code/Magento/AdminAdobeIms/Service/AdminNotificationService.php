@@ -72,7 +72,7 @@ class AdminNotificationService
             return;
         }
 
-        $backendUrl = $this->backendUrl->getUrl('admin');
+        $backendUrl = $this->backendUrl->getRouteUrl('adminhtml');
 
         $emailTemplate = $this->imsConfig->getEmailTemplateForNewAdminUsers();
 
