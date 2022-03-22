@@ -18,6 +18,6 @@
             <argument name="value" type="string" defaultValue="1"/>
         </arguments>
 
-        <see selector="{{AdminProductGridSection.productGridCell(row,column)}}" userInput="{{value}}" stepKey="seeProductGridCellWithProvidedValue"/>
+        <seeElement selector="{{AdminProductGridSection.productGridCell(row,column)}}" stepKey="seeProductGridCellWithProvidedValue"/>
     </actionGroup>
 </actionGroups>

@@ -19,6 +19,6 @@
         <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="goToWishList"/>
         <waitForPageLoad stepKey="waitForWishList"/>
         <waitForElement selector="{{StorefrontCustomerWishlistProductSection.ProductTitleByName(productName)}}" time="30" stepKey="assertProductName"/>
-        <see userInput="{{productPrice}}" selector="{{StorefrontCustomerWishlistProductSection.ProductPriceByName(productName)}}" stepKey="assertProductPrice"/>
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductPriceByName(productName)}}" stepKey="assertProductPrice"/>
     </actionGroup>
 </actionGroups>
