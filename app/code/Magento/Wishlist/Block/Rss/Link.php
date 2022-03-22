@@ -44,7 +44,7 @@ class Link extends \Magento\Framework\View\Element\Template
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         array $data = []
     ) {
-        $data['wishlistHelper'] = $this->wishlistHelper;
+        $data['wishlistHelper'] = $wishlistHelper;
         parent::__construct($context, $data);
         $this->wishlistHelper = $wishlistHelper;
         $this->rssUrlBuilder = $rssUrlBuilder;
