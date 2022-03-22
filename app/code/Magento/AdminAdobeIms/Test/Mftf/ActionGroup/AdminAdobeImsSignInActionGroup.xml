@@ -27,6 +27,7 @@
 
         <fillField selector="{{AdminAdobeImsSignInSection.password}}" userInput="{{password}}" stepKey="fillPassword"/>
         <click selector="{{AdminAdobeImsSignInSection.AdobeImsPasswordContinueButton}}" stepKey="clickPasswordContinue"/>
+        <waitForPageLoad stepKey="waitForLoginToFinish"/>
     </actionGroup>
 </actionGroups>
 
