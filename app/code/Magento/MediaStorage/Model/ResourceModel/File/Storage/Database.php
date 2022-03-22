@@ -60,7 +60,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
     public function __construct(
         Context $context,
         Helper $resourceHelper,
-        string $connectionName = null,
+        $connectionName = null,
         ConnectionFactory $connectionFactory = null,
         DeploymentConfig $deploymentConfig = null
     ) {

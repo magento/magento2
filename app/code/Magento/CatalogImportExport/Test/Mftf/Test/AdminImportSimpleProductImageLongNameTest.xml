@@ -32,8 +32,8 @@
                 <argument name="path">var/import/images/test_image_long_name</argument>
             </helper>
             <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProductBaseImage">
-                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderBaseImage.file}}</argument>
-                <argument name="destination">var/import/images/test_image_long_name/{{placeholderBaseImage.file}}</argument>
+                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderBaseImageLongName.file}}</argument>
+                <argument name="destination">var/import/images/test_image_long_name/{{placeholderBaseImageLongName.file}}</argument>
             </helper>
             <!-- Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -60,7 +60,7 @@
             <argument name="productId" value="$createProduct.id$"/>
         </actionGroup>
         <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertBaseImageIsPresent">
-            <argument name="image" value="{{placeholderBaseImage.name}}"/>
+            <argument name="image" value="{{placeholderBaseImageLongName.name}}"/>
         </actionGroup>
     </test>
 </tests>
