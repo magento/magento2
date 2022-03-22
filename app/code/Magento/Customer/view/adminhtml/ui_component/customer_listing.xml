@@ -184,7 +184,6 @@
             <settings>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
-                <dateFormat>MMM d, YYYY h:mm:ss A</dateFormat>
                 <label translate="true">Customer Since</label>
             </settings>
         </column>

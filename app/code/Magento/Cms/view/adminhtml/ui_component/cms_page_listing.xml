@@ -206,7 +206,6 @@
             <settings>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
-                <dateFormat>MMM d, YYYY h:mm:ss A</dateFormat>
                 <label translate="true">Created</label>
             </settings>
         </column>
@@ -214,7 +213,6 @@
             <settings>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
-                <dateFormat>MMM d, YYYY h:mm:ss A</dateFormat>
                 <label translate="true">Modified</label>
             </settings>
         </column>

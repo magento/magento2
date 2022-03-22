@@ -70,7 +70,6 @@
             <settings>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
-                <dateFormat>MMM d, YYYY h:mm:ss A</dateFormat>
                 <label translate="true">Last Activity</label>
             </settings>
         </column>
