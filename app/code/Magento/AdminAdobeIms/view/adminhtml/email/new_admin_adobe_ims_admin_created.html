@@ -16,9 +16,9 @@
 
 <tr>
     <td>
-        <table class="email-width" align="left" width="400" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:400px;">
+        <table class="email-width-400" align="left" width="400" border="0" cellpadding="0" cellspacing="0" role="presentation">
             <tr>
-                <td class="header" style="color:#000000; font-family:adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:23px; line-height:30px; padding-top:70px;">
+                <td class="header email-subject">
                     <strong>{{trans "%user_name, you now have access to Adobe Commerce" user_name=$user.firstname}}</strong>
                 </td>
             </tr>
@@ -26,48 +26,49 @@
     </td>
 </tr>
 <tr>
-    <td style="color:#2c2c2c; font-family:adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-height:26px; padding-top:25px;">
+    <td class="email-text padding-top-25">
         {{trans "Your administrator at %store_name has given you access to Adobe Commerce" store_name=$store.frontend_name}}
     </td>
 </tr>
 <tr>
-    <td style="color:#1473E6; font-family:adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:16px; line-height:20px; padding-top:40px; padding-bottom:40px;"><!--[if gte mso 9]>
+    <td class="cta-button-container">
+        <!--[if gte mso 9]>
         <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" style="height:40px; v-text-anchor:middle; width:200px;" arcsize="50%" stroke="f" fillcolor="#1473E6">
             <v:textbox style="mso-fit-shape-to-text:t">
                 <center style="color:#ffffff; font-family:Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:16px;">
-        <![endif]-->
-        <a href="{{var cta_link}}" target="_blank" style="background-color:#1473E6;border-radius:20px;color:#ffffff;display:inline-block;font-size:16px;line-height:40px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;">
+                <![endif]-->
+        <a class="cta-button" href="{{var cta_link}}" target="_blank">
             <strong>{{trans "Get started"}}</strong>
         </a>
-        <!--[if gte mso 9]>
-        </center>
-        <p style="margin:0; font-size:0; line-height:0;"><o:p xmlns:o="urn:schemas-microsoft-com:office:office">&nbsp;</o:p></p>
-        </v:textbox>
+                <!--[if gte mso 9]>
+                </center>
+                <p class="cta-button-mso"><o:p xmlns:o="urn:schemas-microsoft-com:office:office">&nbsp;</o:p></p>
+            </v:textbox>
         </v:roundrect>
         <![endif]-->
     </td>
 </tr>
 <tr>
-    <td style="color:#2c2c2c; font-family:adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-height:26px;">
+    <td class="email-text padding-top-0">
         {{trans "Here are a few links to help you get up and running:"}}
     </td>
 </tr>
 <tr>
-    <td style="color:#2c2c2c; font-family:adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-height:26px; padding-top:25px;">
-        <a href="https://experienceleague.adobe.com/docs/commerce.html" target="_blank" style="color:#1473E6; text-decoration:none;">
+    <td class="email-text">
+        <a class="email-information-link" href="https://experienceleague.adobe.com/docs/commerce.html" target="_blank">
             {{trans "Documentation"}}
         </a>
     </td>
 </tr>
 <tr>
-    <td style="color:#2c2c2c; font-family:adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-height:26px; padding-top:25px;">
-        <a href="https://devdocs.magento.com/guides/v2.4/release-notes/bk-release-notes.html" target="_blank" style="color:#1473E6; text-decoration:none;">
+    <td class="email-text">
+        <a class="email-information-link" href="https://devdocs.magento.com/guides/v2.4/release-notes/bk-release-notes.html" target="_blank">
             {{trans "Release notes"}}
         </a>
     </td>
 </tr>
 <tr>
-    <td style="color:#2c2c2c; font-family:adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-height:26px; padding-top:25px;">
+    <td class="email-text">
         {{trans "If you have any questions about access to Adobe Commerce, contact your administrator or your Adobe account team for more information."}}
     </td>
 </tr>
