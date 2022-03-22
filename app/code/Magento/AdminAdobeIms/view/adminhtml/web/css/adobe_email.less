@@ -4,13 +4,13 @@
  */
 
 @color-blue: #1473e6;
-@color-red: #eB1000;
+@color-red: #eb1000;
 @color-light-grey: #e4e4e4;
 @color-grey: #959595;
 @color-dark-grey: #2c2c2c;
 @color-white-smoke: #f5f5f5;
-@color-white: #ffffff;
-@color-black: #000000;
+@color-white: #fff;
+@color-black: #000;
 
 @import url("https://use.typekit.net/onr8tbr.css");
 @media (prefers-color-scheme: dark) {
@@ -19,7 +19,8 @@
         margin: 0 auto;
     }
 
-    a, a:visited {
+    a,
+    a:visited {
         color: @color-blue;
         text-decoration: none;
     }
@@ -31,8 +32,8 @@
     /* iOS BLUE LINKS */
     a[x-apple-data-detectors] {
         color: inherit !important;
-        font-size: inherit !important;
         font-family: inherit !important;
+        font-size: inherit !important;
         font-weight: inherit !important;
         line-height: inherit !important;
         text-decoration: none !important;
@@ -102,21 +103,21 @@
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
-    width: 100% !important;
     -webkit-text-size-adjust: none;
+    width: 100% !important;
 }
 
 .email-preview {
-    font-size: 1px;
     color: @color-light-grey;
     display: none;
+    font-size: 1px;
     overflow: hidden;
     visibility: hidden;
 }
 
 .email-header-container {
-    border-top: 4px solid @color-red;
     background-color: @color-white;
+    border-top: 4px solid @color-red;
     padding-bottom: 60px;
 }
 
@@ -154,8 +155,8 @@
     font-family: adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif;
     font-size: 11px;
     line-height: 18px;
-    padding-top: 50px;
     padding-bottom: 50px;
+    padding-top: 50px;
 }
 
 .email-subject {
@@ -179,21 +180,21 @@
     font-family: adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif;
     font-size: 16px;
     line-height: 20px;
-    padding-top: 40px;
     padding-bottom: 40px;
+    padding-top: 40px;
 }
 
 .cta-button {
-    background-color:@color-blue;
-    border-radius:20px;
-    color:@color-white;
-    display:inline-block;
-    font-size:16px;
-    line-height:40px;
-    text-align:center;
-    text-decoration:none;
-    width:200px;
-    -webkit-text-size-adjust:none;
+    background-color: @color-blue;
+    border-radius: 20px;
+    color: @color-white;
+    display: inline-block;
+    font-size: 16px;
+    line-height: 40px;
+    text-align: center;
+    text-decoration: none;
+    -webkit-text-size-adjust: none;
+    width: 200px;
 }
 
 .cta-button-mso {
