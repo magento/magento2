@@ -123,10 +123,10 @@ define([
                     content:  $t(data.content),
                     modalClass: 'media-gallery-folder-prompt',
                     validation: true,
-                    validationRules: ['required-entry', 'validate-alphanum'],
+                    validationRules: ['required-entry', 'validate-filename'],
                     attributesField: {
                         name: 'folder_name',
-                        'data-validate': '{required:true, validate-alphanum}',
+                        'data-validate': '{required:true, validate-filename}',
                         maxlength: '128'
                     },
                     attributesForm: {
