@@ -39,6 +39,7 @@ define([
          */
         initialize: function () {
             this._super().observe(['selectedFolder']);
+            this._addValidation();
             this.initEvents();
 
             return this;
@@ -191,6 +192,17 @@ define([
 
             this.selectedFolder(folderId);
             $(this.deleteButtonSelector).prop('disabled', false).removeClass('disabled');
+        },
+
+        /**
+         * @private
+         */
+        _addValidation: function () {
+            $.validator.addMethod(
+                'validate-filename', function (value) {
+                    return $.mage.isEmptyNoTrim(value) || /^[a-z0-9\-\_]+$/si.test(value);
+                },
+                $.mage.__('Please use only letters (a-z or A-Z), numbers (0-9), underscore (_) or hyphen (-) in this field. No spaces or other characters are allowed.')); //eslint-disable-line max-len
         }
     });
 });

@@ -45,7 +45,7 @@
         <grabTextFrom selector="{{AdminMediaGalleryFolderSection.folderNameValidationMessage}}" stepKey="grabValidationMessage"/>
         <assertStringContainsString stepKey="assertFirst">
             <actualResult type="variable">grabValidationMessage</actualResult>
-            <expectedResult type="string">Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.</expectedResult>
+            <expectedResult type="string">Please use only letters (a-z or A-Z), numbers (0-9), underscore (_) or hyphen (-) in this field. No spaces or other characters are allowed.</expectedResult>
         </assertStringContainsString>
 
         <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder"/>
