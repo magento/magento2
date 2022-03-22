@@ -40,7 +40,7 @@ class Autoloader
      * Load specified class name and generate it if necessary
      *
      * According to PSR-4 section 2.4 an autoloader MUST NOT throw an exception and SHOULD NOT return a value.
-     * We do throw an exception to improve the developer experience.  
+     * We do throw an exception to improve the developer experience.
      * When code generation fails, it makes no sense to give other autoloaders a chance to load it.
      *
      * @see https://www.php-fig.org/psr/psr-4/
@@ -92,7 +92,7 @@ class Autoloader
         try {
             $logger = ObjectManager::getInstance()->get(LoggerInterface::class);
             $logger->debug($exception->getMessage(), ['exception' => $exception]);
-        } catch (\Exception $ignoreThisException) {
+        } catch (\Exception $ignoreThisException) { //@codingStandardsIgnoreLine
             // Do not take an action here, since the original exception might have been caused by logger
         }
     }
