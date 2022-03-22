@@ -63,7 +63,7 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPriceList(Product $bundleProduct, $searchMin, $useRegularPrice)
     {
@@ -188,6 +188,8 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
     }
 
     /**
+     * Adjust min price for non required options
+     *
      * @return void
      */
     private function processMinPriceForNonRequiredOptions()
