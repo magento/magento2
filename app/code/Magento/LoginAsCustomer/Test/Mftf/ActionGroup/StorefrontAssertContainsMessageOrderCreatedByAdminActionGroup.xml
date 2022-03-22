@@ -17,7 +17,8 @@
             <argument name="orderId" type="string"/>
         </arguments>
 
-        <amOnPage url="{{StorefrontCustomerOrderViewPage.url(orderId)}}" stepKey="gotoOrderPage"/>
+        <amOnPage url="{{StorefrontCustomerOrdersHistoryPage.url}}" stepKey="amOnTheCustomerOrderHistoryPage"/>
+        <click selector="{{StorefrontCustomerOrderSection.viewOrderByOrderNumber(orderId)}}" stepKey="goToOrderReviewPage" />
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <see userInput="Order Placed by Store Administrator" stepKey="seeMessageOrderCreatedByAdmin"/>
     </actionGroup>

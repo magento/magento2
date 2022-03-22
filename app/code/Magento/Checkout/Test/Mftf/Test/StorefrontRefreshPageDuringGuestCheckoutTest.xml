@@ -58,7 +58,9 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
         <!-- Order review page has address that was created during checkout -->
-        <amOnPage url="{{AdminOrderPage.url({$grabOrderNumber})}}" stepKey="navigateToOrderPage"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForCreatedOrderPage"/>
         <see selector="{{AdminShipmentAddressInformationSection.shippingAddress}}" userInput="{{CustomerAddressSimple.street[0]}} {{CustomerAddressSimple.city}}, {{CustomerAddressSimple.state}}, {{CustomerAddressSimple.postcode}}" stepKey="checkShippingAddress"/>
     </test>

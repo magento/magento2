@@ -89,13 +89,13 @@
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrdersGridById">
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
-
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="getOrderId"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
 
         <actionGroup ref="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup" stepKey="goToOrderHistoryPage"/>
         <!--Step12. Go to Customer Order Shipment Page and Checking the correctness of displayed Qty Shipped -->
-        <amOnPage url="{{StorefrontCustomerOrderShipmentPage.url({$grabOrderNumber})}}" stepKey="amOnOrderShipmentPage"/>
+        <amOnPage url="{{StorefrontCustomerOrderShipmentPage.url({$getOrderId})}}" stepKey="amOnOrderShipmentPage"/>
         <waitForPageLoad time="30" stepKey="waitForOrderShipmentsPageLoad"/>
         <actionGroup ref="AssertStorefrontOrderShipmentsQtyShippedActionGroup" stepKey="verifyAssertOrderShipments">
             <argument name="expectedQtyShipped" value="2.14"/>
