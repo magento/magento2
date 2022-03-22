@@ -269,6 +269,11 @@ abstract class AbstractEntity
         foreach ($this->filterAttributeCollection($this->getAttributeCollection()) as $attribute) {
             $attrCode = $attribute->getAttributeCode();
 
+            $filterFlagName = $attrCode . '_filter_applied';
+            if ($collection->hasFlag($filterFlagName)) {
+                continue;
+            }
+
             // filter applying
             if (isset($exportFilter[$attrCode])) {
                 $attrFilterType = \Magento\ImportExport\Model\Export::getAttributeFilterType($attribute);
@@ -320,7 +325,10 @@ abstract class AbstractEntity
                         }
                     }
                 }
+
+                $collection->setFlag($filterFlagName);
             }
+
             if (in_array($attrCode, $exportAttrCodes)) {
                 $collection->addAttributeToSelect($attrCode);
             }
