@@ -327,7 +327,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $countSelect = $this->getProductsCountQuery($categoryIds, (bool)$websiteId);
             $categoryProductsCount = $this->_conn->fetchPairs($countSelect);
             foreach ($anchor as $item) {
-                $productsCount = isset($categoriesProductsCount[$item->getId()])
+                $productsCount = isset($categoryProductsCount[$item->getId()])
                     ? (int)$categoryProductsCount[$item->getId()]
                     : $this->getProductsCountFromCategoryTable($item, $websiteId);
                 $item->setProductCount($productsCount);
