@@ -954,7 +954,9 @@ class Config
     private function initAttributesFromCache(Type $entityType)
     {
         $entityTypeCode = $entityType->getEntityTypeCode();
-        $cacheKey = self::ATTRIBUTES_CACHE_ID . $entityTypeCode;
+        $attributeCollection = $this->_universalFactory->create($entityType->getEntityAttributeCollection());
+        $websiteId = $attributeCollection instanceof Collection ? $this->getWebsiteId($attributeCollection) : 0;
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $entityTypeCode . '-' . $websiteId ;
         if ($this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
             $attributes = $this->serializer->unserialize($attributes);
             if ($attributes) {

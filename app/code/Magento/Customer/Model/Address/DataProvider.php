@@ -7,10 +7,12 @@ declare(strict_types=1);
 namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\FileUploaderDataResolver;
@@ -41,7 +43,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     private $allowToShowHiddenAttributes;
 
-    /*
+    /**
      * @var ContextInterface
      */
     private $context;
@@ -73,6 +75,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $attributeMetadataResolver;
 
     /**
+     * @var Share|null
+     */
+    private $shareConfig;
+
+    /**
      * DataProvider constructor.
      * @param string $name
      * @param string $primaryFieldName
@@ -86,6 +93,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param array $meta
      * @param array $data
      * @param bool $allowToShowHiddenAttributes
+     * @param Share|null $shareConfig
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -101,7 +109,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         AttributeMetadataResolver $attributeMetadataResolver,
         array $meta = [],
         array $data = [],
-        $allowToShowHiddenAttributes = true
+        $allowToShowHiddenAttributes = true,
+        ?Share $shareConfig = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $addressCollectionFactory->create();
@@ -111,6 +120,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->context = $context;
         $this->fileUploaderDataResolver = $fileUploaderDataResolver;
         $this->attributeMetadataResolver = $attributeMetadataResolver;
+        $this->shareConfig = $shareConfig ?? ObjectManager::getInstance()->get(Share::class);
         $this->meta['general']['children'] = $this->getAttributesMeta(
             $eavConfig->getEntityType('customer_address')
         );
@@ -210,9 +220,17 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private function getAttributesMeta(Type $entityType): array
     {
         $meta = [];
-        $attributes = $entityType->getAttributeCollection();
+        $parentId = $this->context->getRequestParam('parent_id');
+        $customer = $this->customerRepository->getById($parentId);
+        /** @var \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection $sharedCollection */
+        $sharedCollection = $entityType->getAttributeCollection();
+        $collection = clone $sharedCollection;
+        if (!$this->shareConfig->isGlobalScope()) {
+            $collection->setWebsite($customer->getWebsiteId());
+        }
+
         /* @var AbstractAttribute $attribute */
-        foreach ($attributes as $attribute) {
+        foreach ($collection as $attribute) {
             if (\in_array($attribute->getFrontendInput(), $this->bannedInputTypes, true)) {
                 continue;
             }
