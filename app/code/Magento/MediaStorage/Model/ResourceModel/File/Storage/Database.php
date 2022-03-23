@@ -92,7 +92,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
         $connection = $this->getConnection();
         $table = $this->getMainTable();
         if ($connection->isTableExists($table)) {
-            $this->increaseLengthFilenameColumn();
+            $this->increaseFilenameColumnLength();
             return $this;
         }
 
@@ -182,7 +182,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
      *
      * @return void
      */
-    private function increaseLengthFilenameColumn(): void
+    private function increaseFilenameColumnLength(): void
     {
         $connection = $this->createResourceConnection($this->connectionName);
         $table = $this->getMainTable();
