@@ -11,6 +11,7 @@ use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 /**
  * Export entity abstract model
  *
+ * phpcs:ignore Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -48,8 +49,6 @@ abstract class AbstractEntity
     protected $_disabledAttrs = [];
 
     /**
-     * Entity type id.
-     *
      * @var int
      */
     protected $_entityTypeId;
@@ -97,8 +96,6 @@ abstract class AbstractEntity
     protected $_messageTemplates = [];
 
     /**
-     * Parameters.
-     *
      * @var array
      */
     protected $_parameters = [];
@@ -175,8 +172,10 @@ abstract class AbstractEntity
     protected function _initStores()
     {
         foreach ($this->_storeManager->getStores(true) as $store) {
+            // phpstan:ignore "Access to an undefined property"
             $this->_storeIdToCode[$store->getId()] = $store->getCode();
         }
+        // phpstan:ignore "Access to an undefined property"
         ksort($this->_storeIdToCode);
         // to ensure that 'admin' store (ID is zero) goes first
 
@@ -251,6 +250,8 @@ abstract class AbstractEntity
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function _prepareEntityCollection(\Magento\Eav\Model\Entity\Collection\AbstractCollection $collection)
     {
@@ -335,6 +336,7 @@ abstract class AbstractEntity
         }
         return $collection;
     }
+    //phpcs:enable Generic.Metrics.NestingLevel
 
     /**
      * Add error with corresponding current data source row number.
@@ -348,6 +350,7 @@ abstract class AbstractEntity
         $errorCode = (string)$errorCode;
         $this->_errors[$errorCode][] = $errorRowNum + 1;
         // one added for human readability
+        // phpstan:ignore "Access to an undefined property"
         $this->_invalidRows[$errorRowNum] = true;
         $this->_errorsCount++;
 
@@ -440,6 +443,7 @@ abstract class AbstractEntity
                         }
                     }
                 }
+                // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\Exception $e) {
                 // ignore exceptions connected with source models
             }
@@ -504,6 +508,7 @@ abstract class AbstractEntity
      */
     public function getInvalidRowsCount()
     {
+        // phpstan:ignore "Access to an undefined property"
         return count($this->_invalidRows);
     }
 
@@ -569,6 +574,7 @@ abstract class AbstractEntity
 
     /**
      * Clean cached values
+     *
      * @since 100.1.2
      */
     public function __destruct()
