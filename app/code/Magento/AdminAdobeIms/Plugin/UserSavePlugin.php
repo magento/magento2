@@ -54,6 +54,7 @@ class UserSavePlugin
     /**
      * Generate random password string
      *
+     * @return string
      * @throws Exception
      */
     private function generateRandomPassword(): string
