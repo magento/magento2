@@ -81,9 +81,9 @@
         <grabTextFrom selector="{{AdminOrdersGridSection.gridCell('1','Purchase Date')}}" stepKey="grabPurchaseDateInFrenchLocale"/>
 
         <!--Checking Date after changing "Interface Locale"-->
-        <assertStringNotContainsString stepKey="checkingDateAfterChangeInterfaceLocale">
-            <expectedResult type="string">in</expectedResult>
+        <assertStringContainsString stepKey="checkingDateAfterChangeInterfaceLocale">
+            <expectedResult type="string">min</expectedResult>
             <actualResult type="variable">grabPurchaseDateInFrenchLocale</actualResult>
-        </assertStringNotContainsString>
+        </assertStringContainsString>
     </test>
 </tests>
