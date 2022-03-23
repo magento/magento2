@@ -15,15 +15,30 @@ interface ExtendedExportInfoInterface extends ExportInfoInterface
     /**
      * Returns skipped attributes
      *
-     * @return mixed
+     * @return string[]|null
      */
-    public function getSkipAttr();
+    public function getSkipAttr(): ?array;
 
     /**
      * Set skipped attributes
      *
-     * @param string $skipAttr
-     * @return mixed
+     * @param string[] $skipAttr
+     * @return void
      */
-    public function setSkipAttr($skipAttr);
+    public function setSkipAttr(array $skipAttr): void;
+
+    /**
+     * Returns admin locale
+     *
+     * @return string|null
+     */
+    public function getLocale(): ?string;
+
+    /**
+     * Set admin locale
+     *
+     * @param string $locale
+     * @return void
+     */
+    public function setLocale(string $locale): void;
 }

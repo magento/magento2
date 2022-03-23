@@ -45,6 +45,11 @@ class ExportInfo implements ExtendedExportInfoInterface
     private $skipAttr;
 
     /**
+     * @var string
+     */
+    private $locale;
+
+    /**
      * @inheritdoc
      */
     public function getFileFormat()
@@ -127,7 +132,7 @@ class ExportInfo implements ExtendedExportInfoInterface
     /**
      * @inheritdoc
      */
-    public function getSkipAttr()
+    public function getSkipAttr(): ?array
     {
         return $this->skipAttr;
     }
@@ -135,8 +140,24 @@ class ExportInfo implements ExtendedExportInfoInterface
     /**
      * @inheritdoc
      */
-    public function setSkipAttr($skipAttr)
+    public function setSkipAttr(array $skipAttr): void
     {
         $this->skipAttr = $skipAttr;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLocale(): ?string
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setLocale(string $locale): void
+    {
+        $this->locale = $locale;
     }
 }

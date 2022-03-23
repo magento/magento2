@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Controller\Adminhtml\Export;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\MysqlMq\Model\QueueManagement;
 use Magento\MysqlMq\Model\ResourceModel\Message;
@@ -36,6 +37,9 @@ class ExportTest extends AbstractBackendController
     /** @var SerializerInterface */
     private $json;
 
+    /** @var LocaleResolver */
+    private $localeResolver;
+
     /** @var DeleteTopicRelatedMessages */
     private $deleteTopicRelatedMessages;
 
@@ -49,6 +53,7 @@ class ExportTest extends AbstractBackendController
         $this->queueManagement = $this->_objectManager->get(QueueManagement::class);
         $this->queueMessageResource = $this->_objectManager->get(Message::class);
         $this->json = $this->_objectManager->get(SerializerInterface::class);
+        $this->localeResolver = $this->_objectManager->get(LocaleResolver::class);
         $this->deleteTopicRelatedMessages = $this->_objectManager->get(DeleteTopicRelatedMessages::class);
         $this->deleteTopicRelatedMessages->execute(self::TOPIC_NAME);
     }
@@ -72,6 +77,7 @@ class ExportTest extends AbstractBackendController
     {
         $expectedSessionMessage = (string)__('Message is added to queue, wait to get your file soon.'
             . ' Make sure your cron job is running to export the file');
+        $locale = $this->localeResolver->getLocale();
         $fileFormat = 'csv';
         $filter = ['price' => [0, 1000]];
         $this->getRequest()->setMethod(Http::METHOD_POST)
@@ -95,5 +101,7 @@ class ExportTest extends AbstractBackendController
         $actualFilter = $this->json->unserialize($body['export_filter']);
         $this->assertCount(1, $actualFilter);
         $this->assertEquals($filter, reset($actualFilter));
+        $this->assertNotEmpty($body['locale']);
+        $this->assertEquals($locale, $body['locale']);
     }
 }
