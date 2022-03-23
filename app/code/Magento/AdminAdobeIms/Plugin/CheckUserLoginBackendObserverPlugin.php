@@ -34,6 +34,7 @@ class CheckUserLoginBackendObserverPlugin
      * @param callable $proceed
      * @param Observer $observer
      * @return CheckUserLoginBackendObserver|void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
         CheckUserLoginBackendObserver $subject,

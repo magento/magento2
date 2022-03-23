@@ -7,19 +7,27 @@
 
 namespace Magento\AdminAdobeIms\Controller\Adminhtml\User;
 
+use Magento\Backend\Model\Auth\Session;
+use Magento\Backend\Model\Locale\Manager;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Framework\Validator\Exception;
+use Magento\Framework\Validator\Locale;
+use Magento\Security\Model\AdminSessionsManager;
 use Magento\Security\Model\SecurityCookie;
+use Magento\User\Controller\Adminhtml\User as UserController;
 use Magento\User\Model\Spi\NotificationExceptionInterface;
 use Magento\User\Block\User\Edit\Tab\Main;
+use Magento\User\Model\User;
 
 /**
  * Save admin user.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostActionInterface
+class Save extends UserController implements HttpPostActionInterface
 {
     /**
      * @var SecurityCookie
@@ -58,7 +66,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
             return;
         }
 
-        /** @var $model \Magento\User\Model\User */
+        /** @var $model User */
         $model = $this->_userFactory->create()->load($userId);
         if ($userId && $model->isObjectNew()) {
             $this->messageManager->addError(__('This user no longer exists.'));
@@ -71,14 +79,14 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
             $model->setRoleId($userRoles[0]);
         }
 
-        /** @var $currentUser \Magento\User\Model\User */
-        $currentUser = $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class)->getUser();
+        /** @var $currentUser User */
+        $currentUser = $this->_objectManager->get(Session::class)->getUser();
         if ($userId == $currentUser->getId()
-            && $this->_objectManager->get(\Magento\Framework\Validator\Locale::class)
+            && $this->_objectManager->get(Locale::class)
                 ->isValid($data['interface_locale'])
         ) {
             $this->_objectManager->get(
-                \Magento\Backend\Model\Locale\Manager::class
+                Manager::class
             )->switchBackendInterfaceLocale(
                 $data['interface_locale']
             );
@@ -97,21 +105,21 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
         } catch (UserLockedException $e) {
             $this->_auth->logout();
             $this->getSecurityCookie()->setLogoutReasonCookie(
-                \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
+                AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             );
             $this->_redirect('*');
         } catch (NotificationExceptionInterface $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
-        } catch (\Magento\Framework\Exception\AuthenticationException $e) {
+        } catch (AuthenticationException $e) {
             $this->messageManager->addError(
                 __('The password entered for the current user is invalid. Verify the password and try again.')
             );
             $this->redirectToEdit($model, $data);
-        } catch (\Magento\Framework\Validator\Exception $e) {
+        } catch (Exception $e) {
             $messages = $e->getMessages();
             $this->messageManager->addMessages($messages);
             $this->redirectToEdit($model, $data);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             if ($e->getMessage()) {
                 $this->messageManager->addError($e->getMessage());
             }
@@ -122,11 +130,11 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
     /**
      * Redirect to Edit form.
      *
-     * @param \Magento\User\Model\User $model
+     * @param User $model
      * @param array $data
      * @return void
      */
-    protected function redirectToEdit(\Magento\User\Model\User $model, array $data)
+    private function redirectToEdit(User $model, array $data)
     {
         $this->_getSession()->setUserData($data);
         $arguments = $model->getId() ? ['user_id' => $model->getId()] : [];

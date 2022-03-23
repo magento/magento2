@@ -8,18 +8,23 @@
 
 namespace Magento\AdminAdobeIms\Controller\Adminhtml\User;
 
+use Magento\Backend\Model\Auth\Session;
 use Magento\User\Block\User\Edit\Tab\Main as UserEdit;
-use Magento\Framework\Exception\AuthenticationException;
+use Magento\User\Controller\Adminhtml\User as UserController;
+use Magento\User\Model\User;
 
-class Delete extends \Magento\User\Controller\Adminhtml\User
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
+class Delete extends UserController
 {
     /**
      * @return void
      */
     public function execute()
     {
-        /** @var \Magento\User\Model\User */
-        $currentUser = $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class)->getUser();
+        /** @var User */
+        $currentUser = $this->_objectManager->get(Session::class)->getUser();
         $userId = (int)$this->getRequest()->getPost('user_id');
 
         if ($userId) {
@@ -31,7 +36,7 @@ class Delete extends \Magento\User\Controller\Adminhtml\User
             try {
                 $currentUserPassword = (string)$this->getRequest()->getPost(UserEdit::CURRENT_USER_PASSWORD_FIELD);
                 $currentUser->performIdentityCheck($currentUserPassword);
-                /** @var \Magento\User\Model\User $model */
+                /** @var User $model */
                 $model = $this->_userFactory->create();
                 $model->setId($userId);
                 $model->delete();

@@ -17,9 +17,9 @@ use Magento\Framework\Escaper;
         <use xlink:href="#spectrum-icon-18-Alert" />
     </svg>
     <div class="spectrum-InLineAlert-header admin-adobe-ims-message-header">
-        <?= $escaper->escapeHtml($block->getData('headline')) ?>
+        <?php echo $escaper->escapeHtml($block->getData('headline')) ?>
     </div>
     <div class="spectrum-InLineAlert-content admin-adobe-ims-message-message">
-        <?= $escaper->escapeHtml($block->getData('message')) ?>
+        <?php echo $escaper->escapeHtml($block->getData('message')) ?>
     </div>
 </div>
