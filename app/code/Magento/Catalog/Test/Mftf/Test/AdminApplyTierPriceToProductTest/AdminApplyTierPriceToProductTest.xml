@@ -230,6 +230,7 @@
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButton}}" stepKey="waitForcustomerGroupPriceDeleteButton"/>
         <scrollTo selector="//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//table[@class='admin__dynamic-rows admin__control-table']//button[@class='action-delete'][1]" stepKey="scrollToDeleteFirstRowOfCustomerGroupPrice"/>
         <click selector="//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//table[@class='admin__dynamic-rows admin__control-table']//button[@class='action-delete'][1]" stepKey="deleteFirstRowOfCustomerGroupPrice"/>
+        <waitForElementVisible selector="//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//table[@class='admin__dynamic-rows admin__control-table']//button[@class='action-delete'][1]" stepKey="waitForSecondRowDeleteButton"/>
         <click selector="//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//table[@class='admin__dynamic-rows admin__control-table']//button[@class='action-delete'][1]" stepKey="deleteSecondRowOfCustomerGroupPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="clickDoneButton5"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct5"/>
