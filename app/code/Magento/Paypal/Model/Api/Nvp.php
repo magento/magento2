@@ -7,6 +7,7 @@
 namespace Magento\Paypal\Model\Api;
 
 use Magento\Framework\DataObject;
+use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Model\Cart;
 use Magento\Payment\Model\Method\Logger;
 
@@ -25,30 +26,30 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Paypal methods definition
      */
-    const DO_DIRECT_PAYMENT = 'DoDirectPayment';
+    public const DO_DIRECT_PAYMENT = 'DoDirectPayment';
 
-    const DO_CAPTURE = 'DoCapture';
+    public const DO_CAPTURE = 'DoCapture';
 
-    const DO_AUTHORIZATION = 'DoAuthorization';
+    public const DO_AUTHORIZATION = 'DoAuthorization';
 
-    const DO_VOID = 'DoVoid';
+    public const DO_VOID = 'DoVoid';
 
-    const REFUND_TRANSACTION = 'RefundTransaction';
+    public const REFUND_TRANSACTION = 'RefundTransaction';
 
-    const SET_EXPRESS_CHECKOUT = 'SetExpressCheckout';
+    public const SET_EXPRESS_CHECKOUT = 'SetExpressCheckout';
 
-    const GET_EXPRESS_CHECKOUT_DETAILS = 'GetExpressCheckoutDetails';
+    public const GET_EXPRESS_CHECKOUT_DETAILS = 'GetExpressCheckoutDetails';
 
-    const DO_EXPRESS_CHECKOUT_PAYMENT = 'DoExpressCheckoutPayment';
+    public const DO_EXPRESS_CHECKOUT_PAYMENT = 'DoExpressCheckoutPayment';
 
-    const CALLBACK_RESPONSE = 'CallbackResponse';
+    public const CALLBACK_RESPONSE = 'CallbackResponse';
 
     /**
      * Paypal ManagePendingTransactionStatus actions
      */
-    const PENDING_TRANSACTION_ACCEPT = 'Accept';
+    public const PENDING_TRANSACTION_ACCEPT = 'Accept';
 
-    const PENDING_TRANSACTION_DENY = 'Deny';
+    public const PENDING_TRANSACTION_DENY = 'Deny';
 
     /**
      * Capture type (make authorization close or remain open)
@@ -387,15 +388,11 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     protected $_doVoidRequest = ['AUTHORIZATIONID', 'NOTE'];
 
     /**
-     * GetTransactionDetailsRequest
-     *
      * @var string[]
      */
     protected $_getTransactionDetailsRequest = ['TRANSACTIONID'];
 
     /**
-     * GetTransactionDetailsResponse
-     *
      * @var string[]
      */
     protected $_getTransactionDetailsResponse = [
@@ -1160,7 +1157,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @param string $methodName
      * @param array $request
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
+     * @throws ClientException|\Magento\Framework\Exception\LocalizedException|\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function call($methodName, array $request)
@@ -1218,7 +1215,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             );
             $http->close();
 
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new ClientException(
                 __('Payment Gateway is unreachable at the moment. Please use another payment option.')
             );
         }

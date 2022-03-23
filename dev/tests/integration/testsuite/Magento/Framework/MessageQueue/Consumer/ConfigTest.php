@@ -59,7 +59,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('consumer5', $consumer->getName());
         $this->assertEquals('queue5', $consumer->getQueue());
-        $this->assertEquals('amqp', $consumer->getConnection());
+        $this->assertEquals('db', $consumer->getConnection());
         $this->assertEquals(\Magento\Framework\MessageQueue\ConsumerInterface::class, $consumer->getConsumerInstance());
         $this->assertNull($consumer->getMaxMessages());
         $handlers = $consumer->getHandlers();

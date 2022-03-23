@@ -220,10 +220,14 @@ class CheckoutTest extends TestCase
         $this->assertEquals($expected, $quote->getCustomerEmail());
         $this->assertNotEmpty($quote->getBillingAddress());
         $this->assertNotEmpty($quote->getShippingAddress());
+        $this->assertEquals($quote->getBillingAddress()->getFirstname(), $quote->getCustomerFirstname());
+        $this->assertEquals($quote->getBillingAddress()->getLastname(), $quote->getCustomerLastname());
 
         $order = $checkout->getOrder();
         $this->assertNotEmpty($order->getBillingAddress());
         $this->assertNotEmpty($order->getShippingAddress());
+        $this->assertEquals($quote->getBillingAddress()->getFirstname(), $order->getCustomerFirstname());
+        $this->assertEquals($quote->getBillingAddress()->getLastname(), $order->getCustomerLastname());
     }
 
     /**
