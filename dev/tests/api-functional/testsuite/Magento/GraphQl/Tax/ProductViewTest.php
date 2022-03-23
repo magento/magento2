@@ -328,7 +328,7 @@ QUERY;
                                 [
                                     'amount' =>
                                         [
-                                            'value  ' => 0.573,
+                                            'value' => 0.573,
                                             'currency' => 'EUR',
                                         ],
                                         'code' => 'TAX',
