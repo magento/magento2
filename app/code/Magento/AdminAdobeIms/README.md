@@ -129,8 +129,10 @@ Done:
 4. Disable the password rules when creating a new user
 5. Remove password refresh options from config,
    1. Validate that events dont happen on login,
+6. Validate that when disabled the fields work again
+7. Functional tests
+   1. Create user
+   2. Delete user [not working as MFTF right now]
 
 Open:
-1. Validate that when disabled the fields work again,
 2. Update Wiki
-3. Functional tests
