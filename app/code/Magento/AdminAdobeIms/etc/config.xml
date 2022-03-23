@@ -21,6 +21,7 @@
                 <header_template>admin_adobe_ims_email_header_template</header_template>
                 <footer_template>admin_adobe_ims_email_footer_template</footer_template>
                 <content_template>admin_emails_new_user_created_template</content_template>
+                <new_user_email_identity>general</new_user_email_identity>
             </email>
         </adobe_ims>
     </default>

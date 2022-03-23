@@ -79,7 +79,7 @@ class ImsEmailNotification
             ])
             ->setTemplateVars($templateVars)
             ->setFromByScope(
-                $this->config->getValue('admin/emails/forgot_email_identity'),
+                $this->config->getValue('adobe_ims/email/new_user_email_identity'),
                 Store::DEFAULT_STORE_ID
             )
             ->addTo($toEmail, $toName)
