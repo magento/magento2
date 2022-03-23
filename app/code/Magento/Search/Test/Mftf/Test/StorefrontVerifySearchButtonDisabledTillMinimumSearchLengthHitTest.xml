@@ -19,6 +19,13 @@
             <group value="pr_exclude"/>
         </annotations>
 
+        <!--Set configs to default-->
+        <magentoCLI command="config:set {{SetMinQueryLength3Config.path}} {{SetMinQueryLength3Config.value}}" stepKey="setMinQueryLengthDefaultState"/>
+
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
 
         <actionGroup ref="StoreFrontFillSearchActionGroup" stepKey="fillSearchByTextLessThanMinimumSearchLength">
