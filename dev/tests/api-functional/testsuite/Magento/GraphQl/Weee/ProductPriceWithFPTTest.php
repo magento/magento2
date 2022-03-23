@@ -112,7 +112,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $product = $result['products']['items'][0];
 
         // final price and regular price are the sum of product price and FPT
-        $this->assertEquals(112.7, $product['price_range']['minimum_price']['regular_price']['value']);
+        $this->assertEquals(225.4, $product['price_range']['minimum_price']['regular_price']['value']);
         $this->assertEquals(112.7, $product['price_range']['minimum_price']['final_price']['value']);
 
         $this->assertEquals(112.7, $product['price_range']['maximum_price']['regular_price']['value']);
@@ -169,7 +169,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $product = $result['products']['items'][0];
 
         // final price and regular price are the sum of product price and FPT
-        $this->assertEquals(112.7, $product['price_range']['minimum_price']['regular_price']['value']);
+        $this->assertEquals(225.4, $product['price_range']['minimum_price']['regular_price']['value']);
         $this->assertEquals(112.7, $product['price_range']['minimum_price']['final_price']['value']);
 
         $this->assertEquals(112.7, $product['price_range']['maximum_price']['regular_price']['value']);
@@ -240,7 +240,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $this->assertNotEmpty($product['price_range']['minimum_price']['fixed_product_taxes']);
 
         // final price and regular price are the sum of product price, FPT and product tax
-        $this->assertEquals(120.2, round($product['price_range']['minimum_price']['regular_price']['value'], 2));
+        $this->assertEquals(240.4, round($product['price_range']['minimum_price']['regular_price']['value'], 2));
         $this->assertEquals(120.2, round($product['price_range']['minimum_price']['final_price']['value'], 2));
 
         $this->assertEquals(120.2, round($product['price_range']['maximum_price']['regular_price']['value'], 2));
@@ -307,7 +307,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
 
         $this->assertNotEmpty($product['price_range']['minimum_price']['fixed_product_taxes']);
         // final price and regular price are the sum of product price and FPT
-        $this->assertEquals(120.2, round($product['price_range']['minimum_price']['regular_price']['value'], 2));
+        $this->assertEquals(240.4, round($product['price_range']['minimum_price']['regular_price']['value'], 2));
         $this->assertEquals(120.2, round($product['price_range']['minimum_price']['final_price']['value'], 2));
 
         $this->assertEquals(120.2, round($product['price_range']['maximum_price']['regular_price']['value'], 2));
@@ -360,7 +360,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $product = $result['products']['items'][0];
 
         // final price and regular price are the sum of product price and FPT
-        $this->assertEquals(112.7, $product['price_range']['minimum_price']['regular_price']['value']);
+        $this->assertEquals(225.4, $product['price_range']['minimum_price']['regular_price']['value']);
         $this->assertEquals(112.7, $product['price_range']['minimum_price']['final_price']['value']);
 
         $this->assertEquals(112.7, $product['price_range']['maximum_price']['regular_price']['value']);
@@ -418,7 +418,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $product = $result['products']['items'][0];
 
         // final price and regular price are the sum of product price and FPT
-        $this->assertEquals(112.7, $product['price_range']['minimum_price']['regular_price']['value']);
+        $this->assertEquals(225.4, $product['price_range']['minimum_price']['regular_price']['value']);
         $this->assertEquals(112.7, $product['price_range']['minimum_price']['final_price']['value']);
 
         $this->assertEquals(112.7, $product['price_range']['maximum_price']['regular_price']['value']);
@@ -492,7 +492,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         //12.7 + 7.5% of 12.7 = 13.65
         $fptWithTax = round(13.65, 2);
         // final price and regular price are the sum of product price and FPT
-        $this->assertEquals(113.65, round($product['price_range']['minimum_price']['regular_price']['value'], 2));
+        $this->assertEquals(227.31, round($product['price_range']['minimum_price']['regular_price']['value'], 2));
         $this->assertEquals(113.65, round($product['price_range']['minimum_price']['final_price']['value'], 2));
 
         $this->assertEquals(113.65, round($product['price_range']['maximum_price']['regular_price']['value'], 2));
@@ -566,7 +566,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertNotEmpty($result['products']['items']);
         $product = $result['products']['items'][0];
-        $this->assertEquals(124.40, round($product['price_range']['minimum_price']['regular_price']['value'], 2));
+        $this->assertEquals(248.81, round($product['price_range']['minimum_price']['regular_price']['value'], 2));
         $this->assertCount(
             2,
             $product['price_range']['minimum_price']['fixed_product_taxes'],
@@ -642,7 +642,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertNotEmpty($result['products']['items']);
         $product = $result['products']['items'][0];
-        $this->assertEquals(100, round($product['price_range']['minimum_price']['regular_price']['value'], 2));
+        $this->assertEquals(200.0, round($product['price_range']['minimum_price']['regular_price']['value'], 2));
         $this->assertCount(
             0,
             $product['price_range']['minimum_price']['fixed_product_taxes'],

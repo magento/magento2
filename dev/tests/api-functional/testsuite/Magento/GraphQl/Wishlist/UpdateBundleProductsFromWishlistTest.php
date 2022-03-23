@@ -111,7 +111,7 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
         self::assertEquals($newBundleOptionUid, $responseOptionSelection['uid']);
         self::assertEquals('Simple Product2', $responseOptionSelection['label']);
         self::assertEquals(1, $responseOptionSelection['quantity']);
-        self::assertEquals(10, $responseOptionSelection['price']);
+        self::assertEquals(20, $responseOptionSelection['price']);
     }
 
     /**

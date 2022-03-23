@@ -105,7 +105,7 @@ class AddBundleProductToWishlistTest extends GraphQlAbstract
             [
                 'label' => 'Simple Product',
                 'quantity' => 1,
-                'price' => 2.75
+                'price' => 5.5
             ]
         );
     }

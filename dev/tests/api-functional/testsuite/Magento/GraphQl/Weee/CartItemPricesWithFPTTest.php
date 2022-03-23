@@ -132,7 +132,7 @@ class CartItemPricesWithFPTTest extends GraphQlAbstract
             [
                 'taxSettings' => [
                     'tax/weee/enable' => '1',
-                    'tax/weee/apply_vat' => '0',
+                    'tax/weee/apply_vat' => '   0',
                     'tax/calculation/price_includes_tax' => '0',
                     'tax/display/type' => '1',
                 ],
@@ -140,19 +140,19 @@ class CartItemPricesWithFPTTest extends GraphQlAbstract
                     [
                         'label' => 'fixed_product_attribute_front_label',
                         'amount' => [
-                            'value' => 10.0
+                            'value' => 20.0
                         ]
                     ],
                     [
                         'label' => 'fpt_for_all_front_label',
                         'amount' => [
-                            'value' => 12.7
+                            'value' => 25.4
                         ]
                     ],
                     [
                         'label' => 'fixed_product_attribute_front_label',
                         'amount' => [
-                            'value' => 5.0
+                            'value' => 10.0
                         ]
                     ],
                 ]
@@ -168,19 +168,19 @@ class CartItemPricesWithFPTTest extends GraphQlAbstract
                     [
                         'label' => 'fixed_product_attribute_front_label',
                         'amount' => [
-                            'value' => 10.0
+                            'value' => 20.0
                         ]
                     ],
                     [
                         'label' => 'fpt_for_all_front_label',
                         'amount' => [
-                            'value' => 12.7
+                            'value' => 25.4
                         ]
                     ],
                     [
                         'label' => 'fixed_product_attribute_front_label',
                         'amount' => [
-                            'value' => 5.0
+                            'value' => 10.0
                         ]
                     ],
                 ]
@@ -196,19 +196,19 @@ class CartItemPricesWithFPTTest extends GraphQlAbstract
                     [
                         'label' => 'fixed_product_attribute_front_label',
                         'amount' => [
-                            'value' => 10.0
+                            'value' => 20.0
                         ]
                     ],
                     [
                         'label' => 'fpt_for_all_front_label',
                         'amount' => [
-                            'value' => 12.7
+                            'value' => 25.4
                         ]
                     ],
                     [
                         'label' => 'fixed_product_attribute_front_label',
                         'amount' => [
-                            'value' => 5.0
+                            'value' => 10
                         ]
                     ],
                 ]
@@ -224,19 +224,19 @@ class CartItemPricesWithFPTTest extends GraphQlAbstract
                     [
                         'label' => 'fixed_product_attribute_front_label',
                         'amount' => [
-                            'value' => 10.75
+                            'value' => 21.5
                         ]
                     ],
                     [
                         'label' => 'fpt_for_all_front_label',
                         'amount' => [
-                            'value' => 13.66
+                            'value' => 27.31
                         ]
                     ],
                     [
                         'label' => 'fixed_product_attribute_front_label',
                         'amount' => [
-                            'value' => 5.38
+                            'value' => 10.75
                         ]
                     ],
                 ]
@@ -252,19 +252,19 @@ class CartItemPricesWithFPTTest extends GraphQlAbstract
                     [
                         'label' => 'fixed_product_attribute_front_label',
                         'amount' => [
-                            'value' => 10.0
+                            'value' => 20
                         ]
                     ],
                     [
                         'label' => 'fpt_for_all_front_label',
                         'amount' => [
-                            'value' => 12.7
+                            'value' => 25.41
                         ]
                     ],
                     [
                         'label' => 'fixed_product_attribute_front_label',
                         'amount' => [
-                            'value' => 5.01
+                            'value' => 10
                         ]
                     ],
                 ]
@@ -280,19 +280,19 @@ class CartItemPricesWithFPTTest extends GraphQlAbstract
                     [
                         'label' => 'fixed_product_attribute_front_label',
                         'amount' => [
-                            'value' => 10.75
+                            'value' => 21.5
                         ]
                     ],
                     [
                         'label' => 'fpt_for_all_front_label',
                         'amount' => [
-                            'value' => 13.65
+                            'value' => 27.31
                         ]
                     ],
                     [
                         'label' => 'fixed_product_attribute_front_label',
                         'amount' => [
-                            'value' => 5.38
+                            'value' => 10.75
                         ]
                     ],
                 ]

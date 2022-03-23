@@ -284,16 +284,16 @@ QUERY;
                 [
                     'minimalPrice' => [
                         'amount' => [
-                            'value' => 4.1065,
-                            'currency' => 'USD'
+                            'value' => 8.213,
+                            'currency' => 'EUR'
                         ],
                         'adjustments' => [
                             0 =>
                                 [
                                     'amount' =>
                                         [
-                                            'value' => 0.2865,
-                                            'currency' => 'USD',
+                                            'value' => 0.573,
+                                            'currency' => 'EUR',
                                         ],
                                         'code' => 'TAX',
                                         'description' => 'INCLUDED',
@@ -302,16 +302,16 @@ QUERY;
                     ],
                     'regularPrice' => [
                         'amount' => [
-                            'value' => 10.7500,
-                            'currency' => 'USD'
+                            'value' => 21.5,
+                            'currency' => 'EUR'
                         ],
                         'adjustments' => [
                             0 =>
                                 [
                                     'amount' =>
                                         [
-                                            'value' => 0.7500,
-                                            'currency' => 'USD',
+                                            'value' => 1.5,
+                                            'currency' => 'EUR',
                                         ],
                                         'code' => 'TAX',
                                         'description' => 'INCLUDED',
@@ -320,16 +320,16 @@ QUERY;
                     ],
                     'maximalPrice' => [
                         'amount' => [
-                            'value' => 4.1065,
-                            'currency' => 'USD'
+                            'value' => 8.213,
+                            'currency' => 'EUR'
                         ],
                         'adjustments' => [
                             0 =>
                                 [
                                     'amount' =>
                                         [
-                                            'value' => 0.2865,
-                                            'currency' => 'USD',
+                                            'value  ' => 0.573,
+                                            'currency' => 'EUR',
                                         ],
                                         'code' => 'TAX',
                                         'description' => 'INCLUDED',

@@ -29,7 +29,7 @@ class VariablesSupportQueryTest extends GraphQlAbstract
     public function testQueryObjectVariablesSupport()
     {
         $productSku = 'simple-249';
-        $minPrice = 153;
+        $minPrice = 306;
 
         $query
             = <<<'QUERY'
