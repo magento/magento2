@@ -16,6 +16,7 @@
         "magento/module-config": "*",
         "magento/module-user": "*",
         "magento/module-backend": "*",
+        "magento/module-authorization": "*",
         "magento/module-store": "*",
         "magento/module-email": "*",
         "magento/module-security": "*"

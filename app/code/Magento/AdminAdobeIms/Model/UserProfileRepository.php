@@ -17,7 +17,8 @@ use Psr\Log\LoggerInterface;
 /**
  * Represent user profile repository
  */
-class UserProfileRepository extends \Magento\AdobeIms\Model\UserProfileRepository implements UserProfileRepositoryInterface
+class UserProfileRepository extends \Magento\AdobeIms\Model\UserProfileRepository
+    implements UserProfileRepositoryInterface
 {
     private const ADOBE_USER_ID = 'adobe_user_id';
 
@@ -25,6 +26,7 @@ class UserProfileRepository extends \Magento\AdobeIms\Model\UserProfileRepositor
      * @var UserProfile
      */
     private UserProfile $resource;
+
     /**
      * @var UserProfileInterfaceFactory
      */

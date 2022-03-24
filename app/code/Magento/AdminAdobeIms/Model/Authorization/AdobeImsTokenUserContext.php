@@ -25,7 +25,7 @@ use Magento\Framework\Webapi\Request;
  */
 class AdobeImsTokenUserContext implements UserContextInterface
 {
-    const AUTHORIZATION_METHOD_HEADER_BEARER = 'bearer';
+    private const AUTHORIZATION_METHOD_HEADER_BEARER = 'bearer';
 
     /**
      * @var int
@@ -41,26 +41,32 @@ class AdobeImsTokenUserContext implements UserContextInterface
      * @var Request
      */
     private Request $request;
+
     /**
      * @var TokenReaderInterface
      */
     private TokenReaderInterface $tokenReader;
+
     /**
      * @var ImsConnection
      */
     private ImsConnection $imsConnection;
+
     /**
      * @var ImsConfig
      */
     private ImsConfig $imsConfig;
+
     /**
      * @var UserProfileRepositoryInterface
      */
     private UserProfileRepositoryInterface $userProfileRepository;
+
     /**
      * @var UserProfileInterfaceFactory
      */
     private UserProfileInterfaceFactory $userProfileFactory;
+
     /**
      * @var User
      */

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Authorization;
 
+use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -29,38 +30,44 @@ use Magento\User\Model\User;
 /**
  * Checks the categories/list api
  */
-class AdobeImsTokenUserContextTest  extends WebapiAbstract
+class AdobeImsTokenUserContextTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/store/storeConfigs';
-    const SERVICE_NAME = 'storeStoreConfigManagerV1';
-    const SERVICE_VERSION = 'V1';
-    const KEYS_LOCATION = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
-    const TEST_ADOBE_USER_ID = '121B46F2620BF4240A49TEST@AdobeID';
+    private const RESOURCE_PATH = '/V1/store/storeConfigs';
+    private const SERVICE_NAME = 'storeStoreConfigManagerV1';
+    private const SERVICE_VERSION = 'V1';
+    private const KEYS_LOCATION = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
+    private const TEST_ADOBE_USER_ID = '121B46F2620BF4240A49TEST@AdobeID';
 
     /**
      * @var JwtManagerInterface
      */
     private $manager;
+
     /**
      * @var CacheInterface
      */
     private $cache;
+
     /**
      * @var UserProfileRepositoryInterface
      */
     private $userProfileRepository;
+
     /**
      * @var User
      */
     private $userModel;
+
     /**
      * @var JwkFactory
      */
     private $jwkFactory;
+
     /**
      * @var WriterInterface
      */
     private $configWriter;
+
     /**
      * @var ScopeConfigInterface
      */
@@ -85,7 +92,7 @@ class AdobeImsTokenUserContextTest  extends WebapiAbstract
 
     public function testUseAdobeAccessTokenModuleDisabled()
     {
-        $this->configWriter->save(\Magento\AdminAdobeIms\Service\ImsConfig::XML_PATH_ENABLED, 0);
+        $this->configWriter->save(ImsConfig::XML_PATH_ENABLED, 0);
         $this->scopeConfig->clean();
 
         $token = $this->createAccessToken();
@@ -114,7 +121,7 @@ class AdobeImsTokenUserContextTest  extends WebapiAbstract
     {
         $adminUserNameFromFixture = 'webapi_user';
         $token = $this->createAccessToken();
-        $this->configWriter->save(\Magento\AdminAdobeIms\Service\ImsConfig::XML_PATH_ENABLED, 1);
+        $this->configWriter->save(ImsConfig::XML_PATH_ENABLED, 1);
         $this->scopeConfig->clean();
         $this->runWebApiCall($token);
         $this->assertAdobeUserIsSaved($adminUserNameFromFixture);
@@ -169,6 +176,10 @@ class AdobeImsTokenUserContextTest  extends WebapiAbstract
         }
     }
 
+    /**
+     * @param $token
+     * @return void
+     */
     private function runWebApiCall($token)
     {
         $serviceInfo = [
@@ -216,18 +227,18 @@ class AdobeImsTokenUserContextTest  extends WebapiAbstract
             [
                 new JwsHeader(
                     [
-                        new PrivateHeaderParameter('alg', 'RS256'),
-                        new PrivateHeaderParameter('x5u', 'jwtRS256.key.pub'),
-                        new PrivateHeaderParameter('kid', 'jwtRS256.key'),
-                        new PrivateHeaderParameter('itt', 'at')
+                        new PrivateHeaderParameter('alg','RS256'),
+                        new PrivateHeaderParameter('x5u','jwtRS256.key.pub'),
+                        new PrivateHeaderParameter('kid','jwtRS256.key'),
+                        new PrivateHeaderParameter('itt','at')
                     ]
                 )
             ],
             new ClaimsPayload(
                 [
-                    new PrivateClaim('user_id', self::TEST_ADOBE_USER_ID),
-                    new PrivateClaim('created_at',  $date),
-                    new PrivateClaim('expires_in',  '86400000')
+                    new PrivateClaim('user_id',self::TEST_ADOBE_USER_ID),
+                    new PrivateClaim('created_at', $date),
+                    new PrivateClaim('expires_in', '86400000')
                 ]
             ),
             null
@@ -263,6 +274,5 @@ class AdobeImsTokenUserContextTest  extends WebapiAbstract
         $this->assertEquals(['resources' => 'Magento_Backend::store'], $exceptionData['parameters']);
         $this->assertEquals(HTTPExceptionCodes::HTTP_UNAUTHORIZED, $exception->getCode());
     }
-
 }
 

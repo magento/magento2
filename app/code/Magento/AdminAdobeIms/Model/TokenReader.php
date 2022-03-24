@@ -27,12 +27,13 @@ use Psr\Log\LoggerInterface;
  */
 class TokenReader implements TokenReaderInterface
 {
-    const HEADER_ATTRIBUTE_X5U = 'x5u';
+    private const HEADER_ATTRIBUTE_X5U = 'x5u';
 
     /**
      * @var string
      */
     private string $cacheIdPrefix = 'AdminAdobeIms_';
+
     /**
      * @var string
      */
@@ -42,22 +43,27 @@ class TokenReader implements TokenReaderInterface
      * @var JwtManagerInterface
      */
     private JwtManagerInterface $jwtManager;
+
     /**
      * @var CacheInterface
      */
     private CacheInterface $cache;
+
     /**
      * @var ImsConfig
      */
     private ImsConfig $imsConfig;
+
     /**
      * @var JwkFactory
      */
     private JwkFactory $jwkFactory;
+
     /**
      * @var LoggerInterface
      */
     private LoggerInterface $logger;
+
     /**
      * @var DateTime
      */
@@ -88,6 +94,8 @@ class TokenReader implements TokenReaderInterface
     }
 
     /**
+     * Read data from a token.
+     *
      * @param string $token
      * @return array
      * @throws AuthenticationException
@@ -166,6 +174,8 @@ class TokenReader implements TokenReaderInterface
     }
 
     /**
+     * Load certificate from cache
+     *
      * @return string|bool
      */
     private function loadCertificateFromCache()
@@ -174,6 +184,8 @@ class TokenReader implements TokenReaderInterface
     }
 
     /**
+     * Save certificate into cache
+     *
      * @param string $certificateValue
      * @return void
      */
@@ -183,8 +195,7 @@ class TokenReader implements TokenReaderInterface
     }
 
     /**
-     * Cache Id is based on prefix that is equal to module name
-     * and certificate file name that is in token header
+     * Cache Id is based on prefix that is equal to module name and certificate file name that is in token header
      *
      * @param string $certificateFileName
      */
