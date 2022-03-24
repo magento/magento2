@@ -8,6 +8,7 @@ namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AddressRegistry;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Collection as AddressAttributeCollection;
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
@@ -221,21 +222,22 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private function getAttributesMeta(Type $entityType): array
     {
         $meta = [];
+        /** @var AddressAttributeCollection $attributes */
+        $attributes = $entityType->getAttributeCollection();
         $customerId = $this->context->getRequestParam('parent_id');
         $entityId = $this->context->getRequestParam('entity_id');
+
         if (!$customerId && $entityId) {
             $customerId = $this->addressRegistry->retrieve($entityId)->getParentId();
         }
-        /** @var \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection $sharedCollection */
-        $sharedCollection = $entityType->getAttributeCollection();
-        $collection = clone $sharedCollection;
+
         if ($customerId) {
             $customer = $this->customerRepository->getById($customerId);
-            $collection->setWebsite($customer->getWebsiteId());
+            $attributes->setWebsite($customer->getWebsiteId());
         }
 
         /* @var AbstractAttribute $attribute */
-        foreach ($collection as $attribute) {
+        foreach ($attributes as $attribute) {
             if (\in_array($attribute->getFrontendInput(), $this->bannedInputTypes, true)) {
                 continue;
             }

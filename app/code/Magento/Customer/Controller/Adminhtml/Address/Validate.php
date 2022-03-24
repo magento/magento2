@@ -111,6 +111,7 @@ class Validate extends Action implements HttpPostActionInterface, HttpGetActionI
     {
         $addressForm = $this->formFactory->create('customer_address', 'adminhtml_customer_address');
         $formData = $addressForm->extractData($this->getRequest());
+
         $errors = $addressForm->validateData($formData);
         if ($errors !== true) {
             $messages = $response->hasMessages() ? $response->getMessages() : [];
