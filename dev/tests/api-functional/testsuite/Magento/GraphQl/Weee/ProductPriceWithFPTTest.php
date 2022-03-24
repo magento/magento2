@@ -116,7 +116,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $this->assertEquals(225.4, $product['price_range']['minimum_price']['final_price']['value']);
 
         $this->assertEquals(225.4, $product['price_range']['maximum_price']['regular_price']['value']);
-        $this->assertEquals(112.7, $product['price_range']['maximum_price']['final_price']['value']);
+        $this->assertEquals(225.4, $product['price_range']['maximum_price']['final_price']['value']);
 
         $this->assertNotEmpty($product['price_range']['minimum_price']['fixed_product_taxes']);
         $fixedProductTax = $product['price_range']['minimum_price']['fixed_product_taxes'][0];
@@ -173,7 +173,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $this->assertEquals(225.4, $product['price_range']['minimum_price']['final_price']['value']);
 
         $this->assertEquals(225.4, $product['price_range']['maximum_price']['regular_price']['value']);
-        $this->assertEquals(112.7, $product['price_range']['maximum_price']['final_price']['value']);
+        $this->assertEquals(225.4, $product['price_range']['maximum_price']['final_price']['value']);
 
         $this->assertNotEmpty($product['price_range']['minimum_price']['fixed_product_taxes']);
         $fixedProductTax = $product['price_range']['minimum_price']['fixed_product_taxes'][0];
@@ -244,7 +244,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $this->assertEquals(240.4, round($product['price_range']['minimum_price']['final_price']['value'], 2));
 
         $this->assertEquals(240.4, round($product['price_range']['maximum_price']['regular_price']['value'], 2));
-        $this->assertEquals(120.2, round($product['price_range']['maximum_price']['final_price']['value'], 2));
+        $this->assertEquals(240.4, round($product['price_range']['maximum_price']['final_price']['value'], 2));
     }
 
     /**
@@ -311,7 +311,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $this->assertEquals(240.4, round($product['price_range']['minimum_price']['final_price']['value'], 2));
 
         $this->assertEquals(240.4, round($product['price_range']['maximum_price']['regular_price']['value'], 2));
-        $this->assertEquals(120.2, round($product['price_range']['maximum_price']['final_price']['value'], 2));
+        $this->assertEquals(240.4, round($product['price_range']['maximum_price']['final_price']['value'], 2));
     }
 
     /**
@@ -364,7 +364,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $this->assertEquals(225.4, $product['price_range']['minimum_price']['final_price']['value']);
 
         $this->assertEquals(225.4, $product['price_range']['maximum_price']['regular_price']['value']);
-        $this->assertEquals(112.7, $product['price_range']['maximum_price']['final_price']['value']);
+        $this->assertEquals(225.4, $product['price_range']['maximum_price']['final_price']['value']);
 
         $this->assertNotEmpty($product['price_range']['minimum_price']['fixed_product_taxes']);
         $fixedProductTax = $product['price_range']['minimum_price']['fixed_product_taxes'][0];
@@ -422,7 +422,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $this->assertEquals(225.4, $product['price_range']['minimum_price']['final_price']['value']);
 
         $this->assertEquals(225.4, $product['price_range']['maximum_price']['regular_price']['value']);
-        $this->assertEquals(112.7, $product['price_range']['maximum_price']['final_price']['value']);
+        $this->assertEquals(225.4, $product['price_range']['maximum_price']['final_price']['value']);
 
         $this->assertNotEmpty($product['price_range']['minimum_price']['fixed_product_taxes']);
         $fixedProductTax = $product['price_range']['minimum_price']['fixed_product_taxes'][0];
@@ -496,7 +496,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $this->assertEquals(227.31, round($product['price_range']['minimum_price']['final_price']['value'], 2));
 
         $this->assertEquals(227.31, round($product['price_range']['maximum_price']['regular_price']['value'], 2));
-        $this->assertEquals(113.65, round($product['price_range']['maximum_price']['final_price']['value'], 2));
+        $this->assertEquals(227.31, round($product['price_range']['maximum_price']['final_price']['value'], 2));
 
         $this->assertNotEmpty($product['price_range']['minimum_price']['fixed_product_taxes']);
         $fixedProductTax = $product['price_range']['minimum_price']['fixed_product_taxes'][0];
