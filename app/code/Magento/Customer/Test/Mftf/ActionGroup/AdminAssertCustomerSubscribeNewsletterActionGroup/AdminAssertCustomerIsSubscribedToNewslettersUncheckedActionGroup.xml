@@ -11,9 +11,6 @@
         <annotations>
             <description>Verify that check box "Newsletter subscribed" is unchecked on "Newsletter" tab on customer edit page.</description>
         </annotations>
-        <arguments>
-            <argument name="websiteId" type="string" defaultValue="1"/>
-        </arguments>
         <click selector="//a[@class='admin__page-nav-link' and @id='tab_newsletter_content']" stepKey="subscribeToNewsletterAgain"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <seeElement selector="//input[@id='_newslettersubscription_status_1' and @value='']" stepKey="checkboxIsVisbale"/>

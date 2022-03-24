@@ -5,7 +5,6 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontCustomerSubscribeToNewsletterAndVerifyInAdminTest">
