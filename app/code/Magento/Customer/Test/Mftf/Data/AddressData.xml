@@ -66,6 +66,9 @@
         <data key="telephone">512-345-6789</data>
         <requiredEntity type="region">RegionTX</requiredEntity>
     </entity>
+    <entity name="US_Address_TX_Without_Default_And_Telephone" extends="US_Address_TX_Without_Default">
+        <data key="telephone"></data>
+    </entity>
     <entity name="US_Address_TX_Default_Billing" type="address">
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
