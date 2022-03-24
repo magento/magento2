@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\AddressRegistry;
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
 use Magento\Eav\Model\Config;
@@ -23,6 +24,7 @@ use Magento\Ui\Component\Form\Element\Multiline;
  * Dataprovider of customer addresses for customer address grid.
  *
  * @property \Magento\Customer\Model\ResourceModel\Address\Collection $collection
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -75,9 +77,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $attributeMetadataResolver;
 
     /**
-     * @var Share|null
+     * @var Share
      */
     private $shareConfig;
+
+    /**
+     * @var AddressRegistry
+     */
+    private $addressRegistry;
 
     /**
      * DataProvider constructor.
@@ -94,6 +101,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param array $data
      * @param bool $allowToShowHiddenAttributes
      * @param Share|null $shareConfig
+     * @param AddressRegistry|null $addressRegistry
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -110,7 +118,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         array $meta = [],
         array $data = [],
         $allowToShowHiddenAttributes = true,
-        ?Share $shareConfig = null
+        ?Share $shareConfig = null,
+        ?AddressRegistry $addressRegistry = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $addressCollectionFactory->create();
@@ -121,6 +130,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->fileUploaderDataResolver = $fileUploaderDataResolver;
         $this->attributeMetadataResolver = $attributeMetadataResolver;
         $this->shareConfig = $shareConfig ?? ObjectManager::getInstance()->get(Share::class);
+        $this->addressRegistry = $addressRegistry ?? ObjectManager::getInstance()->get(AddressRegistry::class);
         $this->meta['general']['children'] = $this->getAttributesMeta(
             $eavConfig->getEntityType('customer_address')
         );
@@ -220,13 +230,19 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private function getAttributesMeta(Type $entityType): array
     {
         $meta = [];
-        $parentId = $this->context->getRequestParam('parent_id');
-        $customer = $this->customerRepository->getById($parentId);
+        $customerId = $this->context->getRequestParam('parent_id');
+        $entityId = $this->context->getRequestParam('entity_id');
+        if (!$customerId && $entityId) {
+            $customerId = $this->addressRegistry->retrieve($entityId)->getParentId();
+        }
         /** @var \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection $sharedCollection */
         $sharedCollection = $entityType->getAttributeCollection();
         $collection = clone $sharedCollection;
-        if (!$this->shareConfig->isGlobalScope()) {
-            $collection->setWebsite($customer->getWebsiteId());
+        if ($customerId) {
+            $customer = $this->customerRepository->getById($customerId);
+            if (!$this->shareConfig->isGlobalScope()) {
+                $collection->setWebsite($customer->getWebsiteId());
+            }
         }
 
         /* @var AbstractAttribute $attribute */
