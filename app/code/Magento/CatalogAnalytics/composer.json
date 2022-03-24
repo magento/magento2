@@ -1,17 +1,18 @@
 {
     "name": "magento/module-catalog-analytics",
     "description": "N/A",
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/framework": "*",
-        "magento/module-catalog": "*",
-        "magento/module-analytics": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.4.1",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "103.0.*",
+        "magento/module-catalog": "104.0.*",
+        "magento/module-analytics": "100.4.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -21,3 +22,4 @@
         }
     }
 }
+

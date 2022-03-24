@@ -2,21 +2,22 @@
     "name": "magento/module-catalog-cms-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/framework": "*",
-        "magento/module-catalog": "*",
-        "magento/module-cms-graph-ql": "*"
-    },
-    "suggest": {
-        "magento/module-graph-ql": "*",
-        "magento/module-cms": "*",
-        "magento/module-catalog-graph-ql": "*"
-    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.4.0",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "103.0.*",
+        "magento/module-catalog": "104.0.*",
+        "magento/module-cms-graph-ql": "100.4.*"
+    },
+    "suggest": {
+        "magento/module-graph-ql": "100.4.*",
+        "magento/module-cms": "104.0.*",
+        "magento/module-catalog-graph-ql": "100.4.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -26,3 +27,4 @@
         }
     }
 }
+

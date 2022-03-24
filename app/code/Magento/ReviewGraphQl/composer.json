@@ -2,21 +2,22 @@
     "name": "magento/module-review-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/module-catalog": "*",
-        "magento/module-review": "*",
-        "magento/module-store": "*",
-        "magento/framework": "*"
-    },
-    "suggest": {
-        "magento/module-graph-ql": "*",
-        "magento/module-graph-ql-cache": "*"
-    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.4.0",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/module-catalog": "104.0.*",
+        "magento/module-review": "100.4.*",
+        "magento/module-store": "101.1.*",
+        "magento/framework": "103.0.*"
+    },
+    "suggest": {
+        "magento/module-graph-ql": "100.4.*",
+        "magento/module-graph-ql-cache": "100.4.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -26,3 +27,4 @@
         }
     }
 }
+
