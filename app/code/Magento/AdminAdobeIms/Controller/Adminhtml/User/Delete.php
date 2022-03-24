@@ -28,7 +28,7 @@ class Delete extends UserController
         $userId = (int)$this->getRequest()->getPost('user_id');
 
         if ($userId) {
-            if ($currentUser->getId() === $userId) {
+            if ((int)$currentUser->getId() === $userId) {
                 $this->messageManager->addError(__('You cannot delete your own account.'));
                 $this->_redirect('adminhtml/*/edit', ['user_id' => $userId]);
                 return;
