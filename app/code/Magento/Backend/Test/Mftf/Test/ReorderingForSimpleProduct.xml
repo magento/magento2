@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ReorderingForSimpleProduct" extends="CustomerOrderSimpleProduct">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Customer Checkout validations test"/>
+            <title value="Checkout of Simple product as Registered customer test"/>
+            <description value="Checkout of Simple product as Registered customer test"/>
+            <stories value="Customer Checkout test"/>
+            <testCaseId value="MC-27191"/>
+            <severity value="MAJOR"/>
+            <group value="reorder"/>
+        </annotations>
+
+        <!-- Log in as admin-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!-- Go to orders page and validate the order details -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
+            <argument name="orderId" value="{$getOrderNumber}"/>
+        </actionGroup>
+
+        <!-- create an shipment for the order-->
+        <actionGroup ref="AdminCreateShipmentFromOrderPage" stepKey="createNewShipment">
+            <argument name="Title" value="Title"/>
+            <argument name="Number" value="99"/>
+            <argument name="Qty" value="1"/>
+            <argument name="Comment" value="comments for shipment"/>
+        </actionGroup>
+
+
+        <!-- Open My Account Page from Customer dropdown -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
+
+        <!-- Goto Orders tab from Sidebar menu in Storefront page -->
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu">
+            <argument name="menu" value="My Orders"/>
+        </actionGroup>
+
+        <!-- Clicking View Order from My Orders Grid -->
+        <actionGroup ref="StorefrontClickViewOrderLinkOnMyOrdersPageActionGroup" stepKey="clickViewOrder"/>
+
+        <!-- Clicking on Reorder link from Order Details Tab -->
+        <click selector="{{StorefrontCustomerOrderViewSection.reorder}}" stepKey="clickReorder"/>
+
+        <!-- Steps to perform the reorder -->
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickOnNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoadedTill"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButtonOnCheckoutPage"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButtonOnCheckoutPage"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlacedByCustomer"/>
+
+    </test>
+</tests>
