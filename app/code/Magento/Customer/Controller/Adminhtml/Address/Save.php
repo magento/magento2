@@ -7,8 +7,6 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Backend\App\Action;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
@@ -68,11 +66,6 @@ class Save extends Action implements HttpPostActionInterface
     private $resultJsonFactory;
 
     /**
-     * @var Share
-     */
-    private $shareConfig;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
@@ -91,7 +84,6 @@ class Save extends Action implements HttpPostActionInterface
      * @param \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory
      * @param LoggerInterface $logger
      * @param JsonFactory $resultJsonFactory
-     * @param Share|null $shareConfig
      * @param StoreManagerInterface|null $storeManager
      * @param CustomerRegistry|null $customerRegistry
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -105,7 +97,6 @@ class Save extends Action implements HttpPostActionInterface
         \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory,
         LoggerInterface $logger,
         JsonFactory $resultJsonFactory,
-        ?Share $shareConfig = null,
         ?StoreManagerInterface $storeManager = null,
         ?CustomerRegistry $customerRegistry = null
     ) {
@@ -117,8 +108,6 @@ class Save extends Action implements HttpPostActionInterface
         $this->addressDataFactory = $addressDataFactory;
         $this->logger = $logger;
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->shareConfig = $shareConfig
-            ?? ObjectManager::getInstance()->get(Share::class);
         $this->storeManager = $storeManager
             ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->customerRegistry = $customerRegistry
@@ -138,7 +127,7 @@ class Save extends Action implements HttpPostActionInterface
         $error = false;
         try {
             $customerModel = $this->customerRegistry->retrieve($customerId);
-            if (!$this->shareConfig->isGlobalScope() && $customerModel->getStoreId()) {
+            if ($customerModel->getStoreId()) {
                 $this->storeManager->setCurrentStore($customerModel->getStoreId());
             }
             /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */

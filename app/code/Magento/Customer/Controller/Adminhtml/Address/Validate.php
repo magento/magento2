@@ -7,8 +7,6 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Backend\App\Action;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
@@ -40,11 +38,6 @@ class Validate extends Action implements HttpPostActionInterface, HttpGetActionI
     private $formFactory;
 
     /**
-     * @var Share
-     */
-    private $shareConfig;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
@@ -58,7 +51,6 @@ class Validate extends Action implements HttpPostActionInterface, HttpGetActionI
      * @param Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
-     * @param Share|null $shareConfig
      * @param StoreManagerInterface|null $storeManager
      * @param CustomerRegistry|null $customerRegistry
      */
@@ -66,15 +58,12 @@ class Validate extends Action implements HttpPostActionInterface, HttpGetActionI
         Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
-        ?Share $shareConfig = null,
         ?StoreManagerInterface $storeManager = null,
         ?CustomerRegistry $customerRegistry = null
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->formFactory = $formFactory;
-        $this->shareConfig = $shareConfig
-            ?? ObjectManager::getInstance()->get(Share::class);
         $this->storeManager = $storeManager
             ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->customerRegistry = $customerRegistry
@@ -91,7 +80,7 @@ class Validate extends Action implements HttpPostActionInterface, HttpGetActionI
         $customerId = $this->getRequest()->getParam('parent_id');
         if ($customerId) {
             $customerModel = $this->customerRegistry->retrieve($customerId);
-            if (!$this->shareConfig->isGlobalScope() && $customerModel->getStoreId()) {
+            if ($customerModel->getStoreId()) {
                 $this->storeManager->setCurrentStore($customerModel->getStoreId());
             }
         }

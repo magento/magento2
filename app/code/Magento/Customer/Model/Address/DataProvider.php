@@ -8,7 +8,6 @@ namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AddressRegistry;
-use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
@@ -77,11 +76,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $attributeMetadataResolver;
 
     /**
-     * @var Share
-     */
-    private $shareConfig;
-
-    /**
      * @var AddressRegistry
      */
     private $addressRegistry;
@@ -100,7 +94,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param array $meta
      * @param array $data
      * @param bool $allowToShowHiddenAttributes
-     * @param Share|null $shareConfig
      * @param AddressRegistry|null $addressRegistry
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -118,7 +111,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         array $meta = [],
         array $data = [],
         $allowToShowHiddenAttributes = true,
-        ?Share $shareConfig = null,
         ?AddressRegistry $addressRegistry = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
@@ -129,7 +121,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->context = $context;
         $this->fileUploaderDataResolver = $fileUploaderDataResolver;
         $this->attributeMetadataResolver = $attributeMetadataResolver;
-        $this->shareConfig = $shareConfig ?? ObjectManager::getInstance()->get(Share::class);
         $this->addressRegistry = $addressRegistry ?? ObjectManager::getInstance()->get(AddressRegistry::class);
         $this->meta['general']['children'] = $this->getAttributesMeta(
             $eavConfig->getEntityType('customer_address')
@@ -240,9 +231,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $collection = clone $sharedCollection;
         if ($customerId) {
             $customer = $this->customerRepository->getById($customerId);
-            if (!$this->shareConfig->isGlobalScope()) {
-                $collection->setWebsite($customer->getWebsiteId());
-            }
+            $collection->setWebsite($customer->getWebsiteId());
         }
 
         /* @var AbstractAttribute $attribute */
