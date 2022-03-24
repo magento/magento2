@@ -114,6 +114,9 @@ class Date extends Column
         ];
         if (!isset($config['dateFormat'])) {
             $config['dateFormat'] = $this->timezone->getDateTimeFormat(\IntlDateFormatter::MEDIUM);
+            if ($config['storeLocale'] == 'fr_CA' || $config['storeLocale'] == 'pt_BR') {
+                $config['dateFormat'] = preg_replace("/([^']*)'([^']+)'([^']*)/", '$1[$2]$3', $config['dateFormat']);
+            }
         }
         $this->setData('config', $config);
 
