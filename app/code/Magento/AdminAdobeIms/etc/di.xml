@@ -53,4 +53,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Backend\Model\Auth">
+        <plugin name="disable_admin_login_auth"
+                type="Magento\AdminAdobeIms\Plugin\DisableAdminLoginAuthPlugin"/>
+    </type>
 </config>
