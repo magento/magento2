@@ -19,6 +19,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class used to execute test cases for update item quantity
+ */
 class UpdateItemQtyTest extends TestCase
 {
     /**
@@ -248,7 +251,7 @@ class UpdateItemQtyTest extends TestCase
     /**
      * @return void
      */
-    public function testExecuteWithNonNumericItemQty(): void
+    public function testExecuteInvalidItemQty(): void
     {
         $error = [
             'success' => false,

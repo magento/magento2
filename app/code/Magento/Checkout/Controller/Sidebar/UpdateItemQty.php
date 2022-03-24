@@ -18,6 +18,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class used to update item quantity.
+ */
 class UpdateItemQty extends Action implements HttpPostActionInterface
 {
     /**
