@@ -53,10 +53,12 @@ class DisableAdminLoginAuthPlugin
     {
         if ($this->imsConfig->enabled() === false) {
             $proceed($username, $password);
+            return;
         }
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->redirectFactory->create();
         $this->messageManager->addErrorMessage(__('Please sign in with Adobe ID'));
         $resultRedirect->setPath('admin');
+        return;
     }
 }
