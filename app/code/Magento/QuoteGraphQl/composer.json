@@ -2,29 +2,30 @@
     "name": "magento/module-quote-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "*",
+        "magento/module-quote": "*",
+        "magento/module-checkout": "*",
+        "magento/module-catalog": "*",
+        "magento/module-store": "*",
+        "magento/module-customer": "*",
+        "magento/module-customer-graph-ql": "*",
+        "magento/module-sales": "*",
+        "magento/module-directory": "*",
+        "magento/module-graph-ql": "*",
+        "magento/module-gift-message": "*",
+        "magento/module-catalog-inventory": "*"
+    },
+    "suggest": {
+        "magento/module-graph-ql-cache": "*",
+        "magento/module-catalog-inventory-graph-ql": "*",
+        "magento/module-payment-graph-ql": "*"
+    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "version": "100.4.3",
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "103.0.*",
-        "magento/module-quote": "101.2.*",
-        "magento/module-checkout": "100.4.*",
-        "magento/module-catalog": "104.0.*",
-        "magento/module-store": "101.1.*",
-        "magento/module-customer": "103.0.*",
-        "magento/module-customer-graph-ql": "100.4.*",
-        "magento/module-sales": "103.0.*",
-        "magento/module-directory": "100.4.*",
-        "magento/module-graph-ql": "100.4.*",
-        "magento/module-gift-message": "100.4.*",
-        "magento/module-catalog-inventory": "100.4.*"
-    },
-    "suggest": {
-        "magento/module-graph-ql-cache": "100.4.*"
-    },
     "autoload": {
         "files": [
             "registration.php"
@@ -34,4 +35,3 @@
         }
     }
 }
-

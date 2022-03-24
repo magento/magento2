@@ -1,33 +1,32 @@
 {
     "name": "magento/module-swatches",
     "description": "Add Swatches to Products",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-config": "*",
+        "magento/module-configurable-product": "*",
+        "magento/module-customer": "*",
+        "magento/module-eav": "*",
+        "magento/module-page-cache": "*",
+        "magento/module-media-storage": "*",
+        "magento/module-store": "*",
+        "magento/module-theme": "*"
+    },
+    "suggest": {
+        "magento/module-layered-navigation": "*",
+        "magento/module-swatches-sample-data": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "config": {
-        "sort-packages": true
-    },
-    "version": "100.4.3",
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "103.0.*",
-        "magento/module-backend": "102.0.*",
-        "magento/module-catalog": "104.0.*",
-        "magento/module-config": "101.2.*",
-        "magento/module-configurable-product": "100.4.*",
-        "magento/module-customer": "103.0.*",
-        "magento/module-eav": "102.1.*",
-        "magento/module-page-cache": "100.4.*",
-        "magento/module-media-storage": "100.4.*",
-        "magento/module-store": "101.1.*",
-        "magento/module-theme": "101.1.*"
-    },
-    "suggest": {
-        "magento/module-layered-navigation": "100.4.*",
-        "magento/module-swatches-sample-data": "Sample Data version: 100.4.*"
-    },
     "autoload": {
         "files": [
             "registration.php"
@@ -37,4 +36,3 @@
         }
     }
 }
-

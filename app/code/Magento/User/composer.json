@@ -1,26 +1,25 @@
 {
     "name": "magento/module-user",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "*",
+        "magento/module-authorization": "*",
+        "magento/module-backend": "*",
+        "magento/module-email": "*",
+        "magento/module-integration": "*",
+        "magento/module-security": "*",
+        "magento/module-store": "*",
+        "magento/module-ui": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "config": {
-        "sort-packages": true
-    },
-    "version": "101.2.3",
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "103.0.*",
-        "magento/module-authorization": "100.4.*",
-        "magento/module-backend": "102.0.*",
-        "magento/module-email": "101.1.*",
-        "magento/module-integration": "100.4.*",
-        "magento/module-security": "100.4.*",
-        "magento/module-store": "101.1.*",
-        "magento/module-ui": "101.2.*"
-    },
     "autoload": {
         "files": [
             "registration.php"
@@ -30,4 +29,3 @@
         }
     }
 }
-

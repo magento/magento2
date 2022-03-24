@@ -1,18 +1,17 @@
 {
     "name": "magento/module-quote-analytics",
     "description": "N/A",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "*",
+        "magento/module-quote": "*",
+        "magento/module-analytics": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "version": "100.4.3",
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "103.0.*",
-        "magento/module-quote": "101.2.*",
-        "magento/module-analytics": "100.4.*"
-    },
     "autoload": {
         "files": [
             "registration.php"
@@ -22,4 +21,3 @@
         }
     }
 }
-

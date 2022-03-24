@@ -2,18 +2,17 @@
     "name": "magento/module-catalog-rule-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "*"
+    },
+    "suggest": {
+        "magento/module-catalog-rule": "*"
+    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "version": "100.4.1",
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "103.0.*"
-    },
-    "suggest": {
-        "magento/module-catalog-rule": "101.2.*"
-    },
     "autoload": {
         "files": [
             "registration.php"
@@ -23,4 +22,3 @@
         }
     }
 }
-

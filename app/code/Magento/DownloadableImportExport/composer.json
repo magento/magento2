@@ -1,25 +1,24 @@
 {
     "name": "magento/module-downloadable-import-export",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "*",
+        "magento/module-catalog": "*",
+        "magento/module-catalog-import-export": "*",
+        "magento/module-downloadable": "*",
+        "magento/module-eav": "*",
+        "magento/module-import-export": "*",
+        "magento/module-store": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "config": {
-        "sort-packages": true
-    },
-    "version": "100.4.2",
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "103.0.*",
-        "magento/module-catalog": "104.0.*",
-        "magento/module-catalog-import-export": "101.1.*",
-        "magento/module-downloadable": "100.4.*",
-        "magento/module-eav": "102.1.*",
-        "magento/module-import-export": "101.0.*",
-        "magento/module-store": "101.1.*"
-    },
     "autoload": {
         "files": [
             "registration.php"
@@ -29,4 +28,3 @@
         }
     }
 }
-
