@@ -15,6 +15,8 @@ define([
          * Init.
          */
         init: function () {
+            customerData.reload(['persistent','cart'], true);
+
             var persistent = customerData.get('persistent');
 
             if (persistent().fullname === undefined) {
