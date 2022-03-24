@@ -101,7 +101,6 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
      */
     protected function jsonResponse($error = '')
     {
-
         return $this->getResponse()->representJson(
             $this->jsonHelper->jsonEncode($this->sidebar->getResponseData($error))
         );

@@ -251,7 +251,7 @@ class UpdateItemQtyTest extends TestCase
     /**
      * @return void
      */
-    public function testExecuteInvalidItemQty(): void
+    public function testExecuteWithInvalidItemQty(): void
     {
         $error = [
             'success' => false,
