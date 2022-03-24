@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Elasticsearch\Test\Unit\Model\DataProvider\Base;
+namespace Magento\Elasticsearch7\Test\Unit\Model\DataProvider\Base;
 
 use Elasticsearch\Common\Exceptions\BadRequest400Exception;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
@@ -14,7 +14,7 @@ use Magento\Elasticsearch\Model\DataProvider\Base\Suggestions;
 use Magento\Elasticsearch\Model\DataProvider\Suggestions as SuggestionsDataProvider;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
-use Magento\Elasticsearch6\Model\Client\Elasticsearch;
+use Magento\Elasticsearch7\Model\Client\Elasticsearch;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Search\Model\QueryInterface;
@@ -95,17 +95,17 @@ class SuggestionsTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isElasticsearchEnabled'])
+            ->onlyMethods(['isElasticsearchEnabled'])
             ->getMock();
 
         $this->queryResultFactory = $this->getMockBuilder(QueryResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->connectionManager = $this->getMockBuilder(ConnectionManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection'])
+            ->onlyMethods(['getConnection'])
             ->getMock();
 
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
@@ -115,7 +115,7 @@ class SuggestionsTest extends TestCase
         $this->searchIndexNameResolver = $this
             ->getMockBuilder(SearchIndexNameResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIndexName'])
+            ->onlyMethods(['getIndexName'])
             ->getMock();
 
         $this->storeManager = $this->getMockBuilder(StoreManager::class)

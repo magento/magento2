@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontElasticsearchSearchInvalidValueTest">
         <annotations>
-            <features value="Elasticsearch6"/>
+            <features value="CatalogSearch"/>
             <stories value="Search Product on Storefront"/>
             <title value="Elasticsearch: try to search by invalid value of 'Searchable' attribute"/>
             <description value="Elasticsearch: try to search by invalid value of 'Searchable' attribute"/>
