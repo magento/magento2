@@ -59,6 +59,5 @@ class DisableAdminLoginAuthPlugin
         $resultRedirect = $this->redirectFactory->create();
         $this->messageManager->addErrorMessage(__('Please sign in with Adobe ID'));
         $resultRedirect->setPath('admin');
-        return;
     }
 }
