@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+// @codingStandardsIgnoreFile
 ?>
 <?php $_order = $block->getOrder() ?>
 <?php $_invoice = $block->getInvoice() ?>
@@ -14,7 +15,7 @@
 <?php foreach ($_invoices as $_invoice) : ?>
 <div class="order-details-items invoice">
     <div class="order-title">
-        <strong><?= $block->escapeHtml(__('Invoice #')) ?><?= (int) $_invoice->getIncrementId() ?></strong>
+        <strong><?= $block->escapeHtml(__('Invoice #')) ?><?= $block->escapeHtml($_invoice->getIncrementId()) ?></strong>
     </div>
     <div class="table-wrapper table-order-items invoice">
         <table class="data table table-order-items invoice" id="my-invoice-table-<?= (int) $_invoice->getId() ?>">

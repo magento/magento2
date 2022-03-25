@@ -9,9 +9,16 @@ use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/multiple_products.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 $productIds = range(10, 12, 1);
 foreach ($productIds as $productId) {
+    $product = $productRepository->getById($productId, true, null, true);
+    if ((int) $product->getStatus() === \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED) {
+        $product->unlockAttribute('status')
+            ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        $product->save();
+    }
     /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
     $stockItem = $objectManager->create(\Magento\CatalogInventory\Model\Stock\Item::class);
     $stockItem->load($productId, 'product_id');
@@ -167,7 +174,6 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
             ]
         ]
     );
-$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 if ($product->getBundleOptionsData()) {
     $options = [];

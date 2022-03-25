@@ -21,6 +21,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use StorefrontVerifyCategoryProductAndProductCategoryPartialReindexTest instead.</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update by Schedule" mode -->

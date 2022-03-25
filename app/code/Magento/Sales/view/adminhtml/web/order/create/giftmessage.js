@@ -248,7 +248,7 @@ define([
                 return false;
             }
 
-            if (jQuery.isFunction(giftOptionsForm[0].reset)) {
+            if (typeof (giftOptionsForm[0].reset) === 'function') {
                 giftOptionsForm[0].reset();
             }
             this.closeWindow();

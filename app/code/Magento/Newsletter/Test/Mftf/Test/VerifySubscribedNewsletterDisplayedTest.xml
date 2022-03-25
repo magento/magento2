@@ -48,6 +48,10 @@
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
             <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
@@ -58,8 +62,9 @@
             <argument name="Customer" value="CustomerEntityOne"/>
         </actionGroup>
         <!--Sign Out-->
-        <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="customerOnLogoutPage"/>
-        <waitForPageLoad stepKey="waitLogoutCustomer"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logout"/>
+        <comment userInput="BIC workaround" stepKey="customerOnLogoutPage"/>
+        <comment userInput="BIC workaround" stepKey="waitLogoutCustomer"/>
         <!--Create new Account with the same email address. (unchecked Sign Up for Newsletter checkbox)-->
         <actionGroup ref="StorefrontCreateNewAccountNewsletterUncheckedActionGroup" stepKey="createNewAccountNewsletterUnchecked">
             <argument name="Customer" value="CustomerEntityOne"/>

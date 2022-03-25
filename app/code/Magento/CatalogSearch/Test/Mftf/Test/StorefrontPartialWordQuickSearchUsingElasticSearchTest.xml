@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-34205"/>
             <group value="SearchEngineElasticsearch"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Create subcategory -->

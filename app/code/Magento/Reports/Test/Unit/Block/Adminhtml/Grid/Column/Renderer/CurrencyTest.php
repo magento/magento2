@@ -154,7 +154,7 @@ class CurrencyTest extends TestCase
         );
 
         $this->gridColumnMock = $this->getMockBuilder(Column::class)
-            ->addMethods(['getIndex'])
+            ->addMethods(['getIndex', 'getRateField', 'getCurrency'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $objectManager->getObject(
@@ -250,6 +250,8 @@ class CurrencyTest extends TestCase
             ->method('getCurrency')
             ->with($storeCurrencyCode)
             ->willReturn($currLocaleMock);
+        $this->gridColumnMock->method('getCurrency')->willReturn('USD');
+        $this->gridColumnMock->method('getRateField')->willReturn('test_rate_field');
         $actualAmount = $this->model->render($this->row);
         $this->assertEquals($convertedAmount, $actualAmount);
     }

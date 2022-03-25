@@ -82,17 +82,18 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCheckoutPaymentSectionPageLoad"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="orderIsSuccessfullyPlaced"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
         <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="openOrderViewPage"/>
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
+        <!-- Open created order in backend -->
+        <comment userInput="BIC workaround" stepKey="goToOrders"/>
+        <comment userInput="BIC workaround" stepKey="filterOrderGridById"/>
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
-            <argument name="entityId" value="$grabOrderId"/>
+            <argument name="entityId" value="{$grabOrderId}"/>
         </actionGroup>
-        <comment userInput="Comment is added to preserve Backward Compatibility" stepKey="goToOrders"/>
-        <comment userInput="Comment is added to preserve Backward Compatibility" stepKey="filterOrderGridById"/>
 
         <!-- Assert order total -->
         <scrollTo selector="{{AdminOrderTotalSection.grandTotal}}" stepKey="scrollToOrderTotalSection"/>

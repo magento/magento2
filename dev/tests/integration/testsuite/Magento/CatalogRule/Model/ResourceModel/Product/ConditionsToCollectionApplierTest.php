@@ -247,7 +247,8 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
                     'simple-product-9',
                     'simple-product-10',
                     'simple-product-11',
-                    'simple-product-12'
+                    'simple-product-12',
+                    'simple-product-13',
                 ]
             ],
 
@@ -272,7 +273,8 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
                     'simple-product-9',
                     'simple-product-10',
                     'simple-product-11',
-                    'simple-product-12'
+                    'simple-product-12',
+                    'simple-product-13',
                 ]
             ],
 
@@ -386,7 +388,8 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
                     'simple-product-9',
                     'simple-product-10',
                     'simple-product-11',
-                    'simple-product-12'
+                    'simple-product-12',
+                    'simple-product-13',
                 ]
             ],
 
@@ -416,7 +419,8 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
                     'simple-product-9',
                     'simple-product-10',
                     'simple-product-11',
-                    'simple-product-12'
+                    'simple-product-12',
+                    'simple-product-13',
                 ]
             ],
 
@@ -424,12 +428,9 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
             'variation 22' => [
                 'condition' => $this->getConditionsForVariation22(),
                 'expected-sku' => [
-                    'simple-product-1',
-                    'simple-product-2',
-                    'simple-product-3',
-                    'simple-product-4',
                     'simple-product-7',
-                    'simple-product-8'
+                    'simple-product-8',
+                    'simple-product-13',
                 ]
             ],
         ];

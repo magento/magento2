@@ -31,5 +31,6 @@
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="clickPayPalCheckbox"/>
+        <waitForPageLoad stepKey="waitForPaymentLoad"/>
     </actionGroup>
 </actionGroups>

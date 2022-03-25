@@ -1750,7 +1750,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $options['unsigned'] = true;
         }
         if ($columnData['NULLABLE'] === false
-            && !($type == Table::TYPE_TEXT && strlen($columnData['DEFAULT']) != 0)
+            && !($type == Table::TYPE_TEXT && isset($columnData['DEFAULT']) && strlen($columnData['DEFAULT']) != 0)
         ) {
             $options['nullable'] = false;
         }
@@ -1760,10 +1760,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if ($columnData['DEFAULT'] !== null && $type != Table::TYPE_TEXT) {
             $options['default'] = $this->quote($columnData['DEFAULT']);
         }
-        if (strlen($columnData['SCALE']) > 0) {
+        if (isset($columnData['SCALE']) && strlen($columnData['SCALE']) > 0) {
             $options['scale'] = $columnData['SCALE'];
         }
-        if (strlen($columnData['PRECISION']) > 0) {
+        if (isset($columnData['PRECISION']) && strlen($columnData['PRECISION']) > 0) {
             $options['precision'] = $columnData['PRECISION'];
         }
 

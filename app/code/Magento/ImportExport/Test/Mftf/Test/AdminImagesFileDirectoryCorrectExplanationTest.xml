@@ -16,6 +16,7 @@
             <description value="Check correct explanation for the 'Images File Directory' option."/>
             <severity value="MINOR"/>
             <group value="importExport"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

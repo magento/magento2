@@ -21,6 +21,7 @@
         <amOnPage url="{{productUrl}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartDisabled}}" stepKey="waitForAddToCartButtonToRemoveDisabledState"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
         <waitForPageLoad stepKey="waitForAddToCart"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>

@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="store"/>
             <group value="mtf_migrated"/>
+            <group value="skip_in_cloud_native_s3"/>
         </annotations>
 
         <before>

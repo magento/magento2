@@ -2786,7 +2786,9 @@ class TypeTest extends TestCase
     private function expectProductEntityMetadata(): void
     {
         $entityMetadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
+            ->onlyMethods(['getLinkField'])
             ->getMockForAbstractClass();
+        $entityMetadataMock->method('getLinkField')->willReturn('test_link_field');
         $this->metadataPool->expects($this->any())->method('getMetadata')
             ->with(ProductInterface::class)
             ->willReturn($entityMetadataMock);

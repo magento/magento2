@@ -1744,7 +1744,7 @@
         <arguments>
             <argument name="connectionToExchangeMap" xsi:type="array">
                 <item name="amqp" xsi:type="string">magento</item>
-                <item name="db" xsi:type="string">magento-db</item>
+                <item name="db" xsi:type="string">magento</item>
             </argument>
         </arguments>
     </type>
@@ -1752,7 +1752,7 @@
         <arguments>
             <argument name="publisherNameToConnectionMap" xsi:type="array">
                 <item name="amqp-magento" xsi:type="string">amqp</item>
-                <item name="db-magento-db" xsi:type="string">db</item>
+                <item name="db-magento" xsi:type="string">db</item>
             </argument>
         </arguments>
     </type>

@@ -38,6 +38,13 @@
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>

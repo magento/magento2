@@ -51,6 +51,8 @@ class CartFixedDiscount
     ): float {
         $shippingAmount = (float) $address->getShippingAmount();
         if ($shippingAmount == 0.0) {
+            $addressQty = $this->getAddressQty($address);
+            $address->setItemQty($addressQty);
             $address->setCollectShippingRates(true);
             $address->collectShippingRates();
             $shippingRates = $address->getAllShippingRates();
@@ -82,7 +84,7 @@ class CartFixedDiscount
         float $baseRuleTotals,
         string $discountType
     ): float {
-        $ratio = $baseItemPrice * $qty / $baseRuleTotals;
+        $ratio = $baseRuleTotals != 0 ? $baseItemPrice * $qty / $baseRuleTotals : 0;
         return $this->deltaPriceRound->round(
             $ruleDiscount * $ratio,
             $discountType
@@ -109,7 +111,7 @@ class CartFixedDiscount
         string $discountType
     ): float {
         $baseItemPriceTotal = $baseItemPrice * $qty - $baseItemDiscountAmount;
-        $ratio = $baseItemPriceTotal / $baseRuleTotalsDiscount;
+        $ratio = $baseRuleTotalsDiscount != 0 ? $baseItemPriceTotal / $baseRuleTotalsDiscount : 0;
         $discountAmount = $this->deltaPriceRound->round($ruleDiscount * $ratio, $discountType);
         return $discountAmount;
     }
@@ -127,7 +129,7 @@ class CartFixedDiscount
         float $shippingAmount,
         float $quoteBaseSubtotal
     ): float {
-        $ratio = $shippingAmount / $quoteBaseSubtotal;
+        $ratio = $quoteBaseSubtotal != 0 ? $shippingAmount / $quoteBaseSubtotal : 0;
         return $this->priceCurrency
             ->roundPrice(
                 $rule->getDiscountAmount() * $ratio
@@ -240,5 +242,36 @@ class CartFixedDiscount
             $availableDiscountAmount -= $baseDiscountAmount;
         }
         return $availableDiscountAmount;
+    }
+
+    /**
+     * Get address quantity.
+     *
+     * @param AddressInterface $address
+     * @return float
+     */
+    private function getAddressQty(AddressInterface $address): float
+    {
+        $addressQty = 0;
+        $items = array_filter(
+            $address->getAllItems(),
+            function ($item) {
+                return !$item->getProduct()->isVirtual() && !$item->getParentItem();
+            }
+        );
+        foreach ($items as $item) {
+            if ($item->getHasChildren() && $item->isShipSeparately()) {
+                foreach ($item->getChildren() as $child) {
+                    if ($child->getProduct()->isVirtual()) {
+                        continue;
+                    }
+                    $addressQty += $child->getTotalQty();
+                }
+            } else {
+                $addressQty += (float)$item->getQty();
+            }
+        }
+
+        return (float)$addressQty;
     }
 }

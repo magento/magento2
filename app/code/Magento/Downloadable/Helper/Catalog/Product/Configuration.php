@@ -64,7 +64,7 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
     public function getLinksTitle($product)
     {
         $title = $product->getLinksTitle();
-        if (strlen($title)) {
+        if ($title !== null && strlen($title)) {
             return $title;
         }
         return $this->scopeConfig->getValue(

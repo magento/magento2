@@ -313,33 +313,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test that getThumbnailUrl() returns correct URL for root folder or sub-folders images
-     *
-     * @param string $directory
-     * @param string $filename
-     * @param array $expectedUrls
-     * @return void
-     * @magentoAppIsolation enabled
-     * @magentoAppArea adminhtml
-     * @dataProvider getThumbnailUrlDataProvider
-     */
-    public function testGetThumbnailUrl(string $directory, string $filename, array $expectedUrls): void
-    {
-        $root = $this->storage->getCmsWysiwygImages()->getStorageRoot();
-        $directory = implode('/', array_filter([rtrim($root, '/'), trim($directory, '/')]));
-        $path = $directory . '/' . $filename;
-        $this->generateImage($path);
-        $this->storage->resizeFile($path);
-        $collection = $this->storage->getFilesCollection($directory, 'image');
-        $paths = [];
-        foreach ($collection as $item) {
-            $paths[] = parse_url($item->getThumbUrl(), PHP_URL_PATH);
-        }
-        $this->assertEquals($expectedUrls, $paths);
-        $this->driver->deleteFile($path);
-    }
-
-    /**
      * Verify thumbnail generation for diferent sizes
      *
      * @param array $sizes
@@ -387,42 +360,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                     'height' => 20,
                 ],
                 false
-            ]
-        ];
-    }
-
-    /**
-     * Provide scenarios for testing getThumbnailUrl()
-     *
-     * @return array
-     */
-    public function getThumbnailUrlDataProvider(): array
-    {
-        return [
-            [
-                '/',
-                'image1.png',
-                []
-            ],
-            [
-                '/cms',
-                'image2.png',
-                []
-            ],
-            [
-                '/cms/pages',
-                'image3.png',
-                []
-            ],
-            [
-                '/MagentoCmsModelWysiwygImagesStorageTest',
-                'image2.png',
-                ['/media/.thumbsMagentoCmsModelWysiwygImagesStorageTest/image2.png']
-            ],
-            [
-                '/MagentoCmsModelWysiwygImagesStorageTest/pages',
-                'image3.png',
-                ['/media/.thumbsMagentoCmsModelWysiwygImagesStorageTest/pages/image3.png']
             ]
         ];
     }

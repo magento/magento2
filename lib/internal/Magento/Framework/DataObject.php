@@ -368,7 +368,8 @@ class DataObject implements \ArrayAccess
         } else {
             preg_match_all('/\{\{([a-z0-9_]+)\}\}/is', $format, $matches);
             foreach ($matches[1] as $var) {
-                $format = str_replace('{{' . $var . '}}', $this->getData($var), $format);
+                $data = $this->getData($var) ?? '';
+                $format = str_replace('{{' . $var . '}}', $data, $format);
             }
             $result = $format;
         }
@@ -503,6 +504,7 @@ class DataObject implements \ArrayAccess
      * @return void
      * @link http://www.php.net/manual/en/arrayaccess.offsetset.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->_data[$offset] = $value;
@@ -515,6 +517,7 @@ class DataObject implements \ArrayAccess
      * @return bool
      * @link http://www.php.net/manual/en/arrayaccess.offsetexists.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->_data[$offset]) || array_key_exists($offset, $this->_data);
@@ -527,6 +530,7 @@ class DataObject implements \ArrayAccess
      * @return void
      * @link http://www.php.net/manual/en/arrayaccess.offsetunset.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->_data[$offset]);
@@ -539,6 +543,7 @@ class DataObject implements \ArrayAccess
      * @return mixed
      * @link http://www.php.net/manual/en/arrayaccess.offsetget.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (isset($this->_data[$offset])) {

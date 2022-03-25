@@ -8,11 +8,6 @@ namespace Magento\SalesRule\Model;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
-/**
- * Class Utility
- *
- * @package Magento\SalesRule\Model
- */
 class Utility
 {
     /**
@@ -91,7 +86,7 @@ class Utility
          */
         if ($rule->getCouponType() != \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON) {
             $couponCode = $address->getQuote()->getCouponCode();
-            if (strlen($couponCode)) {
+            if ($couponCode !== null && strlen($couponCode)) {
                 /** @var \Magento\SalesRule\Model\Coupon $coupon */
                 $coupon = $this->couponFactory->create();
                 $coupon->load($couponCode, 'code');
@@ -153,6 +148,8 @@ class Utility
     }
 
     /**
+     * Set discount amount (found min)
+     *
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
@@ -294,6 +291,8 @@ class Utility
     }
 
     /**
+     * Resets rounding deltas data.
+     *
      * @return void
      */
     public function resetRoundingDeltas()

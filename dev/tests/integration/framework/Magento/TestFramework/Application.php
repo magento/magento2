@@ -13,6 +13,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem\Glob;
 use Magento\Framework\Mail;
 use Magento\TestFramework;
+use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Psr\Log\LoggerInterface;
 use DomainException;
 
@@ -27,7 +28,7 @@ class Application
     /**
      * Default application area.
      */
-    const DEFAULT_APP_AREA = 'global';
+    public const DEFAULT_APP_AREA = 'global';
 
     /**
      * DB vendor adapter instance.
@@ -416,6 +417,7 @@ class Application
                 \Magento\Framework\App\State::class => TestFramework\App\State::class,
                 Mail\TransportInterface::class => TestFramework\Mail\TransportInterfaceMock::class,
                 Mail\Template\TransportBuilder::class => TestFramework\Mail\Template\TransportBuilderMock::class,
+                ProcessorInterface::class => \Magento\TestFramework\Fixture\Data\CompositeProcessor::class,
             ]
         ];
         if ($this->loadTestExtensionAttributes) {

@@ -75,6 +75,7 @@
         <element name="priceField" type="input" selector="//div[@data-index='price']//input"/>
         <element name="listedBundleItem" type="text" selector="//tr[@data-repeat-index='0']//div"/>
         <element name="listedBundleItem2" type="text" selector="//tr[@data-repeat-index='2']//div"/>
+        <element name="bundleItem" type="text" selector="//span[@data-index='sku']"/>
         <!--FirstProductOption-->
         <element name="firstProductOption" type="checkbox" selector="//div[@class='admin__data-grid-outer-wrap']//tr[@data-repeat-index='0']//input[@type='checkbox']"/>
         <element name="dynamicSkuToggle" type="checkbox" selector="div[data-index='sku_type'] .admin__actions-switch-label" timeout="30"/>

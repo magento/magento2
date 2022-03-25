@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-93941"/>
             <group value="captcha"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <!--Login as admin-->
