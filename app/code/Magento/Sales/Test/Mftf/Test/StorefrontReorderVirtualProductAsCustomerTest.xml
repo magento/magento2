@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontReorderVirtualProductAsCustomer" >
+        <annotations>
+            <stories value="Reorder on Storefront for Virtual product"/>
+            <title value="Reorder on Storefront for Virtual product"/>
+            <description value="Verify customer able to reorder on Storefront for simple products."/>
+            <testCaseId value="https://jira.corp.magento.com/browse/MC-26873"/>
+            <severity value="MAJOR"/>
+            <group value="Reorder_Product"/>
+        </annotations>
+
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- create virtual product -->
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct"/>
+            <!-- create US customer -->
+            <createData entity="Simple_US_Customer_NY" stepKey="createDefaultCustomer"/>
+            <!-- create default category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- assign virtual product to default category -->
+            <createData entity="AssignProductToCategory" stepKey="assignCategoryToVirtualProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <requiredEntity createDataKey="createVirtualProduct"/>
+            </createData>
+        </before>
+
+        <after>
+            <!-- delete category,product,customer -->
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>
+            <deleteData createDataKey="createDefaultCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Login to storefront as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$createDefaultCustomer$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
+        <!-- go to category -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <!-- select the product image and add to cart -->
+        <click selector="//img[@class='product-image-photo']" stepKey="clickProduct1"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createVirtualProduct.name$$"/>
+        </actionGroup>
+        <!-- click on cart icon and proceed to checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCartAsCustomer"/>
+        <click selector="{{CheckoutShippingGuestInfoSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.success}}" stepKey="waitForSuccess"/>
+        <!-- get order number -->
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderNumber"/>
+        <!-- Log in as admin-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!-- go to orders page and validate order details -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
+            <argument name="orderId" value="{$getOrderNumber}"/>
+        </actionGroup>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="verifyOrderStatus"/>
+        <click selector="{{AdminOrderDetailsInformationSection.orderStatus}}" stepKey="openOrderDetailPage"/>
+        <!-- create an invoice for the order-->
+        <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createNewInvoice"/>
+        <!-- Find the Order in storefront -->
+        <amOnPage url="{StorefrontHomePage.url}" stepKey="goToStorefrontHomePage" />
+        <amOnPage url="{{StorefrontGuestOrderSearchPage.url}}" stepKey="amOnOrdersAndReturns"/>
+        <waitForPageLoad stepKey="waitForStorefrontMyOrdersPage"/>
+        <!-- Click 'Reorder' link -->
+        <click selector="{{StorefrontCustomerMyOrdersSection.reorderLink}}" stepKey="clickReturnLink"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <!--Check that product from order is visible in cart after reorder -->
+        <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createVirtualProduct.name$$)}}" stepKey="seeProductInCart"/>
+
+    </test>
+</tests>
