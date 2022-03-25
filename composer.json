@@ -91,7 +91,7 @@
         "magento/magento2-functional-testing-framework": "^3.7",
         "pdepend/pdepend": "~2.10.0",
         "phpmd/phpmd": "^2.9.1",
-        "phpstan/phpstan": "~1.4.9",
+        "phpstan/phpstan": "^1.5.6",
         "phpunit/phpunit": "~9.5.20",
         "sebastian/phpcpd": "^6.0.3",
         "squizlabs/php_codesniffer": "~3.6.0",
