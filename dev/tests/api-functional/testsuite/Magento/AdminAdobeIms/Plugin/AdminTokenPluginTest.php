@@ -20,7 +20,19 @@ class AdminTokenPluginTest extends WebapiAbstract
     private const RESOURCE_PATH_ADMIN_TOKEN = "/V1/integration/admin/token";
 
     /**
+     * @var WriterInterface
+     */
+    private $configWriter;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * Setup AdminTokenPlugin
+     *
+     * @return void
      */
     protected function setUp(): void
     {
@@ -67,5 +79,4 @@ class AdminTokenPluginTest extends WebapiAbstract
         $this->configWriter->save(ImsConfig::XML_PATH_ENABLED, 0);
         $this->scopeConfig->clean();
     }
-
 }
