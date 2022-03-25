@@ -12,7 +12,9 @@ use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\InvalidArgumentException;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Jwt\Jwk;
 use Magento\Framework\Jwt\JwkFactory;
 use Magento\Framework\Jwt\Jws\JwsSignatureJwks;
@@ -70,6 +72,11 @@ class TokenReader implements TokenReaderInterface
     private DateTime $dateTime;
 
     /**
+     * @var File
+     */
+    private File $driver;
+
+    /**
      * @param JwtManagerInterface $jwtManager
      * @param CacheInterface $cache
      * @param ImsConfig $imsConfig
@@ -83,7 +90,8 @@ class TokenReader implements TokenReaderInterface
         ImsConfig $imsConfig,
         JwkFactory $jwkFactory,
         LoggerInterface $logger,
-        DateTime $dateTime
+        DateTime $dateTime,
+        File $driver
     ) {
         $this->jwtManager = $jwtManager;
         $this->cache = $cache;
@@ -91,6 +99,7 @@ class TokenReader implements TokenReaderInterface
         $this->jwkFactory = $jwkFactory;
         $this->logger = $logger;
         $this->dateTime = $dateTime;
+        $this->driver = $driver;
     }
 
     /**
@@ -164,7 +173,10 @@ class TokenReader implements TokenReaderInterface
 
         if (!$certificateValue = $this->loadCertificateFromCache()) {
             $certificateUrl = $this->imsConfig->getCertificateUrl($certificateFileName);
-            if (!$certificateValue = file_get_contents($certificateUrl)) {
+            try {
+                $certificateValue = $this->driver->fileGetContents($certificateUrl);
+            } catch (FileSystemException $exception) {
+                $this->logger->error($exception->getMessage());
                 return false;
             }
             $this->saveCertificateInCache($certificateValue);

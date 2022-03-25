@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Model;
 
 use Magento\AdobeIms\Model\ResourceModel\UserProfile;
+use Magento\AdobeIms\Model\UserProfileRepository as AdobeImsUserProfileRepository;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
@@ -17,8 +18,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Represent user profile repository
  */
-class UserProfileRepository extends \Magento\AdobeIms\Model\UserProfileRepository
-    implements UserProfileRepositoryInterface
+class UserProfileRepository extends AdobeImsUserProfileRepository implements UserProfileRepositoryInterface
 {
     private const ADOBE_USER_ID = 'adobe_user_id';
 

@@ -227,16 +227,16 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
             [
                 new JwsHeader(
                     [
-                        new PrivateHeaderParameter('alg','RS256'),
-                        new PrivateHeaderParameter('x5u','jwtRS256.key.pub'),
-                        new PrivateHeaderParameter('kid','jwtRS256.key'),
-                        new PrivateHeaderParameter('itt','at')
+                        new PrivateHeaderParameter('alg', 'RS256'),
+                        new PrivateHeaderParameter('x5u', 'jwtRS256.key.pub'),
+                        new PrivateHeaderParameter('kid', 'jwtRS256.key'),
+                        new PrivateHeaderParameter('itt', 'at')
                     ]
                 )
             ],
             new ClaimsPayload(
                 [
-                    new PrivateClaim('user_id',self::TEST_ADOBE_USER_ID),
+                    new PrivateClaim('user_id', self::TEST_ADOBE_USER_ID),
                     new PrivateClaim('created_at', $date),
                     new PrivateClaim('expires_in', '86400000')
                 ]
@@ -275,4 +275,3 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
         $this->assertEquals(HTTPExceptionCodes::HTTP_UNAUTHORIZED, $exception->getCode());
     }
 }
-
