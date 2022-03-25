@@ -31,8 +31,8 @@ class AdminTokenPlugin
      *
      * @param AdminTokenService $subject
      * @param callable $proceed
-     * @param $username
-     * @param $password
+     * @param string $username
+     * @param string $password
      * @return mixed
      * @throws AuthenticationException
      */
