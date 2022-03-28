@@ -18,6 +18,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use StorefrontReorderAsGuestCustomerTest instead</issueId>
             </skip> 
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Create simple product.-->

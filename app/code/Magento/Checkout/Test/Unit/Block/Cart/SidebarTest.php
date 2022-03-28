@@ -129,8 +129,8 @@ class SidebarTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetTotalsHtml(): void
     {
         $totalsHtml = "$134.36";
@@ -152,8 +152,8 @@ class SidebarTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetConfig(): void
     {
         $websiteId = 100;
@@ -211,8 +211,8 @@ class SidebarTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetIsNeedToDisplaySideBar(): void
     {
         $this->scopeConfigMock->expects($this->once())
@@ -226,8 +226,8 @@ class SidebarTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetTotalsCache(): void
     {
         $quoteMock = $this->createMock(Quote::class);

@@ -55,8 +55,8 @@ class AdminUserCreateCommandTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecute(): void
     {
         $options = [
@@ -83,8 +83,8 @@ class AdminUserCreateCommandTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testInteraction(): void
     {
         $application = new Application();

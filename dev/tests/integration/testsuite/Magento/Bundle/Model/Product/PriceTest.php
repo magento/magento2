@@ -143,14 +143,23 @@ class PriceTest extends TestCase
 
     /**
      * Fixed Bundle Product without discounts
-     * @magentoDataFixture Magento/Bundle/_files/fixed_bundle_product_without_discounts.php
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple1","price":10} as:p1
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple2","price":20} as:p2
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple3","price":30} as:p3
+     * @magentoDataFixture Magento\Bundle\Test\Fixture\Link with:{"sku":"$p1.sku$","price":10,"price_type":0} as:link1
+     * @magentoDataFixture Magento\Bundle\Test\Fixture\Link with:{"sku":"$p2.sku$","price":25,"price_type":1} as:link2
+     * @magentoDataFixture Magento\Bundle\Test\Fixture\Link with:{"sku":"$p3.sku$","price":25,"price_type":0} as:link3
+     * @magentoDataFixture Magento\Bundle\Test\Fixture\Option as:opt1
+     * @magentoDataFixture Magento\Bundle\Test\Fixture\Product as:bundle1
+     * @magentoDataFixtureDataProvider {"opt1":{"product_links":["$link1$","$link2$","$link3$"]}}
+     * @magentoDataFixtureDataProvider {"bundle1":{"sku":"bundle1","price":50,"price_type":1,"_options":["$opt1$"]}}
      *
      * @return void
      */
     public function testFixedBundleProductPriceWithoutDiscounts(): void
     {
         $this->checkBundlePrices(
-            'fixed_bundle_product_without_discounts',
+            'bundle1',
             ['price' => 50, 'final_price' => 50, 'min_price' => 60, 'max_price' => 75, 'tier_price' => null],
             ['simple1' => 60, 'simple2' => 62.5, 'simple3' => 75]
         );
@@ -188,14 +197,19 @@ class PriceTest extends TestCase
 
     /**
      * Dynamic Bundle Product without discount + options without discounts
-     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_without_discounts.php
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple1000","price":10} as:p1
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple1001","price":20} as:p2
+     * @magentoDataFixture Magento\Bundle\Test\Fixture\Option as:opt1
+     * @magentoDataFixture Magento\Bundle\Test\Fixture\Product as:bundle1
+     * @magentoDataFixtureDataProvider {"opt1":{"product_links":["$p1$","$p2$"]}}
+     * @magentoDataFixtureDataProvider {"bundle1":{"sku":"bundle1","_options":["$opt1$"]}}
      *
      * @return void
      */
     public function testDynamicBundleProductWithoutDiscountAndOptionsWithoutDiscounts(): void
     {
         $this->checkBundlePrices(
-            'dynamic_bundle_product_without_discounts',
+            'bundle1',
             ['price' => 0, 'final_price' => 0, 'min_price' => 10, 'max_price' => 20, 'tier_price' => null],
             ['simple1000' => 10, 'simple1001' => 20]
         );

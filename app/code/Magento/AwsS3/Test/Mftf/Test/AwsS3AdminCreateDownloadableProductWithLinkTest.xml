@@ -20,6 +20,7 @@
             <testCaseId value="MC-38039"/>
             <group value="Downloadable"/>
             <group value="remote_storage_aws_s3"/>
+            <group value="skip_in_cloud_native_s3"/>
         </annotations>
         <before>
             <comment userInput="BIC workaround" stepKey="enableRemoteStorage"/>
@@ -161,14 +162,16 @@
         <comment userInput="BIC workaround" stepKey="waitForPaymentSectionLoaded"/>
         <comment userInput="BIC workaround" stepKey="clickPlaceOrderButton"/>
         <comment userInput="BIC workaround" stepKey="orderIsSuccessfullyPlaced"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <!-- Open Create invoice -->
         <comment userInput="BIC workaround" stepKey="onOrdersPage"/>
         <comment userInput="BIC workaround" stepKey="searchOrder"/>
         <comment userInput="BIC workaround" stepKey="clickOrderRow"/>
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="goToOrderInAdmin">
-            <argument name="orderId" value="{$grabOrderNumber}"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="goToOrderInAdmin">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
         <comment userInput="BIC workaround" stepKey="createCreditMemo"/>
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>

@@ -1101,6 +1101,22 @@ define([
                 return moment.utc(value, params.dateFormat).isSameOrBefore(moment.utc());
             },
             $.mage.__('The Date of Birth should not be greater than today.')
+        ],
+        'validate-no-utf8mb4-characters': [
+            function (value) {
+                var validator = this,
+                    message = $.mage.__('Please remove invalid characters: {0}.'),
+                    matches = value.match(/(?:[\uD800-\uDBFF][\uDC00-\uDFFF])/g),
+                    result = matches === null;
+
+                if (!result) {
+                    validator.charErrorMessage = message.replace('{0}', matches.join());
+                }
+
+                return result;
+            }, function () {
+                return this.charErrorMessage;
+            }
         ]
     }, function (data) {
         return {

@@ -59,6 +59,7 @@
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
         <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="goToReview"/>
         <actionGroup ref="AssertCaptchaVisibleOnSecondCheckoutStepActionGroup" stepKey="assertCaptchaIsVisible"/>
+        <waitForPageLoad stepKey="waitForSpinner"/>
         <actionGroup ref="StorefrontFillCaptchaFieldOnCheckoutActionGroup" stepKey="placeOrderWithIncorrectValue">
             <argument name="captcha" value="{{WrongCaptcha.value}}"/>
         </actionGroup>

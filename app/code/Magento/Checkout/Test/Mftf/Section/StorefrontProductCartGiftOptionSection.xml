@@ -12,7 +12,7 @@
         <element name="giftOptions" type="button" selector=".action.action-gift"/>
         <element name="fieldTo" type="input" selector=".gift-options-content .field-to input"/>
         <element name="fieldFrom" type="input" selector=".gift-options-content .field-from input"/>
-        <element name="message" type="textarea" selector="#gift-message-whole-message"/>
+        <element name="message" type="textarea" selector=".gift-options-content .field.text .input-text"/>
         <element name="update" type="button" selector=".action-update"/>
         <element name="cancel" type="button" selector=".action-cancel"/>
     </section>

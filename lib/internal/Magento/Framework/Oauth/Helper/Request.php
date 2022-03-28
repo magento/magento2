@@ -84,7 +84,9 @@ class Request
             return [];
         }
 
-        if ($contentTypeHeader && 0 === strpos($contentTypeHeader, \Zend_Http_Client::ENC_URLENCODED)) {
+        if ($requestBodyString !== null && $contentTypeHeader &&
+            0 === strpos($contentTypeHeader, \Zend_Http_Client::ENC_URLENCODED)
+        ) {
             $protocolParamsNotSet = !$protocolParams;
 
             parse_str($requestBodyString, $protocolBodyParams);

@@ -19,6 +19,7 @@
             <skip>
                 <issueId value="MQE-891"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>

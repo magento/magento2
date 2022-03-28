@@ -151,16 +151,16 @@ class PayflowproTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCanCapturePartial(): void
     {
         $this->assertTrue($this->payflowpro->canCapturePartial());
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCanRefundPartialPerInvoice(): void
     {
         $this->assertTrue($this->payflowpro->canRefundPartialPerInvoice());
@@ -598,8 +598,8 @@ class PayflowproTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testPostRequest(): void
     {
         $expectedResult = new DataObject();
@@ -618,8 +618,8 @@ class PayflowproTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testPostRequestException(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');

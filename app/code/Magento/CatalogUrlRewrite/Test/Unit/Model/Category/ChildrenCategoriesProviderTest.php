@@ -85,8 +85,8 @@ class ChildrenCategoriesProviderTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetChildrenRecursive(): void
     {
         $bind = ['c_path' => 'category-path/%'];
@@ -97,8 +97,8 @@ class ChildrenCategoriesProviderTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetChildrenForNewCategory(): void
     {
         $this->category->expects($this->once())->method('isObjectNew')->willReturn(true);
@@ -106,8 +106,8 @@ class ChildrenCategoriesProviderTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetChildren(): void
     {
         $categoryLevel = 3;

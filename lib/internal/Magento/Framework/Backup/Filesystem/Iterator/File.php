@@ -24,6 +24,7 @@ class File extends \SplFileObject
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->_currentStatement;
@@ -34,6 +35,7 @@ class File extends \SplFileObject
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         $this->_currentStatement = '';
@@ -53,6 +55,7 @@ class File extends \SplFileObject
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         parent::rewind();

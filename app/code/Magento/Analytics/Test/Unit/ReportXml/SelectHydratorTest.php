@@ -198,7 +198,7 @@ class SelectHydratorTest extends TestCase
             ->willReturn($this->selectMock);
         $withArgs = [];
 
-        foreach (array_keys($selectParts) as $key => $partName) {
+        foreach (array_keys($selectParts) as $partName) {
             $withArgs[] = [$partName, $expectedParts[$partName]];
         }
         $this->selectMock

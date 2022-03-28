@@ -523,7 +523,7 @@ class Attribute extends AbstractDb
         $where = $connection->quoteInto('attribute_id = ?', $attributeId);
         $update = [];
 
-        if ($object->getBackendType() === 'varchar') {
+        if ($object->getBackendType() === 'text') {
             $where.= ' AND ' . $connection->prepareSqlCondition('value', ['finset' => $optionId]);
             $concat = $connection->getConcatSql(["','", 'value', "','"]);
             $expr = $connection->quoteInto(

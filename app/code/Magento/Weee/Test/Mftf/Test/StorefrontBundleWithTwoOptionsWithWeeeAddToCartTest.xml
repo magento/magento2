@@ -21,13 +21,16 @@
         </annotations>
 
         <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
-            <magentoCLI command="config:set tax/weee/enable 1" stepKey="EnableWeee"/>
-            <magentoCLI command="config:set tax/weee/display_list 0" stepKey="EnableDisplayInListFPTOnly"/>
-            <magentoCLI command="config:set tax/weee/display 0" stepKey="SetDisplayFPTOnly"/>
-            <magentoCLI command="config:set tax/weee/display_sales 0" stepKey="SetDisplaySalesFPTOnly"/>
-            <magentoCLI command="config:set tax/weee/display_email 0" stepKey="SetDisplayEmailFPTOnly"/>
-            <magentoCLI command="config:set tax/weee/apply_vat 1" stepKey="EnableApplyVAT"/>
+            <comment userInput="BIC workaround" stepKey="EnableWeee"/>
+            <comment userInput="BIC workaround" stepKey="EnableDisplayInListFPTOnly"/>
+            <comment userInput="BIC workaround" stepKey="SetDisplayFPTOnly"/>
+            <comment userInput="BIC workaround" stepKey="SetDisplaySalesFPTOnly"/>
+            <comment userInput="BIC workaround" stepKey="SetDisplayEmailFPTOnly"/>
+            <comment userInput="BIC workaround" stepKey="EnableApplyVAT"/>
             <magentoCLI command="config:set tax/weee/include_in_subtotal 1" stepKey="EnableIncludeInSubtotal"/>
 
             <createData entity="FPTProductAttribute" stepKey="createProductFPTAttribute"/>
@@ -40,9 +43,10 @@
         </before>
 
         <after>
-            <deleteData createDataKey="createFullTaxRate" stepKey="deleteFullTaxRate"/>
-            <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <createData entity="WeeeConfigDisable" stepKey="disableFPT"/>
+            <magentoCLI command="config:set tax/weee/include_in_subtotal 0" stepKey="disableIncludeInSubtotal"/>
+            <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
+            <deleteData createDataKey="createFullTaxRate" stepKey="deleteFullTaxRate"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundle">
@@ -50,7 +54,7 @@
             </actionGroup>
         </after>
 
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <comment userInput="BIC workaround" stepKey="loginAsAdmin"/>
 
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSimpleProduct1EditPage">
             <argument name="productId" value="$simpleProduct1.id$"/>

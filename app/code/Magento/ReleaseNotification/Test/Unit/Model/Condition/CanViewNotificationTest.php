@@ -98,7 +98,7 @@ class CanViewNotificationTest extends TestCase
         $this->sessionMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
-        $this->productMetadataMock->expects($this->once())
+        $this->productMetadataMock->expects($this->any())
             ->method('getVersion')
             ->willReturn($version);
         $this->logMock->expects($this->once())

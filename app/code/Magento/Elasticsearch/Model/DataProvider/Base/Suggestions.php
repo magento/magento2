@@ -226,7 +226,6 @@ class Suggestions implements SuggestedQueriesInterface
                         [
                             'field' => $field,
                             'min_word_length' => 3,
-                            'min_doc_freq' => 1,
                         ]
                     ],
                 ],
