@@ -51,13 +51,10 @@
         </actionGroup>
 
         <!-- Validate custom options dynamic rows per page -->
-        <comment userInput="Admin to validate the custom options dynamic rows per page" stepKey="validateCustomOptionsDynamicRowsPerPage"/>
-        <click selector="{{AdminProductGridPaginationSection.perPageDropdown}}" stepKey="clickProductPerPageDropdown"/>
-        <click selector="{{AdminProductGridPaginationSection.perPageOption('Custom')}}" stepKey="selectCustomPerPage"/>
-        <fillField selector="{{AdminProductGridPaginationSection.perPageInput}}" userInput="1" stepKey="fillCustomPerPage"/>
-        <click selector="{{AdminProductGridPaginationSection.perPageApplyInput}}" stepKey="applyCustomPerPage"/>
-        <waitForPageLoad stepKey="waitForPageRefreshCustomPerPage"/>
-        <waitForElementVisible selector=".admin__dynamic-rows[data-index='values'] tr.data-row" stepKey="waitForRowsToBeVisible"/>
-        <seeNumberOfElements selector=".admin__dynamic-rows[data-index='values'] tr.data-row" userInput="1" stepKey="see4RowsOfOptions"/>
+        <actionGroup ref="AdminOpenAndApplyCustomOptionsPerPageActionGroup" stepKey="openAndApplyPerPageDropdown">
+            <argument name="perPageInputValue" value="1"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.customOptionTableRows}}" stepKey="waitForRowsToBeVisible"/>
+        <seeNumberOfElements selector="{{AdminProductCustomizableOptionsSection.customOptionTableRows}}" userInput="1" stepKey="see4RowsOfOptions"/>
     </test>
 </tests>

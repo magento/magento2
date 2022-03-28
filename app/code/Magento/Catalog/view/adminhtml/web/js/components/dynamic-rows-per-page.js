@@ -7,8 +7,9 @@ define([
     'Magento_Ui/js/dynamic-rows/dynamic-rows',
     'underscore',
     'mageUtils',
-    'uiLayout'
-], function (DynamicRows, _, utils, layout) {
+    'uiLayout',
+    'rjsResolver'
+], function (DynamicRows, _, utils, layout, resolver) {
     'use strict';
 
     return DynamicRows.extend({
@@ -46,13 +47,10 @@ define([
             },
             links: {
                 options: '${ $.sizesConfig.name }:options',
-                perPageSize: '${ $.sizesConfig.name }:value'
-            },
-            statefull: {
-                perPageSize: true
+                pageSize: '${ $.sizesConfig.name }:value'
             },
             listens: {
-                'perPageSize': 'onPageSizeChange'
+                'pageSize': 'onPageSizeChange'
             },
             modules: {
                 sizes: '${ $.sizesConfig.name }'
@@ -92,7 +90,7 @@ define([
         initObservable: function () {
             this._super()
                 .track([
-                    'perPageSize'
+                    'pageSize'
                 ]);
 
             return this;
@@ -102,16 +100,11 @@ define([
          * Handles changes of the page size.
          */
         onPageSizeChange: function () {
-            if (this.getRecordCount()) {
-                if (this.perPageSize !== undefined) {
-                    this.pageSize = this.perPageSize;
+            resolver(function () {
+                if (this.elems().length) {
                     this.reload();
-                } else {
-                    this.perPageSize = this.pageSize;
                 }
-            } else {
-                this.perPageSize  = this.pageSize;
-            }
+            }, this);
         }
     });
 });
