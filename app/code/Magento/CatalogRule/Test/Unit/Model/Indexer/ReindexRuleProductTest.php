@@ -62,7 +62,6 @@ class ReindexRuleProductTest extends TestCase
      */
     private $websiteTz;
 
-
     /**
      * @inheritDoc
      */
@@ -225,6 +224,7 @@ class ReindexRuleProductTest extends TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function executeDataProvider(): array
     {
