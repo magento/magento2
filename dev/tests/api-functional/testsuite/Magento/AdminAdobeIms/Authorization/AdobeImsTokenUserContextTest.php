@@ -177,6 +177,31 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Webapi/_files/webapi_user.php
+     */
+    public function testUseAdobeAccessTokenInvalidCertificate()
+    {
+        $token = $this->createAccessToken('now', true);
+
+        $noExceptionOccurred = false;
+        try {
+            $this->runWebApiCall($token);
+            $noExceptionOccurred = true;
+        } catch (\SoapFault $e) {
+            $this->assertStringContainsString(
+                'The consumer isn\'t authorized to access %resources.',
+                $e->getMessage(),
+                'SoapFault does not contain expected message.'
+            );
+        } catch (\Exception $exception) {
+            $this->assertUnauthorizedAccessException($exception);
+        }
+        if ($noExceptionOccurred) {
+            $this->fail("Exception was expected to be thrown when provided token has invalid certificate.");
+        }
+    }
+
+    /**
      * @param $token
      * @return void
      */
@@ -206,7 +231,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     /**
      * @return string
      */
-    private function createAccessToken($createdAt = 'now'): string
+    private function createAccessToken($createdAt = 'now', $isCertificateInvalid = false): string
     {
         $this->cache->save(
             file_get_contents(self::KEYS_LOCATION . 'jwtRS256.key.pub'),
@@ -223,12 +248,13 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
         // timestamp in milliseconds
         $date = (new \DateTime($createdAt))->getTimestamp() * 1000;
 
+        $x5u = $isCertificateInvalid ? 'invalid certificate' : 'jwtRS256.key.pub';
         return $this->manager->create(new Jws(
             [
                 new JwsHeader(
                     [
                         new PrivateHeaderParameter('alg', 'RS256'),
-                        new PrivateHeaderParameter('x5u', 'jwtRS256.key.pub'),
+                        new PrivateHeaderParameter('x5u', $x5u),
                         new PrivateHeaderParameter('kid', 'jwtRS256.key'),
                         new PrivateHeaderParameter('itt', 'at')
                     ]
