@@ -21,11 +21,13 @@
                 $_i++ ?>
                 <tbody class="<?= /* @noEscape */ $_i%2 ? 'odd' : 'even' ?>">
                     <?= $block->getItemHtml($_item) ?>
-                    <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
-                    <?php $item = $_item->getOrderItem(); ?>
-                    <?php if ($item->getQtyShipped()): ?>
+                    <?php $orderItem = $_item->getOrderItem(); ?>
+                    <?= $block->getItemExtraInfoHtml($orderItem) ?>
+                    <?php $qtyToShip = $orderItem->getQtyShipped() ??
+                        (float) $orderItem->getQtyOrdered() - (float) $orderItem->getQtyShipped(); ?>
+                    <?php if ($orderItem->getQtyShipped()): ?>
                         <input type="hidden" name="shipment[items][<?= /** @noEscape */ $_item->getId()?>]"
-                               value="<?= /** @noEscape */ (float) $item->getQtyShipped(); ?>">
+                               value="<?= /** @noEscape */ $qtyToShip; ?>">
                     <?php endif; ?>
                 </tbody>
             <?php endif; ?>
