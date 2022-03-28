@@ -36,19 +36,26 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
      * @var string[]
      */
     private $indexers;
+    /**
+     * @var string[]
+     */
+    private $optionalIndexers;
 
     /**
      * @param ObjectManagerFactory $objectManagerFactory
      * @param ScopeConfigInterface $configReader
      * @param array $indexers
+     * @param array $optionalIndexers
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
         ScopeConfigInterface $configReader,
-        array $indexers
+        array $indexers,
+        array $optionalIndexers
     ) {
         $this->configReader = $configReader;
         $this->indexers = $indexers;
+        $this->optionalIndexers = $optionalIndexers;
         parent::__construct($objectManagerFactory);
     }
 
@@ -92,7 +99,7 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
                 $output->writeln(sprintf('%-50s ', $indexer->getTitle() . ':') . $mode);
             }
         } catch (\Exception $e) {
-            if ($e instanceof \InvalidArgumentException && $indexerId !== 'catalogpermissions_category') {
+            if (!in_array($indexerId, $this->optionalIndexers)) {
                 $output->writeln('"' . $indexer->getTitle() . '" indexer process unknown error:' . PHP_EOL);
                 $output->writeln($e->getMessage() . PHP_EOL);
                 // we must have an exit code higher than zero to indicate something was wrong
@@ -114,7 +121,7 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
         $arguments[] = new InputArgument(
             self::INPUT_KEY_INDEXER,
             InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
-            $optionDescription . ' (' . implode($this->indexers) . ')'
+            $optionDescription . ' (' . implode(',', $this->indexers) . ')'
         );
 
         return $arguments;
