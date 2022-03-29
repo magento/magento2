@@ -132,6 +132,7 @@ class Processor
      * @param bool $isIncrement
      * @param int $ruleId
      * @param int $customerId
+     * @throws \Exception
      */
     private function updateCustomerRuleUsages(bool $isIncrement, int $ruleId, int $customerId): void
     {
@@ -144,6 +145,9 @@ class Processor
         } elseif ($isIncrement) {
             $ruleCustomer->setCustomerId($customerId)->setRuleId($ruleId)->setTimesUsed(1);
         }
-        $ruleCustomer->save();
+
+        if ($ruleCustomer->hasData()) {
+            $ruleCustomer->save();
+        }
     }
 }
