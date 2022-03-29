@@ -1,7 +1,5 @@
 <?php
 /**
- * Grouped Products Price Indexer Resource model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -104,7 +102,21 @@ class Grouped implements DimensionalIndexerInterface
             'tierPriceField' => 'tier_price',
         ]);
         $select = $this->prepareGroupedProductPriceDataSelect($dimensions, iterator_to_array($entityIds));
-        $this->tableMaintainer->insertFromSelect($select, $temporaryPriceTable->getTableName(), []);
+        $this->tableMaintainer->insertFromSelect(
+            $select,
+            $temporaryPriceTable->getTableName(),
+            [
+            "entity_id",
+            "customer_group_id",
+            "website_id",
+            "tax_class_id",
+            "price",
+            "final_price",
+            "min_price",
+            "max_price",
+            "tier_price",
+            ]
+        );
     }
 
     /**
