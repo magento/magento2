@@ -92,11 +92,13 @@ class WebsiteTest extends TestCase
                         'label' => 'Main Website',
                         'value' => '1',
                         'group_id' => '1',
+                        'default_store_view_id' => '1',
                     ],
                     [
                         'label' => 'Second Website',
                         'value' => '2',
                         'group_id' => '1',
+                        'default_store_view_id' => '2',
                     ],
                 ],
             ],

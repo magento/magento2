@@ -76,7 +76,7 @@ class Website implements OptionSourceInterface
     /**
      * Get Default store view id by Website id
      *
-     * @param $websiteId
+     * @param string $websiteId
      * @return mixed
      */
     private function getWebsiteDefaultStoreViewId($websiteId)
