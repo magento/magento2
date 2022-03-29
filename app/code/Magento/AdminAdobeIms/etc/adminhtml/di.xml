@@ -48,8 +48,6 @@
     <type name="Magento\User\Model\User">
         <plugin name="aroundVerifyIdentity"
                 type="Magento\AdminAdobeIms\Plugin\ReplaceVerifyIdentityWithImsPlugin"/>
-        <plugin name="empty_password_for_user"
-                type="Magento\AdminAdobeIms\Plugin\SetEmptyPasswordForUserPlugin"/>
         <plugin name="user_save"
                 type="Magento\AdminAdobeIms\Plugin\UserSavePlugin"/>
     </type>
