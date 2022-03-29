@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model;
 
+use Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
 
@@ -152,6 +154,7 @@ class AdminSessionsManager
      * Handle logout process
      *
      * @return $this
+     * @throws Exception
      * @since 100.1.0
      */
     public function processLogout()
@@ -294,15 +297,22 @@ class AdminSessionsManager
      * Create new record
      *
      * @return $this
+     * @throws Exception
      * @since 100.1.0
      */
     protected function createNewSession()
     {
+        $user = $this->authSession->getUser();
+        if (null === $user) {
+           $this->processLogout();
+           throw new LocalizedException(__('User is not found'));
+        }
+
         $adminSessionInfo = $this->adminSessionInfoFactory
             ->create()
             ->setData(
                 [
-                    'user_id' => $this->authSession->getUser()->getId(),
+                    'user_id' => $user->getId(),
                     'ip' => $this->remoteAddress->getRemoteAddress(),
                     'status' => AdminSessionInfo::LOGGED_IN
                 ]

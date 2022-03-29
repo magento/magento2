@@ -119,18 +119,16 @@ class Custom extends \Magento\Framework\App\Config\Value
         }
 
         if ($useCustomUrl == 1) {
-            $this->_configWriter->save(
+            $paths = [
                 self::XML_PATH_SECURE_BASE_URL,
-                $value,
-                self::CONFIG_SCOPE,
-                self::CONFIG_SCOPE_ID
-            );
-            $this->_configWriter->save(
                 self::XML_PATH_UNSECURE_BASE_URL,
-                $value,
-                self::CONFIG_SCOPE,
-                self::CONFIG_SCOPE_ID
-            );
+                self::XML_PATH_SECURE_BASE_LINK_URL,
+                self::XML_PATH_UNSECURE_BASE_LINK_URL,
+            ];
+
+            foreach ($paths as $path) {
+                $this->_configWriter->save($path, $value, self::CONFIG_SCOPE, self::CONFIG_SCOPE_ID);
+            }
         }
 
         return parent::afterSave();
