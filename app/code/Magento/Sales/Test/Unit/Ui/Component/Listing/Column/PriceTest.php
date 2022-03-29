@@ -76,7 +76,8 @@ class PriceTest extends TestCase
         array $dataSource,
         string $currencyCode,
         ?int $expectedStoreId = null
-    ): void {
+    ): void
+    {
         $itemName = 'itemName';
         $oldItemValue = 'oldItemValue';
         $newItemValue = 'newItemValue';
@@ -158,24 +159,11 @@ class PriceTest extends TestCase
                 ]
             ]
         ];
-        $dataSource5 = [
-            'data' => [
-                'items' => [
-                    [
-                        'itemName' => 'oldItemValue',
-                        'store_id' => '123Test',
-                        'base_currency_code' => '',
-                    ]
-                ]
-            ]
-        ];
-
         return [
             [true, $dataSource1, 'US'],
             [false, $dataSource2, 'SAR'],
             [false, $dataSource3, 'SAR', 2],
             [false, $dataSource4, 'SAR'],
-            [false, $dataSource5, 'INR'],
         ];
     }
 }
