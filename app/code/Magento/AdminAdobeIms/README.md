@@ -92,6 +92,17 @@ It's triggered by the event `controller_action_predispatch_adminhtml_auth_logout
 
 Token is invalidated with a call, if it's successful, the access and refresh token are deleted in the `adobe_user_profile` table.
 
+# Admin Created Email
+
+We created an Observer for the `admin_user_save_after` event. \
+There we check if the customer object is newly created or not. \
+When a new admin user got created in Magento, he will then receive an email with further information on how to login.
+
+We use the `admin_emails_new_user_created_template` Template for the content, and also created a new header and footer template for the Admin Adobe IMS module templates.
+They are called `admin_adobe_ims_email_header_template` and `admin_adobe_ims_email_footer_template`.
+
+The notification mail will be sent inside our `AdminNotificationService` where we can add and modify the template variables.
+
 # Error Handling
 For the AdminAdobeIms Module we have two specific error messages and one general error message which are shown on the Admin Login page when an error occured.
 

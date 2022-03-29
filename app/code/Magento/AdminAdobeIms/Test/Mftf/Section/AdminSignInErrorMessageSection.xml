@@ -11,9 +11,9 @@
     <section name="AdminSignInErrorMessageSection">
         <element name="generalHeadline"
                  type="text"
-                 selector=".admin-adobe-ims-message-wrapper .admin-adobe-ims-message-header"/>
+                 selector=".adobe-ims-error-message-wrapper .admin-adobe-ims-message-header"/>
         <element name="generalMessage"
                  type="text"
-                 selector=".admin-adobe-ims-message-wrapper .admin-adobe-ims-message-message"/>
+                 selector=".adobe-ims-error-message-wrapper .admin-adobe-ims-message-message"/>
     </section>
 </sections>

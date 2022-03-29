@@ -21,6 +21,8 @@
             <amOnPage url="{{AdminAdobeImsCallbackPage.url}}" stepKey="openCallbackUrl"/>
         </before>
 
+        <waitForPageLoad stepKey="waitForAdminLoginPageLoad"/>
+
         <!-- Check for Sign in with error message -->
         <actionGroup ref="AssertAdminSignInEmptyCodeErrorMessageTestActionGroup"
                      stepKey="assertAdminLoginShowsErrorMessage"/>

@@ -17,6 +17,12 @@
                 <profile_url><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/profile/v1?client_id=#{client_id}]]></profile_url>
                 <logout_url><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/logout/v1?access_token=#{access_token}&amp;client_id=#{client_id}&amp;client_secret=#{client_secret}]]></logout_url>
             </integration>
+            <email>
+                <header_template>admin_adobe_ims_email_header_template</header_template>
+                <footer_template>admin_adobe_ims_email_footer_template</footer_template>
+                <content_template>admin_emails_new_user_created_template</content_template>
+                <new_user_email_identity>general</new_user_email_identity>
+            </email>
         </adobe_ims>
     </default>
 </config>
