@@ -25,9 +25,27 @@
             <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
                         stepKey="enableLoginAsCustomerAutoDetection"/>
             <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createFirstCustomer"/>
+
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultUser"/>
+            <actionGroup ref="AdminOpenGeneralConfigurationPageActionGroup" stepKey="goToGeneralConfig"/>
+            <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}"
+                              dependentSelector="{{LocaleOptionsSection.timezone}}"
+                              visible="false"
+                              stepKey="openLocaleSection"/>
+            <grabValueFrom selector="{{LocaleOptionsSection.timezone}}" stepKey="originalTimezone"/>
+            <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="UTC" stepKey="setTimezone"/>
+            <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
         </before>
         <after>
+            <actionGroup ref="AdminOpenGeneralConfigurationPageActionGroup" stepKey="goToGeneralConfig"/>
+            <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}"
+                              dependentSelector="{{LocaleOptionsSection.timezone}}"
+                              visible="false"
+                              stepKey="openLocaleSection"/>
+            <grabValueFrom selector="{{LocaleOptionsSection.timezone}}" stepKey="originalTimezone"/>
+            <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="America/Los_Angeles" stepKey="setTimezone"/>
+            <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
+
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsDefaultAdmin"/>
             <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>
