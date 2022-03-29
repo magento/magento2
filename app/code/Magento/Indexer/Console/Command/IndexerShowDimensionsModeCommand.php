@@ -12,7 +12,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Console\Cli;
-use Magento\SharedCatalog\Model\State as SharedCatalogState;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
@@ -37,27 +36,26 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
      * @var string[]
      */
     private $indexers;
-
     /**
-     * @var SharedCatalogState
+     * @var string[]
      */
-    private $sharedCatalogState;
+    private $optionalIndexers;
 
     /**
      * @param ObjectManagerFactory $objectManagerFactory
      * @param ScopeConfigInterface $configReader
-     * @param SharedCatalogState $sharedCatalogState
      * @param array $indexers
+     * @param array $optionalIndexers
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
         ScopeConfigInterface $configReader,
-        SharedCatalogState $sharedCatalogState,
-        array $indexers
+        array $indexers,
+        array $optionalIndexers
     ) {
         $this->configReader = $configReader;
-        $this->sharedCatalogState = $sharedCatalogState;
         $this->indexers = $indexers;
+        $this->optionalIndexers = $optionalIndexers;
         parent::__construct($objectManagerFactory);
     }
 
@@ -101,9 +99,7 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
                 $output->writeln(sprintf('%-50s ', $indexer->getTitle() . ':') . $mode);
             }
         } catch (\Exception $e) {
-            if ($indexerId === 'catalogpermissions_category' && !$this->sharedCatalogState->isGlobal()) {
-                // do nothing
-            } else {
+            if (!in_array($indexerId, $this->optionalIndexers)) {
                 $output->writeln('"' . $indexer->getTitle() . '" indexer process unknown error:' . PHP_EOL);
                 $output->writeln($e->getMessage() . PHP_EOL);
                 // we must have an exit code higher than zero to indicate something was wrong
