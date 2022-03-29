@@ -10,6 +10,7 @@ namespace Magento\AdminAdobeIms\Plugin;
 
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Backend\Model\Auth;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 
@@ -49,13 +50,14 @@ class DisableAdminLoginAuthPlugin
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundLogin(Auth $subject, callable $proceed, $username, $password): void
+    public function aroundLogin(Auth $subject, callable $proceed, string $username, string $password): void
     {
         if ($this->imsConfig->enabled() === false) {
             $proceed($username, $password);
             return;
         }
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->redirectFactory->create();
         $this->messageManager->addErrorMessage(__('Please sign in with Adobe ID'));
         $resultRedirect->setPath('admin');
