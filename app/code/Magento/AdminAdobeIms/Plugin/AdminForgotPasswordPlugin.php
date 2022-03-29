@@ -54,7 +54,7 @@ class AdminForgotPasswordPlugin
      * @return Redirect
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(Forgotpassword $subject, callable $proceed)
+    public function aroundExecute(Forgotpassword $subject, callable $proceed): Redirect
     {
         if ($this->imsConfig->enabled()) {
             $resultRedirect = $this->redirectFactory->create();

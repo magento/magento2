@@ -16,6 +16,7 @@ use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Helper\DebugFormatterHelper;
 use Symfony\Component\Console\Helper\FormatterHelper;
@@ -89,19 +90,19 @@ class AdminAdobeImsEnableCommandTest extends TestCase
     /**
      * Test AdminAdobeIms Command calls cache clear and return correct message
      *
-     * @param $testAuthMode
-     * @param $enableMethodCallExpection
-     * @param $cleanMethodCallExpection
-     * @param $outputMessage
+     * @param bool $testAuthMode
+     * @param InvokedCountMatcher$enableMethodCallExpection
+     * @param InvokedCountMatcher $cleanMethodCallExpection
+     * @param string $outputMessage
      * @return void
      * @throws Exception
      * @dataProvider cliCommandProvider
      */
     public function testAdminAdobeImsModuleEnableWillClearCacheWhenSuccessful(
-        $testAuthMode,
-        $enableMethodCallExpection,
-        $cleanMethodCallExpection,
-        $outputMessage
+        bool $testAuthMode,
+        InvokedCountMatcher $enableMethodCallExpection,
+        InvokedCountMatcher $cleanMethodCallExpection,
+        string $outputMessage
     ): void {
         $inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
