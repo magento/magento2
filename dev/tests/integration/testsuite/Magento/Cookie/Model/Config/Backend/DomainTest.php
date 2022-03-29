@@ -25,9 +25,7 @@ class DomainTest extends TestCase
     public function testBeforeSave($value, $exceptionMessage = null)
     {
         /** @var $domain Domain */
-        $domain = Bootstrap::getObjectManager()->create(
-            Domain::class
-        );
+        $domain = Bootstrap::getObjectManager()->create(Domain::class);
         $domain->setValue($value);
         $domain->setPath('path');
         try {

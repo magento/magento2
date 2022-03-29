@@ -27,8 +27,8 @@ class CookieDomainValidator extends AbstractValidator
             return false;
         }
 
-        //Hostname validator allows [;,] and returns the validator as true but these are unacceptable cookie domain
-        //characters hence need explicit validation for the same
+        //Hostname validator allows [;,] and returns the validator as true but,
+        //these are unacceptable cookie domain characters hence need explicit validation for the same
         if (preg_match('/[;,]/', $value)) {
             $this->_addMessages(['invalid character in cookie domain']);
 
