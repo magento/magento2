@@ -59,8 +59,6 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
         $this->userProfileRepository = $this->createMock(UserProfileRepository::class);
         $this->encryptor = $this->createMock(EncryptorInterface::class);
 
-        $this->userMock = $this->createMock(User::class);
-
         $this->plugin = $objectManagerHelper->getObject(
             ReplaceVerifyIdentityWithImsPlugin::class,
             [
@@ -91,6 +89,11 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
 
         $expectedResult = true;
 
+        /**
+         * @param $request
+         * @return bool
+         * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+         */
         $proceed = function ($request) use ($expectedResult) {
             return $expectedResult;
         };
@@ -130,6 +133,12 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
             ->willReturn(true);
 
         $expectedResult = true;
+
+        /**
+         * @param $request
+         * @return bool
+         * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+         */
         $proceed = function ($request) use ($expectedResult) {
             return $expectedResult;
         };
@@ -169,6 +178,12 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
             . 'Please wait and try again later.');
 
         $expectedResult = true;
+
+        /**
+         * @param $request
+         * @return bool
+         * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+         */
         $proceed = function ($request) use ($expectedResult) {
             return $expectedResult;
         };

@@ -10,6 +10,8 @@ namespace Magento\AdminAdobeIms\Controller\Adminhtml\User;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Backend\Model\Locale\Manager;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\UserLockedException;
@@ -51,6 +53,7 @@ class Save extends UserController implements HttpPostActionInterface
 
     /**
      * @inheritDoc
+     * @return ResultInterface|ResponseInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

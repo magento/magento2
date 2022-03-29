@@ -88,7 +88,11 @@ class AdminForgotPasswordPluginTest extends TestCase
             ->with('Please sign in with Adobe ID', null)
             ->willReturnSelf();
 
-        $this->plugin->aroundExecute($subject, function() {});
+        $this->plugin->aroundExecute(
+            $subject,
+            function () {
+            }
+        );
     }
 
     /**
@@ -116,6 +120,10 @@ class AdminForgotPasswordPluginTest extends TestCase
             ->with('Please sign in with Adobe ID', null)
             ->willReturnSelf();
 
-        $this->plugin->aroundExecute($subject, function() {});
+        $this->plugin->aroundExecute(
+            $subject,
+            function () {
+            }
+        );
     }
 }
