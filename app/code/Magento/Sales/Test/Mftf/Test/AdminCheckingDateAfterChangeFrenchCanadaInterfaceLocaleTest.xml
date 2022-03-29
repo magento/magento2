@@ -80,9 +80,12 @@
         <!--Get date from "Purchase Date" column after changing "Interface Locale"-->
         <grabTextFrom selector="{{AdminOrdersGridSection.gridCell('1','Purchase Date')}}" stepKey="grabPurchaseDateInFrenchLocale"/>
 
+        <!--Get month name in French-->
+        <executeJS function="return (new Date('{$grabPurchaseDateInDefaultLocale}').toLocaleDateString('fr-CA', {month: 'short'}))" stepKey="getMonthNameInFrench"/>
+
         <!--Checking Date after changing "Interface Locale"-->
         <assertStringContainsString stepKey="checkingDateAfterChangeInterfaceLocale">
-            <expectedResult type="string">min</expectedResult>
+            <expectedResult type="variable">getMonthNameInFrench</expectedResult>
             <actualResult type="variable">grabPurchaseDateInFrenchLocale</actualResult>
         </assertStringContainsString>
     </test>
