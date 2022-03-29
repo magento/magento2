@@ -51,7 +51,7 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
         ObjectManagerFactory $objectManagerFactory,
         ScopeConfigInterface $configReader,
         array $indexers,
-        array $optionalIndexers
+        array $optionalIndexers = []
     ) {
         $this->configReader = $configReader;
         $this->indexers = $indexers;
