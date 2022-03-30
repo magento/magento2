@@ -457,4 +457,17 @@
         <data key="group">General</data>
         <requiredEntity type="address">BillingAddressTX</requiredEntity>
     </entity>
+    <entity name="GloCustomer" type="customer">
+        <data key="group_id">1</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">G.Butler@example.com</data>
+        <data key="firstname">Lasonya G</data>
+        <data key="lastname">Butler</data>
+        <data key="fullname">Lasonya G. Butler</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">GloCustomerAddress</requiredEntity>
+    </entity>
 </entities>
