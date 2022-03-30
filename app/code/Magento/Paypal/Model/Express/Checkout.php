@@ -30,7 +30,7 @@ class Checkout
      *
      * @var string
      */
-    private const PAL_CACHE_ID = 'paypal_express_checkout_pal';
+    public const PAL_CACHE_ID = 'paypal_express_checkout_pal';
 
     /**
      * Keys for passthrough variables in sales/quote_payment and sales/order_payment
@@ -1160,6 +1160,8 @@ class Checkout
 
         $quote->setCustomerId(null)
             ->setCustomerEmail($email)
+            ->setCustomerFirstname($billingAddress->getFirstname())
+            ->setCustomerLastname($billingAddress->getLastname())
             ->setCustomerIsGuest(true)
             ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
         return $this;
