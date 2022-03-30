@@ -298,9 +298,9 @@ QUERY;
             'Product name in fixture store is invalid.'
         );
         $this->assertEquals(
-            'EUR',
+            'USD',
             $response['products']['items'][0]['price']['minimalPrice']['amount']['currency'],
-            'Currency code EUR in fixture store default is unexpected'
+            'Currency code USD in fixture store default is unexpected'
         );
 
         // test cached response store + currency header with non existing currency, and no valid response, no cache
