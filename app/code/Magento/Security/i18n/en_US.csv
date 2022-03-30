@@ -29,4 +29,3 @@ None,None
 """%1"" must be later than the current date.","""%1"" must be later than the current date."
 "User Expiration","User Expiration"
 """%1"" is not a valid date.","""%1"" is not a valid date."
-"User not found","User not found"
