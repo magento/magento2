@@ -51,17 +51,17 @@ class AdminForgotPasswordPlugin
      *
      * @param Forgotpassword $subject
      * @param callable $proceed
-     * @return Redirect
+     * @return Redirect|void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(Forgotpassword $subject, callable $proceed): Redirect
+    public function aroundExecute(Forgotpassword $subject, callable $proceed)
     {
-        if ($this->imsConfig->enabled()) {
-            $resultRedirect = $this->redirectFactory->create();
-            $this->messageManager->addErrorMessage(__('Please sign in with Adobe ID'));
-            return $resultRedirect->setPath('admin');
+        if ($this->imsConfig->enabled() === false) {
+            return $proceed();
         }
 
-        return $proceed();
+        $resultRedirect = $this->redirectFactory->create();
+        $this->messageManager->addErrorMessage(__('Please sign in with Adobe ID'));
+        return $resultRedirect->setPath('admin');
     }
 }
