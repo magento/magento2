@@ -305,7 +305,7 @@ class AdminSessionsManager
         $user = $this->authSession->getUser();
         if (null === $user) {
            $this->processLogout();
-           throw new LocalizedException(__('User is not found'));
+           throw new LocalizedException(__('User not found'));
         }
 
         $adminSessionInfo = $this->adminSessionInfoFactory
