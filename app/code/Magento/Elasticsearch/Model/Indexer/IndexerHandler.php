@@ -7,6 +7,7 @@ namespace Magento\Elasticsearch\Model\Indexer;
 
 use Magento\Catalog\Model\Category;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Mode as IndexationMode;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Processor;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
@@ -86,6 +87,8 @@ class IndexerHandler implements IndexerInterface
      */
     private $processor;
 
+    private ?IndexationMode $indexationMode;
+
     /**
      * IndexerHandler constructor.
      * @param IndexStructureInterface $indexStructure
@@ -98,6 +101,7 @@ class IndexerHandler implements IndexerInterface
      * @param DeploymentConfig|null $deploymentConfig
      * @param CacheContext|null $cacheContext
      * @param Processor|null $processor
+     * @param IndexationMode|null $indexationMode
      */
     public function __construct(
         IndexStructureInterface $indexStructure,
@@ -109,7 +113,8 @@ class IndexerHandler implements IndexerInterface
         int $batchSize = self::DEFAULT_BATCH_SIZE,
         ?DeploymentConfig $deploymentConfig = null,
         ?CacheContext $cacheContext = null,
-        ?Processor $processor = null
+        ?Processor $processor = null,
+        ?IndexationMode $indexationMode = null
     ) {
         $this->indexStructure = $indexStructure;
         $this->adapter = $adapter;
@@ -121,6 +126,7 @@ class IndexerHandler implements IndexerInterface
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
         $this->processor = $processor ?: ObjectManager::getInstance()->get(Processor::class);
+        $this->indexationMode = $indexationMode ?: ObjectManager::getInstance()->get(IndexationMode::class);
     }
 
     /**
@@ -137,7 +143,11 @@ class IndexerHandler implements IndexerInterface
 
         foreach ($this->batch->getItems($documents, $this->batchSize) as $documentsBatch) {
             $docs = $this->adapter->prepareDocsPerStore($documentsBatch, $scopeId);
-            $this->adapter->addDocs($docs, $scopeId, $this->getIndexerId());
+            if ($this->indexationMode->getIsPartialIndexationMode()) {
+                $this->adapter->updateDocs($docs, $scopeId, $this->getIndexerId());
+            } else {
+                $this->adapter->addDocs($docs, $scopeId, $this->getIndexerId());
+            }
             if ($this->processor->getIndexer()->isScheduled()) {
                 $this->updateCacheContext($docs);
             }
@@ -177,6 +187,9 @@ class IndexerHandler implements IndexerInterface
      */
     public function deleteIndex($dimensions, \Traversable $documents)
     {
+        if ($this->indexationMode->getIsPartialIndexationMode()) {
+            return $this;
+        }
         $dimension = current($dimensions);
         $scopeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
         $documentIds = [];

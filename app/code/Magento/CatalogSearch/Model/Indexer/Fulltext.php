@@ -16,6 +16,7 @@ use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Store\Model\StoreDimensionProvider;
 use Magento\Indexer\Model\ProcessManager;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Mode as IndexationMode;
 
 /**
  * Provide functionality for Fulltext Search indexing.
@@ -112,6 +113,7 @@ class Fulltext implements
      * @param ProcessManager|null $processManager
      * @param int|null $batchSize
      * @param DeploymentConfig|null $deploymentConfig
+     * @param IndexationMode|null $indexationMode
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -125,7 +127,8 @@ class Fulltext implements
         array $data,
         ProcessManager $processManager = null,
         ?int $batchSize = null,
-        ?DeploymentConfig $deploymentConfig = null
+        ?DeploymentConfig $deploymentConfig = null,
+        ?IndexationMode $indexationMode = null
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
         $this->indexerHandlerFactory = $indexerHandlerFactory;
@@ -137,6 +140,7 @@ class Fulltext implements
         $this->processManager = $processManager ?: ObjectManager::getInstance()->get(ProcessManager::class);
         $this->batchSize = $batchSize ?? self::BATCH_SIZE;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->indexationMode = $indexationMode ?: ObjectManager::getInstance()->get(IndexationMode::class);
     }
 
     /**
@@ -217,6 +221,7 @@ class Fulltext implements
             array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
         );
         if ($saveHandler->isAvailable($dimensions)) {
+            $this->indexationMode->setPartialIndexationMode();
             $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
             $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
         }
@@ -231,6 +236,7 @@ class Fulltext implements
     public function executeFull()
     {
         $userFunctions = [];
+        $this->indexationMode->setFullIndexationMode();
         foreach ($this->dimensionProvider->getIterator() as $dimension) {
             $userFunctions[] = function () use ($dimension) {
                 $this->executeByDimensions($dimension);

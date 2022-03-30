@@ -224,6 +224,33 @@ class Elasticsearch
     }
 
     /**
+     * Update prepared Elasticsearch documents to Elasticsearch index
+     *
+     * @param array $documents
+     * @param $storeId
+     * @param $mappedIndexerId
+     * @return $this
+     */
+    public function updateDocs(array $documents, $storeId, $mappedIndexerId): self
+    {
+        if (count($documents)) {
+            try {
+                $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
+                $bulkIndexDocuments = $this->getDocsArrayInBulkIndexFormat(
+                    $documents,
+                    $indexName,
+                    self::BULK_ACTION_UPDATE
+                );
+                $this->client->bulkQuery($bulkIndexDocuments);
+            } catch (Exception $e) {
+                $this->logger->critical($e);
+                throw $e;
+            }
+        }
+        return $this;
+    }
+
+    /**
      * Removes all documents from Elasticsearch index
      *
      * @param int $storeId
@@ -327,6 +354,9 @@ class Elasticsearch
             ];
             if ($action == self::BULK_ACTION_INDEX) {
                 $bulkArray['body'][] = $document;
+            }
+            if ($action == self::BULK_ACTION_UPDATE) {
+                $bulkArray['body'][] = ['doc' => $document];
             }
         }
 
