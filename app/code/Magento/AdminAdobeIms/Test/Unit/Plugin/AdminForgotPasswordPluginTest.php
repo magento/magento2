@@ -11,9 +11,6 @@ use Magento\AdminAdobeIms\Plugin\AdminForgotPasswordPlugin;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
-use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Exception\AuthorizationException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\User\Controller\Adminhtml\Auth\Forgotpassword;
@@ -72,6 +69,8 @@ class AdminForgotPasswordPluginTest extends TestCase
     {
         $subject = $this->createMock(Forgotpassword::class);
         $redirect = $this->createMock(Redirect::class);
+        $redirect->method('setPath')
+            ->willReturnSelf();
 
         $this->imsConfigMock
             ->expects($this->once())
@@ -88,11 +87,11 @@ class AdminForgotPasswordPluginTest extends TestCase
             ->with('Please sign in with Adobe ID', null)
             ->willReturnSelf();
 
-        $this->plugin->aroundExecute(
-            $subject,
-            function () {
-            }
-        );
+        $closure = function () {
+            return $this->createMock(Redirect::class);
+        };
+
+        $this->assertEquals($redirect, $this->plugin->aroundExecute($subject, $closure));
     }
 
     /**
@@ -120,10 +119,10 @@ class AdminForgotPasswordPluginTest extends TestCase
             ->with('Please sign in with Adobe ID', null)
             ->willReturnSelf();
 
-        $this->plugin->aroundExecute(
-            $subject,
-            function () {
-            }
-        );
+        $closure = function () {
+            return $this->createMock(Redirect::class);
+        };
+
+        $this->assertEquals($redirect, $this->plugin->aroundExecute($subject, $closure));
     }
 }
