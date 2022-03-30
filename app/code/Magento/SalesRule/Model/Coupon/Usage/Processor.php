@@ -23,7 +23,7 @@ class Processor
     private $ruleFactory;
 
     /**
-     * @var RuleFactory
+     * @var CustomerFactory
      */
     private $ruleCustomerFactory;
 
