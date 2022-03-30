@@ -89,12 +89,7 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
 
         $expectedResult = true;
 
-        /**
-         * @param $request
-         * @return bool
-         * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-         */
-        $proceed = function ($request) use ($expectedResult) {
+        $proceed = function () use ($expectedResult) {
             return $expectedResult;
         };
 
@@ -134,12 +129,7 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
 
         $expectedResult = true;
 
-        /**
-         * @param $request
-         * @return bool
-         * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-         */
-        $proceed = function ($request) use ($expectedResult) {
+        $proceed = function () use ($expectedResult) {
             return $expectedResult;
         };
 
@@ -179,12 +169,7 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
 
         $expectedResult = true;
 
-        /**
-         * @param $request
-         * @return bool
-         * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-         */
-        $proceed = function ($request) use ($expectedResult) {
+        $proceed = function () use ($expectedResult) {
             return $expectedResult;
         };
 
