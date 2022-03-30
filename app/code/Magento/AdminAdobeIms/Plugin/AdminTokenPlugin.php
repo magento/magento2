@@ -33,7 +33,7 @@ class AdminTokenPlugin
      * @param callable $proceed
      * @param string $username
      * @param string $password
-     * @return mixed
+     * @return string
      * @throws AuthenticationException
      */
     public function aroundCreateAdminAccessToken(AdminTokenService $subject, callable $proceed, $username, $password)
