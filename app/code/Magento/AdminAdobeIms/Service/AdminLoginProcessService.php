@@ -9,13 +9,12 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Service;
 
+use Exception;
 use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
 use Magento\AdminAdobeIms\Model\Auth;
 use Magento\AdminAdobeIms\Model\User;
 use Magento\AdobeIms\Model\LogIn;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
-use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Exception\CouldNotSaveException;
 
 class AdminLoginProcessService
 {
@@ -54,7 +53,6 @@ class AdminLoginProcessService
      * @param TokenResponseInterface $tokenResponse
      * @return void
      * @throws AdobeImsTokenAuthorizationException
-     * @throws CouldNotSaveException|AuthenticationException
      */
     public function execute(array $profile, TokenResponseInterface $tokenResponse): void
     {
@@ -65,8 +63,13 @@ class AdminLoginProcessService
             );
         }
 
-        $this->logIn->execute((int)$adminUser['user_id'], $tokenResponse);
-
-        $this->auth->loginByUsername($adminUser['username']);
+        try {
+            $this->logIn->execute((int)$adminUser['user_id'], $tokenResponse);
+            $this->auth->loginByUsername($adminUser['username']);
+        } catch (Exception $exception) {
+            throw new AdobeImsTokenAuthorizationException(
+                __($exception->getMessage())
+            );
+        }
     }
 }
