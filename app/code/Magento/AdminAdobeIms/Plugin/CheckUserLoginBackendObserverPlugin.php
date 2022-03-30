@@ -28,12 +28,19 @@ class CheckUserLoginBackendObserverPlugin
     }
 
     /**
+     * Disable login captcha when AdminAdobeIMS Module is enabled
+     *
      * @param CheckUserLoginBackendObserver $subject
      * @param callable $proceed
      * @param Observer $observer
+     * @return CheckUserLoginBackendObserver|void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(CheckUserLoginBackendObserver $subject, callable $proceed, Observer $observer)
-    {
+    public function aroundExecute(
+        CheckUserLoginBackendObserver $subject,
+        callable $proceed,
+        Observer $observer
+    ) {
         if (!$this->imsConfig->enabled()) {
             return $proceed($observer);
         }

@@ -120,3 +120,21 @@ Errors are logged into the `/var/log/admin_adobe_ims.log` file.
 
 Logging can be enabled or disabled in the config on changing the value for `adobe_ims\integration\logging_enabled` or in the Magento Admin Configuration under `Advanced > Developer > Debug`. \
 There you can switch the toggle for `Enable Logging for Admin Adobe IMS Module`
+
+# Password usage in Admin UI
+When the AdobeAdminIMS Module is enabled, we do not need any password fields in the magento admin backend anymore.
+
+So we removed the "Current User Verification" fields and also the "Password" and "Password Confirmation" fields of the user forms.
+This is done by the Plugins `\Magento\AdminAdobeIms\Plugin\RemoveCurrentUserVerificationFieldsPlugin` and `\Magento\AdminAdobeIms\Plugin\RemovePasswordFieldsPlugin` Plugins.
+Additionally, we need `\Magento\AdminAdobeIms\Plugin\RemoveUserValidationRulesPlugin` to remove the password from the form validation.
+
+As we don't need the current user password anymore, we have the `\Magento\AdminAdobeIms\Plugin\ReplaceVerifyIdentityWithImsPlugin` Plugin to verify the `access_token` of the current admin user in AdobeIMS and only proceed when it is still valid.
+
+For the newly created user will be a random password generated, as we did not modify the admin_user table, where the password field can not be null. 
+This is done in the `\Magento\AdminAdobeIms\Plugin\UserSavePlugin`.
+
+We also disabled the "Change password in 30 days" functionally, as we don't need the magento admin user password for the login.
+This can be found in the `\Magento\AdminAdobeIms\Plugin\DisableForcedPasswordChangePlugin` and `\Magento\AdminAdobeIms\Plugin\DisablePasswordResetPlugin` Plugins.
+
+When the AdminAdobeIMS Module is disabled, the user can not be log in when using an empty password.
+Instead, the forgot password function must be used to reset the password.

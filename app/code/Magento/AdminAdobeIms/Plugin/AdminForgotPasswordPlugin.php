@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Plugin;
 
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\User\Controller\Adminhtml\Auth\Forgotpassword;
@@ -46,14 +47,16 @@ class AdminForgotPasswordPlugin
     }
 
     /**
+     * Disable forgot password method when AdminAdobeIMS Module is enabled
+     *
      * @param Forgotpassword $subject
      * @param callable $proceed
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return Redirect
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(Forgotpassword $subject, callable $proceed)
+    public function aroundExecute(Forgotpassword $subject, callable $proceed): Redirect
     {
         if ($this->imsConfig->enabled()) {
-            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
             $resultRedirect = $this->redirectFactory->create();
             $this->messageManager->addErrorMessage(__('Please sign in with Adobe ID'));
             return $resultRedirect->setPath('admin');

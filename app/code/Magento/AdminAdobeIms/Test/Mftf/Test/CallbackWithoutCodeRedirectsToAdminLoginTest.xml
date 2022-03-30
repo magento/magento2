@@ -18,6 +18,7 @@
             <testCaseId value="CABPI-205"/>
         </annotations>
         <before>
+            <actionGroup ref="AdminEnableAdobeImsActionGroup" stepKey="enableIms" />
             <amOnPage url="{{AdminAdobeImsCallbackPage.url}}" stepKey="openCallbackUrl"/>
         </before>
 
