@@ -8,8 +8,11 @@ declare(strict_types=1);
 namespace Magento\Security\Model;
 
 use Exception;
+use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection;
 use Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
 
 /**
@@ -23,12 +26,12 @@ class AdminSessionsManager
     /**
      * Admin Session lifetime (sec)
      */
-    const ADMIN_SESSION_LIFETIME = 86400;
+    public const ADMIN_SESSION_LIFETIME = 86400;
 
     /**
      * Logout reason when current user has been locked out
      */
-    const LOGOUT_REASON_USER_LOCKED = 10;
+    public const LOGOUT_REASON_USER_LOCKED = 10;
 
     /**
      * @var ConfigInterface
@@ -37,7 +40,7 @@ class AdminSessionsManager
     protected $securityConfig;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      * @since 100.1.0
      */
     protected $authSession;
@@ -49,19 +52,19 @@ class AdminSessionsManager
     protected $adminSessionInfoFactory;
 
     /**
-     * @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory
+     * @var CollectionFactory
      * @since 100.1.0
      */
     protected $adminSessionInfoCollectionFactory;
 
     /**
-     * @var \Magento\Security\Model\AdminSessionInfo
+     * @var AdminSessionInfo
      * @since 100.1.0
      */
     protected $currentSession;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
     private $dateTime;
 
@@ -75,23 +78,25 @@ class AdminSessionsManager
      *
      * Means that after session was prolonged
      * all other prolongs will be ignored within this period
+     *
+     * @var int
      */
     private $maxIntervalBetweenConsecutiveProlongs = 60;
 
     /**
      * @param ConfigInterface $securityConfig
-     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param Session $authSession
      * @param AdminSessionInfoFactory $adminSessionInfoFactory
      * @param CollectionFactory $adminSessionInfoCollectionFactory
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param DateTime $dateTime
      * @param RemoteAddress $remoteAddress
      */
     public function __construct(
         ConfigInterface $securityConfig,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Security\Model\AdminSessionInfoFactory $adminSessionInfoFactory,
-        \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory $adminSessionInfoCollectionFactory,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
+        Session $authSession,
+        AdminSessionInfoFactory $adminSessionInfoFactory,
+        CollectionFactory $adminSessionInfoCollectionFactory,
+        DateTime $dateTime,
         RemoteAddress $remoteAddress
     ) {
         $this->securityConfig = $securityConfig;
@@ -106,6 +111,7 @@ class AdminSessionsManager
      * Handle all others active sessions according Sharing Account Setting
      *
      * @return $this
+     * @throws Exception
      * @since 100.1.0
      */
     public function processLogin()
@@ -132,6 +138,7 @@ class AdminSessionsManager
      * Handle Prolong process
      *
      * @return $this
+     * @throws Exception
      * @since 100.1.0
      */
     public function processProlong()
@@ -172,6 +179,7 @@ class AdminSessionsManager
      * Get current session record
      *
      * @return AdminSessionInfo
+     * @throws Exception
      * @since 100.1.0
      */
     public function getCurrentSession()
@@ -244,13 +252,13 @@ class AdminSessionsManager
     /**
      * Get sessions for current user
      *
-     * @return \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection
+     * @return Collection
      * @since 100.1.0
      */
     public function getSessionsForCurrentUser()
     {
         return $this->createAdminSessionInfoCollection()
-            ->filterByUser($this->authSession->getUser()->getId(), \Magento\Security\Model\AdminSessionInfo::LOGGED_IN)
+            ->filterByUser($this->authSession->getUser()->getId(), AdminSessionInfo::LOGGED_IN)
             ->filterExpiredSessions($this->securityConfig->getAdminSessionLifetime())
             ->loadData();
     }
@@ -266,13 +274,13 @@ class AdminSessionsManager
         $collection = $this->createAdminSessionInfoCollection()
             ->filterByUser(
                 $this->authSession->getUser()->getId(),
-                \Magento\Security\Model\AdminSessionInfo::LOGGED_IN,
+                AdminSessionInfo::LOGGED_IN,
                 $this->authSession->getAdminSessionInfoId()
             )
             ->filterExpiredSessions($this->securityConfig->getAdminSessionLifetime())
             ->loadData();
 
-        $collection->setDataToAll('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_MANUALLY)
+        $collection->setDataToAll('status', AdminSessionInfo::LOGGED_OUT_MANUALLY)
             ->save();
 
         return $this;
@@ -304,8 +312,8 @@ class AdminSessionsManager
     {
         $user = $this->authSession->getUser();
         if (null === $user) {
-           $this->processLogout();
-           throw new LocalizedException(__('User not found'));
+            $this->processLogout();
+            throw new LocalizedException(__('User not found'));
         }
 
         $adminSessionInfo = $this->adminSessionInfoFactory
@@ -324,7 +332,9 @@ class AdminSessionsManager
     }
 
     /**
-     * @return \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection
+     * Creates the collection of admin session
+     *
+     * @return Collection
      * @since 100.1.0
      */
     protected function createAdminSessionInfoCollection()
@@ -333,8 +343,7 @@ class AdminSessionsManager
     }
 
     /**
-     * Calculates diff between now and last session updated_at
-     * and decides whether new prolong must be triggered or not
+     * Calculates diff between now and last session updated_at and decides whether new prolong must be triggered or not
      *
      * This is done to limit amount of session prolongs and updates to database
      * within some period of time - X
