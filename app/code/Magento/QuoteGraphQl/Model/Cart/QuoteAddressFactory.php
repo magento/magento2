@@ -100,6 +100,10 @@ class QuoteAddressFactory
             throw new GraphQlInputException(__('Country is not available'));
         }
 
+        if (!empty($addressInput['region'])) {
+            $this->normalizeRegion($addressInput);
+        }
+
         $this->validateRegion($addressInput);
 
         $maxAllowedLineCount = $this->addressHelper->getStreetLines();
@@ -140,6 +144,26 @@ class QuoteAddressFactory
                 throw new GraphQlInputException(
                     __('The specified region is not a part of the selected country or region')
                 );
+            }
+        }
+    }
+
+    /**
+     * Normalize region code to region id while requesting to setShippingAddress
+     *
+     * @param array $addressInput
+     */
+    private function normalizeRegion(array &$addressInput)
+    {
+        $shippingAddressRegion = $addressInput['region'];
+        if (is_numeric($shippingAddressRegion)) {
+            $regionCollection = $this->regionCollectionFactory
+                ->create()
+                ->addCountryFilter($addressInput['country_code']);
+            $allRegions = $regionCollection->toOptionArray();
+            $regionId = (int) $addressInput['region'];
+            if (array_key_exists($regionId, $allRegions)) {
+                $addressInput['region'] = $allRegions[$regionId]['value'];
             }
         }
     }
