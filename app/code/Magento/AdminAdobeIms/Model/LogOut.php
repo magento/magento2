@@ -107,7 +107,7 @@ class LogOut implements LogOutInterface
      * @param string $accessToken
      * @throws LocalizedException
      */
-    private function externalLogOut(string $accessToken): void
+    public function externalLogOut(string $accessToken): void
     {
         if (!$this->checkUserProfile($accessToken)) {
             throw new LocalizedException(
