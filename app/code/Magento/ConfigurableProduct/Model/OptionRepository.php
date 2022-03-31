@@ -239,7 +239,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         if (!$option->getId()) {
             throw new CouldNotSaveException(__('An error occurred while saving the option. Please try to save again.'));
         }
-        return $option->getId();
+        return $option->getId()."ooo".$product->getTypeId();
     }
 
     /**
