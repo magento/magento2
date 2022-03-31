@@ -51,7 +51,7 @@ class LocaleFormatter
      */
     public function formatNumber($number)
     {
-        if (!is_float($number) || !is_int($number)) {
+        if (!is_float($number) && !is_int($number)) {
             $number = (int) $number;
         }
 
