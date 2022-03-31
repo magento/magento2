@@ -28,15 +28,11 @@ use Magento\Theme\Block\Html\Pager;
 class Items extends AbstractItems
 {
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Order items per page.
-     *
      * @var int
      */
     private $itemsPerPage;
@@ -148,12 +144,11 @@ class Items extends AbstractItems
      */
     private function preparePager(AbstractBlock $pagerBlock): void
     {
-        $collectionToPager = $this->createItemsCollection();
+        $collectionToPager = $this->itemCollection;
         $collectionToPager->addFieldToFilter('parent_item_id', ['null' => true]);
-        $pagerBlock->setCollection($collectionToPager);
-
         $pagerBlock->setLimit($this->itemsPerPage);
         $pagerBlock->setAvailableLimit([$this->itemsPerPage]);
+        $pagerBlock->setCollection($collectionToPager);
         $pagerBlock->setShowAmounts($this->isPagerDisplayed());
     }
 
