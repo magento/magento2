@@ -15,6 +15,11 @@ use PHPUnit\Framework\TestCase;
 
 class RequestMethodValidatorTest extends TestCase
 {
+    /**
+     * @var RequestMethodValidator
+     */
+    private $validator;
+
     protected function setUp(): void
     {
         $this->validator = new RequestMethodValidator();
