@@ -112,6 +112,8 @@ class GenerateFixturesCommand extends Command
                 $indexer->setScheduled($indexersState[$indexerId['indexer_id']]);
             }
 
+            $this->optimizeTables($fixtureModel->getObjectManager(), $output);
+
             /** @var \Magento\Setup\Fixtures\IndexersStatesApplyFixture $indexerFixture */
             $indexerFixture = $fixtureModel
                 ->getFixtureByName(\Magento\Setup\Fixtures\IndexersStatesApplyFixture::class);
@@ -167,5 +169,21 @@ class GenerateFixturesCommand extends Command
         $endTime = microtime(true);
         $resultTime = (int) ($endTime - $startTime);
         $output->writeln('<info> done in ' . gmdate('H:i:s', $resultTime) . '</info>');
+    }
+
+    /**
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function optimizeTables(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        OutputInterface $output
+    ): void {
+        $connect = $objectManager->get(ResourceConnection::class)->getConnection();
+        $output->writeln("<info>Optimize tables</info>");
+        foreach ($connect->getTables() as $tableName) {
+            $connect->query("OPTIMIZE TABLE `$tableName`");
+        }
     }
 }
