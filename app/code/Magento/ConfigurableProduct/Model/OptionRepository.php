@@ -228,7 +228,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
 
         try {
             if ($product->getTypeId() === ProductType::TYPE_SIMPLE) {
-                $product->setTypeId(ProductType::TYPE_CONFIGURABLE);
+                $product->setTypeId(ConfigurableType::TYPE_CODE);
                 $product->save();
             }
             $option->save();
