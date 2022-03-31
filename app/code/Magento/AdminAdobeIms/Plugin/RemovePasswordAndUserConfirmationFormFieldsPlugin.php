@@ -33,6 +33,7 @@ class RemovePasswordAndUserConfirmationFormFieldsPlugin
      * @param WidgetForm $subject
      * @param DataForm $result
      * @return DataForm
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetForm(WidgetForm $subject, DataForm $result): DataForm
     {
