@@ -17,8 +17,7 @@
         "magento/module-user": "*",
         "magento/module-backend": "*",
         "magento/module-store": "*",
-        "magento/module-email": "*",
-        "magento/module-security": "*"
+        "magento/module-email": "*"
     },
     "suggest": {
         "magento/module-theme": "*"
