@@ -25,7 +25,7 @@ define([
             }
 
             if (option['default_store_view_id']) {
-                document.getElementsByName("customer[sendemail_store_id]")[0].value = option['default_store_view_id'];
+                document.getElementsByName('customer[sendemail_store_id]')[0].value = option['default_store_view_id'];
             }
             return this._super();
         }
