@@ -56,13 +56,13 @@ class WebsiteTest extends TestCase
         $storeMock1 = $this->createPartialMock(Store::class, ['getId']);
         $storeMock2 = $this->createPartialMock(Store::class, ['getId']);
 
-        $websiteMock1->method('getId')->willReturn(1);
+        $storeMock1->method('getId')->willReturn('1');
+        $websiteMock1->method('getId')->willReturn('1');
         $websiteMock1->method('getDefaultStore')->willReturn($storeMock1);
-        $storeMock1->method('getId')->willReturn(1);
 
-        $websiteMock2->method('getId')->willReturn(2);
+        $storeMock2->method('getId')->willReturn('2');
+        $websiteMock2->method('getId')->willReturn('2');
         $websiteMock2->method('getDefaultStore')->willReturn($storeMock2);
-        $storeMock2->method('getId')->willReturn(2);
 
         $this->systemStore->method('getWebsiteCollection')->willReturn([$websiteMock1, $websiteMock2]);
     }
