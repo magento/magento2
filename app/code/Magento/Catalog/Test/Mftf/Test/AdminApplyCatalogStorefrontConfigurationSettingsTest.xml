@@ -74,7 +74,7 @@
                 <actionGroup ref="AdminConfigExpandStorefrontTabActionGroup" stepKey="expandStorefrontTab"/>
 
                 <!-- Revert changes in storefront config page -->
-                <actionGroup ref="AdminPreDefineDataInStoreFrontActionGroup" stepKey="FillDataInStoreFront"/>
+                <actionGroup ref="AdminPreDefineDataInCatalogStoreFrontActionGroup" stepKey="FillDataInStoreFront"/>
                 <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForListMode">
                     <argument name="rowId" value="row_catalog_frontend_list_mode"/>
                 </actionGroup>
