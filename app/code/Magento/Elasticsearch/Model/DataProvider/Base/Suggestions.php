@@ -66,6 +66,11 @@ class Suggestions implements SuggestedQueriesInterface
     private $logger;
 
     /**
+     * @var GetSuggestionFrequencyInterface
+     */
+    private $getSuggestionFrequency;
+
+    /**
      * Suggestions constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
@@ -76,6 +81,7 @@ class Suggestions implements SuggestedQueriesInterface
      * @param StoreManager $storeManager
      * @param FieldProviderInterface $fieldProvider
      * @param LoggerInterface|null $logger
+     * @param GetSuggestionFrequencyInterface|null $getSuggestionFrequency
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -85,7 +91,8 @@ class Suggestions implements SuggestedQueriesInterface
         SearchIndexNameResolver $searchIndexNameResolver,
         StoreManager $storeManager,
         FieldProviderInterface $fieldProvider,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        ?GetSuggestionFrequencyInterface $getSuggestionFrequency = null
     ) {
         $this->queryResultFactory = $queryResultFactory;
         $this->connectionManager = $connectionManager;
@@ -95,6 +102,8 @@ class Suggestions implements SuggestedQueriesInterface
         $this->storeManager = $storeManager;
         $this->fieldProvider = $fieldProvider;
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->getSuggestionFrequency = $getSuggestionFrequency ?:
+            ObjectManager::getInstance()->get(GetSuggestionFrequencyInterface::class);
     }
 
     /**
@@ -115,7 +124,12 @@ class Suggestions implements SuggestedQueriesInterface
             foreach ($suggestions as $suggestion) {
                 $count = null;
                 if ($isResultsCountEnabled) {
-                    $count = isset($suggestion['freq']) ? $suggestion['freq'] : null;
+                    try {
+                        $count = $this->getSuggestionFrequency->execute($suggestion['text']);
+                    } catch (\Exception $e) {
+                        $this->logger->critical($e);
+                    }
+
                 }
                 $result[] = $this->queryResultFactory->create(
                     [
