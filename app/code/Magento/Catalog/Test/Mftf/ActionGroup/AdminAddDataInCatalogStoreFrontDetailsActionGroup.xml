@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddDataInCatalogStoreFrontDetailsActionGroup">
+
+        <click selector='//*[@id="catalog_frontend_list_mode"]' stepKey="clickListMode"/>
+        <click selector='//option[@value="list-grid"]' stepKey="clickListGrid"/>
+        <fillField selector='//*[@id="catalog_frontend_grid_per_page_values"]' userInput="1,10,50,100" stepKey="fillDataInGridAllowedValuesField"/>
+        <fillField selector='//*[@id="catalog_frontend_grid_per_page"]' userInput="10" stepKey="fillDataInGridDefaultValueField"/>
+        <fillField selector='//*[@id="catalog_frontend_list_per_page_values"]' userInput="1,10,30" stepKey="fillDataInListAllowedValuesField"/>
+        <fillField selector='//*[@id="catalog_frontend_list_per_page"]' userInput="1" stepKey="fillDataInListDefaultValueField"/>
+        <click selector='//*[@id="catalog_frontend_default_sort_by"]' stepKey="clickListingSortBy"/>
+        <click selector="//option[@value='price']" stepKey="clickPrice"/>
+        <click selector='//*[@id="catalog_frontend_list_allow_all"]' stepKey="clickProductsPerPage"/>
+        <click selector='//option[@value="1"]' stepKey="clickYesButton"/>
+    </actionGroup>
+</actionGroups>
