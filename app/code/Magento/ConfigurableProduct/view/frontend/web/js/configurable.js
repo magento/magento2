@@ -496,7 +496,7 @@ define([
                         options[i].label = options[i].initialLabel;
 
                         if (optionPriceDiff !== 0) {
-                            options[i].label += ' ' + priceUtils.formatPrice(
+                            options[i].label += ' ' + priceUtils.formatPriceLocale(
                                 optionPriceDiff,
                                 this.options.priceFormat,
                                 true

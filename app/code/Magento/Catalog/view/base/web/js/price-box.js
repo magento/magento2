@@ -150,7 +150,7 @@ define([
                     return memo + amount;
                 }, price.amount);
 
-                price.formatted = utils.formatPrice(price.final, priceFormat);
+                price.formatted = utils.formatPriceLocale(price.final, priceFormat);
 
                 $('[data-price-type="' + priceCode + '"]', this.element).html(priceTemplate({
                     data: price

@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 // phpcs:disable Magento2.Templates.ThisInTemplate
-/** @var $block \Magento\Bundle\Block\Sales\Order\Items\Renderer */
-/** @var $viewModel \Magento\Bundle\ViewModel\Sales\Order\Items\Renderer */
+/**
+ * @var \Magento\Bundle\Block\Sales\Order\Items\Renderer $block
+ * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
+ * @var \Magento\Bundle\ViewModel\Sales\Order\Items\Renderer $viewModel
+ */
 $parentItem = $block->getItem();
 $viewModel = $block->getViewModel();
 $items = $viewModel->getOrderItems((int)$parentItem->getOrderId(), (int)$parentItem->getId());
@@ -73,25 +76,33 @@ $prevOptionId = '';
             <?php if ($item->getQtyOrdered() > 0): ?>
                 <li class="item">
                     <span class="title"><?= $block->escapeHtml(__('Ordered')); ?></span>
-                    <span class="content"><?= /* @noEscape */ $item->getQtyOrdered() * 1; ?></span>
+                    <span class="content">
+                        <?= /* @noEscape */ $localeFormatter->formatNumber($item->getQtyOrdered() * 1); ?>
+                    </span>
                 </li>
             <?php endif; ?>
             <?php if ($item->getQtyShipped() > 0 && !$block->isShipmentSeparately()): ?>
                 <li class="item">
                     <span class="title"><?= $block->escapeHtml(__('Shipped')); ?></span>
-                    <span class="content"><?= /* @noEscape */ $item->getQtyShipped() * 1; ?></span>
+                    <span class="content">
+                        <?= /* @noEscape */ $localeFormatter->formatNumber($item->getQtyShipped() * 1); ?>
+                    </span>
                 </li>
             <?php endif; ?>
             <?php if ($item->getQtyCanceled() > 0): ?>
                 <li class="item">
                     <span class="title"><?= $block->escapeHtml(__('Canceled')); ?></span>
-                    <span class="content"><?= /* @noEscape */ $item->getQtyCanceled() * 1; ?></span>
+                    <span class="content">
+                        <?= /* @noEscape */ $localeFormatter->formatNumber($item->getQtyCanceled() * 1); ?>
+                    </span>
                 </li>
             <?php endif; ?>
             <?php if ($item->getQtyRefunded() > 0): ?>
                 <li class="item">
                     <span class="title"><?= $block->escapeHtml(__('Refunded')); ?></span>
-                    <span class="content"><?= /* @noEscape */ $item->getQtyRefunded() * 1; ?></span>
+                    <span class="content">
+                        <?= /* @noEscape */ $localeFormatter->formatNumber($item->getQtyRefunded() * 1); ?>
+                    </span>
                 </li>
             <?php endif; ?>
         <?php elseif ($item->getQtyShipped() > 0 && $item->getParentItem() && $block->isShipmentSeparately()): ?>

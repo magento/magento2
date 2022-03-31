@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var  $block \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer */
+/**
+ * @var \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer $block
+ * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
+ */
 $_item = $block->getItem();
 ?>
 <tr id="order-item-row-<?= (int) $_item->getId() ?>">
@@ -51,7 +54,9 @@ $_item = $block->getItem();
         <?php if ($block->getItem()->getQtyOrdered() > 0): ?>
             <li class="item">
                 <span class="title"><?= $block->escapeHtml(__('Ordered')) ?></span>
-                <span class="content"><?= (float) $block->getItem()->getQtyOrdered() ?></span>
+                <span class="content">
+                    <?= $block->escapeHtml($localeFormatter->formatNumber((float) $block->getItem()->getQtyOrdered()))?>
+                </span>
             </li>
         <?php endif; ?>
         <?php if ($block->getItem()->getQtyShipped() > 0): ?>
