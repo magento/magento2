@@ -108,10 +108,14 @@ $prevOptionId = '';
         <?php elseif ($item->getQtyShipped() > 0 && $item->getParentItem() && $block->isShipmentSeparately()): ?>
             <li class="item">
                 <span class="title"><?= $block->escapeHtml(__('Shipped')); ?></span>
-                <span class="content"><?= /* @noEscape */ $item->getQtyShipped() * 1; ?></span>
+                <span class="content">
+                    <?= /* @noEscape */ $localeFormatter->formatNumber($item->getQtyShipped() * 1); ?>
+                </span>
             </li>
         <?php else: ?>
-            <span class="content"><?= /* @noEscape */ $parentItem->getQtyOrdered() * 1; ?></span>
+            <span class="content">
+                <?= /* @noEscape */ $localeFormatter->formatNumber($parentItem->getQtyOrdered() * 1); ?>
+            </span>
         <?php endif; ?>
         <?php if (($item->getParentItem() && $block->isChildCalculated()) ||
         (!$item->getParentItem() && !$block->isChildCalculated()) ||
