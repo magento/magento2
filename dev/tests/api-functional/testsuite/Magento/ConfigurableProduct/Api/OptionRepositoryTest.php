@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Api;
 
+use Magento\Catalog\Model\ProductRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 
@@ -166,6 +167,8 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         $attribute = $attributeRepository->get('catalog_product', 'test_configurable');
 
         $productSku = 'simple';
+        $product = $this->objectManager->create(ProductRepository::class)->get($productSku);
+        $this->assertEquals('simple', $product->getTypeId());
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $productSku . '/options',
@@ -188,6 +191,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         ];
         /** @var int $result */
         $result = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'option' => $option]);
+        $this->assertEquals('configurable', $product->getTypeId());
         $this->assertGreaterThan(0, $result);
     }
 

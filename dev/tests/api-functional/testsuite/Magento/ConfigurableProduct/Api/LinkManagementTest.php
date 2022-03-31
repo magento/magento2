@@ -9,11 +9,9 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProduct\Api;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Model\Entity\Attribute\Option;
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -84,52 +82,6 @@ class LinkManagementTest extends WebapiAbstract
     public function testAddChild(): void
     {
         $productSku = 'configurable';
-        $childSku = 'simple_77';
-        $res = $this->addChild($productSku, $childSku);
-        $this->assertTrue($res);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_simple_77.php
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/delete_association.php
-     *
-     * @return void
-     */
-    public function testAddChildToConfigurableProdWithoutOption(): void
-    {
-        /** @var AttributeRepositoryInterface $attributeRepository */
-        $attributeRepository = Bootstrap::getObjectManager()->create(AttributeRepositoryInterface::class);
-
-        /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
-        $attribute = $attributeRepository->get('catalog_product', 'test_configurable');
-
-        $productSku = 'simple';
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $productSku . '/options',
-                'httpMethod' => Request::HTTP_METHOD_POST
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Save'
-            ]
-        ];
-        $option = [
-            'attribute_id' => $attribute->getAttributeId(),
-            'label' => 'Test',
-            'values' => [
-                [
-                    'value_index' => 1,
-                ]
-            ],
-        ];
-        /** @var int $result */
-        $result = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'option' => $option]);
-        $this->assertGreaterThan(0, $result);
-
         $childSku = 'simple_77';
         $res = $this->addChild($productSku, $childSku);
         $this->assertTrue($res);
