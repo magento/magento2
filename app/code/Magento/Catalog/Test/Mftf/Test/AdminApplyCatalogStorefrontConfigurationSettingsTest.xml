@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyCatalogStorefrontConfigurationSettingsTest">
+             <annotations>
+            <features value="Catalog"/>
+            <stories value="Apply catalog storefront configuration settings"/>
+            <title value="You should be able to apply catalog storefront configuration settings."/>
+            <description value="You should be able to apply catalog storefront configuration settings."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-27444"/>
+            </annotations>
+            <before>
+                <!-- Create category -->
+                <createData entity="_defaultCategory" stepKey="createCategory"/>
+                <!-- Create 11 simple products -->
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
+                    <requiredEntity createDataKey="createCategory"/>
+                </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct2">
+                    <requiredEntity createDataKey="createCategory"/>
+                </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct3">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct4">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct5">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct6">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct7">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct8">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct9">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct10">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct11">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+            </before>
+
+            <after>
+                <!-- delete created entities -->
+                <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+                <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+                <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
+                <deleteData createDataKey="createSimpleProduct4" stepKey="deleteSimpleProduct4"/>
+                <deleteData createDataKey="createSimpleProduct5" stepKey="deleteSimpleProduct5"/>
+                <deleteData createDataKey="createSimpleProduct6" stepKey="deleteSimpleProduct6"/>
+                <deleteData createDataKey="createSimpleProduct7" stepKey="deleteSimpleProduct7"/>
+                <deleteData createDataKey="createSimpleProduct8" stepKey="deleteSimpleProduct8"/>
+                <deleteData createDataKey="createSimpleProduct9" stepKey="deleteSimpleProduct9"/>
+                <deleteData createDataKey="createSimpleProduct10" stepKey="deleteSimpleProduct10"/>
+                <deleteData createDataKey="createSimpleProduct11" stepKey="deleteSimpleProduct11"/>
+                <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+                <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+                <actionGroup ref="AdminOpenStoreConfigCatalogPageActionGroup" stepKey="navigateToConfigurationPage"/>
+                <actionGroup ref="AdminConfigExpandStorefrontTabActionGroup" stepKey="expandStorefrontTab"/>
+
+                <!-- Revert changes in storefront config page -->
+                <actionGroup ref="AdminPreDefineDataInStoreFrontActionGroup" stepKey="FillDataInStoreFront"/>
+                <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForListMode">
+                    <argument name="rowId" value="row_catalog_frontend_list_mode"/>
+                </actionGroup>
+                <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForGridAllowedValues">
+                    <argument name="rowId" value="row_catalog_frontend_grid_per_page_values"/>
+                </actionGroup>
+                <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForGridDefaultValue">
+                    <argument name="rowId" value="row_catalog_frontend_grid_per_page"/>
+                </actionGroup>
+                <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForAllowedValues">
+                    <argument name="rowId" value="row_catalog_frontend_list_per_page_values"/>
+                </actionGroup>
+                <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForListDefaultValue">
+                    <argument name="rowId" value="row_catalog_frontend_list_per_page"/>
+                </actionGroup>
+                <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForListSortingBy">
+                    <argument name="rowId" value="row_catalog_frontend_default_sort_by"/>
+                </actionGroup>
+                <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForProductsPerPage">
+                    <argument name="rowId" value="row_catalog_frontend_list_allow_all"/>
+                </actionGroup>
+
+                <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigurations"/>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+                <!--Clean cache-->
+                <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                    <argument name="tags" value=""/>
+                </actionGroup>
+                <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+               </after>
+
+                <!-- Login to Admin page -->
+                <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+                <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="assertLoggedIn"/>
+
+                <!-- Navigate to config page and fill required data -->
+                <actionGroup ref="AdminOpenStoreConfigCatalogPageActionGroup" stepKey="navigateToConfigurationPage"/>
+                <actionGroup ref="AdminConfigExpandStorefrontTabActionGroup" stepKey="expandStorefrontTab"/>
+                <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForListMode">
+                     <argument name="rowId" value="row_catalog_frontend_list_mode"/>
+                </actionGroup>
+                <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForGridAllowedValues">
+                      <argument name="rowId" value="row_catalog_frontend_grid_per_page_values"/>
+                </actionGroup>
+                <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForGridDefaultValue">
+                       <argument name="rowId" value="row_catalog_frontend_grid_per_page"/>
+                </actionGroup>
+               <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForAllowedValues">
+                      <argument name="rowId" value="row_catalog_frontend_list_per_page_values"/>
+               </actionGroup>
+               <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForListDefaultValue">
+                 <argument name="rowId" value="row_catalog_frontend_list_per_page"/>
+               </actionGroup>
+               <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForListSortingBy">
+                       <argument name="rowId" value="row_catalog_frontend_default_sort_by"/>
+               </actionGroup>
+               <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForProductsPerPage">
+                        <argument name="rowId" value="row_catalog_frontend_list_allow_all"/>
+               </actionGroup>
+               <actionGroup ref="AdminAddDataInCatalogStoreFrontDetailsActionGroup" stepKey="fillingDataInStoreFrontFields"/>
+               <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigurations"/>
+
+                    <!--Clean cache and reindex-->
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                     <argument name="indices" value=""/>
+                </actionGroup>
+                <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                      <argument name="tags" value=""/>
+                </actionGroup>
+
+        <!-- navigate to created category page and check the products per page -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage1">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+
+
+
+
+        <!-- Go to storefront created category page and verifies list and grid mode -->
+        <actionGroup ref="AdminVerifiesListAndGridModeActionGroup" stepKey="ChangesInListAndGridMode"/>
+
+
+
+                  <!-- again navigate to created category page and check the products per page-->
+                <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage2">
+                    <argument name="category" value="$$createCategory$$"/>
+                </actionGroup>
+
+               <click selector=".//*[@class='toolbar toolbar-products'][1]//*[@data-value='grid']" stepKey="switchToGridMode4"/>
+               <seeElement selector='//ol[@class="products list items product-items"]' stepKey="see10ProductsVisible" />
+
+               <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+                </test>
+                </tests>
