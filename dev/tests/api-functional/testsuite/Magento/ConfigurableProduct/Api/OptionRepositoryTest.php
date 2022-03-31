@@ -167,7 +167,8 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         $attribute = $attributeRepository->get('catalog_product', 'test_configurable');
 
         $productSku = 'simple';
-        $product = $this->objectManager->create(ProductRepository::class)->get($productSku);
+        $productRepository = $this->objectManager->create(ProductRepository::class);
+        $product = $productRepository->get($productSku);
         $this->assertEquals('simple', $product->getTypeId());
         $serviceInfo = [
             'rest' => [
