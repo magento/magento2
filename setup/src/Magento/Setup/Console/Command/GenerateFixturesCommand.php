@@ -172,6 +172,8 @@ class GenerateFixturesCommand extends Command
     }
 
     /**
+     * Optimize tables after entities generation.
+     *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param OutputInterface $output
      * @return void
