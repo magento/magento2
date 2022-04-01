@@ -17,7 +17,7 @@
                 <profile_url><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/profile/v1?client_id=#{client_id}]]></profile_url>
                 <logout_url><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/logout/v1?access_token=#{access_token}&amp;client_id=#{client_id}&amp;client_secret=#{client_secret}]]></logout_url>
                 <certificate_path><![CDATA[https://static.adobelogin.com/keys/prod/]]></certificate_path>
-                <verify_url><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/validate_token/v1?token=#{token}&client_id=#{client_id}&type=access_token]]></verify_url>
+                <validate_token_url><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/validate_token/v1?token=#{token}&client_id=#{client_id}&type=#{token_type}]]></validate_token_url>
             </integration>
             <email>
                 <header_template>admin_adobe_ims_email_header_template</header_template>

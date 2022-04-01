@@ -66,4 +66,9 @@
         <plugin name="admin_adobe_ims_admin_token_plugin"
                 type="Magento\AdminAdobeIms\Plugin\AdminTokenPlugin" />
     </type>
+
+    <type name="Magento\Backend\Model\Auth\Session">
+        <plugin name="admin_adobe_ims_backend_auth_session"
+                type="Magento\AdminAdobeIms\Plugin\BackendAuthSessionPlugin"/>
+    </type>
 </config>

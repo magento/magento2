@@ -95,7 +95,7 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
 
         $this->imsConnectionMock
             ->expects($this->never())
-            ->method('verifyToken');
+            ->method('validateToken');
 
         $this->assertEquals($expectedResult, $this->plugin->aroundVerifyIdentity($subject, $proceed, ''));
     }
@@ -124,7 +124,7 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
 
         $this->imsConnectionMock
             ->expects($this->once())
-            ->method('verifyToken')
+            ->method('validateToken')
             ->willReturn(true);
 
         $expectedResult = true;
@@ -160,7 +160,7 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
 
         $this->imsConnectionMock
             ->expects($this->once())
-            ->method('verifyToken')
+            ->method('validateToken')
             ->willReturn(false);
 
         $this->expectException(AuthenticationException::class);
