@@ -33,7 +33,9 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
 
     const XML_PATH_VIV_TAX_CALCULATION_ADDRESS_TYPE = 'customer/create_account/tax_calculation_address_type';
 
-    const XML_PATH_VAT_FRONTEND_VISIBILITY = 'customer/create_account/vat_frontend_visibility';
+    const XML_PATH_VAT_FRONTEND_VISIBILITY = 'customer/address/taxvat_show';
+
+    const XML_PATH_VAT_REGISTER_FORM_VISIBILITY = 'customer/create_account/vat_frontend_visibility';
 
     /**
      * Possible customer address types
@@ -387,12 +389,20 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Check if VAT ID address attribute has to be shown on frontend (on Customer Address management forms)
+     * Check if VAT ID address attribute has to be shown on frontend
+     * (on Customer Address management forms or Customer register form)
      *
+     * @param bool $registerFom
      * @return boolean
      */
-    public function isVatAttributeVisible()
+    public function isVatAttributeVisible(bool $registerFom = false): bool
     {
+        if ($registerFom) {
+            return $this->scopeConfig->isSetFlag(
+                self::XML_PATH_VAT_REGISTER_FORM_VISIBILITY,
+                ScopeInterface::SCOPE_STORE
+            );
+        }
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_VAT_FRONTEND_VISIBILITY,
             ScopeInterface::SCOPE_STORE
@@ -414,6 +424,24 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
         $attributeMetadata = $this->_addressMetadataService->getAttributeMetadata($code);
         if ($attributeMetadata) {
             return $attributeMetadata->isVisible();
+        }
+        return false;
+    }
+
+    /**
+     * Check if attribute is required
+     *
+     * @param string $code
+     *
+     * @return bool
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function isAttributeRequired($code): bool
+    {
+        $attributeMetadata = $this->_addressMetadataService->getAttributeMetadata($code);
+        if ($attributeMetadata) {
+            return $attributeMetadata->isRequired();
         }
         return false;
     }

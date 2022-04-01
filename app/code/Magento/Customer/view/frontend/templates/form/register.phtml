@@ -63,7 +63,7 @@ $createAccountButtonViewModel = $block->getData('create_account_button_view_mode
         <?php endif ?>
 
         <?php $_taxvat = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Taxvat::class) ?>
-        <?php if ($_taxvat->isEnabled() && $addressHelper->isVatAttributeVisible()): ?>
+        <?php if ($_taxvat->isEnabled()): ?>
             <?= $_taxvat->setTaxvat($formData->getTaxvat())->toHtml() ?>
         <?php endif ?>
 

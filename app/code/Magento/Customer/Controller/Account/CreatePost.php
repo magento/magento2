@@ -290,11 +290,6 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
                 case 'region':
                     $regionDataObject->setRegion($value);
                     break;
-                case 'taxvat':
-                    if ($this->addressHelper->isVatAttributeVisible()) {
-                        $addressData[$attributeCode] = $value;
-                    }
-                    break;
                 default:
                     $addressData[$attributeCode] = $value;
             }
