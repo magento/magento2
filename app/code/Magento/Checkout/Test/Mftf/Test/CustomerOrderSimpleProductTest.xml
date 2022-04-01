@@ -37,38 +37,23 @@
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <!-- Go to category -->
-        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
-            <argument name="category" value="$$testCategory$$"/>
+
+        <!-- Customer placed order from storefront with payment method -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$testProduct$"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
-
-
-        <!-- Open product detail page-->
-        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($testProduct.name$)}}" stepKey="openProduct"/>
-        <waitForPageLoad time="30" stepKey="waitForFirstProduct"/>
-
-        <!-- add to cart -->
-        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
-            <argument name="productName" value="$$testProduct.name$$"/>
-        </actionGroup>
-
-        <!-- click on cart icon and proceed to checkout -->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFlatRate"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentStep"/>
 
-
-        <!-- Steps to perform checkout -->
-        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
-        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
-
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" after="clickNext" stepKey="waitForPaymentSectionLoaded2"/>
-        <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" before="waitForPlaceOrderButton" stepKey="clickCheckMoneyOrderPayment"/>
-
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
-        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
 
         <!-- order number is captured for future validation -->
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderNumber"/>
+
+
     </test>
 </tests>

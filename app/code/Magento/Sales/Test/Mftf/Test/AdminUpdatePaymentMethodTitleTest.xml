@@ -41,16 +41,16 @@
         </actionGroup>
 
         <!-- Resetting column checkbox -->
-        <click selector="{{AdminOrdersGridSection.columnsDropdown}}" stepKey="openColumnsDropdown"/>
-        <click selector="{{AdminOrdersGridSection.resetColumnCheckbox}}" stepKey="resetColumnCheckbox"/>
-        <click selector="{{AdminOrdersGridSection.columnsDropdown}}" stepKey="closeColumnsDropdown" />
+        <actionGroup ref="AdminResetColumnDropDownActionGroup" stepKey="ResetColumnDropdown"/>
         <!--Enabling Payment Method option from Column dropdown-->
         <actionGroup ref="AdminSelectFieldToColumnActionGroup" stepKey="EnablePaymentMethodOption">
             <argument name="column" value="Payment Method"/>
         </actionGroup>
 
         <!--Verifying the updated Payment Method title -->
-        <seeElement selector="{{AdminOrdersGridSection.paymentInformation('Test')}}" stepKey="seePaymentMethod"/>
+        <actionGroup ref="AdminVerifyPaymentInformationTitleActionGroup" stepKey="seePaymentMethod">
+            <argument name="paymentText" value="Test"/>
+        </actionGroup>
 
     </test>
 </tests>
