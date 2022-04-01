@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Api;
 
-use Magento\Catalog\Model\ProductRepository;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 
 /**
@@ -17,9 +17,9 @@ use Magento\Eav\Api\AttributeRepositoryInterface;
  */
 class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
-    public const SERVICE_NAME = 'configurableProductOptionRepositoryV1';
-    public const SERVICE_VERSION = 'V1';
-    public const RESOURCE_PATH = '/V1/configurable-products';
+    const SERVICE_NAME = 'configurableProductOptionRepositoryV1';
+    const SERVICE_VERSION = 'V1';
+    const RESOURCE_PATH = '/V1/configurable-products';
 
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
@@ -190,15 +190,12 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
                 ]
             ],
         ];
-        /** @var string $result */
+        /** @var int $result */
         $result = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'option' => $option]);
-        echo "-------------------->>>>>>>".$result;
-        $arr = explode("ooo", $result);
-        $this->assertEquals('configurable', $arr[1]);
-        $productRepository1 = Bootstrap::getObjectManager()->create(ProductRepository::class);
-        $updatedproduct = $productRepository1->get($productSku);
+        $this->assertGreaterThan(0, $result);
+        $updatedproductRepo = Bootstrap::getObjectManager()->create(ProductRepository::class);
+        $updatedproduct = $updatedproductRepo->get($productSku);
         $this->assertEquals('configurable', $updatedproduct->getTypeId());
-        //$this->assertGreaterThan(0, $result);
     }
 
     /**
