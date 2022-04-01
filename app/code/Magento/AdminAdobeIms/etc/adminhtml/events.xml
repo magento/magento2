@@ -10,4 +10,8 @@
         <observer name="new_admin_user_created"
                   instance="Magento\AdminAdobeIms\Observer\AdminAccountCreatedObserver"/>
     </event>
+    <event name="admin_adobe_ims_user_authenticate_after">
+        <observer name="admin_adobe_ims_user_authentication"
+                  instance="Magento\AdminAdobeIms\Observer\AuthObserver"/>
+    </event>
 </config>
