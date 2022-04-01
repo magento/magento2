@@ -70,7 +70,6 @@ class AdaptUrlRewritesToVisibilityAttribute
      */
     public function execute(array $productIds, int $visibility, int $storeId): void
     {
-        echo'afdsdv'; var_dump($storeId);
         $products = $this->getProductsByIds($productIds, $storeId);
 
         /** @var Product $product */

@@ -100,7 +100,7 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
             [
                 'attributes_data' => [ ProductInterface::VISIBILITY => Visibility::VISIBILITY_NOT_VISIBLE ],
                 'product_ids' => [$product->getId()],
-                'store_id' => $firstStore
+                'store_id' => $firstStore,
             ]
         );
 
