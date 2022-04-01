@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="LoginAsAdmin"/>
-    
+
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct01">
                 <requiredEntity createDataKey="createCategory"/>
@@ -247,7 +247,19 @@
             <argument name="orderId" value="$createCustomerCart.return$"/>
             <argument name="orderNumber" value="$getOrderData.increment_id$"/>
         </actionGroup>
-        
+
         <seeElement selector="{{StorefrontCustomerOrderViewSection.pager}}" stepKey="assertPagerIsDisplayed"/>
+        <executeJS function="var len = document.querySelectorAll('{{StorefrontCustomerOrderViewSection.itemCountOnPage}}').length; return len;" stepKey="orderItemsCountOnFirstPage"/>
+        <assertEquals stepKey="assertOrderItemsOnFirstPage">
+            <actualResult type="const">($orderItemsCountOnFirstPage)</actualResult>
+            <expectedResult type="const">20</expectedResult>
+        </assertEquals>
+        <click selector="{{StorefrontCustomerOrderViewSection.pagerLink($createCustomerCart.return$, '2')}}" stepKey="assertPagerLink" />
+        <waitForPageLoad stepKey="waitForPageLoading"/>
+        <executeJS function="var len = document.querySelectorAll('{{StorefrontCustomerOrderViewSection.itemCountOnPage}}').length; return len;" stepKey="orderItemsCountOnSecondPage"/>
+        <assertEquals stepKey="assertOrderItemsOnSecondPage">
+            <actualResult type="const">($orderItemsCountOnSecondPage)</actualResult>
+            <expectedResult type="const">1</expectedResult>
+        </assertEquals>
     </test>
 </tests>
