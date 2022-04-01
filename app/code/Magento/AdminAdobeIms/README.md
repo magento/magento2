@@ -177,3 +177,14 @@ This authentication mechanism enabled for REST and SOAP web API areas.
 Examples, how developers can test functionality:
 curl -X GET "{domain}/rest/V1/customers/2" -H "Authorization: Bearer AddAdobeImsAccessToken"
 curl -X GET "{domain}/rest/V1/products/24-MB01" -H "Authorization: Bearer AddAdobeImsAccessToken" 
+
+# ACCESS_TOKEN saving in session and validation
+When AdminAdomeIms module is enabled, we check each 10 minutes if ACCESS_TOKEN is still valid.
+For this when admin user login and when session is started, we add 2 extra varibles to the session:
+token_last_check_time is current time
+adobe_access_token is ACCESS_TOKEN that we recieve during autorization
+
+There is a plugin \Magento\AdminAdobeIms\Plugin\BackendAuthSessionPlugin where we check if token_last_check_time was updated 10 min ago. 
+If yes, then we make call to IMS to validate access_token.
+If token is valid, value token_last_check_time will be updated to current time and session prolong.
+If token is not valid, session will be destroyed.
