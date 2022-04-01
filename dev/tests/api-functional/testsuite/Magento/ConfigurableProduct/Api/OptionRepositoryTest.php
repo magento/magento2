@@ -192,10 +192,11 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         ];
         /** @var string $result */
         $result = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'option' => $option]);
-        $updatedproduct = $productRepository->get($productSku);
-        $this->assertEquals('configurable', $updatedproduct->getTypeId());
         $arr = explode("000", $result);
         $this->assertEquals('configurable', $arr[1]);
+        $productRepository1 = Bootstrap::getObjectManager()->create(ProductRepository::class);
+        $updatedproduct = $productRepository1->get($productSku);
+        $this->assertEquals('configurable', $updatedproduct->getTypeId());
         //$this->assertGreaterThan(0, $result);
     }
 
