@@ -7,13 +7,13 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ReorderingForSimpleProduct" extends="CustomerOrderSimpleProduct">
+    <test name="CustomerReorderSimpleProductTest" extends="CustomerOrderSimpleProductTest">
         <annotations>
             <features value="Checkout"/>
-            <stories value="Customer Checkout validations test"/>
-            <title value="Checkout of Simple product as Registered customer test"/>
-            <description value="Checkout of Simple product as Registered customer test"/>
-            <stories value="Customer Checkout test"/>
+            <stories value="Customer Reorder simple product"/>
+            <title value="Customer Reorder simple product"/>
+            <description value="Customer Reorder simple product"/>
+            <stories value="Customer Reorder simple product"/>
             <testCaseId value="MC-27191"/>
             <severity value="MAJOR"/>
             <group value="reorder"/>
@@ -47,16 +47,14 @@
         <!-- Clicking View Order from My Orders Grid -->
         <actionGroup ref="StorefrontClickViewOrderLinkOnMyOrdersPageActionGroup" stepKey="clickViewOrder"/>
 
+
         <!-- Clicking on Reorder link from Order Details Tab -->
         <click selector="{{StorefrontCustomerOrderViewSection.reorder}}" stepKey="clickReorder"/>
 
-        <!-- Steps to perform the reorder -->
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickOnNext"/>
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoadedTill"/>
-        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButtonOnCheckoutPage"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButtonOnCheckoutPage"/>
-        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlacedByCustomer"/>
+        <!-- Reorder Simple Product -->
+        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeReorder">
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
 
     </test>
 </tests>

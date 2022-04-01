@@ -6,7 +6,7 @@
             <stories value="Customer Order Simple Product"/>
             <title value="Customer Order Simple Product"/>
             <description value="Customer Order Simple Product"/>
-            <stories value="Customer Checkout"/>
+            <stories value="Customer Checkoqut"/>
             <severity value="MAJOR"/>
             <group value="checkout"/>
             <group value="shoppingCart"/>
@@ -53,7 +53,5 @@
 
         <!-- order number is captured for future validation -->
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderNumber"/>
-
-
     </test>
 </tests>
