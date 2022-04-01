@@ -31,6 +31,7 @@ class ImsConfig extends Config
 
     private const OAUTH_CALLBACK_URL = 'adobe_ims_auth/oauth/';
     public const XML_PATH_LOGOUT_URL = 'adobe_ims/integration/logout_url';
+    public const XML_PATH_CERTIFICATE_PATH = 'adobe_ims/integration/certificate_path';
 
     /**
      * @var ScopeConfigInterface
@@ -300,5 +301,16 @@ class ImsConfig extends Config
     public function getOrganizationId(): string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_ORGANIZATION_ID);
+    }
+
+    /**
+     * IMS certificate (public key) location retrieval
+     *
+     * @param string $fileName
+     * @return string
+     */
+    public function getCertificateUrl(string $fileName): string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_CERTIFICATE_PATH) . $fileName;
     }
 }

@@ -53,4 +53,17 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Backend\Model\Auth">
+        <plugin name="disable_admin_login_auth"
+                type="Magento\AdminAdobeIms\Plugin\DisableAdminLoginAuthPlugin"/>
+    </type>
+
+    <preference for="Magento\AdobeImsApi\Api\UserProfileRepositoryInterface" type="Magento\AdminAdobeIms\Model\UserProfileRepository"/>
+    <preference for="Magento\AdminAdobeIms\Api\TokenReaderInterface" type="Magento\AdminAdobeIms\Model\TokenReader"/>
+
+
+    <type name="Magento\Integration\Model\AdminTokenService">
+        <plugin name="admin_adobe_ims_admin_token_plugin"
+                type="Magento\AdminAdobeIms\Plugin\AdminTokenPlugin" />
+    </type>
 </config>

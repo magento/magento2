@@ -1,0 +1,10 @@
+{
+    "adobe_user_profile": {
+        "column": {
+            "adobe_user_id": true
+        },
+        "index": {
+            "ADOBE_USER_PROFILE_ADOBE_USER_ID": true
+        }
+    }
+}

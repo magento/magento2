@@ -14,8 +14,11 @@
             <module name="Magento_Backend"/>
             <module name="Magento_User"/>
             <module name="Magento_Captcha"/>
+            <module name="Magento_Authorization"/>
             <module name="Magento_Store"/>
             <module name="Magento_Email"/>
+            <module name="Magento_Security"/>
+            <module name="Magento_Integration"/>
         </sequence>
     </module>
 </config>
