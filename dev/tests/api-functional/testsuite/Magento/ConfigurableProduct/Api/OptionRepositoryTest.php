@@ -17,9 +17,9 @@ use Magento\Eav\Api\AttributeRepositoryInterface;
  */
 class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
-    const SERVICE_NAME = 'configurableProductOptionRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/configurable-products';
+    public const SERVICE_NAME = 'configurableProductOptionRepositoryV1';
+    public const SERVICE_VERSION = 'V1';
+    public const RESOURCE_PATH = '/V1/configurable-products';
 
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
