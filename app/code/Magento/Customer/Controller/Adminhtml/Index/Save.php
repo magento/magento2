@@ -349,7 +349,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                     ['customer' => $customer, 'request' => $this->getRequest()]
                 );
 
-                if (isset($customerData['sendemail_store_id']) && !empty($customerData['sendemail_store_id'])) {
+                if (isset($customerData['sendemail_store_id']) && $customerData['sendemail_store_id'] !== false) {
                     $customer->setStoreId($customerData['sendemail_store_id']);
                     try {
                         $this->customerAccountManagement->validateCustomerStoreIdByWebsiteId($customer);
