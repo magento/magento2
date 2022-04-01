@@ -1830,6 +1830,16 @@ class Product extends AbstractEntity
                     }
                 }
 
+                foreach ($rowExistingImages as $key => $image) {
+                    if (!array_key_exists('remains', $image)) {
+                        $mediaGallery[$storeId][$rowSku][$image['value']] = [
+                            'value' => $image['value'],
+                            'value_id' => $image['value_id'],
+                            'removed' => 1
+                        ];
+                    }
+                }
+
                 // 6. Attributes phase
                 $rowStore = (self::SCOPE_STORE == $rowScope)
                     ? $this->storeResolver->getStoreCodeToId($rowData[self::COL_STORE])
@@ -1969,7 +1979,7 @@ class Product extends AbstractEntity
      * @param string $importDir
      * @return string
      */
-    private function getAlreadyExistedImage(array $imageRow, string $columnImage, string $importDir): string
+    private function getAlreadyExistedImage(array &$imageRow, string $columnImage, string $importDir): string
     {
         if (filter_var($columnImage, FILTER_VALIDATE_URL)) {
             $hash = $this->getFileHash($columnImage);
@@ -1978,7 +1988,7 @@ class Product extends AbstractEntity
             $hash = $this->isFileExists($path) ? $this->getFileHash($path) : '';
         }
 
-        return array_reduce(
+        $result = array_reduce(
             $imageRow,
             function ($exists, $file) use ($hash) {
                 if (!$exists && isset($file['hash']) && $file['hash'] === $hash) {
@@ -1989,6 +1999,17 @@ class Product extends AbstractEntity
             },
             ''
         );
+
+        if ($result) {
+            foreach ($imageRow as $key => $image) {
+                if ($image['hash'] === $hash) {
+                    $imageRow[$key]['remains'] = true;
+                    break;
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**

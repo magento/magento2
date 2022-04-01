@@ -114,12 +114,18 @@ class MediaGalleryProcessor
         $productMediaGalleryValueData = [];
         $mediaGalleryValueToEntityData = [];
         $mediaGalleryValueToStoreData = [];
+        $deprecatedImagesValues = [];
         $productLinkIdField = $this->getProductEntityLinkField();
         foreach ($mediaGalleryData as $storeId => $storeMediaGalleryData) {
             foreach ($storeMediaGalleryData as $sku => $productMediaGalleryData) {
                 $productId = $this->skuProcessor->getNewSku($sku)[$productLinkIdField];
                 $productMediaGalleryValueData[$productId] = $productMediaGalleryValueData[$productId] ?? [];
                 foreach ($productMediaGalleryData as $data) {
+                    if (array_key_exists('removed', $data)) {
+                        $deprecatedImagesValues[] = $data['value_id'];
+                        continue;
+                    }
+
                     if (!in_array($data['value'], $productMediaGalleryValueData[$productId])) {
                         $productMediaGalleryValueData[$productId][] = $data['value'];
                         $mediaGalleryValueData[] = [
@@ -143,6 +149,20 @@ class MediaGalleryProcessor
                 }
             }
         }
+
+        if ($deprecatedImagesValues) {
+            $deprecatedImagesValueIds = $this->connection->fetchCol(
+                $this->connection->select()
+                                 ->from($this->mediaGalleryTableName, ['value_id'])
+                                 ->where('value_id IN (?)', $deprecatedImagesValues)
+            );
+            $this->deleteImages($deprecatedImagesValueIds);
+        }
+
+        if (!$mediaGalleryValueData) {
+            return;
+        }
+
         try {
             $mediaValueIdValueMap = [];
             $oldMediaValues = $this->connection->fetchCol(
@@ -192,6 +212,14 @@ class MediaGalleryProcessor
             }
             throw $exception;
         }
+    }
+
+    private function deleteImages(array $filesValueIds): void
+    {
+        $this->connection->delete(
+            $this->mediaGalleryTableName,
+            $this->connection->quoteInto('value_id IN (?)', $filesValueIds)
+        );
     }
 
     /**
