@@ -427,22 +427,4 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
         }
         return false;
     }
-
-    /**
-     * Check if attribute is required
-     *
-     * @param string $code
-     *
-     * @return bool
-     * @throws NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function isAttributeRequired($code): bool
-    {
-        $attributeMetadata = $this->_addressMetadataService->getAttributeMetadata($code);
-        if ($attributeMetadata) {
-            return $attributeMetadata->isRequired();
-        }
-        return false;
-    }
 }
