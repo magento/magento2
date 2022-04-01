@@ -67,8 +67,7 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
 
         /** @var StoreManagerInterface $storeManager */
         $storeManager = $this->objectManager->get(StoreManagerInterface::class);
-        $storeManager->setCurrentStore(0);
-
+        $firstStore = current($product->getStoreIds());
         $testStore = $storeManager->getStore('test');
         $productFilter = [
             UrlRewrite::ENTITY_TYPE => 'product',
@@ -80,7 +79,7 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
                 'target_path' => "catalog/product/view/id/" . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
-                'store_id' => '1',
+                'store_id' => $firstStore,
             ],
             [
                 'request_path' => "product-1.html",
@@ -100,12 +99,14 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
             'catalog_product_attribute_update_before',
             [
                 'attributes_data' => [ ProductInterface::VISIBILITY => Visibility::VISIBILITY_NOT_VISIBLE ],
-                'product_ids' => [$product->getId()]
+                'product_ids' => [$product->getId()],
+                'store_id' => $firstStore
             ]
         );
 
         $actual = $this->getActualResults($productFilter);
-        $this->assertCount(0, $actual);
+        //Initially count was 2, when visibility of 1 store view is set to not visible individually, the new count is 1
+        $this->assertCount(1, $actual);
     }
 
     /**
