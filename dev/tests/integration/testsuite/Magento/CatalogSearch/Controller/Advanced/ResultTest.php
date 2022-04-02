@@ -219,6 +219,18 @@ class ResultTest extends AbstractController
                         'to' => 1,
                     ]
                 ]
+            ],
+            'search_with_name_param_is_array' => [
+                [
+                    'name' => [],
+                    'sku' => '',
+                    'description' => '',
+                    'short_description' => '',
+                    'price' => [
+                        'from' => 0,
+                        'to' => 20,
+                    ]
+                ]
             ]
         ];
     }
