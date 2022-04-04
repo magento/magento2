@@ -11,7 +11,7 @@ use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
 use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
 use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdobeImsApi\Api\LogOutInterface;
+use Magento\AdminAdobeIms\Api\ImsLogOutInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\Client\CurlFactory;
@@ -21,7 +21,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Represent functionality for log out users from the Adobe account
  */
-class LogOut implements LogOutInterface
+class LogOut implements ImsLogOutInterface
 {
     /**
      * Successful result code.
@@ -31,22 +31,22 @@ class LogOut implements LogOutInterface
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * @var CurlFactory
      */
-    private $curlFactory;
+    private CurlFactory $curlFactory;
 
     /**
      * @var GetAccessTokenInterface
      */
-    private $getAccessToken;
+    private GetAccessTokenInterface $getAccessToken;
 
     /**
      * @var FlushUserTokensInterface
      */
-    private $flushUserTokens;
+    private FlushUserTokensInterface $flushUserTokens;
     /**
      * @var ImsConfig
      */
@@ -83,10 +83,12 @@ class LogOut implements LogOutInterface
     /**
      * @inheritDoc
      */
-    public function execute() : bool
+    public function execute(?string $accessToken = null) : bool
     {
         try {
-            $accessToken = $this->getAccessToken->execute();
+            if ($accessToken === null) {
+                $accessToken = $this->getAccessToken->execute();
+            }
 
             if (empty($accessToken)) {
                 return true;
@@ -107,7 +109,7 @@ class LogOut implements LogOutInterface
      * @param string $accessToken
      * @throws LocalizedException
      */
-    public function externalLogOut(string $accessToken): void
+    private function externalLogOut(string $accessToken): void
     {
         if (!$this->checkUserProfile($accessToken)) {
             throw new LocalizedException(

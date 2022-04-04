@@ -94,7 +94,7 @@ class AdminLoginProcessService
     private function externalLogout(string $accessToken): void
     {
         try {
-            $this->logOut->externalLogOut($accessToken);
+            $this->logOut->execute($accessToken);
         } catch (Exception $exception) {
             throw new AdobeImsTokenAuthorizationException(
                 __($exception->getMessage())
