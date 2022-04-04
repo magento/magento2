@@ -15,6 +15,5 @@
         <element name="checkboxIsVisbale" type="checkbox" selector="//input[@id='_newslettersubscription_status_1' and @value='1']"/>
         <element name="subscribeToNewsletterAgain" type="text" selector="//a[@class='admin__page-nav-link' and @id='tab_newsletter_content']"/>
         <element name="checkboxIsVisibility" type="checkbox" selector="//input[@id='_newslettersubscription_status_1' and @value='']"/>
-
     </section>
 </sections>
