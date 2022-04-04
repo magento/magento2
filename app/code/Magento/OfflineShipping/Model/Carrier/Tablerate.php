@@ -111,6 +111,9 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                     }
                 } elseif ($item->getProduct()->isVirtual()) {
                     $request->setPackageValue($request->getPackageValue() - $item->getBaseRowTotal());
+                    $request->setPackageValueWithDiscount(
+                        $request->getPackageValueWithDiscount() - $item->getBaseRowTotal()
+                    );
                 }
             }
         }
