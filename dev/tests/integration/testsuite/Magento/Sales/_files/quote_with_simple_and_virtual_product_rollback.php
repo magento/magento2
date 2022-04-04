@@ -30,14 +30,14 @@ $quote->load('quoteWithVirtualProduct', 'reserved_order_id')->delete();
 $productRepository = Bootstrap::getObjectManager()
     ->get(ProductRepositoryInterface::class);
 try {
-    $product = $productRepository->get('tableRate-1', false, null, true);
+    $product = $productRepository->get('simple-1', false, null, true);
     $productRepository->delete($product);
 } catch (NoSuchEntityException $e) {
     //Product already removed
 }
 
 try {
-    $customDesignProduct = $productRepository->get('tableRate-2', false, null, true);
+    $customDesignProduct = $productRepository->get('virtual-1', false, null, true);
     $productRepository->delete($customDesignProduct);
 } catch (NoSuchEntityException $e) {
     //Product already removed

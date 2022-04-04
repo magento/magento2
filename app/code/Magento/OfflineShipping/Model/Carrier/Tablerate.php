@@ -136,8 +136,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                             $freeQty += $item->getQty() * ($child->getQty() - $freeShipping);
                         }
                     }
-                } elseif (
-                    ($item->getFreeShipping() || $item->getAddress()->getFreeShipping()) &&
+                } elseif (($item->getFreeShipping() || $item->getAddress()->getFreeShipping()) &&
                     ($item->getFreeShippingMethod() == null || $item->getFreeShippingMethod() &&
                     $item->getFreeShippingMethod() == 'tablerate_bestway')
                 ) {

@@ -20,96 +20,78 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 Bootstrap::getInstance()->loadArea('frontend');
 $objectManager = Bootstrap::getObjectManager();
-$productRepository = $objectManager
-    ->create(ProductRepositoryInterface::class);
-$firstProduct = $objectManager->create(Product::class);
-$firstProduct->setTypeId(Type::TYPE_SIMPLE)
-    ->setCategoryIds([3])
-    ->setId(123)
+
+$simpleProduct = $objectManager->create(Product::class)
+    ->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
-    ->setName('First Test Product For TableRate')
-    ->setSku('tableRate-1')
-    ->setPrice(40)
-    ->setTaxClassId(0)
-    ->setMetaTitle('meta title')
-    ->setMetaKeyword('meta keyword')
-    ->setMetaDescription('meta description')
+    ->setWebsiteIds([1])
+    ->setName('Simple Product')
+    ->setSku('simple-1')
+    ->setPrice(10)
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
-    ->setStockData(
-        [
-            'qty' => 100,
-            'is_in_stock' => 1,
-            'manage_stock' => 1,
-        ]
-    )
+    ->setCategoryIds([2])
+    ->setStockData([
+        'use_config_manage_stock' => 1,
+        'qty' => 100,
+        'is_qty_decimal' => 0,
+        'is_in_stock' => 1,
+    ])
     ->save();
 
-/** @var ProductRepositoryInterface $productRepository */
-$firstProduct = $productRepository->save($firstProduct);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$productRepository->save($simpleProduct);
 
-$secondProduct = $objectManager->create(Product::class);
-$secondProduct->setTypeId(Type::TYPE_VIRTUAL)
-    ->setCategoryIds([6])
-    ->setId(124)
+$virtualProduct = $objectManager->create(Product::class)
+    ->setTypeId(Type::TYPE_VIRTUAL)
     ->setAttributeSetId(4)
-    ->setName('Second Test Product For TableRate')
-    ->setSku('tableRate-2')
-    ->setPrice(20)
-    ->setTaxClassId(0)
-    ->setMetaTitle('meta title')
-    ->setMetaKeyword('meta keyword')
-    ->setMetaDescription('meta description')
+    ->setWebsiteIds([1])
+    ->setName('Virtual Product')
+    ->setSku('virtual-1')
+    ->setPrice(10)
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
-    ->setStockData(
-        [
-            'qty' => 100,
-            'is_in_stock' => 1,
-            'manage_stock' => 1,
-        ]
-    )
+    ->setCategoryIds([2])
+    ->setStockData([
+        'use_config_manage_stock' => 1,
+        'qty' => 100,
+        'is_qty_decimal' => 0,
+        'is_in_stock' => 1,
+    ])
     ->save();
 
-/** @var ProductRepositoryInterface $productRepository */
-$secondProduct = $productRepository->save($secondProduct);
+$productRepository->save($virtualProduct);
 
 $addressData = include __DIR__ . '/address_data.php';
-$billingAddress = $objectManager->create(
-    Address::class,
-    ['data' => $addressData]
-);
+$billingAddress = $objectManager->create(Address::class, ['data' => $addressData]);
 $billingAddress->setAddressType('billing');
 
-$shippingAddress = $objectManager->create(
-    Address::class,
-    ['data' => $addressData]
-);
-$shippingAddress->setAddressType('shipping');
-
-$store = $objectManager
-    ->get(StoreManagerInterface::class)
-    ->getStore();
+/** @var Address $shippingAddress */
+$shippingAddress = clone $billingAddress;
+$shippingAddress->setId(null)->setAddressType('shipping');
 
 /** @var Quote $quote */
 $quote = $objectManager->create(Quote::class);
-$quote->setCustomerIsGuest(true)
-    ->setStoreId($store->getId())
+$quote
+    ->setCustomerIsGuest(true)
+    ->setStoreId($objectManager->get(StoreManagerInterface::class)->getStore()->getId())
     ->setReservedOrderId('quoteWithVirtualProduct')
     ->setBillingAddress($billingAddress)
-    ->setShippingAddress($shippingAddress);
+    ->setShippingAddress($shippingAddress)
+    ->setCustomerEmail('test@test.magento.com');
+$quote->addProduct($simpleProduct);
+$quote->addProduct($virtualProduct);
+
+$quote->getShippingAddress()->setShippingMethod('tablerate_bestway');
 $quote->getPayment()->setMethod('checkmo');
-$quote->addProduct($firstProduct);
-$quote->addProduct($secondProduct);
-$quote->setIsMultiShipping(0);
+$quote->collectTotals();
 
 $quoteRepository = $objectManager->get(CartRepositoryInterface::class);
 $quoteRepository->save($quote);
 
 /** @var QuoteIdMask $quoteIdMask */
-$quoteIdMask = $objectManager
-    ->create(QuoteIdMaskFactory::class)
-    ->create();
-$quoteIdMask->setQuoteId($quote->getId())
+$quoteIdMask = $objectManager->create(QuoteIdMaskFactory::class)->create();
+$quoteIdMask
+    ->setQuoteId($quote->getId())
     ->setDataChanges(true)
     ->save();
