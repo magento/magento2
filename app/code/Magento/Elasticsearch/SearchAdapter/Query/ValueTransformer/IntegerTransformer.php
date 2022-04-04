@@ -19,6 +19,16 @@ class IntegerTransformer implements ValueTransformerInterface
      */
     public function transform(string $value): ?int
     {
-        return \is_numeric($value) ? (int) $value : null;
+        return (\is_numeric($value) &&
+            $this->validateIntegerTypesWithInRange($value)) ? (int) $value : null;
+    }
+
+    /**
+     * @param $value
+     * @return bool
+     */
+    public function validateIntegerTypesWithInRange($value): bool
+    {
+        return (abs($value) & 0x7FFFFFFF) === abs($value);
     }
 }
