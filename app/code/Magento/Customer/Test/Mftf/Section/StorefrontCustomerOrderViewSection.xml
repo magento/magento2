@@ -30,5 +30,7 @@
         <element name="productQuantityByRow" type="text" parameterized="true" selector="#my-orders-table tbody:nth-of-type({{index}}) td.qty"/>
         <element name="productSubtotalByRow" type="text" parameterized="true" selector="#my-orders-table tbody:nth-of-type({{index}}) td.subtotal"/>
         <element name="grandTotal" type="text" selector="//tr[@class='grand_total']//td[@data-th='Grand Total']"/>
+        <element name="pagerLink" type="text" selector=".pager a.page[href*='order_id/{{orderId}}/?p={{pageNumber}}']" parameterized="true"/>
+        <element name="itemCountOnPage" type="text" selector="#my-orders-table tbody"/>
     </section>
 </sections>
