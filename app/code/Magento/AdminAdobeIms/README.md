@@ -124,11 +124,13 @@ There you can switch the toggle for `Enable Logging for Admin Adobe IMS Module`
 # Password usage in Admin UI
 When the AdobeAdminIMS Module is enabled, we do not need any password fields in the magento admin backend anymore.
 
-So we removed the "Current User Verification" fields and also the "Password" and "Password Confirmation" fields of the user forms.
-This is done by the Plugins `\Magento\AdminAdobeIms\Plugin\RemoveCurrentUserVerificationFieldsPlugin` and `\Magento\AdminAdobeIms\Plugin\RemovePasswordFieldsPlugin` Plugins.
-Additionally, we need `\Magento\AdminAdobeIms\Plugin\RemoveUserValidationRulesPlugin` to remove the password from the form validation.
+So we removed the "Current User Verification" fields and the "Password" and "Password Confirmation" fields of the user forms.
+This is done by the Plugin `\Magento\AdminAdobeIms\Plugin\RemovePasswordAndUserConfirmationFormFieldsPlugin`.
+Here we remove the password and password confirmation field, and hide the current user verification fieldset. 
+As the verification field is just hidden, we set a random password to bypass the input filters of the Save and Delete user Classes.
+The `\Magento\AdminAdobeIms\Plugin\RemoveUserValidationRulesPlugin` Plugin is required to remove the password fields from the form validation.
 
-As we don't need the current user password anymore, we have the `\Magento\AdminAdobeIms\Plugin\ReplaceVerifyIdentityWithImsPlugin` Plugin to verify the `access_token` of the current admin user in AdobeIMS and only proceed when it is still valid.
+As we don't show the current user verification field anymore, we have the `\Magento\AdminAdobeIms\Plugin\ReplaceVerifyIdentityWithImsPlugin` Plugin to verify the `access_token` of the current admin user in AdobeIMS and only proceed when it is still valid.
 
 For the newly created user will be a random password generated, as we did not modify the admin_user table, where the password field can not be null. 
 This is done in the `\Magento\AdminAdobeIms\Plugin\UserSavePlugin`.

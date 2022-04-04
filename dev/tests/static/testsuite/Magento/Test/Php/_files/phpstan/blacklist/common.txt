@@ -21,4 +21,3 @@ dev/tests/api-functional/testsuite/Magento/Integration/Model/AdminTokenServiceTe
 dev/tests/api-functional/testsuite/Magento/Integration/Model/CustomerTokenServiceTest.php
 app/code/Magento/Developer/Test/Unit/Console/Command/DevTestsRunCommandTest.php
 app/code/Magento/OfflineShipping/Test/Unit/Model/ResourceModel/Carrier/Tablerate/CSV/ColumnResolverTest.php
-app/code/Magento/AdminAdobeIms/Controller/Adminhtml/User/Save.php

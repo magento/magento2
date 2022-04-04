@@ -12,11 +12,6 @@
     <preference for="Magento\Backend\Model\Auth\Credential\StorageInterface"
                 type="Magento\AdminAdobeIms\Model\User" />
 
-    <preference for="Magento\User\Controller\Adminhtml\User\Save"
-                type="Magento\AdminAdobeIms\Controller\Adminhtml\User\Save"/>
-    <preference for="Magento\User\Controller\Adminhtml\User\Delete"
-                type="Magento\AdminAdobeIms\Controller\Adminhtml\User\Delete"/>
-
     <type name="Magento\Framework\View\Result\Layout">
         <plugin name="add_adobe_ims_layout_handle"
                 type="Magento\AdminAdobeIms\Plugin\AddAdobeImsLayoutHandlePlugin" />
@@ -35,23 +30,12 @@
         </arguments>
     </type>
 
-    <type name="Magento\Framework\Data\Form">
-        <plugin name="aroundAddElement"
-                type="Magento\AdminAdobeIms\Plugin\RemoveCurrentUserVerificationFieldsPlugin"/>
-    </type>
-
-    <type name="Magento\Framework\Data\Form\Element\Fieldset">
-        <plugin name="afterAddField"
-                type="Magento\AdminAdobeIms\Plugin\RemovePasswordFieldsPlugin"/>
-    </type>
-
     <type name="Magento\User\Model\User">
         <plugin name="aroundVerifyIdentity"
                 type="Magento\AdminAdobeIms\Plugin\ReplaceVerifyIdentityWithImsPlugin"/>
         <plugin name="user_save"
                 type="Magento\AdminAdobeIms\Plugin\UserSavePlugin"/>
     </type>
-
     <type name="Magento\User\Model\UserValidationRules">
         <plugin name="remove_user_validation_rules"
                 type="Magento\AdminAdobeIms\Plugin\RemoveUserValidationRulesPlugin"/>
@@ -61,5 +45,9 @@
                 type="Magento\AdminAdobeIms\Plugin\DisablePasswordResetPlugin"/>
         <plugin name="disable_forced_password_change"
                 type="Magento\AdminAdobeIms\Plugin\DisableForcedPasswordChangePlugin"/>
+    </type>
+    <type name="Magento\Backend\Block\Widget\Form">
+        <plugin name="remove_password_and_user_confirmation_form_fields"
+                type="Magento\AdminAdobeIms\Plugin\RemovePasswordAndUserConfirmationFormFieldsPlugin"/>
     </type>
 </config>
