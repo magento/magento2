@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Observer;
 
+use DateInterval;
 use DateTime;
 use Exception;
 use Magento\Framework\Event\Observer as EventObserver;
@@ -113,7 +114,7 @@ class AuthObserver implements ObserverInterface
 
         $newFirstFailureDate = false;
         $updateLockExpires = false;
-        $lockThreshInterval = new \DateInterval('PT' . $lockThreshold.'S');
+        $lockThreshInterval = new DateInterval('PT' . $lockThreshold . 'S');
         // set first failure date when this is first failure or last first failure expired
         if (1 === $failuresNum
             || !$firstFailureDate
