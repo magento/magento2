@@ -93,7 +93,9 @@
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="navigateToProductPageOnDefaultStore">
             <argument name="product" value="$product$"/>
         </actionGroup>
-        <see userInput="$$product.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertFirstProductNameTitle"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertFirstProductNameTitle">
+            <argument name="value" value="$$product.name$$"/>
+        </actionGroup>
         <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addFirstProductToWishlist"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <see userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}" stepKey="seeProduct1InWishlistOnSecondStore"/>
@@ -104,7 +106,9 @@
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="navigateToProductPageOnSecondStore">
             <argument name="product" value="$secondProduct$"/>
         </actionGroup>
-        <see userInput="$$secondProduct.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertSecondProductNameTitle"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertSecondProductNameTitle">
+            <argument name="value" value="$$secondProduct.name$$"/>
+        </actionGroup>
         <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addSecondProductToWishlist"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <see userInput="$$secondProduct.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}" stepKey="seeProduct2InWishlistOnSecondStore"/>

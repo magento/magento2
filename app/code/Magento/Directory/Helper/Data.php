@@ -348,7 +348,7 @@ class Data extends AbstractHelper
             AllowedCountries::ALLOWED_COUNTRIES_PATH,
             $scope['type'],
             $scope['value']
-        );
+        ) ?? '';
         $countryIds = explode(',', $allowedCountries);
         $collection = $this->_regCollectionFactory->create();
         $collection->addCountryFilter($countryIds)->load();

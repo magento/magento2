@@ -459,13 +459,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     private function getNumberFormatter(array $options): \Magento\Framework\NumberFormatter
     {
-        $key = 'currency_' . hash(
-            'sha256',
-            ($this->localeResolver->getLocale() . $this->serializer->serialize($options))
-        );
+        $locale = $this->localeResolver->getLocale() . ($this->getCode() ? '@currency=' . $this->getCode() : '');
+        $key = 'currency_' . hash('sha256', $locale . $this->serializer->serialize($options));
         if (!isset($this->numberFormatterCache[$key])) {
             $this->numberFormatter = $this->numberFormatterFactory->create(
-                ['locale' => $this->localeResolver->getLocale(), 'style' => \NumberFormatter::CURRENCY]
+                ['locale' => $locale, 'style' => \NumberFormatter::CURRENCY]
             );
 
             $this->setOptions($options);
