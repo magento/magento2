@@ -74,6 +74,14 @@ class User extends AdminUser
                 $result = $this->verifyIdentityWithoutPassword();
             }
 
+            /**
+             * Dispatch admin_user_authenticate_after but with an empty password
+             */
+            $this->_eventManager->dispatch(
+                'admin_adobe_ims_user_authenticate_after',
+                ['username' => $username, 'user' => $this, 'result' => $result]
+            );
+
         } catch (LocalizedException $e) {
             $this->unsetData();
             throw $e;
