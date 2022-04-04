@@ -1468,28 +1468,15 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
-    <entity name="SimpleProductQuantity" type="product">
-        <data key="name" unique="suffix">Simple Product </data>
-        <data key="sku" unique="suffix">SimpleProduct</data>
-        <data key="urlKey" unique="suffix">simple-product-</data>
-        <data key="type_id">simple</data>
-        <data key="attribute_set_id">4</data>
-        <data key="price">50.00</data>
-        <data key="visibility">4</data>
-        <data key="status">1</data>
-        <data key="quantity">0.5</data>
-        <data key="weight">1</data>
-        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
-        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
-    </entity>
-    <entity name="GloSimpleProduct" type="product">
-        <data key="name" unique="suffix">Physical Simple Product</data>
+
+    <entity name="TestProduct" type="product">
+        <data key="name">Simple Product</data>
         <data key="sku" unique="suffix">very-simple-product</data>
         <data key="urlKey" unique="suffix">very-simple-product</data>
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
         <data key="visibility">4</data>
-        <data key="price">1532.00</data>
+        <data key="price">100.00</data>
         <data key="status">1</data>
         <data key="weight">654</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>

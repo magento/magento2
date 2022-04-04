@@ -18,13 +18,14 @@
         </annotations>
         <before>
             <!-- Create first simple product and add special price -->
-            <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct"/>
-            <createData entity="specialProductPrice2" stepKey="specialPriceToFirstProduct">
+
+            <createData entity="TestProduct" stepKey="createFirstSimpleProduct"/>
+            <createData entity="specialProductPrice3" stepKey="specialPriceToFirstProduct">
                 <requiredEntity createDataKey="createFirstSimpleProduct"/>
             </createData>
 
             <!-- Create category -->
-            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="TestCategory" stepKey="createCategory"/>
             <createData entity="AssignProductToCategory" stepKey="assignTestCategoryToTestProduct">
                 <requiredEntity createDataKey="createCategory"/>
                 <requiredEntity createDataKey="createFirstSimpleProduct"/>
@@ -33,13 +34,14 @@
             <!-- Create Customer -->
             <createData entity="GloCustomer" stepKey="createCustomer"/>
         </before>
+        <!-- Delete Data -->
         <after>
-            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>
-            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteSimpleProduct"/>
+        <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>
+        <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
 
-        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
                 <argument name="Customer" value="$$createCustomer$$"/>
             </actionGroup>
 

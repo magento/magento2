@@ -461,7 +461,7 @@
         <data key="group_id">1</data>
         <data key="default_billing">true</data>
         <data key="default_shipping">true</data>
-        <data key="email" unique="prefix">G.Butler@example.com</data>
+        <data key="email">G.Butler@example.com</data>
         <data key="firstname">Lasonya G</data>
         <data key="lastname">Butler</data>
         <data key="fullname">Lasonya G. Butler</data>
