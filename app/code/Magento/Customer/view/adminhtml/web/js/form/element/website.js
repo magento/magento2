@@ -17,7 +17,9 @@ define([
          */
         onUpdate: function (value) {
             var groupIdFieldKey = 'group_id',
+                sendEmailStoreIdFieldKey = 'sendemail_store_id',
                 groupId = registry.get('index = ' + groupIdFieldKey),
+                storeId = registry.get('index = ' + sendEmailStoreIdFieldKey),
                 option = this.getOption(value);
 
             if (groupId) {
@@ -25,7 +27,7 @@ define([
             }
 
             if (option['default_store_view_id']) {
-                document.getElementsByName('customer[sendemail_store_id]')[0].value = option['default_store_view_id'];
+                storeId.value(option['default_store_view_id']);
             }
             return this._super();
         }
