@@ -21,6 +21,8 @@ use PHPUnit\Framework\TestCase;
 
 class AdminLoginProcessServiceTest extends TestCase
 {
+    private const TEST_EMAIL = 'test@test.com';
+
     /**
      * @var AdminLoginProcessService
      */
@@ -90,16 +92,20 @@ class AdminLoginProcessServiceTest extends TestCase
         $this->expectException(AdobeImsTokenAuthorizationException::class);
         $this->expectExceptionMessage('No matching admin user found for Adobe ID.');
 
-        $this->loginService->execute(['email' => 'test@test.com'], $this->tokenResponse);
+        $this->loginService->execute(['email' => self::TEST_EMAIL], $this->tokenResponse);
     }
 
+    /**
+     * @return void
+     * @throws AdobeImsTokenAuthorizationException
+     */
     public function testExceptionWillBeThrownWhenLoginFails(): void
     {
         $this->user
             ->method('loadByEmail')
             ->willReturn([
                 'user_id' => '1',
-                'email' => 'test@test.com',
+                'email' => self::TEST_EMAIL,
             ]);
 
         $this->logIn
@@ -113,9 +119,13 @@ class AdminLoginProcessServiceTest extends TestCase
 
         $this->expectException(AdobeImsTokenAuthorizationException::class);
 
-        $this->loginService->execute(['email' => 'test@test.com'], $this->tokenResponse);
+        $this->loginService->execute(['email' => self::TEST_EMAIL], $this->tokenResponse);
     }
 
+    /**
+     * @return void
+     * @throws AdobeImsTokenAuthorizationException
+     */
     public function testExceptionWillBeThrownWhenAuthenticationFails(): void
     {
         $this->user
@@ -123,7 +133,7 @@ class AdminLoginProcessServiceTest extends TestCase
             ->willReturn([
                 'user_id' => '1',
                 'username' => 'admin',
-                'email' => 'test@test.com',
+                'email' => self::TEST_EMAIL,
             ]);
 
         $this->auth
@@ -137,6 +147,6 @@ class AdminLoginProcessServiceTest extends TestCase
 
         $this->expectException(AdobeImsTokenAuthorizationException::class);
 
-        $this->loginService->execute(['email' => 'test@test.com'], $this->tokenResponse);
+        $this->loginService->execute(['email' => self::TEST_EMAIL], $this->tokenResponse);
     }
 }
