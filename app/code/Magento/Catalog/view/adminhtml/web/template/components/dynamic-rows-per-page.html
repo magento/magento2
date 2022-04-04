@@ -48,10 +48,10 @@
                 </tr>
                 </tbody>
 
-                <tfoot visible="element.addButton || (!!element.getRecordCount() && pages() > 1)">
+                <tfoot visible="element.addButton || (!!element.getRecordCount())">
                 <tr>
                     <td attr="{'colspan': element.getColumnsCount()}"
-                        visible="element.addButton || pages() > 1">
+                        visible="element.addButton || (!!element.getRecordCount())">
                         <button if="element.addButton"
                                 attr="{disabled: disabled, 'data-action': 'add_new_row'}"
                                 type="button"
