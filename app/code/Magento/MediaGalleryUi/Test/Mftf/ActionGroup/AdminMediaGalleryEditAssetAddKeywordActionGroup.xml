@@ -16,6 +16,7 @@
             <argument name="keyword"/>
         </arguments>
 
+        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryEditDetailsSection.newKeyword}}" stepKey="waitForField"/>
         <fillField selector="{{AdminEnhancedMediaGalleryEditDetailsSection.newKeyword}}" userInput="{{keyword}}" stepKey="enterKeyword"/>
         <click selector="{{AdminEnhancedMediaGalleryEditDetailsSection.addNewKeyword}}" stepKey="addKeyword"/>
     </actionGroup>
