@@ -22,19 +22,21 @@
             <before>
                 <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
                 <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
+                <magentoCron groups="index" stepKey="reindex"/>
             </before>
 
             <after>
                 <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                     <argument name="customStore" value="customStore"/>
                 </actionGroup>
-                <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+                <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="resetSearchFilter"/>
+                <magentoCron groups="index" stepKey="reindex"/>
                 <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
 
             <!--Filter grid and see created store view-->
             <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="navigateToStoresIndex"/>
-            <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+            <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="resetSearchFilter"/>
             <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilterField"/>
             <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearch"/>
             <see selector="{{AdminStoresGridSection.gridCell('1', 'Store View')}}" userInput="{{customStore.name}}" stepKey="seeNewStoreView"/>
