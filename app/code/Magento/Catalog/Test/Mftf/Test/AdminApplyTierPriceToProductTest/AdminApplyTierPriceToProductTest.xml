@@ -69,6 +69,9 @@
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmount_2"/>
         <!--Case: Tier Price for General Customer Group-->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex2"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct2">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
@@ -93,6 +96,9 @@
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmount_3"/>
         <!--Case: Tier Price applied if Product quantity meets Tier Price Condition-->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex3"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct3">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct3">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
@@ -158,6 +164,9 @@
         </assertEquals>
         <!--Tier Price is changed in Shopping Cart and is changed on Product page if Tier Price parameters are changed in Admin-->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex4"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct4">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct4">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
@@ -222,6 +231,9 @@
         <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('1', '10')}}" stepKey="assertProductTierPriceSavePercentageAmountForFirstRow2"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('2', '25')}}" stepKey="assertProductTierPriceSavePercentageAmountForSecondRow2"/>
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex5"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct5">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct5">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
