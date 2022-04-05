@@ -61,6 +61,7 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
                 ->create();
         }
         $this->data[SearchCriteria::SORT_ORDERS] = [$this->sortOrderBuilder->create()];
+        $this->filters = [];
         return parent::create();
     }
 
@@ -77,6 +78,8 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
     }
 
     /**
+     * Set sort order
+     *
      * @param string $field
      * @param string $direction
      * @return $this

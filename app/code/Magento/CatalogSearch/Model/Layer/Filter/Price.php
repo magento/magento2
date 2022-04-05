@@ -18,7 +18,7 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 class Price extends AbstractFilter
 {
     /** Price delta for filter  */
-    const PRICE_DELTA = 0.001;
+    public const PRICE_DELTA = 0.001;
 
     /**
      * @var \Magento\Catalog\Model\Layer\Filter\DataProvider\Price
@@ -274,6 +274,9 @@ class Price extends AbstractFilter
     private function prepareData($key, $count, $isLast = false)
     {
         [$from, $to] = explode('_', $key);
+        if ($isLast) {
+            $to = '';
+        }
         $label = $this->_renderRangeLabel($from, $to, $isLast);
         $value = $from . '-' . $to . $this->dataProvider->getAdditionalRequestData();
 
