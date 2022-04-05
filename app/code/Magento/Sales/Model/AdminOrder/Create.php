@@ -33,7 +33,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     /**
      * Xml default email domain path
      */
-    public const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
+    const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
 
     private const XML_PATH_EMAIL_REQUIRED_CREATE_ORDER = 'customer/create_account/email_required_create_order';
     /**
@@ -100,6 +100,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     protected $_quote;
 
     /**
+     * Core registry
+     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -110,6 +112,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     protected $_logger;
 
     /**
+     * Core event manager proxy
+     *
      * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager = null;
@@ -1829,9 +1833,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function _prepareCustomer()
     {
-        if ($this->getQuote()->getCustomerIsGuest()) {
-            return $this;
-        }
         /** @var $store \Magento\Store\Model\Store */
         $store = $this->getSession()->getStore();
         $customer = $this->getQuote()->getCustomer();
@@ -1844,19 +1845,18 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 ->setWebsiteId($store->getWebsiteId())
                 ->setCreatedAt(null);
             $customer = $this->_validateCustomerData($customer);
-        } elseif (!$customer->getId()) {
-            /** Create new customer */
-            $customerBillingAddressDataObject = $this->getBillingAddress()->exportCustomerAddress();
-            $customer->setSuffix($customerBillingAddressDataObject->getSuffix())
-                ->setFirstname($customerBillingAddressDataObject->getFirstname())
-                ->setLastname($customerBillingAddressDataObject->getLastname())
-                ->setMiddlename($customerBillingAddressDataObject->getMiddlename())
-                ->setPrefix($customerBillingAddressDataObject->getPrefix())
-                ->setStoreId($store->getId())
-                ->setWebsiteId($store->getWebsiteId())
-                ->setEmail($this->_getNewCustomerEmail());
-            $customer = $this->_validateCustomerData($customer);
         }
+
+        $customerBillingAddressDataObject = $this->getBillingAddress()->exportCustomerAddress();
+        $customer->setSuffix($customerBillingAddressDataObject->getSuffix())
+            ->setFirstname($customerBillingAddressDataObject->getFirstname())
+            ->setLastname($customerBillingAddressDataObject->getLastname())
+            ->setMiddlename($customerBillingAddressDataObject->getMiddlename())
+            ->setPrefix($customerBillingAddressDataObject->getPrefix())
+            ->setStoreId($store->getId())
+            ->setWebsiteId($store->getWebsiteId())
+            ->setEmail($this->_getNewCustomerEmail());
+        $customer = $this->_validateCustomerData($customer);
         $this->getQuote()->setCustomer($customer);
 
         if ($this->getBillingAddress()->getSaveInAddressBook()) {
@@ -1984,11 +1984,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $orderData = [];
         if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
-            if ($oldOrder->getCustomerIsGuest()) {
-                $quote->setCustomerFirstname($oldOrder->getCustomerFirstname());
-                $quote->setCustomerMiddlename($oldOrder->getCustomerMiddlename());
-                $quote->setCustomerLastname($oldOrder->getCustomerLastname());
-            }
             $originalId = $oldOrder->getOriginalIncrementId();
             if (!$originalId) {
                 $originalId = $oldOrder->getIncrementId();

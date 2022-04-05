@@ -137,6 +137,26 @@ class AddressSave extends Order implements HttpPostActionInterface
                         'order_id' => $address->getParentId()
                     ]
                 );
+                if ($address->getAddressType() === AddressModel::TYPE_BILLING) {
+                    $order = $address->getOrder();
+                    $quote = $this->_objectManager->create(
+                        \Magento\Quote\Model\Quote::class
+                    )->load(
+                        $order->getQuoteId()
+                    );
+                    $quote->setCustomerSuffix($address->getSuffix())
+                        ->setCustomerFirstname($address->getFirstname())
+                        ->setCustomerLastname($address->getLastname())
+                        ->setCustomerMiddlename($address->getMiddlename())
+                        ->setCustomerPrefix($address->getPrefix())
+                        ->save();
+                    $order->setCustomerSuffix($address->getSuffix())
+                        ->setCustomerFirstname($address->getFirstname())
+                        ->setCustomerLastname($address->getLastname())
+                        ->setCustomerMiddlename($address->getMiddlename())
+                        ->setCustomerPrefix($address->getPrefix())
+                        ->save();
+                }
                 $this->messageManager->addSuccessMessage(__('You updated the order address.'));
                 return $resultRedirect->setPath('sales/*/view', ['order_id' => $address->getParentId()]);
             } catch (LocalizedException $e) {

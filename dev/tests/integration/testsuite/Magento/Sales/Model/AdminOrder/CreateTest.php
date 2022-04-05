@@ -13,7 +13,6 @@ use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\QuoteRepository;
 use Magento\Sales\Api\Data\OrderAddressExtensionInterface;
 use Magento\Sales\Api\Data\OrderAddressExtensionInterfaceFactory;
 use Magento\Sales\Api\OrderManagementInterface;
@@ -114,16 +113,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->model->setPaymentData(['method' => 'checkmo']);
 
         $newOrder = $this->model->createOrder();
-        /** @var $quoteobj QuoteRepository */
-        $quoteobj = $this->objectManager->create(QuoteRepository::class);
-        $newQuote = $quoteobj->get($newOrder->getQuoteId());
-        self::assertEquals($order->getCustomerFirstname(), $newQuote->getCustomerFirstname());
-        self::assertEquals($order->getCustomerLastname(), $newQuote->getCustomerLastname());
-        self::assertEquals($order->getCustomerLastname(), $newQuote->getCustomerLastname());
-        self::assertEquals($order->getCustomerFirstname(), $newOrder->getCustomerFirstname());
-        self::assertEquals($order->getCustomerLastname(), $newOrder->getCustomerLastname());
-        self::assertEquals($order->getCustomerMiddlename(), $newOrder->getCustomerMiddlename());
-
         $newOrderItems = $newOrder->getItemsCollection();
 
         self::assertEquals(1, $newOrderItems->count());

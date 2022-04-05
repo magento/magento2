@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Quote\Model\QuoteRepository;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
@@ -75,6 +76,13 @@ class AddressSaveTest extends AbstractBackendController
             $this->stringContains(sprintf('sales/order/view/order_id/%s/', $order->getId()))
         );
         $this->assertAddressData($addressId, $data);
+        /** @var $quoteobj QuoteRepository */
+        $quoteobj = $this->objectManager->create(QuoteRepository::class);
+        $quote = $quoteobj->get($order->getQuoteId());
+        self::assertEquals('New test name', $quote->getCustomerFirstname());
+        self::assertEquals('New test lastname', $quote->getCustomerLastname());
+        self::assertEquals('New test name', $order->getCustomerFirstname());
+        self::assertEquals('New test lastname', $order->getCustomerLastname());
     }
 
     /**
