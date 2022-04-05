@@ -62,12 +62,10 @@
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
 
-        <!--Click Place Order button--> 
+        <!--Click Place Order button-->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoadSuccessPage"/>
-
-        <!--See success messages-->
-        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
+        <comment userInput="BIC Workaround" stepKey="waitForLoadSuccessPage"/>
+        <comment userInput="BIC Workaround" stepKey="seeSuccessTitle"/>
         <see selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order # is: " stepKey="seeOrderNumber"/>
 
         <!--Check register section-->
@@ -99,8 +97,8 @@
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
 
         <!--Click Place Order button-->
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder2"/>
-        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage2"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder2"/>
+        <comment userInput="BIC Workaround" stepKey="waitForLoadSuccessPage2"/>
 
         <!--Continue shopping-->
         <click selector="{{CheckoutSuccessMainSection.continueShoppingButton}}" stepKey="clickContinueShoppingButton"/>
