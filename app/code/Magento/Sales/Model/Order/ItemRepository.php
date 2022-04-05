@@ -151,7 +151,7 @@ class ItemRepository implements OrderItemRepositoryInterface, ResetAfterRequestI
     public function delete(OrderItemInterface $entity)
     {
         $this->metadata->getMapper()->delete($entity);
-        unset($this->registry[$entity->getEntityId()]);
+        unset($this->registry[$entity->getItemId()]);
         return true;
     }
 
