@@ -10,17 +10,16 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminPreDefineDataInCatalogStoreFrontActionGroup">
 
-        <click selector='//*[@id="catalog_frontend_list_mode"]' stepKey="clickListMode"/>
-        <click selector='//option[@value="grid-list"]' stepKey="clickGridList"/>
-        <fillField selector='//*[@id="catalog_frontend_grid_per_page_values"]' userInput="12,24,36" stepKey="fillDataInGridAllowedValuesField"/>
-        <fillField selector='//*[@id="catalog_frontend_grid_per_page"]' userInput="12" stepKey="fillDataInGridDefaultValueField"/>
-        <fillField selector='//*[@id="catalog_frontend_list_per_page_values"]' userInput="5,10,15,20,25" stepKey="fillDataInListAllowedValuesField"/>
-        <fillField selector='//*[@id="catalog_frontend_list_per_page"]' userInput="10" stepKey="fillDataInListDefaultValueField"/>
-        <click selector='//*[@id="catalog_frontend_default_sort_by"]' stepKey="clickListingSortBy"/>
-        <click selector="//option[@value='position']" stepKey="clickPosition"/>
-        <click selector='//*[@id="catalog_frontend_list_allow_all"]' stepKey="clickProductsPerPage"/>
-        <click selector='//option[@value="0"]' stepKey="clickNoButton"/>
-
+        <click selector="{{AdminCatalogStorefrontConfigSection.listMode}}" stepKey="clickListMode"/>
+        <click selector="{{AdminCatalogStorefrontConfigSection.gridList}}" stepKey="clickGridList"/>
+        <fillField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" userInput="12,24,36" stepKey="fillDataInGridAllowedValuesField"/>
+        <fillField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageDefaultValue}}" userInput="12" stepKey="fillDataInGridDefaultValueField"/>
+        <fillField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageListAllowedValues}}" userInput="5,10,15,20,25" stepKey="fillDataInListAllowedValuesField"/>
+        <fillField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageListDefaultValue}}" userInput="10" stepKey="fillDataInListDefaultValueField"/>
+        <click selector="{{AdminCatalogStorefrontConfigSection.productsListingSort}}" stepKey="clickListingSortBy"/>
+        <click selector="{{AdminCatalogStorefrontConfigSection.positionProduct}}" stepKey="clickPosition"/>
+        <click selector="{{AdminCatalogStorefrontConfigSection.productsPerPage}}" stepKey="clickProductsPerPage"/>
+        <click selector="{{AdminCatalogStorefrontConfigSection.selectProductsPerPage}}" stepKey="clickNoButton"/>
     </actionGroup>
 </actionGroups>
 
