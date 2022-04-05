@@ -7,18 +7,14 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
-use Magento\Eav\Setup\EavSetup;
-use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
-/** @var EavSetupFactory $eavSetupFactory */
-$eavSetupFactory = $objectManager->create(EavSetupFactory::class);
 /** @var Registry $registry */
 $registry = $objectManager->get(Registry::class);
 /** @var ProductRepositoryInterface $productRepository */
@@ -31,9 +27,8 @@ try {
 } catch (NoSuchEntityException $e) {
     //Product already deleted.
 }
-/** @var EavSetup $eavSetup */
-$eavSetup = $eavSetupFactory->create();
-$eavSetup->removeAttribute(Product::ENTITY, 'test_searchable_attribute');
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
+
+Resolver::getInstance()->requireDataFixture('Magento/CatalogSearch/_files/searchable_attribute_rollback.php');

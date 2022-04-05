@@ -9,11 +9,12 @@ namespace Magento\CatalogSearch\Model;
 
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Search\Request\Config as RequestConfig;
-use Magento\Framework\Search\Request\Config\FilesystemReader as RequestConfigReader;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @magentoDbIsolation disabled
+ */
 class AdvancedTest extends TestCase
 {
     /**
@@ -23,21 +24,16 @@ class AdvancedTest extends TestCase
 
     protected function setUp(): void
     {
-        $requestConfigReader = Bootstrap::getObjectManager()->get(RequestConfigReader::class);
-        $requestConfig = Bootstrap::getObjectManager()->get(RequestConfig::class);
-        $requestConfig->merge($requestConfigReader->read());
-
         $this->model = Bootstrap::getObjectManager()->create(Advanced::class);
     }
 
     /**
-     * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
-     * @magentoDataFixture Magento/Catalog/_files/not_visible_product_with_layered_navigation_attribute.php
+     * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
+     * @magentoDataFixture Magento/CatalogSearch/_files/not_visible_searchable_product.php
      */
     public function testAddFilters(): void
     {
-        $attributeCode = 'test_configurable';
+        $attributeCode = 'test_searchable_attribute';
         $attributeRepository = Bootstrap::getObjectManager()->get(ProductAttributeRepositoryInterface::class);
         $attribute = $attributeRepository->get($attributeCode);
         $option = $attribute->getOptions()[1];
@@ -50,6 +46,6 @@ class AdvancedTest extends TestCase
         self::assertCount(1, $products);
         /** @var Product $product */
         $product = array_shift($products);
-        self::assertEquals('Option 1', $product->getAttributeText($attributeCode));
+        self::assertEquals('simple_for_search', $product->getSku());
     }
 }

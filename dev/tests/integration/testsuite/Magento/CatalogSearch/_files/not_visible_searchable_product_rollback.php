@@ -20,4 +20,4 @@ try {
     //Product already removed
 }
 
-Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/layered_navigation_attribute_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/CatalogSearch/_files/searchable_attribute_rollback.php');
