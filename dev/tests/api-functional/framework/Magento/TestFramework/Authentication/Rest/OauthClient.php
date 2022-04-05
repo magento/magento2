@@ -26,7 +26,7 @@ class OauthClient extends AbstractService
     /**
      * The maximum timeout for http request in seconds
      */
-    const DEFAULT_TIMEOUT = 120;
+    public const DEFAULT_TIMEOUT = 120;
 
     /** @var string|null */
     protected $_oauthVerifier = null;

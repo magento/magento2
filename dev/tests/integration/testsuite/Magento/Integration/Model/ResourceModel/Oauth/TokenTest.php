@@ -17,9 +17,9 @@ use Magento\Integration\Model\Oauth\Token;
  */
 class TokenTest extends \PHPUnit\Framework\TestCase
 {
-    const TOKEN_LIFETIME = 1; // in hours
+    public const TOKEN_LIFETIME = 1; // in hours
 
-    const BASE_CREATED_AT_TIMESTAMP = 100000;
+    public const BASE_CREATED_AT_TIMESTAMP = 100000;
 
     /**
      * @var array
