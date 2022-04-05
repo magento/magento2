@@ -16,13 +16,13 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class OrderGetTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/orders';
+    private const RESOURCE_PATH = '/V1/orders';
 
-    const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
+    private const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
 
-    const SERVICE_VERSION = 'V1';
+    private const SERVICE_VERSION = 'V1';
 
-    const ORDER_INCREMENT_ID = '100000001';
+    private const ORDER_INCREMENT_ID = '100000001';
 
     /**
      * @var ObjectManagerInterface
@@ -74,7 +74,7 @@ class OrderGetTest extends WebapiAbstract
         $expectedShippingAddress = [
             'address_type' => 'shipping',
             'city' => 'Los Angeles',
-            'email' => 'customer@null.com',
+            'email' => 'customer@example.com',
             'postcode' => '11111',
             'region' => 'CA'
         ];
