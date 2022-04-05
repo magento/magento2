@@ -10,6 +10,7 @@ use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\PaymentInterface;
@@ -17,7 +18,6 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total as AddressTotal;
 use Magento\Sales\Model\Status;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Quote model
@@ -2541,6 +2541,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                     continue;
                 }
                 if ($item->getQty() > 1) {
+                    //DB table `quote_item` qty value can not be set to 1, if having more than 1 child references
+                    //in table `quote_address_item`.
+                    if (count($this->getQuoteShippingAddressItemsByQuoteItemId($item->getItemId())) > 1) {
+                        continue;
+                    }
+
                     for ($itemIndex = 0, $itemQty = $item->getQty(); $itemIndex < $itemQty; $itemIndex++) {
                         if ($itemIndex == 0) {
                             $addressItem = $item;
@@ -2657,5 +2663,34 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                 ? $this->setBillingAddress($address)
                 : $this->setShippingAddress($address);
         }
+    }
+
+    /**
+     * Returns quote address items
+     *
+     * @param $itemId
+     * @return array
+     */
+    private function getQuoteShippingAddressItemsByQuoteItemId($itemId = null): array
+    {
+        $addressItems = [];
+        if ($itemId !== null && $this->isMultipleShippingAddresses()) {
+            $addresses = $this->getAllShippingAddresses();
+            foreach ($addresses as $address) {
+                foreach ($address->getAllItems() as $item) {
+                    if ($item->getParentItemId()) {
+                        continue;
+                    }
+                    if ($item->getProduct()->getIsVirtual()) {
+                        continue;
+                    }
+                    if ($item->getQuoteItemId() === $itemId) {
+                        $addressItems[] = $item;
+                    }
+                }
+            }
+        }
+
+        return $addressItems;
     }
 }
