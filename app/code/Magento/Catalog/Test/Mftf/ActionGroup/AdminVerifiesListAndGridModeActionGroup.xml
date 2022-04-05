@@ -18,27 +18,35 @@
 
         <!-- verify changes in List mode -->
         <seeElement selector='//*[@id="maincontent"]//*[@data-value="list"]' stepKey="seePageInListView" />
-        <click selector=".//*[@class='toolbar toolbar-products'][1]//*[@id='mode-grid']" stepKey="clickGridMode"/>
-        <seeElement selector='//*[@id="maincontent"]/div[3]/div[1]/div[2]/div[1]/strong[2]' stepKey="seePageInGridView" />
-        <click selector='//*[@id="mode-list"]' stepKey="switchToListMode1"/>
-        <seeElement selector='(//ol[@class="products list items product-items"]/li)[1]' stepKey="seePageProduct" />
-        <seeElement selector='.//*[@id="sorter"]//option[@value="price"]' stepKey="seeSortByPriceInListMode" />
-        <click selector='//*[@id="limiter"]' stepKey="clickProductsPerPageButtonInListMode"/>
-        <click selector='//*[@id="limiter"]/option[4]' stepKey="clickAllButton"/>
-        <seeElement selector='//ol[@class="products list items product-items"]' stepKey="seeAllProducts" />
-        <click selector=".//*[@class='toolbar toolbar-products'][1]//*[@data-value='grid']" stepKey="switchToGridMode"/>
-        <seeElement selector='//*[@id="maincontent"]/div[3]/div[1]/div[2]/div[1]/strong[2]' stepKey="seePageInGridView2" />
-        <click selector='//*[@id="mode-list"]' stepKey="switchToListMode2"/>
-        <seeElement selector="#maincontent > div.columns > div.column.main > div:nth-child(3) > div.modes > strong.modes-mode.active.mode-list" stepKey="seePageInListView1" />
-        <click selector=".//*[@class='toolbar toolbar-products'][1]//*[@data-value='grid']" stepKey="switchToGridMode3"/>
-        <seeElement selector='//*[@id="maincontent"]/div[3]/div[1]/div[2]/div[1]/strong[2]' stepKey="seePageInGridView3" />
-        <seeElement selector='//ol[@class="products list items product-items"]' stepKey="seeAllProducts1" />
-        <seeElement selector='.//*[@id="sorter"]//option[@value="price"]' stepKey="seeSortByPriceInGridMode" />
-        <click selector='//*[@id="limiter"]' stepKey="clickProductsPerPageInGridMode"/>
-        <seeElement selector='(//*[@id="limiter"]/option)' stepKey="verifyingPagesInGrid1" />
-        <seeElement selector='(//*[@id="limiter"]/option)[2]' stepKey="verifyingPagesInGrid2" />
-        <seeElement selector='(//*[@id="limiter"]/option)[3]' stepKey="verifyingPagesInGrid3" />
-        <seeElement selector='(//*[@id="limiter"]/option)[4]' stepKey="verifyingPagesInGrid4" />
-        <seeElement selector='(//*[@id="limiter"]/option)[5]' stepKey="verifyingPagesInGrid5" />
+        <!--<see selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="seePageInListView"/>-->
+        <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="clickGridMode"/>
+        <waitForPageLoad stepKey="waitForGridMode"/>
+        <see selector="{{AdminChecksListAndGridModeSection.gridView}}" stepKey="seePageInGridView"/>
+        <click selector="{{AdminChecksListAndGridModeSection.listMode}}" stepKey="switchToListMode"/>
+        <waitForPageLoad stepKey="waitForListMode"/>
+        <see selector="{{AdminChecksListAndGridModeSection.pageProduct}}" stepKey="seePageProduct"/>
+        <see selector="{{AdminChecksListAndGridModeSection.sortByPrice}}" stepKey="seeSortByPriceInListMode"/>
+        <click selector="{{AdminChecksListAndGridModeSection.productsPerPage}}" stepKey="clickProductsPerPageButtonInListMode"/>
+        <waitForPageLoad stepKey="waitForProductsPerPage"/>
+        <click selector="{{AdminChecksListAndGridModeSection.allButton}}" stepKey="selectAllButton"/>
+        <waitForPageLoad stepKey="waitForSelectAll"/>
+        <see selector="{{AdminChecksListAndGridModeSection.allProducts}}" stepKey="seeAllProducts"/>
+        <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="switchToGridMode"/>
+        <see selector="{{AdminChecksListAndGridModeSection.gridView}}" stepKey="seePageInGridView2"/>
+        <click selector="{{AdminChecksListAndGridModeSection.listMode}}" stepKey="switchToListMode1"/>
+        <see selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="seePageInListView1"/>
+        <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="switchToGridMode1"/>
+        <see selector="{{AdminChecksListAndGridModeSection.allProducts}}" stepKey="seePageProductsInGrid"/>
+        <see selector="{{AdminChecksListAndGridModeSection.sortByPrice}}" stepKey="seeSortByPriceInGridMode"/>
+        <click selector="{{AdminChecksListAndGridModeSection.productsPerPage}}" stepKey="clickProductsPerPageButtonInGridMode"/>
+        <waitForPageLoad stepKey="waitForProductsPerPageOpen"/>
+        <see selector="{{AdminChecksListAndGridModeSection.pageOptions1}}" stepKey="seePageOptions1"/>
+        <see selector="{{AdminChecksListAndGridModeSection.pageOptions2}}" stepKey="seePageOptions2"/>
+        <see selector="{{AdminChecksListAndGridModeSection.pageOptions3}}" stepKey="seePageOptions3"/>
+        <see selector="{{AdminChecksListAndGridModeSection.pageOptions4}}" stepKey="seePageOptions4"/>
+        <see selector="{{AdminChecksListAndGridModeSection.pageOptions5}}" stepKey="seePageOptions5"/>
+
+
+
     </actionGroup>
 </actionGroups>

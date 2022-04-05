@@ -124,20 +124,20 @@
                 <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForGridDefaultValue">
                        <argument name="rowId" value="row_catalog_frontend_grid_per_page"/>
                 </actionGroup>
-               <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForAllowedValues">
+                <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForAllowedValues">
                       <argument name="rowId" value="row_catalog_frontend_list_per_page_values"/>
-               </actionGroup>
-               <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForListDefaultValue">
-                 <argument name="rowId" value="row_catalog_frontend_list_per_page"/>
-               </actionGroup>
-               <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForListSortingBy">
+                 </actionGroup>
+                <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForListDefaultValue">
+                  <argument name="rowId" value="row_catalog_frontend_list_per_page"/>
+                </actionGroup>
+                <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForListSortingBy">
                        <argument name="rowId" value="row_catalog_frontend_default_sort_by"/>
-               </actionGroup>
-               <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForProductsPerPage">
+                </actionGroup>
+                <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForProductsPerPage">
                         <argument name="rowId" value="row_catalog_frontend_list_allow_all"/>
-               </actionGroup>
-               <actionGroup ref="AdminAddDataInCatalogStoreFrontDetailsActionGroup" stepKey="fillingDataInStoreFrontFields"/>
-               <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigurations"/>
+                </actionGroup>
+                <actionGroup ref="AdminAddDataInCatalogStoreFrontDetailsActionGroup" stepKey="fillingDataInStoreFrontFields"/>
+                <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigurations"/>
 
                     <!--Clean cache and reindex-->
                 <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
@@ -147,27 +147,27 @@
                       <argument name="tags" value=""/>
                 </actionGroup>
 
-        <!-- navigate to created category page and check the products per page -->
-        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage1">
-            <argument name="category" value="$$createCategory$$"/>
-        </actionGroup>
+              <!-- navigate to created category page and check the products per page -->
+               <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage1">
+                   <argument name="category" value="$$createCategory$$"/>
+               </actionGroup>
 
 
 
 
-        <!-- Go to storefront created category page and verifies list and grid mode -->
-        <actionGroup ref="AdminVerifiesListAndGridModeActionGroup" stepKey="ChangesInListAndGridMode"/>
+             <!-- Go to storefront created category page and verifies list and grid mode -->
+             <actionGroup ref="AdminVerifiesListAndGridModeActionGroup" stepKey="ChangesInListAndGridMode"/>
 
 
 
                   <!-- again navigate to created category page and check the products per page-->
-                <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage2">
+             <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage2">
                     <argument name="category" value="$$createCategory$$"/>
-                </actionGroup>
+             </actionGroup>
 
-               <click selector=".//*[@class='toolbar toolbar-products'][1]//*[@data-value='grid']" stepKey="switchToGridMode4"/>
-               <seeElement selector='//ol[@class="products list items product-items"]' stepKey="see10ProductsVisible" />
+             <click selector=".//*[@class='toolbar toolbar-products'][1]//*[@data-value='grid']" stepKey="switchToGridMode4"/>
+             <seeElement selector='//ol[@class="products list items product-items"]' stepKey="see10ProductsVisible" />
 
-               <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
-                </test>
-                </tests>
+             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+    </test>
+</tests>
