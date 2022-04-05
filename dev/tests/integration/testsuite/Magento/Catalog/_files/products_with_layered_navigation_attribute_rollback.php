@@ -6,13 +6,12 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Eav\Model\Config;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Catalog\Model\GetCategoryByName;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var Registry $registry */
@@ -45,17 +44,7 @@ try {
     //Category already removed
 }
 
-$eavConfig = $objectManager->get(Config::class);
-/** @var ProductAttributeRepositoryInterface $attributeRepository */
-$attributeRepository = $objectManager->get(ProductAttributeRepositoryInterface::class);
-
-try {
-    $attribute = $attributeRepository->get('test_configurable');
-    $attributeRepository->delete($attribute);
-} catch (NoSuchEntityException $exception) {
-    //Attribute already removed
-}
-$eavConfig->clear();
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/layered_navigation_attribute_rollback.php');
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

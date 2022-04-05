@@ -241,7 +241,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function addFieldsToFilter($fields)
     {
         if ($fields) {
-            $this->filters = array_merge($this->filters, $fields);
+            $this->filters = array_replace_recursive($this->filters, $fields);
         }
         return $this;
     }
