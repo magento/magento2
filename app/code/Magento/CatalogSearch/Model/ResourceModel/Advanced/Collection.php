@@ -189,10 +189,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         Advanced $advancedSearchResource = null
     ) {
         $this->searchRequestName = $searchRequestName;
-        if ($searchResultFactory === null) {
-            $this->searchResultFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Api\Search\SearchResultFactory::class);
-        }
+        $this->searchResultFactory = $searchResultFactory ?: ObjectManager::getInstance()
+            ->get(SearchResultFactory::class);
         $this->searchCriteriaResolverFactory = $searchCriteriaResolverFactory ?: ObjectManager::getInstance()
             ->get(SearchCriteriaResolverFactory::class);
         $this->searchResultApplierFactory = $searchResultApplierFactory ?: ObjectManager::getInstance()
