@@ -22,13 +22,15 @@
             <before>
                 <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
                 <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
+                <magentoCron groups="index" stepKey="reindex"/>
             </before>
 
             <after>
                 <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                     <argument name="customStore" value="customStore"/>
                 </actionGroup>
-                <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+                <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="resetSearchFilter"/>
+                <magentoCron groups="index" stepKey="reindex"/>
                 <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
 

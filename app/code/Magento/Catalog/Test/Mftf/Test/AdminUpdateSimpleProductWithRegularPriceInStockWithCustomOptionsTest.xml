@@ -32,6 +32,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{simpleProductRegularPriceCustomOptions.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="cliCacheFlushActionGroup">
                 <argument name="tags" value="" />
             </actionGroup>

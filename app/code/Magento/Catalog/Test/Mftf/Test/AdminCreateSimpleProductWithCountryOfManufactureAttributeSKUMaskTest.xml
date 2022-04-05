@@ -28,6 +28,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{nameAndAttributeSkuMaskSimpleProduct.name}}-{{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" />
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
