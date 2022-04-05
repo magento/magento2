@@ -19,7 +19,7 @@ During the authorization we check if the configured `Organization ID` provided o
 
 In the profile response from Adobe IMS must be a `roles` array. There we have all assigned organizations to the user.
 
-We compare if the configured organization ID is existed in this array and also the structure of the organization ID is valid.
+We compare if the configured organization ID does exist in this array and also the structure of the organization ID is valid.
 
 # CLI command usage:
 ## bin/magento admin:adobe-ims:enable

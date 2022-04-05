@@ -31,7 +31,7 @@ class ClearAdobeUserIdPlugin
      * When access_token will be set with an empty value, also clear the adobe_user_id value
      *
      * @param UserProfileInterface $subject
-     * @param null $result
+     * @param $result
      * @param string $value
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
