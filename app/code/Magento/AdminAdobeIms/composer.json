@@ -16,7 +16,6 @@
         "magento/module-authorization": "*",
         "magento/module-store": "*",
         "magento/module-email": "*",
-        "magento/module-security": "*",
         "magento/module-integration": "*"
     },
     "suggest": {
