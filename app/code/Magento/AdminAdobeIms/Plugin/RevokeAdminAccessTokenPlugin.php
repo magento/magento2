@@ -11,17 +11,14 @@ namespace Magento\AdminAdobeIms\Plugin;
 use Exception;
 use Magento\AdminAdobeIms\Model\Auth;
 use Magento\AdminAdobeIms\Model\LogOut;
+use Magento\AdminAdobeIms\Model\UserProfileRepository;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Model\AdminTokenService;
 
 class RevokeAdminAccessTokenPlugin
 {
-    /**
-     * @var Auth
-     */
-    private Auth $auth;
-
     /**
      * @var LogOut
      */
@@ -33,18 +30,31 @@ class RevokeAdminAccessTokenPlugin
     private ImsConfig $imsConfig;
 
     /**
-     * @param Auth $auth
+     * @var UserProfileRepository
+     */
+    private UserProfileRepository $userProfileRepository;
+
+    /**
+     * @var EncryptorInterface
+     */
+    private EncryptorInterface $encryptor;
+
+    /**
      * @param LogOut $logOut
      * @param ImsConfig $imsConfig
+     * @param UserProfileRepository $userProfileRepository
+     * @param EncryptorInterface $encryptor
      */
     public function __construct(
-        Auth $auth,
         LogOut $logOut,
-        ImsConfig $imsConfig
+        ImsConfig $imsConfig,
+        UserProfileRepository $userProfileRepository,
+        EncryptorInterface $encryptor
     ) {
-        $this->auth = $auth;
         $this->logOut = $logOut;
         $this->imsConfig = $imsConfig;
+        $this->userProfileRepository = $userProfileRepository;
+        $this->encryptor = $encryptor;
     }
 
     /**
@@ -68,10 +78,11 @@ class RevokeAdminAccessTokenPlugin
         }
 
         try {
-            $session = $this->auth->getAuthStorage();
-            $accessToken = $session->getAdobeAccessToken();
-
-            $this->logOut->execute($accessToken);
+            $entity = $this->userProfileRepository->getByUserId($adminId);
+            $this->logOut->execute(
+                $this->encryptor->decrypt($entity->getAccessToken()),
+                $adminId
+            );
         } catch (Exception $exception) {
             throw new LocalizedException(__('The tokens couldn\'t be revoked.'), $exception);
         }

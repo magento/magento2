@@ -17,6 +17,9 @@ use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Request;
 
@@ -120,6 +123,9 @@ class AdobeImsTokenUserContext implements UserContextInterface
      * Finds the bearer token and looks up the value.
      *
      * @return void
+     * @throws AuthorizationException
+     * @throws CouldNotSaveException
+     * @throws InvalidArgumentException
      */
     private function processRequest()
     {
@@ -139,7 +145,7 @@ class AdobeImsTokenUserContext implements UserContextInterface
             if ($userProfile->getId()) {
                 $adminUserId = (int) $userProfile->getData('admin_user_id');
             } else {
-                $profile = $this->imsConnection->getProfile($bearerToken);
+                $profile = $this->getUserProfile($bearerToken);
                 if (empty($profile['email'])) {
                     throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
                 }
@@ -161,6 +167,22 @@ class AdobeImsTokenUserContext implements UserContextInterface
 
         $this->userId = $adminUserId;
         $this->isRequestProcessed = true;
+    }
+
+    /**
+     * Get adobe user profile
+     *
+     * @param string $bearerToken
+     * @return array
+     * @throws AuthenticationException
+     */
+    private function getUserProfile(string $bearerToken): array
+    {
+        try {
+            return $this->imsConnection->getProfile($bearerToken);
+        } catch (\Exception $exception) {
+            throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
+        }
     }
 
     /**

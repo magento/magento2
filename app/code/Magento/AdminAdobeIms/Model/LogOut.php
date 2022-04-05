@@ -83,8 +83,10 @@ class LogOut implements ImsLogOutInterface
     /**
      * @inheritDoc
      */
-    public function execute(?string $accessToken = null) : bool
-    {
+    public function execute(
+        ?string $accessToken = null,
+        ?int $adminUserId = null
+    ): bool {
         try {
             if ($accessToken === null) {
                 $accessToken = $this->getAccessToken->execute();
@@ -95,7 +97,7 @@ class LogOut implements ImsLogOutInterface
             }
 
             $this->externalLogOut($accessToken);
-            $this->flushUserTokens->execute();
+            $this->flushUserTokens->execute($adminUserId);
             return true;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);

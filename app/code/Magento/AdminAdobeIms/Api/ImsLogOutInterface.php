@@ -19,7 +19,8 @@ interface ImsLogOutInterface
      * LogOut User from Adobe IMS Account
      *
      * @param string|null $accessToken
+     * @param int|null $adminUserId
      * @return bool
      */
-    public function execute(?string $accessToken = null) : bool;
+    public function execute(?string $accessToken = null, ?int $adminUserId = null) : bool;
 }
