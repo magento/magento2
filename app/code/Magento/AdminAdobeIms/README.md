@@ -15,11 +15,11 @@ If there went something wrong during the authorization, the user gets redirected
 
 # Organization ID Validation
 
-During the authorization we check if the configured `Organization ID` provided on the enable CLI command is assigned to the user.
+During the authorization we check if the configured `Organization ID` provided on the enabling CLI command is assigned to the user.
 
 In the profile response from Adobe IMS must be a `roles` array. There we have all assigned organizations to the user.
 
-We compare if the configured organization ID is existend in this array and also the structure of the organization ID is valid.
+We compare if the configured organization ID is existed in this array and also the structure of the organization ID is valid.
 
 # CLI command usage:
 ## bin/magento admin:adobe-ims:enable
@@ -154,7 +154,7 @@ If adobe_user_id does not exist in adobe_user_profile table, then we have to mak
 Using email from Adobe user profile we can check if admin user with these email exists in Magento. If so, we save relevant data into adobe_user_profile table.
 If admin user with the email is not found, authentication will fail.
 
-IMS access token verification.
+###IMS access token verification.
 To verify token a public key is required. For more info https://wiki.corp.adobe.com/display/ims/IMS+public+key+retrieval 
 In Admin Adobe Ims module was defined path where certificate has to be downloaded from.
 By default, in config.xml, these value for production.
@@ -179,10 +179,10 @@ curl -X GET "{domain}/rest/V1/customers/2" -H "Authorization: Bearer AddAdobeIms
 curl -X GET "{domain}/rest/V1/products/24-MB01" -H "Authorization: Bearer AddAdobeImsAccessToken" 
 
 # ACCESS_TOKEN saving in session and validation
-When AdminAdomeIms module is enabled, we check each 10 minutes if ACCESS_TOKEN is still valid.
-For this when admin user login and when session is started, we add 2 extra varibles to the session:
+When AdminAdobeIms module is enabled, we check each 10 minutes if ACCESS_TOKEN is still valid.
+For this when admin user login and when session is started, we add 2 extra variables to the session:
 token_last_check_time is current time
-adobe_access_token is ACCESS_TOKEN that we recieve during autorization
+adobe_access_token is ACCESS_TOKEN that we receive during authorization
 
 There is a plugin \Magento\AdminAdobeIms\Plugin\BackendAuthSessionPlugin where we check if token_last_check_time was updated 10 min ago. 
 If yes, then we make call to IMS to validate access_token.
