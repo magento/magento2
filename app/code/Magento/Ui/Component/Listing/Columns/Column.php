@@ -16,7 +16,7 @@ use Magento\Ui\Component\AbstractComponent;
  */
 class Column extends AbstractComponent implements ColumnInterface
 {
-    const NAME = 'column';
+    public const NAME = 'column';
 
     /**
      * UI component
