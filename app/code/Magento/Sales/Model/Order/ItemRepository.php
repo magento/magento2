@@ -180,9 +180,9 @@ class ItemRepository implements OrderItemRepositoryInterface, ResetAfterRequestI
         }
 
         $this->metadata->getMapper()->save($entity);
-        $entityId = $entity->getEntityId() ?? '';
-        $this->registry[$entityId] = $entity;
-        return $this->registry[$entityId];
+        $itemId = $entity->getItemId() ?? '';
+        $this->registry[$itemId] = $entity;
+        return $this->registry[$itemId];
     }
 
     /**
