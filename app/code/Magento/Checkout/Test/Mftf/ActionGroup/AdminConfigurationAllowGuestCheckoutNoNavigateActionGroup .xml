@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminConfigurationAllowGuestCheckoutNoNavigateActionGroup">
+        <annotations>
+            <description>Open Stores>Configuration; Sales>Checkout; Checkout Options section; Allow Guest Checkout= No.</description>
+        </annotations>
+        <!-- click on store tab page-->
+        <click selector="{{StoreConfigSection.StoreTab}}" stepKey="clickOnStorePage"/>
+        <click selector="{{StoreConfigSection.ConfigurationPage}}" stepKey="clickOnConfigurationPage"/>
+        <!-- click on sales tab page-->
+        <click selector="{{StoreConfigSection.SalesTab}}" stepKey="clickOnSalesPage"/>
+        <!--Click on checkout and Expand Checkout Options tab -->
+        <click selector="{{SalesConfigSection.CheckoutTab}}" stepKey="clickOnCheckoutPage"/>
+        <click selector="{{SalesConfigSection.ExpandCheckoutOptions}}" stepKey="clickToExpandCheckoutOptions"/>
+        <!--Click on Use system value checkbox and save the configuration  -->
+        <click selector="{{SalesConfigSection.UseSystemValue}}" stepKey="uncheckUseSystemValue"/>
+        <selectOption selector="{{SalesConfigSection.AllowGuestCheckout}}" userInput="No" stepKey="selectAllowGuestCheckoutNo"/>
+    </actionGroup>
+</actionGroups>

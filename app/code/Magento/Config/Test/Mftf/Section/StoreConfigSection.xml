@@ -16,5 +16,8 @@
         <element name="Country" type="select" selector="#general_store_information_country_id"/>
         <element name="fillVATNumber" type="input" selector="#general_store_information_merchant_vat_number"/>
         <element name="validateVATNumber" type="button" selector="#general_store_information_validate_vat_number" timeout="30"/>
+        <element name="StoreTab" type="button" selector="//a[@href='#']//span[contains(text(),'Stores')]" timeout="30"/>
+        <element name="ConfigurationPage" type="button" selector="//li[@class='item-system-config    level-2']//span[contains(text(),'Configuration')]" timeout="30"/>
+        <element name="SalesTab" type="button" selector="//div[@class='admin__page-nav-title title _collapsible']//strong[contains(text(),'Sales')]" timeout="30"/>
     </section>
 </sections>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontGuestSignInActionGroup">
+        <annotations>
+            <description>Enter email id and password, click on sign in button and validate functionality.</description>
+        </annotations>
+        <arguments>
+            <!--<argument name="username" type="string" defaultValue=""/>-->
+            <argument name="email" type="string" defaultValue=""/>
+            <argument name="password" type="string" defaultValue=""/>
+        </arguments>
+
+        <fillField selector="{{StorefrontGuestSignInSection.email}}" userInput="{{email}}" stepKey="fillEmailId"/>
+        <fillField selector="{{StorefrontGuestSignInSection.password}}" userInput="{{password}}" stepKey="fillPassword"/>
+        <waitForElementVisible selector="{{StorefrontGuestSignInSection.CreateAnAccount}}" stepKey="seeCreateAnAccount"/>
+        <waitForElementVisible selector="{{StorefrontGuestSignInSection.ForgotYourPassword}}" stepKey="seeForgotYourPassword"/>
+        <click selector="{{StorefrontGuestSignInSection.SignIn}}" stepKey="clickOnSignIn"/>
+    </actionGroup>
+</actionGroups>

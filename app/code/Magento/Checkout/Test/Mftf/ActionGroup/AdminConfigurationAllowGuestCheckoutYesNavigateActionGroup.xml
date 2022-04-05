@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminConfigurationAllowGuestCheckoutYesNavigateActionGroup">
+        <annotations>
+            <description>Open Stores>Configuration; Sales>Checkout; Checkout Options section; Allow Guest Checkout= Yes.</description>
+        </annotations>
+        <click selector="{{StoreConfigSection.StoreTab}}" stepKey="clickOnStorePage1"/>
+        <click selector="{{StoreConfigSection.ConfigurationPage}}" stepKey="clickOnConfigurationPage1"/>
+        <click selector="{{StoreConfigSection.SalesTab}}" stepKey="clickOnSalesPage1"/>
+        <click selector="{{SalesConfigSection.CheckoutTab}}" stepKey="clickOnCheckoutPage1"/>
+        <selectOption selector="{{SalesConfigSection.AllowGuestCheckout}}" userInput="Yes" stepKey="selectAllowGuestCheckoutYes"/>
+        <click selector="{{SalesConfigSection.UseSystemValue}}" stepKey="checkUseSystemValue"/>
+        <click selector="{{SalesConfigSection.ExpandCheckoutOptions}}" stepKey="clickToMinimizeCheckoutOptions"/>
+    </actionGroup>
+</actionGroups>
