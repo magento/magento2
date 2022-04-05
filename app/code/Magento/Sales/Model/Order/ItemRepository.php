@@ -171,8 +171,8 @@ class ItemRepository implements OrderItemRepositoryInterface
         }
 
         $this->metadata->getMapper()->save($entity);
-        $this->registry[$entity->getEntityId()] = $entity;
-        return $this->registry[$entity->getEntityId()];
+        $this->registry[$entity->getItemId()] = $entity;
+        return $this->registry[$entity->getItemId()];
     }
 
     /**
