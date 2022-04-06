@@ -26,13 +26,13 @@
         </label>
     </div>
     <div class="payment-method-content">
-        <each args="getRegion('messages')" render=""/>
+        <each args="getRegion('messages')" render=""></each>
         <div class="checkout-agreements-block">
-            <each args="$parent.getRegion('before-place-order')" render=""/>
+            <each args="$parent.getRegion('before-place-order')" render=""></each>
         </div>
         <div class="actions-toolbar" attr="id: getButtonId()" afterRender="renderPayPalButtons"></div>
         <div class="payment-method-extra-content">
-            <each args="$parent.getRegion('paypal-method-extra-content')" render=""/>
+            <each args="$parent.getRegion('paypal-method-extra-content')" render=""></each>
         </div>
     </div>
 </div>

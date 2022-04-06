@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontBundleWithTwoOptionsWithWeeeAddToCartTest">
+        <annotations>
+            <features value="Tax"/>
+            <stories value="Shopping cart taxes"/>
+            <title value="Test Storefront Bundle Product With Two Options With Weee Added To Cart"/>
+            <description value="The purpose of the test is to ensure that Bundle product with two options with Weee successfully added to cart"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-43057"/>
+            <group value="tax"/>
+            <group value="weee"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
+            <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
+            <comment userInput="BIC workaround" stepKey="EnableWeee"/>
+            <comment userInput="BIC workaround" stepKey="EnableDisplayInListFPTOnly"/>
+            <comment userInput="BIC workaround" stepKey="SetDisplayFPTOnly"/>
+            <comment userInput="BIC workaround" stepKey="SetDisplaySalesFPTOnly"/>
+            <comment userInput="BIC workaround" stepKey="SetDisplayEmailFPTOnly"/>
+            <comment userInput="BIC workaround" stepKey="EnableApplyVAT"/>
+            <magentoCLI command="config:set tax/weee/include_in_subtotal 1" stepKey="EnableIncludeInSubtotal"/>
+
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttribute"/>
+            <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet">
+                <requiredEntity createDataKey="createProductFPTAttribute"/>
+            </createData>
+            <createData entity="USFullTaxRate" stepKey="createFullTaxRate"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+        </before>
+
+        <after>
+            <createData entity="WeeeConfigDisable" stepKey="disableFPT"/>
+            <magentoCLI command="config:set tax/weee/include_in_subtotal 0" stepKey="disableIncludeInSubtotal"/>
+            <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <deleteData createDataKey="createFullTaxRate" stepKey="deleteFullTaxRate"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundle">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+        </after>
+
+        <comment userInput="BIC workaround" stepKey="loginAsAdmin"/>
+
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSimpleProduct1EditPage">
+            <argument name="productId" value="$simpleProduct1.id$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValueToSimpleProduct1">
+            <argument name="FPTAttributeCode" value="$createProductFPTAttribute.attribute_code$"/>
+            <argument name="stateForFPT" value="*"/>
+            <argument name="valueForFPT" value="10"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct1"/>
+
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSimpleProduct2EditPage">
+            <argument name="productId" value="$simpleProduct2.id$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValueToSimpleProduct2">
+            <argument name="FPTAttributeCode" value="$createProductFPTAttribute.attribute_code$"/>
+            <argument name="stateForFPT" value="*"/>
+            <argument name="valueForFPT" value="10"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct2"/>
+
+        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
+        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
+
+        <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainProductFields">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValueToBundleProduct">
+            <argument name="FPTAttributeCode" value="$createProductFPTAttribute.attribute_code$"/>
+            <argument name="stateForFPT" value="*"/>
+            <argument name="valueForFPT" value="10"/>
+        </actionGroup>
+
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption1">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="Option1"/>
+            <argument name="inputType" value="checkbox"/>
+        </actionGroup>
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption2">
+            <argument name="x" value="1"/>
+            <argument name="n" value="2"/>
+            <argument name="prodOneSku" value="$$simpleProduct2.sku$$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="Option2"/>
+            <argument name="inputType" value="checkbox"/>
+        </actionGroup>
+
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveBundleProduct"/>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="productUrl" value="{{BundleProduct.urlkey}}" />
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAddBundleProductFromProductToCartActionGroup" stepKey="addBundleProductToCart">
+            <argument name="productName" value="{{BundleProduct.name}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart"/>
+        <actionGroup ref="AssertStorefrontMiniCartSubtotalActionGroup" stepKey="assertSubtotal">
+            <argument name="subtotal" value="$266.00"/>
+        </actionGroup>
+    </test>
+</tests>

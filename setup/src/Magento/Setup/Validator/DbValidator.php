@@ -19,7 +19,7 @@ class DbValidator
     /**
      * Db prefix max length
      */
-    const DB_PREFIX_LENGTH = 5;
+    public const DB_PREFIX_LENGTH = 5;
 
     /**
      * DB connection factory
@@ -141,17 +141,16 @@ class DbValidator
      */
     private function checkDatabaseName(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $dbName)
     {
-        $query = "SHOW DATABASES";
-        $accessibleDbs = $connection->query($query)->fetchAll(\PDO::FETCH_COLUMN, 0);
-        foreach ($accessibleDbs as $accessibleDbName) {
-            if ($dbName == $accessibleDbName) {
-                return true;
-            }
+        try {
+            $query = sprintf("SHOW TABLES FROM `%s`", $dbName);
+            $connection->query($query)->fetchAll(\PDO::FETCH_COLUMN, 0);
+            return true;
+        } catch (\Exception $e) {
+            throw new \Magento\Setup\Exception(
+                "Database '{$dbName}' does not exist "
+                . "or specified database server user does not have privileges to access this database."
+            );
         }
-        throw new \Magento\Setup\Exception(
-            "Database '{$dbName}' does not exist "
-            ."or specified database server user does not have privileges to access this database."
-        );
     }
 
     /**

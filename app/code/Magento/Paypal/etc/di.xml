@@ -149,6 +149,7 @@
     <type name="Magento\Paypal\Controller\Transparent\Response">
         <arguments>
             <argument name="responseValidator" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidatorInController</argument>
+            <argument name="sessionTransparent" xsi:type="object">Magento\Checkout\Model\Session</argument>
         </arguments>
     </type>
 

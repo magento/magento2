@@ -7,9 +7,8 @@ namespace Magento\Framework\Interception\Code;
 
 use Magento\Framework\Code\Reader\ArgumentsReader;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\GetParameterClassTrait;
 use Magento\Framework\Phrase;
-use ReflectionClass;
-use ReflectionException;
 use ReflectionParameter;
 
 /**
@@ -17,6 +16,8 @@ use ReflectionParameter;
  */
 class InterfaceValidator
 {
+    use GetParameterClassTrait;
+
     public const METHOD_BEFORE = 'before';
     public const METHOD_AROUND = 'around';
     public const METHOD_AFTER = 'after';
@@ -176,22 +177,6 @@ class InterfaceValidator
         return $parameterClass ?
             '\\' . $parameterClass->getName() :
             ($parameterType && $parameterType->getName() === 'array' ? 'array' : null);
-    }
-
-    /**
-     * Get class by reflection parameter
-     *
-     * @param ReflectionParameter $reflectionParameter
-     * @return ReflectionClass|null
-     * @throws ReflectionException
-     */
-    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
-    {
-        $parameterType = $reflectionParameter->getType();
-
-        return $parameterType && !$parameterType->isBuiltin()
-            ? new ReflectionClass($parameterType->getName())
-            : null;
     }
 
     /**

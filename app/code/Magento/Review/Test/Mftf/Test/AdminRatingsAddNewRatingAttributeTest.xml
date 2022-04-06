@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRatingsAddNewRatingAttributeTest">
+        <annotations>
+            <features value="Review"/>
+            <stories value="Rating Attributes"/>
+            <title value="Adding new rating attribute"/>
+            <description value="Admin should be able add new rating attribute"/>
+            <severity value="MINOR"/>
+            <group value="review"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminRatingOpenRatingAttributeFromGridActionGroup" stepKey="openAttribute"/>
+            <actionGroup ref="AdminRatingDeleteAttributeActionGroup" stepKey="deleteCreatedRatingAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateToNewRatingFormActionGroup" stepKey="navigateToNewRatingPage"/>
+        <actionGroup ref="AdminFillNewRatingAttributeFormActionGroup" stepKey="fillRatingForm">
+            <argument name="default_Value" value="Test Rating"/>
+            <argument name="store" value="Default Store View"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveRatingButtonActionGroup" stepKey="saveRatingAttribute"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="You saved the rating."/>
+        </actionGroup>
+        <actionGroup ref="AdminSearchRatingAttributeOnGridActionGroup" stepKey="searchCreatedRatingOnGrid">
+            <argument name="rating" value="Test Rating"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRatingAttributeInGridActionGroup" stepKey="assertRatingAttributeInGrid">
+            <argument name="rating" value="Test Rating"/>
+        </actionGroup>
+    </test>
+</tests>

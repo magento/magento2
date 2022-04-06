@@ -38,7 +38,7 @@ class Write extends Read implements WriteInterface
         \Magento\Framework\Filesystem\File\WriteFactory $fileFactory,
         DriverInterface $driver,
         $path,
-        $createPermissions = null,
+        ?int $createPermissions = null,
         ?PathValidatorInterface $pathValidator = null
     ) {
         parent::__construct($fileFactory, $driver, $path, $pathValidator);

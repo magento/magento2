@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MysqlTest extends TestCase
 {
-    const CUSTOM_ERROR_HANDLER_MESSAGE = 'Custom error handler message';
+    public const CUSTOM_ERROR_HANDLER_MESSAGE = 'Custom error handler message';
 
     /**
      * @var SelectFactory|MockObject
@@ -426,7 +426,7 @@ class MysqlTest extends TestCase
         );
         $adapter->expects($this->any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
         $adapter->expects($this->any())->method('_getTableName')->willReturnArgument(0);
-        $adapter->expects($this->any())->method('quote')->willReturnArgument(0);
+        $adapter->expects($this->any())->method('quote')->willReturnOnConsecutiveCalls('', 'Some field');
         $adapter->expects($this->once())->method('rawQuery')->with($expectedQuery);
         $adapter->addColumn('tableName', 'columnName', $options);
     }
