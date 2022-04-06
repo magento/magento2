@@ -2523,6 +2523,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Get quote items assigned to different quote addresses populated per item qty.
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getShippingAddressesItems()
     {
@@ -2668,7 +2669,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Returns quote address items
      *
-     * @param $itemId
+     * @param int|null $itemId
      * @return array
      */
     private function getQuoteShippingAddressItemsByQuoteItemId($itemId = null): array
