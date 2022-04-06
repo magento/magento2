@@ -48,7 +48,7 @@ class TranslateTest extends TestCase
             ->getMock();
         $this->messageFormatter
             ->method('render')
-            ->willReturnCallback(function($source) {
+            ->willReturnCallback(function ($source) {
                 return end($source);
             });
 
