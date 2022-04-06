@@ -15,6 +15,7 @@ use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -65,6 +66,11 @@ class ProductCustomOptionsDataProviderTest extends TestCase
      * @var PoolInterface|MockObject
      */
     private $modifiersPool;
+
+    /**
+     * @var ModifierInterface|MockObject
+     */
+    private $modifierMockOne;
 
     protected function setUp(): void
     {
@@ -120,6 +126,17 @@ class ProductCustomOptionsDataProviderTest extends TestCase
                 'metadataPool' => $this->metadataPool
             ]
         );
+
+        $this->modifierMockOne = $this->getMockBuilder(ModifierInterface::class)
+            ->setMethods(['modifyData'])
+            ->getMockForAbstractClass();
+        $this->modifierMockOne->expects($this->any())
+            ->method('modifyData')
+            ->willReturn($this->returnArgument(0));
+
+        $this->modifiersPool->expects($this->any())
+            ->method('getModifiersInstances')
+            ->willReturn([$this->modifierMockOne]);
     }
 
     /**

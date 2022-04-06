@@ -10,8 +10,8 @@ use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Helper\Product\AddUrlToName as NameHelper;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Phrase;
 use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\DynamicRows;
@@ -23,6 +23,7 @@ use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\Component\Modal;
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Ui\Component\Listing\Columns\Price;
 
 /**
  * Class for Product Modifier Related
@@ -99,13 +100,18 @@ class Related extends AbstractModifier
     protected $scopeName;
 
     /**
+     * @var NameHelper
+     */
+    private $nameHelper;
+
+    /**
      * @var string
      * @since 101.0.0
      */
     protected $scopePrefix;
 
     /**
-     * @var \Magento\Catalog\Ui\Component\Listing\Columns\Price
+     * @var Price
      */
     private $priceModifier;
 
@@ -117,6 +123,8 @@ class Related extends AbstractModifier
      * @param ImageHelper $imageHelper
      * @param Status $status
      * @param AttributeSetRepositoryInterface $attributeSetRepository
+     * @param NameHelper $nameHelper
+     * @param Price $priceModifier
      * @param string $scopeName
      * @param string $scopePrefix
      */
@@ -128,6 +136,8 @@ class Related extends AbstractModifier
         ImageHelper $imageHelper,
         Status $status,
         AttributeSetRepositoryInterface $attributeSetRepository,
+        NameHelper $nameHelper,
+        Price $priceModifier,
         $scopeName = '',
         $scopePrefix = ''
     ) {
@@ -138,6 +148,8 @@ class Related extends AbstractModifier
         $this->imageHelper = $imageHelper;
         $this->status = $status;
         $this->attributeSetRepository = $attributeSetRepository;
+        $this->nameHelper = $nameHelper;
+        $this->priceModifier = $priceModifier;
         $this->scopeName = $scopeName;
         $this->scopePrefix = $scopePrefix;
     }
@@ -248,11 +260,6 @@ class Related extends AbstractModifier
      */
     private function getPriceModifier()
     {
-        if (!$this->priceModifier) {
-            $this->priceModifier = ObjectManager::getInstance()->get(
-                \Magento\Catalog\Ui\Component\Listing\Columns\Price::class
-            );
-        }
         return $this->priceModifier;
     }
 
@@ -269,7 +276,7 @@ class Related extends AbstractModifier
         return [
             'id' => $linkedProduct->getId(),
             'thumbnail' => $this->imageHelper->init($linkedProduct, 'product_listing_thumbnail')->getUrl(),
-            'name' => $linkedProduct->getName(),
+            'name' => $this->nameHelper->addUrlToName($linkedProduct),
             'status' => $this->status->getOptionText($linkedProduct->getStatus()),
             'attribute_set' => $this->attributeSetRepository
                 ->get($linkedProduct->getAttributeSetId())
@@ -644,7 +651,7 @@ class Related extends AbstractModifier
                     ],
                 ],
             ],
-            'name' => $this->getTextColumn('name', false, __('Name'), 20),
+            'name' => $this->getHtmlColumn('name', false, __('Name'), 20),
             'status' => $this->getTextColumn('status', true, __('Status'), 30),
             'attribute_set' => $this->getTextColumn('attribute_set', false, __('Attribute Set'), 40),
             'sku' => $this->getTextColumn('sku', true, __('SKU'), 50),
@@ -699,6 +706,38 @@ class Related extends AbstractModifier
                         'componentType' => Field::NAME,
                         'formElement' => Input::NAME,
                         'elementTmpl' => 'ui/dynamic-rows/cells/text',
+                        'component' => 'Magento_Ui/js/form/element/text',
+                        'dataType' => Text::NAME,
+                        'dataScope' => $dataScope,
+                        'fit' => $fit,
+                        'label' => $label,
+                        'sortOrder' => $sortOrder,
+                    ],
+                ],
+            ],
+        ];
+
+        return $column;
+    }
+
+    /**
+     * Retrieve html column structure
+     *
+     * @param string $dataScope
+     * @param bool $fit
+     * @param Phrase $label
+     * @param int $sortOrder
+     * @return array
+     */
+    private function getHtmlColumn($dataScope, $fit, Phrase $label, $sortOrder) : array
+    {
+        $column = [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'componentType' => Field::NAME,
+                        'formElement' => Input::NAME,
+                        'elementTmpl' => 'Magento_Catalog/components/cell-html',
                         'component' => 'Magento_Ui/js/form/element/text',
                         'dataType' => Text::NAME,
                         'dataScope' => $dataScope,

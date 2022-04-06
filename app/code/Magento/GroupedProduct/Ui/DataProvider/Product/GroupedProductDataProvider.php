@@ -7,6 +7,7 @@ namespace Magento\GroupedProduct\Ui\DataProvider\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Framework\App\RequestInterface;
@@ -14,6 +15,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
 use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 class GroupedProductDataProvider extends ProductDataProvider
 {
@@ -33,6 +35,11 @@ class GroupedProductDataProvider extends ProductDataProvider
     protected $storeRepository;
 
     /**
+     * @var PoolInterface
+     */
+    private $modifiersPool;
+
+    /**
      * Construct
      *
      * @param string $name
@@ -46,6 +53,7 @@ class GroupedProductDataProvider extends ProductDataProvider
      * @param array $data
      * @param AddFieldToCollectionInterface[] $addFieldStrategies
      * @param AddFilterToCollectionInterface[] $addFilterStrategies
+     * @param PoolInterface|null $modifiersPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -59,7 +67,8 @@ class GroupedProductDataProvider extends ProductDataProvider
         array $meta = [],
         array $data = [],
         array $addFieldStrategies = [],
-        array $addFilterStrategies = []
+        array $addFilterStrategies = [],
+        PoolInterface $modifiersPool = null
     ) {
         parent::__construct(
             $name,
@@ -75,6 +84,7 @@ class GroupedProductDataProvider extends ProductDataProvider
         $this->request = $request;
         $this->storeRepository = $storeRepository;
         $this->config = $config;
+        $this->modifiersPool = $modifiersPool ?: ObjectManager::getInstance()->get(PoolInterface::class);
     }
 
     /**
@@ -103,9 +113,15 @@ class GroupedProductDataProvider extends ProductDataProvider
         }
         $items = $this->getCollection()->toArray();
 
-        return [
+        $data = [
             'totalRecords' => $this->getCollection()->getSize(),
             'items' => array_values($items),
         ];
+
+        /** @var ModifierInterface $modifier */
+        foreach ($this->modifiersPool->getModifiersInstances() as $modifier) {
+            $data = $modifier->modifyData($data);
+        }
+        return $data;
     }
 }

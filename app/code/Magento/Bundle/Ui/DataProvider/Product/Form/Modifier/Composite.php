@@ -12,6 +12,7 @@ use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Api\ProductOptionRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\Product\AddUrlToName as NameHelper;
 
 /**
  * Class Bundle customizes Bundle product creation flow
@@ -46,10 +47,16 @@ class Composite extends AbstractModifier
     protected $productRepository;
 
     /**
+     * @var NameHelper
+     */
+    private $nameHelper;
+
+    /**
      * @param LocatorInterface $locator
      * @param ObjectManagerInterface $objectManager
      * @param ProductOptionRepositoryInterface $optionsRepository
      * @param ProductRepositoryInterface $productRepository
+     * @param NameHelper $nameHelper
      * @param array $modifiers
      */
     public function __construct(
@@ -57,12 +64,14 @@ class Composite extends AbstractModifier
         ObjectManagerInterface $objectManager,
         ProductOptionRepositoryInterface $optionsRepository,
         ProductRepositoryInterface $productRepository,
+        NameHelper $nameHelper,
         array $modifiers = []
     ) {
         $this->locator = $locator;
         $this->objectManager = $objectManager;
         $this->optionsRepository = $optionsRepository;
         $this->productRepository = $productRepository;
+        $this->nameHelper = $nameHelper;
         $this->modifiers = $modifiers;
     }
 
@@ -115,7 +124,7 @@ class Composite extends AbstractModifier
                         'selection_id' => $productLink->getId(),
                         'option_id' => $productLink->getOptionId(),
                         'product_id' => $linkedProduct->getId(),
-                        'name' => $linkedProduct->getName(),
+                        'name' => $this->nameHelper->addUrlToName($linkedProduct),
                         'sku' => $linkedProduct->getSku(),
                         'is_default' => ($productLink->getIsDefault()) ? '1' : '0',
                         'selection_price_value' => $productLink->getPrice(),

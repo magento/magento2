@@ -280,4 +280,9 @@
             <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
         </arguments>
     </type>
+    <type name="Magento\ConfigurableProduct\Ui\DataProvider\Product\ConfigurableDataProvider">
+        <arguments>
+            <argument name="modifiersPool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Name\Modifier\Pool</argument>
+        </arguments>
+    </type>
 </config>

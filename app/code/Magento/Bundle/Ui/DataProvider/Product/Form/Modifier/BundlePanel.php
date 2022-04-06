@@ -671,7 +671,7 @@ class BundlePanel extends AbstractModifier
                                 'componentType' => Form\Field::NAME,
                                 'dataType' => Form\Element\DataType\Text::NAME,
                                 'formElement' => Form\Element\Input::NAME,
-                                'elementTmpl' => 'ui/dynamic-rows/cells/text',
+                                'elementTmpl' => 'ui/form/element/html',
                                 'label' => __('Name'),
                                 'dataScope' => 'name',
                                 'sortOrder' => 60,

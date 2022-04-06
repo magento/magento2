@@ -12,9 +12,11 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
  * Class AbstractDataProvider
@@ -59,6 +61,11 @@ abstract class AbstractDataProvider extends ProductDataProvider
     private $store;
 
     /**
+     * @var PoolInterface
+     */
+    private $modifiersPool;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -71,6 +78,7 @@ abstract class AbstractDataProvider extends ProductDataProvider
      * @param array $addFilterStrategies
      * @param array $meta
      * @param array $data
+     * @param PoolInterface|null $modifiersPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -85,7 +93,8 @@ abstract class AbstractDataProvider extends ProductDataProvider
         $addFieldStrategies,
         $addFilterStrategies,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        PoolInterface $modifiersPool = null
     ) {
         parent::__construct(
             $name,
@@ -102,6 +111,7 @@ abstract class AbstractDataProvider extends ProductDataProvider
         $this->productRepository = $productRepository;
         $this->storeRepository = $storeRepository;
         $this->productLinkRepository = $productLinkRepository;
+        $this->modifiersPool = $modifiersPool ?: ObjectManager::getInstance()->get(PoolInterface::class);
     }
 
     /**
@@ -204,5 +214,29 @@ abstract class AbstractDataProvider extends ProductDataProvider
         }
 
         return $this->store = $this->storeRepository->getById($storeId);
+    }
+
+    /**
+     * Get data
+     *
+     * @return array
+     */
+    public function getData() : array
+    {
+        if (!$this->getCollection()->isLoaded()) {
+            $this->getCollection()->load();
+        }
+        $items = $this->getCollection()->toArray();
+
+        $data = [
+            'totalRecords' => $this->getCollection()->getSize(),
+            'items' => array_values($items),
+        ];
+
+        /** @var ModifierInterface $modifier */
+        foreach ($this->modifiersPool->getModifiersInstances() as $modifier) {
+            $data = $modifier->modifyData($data);
+        }
+        return $data;
     }
 }

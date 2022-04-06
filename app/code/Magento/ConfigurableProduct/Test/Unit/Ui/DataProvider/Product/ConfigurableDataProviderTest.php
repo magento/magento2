@@ -5,47 +5,35 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GroupedProduct\Test\Unit\Ui\DataProvider\Product;
+namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider\Product;
 
-use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Framework\App\RequestInterface;
+use Magento\ConfigurableProduct\Ui\DataProvider\Product\ConfigurableDataProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\GroupedProduct\Ui\DataProvider\Product\GroupedProductDataProvider;
-use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use PHPUnit\Framework\TestCase;
 
-class GroupedProductDataProviderTest extends TestCase
+/**
+ * ConfigurableDataProviderTest class which checks type
+ */
+class ConfigurableDataProviderTest extends TestCase
 {
-    const ALLOWED_TYPE = 'simple';
-
     /**
      * @var ObjectManager
      */
-    protected $objectManager;
-
-    /**
-     * @var RequestInterface|MockObject
-     */
-    protected $requestMock;
+    private $objectManager;
 
     /**
      * @var CollectionFactory|MockObject
      */
-    protected $collectionFactoryMock;
+    private $collectionFactoryMock;
 
     /**
      * @var Collection|MockObject
      */
-    protected $collectionMock;
-
-    /**
-     * @var ConfigInterface|MockObject
-     */
-    protected $configMock;
+    private $collectionMock;
 
     /**
      * @var PoolInterface|MockObject
@@ -58,14 +46,28 @@ class GroupedProductDataProviderTest extends TestCase
     private $modifierMockOne;
 
     /**
+     * Test checks ConfigurableDataProvider type
+     */
+    public function testCheckType(): void
+    {
+        $this->assertInstanceOf(ConfigurableDataProvider::class, $this->getModel());
+    }
+
+    /**
+     * Test checks collection type
+     */
+    public function testGetCollection(): void
+    {
+        $this->assertInstanceOf(Collection::class, $this->getModel()->getCollection());
+    }
+
+    /**
      * @return void
      */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -86,9 +88,6 @@ class GroupedProductDataProviderTest extends TestCase
         $this->collectionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->collectionMock);
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->setMethods(['getComposableTypes'])
-            ->getMockForAbstractClass();
 
         $this->modifiersPool = $this->getMockBuilder(PoolInterface::class)
             ->getMockForAbstractClass();
@@ -106,52 +105,18 @@ class GroupedProductDataProviderTest extends TestCase
     /**
      * @return object
      */
-    protected function getModel()
+    private function getModel(): ConfigurableDataProvider
     {
-        return $this->objectManager->getObject(GroupedProductDataProvider::class, [
+        return $this->objectManager->getObject(ConfigurableDataProvider::class, [
             'name' => 'testName',
             'primaryFieldName' => 'testPrimaryFieldName',
             'requestFieldName' => 'testRequestFieldName',
             'collectionFactory' => $this->collectionFactoryMock,
-            'request' => $this->requestMock,
-            'config' => $this->configMock,
-            'addFieldStrategies' => [],
-            'addFilterStrategies' => [],
             'meta' => [],
             'data' => [],
+            'addFieldStrategies' => [],
+            'addFilterStrategies' => [],
             'modifiersPool' => $this->modifiersPool
         ]);
-    }
-
-    public function testGetData()
-    {
-        $items = ['testProduct1', 'testProduct2'];
-        $expectedData = [
-            'totalRecords' => count($items),
-            'items' => $items,
-        ];
-
-        $this->configMock->expects($this->once())
-            ->method('getComposableTypes')
-            ->willReturn([self::ALLOWED_TYPE]);
-        $this->collectionMock->expects($this->once())
-            ->method('isLoaded')
-            ->willReturn(false);
-        $this->collectionMock->expects($this->any())
-            ->method('addAttributeToFilter')
-            ->withConsecutive(['type_id', [self::ALLOWED_TYPE]], ['required_options', '0']);
-        $this->collectionMock->expects($this->once())
-            ->method('toArray')
-            ->willReturn($items);
-        $this->collectionMock->expects($this->once())
-            ->method('getSize')
-            ->willReturn(count($items));
-
-        $this->assertEquals($expectedData, $this->getModel()->getData());
-    }
-
-    public function testGetCollection()
-    {
-        $this->assertInstanceOf(Collection::class, $this->getModel()->getCollection());
     }
 }

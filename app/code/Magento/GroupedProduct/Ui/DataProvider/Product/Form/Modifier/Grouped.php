@@ -24,6 +24,7 @@ use Magento\Framework\Locale\CurrencyInterface;
 use Magento\GroupedProduct\Model\Product\Link\CollectionProvider\Grouped as GroupedProducts;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
+use Magento\Catalog\Helper\Product\AddUrlToName as NameHelper;
 
 /**
  * Data provider for Grouped products
@@ -113,6 +114,11 @@ class Grouped extends AbstractModifier
     private $productLinkFactory;
 
     /**
+     * @var NameHelper
+     */
+    private $nameHelper;
+
+    /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
      * @param ProductLinkRepositoryInterface $productLinkRepository
@@ -121,6 +127,7 @@ class Grouped extends AbstractModifier
      * @param Status $status
      * @param AttributeSetRepositoryInterface $attributeSetRepository
      * @param CurrencyInterface $localeCurrency
+     * @param NameHelper $nameHelper
      * @param array $uiComponentsConfig
      * @param GroupedProducts $groupedProducts
      * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory|null $productLinkFactory
@@ -135,6 +142,7 @@ class Grouped extends AbstractModifier
         Status $status,
         AttributeSetRepositoryInterface $attributeSetRepository,
         CurrencyInterface $localeCurrency,
+        NameHelper $nameHelper,
         array $uiComponentsConfig = [],
         GroupedProducts $groupedProducts = null,
         \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null
@@ -147,6 +155,7 @@ class Grouped extends AbstractModifier
         $this->attributeSetRepository = $attributeSetRepository;
         $this->status = $status;
         $this->localeCurrency = $localeCurrency;
+        $this->nameHelper = $nameHelper;
         $this->uiComponentsConfig = array_replace_recursive($this->uiComponentsConfig, $uiComponentsConfig);
         $this->groupedProducts = $groupedProducts ?: ObjectManager::getInstance()->get(
             \Magento\GroupedProduct\Model\Product\Link\CollectionProvider\Grouped::class
@@ -196,7 +205,7 @@ class Grouped extends AbstractModifier
 
         return [
             'id' => $linkedProduct->getId(),
-            'name' => $linkedProduct->getName(),
+            'name' => $this->nameHelper->addUrlToName($linkedProduct),
             'sku' => $linkedProduct->getSku(),
             'price' => $currency->toCurrency(sprintf("%f", $linkedProduct->getPrice())),
             'qty' => $linkedProduct->getQty(),
@@ -567,7 +576,7 @@ class Grouped extends AbstractModifier
                     ],
                 ],
             ],
-            'name' => $this->getTextColumn('name', false, __('Name'), 30),
+            'name' => $this->getHtmlColumn('name', false, __('Name'), 30),
             'attribute_set' => $this->getTextColumn('attribute_set', false, __('Attribute Set'), 40),
             'status' => $this->getTextColumn('status', true, __('Status'), 50),
             'sku' => $this->getTextColumn('sku', false, __('SKU'), 60),
@@ -668,6 +677,38 @@ class Grouped extends AbstractModifier
                 ],
             ],
         ];
+        return $column;
+    }
+
+    /**
+     * Returns html column configuration for the dynamic grid
+     *
+     * @param string $dataScope
+     * @param bool $fit
+     * @param Phrase $label
+     * @param int $sortOrder
+     * @return array
+     */
+    protected function getHtmlColumn($dataScope, $fit, Phrase $label, $sortOrder) : array
+    {
+        $column = [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'componentType' => Form\Field::NAME,
+                        'formElement' => Form\Element\Input::NAME,
+                        'elementTmpl' => 'Magento_GroupedProduct/components/cell-html',
+                        'dataType' => Form\Element\DataType\Text::NAME,
+                        'dataScope' => $dataScope,
+                        'fit' => $fit,
+                        'label' => $label,
+                        'sortOrder' => $sortOrder,
+                        'labelVisible' => false,
+                    ],
+                ],
+            ],
+        ];
+
         return $column;
     }
 }

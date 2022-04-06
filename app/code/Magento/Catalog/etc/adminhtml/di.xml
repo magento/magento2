@@ -83,6 +83,16 @@
             <argument name="instanceName" xsi:type="string">\Magento\Catalog\Ui\DataProvider\Product\ProductCollection</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Related\AbstractDataProvider">
+        <arguments>
+            <argument name="modifiersPool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Name\Modifier\Pool</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductCustomOptionsDataProvider">
+        <arguments>
+            <argument name="modifiersPool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Name\Modifier\Pool</argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider">
         <arguments>
             <argument name="addFieldStrategies" xsi:type="array">
@@ -179,6 +189,24 @@
                 </item>
                 <item name="priceAttributes" xsi:type="array">
                     <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Modifier\PriceAttributes</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Name\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="attributes" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Modifier\Attributes</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+                <item name="priceAttributes" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Modifier\PriceAttributes</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+                <item name="addUrlToName" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Modifier\AddUrlToName</item>
                     <item name="sortOrder" xsi:type="number">10</item>
                 </item>
             </argument>

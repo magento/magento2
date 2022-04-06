@@ -8,6 +8,9 @@ namespace Magento\Bundle\Ui\DataProvider\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider;
 use Magento\Bundle\Helper\Data;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
+use Magento\Framework\App\ObjectManager;
 
 class BundleDataProvider extends ProductDataProvider
 {
@@ -17,6 +20,11 @@ class BundleDataProvider extends ProductDataProvider
     protected $dataHelper;
 
     /**
+     * @var PoolInterface
+     */
+    private $modifiersPool;
+
+    /**
      * Construct
      *
      * @param string $name
@@ -24,10 +32,11 @@ class BundleDataProvider extends ProductDataProvider
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
      * @param Data $dataHelper
-     * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
-     * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
+     * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
+     * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
+     * @param PoolInterface|null $modifiersPool
      */
     public function __construct(
         $name,
@@ -38,7 +47,8 @@ class BundleDataProvider extends ProductDataProvider
         array $meta = [],
         array $data = [],
         array $addFieldStrategies = [],
-        array $addFilterStrategies = []
+        array $addFilterStrategies = [],
+        PoolInterface $modifiersPool = null
     ) {
         parent::__construct(
             $name,
@@ -52,6 +62,7 @@ class BundleDataProvider extends ProductDataProvider
         );
 
         $this->dataHelper = $dataHelper;
+        $this->modifiersPool = $modifiersPool ?: ObjectManager::getInstance()->get(PoolInterface::class);
     }
 
     /**
@@ -74,9 +85,16 @@ class BundleDataProvider extends ProductDataProvider
         }
         $items = $this->getCollection()->toArray();
 
-        return [
+        $data = [
             'totalRecords' => $this->getCollection()->getSize(),
             'items' => array_values($items),
         ];
+
+        /** @var ModifierInterface $modifier */
+        foreach ($this->modifiersPool->getModifiersInstances() as $modifier) {
+            $data = $modifier->modifyData($data);
+        }
+
+        return $data;
     }
 }

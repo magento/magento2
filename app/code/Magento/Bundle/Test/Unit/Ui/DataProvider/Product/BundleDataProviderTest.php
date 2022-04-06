@@ -14,6 +14,8 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -47,6 +49,16 @@ class BundleDataProviderTest extends TestCase
     protected $dataHelperMock;
 
     /**
+     * @var PoolInterface|MockObject
+     */
+    private $modifiersPool;
+
+    /**
+     * @var ModifierInterface|MockObject
+     */
+    private $modifierMockOne;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -54,6 +66,8 @@ class BundleDataProviderTest extends TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->getMockForAbstractClass();
+        $this->modifiersPool = $this->getMockBuilder(PoolInterface::class)
             ->getMockForAbstractClass();
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
@@ -79,6 +93,15 @@ class BundleDataProviderTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getAllowedSelectionTypes'])
             ->getMock();
+        $this->modifierMockOne = $this->getMockBuilder(ModifierInterface::class)
+            ->setMethods(['modifyData'])
+            ->getMockForAbstractClass();
+        $this->modifierMockOne->expects($this->any())
+            ->method('modifyData')
+            ->willReturn($this->returnArgument(0));
+        $this->modifiersPool->expects($this->any())
+            ->method('getModifiersInstances')
+            ->willReturn([$this->modifierMockOne]);
     }
 
     /**
@@ -97,6 +120,7 @@ class BundleDataProviderTest extends TestCase
             'addFilterStrategies' => [],
             'meta' => [],
             'data' => [],
+            'modifiersPool' => $this->modifiersPool
         ]);
     }
 

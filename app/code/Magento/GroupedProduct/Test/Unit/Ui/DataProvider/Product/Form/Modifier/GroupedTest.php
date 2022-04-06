@@ -14,6 +14,7 @@ use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Catalog\Helper\Product\AddUrlToName as NameHelper;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
@@ -95,6 +96,11 @@ class GroupedTest extends AbstractModifierTest
      * @var ProductLinkInterfaceFactory|MockObject
      */
     private $productLinkFactoryMock;
+
+    /**
+     * @var NameHelper|MockObject
+     */
+    private $nameHelperMock;
 
     /**
      * @inheritdoc
@@ -211,6 +217,10 @@ class GroupedTest extends AbstractModifierTest
             ->method('get')
             ->willReturn($attributeSetMock);
 
+        $this->nameHelperMock = $this->createMock(NameHelper::class);
+        $this->nameHelperMock->method('addUrlToName')
+            ->willReturn(self::LINKED_PRODUCT_NAME);
+
         return $this->objectManager->getObject(Grouped::class, [
             'locator' => $this->locatorMock,
             'productLinkRepository' => $this->linkRepositoryMock,
@@ -220,6 +230,7 @@ class GroupedTest extends AbstractModifierTest
             'attributeSetRepository' => $this->attributeSetRepositoryMock,
             'groupedProducts' => $this->groupedProductsMock,
             'productLinkFactory' => $this->productLinkFactoryMock,
+            'nameHelper' => $this->nameHelperMock
         ]);
     }
 
@@ -270,7 +281,7 @@ class GroupedTest extends AbstractModifierTest
         $linkedProductMock->expects($this->once())
             ->method('getId')
             ->willReturn(self::LINKED_PRODUCT_ID);
-        $linkedProductMock->expects($this->once())
+        $linkedProductMock->expects($this->any())
             ->method('getName')
             ->willReturn(self::LINKED_PRODUCT_NAME);
         $linkedProductMock->expects($this->once())
