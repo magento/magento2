@@ -15,7 +15,7 @@ function init(config) {
         themes, root, staticDir, baseUrl, mapFile, host, port, files, requireJs;
 
     root         = config.root;
-    staticDir       = config.static;
+    staticDir    = config.static;
     port         = config.port;
     files        = config.files;
     themes       = config.themes;
@@ -69,7 +69,7 @@ function init(config) {
                  */
                 helpers: specs
             }
-        }
+        };
     });
 }
 

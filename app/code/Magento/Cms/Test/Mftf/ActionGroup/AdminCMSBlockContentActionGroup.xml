@@ -11,7 +11,7 @@
         <arguments>
             <argument name="image" type="entity" defaultValue="MagentoLogo"/>
         </arguments>
-        <click selector="{{TinyMCESection.InsertImage}}" stepKey="clickAddImageButton"/>
+        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickAddImageButton"/>
         <waitForElementVisible selector="{{MediaGallerySection.Browse}}" stepKey="waitForBrowseImage"/>
         <click  selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowseImage"/>
         <waitForElementVisible selector="{{MediaGallerySection.StorageRootArrow}}" stepKey="waitForAttacheFiles"/>

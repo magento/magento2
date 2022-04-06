@@ -17,4 +17,13 @@
         <data key="price">100.00</data>
         <requiredEntity type="custom_attribute_array">ApiProductMsrp</requiredEntity>
     </entity>
+    <entity name="SimpleProductMap1">
+        <data key="price">55.00</data>
+    </entity>
+    <entity name="SimpleProductMap2">
+        <data key="price">65.00</data>
+    </entity>
+    <entity name="SimpleProductMap3">
+        <data key="price">155.00</data>
+    </entity>
 </entities>

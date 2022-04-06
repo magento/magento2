@@ -291,7 +291,7 @@ class Escaper
      */
     public function encodeUrlParam($string)
     {
-        return $this->getEscaper()->escapeUrl($string);
+        return $this->getEscaper()->escapeUrl((string)$string);
     }
 
     /**
@@ -303,6 +303,12 @@ class Escaper
      */
     public function escapeJs($string)
     {
+        if (!is_string($string)) {
+            // In PHP > 8, preg_replace_callback throws an error if the 3rd param type is incorrect.
+            // This check emulates an old behavior.
+            $string = (string) $string;
+        }
+
         if ($string === '' || ctype_digit($string)) {
             return $string;
         }
@@ -330,7 +336,7 @@ class Escaper
      */
     public function escapeCss($string)
     {
-        return $this->getEscaper()->escapeCss($string);
+        return $this->getEscaper()->escapeCss((string)$string);
     }
 
     /**

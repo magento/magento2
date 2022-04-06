@@ -26,6 +26,9 @@
         </before>
         <after>
             <deleteData stepKey="deleteAttribute" createDataKey="createConfigProductAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex" after="deleteAttribute">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm">
             <argument name="productType" value="virtual"/>

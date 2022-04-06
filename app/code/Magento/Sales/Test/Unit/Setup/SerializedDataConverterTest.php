@@ -31,6 +31,9 @@ class SerializedDataConverterTest extends TestCase
      */
     private $serializedDataConverter;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -45,7 +48,10 @@ class SerializedDataConverterTest extends TestCase
         );
     }
 
-    public function testConvert()
+    /**
+     * @return void
+     */
+    public function testConvert(): void
     {
         $serializedData = 'serialized data';
         $jsonEncodedData = 'json encoded data';
@@ -69,7 +75,10 @@ class SerializedDataConverterTest extends TestCase
         );
     }
 
-    public function testConvertBundleAttributes()
+    /**
+     * @return void
+     */
+    public function testConvertBundleAttributes(): void
     {
         $serializedData = 'serialized data';
         $serializedBundleAttributes = 'serialized bundle attributes';
@@ -90,29 +99,24 @@ class SerializedDataConverterTest extends TestCase
             ],
             'bundle_selection_attributes' => $jsonEncodedBundleAttributes
         ];
-        $this->serializeMock->expects($this->at(0))
+        $this->serializeMock
             ->method('unserialize')
-            ->with($serializedData)
-            ->willReturn($data);
-        $this->serializeMock->expects($this->at(1))
-            ->method('unserialize')
-            ->with($serializedBundleAttributes)
-            ->willReturn($bundleAttributes);
-        $this->jsonMock->expects($this->at(0))
+            ->withConsecutive([$serializedData], [$serializedBundleAttributes])
+            ->willReturnOnConsecutiveCalls($data, $bundleAttributes);
+        $this->jsonMock
             ->method('serialize')
-            ->with($bundleAttributes)
-            ->willReturn($jsonEncodedBundleAttributes);
-        $this->jsonMock->expects($this->at(1))
-            ->method('serialize')
-            ->with($dataWithJsonEncodedBundleAttributes)
-            ->willReturn($jsonEncodedData);
+            ->withConsecutive([$bundleAttributes], [$dataWithJsonEncodedBundleAttributes])
+            ->willReturnOnConsecutiveCalls($jsonEncodedBundleAttributes, $jsonEncodedData);
         $this->assertEquals(
             $jsonEncodedData,
             $this->serializedDataConverter->convert($serializedData)
         );
     }
 
-    public function testConvertCustomOptionsTypeFile()
+    /**
+     * @return void
+     */
+    public function testConvertCustomOptionsTypeFile(): void
     {
         $serializedData = 'serialized data';
         $serializedOptionValue = 'serialized option value';
@@ -151,29 +155,24 @@ class SerializedDataConverterTest extends TestCase
                 ]
             ]
         ];
-        $this->serializeMock->expects($this->at(0))
+        $this->serializeMock
             ->method('unserialize')
-            ->with($serializedData)
-            ->willReturn($data);
-        $this->serializeMock->expects($this->at(1))
-            ->method('unserialize')
-            ->with($serializedOptionValue)
-            ->willReturn($optionValue);
-        $this->jsonMock->expects($this->at(0))
+            ->withConsecutive([$serializedData], [$serializedOptionValue])
+            ->willReturnOnConsecutiveCalls($data, $optionValue);
+        $this->jsonMock
             ->method('serialize')
-            ->with($optionValue)
-            ->willReturn($jsonEncodedOptionValue);
-        $this->jsonMock->expects($this->at(1))
-            ->method('serialize')
-            ->with($dataWithJsonEncodedOptionValue)
-            ->willReturn($jsonEncodedData);
+            ->withConsecutive([$optionValue], [$dataWithJsonEncodedOptionValue])
+            ->willReturnOnConsecutiveCalls($jsonEncodedOptionValue, $jsonEncodedData);
         $this->assertEquals(
             $jsonEncodedData,
             $this->serializedDataConverter->convert($serializedData)
         );
     }
 
-    public function testConvertCorruptedData()
+    /**
+     * @return void
+     */
+    public function testConvertCorruptedData(): void
     {
         $this->expectException('Magento\Framework\DB\DataConverter\DataConversionException');
         $this->serializeMock->expects($this->once())
@@ -186,7 +185,10 @@ class SerializedDataConverterTest extends TestCase
         $this->serializedDataConverter->convert('serialized data');
     }
 
-    public function testConvertSkipConversion()
+    /**
+     * @return void
+     */
+    public function testConvertSkipConversion(): void
     {
         $serialized = '[]';
         $this->serializeMock->expects($this->never())

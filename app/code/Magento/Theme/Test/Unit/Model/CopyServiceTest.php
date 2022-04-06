@@ -25,6 +25,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class CopyServiceTest extends TestCase
 {
@@ -99,7 +101,17 @@ class CopyServiceTest extends TestCase
     protected $dirWriteMock;
 
     /**
-     * @return void
+     * @var array
+     */
+    private $updateFactoryReturn = [];
+
+    /**
+     * @var int
+     */
+    private $updateFactoryCalls = 0;
+
+    /**
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
@@ -110,7 +122,7 @@ class CopyServiceTest extends TestCase
                 'file_path' => 'fixture_file_path_one',
                 'file_type' => 'fixture_file_type_one',
                 'content' => 'fixture_content_one',
-                'sort_order' => 10,
+                'sort_order' => 10
             ]
         );
         $sourceFileTwo = $this->createPartialMock(File::class, ['__wakeup', 'delete']);
@@ -119,7 +131,7 @@ class CopyServiceTest extends TestCase
                 'file_path' => 'fixture_file_path_two',
                 'file_type' => 'fixture_file_type_two',
                 'content' => 'fixture_content_two',
-                'sort_order' => 20,
+                'sort_order' => 20
             ]
         );
         $this->sourceFiles = [$sourceFileOne, $sourceFileTwo];
@@ -130,7 +142,7 @@ class CopyServiceTest extends TestCase
 
         $this->targetFiles = [
             $this->createPartialMock(File::class, ['__wakeup', 'delete']),
-            $this->createPartialMock(File::class, ['__wakeup', 'delete']),
+            $this->createPartialMock(File::class, ['__wakeup', 'delete'])
         ];
         $this->targetTheme = $this->createPartialMock(
             Theme::class,
@@ -167,7 +179,15 @@ class CopyServiceTest extends TestCase
             Update::class,
             ['__wakeup', 'getCollection']
         );
-        $this->updateFactory->expects($this->at(0))->method('create')->willReturn($this->update);
+        $this->updateFactoryReturn = [$this->update];
+        $classInstance = $this;
+        $this->updateFactory
+            ->method('create')
+            ->will(
+                $this->returnCallback(function () use ($classInstance) {
+                    return $classInstance->updateFactoryReturn[$classInstance->updateFactoryCalls++];
+                })
+            );
         $this->updateCollection = $this->createPartialMock(
             Collection::class,
             ['addThemeFilter', 'delete', 'getIterator']
@@ -200,6 +220,9 @@ class CopyServiceTest extends TestCase
         );
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown(): void
     {
         $this->object = null;
@@ -216,9 +239,10 @@ class CopyServiceTest extends TestCase
     }
 
     /**
+     * @return void
      * cover \Magento\Theme\Model\CopyService::_copyLayoutCustomization
      */
-    public function testCopyLayoutUpdates()
+    public function testCopyLayoutUpdates(): void
     {
         $customization = $this->createPartialMock(
             Customization::class,
@@ -256,15 +280,29 @@ class CopyServiceTest extends TestCase
             ->getMock();
         $targetLinkTwo->setData(['id' => 2, 'layout_update_id' => 2]);
 
-        $targetLinkOne->expects($this->at(0))->method('setThemeId')->with(123);
-        $targetLinkOne->expects($this->at(1))->method('setLayoutUpdateId')->with(1);
-        $targetLinkOne->expects($this->at(2))->method('setId')->with(null);
-        $targetLinkOne->expects($this->at(3))->method('save');
+        $targetLinkOne
+            ->method('setThemeId')
+            ->withConsecutive([123]);
+        $targetLinkOne
+            ->method('setLayoutUpdateId')
+            ->withConsecutive([1]);
+        $targetLinkOne
+            ->method('setId')
+            ->withConsecutive([null]);
+        $targetLinkOne
+            ->method('save');
 
-        $targetLinkTwo->expects($this->at(0))->method('setThemeId')->with(123);
-        $targetLinkTwo->expects($this->at(1))->method('setLayoutUpdateId')->with(2);
-        $targetLinkTwo->expects($this->at(2))->method('setId')->with(null);
-        $targetLinkTwo->expects($this->at(3))->method('save');
+        $targetLinkTwo
+            ->method('setThemeId')
+            ->withConsecutive([123]);
+        $targetLinkTwo
+            ->method('setLayoutUpdateId')
+            ->withConsecutive([2]);
+        $targetLinkTwo
+            ->method('setId')
+            ->withConsecutive([null]);
+        $targetLinkTwo
+            ->method('save');
 
         $linkReturnValues = $this->onConsecutiveCalls(new \ArrayIterator([$targetLinkOne, $targetLinkTwo]));
         $this->linkCollection->expects($this->any())->method('getIterator')->will($linkReturnValues);
@@ -279,17 +317,24 @@ class CopyServiceTest extends TestCase
             ['__wakeup', 'setId', 'load', 'save']
         );
         $targetUpdateTwo->setData(['id' => 2]);
-        $updateReturnValues = $this->onConsecutiveCalls($this->update, $targetUpdateOne, $targetUpdateTwo);
-        $this->updateFactory->expects($this->any())->method('create')->will($updateReturnValues);
+
+        $this->updateFactoryReturn = array_merge(
+            $this->updateFactoryReturn,
+            [
+                $targetUpdateOne,
+                $targetUpdateTwo
+            ]
+        );
 
         $this->object->copy($this->sourceTheme, $this->targetTheme);
     }
 
     /**
+     * @return void
      * cover \Magento\Theme\Model\CopyService::_copyDatabaseCustomization
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testCopyDatabaseCustomization()
+    public function testCopyDatabaseCustomization(): void
     {
         $sourceCustom = $this->createPartialMock(
             Customization::class,
@@ -349,34 +394,33 @@ class CopyServiceTest extends TestCase
 
         $newFileOne = $this->createPartialMock(File::class, ['__wakeup', 'setData', 'save']);
         $newFileTwo = $this->createPartialMock(File::class, ['__wakeup', 'setData', 'save']);
-        $newFileOne->expects(
-            $this->at(0)
-        )->method(
-            'setData'
-        )->with(
-            [
-                'theme_id' => 123,
-                'file_path' => 'fixture_file_path_one',
-                'file_type' => 'fixture_file_type_one',
-                'content' => 'fixture_content_one',
-                'sort_order' => 10,
-            ]
-        );
-        $newFileOne->expects($this->at(1))->method('save');
-        $newFileTwo->expects(
-            $this->at(0)
-        )->method(
-            'setData'
-        )->with(
-            [
-                'theme_id' => 123,
-                'file_path' => 'fixture_file_path_two',
-                'file_type' => 'fixture_file_type_two',
-                'content' => 'fixture_content_two',
-                'sort_order' => 20,
-            ]
-        );
-        $newFileTwo->expects($this->at(1))->method('save');
+
+        $newFileOne
+            ->method('setData')
+            ->with(
+                [
+                    'theme_id' => 123,
+                    'file_path' => 'fixture_file_path_one',
+                    'file_type' => 'fixture_file_type_one',
+                    'content' => 'fixture_content_one',
+                    'sort_order' => 10
+                ]
+            );
+        $newFileOne->method('save');
+
+        $newFileTwo
+            ->method('setData')
+            ->with(
+                [
+                    'theme_id' => 123,
+                    'file_path' => 'fixture_file_path_two',
+                    'file_type' => 'fixture_file_type_two',
+                    'content' => 'fixture_content_two',
+                    'sort_order' => 20
+                ]
+            );
+        $newFileTwo->method('save');
+
         $this->fileFactory->expects(
             $this->any()
         )->method(
@@ -391,11 +435,11 @@ class CopyServiceTest extends TestCase
     }
 
     /**
+     * @return void
      * cover \Magento\Theme\Model\CopyService::_copyFilesystemCustomization
-     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testCopyFilesystemCustomization()
+    public function testCopyFilesystemCustomization(): void
     {
         $customization = $this->createPartialMock(
             Customization::class,
@@ -432,21 +476,9 @@ class CopyServiceTest extends TestCase
             new \ArrayIterator([])
         );
 
-        $this->customizationPath->expects(
-            $this->at(0)
-        )->method(
-            'getCustomizationPath'
-        )->willReturn(
-            'source/path'
-        );
-
-        $this->customizationPath->expects(
-            $this->at(1)
-        )->method(
-            'getCustomizationPath'
-        )->willReturn(
-            'target/path'
-        );
+        $this->customizationPath
+            ->method('getCustomizationPath')
+            ->willReturnOnConsecutiveCalls('source/path', 'target/path');
 
         $this->dirWriteMock->expects(
             $this->any()
@@ -474,7 +506,7 @@ class CopyServiceTest extends TestCase
             [
                 ['target/path', ['target/path/subdir']],
                 ['source/path', ['source/path/subdir']],
-                ['source/path/subdir', ['source/path/subdir/file_one.jpg', 'source/path/subdir/file_two.png']],
+                ['source/path/subdir', ['source/path/subdir/file_one.jpg', 'source/path/subdir/file_two.png']]
             ]
         );
 

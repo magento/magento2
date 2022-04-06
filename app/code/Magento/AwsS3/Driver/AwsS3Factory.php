@@ -116,6 +116,10 @@ class AwsS3Factory implements DriverFactoryInterface
             $config['http_handler'] = $this->objectManager->create($config['http_handler'])($config);
         }
 
+        if (!empty($config['path_style'])) {
+            $config['use_path_style_endpoint'] = boolval($config['path_style']);
+        }
+
         $client = new S3Client($config);
         $adapter = new AwsS3V3Adapter($client, $config['bucket'], $prefix);
         $cache = $this->cacheInterfaceFactory->create(

@@ -3,10 +3,13 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/module-eav": "*",
         "magento/framework": "*",
-        "magento/module-webapi": "*"
+        "magento/module-webapi": "*",
+        "magento/module-new-relic-reporting": "*",
+        "magento/module-authorization": "*",
+        "webonyx/graphql-php": "~14.11.5"
     },
     "suggest": {
         "magento/module-graph-ql-cache": "*"

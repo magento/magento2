@@ -24,12 +24,14 @@
                     <arguments>
                         <argument name="customerAddressFormatter" xsi:type="object">Magento\Sales\ViewModel\Customer\AddressFormatter</argument>
                         <argument name="customerAddressCollection" xsi:type="object">Magento\Customer\Model\ResourceModel\Address\Collection</argument>
+                        <argument name="customerAddressCollectionAttributeFilter" xsi:type="object">Magento\Sales\ViewModel\Customer\Address\AddressAttributeFilter</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Sales\Block\Adminhtml\Order\Create\Billing\Address" template="Magento_Sales::order/create/form/address.phtml" name="billing_address">
                     <arguments>
                         <argument name="customerAddressFormatter" xsi:type="object">Magento\Sales\ViewModel\Customer\AddressFormatter</argument>
                         <argument name="customerAddressCollection" xsi:type="object">Magento\Customer\Model\ResourceModel\Address\Collection</argument>
+                        <argument name="customerAddressCollectionAttributeFilter" xsi:type="object">Magento\Sales\ViewModel\Customer\Address\AddressAttributeFilter</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Method" template="Magento_Sales::order/create/abstract.phtml" name="shipping_method">

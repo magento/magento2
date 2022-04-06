@@ -16,11 +16,11 @@
          css="'_with-tooltip': $data.tooltip, '_with-reset': $data.showFallbackReset && $data.isDifferedFromDefault">
             <div class="type-selector-input-container">
                 <!--render link types select-->
-                <render args="typeSelectorTemplate"/>
+                <render args="typeSelectorTemplate"></render>
 
                 <!--display field to insert link value based on link type-->
                 <div ko-scope="getLinkedElementName()" class="url-input-element-linked-element">
-                    <render/>
+                    <render></render>
                     <label class="admin__field-error" visible="error" attr="for: uid" text="error"></label>
                 </div>
             </div>

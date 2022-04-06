@@ -29,7 +29,7 @@
                 <label class="admin__control-support-text" data-bind="text: $t('per page')"></label>
                 <div class="admin__data-grid-pager">
                     <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
-                    <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">
+                    <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage"/>
                     <label class="admin__control-support-text" data-bind="attr: {for: ko.uid}, text: 'of ' + pages()"></label>
                     <button class="action-next" type="button" data-bind="attr: {title: $t('Next Page')}, click: nextPage, disable: isLast()"></button>
                 </div>
@@ -88,6 +88,6 @@
                 <span translate="addButtonLabel"></span>
             </button>
         </div>
-        <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
+        <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"></render>
     </div>
 </div>
