@@ -37,8 +37,8 @@ class LegacyFixtureTest extends TestCase
             0,
             $legacyFixtureFiles,
             "The format used for creating fixtures is deprecated. Please use parametrized fixture format.\n"
-            . " For details please look at $docUrl.\r\n" .
-            "The following fixture files were added:\r\n"
+            . "For details please look at $docUrl.\r\n"
+            . "The following fixture files were added:\r\n"
             . implode(PHP_EOL, $legacyFixtureFiles)
         );
     }
