@@ -10,7 +10,7 @@ namespace Magento\Framework\Mail;
 use Magento\Framework\Mail\Exception\InvalidArgumentException;
 
 /**
- * Class AddressConverter
+ * Convert and filter email addresses
  */
 class AddressConverter
 {
