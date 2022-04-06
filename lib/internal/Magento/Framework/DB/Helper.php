@@ -1,7 +1,5 @@
 <?php
 /**
- * DB helper class for MySql Magento DB Adapter
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -158,14 +156,8 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
     {
         if ($limitCount !== null) {
             $limitCount = (int)$limitCount;
-            if ($limitCount <= 0) {
-                //throw new \Exception("LIMIT argument count={$limitCount} is not valid");
-            }
 
             $limitOffset = (int)$limitOffset;
-            if ($limitOffset < 0) {
-                //throw new \Exception("LIMIT argument offset={$limitOffset} is not valid");
-            }
 
             if ($limitOffset + $limitCount != $limitOffset + 1) {
                 $columns = [];
@@ -275,7 +267,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      */
     public function getDateDiff($startDate, $endDate)
     {
-        $dateDiff = '(TO_DAYS(' . $endDate . ') - TO_DAYS(' . $startDate . '))';
+        $dateDiff = "TIMESTAMPDIFF(DAY, {$startDate}, {$endDate})";
         return new \Zend_Db_Expr($dateDiff);
     }
 
