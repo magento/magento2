@@ -185,6 +185,7 @@
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProductBySku">
             <argument name="sku" value="$$createExportImportConfigurableProduct.sku$$"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
         <!-- Go to System > Import. Set import settings: Entity Type > Product, Import Behavior > Add/Update,
              Select File to Import > previously exported file and press "Check Data" -->

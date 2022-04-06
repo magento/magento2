@@ -83,6 +83,7 @@
                 <requiredEntity createDataKey="createSecondConfigProduct"/>
                 <requiredEntity createDataKey="createSecondConfigChildProduct"/>
             </createData>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <!-- Admin logout -->
