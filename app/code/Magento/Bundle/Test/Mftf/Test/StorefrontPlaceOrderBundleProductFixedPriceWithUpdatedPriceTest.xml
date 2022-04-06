@@ -100,6 +100,8 @@
         <see selector="{{StorefrontBundledSection.nthItemOptionsTitle('2')}}" userInput="$$createSecondBundleOption.title$$" stepKey="seeOption2LabelInShoppingCart"/>
         <see selector="{{StorefrontBundledSection.nthItemOptionsValue('2')}}" userInput="1 x $$createSecondProduct.name$$ $5.00" stepKey="seeOption2ValueInShoppingCart"/>
         <!--Verify total-->
+        <waitForPageLoad stepKey="waitForCartSummary"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForShoppingCartTotal"/>
         <grabTextFrom selector="{{CheckoutCartSummarySection.total}}" stepKey="grabShoppingCartTotal"/>
         <assertEquals stepKey="verifyGrandTotalOnShoppingCartPage">
             <actualResult type="variable">grabShoppingCartTotal</actualResult>
