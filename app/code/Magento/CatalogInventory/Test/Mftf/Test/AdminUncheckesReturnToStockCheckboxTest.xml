@@ -45,13 +45,13 @@
         <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPageToSearchUpdatedSimpleProduct"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="searchForProduct">
-            <argument name="product" value="_defaultProduct"/>
+            <argument name="product" value="SimpleProductQty100"/>
         </actionGroup>
 
         <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeQuantity">
             <argument name="row" value="1"/>
             <argument name="column" value="Quantity"/>
-            <argument name="value" value="${{_defaultProduct.quantity}}"/>
+            <argument name="value" value="99"/>
         </actionGroup>
 
         <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
