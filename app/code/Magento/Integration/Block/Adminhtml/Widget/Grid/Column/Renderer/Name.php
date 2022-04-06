@@ -36,6 +36,6 @@ class Name extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      */
     protected function isUrlSecure($url)
     {
-        return (strpos($url, 'http:') !== 0);
+        return (is_string($url) && strpos($url, 'http:') !== 0);
     }
 }

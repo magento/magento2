@@ -64,7 +64,7 @@ class ExtractDataFromCategoryTree
                 if (empty($tree)) {
                     $tree = $currentLevelTree;
                 }
-                $tree = $this->mergeCategoriesTrees($currentLevelTree, $tree);
+                $tree = $this->mergeCategoriesTrees($tree, $currentLevelTree);
             }
         }
 
@@ -154,9 +154,14 @@ class ExtractDataFromCategoryTree
         foreach ($tree as &$node) {
             if ($node['children']) {
                 uasort($node['children'], function ($element1, $element2) {
-                    return $element1['position'] > $element2['position'];
+                    return ($element1['position'] <=> $element2['position']);
                 });
                 $node['children'] = $this->sortTree($node['children']);
+                if (isset($node['children_count'])) {
+                    $node['children_count'] = count($node['children']);
+                }
+            } elseif (isset($node['children_count'])) {
+                $node['children_count'] = 0;
             }
         }
 

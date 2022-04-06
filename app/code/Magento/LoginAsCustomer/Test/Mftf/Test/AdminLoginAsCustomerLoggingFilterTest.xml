@@ -17,6 +17,7 @@
             <severity value="AVERAGE"/>
             <group value="login_as_customer"/>
             <testCaseId value="MC-38920"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"

@@ -145,7 +145,7 @@ define([
 
             spyOn(instance.data('mage-multiselect2'), '_createSelectedOption').and.returnValue(true);
 
-            checkbox.click();
+            checkbox.trigger('click');
 
             expect(instance.data('mage-multiselect2')._createSelectedOption).toHaveBeenCalledWith({
                 value: '1',

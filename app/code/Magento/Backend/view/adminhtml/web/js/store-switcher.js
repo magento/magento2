@@ -79,7 +79,7 @@ define([
                         }
                     });
 
-                    $('#store-change-button').click();
+                    $('#store-change-button').trigger('click');
                 }
             }
 

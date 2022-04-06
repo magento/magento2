@@ -43,6 +43,9 @@ class ShipmentSenderTest extends AbstractSenderTest
      */
     protected $shipmentResourceMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->stepMockSetup();
@@ -86,21 +89,27 @@ class ShipmentSenderTest extends AbstractSenderTest
             $this->paymentHelper,
             $this->shipmentResourceMock,
             $this->globalConfig,
-            $this->eventManagerMock
+            $this->eventManagerMock,
+            $this->appEmulator
         );
     }
 
     /**
      * @param int $configValue
-     * @param bool|null $forceSyncMode
-     * @param bool|null $customerNoteNotify
+     * @param int|null $forceSyncMode
+     * @param int|null $customerNoteNotify
      * @param bool|null $emailSendingResult
-     * @dataProvider sendDataProvider
+     *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @dataProvider sendDataProvider
      */
-    public function testSend($configValue, $forceSyncMode, $customerNoteNotify, $emailSendingResult)
-    {
+    public function testSend(
+        int $configValue,
+        ?int $forceSyncMode,
+        ?int $customerNoteNotify,
+        ?bool $emailSendingResult
+    ): void {
         $comment = 'comment_test';
         $address = 'address_test';
         $configPath = 'sales_email/general/async_sending';
@@ -180,6 +189,8 @@ class ShipmentSenderTest extends AbstractSenderTest
                     ]
                 );
 
+            $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+            $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
             $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
@@ -218,12 +229,12 @@ class ShipmentSenderTest extends AbstractSenderTest
                 );
             }
         } else {
-            $this->shipmentResourceMock->expects($this->at(0))
+            $this->shipmentResourceMock
                 ->method('saveAttribute')
-                ->with($this->shipmentMock, 'email_sent');
-            $this->shipmentResourceMock->expects($this->at(1))
-                ->method('saveAttribute')
-                ->with($this->shipmentMock, 'send_email');
+                ->withConsecutive(
+                    [$this->shipmentMock, 'email_sent'],
+                    [$this->shipmentMock, 'send_email']
+                );
 
             $this->assertFalse(
                 $this->sender->send($this->shipmentMock)
@@ -234,7 +245,7 @@ class ShipmentSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public function sendDataProvider()
+    public function sendDataProvider(): array
     {
         return [
             [0, 0, 1, true],
@@ -251,10 +262,15 @@ class ShipmentSenderTest extends AbstractSenderTest
      * @param bool $isVirtualOrder
      * @param int $formatCallCount
      * @param string|null $expectedShippingAddress
+     *
+     * @return void
      * @dataProvider sendVirtualOrderDataProvider
      */
-    public function testSendVirtualOrder($isVirtualOrder, $formatCallCount, $expectedShippingAddress)
-    {
+    public function testSendVirtualOrder(
+        bool $isVirtualOrder,
+        int $formatCallCount,
+        ?string $expectedShippingAddress
+    ): void {
         $address = 'address_test';
         $this->orderMock->setData(OrderInterface::IS_VIRTUAL, $isVirtualOrder);
         $customerName = 'Test Customer';
@@ -322,6 +338,8 @@ class ShipmentSenderTest extends AbstractSenderTest
                 ]
             );
 
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->identityContainerMock->expects($this->exactly(2))
             ->method('isEnabled')
             ->willReturn(false);
@@ -335,7 +353,7 @@ class ShipmentSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public function sendVirtualOrderDataProvider()
+    public function sendVirtualOrderDataProvider(): array
     {
         return [
             [true, 1, null],

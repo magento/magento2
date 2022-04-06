@@ -11,7 +11,7 @@
     </div>
 
     <div class="admin__field-complex-elements">
-        <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
+        <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"></render>
         <button attr="{disabled: disabled}"
                 class="action-secondary"
                 type="button"
@@ -37,7 +37,7 @@
         <div class="admin__control-table-pagination" visible="!!element.getRecordCount()">
             <div class="admin__data-grid-pager">
                 <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
-                <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">
+                <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage"/>
                 <label class="admin__control-support-text" data-bind="attr: {for: ko.uid}, text: 'of ' + pages()"></label>
                 <button class="action-next" type="button" data-bind="attr: {title: $t('Next Page')}, click: nextPage, disable: isLast()"></button>
             </div>
@@ -86,7 +86,7 @@
     <div class="message message-notice notice">
         <span
             translate="'Search strings are either normal strings or regular expressions (PCRE). They are matched in the same order as entered.'"></span>
-        <br>
+        <br/>
         <span
             translate="'Examples'"></span>:
         <span class="code-sample">Firefox: /^mozilla/i</span>

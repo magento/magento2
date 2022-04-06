@@ -32,18 +32,29 @@ use PHPUnit\Framework\TestCase;
  */
 class SubtotalTest extends TestCase
 {
-    /** @var ObjectManager */
+    /**
+     * @var ObjectManager
+     */
     protected $objectManager;
 
-    /**  @var Subtotal */
+    /**
+     * @var Subtotal
+     */
     protected $subtotalModel;
 
-    /** @var MockObject */
+    /**
+     * @var MockObject
+     */
     protected $stockItemMock;
 
-    /** @var MockObject */
+    /**
+     * @var MockObject
+     */
     protected $stockRegistry;
 
+    /**
+     * @inheriDoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -65,7 +76,7 @@ class SubtotalTest extends TestCase
     /**
      * @return array
      */
-    public function collectDataProvider()
+    public function collectDataProvider(): array
     {
         return [
             [12, 10, false, 12, 10],
@@ -77,18 +88,23 @@ class SubtotalTest extends TestCase
     }
 
     /**
-     * @dataProvider collectDataProvider
-     *
      * @param int $price
      * @param int $originalPrice
      * @param bool $itemHasParent
-     * @param int $expectedPrice
-     * @param int $expectedOriginalPrice
+     * @param int|null $expectedPrice
+     * @param int|null $expectedOriginalPrice
      *
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @dataProvider collectDataProvider
      */
-    public function testCollect($price, $originalPrice, $itemHasParent, $expectedPrice, $expectedOriginalPrice)
-    {
+    public function testCollect(
+        int $price,
+        int $originalPrice,
+        bool $itemHasParent,
+        ?int $expectedPrice,
+        ?int $expectedOriginalPrice
+    ): void {
         $this->stockRegistry->expects($this->any())->method('getStockItem')->willReturn($this->stockItemMock);
 
         $priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)->getMock();
@@ -101,7 +117,7 @@ class SubtotalTest extends TestCase
             Item::class,
             [
                 'stockRegistry' => $this->stockRegistry,
-                'priceCurrency' => $priceCurrency,
+                'priceCurrency' => $priceCurrency
             ]
         );
         /** @var Address|MockObject $address */
@@ -125,7 +141,7 @@ class SubtotalTest extends TestCase
         $product->expects($this->any())->method('getStore')->willReturn($store);
         $product->expects($this->any())->method('isVisibleInCatalog')->will($this->returnValue(true));
         $extensionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->setMethods(['getStockItem'])
+            ->addMethods(['getStockItem'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $extensionAttribute->expects($this->atLeastOnce())
@@ -151,7 +167,9 @@ class SubtotalTest extends TestCase
 
         $shipping = $this->createMock(ShippingInterface::class);
         $shipping->expects($this->exactly(2))->method('getAddress')->willReturn($address);
-        $address->expects($this->at(0))->method('setTotalQty')->with(0);
+        $address
+            ->method('setTotalQty')
+            ->with(0);
         $address->expects($this->any())->method('getTotalQty')->willReturn(0);
         $shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
         $shippingAssignmentMock->expects($this->exactly(2))->method('getShipping')->willReturn($shipping);
@@ -172,7 +190,10 @@ class SubtotalTest extends TestCase
         $this->assertEquals($convertedPrice, $quoteItem->getConvertedPrice());
     }
 
-    public function testFetch()
+    /**
+     * @return void
+     */
+    public function testFetch(): void
     {
         $expectedResult = [
             'code' => null,
@@ -193,8 +214,10 @@ class SubtotalTest extends TestCase
 
     /**
      * Test that invalid items are not collected
+     *
+     * @return void
      */
-    public function testCollectWithInvalidItems()
+    public function testCollectWithInvalidItems(): void
     {
         $addressItemId = 38203;
         $addressQuoteItemId = 7643;
@@ -202,7 +225,7 @@ class SubtotalTest extends TestCase
         $quote = $this->createPartialMock(
             Quote::class,
             [
-                'getItemsCollection',
+                'getItemsCollection'
             ]
         );
         $quote->setData(

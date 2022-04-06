@@ -34,7 +34,7 @@ class TextTest extends TestCase
     protected $localeFormatMock;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -49,9 +49,9 @@ class TextTest extends TestCase
                     [
                         'label' => 'label 1.1',
                         'name' => 'name 1.1',
-                        'disabled' => false,
-                    ],
-                ],
+                        'disabled' => false
+                    ]
+                ]
             ],
             [
                 'label' => 'group label 2',
@@ -59,10 +59,10 @@ class TextTest extends TestCase
                     [
                         'label' => 'label 2.2',
                         'name' => 'name 2.2',
-                        'disabled' => true,
-                    ],
+                        'disabled' => true
+                    ]
                 ]
-            ],
+            ]
         ];
         $configMock->expects($this->once())->method('getAll')->willReturn($config);
         $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', 'getMaxCharacters'];
@@ -77,7 +77,7 @@ class TextTest extends TestCase
     /**
      * @return void
      */
-    public function testIsValidSuccess()
+    public function testIsValidSuccess(): void
     {
         $this->valueMock->expects($this->once())->method('getTitle')->willReturn('option_title');
         $this->valueMock->expects($this->exactly(2))->method('getType')->willReturn('name 1.1');
@@ -97,7 +97,7 @@ class TextTest extends TestCase
     /**
      * @return void
      */
-    public function testIsValidWithNegativeMaxCharacters()
+    public function testIsValidWithNegativeMaxCharacters(): void
     {
         $this->valueMock->expects($this->once())->method('getTitle')->willReturn('option_title');
         $this->valueMock->expects($this->exactly(2))->method('getType')->willReturn('name 1.1');
@@ -106,15 +106,10 @@ class TextTest extends TestCase
         $this->valueMock->method('getPrice')
             ->willReturn(10);
         $this->valueMock->expects($this->once())->method('getMaxCharacters')->willReturn(-10);
-        $this->localeFormatMock->expects($this->at(0))
-            ->method('getNumber')
-            ->with(10)
-            ->willReturn(10);
         $this->localeFormatMock
-            ->expects($this->at(1))
             ->method('getNumber')
-            ->with(-10)
-            ->willReturn(-10);
+            ->withConsecutive([10], [-10])
+            ->willReturnOnConsecutiveCalls(10, -10);
         $messages = [
             'option values' => 'Invalid option value',
         ];

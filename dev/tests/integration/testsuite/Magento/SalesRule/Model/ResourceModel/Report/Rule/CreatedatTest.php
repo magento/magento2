@@ -58,8 +58,9 @@ class CreatedatTest extends \PHPUnit\Framework\TestCase
     private function getTotalAmount(\Magento\Sales\Model\Order $order)
     {
         return (
-            $order->getBaseSubtotal() - $order->getBaseSubtotalCanceled()
-            - (abs($order->getBaseDiscountAmount()) - abs($order->getBaseDiscountCanceled()))
+            ($order->getBaseSubtotal() - $order->getBaseSubtotalCanceled()
+            + ($order->getBaseShippingAmount() - $order->getBaseShippingCanceled()))
+            - (abs((float) $order->getBaseDiscountAmount()) - abs((float) $order->getBaseDiscountCanceled()))
             + ($order->getBaseTaxAmount() - $order->getBaseTaxCanceled())
         ) * $order->getBaseToGlobalRate();
     }
@@ -73,8 +74,9 @@ class CreatedatTest extends \PHPUnit\Framework\TestCase
     private function getTotalAmountActual(\Magento\Sales\Model\Order $order)
     {
         return (
-            $order->getBaseSubtotalInvoiced() - $order->getSubtotalRefunded()
-            - abs($order->getBaseDiscountInvoiced()) - abs($order->getBaseDiscountRefunded())
+            ($order->getBaseSubtotalInvoiced() - $order->getSubtotalRefunded()
+            + ($order->getBaseShippingInvoiced() - $order->getBaseShippingRefunded()))
+            - abs((float) $order->getBaseDiscountInvoiced()) - abs((float) $order->getBaseDiscountRefunded())
             + $order->getBaseTaxInvoiced() - $order->getBaseTaxRefunded()
         ) * $order->getBaseToGlobalRate();
     }

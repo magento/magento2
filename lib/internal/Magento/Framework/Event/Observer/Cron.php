@@ -27,7 +27,7 @@ class Cron extends \Magento\Framework\Event\Observer
      */
     public function isValidFor(\Magento\Framework\Event $event)
     {
-        $e = preg_split('#\s+#', $this->getCronExpr(), null, PREG_SPLIT_NO_EMPTY);
+        $e = preg_split('#\s+#', $this->getCronExpr(), -1, PREG_SPLIT_NO_EMPTY);
         if (count($e) !== 5) {
             return false;
         }

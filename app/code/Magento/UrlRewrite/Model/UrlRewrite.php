@@ -36,6 +36,9 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
  * @method UrlRewrite setRedirectType($value)
  * @method UrlRewrite setStoreId($value)
  * @method UrlRewrite setDescription($value)
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class UrlRewrite extends AbstractModel
 {
@@ -89,8 +92,7 @@ class UrlRewrite extends AbstractModel
         EventManager $eventManager = null,
         UrlFinderInterface $urlFinder = null,
         array $entityToCacheTagMap = []
-    )
-    {
+    ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(EventManager::class);
@@ -114,7 +116,6 @@ class UrlRewrite extends AbstractModel
      * Get metadata
      *
      * @return array
-     * @api
      */
     public function getMetadata()
     {
@@ -152,8 +153,7 @@ class UrlRewrite extends AbstractModel
             ]
         );
 
-        while (
-            $urlRewriteTarget &&
+        while ($urlRewriteTarget &&
             $urlRewriteTarget->getTargetPath() !== $urlRewriteTarget->getRequestPath() &&
             $urlRewriteTarget->getRedirectType() > 0
         ) {
@@ -191,7 +191,10 @@ class UrlRewrite extends AbstractModel
                     );
 
                     if ($origUrlRewrite) {
-                        $this->cleanCacheForEntity($origUrlRewrite->getEntityType(), (int) $origUrlRewrite->getEntityId());
+                        $this->cleanCacheForEntity(
+                            $origUrlRewrite->getEntityType(),
+                            (int) $origUrlRewrite->getEntityId()
+                        );
                     }
                 }
             } else {

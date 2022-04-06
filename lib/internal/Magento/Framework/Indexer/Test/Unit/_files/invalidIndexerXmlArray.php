@@ -21,6 +21,16 @@ return [
         '<title>Test</title><description>Test</description></indexer></config>',
         ["Element 'indexer': The attribute 'view_id' is required but missing.\nLine: 1\n"],
     ],
+    'indexer_with_wrong_class_name' => [
+        '<?xml version="1.0"?><config><indexer id="somename" view_id="view_01" class="Class+\Name">' .
+        '<title>Test</title><description>Test</description></indexer></config>',
+        [
+            "Element 'indexer', attribute 'class': [facet 'pattern'] The value 'Class+\Name' "
+            . "is not accepted by the pattern '[a-zA-Z|\\\\]+[a-zA-Z0-9\\\\]+'.\nLine: 1\n",
+            "Element 'indexer', attribute 'class': 'Class+\Name' is not a valid value of the atomic type 'classType'."
+            . "\nLine: 1\n"
+        ],
+    ],
     'indexer_duplicate_view_attribute' => [
         '<?xml version="1.0"?><config><indexer id="somename" view_id="view_01" class="Class\Name">' .
         '<title>Test</title><description>Test</description></indexer>' .

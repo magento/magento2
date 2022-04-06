@@ -13,6 +13,6 @@
             <description>Enables the WYSIWYG Editor via the CLI.</description>
         </annotations>
 
-        <magentoCLI stepKey="enableWYSIWYG" command="config:set cms/wysiwyg/enabled enabled"/>
+        <magentoCLI stepKey="enableWYSIWYG" command="config:set {{WysiwygEnabledByDefault.path}} {{WysiwygEnabledByDefault.value}}"/>
     </actionGroup>
 </actionGroups>

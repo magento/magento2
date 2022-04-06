@@ -109,6 +109,9 @@ class FormTest extends TestCase
      */
     protected $block;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->ratingOptionCollection = $this->createMock(
@@ -177,40 +180,61 @@ class FormTest extends TestCase
                 'systemStore' => $this->systemStore,
                 'session' => $this->session,
                 'viewFileSystem' => $this->viewFileSystem,
-                'filesystem' => $this->fileSystem,
+                'filesystem' => $this->fileSystem
             ]
         );
     }
 
-    public function testToHtmlSessionRatingData()
+    /**
+     * @return void
+     */
+    public function testToHtmlSessionRatingData(): void
     {
         $this->registry->expects($this->any())->method('registry')->willReturn($this->rating);
-        $this->form->expects($this->at(5))->method('getElement')->willReturn($this->element);
-        $this->form->expects($this->at(11))->method('getElement')->willReturn($this->element);
-        $this->form->expects($this->at(14))->method('getElement')->willReturn($this->element);
-        $this->form->expects($this->at(15))->method('getElement')->willReturn($this->element);
-        $this->form->expects($this->any())->method('getElement')->willReturn(false);
+        $this->form
+            ->method('getElement')
+            ->willReturnOnConsecutiveCalls(
+                null,
+                $this->element,
+                null,
+                $this->element,
+                $this->element,
+                $this->element,
+                false
+            );
         $ratingCodes = ['rating_codes' => ['0' => 'rating_code']];
         $this->session->expects($this->any())->method('getRatingData')->willReturn($ratingCodes);
         $this->session->expects($this->any())->method('setRatingData')->willReturnSelf();
         $this->block->toHtml();
     }
 
-    public function testToHtmlCoreRegistryRatingData()
+    /**
+     * @return void
+     */
+    public function testToHtmlCoreRegistryRatingData(): void
     {
         $this->registry->expects($this->any())->method('registry')->willReturn($this->rating);
-        $this->form->expects($this->at(5))->method('getElement')->willReturn($this->element);
-        $this->form->expects($this->at(11))->method('getElement')->willReturn($this->element);
-        $this->form->expects($this->at(14))->method('getElement')->willReturn($this->element);
-        $this->form->expects($this->at(15))->method('getElement')->willReturn($this->element);
-        $this->form->expects($this->any())->method('getElement')->willReturn(false);
+        $this->form
+            ->method('getElement')
+            ->willReturnOnConsecutiveCalls(
+                null,
+                $this->element,
+                null,
+                $this->element,
+                $this->element,
+                $this->element,
+                false
+            );
         $this->session->expects($this->any())->method('getRatingData')->willReturn(false);
         $ratingCodes = ['rating_codes' => ['0' => 'rating_code']];
         $this->rating->expects($this->any())->method('getRatingCodes')->willReturn($ratingCodes);
         $this->block->toHtml();
     }
 
-    public function testToHtmlWithoutRatingData()
+    /**
+     * @return void
+     */
+    public function testToHtmlWithoutRatingData(): void
     {
         $this->registry->expects($this->any())->method('registry')->willReturn(false);
         $this->systemStore->expects($this->atLeastOnce())->method('getStoreCollection')
