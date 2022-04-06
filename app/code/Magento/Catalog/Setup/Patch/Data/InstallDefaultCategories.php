@@ -350,6 +350,8 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
             'frontend_model',
             \Magento\Eav\Model\Entity\Attribute\Frontend\Datetime::class
         );
+        
+        return $this;
     }
 
     /**
@@ -365,7 +367,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
      */
     public static function getVersion()
     {
-        return '2.0.0';
+        return '2.0.1';
     }
 
     /**
