@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Setup\Patch\Data;
 
@@ -17,7 +18,6 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 /**
  * Class InstallDefaultCategories data patch.
  *
- * @package Magento\Catalog\Setup\Patch
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterface
@@ -54,7 +54,8 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -130,7 +131,6 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
         // update attributes group and sort
         $attributes = [
             'custom_design' => ['group' => 'design', 'sort' => 10],
-            // 'custom_design_apply' => array('group' => 'design', 'sort' => 20),
             'custom_design_from' => ['group' => 'design', 'sort' => 20],
             'custom_design_to' => ['group' => 'design', 'sort' => 30],
             'page_layout' => ['group' => 'design', 'sort' => 40],
@@ -353,7 +353,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -361,7 +361,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -369,7 +369,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
