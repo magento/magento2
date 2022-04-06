@@ -69,12 +69,12 @@ class CategorySetup extends EavSetup
     /**
      * This should be set explicitly
      */
-    const CATEGORY_ENTITY_TYPE_ID = '3';
+    public const CATEGORY_ENTITY_TYPE_ID = 3;
 
     /**
      * This should be set explicitly
      */
-    const CATALOG_PRODUCT_ENTITY_TYPE_ID = '4';
+    public const CATALOG_PRODUCT_ENTITY_TYPE_ID = 4;
 
     /**
      * Init
