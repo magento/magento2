@@ -179,7 +179,8 @@ define([
          */
         resolveBillingAddress: function () {
             var selectedBillingAddress,
-                newCustomerBillingAddressData;
+                newCustomerBillingAddressData,
+                billingAddressResolved = false;
 
             selectedBillingAddress = checkoutData.getSelectedBillingAddress();
             newCustomerBillingAddressData = checkoutData.getNewCustomerBillingAddress();
@@ -187,14 +188,18 @@ define([
             if (selectedBillingAddress) {
                 if (selectedBillingAddress === 'new-customer-billing-address' && newCustomerBillingAddressData) {
                     selectBillingAddress(createBillingAddress(newCustomerBillingAddressData));
+                    billingAddressResolved = true;
                 } else {
                     addressList.some(function (address) {
                         if (selectedBillingAddress === address.getKey()) {
                             selectBillingAddress(address);
+                            billingAddressResolved = true;
                         }
                     });
                 }
-            } else {
+            }
+
+            if (!billingAddressResolved) {
                 this.applyBillingAddress();
             }
 
@@ -219,23 +224,15 @@ define([
             var shippingAddress,
                 isBillingAddressInitialized;
 
-            if (quote.billingAddress()) {
-                selectBillingAddress(quote.billingAddress());
+            isBillingAddressInitialized = addressList.some(function (addrs) {
+                if (addrs.isDefaultBilling()) {
+                    selectBillingAddress(addrs);
 
-                return;
-            }
+                    return true;
+                }
 
-            if (quote.isVirtual() || !quote.billingAddress()) {
-                isBillingAddressInitialized = addressList.some(function (addrs) {
-                    if (addrs.isDefaultBilling()) {
-                        selectBillingAddress(addrs);
-
-                        return true;
-                    }
-
-                    return false;
-                });
-            }
+                return false;
+            });
 
             shippingAddress = quote.shippingAddress();
 
@@ -256,11 +253,11 @@ define([
          */
         getShippingAddressFromCustomerAddressList: function () {
             var shippingAddress = _.find(
-                    addressList(),
-                    function (address) {
-                        return checkoutData.getSelectedShippingAddress() == address.getKey() //eslint-disable-line
-                    }
-                );
+                addressList(),
+                function (address) {
+                    return checkoutData.getSelectedShippingAddress() == address.getKey() //eslint-disable-line
+                }
+            );
 
             if (!shippingAddress) {
                 shippingAddress = _.find(

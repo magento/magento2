@@ -15,7 +15,8 @@ define(
         'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/full-screen-loader',
-        'Magento_Checkout/js/action/get-payment-information'
+        'Magento_Checkout/js/action/get-payment-information',
+        'underscore'
     ],
     function ($,
               quote,
@@ -24,30 +25,34 @@ define(
               errorProcessor,
               customer,
               fullScreenLoader,
-              getPaymentInformationAction
+              getPaymentInformationAction,
+              _
     ) {
         'use strict';
 
         return function (messageContainer) {
             var serviceUrl,
-                payload;
+                payload,
+                billingAddress = _.omit(quote.billingAddress(), 'hash'),
+                cartId = quote.getQuoteId();
+
 
             /**
              * Checkout for guest and registered customer.
              */
             if (!customer.isLoggedIn()) {
                 serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/billing-address', {
-                    cartId: quote.getQuoteId()
+                    cartId: cartId
                 });
                 payload = {
-                    cartId: quote.getQuoteId(),
-                    address: quote.billingAddress()
+                    cartId: cartId,
+                    address: billingAddress
                 };
             } else {
                 serviceUrl = urlBuilder.createUrl('/carts/mine/billing-address', {});
                 payload = {
-                    cartId: quote.getQuoteId(),
-                    address: quote.billingAddress()
+                    cartId: cartId,
+                    address: billingAddress
                 };
             }
 

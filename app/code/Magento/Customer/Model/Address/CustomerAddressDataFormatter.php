@@ -10,6 +10,8 @@ namespace Magento\Customer\Model\Address;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Model\Address\Mapper as AddressMapper;
 use Magento\Customer\Model\Address\Config as AddressConfig;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides method to format customer address data.
@@ -32,6 +34,11 @@ class CustomerAddressDataFormatter
     private $customAttributesProcessor;
 
     /**
+     * @var SerializerInterface|mixed
+     */
+    private $serializer;
+
+    /**
      * @param Mapper $addressMapper
      * @param Config $addressConfig
      * @param CustomAttributesProcessor $customAttributesProcessor
@@ -39,11 +46,13 @@ class CustomerAddressDataFormatter
     public function __construct(
         AddressMapper $addressMapper,
         AddressConfig $addressConfig,
-        CustomAttributesProcessor $customAttributesProcessor
+        CustomAttributesProcessor $customAttributesProcessor,
+        SerializerInterface $serializer = null
     ) {
         $this->addressMapper = $addressMapper;
         $this->addressConfig = $addressConfig;
         $this->customAttributesProcessor = $customAttributesProcessor;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -90,6 +99,8 @@ class CustomerAddressDataFormatter
                 $customerAddress['custom_attributes']
             );
         }
+
+        $resultAddress['hash'] = hash('sha1', $this->serializer->serialize($resultAddress));
 
         return $resultAddress;
     }

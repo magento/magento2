@@ -20,8 +20,7 @@ define([
     'mage/translate',
     'Magento_Checkout/js/model/billing-address-postcode-validator',
     'Magento_Checkout/js/model/address-converter'
-],
-function (
+], function (
     ko,
     _,
     Component,
@@ -92,7 +91,7 @@ function (
                 } else {
                     this.isAddressSameAsShipping(
                         newAddress != null &&
-                        newAddress.getCacheKey() == quote.shippingAddress().getCacheKey() //eslint-disable-line eqeqeq
+                        newAddress.getCacheKey() === quote.shippingAddress().getCacheKey() //eslint-disable-line eqeqeq
                     );
                 }
 
@@ -102,6 +101,11 @@ function (
                     this.saveInAddressBook(1);
                 }
                 this.isAddressDetailsVisible(true);
+
+                if (newAddress !== null && checkoutData.getSelectedBillingAddress() !== newAddress.getKey()) {
+                    checkoutData.setSelectedBillingAddress(newAddress.getKey());
+                    setBillingAddressAction(globalMessageList);
+                }
             }, this);
 
             return this;
@@ -125,8 +129,6 @@ function (
         useShippingAddress: function () {
             if (this.isAddressSameAsShipping()) {
                 selectBillingAddress(quote.shippingAddress());
-
-                this.updateAddresses();
                 this.isAddressDetailsVisible(true);
             } else {
                 lastSelectedBillingAddress = quote.billingAddress();
@@ -171,8 +173,6 @@ function (
                     checkoutData.setNewCustomerBillingAddress(addressData);
                 }
             }
-            setBillingAddressAction(globalMessageList);
-            this.updateAddresses();
         },
 
         /**
@@ -197,8 +197,8 @@ function (
                 // restore 'Same As Shipping' checkbox state
                 this.isAddressSameAsShipping(
                     quote.billingAddress() != null &&
-                        quote.billingAddress().getCacheKey() == quote.shippingAddress().getCacheKey() && //eslint-disable-line
-                        !quote.isVirtual()
+                    quote.billingAddress().getCacheKey() === quote.shippingAddress().getCacheKey() && //eslint-disable-line
+                    !quote.isVirtual()
                 );
                 this.isAddressDetailsVisible(true);
             }
@@ -244,6 +244,8 @@ function (
 
         /**
          * Trigger action to update shipping and billing addresses
+         *
+         * @deprecated Unused function
          */
         updateAddresses: function () {
             if (window.checkoutConfig.reloadOnBillingAddress ||
