@@ -51,6 +51,9 @@ class BaseTest extends TestCase
      */
     private $componentRegistrar;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->themeDirectory = $this->createPartialMock(
@@ -77,7 +80,10 @@ class BaseTest extends TestCase
         );
     }
 
-    public function testGetFilesWrongTheme()
+    /**
+     * @return void
+     */
+    public function testGetFilesWrongTheme(): void
     {
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
@@ -94,9 +100,10 @@ class BaseTest extends TestCase
      * @param string $filePath
      * @param string $pathPattern
      *
+     * @return void
      * @dataProvider getFilesDataProvider
      */
-    public function testGetFiles($files, $filePath, $pathPattern)
+    public function testGetFiles($files, $filePath, $pathPattern): void
     {
         $themePath = 'area/theme/path';
         $theme = $this->getMockForAbstractClass(ThemeInterface::class);
@@ -124,14 +131,17 @@ class BaseTest extends TestCase
             ->willReturnArgument(0);
 
         $checkResult = [];
+        $withArgs = $willReturnArgs = [];
+
         foreach ($files as $key => $file) {
             $checkResult[$key] = new File($file['handle'], $file['module']);
-            $this->fileFactory
-                ->expects($this->at($key))
-                ->method('create')
-                ->with(sprintf($handlePath, $file['module'], $file['handle']), $file['module'])
-                ->willReturn($checkResult[$key]);
+            $withArgs[] = [sprintf($handlePath, $file['module'], $file['handle']), $file['module']];
+            $willReturnArgs[] = $checkResult[$key];
         }
+        $this->fileFactory
+            ->method('create')
+            ->withConsecutive(...$withArgs)
+            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
 
         $this->assertSame($checkResult, $this->model->getFiles($theme, $filePath));
     }
@@ -139,14 +149,14 @@ class BaseTest extends TestCase
     /**
      * @return array
      */
-    public function getFilesDataProvider()
+    public function getFilesDataProvider(): array
     {
         return [
             [
                 [
                     ['handle' => '1.xml', 'module' => 'Module_One'],
                     ['handle' => '2.xml', 'module' => 'Module_One'],
-                    ['handle' => '3.xml', 'module' => 'Module_Two'],
+                    ['handle' => '3.xml', 'module' => 'Module_Two']
                 ],
                 '*.xml',
                 '[^/]*\\.xml'
@@ -157,7 +167,7 @@ class BaseTest extends TestCase
                 ],
                 'preset/4',
                 'preset/4'
-            ],
+            ]
         ];
     }
 }

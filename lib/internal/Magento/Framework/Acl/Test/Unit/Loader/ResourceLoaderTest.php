@@ -17,23 +17,27 @@ use PHPUnit\Framework\TestCase;
 class ResourceLoaderTest extends TestCase
 {
     /**
-     * Test for \Magento\Framework\Acl\Loader\ResourceLoader::populateAcl
+     * Test for ResourceLoader::populateAcl
+     *
+     * @return void
      */
-    public function testPopulateAclOnValidObjects()
+    public function testPopulateAclOnValidObjects(): void
     {
-        /** @var $aclResource \Magento\Framework\Acl\AclResource */
+        /** @var $aclResource AclResource */
         $aclResource = $this->createMock(AclResource::class);
 
         /** @var Acl $acl */
         $acl = $this->createPartialMock(Acl::class, ['addResource']);
         $acl->expects($this->exactly(2))->method('addResource');
-        $acl->expects($this->at(0))->method('addResource')->with($aclResource, null)->willReturnSelf();
-        $acl->expects($this->at(1))->method('addResource')->with($aclResource, $aclResource)->willReturnSelf();
+        $acl
+            ->method('addResource')
+            ->withConsecutive([$aclResource, null], [$aclResource, $aclResource])
+            ->willReturnOnConsecutiveCalls($acl, $acl);
 
         $factoryObject = $this->createPartialMock(AclResourceFactory::class, ['createResource']);
         $factoryObject->expects($this->any())->method('createResource')->willReturn($aclResource);
 
-        /** @var $resourceProvider \Magento\Framework\Acl\AclResource\ProviderInterface */
+        /** @var $resourceProvider ProviderInterface */
         $resourceProvider = $this->getMockForAbstractClass(ProviderInterface::class);
         $resourceProvider->expects($this->once())
             ->method('getAclResources')
@@ -48,37 +52,38 @@ class ResourceLoaderTest extends TestCase
                                 'id' => 'child_resource::id',
                                 'title' => 'Child Resource Title',
                                 'sortOrder' => 10,
-                                'children' => [],
-                            ],
-                        ],
-                    ],
+                                'children' => []
+                            ]
+                        ]
+                    ]
                 ]
             );
 
-        /** @var $loaderResource \Magento\Framework\Acl\Loader\ResourceLoader */
         $loaderResource = new ResourceLoader($resourceProvider, $factoryObject);
 
         $loaderResource->populateAcl($acl);
     }
 
     /**
-     * Test for \Magento\Framework\Acl\Loader\ResourceLoader::populateAcl
+     * Test for ResourceLoader::populateAcl
+     *
+     * @return void
      */
-    public function testPopulateAclWithException()
+    public function testPopulateAclWithException(): void
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Missing ACL resource identifier');
-        /** @var $aclResource \Magento\Framework\Acl\AclResource */
+        /** @var $aclResource AclResource */
         $aclResource = $this->createMock(AclResource::class);
 
         $factoryObject = $this->getMockBuilder(AclResourceFactory::class)
-            ->setMethods(['createResource'])
+            ->onlyMethods(['createResource'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $factoryObject->expects($this->any())->method('createResource')->willReturn($aclResource);
 
-        /** @var $resourceProvider \Magento\Framework\Acl\AclResource\ProviderInterface */
+        /** @var $resourceProvider ProviderInterface */
         $resourceProvider = $this->getMockForAbstractClass(ProviderInterface::class);
         $resourceProvider->expects($this->once())
             ->method('getAclResources')
@@ -92,17 +97,16 @@ class ResourceLoaderTest extends TestCase
                                 'id' => 'child_resource::id',
                                 'title' => 'Child Resource Title',
                                 'sortOrder' => 10,
-                                'children' => [],
-                            ],
-                        ],
-                    ],
+                                'children' => []
+                            ]
+                        ]
+                    ]
                 ]
             );
 
         /** @var Acl $acl */
         $acl = $this->createPartialMock(Acl::class, ['addResource']);
 
-        /** @var $loaderResource \Magento\Framework\Acl\Loader\ResourceLoader */
         $loaderResource = new ResourceLoader($resourceProvider, $factoryObject);
 
         $loaderResource->populateAcl($acl);

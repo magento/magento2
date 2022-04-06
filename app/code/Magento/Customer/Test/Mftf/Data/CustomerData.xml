@@ -443,4 +443,18 @@
         <requiredEntity type="address">UK_With_State_Default_Billing</requiredEntity>
         <requiredEntity type="address">US_Address_NY_Default_Shipping</requiredEntity>
     </entity>
+    <entity name="Simple_USTX_Customer" type="customer">
+        <data key="group_id">1</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Buyer</data>
+        <data key="fullname">John Buyer</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <data key="group">General</data>
+        <requiredEntity type="address">BillingAddressTX</requiredEntity>
+    </entity>
 </entities>

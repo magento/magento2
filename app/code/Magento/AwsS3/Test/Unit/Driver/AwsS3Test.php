@@ -64,6 +64,7 @@ class AwsS3Test extends TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getAbsolutePathDataProvider(): array
     {
@@ -407,6 +408,18 @@ class AwsS3Test extends TestCase
             [
                 'test/test/../test.txt',
                 'test/test.txt'
+            ],
+            [
+                'test//test/../test.txt',
+                'test/test.txt'
+            ],
+            [
+                'test1///test2/..//test3//test.txt',
+                'test1/test3/test.txt'
+            ],
+            [
+                self::URL . '/test1///test2/..//test3//test.txt',
+                self::URL . 'test1/test3/test.txt'
             ]
         ];
     }

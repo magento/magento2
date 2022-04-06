@@ -95,7 +95,9 @@ class Filesystem extends BaseFilesystem implements FilesystemInterface
                 $uri = $this->getUri($directoryCode) ?: '';
                 $this->writeInstances[$code] = $this->writeFactory->create(
                     $this->driverPool->getDriver()->getAbsolutePath('', $uri),
-                    $driverCode
+                    $driverCode,
+                    null,
+                    $directoryCode
                 );
             }
 

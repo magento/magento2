@@ -8,20 +8,22 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Controller;
 
 use Magento\Framework\App\FrontControllerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
+use Magento\Framework\GraphQl\Query\Fields as QueryFields;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\Response;
-use Magento\Framework\App\Response\Http as HttpResponse;
-use Magento\Framework\GraphQl\Query\Fields as QueryFields;
-use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\App\ObjectManager;
+use Magento\GraphQl\Helper\Query\Logger\LogData;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
+use Magento\GraphQl\Model\Query\Logger\LoggerPool;
 
 /**
  * Front controller for web API GraphQL area.
@@ -90,6 +92,16 @@ class GraphQl implements FrontControllerInterface
     private $contextFactory;
 
     /**
+     * @var LogData
+     */
+    private $logDataHelper;
+
+    /**
+     * @var LoggerPool
+     */
+    private $loggerPool;
+
+    /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
@@ -101,6 +113,8 @@ class GraphQl implements FrontControllerInterface
      * @param JsonFactory|null $jsonFactory
      * @param HttpResponse|null $httpResponse
      * @param ContextFactoryInterface $contextFactory
+     * @param LogData $logDataHelper
+     * @param LoggerPool $loggerPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -114,7 +128,9 @@ class GraphQl implements FrontControllerInterface
         QueryFields $queryFields,
         JsonFactory $jsonFactory = null,
         HttpResponse $httpResponse = null,
-        ContextFactoryInterface $contextFactory = null
+        ContextFactoryInterface $contextFactory = null,
+        LogData $logDataHelper = null,
+        LoggerPool $loggerPool = null
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
@@ -127,6 +143,8 @@ class GraphQl implements FrontControllerInterface
         $this->jsonFactory = $jsonFactory ?: ObjectManager::getInstance()->get(JsonFactory::class);
         $this->httpResponse = $httpResponse ?: ObjectManager::getInstance()->get(HttpResponse::class);
         $this->contextFactory = $contextFactory ?: ObjectManager::getInstance()->get(ContextFactoryInterface::class);
+        $this->logDataHelper = $logDataHelper ?: ObjectManager::getInstance()->get(LogData::class);
+        $this->loggerPool = $loggerPool ?: ObjectManager::getInstance()->get(LoggerPool::class);
     }
 
     /**
@@ -136,15 +154,18 @@ class GraphQl implements FrontControllerInterface
      * @return ResponseInterface
      * @since 100.3.0
      */
-    public function dispatch(RequestInterface $request) : ResponseInterface
+    public function dispatch(RequestInterface $request): ResponseInterface
     {
         $statusCode = 200;
         $jsonResult = $this->jsonFactory->create();
+        $data = $this->getDataFromRequest($request);
+        $result = [];
+
+        $schema = null;
         try {
             /** @var Http $request */
             $this->requestProcessor->validateRequest($request);
 
-            $data = $this->getDataFromRequest($request);
             $query = $data['query'] ?? '';
             $variables = $data['variables'] ?? null;
 
@@ -160,7 +181,7 @@ class GraphQl implements FrontControllerInterface
                 $data['variables'] ?? []
             );
         } catch (\Exception $error) {
-            $result['errors'] = isset($result) && isset($result['errors']) ? $result['errors'] : [];
+            $result['errors'] = isset($result['errors']) ? $result['errors'] : [];
             $result['errors'][] = $this->graphQlError->create($error);
             $statusCode = ExceptionFormatter::HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS;
         }
@@ -168,6 +189,13 @@ class GraphQl implements FrontControllerInterface
         $jsonResult->setHttpResponseCode($statusCode);
         $jsonResult->setData($result);
         $jsonResult->renderResult($this->httpResponse);
+
+        // log information about the query, unless it is an introspection query
+        if (strpos($data['query'], 'IntrospectionQuery') === false) {
+            $queryInformation = $this->logDataHelper->getLogData($request, $data, $schema, $this->httpResponse);
+            $this->loggerPool->execute($queryInformation);
+        }
+
         return $this->httpResponse;
     }
 
@@ -177,7 +205,7 @@ class GraphQl implements FrontControllerInterface
      * @param RequestInterface $request
      * @return array
      */
-    private function getDataFromRequest(RequestInterface $request) : array
+    private function getDataFromRequest(RequestInterface $request): array
     {
         /** @var Http $request */
         if ($request->isPost()) {
