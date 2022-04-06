@@ -37,8 +37,7 @@ class AddRegionsForIndia implements DataPatchInterface, PatchVersionInterface
     public function __construct(
         ModuleDataSetupInterface                      $moduleDataSetup,
         \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
-    )
-    {
+    ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->dataInstallerFactory = $dataInstallerFactory;
     }
