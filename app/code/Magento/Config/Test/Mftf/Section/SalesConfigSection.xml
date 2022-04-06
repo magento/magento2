@@ -13,5 +13,5 @@
         <element name="CheckIfTaxClassesTabExpand" type="button" selector="#tax_classes-head:not(.open)"/>
         <element name="ShippingTaxClass" type="select" selector="#tax_classes_shipping_tax_class"/>
         <element name="EnableTaxClassForShipping" type="checkbox" selector="#tax_classes_shipping_tax_class_inherit"/>
-         </section>
+    </section>
 </sections>
