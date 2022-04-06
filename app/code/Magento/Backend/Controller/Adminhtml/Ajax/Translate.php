@@ -52,8 +52,7 @@ class Translate extends \Magento\Backend\App\Action
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         try {
-            $this->inlineParser->processAjaxPost($translate);
-            $response = ['success' => 'true'];
+            $response = $this->inlineParser->processAjaxPost($translate);
         } catch (\Exception $e) {
             $response = ['error' => 'true', 'message' => $e->getMessage()];
         }
