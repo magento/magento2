@@ -39,6 +39,7 @@ class AdminTokenPluginTest extends WebapiAbstract
     protected function setUp(): void
     {
         parent::setUp();
+        $this->_markTestAsRestOnly();
         $objectManager = Bootstrap::getObjectManager();
         $this->configWriter = $objectManager->get(WriterInterface::class);
         $this->scopeConfig = $objectManager->get(ScopeConfigInterface::class);
