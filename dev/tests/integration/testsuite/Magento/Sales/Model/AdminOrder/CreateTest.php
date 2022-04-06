@@ -978,7 +978,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $customerMock->method('getEmail')
             ->willReturn('customer@example.com');
         $customerMock->method('_getExtensionAttributes')
-            ->willReturn(NULL);
+            ->willReturn(null);
 
         return $customerMock;
     }

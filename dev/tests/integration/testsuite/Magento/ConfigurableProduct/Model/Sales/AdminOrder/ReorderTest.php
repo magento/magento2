@@ -81,7 +81,7 @@ class ReorderTest extends TestCase
         $customerMock->method('getEmail')
             ->willReturn('customer@example.com');
         $customerMock->method('_getExtensionAttributes')
-            ->willReturn(NULL);
+            ->willReturn(null);
         $this->model->getQuote()->setCustomer($customerMock);
 
         $shippingMethod = 'freeshipping_freeshipping';

@@ -33,7 +33,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     /**
      * Xml default email domain path
      */
-    private const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
+    public const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
 
     private const XML_PATH_EMAIL_REQUIRED_CREATE_ORDER = 'customer/create_account/email_required_create_order';
     /**
