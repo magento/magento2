@@ -22,6 +22,7 @@ class LegacyFixtureTest extends TestCase
      */
     public function testNew(): void
     {
+        $docUrl = 'https://devdocs.magento.com/guides/v2.4/test/integration/parameterized_data_fixture.html';
         $files = AddedFiles::getAddedFilesList(__DIR__ . '/..');
         $legacyFixtureFiles = [];
         foreach ($files as $file) {
@@ -35,7 +36,8 @@ class LegacyFixtureTest extends TestCase
         $this->assertCount(
             0,
             $legacyFixtureFiles,
-            "Fixture files are deprecated. Please use parameterized data fixtures.\r\n" .
+            "The format used for creating fixtures is deprecated. Please use parametrized fixture format.\n"
+            . " For details please look at $docUrl.\r\n" .
             "The following fixture files were added:\r\n"
             . implode(PHP_EOL, $legacyFixtureFiles)
         );
