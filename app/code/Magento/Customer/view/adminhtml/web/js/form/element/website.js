@@ -19,15 +19,15 @@ define([
             var groupIdFieldKey = 'group_id',
                 sendEmailStoreIdFieldKey = 'sendemail_store_id',
                 groupId = registry.get('index = ' + groupIdFieldKey),
-                storeId = registry.get('index = ' + sendEmailStoreIdFieldKey),
+                sendEmailStoreId = registry.get('index = ' + sendEmailStoreIdFieldKey),
                 option = this.getOption(value);
 
             if (groupId) {
                 groupId.value(option[groupIdFieldKey]);
             }
 
-            if (option['default_store_view_id']) {
-                storeId.value(option['default_store_view_id']);
+            if (sendEmailStoreId && option['default_store_view_id']) {
+                sendEmailStoreId.value(option['default_store_view_id']);
             }
             return this._super();
         }
