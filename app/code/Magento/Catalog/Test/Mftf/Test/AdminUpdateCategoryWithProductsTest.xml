@@ -35,7 +35,7 @@
         <!--Open Category Page-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCreatedCategory"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
 
         <!--Update Product Display Setting-->

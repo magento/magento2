@@ -23,7 +23,9 @@
         </before>
         <after>
             <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
-            <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(FirstLevelSubCat.name)}}" stepKey="clickCategoryLink"/>
+            <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickCategoryLink">
+                <argument name="category" value="FirstLevelSubCat"/>
+            </actionGroup>
             <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="clickDelete"/>
             <waitForElementVisible selector="{{AdminCategoryModalSection.message}}" stepKey="waitForConfirmationModal"/>
             <see selector="{{AdminCategoryModalSection.message}}" userInput="Are you sure you want to delete this category?" stepKey="seeDeleteConfirmationMessage"/>

@@ -53,8 +53,10 @@
         <!--Update Category-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleRootSubCategory.name)}}" stepKey="selectCategory"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCategory">
+            <argument name="category" value="SimpleRootSubCategory"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="updateCategoryName"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveUpdatedCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>

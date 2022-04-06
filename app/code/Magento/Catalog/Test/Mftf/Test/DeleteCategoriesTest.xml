@@ -47,8 +47,10 @@
         </after>
         <comment userInput="BIC workaround" stepKey="loginAsAdmin1"/>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createNewRootCategoryA.name$$)}}" stepKey="openNewRootCategory"/>
-        <waitForPageLoad stepKey="waitForPageCategoryLoadAfterClickOnNewRootCategory"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openNewRootCategory">
+            <argument name="category" value="$$createNewRootCategoryA$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageCategoryLoadAfterClickOnNewRootCategory"/>
         <seeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="assertDeleteButtonIsPresent"/>
         <!--Move categories from Default Category to NewRootCategory. -->
         <actionGroup ref="MoveCategoryActionGroup" stepKey="MoveCategoryBToNewRootCategory">
@@ -84,8 +86,10 @@
 
         <!-- Delete Default Root Category. -->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPageAfterCLIReindexCommand"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('Default Category')}}" stepKey="clickOnDefaultRootCategory"/>
-        <waitForPageLoad stepKey="waitForPageDefaultCategoryEditLoad" />
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickOnDefaultRootCategory">
+            <argument name="category" value="Default Category"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageDefaultCategoryEditLoad"/>
         <seeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="assertDeleteButtonIsPresent1"/>
         <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="DeleteDefaultRootCategory"/>
         <waitForElementVisible selector="{{AdminCategoryModalSection.ok}}" stepKey="waitForModalDeleteDefaultRootCategory" />
@@ -154,8 +158,10 @@
         </actionGroup>
         <!-- Rename New Root Category to Default category -->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPageAfterStoreFrontProductsAssertions"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('$$createNewRootCategoryA.name$$')}}" stepKey="clickOnNewRootCategoryA"/>
-        <waitForPageLoad stepKey="waitForPageNewRootCategoryALoad" />
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickOnNewRootCategoryA">
+            <argument name="category" value="$$createNewRootCategoryA$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageNewRootCategoryALoad"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="Default Category" stepKey="enterCategoryNameAsDefaultCategory"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategoryDefaultCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessageAfterSaveDefaultCategory"/>

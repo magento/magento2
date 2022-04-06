@@ -33,8 +33,10 @@
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <!--Create subcategory under parent category -->
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}" stepKey="selectCategory"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCategory">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="addSubCategoryName"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>

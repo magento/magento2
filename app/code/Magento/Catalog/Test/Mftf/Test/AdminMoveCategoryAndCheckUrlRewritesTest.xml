@@ -35,8 +35,10 @@
         <!--Open category page-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(FirstLevelSubCat.name)}}" stepKey="selectCategory"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCategory">
+            <argument name="category" value="FirstLevelSubCat"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad"/>
 
         <!--Create second level category-->
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>

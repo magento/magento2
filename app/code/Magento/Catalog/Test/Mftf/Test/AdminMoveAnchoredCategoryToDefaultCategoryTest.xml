@@ -31,8 +31,8 @@
         <!--Open Category Page-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCategory"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCategory"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad"/>
 
         <!--Enable Anchor for _defaultCategory Category-->
         <scrollTo selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" x="0" y="-80" stepKey="scrollToDisplaySetting"/>

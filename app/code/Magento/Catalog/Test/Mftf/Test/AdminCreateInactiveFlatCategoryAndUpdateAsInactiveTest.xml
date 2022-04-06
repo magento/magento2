@@ -55,8 +55,10 @@
         <!-- Select created category and make category inactive-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(CatNotActive.name)}}" stepKey="selectCreatedCategory"/>
-        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCreatedCategory">
+            <argument name="category" value="CatNotActive"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageToLoad"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{CatNotActive.name}}" stepKey="seeUpdatedCategoryTitle"/>

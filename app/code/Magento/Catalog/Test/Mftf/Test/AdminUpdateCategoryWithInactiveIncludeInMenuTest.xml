@@ -33,7 +33,7 @@
 
         <!--Update Category name,description, urlKey, meta title and disable Include in Menu-->
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCreatedCategory"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="fillCategoryName"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
         <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="disableIncludeInMenu"/>
@@ -66,8 +66,10 @@
         <!--Verify Updated fields in Category Page-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleRootSubCategory.name)}}" stepKey="selectCreatedCategory1"/>
-        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCreatedCategory1">
+            <argument name="category" value="SimpleRootSubCategory"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageToLoad"/>
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="seeUpdatedCategoryTitle"/>
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}"  stepKey="verifyInactiveIncludeInMenu"/>
         <seeInField  selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="seeUpdatedCategoryName"/>

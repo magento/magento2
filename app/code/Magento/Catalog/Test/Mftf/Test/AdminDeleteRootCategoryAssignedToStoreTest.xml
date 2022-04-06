@@ -42,7 +42,9 @@
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandToSeeAllCategories"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(NewRootCategory.name))}}" stepKey="clickRootCategoryInTree"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickRootCategoryInTree">
+            <argument name="category" value="NewRootCategory"/>
+        </actionGroup>
 
         <!--Verify Delete button is not displayed-->
         <dontSeeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="dontSeeDeleteButton"/>

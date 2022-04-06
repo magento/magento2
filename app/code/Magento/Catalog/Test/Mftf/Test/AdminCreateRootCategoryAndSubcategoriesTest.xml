@@ -50,7 +50,9 @@
         <actionGroup ref="CreateCategoryActionGroup" stepKey="createSubcategory1">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(NewRootCategory.name)}}" stepKey="clickOnCreatedNewRootCategory1"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickOnCreatedNewRootCategory1">
+            <argument name="category" value="NewRootCategory"/>
+        </actionGroup>
         <scrollToTopOfPage stepKey="scrollToTopOfPage3"/>
         <!--Create another subcategory-->
         <actionGroup ref="CreateCategoryActionGroup" stepKey="createSubcategory2">

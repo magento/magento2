@@ -56,8 +56,10 @@
         <!--Search default simple product in the grid page -->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="OpenCategoryCatalogPage"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$initialCategoryEntity.name$$)}}" stepKey="selectCategory"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCategory">
+            <argument name="category" value="$$initialCategoryEntity$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad"/>
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="clickAdminCategoryProductSection"/>
         <waitForPageLoad stepKey="waitForSectionHeaderToLoad"/>
         <dontSee selector="{{AdminCategoryProductsGridSection.rowProductName($$initialSimpleProduct.name$$)}}" stepKey="dontSeeProductNameOnCategoryCatalogPage"/>

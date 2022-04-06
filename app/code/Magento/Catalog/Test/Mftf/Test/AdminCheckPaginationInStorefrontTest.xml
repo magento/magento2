@@ -101,8 +101,8 @@
         <comment userInput="Open Category Page and select created category" stepKey="commentOpenCategoryPage"/>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
-        <waitForPageLoad stepKey="waitForPageToLoaded2"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCreatedCategory"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoaded2"/>
         <!--Select Products-->
         <comment userInput="Select Products" stepKey="commentSelectProducts"/>
         <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>

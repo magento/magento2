@@ -54,8 +54,10 @@
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontHomePage"/>
         <!--Click on first category-->
         <comment userInput="Click on first category" stepKey="openFirstCategoryPage"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$category1.name$$)}}" stepKey="clickCategory1Name"/>
-        <waitForPageLoad stepKey="waitForCategory1Page"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickCategory1Name">
+            <argument name="category" value="$$category1$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategory1Page"/>
         <!--Check if current category is highlighted and the others are not-->
         <comment userInput="Check if current category is highlighted and the others are not" stepKey="checkCateg1NameIsHighlighted"/>
         <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$category1.name$$)}}" userInput="class" stepKey="grabCategory1Class"/>
@@ -74,8 +76,10 @@
         <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo($product2.name$)}}" stepKey="seeProduct2InCategoryPage"/>
         <!--Click on second category-->
         <comment userInput="Click on second category" stepKey="openSecondCategoryPage"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$category2.name$$)}}" stepKey="clickCategory2Name"/>
-        <waitForPageLoad stepKey="waitForCategory2Page"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickCategory2Name">
+            <argument name="category" value="$$category2$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategory2Page"/>
         <!--Check if current category is highlighted  and the others are not-->
         <comment userInput="Check if current category is highlighted and the others are not" stepKey="checkCateg2NameIsHighlighted"/>
         <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$category2.name$$)}}" userInput="class" stepKey="grabCategory2Class"/>
