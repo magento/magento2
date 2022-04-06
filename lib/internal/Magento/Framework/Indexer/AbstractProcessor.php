@@ -80,7 +80,7 @@ abstract class AbstractProcessor
     }
 
     /**
-     * Mark Product price indexer as invalid
+     * Mark indexer as invalid
      *
      * @return void
      */
