@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Directory\Setup\Patch\Data;
 
 use Magento\Directory\Setup\DataInstaller;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Directory\Setup\DataInstallerFactory;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
@@ -21,22 +21,22 @@ class AddRegionsForIndia implements DataPatchInterface, PatchVersionInterface
     /**
      * @var ModuleDataSetupInterface
      */
-    private $moduleDataSetup;
+    private ModuleDataSetupInterface $moduleDataSetup;
 
     /**
-     * @var \Magento\Directory\Setup\DataInstallerFactory
+     * @var DataInstallerFactory
      */
-    private $dataInstallerFactory;
+    private DataInstallerFactory $dataInstallerFactory;
 
     /**
      * AddRegionsForIndia constructor.
      *
      * @param ModuleDataSetupInterface $moduleDataSetup
-     * @param \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
+     * @param DataInstallerFactory $dataInstallerFactory
      */
     public function __construct(
-        ModuleDataSetupInterface                      $moduleDataSetup,
-        \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
+        ModuleDataSetupInterface $moduleDataSetup,
+        DataInstallerFactory     $dataInstallerFactory
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->dataInstallerFactory = $dataInstallerFactory;
@@ -53,6 +53,8 @@ class AddRegionsForIndia implements DataPatchInterface, PatchVersionInterface
             $this->moduleDataSetup->getConnection(),
             $this->getDataForIndia()
         );
+
+        return $this;
     }
 
     /**
@@ -60,7 +62,7 @@ class AddRegionsForIndia implements DataPatchInterface, PatchVersionInterface
      *
      * @return array
      */
-    private function getDataForIndia()
+    private function getDataForIndia(): array
     {
         return [
             ['IN', 'LA', 'Ladakh']
@@ -70,7 +72,7 @@ class AddRegionsForIndia implements DataPatchInterface, PatchVersionInterface
     /**
      * @inheritdoc
      */
-    public static function getDependencies()
+    public static function getDependencies(): array
     {
         return [
             InitializeDirectoryData::class,
@@ -80,7 +82,7 @@ class AddRegionsForIndia implements DataPatchInterface, PatchVersionInterface
     /**
      * @inheritdoc
      */
-    public static function getVersion()
+    public static function getVersion(): string
     {
         return '1.0.0';
     }
@@ -88,7 +90,7 @@ class AddRegionsForIndia implements DataPatchInterface, PatchVersionInterface
     /**
      * @inheritdoc
      */
-    public function getAliases()
+    public function getAliases(): array
     {
         return [];
     }
