@@ -7,7 +7,6 @@
 namespace Magento\Paypal\Block\Express;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Paypal\Model\Express\Checkout;
 use Magento\Quote\Model\Quote\Address\Rate;
 
 /**
@@ -306,18 +305,5 @@ class Review extends \Magento\Framework\View\Element\Template
         );
 
         return parent::_beforeToHtml();
-    }
-
-    /**
-     * Return paypal funding source
-     *
-     * @return string|null
-     */
-    public function getPaypalFundingSource()
-    {
-        if ($this->_quote->getPayment()->getAdditionalInformation(Checkout::PAYMENT_INFO_FUNDING_SOURCE)) {
-            return ucfirst($this->_quote->getPayment()->getAdditionalInformation(Checkout::PAYMENT_INFO_FUNDING_SOURCE));
-        }
-        return null;
     }
 }

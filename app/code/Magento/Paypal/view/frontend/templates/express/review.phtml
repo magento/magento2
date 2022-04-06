@@ -13,6 +13,9 @@ use Magento\Paypal\Block\Express\Review;
  * @var Escaper $escaper
  * @var SecureHtmlRenderer $secureRenderer
  */
+
+/** @var \Magento\Paypal\ViewModel\PaypalFundingSourceDataProvider $paypalFundingSourceDataProvider */
+$paypalFundingSourceDataProvider = $block->getData('PaypalFundingSourceDataProvider');
 ?>
 <div class="paypal-review view">
     <div class="block block-order-details-view">
@@ -101,7 +104,8 @@ use Magento\Paypal\Block\Express\Review;
             <div class="box box-order-billing-address">
                 <strong class="box-title"><span><?= $escaper->escapeHtml(__('Payment Method')) ?></span></strong>
                 <div class="box-content">
-                    <?= $escaper->escapeHtml($block->getPaypalFundingSource() ?? $block->getPaymentMethodTitle()) ?><br>
+                    <?= $escaper->escapeHtml($paypalFundingSourceDataProvider->getPaypalFundingSource()
+                        ?? $block->getPaymentMethodTitle()) ?><br>
                     <?= $escaper->escapeHtml($block->getEmail()) ?> <br>
                     <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png"
                          alt="<?= $block->escapeHtml(__('Buy now with PayPal')) ?>"/>
