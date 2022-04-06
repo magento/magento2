@@ -13,9 +13,5 @@
         <element name="CheckIfTaxClassesTabExpand" type="button" selector="#tax_classes-head:not(.open)"/>
         <element name="ShippingTaxClass" type="select" selector="#tax_classes_shipping_tax_class"/>
         <element name="EnableTaxClassForShipping" type="checkbox" selector="#tax_classes_shipping_tax_class_inherit"/>
-        <element name="AllowGuestCheckout" type="select" selector="//select[@id='checkout_options_guest_checkout']" timeout="30"/>
-        <element name="CheckoutTab" type="button" selector="//a[@class='admin__page-nav-link item-nav']//span[contains(text(),'Checkout')]" timeout="30"/>
-        <element name="ExpandCheckoutOptions" type="text" selector="//a[@id='checkout_options-head']" timeout="30"/>
-        <element name="UseSystemValue" type="checkbox" selector="//input[@id='checkout_options_guest_checkout_inherit']" timeout="30"/>
-    </section>
+         </section>
 </sections>
