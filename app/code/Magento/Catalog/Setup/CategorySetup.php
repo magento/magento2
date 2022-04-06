@@ -1,10 +1,10 @@
 <?php
 /**
- * Catalog entity setup
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Setup;
 
 use Magento\Catalog\Block\Adminhtml\Category\Helper\Pricestep;
@@ -69,12 +69,12 @@ class CategorySetup extends EavSetup
     /**
      * This should be set explicitly
      */
-    const CATEGORY_ENTITY_TYPE_ID = 3;
+    const CATEGORY_ENTITY_TYPE_ID = '3';
 
     /**
      * This should be set explicitly
      */
-    const CATALOG_PRODUCT_ENTITY_TYPE_ID = 4;
+    const CATALOG_PRODUCT_ENTITY_TYPE_ID = '4';
 
     /**
      * Init
