@@ -69,7 +69,7 @@ class AdobeImsTokenUserService
     }
 
     /**
-     * Update adobe_user_id for admin user
+     * get adobe_user_id from token and store it for admin user
      *
      * @param string $bearerToken
      * @return int
@@ -78,7 +78,7 @@ class AdobeImsTokenUserService
      * @throws CouldNotSaveException
      * @throws InvalidArgumentException
      */
-    public function updateAdminUserProfile(string $bearerToken): int
+    public function getAdminUserIdByToken(string $bearerToken): int
     {
         $tokenData = $this->tokenReader->read($bearerToken);
 

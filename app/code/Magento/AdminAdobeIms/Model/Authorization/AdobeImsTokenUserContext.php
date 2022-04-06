@@ -99,7 +99,7 @@ class AdobeImsTokenUserContext implements UserContextInterface
         }
 
         try {
-            $adminUserId = $this->tokenUserService->updateAdminUserProfile($bearerToken);
+            $adminUserId = $this->tokenUserService->getAdminUserIdByToken($bearerToken);
         } catch (AuthenticationException $e) {
             $this->isRequestProcessed = true;
             return;
@@ -108,8 +108,6 @@ class AdobeImsTokenUserContext implements UserContextInterface
         $this->userId = $adminUserId;
         $this->isRequestProcessed = true;
     }
-
-
 
     /**
      * Getting requested token
