@@ -19,15 +19,14 @@
             <group value="module-checkout"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <!-- create category and simple product -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!--Goto Admin Configuration page and Allow Guest Checkout is No-->
-            <actionGroup ref="AdminConfigurationAllowGuestCheckoutNoNavigateActionGroup" stepKey="storeConfigurationAllowGuestCheckoutNo"/>
-            <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="clickOnSaveConfig"/>
+            <createData entity="DisableAllowGuestCheckout" stepKey="storeConfigurationAllowGuestCheckoutNo">
+            </createData>
             <!-- create customer and clean the cache and index-->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
@@ -48,18 +47,14 @@
             <argument name="email" value="$$createCustomer.email$$"/>
             <argument name="password" value="$$createCustomer.password$$"/>
         </actionGroup>
-        <amOnPage url="{{AdminLoginPage.url}}" stepKey="onLoginPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingPage"/>
-
         <after>
             <!--Goto Admin Configuration page and Allow Guest Checkout is Yes-->
-            <actionGroup ref="AdminConfigurationAllowGuestCheckoutYesNavigateActionGroup" stepKey="storeConfigurationAllowGuestCheckoutYes"/>
-            <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="clickOnSaveConfigAgain"/>
+            <createData entity="EnableAllowGuestCheckout" stepKey="storeConfigurationAllowGuestCheckoutYes">
+            </createData>
             <!-- Delete created category, product and customer-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>
