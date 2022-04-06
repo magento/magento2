@@ -67,6 +67,23 @@ class ReorderTest extends TestCase
             self::assertEquals(0, (int)$quoteItem->getCustomPrice());
         }
 
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Data\Customer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getGroupId',
+                    'getEmail',
+                    '_getExtensionAttributes'
+                ]
+            )->getMock();
+        $customerMock->method('getGroupId')
+            ->willReturn(1);
+        $customerMock->method('getEmail')
+            ->willReturn('customer@example.com');
+        $customerMock->method('_getExtensionAttributes')
+            ->willReturn(NULL);
+        $this->model->getQuote()->setCustomer($customerMock);
+
         $shippingMethod = 'freeshipping_freeshipping';
         /** @var Rate $rate */
         $rate = $this->objectManager->create(Rate::class);

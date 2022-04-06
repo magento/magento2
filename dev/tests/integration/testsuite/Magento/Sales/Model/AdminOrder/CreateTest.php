@@ -103,10 +103,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $customer = $this->objectManager->create(Customer::class);
         $customer->load(1)->setDefaultBilling(null)->setDefaultShipping(null)->save();
+        $customerMock = $this->getMockedCustomer();
 
         $rate = $this->objectManager->create(Quote\Address\Rate::class);
         $rate->setCode('freeshipping_freeshipping');
 
+        $this->model->getQuote()->setCustomer($customerMock);
         $this->model->getQuote()->getShippingAddress()->addShippingRate($rate);
         $this->model->getQuote()->getShippingAddress()->setCountryId('EE');
         $this->model->setShippingAsBilling(0);
@@ -399,6 +401,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             $paymentMethod
         );
         $order = $this->model->createOrder();
+        $newBillAddress = $order->getBillingAddress();
+        self::assertEquals($this->model->getQuote()->getCustomerFirstname(), $newBillAddress->getFirstname());
+        self::assertEquals($this->model->getQuote()->getCustomerLastname(), $newBillAddress->getLastname());
+        self::assertEquals($order->getCustomerFirstname(), $newBillAddress->getFirstname());
+        self::assertEquals($order->getCustomerLastname(), $newBillAddress->getLastname());
         $this->verifyCreatedOrder($order, $shippingMethod);
         /** @var Customer $customer */
         $customer = $this->objectManager->create(Customer::class);
@@ -569,6 +576,9 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             $paymentMethod,
             $customerIdFromFixture
         );
+        $customerMock = $this->getMockedCustomer();
+
+        $this->model->getQuote()->setCustomer($customerMock);
         $order = $this->model->createOrder();
         $this->verifyCreatedOrder($order, $shippingMethod);
         $this->objectManager->get(CustomerRegistry::class)
@@ -617,6 +627,9 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             $paymentMethod,
             $customerIdFromFixture
         );
+        $customerMock = $this->getMockedCustomer();
+
+        $this->model->getQuote()->setCustomer($customerMock);
         $order = $this->model->createOrder();
         $this->verifyCreatedOrder($order, $shippingMethod);
     }
@@ -861,6 +874,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
          * They are set to message manager only during createOrder() call.
          */
         $this->model->setIsValidate(true)->setBillingAddress($invalidAddressData);
+        $this->model->setIsValidate(true)->setShippingAddress($invalidAddressData);
         try {
             $this->model->createOrder();
             $this->fail('Validation errors are expected to lead to exception during createOrder() call.');
@@ -938,5 +952,34 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             /** createOrder is expected to throw exception with empty message when validation error occurs */
             self::assertEquals('Validation is failed.', $e->getRawMessage());
         }
+    }
+
+    /**
+     * Get customer mock object.
+     *
+     * @return \Magento\Customer\Model\Data\Customer
+     */
+    private function getMockedCustomer()
+    {
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Data\Customer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getId',
+                    'getGroupId',
+                    'getEmail',
+                    '_getExtensionAttributes'
+                ]
+            )->getMock();
+        $customerMock->method('getId')
+            ->willReturn(1);
+        $customerMock->method('getGroupId')
+            ->willReturn(1);
+        $customerMock->method('getEmail')
+            ->willReturn('customer@example.com');
+        $customerMock->method('_getExtensionAttributes')
+            ->willReturn(NULL);
+
+        return $customerMock;
     }
 }

@@ -41,7 +41,7 @@ class AddressSave extends Order implements HttpPostActionInterface
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
+    public const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
 
     /**
      * @var RegionFactory
@@ -72,6 +72,7 @@ class AddressSave extends Order implements HttpPostActionInterface
      * @param LoggerInterface $logger
      * @param RegionFactory|null $regionFactory
      * @param OrderAddressRepositoryInterface|null $orderAddressRepository
+     * @param AttributeMetadataDataProvider|null $attributeMetadataDataProvider
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
