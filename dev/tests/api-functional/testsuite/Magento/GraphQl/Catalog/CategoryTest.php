@@ -411,6 +411,8 @@ QUERY;
           }
         }
         name
+        new_from_date
+        new_to_date
         options_container
         price {
           minimalPrice {
@@ -846,6 +848,8 @@ QUERY;
             'short_description',
             'country_of_manufacture',
             'gift_message_available',
+            'new_from_date',
+            'new_to_date',
             'options_container',
             'special_price'
         ];
