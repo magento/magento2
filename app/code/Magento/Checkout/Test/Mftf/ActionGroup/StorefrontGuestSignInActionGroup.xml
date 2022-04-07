@@ -17,11 +17,10 @@
             <argument name="email" type="string" defaultValue=""/>
             <argument name="password" type="string" defaultValue=""/>
         </arguments>
-
         <fillField selector="{{StorefrontCustomerSignInPopupFormSection.email}}" userInput="{{email}}" stepKey="fillEmailId"/>
         <fillField selector="{{StorefrontCustomerSignInPopupFormSection.password}}" userInput="{{password}}" stepKey="fillPassword"/>
-        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.CreateAnAccount}}" stepKey="seeCreateAnAccount"/>
-        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.ForgotYourPassword}}" stepKey="seeForgotYourPassword"/>
-        <click selector="{{StorefrontCustomerSignInPopupFormSection.SignIn}}" stepKey="clickOnSignIn"/>
-    </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.createAnAccount}}" stepKey="seeCreateAnAccount"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.forgotYourPassword}}" stepKey="seeForgotYourPassword"/>
+        <click selector="{{StorefrontCustomerSignInPopupFormSection.signIn}}" stepKey="clickOnSignIn"/>
+         </actionGroup>
 </actionGroups>
