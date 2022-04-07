@@ -131,6 +131,9 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
         $lifetime = $this->securityConfig->getAdminSessionLifetime();
         $currentTime = $this->dateTime->gmtTimestamp();
         $lastUpdatedTime = $this->getUpdatedAt();
+        if (empty($lastUpdatedTime)) {
+            return true;
+        }
         if (!is_numeric($lastUpdatedTime)) {
             $lastUpdatedTime = strtotime($lastUpdatedTime);
         }
