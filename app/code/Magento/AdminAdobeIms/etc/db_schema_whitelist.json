@@ -1,10 +1,23 @@
 {
-    "adobe_user_profile": {
+    "admin_adobe_ims_token": {
         "column": {
-            "adobe_user_id": true
+            "id": true,
+            "admin_user_id": true,
+            "access_token_hash": true,
+            "created_at": true,
+            "updated_at": true,
+            "last_check_time": true,
+            "access_token_expires_at": true
         },
         "index": {
-            "ADOBE_USER_PROFILE_ADOBE_USER_ID": true
+            "ADOBE_USER_PROFILE_ID": true,
+            "ADMIN_ADOBE_IMS_TOKEN_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ADOBE_USER_PROFILE_ADMIN_USER_ID_ADMIN_USER_USER_ID": true,
+            "ADMIN_ADOBE_IMS_TOKEN_ACCESS_TOKEN_HASH": true,
+            "ADMIN_ADOBE_IMS_TOKEN_ADMIN_USER_ID_ADMIN_USER_USER_ID": true
         }
     }
 }
