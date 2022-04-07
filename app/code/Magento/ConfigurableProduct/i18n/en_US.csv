@@ -1,7 +1,7 @@
 "Add configurable attributes to the current Attribute Set (""%1"")","Add configurable attributes to the current Attribute Set (""%1"")"
-"Add configurable attributes to the new Attribute Set based on current","Add configurable attributes to the new Attribute Set based on current"
+"Add configurable attributes to a new Attribute Set based on current","Add configurable attributes to a new Attribute Set based on current"
 "New attribute set name","New attribute set name"
-"Add configurable attributes to the existing Attribute Set","Add configurable attributes to the existing Attribute Set"
+"Add configurable attributes to an existing Attribute Set","Add configurable attributes to an existing Attribute Set"
 "Choose existing Attribute Set","Choose existing Attribute Set"
 Save,Save
 "Save & New","Save & New"
