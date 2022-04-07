@@ -438,14 +438,8 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         }
 
         if ((array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
-                && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
-            if ($this->isArabicSymbols($formattedCurrency)) {
-                /* Workaround. We need to provide Arabic symbols range and Unicode modifier into expression
-                   to bypass issue when preg_replace with Arabic symbol return corrupted result */
-                $formattedCurrency = preg_replace(['/[^0-9\x{0600}-\x{06FF}.,۰٫]+/u', '/ /'], '', $formattedCurrency);
-            } else {
-                $formattedCurrency = preg_replace(['/[^0-9.,۰٫]+/', '/ /'], '', $formattedCurrency);
-            }
+            && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
+            $formattedCurrency = str_replace(' ', '', $formattedCurrency);
         }
 
         return preg_replace('/^\s+|\s+$/u', '', $formattedCurrency);
