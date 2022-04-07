@@ -69,7 +69,7 @@ class AdobeImsTokenUserService
     }
 
     /**
-     * get adobe_user_id from token and store it for admin user
+     * Get adobe_user_id from token and store it for admin user
      *
      * @param string $bearerToken
      * @return int
