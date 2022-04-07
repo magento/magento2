@@ -8,16 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model\Authorization;
 
-use Magento\AdminAdobeIms\Api\TokenReaderInterface;
-use Magento\AdminAdobeIms\Model\ImsConnection;
-use Magento\AdminAdobeIms\Model\User;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
-use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\Webapi\Request;
 
 /**
@@ -28,14 +24,14 @@ class AdobeImsTokenUserContext implements UserContextInterface
     private const AUTHORIZATION_METHOD_HEADER_BEARER = 'bearer';
 
     /**
-     * @var int
+     * @var int|null
      */
-    private $userId;
+    private ?int $userId = null;
 
     /**
      * @var bool
      */
-    private $isRequestProcessed;
+    private bool $isRequestProcessed = false;
 
     /**
      * @var Request
@@ -43,66 +39,34 @@ class AdobeImsTokenUserContext implements UserContextInterface
     private Request $request;
 
     /**
-     * @var TokenReaderInterface
-     */
-    private TokenReaderInterface $tokenReader;
-
-    /**
-     * @var ImsConnection
-     */
-    private ImsConnection $imsConnection;
-
-    /**
      * @var ImsConfig
      */
     private ImsConfig $imsConfig;
 
     /**
-     * @var UserProfileRepositoryInterface
+     * @var AdobeImsTokenUserService
      */
-    private UserProfileRepositoryInterface $userProfileRepository;
-
-    /**
-     * @var UserProfileInterfaceFactory
-     */
-    private UserProfileInterfaceFactory $userProfileFactory;
-
-    /**
-     * @var User
-     */
-    private User $adminUser;
+    private AdobeImsTokenUserService $tokenUserService;
 
     /**
      * @param Request $request
-     * @param TokenReaderInterface $tokenReader
-     * @param ImsConnection $imsConnection
      * @param ImsConfig $imsConfig
-     * @param UserProfileRepositoryInterface $userProfileRepository
-     * @param UserProfileInterfaceFactory $userProfileFactory
-     * @param User $adminUser
+     * @param AdobeImsTokenUserService $tokenUserService
      */
     public function __construct(
         Request $request,
-        TokenReaderInterface $tokenReader,
-        ImsConnection $imsConnection,
         ImsConfig $imsConfig,
-        UserProfileRepositoryInterface $userProfileRepository,
-        UserProfileInterfaceFactory $userProfileFactory,
-        User $adminUser
+        AdobeImsTokenUserService $tokenUserService
     ) {
         $this->request = $request;
-        $this->tokenReader = $tokenReader;
-        $this->imsConnection = $imsConnection;
         $this->imsConfig = $imsConfig;
-        $this->userProfileRepository = $userProfileRepository;
-        $this->userProfileFactory = $userProfileFactory;
-        $this->adminUser = $adminUser;
+        $this->tokenUserService = $tokenUserService;
     }
 
     /**
      * @inheritdoc
      */
-    public function getUserId()
+    public function getUserId(): ?int
     {
         $this->processRequest();
         return $this->userId;
@@ -111,7 +75,7 @@ class AdobeImsTokenUserContext implements UserContextInterface
     /**
      * @inheritdoc
      */
-    public function getUserType()
+    public function getUserType(): ?int
     {
         return UserContextInterface::USER_TYPE_ADMIN;
     }
@@ -120,6 +84,9 @@ class AdobeImsTokenUserContext implements UserContextInterface
      * Finds the bearer token and looks up the value.
      *
      * @return void
+     * @throws AuthorizationException
+     * @throws CouldNotSaveException
+     * @throws InvalidArgumentException
      */
     private function processRequest()
     {
@@ -132,28 +99,7 @@ class AdobeImsTokenUserContext implements UserContextInterface
         }
 
         try {
-            $tokenData = $this->tokenReader->read($bearerToken);
-            $adobeUserId = $tokenData['adobe_user_id'] ?? '';
-            $userProfile = $this->userProfileRepository->getByAdobeUserId($adobeUserId);
-
-            if ($userProfile->getId()) {
-                $adminUserId = (int) $userProfile->getData('admin_user_id');
-            } else {
-                $profile = $this->imsConnection->getProfile($bearerToken);
-                if (empty($profile['email'])) {
-                    throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
-                }
-                $adminUser = $this->adminUser->loadByEmail($profile['email']);
-                if (empty($adminUser['user_id'])) {
-                    throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
-                }
-
-                $adminUserId = (int) $adminUser['user_id'];
-                $profile['adobe_user_id'] = $adobeUserId;
-
-                $userProfileInterface = $this->getUserProfileInterface($adminUserId);
-                $this->userProfileRepository->save($this->updateUserProfile($userProfileInterface, $profile));
-            }
+            $adminUserId = $this->tokenUserService->getAdminUserIdByToken($bearerToken);
         } catch (AuthenticationException $e) {
             $this->isRequestProcessed = true;
             return;
@@ -189,44 +135,5 @@ class AdobeImsTokenUserContext implements UserContextInterface
         }
 
         return $headerPieces[1];
-    }
-
-    /**
-     * Get user profile entity
-     *
-     * @param int $adminUserId
-     * @return UserProfileInterface
-     */
-    private function getUserProfileInterface(int $adminUserId): UserProfileInterface
-    {
-        try {
-            return $this->userProfileRepository->getByUserId($adminUserId);
-        } catch (NoSuchEntityException $exception) {
-            return $this->userProfileFactory->create(
-                [
-                    'data' => [
-                        'admin_user_id' => $adminUserId
-                    ]
-                ]
-            );
-        }
-    }
-
-    /**
-     * Update user profile with the data from token
-     *
-     * @param UserProfileInterface $userProfileInterface
-     * @param array $profile
-     * @return UserProfileInterface
-     */
-    private function updateUserProfile(
-        UserProfileInterface $userProfileInterface,
-        array $profile
-    ): UserProfileInterface {
-        $userProfileInterface->setName($profile['name'] ?? '');
-        $userProfileInterface->setEmail($profile['email'] ?? '');
-        $userProfileInterface->setAdobeUserId($profile['adobe_user_id']);
-
-        return $userProfileInterface;
     }
 }

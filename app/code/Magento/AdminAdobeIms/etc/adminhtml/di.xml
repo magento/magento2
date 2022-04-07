@@ -50,4 +50,12 @@
         <plugin name="remove_password_and_user_confirmation_form_fields"
                 type="Magento\AdminAdobeIms\Plugin\RemovePasswordAndUserConfirmationFormFieldsPlugin"/>
     </type>
+    <type name="Magento\Integration\Model\AdminTokenService">
+        <plugin name="revoke_admin_access_token"
+                type="Magento\AdminAdobeIms\Plugin\RevokeAdminAccessTokenPlugin"/>
+    </type>
+    <type name="Magento\AdobeImsApi\Api\Data\UserProfileInterface">
+        <plugin name="clear_adobe_user_id"
+                type="Magento\AdminAdobeIms\Plugin\ClearAdobeUserIdPlugin"/>
+    </type>
 </config>

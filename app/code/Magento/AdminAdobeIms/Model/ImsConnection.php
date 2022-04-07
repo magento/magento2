@@ -208,7 +208,7 @@ class ImsConnection
      *
      * @param string $code
      * @return array|bool|float|int|mixed|string|null
-     * @throws AuthorizationException
+     * @throws AdobeImsTokenAuthorizationException
      */
     public function getProfile(string $code)
     {
