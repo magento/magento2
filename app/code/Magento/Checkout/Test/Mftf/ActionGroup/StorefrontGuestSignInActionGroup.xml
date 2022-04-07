@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontGuestSignInActionGroup">
         <annotations>
-            <description>Enter email id and password, click on sign in button and validate functionality.</description>
+            <description>Enter email id and password, click on sign in button.</description>
         </annotations>
         <arguments>
             <!--<argument name="username" type="string" defaultValue=""/>-->
@@ -18,10 +18,10 @@
             <argument name="password" type="string" defaultValue=""/>
         </arguments>
 
-        <fillField selector="{{StorefrontGuestSignInSection.email}}" userInput="{{email}}" stepKey="fillEmailId"/>
-        <fillField selector="{{StorefrontGuestSignInSection.password}}" userInput="{{password}}" stepKey="fillPassword"/>
-        <waitForElementVisible selector="{{StorefrontGuestSignInSection.CreateAnAccount}}" stepKey="seeCreateAnAccount"/>
-        <waitForElementVisible selector="{{StorefrontGuestSignInSection.ForgotYourPassword}}" stepKey="seeForgotYourPassword"/>
-        <click selector="{{StorefrontGuestSignInSection.SignIn}}" stepKey="clickOnSignIn"/>
+        <fillField selector="{{StorefrontCustomerSignInPopupFormSection.email}}" userInput="{{email}}" stepKey="fillEmailId"/>
+        <fillField selector="{{StorefrontCustomerSignInPopupFormSection.password}}" userInput="{{password}}" stepKey="fillPassword"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.CreateAnAccount}}" stepKey="seeCreateAnAccount"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.ForgotYourPassword}}" stepKey="seeForgotYourPassword"/>
+        <click selector="{{StorefrontCustomerSignInPopupFormSection.SignIn}}" stepKey="clickOnSignIn"/>
     </actionGroup>
 </actionGroups>
