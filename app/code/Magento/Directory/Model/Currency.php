@@ -595,15 +595,4 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         }
         return $string;
     }
-
-    /**
-     * Checks if given string is of Arabic symbols
-     *
-     * @param string $string
-     * @return bool
-     */
-    private function isArabicSymbols(string $string): bool
-    {
-        return preg_match('/[\p{Arabic}]/u', $string) > 0;
-    }
 }
