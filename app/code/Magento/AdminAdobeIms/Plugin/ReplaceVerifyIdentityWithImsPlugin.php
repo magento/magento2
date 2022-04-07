@@ -109,6 +109,6 @@ class ReplaceVerifyIdentityWithImsPlugin
         }
 
         $accessToken = $this->encryptor->decrypt($userProfile->getAccessToken());
-        return $this->imsConnection->verifyToken($accessToken);
+        return $this->imsConnection->validateToken($accessToken);
     }
 }

@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Model;
 
 use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
+use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdobeIms\Model\GetToken;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
@@ -43,21 +44,29 @@ class ImsConnection
     private GetToken $token;
 
     /**
+     * @var AdminAdobeImsLogger
+     */
+    private AdminAdobeImsLogger $adminAdobeImsLogger;
+
+    /**
      * @param CurlFactory $curlFactory
      * @param ImsConfig $imsConfig
      * @param Json $json
      * @param GetToken $token
+     * @param AdminAdobeImsLogger $adminAdobeImsLogger
      */
     public function __construct(
         CurlFactory $curlFactory,
         ImsConfig $imsConfig,
         Json $json,
-        GetToken $token
+        GetToken $token,
+        AdminAdobeImsLogger $adminAdobeImsLogger
     ) {
         $this->curlFactory = $curlFactory;
         $this->imsConfig = $imsConfig;
         $this->json = $json;
         $this->token = $token;
+        $this->adminAdobeImsLogger = $adminAdobeImsLogger;
     }
 
     /**
@@ -140,19 +149,20 @@ class ImsConnection
      * Verify if access_token is valid
      *
      * @param string $code
+     * @param string $tokenType
      * @return bool
      * @throws AuthorizationException
      */
-    public function verifyToken(string $code): bool
+    public function validateToken(string $code, string $tokenType = 'access_token'): bool
     {
+        $isTokenValid = false;
         $curl = $this->curlFactory->create();
 
         $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
         $curl->addHeader('cache-control', 'no-cache');
-        $curl->addHeader('Authorization', 'Bearer ' . $code);
 
         $curl->post(
-            $this->imsConfig->getVerifyUrl($code),
+            $this->imsConfig->getValidateTokenUrl($code, $tokenType),
             []
         );
 
@@ -164,7 +174,15 @@ class ImsConnection
 
         $body = $this->json->unserialize($curl->getBody());
 
-        return isset($body['valid']) && $body['valid'] === true;
+        if (isset($body['valid'])) {
+            $isTokenValid = (bool)$body['valid'];
+        }
+
+        if (!$isTokenValid && isset($body['reason'])) {
+            $this->adminAdobeImsLogger->info($tokenType . ' is not valid. Reason: ' . $body['reason']);
+        }
+
+        return $isTokenValid;
     }
 
     /**

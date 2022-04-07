@@ -27,11 +27,11 @@ class ImsConfig extends Config
     public const XML_PATH_AUTH_URL_PATTERN = 'adobe_ims/integration/auth_url_pattern';
     public const XML_PATH_PROFILE_URL = 'adobe_ims/integration/profile_url';
     public const XML_PATH_NEW_ADMIN_EMAIL_TEMPLATE = 'adobe_ims/email/content_template';
-    public const XML_PATH_VERIFY_URL = 'adobe_ims/integration/verify_url';
-
-    private const OAUTH_CALLBACK_URL = 'adobe_ims_auth/oauth/';
+    public const XML_PATH_VALIDATE_TOKEN_URL = 'adobe_ims/integration/validate_token_url';
     public const XML_PATH_LOGOUT_URL = 'adobe_ims/integration/logout_url';
     public const XML_PATH_CERTIFICATE_PATH = 'adobe_ims/integration/certificate_path';
+
+    private const OAUTH_CALLBACK_URL = 'adobe_ims_auth/oauth/';
 
     /**
      * @var ScopeConfigInterface
@@ -164,17 +164,18 @@ class ImsConfig extends Config
     }
 
     /**
-     * Get Token verification url
+     * Get Token validation url
      *
      * @param string $code
+     * @param string $tokenType
      * @return string
      */
-    public function getVerifyUrl(string $code): string
+    public function getValidateTokenUrl(string $code, string $tokenType): string
     {
         return str_replace(
-            ['#{token}', '#{client_id}'],
-            [$code, $this->getApiKey()],
-            $this->scopeConfig->getValue(self::XML_PATH_VERIFY_URL)
+            ['#{token}', '#{client_id}', '#{token_type}'],
+            [$code, $this->getApiKey(), $tokenType],
+            $this->scopeConfig->getValue(self::XML_PATH_VALIDATE_TOKEN_URL)
         );
     }
 
