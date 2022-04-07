@@ -19,70 +19,85 @@
         </annotations>
 
         <before>
-            <!-- Login as admin -->
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <!-- create virtual product -->
-            <createData entity="VirtualProduct" stepKey="createVirtualProduct"/>
-            <!-- create US customer -->
-            <createData entity="Simple_US_Customer_NY" stepKey="createDefaultCustomer"/>
+
             <!-- create default category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- create virtual product -->
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct">
+            <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
             <!-- assign virtual product to default category -->
             <createData entity="AssignProductToCategory" stepKey="assignCategoryToVirtualProduct">
                 <requiredEntity createDataKey="createCategory"/>
                 <requiredEntity createDataKey="createVirtualProduct"/>
             </createData>
+
+            <!-- create customer -->
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
         </before>
 
         <after>
             <!-- delete category,product,customer -->
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>
-            <deleteData createDataKey="createDefaultCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
 
-        <!-- Login to storefront as customer -->
-        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
-            <argument name="Customer" value="$createDefaultCustomer$"/>
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
-        <!-- go to category -->
-        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
-            <argument name="category" value="$$createCategory$$"/>
+
+        <!-- Customer placed order from storefront with payment method -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createVirtualProduct$$"/>
         </actionGroup>
-        <!-- select the product image and add to cart -->
-        <click selector="//img[@class='product-image-photo']" stepKey="clickProduct1"/>
-        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
-            <argument name="productName" value="$$createVirtualProduct.name$$"/>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
-        <!-- click on cart icon and proceed to checkout -->
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCartAsCustomer"/>
-        <click selector="{{CheckoutShippingGuestInfoSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
-        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
-        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
-        <waitForElementVisible selector="{{CheckoutSuccessMainSection.success}}" stepKey="waitForSuccess"/>
-        <!-- get order number -->
+
+        <!-- order number is captured for future validation -->
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderNumber"/>
+
         <!-- Log in as admin-->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-        <!-- go to orders page and validate order details -->
+
+        <!-- Go to orders page and validate the order details -->
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
             <argument name="orderId" value="{$getOrderNumber}"/>
         </actionGroup>
-        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="verifyOrderStatus"/>
-        <click selector="{{AdminOrderDetailsInformationSection.orderStatus}}" stepKey="openOrderDetailPage"/>
-        <!-- create an invoice for the order-->
-        <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createNewInvoice"/>
-        <!-- Find the Order in storefront -->
-        <amOnPage url="{StorefrontHomePage.url}" stepKey="goToStorefrontHomePage" />
-        <amOnPage url="{{StorefrontGuestOrderSearchPage.url}}" stepKey="amOnOrdersAndReturns"/>
-        <waitForPageLoad stepKey="waitForStorefrontMyOrdersPage"/>
-        <!-- Click 'Reorder' link -->
-        <click selector="{{StorefrontCustomerMyOrdersSection.reorderLink}}" stepKey="clickReturnLink"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <!--Check that product from order is visible in cart after reorder -->
-        <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createVirtualProduct.name$$)}}" stepKey="seeProductInCart"/>
+
+        <!--Create Invoice-->
+        <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createInvoice"/>
+
+        <!-- Open My Account Page from Customer dropdown -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
+
+        <!-- Goto Orders tab from Sidebar menu in Storefront page -->
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu">
+            <argument name="menu" value="My Orders"/>
+        </actionGroup>
+
+        <!-- Clicking View Order from My Orders Grid -->
+        <actionGroup ref="StorefrontClickViewOrderLinkOnMyOrdersPageActionGroup" stepKey="clickViewOrder"/>
+
+        <!-- Clicking on Reorder link from Order Details Tab -->
+        <click selector="{{StorefrontCustomerOrderViewSection.reorder}}" stepKey="clickReorder"/>
+
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
+
+        <!-- Reordering the virtual product -->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="reorderVirtualProduct">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
 
     </test>
 </tests>
