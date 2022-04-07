@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutShippingGuestInfoSection">
         <element name="email" type="input" selector="#customer-email"/>
         <element name="firstName" type="input" selector="input[name=firstname]"/>
@@ -24,7 +24,6 @@
         <element name="next" type="button" selector="button.button.action.continue.primary" timeout="30"/>
         <element name="firstShippingMethod" type="radio" selector=".row:nth-of-type(1) .col-method .radio"/>
         <element name="shippingBlock" type="text" selector="#checkout-step-shipping"/>
-
 
         <!--Order Summary-->
         <element name="itemInCart" type="button" selector="div.items-in-cart div.title" timeout="30"/>
