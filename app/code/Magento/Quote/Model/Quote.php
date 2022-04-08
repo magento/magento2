@@ -2670,13 +2670,13 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Returns quote address items
      *
-     * @param int|null $itemId
+     * @param int $itemId
      * @return array
      */
-    private function getQuoteShippingAddressItemsByQuoteItemId($itemId = null): array
+    private function getQuoteShippingAddressItemsByQuoteItemId(int $itemId): array
     {
         $addressItems = [];
-        if ($itemId !== null && $this->isMultipleShippingAddresses()) {
+        if ($this->isMultipleShippingAddresses()) {
             $addresses = $this->getAllShippingAddresses();
             foreach ($addresses as $address) {
                 foreach ($address->getAllItems() as $item) {
