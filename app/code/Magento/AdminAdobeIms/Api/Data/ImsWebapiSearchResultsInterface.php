@@ -8,27 +8,27 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Api\Data;
 
-use Magento\AdminAdobeIms\Api\Data\ImsTokenInterface;
+use Magento\AdminAdobeIms\Api\Data\ImsWebapiInterface;
 use Magento\Framework\Api\SearchResultsInterface;
 
 /**
- * Interface ImsTokenSearchResultsInterface
+ * Interface ImsWebapiSearchResultsInterface
  *
  * @api
  */
-interface ImsTokenSearchResultsInterface extends SearchResultsInterface
+interface ImsWebapiSearchResultsInterface extends SearchResultsInterface
 {
     /**
      * Get ims token list.
      *
-     * @return ImsTokenInterface[]
+     * @return ImsWebapiInterface[]
      */
     public function getItems();
 
     /**
      * Set ims token list.
      *
-     * @param ImsTokenInterface[] $items
+     * @param ImsWebapiInterface[] $items
      * @return $this
      */
     public function setItems(array $items);

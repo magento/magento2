@@ -8,12 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model;
 
-use Magento\AdminAdobeIms\Api\Data\ImsTokenSearchResultsInterface;
+use Magento\AdminAdobeIms\Api\Data\ImsWebapiSearchResultsInterface;
 use Magento\Framework\Api\SearchResults;
 
 /**
  * Service Data Object with ims token search results.
  */
-class ImsTokenSearchResults extends SearchResults implements ImsTokenSearchResultsInterface
+class ImsWebapiSearchResults extends SearchResults implements ImsWebapiSearchResultsInterface
 {
 }

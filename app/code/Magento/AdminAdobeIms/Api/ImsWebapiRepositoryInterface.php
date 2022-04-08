@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Api;
 
-use Magento\AdminAdobeIms\Api\Data\ImsTokenInterface;
+use Magento\AdminAdobeIms\Api\Data\ImsWebapiInterface;
 
-use Magento\AdminAdobeIms\Api\Data\ImsTokenSearchResultsInterface;
+use Magento\AdminAdobeIms\Api\Data\ImsWebapiSearchResultsInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
@@ -20,34 +20,34 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Declare ims user profile repository
  * @api
  */
-interface ImsTokenRepositoryInterface
+interface ImsWebapiRepositoryInterface
 {
     /**
      * Save ims
      *
-     * @param ImsTokenInterface $entity
+     * @param ImsWebapiInterface $entity
      * @return void
      * @throws CouldNotSaveException
      */
-    public function save(ImsTokenInterface $entity): void;
+    public function save(ImsWebapiInterface $entity): void;
 
     /**
      * Get ims token
      *
      * @param int $entityId
-     * @return ImsTokenInterface
+     * @return ImsWebapiInterface
      * @throws NoSuchEntityException
      */
-    public function get(int $entityId): ImsTokenInterface;
+    public function get(int $entityId): ImsWebapiInterface;
 
     /**
      * Get ims token by search criteria
      *
      * @param SearchCriteriaInterface $searchCriteria
-     * @return ImsTokenSearchResultsInterface
+     * @return ImsWebapiSearchResultsInterface
      * @throws NoSuchEntityException
      */
-    public function getList(SearchCriteriaInterface $searchCriteria): ImsTokenSearchResultsInterface;
+    public function getList(SearchCriteriaInterface $searchCriteria): ImsWebapiSearchResultsInterface;
 
     /**
      * Delete ims token.

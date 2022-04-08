@@ -14,7 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * Declare the ims token data service object
  * @api
  */
-interface ImsTokenInterface extends ExtensibleDataInterface
+interface ImsWebapiInterface extends ExtensibleDataInterface
 {
     /**
      * Get ID
@@ -36,7 +36,7 @@ interface ImsTokenInterface extends ExtensibleDataInterface
      * @param int $value
      * @return $this
      */
-    public function setUserId(int $value): ImsTokenInterface;
+    public function setUserId(int $value): ImsWebapiInterface;
 
     /**
      * Get access token hash
@@ -51,7 +51,7 @@ interface ImsTokenInterface extends ExtensibleDataInterface
      * @param string $value
      * @return $this
      */
-    public function setAccessTokenHash(string $value): ImsTokenInterface;
+    public function setAccessTokenHash(string $value): ImsWebapiInterface;
 
     /**
      * Get creation time
@@ -66,7 +66,7 @@ interface ImsTokenInterface extends ExtensibleDataInterface
      * @param string $value
      * @return $this
      */
-    public function setCreatedAt(string $value): ImsTokenInterface;
+    public function setCreatedAt(string $value): ImsWebapiInterface;
 
     /**
      * Get update time
@@ -81,7 +81,7 @@ interface ImsTokenInterface extends ExtensibleDataInterface
      * @param string $value
      * @return $this
      */
-    public function setUpdatedAt(string $value): ImsTokenInterface;
+    public function setUpdatedAt(string $value): ImsWebapiInterface;
 
     /**
      * Get last check time
@@ -96,7 +96,7 @@ interface ImsTokenInterface extends ExtensibleDataInterface
      * @param string $value
      * @return $this
      */
-    public function setLastCheckTime(string $value): ImsTokenInterface;
+    public function setLastCheckTime(string $value): ImsWebapiInterface;
 
     /**
      * Get expires time of token
@@ -111,22 +111,22 @@ interface ImsTokenInterface extends ExtensibleDataInterface
      * @param string $value
      * @return $this
      */
-    public function setAccessTokenExpiresAt(string $value): ImsTokenInterface;
+    public function setAccessTokenExpiresAt(string $value): ImsWebapiInterface;
 
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return ImsTokenExtensionInterface
+     * @return ImsWebapiExtensionInterface
      */
-    public function getExtensionAttributes(): ImsTokenExtensionInterface;
+    public function getExtensionAttributes(): ImsWebapiExtensionInterface;
 
     /**
      * Set extension attributes
      *
-     * @param ImsTokenExtensionInterface $extensionAttributes
+     * @param ImsWebapiExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        ImsTokenExtensionInterface $extensionAttributes
-    ): ImsTokenInterface;
+        ImsWebapiExtensionInterface $extensionAttributes
+    ): ImsWebapiInterface;
 }

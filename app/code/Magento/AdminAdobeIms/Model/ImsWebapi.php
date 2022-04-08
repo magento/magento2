@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model;
 
-use Magento\AdminAdobeIms\Model\ResourceModel\ImsToken as ImsTokenResource;
-use Magento\AdminAdobeIms\Api\Data\ImsTokenInterface;
+use Magento\AdminAdobeIms\Model\ResourceModel\ImsWebapi as ImsWebapiResource;
+use Magento\AdminAdobeIms\Api\Data\ImsWebapiInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\AdminAdobeIms\Api\Data\ImsTokenExtensionInterface;
+use Magento\AdminAdobeIms\Api\Data\ImsWebapiExtensionInterface;
 
 /**
  * Represent the user profile service data class
  */
-class ImsToken extends AbstractExtensibleModel implements ImsTokenInterface
+class ImsWebapi extends AbstractExtensibleModel implements ImsWebapiInterface
 {
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -32,7 +32,7 @@ class ImsToken extends AbstractExtensibleModel implements ImsTokenInterface
      */
     protected function _construct(): void
     {
-        $this->_init(ImsTokenResource::class);
+        $this->_init(ImsWebapiResource::class);
     }
 
     /**
@@ -46,7 +46,7 @@ class ImsToken extends AbstractExtensibleModel implements ImsTokenInterface
     /**
      * @inheritdoc
      */
-    public function setUserId(int $value): ImsTokenInterface
+    public function setUserId(int $value): ImsWebapiInterface
     {
         $this->setData(self::USER_ID, $value);
 
@@ -64,7 +64,7 @@ class ImsToken extends AbstractExtensibleModel implements ImsTokenInterface
     /**
      * @inheritdoc
      */
-    public function setAccessTokenHash(string $value): ImsTokenInterface
+    public function setAccessTokenHash(string $value): ImsWebapiInterface
     {
         $this->setData(self::ACCESS_TOKEN_HASH, $value);
 
@@ -82,7 +82,7 @@ class ImsToken extends AbstractExtensibleModel implements ImsTokenInterface
     /**
      * @inheritdoc
      */
-    public function setCreatedAt(string $value): ImsTokenInterface
+    public function setCreatedAt(string $value): ImsWebapiInterface
     {
         $this->setData(self::CREATED_AT, $value);
 
@@ -100,7 +100,7 @@ class ImsToken extends AbstractExtensibleModel implements ImsTokenInterface
     /**
      * @inheritdoc
      */
-    public function setUpdatedAt(string $value): ImsTokenInterface
+    public function setUpdatedAt(string $value): ImsWebapiInterface
     {
         $this->setData(self::UPDATED_AT, $value);
 
@@ -118,7 +118,7 @@ class ImsToken extends AbstractExtensibleModel implements ImsTokenInterface
     /**
      * @inheritdoc
      */
-    public function setLastCheckTime(string $value): ImsTokenInterface
+    public function setLastCheckTime(string $value): ImsWebapiInterface
     {
         $this->setData(self::LAST_CHECK_TIME, $value);
 
@@ -136,7 +136,7 @@ class ImsToken extends AbstractExtensibleModel implements ImsTokenInterface
     /**
      * @inheritdoc
      */
-    public function setAccessTokenExpiresAt(string $value): ImsTokenInterface
+    public function setAccessTokenExpiresAt(string $value): ImsWebapiInterface
     {
         $this->setData(self::ACCESS_TOKEN_EXPIRES_AT, $value);
 
@@ -146,7 +146,7 @@ class ImsToken extends AbstractExtensibleModel implements ImsTokenInterface
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes(): ImsTokenExtensionInterface
+    public function getExtensionAttributes(): ImsWebapiExtensionInterface
     {
         return $this->_getExtensionAttributes();
     }
@@ -154,7 +154,7 @@ class ImsToken extends AbstractExtensibleModel implements ImsTokenInterface
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(ImsTokenExtensionInterface $extensionAttributes): ImsTokenInterface
+    public function setExtensionAttributes(ImsWebapiExtensionInterface $extensionAttributes): ImsWebapiInterface
     {
         $this->_setExtensionAttributes($extensionAttributes);
 

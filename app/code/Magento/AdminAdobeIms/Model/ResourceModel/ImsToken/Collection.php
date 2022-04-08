@@ -6,10 +6,10 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdminAdobeIms\Model\ResourceModel\ImsToken;
+namespace Magento\AdminAdobeIms\Model\ResourceModel\ImsWebapi;
 
-use Magento\AdminAdobeIms\Model\ResourceModel\ImsToken as ImsTokenResource;
-use Magento\AdminAdobeIms\Model\ImsToken as ImsTokenModel;
+use Magento\AdminAdobeIms\Model\ResourceModel\ImsWebapi as ImsWebapiResource;
+use Magento\AdminAdobeIms\Model\ImsWebapi as ImsWebapiModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**
@@ -22,6 +22,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct(): void
     {
-        $this->_init(ImsTokenModel::class, ImsTokenResource::class);
+        $this->_init(ImsWebapiModel::class, ImsWebapiResource::class);
     }
 }

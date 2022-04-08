@@ -9,13 +9,13 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Model;
 
 use Exception;
-use Magento\AdminAdobeIms\Model\ResourceModel\ImsToken\Collection;
-use Magento\AdminAdobeIms\Model\ResourceModel\ImsToken\CollectionFactory;
-use Magento\AdminAdobeIms\Api\Data\ImsTokenInterface;
-use Magento\AdminAdobeIms\Api\Data\ImsTokenInterfaceFactory;
-use Magento\AdminAdobeIms\Api\ImsTokenRepositoryInterface;
-use Magento\AdminAdobeIms\Api\Data\ImsTokenSearchResultsInterface;
-use Magento\AdminAdobeIms\Api\Data\ImsTokenSearchResultsInterfaceFactory;
+use Magento\AdminAdobeIms\Model\ResourceModel\ImsWebapi\Collection;
+use Magento\AdminAdobeIms\Model\ResourceModel\ImsWebapi\CollectionFactory;
+use Magento\AdminAdobeIms\Api\Data\ImsWebapiInterface;
+use Magento\AdminAdobeIms\Api\Data\ImsWebapiInterfaceFactory;
+use Magento\AdminAdobeIms\Api\ImsWebapiRepositoryInterface;
+use Magento\AdminAdobeIms\Api\Data\ImsWebapiSearchResultsInterface;
+use Magento\AdminAdobeIms\Api\Data\ImsWebapiSearchResultsInterfaceFactory;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -26,17 +26,17 @@ use Psr\Log\LoggerInterface;
 /**
  * Represent user profile repository
  */
-class ImsTokenRepository implements ImsTokenRepositoryInterface
+class ImsWebapiRepository implements ImsWebapiRepositoryInterface
 {
     private const ADMIN_USER_ID = 'admin_user_id';
 
     /**
-     * @var ResourceModel\ImsToken
+     * @var ResourceModel\ImsWebapi
      */
     private $resource;
 
     /**
-     * @var ImsTokenInterfaceFactory
+     * @var ImsWebapiInterfaceFactory
      */
     private $entityFactory;
 
@@ -58,27 +58,27 @@ class ImsTokenRepository implements ImsTokenRepositoryInterface
      */
     private CollectionProcessorInterface $collectionProcessor;
     /**
-     * @var ImsTokenSearchResultsInterfaceFactory
+     * @var ImsWebapiSearchResultsInterfaceFactory
      */
-    private ImsTokenSearchResultsInterfaceFactory $searchResultsFactory;
+    private ImsWebapiSearchResultsInterfaceFactory $searchResultsFactory;
 
     /**
      * UserProfileRepository constructor.
      *
-     * @param ResourceModel\ImsToken $resource
-     * @param ImsTokenInterfaceFactory $entityFactory
+     * @param ResourceModel\ImsWebapi $resource
+     * @param ImsWebapiInterfaceFactory $entityFactory
      * @param LoggerInterface $logger
      * @param CollectionFactory $entityCollectionFactory
      * @param CollectionProcessorInterface $collectionProcessor
-     * @param ImsTokenSearchResultsInterfaceFactory $searchResultsFactory
+     * @param ImsWebapiSearchResultsInterfaceFactory $searchResultsFactory
      */
     public function __construct(
-        ResourceModel\ImsToken $resource,
-        ImsTokenInterfaceFactory $entityFactory,
+        ResourceModel\ImsWebapi $resource,
+        ImsWebapiInterfaceFactory $entityFactory,
         LoggerInterface $logger,
         CollectionFactory $entityCollectionFactory,
         CollectionProcessorInterface $collectionProcessor,
-        ImsTokenSearchResultsInterfaceFactory $searchResultsFactory
+        ImsWebapiSearchResultsInterfaceFactory $searchResultsFactory
     ) {
         $this->resource = $resource;
         $this->entityFactory = $entityFactory;
@@ -91,7 +91,7 @@ class ImsTokenRepository implements ImsTokenRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(ImsTokenInterface $entity): void
+    public function save(ImsWebapiInterface $entity): void
     {
         try {
             $this->resource->save($entity);
@@ -105,7 +105,7 @@ class ImsTokenRepository implements ImsTokenRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function get(int $entityId): ImsTokenInterface
+    public function get(int $entityId): ImsWebapiInterface
     {
         if (isset($this->loadedEntities[$entityId])) {
             return $this->loadedEntities[$entityId];
@@ -123,7 +123,7 @@ class ImsTokenRepository implements ImsTokenRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getList(SearchCriteriaInterface $searchCriteria): ImsTokenSearchResultsInterface
+    public function getList(SearchCriteriaInterface $searchCriteria): ImsWebapiSearchResultsInterface
     {
         /** @var Collection $collection */
         $collection = $this->entityCollectionFactory->create();

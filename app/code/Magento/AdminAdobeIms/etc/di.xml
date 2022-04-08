@@ -6,9 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\AdminAdobeIms\Api\Data\ImsTokenSearchResultsInterface" type="Magento\AdminAdobeIms\Model\ImsTokenSearchResults"/>
-    <preference for="Magento\AdminAdobeIms\Api\ImsTokenRepositoryInterface" type="Magento\AdminAdobeIms\Model\ImsTokenRepository"/>
-    <preference for="Magento\AdminAdobeIms\Api\Data\ImsTokenInterface" type="Magento\AdminAdobeIms\Model\ImsToken"/>
+    <preference for="Magento\AdminAdobeIms\Api\Data\ImsWebapiSearchResultsInterface" type="Magento\AdminAdobeIms\Model\ImsWebapiSearchResults"/>
+    <preference for="Magento\AdminAdobeIms\Api\ImsWebapiRepositoryInterface" type="Magento\AdminAdobeIms\Model\ImsWebapiRepository"/>
+    <preference for="Magento\AdminAdobeIms\Api\Data\ImsWebapiInterface" type="Magento\AdminAdobeIms\Model\ImsWebapi"/>
 
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
@@ -62,7 +62,6 @@
                 type="Magento\AdminAdobeIms\Plugin\DisableAdminLoginAuthPlugin"/>
     </type>
 
-    <preference for="Magento\AdobeImsApi\Api\UserProfileRepositoryInterface" type="Magento\AdminAdobeIms\Model\ImsTokenRepository"/>
     <preference for="Magento\AdminAdobeIms\Api\TokenReaderInterface" type="Magento\AdminAdobeIms\Model\TokenReader"/>
 
 

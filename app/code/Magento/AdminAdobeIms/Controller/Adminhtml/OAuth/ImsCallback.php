@@ -106,12 +106,12 @@ class ImsCallback extends Auth implements HttpGetActionInterface
             }
             $this->organizationService->checkOrganizationAllocation($profile);
             $this->adminLoginProcessService->execute($profile, $tokenResponse);
-        } catch (AdobeImsTokenAuthorizationException $e) {
+        } catch (AdobeImsWebapiAuthorizationException $e) {
             $this->logger->error($e->getMessage());
 
             $this->imsErrorMessage(
                 'You don\'t have access to this Commerce instance',
-                AdobeImsTokenAuthorizationException::ERROR_MESSAGE
+                AdobeImsWebapiAuthorizationException::ERROR_MESSAGE
             );
         } catch (AdobeImsOrganizationAuthorizationException $e) {
             $this->logger->error($e->getMessage());

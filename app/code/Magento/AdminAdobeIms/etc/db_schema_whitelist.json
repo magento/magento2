@@ -1,5 +1,5 @@
 {
-    "admin_adobe_ims_token": {
+    "admin_adobe_ims_webapi": {
         "column": {
             "id": true,
             "admin_user_id": true,

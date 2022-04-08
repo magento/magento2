@@ -13,7 +13,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 /**
  * Represent the ims token resource model
  */
-class ImsToken extends AbstractDb
+class ImsWebapi extends AbstractDb
 {
     private const ADMIN_ADOBE_IMS_TOKEN = 'admin_adobe_ims_token';
     private const ENTITY_ID = 'id';
