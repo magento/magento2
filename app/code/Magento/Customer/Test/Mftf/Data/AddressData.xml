@@ -392,7 +392,7 @@
         <data key="default_billing">Yes</data>
         <data key="vatNumber">GB571903731</data>
     </entity>
-    <entity name="GloCustomerAddress" type="address">
+    <entity name="USACustomerAddress" type="address">
         <data key="id">0</data>
         <data key="customer_id">15</data>
         <requiredEntity type="region">CustomerRegionOne</requiredEntity>

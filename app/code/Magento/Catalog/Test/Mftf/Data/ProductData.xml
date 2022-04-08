@@ -1469,7 +1469,7 @@
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
 
-    <entity name="TestProduct" type="product">
+    <entity name="SimpleProduct_SpecialPrice" type="product">
         <data key="name">Simple Product</data>
         <data key="sku" unique="suffix">very-simple-product</data>
         <data key="urlKey" unique="suffix">very-simple-product</data>

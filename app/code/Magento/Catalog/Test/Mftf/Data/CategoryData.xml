@@ -279,10 +279,10 @@
         <var key="category_id" entityKey="id" entityType="category"/>
         <var key="sku" entityKey="sku" entityType="product"/>
     </entity>
-    <entity name="TestCategory" type="category">
-        <data key="name">Test Category</data>
-        <data key="name_lwr" unique="suffix">GlobalLogicAutomation</data>
-        <data key="urlKey" unique="suffix">GlobalLogicAutomation</data>
+    <entity name="SimpleCategory_SpecialPrice" type="category">
+        <data key="name">Simple Category</data>
+        <data key="name_lwr" unique="suffix">SimpleCategory</data>
+        <data key="urlKey" unique="suffix">SimpleCategory</data>
         <data key="is_active">true</data>
     </entity>
 </entities>
