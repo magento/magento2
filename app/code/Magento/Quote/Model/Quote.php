@@ -2544,12 +2544,13 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                 if ($item->getQty() > 1) {
                     //DB table `quote_item` qty value can not be set to 1, if having more than 1 child references
                     //in table `quote_address_item`.
-                    if (count($this->getQuoteShippingAddressItemsByQuoteItemId($item->getItemId())) > 1) {
+                    if ($item->getItemId() !== null
+                        && count($this->getQuoteShippingAddressItemsByQuoteItemId($item->getItemId())) > 1) {
                         continue;
                     }
 
                     for ($itemIndex = 0, $itemQty = $item->getQty(); $itemIndex < $itemQty; $itemIndex++) {
-                        if ($itemIndex == 0) {
+                        if ($itemIndex === 0) {
                             $addressItem = $item;
                         } else {
                             $addressItem = clone $item;
@@ -2679,10 +2680,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $addresses = $this->getAllShippingAddresses();
             foreach ($addresses as $address) {
                 foreach ($address->getAllItems() as $item) {
-                    if ($item->getParentItemId()) {
-                        continue;
-                    }
-                    if ($item->getProduct()->getIsVirtual()) {
+                    if ($item->getParentItemId() || $item->getProduct()->getIsVirtual()) {
                         continue;
                     }
                     if ($item->getQuoteItemId() === $itemId) {

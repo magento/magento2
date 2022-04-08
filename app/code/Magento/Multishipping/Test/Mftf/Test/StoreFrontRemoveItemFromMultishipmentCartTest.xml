@@ -68,12 +68,18 @@
         </actionGroup>
         <!-- Save updated addresses -->
         <actionGroup ref="StorefrontMultiShippingSaveAddressActionGroup" stepKey="saveThreeDifferentAddresses"/>
+        <!-- Verify there are 3 items available on cart page -->
+        <seeNumberOfElements userInput="3" selector="a.action.delete" stepKey="seeThreeItems"/>
         <!-- Remove first simple item from cart -->
         <actionGroup ref="StorefrontRemoveProductOnCheckoutActionGroup" stepKey="removeFirstItemFromCart"/>
         <waitForPageLoad time="30"  stepKey="waitForCartSummaryPageToLoadAfterRemovalOfFirstItem"/>
+        <!-- Verify there are 2 items still available after removal of first -->
+        <seeNumberOfElements userInput="2" selector="a.action.delete" stepKey="seeTwoItems"/>
         <!-- Remove second simple item from cart -->
         <actionGroup ref="StorefrontRemoveProductOnCheckoutActionGroup" stepKey="removeSecondItemFromCart"/>
         <waitForPageLoad time="30"  stepKey="waitForCartSummaryPageToLoadAfterRemovalOfSecondItem"/>
+        <!-- Verify there are 1 items still available after removal of second -->
+        <seeNumberOfElements userInput="1" selector="a.action.delete" stepKey="seeOneItems"/>
         <!-- Remove second simple item from cart -->
         <actionGroup ref="StorefrontRemoveProductOnCheckoutActionGroup" stepKey="removeThirdItemFromCart"/>
         <waitForPageLoad time="30"  stepKey="waitForCartSummaryPageToLoadAfterRemovalOfTestItem"/>
