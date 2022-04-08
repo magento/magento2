@@ -203,7 +203,7 @@ define([
          * @returns {Filters} Chainable.
          */
         apply: function () {
-            $('body').notification('clear');
+            //$('body').notification('clear');
             this.set('applied', removeEmpty(this.filters));
 
             return this;
