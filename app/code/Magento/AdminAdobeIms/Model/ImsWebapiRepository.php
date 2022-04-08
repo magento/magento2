@@ -22,6 +22,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Represent user profile repository
@@ -63,6 +64,11 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
     private ImsWebapiSearchResultsInterfaceFactory $searchResultsFactory;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
+
+    /**
      * UserProfileRepository constructor.
      *
      * @param ResourceModel\ImsWebapi $resource
@@ -71,6 +77,7 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
      * @param CollectionFactory $entityCollectionFactory
      * @param CollectionProcessorInterface $collectionProcessor
      * @param ImsWebapiSearchResultsInterfaceFactory $searchResultsFactory
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         ResourceModel\ImsWebapi $resource,
@@ -78,7 +85,8 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
         LoggerInterface $logger,
         CollectionFactory $entityCollectionFactory,
         CollectionProcessorInterface $collectionProcessor,
-        ImsWebapiSearchResultsInterfaceFactory $searchResultsFactory
+        ImsWebapiSearchResultsInterfaceFactory $searchResultsFactory,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->resource = $resource;
         $this->entityFactory = $entityFactory;
@@ -86,6 +94,7 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
         $this->entityCollectionFactory = $entityCollectionFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -118,6 +127,18 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
         }
 
         return $this->loadedEntities[$entity->getId()] = $entity;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getByAdminId(int $adminId): array
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(self::ADMIN_USER_ID, $adminId)
+            ->create();
+
+        return $this->getList($searchCriteria)->getItems();
     }
 
     /**

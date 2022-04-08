@@ -96,7 +96,10 @@ class LogOut implements ImsLogOutInterface
             }
 
             $this->externalLogOut($accessToken);
-            $this->flushUserTokens->execute($adminUserId);
+            if ($adminUserId) {
+                // TODO
+                //$this->flushUserTokens->execute($adminUserId);
+            }
             return true;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
