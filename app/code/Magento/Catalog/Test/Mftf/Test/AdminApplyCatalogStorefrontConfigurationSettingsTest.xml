@@ -56,21 +56,11 @@
             </before>
 
             <after>
-                <!-- delete created entities -->
-                <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
-                <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
-                <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
-                <deleteData createDataKey="createSimpleProduct4" stepKey="deleteSimpleProduct4"/>
-                <deleteData createDataKey="createSimpleProduct5" stepKey="deleteSimpleProduct5"/>
-                <deleteData createDataKey="createSimpleProduct6" stepKey="deleteSimpleProduct6"/>
-                <deleteData createDataKey="createSimpleProduct7" stepKey="deleteSimpleProduct7"/>
-                <deleteData createDataKey="createSimpleProduct8" stepKey="deleteSimpleProduct8"/>
-                <deleteData createDataKey="createSimpleProduct9" stepKey="deleteSimpleProduct9"/>
-                <deleteData createDataKey="createSimpleProduct10" stepKey="deleteSimpleProduct10"/>
-                <deleteData createDataKey="createSimpleProduct11" stepKey="deleteSimpleProduct11"/>
-                <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-                <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+                <actionGroup ref="AdminOpenDashboardPageActionGroup" stepKey="goToDashboardPage"/>
+                <waitForPageLoad stepKey="waitForPageLoad1" time="60"/>
                 <actionGroup ref="AdminOpenStoreConfigCatalogPageActionGroup" stepKey="navigateToConfigurationPage"/>
+                <waitForPageLoad stepKey="waitForPageLoad" time="60"/>
                 <actionGroup ref="AdminConfigExpandStorefrontTabActionGroup" stepKey="expandStorefrontTab"/>
 
                 <!-- Revert changes in storefront config page -->
@@ -101,11 +91,26 @@
                 <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                     <argument name="indices" value=""/>
                 </actionGroup>
-                <!--Clean cache-->
+
                 <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
                     <argument name="tags" value=""/>
                 </actionGroup>
+
+              <!-- delete created entities -->
+                <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+                <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+                <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
+                <deleteData createDataKey="createSimpleProduct4" stepKey="deleteSimpleProduct4"/>
+                <deleteData createDataKey="createSimpleProduct5" stepKey="deleteSimpleProduct5"/>
+                <deleteData createDataKey="createSimpleProduct6" stepKey="deleteSimpleProduct6"/>
+                <deleteData createDataKey="createSimpleProduct7" stepKey="deleteSimpleProduct7"/>
+                <deleteData createDataKey="createSimpleProduct8" stepKey="deleteSimpleProduct8"/>
+                <deleteData createDataKey="createSimpleProduct9" stepKey="deleteSimpleProduct9"/>
+                <deleteData createDataKey="createSimpleProduct10" stepKey="deleteSimpleProduct10"/>
+                <deleteData createDataKey="createSimpleProduct11" stepKey="deleteSimpleProduct11"/>
+                <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
                 <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+
                </after>
 
                 <!-- Login to Admin page -->
@@ -166,8 +171,8 @@
              </actionGroup>
 
              <click selector=".//*[@class='toolbar toolbar-products'][1]//*[@data-value='grid']" stepKey="switchToGridMode4"/>
-             <seeElement selector='//ol[@class="products list items product-items"]' stepKey="see10ProductsVisible" />
+             <seeNumberOfElements selector="{{AdminChecksListAndGridModeSection.productCount}}" userInput="10" stepKey="seeNumberOfProductsInGridView"/>
 
-             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+
     </test>
 </tests>

@@ -17,34 +17,32 @@
 
 
         <!-- verify changes in List mode -->
-        <seeElement selector='//*[@id="maincontent"]//*[@data-value="list"]' stepKey="seePageInListView" />
-        <!--<see selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="seePageInListView"/>-->
+
+        <seeElement selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="seePageInListView"/>
+        <scrollTo selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="scrollToGridMode"/>
         <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="clickGridMode"/>
-        <waitForPageLoad stepKey="waitForGridMode"/>
-        <see selector="{{AdminChecksListAndGridModeSection.gridView}}" stepKey="seePageInGridView"/>
-        <click selector="{{AdminChecksListAndGridModeSection.listMode}}" stepKey="switchToListMode"/>
+         <waitForPageLoad stepKey="waitForGridMode"/> 
+        <seeElement selector="{{AdminChecksListAndGridModeSection.gridView}}" stepKey="seePageInGridView"/>
+        <click selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="clickListMode"/>
         <waitForPageLoad stepKey="waitForListMode"/>
-        <see selector="{{AdminChecksListAndGridModeSection.pageProduct}}" stepKey="seePageProduct"/>
-        <see selector="{{AdminChecksListAndGridModeSection.sortByPrice}}" stepKey="seeSortByPriceInListMode"/>
+        <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="1" stepKey="seeNumberOfProductsInPage1"/>
         <click selector="{{AdminChecksListAndGridModeSection.productsPerPage}}" stepKey="clickProductsPerPageButtonInListMode"/>
         <waitForPageLoad stepKey="waitForProductsPerPage"/>
         <click selector="{{AdminChecksListAndGridModeSection.allButton}}" stepKey="selectAllButton"/>
         <waitForPageLoad stepKey="waitForSelectAll"/>
-        <see selector="{{AdminChecksListAndGridModeSection.allProducts}}" stepKey="seeAllProducts"/>
+       <seeElement selector="{{AdminChecksListAndGridModeSection.allProducts}}" stepKey="seeAllProducts"/> 
         <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="switchToGridMode"/>
-        <see selector="{{AdminChecksListAndGridModeSection.gridView}}" stepKey="seePageInGridView2"/>
-        <click selector="{{AdminChecksListAndGridModeSection.listMode}}" stepKey="switchToListMode1"/>
-        <see selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="seePageInListView1"/>
+         <seeElement selector="{{AdminChecksListAndGridModeSection.gridView}}" stepKey="seePageInGridView2"/> 
+        <click selector="{{StorefrontCategoryProductSection.categoryListView}}" stepKey="switchToListMode1"/>
+         <seeElement selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="seePageInListView1"/> 
         <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="switchToGridMode1"/>
-        <see selector="{{AdminChecksListAndGridModeSection.allProducts}}" stepKey="seePageProductsInGrid"/>
-        <see selector="{{AdminChecksListAndGridModeSection.sortByPrice}}" stepKey="seeSortByPriceInGridMode"/>
         <click selector="{{AdminChecksListAndGridModeSection.productsPerPage}}" stepKey="clickProductsPerPageButtonInGridMode"/>
         <waitForPageLoad stepKey="waitForProductsPerPageOpen"/>
-        <see selector="{{AdminChecksListAndGridModeSection.pageOptions1}}" stepKey="seePageOptions1"/>
-        <see selector="{{AdminChecksListAndGridModeSection.pageOptions2}}" stepKey="seePageOptions2"/>
-        <see selector="{{AdminChecksListAndGridModeSection.pageOptions3}}" stepKey="seePageOptions3"/>
-        <see selector="{{AdminChecksListAndGridModeSection.pageOptions4}}" stepKey="seePageOptions4"/>
-        <see selector="{{AdminChecksListAndGridModeSection.pageOptions5}}" stepKey="seePageOptions5"/>
+        <seeElement selector="{{AdminChecksListAndGridModeSection.pageOptions1}}" stepKey="seePageOptions1"/>
+        <seeElement selector="{{AdminChecksListAndGridModeSection.pageOptions2}}" stepKey="seePageOptions2"/>
+        <seeElement selector="{{AdminChecksListAndGridModeSection.pageOptions3}}" stepKey="seePageOptions3"/>
+        <seeElement selector="{{AdminChecksListAndGridModeSection.pageOptions4}}" stepKey="seePageOptions4"/>
+        <seeElement selector="{{AdminChecksListAndGridModeSection.pageOptions5}}" stepKey="seePageOptions5"/> 
 
 
 
