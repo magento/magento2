@@ -1202,4 +1202,92 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     {
         return isset(self::$mapDependencies[$module]) ? false : true;
     }
+
+    /**
+     * Test modules don't have direct dependencies on modules that might be disabled by 3rd-party Magento extensions.
+     *
+     * @inheritdoc
+     * @throws \Exception
+     * @return void
+     */
+    public function testDirectExtensionDependencies()
+    {
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+
+        // @todo - move to config
+        $extensionConflictList = [
+            // the following modules must be disabled when Live Search is used
+            // so core modules must not be dependent on them
+            'Magento\LiveSearch' => [
+                'Magento\Elasticsearch',
+                'Magento\Elasticsearch6',
+                'Magento\Elasticsearch7',
+                'Magento\ElasticsearchCatalogPermissions',
+            ],
+        ];
+
+        // @todo - move to config
+        $allowedDependencies = [
+            'Magento\Elasticsearch' => [
+                'Magento\Elasticsearch',
+                'Magento\Elasticsearch6',
+                'Magento\Elasticsearch7'
+            ]
+        ];
+
+        $invoker(
+        /**
+         * Check modules dependencies for specified file
+         *
+         * @param string $fileType
+         * @param string $file
+         */
+            function ($fileType, $file) use ($extensionConflictList, $allowedDependencies) {
+                $module = $this->getModuleNameForRelevantFile($file);
+                if (!$module) {
+                    return;
+                }
+
+                $contents = $this->_getCleanedFileContents($fileType, $file);
+
+                $dependencies = $this->getDependenciesFromFiles($module, $fileType, $file, $contents);
+
+                $modules = [];
+                foreach ($dependencies as $dependency) {
+                    $modules[] = $dependency['modules'];
+                }
+
+                $modulesDependencies = array_merge(...$modules);
+
+                foreach ($extensionConflictList as $extension => $disabledModules) {
+                    $foundedModules = \array_unique(array_intersect($modulesDependencies, $disabledModules));
+                    if (!empty($foundedModules)) {
+
+                        foreach ($foundedModules as $foundedModule) {
+                            if (!empty($allowedDependencies[$foundedModule])
+                                && \in_array($module, $allowedDependencies[$foundedModule])
+                            ) {
+                                // skip, this dependency is allowed
+                                continue;
+                            }
+
+                            $this->fail(
+                                \sprintf(
+                                    'Module "%s" has dependency on: "%s".' .
+                                    ' No direct dependencies must be added on "%s",' .
+                                    ' because it must be disabled when "%s" extension is used.' .
+                                    ' See AC-2516 for more details',
+                                    $module,
+                                    \implode(', ', $foundedModules),
+                                    $module,
+                                    $extension
+                                )
+                            );
+                        }
+                    }
+                }
+            },
+            $this->getAllFiles()
+        );
+    }
 }
