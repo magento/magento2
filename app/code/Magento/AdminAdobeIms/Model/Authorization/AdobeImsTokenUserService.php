@@ -14,14 +14,18 @@ use Magento\AdminAdobeIms\Api\TokenReaderInterface;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Model\User;
 use Magento\AdminAdobeIms\Api\Data\ImsWebapiInterfaceFactory;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 
 class AdobeImsTokenUserService
 {
+    private const DATE_FORMAT = 'Y-m-d H:i:s';
+
     /**
      * @var TokenReaderInterface
      */
@@ -48,24 +52,40 @@ class AdobeImsTokenUserService
     private ImsWebapiRepositoryInterface $imsWebapiRepository;
 
     /**
+     * @var EncryptorInterface
+     */
+    private EncryptorInterface $encryptor;
+
+    /**
+     * @var DateTime
+     */
+    private DateTime $dateTime;
+
+    /**
      * @param TokenReaderInterface $tokenReader
      * @param ImsWebapiRepositoryInterface $imsWebapiRepository
      * @param ImsWebapiInterfaceFactory $imsWebapiFactory
      * @param User $adminUser
      * @param ImsConnection $imsConnection
+     * @param EncryptorInterface $encryptor
+     * @param DateTime $dateTime
      */
     public function __construct(
         TokenReaderInterface $tokenReader,
         ImsWebapiRepositoryInterface $imsWebapiRepository,
         ImsWebapiInterfaceFactory $imsWebapiFactory,
         User $adminUser,
-        ImsConnection $imsConnection
+        ImsConnection $imsConnection,
+        EncryptorInterface $encryptor,
+        DateTime $dateTime
     ) {
         $this->tokenReader = $tokenReader;
         $this->imsWebapiFactory = $imsWebapiFactory;
         $this->adminUser = $adminUser;
         $this->imsConnection = $imsConnection;
         $this->imsWebapiRepository = $imsWebapiRepository;
+        $this->encryptor = $encryptor;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -77,10 +97,11 @@ class AdobeImsTokenUserService
      * @throws AuthorizationException
      * @throws CouldNotSaveException
      * @throws InvalidArgumentException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getAdminUserIdByToken(string $bearerToken): int
     {
-        $this->tokenReader->read($bearerToken);
+        $dataFromToken = $this->tokenReader->read($bearerToken);
         $imsWebapiEntity = $this->imsWebapiRepository->getByAccessToken($bearerToken);
 
         if ($imsWebapiEntity->getId()) {
@@ -97,6 +118,8 @@ class AdobeImsTokenUserService
 
             $adminUserId = (int) $adminUser['user_id'];
             $profile['access_token'] = $bearerToken;
+            $profile['created_at'] = $dataFromToken['created_at'] ?? 0;
+            $profile['expires_in'] = $dataFromToken['expires_in'] ?? 0;
 
             $imsWebapiInterface = $this->createImsWebapiInterface($adminUserId);
             $this->imsWebapiRepository->save($this->updateImsWebapi($imsWebapiInterface, $profile));
@@ -122,7 +145,7 @@ class AdobeImsTokenUserService
     }
 
     /**
-     * Get ims webapi entity
+     * Create new ims webapi entity
      *
      * @param int $adminUserId
      * @return ImsWebapiInterface
@@ -150,8 +173,25 @@ class AdobeImsTokenUserService
         array $profile
     ): ImsWebapiInterface {
         $imsWebapiInterface->setAccessTokenHash($this->encryptor->getHash($profile['access_token']));
-        $imsWebapiInterface->setLastCheckTime($this->dateTime->gmtTimestamp());
+        $imsWebapiInterface->setLastCheckTime($this->dateTime->gmtDate(self::DATE_FORMAT));
+        $imsWebapiInterface->setAccessTokenExpiresAt(
+            $this->getExpiresTime($profile['created_at'], $profile['expires_in'])
+        );
 
         return $imsWebapiInterface;
+    }
+
+    /**
+     * Retrieve token expires date
+     *
+     * @param int $expiresIn
+     * @return string
+     */
+    private function getExpiresTime(int $createdAt, int $expiresIn): string
+    {
+        return $this->dateTime->gmtDate(
+            self::DATE_FORMAT,
+            $createdAt + $expiresIn / 1000
+        );
     }
 }

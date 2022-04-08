@@ -147,7 +147,6 @@ class TokenReader implements TokenReaderInterface
         }
 
         return [
-            'adobe_user_id' => $claims['user_id']->getValue(),
             'created_at' => $createdAt,
             'expires_in' => $expiresIn,
         ];

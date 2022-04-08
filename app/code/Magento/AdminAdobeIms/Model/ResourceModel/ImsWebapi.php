@@ -15,7 +15,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
  */
 class ImsWebapi extends AbstractDb
 {
-    private const ADMIN_ADOBE_IMS_TOKEN = 'admin_adobe_ims_token';
+    private const ADMIN_ADOBE_IMS_WEBAPI = 'admin_adobe_ims_webapi';
     private const ENTITY_ID = 'id';
 
     /**
@@ -23,6 +23,6 @@ class ImsWebapi extends AbstractDb
      */
     protected function _construct(): void
     {
-        $this->_init(self::ADMIN_ADOBE_IMS_TOKEN, self::ENTITY_ID);
+        $this->_init(self::ADMIN_ADOBE_IMS_WEBAPI, self::ENTITY_ID);
     }
 }

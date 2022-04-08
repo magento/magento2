@@ -151,12 +151,6 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
         $entity = $this->entityFactory->create();
         $this->resource->load($entity, $this->encryptor->getHash($token), 'access_token_hash');
 
-        if (!$entity->getId()) {
-            throw new NoSuchEntityException(
-                __('Could not find entity: %access_token_hash.', ['access_token_hash' => $token])
-            );
-        }
-
         return $entity;
     }
 
