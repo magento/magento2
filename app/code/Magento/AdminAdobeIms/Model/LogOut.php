@@ -55,12 +55,18 @@ class LogOut implements ImsLogOutInterface
     private ImsConnection $imsConnection;
 
     /**
+     * @var Auth
+     */
+    private Auth $auth;
+
+    /**
      * @param LoggerInterface $logger
      * @param ImsConfig $imsConfig
      * @param CurlFactory $curlFactory
      * @param GetAccessTokenInterface $getAccessToken
      * @param FlushUserTokensInterface $flushUserTokens
      * @param ImsConnection $imsConnection
+     * @param Auth $auth
      */
     public function __construct(
         LoggerInterface $logger,
@@ -68,7 +74,8 @@ class LogOut implements ImsLogOutInterface
         CurlFactory $curlFactory,
         GetAccessTokenInterface $getAccessToken,
         FlushUserTokensInterface $flushUserTokens,
-        ImsConnection $imsConnection
+        ImsConnection $imsConnection,
+        Auth $auth
     ) {
         $this->logger = $logger;
         $this->curlFactory = $curlFactory;
@@ -76,6 +83,7 @@ class LogOut implements ImsLogOutInterface
         $this->flushUserTokens = $flushUserTokens;
         $this->imsConfig = $imsConfig;
         $this->imsConnection = $imsConnection;
+        $this->auth = $auth;
     }
 
     /**
@@ -87,7 +95,8 @@ class LogOut implements ImsLogOutInterface
     ): bool {
         try {
             if ($accessToken === null) {
-                $accessToken = $this->getAccessToken->execute();
+                $session = $this->auth->getAuthStorage();
+                $accessToken = $session->getAdobeAccessToken();
             }
 
             if (empty($accessToken)) {
@@ -96,8 +105,7 @@ class LogOut implements ImsLogOutInterface
 
             $this->externalLogOut($accessToken);
             if ($adminUserId) {
-                // TODO
-                //$this->flushUserTokens->execute($adminUserId);
+                $this->flushUserTokens->execute($adminUserId);
             }
             return true;
         } catch (\Exception $exception) {

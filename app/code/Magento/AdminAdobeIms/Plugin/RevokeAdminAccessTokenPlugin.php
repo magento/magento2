@@ -81,7 +81,7 @@ class RevokeAdminAccessTokenPlugin
             foreach ($entities as $entity) {
                 // TODO
                 $this->logOut->execute(
-                    $this->encryptor->decrypt($entity->getAccessTokenHash()),
+                    null,
                     $adminId
                 );
             }
