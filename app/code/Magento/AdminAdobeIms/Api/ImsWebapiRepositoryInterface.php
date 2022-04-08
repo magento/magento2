@@ -50,6 +50,15 @@ interface ImsWebapiRepositoryInterface
     public function getByAdminId(int $adminId): array;
 
     /**
+     * Get entity by access token
+     *
+     * @param string $token
+     * @return ImsWebapiInterface
+     * @throws NoSuchEntityException
+     */
+    public function getByAccessToken(string $token): ImsWebapiInterface;
+
+    /**
      * Get ims token by search criteria
      *
      * @param SearchCriteriaInterface $searchCriteria

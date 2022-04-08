@@ -19,6 +19,7 @@ use Magento\AdminAdobeIms\Api\Data\ImsWebapiSearchResultsInterfaceFactory;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
@@ -67,6 +68,7 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
      * @var SearchCriteriaBuilder
      */
     private SearchCriteriaBuilder $searchCriteriaBuilder;
+    private EncryptorInterface $encryptor;
 
     /**
      * UserProfileRepository constructor.
@@ -78,6 +80,7 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
      * @param CollectionProcessorInterface $collectionProcessor
      * @param ImsWebapiSearchResultsInterfaceFactory $searchResultsFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param EncryptorInterface $encryptor
      */
     public function __construct(
         ResourceModel\ImsWebapi $resource,
@@ -86,7 +89,8 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
         CollectionFactory $entityCollectionFactory,
         CollectionProcessorInterface $collectionProcessor,
         ImsWebapiSearchResultsInterfaceFactory $searchResultsFactory,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        EncryptorInterface $encryptor
     ) {
         $this->resource = $resource;
         $this->entityFactory = $entityFactory;
@@ -95,6 +99,7 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->encryptor = $encryptor;
     }
 
     /**
@@ -139,6 +144,20 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
             ->create();
 
         return $this->getList($searchCriteria)->getItems();
+    }
+
+    public function getByAccessToken(string $token): ImsWebapiInterface
+    {
+        $entity = $this->entityFactory->create();
+        $this->resource->load($entity, $this->encryptor->getHash($token), 'access_token_hash');
+
+        if (!$entity->getId()) {
+            throw new NoSuchEntityException(
+                __('Could not find entity: %access_token_hash.', ['access_token_hash' => $token])
+            );
+        }
+
+        return $entity;
     }
 
     /**

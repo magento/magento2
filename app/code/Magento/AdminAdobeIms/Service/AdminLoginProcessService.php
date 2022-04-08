@@ -14,7 +14,6 @@ use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
 use Magento\AdminAdobeIms\Model\Auth;
 use Magento\AdminAdobeIms\Model\LogOut;
 use Magento\AdminAdobeIms\Model\User;
-use Magento\AdobeIms\Model\LogIn;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 
@@ -31,11 +30,6 @@ class AdminLoginProcessService
     private Auth $auth;
 
     /**
-     * @var LogIn
-     */
-    private LogIn $logIn;
-
-    /**
      * @var LogOut
      */
     private LogOut $logOut;
@@ -48,20 +42,17 @@ class AdminLoginProcessService
     /**
      * @param User $adminUser
      * @param Auth $auth
-     * @param LogIn $logIn
      * @param LogOut $logOut
      * @param DateTime $dateTime
      */
     public function __construct(
         User $adminUser,
         Auth $auth,
-        LogIn $logIn,
         LogOut $logOut,
         DateTime $dateTime
     ) {
         $this->adminUser = $adminUser;
         $this->auth = $auth;
-        $this->logIn = $logIn;
         $this->logOut = $logOut;
         $this->dateTime = $dateTime;
     }
@@ -85,7 +76,6 @@ class AdminLoginProcessService
         }
 
         try {
-            $this->logIn->execute((int)$adminUser['user_id'], $tokenResponse);
             $this->auth->loginByUsername($adminUser['username']);
             $session = $this->auth->getAuthStorage();
             $session->setAdobeAccessToken($tokenResponse->getAccessToken());

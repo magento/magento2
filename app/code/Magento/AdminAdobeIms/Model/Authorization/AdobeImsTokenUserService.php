@@ -8,12 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model\Authorization;
 
+use Magento\AdminAdobeIms\Api\Data\ImsWebapiInterface;
+use Magento\AdminAdobeIms\Api\ImsWebapiRepositoryInterface;
 use Magento\AdminAdobeIms\Api\TokenReaderInterface;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Model\User;
-use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
-use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\AdminAdobeIms\Api\Data\ImsWebapiInterfaceFactory;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -28,14 +28,9 @@ class AdobeImsTokenUserService
     private TokenReaderInterface $tokenReader;
 
     /**
-     * @var UserProfileRepositoryInterface
+     * @var ImsWebapiInterfaceFactory
      */
-    private UserProfileRepositoryInterface $userProfileRepository;
-
-    /**
-     * @var UserProfileInterfaceFactory
-     */
-    private UserProfileInterfaceFactory $userProfileFactory;
+    private ImsWebapiInterfaceFactory $imsWebapiFactory;
 
     /**
      * @var User
@@ -48,28 +43,33 @@ class AdobeImsTokenUserService
     private ImsConnection $imsConnection;
 
     /**
+     * @var ImsWebapiRepositoryInterface
+     */
+    private ImsWebapiRepositoryInterface $imsWebapiRepository;
+
+    /**
      * @param TokenReaderInterface $tokenReader
-     * @param UserProfileRepositoryInterface $userProfileRepository
-     * @param UserProfileInterfaceFactory $userProfileFactory
+     * @param ImsWebapiRepositoryInterface $imsWebapiRepository
+     * @param ImsWebapiInterfaceFactory $imsWebapiFactory
      * @param User $adminUser
      * @param ImsConnection $imsConnection
      */
     public function __construct(
         TokenReaderInterface $tokenReader,
-        UserProfileRepositoryInterface $userProfileRepository,
-        UserProfileInterfaceFactory $userProfileFactory,
+        ImsWebapiRepositoryInterface $imsWebapiRepository,
+        ImsWebapiInterfaceFactory $imsWebapiFactory,
         User $adminUser,
         ImsConnection $imsConnection
     ) {
         $this->tokenReader = $tokenReader;
-        $this->userProfileRepository = $userProfileRepository;
-        $this->userProfileFactory = $userProfileFactory;
+        $this->imsWebapiFactory = $imsWebapiFactory;
         $this->adminUser = $adminUser;
         $this->imsConnection = $imsConnection;
+        $this->imsWebapiRepository = $imsWebapiRepository;
     }
 
     /**
-     * Get adobe_user_id from token and store it for admin user
+     * Retrieve admin user id by token
      *
      * @param string $bearerToken
      * @return int
@@ -80,14 +80,11 @@ class AdobeImsTokenUserService
      */
     public function getAdminUserIdByToken(string $bearerToken): int
     {
-        $tokenData = $this->tokenReader->read($bearerToken);
+        $this->tokenReader->read($bearerToken);
+        $imsWebapiEntity = $this->imsWebapiRepository->getByAccessToken($bearerToken);
 
-        $adobeUserId = $tokenData['adobe_user_id'] ?? '';
-
-        $userProfile = $this->userProfileRepository->getByAdobeUserId($adobeUserId);
-
-        if ($userProfile->getId()) {
-            $adminUserId = (int) $userProfile->getData('admin_user_id');
+        if ($imsWebapiEntity->getId()) {
+            $adminUserId = $imsWebapiEntity->getUserId();
         } else {
             $profile = $this->getUserProfile($bearerToken);
             if (empty($profile['email'])) {
@@ -99,10 +96,10 @@ class AdobeImsTokenUserService
             }
 
             $adminUserId = (int) $adminUser['user_id'];
-            $profile['adobe_user_id'] = $adobeUserId;
+            $profile['access_token'] = $bearerToken;
 
-            $userProfileInterface = $this->getUserProfileInterface($adminUserId);
-            $this->userProfileRepository->save($this->updateUserProfile($userProfileInterface, $profile));
+            $imsWebapiInterface = $this->createImsWebapiInterface($adminUserId);
+            $this->imsWebapiRepository->save($this->updateImsWebapi($imsWebapiInterface, $profile));
         }
 
         return $adminUserId;
@@ -125,41 +122,36 @@ class AdobeImsTokenUserService
     }
 
     /**
-     * Get user profile entity
+     * Get ims webapi entity
      *
      * @param int $adminUserId
-     * @return UserProfileInterface
+     * @return ImsWebapiInterface
      */
-    private function getUserProfileInterface(int $adminUserId): UserProfileInterface
+    private function createImsWebapiInterface(int $adminUserId): ImsWebapiInterface
     {
-        try {
-            return $this->userProfileRepository->getByUserId($adminUserId);
-        } catch (NoSuchEntityException $exception) {
-            return $this->userProfileFactory->create(
-                [
-                    'data' => [
-                        'admin_user_id' => $adminUserId
-                    ]
+        return $this->imsWebapiFactory->create(
+            [
+                'data' => [
+                    'admin_user_id' => $adminUserId
                 ]
-            );
-        }
+            ]
+        );
     }
 
     /**
-     * Update user profile with the data from token
+     * Update admin adobe ims webapi entry
      *
-     * @param UserProfileInterface $userProfileInterface
+     * @param ImsWebapiInterface $imsWebapiInterface
      * @param array $profile
-     * @return UserProfileInterface
+     * @return ImsWebapiInterface
      */
-    private function updateUserProfile(
-        UserProfileInterface $userProfileInterface,
+    private function updateImsWebapi(
+        ImsWebapiInterface $imsWebapiInterface,
         array $profile
-    ): UserProfileInterface {
-        $userProfileInterface->setName($profile['name'] ?? '');
-        $userProfileInterface->setEmail($profile['email'] ?? '');
-        $userProfileInterface->setAdobeUserId($profile['adobe_user_id']);
+    ): ImsWebapiInterface {
+        $imsWebapiInterface->setAccessTokenHash($this->encryptor->getHash($profile['access_token']));
+        $imsWebapiInterface->setLastCheckTime($this->dateTime->gmtTimestamp());
 
-        return $userProfileInterface;
+        return $imsWebapiInterface;
     }
 }
