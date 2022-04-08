@@ -22,8 +22,9 @@ class ImsConfig extends Config
     public const XML_PATH_ENABLED = 'adobe_ims/integration/enabled';
     public const XML_PATH_LOGGING_ENABLED = 'adobe_ims/integration/logging_enabled';
     public const XML_PATH_ORGANIZATION_ID = 'adobe_ims/integration/organization_id';
-    public const XML_PATH_API_KEY = 'adobe_ims/integration/api_key';
-    public const XML_PATH_PRIVATE_KEY = 'adobe_ims/integration/private_key';
+    public const XML_PATH_CLIENT_ID = 'adobe_ims/admin/client_id';
+    public const XML_PATH_CLIENT_SECRET = 'adobe_ims/admin/client_secret';
+    public const XML_PATH_SCOPES = 'adobe_ims/admin/scopes';
     public const XML_PATH_AUTH_URL_PATTERN = 'adobe_ims/integration/auth_url_pattern';
     public const XML_PATH_PROFILE_URL = 'adobe_ims/integration/profile_url';
     public const XML_PATH_NEW_ADMIN_EMAIL_TEMPLATE = 'adobe_ims/email/content_template';
@@ -122,12 +123,12 @@ class ImsConfig extends Config
         );
 
         $this->updateSecureConfig(
-            self::XML_PATH_API_KEY,
+            self::XML_PATH_CLIENT_ID,
             $clientId
         );
 
         $this->updateSecureConfig(
-            self::XML_PATH_PRIVATE_KEY,
+            self::XML_PATH_CLIENT_SECRET,
             $clientSecret
         );
     }
@@ -145,8 +146,8 @@ class ImsConfig extends Config
         );
 
         $this->deleteConfig(self::XML_PATH_ORGANIZATION_ID);
-        $this->deleteConfig(self::XML_PATH_API_KEY);
-        $this->deleteConfig(self::XML_PATH_PRIVATE_KEY);
+        $this->deleteConfig(self::XML_PATH_CLIENT_ID);
+        $this->deleteConfig(self::XML_PATH_CLIENT_SECRET);
     }
 
     /**
@@ -158,7 +159,7 @@ class ImsConfig extends Config
     {
         return str_replace(
             ['#{client_id}'],
-            [$this->getApiKey()],
+            [$this->getAdminAdobeImsClientId()],
             $this->scopeConfig->getValue(self::XML_PATH_PROFILE_URL)
         );
     }
@@ -174,7 +175,7 @@ class ImsConfig extends Config
     {
         return str_replace(
             ['#{token}', '#{client_id}', '#{token_type}'],
-            [$code, $this->getApiKey(), $tokenType],
+            [$code, $this->getAdminAdobeImsClientId(), $tokenType],
             $this->scopeConfig->getValue(self::XML_PATH_VALIDATE_TOKEN_URL)
         );
     }
@@ -235,13 +236,51 @@ class ImsConfig extends Config
     public function getAdminAdobeImsAuthUrl(?string $clientId): string
     {
         if ($clientId === null) {
-            $clientId = $this->getApiKey();
+            $clientId = $this->getAdminAdobeImsClientId();
         }
 
         return str_replace(
-            ['#{client_id}', '#{redirect_uri}', '#{locale}'],
-            [$clientId, $this->getAdminAdobeImsCallBackUrl(), $this->getLocale()],
+            ['#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
+            [
+                $clientId,
+                $this->getAdminAdobeImsCallBackUrl(),
+                $this->getAdminAdobeImsScopes(),
+                $this->getLocale()
+            ],
             $this->scopeConfig->getValue(self::XML_PATH_AUTH_URL_PATTERN)
+        );
+    }
+
+    /**
+     * Get client_id for AdminAdobeIms
+     *
+     * @return string
+     */
+    public function getAdminAdobeImsClientId(): string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_CLIENT_ID);
+    }
+
+    /**
+     * Get client_secret for AdminAdobeIms
+     *
+     * @return string
+     */
+    public function getAdminAdobeImsClientSecret(): string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_CLIENT_SECRET);
+    }
+
+    /**
+     * Get scopes for AdminAdobeIms
+     *
+     * @return string
+     */
+    public function getAdminAdobeImsScopes(): string
+    {
+        return implode(
+            ',',
+            $this->scopeConfig->getValue(self::XML_PATH_SCOPES)
         );
     }
 
@@ -289,13 +328,13 @@ class ImsConfig extends Config
     {
         return str_replace(
             ['#{access_token}', '#{client_secret}', '#{client_id}'],
-            [$accessToken, $this->getPrivateKey(), $this->getApiKey()],
+            [$accessToken, $this->getAdminAdobeImsClientSecret(), $this->getAdminAdobeImsClientId()],
             $this->scopeConfig->getValue(self::XML_PATH_LOGOUT_URL)
         );
     }
 
     /**
-     * Retrieve Organization Id
+     * Retrieve OrganizationId
      *
      * @return string
      */

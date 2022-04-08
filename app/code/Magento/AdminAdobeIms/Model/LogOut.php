@@ -15,7 +15,6 @@ use Magento\AdminAdobeIms\Api\ImsLogOutInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\Client\CurlFactory;
-use Magento\AdminAdobeIms\Model\ImsConnection;
 use Psr\Log\LoggerInterface;
 
 /**

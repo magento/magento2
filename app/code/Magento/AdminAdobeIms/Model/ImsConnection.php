@@ -11,7 +11,6 @@ namespace Magento\AdminAdobeIms\Model;
 use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
 use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdobeIms\Model\GetToken;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\InvalidArgumentException;
