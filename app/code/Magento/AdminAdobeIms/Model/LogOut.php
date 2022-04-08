@@ -7,12 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model;
 
-use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
+use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
 use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdminAdobeIms\Api\ImsLogOutInterface;
-use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Psr\Log\LoggerInterface;
@@ -151,7 +150,7 @@ class LogOut implements ImsLogOutInterface
             if (!empty($profile['email'])) {
                 return true;
             }
-        } catch (AdobeImsTokenAuthorizationException $exception) {
+        } catch (AdobeImsAuthorizationException $exception) {
             return false;
         }
         return false;

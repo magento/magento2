@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Service;
 
 use Exception;
-use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
+use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Model\Auth;
 use Magento\AdminAdobeIms\Model\LogOut;
 use Magento\AdminAdobeIms\Model\User;
@@ -63,14 +63,14 @@ class AdminLoginProcessService
      * @param array $profile
      * @param TokenResponseInterface $tokenResponse
      * @return void
-     * @throws AdobeImsTokenAuthorizationException
+     * @throws AdobeImsAuthorizationException
      */
     public function execute(array $profile, TokenResponseInterface $tokenResponse): void
     {
         $adminUser = $this->adminUser->loadByEmail($profile['email']);
         if (empty($adminUser['user_id'])) {
             $this->externalLogout($tokenResponse->getAccessToken());
-            throw new AdobeImsTokenAuthorizationException(
+            throw new AdobeImsAuthorizationException(
                 __('No matching admin user found for Adobe ID.')
             );
         }
@@ -82,7 +82,7 @@ class AdminLoginProcessService
             $session->setTokenLastCheckTime($this->dateTime->gmtTimestamp());
         } catch (Exception $exception) {
             $this->externalLogout($tokenResponse->getAccessToken());
-            throw new AdobeImsTokenAuthorizationException(
+            throw new AdobeImsAuthorizationException(
                 __($exception->getMessage())
             );
         }
@@ -93,14 +93,14 @@ class AdminLoginProcessService
      *
      * @param string $accessToken
      * @return void
-     * @throws AdobeImsTokenAuthorizationException
+     * @throws AdobeImsAuthorizationException
      */
     private function externalLogout(string $accessToken): void
     {
         try {
             $this->logOut->execute($accessToken);
         } catch (Exception $exception) {
-            throw new AdobeImsTokenAuthorizationException(
+            throw new AdobeImsAuthorizationException(
                 __($exception->getMessage())
             );
         }

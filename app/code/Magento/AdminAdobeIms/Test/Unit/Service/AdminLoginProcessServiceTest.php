@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Test\Unit\Service;
 
 use Exception;
-use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
+use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Model\Auth;
 use Magento\AdminAdobeIms\Model\LogOut;
 use Magento\AdminAdobeIms\Model\User;
@@ -89,7 +89,7 @@ class AdminLoginProcessServiceTest extends TestCase
             ->method('execute')
             ->with('accessToken');
 
-        $this->expectException(AdobeImsTokenAuthorizationException::class);
+        $this->expectException(AdobeImsAuthorizationException::class);
         $this->expectExceptionMessage('No matching admin user found for Adobe ID.');
 
         $this->loginService->execute(['email' => self::TEST_EMAIL], $this->tokenResponse);
@@ -97,7 +97,7 @@ class AdminLoginProcessServiceTest extends TestCase
 
     /**
      * @return void
-     * @throws AdobeImsTokenAuthorizationException
+     * @throws AdobeImsAuthorizationException
      */
     public function testExceptionWillBeThrownWhenLoginFails(): void
     {
@@ -117,14 +117,14 @@ class AdminLoginProcessServiceTest extends TestCase
             ->method('execute')
             ->with('accessToken');
 
-        $this->expectException(AdobeImsTokenAuthorizationException::class);
+        $this->expectException(AdobeImsAuthorizationException::class);
 
         $this->loginService->execute(['email' => self::TEST_EMAIL], $this->tokenResponse);
     }
 
     /**
      * @return void
-     * @throws AdobeImsTokenAuthorizationException
+     * @throws AdobeImsAuthorizationException
      */
     public function testExceptionWillBeThrownWhenAuthenticationFails(): void
     {
@@ -145,7 +145,7 @@ class AdminLoginProcessServiceTest extends TestCase
             ->method('execute')
             ->with('accessToken');
 
-        $this->expectException(AdobeImsTokenAuthorizationException::class);
+        $this->expectException(AdobeImsAuthorizationException::class);
 
         $this->loginService->execute(['email' => self::TEST_EMAIL], $this->tokenResponse);
     }

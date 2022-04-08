@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model;
 
-use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
+use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdobeIms\Model\GetToken;
@@ -195,14 +195,14 @@ class ImsConnection
      *
      * @param string $code
      * @return TokenResponseInterface
-     * @throws AdobeImsTokenAuthorizationException
+     * @throws AdobeImsAuthorizationException
      */
     public function getTokenResponse(string $code): TokenResponseInterface
     {
         try {
             return $this->token->execute($code);
         } catch (AuthorizationException $exception) {
-            throw new AdobeImsTokenAuthorizationException(
+            throw new AdobeImsAuthorizationException(
                 __($exception->getMessage())
             );
         }
@@ -213,7 +213,7 @@ class ImsConnection
      *
      * @param string $code
      * @return array|bool|float|int|mixed|string|null
-     * @throws AdobeImsTokenAuthorizationException
+     * @throws AdobeImsAuthorizationException
      */
     public function getProfile(string $code)
     {
@@ -226,7 +226,7 @@ class ImsConnection
         $curl->get($this->imsConfig->getProfileUrl());
 
         if ($curl->getBody() === '') {
-            throw new AdobeImsTokenAuthorizationException(
+            throw new AdobeImsAuthorizationException(
                 __('Profile body is empty')
             );
         }

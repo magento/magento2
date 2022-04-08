@@ -10,7 +10,7 @@ namespace Magento\AdminAdobeIms\Controller\Adminhtml\OAuth;
 
 use Exception;
 use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
-use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
+use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
@@ -106,12 +106,12 @@ class ImsCallback extends Auth implements HttpGetActionInterface
             }
             $this->organizationService->checkOrganizationAllocation($profile);
             $this->adminLoginProcessService->execute($profile, $tokenResponse);
-        } catch (AdobeImsWebapiAuthorizationException $e) {
+        } catch (AdobeImsAuthorizationException $e) {
             $this->logger->error($e->getMessage());
 
             $this->imsErrorMessage(
                 'You don\'t have access to this Commerce instance',
-                AdobeImsWebapiAuthorizationException::ERROR_MESSAGE
+                AdobeImsAuthorizationException::ERROR_MESSAGE
             );
         } catch (AdobeImsOrganizationAuthorizationException $e) {
             $this->logger->error($e->getMessage());
