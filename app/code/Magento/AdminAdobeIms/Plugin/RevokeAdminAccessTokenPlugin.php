@@ -9,51 +9,33 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Plugin;
 
 use Exception;
-use Magento\AdminAdobeIms\Api\ImsTokenRepositoryInterface;
-use Magento\AdminAdobeIms\Model\LogOut;
+use Magento\AdminAdobeIms\Model\FlushUserTokens;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Model\AdminTokenService;
 
 class RevokeAdminAccessTokenPlugin
 {
     /**
-     * @var LogOut
-     */
-    private LogOut $logOut;
-
-    /**
      * @var ImsConfig
      */
     private ImsConfig $imsConfig;
 
     /**
-     * @var EncryptorInterface
+     * @var FlushUserTokens
      */
-    private EncryptorInterface $encryptor;
+    private FlushUserTokens $flushUserTokens;
 
     /**
-     * @var ImsTokenRepositoryInterface
-     */
-    private ImsTokenRepositoryInterface $imsWebApiRepository;
-
-    /**
-     * @param LogOut $logOut
      * @param ImsConfig $imsConfig
-     * @param ImsTokenRepositoryInterface $imsWebApiRepository
-     * @param EncryptorInterface $encryptor
+     * @param FlushUserTokens $flushUserTokens
      */
     public function __construct(
-        LogOut $logOut,
         ImsConfig $imsConfig,
-        ImsTokenRepositoryInterface $imsWebApiRepository,
-        EncryptorInterface $encryptor
+        FlushUserTokens $flushUserTokens
     ) {
-        $this->logOut = $logOut;
         $this->imsConfig = $imsConfig;
-        $this->encryptor = $encryptor;
-        $this->imsWebApiRepository = $imsWebApiRepository;
+        $this->flushUserTokens = $flushUserTokens;
     }
 
     /**
@@ -77,14 +59,7 @@ class RevokeAdminAccessTokenPlugin
         }
 
         try {
-            $entities = $this->imsWebApiRepository->getByAdminId($adminId);
-            foreach ($entities as $entity) {
-                // TODO
-                $this->logOut->execute(
-                    null,
-                    $adminId
-                );
-            }
+            $this->flushUserTokens->execute($adminId);
         } catch (Exception $exception) {
             throw new LocalizedException(__('The tokens couldn\'t be revoked.'), $exception);
         }

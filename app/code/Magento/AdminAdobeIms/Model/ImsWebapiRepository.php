@@ -20,14 +20,12 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
-/**
- * Represent user profile repository
- */
 class ImsWebapiRepository implements ImsWebapiRepositoryInterface
 {
     private const ADMIN_USER_ID = 'admin_user_id';
@@ -35,30 +33,33 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
     /**
      * @var ResourceModel\ImsWebapi
      */
-    private $resource;
+    private ResourceModel\ImsWebapi $resource;
 
     /**
      * @var ImsWebapiInterfaceFactory
      */
-    private $entityFactory;
+    private ImsWebapiInterfaceFactory $entityFactory;
 
     /**
      * @var array
      */
-    private $loadedEntities = [];
+    private array $loadedEntities = [];
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
+
     /**
      * @var CollectionFactory
      */
     private CollectionFactory $entityCollectionFactory;
+
     /**
      * @var CollectionProcessorInterface
      */
     private CollectionProcessorInterface $collectionProcessor;
+
     /**
      * @var ImsWebapiSearchResultsInterfaceFactory
      */
@@ -68,11 +69,13 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
      * @var SearchCriteriaBuilder
      */
     private SearchCriteriaBuilder $searchCriteriaBuilder;
+
+    /**
+     * @var EncryptorInterface
+     */
     private EncryptorInterface $encryptor;
 
     /**
-     * UserProfileRepository constructor.
-     *
      * @param ResourceModel\ImsWebapi $resource
      * @param ImsWebapiInterfaceFactory $entityFactory
      * @param LoggerInterface $logger
@@ -146,6 +149,9 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
         return $this->getList($searchCriteria)->getItems();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getByAccessToken(string $token): ImsWebapiInterface
     {
         $entity = $this->entityFactory->create();
@@ -182,19 +188,17 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function deleteByUserId(int $id): bool
+    public function deleteByUserId(int $adminId): void
     {
-      /*  $entity = $this->entityFactory->create()->load($id);
+        try {
+            $entities = $this->getByAdminId($adminId);
 
-        if (!$entity->getId()) {
-            throw new NoSuchEntityException(__(
-                'Cannot delete ims token with id %1',
-                $id
-            ));
+            foreach ($entities as $entity) {
+                $this->resource->delete($entity);
+            }
+        } catch (Exception $exception) {
+            $this->logger->critical($exception);
+            throw new CouldNotDeleteException(__('Could not delete ims tokens for user id.'), $exception);
         }
-
-        $this->resource->delete($entity);
-
-        return true;*/
     }
 }

@@ -17,13 +17,13 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Declare ims user profile repository
+ * Declare ims web api repository
  * @api
  */
 interface ImsWebapiRepositoryInterface
 {
     /**
-     * Save ims
+     * Save ims token
      *
      * @param ImsWebapiInterface $entity
      * @return void
@@ -44,7 +44,7 @@ interface ImsWebapiRepositoryInterface
      * Get ims token(s) by admin id
      *
      * @param int $adminId
-     * @return ImsTokenInterface[]
+     * @return ImsWebapiInterface[]
      * @throws NoSuchEntityException
      */
     public function getByAdminId(int $adminId): array;
@@ -68,12 +68,12 @@ interface ImsWebapiRepositoryInterface
     public function getList(SearchCriteriaInterface $searchCriteria): ImsWebapiSearchResultsInterface;
 
     /**
-     * Delete ims token.
+     * Delete ims tokens for user id.
      *
-     * @param int $id
-     * @return bool true on success
+     * @param int $adminId
+     * @return void
      * @throws NoSuchEntityException
      * @throws LocalizedException
      */
-    public function deleteByUserId(int $id): bool;
+    public function deleteByUserId(int $adminId): void;
 }

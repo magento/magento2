@@ -97,7 +97,7 @@ class AdobeImsTokenUserService
      * @throws AuthorizationException
      * @throws CouldNotSaveException
      * @throws InvalidArgumentException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getAdminUserIdByToken(string $bearerToken): int
     {
@@ -184,6 +184,7 @@ class AdobeImsTokenUserService
     /**
      * Retrieve token expires date
      *
+     * @param int $createdAt
      * @param int $expiresIn
      * @return string
      */
