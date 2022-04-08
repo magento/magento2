@@ -9,18 +9,32 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Service;
 
-use Magento\AdminAdobeIms\Model\ResourceModel\JwtUserToken\Revoked;
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\JwtUserToken\Api\Data\Revoked;
+use Magento\JwtUserToken\Api\RevokedRepositoryInterface;
+use Magento\User\Model\ResourceModel\User\Collection;
+use Magento\User\Model\ResourceModel\User\CollectionFactory;
 
 class CleanupTokensService
 {
-    private Revoked $revoked;
+    /**
+     * @var RevokedRepositoryInterface
+     */
+    private RevokedRepositoryInterface $revokedRepo;
 
     /**
-     * @param Revoked $revoked
+     * @var Collection
      */
-    public function __construct(Revoked $revoked)
+    private Collection $adminUserCollection;
+
+    /**
+     * @param RevokedRepositoryInterface $revokedRepo
+     * @param CollectionFactory $adminUserCollectionFactory
+     */
+    public function __construct(RevokedRepositoryInterface $revokedRepo, CollectionFactory $adminUserCollectionFactory)
     {
-        $this->revoked = $revoked;
+        $this->revokedRepo = $revokedRepo;
+        $this->adminUserCollection = $adminUserCollectionFactory->create();
     }
 
     /**
@@ -28,6 +42,12 @@ class CleanupTokensService
      */
     public function execute()
     {
-        $this->revoked->deleteAllRecords();
+        $adminUsers = $this->adminUserCollection->getItems();
+        foreach ($adminUsers as $adminUser) {
+            //Invalidating all tokens issued before current datetime.
+            $this->revokedRepo->saveRevoked(
+                new Revoked((int) UserContextInterface::USER_TYPE_ADMIN, (int) $adminUser->getId(), time())
+            );
+        }
     }
 }

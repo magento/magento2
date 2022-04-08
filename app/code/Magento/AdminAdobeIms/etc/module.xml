@@ -18,6 +18,7 @@
             <module name="Magento_Store"/>
             <module name="Magento_Email"/>
             <module name="Magento_Integration"/>
+            <module name="Magento_JwtUserToken"/>
         </sequence>
     </module>
 </config>
