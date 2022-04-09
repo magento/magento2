@@ -19,9 +19,9 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
 {
-    const INPUT_KEY_INDEXER = 'indexer';
-    const DIMENSION_MODE_NONE = 'none';
-    const XML_PATH_DIMENSIONS_MODE_MASK = 'indexer/%s/dimensions_mode';
+    private const INPUT_KEY_INDEXER = 'indexer';
+    private const DIMENSION_MODE_NONE = 'none';
+    private const XML_PATH_DIMENSIONS_MODE_MASK = 'indexer/%s/dimensions_mode';
     /**
      * @var string
      */
@@ -60,7 +60,7 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -71,7 +71,7 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
@@ -99,6 +99,7 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
                 $output->writeln(sprintf('%-50s ', $indexer->getTitle() . ':') . $mode);
             }
         } catch (\Exception $e) {
+            /** @noinspection PhpUndefinedFieldInspection */
             if (!in_array($indexerId, $this->optionalIndexers)) {
                 $output->writeln('"' . $indexer->getTitle() . '" indexer process unknown error:' . PHP_EOL);
                 $output->writeln($e->getMessage() . PHP_EOL);
