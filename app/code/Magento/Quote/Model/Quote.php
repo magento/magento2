@@ -2548,7 +2548,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                         && count($this->getQuoteShippingAddressItemsByQuoteItemId($item->getItemId())) > 1) {
                         continue;
                     }
-
                     for ($itemIndex = 0, $itemQty = $item->getQty(); $itemIndex < $itemQty; $itemIndex++) {
                         if ($itemIndex === 0) {
                             $addressItem = $item;
