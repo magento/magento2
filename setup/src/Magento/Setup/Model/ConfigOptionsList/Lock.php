@@ -26,70 +26,70 @@ class Lock implements ConfigOptionsListInterface
      *
      * @const string
      */
-    const INPUT_KEY_LOCK_PROVIDER = 'lock-provider';
+    public const INPUT_KEY_LOCK_PROVIDER = 'lock-provider';
 
     /**
      * The name of an option to set DB prefix
      *
      * @const string
      */
-    const INPUT_KEY_LOCK_DB_PREFIX = 'lock-db-prefix';
+    public const INPUT_KEY_LOCK_DB_PREFIX = 'lock-db-prefix';
 
     /**
      * The name of an option to set Zookeeper host
      *
      * @const string
      */
-    const INPUT_KEY_LOCK_ZOOKEEPER_HOST = 'lock-zookeeper-host';
+    public const INPUT_KEY_LOCK_ZOOKEEPER_HOST = 'lock-zookeeper-host';
 
     /**
      * The name of an option to set Zookeeper path
      *
      * @const string
      */
-    const INPUT_KEY_LOCK_ZOOKEEPER_PATH = 'lock-zookeeper-path';
+    public const INPUT_KEY_LOCK_ZOOKEEPER_PATH = 'lock-zookeeper-path';
 
     /**
      * The name of an option to set File path
      *
      * @const string
      */
-    const INPUT_KEY_LOCK_FILE_PATH = 'lock-file-path';
+    public const INPUT_KEY_LOCK_FILE_PATH = 'lock-file-path';
 
     /**
      * The configuration path to save lock provider
      *
      * @const string
      */
-    const CONFIG_PATH_LOCK_PROVIDER = 'lock/provider';
+    public const CONFIG_PATH_LOCK_PROVIDER = 'lock/provider';
 
     /**
      * The configuration path to save DB prefix
      *
      * @const string
      */
-    const CONFIG_PATH_LOCK_DB_PREFIX = 'lock/config/prefix';
+    public const CONFIG_PATH_LOCK_DB_PREFIX = 'lock/config/prefix';
 
     /**
      * The configuration path to save Zookeeper host
      *
      * @const string
      */
-    const CONFIG_PATH_LOCK_ZOOKEEPER_HOST = 'lock/config/host';
+    public const CONFIG_PATH_LOCK_ZOOKEEPER_HOST = 'lock/config/host';
 
     /**
      * The configuration path to save Zookeeper path
      *
      * @const string
      */
-    const CONFIG_PATH_LOCK_ZOOKEEPER_PATH = 'lock/config/path';
+    public const CONFIG_PATH_LOCK_ZOOKEEPER_PATH = 'lock/config/path';
 
     /**
      * The configuration path to save locks directory path
      *
      * @const string
      */
-    const CONFIG_PATH_LOCK_FILE_PATH = 'lock/config/path';
+    public const CONFIG_PATH_LOCK_FILE_PATH = 'lock/config/path';
 
     /**
      * The list of lock providers
@@ -134,7 +134,6 @@ class Lock implements ConfigOptionsListInterface
      */
     private $defaultConfigValues = [
         self::INPUT_KEY_LOCK_PROVIDER => LockBackendFactory::LOCK_DB,
-        self::INPUT_KEY_LOCK_DB_PREFIX => null,
         self::INPUT_KEY_LOCK_ZOOKEEPER_PATH => ZookeeperLock::DEFAULT_PATH,
     ];
 
@@ -317,7 +316,10 @@ class Lock implements ConfigOptionsListInterface
         string $lockProvider
     ) {
         foreach ($this->mappingInputKeyToConfigPath[$lockProvider] as $input => $path) {
-            $configData->set($path, $deploymentConfig->get($path, $this->getDefaultValue($input)));
+            // do not set default value null for lock db prefix
+            if ($input !== self::INPUT_KEY_LOCK_DB_PREFIX) {
+                $configData->set($path, $deploymentConfig->get($path, $this->getDefaultValue($input)));
+            }
         }
 
         return $configData;
@@ -333,10 +335,6 @@ class Lock implements ConfigOptionsListInterface
      */
     private function getDefaultValue(string $inputKey)
     {
-        if (isset($this->defaultConfigValues[$inputKey])) {
-            return $this->defaultConfigValues[$inputKey];
-        } else {
-            return null;
-        }
+        return $this->defaultConfigValues[$inputKey] ?? null;
     }
 }

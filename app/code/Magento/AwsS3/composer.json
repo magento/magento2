@@ -5,11 +5,9 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.4.0||~8.0.0||~8.1.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
-        "magento/module-remote-storage": "*",
-        "league/flysystem": "^2.0",
-        "league/flysystem-aws-s3-v3": "^2.0"
+        "magento/module-remote-storage": "*"
     },
     "type": "magento2-module",
     "license": [
