@@ -2683,7 +2683,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                     if ($item->getParentItemId() || $item->getProduct()->getIsVirtual()) {
                         continue;
                     }
-                    if ($item->getQuoteItemId() === $itemId) {
+                    if ((int)$item->getQuoteItemId() === $itemId) {
                         $addressItems[] = $item;
                     }
                 }

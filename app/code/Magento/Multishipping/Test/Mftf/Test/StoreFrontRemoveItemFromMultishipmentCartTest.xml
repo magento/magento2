@@ -80,7 +80,7 @@
         <waitForPageLoad time="30"  stepKey="waitForCartSummaryPageToLoadAfterRemovalOfSecondItem"/>
         <!-- Verify there are 1 items still available after removal of second -->
         <seeNumberOfElements userInput="1" selector="a.action.delete" stepKey="seeOneItems"/>
-        <!-- Remove second simple item from cart -->
+        <!-- Remove third simple item from cart -->
         <actionGroup ref="StorefrontRemoveProductOnCheckoutActionGroup" stepKey="removeThirdItemFromCart"/>
         <waitForPageLoad time="30"  stepKey="waitForCartSummaryPageToLoadAfterRemovalOfTestItem"/>
     </test>
