@@ -99,14 +99,12 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
                 $output->writeln(sprintf('%-50s ', $indexer->getTitle() . ':') . $mode);
             }
         } catch (\Exception $e) {
-            // @codingStandardsIgnoreStart
-            if (!in_array($indexerId, $this->optionalIndexers)) {
+            if (!in_array($indexerId, $this->optionalIndexers)) { /** @phpstan-ignore-line */
                 $output->writeln('"' . $indexer->getTitle() . '" indexer process unknown error:' . PHP_EOL);
                 $output->writeln($e->getMessage() . PHP_EOL);
                 // we must have an exit code higher than zero to indicate something was wrong
                 $returnValue = Cli::RETURN_FAILURE;
             }
-            // @codingStandardsIgnoreEnd
         }
 
         return $returnValue;
