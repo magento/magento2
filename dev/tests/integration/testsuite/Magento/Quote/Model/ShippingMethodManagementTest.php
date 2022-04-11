@@ -33,6 +33,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use PHPUnit\Framework\TestCase;
 use Magento\Quote\Api\CouponManagementInterface;
+
 /**
  * Test for shipping methods management
  *

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var Magento\Framework\Registry $registry */
 $registry = $objectManager->get(\Magento\Framework\Registry::class);
@@ -37,6 +39,7 @@ $salesRule->setData(
 );
 $salesRule->save();
 $registry->unregister('Magento/SalesRule/_files/cart_rule_free_shipping_subtotal_equals_more_than_30');
-$registry->register('Magento/SalesRule/_files/cart_rule_free_shipping_subtotal_equals_more_than_30_rollback',
+$registry->register(
+    'Magento/SalesRule/_files/cart_rule_free_shipping_subtotal_equals_more_than_30_rollback',
     $salesRule->getRuleId()
 );
