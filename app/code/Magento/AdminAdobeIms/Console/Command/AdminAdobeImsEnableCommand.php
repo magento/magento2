@@ -65,7 +65,7 @@ class AdminAdobeImsEnableCommand extends Command
     /**
      * @var UpdateTokensService
      */
-    private updateTokensService $cleanupTokensService;
+    private UpdateTokensService $updateTokensService;
 
     /**
      * @param ImsConfig $imsConfig
@@ -79,14 +79,14 @@ class AdminAdobeImsEnableCommand extends Command
         ImsConnection $imsConnection,
         ImsCommandOptionService $imsCommandOptionService,
         TypeListInterface $cacheTypeList,
-        UpdateTokensService $cleanupTokensService
+        UpdateTokensService $updateTokensService
     ) {
         parent::__construct();
         $this->imsConfig = $imsConfig;
         $this->imsConnection = $imsConnection;
         $this->imsCommandOptionService = $imsCommandOptionService;
         $this->cacheTypeList = $cacheTypeList;
-        $this->updateTokensService = $cleanupTokensService;
+        $this->updateTokensService = $updateTokensService;
 
         $this->setName('admin:adobe-ims:enable')
             ->setDescription('Enable Adobe IMS Module.')
