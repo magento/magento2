@@ -42,11 +42,11 @@ class ImsWebapiTest extends TestCase
     /**
      * Test setAccessToken
      */
-    public function testAccessToken(): void
+    public function testAccessTokenHash(): void
     {
         $value = 'value1';
-        $this->model->setAccessToken($value);
-        $this->assertSame($value, $this->model->getAccessToken());
+        $this->model->setAccessTokenHash($value);
+        $this->assertSame($value, $this->model->getAccessTokenHash());
     }
 
     /**

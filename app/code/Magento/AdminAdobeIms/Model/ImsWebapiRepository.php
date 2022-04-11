@@ -82,14 +82,15 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
-        ResourceModel\ImsWebapi $resource,
-        ImsWebapiInterfaceFactory $entityFactory,
-        LoggerInterface $logger,
-        CollectionFactory $entityCollectionFactory,
-        CollectionProcessorInterface $collectionProcessor,
+        ResourceModel\ImsWebapi                $resource,
+        ImsWebapiInterfaceFactory              $entityFactory,
+        LoggerInterface                        $logger,
+        CollectionFactory                      $entityCollectionFactory,
+        CollectionProcessorInterface           $collectionProcessor,
         ImsWebapiSearchResultsInterfaceFactory $searchResultsFactory,
-        SearchCriteriaBuilder $searchCriteriaBuilder
-    ) {
+        SearchCriteriaBuilder                  $searchCriteriaBuilder
+    )
+    {
         $this->resource = $resource;
         $this->entityFactory = $entityFactory;
         $this->logger = $logger;
@@ -134,13 +135,14 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getByAdminId(int $adminId): array
+    public function getByAdminUserId(int $adminUserId): array
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(self::ADMIN_USER_ID, $adminId)
+            ->addFilter(self::ADMIN_USER_ID, $adminUserId)
             ->create();
 
-        return $this->getList($searchCriteria)->getItems();
+        return $this->getList($searchCriteria)
+            ->getItems();
     }
 
     /**
@@ -182,17 +184,22 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function deleteByUserId(int $adminId): void
+    public function deleteByAdminUserId(int $adminUserId): bool
     {
         try {
-            $entities = $this->getByAdminId($adminId);
+            $entities = $this->getByAdminUserId($adminUserId);
 
             foreach ($entities as $entity) {
                 $this->resource->delete($entity);
             }
+            return true;
         } catch (Exception $exception) {
             $this->logger->critical($exception);
-            throw new CouldNotDeleteException(__('Could not delete ims tokens for user id.'), $exception);
+            throw new CouldNotDeleteException(
+                __('Could not delete ims tokens for admin user id %1.', $adminUserId),
+                $exception
+            );
         }
+
     }
 }

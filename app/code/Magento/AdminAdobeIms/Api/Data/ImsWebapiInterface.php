@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Api\Data;
 
-use Magento\AdminAdobeIms\Api\Data\ImsWebapiExtensionInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
@@ -25,19 +24,19 @@ interface ImsWebapiInterface extends ExtensibleDataInterface
     public function getId();
 
     /**
-     * Get user ID
+     * Get admin user ID
      *
      * @return int|null
      */
-    public function getUserId(): ?int;
+    public function getAdminUserId(): ?int;
 
     /**
-     * Set user ID
+     * Set admin user ID
      *
      * @param int $value
      * @return $this
      */
-    public function setUserId(int $value): ImsWebapiInterface;
+    public function setAdminUserId(int $value): ImsWebapiInterface;
 
     /**
      * Get access token hash
@@ -132,14 +131,14 @@ interface ImsWebapiInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return ImsWebapiExtensionInterface
+     * @return \Magento\AdminAdobeIms\Api\Data\ImsWebapiExtensionInterface
      */
     public function getExtensionAttributes(): ImsWebapiExtensionInterface;
 
     /**
      * Set extension attributes
      *
-     * @param ImsWebapiExtensionInterface $extensionAttributes
+     * @param \Magento\AdminAdobeIms\Api\Data\ImsWebapiExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(

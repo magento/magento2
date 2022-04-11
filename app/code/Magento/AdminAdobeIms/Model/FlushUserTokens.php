@@ -85,7 +85,7 @@ class FlushUserTokens implements FlushUserTokensInterface
      */
     private function revokeTokenForAdobeIms(int $adminUserId = null): void
     {
-        $list = $this->imsWebapiRepository->getByAdminId($adminUserId);
+        $list = $this->imsWebapiRepository->getByAdminUserId($adminUserId);
         foreach ($list as $entity) {
             if ($entity->getAccessToken() !== null) {
                 $this->logOut->execute(

@@ -20,7 +20,7 @@ class ImsWebapi extends AbstractExtensibleModel implements ImsWebapiInterface
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    private const USER_ID = 'admin_user_id';
+    private const ADMIN_USER_ID = 'admin_user_id';
     private const ACCESS_TOKEN_HASH = 'access_token_hash';
     private const ACCESS_TOKEN = 'access_token';
     private const LAST_CHECK_TIME = 'last_check_time';
@@ -39,17 +39,17 @@ class ImsWebapi extends AbstractExtensibleModel implements ImsWebapiInterface
     /**
      * @inheritdoc
      */
-    public function getUserId(): ?int
+    public function getAdminUserId(): ?int
     {
-        return (int) $this->getData(self::USER_ID);
+        return (int) $this->getData(self::ADMIN_USER_ID);
     }
 
     /**
      * @inheritdoc
      */
-    public function setUserId(int $value): ImsWebapiInterface
+    public function setAdminUserId(int $value): ImsWebapiInterface
     {
-        $this->setData(self::USER_ID, $value);
+        $this->setData(self::ADMIN_USER_ID, $value);
 
         return $this;
     }

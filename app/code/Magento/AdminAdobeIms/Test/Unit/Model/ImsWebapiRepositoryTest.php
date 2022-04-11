@@ -15,8 +15,10 @@ use Magento\AdminAdobeIms\Model\ImsWebapiRepository;
 use Magento\AdminAdobeIms\Api\Data\ImsWebapiInterfaceFactory;
 use Magento\AdminAdobeIms\Api\Data\ImsWebapiSearchResultsInterfaceFactory;
 use Magento\AdminAdobeIms\Api\Data\ImsWebapiSearchResultsInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -72,6 +74,11 @@ class ImsWebapiRepositoryTest extends TestCase
     private $searchResultsFactory;
 
     /**
+     * @var SearchCriteriaBuilder|MockObject
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * Prepare test objects.
      */
     protected function setUp(): void
@@ -90,6 +97,10 @@ class ImsWebapiRepositoryTest extends TestCase
             ImsWebapiSearchResultsInterfaceFactory::class,
             ['create']
         );
+        $this->searchCriteriaBuilder = $this->createPartialMock(
+            SearchCriteriaBuilder::class,
+            ['create', 'addFilter']
+        );
 
         $this->model = new ImsWebapiRepository(
             $this->resource,
@@ -97,7 +108,8 @@ class ImsWebapiRepositoryTest extends TestCase
             $this->loggerMock,
             $this->entityCollectionFactory,
             $this->collectionProcessor,
-            $this->searchResultsFactory
+            $this->searchResultsFactory,
+            $this->searchCriteriaBuilder
         );
     }
 
@@ -119,14 +131,14 @@ class ImsWebapiRepositoryTest extends TestCase
     public function testSaveWithException(): void
     {
         $this->expectException(CouldNotSaveException::class);
-        $this->expectExceptionMessage('Could not save ims webapi.');
+        $this->expectExceptionMessage('Could not save ims token.');
 
         $imsWebapi = $this->createMock(ImsWebapi::class);
         $this->resource->expects($this->once())
             ->method('save')
             ->with($imsWebapi)
             ->willThrowException(
-                new CouldNotSaveException(__('Could not save ims webapi.'))
+                new CouldNotSaveException(__('Could not save ims token.'))
             );
         $this->loggerMock->expects($this->once())->method('critical');
         $this->model->save($imsWebapi);
@@ -149,7 +161,7 @@ class ImsWebapiRepositoryTest extends TestCase
     public function testGetWithException(): void
     {
         $this->expectException(NoSuchEntityException::class);
-        $this->expectExceptionMessage('The ims web API wasn\'t found.');
+        $this->expectExceptionMessage('The ims token wasn\'t found.');
 
         $entity = $this->objectManager->getObject(ImsWebapi::class);
         $this->entityFactory->method('create')
@@ -157,20 +169,73 @@ class ImsWebapiRepositoryTest extends TestCase
         $this->resource->expects($this->once())
             ->method('load')
             ->willThrowException(
-                new NoSuchEntityException(__('The web API wasn\'t found.'))
+                new NoSuchEntityException(__('The ims token wasn\'t found.'))
             );
         $this->model->get(1);
     }
 
     /**
+     * @return array
+     */
+    protected function initCollection()
+    {
+        $collectionSize = 1;
+        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
+            ->setMethods(['getPageSize'])
+            ->getMockForAbstractClass();
+
+        $searchCriteriaMock->expects($this->any())
+            ->method('getPageSize')
+            ->willReturn($collectionSize);
+
+        $this->searchCriteriaBuilder->expects($this->once())
+            ->method('create')
+            ->willReturn($searchCriteriaMock);
+        $this->searchCriteriaBuilder->expects($this->once())
+            ->method('addFilter')
+            ->willReturnSelf();
+
+        $collection = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $imsWebapiMock = $this->createMock(ImsWebapi::class);
+
+        $collection->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$imsWebapiMock]);
+
+        $this->entityCollectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($collection);
+
+        $collection->expects($this->once())
+            ->method('getSize')
+            ->willReturn($collectionSize);
+
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($searchCriteriaMock, $collection)
+            ->willReturnSelf();
+        $searchResultsMock = $this->createSearchResultsMock($searchCriteriaMock, $imsWebapiMock, $collectionSize);
+
+        $searchResultsMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$imsWebapiMock]);
+
+        $this->searchResultsFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($searchResultsMock);
+
+        return [$imsWebapiMock];
+    }
+
+    /**
      * Test get by ims webapi id.
      */
-    public function testGetByUserId(): void
+    public function testGetByAdminUserId(): void
     {
-        $entity = $this->objectManager->getObject(ImsWebapi::class)->setId(1);
-        $this->entityFactory->method('create')
-            ->willReturn($entity);
-        $this->assertEquals($this->model->getByUserId(1)->getId(), 1);
+        $this->assertEquals($this->initCollection(), $this->model->getByAdminUserId(1));
     }
 
     /**
@@ -225,7 +290,7 @@ class ImsWebapiRepositoryTest extends TestCase
      * @param int $collectionSize
      * @return MockObject
      */
-    protected function createSearchResultsMock($searchCriteriaMock, $imsWebapiMock, $collectionSize)
+    protected function createSearchResultsMock($searchCriteriaMock, $imsWebapiMock, $collectionSize = 1)
     {
         /** @var MockObject $searchResultsMock */
         $searchResultsMock = $this->getMockBuilder(ImsWebapiSearchResultsInterface::class)
@@ -237,7 +302,7 @@ class ImsWebapiRepositoryTest extends TestCase
         $searchResultsMock->expects($this->any())
             ->method('setItems')
             ->with([$imsWebapiMock]);
-        $searchResultsMock->expects($this->once())
+        $searchResultsMock->expects($this->any())
             ->method('setTotalCount')
             ->with($collectionSize);
 
@@ -247,18 +312,18 @@ class ImsWebapiRepositoryTest extends TestCase
     /**
      * Test successful deletion of ims web API
      */
-    public function testDeleteById()
+    public function testDeleteByAdminUserId()
     {
-        $entityId = 1;
+        $adminUserId = 1;
 
-        $imsWebapiMock = $this->initImsWebapi($entityId);
+        $entities = $this->initCollection();
 
         $this->resource->expects($this->exactly(1))
             ->method('delete')
-            ->with($imsWebapiMock)
+            ->with($entities[0])
             ->willReturnSelf();
 
-        $this->assertTrue($this->model->deleteById($entityId));
+        $this->assertTrue($this->model->deleteByAdminUserId($adminUserId));
     }
 
     /**
@@ -269,41 +334,24 @@ class ImsWebapiRepositoryTest extends TestCase
      */
     public function testDeleteWithException()
     {
-        $entityId = 1;
-        $message = 'Cannot delete ims webapi with id %1';
-        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
-        $this->expectExceptionMessage(sprintf($message, $entityId));
-        $imsWebapi = $this->initImsWebapi($entityId);
+        $adminUserId = 1;
+        $message = 'Could not delete ims tokens for admin user id %1.';
+        $this->expectException('Magento\Framework\Exception\CouldNotDeleteException');
+        $this->expectExceptionMessage(sprintf($message, $adminUserId));
+        $entities = $this->initCollection();
 
-        $this->resource->expects($this->once())
+        $this->resource->expects($this->exactly(1))
             ->method('delete')
+            ->with($entities[0])
             ->willThrowException(
-                new NoSuchEntityException(__(
+                new CouldNotDeleteException(__(
                     $message,
-                    $entityId
+                    $adminUserId
                 ))
             );
-        $this->model->deleteById($entityId);
+
+
+        $this->model->deleteByAdminUserId($adminUserId);
     }
 
-    /**
-     * @param int $entityId
-     * @return ImsWebapi|MockObject
-     */
-    private function initImsWebapi($entityId)
-    {
-        $imsWebapiMock = $this->createMock(ImsWebapi::class);
-        $this->entityFactory->method('create')
-            ->willReturn($imsWebapiMock);
-
-        $imsWebapiMock->expects($this->any())
-            ->method('load')
-            ->with($entityId)
-            ->willReturn($imsWebapiMock);
-
-        $imsWebapiMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($entityId);
-        return $imsWebapiMock;
-    }
 }

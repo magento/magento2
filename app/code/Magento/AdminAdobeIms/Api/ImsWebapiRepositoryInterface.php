@@ -41,13 +41,13 @@ interface ImsWebapiRepositoryInterface
     public function get(int $entityId): ImsWebapiInterface;
 
     /**
-     * Get ims token(s) by admin id
+     * Get ims token(s) by admin user id
      *
-     * @param int $adminId
+     * @param int $adminUserId
      * @return ImsWebapiInterface[]
      * @throws NoSuchEntityException
      */
-    public function getByAdminId(int $adminId): array;
+    public function getByAdminUserId(int $adminUserId): array;
 
     /**
      * Get entity by access token hash
@@ -68,12 +68,12 @@ interface ImsWebapiRepositoryInterface
     public function getList(SearchCriteriaInterface $searchCriteria): ImsWebapiSearchResultsInterface;
 
     /**
-     * Delete ims tokens for user id.
+     * Delete ims tokens for admin user id.
      *
-     * @param int $adminId
-     * @return void
+     * @param int $adminUserId
+     * @return bool
      * @throws NoSuchEntityException
      * @throws LocalizedException
      */
-    public function deleteByUserId(int $adminId): void;
+    public function deleteByAdminUserId(int $adminUserId): bool;
 }
