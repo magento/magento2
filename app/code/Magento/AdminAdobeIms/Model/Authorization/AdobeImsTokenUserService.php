@@ -102,7 +102,9 @@ class AdobeImsTokenUserService
     public function getAdminUserIdByToken(string $bearerToken): int
     {
         $dataFromToken = $this->tokenReader->read($bearerToken);
-        $imsWebapiEntity = $this->imsWebapiRepository->getByAccessToken($bearerToken);
+        $imsWebapiEntity = $this->imsWebapiRepository->getByAccessTokenHash(
+            $this->encryptor->getHash($bearerToken)
+        );
 
         if ($imsWebapiEntity->getId()) {
             $adminUserId = $imsWebapiEntity->getUserId();

@@ -19,7 +19,6 @@ use Magento\AdminAdobeIms\Api\Data\ImsWebapiSearchResultsInterfaceFactory;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -71,11 +70,6 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
     private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     /**
-     * @var EncryptorInterface
-     */
-    private EncryptorInterface $encryptor;
-
-    /**
      * @param ResourceModel\ImsWebapi $resource
      * @param ImsWebapiInterfaceFactory $entityFactory
      * @param LoggerInterface $logger
@@ -83,7 +77,6 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
      * @param CollectionProcessorInterface $collectionProcessor
      * @param ImsWebapiSearchResultsInterfaceFactory $searchResultsFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param EncryptorInterface $encryptor
      */
     public function __construct(
         ResourceModel\ImsWebapi $resource,
@@ -92,8 +85,7 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
         CollectionFactory $entityCollectionFactory,
         CollectionProcessorInterface $collectionProcessor,
         ImsWebapiSearchResultsInterfaceFactory $searchResultsFactory,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        EncryptorInterface $encryptor
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->resource = $resource;
         $this->entityFactory = $entityFactory;
@@ -102,7 +94,6 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->encryptor = $encryptor;
     }
 
     /**
@@ -152,10 +143,10 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getByAccessToken(string $token): ImsWebapiInterface
+    public function getByAccessTokenHash(string $tokenHash): ImsWebapiInterface
     {
         $entity = $this->entityFactory->create();
-        $this->resource->load($entity, $this->encryptor->getHash($token), 'access_token_hash');
+        $this->resource->load($entity, $tokenHash, 'access_token_hash');
 
         return $entity;
     }
