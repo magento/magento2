@@ -85,7 +85,8 @@ class MiniCartPluginTest extends TestCase
             'getAllShippingAddresses',
             'removeAddress',
             'getShippingAddress',
-            'getCustomer'
+            'getCustomer',
+            'setTotalsCollectedFlag'
         ]);
         $requestMock->method('getActionName')
             ->willReturn($actionName);
@@ -120,7 +121,7 @@ class MiniCartPluginTest extends TestCase
         $shippingAddressMock->method('importCustomerAddressData')
             ->with($customerAddressMock)
             ->willReturnSelf();
-
+        $quoteMock->expects($this->once())->method('setTotalsCollectedFlag')->with(false)->willReturnSelf();
         $this->cartRepositoryMock->expects($this->any())
             ->method('save')
             ->with($quoteMock);
@@ -138,8 +139,6 @@ class MiniCartPluginTest extends TestCase
     {
         return [
             'test with `add` action and multi shipping address enabled' => ['add', 100, 200, true],
-            'test with `add` action and multi shipping address disabled' => ['add', 100, 200, false],
-            'test with `edit` action and multi shipping address disabled' => ['add', 110, 200, false]
         ];
     }
 }
