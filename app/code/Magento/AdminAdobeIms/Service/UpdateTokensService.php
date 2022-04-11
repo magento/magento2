@@ -38,6 +38,8 @@ class UpdateTokensService
     }
 
     /**
+     * Token invalidation for the admin users
+     *
      * return @void
      */
     public function execute()
