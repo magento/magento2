@@ -124,6 +124,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Returns the current attribute set name
+     *
      * @return string
      */
     protected function getCurrentAttributeSetName()

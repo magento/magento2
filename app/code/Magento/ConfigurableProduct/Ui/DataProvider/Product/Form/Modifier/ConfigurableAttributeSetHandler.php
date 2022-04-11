@@ -16,7 +16,7 @@ use Magento\Framework\UrlInterface;
  */
 class ConfigurableAttributeSetHandler extends AbstractModifier
 {
-    const ATTRIBUTE_SET_HANDLER_MODAL = 'configurable_attribute_set_handler_modal';
+    public const ATTRIBUTE_SET_HANDLER_MODAL = 'configurable_attribute_set_handler_modal';
 
     /**
      * @var UrlInterface
