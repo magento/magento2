@@ -75,7 +75,8 @@ class FlushUserTokens implements FlushUserTokensInterface
 
     /**
      * Revoke tokens for adobe
-     *  Get list of all tokens for adminUserId and invalidate them on adobe side
+     *
+     * Get list of all tokens for adminUserId and invalidate them on adobe side
      *
      * @param int|null $adminUserId
      * @return void
@@ -86,7 +87,7 @@ class FlushUserTokens implements FlushUserTokensInterface
     {
         $list = $this->imsWebapiRepository->getByAdminId($adminUserId);
         foreach ($list as $entity) {
-            if($entity->getAccessToken() !== null) {
+            if ($entity->getAccessToken() !== null) {
                 $this->logOut->execute(
                     $this->encryptor->decrypt($entity->getAccessToken())
                 );

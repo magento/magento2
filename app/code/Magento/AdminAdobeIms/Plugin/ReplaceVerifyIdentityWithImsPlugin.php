@@ -67,6 +67,7 @@ class ReplaceVerifyIdentityWithImsPlugin
      * @throws AuthenticationException
      * @throws AuthorizationException
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundVerifyIdentity(User $subject, callable $proceed, string $password): bool
     {
@@ -74,7 +75,7 @@ class ReplaceVerifyIdentityWithImsPlugin
             return $proceed($password);
         }
 
-        $valid = $this->verifyImsToken($subject);
+        $valid = $this->verifyImsToken();
         if ($valid) {
             return true;
         }
@@ -90,13 +91,12 @@ class ReplaceVerifyIdentityWithImsPlugin
     /**
      * Get and verify IMS Token for current user
      *
-     * @param User $user
      * @return bool
      * @throws AuthenticationException
      * @throws AuthorizationException
      * @throws NoSuchEntityException
      */
-    private function verifyImsToken(User $user): bool
+    private function verifyImsToken(): bool
     {
         $session = $this->auth->getAuthStorage();
         $accessToken = $session->getAdobeAccessToken();

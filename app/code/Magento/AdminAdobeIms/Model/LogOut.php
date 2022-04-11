@@ -73,7 +73,8 @@ class LogOut implements ImsLogOutInterface
     /**
      * @inheritDoc
      */
-    public function execute(?string $accessToken = null): bool {
+    public function execute(?string $accessToken = null): bool
+    {
         try {
             if ($accessToken === null) {
                 $session = $this->auth->getAuthStorage();
