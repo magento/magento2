@@ -58,4 +58,8 @@
         <plugin name="clear_adobe_user_id"
                 type="Magento\AdminAdobeIms\Plugin\ClearAdobeUserIdPlugin"/>
     </type>
+    <type name="Magento\AdminAdobeIms\Service\ImsConfig">
+        <plugin name="update_adobe_ims_scopes"
+                type="Magento\AdminAdobeIms\Plugin\UpdateAdobeImsScopes"/>
+    </type>
 </config>

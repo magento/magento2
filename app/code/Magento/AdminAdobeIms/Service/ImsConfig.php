@@ -22,15 +22,17 @@ class ImsConfig extends Config
     public const XML_PATH_ENABLED = 'adobe_ims/integration/enabled';
     public const XML_PATH_LOGGING_ENABLED = 'adobe_ims/integration/logging_enabled';
     public const XML_PATH_ORGANIZATION_ID = 'adobe_ims/integration/organization_id';
-    public const XML_PATH_CLIENT_ID = 'adobe_ims/admin/client_id';
-    public const XML_PATH_CLIENT_SECRET = 'adobe_ims/admin/client_secret';
-    public const XML_PATH_SCOPES = 'adobe_ims/admin/scopes';
+    public const XML_PATH_CLIENT_ID = 'adobe_ims/integration/client_id';
+    public const XML_PATH_CLIENT_SECRET = 'adobe_ims/integration/client_secret';
+    public const XML_PATH_SCOPES = 'adobe_ims/integration/scopes';
     public const XML_PATH_AUTH_URL_PATTERN = 'adobe_ims/integration/auth_url_pattern';
     public const XML_PATH_PROFILE_URL = 'adobe_ims/integration/profile_url';
     public const XML_PATH_NEW_ADMIN_EMAIL_TEMPLATE = 'adobe_ims/email/content_template';
     public const XML_PATH_VALIDATE_TOKEN_URL = 'adobe_ims/integration/validate_token_url';
     public const XML_PATH_LOGOUT_URL = 'adobe_ims/integration/logout_url';
     public const XML_PATH_CERTIFICATE_PATH = 'adobe_ims/integration/certificate_path';
+
+    public const XML_PATH_ADMIN_ADOBE_IMS_SCOPES = 'adobe_ims/admin/scopes';
 
     private const OAUTH_CALLBACK_URL = 'adobe_ims_auth/oauth/';
 
@@ -244,7 +246,7 @@ class ImsConfig extends Config
             [
                 $clientId,
                 $this->getAdminAdobeImsCallBackUrl(),
-                $this->getAdminAdobeImsScopes(),
+                $this->getScopes(),
                 $this->getLocale()
             ],
             $this->scopeConfig->getValue(self::XML_PATH_AUTH_URL_PATTERN)
@@ -272,11 +274,11 @@ class ImsConfig extends Config
     }
 
     /**
-     * Get scopes for AdminAdobeIms
+     * Get scopes for AdobeIms
      *
      * @return string
      */
-    public function getAdminAdobeImsScopes(): string
+    public function getScopes(): string
     {
         return implode(
             ',',
