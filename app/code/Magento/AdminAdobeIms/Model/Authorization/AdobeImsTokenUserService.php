@@ -22,6 +22,9 @@ use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AdobeImsTokenUserService
 {
     private const DATE_FORMAT = 'Y-m-d H:i:s';

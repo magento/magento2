@@ -25,6 +25,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ImsWebapiRepository implements ImsWebapiRepositoryInterface
 {
     private const ADMIN_USER_ID = 'admin_user_id';
