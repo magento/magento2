@@ -147,14 +147,19 @@ class ImsConnection
     /**
      * Verify if access_token is valid
      *
-     * @param string $code
+     * @param string|null $code
      * @param string $tokenType
      * @return bool
      * @throws AuthorizationException
      */
-    public function validateToken(string $code, string $tokenType = 'access_token'): bool
+    public function validateToken(?string $code, string $tokenType = 'access_token'): bool
     {
         $isTokenValid = false;
+
+        if ($code === null) {
+            return false;
+        }
+
         $curl = $this->curlFactory->create();
 
         $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
