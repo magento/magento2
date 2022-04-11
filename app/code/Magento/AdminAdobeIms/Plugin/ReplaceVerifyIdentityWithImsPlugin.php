@@ -11,7 +11,6 @@ namespace Magento\AdminAdobeIms\Plugin;
 use Magento\AdminAdobeIms\Model\Auth;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -35,26 +34,18 @@ class ReplaceVerifyIdentityWithImsPlugin
     private Auth $auth;
 
     /**
-     * @var EncryptorInterface
-     */
-    private EncryptorInterface $encryptor;
-
-    /**
      * @param ImsConfig $imsConfig
      * @param ImsConnection $imsConnection
      * @param Auth $auth
-     * @param EncryptorInterface $encryptor
      */
     public function __construct(
         ImsConfig $imsConfig,
         ImsConnection $imsConnection,
-        Auth $auth,
-        EncryptorInterface $encryptor
+        Auth $auth
     ) {
         $this->imsConfig = $imsConfig;
         $this->imsConnection = $imsConnection;
         $this->auth = $auth;
-        $this->encryptor = $encryptor;
     }
 
     /**
