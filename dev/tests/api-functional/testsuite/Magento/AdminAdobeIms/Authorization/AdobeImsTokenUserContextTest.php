@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Authorization;
 
+use Magento\AdminAdobeIms\Api\ImsWebapiRepositoryInterface;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
@@ -49,11 +49,6 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     private $cache;
 
     /**
-     * @var UserProfileRepositoryInterface
-     */
-    private $userProfileRepository;
-
-    /**
      * @var User
      */
     private $userModel;
@@ -74,6 +69,11 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     private $scopeConfig;
 
     /**
+     * @var ImsWebapiRepositoryInterface
+     */
+    private $imsWebapiRepository;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -83,11 +83,11 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
         $objectManager = Bootstrap::getObjectManager();
         $this->manager = $objectManager->get(JwtManagerInterface::class);
         $this->cache = $objectManager->get(CacheInterface::class);
-        $this->userProfileRepository = $objectManager->get(UserProfileRepositoryInterface::class);
         $this->userModel = $objectManager->get(User::class);
         $this->jwkFactory = $objectManager->get(JwkFactory::class);
         $this->configWriter = $objectManager->get(WriterInterface::class);
         $this->scopeConfig = $objectManager->get(ScopeConfigInterface::class);
+        $this->imsWebapiRepository = $objectManager->get(ImsWebapiRepositoryInterface::class);
     }
 
     public function testUseAdobeAccessTokenModuleDisabled()
@@ -126,7 +126,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
         $this->configWriter->save(ImsConfig::XML_PATH_ENABLED, 1);
         $this->scopeConfig->clean();
         $this->runWebApiCall($token);
-        $this->assertAdobeUserIsSaved($adminUserNameFromFixture);
+        $this->assertAdminUserIdIsSaved($adminUserNameFromFixture, $token);
     }
 
     public function testUseAdobeAccessTokenAdminNotExist()
@@ -277,18 +277,18 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     }
 
     /**
-     * Check if adobe_user_id was saved into adobe_user_profile table
+     * Check if admin_user_id was saved into admin_adobe_ims_webapi table
      *
-     * @param string $accessToken
-     * @param string $userName
-     * @param string $password
+     * @param $username
+     * @param $token
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function assertAdobeUserIsSaved($username)
+    private function assertAdminUserIdIsSaved($username, $token)
     {
         $adminUserId = (int) $this->userModel->loadByUsername($username)->getId();
-        $userProfile = $this->userProfileRepository->getByUserId($adminUserId);
-        if ($userProfile->getId()) {
-            $this->assertEquals(self::TEST_ADOBE_USER_ID, $userProfile->getData('adobe_user_id'));
+        $webapiEntity = $this->imsWebapiRepository->getByAccessToken($token);
+        if ($webapiEntity->getId()) {
+            $this->assertEquals($adminUserId, $webapiEntity->getUserId());
         }
     }
 
