@@ -31,6 +31,7 @@ use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class DependencyTest extends \PHPUnit\Framework\TestCase
 {
@@ -1252,10 +1253,10 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 $modulesDependencies = array_merge(...$modules);
 
                 foreach ($extensionConflictList as $extension => $disabledModules) {
-                    $foundedModules = \array_unique(array_intersect($modulesDependencies, $disabledModules));
-                    if (!empty($foundedModules)) {
+                    $modulesThatMustBeDisabled = \array_unique(array_intersect($modulesDependencies, $disabledModules));
+                    if (!empty($modulesThatMustBeDisabled)) {
 
-                        foreach ($foundedModules as $foundedModule) {
+                        foreach ($modulesThatMustBeDisabled as $foundedModule) {
                             if (!empty($allowedDependencies[$foundedModule])
                                 && \in_array($module, $allowedDependencies[$foundedModule])
                             ) {
@@ -1270,7 +1271,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                                     ' because it must be disabled when "%s" extension is used.' .
                                     ' See AC-2516 for more details',
                                     $module,
-                                    \implode(', ', $foundedModules),
+                                    \implode(', ', $modulesThatMustBeDisabled),
                                     $module,
                                     $extension
                                 )
@@ -1297,7 +1298,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             foreach (glob($extensionConflictsFilePattern) as $fileName) {
                 $extensionConflicts[] = include $fileName;
             }
-            self::$extensionConflicts = array_merge([], ...$extensionConflicts);
+            self::$extensionConflicts = \array_merge_recursive([], ...$extensionConflicts);
         }
         return self::$extensionConflicts;
     }
@@ -1316,7 +1317,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             foreach (glob($allowedDependenciesFilePattern) as $fileName) {
                 $allowedDependencies[] = include $fileName;
             }
-            self::$allowedDependencies = array_merge([], ...$allowedDependencies);
+            self::$allowedDependencies = \array_merge_recursive([], ...$allowedDependencies);
         }
         return self::$allowedDependencies;
     }

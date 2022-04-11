@@ -10,7 +10,5 @@ return [
         'Magento\Elasticsearch',
         'Magento\Elasticsearch6',
         'Magento\Elasticsearch7',
-        'Magento\ElasticsearchCatalogPermissions', // move to EE repo
-        'Magento\ElasticsearchCatalogPermissionsGraphQl', // move to EE repo
     ]
 ];
