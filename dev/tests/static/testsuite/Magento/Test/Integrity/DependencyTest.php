@@ -189,6 +189,16 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     private $undeclaredDependencyBlacklist;
 
     /**
+     * @var array|null
+     */
+    private static $extensionConflicts = null;
+
+    /**
+     * @var array|null
+     */
+    private static $allowedDependencies = null;
+
+    /**
      * Sets up data
      *
      * @throws \Exception
@@ -1214,26 +1224,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
 
-        // @todo - move to config
-        $extensionConflictList = [
-            // the following modules must be disabled when Live Search is used
-            // so core modules must not be dependent on them
-            'Magento\LiveSearch' => [
-                'Magento\Elasticsearch',
-                'Magento\Elasticsearch6',
-                'Magento\Elasticsearch7',
-                'Magento\ElasticsearchCatalogPermissions',
-            ],
-        ];
-
-        // @todo - move to config
-        $allowedDependencies = [
-            'Magento\Elasticsearch' => [
-                'Magento\Elasticsearch',
-                'Magento\Elasticsearch6',
-                'Magento\Elasticsearch7'
-            ]
-        ];
+        $extensionConflictList = self::getExtensionConflicts();
+        $allowedDependencies = self::getAllowedDependencies();
 
         $invoker(
         /**
@@ -1289,5 +1281,43 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             },
             $this->getAllFiles()
         );
+    }
+
+    /**
+     * Initialize extension conflicts list.
+     *
+     * @return array
+     */
+    private static function getExtensionConflicts(): array
+    {
+        if (null === self::$extensionConflicts) {
+            $extensionConflictsFilePattern =
+                realpath(__DIR__) . '/_files/extension_dependencies_test/extension_conflicts/*.php';
+            $extensionConflicts = [];
+            foreach (glob($extensionConflictsFilePattern) as $fileName) {
+                $extensionConflicts[] = include $fileName;
+            }
+            self::$extensionConflicts = array_merge([], ...$extensionConflicts);
+        }
+        return self::$extensionConflicts;
+    }
+
+    /**
+     * Initialize allowed dependencies.
+     *
+     * @return array
+     */
+    private static function getAllowedDependencies(): array
+    {
+        if (null === self::$allowedDependencies) {
+            $allowedDependenciesFilePattern =
+                realpath(__DIR__) . '/_files/extension_dependencies_test/allowed_dependencies/*.php';
+            $allowedDependencies = [];
+            foreach (glob($allowedDependenciesFilePattern) as $fileName) {
+                $allowedDependencies[] = include $fileName;
+            }
+            self::$allowedDependencies = array_merge([], ...$allowedDependencies);
+        }
+        return self::$allowedDependencies;
     }
 }
