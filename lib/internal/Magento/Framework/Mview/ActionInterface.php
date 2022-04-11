@@ -19,7 +19,6 @@ interface ActionInterface
      *
      * @param int[] $ids
      * @return void
-     * @api
      */
     public function execute($ids);
 }

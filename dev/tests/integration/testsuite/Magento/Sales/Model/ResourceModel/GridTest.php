@@ -12,6 +12,7 @@ use Magento\Sales\Model\Grid\LastUpdateTimeCache;
 use Magento\Sales\Model\ResourceModel\Provider\UpdatedAtListProvider;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 
 /**
  * @magentoDataFixture Magento/Sales/_files/order_with_invoice_shipment_creditmemo.php
@@ -131,6 +132,54 @@ class GridTest extends TestCase
                     'gridTableName' => 'sales_invoice_grid',
                 ],
                 'order_id',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider shipmentGridDataProvider
+     * @param array $constructorArgs
+     * @param string $orderIdField
+     * @param string $orderIdIndex
+     */
+    public function testSalesShipmentGridOrderIdFieldIndex(array $constructorArgs, string $orderIdField, string $orderIdIndex)
+    {
+        $constructorArgs['orderIdField'] = $constructorArgs['mainTableName'] . '.' . $orderIdField;
+        $constructorArgs['columns'] = [
+            $orderIdField => $constructorArgs['orderIdField'],
+            'created_at' => $constructorArgs['mainTableName'] . '.created_at',
+            'updated_at' => $constructorArgs['mainTableName'] . '.updated_at',
+        ];
+        $constructorArgs['notSyncedDataProvider'] = $this->objectManager->get(UpdatedAtListProvider::class);
+        $grid = $this->objectManager->create(Grid::class, $constructorArgs);
+        /** @var Mysql $connection */
+        $connection = $grid->getConnection();
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)
+            ->loadByIncrementId('100000111');
+        $select = $connection->select()
+            ->from($constructorArgs['gridTableName'], ['order_id'])
+            ->where("$orderIdField = ?", $order->getEntityId());
+        $gridTableIndexes = $connection->getIndexList($constructorArgs['gridTableName']);
+        $gridFieldData = $connection->fetchRow($select);
+        $testFiledData = ['order_id' => $order->getEntityId()];
+        $this->assertEquals($testFiledData, $gridFieldData);
+        $this->assertArrayHasKey($orderIdIndex, $gridTableIndexes);
+        $this->assertEquals($gridTableIndexes[$orderIdIndex]['fields'][0], $orderIdField);
+    }
+
+    /**
+     * @return array
+     */
+    public function shipmentGridDataProvider(): array
+    {
+        return [
+            'Magento\Sales\Model\ResourceModel\Grid' => [
+                [
+                    'mainTableName' => 'sales_shipment',
+                    'gridTableName' => 'sales_shipment_grid',
+                ],
+                'order_id',
+                'SALES_SHIPMENT_GRID_ORDER_ID'
             ],
         ];
     }

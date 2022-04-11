@@ -9,6 +9,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteManagement;
+use Magento\Quote\Model\SubmitQuoteValidator;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Model\Service\OrderService;
 use Magento\SalesRule\Model\Coupon;
@@ -158,14 +159,16 @@ class CouponUsagesTest extends TestCase
     /**
      * Test to decrement coupon usages after exception on order placing
      *
+     * @param array $mockObjects
      * @magentoDataFixture Magento/SalesRule/_files/coupons_limited_order.php
+     * @magentoDbIsolation disabled
+     * @dataProvider quoteSubmitFailureDataProvider
      */
-    public function testSubmitQuoteWithError()
+    public function testQuoteSubmitFailure(array $mockObjects)
     {
         $customerId = 1;
         $couponCode = 'one_usage';
         $reservedOrderId = 'test01';
-        $exceptionMessage = 'Some test exception';
 
         /** @var Coupon $coupon */
         $coupon = $this->objectManager->get(Coupon::class);
@@ -174,23 +177,16 @@ class CouponUsagesTest extends TestCase
         $quote = $this->objectManager->get(Quote::class);
         $quote->load($reservedOrderId, 'reserved_order_id');
 
-        /** @var OrderManagementInterface|MockObject $orderManagement */
-        $orderManagement = $this->createMock(OrderManagementInterface::class);
-        $orderManagement->expects($this->once())
-            ->method('place')
-            ->willThrowException(new \Exception($exceptionMessage));
-
         /** @var QuoteManagement $quoteManagement */
         $quoteManagement = $this->objectManager->create(
             QuoteManagement::class,
-            ['orderManagement' => $orderManagement]
+            $mockObjects
         );
 
         try {
             $quoteManagement->submit($quote);
         } catch (\Exception $exception) {
-            $this->assertEquals($exceptionMessage, $exception->getMessage());
-
+            sleep(10); // timeout to processing queue
             $this->usage->loadByCustomerCoupon($this->couponUsage, $customerId, $coupon->getId());
             $coupon->loadByCode($couponCode);
             self::assertEquals(
@@ -202,5 +198,32 @@ class CouponUsagesTest extends TestCase
                 $this->couponUsage->getTimesUsed()
             );
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function quoteSubmitFailureDataProvider(): array
+    {
+        /** @var OrderManagementInterface|MockObject $orderManagement */
+        $orderManagement = $this->createMock(OrderManagementInterface::class);
+        $orderManagement->expects($this->once())
+            ->method('place')
+            ->willThrowException(new \Exception());
+
+        /** @var OrderManagementInterface|MockObject $orderManagement */
+        $submitQuoteValidator = $this->createMock(SubmitQuoteValidator::class);
+        $submitQuoteValidator->expects($this->once())
+            ->method('validateQuote')
+            ->willThrowException(new \Exception());
+
+        return [
+            'order placing failure' => [
+                ['orderManagement' => $orderManagement]
+            ],
+            'quote validation failure' => [
+                ['submitQuoteValidator' => $submitQuoteValidator]
+            ],
+        ];
     }
 }

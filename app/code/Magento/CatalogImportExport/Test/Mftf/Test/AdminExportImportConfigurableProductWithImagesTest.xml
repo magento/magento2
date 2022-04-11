@@ -171,17 +171,21 @@
         </actionGroup>
         <reloadPage stepKey="refreshPage"/>
         <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
-        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="getFilename"/>
+        <actionGroup ref="AdminGetExportFilenameOnServerActionGroup" stepKey="grabNameFile">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
 
         <!-- Save exported file: file successfully downloaded -->
         <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
-            <argument name="fileName" value="{$grabNameFile}"/>
+            <argument name="fileName" value="{$getFilename}"/>
         </actionGroup>
 
         <!-- Go to Catalog > Products. Find ConfProd and delete it -->
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProductBySku">
             <argument name="sku" value="$$createExportImportConfigurableProduct.sku$$"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
         <!-- Go to System > Import. Set import settings: Entity Type > Product, Import Behavior > Add/Update,
              Select File to Import > previously exported file and press "Check Data" -->
@@ -222,7 +226,7 @@
 
         <!-- Delete exported file -->
         <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
-            <argument name="fileName" value="{$grabNameFile}"/>
+            <argument name="fileName" value="{$getFilename}"/>
         </actionGroup>
     </test>
 </tests>

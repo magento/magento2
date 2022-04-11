@@ -15,6 +15,7 @@
             <testCaseId value="MC-14702"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -36,6 +37,9 @@
         </actionGroup>
 
         <!-- Assert error message -->
-        <see selector="{{AdminCategoryMessagesSection.errorMessage}}" userInput="The value specified in the URL Key field would generate a URL that already exists." stepKey="seeErrorMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorMessage">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="The value specified in the URL Key field would generate a URL that already exists."/>
+        </actionGroup>
     </test>
 </tests>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyContactUsNbspTrimFromEmailInputTest">
+        <annotations>
+            <features value="Contact"/>
+            <title value="Test for contact form to trim non-breaking spaces at the end of the email address"/>
+            <description value="Non-break spaces should be trimmed from the contact form email address input field"/>
+            <stories value="Submit Contact Us Form"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-42234"/>
+            <useCaseId value="MC-41850"/>
+            <group value="contact"/>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <actionGroup ref="StorefrontOpenContactUsPageActionGroup" stepKey="goToContactUsPage"/>
+
+        <actionGroup ref="StorefrontFillContactUsFormActionGroup" stepKey="fillUpTheFormWithCustomerDataWithNbsp">
+            <argument name="customer" value="Simple_US_Customer_Nbsp_In_Email" />
+            <argument name="contactUsData" value="DefaultContactUsData" />
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAssertEmailAddressTrimmedActionGroup" stepKey="assertEmailWasTrimmedInTheInput">
+            <argument name="emailAddressWithSpaces" value="{{Simple_US_Customer_Nbsp_In_Email.email}}" />
+            <argument name="inputSelector" value="{{StorefrontContactUsFormSection.emailField}}" />
+        </actionGroup>
+
+        <actionGroup ref="StorefrontSubmitContactUsFormActionGroup" stepKey="submitContactUsForm"/>
+        <actionGroup ref="AssertMessageContactUsFormActionGroup" stepKey="assertContactUsFormSuccessfullySubmitted"/>
+    </test>
+</tests>

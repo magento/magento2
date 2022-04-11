@@ -74,6 +74,9 @@
         <index referenceId="OAUTH_TOKEN_CONSUMER_ID" indexType="btree">
             <column name="consumer_id"/>
         </index>
+        <index referenceId="OAUTH_TOKEN_CREATED_AT" indexType="btree">
+            <column name="created_at"/>
+        </index>
     </table>
     <table name="oauth_nonce" resource="default" engine="innodb" comment="OAuth Nonce">
         <column xsi:type="varchar" name="nonce" nullable="false" length="32" comment="Nonce String"/>

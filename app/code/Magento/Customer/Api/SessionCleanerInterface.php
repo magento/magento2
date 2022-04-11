@@ -15,7 +15,7 @@ namespace Magento\Customer\Api;
 interface SessionCleanerInterface
 {
     /**
-     * Destroy all active customer sessions related to given customer except current session.
+     * Destroy all active customer sessions related to given customer id, including current session.
      *
      * @param int $customerId
      * @return void

@@ -100,6 +100,13 @@ class EditTest extends TestCase
             ['id' => 'Invalid_Node', 'children' => ['resource4', 'resource5', 'resource6']]
         ];
         $mappedResources = ['mapped1', 'mapped2', 'mapped3'];
+        $this->coreRegistryMock->expects($this->once())
+            ->method('registry')
+            ->with(SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY)
+            ->willReturn(true);
+        $this->rootResourceMock->expects($this->exactly(1))
+            ->method('getId')
+            ->willReturn(10);
         $this->aclResourceProviderMock->expects($this->once())->method('getAclResources')->willReturn($resources);
         $this->integrationDataMock->expects($this->once())->method('mapResources')->willReturn($mappedResources);
 

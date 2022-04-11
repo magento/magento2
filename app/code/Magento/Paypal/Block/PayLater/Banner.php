@@ -11,6 +11,8 @@ namespace Magento\Paypal\Block\PayLater;
 use Magento\Framework\View\Element\Template;
 use Magento\Paypal\Model\PayLaterConfig;
 use Magento\Paypal\Model\SdkUrl;
+use Magento\Paypal\Model\Config as PaypalConfig;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * PayPal PayLater component block
@@ -39,22 +41,31 @@ class Banner extends Template
     private $position = '';
 
     /**
+     * @var PaypalConfig
+     */
+    private $paypalConfig;
+
+    /**
      * @param Template\Context $context
      * @param PayLaterConfig $payLaterConfig
      * @param SdkUrl $sdkUrl
      * @param array $data
+     * @param PaypalConfig $paypalConfig
      */
     public function __construct(
         Template\Context $context,
         PayLaterConfig $payLaterConfig,
         SdkUrl $sdkUrl,
-        array $data = []
+        array $data = [],
+        PaypalConfig $paypalConfig = null
     ) {
         parent::__construct($context, $data);
         $this->payLaterConfig = $payLaterConfig;
         $this->sdkUrl = $sdkUrl;
         $this->placement = $data['placement'] ??  '';
         $this->position = $data['position'] ??  '';
+        $this->paypalConfig = $paypalConfig ?: ObjectManager::getInstance()
+            ->get(PaypalConfig::class);
     }
 
     /**
@@ -82,6 +93,12 @@ class Banner extends Template
         $componentConfig = $this->jsLayout['components']['payLater']['config'] ?? [];
         $defaultConfig = ['sdkUrl' => $this->getPayPalSdkUrl()];
         $config = array_replace($defaultConfig, $componentConfig);
+        $displayAmount = $config['displayAmount'] ?? false;
+        $config['displayAmount'] = !$displayAmount || $this->payLaterConfig->isPPBillingAgreementEnabled()
+            ? false : true;
+        $config['dataAttributes'] = [
+            'data-partner-attribution-id' => $this->paypalConfig->getBuildNotationCode()
+        ];
 
         //Extend block component attributes with defaults
         $componentAttributes = $this->jsLayout['components']['payLater']['config']['attributes'] ?? [];

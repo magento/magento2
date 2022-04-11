@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="MQE-1964"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"

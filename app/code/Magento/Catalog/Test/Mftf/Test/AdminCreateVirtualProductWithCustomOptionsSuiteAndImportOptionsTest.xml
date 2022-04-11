@@ -27,7 +27,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteVirtualProduct">
                 <argument name="sku" value="{{virtualProductCustomImportOptions.sku}}"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetOrderFilter"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetOrderFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -42,7 +42,9 @@
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{virtualProductCustomImportOptions.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{virtualProductCustomImportOptions.sku}}" stepKey="fillProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{virtualProductCustomImportOptions.price}}" stepKey="fillProductPrice"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductCustomImportOptions.quantity}}" stepKey="fillProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQuantity">
+            <argument name="productQty" value="{{virtualProductCustomImportOptions.quantity}}"/>
+        </actionGroup>
         <click selector="{{AdminProductFormSection.productStockStatus}}" stepKey="clickProductStockStatus"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
@@ -117,7 +119,7 @@
 
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
-        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <magentoCron groups="index" stepKey="reindex"/>
         <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Verify customer see created virtual product with custom options suite and import options(from above step) on storefront page and is searchable by sku -->
@@ -135,7 +137,9 @@
         <click selector="{{StorefrontQuickSearchResultsSection.productLink}}" stepKey="openSearchedProduct"/>
 
         <!-- Verify we see created virtual product with custom options suite and import options on the storefront page -->
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{virtualProductCustomImportOptions.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeVirtualProductNameOnStoreFrontPage">
+            <argument name="value" value="{{virtualProductCustomImportOptions.name}}"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeVirtualProductSku">
             <argument name="productSku" value="{{virtualProductCustomImportOptions.sku}}"/>
         </actionGroup>

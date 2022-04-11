@@ -16,6 +16,9 @@ use Magento\Framework\Api\Search\AggregationInterface;
  */
 class SearchResult
 {
+    /**
+     * @var array
+     */
     private $data;
 
     /**
@@ -84,5 +87,15 @@ class SearchResult
     public function getTotalPages(): int
     {
         return $this->data['totalPages'] ?? 0;
+    }
+
+    /**
+     * Retrieve an array in the format of GraphQL-readable type containing search suggestions.
+     *
+     * @return array
+     */
+    public function getSuggestions() : array
+    {
+        return $this->data['suggestions'] ?? [];
     }
 }

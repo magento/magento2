@@ -698,6 +698,9 @@
                 <item name="0" xsi:type="string">Magento\Framework\Data\OptionSourceInterface</item>
                 <item name="1" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface</item>
             </argument>
+            <argument name="deniedClassList" xsi:type="array">
+                <item name="0" xsi:type="string">Magento\Framework\Model\ResourceModel\AbstractResource</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Mview\View">
@@ -1741,7 +1744,7 @@
         <arguments>
             <argument name="connectionToExchangeMap" xsi:type="array">
                 <item name="amqp" xsi:type="string">magento</item>
-                <item name="db" xsi:type="string">magento-db</item>
+                <item name="db" xsi:type="string">magento</item>
             </argument>
         </arguments>
     </type>
@@ -1749,7 +1752,7 @@
         <arguments>
             <argument name="publisherNameToConnectionMap" xsi:type="array">
                 <item name="amqp-magento" xsi:type="string">amqp</item>
-                <item name="db-magento-db" xsi:type="string">db</item>
+                <item name="db-magento" xsi:type="string">db</item>
             </argument>
         </arguments>
     </type>
@@ -1763,6 +1766,11 @@
     <!-- \Magento\Framework\MessageQueue\Bulk\PublisherPool is @api -->
     <virtualType name="Magento\Framework\MessageQueue\Bulk\PublisherPool" type="Magento\Framework\MessageQueue\PublisherPool" />
     <type name="Magento\Framework\Session\Config">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Session\SessionMaxSizeConfig">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
         </arguments>

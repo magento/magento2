@@ -6,6 +6,7 @@
 namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Annotation\TestCaseAnnotation;
 use Magento\TestFramework\Event\Param\Transaction;
 use PHPUnit\Framework\TestCase;
 
@@ -108,7 +109,8 @@ class DbIsolation
      */
     private function getAnnotations(TestCase $test)
     {
-        $annotations = $test->getAnnotations();
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
+
         return array_replace((array)$annotations['class'], (array)$annotations['method']);
     }
 }

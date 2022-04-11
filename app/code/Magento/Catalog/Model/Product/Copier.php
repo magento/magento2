@@ -6,12 +6,13 @@
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Option\Repository as OptionRepository;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Model\ResourceModel\DuplicatedProductAttributesCopier;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
@@ -51,24 +52,40 @@ class Copier
     private $scopeOverriddenValue;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var DuplicatedProductAttributesCopier
+     */
+    private $attributeCopier;
+
+    /**
      * @param CopyConstructorInterface $copyConstructor
      * @param ProductFactory $productFactory
      * @param ScopeOverriddenValue $scopeOverriddenValue
      * @param OptionRepository|null $optionRepository
      * @param MetadataPool|null $metadataPool
+     * @param ProductRepositoryInterface $productRepository
+     * @param DuplicatedProductAttributesCopier $attributeCopier
      */
     public function __construct(
         CopyConstructorInterface $copyConstructor,
         ProductFactory $productFactory,
         ScopeOverriddenValue $scopeOverriddenValue,
         OptionRepository $optionRepository,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        ProductRepositoryInterface $productRepository,
+        DuplicatedProductAttributesCopier $attributeCopier
     ) {
         $this->productFactory = $productFactory;
         $this->copyConstructor = $copyConstructor;
         $this->scopeOverriddenValue = $scopeOverriddenValue;
         $this->optionRepository = $optionRepository;
         $this->metadataPool = $metadataPool;
+        $this->productRepository = $productRepository;
+        $this->attributeCopier = $attributeCopier;
     }
 
     /**
@@ -79,11 +96,13 @@ class Copier
      */
     public function copy(Product $product): Product
     {
-        $product->getWebsiteIds();
-        $product->getCategoryIds();
-
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
 
+        /*  Regardless in what scope the product was provided,
+            for duplicating we want to clone product in Global scope first */
+        if ((int)$product->getStoreId() !== Store::DEFAULT_STORE_ID) {
+            $product = $this->productRepository->getById($product->getId(), true, Store::DEFAULT_STORE_ID);
+        }
         /** @var Product $duplicate */
         $duplicate = $this->productFactory->create();
         $productData = $product->getData();
@@ -102,6 +121,7 @@ class Copier
         $duplicate->setStoreId(Store::DEFAULT_STORE_ID);
         $this->copyConstructor->build($product, $duplicate);
         $this->setDefaultUrl($product, $duplicate);
+        $this->attributeCopier->copyProductAttributes($product, $duplicate);
         $this->setStoresUrl($product, $duplicate);
         $this->optionRepository->duplicate($product, $duplicate);
 
