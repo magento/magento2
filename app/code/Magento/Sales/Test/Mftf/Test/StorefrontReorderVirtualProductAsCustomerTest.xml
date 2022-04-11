@@ -13,7 +13,7 @@
             <stories value="Reorder on Storefront for Virtual product"/>
             <title value="Reorder on Storefront for Virtual product"/>
             <description value="Verify customer able to reorder on Storefront for simple products."/>
-            <testCaseId value="https://jira.corp.magento.com/browse/MC-26873"/>
+            <testCaseId value="MC-26873"/>
             <severity value="MAJOR"/>
             <group value="Reorder_Product"/>
         </annotations>
