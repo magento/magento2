@@ -49,6 +49,11 @@ class Manual implements AlgorithmInterface
         $dbRanges = $this->processRange($dbRanges, $options['max_intervals_number']);
         $data = $this->dataProvider->prepareData($range, $dbRanges);
 
+        $aggregations = $this->dataProvider->getAggregations($entityStorage);
+        if ($aggregations['max']) {
+            $data[array_key_last($data)]['to'] = $aggregations['max'] + 0.01;
+        }
+
         return $data;
     }
 
