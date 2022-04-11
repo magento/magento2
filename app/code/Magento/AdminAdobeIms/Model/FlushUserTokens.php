@@ -7,10 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model;
 
+use Exception;
 use Magento\AdminAdobeIms\Api\ImsWebapiRepositoryInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class FlushUserTokens implements FlushUserTokensInterface
 {
@@ -25,17 +29,33 @@ class FlushUserTokens implements FlushUserTokensInterface
     private UserContextInterface $userContext;
 
     /**
+     * @var LogOut
+     */
+    private LogOut $logOut;
+
+    /**
+     * @var Encryptor
+     */
+    private Encryptor $encryptor;
+
+    /**
      * FlushUserTokens constructor.
      *
      * @param ImsWebapiRepositoryInterface $imsWebapiRepository
      * @param UserContextInterface $userContext
+     * @param LogOut $logOut
+     * @param Encryptor $encryptor
      */
     public function __construct(
         ImsWebapiRepositoryInterface $imsWebapiRepository,
-        UserContextInterface $userContext
+        UserContextInterface $userContext,
+        LogOut $logOut,
+        Encryptor $encryptor
     ) {
         $this->imsWebapiRepository = $imsWebapiRepository;
         $this->userContext = $userContext;
+        $this->logOut = $logOut;
+        $this->encryptor = $encryptor;
     }
 
     /**
@@ -45,20 +65,45 @@ class FlushUserTokens implements FlushUserTokensInterface
     {
         try {
             $adminUserId = $adminUserId ?? (int) $this->userContext->getUserId();
-            $this->imsWebapiRepository->deleteByUserId($adminUserId);
-        } catch (\Exception $exception) { //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+
+            $this->revokeTokenForAdobeIms($adminUserId);
+            $this->removeTokensFromTable($adminUserId);
+        } catch (Exception $exception) { //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             // User profile and tokens are not present in the system
         }
     }
 
     /**
-     * Checks if the tokens are empty
+     * Revoke tokens for adobe
+     *  Get list of all tokens for adminUserId and invalidate them on adobe side
      *
-     * @param UserProfileInterface $userProfile
-     * @return bool
+     * @param int|null $adminUserId
+     * @return void
+     * @throws NoSuchEntityException
+     * @throws Exception
      */
-    private function isTokenDataEmpty(UserProfileInterface $userProfile) : bool
+    private function revokeTokenForAdobeIms(int $adminUserId = null): void
     {
-        return empty($userProfile->getRefreshToken()) && empty($userProfile->getAccessToken());
+        $list = $this->imsWebapiRepository->getByAdminId($adminUserId);
+        foreach ($list as $entity) {
+            if($entity->getAccessToken() !== null) {
+                $this->logOut->execute(
+                    $this->encryptor->decrypt($entity->getAccessToken())
+                );
+            }
+        }
+    }
+
+    /**
+     * Remove tokens from webapi table
+     *
+     * @param int|null $adminUserId
+     * @return void
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
+     */
+    private function removeTokensFromTable(int $adminUserId = null): void
+    {
+        $this->imsWebapiRepository->deleteByUserId($adminUserId);
     }
 }
