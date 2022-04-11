@@ -11,6 +11,7 @@ namespace Magento\AdminAdobeIms\Test\Unit\Command;
 use Exception;
 use Magento\AdminAdobeIms\Console\Command\AdminAdobeImsEnableCommand;
 use Magento\AdminAdobeIms\Model\ImsConnection;
+use Magento\AdminAdobeIms\Service\UpdateTokensService;
 use Magento\AdminAdobeIms\Service\ImsCommandOptionService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\App\Cache\Type\Config;
@@ -54,6 +55,11 @@ class AdminAdobeImsEnableCommandTest extends TestCase
     private $typeListInterface;
 
     /**
+     * @var UpdateTokensService
+     */
+    private $updateTokensService;
+
+    /**
      * @var QuestionHelper
      */
     private $questionHelperMock;
@@ -71,6 +77,7 @@ class AdminAdobeImsEnableCommandTest extends TestCase
         $this->imsConnectionMock = $this->createMock(ImsConnection::class);
         $this->imsCommandOptionService = $this->createMock(ImsCommandOptionService::class);
         $this->typeListInterface = $this->createMock(TypeListInterface::class);
+        $this->updateTokensService = $this->createMock(UpdateTokensService::class);
 
         $this->questionHelperMock = $this->getMockBuilder(QuestionHelper::class)
             ->disableOriginalConstructor()
@@ -83,6 +90,7 @@ class AdminAdobeImsEnableCommandTest extends TestCase
                 'imsConnection' => $this->imsConnectionMock,
                 'imsCommandOptionService' => $this->imsCommandOptionService,
                 'cacheTypeList' => $this->typeListInterface,
+                'updateTokenService' => $this->updateTokensService
             ]
         );
     }
@@ -128,10 +136,15 @@ class AdminAdobeImsEnableCommandTest extends TestCase
             ->method('cleanType')
             ->with(Config::TYPE_IDENTIFIER);
 
+        $this->updateTokensService
+            ->expects($cleanMethodCallExpection)
+            ->method('execute');
+
         $outputMock->expects($this->once())
             ->method('writeln')
             ->with($outputMessage, null)
             ->willReturnSelf();
+
 
         $this->enableCommand->setHelperSet($this->getHelperSet());
         $this->enableCommand->run($inputMock, $outputMock);

@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Console\Command;
 
 use Magento\AdminAdobeIms\Model\ImsConnection;
-use Magento\AdminAdobeIms\Service\CleanupTokensService;
+use Magento\AdminAdobeIms\Service\UpdateTokensService;
 use Magento\AdminAdobeIms\Service\ImsCommandOptionService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\App\Cache\Type\Config;
@@ -63,23 +63,23 @@ class AdminAdobeImsEnableCommand extends Command
     private TypeListInterface $cacheTypeList;
 
     /**
-     * @var CleanupTokensService
+     * @var UpdateTokensService
      */
-    private CleanupTokensService $cleanupTokensService;
+    private UpdateTokensService $cleanupTokensService;
 
     /**
      * @param ImsConfig $imsConfig
      * @param ImsConnection $imsConnection
      * @param ImsCommandOptionService $imsCommandOptionService
      * @param TypeListInterface $cacheTypeList
-     * @param CleanupTokensService $cleanupTokensService
+     * @param UpdateTokensService $cleanupTokensService
      */
     public function __construct(
         ImsConfig $imsConfig,
         ImsConnection $imsConnection,
         ImsCommandOptionService $imsCommandOptionService,
         TypeListInterface $cacheTypeList,
-        CleanupTokensService $cleanupTokensService
+        UpdateTokensService $cleanupTokensService
     ) {
         parent::__construct();
         $this->imsConfig = $imsConfig;

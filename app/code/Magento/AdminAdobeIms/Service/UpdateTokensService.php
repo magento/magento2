@@ -15,7 +15,7 @@ use Magento\JwtUserToken\Api\RevokedRepositoryInterface;
 use Magento\User\Model\ResourceModel\User\Collection;
 use Magento\User\Model\ResourceModel\User\CollectionFactory;
 
-class CleanupTokensService
+class UpdateTokensService
 {
     /**
      * @var RevokedRepositoryInterface
