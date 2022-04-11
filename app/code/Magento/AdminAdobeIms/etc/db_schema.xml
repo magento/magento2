@@ -10,6 +10,7 @@
         <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
         <column xsi:type="int" name="admin_user_id" unsigned="true" nullable="false" identity="false" default="0" comment="Admin User Id"/>
         <column xsi:type="varchar" name="access_token_hash" nullable="true" comment="Access Token Hash" length="255"/>
+        <column xsi:type="text" name="access_token" nullable="true" comment="Access Token"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
         <column xsi:type="timestamp" name="last_check_time" on_update="false" nullable="false" default="0" comment="Last check time"/>

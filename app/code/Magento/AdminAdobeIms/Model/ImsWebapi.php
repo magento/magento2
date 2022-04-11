@@ -22,6 +22,7 @@ class ImsWebapi extends AbstractExtensibleModel implements ImsWebapiInterface
      */
     private const USER_ID = 'admin_user_id';
     private const ACCESS_TOKEN_HASH = 'access_token_hash';
+    private const ACCESS_TOKEN = 'access_token';
     private const LAST_CHECK_TIME = 'last_check_time';
     private const CREATED_AT = 'created_at';
     private const UPDATED_AT = 'updated_at';
@@ -67,6 +68,24 @@ class ImsWebapi extends AbstractExtensibleModel implements ImsWebapiInterface
     public function setAccessTokenHash(string $value): ImsWebapiInterface
     {
         $this->setData(self::ACCESS_TOKEN_HASH, $value);
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAccessToken(): ?string
+    {
+        return $this->getData(self::ACCESS_TOKEN);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setAccessToken(string $value): ImsWebapiInterface
+    {
+        $this->setData(self::ACCESS_TOKEN, $value);
 
         return $this;
     }

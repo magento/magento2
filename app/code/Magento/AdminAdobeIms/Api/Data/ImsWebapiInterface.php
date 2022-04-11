@@ -55,6 +55,21 @@ interface ImsWebapiInterface extends ExtensibleDataInterface
     public function setAccessTokenHash(string $value): ImsWebapiInterface;
 
     /**
+     * Get access token
+     *
+     * @return string|null
+     */
+    public function getAccessToken(): ?string;
+
+    /**
+     * Set access token
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setAccessToken(string $value): ImsWebapiInterface;
+
+    /**
      * Get creation time
      *
      * @return string|null

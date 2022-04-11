@@ -173,6 +173,7 @@ class AdobeImsTokenUserService
         array $profile
     ): ImsWebapiInterface {
         $imsWebapiInterface->setAccessTokenHash($this->encryptor->getHash($profile['access_token']));
+        $imsWebapiInterface->setAccessToken($this->encryptor->encrypt($profile['access_token']));
         $imsWebapiInterface->setLastCheckTime($this->dateTime->gmtDate(self::DATE_FORMAT));
         $imsWebapiInterface->setAccessTokenExpiresAt(
             $this->getExpiresTime($profile['created_at'], $profile['expires_in'])

@@ -4,6 +4,7 @@
             "id": true,
             "admin_user_id": true,
             "access_token_hash": true,
+            "access_token": true,
             "created_at": true,
             "updated_at": true,
             "last_check_time": true,
