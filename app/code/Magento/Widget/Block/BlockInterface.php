@@ -5,16 +5,10 @@
  */
 declare(strict_types=1);
 
-/**
- * Widget Block Interface
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- * @api
- */
 namespace Magento\Widget\Block;
 
 /**
- * Interface \Magento\Widget\Block\BlockInterface
+ * Widget Block Interface
  *
  * @api
  */
