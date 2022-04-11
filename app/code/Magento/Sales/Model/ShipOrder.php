@@ -148,8 +148,7 @@ class ShipOrder implements ShipOrderInterface
         array $tracks = [],
         array $packages = [],
         \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments = null
-    )
-    {
+    ) {
         return $this->orderMutex->execute(
             (int)$orderId,
             \Closure::fromCallable([$this, 'createShipment']),
