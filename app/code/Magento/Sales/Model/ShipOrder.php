@@ -149,6 +149,7 @@ class ShipOrder implements ShipOrderInterface
         array $packages = [],
         \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments = null
     ) {
+        // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
         return $this->orderMutex->execute(
             (int)$orderId,
             \Closure::fromCallable([$this, 'createShipment']),
@@ -221,18 +222,6 @@ class ShipOrder implements ShipOrderInterface
         }
         try {
             $this->orderRegistrar->register($order, $shipment);
-            /*foreach ($shipment->getItems() as $item) {
-                if ($item->getQty() > 0) {
-                    $orderItem = $item->getOrderItem();
-                }
-                $orderItem = $item->getOrderItem();
-                $orderItem->setQtyShipped( $item->getQty() );
-                $orderItem->setQtyShipped( $orderItem->getQtyShipped() + $item->getQty() );
-                $orderItem->save();
-            }
-            $order = $shipment->getOrder()->load( $shipment->getOrder()->getId() );
-            $order->save();*/
-
             $shipment = $this->shipmentRepository->save($shipment);
             if ($order->getState() === Order::STATE_NEW) {
                 $order->setState(

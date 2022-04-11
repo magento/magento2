@@ -133,6 +133,7 @@ class RefundOrder implements RefundOrderInterface
         \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
+        // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
         return $this->orderMutex->execute(
             (int) $orderId,
             \Closure::fromCallable([$this, 'createRefund']),
