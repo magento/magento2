@@ -32,6 +32,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{simpleProductRegularPrice245InStock.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -47,7 +48,9 @@
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductRegularPrice245InStock.name}}" stepKey="fillSimpleProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{simpleProductRegularPrice245InStock.sku}}" stepKey="fillSimpleProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{simpleProductRegularPrice245InStock.price}}" stepKey="fillSimpleProductPrice"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductRegularPrice245InStock.quantity}}" stepKey="fillSimpleProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillSimpleProductQuantity">
+            <argument name="productQty" value="{{simpleProductRegularPrice245InStock.quantity}}"/>
+        </actionGroup>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{simpleProductRegularPrice245InStock.status}}" stepKey="selectStockStatusInStock"/>
         <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductRegularPrice245InStock.weight}}" stepKey="fillSimpleProductWeight"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
@@ -94,7 +97,7 @@
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductRegularPrice245InStock.urlKey}}" stepKey="seeUrlKey"/>
 
-        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Verify customer see updated simple product link on category page -->
         <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.custom_attributes[url_key]$$)}}" stepKey="openCategoryPage"/>
