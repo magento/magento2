@@ -81,8 +81,9 @@ class Dynamic implements BucketBuilderInterface
     {
         $resultData = [];
         foreach ($data as $key => $value) {
-            if (!isset($data[$key+1]) && isset($stats['max'])) {
-                $value['to'] = $stats['max'];
+            if (!isset($data[$key+1])) {
+                $value['to'] = !isset($stats['max']) ? $value['to'] : $stats['max'];
+                $value['to'] += 0.01;
             }
             $rangeName = "{$value['from']}_{$value['to']}";
             $value['value'] = $rangeName;
