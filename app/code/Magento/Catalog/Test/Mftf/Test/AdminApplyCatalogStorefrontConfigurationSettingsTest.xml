@@ -170,7 +170,7 @@
                     <argument name="category" value="$$createCategory$$"/>
              </actionGroup>
 
-             <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="switchToGridMode"/>
+             <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="switchToGridMode4"/>
              <seeNumberOfElements selector="{{AdminChecksListAndGridModeSection.productCount}}" userInput="10" stepKey="seeNumberOfProductsInGridView"/>
 
 

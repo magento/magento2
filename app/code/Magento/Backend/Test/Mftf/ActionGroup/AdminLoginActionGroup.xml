@@ -18,6 +18,7 @@
         </arguments>
 
 
+
         <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
         <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{username}}" stepKey="fillUsername"/>
         <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{password}}" stepKey="fillPassword"/>
