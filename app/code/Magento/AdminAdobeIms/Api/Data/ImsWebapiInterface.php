@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Api\Data;
 
+use Magento\AdminAdobeIms\Api\Data\ImsWebapiExtensionInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
