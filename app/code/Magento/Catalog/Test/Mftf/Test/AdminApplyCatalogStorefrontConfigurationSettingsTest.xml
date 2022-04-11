@@ -170,7 +170,7 @@
                     <argument name="category" value="$$createCategory$$"/>
              </actionGroup>
 
-             <click selector=".//*[@class='toolbar toolbar-products'][1]//*[@data-value='grid']" stepKey="switchToGridMode4"/>
+             <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="switchToGridMode"/>
              <seeNumberOfElements selector="{{AdminChecksListAndGridModeSection.productCount}}" userInput="10" stepKey="seeNumberOfProductsInGridView"/>
 
 
