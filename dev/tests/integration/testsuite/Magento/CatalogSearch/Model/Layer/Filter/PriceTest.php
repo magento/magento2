@@ -86,7 +86,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $filters = $this->model->getLayer()->getState()->getFilters();
         $this->assertArrayHasKey(0, $filters);
         $this->assertEquals(
-            '<span class="price">$100.00</span> - <span class="price">$199.99</span>',
+            '<span class="price">$100.00</span> - <span class="price">$200.00</span>',
             (string)$filters[0]->getLabel()
         );
     }
@@ -119,7 +119,12 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store catalog/layered_navigation/price_range_calculation manual
      * @magentoConfigFixture current_store catalog/layered_navigation/price_range_step 10
      * @magentoConfigFixture current_store catalog/layered_navigation/price_range_max_intervals 2
-     * @magentoDataFixture Magento/CatalogSearch/_files/products_with_different_price.php
+     * @magentoDataFixture Magento/Catalog/_files/categories_no_products.php
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":[4], "price":11}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":[4], "price":13}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":[4], "price":22}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":[4], "price":22}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":[4], "price":110}
      */
     public function testGetItemsWithManualAlgorithm(): void
     {

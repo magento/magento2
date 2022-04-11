@@ -18,7 +18,7 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 class Price extends AbstractFilter
 {
     /** Price delta for filter  */
-    public const PRICE_DELTA = 0.001;
+    public const PRICE_DELTA = 0.01;
 
     /**
      * @var \Magento\Catalog\Model\Layer\Filter\DataProvider\Price
@@ -142,7 +142,7 @@ class Price extends AbstractFilter
 
         $this->getLayer()->getProductCollection()->addFieldToFilter(
             'price',
-            ['from' => $from, 'to' =>  empty($to) || $from == $to ? $to : $to - self::PRICE_DELTA]
+            ['from' => $from, 'to' =>  $to]
         );
 
         $this->getLayer()->getState()->addFilter(
@@ -190,10 +190,6 @@ class Price extends AbstractFilter
         } elseif ($fromPrice == $toPrice && $this->dataProvider->getOnePriceIntervalValue()) {
             return $formattedFromPrice;
         } else {
-            if ($fromPrice != $toPrice) {
-                $toPrice -= .01;
-            }
-
             return __('%1 - %2', $formattedFromPrice, $this->priceCurrency->format($toPrice));
         }
     }
@@ -274,8 +270,8 @@ class Price extends AbstractFilter
     private function prepareData($key, $count, $isLast = false)
     {
         [$from, $to] = explode('_', $key);
-        if ($isLast) {
-            $to = '';
+        if (!$isLast && !empty($to) && $to != $from) {
+            $to -= self::PRICE_DELTA;
         }
         $label = $this->_renderRangeLabel($from, $to, $isLast);
         $value = $from . '-' . $to . $this->dataProvider->getAdditionalRequestData();
