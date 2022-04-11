@@ -56,4 +56,12 @@ class ImsConnection extends \Magento\AdminAdobeIms\Model\ImsConnection
         $responseBody = $this->mockResponseBodyLoader->loadForRequest();
         return $this->json->unserialize($responseBody);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function validateToken(string $code, string $tokenType = 'access_token'): bool
+    {
+        return true;
+    }
 }

@@ -249,6 +249,6 @@ class TokenReader implements TokenReaderInterface
         $adminTokenLifetime = $this->oauthHelper->getAdminTokenLifetime() * 3600;
         $magentoIsTokenExpired = ($createdAt + $adminTokenLifetime) <= $this->dateTime->gmtTimestamp();
 
-        return $adobeIsTokenExpired && $magentoIsTokenExpired;
+        return $adobeIsTokenExpired || $magentoIsTokenExpired;
     }
 }
