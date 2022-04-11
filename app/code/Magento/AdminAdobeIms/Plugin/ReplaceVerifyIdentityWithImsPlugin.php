@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Plugin;
 
+use Magento\AdminAdobeIms\Model\Auth;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdobeIms\Model\UserProfileRepository;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
@@ -30,9 +30,9 @@ class ReplaceVerifyIdentityWithImsPlugin
     private ImsConnection $imsConnection;
 
     /**
-     * @var UserProfileRepository
+     * @var Auth
      */
-    private UserProfileRepository $userProfileRepository;
+    private Auth $auth;
 
     /**
      * @var EncryptorInterface
@@ -42,18 +42,18 @@ class ReplaceVerifyIdentityWithImsPlugin
     /**
      * @param ImsConfig $imsConfig
      * @param ImsConnection $imsConnection
-     * @param UserProfileRepository $userProfileRepository
+     * @param Auth $auth
      * @param EncryptorInterface $encryptor
      */
     public function __construct(
         ImsConfig $imsConfig,
         ImsConnection $imsConnection,
-        UserProfileRepository $userProfileRepository,
+        Auth $auth,
         EncryptorInterface $encryptor
     ) {
         $this->imsConfig = $imsConfig;
         $this->imsConnection = $imsConnection;
-        $this->userProfileRepository = $userProfileRepository;
+        $this->auth = $auth;
         $this->encryptor = $encryptor;
     }
 
@@ -98,8 +98,9 @@ class ReplaceVerifyIdentityWithImsPlugin
      */
     private function verifyImsToken(User $user): bool
     {
-        $userProfile = $this->userProfileRepository->getByUserId((int) $user->getId());
-        if (!$userProfile) {
+        $session = $this->auth->getAuthStorage();
+        $accessToken = $session->getAdobeAccessToken();
+        if (!$accessToken) {
             throw new AuthenticationException(
                 __(
                     'The account sign-in was incorrect or your account is disabled temporarily. '
@@ -108,7 +109,6 @@ class ReplaceVerifyIdentityWithImsPlugin
             );
         }
 
-        $accessToken = $this->encryptor->decrypt($userProfile->getAccessToken());
         return $this->imsConnection->validateToken($accessToken);
     }
 }
