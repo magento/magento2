@@ -28,6 +28,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 class AdobeImsTokenUserService
 {
     private const DATE_FORMAT = 'Y-m-d H:i:s';
+    private const ACCESS_TOKEN_INTERVAL_CHECK = 600;
 
     /**
      * @var TokenReaderInterface
@@ -104,10 +105,11 @@ class AdobeImsTokenUserService
      */
     public function getAdminUserIdByToken(string $bearerToken): int
     {
-        $dataFromToken = $this->tokenReader->read($bearerToken);
         $imsWebapiEntity = $this->imsWebapiRepository->getByAccessTokenHash(
             $this->encryptor->getHash($bearerToken)
         );
+        $this->validateToken($bearerToken, $imsWebapiEntity);
+        $dataFromToken = $this->tokenReader->read($bearerToken);
 
         if ($imsWebapiEntity->getId()) {
             $adminUserId = $imsWebapiEntity->getAdminUserId();
@@ -127,10 +129,37 @@ class AdobeImsTokenUserService
             $profile['expires_in'] = $dataFromToken['expires_in'] ?? 0;
 
             $imsWebapiInterface = $this->createImsWebapiInterface($adminUserId);
-            $this->imsWebapiRepository->save($this->updateImsWebapi($imsWebapiInterface, $profile));
+            $this->imsWebapiRepository->save($this->setImsWebapiData($imsWebapiInterface, $profile));
         }
 
         return $adminUserId;
+    }
+
+    /**
+     * @param string $token
+     * @param ImsWebapiInterface $imsWebapiEntity
+     * @return void
+     * @throws AuthenticationException
+     * @throws AuthorizationException
+     * @throws CouldNotSaveException
+     */
+    private function validateToken(string $token, ImsWebapiInterface $imsWebapiEntity)
+    {
+        $isTokenValid = true;
+        if ($imsWebapiEntity->getId()) {
+            $lastCheckTimestamp = $this->dateTime->gmtTimestamp($imsWebapiEntity->getLastCheckTime());
+            if (($lastCheckTimestamp + self::ACCESS_TOKEN_INTERVAL_CHECK) <= $this->dateTime->gmtTimestamp()) {
+                $isTokenValid = $this->imsConnection->validateToken($token);
+                $imsWebapiEntity->setLastCheckTime($this->dateTime->gmtDate(self::DATE_FORMAT));
+                $this->imsWebapiRepository->save($imsWebapiEntity);
+            }
+        } else {
+            $isTokenValid = $this->imsConnection->validateToken($token);
+        }
+
+        if (!$isTokenValid) {
+            throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
+        }
     }
 
     /**
@@ -167,13 +196,13 @@ class AdobeImsTokenUserService
     }
 
     /**
-     * Update admin adobe ims webapi entry
+     * Update admin adobe ims webapi entity
      *
      * @param ImsWebapiInterface $imsWebapiInterface
      * @param array $profile
      * @return ImsWebapiInterface
      */
-    private function updateImsWebapi(
+    private function setImsWebapiData(
         ImsWebapiInterface $imsWebapiInterface,
         array $profile
     ): ImsWebapiInterface {

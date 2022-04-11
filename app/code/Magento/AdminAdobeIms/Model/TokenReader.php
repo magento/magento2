@@ -24,6 +24,7 @@ use Magento\Framework\Jwt\Payload\ClaimsPayloadInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Psr\Log\LoggerInterface;
+use Magento\Integration\Helper\Oauth\Data as OauthHelper;
 
 /**
  * Adobe Ims Token Reader
@@ -94,6 +95,8 @@ class TokenReader implements TokenReaderInterface
      * @param DateTime $dateTime
      * @param File $driver
      * @param Json $json
+     * @param File $driver
+     * @param OauthHelper $oauthHelper
      */
     public function __construct(
         JwtManagerInterface $jwtManager,
@@ -103,7 +106,8 @@ class TokenReader implements TokenReaderInterface
         LoggerInterface $logger,
         DateTime $dateTime,
         File $driver,
-        Json $json
+        Json $json,
+        OauthHelper $oauthHelper
     ) {
         $this->jwtManager = $jwtManager;
         $this->cache = $cache;
@@ -113,6 +117,7 @@ class TokenReader implements TokenReaderInterface
         $this->dateTime = $dateTime;
         $this->driver = $driver;
         $this->json = $json;
+        $this->oauthHelper = $oauthHelper;
     }
 
     /**
@@ -143,9 +148,6 @@ class TokenReader implements TokenReaderInterface
         $payload = $jwt->getPayload();
         $claims = $payload->getClaims();
 
-        if (empty($claims['user_id']) || empty($claims['user_id']->getValue())) {
-            throw new InvalidArgumentException(__('user_id not provided by the received JWT'));
-        }
         if (empty($claims['created_at']) || empty($claims['created_at']->getValue())) {
             throw new InvalidArgumentException(__('created_at not provided by the received JWT'));
         }
@@ -242,6 +244,11 @@ class TokenReader implements TokenReaderInterface
      */
     private function isTokenExpired(int $createdAt, int $expiresIn): bool
     {
-        return ($createdAt + $expiresIn) / 1000 <= $this->dateTime->gmtTimestamp();
+        $adobeIsTokenExpired = ($createdAt + $expiresIn) / 1000 <= $this->dateTime->gmtTimestamp();
+        /* convert admin token lifetime hours to seconds */
+        $adminTokenLifetime = $this->oauthHelper->getAdminTokenLifetime() * 3600;
+        $magentoIsTokenExpired = ($createdAt + $adminTokenLifetime) <= $this->dateTime->gmtTimestamp();
+
+        return $adobeIsTokenExpired && $magentoIsTokenExpired;
     }
 }
