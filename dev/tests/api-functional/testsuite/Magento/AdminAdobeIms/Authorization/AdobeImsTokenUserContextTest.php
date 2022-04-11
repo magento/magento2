@@ -13,6 +13,7 @@ use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Jwt\Claim\PrivateClaim;
 use Magento\Framework\Jwt\Header\PrivateHeaderParameter;
 use Magento\Framework\Jwt\JwkFactory;
@@ -88,6 +89,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
         $this->configWriter = $objectManager->get(WriterInterface::class);
         $this->scopeConfig = $objectManager->get(ScopeConfigInterface::class);
         $this->imsWebapiRepository = $objectManager->get(ImsWebapiRepositoryInterface::class);
+        $this->encryptor = $objectManager->get(EncryptorInterface::class);
     }
 
     public function testUseAdobeAccessTokenModuleDisabled()
@@ -286,7 +288,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     private function assertAdminUserIdIsSaved($username, $token)
     {
         $adminUserId = (int) $this->userModel->loadByUsername($username)->getId();
-        $webapiEntity = $this->imsWebapiRepository->getByAccessToken($token);
+        $webapiEntity = $this->imsWebapiRepository->getByAccessTokenHash($this->encryptor->getHash($token));
         if ($webapiEntity->getId()) {
             $this->assertEquals($adminUserId, $webapiEntity->getUserId());
         }
