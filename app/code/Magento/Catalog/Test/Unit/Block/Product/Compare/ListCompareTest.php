@@ -54,6 +54,8 @@ class ListCompareTest extends TestCase
 
     /**
      * @dataProvider attributeDataProvider
+     * @param array $attributeData
+     * @param string $expectedResult
      */
     public function testProductAttributeValue($attributeData, $expectedResult)
     {
