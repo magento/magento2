@@ -19,6 +19,7 @@
             <group value="shoppingCart"/>
         </annotations>
         <before>
+        
             <!-- create category -->
             <createData entity="_defaultCategory" stepKey="testCategory"/>
             <!-- create data -->
