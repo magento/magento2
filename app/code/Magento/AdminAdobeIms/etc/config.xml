@@ -9,6 +9,14 @@
     <default>
         <adobe_ims>
             <integration>
+                <admin>
+                    <auth_url_pattern><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code]]></auth_url_pattern>
+                    <scopes>
+                        <openid>openid</openid>
+                        <AdobeID>AdobeID</AdobeID>
+                        <additional_info.roles>additional_info.roles</additional_info.roles>
+                    </scopes>
+                </admin>
                 <enabled>0</enabled>
                 <logging_enabled>0</logging_enabled>
                 <organization_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
