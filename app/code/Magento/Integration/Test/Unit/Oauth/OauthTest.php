@@ -23,6 +23,8 @@ use Magento\Integration\Model\Oauth\Token\Provider;
 use Magento\Integration\Model\Oauth\TokenFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Integration\Model\ResourceModel\Oauth\Token as TokenResourceModel;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -61,25 +63,46 @@ class OauthTest extends TestCase
      */
     private $_loggerMock;
 
+    /**
+     * @var string
+     */
     private $_oauthToken;
 
+    /**
+     * @var string
+     */
     private $_oauthSecret;
 
+    /**
+     * @var string
+     */
     private $_oauthVerifier;
 
-    const CONSUMER_ID = 1;
+    /**#@+
+     * Constants
+     */
+    private const CONSUMER_ID = 1;
 
-    const REQUEST_URL = 'http://magento.ll';
+    private const REQUEST_URL = 'http://magento.ll';
+    /**#@-*/
 
+    /** @var MockObject */
+    private $tokenResourceModelMock;
+
+    /**
+     * Initialize dependencies.
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp(): void
     {
         $this->_consumerFactory = $this->getMockBuilder(ConsumerFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->_consumerMock = $this->getMockBuilder(Consumer::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getCreatedAt',
                     'loadByKey',
@@ -99,30 +122,34 @@ class OauthTest extends TestCase
             ->willReturn($this->_consumerMock);
         $this->_nonceFactory = $this->getMockBuilder(NonceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->_tokenFactory = $this->getMockBuilder(
             TokenFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $this->_tokenMock = $this->getMockBuilder(Token::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId',
                     'load',
-                    'getType',
                     'createRequestToken',
-                    'getToken',
-                    'getSecret',
                     'createVerifierToken',
                     'getVerifier',
-                    'getConsumerId',
                     'convertToAccess',
-                    'getRevoked',
                     'getResource',
                     'loadByConsumerIdAndUserType',
                     '__wakeup',
+                ]
+            )
+            ->addMethods(
+                [
+                'getType',
+                'getToken',
+                'getSecret',
+                'getConsumerId',
+                'getRevoked'
                 ]
             )
             ->getMock();
@@ -131,7 +158,7 @@ class OauthTest extends TestCase
             ->setConstructorArgs([new Random()])
             ->getMock();
         $this->_httpUtilityMock = $this->getMockBuilder(\Zend_Oauth_Http_Utility::class)
-            ->setMethods(['sign'])
+            ->onlyMethods(['sign'])
             ->getMock();
         $this->_dateMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
@@ -145,6 +172,10 @@ class OauthTest extends TestCase
             $this->_nonceFactory,
             $this->_dateMock
         );
+        $this->tokenResourceModelMock = $this->getMockBuilder(TokenResourceModel::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $tokenProvider = new Provider(
             $this->_consumerFactory,
             $this->_tokenFactory,
@@ -187,7 +218,7 @@ class OauthTest extends TestCase
             ),
             'oauth_nonce' => '',
             'oauth_timestamp' => time(),
-            'oauth_signature_method' => OauthInterface::SIGNATURE_SHA1,
+            'oauth_signature_method' => OauthInterface::SIGNATURE_SHA256,
             'oauth_signature' => 'invalid_signature',
         ];
 
@@ -335,18 +366,23 @@ class OauthTest extends TestCase
         $nonceMock = $this->getMockBuilder(
             Nonce::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'loadByCompositeKey',
-                    'getNonce',
-                    'getTimestamp',
-                    'setNonce',
-                    'setConsumerId',
-                    'setTimestamp',
                     'save',
                     '__wakeup',
                 ]
-            )->getMock();
+            )
+            ->addMethods(
+                [
+                    'getNonce',
+                    'setNonce',
+                    'setConsumerId',
+                    'setTimestamp',
+                    'getTimeStamp'
+                ]
+            )
+            ->getMock();
 
         $nonceMock->expects($this->any())->method('getNonce')->willReturn($isUsed);
         $nonceMock->expects($this->any())->method('loadByCompositeKey')->willReturnSelf();
@@ -871,7 +907,7 @@ class OauthTest extends TestCase
                 Oauth::LENGTH_CONSUMER_KEY
             ),
             'oauth_signature' => '',
-            'oauth_signature_method' => OauthInterface::SIGNATURE_SHA1,
+            'oauth_signature_method' => OauthInterface::SIGNATURE_SHA256,
             'oauth_nonce' => '',
             'oauth_timestamp' => (string)time(),
             'oauth_token' => $this->_generateRandomString(Oauth::LENGTH_TOKEN),
