@@ -8,16 +8,15 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder;
 
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Magento\CatalogGraphQl\DataProvider\CategoryAttributesMapper;
 use Magento\CatalogGraphQl\DataProvider\Category\Query\CategoryAttributeQuery;
+use Magento\CatalogGraphQl\DataProvider\CategoryAttributesMapper;
+use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\LayerFormatter;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\LayerBuilderInterface;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\RootCategoryProvider;
 use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\LayerFormatter;
-use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Aggregations;
 
 /**
  * Category layer builder
@@ -36,7 +35,7 @@ class Category implements LayerBuilderInterface
      */
     private static $bucketMap = [
         self::CATEGORY_BUCKET => [
-            'request_name' => 'category_id',
+            'request_name' => 'category_uid',
             'label' => 'Category'
         ],
     ];
@@ -44,37 +43,37 @@ class Category implements LayerBuilderInterface
     /**
      * @var CategoryAttributeQuery
      */
-    private $categoryAttributeQuery;
+    private CategoryAttributeQuery $categoryAttributeQuery;
 
     /**
      * @var CategoryAttributesMapper
      */
-    private $attributesMapper;
+    private CategoryAttributesMapper $attributesMapper;
 
     /**
      * @var ResourceConnection
      */
-    private $resourceConnection;
+    private ResourceConnection $resourceConnection;
 
     /**
      * @var RootCategoryProvider
      */
-    private $rootCategoryProvider;
+    private RootCategoryProvider $rootCategoryProvider;
 
     /**
      * @var LayerFormatter
      */
-    private $layerFormatter;
+    private LayerFormatter $layerFormatter;
 
     /**
      * @var CollectionFactory
      */
-    private $categoryCollectionFactory;
+    private CollectionFactory $categoryCollectionFactory;
 
     /**
      * @var Aggregations\Category\IncludeDirectChildrenOnly
      */
-    private $includeDirectChildrenOnly;
+    private Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly;
 
     /**
      * @param CategoryAttributeQuery $categoryAttributeQuery
@@ -152,7 +151,7 @@ class Category implements LayerBuilderInterface
         foreach ($bucket->getValues() as $value) {
             $categoryId = $value->getValue();
             if (!\in_array($categoryId, $categoryIds, true)) {
-                continue ;
+                continue;
             }
             $result['options'][] = $this->layerFormatter->buildItem(
                 $categoryLabels[$categoryId] ?? $categoryId,

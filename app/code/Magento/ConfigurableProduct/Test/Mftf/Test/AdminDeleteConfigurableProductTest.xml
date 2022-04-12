@@ -32,6 +32,7 @@
             <argument name="product" value="$$createConfigurableProduct$$"/>
         </actionGroup>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="deleteMessage"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         <!-- Verify product on Product Page -->
         <amOnPage url="{{StorefrontProductPage.url($$createConfigurableProduct.custom_attributes[url_key]$$)}}" stepKey="amOnConfigurableProductPage"/>
         <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeWhoops">
