@@ -148,16 +148,16 @@ class ImsConnection
     /**
      * Verify if access_token is valid
      *
-     * @param string|null $code
+     * @param string|null $token
      * @param string $tokenType
      * @return bool
      * @throws AuthorizationException
      */
-    public function validateToken(?string $code, string $tokenType = 'access_token'): bool
+    public function validateToken(?string $token, string $tokenType = 'access_token'): bool
     {
         $isTokenValid = false;
 
-        if ($code === null) {
+        if ($token === null) {
             return false;
         }
 
@@ -167,7 +167,7 @@ class ImsConnection
         $curl->addHeader('cache-control', 'no-cache');
 
         $curl->post(
-            $this->imsConfig->getValidateTokenUrl($code, $tokenType),
+            $this->imsConfig->getValidateTokenUrl($token, $tokenType),
             []
         );
 
