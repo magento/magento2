@@ -54,8 +54,4 @@
         <plugin name="revoke_admin_access_token"
                 type="Magento\AdminAdobeIms\Plugin\RevokeAdminAccessTokenPlugin"/>
     </type>
-    <type name="Magento\AdminAdobeIms\Service\ImsConfig">
-        <plugin name="update_adobe_ims_scopes"
-                type="Magento\AdminAdobeIms\Plugin\UpdateAdobeImsScopes"/>
-    </type>
 </config>

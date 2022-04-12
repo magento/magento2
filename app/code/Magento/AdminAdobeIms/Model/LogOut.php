@@ -140,7 +140,6 @@ class LogOut implements ImsLogOutInterface
      *
      * @param string $accessToken
      * @return bool
-     * @throws AuthorizationException
      */
     private function checkUserProfile(string $accessToken): bool
     {
