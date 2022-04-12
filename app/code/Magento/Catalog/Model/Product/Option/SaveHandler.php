@@ -122,7 +122,7 @@ class SaveHandler implements ExtensionInterface
     private function isProductHasRelations(ProductInterface $product): bool
     {
         $result = true;
-        if (!in_array($product->getId(), $this->compositeProductTypes)
+        if (!in_array($product->getTypeId(), $this->compositeProductTypes)
             && $this->relation->getRelationsByChildren([$product->getId()])
         ) {
             $result = false;
