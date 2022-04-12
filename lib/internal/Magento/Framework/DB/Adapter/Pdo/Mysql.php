@@ -3561,6 +3561,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $query .= ' IGNORE';
         }
         $query = sprintf('%s INTO %s', $query, $this->quoteIdentifier($table));
+        $countFieldsInSelect = count($select->getPart(Select::COLUMNS));
+        if (empty($fields) && $countFieldsInSelect > 1) {
+                $fields = array_slice(
+                array_keys($this->describeTable($table)),
+                0,
+                $countFieldsInSelect
+            );
+        }
         if ($fields) {
             $columns = array_map([$this, 'quoteIdentifier'], $fields);
             $query = sprintf('%s (%s)', $query, join(', ', $columns));
