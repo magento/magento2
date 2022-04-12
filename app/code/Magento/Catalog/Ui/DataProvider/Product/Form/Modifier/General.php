@@ -405,21 +405,25 @@ class General extends AbstractModifier
      *
      * @param  array $meta
      * @return array
-     * @since  101.0.0
+     * @since  101.0.1
      */
     protected function customizeUrlKeyField(array $meta): array
     {
-        $tooltip = [
-            'link' => 'https://docs.magento.com/user-guide/catalog/catalog-urls.html',
-            'description' => __(
-                'The URL key should consist of lowercase characters with hyphens to separate words.'
-            ),
-        ];
         $switcherConfig = [
-            'tooltip' => $tooltip,
+            'tooltip' => [
+                'link' => 'https://docs.magento.com/user-guide/catalog/catalog-urls.html',
+                'description' => __(
+                    'The URL key should consist of lowercase characters with hyphens to separate words.'
+                ),
+            ],
         ];
 
-        $path = $this->arrayManager->findPath(ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY, $meta, null, 'children');
+        $path = $this->arrayManager->findPath(
+            ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
+            $meta,
+            null,
+            'children'
+        );
         $meta = $this->arrayManager->merge($path . static::META_CONFIG_PATH, $meta, $switcherConfig);
 
         return $meta;
