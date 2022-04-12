@@ -491,7 +491,7 @@ class Uploader
      */
     public static function getCorrectFileName($fileName)
     {
-        $fileName = preg_replace('/[^a-z0-9_\\-\\.]+/i', '_', $fileName);
+        $fileName = preg_replace('/[^a-z0-9\_\-](?=.*[.])/i', '_', $fileName);
         $fileInfo = pathinfo($fileName);
         $fileInfo['extension'] = $fileInfo['extension'] ?? '';
 
