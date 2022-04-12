@@ -19,20 +19,20 @@
         <before>
             <!-- Create first simple product and add special price -->
 
-            <createData entity="SimpleProduct_SpecialPrice" stepKey="createFirstSimpleProduct"/>
+            <createData entity="ApiSimplePrice100Qty100" stepKey="createFirstSimpleProduct"/>
             <createData entity="specialProductPrice3" stepKey="specialPriceToFirstProduct">
                 <requiredEntity createDataKey="createFirstSimpleProduct"/>
             </createData>
 
             <!-- Create category -->
-            <createData entity="SimpleCategory_SpecialPrice" stepKey="createCategory"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="AssignProductToCategory" stepKey="assignTestCategoryToTestProduct">
                 <requiredEntity createDataKey="createCategory"/>
                 <requiredEntity createDataKey="createFirstSimpleProduct"/>
             </createData>
 
             <!-- Create Customer -->
-            <createData entity="SimpleCustomer_USA" stepKey="createCustomer"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <!-- Delete Data -->
         <after>
