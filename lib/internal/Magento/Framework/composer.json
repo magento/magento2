@@ -25,7 +25,7 @@
         "lib-libxml": "*",
         "colinmollenhour/php-redis-session-abstract": "~1.4.5",
         "composer/composer": "^1.9 || ^2.0",
-        "guzzlehttp/guzzle": "^7.3.0",
+        "guzzlehttp/guzzle": "^7.4.2",
         "laminas/laminas-code": "~4.5.0",
         "laminas/laminas-escaper": "~2.10.0",
         "laminas/laminas-http": "^2.15.0",

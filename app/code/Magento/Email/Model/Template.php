@@ -247,7 +247,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         $storeId = $this->getDesignConfig()->getStore();
 
         try {
-            $processedResult = $processor->setStoreId($storeId)->filter(__($this->getTemplateSubject())->render());
+            $processedResult = $processor->setStoreId($storeId)->filter($this->getTemplateSubject());
         } catch (\Exception $e) {
             $this->cancelDesignConfig();
             throw new \Magento\Framework\Exception\MailException(__($e->getMessage()), $e);
