@@ -89,8 +89,7 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
         CollectionProcessorInterface           $collectionProcessor,
         ImsWebapiSearchResultsInterfaceFactory $searchResultsFactory,
         SearchCriteriaBuilder                  $searchCriteriaBuilder
-    )
-    {
+    ) {
         $this->resource = $resource;
         $this->entityFactory = $entityFactory;
         $this->logger = $logger;
