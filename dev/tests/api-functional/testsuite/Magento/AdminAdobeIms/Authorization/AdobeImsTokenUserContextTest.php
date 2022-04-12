@@ -290,7 +290,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
         $adminUserId = (int) $this->userModel->loadByUsername($username)->getId();
         $webapiEntity = $this->imsWebapiRepository->getByAccessTokenHash($this->encryptor->getHash($token));
         if ($webapiEntity->getId()) {
-            $this->assertEquals($adminUserId, $webapiEntity->getUserId());
+            $this->assertEquals($adminUserId, $webapiEntity->getAdminUserId());
         }
     }
 
