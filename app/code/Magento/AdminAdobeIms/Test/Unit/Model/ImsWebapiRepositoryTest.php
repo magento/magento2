@@ -27,7 +27,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-
 /**
  * Ims Webapi repository test.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -330,7 +329,7 @@ class ImsWebapiRepositoryTest extends TestCase
     public function testDeleteWithException(): void
     {
         $adminUserId = 1;
-        $message = 'Could not delete ims tokens for admin user id $1.';
+        $message = 'Could not delete ims tokens for admin user id %1.';
         $this->expectException(CouldNotDeleteException::class);
         $this->expectExceptionMessage(sprintf($message, $adminUserId));
         $collectionInfo = $this->initCollection();
@@ -347,5 +346,4 @@ class ImsWebapiRepositoryTest extends TestCase
 
         $this->model->deleteByAdminUserId($adminUserId);
     }
-
 }
