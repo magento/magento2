@@ -20,8 +20,9 @@
         </arguments>
 
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true" stepKey="exposeMiniCart"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsClickable"/>
+        <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="exposeMiniCart"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskForCartItem"/>
         <waitForElement selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" time="30" stepKey="waitForCartItemsAreaActive"/>
         <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="{{productVar.name}}" stepKey="seeProductInCart"/>
         <conditionalClick selector="{{CheckoutPaymentSection.ProductOptionsByProductItemName(productVar.name)}}" dependentSelector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName(productVar.name)}}" visible="false" stepKey="exposeProductOptions"/>

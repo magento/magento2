@@ -29,6 +29,9 @@
             <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
             <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
             <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
