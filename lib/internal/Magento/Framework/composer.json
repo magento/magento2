@@ -34,7 +34,7 @@
         "laminas/laminas-stdlib": "^3.7.1",
         "laminas/laminas-uri": "^2.9.1",
         "laminas/laminas-validator": "^2.17.0",
-        "magento/zendframework1": "1.14.6-beta2 as 1.14.6",
+        "magento/zendframework1": "~1.15.0",
         "monolog/monolog": "^2.3",
         "ramsey/uuid": "~4.2.0",
         "symfony/console": "~4.4.0",
