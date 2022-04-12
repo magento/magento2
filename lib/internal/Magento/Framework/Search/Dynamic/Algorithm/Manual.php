@@ -33,7 +33,7 @@ class Manual implements AlgorithmInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems(
         BucketInterface $bucket,
@@ -51,13 +51,16 @@ class Manual implements AlgorithmInterface
 
         $aggregations = $this->dataProvider->getAggregations($entityStorage);
         if ($aggregations['max']) {
-            $data[array_key_last($data)]['to'] = $aggregations['max'] + 0.01;
+            $lastKey = array_key_last($data);
+            $data[$lastKey]['to'] = max($data[$lastKey]['to'], $aggregations['max'] + 0.01);
         }
 
         return $data;
     }
 
     /**
+     * Fix ranges according to maximum ranges number
+     *
      * @param array $items
      * @param int $maxIntervalsNumber
      * @return array
