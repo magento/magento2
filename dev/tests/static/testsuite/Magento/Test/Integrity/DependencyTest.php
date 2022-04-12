@@ -155,8 +155,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     private static $whiteList = [];
 
     /**
-     * Routes whitelist
-     *
      * @var array|null
      */
     private static $routesWhitelist = null;
