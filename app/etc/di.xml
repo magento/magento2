@@ -1743,7 +1743,7 @@
         <arguments>
             <argument name="connectionToExchangeMap" xsi:type="array">
                 <item name="amqp" xsi:type="string">magento</item>
-                <item name="db" xsi:type="string">magento-db</item>
+                <item name="db" xsi:type="string">magento</item>
             </argument>
         </arguments>
     </type>
@@ -1751,7 +1751,7 @@
         <arguments>
             <argument name="publisherNameToConnectionMap" xsi:type="array">
                 <item name="amqp-magento" xsi:type="string">amqp</item>
-                <item name="db-magento-db" xsi:type="string">db</item>
+                <item name="db-magento" xsi:type="string">db</item>
             </argument>
         </arguments>
     </type>
@@ -1836,7 +1836,7 @@
         <plugin name="execute_commit_callbacks" type="Magento\Framework\Model\ExecuteCommitCallbacks" />
     </type>
     <preference for="Magento\Framework\GraphQl\Query\ErrorHandlerInterface" type="Magento\Framework\GraphQl\Query\ErrorHandler"/>
-    <preference for="Magento\Framework\Filter\VariableResolverInterface" type="Magento\Framework\Filter\VariableResolver\StrategyResolver"/>
+    <preference for="Magento\Framework\Filter\VariableResolverInterface" type="Magento\Framework\Filter\VariableResolver\StrictResolver"/>
     <virtualType name="configured_block_cache" type="Magento\Framework\App\Cache">
         <arguments>
             <argument name="cacheIdentifier" xsi:type="string">block_html</argument>

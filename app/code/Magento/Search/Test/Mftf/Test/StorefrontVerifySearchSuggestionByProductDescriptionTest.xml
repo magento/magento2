@@ -26,9 +26,7 @@
             <!-- Create product with description -->
             <createData entity="SimpleProductWithDescription" stepKey="simpleProduct"/>
 
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
                 <argument name="tags" value="full_page"/>
             </actionGroup>
