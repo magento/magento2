@@ -246,17 +246,11 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         $this->applyDesignConfig();
         $storeId = $this->getDesignConfig()->getStore();
 
-        $previousStrictMode = $processor->setStrictMode(
-            !$this->getData('is_legacy') && is_numeric($this->getTemplateId())
-        );
-
         try {
             $processedResult = $processor->setStoreId($storeId)->filter($this->getTemplateSubject());
         } catch (\Exception $e) {
             $this->cancelDesignConfig();
             throw new \Magento\Framework\Exception\MailException(__($e->getMessage()), $e);
-        } finally {
-            $processor->setStrictMode($previousStrictMode);
         }
 
         $this->cancelDesignConfig();
