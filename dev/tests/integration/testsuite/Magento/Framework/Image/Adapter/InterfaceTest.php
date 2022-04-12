@@ -63,7 +63,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      */
     protected function _getFixtureImageSize()
     {
-        return [311, 162];
+        return [311, 175];
     }
 
     /**
@@ -595,7 +595,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
                 break;
             case \Magento\Framework\Image\Adapter\AbstractAdapter::POSITION_TOP_LEFT:
                 $pixel['x'] = 1;
-                $pixel['y'] = 1;
+                $pixel['y'] = 10;
                 break;
             case \Magento\Framework\Image\Adapter\AbstractAdapter::POSITION_TOP_RIGHT:
                 $pixel['x'] = $adapter->getOriginalWidth() - 1;
