@@ -105,6 +105,6 @@ class FlushUserTokens implements FlushUserTokensInterface
      */
     private function removeTokensFromTable(int $adminUserId = null): void
     {
-        $this->imsWebapiRepository->deleteByUserId($adminUserId);
+        $this->imsWebapiRepository->deleteByAdminUserId($adminUserId);
     }
 }
