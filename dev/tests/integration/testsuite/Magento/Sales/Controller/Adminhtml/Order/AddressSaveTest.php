@@ -10,11 +10,8 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Api\OrderAddressRepositoryInterface;
-use Magento\Sales\Model\Order as Order;
-use Magento\Quote\Model\Quote as Quote;
 use Magento\Sales\Model\Order\Address as AddressType;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
@@ -49,7 +46,6 @@ class AddressSaveTest extends AbstractBackendController
      * @dataProvider addressTypeProvider
      *
      * @magentoDataFixture Magento/Sales/_files/order.php
-     * @magentoDataFixture Magento/Sales/_files/quote.php
      *
      * @param string $type
      * @return void
@@ -66,14 +62,7 @@ class AddressSaveTest extends AbstractBackendController
             OrderAddressInterface::POSTCODE => '97203',
             OrderAddressInterface::TELEPHONE => '5555555555',
         ];
-        $quote = $this->_objectManager->create(Quote::class);
-        $quote->load('test01', 'reserved_order_id');
-
         $order = $this->orderFactory->create()->loadByIncrementId(100000001);
-        $order->setQuoteId($quote->getId());
-        $orderRepository = $this->_objectManager->create(OrderRepositoryInterface::class);
-        $orderRepository->save($order);
-
         $addressId = $this->getAddressIdByType($order, $type);
         $this->dispatchWithParams(
             ['address_id' => $addressId],
@@ -145,14 +134,6 @@ class AddressSaveTest extends AbstractBackendController
             $key === OrderAddressInterface::STREET
                 ? $this->assertEquals(reset($value), $address->getData($key))
                 : $this->assertEquals($value, $address->getData($key));
-        }
-        if ($address->getAddressType() === 'billing') {
-            $order = $this->_objectManager->create(Order::class)->load($address->getParentId());
-            $quote = $this->_objectManager->create(Quote::class)->load($order->getQuoteId());
-            $this->assertEquals('New test name', $quote->getCustomerFirstname());
-            $this->assertEquals('New test lastname', $quote->getCustomerLastname());
-            $this->assertEquals($quote->getCustomerFirstname(), $order->getCustomerFirstname());
-            $this->assertEquals($quote->getCustomerLastname(), $order->getCustomerLastname());
         }
     }
 

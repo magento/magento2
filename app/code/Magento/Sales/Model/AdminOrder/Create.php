@@ -1842,18 +1842,20 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 ->setStoreId($store->getId())
                 ->setWebsiteId($store->getWebsiteId())
                 ->setCreatedAt(null);
+            $customer = $this->_validateCustomerData($customer);
+        } elseif (!$customer->getId()) {
+            /** Create new customer */
+            $customerBillingAddressDataObject = $this->getBillingAddress()->exportCustomerAddress();
+            $customer->setSuffix($customerBillingAddressDataObject->getSuffix())
+                ->setFirstname($customerBillingAddressDataObject->getFirstname())
+                ->setLastname($customerBillingAddressDataObject->getLastname())
+                ->setMiddlename($customerBillingAddressDataObject->getMiddlename())
+                ->setPrefix($customerBillingAddressDataObject->getPrefix())
+                ->setStoreId($store->getId())
+                ->setWebsiteId($store->getWebsiteId())
+                ->setEmail($this->_getNewCustomerEmail());
+            $customer = $this->_validateCustomerData($customer);
         }
-
-        $customerBillingAddressDataObject = $this->getBillingAddress()->exportCustomerAddress();
-        $customer->setSuffix($customerBillingAddressDataObject->getSuffix())
-            ->setFirstname($customerBillingAddressDataObject->getFirstname())
-            ->setLastname($customerBillingAddressDataObject->getLastname())
-            ->setMiddlename($customerBillingAddressDataObject->getMiddlename())
-            ->setPrefix($customerBillingAddressDataObject->getPrefix())
-            ->setStoreId($store->getId())
-            ->setWebsiteId($store->getWebsiteId())
-            ->setEmail($this->_getNewCustomerEmail());
-        $customer = $this->_validateCustomerData($customer);
         $this->getQuote()->setCustomer($customer);
 
         if ($this->getBillingAddress()->getSaveInAddressBook()) {
