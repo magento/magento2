@@ -13,12 +13,7 @@
             "magento/*": true
         },
         "preferred-install": "dist",
-        "sort-packages": true,
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "laminas/laminas-dependency-plugin": true,
-            "magento/*": true
-        }
+        "sort-packages": true
     },
     "require": {
         "php": "~7.4.0||~8.1.0",
