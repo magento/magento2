@@ -136,6 +136,8 @@ class AdobeImsTokenUserService
     }
 
     /**
+     * Always validate new tokens and validate existing token with interval
+     *
      * @param string $token
      * @param ImsWebapiInterface $imsWebapiEntity
      * @return void
