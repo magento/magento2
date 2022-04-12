@@ -185,7 +185,9 @@ class TokenReader implements TokenReaderInterface
         [$header] = explode(".", (string)$token);
 
         $decodedAdobeImsHeader = $this->json->unserialize(
-            $this->encoder->encode($header)
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            base64_decode($header)
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
         );
 
         if (!isset($decodedAdobeImsHeader[self::HEADER_ATTRIBUTE_X5U])) {
