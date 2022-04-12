@@ -360,6 +360,7 @@ type Discount @doc(description:"Defines an individual discount. A discount can b
 
 type CartItemPrices @doc(description: "Contains details about the price of the item, including taxes and discounts.") {
     price: Money! @doc(description: "The price of the item before any discounts were applied. The price that might include tax, depending on the configured display settings for cart.")
+    price_including_tax:  Money! @doc(description: "The price of the item before any discounts were applied. The price that might include tax, depending on the configured display settings for cart.")
     row_total: Money! @doc(description: "The value of the price multiplied by the quantity of the item.")
     row_total_including_tax: Money! @doc(description: "The value of `row_total` plus the tax applied to the item.")
     discounts: [Discount] @doc(description: "An array of discounts to be applied to the cart item.")
