@@ -13,7 +13,7 @@ define([
 
     return dynamicRowsGrid.extend({
 
-        deleteRecord: function (index, recordId) {
+        deleteRecord: function () {
             this._super();
             this.resetPosition();
         },
@@ -21,15 +21,16 @@ define([
         resetPosition() {
             let self = this,
                 position = 0;
+
             _.filter(this.elems(), function (elem, index) {
-                if(index === 0) {
-                    position = ((self.currentPage() - 1) * self.pageSize) + 1;
+                if (index === 0) {
+                    position = (self.currentPage() - 1) * self.pageSize + 1;
                 }
-                _.filter(elem.elems(),function(childElem){
-                    if(childElem.index == 'position'){
+                _.filter(elem.elems(),function (childElem) {
+                    if (childElem.index === 'position') {
                         childElem.value(position);
                     }
-                })
+                });
                 position++;
             });
         },
