@@ -149,10 +149,9 @@ class ShipOrder implements ShipOrderInterface
         array $packages = [],
         \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments = null
     ) {
-        // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
         return $this->orderMutex->execute(
             (int)$orderId,
-            \Closure::fromCallable([$this, 'createShipment']),
+            \Closure::fromCallable([$this, 'createShipment']),// phpstan:ignore
             [
                 $orderId,
                 $items,
