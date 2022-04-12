@@ -115,7 +115,10 @@ class ImsWebapiRepositoryTest extends TestCase
     }
 
     /**
-     * Test save.
+     * Test saving
+     *
+     * @return void
+     * @throws CouldNotSaveException
      */
     public function testSave(): void
     {
@@ -128,6 +131,8 @@ class ImsWebapiRepositoryTest extends TestCase
 
     /**
      * Test save with exception.
+     *
+     * @return void
      */
     public function testSaveWithException(): void
     {
@@ -158,6 +163,8 @@ class ImsWebapiRepositoryTest extends TestCase
 
     /**
      * Test get ims web API id with exception.
+     *
+     * @return void
      */
     public function testGetWithException(): void
     {
@@ -176,9 +183,11 @@ class ImsWebapiRepositoryTest extends TestCase
     }
 
     /**
+     * Initializing collection of ims webapi
+     *
      * @return array
      */
-    protected function initCollection()
+    protected function initCollection(): array
     {
         $collectionSize = 1;
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
@@ -189,10 +198,10 @@ class ImsWebapiRepositoryTest extends TestCase
             ->method('getPageSize')
             ->willReturn($collectionSize);
 
-        $this->searchCriteriaBuilder->expects($this->once())
+        $this->searchCriteriaBuilder->expects($this->any())
             ->method('create')
             ->willReturn($searchCriteriaMock);
-        $this->searchCriteriaBuilder->expects($this->once())
+        $this->searchCriteriaBuilder->expects($this->any())
             ->method('addFilter')
             ->willReturnSelf();
 
@@ -220,7 +229,7 @@ class ImsWebapiRepositoryTest extends TestCase
             ->willReturnSelf();
         $searchResultsMock = $this->createSearchResultsMock($searchCriteriaMock, $imsWebapiMock, $collectionSize);
 
-        $searchResultsMock->expects($this->once())
+        $searchResultsMock->expects($this->any())
             ->method('getItems')
             ->willReturn([$imsWebapiMock]);
 
@@ -228,70 +237,50 @@ class ImsWebapiRepositoryTest extends TestCase
             ->method('create')
             ->willReturn($searchResultsMock);
 
-        return [$imsWebapiMock];
+        return [
+            'imsWebapiMock' => [$imsWebapiMock],
+            'searchCriteriaMock' => $searchCriteriaMock,
+            'searchResultsMock' => $searchResultsMock
+        ];
     }
 
     /**
      * Test get by ims webapi id.
+     *
+     * @return void
+     * @throws NoSuchEntityException
      */
     public function testGetByAdminUserId(): void
     {
-        $this->assertEquals($this->initCollection(), $this->model->getByAdminUserId(1));
+        $collectionInfo = $this->initCollection();
+        $this->assertEquals($collectionInfo['imsWebapiMock'], $this->model->getByAdminUserId(1));
     }
 
     /**
-     * Test get list.
+     * Test get list
+     *
+     * @return void
+     * @throws NoSuchEntityException
      */
     public function testGetList(): void
     {
-        $collectionSize = 1;
+        $collectionInfo = $this->initCollection();
 
-        $imsWebapiMock = $this->createMock(ImsWebapi::class);
-
-        $collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $collection->expects($this->once())
-            ->method('getSize')
-            ->willReturn($collectionSize);
-
-        $collection->expects($this->once())
-            ->method('getItems')
-            ->willReturn([$imsWebapiMock]);
-
-        $this->entityCollectionFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($collection);
-
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getPageSize'])
-            ->getMockForAbstractClass();
-
-        $searchCriteriaMock->expects($this->any())
-            ->method('getPageSize')
-            ->willReturn($collectionSize);
-
-        $this->collectionProcessor->expects($this->once())
-            ->method('process')
-            ->with($searchCriteriaMock, $collection)
-            ->willReturnSelf();
-        $searchResultsMock = $this->createSearchResultsMock($searchCriteriaMock, $imsWebapiMock, $collectionSize);
-
-        $this->searchResultsFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($searchResultsMock);
-
-        $this->assertEquals($searchResultsMock, $this->model->getList($searchCriteriaMock));
+        $this->assertEquals(
+            $collectionInfo['searchResultsMock'],
+            $this->model->getList($collectionInfo['searchCriteriaMock'])
+        );
     }
 
     /**
+     * Creating mock for the search results object
+     *
      * @param MockObject $searchCriteriaMock
      * @param MockObject $imsWebapiMock
      * @param int $collectionSize
      * @return MockObject
      */
-    protected function createSearchResultsMock($searchCriteriaMock, $imsWebapiMock, $collectionSize = 1)
+    protected function createSearchResultsMock($searchCriteriaMock, $imsWebapiMock, $collectionSize = 1): MockObject
     {
         /** @var MockObject $searchResultsMock */
         $searchResultsMock = $this->getMockBuilder(ImsWebapiSearchResultsInterface::class)
@@ -312,16 +301,20 @@ class ImsWebapiRepositoryTest extends TestCase
 
     /**
      * Test successful deletion of ims web API
+     *
+     * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
-    public function testDeleteByAdminUserId()
+    public function testDeleteByAdminUserId(): void
     {
         $adminUserId = 1;
 
-        $entities = $this->initCollection();
+        $collectionInfo = $this->initCollection();
 
         $this->resource->expects($this->exactly(1))
             ->method('delete')
-            ->with($entities[0])
+            ->with($collectionInfo['imsWebapiMock'][0])
             ->willReturnSelf();
 
         $this->assertTrue($this->model->deleteByAdminUserId($adminUserId));
@@ -330,27 +323,27 @@ class ImsWebapiRepositoryTest extends TestCase
     /**
      * Test non-successful deletion of ims webapi
      *
+     * @return void
      * @throws NoSuchEntityException
      * @throws LocalizedException
      */
-    public function testDeleteWithException()
+    public function testDeleteWithException(): void
     {
         $adminUserId = 1;
         $message = 'Could not delete ims tokens for admin user id $1.';
         $this->expectException(CouldNotDeleteException::class);
         $this->expectExceptionMessage(sprintf($message, $adminUserId));
-        $entities = $this->initCollection();
+        $collectionInfo = $this->initCollection();
 
         $this->resource->expects($this->exactly(1))
             ->method('delete')
-            ->with($entities[0])
+            ->with($collectionInfo['imsWebapiMock'][0])
             ->willThrowException(
                 new CouldNotDeleteException(__(
                     $message,
                     $adminUserId
                 ))
             );
-
 
         $this->model->deleteByAdminUserId($adminUserId);
     }
