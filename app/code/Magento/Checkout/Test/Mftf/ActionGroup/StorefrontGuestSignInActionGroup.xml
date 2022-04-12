@@ -13,7 +13,6 @@
             <description>Enter email id and password, click on sign in button.</description>
         </annotations>
         <arguments>
-            <!--<argument name="username" type="string" defaultValue=""/>-->
             <argument name="email" type="string" defaultValue=""/>
             <argument name="password" type="string" defaultValue=""/>
         </arguments>

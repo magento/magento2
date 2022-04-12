@@ -29,9 +29,7 @@
             </createData>
             <!-- create customer and clean the cache and index-->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
-        </before>
+               </before>
         <!-- Goto storefront and add product to cart-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad6"/>
