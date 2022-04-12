@@ -15,7 +15,14 @@ use Magento\Security\Model\Config;
 
 class OtherUserSessionPlugin
 {
+    /**
+     * @var ImsConfig
+     */
     private ImsConfig $imsConfig;
+
+    /**
+     * @var ScopeConfigInterface
+     */
     private ScopeConfigInterface $scopeConfig;
 
     /**
