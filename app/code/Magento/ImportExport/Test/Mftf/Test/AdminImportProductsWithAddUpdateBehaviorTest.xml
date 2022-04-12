@@ -49,20 +49,21 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
+                <argument name="websiteName" value="secondWebsite"/>
+            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <!-- Delete all products that replaced products in the before block post import -->
-            <deleteData stepKey="deleteSimpleProduct1" url="/V1/products/SimpleProductForTest1"/>
             <deleteData stepKey="deleteSimpleProduct2" url="/V1/products/SimpleProductForTest2"/>
             <deleteData stepKey="deleteSimpleProduct3" url="/V1/products/SimpleProductForTest3"/>
 
-            <!-- Delete category created in the before block -->
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-
-            <!--Delete website created in the before block -->
-            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite" before="logoutFromAdmin">
-                <argument name="websiteName" value="secondWebsite"/>
-            </actionGroup>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
 
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
