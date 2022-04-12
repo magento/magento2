@@ -23,7 +23,6 @@ use Magento\Framework\Jwt\Exception\JwtException;
 use Magento\Framework\Jwt\Payload\ClaimsPayloadInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Framework\Url\Encoder;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -82,11 +81,6 @@ class TokenReader implements TokenReaderInterface
     private File $driver;
 
     /**
-     * @var Encoder
-     */
-    private Encoder $encoder;
-
-    /**
      * @var Json
      */
     private Json $json;
@@ -100,7 +94,6 @@ class TokenReader implements TokenReaderInterface
      * @param DateTime $dateTime
      * @param File $driver
      * @param Json $json
-     * @param Encoder $encoder
      */
     public function __construct(
         JwtManagerInterface $jwtManager,
@@ -110,8 +103,7 @@ class TokenReader implements TokenReaderInterface
         LoggerInterface $logger,
         DateTime $dateTime,
         File $driver,
-        Json $json,
-        Encoder $encoder
+        Json $json
     ) {
         $this->jwtManager = $jwtManager;
         $this->cache = $cache;
@@ -121,7 +113,6 @@ class TokenReader implements TokenReaderInterface
         $this->dateTime = $dateTime;
         $this->driver = $driver;
         $this->json = $json;
-        $this->encoder = $encoder;
     }
 
     /**

@@ -140,8 +140,7 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
             ->addFilter(self::ADMIN_USER_ID, $adminUserId)
             ->create();
 
-        return $this->getList($searchCriteria)
-            ->getItems();
+        return $this->getList($searchCriteria)->getItems();
     }
 
     /**
