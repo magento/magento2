@@ -45,6 +45,11 @@ class ExportInfo implements ExtendedExportInfoInterface
     private $skipAttr;
 
     /**
+     * @var string
+     */
+    private $fieldsEnclosure;
+
+    /**
      * @inheritdoc
      */
     public function getFileFormat()
@@ -138,5 +143,21 @@ class ExportInfo implements ExtendedExportInfoInterface
     public function setSkipAttr($skipAttr)
     {
         $this->skipAttr = $skipAttr;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFieldsEnclosure()
+    {
+        return $this->fieldsEnclosure;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setFieldsEnclosure($fieldsEnclosure)
+    {
+        $this->fieldsEnclosure = $fieldsEnclosure;
     }
 }
