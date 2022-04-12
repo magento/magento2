@@ -199,6 +199,5 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
                 $exception
             );
         }
-
     }
 }

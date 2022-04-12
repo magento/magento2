@@ -30,6 +30,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Ims Webapi repository test.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ImsWebapiRepositoryTest extends TestCase
 {
@@ -335,8 +336,8 @@ class ImsWebapiRepositoryTest extends TestCase
     public function testDeleteWithException()
     {
         $adminUserId = 1;
-        $message = 'Could not delete ims tokens for admin user id %1.';
-        $this->expectException('Magento\Framework\Exception\CouldNotDeleteException');
+        $message = 'Could not delete ims tokens for admin user id $1.';
+        $this->expectException(CouldNotDeleteException::class);
         $this->expectExceptionMessage(sprintf($message, $adminUserId));
         $entities = $this->initCollection();
 

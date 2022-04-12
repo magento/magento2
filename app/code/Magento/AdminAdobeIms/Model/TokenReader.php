@@ -21,11 +21,16 @@ use Magento\Framework\Jwt\Jws\JwsSignatureJwks;
 use Magento\Framework\Jwt\JwtManagerInterface;
 use Magento\Framework\Jwt\Exception\JwtException;
 use Magento\Framework\Jwt\Payload\ClaimsPayloadInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Url\Encoder;
 use Psr\Log\LoggerInterface;
 
 /**
  * Adobe Ims Token Reader
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class TokenReader implements TokenReaderInterface
 {
@@ -77,12 +82,25 @@ class TokenReader implements TokenReaderInterface
     private File $driver;
 
     /**
+     * @var Encoder
+     */
+    private Encoder $encoder;
+
+    /**
+     * @var Json
+     */
+    private Json $json;
+
+    /**
      * @param JwtManagerInterface $jwtManager
      * @param CacheInterface $cache
      * @param ImsConfig $imsConfig
      * @param JwkFactory $jwkFactory
      * @param LoggerInterface $logger
      * @param DateTime $dateTime
+     * @param File $driver
+     * @param Json $json
+     * @param Encoder $encoder
      */
     public function __construct(
         JwtManagerInterface $jwtManager,
@@ -91,7 +109,9 @@ class TokenReader implements TokenReaderInterface
         JwkFactory $jwkFactory,
         LoggerInterface $logger,
         DateTime $dateTime,
-        File $driver
+        File $driver,
+        Json $json,
+        Encoder $encoder
     ) {
         $this->jwtManager = $jwtManager;
         $this->cache = $cache;
@@ -100,6 +120,8 @@ class TokenReader implements TokenReaderInterface
         $this->logger = $logger;
         $this->dateTime = $dateTime;
         $this->driver = $driver;
+        $this->json = $json;
+        $this->encoder = $encoder;
     }
 
     /**
@@ -111,7 +133,7 @@ class TokenReader implements TokenReaderInterface
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
-    public function read(string $token)
+    public function read(string $token): array
     {
         try {
             if (!$jwk = $this->getJWK($token)) {
@@ -158,10 +180,13 @@ class TokenReader implements TokenReaderInterface
      * @param string $token
      * @return false|Jwk
      */
-    private function getJWK($token)
+    private function getJWK(string $token)
     {
-        list($header) = explode(".", "$token");
-        $decodedAdobeImsHeader = json_decode(base64_decode($header), true);
+        [$header] = explode(".", (string)$token);
+
+        $decodedAdobeImsHeader = $this->json->unserialize(
+            $this->encoder->encode($header)
+        );
 
         if (!isset($decodedAdobeImsHeader[self::HEADER_ATTRIBUTE_X5U])) {
             return false;
@@ -200,7 +225,7 @@ class TokenReader implements TokenReaderInterface
      * @param string $certificateValue
      * @return void
      */
-    private function saveCertificateInCache(string $certificateValue)
+    private function saveCertificateInCache(string $certificateValue): void
     {
         $this->cache->save($certificateValue, $this->cacheId, []);
     }
@@ -210,7 +235,7 @@ class TokenReader implements TokenReaderInterface
      *
      * @param string $certificateFileName
      */
-    private function setCertificateCacheId(string $certificateFileName)
+    private function setCertificateCacheId(string $certificateFileName): void
     {
         $this->cacheId = $this->cacheIdPrefix . $certificateFileName;
     }

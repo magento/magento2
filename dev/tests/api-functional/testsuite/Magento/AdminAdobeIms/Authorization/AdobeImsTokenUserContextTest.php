@@ -32,6 +32,7 @@ use Magento\User\Model\User;
 
 /**
  * Checks the categories/list api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdobeImsTokenUserContextTest extends WebapiAbstract
 {
