@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Console\Command;
 
 use Magento\AdminAdobeIms\Model\ImsConnection;
+use Magento\AdminAdobeIms\Service\UpdateTokensService;
 use Magento\AdminAdobeIms\Service\ImsCommandOptionService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\App\Cache\Type\Config;
@@ -62,22 +63,30 @@ class AdminAdobeImsEnableCommand extends Command
     private TypeListInterface $cacheTypeList;
 
     /**
+     * @var UpdateTokensService
+     */
+    private UpdateTokensService $updateTokensService;
+
+    /**
      * @param ImsConfig $imsConfig
      * @param ImsConnection $imsConnection
      * @param ImsCommandOptionService $imsCommandOptionService
      * @param TypeListInterface $cacheTypeList
+     * @param UpdateTokensService $cleanupTokensService
      */
     public function __construct(
         ImsConfig $imsConfig,
         ImsConnection $imsConnection,
         ImsCommandOptionService $imsCommandOptionService,
-        TypeListInterface $cacheTypeList
+        TypeListInterface $cacheTypeList,
+        UpdateTokensService $updateTokensService
     ) {
         parent::__construct();
         $this->imsConfig = $imsConfig;
         $this->imsConnection = $imsConnection;
         $this->imsCommandOptionService = $imsCommandOptionService;
         $this->cacheTypeList = $cacheTypeList;
+        $this->updateTokensService = $updateTokensService;
 
         $this->setName('admin:adobe-ims:enable')
             ->setDescription('Enable Adobe IMS Module.')
@@ -171,6 +180,7 @@ class AdminAdobeImsEnableCommand extends Command
         if ($testAuth) {
             $this->imsConfig->enableModule($clientId, $clientSecret, $organizationId);
             $this->cacheTypeList->cleanType(Config::TYPE_IDENTIFIER);
+            $this->updateTokensService->execute();
             return true;
         }
 

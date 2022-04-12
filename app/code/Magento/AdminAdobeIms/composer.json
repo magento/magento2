@@ -16,7 +16,9 @@
         "magento/module-authorization": "*",
         "magento/module-store": "*",
         "magento/module-email": "*",
-        "magento/module-integration": "*"
+        "magento/module-integration": "*",
+        "magento/module-jwt-user-token": "*",
+        "magento/module-security": "*"
     },
     "suggest": {
         "magento/module-theme": "*"

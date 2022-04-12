@@ -54,4 +54,8 @@
         <plugin name="revoke_admin_access_token"
                 type="Magento\AdminAdobeIms\Plugin\RevokeAdminAccessTokenPlugin"/>
     </type>
+    <type name="Magento\Security\Model\AdminSessionsManager">
+        <plugin name="keep_other_user_sessions"
+                type="Magento\AdminAdobeIms\Plugin\OtherUserSessionPlugin"/>
+    </type>
 </config>
