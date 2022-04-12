@@ -110,7 +110,7 @@ class AdobeImsTokenUserService
         );
 
         if ($imsWebapiEntity->getId()) {
-            $adminUserId = $imsWebapiEntity->getUserId();
+            $adminUserId = $imsWebapiEntity->getAdminUserId();
         } else {
             $profile = $this->getUserProfile($bearerToken);
             if (empty($profile['email'])) {

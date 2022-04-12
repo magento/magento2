@@ -80,13 +80,13 @@ class ImsWebapiTest extends TestCase
     }
 
     /**
-     * Test setUserId
+     * Test setAdminUserId
      */
-    public function testUserId(): void
+    public function testAdminUserId(): void
     {
         $value = 42;
-        $this->model->setUserId($value);
-        $this->assertSame($value, $this->model->getUserId());
+        $this->model->setAdminUserId($value);
+        $this->assertSame($value, $this->model->getAdminUserId());
     }
 
     /**
