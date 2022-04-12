@@ -1,10 +1,7 @@
 <?php
 /**
- * Scan source code for incorrect or undeclared modules dependencies
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- *
  */
 namespace Magento\Test\Integrity;
 
@@ -29,6 +26,8 @@ use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 
 /**
+ * Scan source code for incorrect or undeclared modules dependencies
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -38,32 +37,32 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     /**
      * Soft dependency between modules
      */
-    const TYPE_SOFT = 'soft';
+    public const TYPE_SOFT = 'soft';
 
     /**
      * Hard dependency between modules
      */
-    const TYPE_HARD = 'hard';
+    public const TYPE_HARD = 'hard';
 
     /**
      * The identifier of dependency for mapping.
      */
-    const MAP_TYPE_DECLARED = 'declared';
+    public const MAP_TYPE_DECLARED = 'declared';
 
     /**
      * The identifier of dependency for mapping.
      */
-    const MAP_TYPE_FOUND = 'found';
+    public const MAP_TYPE_FOUND = 'found';
 
     /**
      * The identifier of dependency for mapping.
      */
-    const MAP_TYPE_REDUNDANT = 'redundant';
+    public const MAP_TYPE_REDUNDANT = 'redundant';
 
     /**
      * Count of directories in path
      */
-    const DIR_PATH_COUNT = 4;
+    public const DIR_PATH_COUNT = 4;
 
     /**
      * List of config.xml files by modules
@@ -163,8 +162,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     private static $routesWhitelist = null;
 
     /**
-     * Redundant dependencies whitelist
-     *
      * @var array|null
      */
     private static $redundantDependenciesWhitelist = null;
