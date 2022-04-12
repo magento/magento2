@@ -496,14 +496,15 @@ class UtilityTest extends TestCase
     }
 
     /**
+     * @dataProvider deltaRoundingFixDataProvider
+     * @param $discountAmount
+     * @param $baseDiscountAmount
+     * @param $percent
+     * @param $rowTotal
      * @return void
      */
-    public function testDeltaRoundignFix(): void
+    public function testDeltaRoundignFix($discountAmount, $baseDiscountAmount, $percent, $rowTotal): void
     {
-        $discountAmount = 10.003;
-        $baseDiscountAmount = 12.465;
-        $percent = 15;
-        $rowTotal = 100;
         $roundedDiscount = round($discountAmount, 2);
         $roundedBaseDiscount = round($baseDiscountAmount, 2);
         $delta = $discountAmount - $roundedDiscount;
@@ -546,7 +547,14 @@ class UtilityTest extends TestCase
             ->willReturnOnConsecutiveCalls($baseDiscountAmount, $baseDiscountAmount);
 
         $this->assertEquals($this->utility, $this->utility->deltaRoundingFix($discountData, $this->item));
-        $this->assertEquals($this->utility, $this->utility->deltaRoundingFix($discountData, $this->item));
+    }
+
+    public function deltaRoundingFixDataProvider()
+    {
+        return [
+            ['discountAmount' => 10.003, 'baseDiscountAmount' => 12.465, 'percent' => 15, 'rowTotal' => 100],
+            ['discountAmount' => 5.0015, 'baseDiscountAmount' => 6.2325, 'percent' => 7.5, 'rowTotal' => 100],
+        ];
     }
 
     /**
