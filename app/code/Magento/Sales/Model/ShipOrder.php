@@ -151,7 +151,7 @@ class ShipOrder implements ShipOrderInterface
     ) {
         return $this->orderMutex->execute(
             (int)$orderId,
-            \Closure::fromCallable([$this, 'createShipment']),// phpstan:ignore
+            \Closure::fromCallable([$this, 'createShipment']),
             [
                 $orderId,
                 $items,

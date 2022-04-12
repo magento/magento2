@@ -135,7 +135,7 @@ class RefundOrder implements RefundOrderInterface
     ) {
         return $this->orderMutex->execute(
             (int) $orderId,
-            \Closure::fromCallable([$this, 'createRefund']),// phpstan:ignore
+            \Closure::fromCallable([$this, 'createRefund']),
             [
                 $orderId,
                 $items,
