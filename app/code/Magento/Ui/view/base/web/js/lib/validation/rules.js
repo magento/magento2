@@ -817,9 +817,9 @@ define([
             },
             $.mage.__('Please enter a valid URL Key (Ex: "example-page", "example-page.html" or "anotherlevel/example-page").')//eslint-disable-line max-len
         ],
-        'validate-identifier-clean': [
+        'validate-trailing-hyphen': [
             function (value) {
-                return utils.isEmptyNoTrim(value) || /^[a-z0-9]+(-[a-z0-9]+)*$/.test(value);
+                return utils.isEmptyNoTrim(value) || /^(?!-)(?!.*-$).+$/.test(value);
             },
             $.mage.__('Please enter a valid URL Key (Ex: example-page).')
         ],

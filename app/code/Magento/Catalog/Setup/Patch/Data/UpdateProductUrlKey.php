@@ -52,8 +52,7 @@ class UpdateProductUrlKey implements DataPatchInterface, PatchVersionInterface
             \Magento\Catalog\Model\Product::ENTITY,
             'url_key',
             [
-                'note' => 'The URL key should consist of lowercase characters with hyphens to separate words',
-                'frontend_class' => 'validate-identifier-clean'
+                'frontend_class' => 'validate-trailing-hyphen'
             ]
         );
         return $this;

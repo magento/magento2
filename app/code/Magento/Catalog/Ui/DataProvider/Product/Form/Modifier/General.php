@@ -150,6 +150,7 @@ class General extends AbstractModifier
         $meta = $this->customizeWeightField($meta);
         $meta = $this->customizeNewDateRangeField($meta);
         $meta = $this->customizeNameListeners($meta);
+        $meta = $this->customizeUrlKeyField($meta);
 
         return $meta;
     }
@@ -397,6 +398,31 @@ class General extends AbstractModifier
                 'valueUpdate' => 'keyup'
             ]
         );
+    }
+
+    /**
+     * Customize URL KEY field
+     *
+     * @param  array $meta
+     * @return array
+     * @since  101.0.0
+     */
+    protected function customizeUrlKeyField(array $meta): array
+    {
+        $tooltip = [
+            'link' => 'https://docs.magento.com/user-guide/catalog/catalog-urls.html',
+            'description' => __(
+                'The URL key should consist of lowercase characters with hyphens to separate words.'
+            ),
+        ];
+        $switcherConfig = [
+            'tooltip' => $tooltip,
+        ];
+
+        $path = $this->arrayManager->findPath(ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY, $meta, null, 'children');
+        $meta = $this->arrayManager->merge($path . static::META_CONFIG_PATH, $meta, $switcherConfig);
+
+        return $meta;
     }
 
     /**
