@@ -17,6 +17,7 @@
             <testCaseId value="MC-15868"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
