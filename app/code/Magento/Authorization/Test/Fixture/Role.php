@@ -27,10 +27,7 @@ class Role implements RevertibleDataFixtureInterface
         'role_name' => 'Role Name %uniqid%',
         'role_type' => Group::ROLE_TYPE,
         'user_id' => 0,
-        'user_type' => UserContextInterface::USER_TYPE_ADMIN,
-        'gws_is_all' => 1,
-        'gws_websites' => null,
-        'gws_store_groups' => null
+        'user_type' => UserContextInterface::USER_TYPE_ADMIN
     ];
 
     /**
