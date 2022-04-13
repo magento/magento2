@@ -7,62 +7,79 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminDeleteGroupedProductTest">
+    <test name="AdminCreateGroupedProductTest">
         <annotations>
             <features value="GroupedProduct"/>
-            <stories value="Delete product"/>
-            <title value="Delete Grouped Product"/>
-            <description value="Admin should be able to delete a grouped product"/>
-            <testCaseId value="MC-11019"/>
-            <severity value="CRITICAL"/>
+            <stories value="Create product"/>
+            <title value="Admin Create Grouped Product"/>
+            <description value="Admin should be able to create a grouped product"/>
+            <testCaseId value="MC-26602"/>
+            <severity value="MAJOR"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <createData entity="ApiProductWithDescription" stepKey="createSimpleProduct"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <createData entity="ApiGroupedProduct2" stepKey="createGroupedProduct">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
-                <requiredEntity createDataKey="createGroupedProduct"/>
-                <requiredEntity createDataKey="createSimpleProduct"/>
-            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createProductOne"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProductTwo"/>
         </before>
-        <after>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-        </after>
-        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteGroupedProductFilteredBySkuAndName">
-            <argument name="product" value="$$createGroupedProduct$$"/>
+        <!--  <after>
+              <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteGroupedProduct">
+                  <argument name="sku" value="{{GroupedProduct.sku}}"/>
+              </actionGroup>
+              <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+              <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
+              <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
+              <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+          </after> -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!-- Create Grouped product via Admin  -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="GroupedProduct"/>
         </actionGroup>
-        <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="deleteMessage">
-            <argument name="message" value="A total of 1 record(s) have been deleted."/>
+
+        <!-- Entering Product name,SKU, category, url key -->
+        <actionGroup ref="FillAdminGroupedProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="GroupedProduct"/>
+            <argument name="categoryName" value="$$createCategory.name$$"/>
         </actionGroup>
-        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
-        <!--Verify product on Product Page -->
-        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="amOnGroupedProductPage">
-            <argument name="productUrl" value="$$createGroupedProduct.custom_attributes[url_key]$$"/>
+
+        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
+        <click selector="body" stepKey="clickBodyToCorrectFocusGrouped"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
+        <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModal"/>
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterGroupedProducts">
+            <argument name="sku" value="$$createProductOne.sku$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAssertPageNotFoundErrorOnProductDetailPageActionGroup" stepKey="seeWhoops">
-            <argument name="product" value="$$createGroupedProduct$$"/>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="checkFilterResult1"/>
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterGroupedProductsSecond">
+            <argument name="sku" value="$$createProductTwo.sku$$"/>
         </actionGroup>
-        <!--Search for the product by sku-->
-        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchByCreatedTerm">
-            <argument name="query" value="$$createGroupedProduct.sku$$"/>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="checkFilterResult2"/>
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
+
+        <actionGroup ref="FillDefaultQuantityForLinkedToGroupProductInGridActionGroup" stepKey="fillDefaultQtyForSimpleProduct">
+            <argument name="productName" value="$$createProductOne.name$$"/>
+            <argument name="qty" value="1"/>
         </actionGroup>
-        <!-- Should not see any search results -->
-       <actionGroup ref="AssertStorefrontProductNotOnSearchPageActionGroup" stepKey="dontSeeProduct">
-            <argument name="productSku" value="$$createGroupedProduct.sku$$"/>
+        <actionGroup ref="FillDefaultQuantityForLinkedToGroupProductInGridActionGroup" stepKey="fillDefaultQtyForSimpleProduct2">
+            <argument name="productName" value="$$createProductTwo.name$$"/>
+            <argument name="qty" value="1"/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontNoResultsMessageOnSearchPageActionGroup" stepKey="seeCantFindProductOneMessage"/>
-        <!-- Go to the category page that we created in the before block -->
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onCategoryPage"/>
-        <actionGroup ref="AssertStorefrontProductAbsentOnCategoryPageActionGroup" stepKey="dontSeeProductInCategory">
-            <argument name="categoryUrlKey" value="$$createCategory.name$$"/>
-            <argument name="productName" value="$$createGroupedProduct.name$$"/>
+
+
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeEmptyProductMessage"/>
+
+        <!--Verify grouped product on storefront.
+        <amOnPage url="{{StorefrontHomePage.url}}/{{customStore.code}}/$$category.custom_attributes[url_key]$$.html" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <see userInput="$$groupedProduct.name$$" stepKey="assertProductPresent"/>
+        <see userInput="$$simpleProduct.price$$" stepKey="assertProductPricePresent"/> -->
+
     </test>
 </tests>
