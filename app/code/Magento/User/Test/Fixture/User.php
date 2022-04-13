@@ -23,7 +23,7 @@ class User implements RevertibleDataFixtureInterface
         'username' => 'adminuser%uniqid%',
         'firstname' => 'Firstname %uniqid%',
         'lastname' => 'Lastname %uniqid%',
-        'email' => 'admin_user_%uniqid%@email.com',
+        'email' => 'adminUser%uniqid%@example.com',
         'password' => Bootstrap::ADMIN_PASSWORD,
         'interface_locale' => 'en_US',
         'is_active' => 1
