@@ -38,7 +38,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Value that means all entities (e.g. websites, groups etc.)
      */
-    const VALUE_ALL = 'all';
+    public const VALUE_ALL = 'all';
 
     /**
      * Permanent column names.
@@ -46,25 +46,25 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Names that begins with underscore is not an attribute. This name convention is for
      * to avoid interference with same attribute name.
      */
-    const COL_STORE = '_store';
+    public const COL_STORE = '_store';
 
-    const COL_ATTR_SET = '_attribute_set';
+    public const COL_ATTR_SET = '_attribute_set';
 
-    const COL_TYPE = '_type';
+    public const COL_TYPE = '_type';
 
-    const COL_PRODUCT_WEBSITES = '_product_websites';
+    public const COL_PRODUCT_WEBSITES = '_product_websites';
 
-    const COL_CATEGORY = '_category';
+    public const COL_CATEGORY = '_category';
 
-    const COL_ROOT_CATEGORY = '_root_category';
+    public const COL_ROOT_CATEGORY = '_root_category';
 
-    const COL_SKU = 'sku';
+    public const COL_SKU = 'sku';
 
-    const COL_VISIBILITY = 'visibility';
+    public const COL_VISIBILITY = 'visibility';
 
-    const COL_MEDIA_IMAGE = '_media_image';
+    public const COL_MEDIA_IMAGE = '_media_image';
 
-    const COL_ADDITIONAL_ATTRIBUTES = 'additional_attributes';
+    public const COL_ADDITIONAL_ATTRIBUTES = 'additional_attributes';
 
     /**
      * Pairs of attribute set ID-to-name.
@@ -123,14 +123,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_storeIdToCode = [];
 
     /**
-     * Website ID-to-code.
+     * Array of Website ID-to-code.
      *
      * @var array
      */
     protected $_websiteIdToCode = [];
 
     /**
-     * Attribute types
+     * Attributes type
      *
      * @var array
      */
@@ -285,6 +285,18 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     ];
 
     /**
+     * Image labels array
+     *
+     * @var array
+     */
+    private $imageLabelAttributes = [
+        'base_image_label',
+        'small_image_label',
+        'thumbnail_image_label',
+        'swatch_image_label',
+    ];
+
+    /**
      * Attributes codes which are appropriate for export and not the part of additional_attributes.
      *
      * @var array
@@ -346,7 +358,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $metadataPool;
 
     /**
-     * Product entity link field
+     * Link field of Product entity
      *
      * @var string
      */
@@ -828,12 +840,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             switch ($lastMemoryLimitLetter) {
                 case 'g':
                     $memoryLimit *= 1024;
-                    // fall-through intentional
-                    // no break
+                // fall-through intentional
+                // no break
                 case 'm':
                     $memoryLimit *= 1024;
-                    // fall-through intentional
-                    // no break
+                // fall-through intentional
+                // no break
                 case 'k':
                     $memoryLimit *= 1024;
                     break;
@@ -962,6 +974,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         $dataRow = array_merge($dataRow, $stockItemRows[$productId]);
                     }
+                    $this->updateGalleryImageData($dataRow, $rawData);
                     $this->appendMultirowData($dataRow, $multirawData);
                     if ($dataRow) {
                         $exportData[] = $dataRow;
@@ -1368,6 +1381,29 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $dataRow[self::COL_TYPE] = $type;
 
         return $dataRow;
+    }
+
+    /**
+     * Add image column if image label exists for all scope
+     *
+     * @param array $dataRow
+     * @param array $rawData
+     * @return void
+     */
+    private function updateGalleryImageData(&$dataRow, $rawData)
+    {
+        $storeId = $dataRow['store_id'];
+        $productId = $dataRow['product_id'];
+        foreach ($this->imageLabelAttributes as $imageLabelCode) {
+            $imageAttributeCode = str_replace('_label', '', $imageLabelCode);
+            if ($storeId != Store::DEFAULT_STORE_ID
+                && isset($dataRow[$imageLabelCode])
+                && $dataRow[$imageLabelCode]
+                && (!isset($dataRow[$imageAttributeCode]) || !$dataRow[$imageAttributeCode])
+            ) {
+                $dataRow[$imageAttributeCode] = $rawData[$productId][Store::DEFAULT_STORE_ID][$imageAttributeCode];
+            }
+        }
     }
 
     /**
