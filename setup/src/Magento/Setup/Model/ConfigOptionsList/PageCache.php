@@ -153,7 +153,7 @@ class PageCache implements ConfigOptionsListInterface
         $configData = new ConfigData(ConfigFilePool::APP_ENV);
         if (isset($options[self::INPUT_KEY_PAGE_CACHE_ID_PREFIX])) {
             $configData->set(self::CONFIG_PATH_PAGE_CACHE_ID_PREFIX, $options[self::INPUT_KEY_PAGE_CACHE_ID_PREFIX]);
-        } else {
+        } elseif (!$deploymentConfig->get(self::CONFIG_PATH_PAGE_CACHE_ID_PREFIX)) {
             $configData->set(self::CONFIG_PATH_PAGE_CACHE_ID_PREFIX, $this->generateCachePrefix());
         }
 
