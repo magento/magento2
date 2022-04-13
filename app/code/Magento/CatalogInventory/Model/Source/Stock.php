@@ -9,6 +9,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Model\Stock as StockModel;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\EntityManager\MetadataPool;
 
@@ -29,12 +30,12 @@ class Stock extends AbstractSource
     private $metadataPool;
 
     /**
-     * @param MetadataPool $metadataPool
+     * @param MetadataPool|null $metadataPool
      */
     public function __construct(
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool = null
     ) {
-        $this->metadataPool = $metadataPool;
+        $this->metadataPool = $metadataPool ?? ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**
