@@ -21,7 +21,7 @@ class User implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
         'username' => 'adminuser%uniqid%',
-        'firstname' => 'Firstname %uniqid%',
+        'firstname' => 'AdminFirstname%uniqid%',
         'lastname' => 'Lastname %uniqid%',
         'email' => 'adminUser%uniqid%@example.com',
         'password' => Bootstrap::ADMIN_PASSWORD,
