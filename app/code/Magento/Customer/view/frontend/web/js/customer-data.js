@@ -17,9 +17,7 @@ define([
 ], function ($, _, ko, sectionConfig, url) {
     'use strict';
 
-    var options = {
-            cookieLifeTime: 86400 //1 day by default
-        },
+    var options = {},
         storage,
         storageInvalidation,
         invalidateCacheBySessionTimeOut,
@@ -31,22 +29,6 @@ define([
 
     url.setBaseUrl(window.BASE_URL);
     options.sectionLoadUrl = url.build('customer/section/load');
-
-    /**
-     * Storage initialization
-     */
-    function initStorage() {
-        $.cookieStorage.setConf({
-            path: '/',
-            expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000),
-            samesite: 'lax'
-        });
-        storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
-        storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
-    }
-
-    // Initialize storage with default parameters to prevent JS errors while component still not initialized
-    initStorage();
 
     /**
      * @param {Object} invalidateOptions
@@ -235,7 +217,14 @@ define([
         /**
          * Storage init
          */
-        initStorage: initStorage,
+        initStorage: function () {
+            $.cookieStorage.setConf({
+                path: '/',
+                expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000)
+            });
+            storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
+            storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
+        },
 
         /**
          * Retrieve the list of sections that has expired since last page reload.
@@ -400,10 +389,7 @@ define([
          */
         'Magento_Customer/js/customer-data': function (settings) {
             options = settings;
-
-            // re-init storage with a new settings
             customerData.initStorage();
-
             invalidateCacheBySessionTimeOut(settings);
             invalidateCacheByCloseCookieSession();
             customerData.init();
