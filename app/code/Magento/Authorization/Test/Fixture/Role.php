@@ -82,7 +82,7 @@ class Role implements RevertibleDataFixtureInterface
     {
 
         $role = $this->roleFactory->create();
-        $role->load($data->getData('role_name'), 'role_name');
+        $role->load($data->getId());
 
         if ($role->getId() !== null) {
             $role->delete();
