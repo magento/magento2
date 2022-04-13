@@ -30,6 +30,12 @@ class Role implements RevertibleDataFixtureInterface
         'user_type' => UserContextInterface::USER_TYPE_ADMIN
     ];
 
+    private const DEFAULT_DATA_RULES = [
+        'id' => null,
+        'role_id' => null,
+        'resources' => ['Magento_Backend::all']
+    ];
+
     /**
      * @var RoleFactory
      */
@@ -46,17 +52,25 @@ class Role implements RevertibleDataFixtureInterface
     private $roleResourceModel;
 
     /**
+     * @var RulesFactory
+     */
+    private $rulesFactory;
+
+    /**
      * @param RoleFactory $roleFactory
      * @param RoleResource $roleResourceModel
+     * @param RulesFactory $rulesFactory
      * @param ProcessorInterface $dataProcessor
      */
     public function __construct(
         RoleFactory        $roleFactory,
         RoleResource       $roleResourceModel,
+        RulesFactory       $rulesFactory,
         ProcessorInterface $dataProcessor
     ) {
         $this->roleFactory = $roleFactory;
         $this->roleResourceModel = $roleResourceModel;
+        $this->rulesFactory = $rulesFactory;
         $this->dataProcessor = $dataProcessor;
     }
 
@@ -66,8 +80,14 @@ class Role implements RevertibleDataFixtureInterface
     public function apply(array $data = []): ?DataObject
     {
         $role = $this->roleFactory->create();
-        $role->setData($this->prepareData($data));
+        $role->setData($this->prepareData(array_diff_key($data, self::DEFAULT_DATA_RULES)));
         $this->roleResourceModel->save($role);
+
+        $rules = $this->rulesFactory->create();
+        $data = array_diff_key($data, self::DEFAULT_DATA);
+        $rules->setRoleId($role->getId() ?? null);
+        $rules->setResources($data['resources'] ?? []);
+        $rules->saveRel();
 
         return $role;
     }
