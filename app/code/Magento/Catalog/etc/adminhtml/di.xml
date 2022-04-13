@@ -162,6 +162,10 @@
                     <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\LayoutUpdate</item>
                     <item name="sortOrder" xsi:type="number">160</item>
                 </item>
+                <item name="seo_update" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Seo</item>
+                    <item name="sortOrder" xsi:type="number">170</item>
+                </item>
             </argument>
         </arguments>
     </virtualType>
