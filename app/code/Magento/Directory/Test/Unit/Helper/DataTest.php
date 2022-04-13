@@ -293,6 +293,7 @@ class DataTest extends TestCase
     {
         return [
             'empty_list' => ['', []],
+            'null_list' => [null, []],
             'normal_list' => ['Country1,Country2', ['Country1', 'Country2']]
         ];
     }
