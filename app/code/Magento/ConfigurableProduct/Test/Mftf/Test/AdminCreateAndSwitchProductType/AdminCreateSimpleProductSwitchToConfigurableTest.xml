@@ -17,6 +17,7 @@
             <useCaseId value="MAGETWO-44165"/>
             <testCaseId value="MAGETWO-29398"/>
             <group value="catalog"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
