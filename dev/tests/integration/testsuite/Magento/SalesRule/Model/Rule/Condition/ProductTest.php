@@ -136,8 +136,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      * @magentoDataFixture Magento/SalesRule/_files/rules_parent_category.php
+     * @dataProvider conditionsDataProvider
      */
-    public function testValidateParentCategoryWithConfigurable()
+    public function testValidateParentCategoryWithConfigurable(array $conditions, bool $expected): void
     {
         $quote = $this->getQuote('test_cart_with_configurable');
         $registry = $this->objectManager->get(Registry::class);
@@ -145,10 +146,152 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $rule = $this->objectManager->create(Rule::class);
         $ruleId = $registry->registry('50% Off on Configurable parent category');
         $rule->load($ruleId);
+        $rule->getConditions()->setConditions([])->loadArray(
+            [
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
+                'attribute' => null,
+                'operator' => null,
+                'value' => '1',
+                'is_value_processed' => null,
+                'aggregator' => 'all',
+                'conditions' => $conditions
+            ]
+        );
+        $rule->save();
 
-        $this->assertFalse(
-            $rule->validate($quote->getBillingAddress()),
+        $this->assertEquals(
+            $expected,
+            $rule->validate($quote->getShippingAddress()),
             'Cart price rule validation failed.'
         );
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return array
+     */
+    public function conditionsDataProvider(): array
+    {
+        return [
+            'If total quantity  is 1 for a subselection of items in cart matching ALL of these conditions: ' .
+            'Category (Parent Only) is not "Default Category"' => [
+                'conditions' => [
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Subselect::class,
+                        'attribute' => 'qty',
+                        'operator' => '==',
+                        'value' => '1',
+                        'is_value_processed' => null,
+                        'aggregator' => 'all',
+                        'conditions' =>
+                            [
+                                [
+                                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                                    'attribute' => 'category_ids',
+                                    'attribute_scope' => 'parent',
+                                    'operator' => '!=',
+                                    'value' => '2',
+                                    'is_value_processed' => false,
+                                ],
+                            ],
+                    ],
+                ],
+                'expected' => false
+            ],
+            'If total quantity  is 1 for a subselection of items in cart matching ALL of these conditions: ' .
+            'Category (Parent Only) is "Default Category"' => [
+                'conditions' => [
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Subselect::class,
+                        'attribute' => 'qty',
+                        'operator' => '==',
+                        'value' => '1',
+                        'is_value_processed' => null,
+                        'aggregator' => 'all',
+                        'conditions' =>
+                            [
+                                [
+                                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                                    'attribute' => 'category_ids',
+                                    'attribute_scope' => 'parent',
+                                    'operator' => '==',
+                                    'value' => '2',
+                                    'is_value_processed' => false,
+                                ],
+                            ],
+                    ],
+                ],
+                'expected' => true
+            ],
+            'If an item is found in the cart with all these conditions true: ' .
+            'Category (Parent Only) is not "Default Category"' => [
+                'conditions' => [
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+                        'value' => '1',
+                        'is_value_processed' => null,
+                        'aggregator' => 'all',
+                        'conditions' =>
+                            [
+                                [
+                                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                                    'attribute' => 'category_ids',
+                                    'attribute_scope' => 'parent',
+                                    'operator' => '!=',
+                                    'value' => '2',
+                                    'is_value_processed' => false,
+                                ],
+                            ],
+                    ],
+                ],
+                'expected' => false
+            ],
+            'If an item is found in the cart with all these conditions true: ' .
+            'Category (Parent Only) is "Default Category"' => [
+                'conditions' => [
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+                        'value' => '1',
+                        'is_value_processed' => null,
+                        'aggregator' => 'all',
+                        'conditions' =>
+                            [
+                                [
+                                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                                    'attribute' => 'category_ids',
+                                    'attribute_scope' => 'parent',
+                                    'operator' => '==',
+                                    'value' => '2',
+                                    'is_value_processed' => false,
+                                ],
+                            ],
+                    ],
+                ],
+                'expected' => true
+            ],
+            'If an item is not found in the cart with all these conditions true: ' .
+            'Category (Parent Only) is "Default Category"' => [
+                'conditions' => [
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+                        'value' => '0',
+                        'is_value_processed' => null,
+                        'aggregator' => 'all',
+                        'conditions' =>
+                            [
+                                [
+                                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                                    'attribute' => 'category_ids',
+                                    'attribute_scope' => 'parent',
+                                    'operator' => '==',
+                                    'value' => '2',
+                                    'is_value_processed' => false,
+                                ],
+                            ],
+                    ],
+                ],
+                'expected' => false
+            ],
+        ];
     }
 }

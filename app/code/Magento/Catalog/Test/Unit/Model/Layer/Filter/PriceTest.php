@@ -203,7 +203,17 @@ class PriceTest extends TestCase
 
         $this->request
             ->method('getParam')
-            ->with($requestField);
+            ->with($requestField)
+            ->willReturnCallback(
+                function ($field) use ($requestField, $idField, $requestValue, $idValue) {
+                    switch ($field) {
+                        case $requestField:
+                            return $requestValue;
+                        case $idField:
+                            return $idValue;
+                    }
+                }
+            );
 
         $result = $this->target->apply($this->request);
         $this->assertSame($this->target, $result);

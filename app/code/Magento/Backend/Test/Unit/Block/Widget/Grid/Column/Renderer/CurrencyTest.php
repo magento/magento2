@@ -72,7 +72,7 @@ class CurrencyTest extends TestCase
 
         $this->_curLocatorMock = $this->createMock(DefaultLocator::class);
         $this->_columnMock = $this->getMockBuilder(Column::class)
-            ->addMethods(['getIndex'])
+            ->addMethods(['getIndex', 'getCurrency', 'getRateField'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->_columnMock->expects($this->any())->method('getIndex')->willReturn('columnIndex');
@@ -115,45 +115,25 @@ class CurrencyTest extends TestCase
      */
     public function testRenderWithDefaultCurrency()
     {
-        $this->_currencyMock->expects(
-            $this->once()
-        )->method(
-            'getRate'
-        )->with(
-            'defaultCurrency'
-        )->willReturn(
-            1.5
-        );
-
-        $this->_curLocatorMock->expects(
-            $this->any()
-        )->method(
-            'getDefaultCurrency'
-        )->with(
-            $this->_requestMock
-        )->willReturn(
-            'defaultCurrency'
-        );
-
+        $this->_currencyMock->expects($this->once())
+            ->method('getRate')
+            ->with('defaultCurrency')
+            ->willReturn(1.5);
+        $this->_curLocatorMock->expects($this->any())
+            ->method('getDefaultCurrency')
+            ->with($this->_requestMock)
+            ->willReturn('defaultCurrency');
         $currLocaleMock = $this->createMock(\Zend_Currency::class);
-        $currLocaleMock->expects(
-            $this->once()
-        )->method(
-            'toCurrency'
-        )->with(
-            15.0000
-        )->willReturn(
-            '15USD'
-        );
-        $this->_localeMock->expects(
-            $this->once()
-        )->method(
-            'getCurrency'
-        )->with(
-            'defaultCurrency'
-        )->willReturn(
-            $currLocaleMock
-        );
+        $currLocaleMock->expects($this->once())
+            ->method('toCurrency')
+            ->with(15.0000)
+            ->willReturn('15USD');
+        $this->_localeMock->expects($this->once())
+            ->method('getCurrency')
+            ->with('defaultCurrency')
+            ->willReturn($currLocaleMock);
+        $this->_columnMock->method('getCurrency')->willReturn('USD');
+        $this->_columnMock->method('getRateField')->willReturn('test_rate_field');
 
         $this->assertEquals('15USD', $this->_blockCurrency->render($this->_row));
     }

@@ -153,8 +153,8 @@ class NameTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testShowPrefixWithException(): void
     {
         $this->customerMetadata->expects(
@@ -221,8 +221,8 @@ class NameTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testShowMiddlename(): void
     {
         $this->_setUpShowAttribute([Customer::MIDDLENAME => self::MIDDLENAME]);
@@ -230,8 +230,8 @@ class NameTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIsMiddlenameRequired(): void
     {
         $this->_setUpIsAttributeRequired();
@@ -239,8 +239,8 @@ class NameTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testShowSuffix(): void
     {
         $this->_setUpShowAttribute([Customer::SUFFIX => self::SUFFIX]);
@@ -248,8 +248,8 @@ class NameTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIsSuffixRequired(): void
     {
         $this->_setUpIsAttributeRequired();
@@ -257,8 +257,8 @@ class NameTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetPrefixOptionsNotEmpty(): void
     {
         /**
@@ -291,8 +291,8 @@ class NameTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetPrefixOptionsEmpty(): void
     {
         $customer = $this->getMockBuilder(
@@ -312,8 +312,8 @@ class NameTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetSuffixOptionsNotEmpty(): void
     {
         /**
@@ -345,8 +345,8 @@ class NameTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetSuffixOptionsEmpty(): void
     {
         $customer = $this->getMockBuilder(
@@ -366,8 +366,8 @@ class NameTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetClassName(): void
     {
         /** Test the default case when the block has no data set for the class name. */
@@ -455,8 +455,8 @@ class NameTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetStoreLabelWithException(): void
     {
         $this->customerMetadata->expects(

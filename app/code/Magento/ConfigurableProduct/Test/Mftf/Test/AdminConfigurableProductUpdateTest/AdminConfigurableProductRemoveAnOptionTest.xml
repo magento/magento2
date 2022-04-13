@@ -114,7 +114,9 @@
             <argument name="product" value="$createConfigProduct$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait4"/>
-        <dontSee selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option1" stepKey="dontSeeOption1InStorefront"/>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionNotVisibleActionGroup" stepKey="dontSeeOption1InStorefront">
+            <argument name="productAttributeOption" value="option1"/>
+        </actionGroup>
         <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeOption2Again">
             <argument name="productAttributeOption" value="option2"/>
         </actionGroup>

@@ -36,7 +36,7 @@ use Psr\Log\LoggerInterface;
  */
 class IndexBuilder
 {
-    const SECONDS_IN_DAY = 86400;
+    public const SECONDS_IN_DAY = 86400;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
@@ -259,7 +259,6 @@ class IndexBuilder
      * @param int $id
      * @throws LocalizedException
      * @return void
-     * @api
      */
     public function reindexById($id)
     {
@@ -287,7 +286,6 @@ class IndexBuilder
      * @param array $ids
      * @throws LocalizedException
      * @return void
-     * @api
      */
     public function reindexByIds(array $ids)
     {
@@ -331,7 +329,6 @@ class IndexBuilder
      *
      * @throws LocalizedException
      * @return void
-     * @api
      */
     public function reindexFull()
     {

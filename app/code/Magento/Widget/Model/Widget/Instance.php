@@ -377,7 +377,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      */
     public function getType()
     {
-        return $this->_getData('instance_type');
+        return (string) $this->_getData('instance_type');
     }
 
     /**
@@ -706,7 +706,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     /**
      * Check if widget parameter doesn't contains payload
      *
-     * @param $param
+     * @param string $param
      * @throws LocalizedException
      */
     private function validateWidgetParameters(string $param): void

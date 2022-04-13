@@ -65,7 +65,7 @@ class DependencyDecorator implements IndexerInterface
     public function __call(string $method, array $args)
     {
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
-        return call_user_func_array([$this->indexer, $method], $args);
+        return call_user_func_array([$this->indexer, $method], array_values($args));
     }
 
     /**

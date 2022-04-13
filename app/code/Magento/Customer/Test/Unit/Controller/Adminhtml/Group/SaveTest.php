@@ -164,8 +164,8 @@ class SaveTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteWithTaxClassAndException(): void
     {
         $taxClass = '3';
@@ -240,8 +240,8 @@ class SaveTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteWithoutTaxClass(): void
     {
         $this->requestMock->expects(self::once())

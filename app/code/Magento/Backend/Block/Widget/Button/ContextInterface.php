@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Widget\Button;
 /**
  * Interface \Magento\Backend\Block\Widget\Button\ContextInterface
  *
+ * @api
  */
 interface ContextInterface
 {
@@ -17,7 +18,6 @@ interface ContextInterface
      *
      * @param \Magento\Backend\Block\Widget\Button\Item $item
      * @return bool
-     * @api
      */
     public function canRender(\Magento\Backend\Block\Widget\Button\Item $item);
 }

@@ -325,8 +325,8 @@ class DataTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testLoadVariationByFallback(): void
     {
         $metadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
@@ -392,8 +392,8 @@ class DataTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testLoadFirstVariationWithImageNoProduct(): void
     {
         $result = $this->swatchHelperObject->loadVariationByFallback($this->productMock, ['color' => 31]);
@@ -401,8 +401,8 @@ class DataTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testLoadVariationByFallbackWithoutProduct(): void
     {
         $result = $this->swatchHelperObject->loadFirstVariationWithImage($this->productMock, ['color' => 31]);
@@ -492,8 +492,8 @@ class DataTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     protected function getSwatchAttributes(): void
     {
         $this->getAttributesFromConfigurable();
@@ -553,8 +553,8 @@ class DataTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     protected function getAttributesFromConfigurable(): void
     {
         $confAttribute = $this->createMock(
@@ -575,8 +575,8 @@ class DataTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     protected function prepareVariationCollection(): void
     {
         $this->productCollectionFactoryMock
@@ -588,8 +588,8 @@ class DataTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     protected function addfilterByParent(): void
     {
         $this->productCollectionMock
@@ -721,8 +721,8 @@ class DataTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetSwatchesByOptionsIdIf1(): void
     {
         //Simulate behaviour of \Magento\Swatches\Model\Swatch as array item
@@ -777,8 +777,8 @@ class DataTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetSwatchesByOptionsIdIf2(): void
     {
         //Simulate behaviour of \Magento\Swatches\Model\Swatch as array item
@@ -836,8 +836,8 @@ class DataTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetSwatchesByOptionsIdIf3(): void
     {
         //Simulate behaviour of \Magento\Swatches\Model\Swatch as array item
@@ -878,8 +878,8 @@ class DataTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIsProductHasSwatch(): void
     {
         $this->getSwatchAttributes();

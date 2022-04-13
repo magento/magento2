@@ -24,6 +24,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use ReflectionMethod;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SubscriptionTest extends TestCase
 {
     /**
@@ -124,7 +127,6 @@ class SubscriptionTest extends TestCase
                     ]
                 ]
             ]);
-        $this->mviewConfig = $mviewConfigMock;
         $this->model = new Subscription(
             $this->resourceMock,
             $this->triggerFactoryMock,
@@ -199,8 +201,7 @@ class SubscriptionTest extends TestCase
                 ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);"],
                 ["INSERT IGNORE INTO test_view_cl (entity_id) VALUES (OLD.columnName);"],
                 ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (OLD.columnName);"]
-            )
-            ->willReturnOnConsecutiveCalls($triggerMock, $triggerMock, $triggerMock, $triggerMock, $triggerMock, $triggerMock);
+            )->willReturn($triggerMock);
 
         $changelogMock = $this->getMockForAbstractClass(
             ChangelogInterface::class,

@@ -546,7 +546,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             $attr = $model->getResource()->getAttribute($attrCode);
 
             if ($attr && $attr->getBackendType() == 'datetime' && !is_int($this->getValue())) {
-                $this->setValue(strtotime($this->getValue()));
+                $this->setValue(strtotime((string) $this->getValue()));
                 $value = strtotime($model->getData($attrCode));
                 return $this->validateAttribute($value);
             }

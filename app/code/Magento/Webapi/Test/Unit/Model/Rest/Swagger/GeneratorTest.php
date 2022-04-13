@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Webapi\Test\Unit\Model\Rest\Swagger;
 
+use Magento\Framework\App\ProductMetadata;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -62,6 +63,14 @@ class GeneratorTest extends TestCase
      */
     private $serializer;
 
+    /**
+     * @var ProductMetadata|MockObject
+     */
+    private $productMetadata;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->serviceMetadataMock = $this->getMockBuilder(
@@ -127,6 +136,7 @@ class GeneratorTest extends TestCase
                     return json_encode($value);
                 }
             );
+        $this->productMetadata = $this->createMock(ProductMetadata::class);
 
         $this->generator = $this->objectManager->getObject(
             Generator::class,
@@ -137,7 +147,8 @@ class GeneratorTest extends TestCase
                 'serviceMetadata' => $this->serviceMetadataMock,
                 'serviceTypeList' => $this->customAttributeTypeLocatorMock,
                 'authorization' => $authorizationMock,
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'productMetadata' => $this->productMetadata
             ]
         );
     }
@@ -168,6 +179,10 @@ class GeneratorTest extends TestCase
                     ['int', true],
                 ]
             );
+
+        $this->productMetadata->expects($this->once())
+            ->method('getVersion')
+            ->willReturn('UNKNOWN');
 
         $this->assertEquals(
             $schema,
@@ -309,7 +324,7 @@ class GeneratorTest extends TestCase
                             ],
                         ],
                     ],
-                    'class' => \Magento\TestModule5\Service\V2\AllSoapAndRestInterface::class,
+                    'class' => 'Magento\TestModule5\Service\V2\AllSoapAndRestInterface',
                     'description' => 'AllSoapAndRestInterface',
                     'routes' => [
                         '/V1/testModule5' => [
@@ -362,7 +377,7 @@ class GeneratorTest extends TestCase
                             ],
                         ],
                     ],
-                    'class' => \Magento\TestModule5\Service\V2\AllSoapAndRestInterface::class,
+                    'class' => 'Magento\TestModule5\Service\V2\AllSoapAndRestInterface',
                     'description' => 'AllSoapAndRestInterface',
                     'routes' => [
                         '/V1/testModule5' => [

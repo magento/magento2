@@ -101,8 +101,8 @@ class OnepageTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDispatch(): void
     {
         $this->request->expects($this->once())
