@@ -97,7 +97,6 @@ class Role implements RevertibleDataFixtureInterface
      */
     public function revert(DataObject $data): void
     {
-
         $role = $this->roleFactory->create();
         $role->load($data->getId());
 
