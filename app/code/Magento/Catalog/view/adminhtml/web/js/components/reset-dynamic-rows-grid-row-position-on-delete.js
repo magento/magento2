@@ -13,11 +13,15 @@ define([
 
     return dynamicRowsGrid.extend({
 
+        /** @inheritdoc */
         deleteRecord: function () {
             this._super();
             this.resetPosition();
         },
 
+        /**
+         * Reset the position on delete of the record.
+         */
         resetPosition() {
             let self = this,
                 position = 0;
@@ -35,6 +39,7 @@ define([
             });
         },
 
+        /** @inheritdoc */
         nextPage: function () {
             this._super();
             resolver(function () {

@@ -12,8 +12,8 @@
         <annotations>
             <features value="Catalog"/>
             <stories value="[Magento Cloud] Removing cross sell products the position count is not being reset"/>
-            <title value="Admin to validate cross sell position value in products export csv"/>
-            <description value="Admin to validate cross sell position value in products export csv"/>
+            <title value="Admin to validate related, upsell and cross sell position value in products export csv"/>
+            <description value="Admin to validate related, upsell and cross sell position value in products export csv"/>
             <severity value="AVERAGE"/>
             <testCaseId value="AC-2844"/>
             <useCaseId value="ACP2E-676"/>
