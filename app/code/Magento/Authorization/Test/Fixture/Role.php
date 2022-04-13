@@ -84,9 +84,8 @@ class Role implements RevertibleDataFixtureInterface
         $this->roleResourceModel->save($role);
 
         $rules = $this->rulesFactory->create();
-        $data = array_diff_key($data, self::DEFAULT_DATA);
         $rules->setRoleId($role->getId() ?? null);
-        $rules->setResources($data['resources'] ?? []);
+        $rules->setResources($data['resources'] ?? self::DEFAULT_DATA_RULES['resources']);
         $rules->saveRel();
 
         return $role;
