@@ -87,6 +87,11 @@ class TokenReader implements TokenReaderInterface
     private Json $json;
 
     /**
+     * @var OauthHelper
+     */
+    private OauthHelper $oauthHelper;
+
+    /**
      * @param JwtManagerInterface $jwtManager
      * @param CacheInterface $cache
      * @param ImsConfig $imsConfig
@@ -95,7 +100,6 @@ class TokenReader implements TokenReaderInterface
      * @param DateTime $dateTime
      * @param File $driver
      * @param Json $json
-     * @param File $driver
      * @param OauthHelper $oauthHelper
      */
     public function __construct(

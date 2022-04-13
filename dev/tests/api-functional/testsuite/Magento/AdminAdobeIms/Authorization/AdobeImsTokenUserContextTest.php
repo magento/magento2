@@ -78,6 +78,11 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     private $imsWebapiRepository;
 
     /**
+     * @var EncryptorInterface
+     */
+    private EncryptorInterface $encryptor;
+
+    /**
      * @return void
      */
     protected function setUp(): void

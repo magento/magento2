@@ -149,10 +149,22 @@ These admin user credentials are needed for getting token that can be used to ma
 It means that will be not possible to create token because admin doesn't have credentials. In these case we have to use IMS access token.
 
 `\Magento\AdminAdobeIms\Model\Authorization\AdobeImsTokenUserContext` new implementation for `\Magento\Authorization\Model\UserContextInterface` was created.
-In the implementation IMS access token is read and verified to get adobe user id. If adobe_user_id already exists in adobe_user_profile table, then we can get admin_user_id.
-If adobe_user_id does not exist in adobe_user_profile table, then we have to make request to IMS service to get Adobe user profile, that contain email.
-Using email from Adobe user profile we can check if admin user with these email exists in Magento. If so, we save relevant data into adobe_user_profile table.
+In the implementation IMS access token is validated and read to get created_at and expires_in data. 
+If access_token_hash already exists in admin_adobe_ims_webapi table, then we can get admin_user_id.
+If access_token_hash does not exist in admin_adobe_ims_webapi table, then we have to make request to IMS service to get Adobe user profile, that contain email.
+Using email from Adobe user profile we can check if admin user with these email exists in Magento. If so, we save relevant data into admin_adobe_ims_webapi table.
 If admin user with the email is not found, authentication will fail.
+
+Web Api Token validation via IMS request.
+Each new token (access_token_hash is not exist in admin_adobe_ims_webapi) is validated by using Adobe IMS endpoint validate_token.
+For already existing access_token_hash in admin_adobe_ims_webapi table, validation happens only if last validation was more than 10 min ago.
+Last time validation is saved as last_check_time in admin_adobe_ims_webapi table.
+
+Check if token has expired.
+Access token itself has expires_in value (by default is 24h, but can be adjusted in Adobe side settings).
+Magento has setting: Stores > Settings > Configuration > Services > OAuth > Access Token Expiration (default is 4h).
+Both of values are checked in function isTokenExpired \Magento\AdminAdobeIms\Model\TokenReader.
+it means that with default values is not possible to use tokens that older than 4h.
 
 ###IMS access token verification.
 To verify token a public key is required. For more info https://wiki.corp.adobe.com/display/ims/IMS+public+key+retrieval 

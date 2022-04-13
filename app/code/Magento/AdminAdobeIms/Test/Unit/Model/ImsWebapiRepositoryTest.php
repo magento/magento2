@@ -28,7 +28,8 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Ims Webapi repository test.
+ * Ims Webapi repository test. Test all repository functions.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ImsWebapiRepositoryTest extends TestCase
@@ -329,7 +330,7 @@ class ImsWebapiRepositoryTest extends TestCase
     public function testDeleteWithException(): void
     {
         $adminUserId = 1;
-        $message = 'Could not delete ims tokens for admin user id %1.';
+        $message = 'Could not delete ims tokens for admin user id %d.';
         $this->expectException(CouldNotDeleteException::class);
         $this->expectExceptionMessage(sprintf($message, $adminUserId));
         $collectionInfo = $this->initCollection();
