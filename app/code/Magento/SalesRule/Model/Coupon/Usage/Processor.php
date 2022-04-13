@@ -144,6 +144,11 @@ class Processor
         } elseif ($isIncrement) {
             $ruleCustomer->setCustomerId($customerId)->setRuleId($ruleId)->setTimesUsed(1);
         }
+
+        if (!$ruleCustomer->getId() && !$isIncrement) {
+            return;
+        }
+
         $ruleCustomer->save();
     }
 }
