@@ -128,7 +128,9 @@ abstract class AbstractFiltersTest extends TestCase
                 $this->assertEquals($expectation[$key], $preparedItem);
                 $item = $filter->getItems()[$key];
                 $this->createNavigationBlockInstance();
-                $this->navigationBlock->getRequest()->setParams($this->getRequestParams($item->getValueString()));
+                $this->navigationBlock->getRequest()->setParams(
+                    $this->getRequestParams((string) $item->getValueString())
+                );
                 $this->navigationBlock->getLayer()->setCurrentCategory($category);
                 $this->navigationBlock->setLayout($this->layout);
                 $collectionSize = $this->navigationBlock->getLayer()->getProductCollection()->count();
