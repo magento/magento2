@@ -20,7 +20,7 @@ use Magento\User\Model\ResourceModel\User as UserResource;
 class User implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
-        'username' => 'admin_user_%uniqid%',
+        'username' => 'adminuser%uniqid%',
         'firstname' => 'Firstname %uniqid%',
         'lastname' => 'Lastname %uniqid%',
         'email' => 'admin_user_%uniqid%@email.com',
