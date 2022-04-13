@@ -5,8 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Multishipping\Test\Unit\Model\Cart\Controller;
+namespace Magento\Multishipping\Test\Unit\Model\Cart;
 
+use Magento\Checkout\Controller\Cart;
 use Magento\Checkout\Controller\Sidebar\UpdateItemQty;
 use Magento\Checkout\Model\Session;
 use Magento\Customer\Api\AddressRepositoryInterface;
@@ -14,7 +15,7 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Multishipping\Model\Cart\Controller\MiniCartPlugin;
+use Magento\Multishipping\Model\Cart\MultishippingClearItemAddress;
 use Magento\Multishipping\Model\DisableMultishipping;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
@@ -27,10 +28,10 @@ use PHPUnit\Framework\TestCase;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MiniCartPluginTest extends TestCase
+class MultishippingClearItemAddressTest extends TestCase
 {
     /**
-     * @var MiniCartPlugin
+     * @var MultishippingClearItemAddress
      */
     private $model;
 
@@ -55,7 +56,7 @@ class MiniCartPluginTest extends TestCase
         $this->checkoutSessionMock = $this->createMock(Session::class);
         $this->addressRepositoryMock = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
         $disableMultishippingMock = $this->createMock(DisableMultishipping::class);
-        $this->model = new MiniCartPlugin(
+        $this->model = new MultishippingClearItemAddress(
             $this->cartRepositoryMock,
             $this->checkoutSessionMock,
             $this->addressRepositoryMock,
@@ -64,7 +65,7 @@ class MiniCartPluginTest extends TestCase
     }
 
     /**
-     * Test cart plugin
+     * Test cart and mini cart plugin
      *
      * @param string $actionName
      * @param int $addressId
@@ -73,7 +74,7 @@ class MiniCartPluginTest extends TestCase
      * @throws LocalizedException
      * @dataProvider getDataDataProvider
      */
-    public function testBeforeDispatch(
+    public function testClearAddressItem(
         string $actionName,
         int $addressId,
         int $customerAddressId,
@@ -85,8 +86,7 @@ class MiniCartPluginTest extends TestCase
             'getAllShippingAddresses',
             'removeAddress',
             'getShippingAddress',
-            'getCustomer',
-            'setTotalsCollectedFlag'
+            'getCustomer'
         ]);
         $requestMock->method('getActionName')
             ->willReturn($actionName);
@@ -121,13 +121,13 @@ class MiniCartPluginTest extends TestCase
         $shippingAddressMock->method('importCustomerAddressData')
             ->with($customerAddressMock)
             ->willReturnSelf();
-        $quoteMock->expects($this->once())->method('setTotalsCollectedFlag')->with(false)->willReturnSelf();
+
         $this->cartRepositoryMock->expects($this->any())
             ->method('save')
             ->with($quoteMock);
 
-        $this->model->beforeDispatch(
-            $this->createMock(UpdateItemQty::class),
+        $this->model->clearAddressItem(
+            $this->createMock(Cart::class),
             $requestMock
         );
     }
@@ -139,6 +139,8 @@ class MiniCartPluginTest extends TestCase
     {
         return [
             'test with `add` action and multi shipping address enabled' => ['add', 100, 200, true],
+            'test with `add` action and multi shipping address disabled' => ['add', 100, 200, false],
+            'test with `edit` action and multi shipping address disabled' => ['add', 110, 200, false]
         ];
     }
 }
