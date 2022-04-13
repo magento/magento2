@@ -90,7 +90,7 @@ use Magento\Quote\Model\Quote;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
-class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
+class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Magento\Quote\Api\Data\CartItemInterface
 {
     /**
      * Quote address model object
