@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteGroupedProductTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="Delete product"/>
+            <title value="Delete Grouped Product"/>
+            <description value="Admin should be able to delete a grouped product"/>
+            <testCaseId value="MC-11019"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="ApiProductWithDescription" stepKey="createSimpleProduct"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiGroupedProduct2" stepKey="createGroupedProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteGroupedProductFilteredBySkuAndName">
+            <argument name="product" value="$$createGroupedProduct$$"/>
+        </actionGroup>
+        <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="deleteMessage">
+            <argument name="message" value="A total of 1 record(s) have been deleted."/>
+        </actionGroup>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+        <!--Verify product on Product Page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="amOnGroupedProductPage">
+            <argument name="productUrl" value="$$createGroupedProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertPageNotFoundErrorOnProductDetailPageActionGroup" stepKey="seeWhoops">
+            <argument name="product" value="$$createGroupedProduct$$"/>
+        </actionGroup>
+        <!--Search for the product by sku-->
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchByCreatedTerm">
+            <argument name="query" value="$$createGroupedProduct.sku$$"/>
+        </actionGroup>
+        <!-- Should not see any search results -->
+       <actionGroup ref="AssertStorefrontProductNotOnSearchPageActionGroup" stepKey="dontSeeProduct">
+            <argument name="productSku" value="$$createGroupedProduct.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontNoResultsMessageOnSearchPageActionGroup" stepKey="seeCantFindProductOneMessage"/>
+        <!-- Go to the category page that we created in the before block -->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onCategoryPage"/>
+        <actionGroup ref="AssertStorefrontProductAbsentOnCategoryPageActionGroup" stepKey="dontSeeProductInCategory">
+            <argument name="categoryUrlKey" value="$$createCategory.name$$"/>
+            <argument name="productName" value="$$createGroupedProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeEmptyProductMessage"/>
+    </test>
+</tests>
