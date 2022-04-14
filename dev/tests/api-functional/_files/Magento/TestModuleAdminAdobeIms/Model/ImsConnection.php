@@ -60,7 +60,7 @@ class ImsConnection extends \Magento\AdminAdobeIms\Model\ImsConnection
     /**
      * @inheritdoc
      */
-    public function validateToken(string $code, string $tokenType = 'access_token'): bool
+    public function validateToken(?string $token, string $tokenType = 'access_token'): bool
     {
         return true;
     }
