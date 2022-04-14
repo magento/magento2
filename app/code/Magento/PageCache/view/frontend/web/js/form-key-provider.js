@@ -55,6 +55,10 @@ define(function () {
             return null;
         }
 
+        function getFormKeyFromUI() {
+            return document.querySelector(inputSelector).value;
+        }
+
         /**
          * Generate form key string
          * @private
@@ -79,7 +83,7 @@ define(function () {
             formKey = getFormKeyCookie();
 
             if (!formKey) {
-                formKey = generateFormKeyString();
+                formKey = getFormKeyFromUI() || generateFormKeyString();
                 setFormKeyCookie(formKey);
             }
             inputElements = document.querySelectorAll(inputSelector);
