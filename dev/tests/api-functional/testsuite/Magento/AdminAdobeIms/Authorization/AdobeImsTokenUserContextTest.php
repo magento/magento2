@@ -31,7 +31,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\User\Model\User;
 
 /**
- * Checks the categories/list api
+ * Runs the storeConfigs api to check provided token
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdobeImsTokenUserContextTest extends WebapiAbstract
@@ -80,7 +80,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     /**
      * @var EncryptorInterface
      */
-    private EncryptorInterface $encryptor;
+    private $encryptor;
 
     /**
      * @return void
