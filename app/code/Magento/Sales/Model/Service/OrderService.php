@@ -267,9 +267,6 @@ class OrderService implements OrderManagementInterface
             ]
         );
 
-        /**
-        * Event argument `transport` is @deprecated. Use `transportObject` instead.
-        */
         $this->eventManager->dispatch(
             'sales_order_state_change_before',
             ['order' => $this, 'transport' => $transport, 'order_object' => $order]
