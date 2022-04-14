@@ -19,8 +19,8 @@ class Conditions implements DataFixtureInterface
         'attribute' => null,
         'operator' => null,
         'value' => true,
-        'is_value_processed' => null,
         'aggregator' => 'all',
+        'is_value_processed' => null,
         'conditions' => [
 
         ],
@@ -34,15 +34,14 @@ class Conditions implements DataFixtureInterface
     /**
      * @param DataObjectFactory $dataObjectFactory
      */
-    public function __construct(
-        DataObjectFactory  $dataObjectFactory
-    ) {
+    public function __construct(DataObjectFactory  $dataObjectFactory)
+    {
         $this->dataObjectFactory = $dataObjectFactory;
     }
 
     /**
      * {@inheritdoc}
-     * @param array $data Parameters. Same format as ProductConditions::DEFAULT_DATA.
+     * @param array $data Parameters. Same format as Conditions::DEFAULT_DATA.
      * - $data['conditions']: An array of any:
      *      - Conditions
      *      - ProductFoundInCartConditions
@@ -54,28 +53,15 @@ class Conditions implements DataFixtureInterface
     }
 
     /**
-     * Prepare combine data
+     * Prepare conditions data
      *
      * @param array $data
      * @return array
      */
     private function prepareData(array $data): array
     {
-        $data = array_merge(self::DEFAULT_DATA, $data);
-        $data['conditions'] = $this->prepareConditionsData($data);
-
-        return $data;
-    }
-
-    /**
-     * Prepare conditions data
-     *
-     * @param array $data
-     * @return array
-     */
-    private function prepareConditionsData(array $data): array
-    {
         $conditions = [];
+        $data = array_merge(self::DEFAULT_DATA, $data);
 
         foreach ($data['conditions'] as $condition) {
             $conditionData = $condition instanceof DataObject ? $condition->toArray() : $condition;
@@ -84,7 +70,7 @@ class Conditions implements DataFixtureInterface
             }
             $conditions[] = $conditionData;
         }
-
-        return $conditions;
+        $data['conditions'] = $conditions;
+        return $data;
     }
 }

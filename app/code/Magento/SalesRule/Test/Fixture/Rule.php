@@ -114,9 +114,8 @@ class Rule implements RevertibleDataFixtureInterface
         unset($data['conditions'], $data['actions']);
         $model->setData($this->prepareData($data));
 
-        $model->setConditionsSerialized($this->serializer->serialize($conditions));
         $model->setActionsSerialized($this->serializer->serialize($actions));
-
+        $model->setConditionsSerialized($this->serializer->serialize($conditions));
         $this->resourceModel->save($model);
 
         return $model;
@@ -136,7 +135,7 @@ class Rule implements RevertibleDataFixtureInterface
     }
 
     /**
-     * Prepare rule data
+     * Prepare salesrule data
      *
      * @param array $data
      * @return array

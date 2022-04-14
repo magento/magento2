@@ -53,7 +53,7 @@ class ProductConditions implements DataFixtureInterface
     }
 
     /**
-     * Prepare combine data
+     * Prepare product conditions data
      *
      * @param array $data
      * @return array
@@ -61,19 +61,6 @@ class ProductConditions implements DataFixtureInterface
     private function prepareData(array $data): array
     {
         $data = array_merge(self::DEFAULT_DATA, $data);
-        $data['conditions'] = $this->prepareConditionsData($data);
-
-        return $data;
-    }
-
-    /**
-     * Prepare conditions data
-     *
-     * @param array $data
-     * @return array
-     */
-    private function prepareConditionsData(array $data): array
-    {
         $conditions = [];
 
         foreach ($data['conditions'] as $condition) {
@@ -83,7 +70,8 @@ class ProductConditions implements DataFixtureInterface
             }
             $conditions[] = $conditionData;
         }
+        $data['conditions'] = $conditions;
 
-        return $conditions;
+        return $data;
     }
 }
