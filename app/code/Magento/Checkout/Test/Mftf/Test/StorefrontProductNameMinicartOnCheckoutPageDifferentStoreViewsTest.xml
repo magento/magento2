@@ -32,6 +32,7 @@
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -40,6 +41,7 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
             <argument name="customStore" value="customStore"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Go to created product page-->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
@@ -82,7 +84,8 @@
         </assertStringContainsString>
 
         <!--Check product name in Shopping Cart page-->
-        <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="clickViewAndEdit"/>
+        <comment userInput="BIC workaround" stepKey="clickViewAndEdit"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCart"/>
         <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.productName}}" stepKey="grabProductNameCart"/>
         <assertStringContainsString stepKey="assertProductNameCart">
