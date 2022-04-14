@@ -43,7 +43,10 @@ class Conditions implements DataFixtureInterface
     /**
      * {@inheritdoc}
      * @param array $data Parameters. Same format as ProductConditions::DEFAULT_DATA.
-     * - $data['conditions']: An array of conditions ProductConditions and ProductCondition
+     * - $data['conditions']: An array of any:
+     *      - Conditions
+     *      - ProductFoundInCartConditions
+     *      - ProductSubselectionInCartConditions
      */
     public function apply(array $data = []): ?DataObject
     {
