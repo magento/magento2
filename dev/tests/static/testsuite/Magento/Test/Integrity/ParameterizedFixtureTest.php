@@ -45,7 +45,6 @@ class ParameterizedFixtureTest extends TestCase
                         continue;
                     }
                 } catch (ReflectionException $exception) {
-                    $errors[]  = $errorMessage;
                     continue;
                 }
 
