@@ -458,8 +458,12 @@ class ShippingMethodManagementTest extends TestCase
      * @magentoConfigFixture default_store carriers/flatrate/active 0
      * @magentoConfigFixture default_store carriers/freeshipping/active 0
      * @magentoConfigFixture default_store carriers/tablerate/condition_name package_value_with_discount
-     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_free_shipping_subtotal_equals_more_than_30.php
-     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_20_percent_off_with_coupon_no_condition.php
+     * @magentoDataFixture Magento\SalesRule\Test\Fixture\AddressCondition as:c1
+     * @magentoDataFixture Magento\SalesRule\Test\Fixture\Rule as:r1
+     * @magentoDataFixture Magento\SalesRule\Test\Fixture\Rule as:r2
+     * @magentoDataFixtureDataProvider {"c1":{"attribute":"base_subtotal","operator":">=","value":30}}
+     * @magentoDataFixtureDataProvider {"r1":{"stop_rules_processing":0,"simple_free_shipping":1,"conditions":["$c1$"]}}
+     * @magentoDataFixtureDataProvider {"r2":{"stop_rules_processing":0,"coupon_code":"123","discount_amount":20}}
      * @magentoDataFixture Magento/Sales/_files/quote_with_multiple_products.php
      * @magentoDataFixture Magento/OfflineShipping/_files/tablerates_price.php
      * @return void
