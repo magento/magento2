@@ -251,7 +251,7 @@ class ThemeList extends \Magento\Framework\Data\Collection implements ListInterf
             'theme_path' => $themePath,
             'code' => $themeCode,
             'theme_title' => $themeConfig->getThemeTitle(),
-            'preview_image' => $media['preview_image'] ? $media['preview_image'] : null,
+            'preview_image' => (is_array($media) && isset($media['preview_image'])) ? $media['preview_image'] : null,
             'parent_theme_path' => $parentPath
         ];
     }
