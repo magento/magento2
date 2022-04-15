@@ -17,6 +17,7 @@
             <testCaseId value="MC-36382"/>
             <severity value="AVERAGE"/>
             <group value="Search"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
