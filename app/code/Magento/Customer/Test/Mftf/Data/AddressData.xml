@@ -47,6 +47,7 @@
         <data key="country">United States</data>
         <data key="postcode">78729</data>
         <data key="telephone">512-345-6789</data>
+        <data key="vat_id">47458714</data>
         <data key="default_billing">Yes</data>
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionTX</requiredEntity>
@@ -332,7 +333,7 @@
         <data key="telephone">333-33-333-33</data>
         <data key="country">Germany</data>
         <data key="state">Berlin</data>
-        <data key="vatNumber">DE257486969</data>
+        <data key="vatNumber">111607872</data>
     </entity>
     <entity name="US_Address_California">
         <data key="firstname">John</data>

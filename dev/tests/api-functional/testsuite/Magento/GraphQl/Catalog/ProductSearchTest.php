@@ -7,28 +7,26 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\CategoryLinkManagement;
 use Magento\Catalog\Model\Indexer\Product\Category\Processor;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Config\Model\ResourceModel\Config;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\Config as eavConfig;
+use Magento\Framework\App\Cache;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Catalog\Model\GetCategoryByName;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
-use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Catalog\Api\CategoryLinkManagementInterface;
-use Magento\Config\Model\ResourceModel\Config;
-use Magento\Framework\App\Cache;
-use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -235,8 +233,9 @@ QUERY;
     }
 
     /**
-     *  Layered navigation for Configurable products with out of stock options
-     * Two configurable products each having two variations and one of the child products of one Configurable set to OOS
+     * Layered navigation for Configurable products with out of stock options
+     * Two configurable products each having two variations and one of the child products
+     * of one Configurable set to OOS
      *
      * @magentoApiDataFixture Magento/Catalog/_files/configurable_products_with_custom_attribute_layered_navigation.php
      * @magentoApiDataFixture Magento/Indexer/_files/reindex_all_invalid.php
@@ -257,7 +256,11 @@ QUERY;
         $this->assertEquals(2, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['aggregations']);
         $this->assertNotEmpty($response['products']['filters'], 'Filters is empty');
-        $this->assertCount(2, $response['products']['aggregations'], 'Aggregation count does not match');
+        $this->assertCount(
+            2,
+            $response['products']['aggregations'],
+            'Aggregation count does not match'
+        );
 
         // Custom attribute filter layer data
         $this->assertResponseFields(
@@ -402,9 +405,20 @@ QUERY;
         $filteredProducts = [$product3, $product2, $product1];
         $countOfFilteredProducts = count($filteredProducts);
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(3, $response['products']['total_count'], 'Number of products returned is incorrect');
-        $this->assertTrue(count($response['products']['filters']) > 0, 'Product filters is not empty');
-        $this->assertCount(3, $response['products']['aggregations'], 'Incorrect count of aggregations');
+        $this->assertEquals(
+            3,
+            $response['products']['total_count'],
+            'Number of products returned is incorrect'
+        );
+        $this->assertTrue(
+            count($response['products']['filters']) > 0,
+            'Product filters is not empty'
+        );
+        $this->assertCount(
+            3,
+            $response['products']['aggregations'],
+            'Incorrect count of aggregations'
+        );
 
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         for ($itemIndex = 0; $itemIndex < $countOfFilteredProducts; $itemIndex++) {
@@ -670,7 +684,7 @@ QUERY;
         $this->assertResponseFields(
             $response['products']['aggregations'][1],
             [
-                'attribute_code' => 'category_id',
+                'attribute_code' => 'category_uid',
                 'count' => 7,
                 'label' => 'Category'
             ]
@@ -803,7 +817,11 @@ QUERY;
         // presort expected and actual results as different search engines have different orders
         usort($expectedCategoryInAggregations, [$this, 'compareLabels']);
         usort($actualCategoriesFromResponse, [$this, 'compareLabels']);
-        $categoryInAggregations = array_map(null, $expectedCategoryInAggregations, $actualCategoriesFromResponse);
+        $categoryInAggregations = array_map(
+            null,
+            $expectedCategoryInAggregations,
+            $actualCategoriesFromResponse
+        );
 
         //Validate the categories and sub-categories data in the filter layer
         foreach ($categoryInAggregations as $index => $categoryAggregationsData) {
@@ -1184,7 +1202,10 @@ QUERY;
     public function testSortByPosition()
     {
         // Get category ID for filtering
-        $category = $this->categoryCollection->addFieldToFilter('name', 'Category 999')->getFirstItem();
+        $category = $this->categoryCollection->addFieldToFilter(
+            'name',
+            'Category 999'
+        )->getFirstItem();
         $categoryId = $category->getId();
 
         $queryAsc = <<<QUERY
@@ -1262,7 +1283,10 @@ QUERY;
      */
     public function testSortByEqualRelevanceAndAscDescReversePosition()
     {
-        $category = $this->categoryCollection->addFieldToFilter('name', 'Category 999')->getFirstItem();
+        $category = $this->categoryCollection->addFieldToFilter(
+            'name',
+            'Category 999'
+        )->getFirstItem();
         $categoryId = (int) $category->getId();
 
         $expectedProductsAsc = ['simple1000', 'simple1001', 'simple1002'];
@@ -1533,7 +1557,7 @@ QUERY;
                 ]
             ],
             [
-                'attribute_code' => 'category_id',
+                'attribute_code' => 'category_uid',
                 'count' => 1,
                 'label' => 'Category',
                 'options' => [
@@ -1642,7 +1666,11 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count'], 'Incorrect count of products returned');
+        $this->assertEquals(
+            2,
+            $response['products']['total_count'],
+            'Incorrect count of products returned'
+        );
         $links = $this->categoryLinkManagement->getAssignedProducts(
             is_numeric($queryCategoryId) ? $queryCategoryId : base64_decode($queryCategoryId)
         );
@@ -1749,12 +1777,18 @@ QUERY;
         $responseAsc = $this->graphQlQuery(sprintf($query, 'ASC'));
         $this->assertEquals(3, $responseDesc['products']['total_count']);
         $this->assertNotEmpty($responseDesc['products']['filters'], 'Filters should have the Category layer');
-        $this->assertEquals('Colorful Category', $responseDesc['products']['filters'][0]['filter_items'][0]['label']);
+        $this->assertEquals(
+            'Colorful Category',
+            $responseDesc['products']['filters'][0]['filter_items'][0]['label']
+        );
         $this->assertCount(2, $responseDesc['products']['aggregations']);
         $expectedProductsInResponse = ['Blue briefs', 'Navy Blue Striped Shoes', 'Grey shorts'];
         $namesDesc = array_column($responseDesc['products']['items'], 'name');
         $this->assertEqualsCanonicalizing($expectedProductsInResponse, $namesDesc);
-        $this->assertEquals($namesDesc, array_reverse(array_column($responseAsc['products']['items'], 'name')));
+        $this->assertEquals(
+            $namesDesc,
+            array_reverse(array_column($responseAsc['products']['items'], 'name'))
+        );
     }
 
     /**
