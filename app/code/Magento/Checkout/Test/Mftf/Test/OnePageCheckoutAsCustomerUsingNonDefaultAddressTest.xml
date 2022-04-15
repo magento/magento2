@@ -75,8 +75,8 @@
         <selectOption selector="{{CheckoutShippingSection.addressDropdown}}" userInput="{{UK_Not_Default_Address.street[0]}}" stepKey="addAddress"/>
 
         <!-- Check order summary in checkout -->
-        <click selector="{{CheckoutShippingSection.updateAddress}}" stepKey="clickToUpdate"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontClickUpdateAddressInCheckoutActionGroup" stepKey="clickToUpdate"/>
+        <comment userInput="BIC workaround" stepKey="waitForPageLoad"/>
 
         <!-- Place order -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>

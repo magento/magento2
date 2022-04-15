@@ -38,6 +38,9 @@
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteCreatedAttribute">
                 <argument name="ProductAttribute" value="newProductAttribute"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -52,7 +55,9 @@
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
 
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="fillProductQty"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQty">
+            <argument name="productQty" value="100"/>
+        </actionGroup>
         <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="selectStockStatus">
              <argument name="stockStatus" value="In Stock"/>
         </actionGroup>
@@ -90,7 +95,9 @@
         <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveTheProduct"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
 
-        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--Verify product attribute added in product form -->
         <scrollTo selector="{{AdminProductFormSection.contentTab}}" stepKey="scrollToContentTab"/>
