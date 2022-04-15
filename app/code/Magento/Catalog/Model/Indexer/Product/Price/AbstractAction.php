@@ -61,7 +61,6 @@ abstract class AbstractAction
     protected $_storeManager;
 
     /**
-     * Currency factory
      *
      * @var CurrencyFactory
      */
@@ -83,7 +82,6 @@ abstract class AbstractAction
     protected $_catalogProductType;
 
     /**
-     * Indexer price factory
      *
      * @var Factory
      */
@@ -343,16 +341,15 @@ abstract class AbstractAction
      */
     protected function _insertFromTable($sourceTable, $destTable, $where = null)
     {
-        $sourceColumns = array_keys($this->getConnection()->describeTable($sourceTable));
-        $targetColumns = array_keys($this->getConnection()->describeTable($destTable));
-        $select = $this->getConnection()->select()->from($sourceTable, $sourceColumns);
+        $columns = array_keys($this->getConnection()->describeTable($destTable));
+        $select = $this->getConnection()->select()->from($sourceTable, $columns);
         if ($where) {
             $select->where($where);
         }
         $query = $this->getConnection()->insertFromSelect(
             $select,
             $destTable,
-            $targetColumns,
+            $columns,
             AdapterInterface::INSERT_ON_DUPLICATE
         );
         $this->getConnection()->query($query);
