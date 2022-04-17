@@ -23,6 +23,7 @@ use Magento\Framework\Filter\Template;
 use Magento\Framework\Filter\Template\Tokenizer\Parameter;
 use Magento\Framework\Filter\VariableResolverInterface;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
@@ -53,12 +54,12 @@ class Filter extends Template
     /**
      * The name used in the {{trans}} directive
      */
-    const TRANS_DIRECTIVE_NAME = 'trans';
+    public const TRANS_DIRECTIVE_NAME = 'trans';
 
     /**
      * The regex to match interior portion of a {{trans "foo"}} translation directive
      */
-    const TRANS_DIRECTIVE_REGEX = '/^\s*([\'"])([^\1]*?)(?<!\\\)\1(\s.*)?$/si';
+    public const TRANS_DIRECTIVE_REGEX = '/^\s*([\'"])([^\1]*?)(?<!\\\)\1(\s.*)?$/si';
 
     /**
      * @var bool
@@ -119,8 +120,6 @@ class Filter extends Template
 
     /**
      * Core store config
-     * Variable factory
-     *
      * @var VariableFactory
      */
     protected $_variableFactory;
@@ -191,6 +190,11 @@ class Filter extends Template
     private $storeInformation;
 
     /**
+     * @var StateInterface
+     */
+    private $inlineTranslationState;
+
+    /**
      * Filter constructor.
      * @param StringUtils $string
      * @param LoggerInterface $logger
@@ -211,6 +215,7 @@ class Filter extends Template
      * @param array $variables
      * @param array $directiveProcessors
      * @param StoreInformation|null $storeInformation
+     * @param StateInterface|null $inlineTranslationState
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -232,7 +237,8 @@ class Filter extends Template
         CssInliner $cssInliner,
         $variables = [],
         array $directiveProcessors = [],
-        ?StoreInformation $storeInformation = null
+        ?StoreInformation $storeInformation = null,
+        StateInterface $inlineTranslationState = null
     ) {
         $this->_escaper = $escaper;
         $this->_assetRepo = $assetRepo;
@@ -251,6 +257,8 @@ class Filter extends Template
         $this->configVariables = $configVariables;
         $this->storeInformation = $storeInformation ?:
             ObjectManager::getInstance()->get(StoreInformation::class);
+        $this->inlineTranslationState = $inlineTranslationState ?:
+            ObjectManager::getInstance()->get(StateInterface::class);
         parent::__construct($string, $variables, $directiveProcessors, $variableResolver);
     }
 
@@ -616,8 +624,9 @@ class Filter extends Template
         if (empty($text)) {
             return '';
         }
-
+        $this->inlineTranslationState->disable();
         $text = __($text, $params)->render();
+        $this->inlineTranslationState->enable();
         return $this->applyModifiers($text, $modifiers);
     }
 
