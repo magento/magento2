@@ -210,6 +210,9 @@ class Stat
             while (strpos($timerId, $prevTimerId . Profiler::NESTING_SEPARATOR) !== 0) {
                 /* Add to result all timers nested in the previous timer */
                 for ($j = $i + 1; $j < count($timerIds); $j++) {
+                    if (!$timerIds[$j]) {
+                        continue;
+                    }
                     if (strpos($timerIds[$j], $prevTimerId . Profiler::NESTING_SEPARATOR) === 0) {
                         $result[] = $timerIds[$j];
                         /* Mark timer as already added */
