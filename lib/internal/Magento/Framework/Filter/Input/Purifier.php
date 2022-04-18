@@ -13,7 +13,7 @@ use Magento\Framework\App\ObjectManager;
 
 class Purifier implements PurifierInterface
 {
-    const CACHE_DEFINITION = 'Cache.DefinitionImpl';
+    public const CACHE_DEFINITION = 'Cache.DefinitionImpl';
 
     /**
      * @var HTMLPurifier $purifier
