@@ -6,7 +6,8 @@
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Category;
+use Magento\Tax\Model\Config;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Product View block
@@ -65,6 +66,11 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
     protected $productRepository;
 
     /**
+     * @var Config|null
+     */
+    private $taxConfig;
+
+    /**
      * @param Context $context
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -76,6 +82,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * @param ProductRepositoryInterface|\Magento\Framework\Pricing\PriceCurrencyInterface $productRepository
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $data
+     * @param Config|null $taxConfig
      * @codingStandardsIgnoreStart
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -90,7 +97,8 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         \Magento\Customer\Model\Session $customerSession,
         ProductRepositoryInterface $productRepository,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        array $data = []
+        array $data = [],
+        Config $taxConfig = null
     ) {
         $this->_productHelper = $productHelper;
         $this->urlEncoder = $urlEncoder;
@@ -101,6 +109,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         $this->customerSession = $customerSession;
         $this->productRepository = $productRepository;
         $this->priceCurrency = $priceCurrency;
+        $this->taxConfig = $taxConfig ?: ObjectManager::getInstance()->get(Config::class);
         parent::__construct(
             $context,
             $data
@@ -181,9 +190,14 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         $priceInfo = $product->getPriceInfo();
         $tierPricesList = $priceInfo->getPrice('tier_price')->getTierPriceList();
         foreach ($tierPricesList as $tierPrice) {
+            $price = $tierPrice['price']->getValue();
+            if ($this->taxConfig->getPriceDisplayType() === Config::DISPLAY_TYPE_EXCLUDING_TAX) {
+                $price = $tierPrice['price']->getBaseAmount();
+            }
             $tierPriceData = [
                 'qty' => $tierPrice['price_qty'],
-                'price' => $tierPrice['website_price'],
+                'price' => $price,
+                'excl_tax_price' => $tierPrice['price']->getBaseAmount()
             ];
             $tierPrices[] = $tierPriceData;
         }

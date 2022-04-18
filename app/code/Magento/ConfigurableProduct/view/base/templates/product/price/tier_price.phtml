@@ -7,38 +7,34 @@
 ?>
 <script type="text/x-magento-template" id="tier-prices-template">
     <ul class="prices-tier items">
-        <% var inclExclPrice = ' <span class="price-wrapper price-excluding-tax"'
-            + 'data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">'
-            + '<span class="price">&nbsp;%1</span>'
-            + '</span>'
+        <% var exclPriceTemplate = ' <span class="price-wrapper price-excluding-tax"'
+        + 'data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">'
+        + '<span class="price">&nbsp;%1</span>'
+        + '</span>'
         %>
 
         <% _.each(tierPrices, function(item, key) { %>
-            <% var itemInclExclPrice = item.hasOwnProperty('incl_excl_tax_price')
-                ? inclExclPrice.replace('%1', priceUtils.formatPrice(item['incl_excl_tax_price'], currencyFormat))
-                : ''
-            %>
-            <% var price = item.hasOwnProperty('excl_tax_price')
-                ? priceUtils.formatPrice(item['excl_tax_price'], currencyFormat)
-                : priceUtils.formatPrice(item.price, currencyFormat)
-            %>
+        <% var itemExclPrice = item.hasOwnProperty('excl_tax_price')
+        ? exclPriceTemplate.replace('%1', priceUtils.formatPrice(item['excl_tax_price'], currencyFormat))
+        : ''
+        %>
 
-            <% var priceStr = '<span class="price-container price-tier_price">'
-                    + '<span data-price-amount="' + price + '"'
+        <% var priceStr = '<span class="price-container price-tier_price">'
+                    + '<span data-price-amount="' + priceUtils.formatPrice(item.price, currencyFormat) + '"'
                     + ' data-price-type=""' + ' class="price-wrapper price-including-tax">'
-                    + '<span class="price">' + price + '</span>'
-                    + '</span>' + itemInclExclPrice + '</span>';
+                    + '<span class="price">' + priceUtils.formatPrice(item.price, currencyFormat) + '</span>'
+                    + '</span>' + itemExclPrice + '</span>';
+        %>
+        <li class="item">
+            <%= '<?= $block->escapeHtml(__('Buy %1 for %2 each and', '%1', '%2')) ?>'
+            .replace('%1', item.qty)
+            .replace('%2', priceStr)
             %>
-            <li class="item">
-                <%= '<?= $block->escapeHtml(__('Buy %1 for %2 each and', '%1', '%2')) ?>'
-                    .replace('%1', item.qty)
-                    .replace('%2', priceStr)
-                %>
-                <strong class="benefit">
-                    <?= $block->escapeHtml(__('save')) ?><span
-                        class="percent tier-<%= key %>">&nbsp;<%= item.percentage %></span>%
-                </strong>
-            </li>
+            <strong class="benefit">
+                <?= $block->escapeHtml(__('save')) ?><span
+                    class="percent tier-<%= key %>">&nbsp;<%= item.percentage %></span>%
+            </strong>
+        </li>
         <% }); %>
     </ul>
 </script>

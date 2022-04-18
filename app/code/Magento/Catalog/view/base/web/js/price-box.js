@@ -220,27 +220,39 @@ define([
         },
 
         /**
-         * Updates product final price according to tier prices
+         * Updates product final and base price according to tier prices
          */
         updateProductTierPrice: function updateProductTierPrice() {
             var productQty = $(this.qtyInfo).val(),
-                originalPrice = this.options.prices.finalPrice.amount,
                 tierPrice,
-                prices,
+                prices = {'prices': {}},
                 i;
 
-            for (i = 0; i < this.options.priceConfig.tierPrices.length; i++) {
-                if (productQty >= this.options.priceConfig.tierPrices[i].qty) {
-                    tierPrice = this.options.priceConfig.tierPrices[i].price;
-                }
-            }
-            prices = {
-                'prices': {
-                    'finalPrice': {
-                        'amount': tierPrice - originalPrice
+            if (this.options.prices.finalPrice) {
+                var originalPrice = this.options.prices.finalPrice.amount;
+
+                for (i = 0; i < this.options.priceConfig.tierPrices.length; i++) {
+                    if (productQty >= this.options.priceConfig.tierPrices[i].qty) {
+                        tierPrice = this.options.priceConfig.tierPrices[i].price;
                     }
                 }
-            };
+                prices.prices.finalPrice = {'amount': tierPrice - originalPrice};
+            }
+
+            if (this.options.prices.basePrice) {
+                var originalBasePrice = this.options.prices.basePrice.amount,
+                    tierPriceExlTax,
+                    tierPriceItem;
+
+                for (i = 0; i < this.options.priceConfig.tierPrices.length; i++) {
+                    tierPriceItem = this.options.priceConfig.tierPrices[i];
+                    if (productQty >= tierPriceItem.qty && tierPriceItem.excl_tax_price) {
+                        tierPriceExlTax = tierPriceItem.excl_tax_price;
+                    }
+                }
+                prices.prices.basePrice = {'amount': tierPriceExlTax - originalBasePrice};
+            }
+
             this.updatePrice(prices);
         }
     });
