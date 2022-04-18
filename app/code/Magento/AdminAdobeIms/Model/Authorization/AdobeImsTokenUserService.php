@@ -229,7 +229,7 @@ class AdobeImsTokenUserService
     {
         return $this->dateTime->gmtDate(
             self::DATE_FORMAT,
-            ($createdAt + $expiresIn) / 1000
+            round(($createdAt + $expiresIn) / 1000)
         );
     }
 }
