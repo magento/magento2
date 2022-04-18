@@ -248,7 +248,14 @@ class StatTest extends TestCase
                     ['stop', 'root->init'],
                     ['stop', 'root'],
                 ],
-                'expected' => ['root', 'root->init', 'root->init->init_config', 'root->system'],
+                'expected' => [
+                    'root',
+                    'root->init',
+                    'root->init->init_config',
+                    'root->system',
+                    'root->system->init_config',
+                    'root->system->init_store',
+                ],
             ]
         ];
     }
