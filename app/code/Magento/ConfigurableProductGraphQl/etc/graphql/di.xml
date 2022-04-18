@@ -71,4 +71,15 @@
     <type name="Magento\ConfigurableProduct\Model\Product\Configuration\Item\ItemProductResolver">
         <plugin name="configured_variant" type="Magento\ConfigurableProductGraphQl\Plugin\Product\Configuration\Item\ItemResolver"/>
     </type>
+    <type name="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsCompositeFilter">
+        <arguments>
+            <argument name="configurableOptionsFilters" xsi:type="array">
+                <item name="status" xsi:type="object">Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsStatusFilter</item>
+                <item name="stock_status" xsi:type="object">Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsStockStatusFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection">
+        <plugin name="add_stock_information" type="Magento\ConfigurableProductGraphQl\Plugin\AddStockStatusToCollection" />
+    </type>
 </config>
