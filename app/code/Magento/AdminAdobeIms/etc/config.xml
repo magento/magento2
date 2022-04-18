@@ -20,7 +20,7 @@
                 <enabled>0</enabled>
                 <logging_enabled>0</logging_enabled>
                 <organization_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
-                <auth_url_pattern><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/authorize/v2?client_id=#{client_id}&amp;redirect_uri=#{redirect_uri}&amp;locale=#{locale}&amp;scope=openid,creative_sdk,email,profile,additional_info,additional_info.roles&amp;response_type=code]]></auth_url_pattern>
+                <auth_url_pattern><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/authorize/v2?client_id=#{client_id}&amp;redirect_uri=#{redirect_uri}&amp;locale=#{locale}&amp;scope=openid,creative_sdk,email,profile&amp;response_type=code]]></auth_url_pattern>
                 <token_url>https://ims-na1-stg1.adobelogin.com/ims/token</token_url>
                 <profile_url><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/profile/v1?client_id=#{client_id}]]></profile_url>
                 <logout_url><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/logout/v1?access_token=#{access_token}&amp;client_id=#{client_id}&amp;client_secret=#{client_secret}]]></logout_url>
