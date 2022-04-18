@@ -6,14 +6,17 @@
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
+use Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog as CatalogAction;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Rule\Model\Condition\AbstractCondition;
-use Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog as CatalogAction;
+use Magento\Rule\Model\Condition\ConditionInterface;
 
 class NewConditionHtml extends CatalogAction implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
+     * New condition html action
+     *
      * @return void
      */
     public function execute()
@@ -22,6 +25,18 @@ class NewConditionHtml extends CatalogAction implements HttpPostActionInterface,
         $formName = $this->getRequest()->getParam('form_namespace');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
+
+        /**
+         * @SuppressWarnings(PHPCPD-START)
+         */
+        if (class_exists($type) && !in_array(ConditionInterface::class, class_implements($type))) {
+            $html = '';
+            $this->getResponse()->setBody($html);
+            return;
+        }
+        /**
+         * @SuppressWarnings(PHPCPD-END)
+         */
 
         $model = $this->_objectManager->create($type)
             ->setId($id)
