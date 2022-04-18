@@ -8,7 +8,7 @@ namespace Magento\Catalog\Api;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * TierPriceStorage test.
+ * TierPriceStorage API operations test.
  */
 class TierPriceStorageTest extends WebapiAbstract
 {
@@ -33,6 +33,7 @@ class TierPriceStorageTest extends WebapiAbstract
      * Test get method.
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoConfigFixture default_store catalog/price/scope 0
      */
     public function testGet()
     {
@@ -53,7 +54,6 @@ class TierPriceStorageTest extends WebapiAbstract
         $tierPrices = $productRepository->get(self::SIMPLE_PRODUCT_SKU)->getTierPrices();
         $this->assertNotEmpty($response);
         $this->assertEquals(count($response), count($tierPrices));
-
         foreach ($response as $item) {
             $this->assertTrue($this->isPriceCorrect($item, $tierPrices));
         }
@@ -63,6 +63,7 @@ class TierPriceStorageTest extends WebapiAbstract
      * Test update method.
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoConfigFixture default_store catalog/price/scope 0
      */
     public function testUpdate()
     {
@@ -252,7 +253,6 @@ class TierPriceStorageTest extends WebapiAbstract
     private function isPriceCorrect(array $price, array $tierPrices)
     {
         $isCorrect = false;
-
         foreach ($tierPrices as $tierPrice) {
             $priceIsCorrect = $price['price_type'] === \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT
                 ? (float)$tierPrice->getExtensionAttributes()->getPercentageValue() === (float)$price['price']
@@ -265,7 +265,6 @@ class TierPriceStorageTest extends WebapiAbstract
                 break;
             }
         }
-
         return $isCorrect;
     }
 }

@@ -148,7 +148,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
      * Delete special price for specified store when price scope is global
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     *
+     * @magentoConfigFixture default_store catalog/price/scope 0
      * @return void
      */
     public function testDeleteWhenPriceIsGlobal(): void
