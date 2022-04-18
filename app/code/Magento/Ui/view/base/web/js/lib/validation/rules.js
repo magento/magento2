@@ -821,7 +821,7 @@ define([
             function (value) {
                 return utils.isEmptyNoTrim(value) || /^(?!-)(?!.*-$).+$/.test(value);
             },
-            $.mage.__('Please enter a valid URL Key (Ex: example-page).')
+            $.mage.__('Trailing hyphens are not allowed.')
         ],
         'validate-zip-international': [
 
