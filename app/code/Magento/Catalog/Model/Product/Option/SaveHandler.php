@@ -11,9 +11,9 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface as OptionRepository;
 use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Model\ResourceModel\Product\Relation;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Relation;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
@@ -26,12 +26,12 @@ class SaveHandler implements ExtensionInterface
     /**
      * @var string[]
      */
-    private $compositeProductTypes = ['grouped', 'configurable', 'bundle'];
+    private array $compositeProductTypes = ['grouped', 'configurable', 'bundle'];
 
     /**
      * @var OptionRepository
      */
-    protected $optionRepository;
+    protected OptionRepository $optionRepository;
 
     /**
      * @var Relation
@@ -44,7 +44,7 @@ class SaveHandler implements ExtensionInterface
      */
     public function __construct(
         OptionRepository $optionRepository,
-        ?Relation $relation = null
+        ?Relation        $relation = null
     ) {
         $this->optionRepository = $optionRepository;
         $this->relation = $relation ?: ObjectManager::getInstance()->get(Relation::class);
@@ -57,6 +57,7 @@ class SaveHandler implements ExtensionInterface
      * @param array $arguments
      * @return ProductInterface|object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws CouldNotSaveException
      */
     public function execute($entity, $arguments = [])
     {
@@ -88,7 +89,7 @@ class SaveHandler implements ExtensionInterface
 
     /**
      * Save custom options
-     *
+     * 
      * @param array $options
      * @param bool $hasChangedSku
      * @param ProductInterface $product
@@ -127,7 +128,6 @@ class SaveHandler implements ExtensionInterface
         ) {
             $result = false;
         }
-
         return $result;
     }
 }
