@@ -5,7 +5,7 @@
 define(function () {
     'use strict';
 
-    return function () {
+    return function (settings) {
         var formKey,
             inputElements,
             inputSelector = 'input[name="form_key"]';
@@ -82,8 +82,13 @@ define(function () {
         function initFormKey() {
             formKey = getFormKeyCookie();
 
+            if (settings.isPaginationCacheEnabled && !formKey) {
+                formKey = getFormKeyFromUI();
+                setFormKeyCookie(formKey);
+            }
+
             if (!formKey) {
-                formKey = getFormKeyFromUI() || generateFormKeyString();
+                formKey = generateFormKeyString();
                 setFormKeyCookie(formKey);
             }
             inputElements = document.querySelectorAll(inputSelector);
