@@ -19,7 +19,7 @@ class FormKeyProvider implements ArgumentInterface
     /**
      * XML PATH to enable/disable saving toolbar parameters to session
      */
-    const XML_PATH_CATALOG_REMEMBER_PAGINATION = 'catalog/frontend/remember_pagination';
+    private const XML_PATH_CATALOG_REMEMBER_PAGINATION = 'catalog/frontend/remember_pagination';
 
     /**
      * @var Config
@@ -53,6 +53,11 @@ class FormKeyProvider implements ArgumentInterface
         return $this->config->isEnabled();
     }
 
+    /**
+     * Is category pagination cache enabled
+     *
+     * @return bool
+     */
     public function isPaginationCacheEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_CATALOG_REMEMBER_PAGINATION);
