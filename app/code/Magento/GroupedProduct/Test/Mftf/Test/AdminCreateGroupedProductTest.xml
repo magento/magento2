@@ -26,10 +26,10 @@
         </before>
         <after>
               <!-- deleting category, simple products -->
-              <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
-              <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
-              <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
-              <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
           </after>
 
         <!-- Create Grouped product via Admin  -->
