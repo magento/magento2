@@ -13,6 +13,13 @@ define([
     describe('Testing FormKey Provider', function () {
         var inputContainer;
 
+        function getFormKeyCookie() {
+            var nameEQ = 'form_key=',
+                cookieArr = document.cookie.split(';');
+
+            return cookieArr[0].split(nameEQ)[1];
+        }
+
         beforeEach(function () {
             inputContainer =  document.createElement('input');
             inputContainer.setAttribute('value', '');
@@ -44,19 +51,15 @@ define([
         });
 
         it('widget gets value from input[form_key] in case cookie is empty is pagination cache enabled', function () {
-            document.cookie = 'form_key= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
             var formKey = 'TestInputStrings';
+
+            document.cookie = 'form_key= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
             $(inputContainer).val(formKey);
             formKeyInit({'isPaginationCacheEnabled': 1});
+
             expect($(inputContainer).val()).toEqual(jasmine.any(String));
             expect($(inputContainer).val().length).toEqual(16);
             expect(formKey).toEqual(getFormKeyCookie());
         });
-
-        function getFormKeyCookie() {
-            var nameEQ = 'form_key=',
-                cookieArr = document.cookie.split(';');
-           return cookieArr[0].split(nameEQ)[1];
-        }
     });
 });
