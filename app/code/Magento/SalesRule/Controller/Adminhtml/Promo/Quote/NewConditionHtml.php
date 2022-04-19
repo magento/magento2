@@ -27,17 +27,11 @@ class NewConditionHtml extends Quote implements HttpPostActionInterface
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 
-        /**
-         * @SuppressWarnings(PHPCPD-START)
-         */
         if (class_exists($type) && !in_array(ConditionInterface::class, class_implements($type))) {
             $html = '';
             $this->getResponse()->setBody($html);
             return;
         }
-        /**
-         * @SuppressWarnings(PHPCPD-END)
-         */
 
         $model = $this->_objectManager->create(
             $type
