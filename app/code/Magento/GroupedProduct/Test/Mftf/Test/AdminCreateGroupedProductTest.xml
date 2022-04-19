@@ -40,10 +40,8 @@
         </actionGroup>
 
         <!-- Entering Grouped Product name,SKU, category, url key -->
-        <actionGroup ref="FillAdminGroupedProductFormActionGroup" stepKey="fillProductForm">
-            <argument name="product" value="GroupedProduct"/>
-            <argument name="categoryName" value="$$createCategory.name$$"/>
-        </actionGroup>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{GroupedProduct.name}}" stepKey="fillProductName"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
 
         <!-- Admin adding the Associated Simple Product For GroupedProduct -->
         <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
