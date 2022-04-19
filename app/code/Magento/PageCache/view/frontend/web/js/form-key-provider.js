@@ -82,7 +82,7 @@ define(function () {
         function initFormKey() {
             formKey = getFormKeyCookie();
 
-            if (settings.isPaginationCacheEnabled && !formKey) {
+            if (settings && settings.isPaginationCacheEnabled && !formKey) {
                 formKey = getFormKeyFromUI();
                 setFormKeyCookie(formKey);
             }
