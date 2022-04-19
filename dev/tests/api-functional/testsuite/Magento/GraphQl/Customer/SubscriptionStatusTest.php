@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
-use Exception;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
@@ -149,6 +148,40 @@ mutation {
 QUERY;
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap($currentEmail, $currentPassword));
         $this->assertFalse($response['updateCustomer']['customer']['is_subscribed']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
+     * @magentoApiDataFixture Magento/Customer/_files/create_customer_for_second_website.php
+     * @magentoConfigFixture default_store customer/account_share/scope 0
+     */
+    public function testSubscriptionStatusInMultiWebsiteSetup(): void
+    {
+        $currentEmail = 'axl@rose.com';
+        $currentPassword = 'axl@123';
+
+        $query = <<<QUERY
+            mutation {
+                updateCustomer(
+                    input: {
+                        is_subscribed: true
+                    }
+                ) {
+                    customer {
+                        is_subscribed
+                    }
+                }
+            }
+        QUERY;
+        $headers = [
+            'Store' => 'third_store_view',
+            'Authorization' => sprintf(
+                'Bearer %s',
+                $this->customerTokenService->createCustomerAccessToken($currentEmail, $currentPassword)
+            ),
+        ];
+        $response = $this->graphQlMutation($query, [], '', $headers);
+        $this->assertTrue($response['updateCustomer']['customer']['is_subscribed']);
     }
 
     /**
