@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
+use Exception;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
@@ -151,14 +152,13 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
-     * @magentoApiDataFixture Magento/Customer/_files/create_customer_for_second_website.php
      * @magentoConfigFixture default_store customer/account_share/scope 0
+     * @magentoApiDataFixture Magento/Customer/_files/customer_for_second_website_with_address.php
      */
     public function testSubscriptionStatusInMultiWebsiteSetup(): void
     {
-        $currentEmail = 'axl@rose.com';
-        $currentPassword = 'axl@123';
+        $currentEmail = 'customer_second_ws_with_addr@example.com';
+        $currentPassword = 'Apassword1';
 
         $query = <<<QUERY
             mutation {
@@ -174,7 +174,7 @@ QUERY;
             }
         QUERY;
         $headers = [
-            'Store' => 'third_store_view',
+            'Store' => 'default',
             'Authorization' => sprintf(
                 'Bearer %s',
                 $this->customerTokenService->createCustomerAccessToken($currentEmail, $currentPassword)
