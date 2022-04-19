@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Gateway\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -15,6 +17,8 @@ use Magento\Store\Model\ScopeInterface;
  * To process value retrieved from config implementation of \Magento\Payment\Gateway\Config\ValueHandlerInterface
  * should be used (inheritance and overriding of getValue method or introduction of new public methods
  * is not recommended).
+ *
+ * @api
  */
 class Config implements ConfigInterface
 {
