@@ -12,6 +12,7 @@ use Magento\Framework\Phrase;
 /**
  * REST API request.
  *
+ * @api
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Request extends \Magento\Framework\Webapi\Request

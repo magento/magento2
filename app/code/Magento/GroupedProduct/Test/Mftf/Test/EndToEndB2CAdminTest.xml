@@ -38,5 +38,6 @@
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteGroupedProduct" after="cleanUpGroupedProduct">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>
