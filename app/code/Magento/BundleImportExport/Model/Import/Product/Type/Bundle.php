@@ -1,8 +1,5 @@
 <?php
-
 /**
- * Import entity of bundle product type
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -29,25 +26,25 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Delimiter before product option value.
      */
-    const BEFORE_OPTION_VALUE_DELIMITER = ';';
+    public const BEFORE_OPTION_VALUE_DELIMITER = ';';
 
-    const PAIR_VALUE_SEPARATOR = '=';
+    public const PAIR_VALUE_SEPARATOR = '=';
 
     /**
      * Dynamic value.
      */
-    const VALUE_DYNAMIC = 'dynamic';
+    public const VALUE_DYNAMIC = 'dynamic';
 
     /**
      * Fixed value.
      */
-    const VALUE_FIXED = 'fixed';
+    public const VALUE_FIXED = 'fixed';
 
-    const NOT_FIXED_DYNAMIC_ATTRIBUTE = 'price_view';
+    public const NOT_FIXED_DYNAMIC_ATTRIBUTE = 'price_view';
 
-    const SELECTION_PRICE_TYPE_FIXED = 0;
+    public const SELECTION_PRICE_TYPE_FIXED = 0;
 
-    const SELECTION_PRICE_TYPE_PERCENT = 1;
+    public const SELECTION_PRICE_TYPE_PERCENT = 1;
 
     /**
      * Array of cached options.
@@ -89,9 +86,9 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     ];
 
     /**
-     * Custom fields mapping.
+     * Custom fields mapping for bundle product.
      *
-     * @inherited
+     * @var array
      */
     protected $_customFieldsMapping = [
         'price_type' => 'bundle_price_type',
@@ -102,7 +99,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     ];
 
     /**
-     * Bundle field mapping.
+     * Bundle field mapping for bundle product with selection.
      *
      * @var array
      */
@@ -113,7 +110,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     ];
 
     /**
-     * Option type mapping.
+     * Option type mapping for bundle product.
      *
      * @var array
      */
@@ -202,11 +199,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     $this->_cachedOptions[$entityId][$option['name']]['selections'] = [];
                 }
                 $this->_cachedOptions[$entityId][$option['name']]['selections'][] = $option;
-                $this->_cachedOptionSelectQuery[] =
-                    $this->connection->quoteInto(
-                        '(parent_id = ' . (int)$entityId . ' AND title = ?)',
-                        $option['name']
-                    );
+                $this->_cachedOptionSelectQuery[] = [(int)$entityId, $option['name']];
             }
         }
         return $selections;
@@ -477,18 +470,24 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     protected function populateExistingOptions()
     {
-        $existingOptions = $this->connection->fetchAssoc(
-            $this->connection->select()->from(
-                ['bo' => $this->_resource->getTableName('catalog_product_bundle_option')],
-                ['option_id', 'parent_id', 'required', 'position', 'type']
-            )->joinLeft(
-                ['bov' => $this->_resource->getTableName('catalog_product_bundle_option_value')],
-                'bo.option_id = bov.option_id',
-                ['value_id', 'title']
-            )->where(
-                implode(' OR ', $this->_cachedOptionSelectQuery)
-            )
+        $select = $this->connection->select()->from(
+            ['bo' => $this->_resource->getTableName('catalog_product_bundle_option')],
+            ['option_id', 'parent_id', 'required', 'position', 'type']
+        )->joinLeft(
+            ['bov' => $this->_resource->getTableName('catalog_product_bundle_option_value')],
+            'bo.option_id = bov.option_id',
+            ['value_id', 'title']
         );
+        $orWhere = false;
+        foreach ($this->_cachedOptionSelectQuery as $item) {
+            if ($orWhere) {
+                $select->orWhere('parent_id = '.$item[0].' AND title = ?', $item[1]);
+            } else {
+                $select->where('parent_id = '.$item[0].' AND title = ?', $item[1]);
+                $orWhere = true;
+            }
+        }
+        $existingOptions = $this->connection->fetchAssoc($select);
         foreach ($existingOptions as $optionId => $option) {
             $this->_cachedOptions[$option['parent_id']][$option['title']]['option_id'] = $optionId;
             foreach ($option as $key => $value) {
