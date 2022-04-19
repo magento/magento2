@@ -8,11 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Authorization;
 
+use Exception;
+use Magento\AdminAdobeIms\Api\ImsWebapiRepositoryInterface;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Jwt\Claim\PrivateClaim;
 use Magento\Framework\Jwt\Header\PrivateHeaderParameter;
 use Magento\Framework\Jwt\JwkFactory;
@@ -28,7 +31,8 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\User\Model\User;
 
 /**
- * Checks the categories/list api
+ * Runs the storeConfigs api to check provided token
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdobeImsTokenUserContextTest extends WebapiAbstract
 {
@@ -47,11 +51,6 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
      * @var CacheInterface
      */
     private $cache;
-
-    /**
-     * @var UserProfileRepositoryInterface
-     */
-    private $userProfileRepository;
 
     /**
      * @var User
@@ -74,6 +73,16 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     private $scopeConfig;
 
     /**
+     * @var ImsWebapiRepositoryInterface
+     */
+    private $imsWebapiRepository;
+
+    /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -83,13 +92,18 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
         $objectManager = Bootstrap::getObjectManager();
         $this->manager = $objectManager->get(JwtManagerInterface::class);
         $this->cache = $objectManager->get(CacheInterface::class);
-        $this->userProfileRepository = $objectManager->get(UserProfileRepositoryInterface::class);
         $this->userModel = $objectManager->get(User::class);
         $this->jwkFactory = $objectManager->get(JwkFactory::class);
         $this->configWriter = $objectManager->get(WriterInterface::class);
         $this->scopeConfig = $objectManager->get(ScopeConfigInterface::class);
+        $this->imsWebapiRepository = $objectManager->get(ImsWebapiRepositoryInterface::class);
+        $this->encryptor = $objectManager->get(EncryptorInterface::class);
     }
 
+    /**
+     * @return void
+     * @throws Exception
+     */
     public function testUseAdobeAccessTokenModuleDisabled()
     {
         $this->_markTestAsRestOnly();
@@ -107,7 +121,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'
             );
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->assertUnauthorizedAccessException($exception);
         }
         if ($noExceptionOccurred) {
@@ -117,6 +131,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Webapi/_files/webapi_user.php
+     * @throws Exception
      */
     public function testUseAdobeAccessTokenSuccess()
     {
@@ -126,9 +141,13 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
         $this->configWriter->save(ImsConfig::XML_PATH_ENABLED, 1);
         $this->scopeConfig->clean();
         $this->runWebApiCall($token);
-        $this->assertAdobeUserIsSaved($adminUserNameFromFixture);
+        $this->assertAdminUserIdIsSaved($adminUserNameFromFixture, $token);
     }
 
+    /**
+     * @return void
+     * @throws Exception
+     */
     public function testUseAdobeAccessTokenAdminNotExist()
     {
         $this->_markTestAsRestOnly();
@@ -143,7 +162,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'
             );
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->assertUnauthorizedAccessException($exception);
         }
         if ($noExceptionOccurred) {
@@ -170,7 +189,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'
             );
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $exceptionData = $this->processRestExceptionResult($exception);
             $expectedExceptionData = ['message' => $expectedMessage];
             $this->assertEquals($expectedExceptionData, $exceptionData);
@@ -198,7 +217,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'
             );
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->assertUnauthorizedAccessException($exception);
         }
         if ($noExceptionOccurred) {
@@ -207,10 +226,10 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     }
 
     /**
-     * @param $token
+     * @param string $token
      * @return void
      */
-    private function runWebApiCall($token)
+    private function runWebApiCall(string $token)
     {
         $serviceInfo = [
             'rest' => [
@@ -234,7 +253,10 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     }
 
     /**
+     * @param string $createdAt
+     * @param bool $isCertificateInvalid
      * @return string
+     * @throws Exception
      */
     private function createAccessToken($createdAt = 'now', $isCertificateInvalid = false): string
     {
@@ -277,25 +299,25 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     }
 
     /**
-     * Check if adobe_user_id was saved into adobe_user_profile table
+     * Check if admin_user_id was saved into admin_adobe_ims_webapi table
      *
-     * @param string $accessToken
-     * @param string $userName
-     * @param string $password
+     * @param string $username
+     * @param string $token
+     * @throws NoSuchEntityException
      */
-    private function assertAdobeUserIsSaved($username)
+    private function assertAdminUserIdIsSaved(string $username, string $token)
     {
         $adminUserId = (int) $this->userModel->loadByUsername($username)->getId();
-        $userProfile = $this->userProfileRepository->getByUserId($adminUserId);
-        if ($userProfile->getId()) {
-            $this->assertEquals(self::TEST_ADOBE_USER_ID, $userProfile->getData('adobe_user_id'));
+        $webapiEntity = $this->imsWebapiRepository->getByAccessTokenHash($this->encryptor->getHash($token));
+        if ($webapiEntity->getId()) {
+            $this->assertEquals($adminUserId, $webapiEntity->getAdminUserId());
         }
     }
 
     /**
      * Make sure that status code and message are correct in case of authentication failure.
      *
-     * @param \Exception $exception
+     * @param Exception $exception
      */
     private function assertUnauthorizedAccessException($exception)
     {

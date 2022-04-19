@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Plugin;
 
+use Magento\AdminAdobeIms\Model\Auth;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdobeIms\Model\UserProfileRepository;
-use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -30,31 +29,23 @@ class ReplaceVerifyIdentityWithImsPlugin
     private ImsConnection $imsConnection;
 
     /**
-     * @var UserProfileRepository
+     * @var Auth
      */
-    private UserProfileRepository $userProfileRepository;
-
-    /**
-     * @var EncryptorInterface
-     */
-    private EncryptorInterface $encryptor;
+    private Auth $auth;
 
     /**
      * @param ImsConfig $imsConfig
      * @param ImsConnection $imsConnection
-     * @param UserProfileRepository $userProfileRepository
-     * @param EncryptorInterface $encryptor
+     * @param Auth $auth
      */
     public function __construct(
         ImsConfig $imsConfig,
         ImsConnection $imsConnection,
-        UserProfileRepository $userProfileRepository,
-        EncryptorInterface $encryptor
+        Auth $auth
     ) {
         $this->imsConfig = $imsConfig;
         $this->imsConnection = $imsConnection;
-        $this->userProfileRepository = $userProfileRepository;
-        $this->encryptor = $encryptor;
+        $this->auth = $auth;
     }
 
     /**
@@ -67,6 +58,7 @@ class ReplaceVerifyIdentityWithImsPlugin
      * @throws AuthenticationException
      * @throws AuthorizationException
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundVerifyIdentity(User $subject, callable $proceed, string $password): bool
     {
@@ -74,7 +66,7 @@ class ReplaceVerifyIdentityWithImsPlugin
             return $proceed($password);
         }
 
-        $valid = $this->verifyImsToken($subject);
+        $valid = $this->verifyImsToken();
         if ($valid) {
             return true;
         }
@@ -90,16 +82,16 @@ class ReplaceVerifyIdentityWithImsPlugin
     /**
      * Get and verify IMS Token for current user
      *
-     * @param User $user
      * @return bool
      * @throws AuthenticationException
      * @throws AuthorizationException
      * @throws NoSuchEntityException
      */
-    private function verifyImsToken(User $user): bool
+    private function verifyImsToken(): bool
     {
-        $userProfile = $this->userProfileRepository->getByUserId((int) $user->getId());
-        if (!$userProfile) {
+        $session = $this->auth->getAuthStorage();
+        $accessToken = $session->getAdobeAccessToken();
+        if (!$accessToken) {
             throw new AuthenticationException(
                 __(
                     'The account sign-in was incorrect or your account is disabled temporarily. '
@@ -108,7 +100,6 @@ class ReplaceVerifyIdentityWithImsPlugin
             );
         }
 
-        $accessToken = $this->encryptor->decrypt($userProfile->getAccessToken());
         return $this->imsConnection->validateToken($accessToken);
     }
 }

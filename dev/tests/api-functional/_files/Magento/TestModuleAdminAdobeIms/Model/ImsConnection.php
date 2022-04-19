@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\TestModuleAdminAdobeIms\Model;
 
+use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdobeIms\Model\GetToken;
 use Magento\Framework\HTTP\Client\CurlFactory;
@@ -39,9 +40,10 @@ class ImsConnection extends \Magento\AdminAdobeIms\Model\ImsConnection
         ImsConfig $imsConfig,
         Json $json,
         GetToken $token,
+        AdminAdobeImsLogger $adminAdobeImsLogger,
         MockResponseBodyLoader $mockResponseBodyLoader
     ) {
-        parent::__construct($curlFactory, $imsConfig, $json, $token);
+        parent::__construct($curlFactory, $imsConfig, $json, $token, $adminAdobeImsLogger);
         $this->mockResponseBodyLoader = $mockResponseBodyLoader;
         $this->json = $json;
     }
@@ -53,5 +55,13 @@ class ImsConnection extends \Magento\AdminAdobeIms\Model\ImsConnection
     {
         $responseBody = $this->mockResponseBodyLoader->loadForRequest();
         return $this->json->unserialize($responseBody);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validateToken(?string $token, string $tokenType = 'access_token'): bool
+    {
+        return true;
     }
 }

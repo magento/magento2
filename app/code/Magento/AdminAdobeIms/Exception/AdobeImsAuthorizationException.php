@@ -13,7 +13,7 @@ use Magento\Framework\Exception\AuthorizationException;
 /**
  * @api
  */
-class AdobeImsTokenAuthorizationException extends AuthorizationException
+class AdobeImsAuthorizationException extends AuthorizationException
 {
     public const ERROR_MESSAGE = 'The Adobe ID you\'re using is not added to this Commerce instance. ' .
         'Contact your organization administrator to request access.';

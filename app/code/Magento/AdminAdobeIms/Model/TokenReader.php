@@ -21,11 +21,16 @@ use Magento\Framework\Jwt\Jws\JwsSignatureJwks;
 use Magento\Framework\Jwt\JwtManagerInterface;
 use Magento\Framework\Jwt\Exception\JwtException;
 use Magento\Framework\Jwt\Payload\ClaimsPayloadInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Psr\Log\LoggerInterface;
+use Magento\Integration\Helper\Oauth\Data as OauthHelper;
 
 /**
  * Adobe Ims Token Reader
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class TokenReader implements TokenReaderInterface
 {
@@ -77,12 +82,25 @@ class TokenReader implements TokenReaderInterface
     private File $driver;
 
     /**
+     * @var Json
+     */
+    private Json $json;
+
+    /**
+     * @var OauthHelper
+     */
+    private OauthHelper $oauthHelper;
+
+    /**
      * @param JwtManagerInterface $jwtManager
      * @param CacheInterface $cache
      * @param ImsConfig $imsConfig
      * @param JwkFactory $jwkFactory
      * @param LoggerInterface $logger
      * @param DateTime $dateTime
+     * @param File $driver
+     * @param Json $json
+     * @param OauthHelper $oauthHelper
      */
     public function __construct(
         JwtManagerInterface $jwtManager,
@@ -91,7 +109,9 @@ class TokenReader implements TokenReaderInterface
         JwkFactory $jwkFactory,
         LoggerInterface $logger,
         DateTime $dateTime,
-        File $driver
+        File $driver,
+        Json $json,
+        OauthHelper $oauthHelper
     ) {
         $this->jwtManager = $jwtManager;
         $this->cache = $cache;
@@ -100,6 +120,8 @@ class TokenReader implements TokenReaderInterface
         $this->logger = $logger;
         $this->dateTime = $dateTime;
         $this->driver = $driver;
+        $this->json = $json;
+        $this->oauthHelper = $oauthHelper;
     }
 
     /**
@@ -111,7 +133,7 @@ class TokenReader implements TokenReaderInterface
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
-    public function read(string $token)
+    public function read(string $token): array
     {
         try {
             if (!$jwk = $this->getJWK($token)) {
@@ -130,9 +152,6 @@ class TokenReader implements TokenReaderInterface
         $payload = $jwt->getPayload();
         $claims = $payload->getClaims();
 
-        if (empty($claims['user_id']) || empty($claims['user_id']->getValue())) {
-            throw new InvalidArgumentException(__('user_id not provided by the received JWT'));
-        }
         if (empty($claims['created_at']) || empty($claims['created_at']->getValue())) {
             throw new InvalidArgumentException(__('created_at not provided by the received JWT'));
         }
@@ -147,7 +166,6 @@ class TokenReader implements TokenReaderInterface
         }
 
         return [
-            'adobe_user_id' => $claims['user_id']->getValue(),
             'created_at' => $createdAt,
             'expires_in' => $expiresIn,
         ];
@@ -159,10 +177,15 @@ class TokenReader implements TokenReaderInterface
      * @param string $token
      * @return false|Jwk
      */
-    private function getJWK($token)
+    private function getJWK(string $token)
     {
-        list($header) = explode(".", "$token");
-        $decodedAdobeImsHeader = json_decode(base64_decode($header), true);
+        [$header] = explode(".", (string)$token);
+
+        $decodedAdobeImsHeader = $this->json->unserialize(
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            base64_decode($header)
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
+        );
 
         if (!isset($decodedAdobeImsHeader[self::HEADER_ATTRIBUTE_X5U])) {
             return false;
@@ -201,7 +224,7 @@ class TokenReader implements TokenReaderInterface
      * @param string $certificateValue
      * @return void
      */
-    private function saveCertificateInCache(string $certificateValue)
+    private function saveCertificateInCache(string $certificateValue): void
     {
         $this->cache->save($certificateValue, $this->cacheId, []);
     }
@@ -211,7 +234,7 @@ class TokenReader implements TokenReaderInterface
      *
      * @param string $certificateFileName
      */
-    private function setCertificateCacheId(string $certificateFileName)
+    private function setCertificateCacheId(string $certificateFileName): void
     {
         $this->cacheId = $this->cacheIdPrefix . $certificateFileName;
     }
@@ -225,6 +248,11 @@ class TokenReader implements TokenReaderInterface
      */
     private function isTokenExpired(int $createdAt, int $expiresIn): bool
     {
-        return ($createdAt + $expiresIn) / 1000 <= $this->dateTime->gmtTimestamp();
+        $adobeIsTokenExpired = ($createdAt + $expiresIn) / 1000 <= $this->dateTime->gmtTimestamp();
+        /* convert admin token lifetime hours to seconds */
+        $adminTokenLifetime = $this->oauthHelper->getAdminTokenLifetime() * 3600;
+        $magentoIsTokenExpired = ($createdAt + $adminTokenLifetime) <= $this->dateTime->gmtTimestamp();
+
+        return $adobeIsTokenExpired || $magentoIsTokenExpired;
     }
 }

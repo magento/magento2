@@ -7,12 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model;
 
-use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
-use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
-use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
+use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdminAdobeIms\Api\ImsLogOutInterface;
-use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Psr\Log\LoggerInterface;
@@ -38,57 +35,50 @@ class LogOut implements ImsLogOutInterface
     private CurlFactory $curlFactory;
 
     /**
-     * @var GetAccessTokenInterface
-     */
-    private GetAccessTokenInterface $getAccessToken;
-
-    /**
-     * @var FlushUserTokensInterface
-     */
-    private FlushUserTokensInterface $flushUserTokens;
-    /**
      * @var ImsConfig
      */
     private ImsConfig $imsConfig;
+
     /**
      * @var ImsConnection
      */
     private ImsConnection $imsConnection;
 
     /**
+     * @var Auth
+     */
+    private Auth $auth;
+
+    /**
      * @param LoggerInterface $logger
      * @param ImsConfig $imsConfig
      * @param CurlFactory $curlFactory
-     * @param GetAccessTokenInterface $getAccessToken
-     * @param FlushUserTokensInterface $flushUserTokens
      * @param ImsConnection $imsConnection
+     * @param Auth $auth
      */
     public function __construct(
         LoggerInterface $logger,
         ImsConfig $imsConfig,
         CurlFactory $curlFactory,
-        GetAccessTokenInterface $getAccessToken,
-        FlushUserTokensInterface $flushUserTokens,
-        ImsConnection $imsConnection
+        ImsConnection $imsConnection,
+        Auth $auth
     ) {
         $this->logger = $logger;
         $this->curlFactory = $curlFactory;
-        $this->getAccessToken = $getAccessToken;
-        $this->flushUserTokens = $flushUserTokens;
         $this->imsConfig = $imsConfig;
         $this->imsConnection = $imsConnection;
+        $this->auth = $auth;
     }
 
     /**
      * @inheritDoc
      */
-    public function execute(
-        ?string $accessToken = null,
-        ?int $adminUserId = null
-    ): bool {
+    public function execute(?string $accessToken = null): bool
+    {
         try {
             if ($accessToken === null) {
-                $accessToken = $this->getAccessToken->execute();
+                $session = $this->auth->getAuthStorage();
+                $accessToken = $session->getAdobeAccessToken();
             }
 
             if (empty($accessToken)) {
@@ -96,7 +86,6 @@ class LogOut implements ImsLogOutInterface
             }
 
             $this->externalLogOut($accessToken);
-            $this->flushUserTokens->execute($adminUserId);
             return true;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
@@ -148,7 +137,7 @@ class LogOut implements ImsLogOutInterface
             if (!empty($profile['email'])) {
                 return true;
             }
-        } catch (AdobeImsTokenAuthorizationException $exception) {
+        } catch (AdobeImsAuthorizationException $exception) {
             return false;
         }
         return false;

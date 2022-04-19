@@ -4,23 +4,6 @@ The Magento_Admin_Adobe_Ims module contains integration with Adobe IMS for backe
 
 For information about module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
-# AdminAdobeIMS Callback
-
-For the AdobeIMS Login we provide a redirect_uri on the request. After a successful Login in AdobeIMS, we get redirected to provided redirect_uri.
-
-In the ImsCallback Controller we get the access_token and then the user profile.
-We then check if the assigned organization is valid and if the user does exist in the magento database, before we complete the user login in Magento.
-
-If there went something wrong during the authorization, the user gets redirected to the admin login page and an error message is shown.
-
-# Organization ID Validation
-
-During the authorization we check if the configured `Organization ID` provided on the enabling CLI command is assigned to the user.
-
-In the profile response from Adobe IMS must be a `roles` array. There we have all assigned organizations to the user.
-
-We compare if the configured organization ID does exist in this array and also the structure of the organization ID is valid.
-
 # CLI command usage:
 ## bin/magento admin:adobe-ims:enable
 Enables the AdminAdobeIMS Module. \
@@ -75,6 +58,23 @@ The layout file `view/adminhtml/layout/adobe_ims_login.xml` adds:
 We have included the minified css and the used svgs from Spectrum CSS with our module, but you can also use npm to install the latest versions.
 To rebuild the minified css run the command `./node_modules/.bin/postcss -o dist/index.min.css index.css` after npm install from inside the web directory.
 
+# AdminAdobeIMS Callback
+
+For the AdobeIMS Login we provide a redirect_uri on the request. After a successful Login in AdobeIMS, we get redirected to provided redirect_uri.
+
+In the ImsCallback Controller we get the access_token and then the user profile.
+We then check if the assigned organization is valid and if the user does exist in the magento database, before we complete the user login in Magento.
+
+If there went something wrong during the authorization, the user gets redirected to the admin login page and an error message is shown.
+
+# Organization ID Validation
+
+During the authorization we check if the configured `Organization ID` provided on the enabling CLI command is assigned to the user.
+
+In the profile response from Adobe IMS must be a `roles` array. There we have all assigned organizations to the user.
+
+We compare if the configured organization ID does exist in this array and also the structure of the organization ID is valid.
+
 # Admin Backend Login
 
 Login with the help Adobe IMS Service is implemented. The redirect to Adobe IMS Service is performed-
@@ -82,15 +82,26 @@ The redirect from Adobe IMS is done to \Magento\AdminAdobeIms\Controller\Adminht
 
 The access code comes from Adobe, the token response is got on the basis of the access code,
 client id (api key) and client secret (private key). 
-The token response access taken is used for getting user profile information. 
-If this is successful, the admin user will be logged in and the access and refresh tokens are saved in the `adobe_user_profile` table.
+The token response access token is used for getting user profile information. 
+If this is successful, the admin user will be logged in and the access tokens is added to session as well as token_last_check_time value.
+
+# ACCESS_TOKEN saving in session and validation
+When AdminAdobeIms module is enabled, we check each 10 minutes if ACCESS_TOKEN is still valid.
+For this when admin user login and when session is started, we add 2 extra variables to the session:
+token_last_check_time is current time
+adobe_access_token is ACCESS_TOKEN that we receive during authorization
+
+There is a plugin \Magento\AdminAdobeIms\Plugin\BackendAuthSessionPlugin where we check if token_last_check_time was updated 10 min ago.
+If yes, then we make call to IMS to validate access_token.
+If token is valid, value token_last_check_time will be updated to current time and session prolong.
+If token is not valid, session will be destroyed.
 
 # Admin Backend Logout
 
 The logout from Adobe IMS Service is performed when Magento Admin User is logged out.
 It's triggered by the event `controller_action_predispatch_adminhtml_auth_logout`
 
-Token is invalidated with a call, if it's successful, the access and refresh token are deleted in the `adobe_user_profile` table.
+We do external LogOut by call to IMS. Session revoke is standard magento behavior
 
 # Admin Created Email
 
@@ -124,7 +135,7 @@ There you can switch the toggle for `Enable Logging for Admin Adobe IMS Module`
 # Password usage in Admin UI
 When the AdobeAdminIMS Module is enabled, we do not need any password fields in the magento admin backend anymore.
 
-So we removed the "Current User Verification" fields and the "Password" and "Password Confirmation" fields of the user forms.
+So we hide the "Current User Verification" fields and removed the "Password" and "Password Confirmation" fields of the user forms.
 This is done by the Plugin `\Magento\AdminAdobeIms\Plugin\RemovePasswordAndUserConfirmationFormFieldsPlugin`.
 Here we remove the password and password confirmation field, and hide the current user verification fieldset. 
 As the verification field is just hidden, we set a random password to bypass the input filters of the Save and Delete user Classes.
@@ -149,10 +160,22 @@ These admin user credentials are needed for getting token that can be used to ma
 It means that will be not possible to create token because admin doesn't have credentials. In these case we have to use IMS access token.
 
 `\Magento\AdminAdobeIms\Model\Authorization\AdobeImsTokenUserContext` new implementation for `\Magento\Authorization\Model\UserContextInterface` was created.
-In the implementation IMS access token is read and verified to get adobe user id. If adobe_user_id already exists in adobe_user_profile table, then we can get admin_user_id.
-If adobe_user_id does not exist in adobe_user_profile table, then we have to make request to IMS service to get Adobe user profile, that contain email.
-Using email from Adobe user profile we can check if admin user with these email exists in Magento. If so, we save relevant data into adobe_user_profile table.
+In the implementation IMS access token is validated and read to get created_at and expires_in data. 
+If access_token_hash already exists in admin_adobe_ims_webapi table, then we can get admin_user_id.
+If access_token_hash does not exist in admin_adobe_ims_webapi table, then we have to make request to IMS service to get Adobe user profile, that contain email.
+Using email from Adobe user profile we can check if admin user with these email exists in Magento. If so, we save relevant data into admin_adobe_ims_webapi table.
 If admin user with the email is not found, authentication will fail.
+
+Web Api Token validation via IMS request.
+Each new token (access_token_hash is not exist in admin_adobe_ims_webapi) is validated by using Adobe IMS endpoint validate_token.
+For already existing access_token_hash in admin_adobe_ims_webapi table, validation happens only if last validation was more than 10 min ago.
+Last time validation is saved as last_check_time in admin_adobe_ims_webapi table.
+
+Check if token has expired.
+Access token itself has expires_in value (by default is 24h, but can be adjusted in Adobe side settings).
+Magento has setting: Stores > Settings > Configuration > Services > OAuth > Access Token Expiration (default is 4h).
+Both of values are checked in function isTokenExpired \Magento\AdminAdobeIms\Model\TokenReader.
+it means that with default values is not possible to use tokens that older than 4h.
 
 ###IMS access token verification.
 To verify token a public key is required. For more info https://wiki.corp.adobe.com/display/ims/IMS+public+key+retrieval 
@@ -176,15 +199,4 @@ This authentication mechanism enabled for REST and SOAP web API areas.
 
 Examples, how developers can test functionality:
 curl -X GET "{domain}/rest/V1/customers/2" -H "Authorization: Bearer AddAdobeImsAccessToken"
-curl -X GET "{domain}/rest/V1/products/24-MB01" -H "Authorization: Bearer AddAdobeImsAccessToken" 
-
-# ACCESS_TOKEN saving in session and validation
-When AdminAdobeIms module is enabled, we check each 10 minutes if ACCESS_TOKEN is still valid.
-For this when admin user login and when session is started, we add 2 extra variables to the session:
-token_last_check_time is current time
-adobe_access_token is ACCESS_TOKEN that we receive during authorization
-
-There is a plugin \Magento\AdminAdobeIms\Plugin\BackendAuthSessionPlugin where we check if token_last_check_time was updated 10 min ago. 
-If yes, then we make call to IMS to validate access_token.
-If token is valid, value token_last_check_time will be updated to current time and session prolong.
-If token is not valid, session will be destroyed.
+curl -X GET "{domain}/rest/V1/products/24-MB01" -H "Authorization: Bearer AddAdobeImsAccessToken"

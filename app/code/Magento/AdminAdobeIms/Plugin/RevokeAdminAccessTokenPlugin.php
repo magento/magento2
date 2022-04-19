@@ -9,56 +9,37 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Plugin;
 
 use Exception;
-use Magento\AdminAdobeIms\Model\Auth;
-use Magento\AdminAdobeIms\Model\LogOut;
-use Magento\AdminAdobeIms\Model\UserProfileRepository;
+use Magento\AdminAdobeIms\Model\FlushUserTokens;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Model\AdminTokenService;
 
 class RevokeAdminAccessTokenPlugin
 {
     /**
-     * @var LogOut
-     */
-    private LogOut $logOut;
-
-    /**
      * @var ImsConfig
      */
     private ImsConfig $imsConfig;
 
     /**
-     * @var UserProfileRepository
+     * @var FlushUserTokens
      */
-    private UserProfileRepository $userProfileRepository;
+    private FlushUserTokens $flushUserTokens;
 
     /**
-     * @var EncryptorInterface
-     */
-    private EncryptorInterface $encryptor;
-
-    /**
-     * @param LogOut $logOut
      * @param ImsConfig $imsConfig
-     * @param UserProfileRepository $userProfileRepository
-     * @param EncryptorInterface $encryptor
+     * @param FlushUserTokens $flushUserTokens
      */
     public function __construct(
-        LogOut $logOut,
         ImsConfig $imsConfig,
-        UserProfileRepository $userProfileRepository,
-        EncryptorInterface $encryptor
+        FlushUserTokens $flushUserTokens
     ) {
-        $this->logOut = $logOut;
         $this->imsConfig = $imsConfig;
-        $this->userProfileRepository = $userProfileRepository;
-        $this->encryptor = $encryptor;
+        $this->flushUserTokens = $flushUserTokens;
     }
 
     /**
-     * Get access_token from session and logout user from Adobe IMS
+     * Get access token(s) by admin id and logout user from Adobe IMS
      *
      * @param AdminTokenService $subject
      * @param bool $result
@@ -78,11 +59,7 @@ class RevokeAdminAccessTokenPlugin
         }
 
         try {
-            $entity = $this->userProfileRepository->getByUserId($adminId);
-            $this->logOut->execute(
-                $this->encryptor->decrypt($entity->getAccessToken()),
-                $adminId
-            );
+            $this->flushUserTokens->execute($adminId);
         } catch (Exception $exception) {
             throw new LocalizedException(__('The tokens couldn\'t be revoked.'), $exception);
         }
