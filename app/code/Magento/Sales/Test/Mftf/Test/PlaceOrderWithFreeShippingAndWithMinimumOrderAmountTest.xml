@@ -38,13 +38,13 @@
         </before>
 
        <after>
-             delete category,product
+             <!-- delete category,product -->
             <deleteData createDataKey="testProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="testCategory" stepKey="deleteSimpleCategory"/>
-             Free Shipping disabled
+             <!-- Free Shipping disabled -->
             <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
             <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.default}}" stepKey="setFreeShippingMethodMinimumOrderAmountAsDefault"/>
-            Cash On Delivery Payment method disabled
+            <!-- Cash On Delivery Payment method disabled -->
             <magentoCLI command="config:set {{CashOnDeliveryDisabledConfigData.path}} {{CashOnDeliveryDisabledConfigData.value}}" stepKey="disabledCashOnDelivery"/>
         </after>
 
