@@ -14,7 +14,7 @@
             <stories value="FormKey"/>
             <title value="Form Key value should be updated from UI if pagination remember is enabled"/>
             <description value="Form Key value should be updated from UI in cookies, if catalog remember pagination is enabled and the form key is set"/>
-            <testCaseId value="AC-"/>
+            <testCaseId value="AC-2887"/>
             <useCaseId value="ACP2E-711"/>
             <severity value="MAJOR"/>
             <group value="pageCache"/>
