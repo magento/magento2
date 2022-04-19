@@ -55,7 +55,7 @@
         </actionGroup>
 
         <!-- Navigate to the cart edit page -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCartActionGroup" stepKey="goToCartViewAndEditPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartViewAndEditPage"/>
 
         <!-- Check if MAP message and link are present and functioning -->
         <actionGroup ref="StorefrontCartPageCheckMapMessagePresentAndClickableActionGroup" stepKey="checkFormMapFunctioning"/>
