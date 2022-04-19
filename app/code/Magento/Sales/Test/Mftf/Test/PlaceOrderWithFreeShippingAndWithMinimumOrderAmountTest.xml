@@ -23,7 +23,7 @@
             <!-- create category -->
             <createData entity="_defaultCategory" stepKey="testCategory"/>
             <!-- create data -->
-            <createData entity="SimpleProductQty100" stepKey="testProduct">
+            <createData entity="ApiSimplePrice100Qty100" stepKey="testProduct">
                 <requiredEntity createDataKey="testCategory"/>
             </createData>
             <createData entity="AssignProductToCategory" stepKey="assignTestCategoryToTestProduct">
@@ -32,18 +32,19 @@
             </createData>
             <!-- Enable free shipping method -->
             <magentoCLI command="config:set {{EnableFreeShippingConfigData.path}} {{EnableFreeShippingConfigData.value}}" stepKey="enableFreeShipping"/>
-            <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigDataWithMinimumAmount.path}} {{AdminFreeshippingMinimumOrderAmountConfigDataWithMinimumAmount.value}}" stepKey="enableFreeShippingwithMinValue"/>
+            <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.seventysix}}" stepKey="setFreeShippingMethodMinimumOrderAmountAsSeventySix"/>
             <!--Enable Cash On Delivery method -->
             <magentoCLI command="config:set {{CashOnDeliveryEnableConfigData.path}} {{CashOnDeliveryEnableConfigData.value}}" stepKey="enableCashOndelivery"/>
         </before>
 
-        <after>
-            <!-- delete category,product,-->
+       <after>
+             delete category,product
             <deleteData createDataKey="testProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="testCategory" stepKey="deleteSimpleCategory"/>
-            <!-- Free Shipping disabled -->
+             Free Shipping disabled
             <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
-            <!-- Cash On Delivery Payment method disabled -->
+            <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.default}}" stepKey="setFreeShippingMethodMinimumOrderAmountAsDefault"/>
+            Cash On Delivery Payment method disabled
             <magentoCLI command="config:set {{CashOnDeliveryDisabledConfigData.path}} {{CashOnDeliveryDisabledConfigData.value}}" stepKey="disabledCashOnDelivery"/>
         </after>
 
@@ -55,7 +56,6 @@
         <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPageNewCustomerActionGroup"/>
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$testProduct$$"/>
-            <argument name="productQty" value="{{SimpleProductQty100.quantity}}"/>
         </actionGroup>
 
         <!--Fill customer address -->
