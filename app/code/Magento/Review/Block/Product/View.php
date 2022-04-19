@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Review\Block\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -21,14 +24,14 @@ class View extends \Magento\Catalog\Block\Product\View
      *
      * @var ReviewCollection
      */
-    protected $_reviewsCollection;
+    protected ReviewCollection $_reviewsCollection;
 
     /**
      * Review resource model
      *
      * @var \Magento\Review\Model\ResourceModel\Review\CollectionFactory
      */
-    protected $_reviewsColFactory;
+    protected \Magento\Review\Model\ResourceModel\Review\CollectionFactory $_reviewsColFactory;
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
@@ -101,12 +104,13 @@ class View extends \Magento\Catalog\Block\Product\View
      * @param bool $displayIfNoReviews
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getReviewsSummaryHtml(
         \Magento\Catalog\Model\Product $product,
         $templateType = false,
         $displayIfNoReviews = false
-    ) {
+    ): string {
         return $this->getLayout()->createBlock(
             \Magento\Review\Block\Rating\Entity\Detailed::class
         )->setEntityId(
@@ -123,8 +127,9 @@ class View extends \Magento\Catalog\Block\Product\View
      * Get collection of reviews
      *
      * @return ReviewCollection
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getReviewsCollection()
+    public function getReviewsCollection(): ReviewCollection
     {
         if (null === $this->_reviewsCollection) {
             $this->_reviewsCollection = $this->_reviewsColFactory->create()->addStoreFilter(
@@ -144,7 +149,7 @@ class View extends \Magento\Catalog\Block\Product\View
      *
      * @return bool
      */
-    public function hasOptions()
+    public function hasOptions(): bool
     {
         return false;
     }
