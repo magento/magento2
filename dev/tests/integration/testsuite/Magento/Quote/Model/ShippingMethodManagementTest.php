@@ -32,6 +32,7 @@ use Magento\Tax\Model\Config as TaxConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use PHPUnit\Framework\TestCase;
+use Magento\Quote\Api\CouponManagementInterface;
 
 /**
  * Test for shipping methods management
@@ -446,5 +447,60 @@ class ShippingMethodManagementTest extends TestCase
         foreach ($configData as $data) {
             $config->setValue($data['path'], $data['value'], $data['scope']);
         }
+    }
+
+    /**
+     *
+     * Test table rate with zero amount is available for the cart when discount coupon cart price rule to all items
+     * and freeshipping cart price rule is applied when order subtotal is greater than specified amount.
+     *
+     * @magentoConfigFixture default_store carriers/tablerate/active 1
+     * @magentoConfigFixture default_store carriers/flatrate/active 0
+     * @magentoConfigFixture default_store carriers/freeshipping/active 0
+     * @magentoConfigFixture default_store carriers/tablerate/condition_name package_value_with_discount
+     * @magentoDataFixture Magento\SalesRule\Test\Fixture\AddressCondition as:c1
+     * @magentoDataFixture Magento\SalesRule\Test\Fixture\Rule as:r1
+     * @magentoDataFixture Magento\SalesRule\Test\Fixture\Rule as:r2
+     * @magentoDataFixtureDataProvider {"c1":{"attribute":"base_subtotal","operator":">=","value":30}}
+     * @magentoDataFixtureDataProvider {"r1":{"stop_rules_processing":0,"simple_free_shipping":1,"conditions":["$c1$"]}}
+     * @magentoDataFixtureDataProvider {"r2":{"stop_rules_processing":0,"coupon_code":"123","discount_amount":20}}
+     * @magentoDataFixture Magento/Sales/_files/quote_with_multiple_products.php
+     * @magentoDataFixture Magento/OfflineShipping/_files/tablerates_price.php
+     * @return void
+     */
+    public function testTableRateWithZeroPriceShownWhenDiscountCouponAndFreeShippingCartRuleApplied()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $quote = $this->getQuote('tableRate');
+        $cartId = $quote->getId();
+        if (!$cartId) {
+            $this->fail('quote fixture failed');
+        }
+        /** @var QuoteIdMask $quoteIdMask */
+        $quoteIdMask = Bootstrap::getObjectManager()
+            ->create(QuoteIdMaskFactory::class)
+            ->create();
+        $quoteIdMask->load($cartId, 'quote_id');
+        //Use masked cart Id
+        $cartId = $quoteIdMask->getMaskedId();
+        $addressFactory = $this->objectManager->get(AddressInterfaceFactory::class);
+        /** @var \Magento\Quote\Api\Data\AddressInterface $address */
+        $address = $addressFactory->create();
+        $address->setCountryId('US');
+        /** @var CouponManagementInterface $couponManagement */
+        $couponManagement = Bootstrap::getObjectManager()->get(CouponManagementInterface::class);
+        $couponManagement->set($quote->getId(), '123');
+        /** @var  GuestShippingMethodManagementInterface $shippingEstimation */
+        $shippingEstimation = $objectManager->get(GuestShippingMethodManagementInterface::class);
+        $result = $shippingEstimation->estimateByExtendedAddress($cartId, $address);
+        $this->assertCount(1, $result);
+        $rate = reset($result);
+
+        $expectedResult = [
+            'method_code' => 'bestway',
+            'amount' => 0
+        ];
+        $this->assertEquals($expectedResult['method_code'], $rate->getMethodCode());
+        $this->assertEquals($expectedResult['amount'], $rate->getAmount());
     }
 }
