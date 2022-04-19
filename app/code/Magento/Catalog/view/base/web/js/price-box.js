@@ -241,16 +241,16 @@ define([
 
             if (this.options.prices.basePrice) {
                 var originalBasePrice = this.options.prices.basePrice.amount,
-                    tierPriceExlTax,
+                    tierBasePrice,
                     tierPriceItem;
 
                 for (i = 0; i < this.options.priceConfig.tierPrices.length; i++) {
                     tierPriceItem = this.options.priceConfig.tierPrices[i];
-                    if (productQty >= tierPriceItem.qty && tierPriceItem.excl_tax_price) {
-                        tierPriceExlTax = tierPriceItem.excl_tax_price;
+                    if (productQty >= tierPriceItem.qty && tierPriceItem.basePrice) {
+                        tierBasePrice = tierPriceItem.basePrice;
                     }
                 }
-                prices.prices.basePrice = {'amount': tierPriceExlTax - originalBasePrice};
+                prices.prices.basePrice = {'amount': tierBasePrice - originalBasePrice};
             }
 
             this.updatePrice(prices);
