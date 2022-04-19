@@ -8,10 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\Framework\App\Action;
 
+use Magento\Framework\App\ActionInterface;
+
 /**
- * Marker for actions processing GET requests.
+ * Marker for actions processing GET and HEAD requests.
  */
-interface HttpGetActionInterface extends HttpHeadActionInterface
+interface HttpGetActionInterface extends ActionInterface
 {
 
 }
