@@ -13,6 +13,7 @@ use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 
 /**
  * Metadata reader
+ * @api
  */
 interface ReadMetadataInterface
 {
