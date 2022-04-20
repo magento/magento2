@@ -13,6 +13,8 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Controller\Adminhtml\Address\Save;
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\FormFactory;
 use Magento\Framework\Api\DataObjectHelper;
@@ -20,12 +22,14 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 class SaveTest extends TestCase
 {
@@ -85,6 +89,16 @@ class SaveTest extends TestCase
     private $json;
 
     /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManager;
+
+    /**
+     * @var CustomerRegistry|MockObject
+     */
+    private $customerRegistry;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -106,6 +120,12 @@ class SaveTest extends TestCase
         $this->json = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->customerRegistry = $this->getMockBuilder(CustomerRegistry::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -117,9 +137,11 @@ class SaveTest extends TestCase
                 'customerRepository'    => $this->customerRepositoryMock,
                 'dataObjectHelper'      => $this->dataObjectHelperMock,
                 'addressDataFactory'    => $this->addressDataFactoryMock,
-                'logger'            => $this->loggerMock,
+                'logger'                => $this->loggerMock,
                 'request'               => $this->requestMock,
-                'resultJsonFactory' => $this->resultJsonFactory
+                'resultJsonFactory'     => $this->resultJsonFactory,
+                'storeManager'          => $this->storeManager,
+                'customerRegistry'      => $this->customerRegistry,
             ]
         );
     }
@@ -219,6 +241,21 @@ class SaveTest extends TestCase
                     ]
                 ]
             )->willReturnSelf();
+
+        $customerModel = $this->getMockBuilder(Customer::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getStoreId'])
+            ->getMock();
+        $customerModel->method('getStoreId')
+            ->willReturn(2);
+        $this->customerRegistry->expects($this->once())
+            ->method('retrieve')
+            ->with(22)
+            ->willReturn($customerModel);
+
+        $this->storeManager->expects($this->once())
+            ->method('setCurrentStore')
+            ->with(2);
 
         $this->assertEquals($this->json, $this->model->execute());
     }
