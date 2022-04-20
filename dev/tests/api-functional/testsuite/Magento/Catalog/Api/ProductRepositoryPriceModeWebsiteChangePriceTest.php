@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Api;
 
@@ -12,13 +13,13 @@ use Magento\Store\Model\Store;
 
 class ProductRepositoryPriceModeWebsiteChangePriceTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductRepositoryV1';
-    const PRICE_SERVICE_NAME = 'catalogBasePriceStorageV1';
-    const SERVICE_VERSION = 'V1';
-    const PRODUCTS_RESOURCE_PATH = '/V1/products';
-    const PRICES_RESOURCE_PATH = '/V1/products/base-prices';
-    const STORE1_CODE_FROM_FIXTURE = 'fixturestore';
-    const STORE2_CODE_FROM_FIXTURE = 'fixture_second_store';
+    private const SERVICE_NAME = 'catalogProductRepositoryV1';
+    private const PRICE_SERVICE_NAME = 'catalogBasePriceStorageV1';
+    private const SERVICE_VERSION = 'V1';
+    private const PRODUCTS_RESOURCE_PATH = '/V1/products';
+    private const PRICES_RESOURCE_PATH = '/V1/products/base-prices';
+    private const STORE1_CODE_FROM_FIXTURE = 'fixturestore';
+    private const STORE2_CODE_FROM_FIXTURE = 'fixture_second_store';
 
     /**
      * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php

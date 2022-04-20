@@ -15,7 +15,7 @@ class Deployments
     /**
      * API URL for New Relic deployments
      */
-    const API_URL = 'https://api.newrelic.com/v2/applications/%s/deployments.json';
+    private const API_URL = 'https://api.newrelic.com/v2/applications/%s/deployments.json';
 
     /**
      * @var \Magento\NewRelicReporting\Model\Config
@@ -55,6 +55,7 @@ class Deployments
      * @param string $description
      * @param bool $change
      * @param bool $user
+     * @param ?string $revision
      *
      * @return bool|string
      */

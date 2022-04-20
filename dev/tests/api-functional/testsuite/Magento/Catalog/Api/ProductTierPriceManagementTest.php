@@ -14,9 +14,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class ProductTierPriceManagementTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductTierPriceManagementV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products/';
+    private const SERVICE_NAME = 'catalogProductTierPriceManagementV1';
+    private const SERVICE_VERSION = 'V1';
+    private const RESOURCE_PATH = '/V1/products/';
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php

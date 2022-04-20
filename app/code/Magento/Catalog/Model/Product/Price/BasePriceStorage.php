@@ -26,7 +26,7 @@ use Magento\Store\Model\Store;
 class BasePriceStorage implements BasePriceStorageInterface
 {
     /**
-     * Attribute code.
+     * Price attribute code.
      *
      * @var string
      */
@@ -78,14 +78,14 @@ class BasePriceStorage implements BasePriceStorageInterface
     private $productAttributeRepository;
 
     /**
-     * Price type allowed.
+     * Is price type allowed
      *
      * @var int
      */
     private $priceTypeAllowed = 1;
 
     /**
-     * Allowed product types.
+     * Array of allowed product types.
      *
      * @var array
      */

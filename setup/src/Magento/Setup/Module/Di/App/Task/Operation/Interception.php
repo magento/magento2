@@ -63,7 +63,7 @@ class Interception implements OperationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function doOperation()
     {

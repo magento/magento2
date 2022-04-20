@@ -23,10 +23,10 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class SpecialPriceStorageTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogSpecialPriceStorageV1';
-    const SERVICE_VERSION = 'V1';
-    const SIMPLE_PRODUCT_SKU = 'simple';
-    const VIRTUAL_PRODUCT_SKU = 'virtual-product';
+    private const SERVICE_NAME = 'catalogSpecialPriceStorageV1';
+    private const SERVICE_VERSION = 'V1';
+    private const SIMPLE_PRODUCT_SKU = 'simple';
+    private const VIRTUAL_PRODUCT_SKU = 'virtual-product';
     private const PRODUCT_SKU_TWO_WEBSITES = 'simple-on-two-websites';
 
     /**

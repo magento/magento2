@@ -52,7 +52,7 @@ class ApplicationCodeGenerator implements OperationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function doOperation()
     {
@@ -86,6 +86,8 @@ class ApplicationCodeGenerator implements OperationInterface
     }
 
     /**
+     * Get list if files.
+     *
      * @param string[] $paths
      * @return array
      * @throws FileSystemException
