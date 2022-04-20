@@ -384,6 +384,38 @@ class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testPartialUpdateShouldNotOverrideImagesRolesInheritance(): void
+    {
+        $sku = 'simple';
+        $name = 'Product Simple edited';
+        $store = $this->objectManager->get(Store::class);
+        $storeId = (int) $store->load('fixture_third_store', 'code')->getId();
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($sku);
+        $request = [
+            ProductInterface::SKU => $sku,
+            ProductInterface::NAME => $name,
+        ];
+        $response = $this->saveProduct($request, 'fixture_third_store');
+        $this->assertEquals($name, $response['name']);
+        $this->assertOverriddenValues(
+            [
+                'name' => true,
+                'image' => false,
+                'small_image' => false,
+                'thumbnail' => false,
+            ],
+            $product,
+            $storeId
+        );
+    }
+
+    /**
      * @param array $expected
      * @param array $actual
      */
