@@ -55,6 +55,10 @@ define(function () {
             return null;
         }
 
+        /**
+         * Get form key from UI input hidden
+         * @private
+         */
         function getFormKeyFromUI() {
             return document.querySelector(inputSelector).value;
         }
