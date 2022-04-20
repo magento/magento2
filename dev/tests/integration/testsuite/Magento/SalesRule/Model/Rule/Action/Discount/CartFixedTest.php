@@ -551,6 +551,33 @@ class CartFixedTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture current_store sales/minimum_order/tax_including 1
+     * @magentoConfigFixture current_store sales/minimum_order/include_discount_amount 1
+     * @magentoConfigFixture current_store tax/calculation/price_includes_tax 1
+     * @magentoConfigFixture current_store tax/calculation/shipping_includes_tax 1
+     * @magentoConfigFixture current_store tax/calculation/discount_tax 1
+     * @magentoConfigFixture current_store tax/calculation/apply_after_discount 1
+     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_with_coupon_5_off_no_condition.php
+     * @magentoDataFixture Magento/Tax/_files/tax_rule_region_1_al.php
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_taxable_product_and_customer.php
+     */
+    public function testCartFixedDiscountPriceIncludeTax()
+    {
+        $quote = $this->getQuote('test_order_with_taxable_product');
+        $quote->setCouponCode('CART_FIXED_DISCOUNT_5');
+        $quote->getShippingAddress()
+            ->setShippingMethod('flatrate_flatrate')
+            ->setCollectShippingRates(true);
+        $quote->collectTotals();
+        $this->quoteRepository->save($quote);
+
+        $this->assertEquals(0.4, $quote->getShippingAddress()->getTaxAmount());
+        $this->assertEquals(5, $quote->getShippingAddress()->getShippingAmount());
+        $this->assertEquals(5, $quote->getShippingAddress()->getSubtotalWithDiscount());
+        $this->assertEquals(-5, $quote->getShippingAddress()->getDiscountAmount());
+    }
+
+    /**
      * Get list of orders by quote id.
      *
      * @param int $quoteId
