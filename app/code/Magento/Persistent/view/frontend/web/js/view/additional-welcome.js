@@ -15,7 +15,9 @@ define([
          * Init.
          */
         init: function () {
-            var persistent = customerData.get('persistent');
+            customerData.reload(['persistent','cart'], true);
+
+            let persistent = customerData.get('persistent');
 
             if (persistent().fullname === undefined) {
                 customerData.get('persistent').subscribe(this.replacePersistentWelcome);
@@ -28,7 +30,7 @@ define([
          * Replace welcome message for customer with persistent cookie.
          */
         replacePersistentWelcome: function () {
-            var persistent = customerData.get('persistent'),
+            let persistent = customerData.get('persistent'),
                 welcomeElems;
 
             if (persistent().fullname !== undefined) {
