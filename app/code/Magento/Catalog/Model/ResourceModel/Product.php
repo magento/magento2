@@ -656,11 +656,7 @@ class Product extends AbstractResource
      */
     private function getResultKey(string $sku, array $productSkuList): string
     {
-        $key = array_search(strtolower($sku), array_map('strtolower', $productSkuList));
-        if ($key !== false) {
-            $sku = $productSkuList[$key];
-        }
-        return $sku;
+        return in_array(strtolower($sku), array_map('strtolower', $productSkuList)) ? $sku : '';
     }
 
     /**
