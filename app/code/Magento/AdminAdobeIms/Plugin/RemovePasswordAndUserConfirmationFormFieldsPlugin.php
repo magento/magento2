@@ -44,7 +44,7 @@ class RemovePasswordAndUserConfirmationFormFieldsPlugin
         if ($result->getElement('base_fieldset')) {
             foreach ($result->getElement('base_fieldset')->getElements() as $element) {
                 if ($element->getId() === 'email') {
-                    $element->setData('note', __('Use the same email user have in Adobe IMS organization.'));
+                    $element->setData('note', __('Use the same email user has in Adobe IMS organization.'));
                 }
                 if ($element->getId() === 'password') {
                     $result->getElement('base_fieldset')->removeField($element->getId());
