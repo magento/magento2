@@ -36,6 +36,11 @@ class PreProcessor implements PreProcessorInterface
     protected $translate;
 
     /**
+     * @var array
+     */
+    protected $areasThemesLocales = [];
+
+    /**
      * @param Config $config
      * @param AreaList $areaList
      * @param TranslateInterface $translate
@@ -63,6 +68,7 @@ class PreProcessor implements PreProcessorInterface
             if ($context instanceof FallbackContext) {
                 $areaCode = $context->getAreaCode();
                 $this->translate->setLocale($context->getLocale());
+                $this->loadTranslationDataBasedOnThemesAndLocales($context);
             }
 
             $area = $this->areaList->getArea($areaCode);
@@ -95,5 +101,24 @@ class PreProcessor implements PreProcessorInterface
     protected function replaceCallback($matches)
     {
         return '\'' . __($matches['translate']) . '\'';
+    }
+
+    /**
+     * Load translation data based on themes and locales.
+     *
+     * @param FallbackContext $context
+     * @return void
+     */
+    public function loadTranslationDataBasedOnThemesAndLocales(FallbackContext $context): void
+    {
+        if (!isset($this->areasThemesLocales[$context->getAreaCode()]
+                [$context->getThemePath()]
+                [$context->getLocale()]
+        )) {
+            $this->areasThemesLocales[$context->getAreaCode()]
+                [$context->getThemePath()]
+                [$context->getLocale()] = true;
+            $this->translate->loadData($context->getAreaCode(), false);
+        }
     }
 }
