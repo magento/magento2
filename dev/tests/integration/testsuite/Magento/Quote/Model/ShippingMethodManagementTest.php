@@ -11,7 +11,6 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\Vat;
-use Magento\Customer\Observer\AfterAddressSaveObserver;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\DataObject;
@@ -23,12 +22,13 @@ use Magento\Quote\Api\Data\EstimateAddressInterface;
 use Magento\Quote\Api\GuestShippingMethodManagementInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
 use Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver;
-use Magento\Quote\Observer\Frontend\Quote\Address\VatValidator;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Api\Data\TaxClassInterface;
 use Magento\Tax\Api\TaxClassRepositoryInterface;
 use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\Config as TaxConfig;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use PHPUnit\Framework\TestCase;
@@ -52,6 +52,11 @@ class ShippingMethodManagementTest extends TestCase
     private $taxClassRepository;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -59,6 +64,7 @@ class ShippingMethodManagementTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->groupRepository = $this->objectManager->get(GroupRepositoryInterface::class);
         $this->taxClassRepository = $this->objectManager->get(TaxClassRepositoryInterface::class);
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -126,6 +132,56 @@ class ShippingMethodManagementTest extends TestCase
             $this->assertEquals($expectedResult['amount'], $rate->getAmount());
             $this->assertEquals($expectedResult['method_code'], $rate->getMethodCode());
         }
+    }
+
+    /**
+     * phpcs:disable Generic.Files.LineLength.TooLong
+     *
+     * @magentoConfigFixture default_store carriers/tablerate/active 1
+     * @magentoConfigFixture default_store carriers/flatrate/active 0
+     * @magentoConfigFixture current_store carriers/tablerate/condition_name package_value_with_discount
+     * @magentoConfigFixture default_store carriers/tablerate/include_virtual_price 0
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple", "type_id":"simple"} as:p1
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"virtual", "type_id":"virtual", "weight":0} as:p2
+     * @magentoDataFixture Magento\Quote\Test\Fixture\GuestCart as:cart
+     * @magentoDataFixture Magento\Quote\Test\Fixture\AddProductToCart with:{"cart_id":"$cart.id$", "product_id":"$p1.id$"}
+     * @magentoDataFixture Magento\Quote\Test\Fixture\AddProductToCart with:{"cart_id":"$cart.id$", "product_id":"$p2.id$"}
+     * @magentoDataFixture Magento\Quote\Test\Fixture\SetBillingAddress with:{"cart_id":"$cart.id$"}
+     * @magentoDataFixture Magento\Quote\Test\Fixture\SetShippingAddress with:{"cart_id":"$cart.id$"}
+     * @magentoDataFixture Magento/OfflineShipping/_files/tablerates_price.php
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    public function testTableRateWithoutIncludingVirtualProduct()
+    {
+        $cartId = (int)$this->fixtures->get('cart')->getId();
+
+        if (!$cartId) {
+            $this->fail('quote fixture failed');
+        }
+
+        /** @var QuoteRepository $quoteRepository */
+        $quoteRepository = $this->objectManager->get(QuoteRepository::class);
+        $quote = $quoteRepository->get($cartId);
+
+        /** @var QuoteIdToMaskedQuoteIdInterface $maskedQuoteId */
+        $maskedQuoteId = $this->objectManager->get(QuoteIdToMaskedQuoteIdInterface::class)->execute($cartId);
+
+        /** @var GuestShippingMethodManagementInterface $shippingEstimation */
+        $shippingEstimation = $this->objectManager->get(GuestShippingMethodManagementInterface::class);
+        $result = $shippingEstimation->estimateByExtendedAddress(
+            $maskedQuoteId,
+            $quote->getShippingAddress()
+        );
+
+        $this->assertCount(1, $result);
+        $rate = reset($result);
+        $expectedResult = [
+            'method_code' => 'bestway',
+            'amount' => 15,
+        ];
+        $this->assertEquals($expectedResult['method_code'], $rate->getMethodCode());
+        $this->assertEquals($expectedResult['amount'], $rate->getAmount());
     }
 
     /**
