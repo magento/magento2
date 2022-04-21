@@ -39,7 +39,7 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: Current result
+      label: Actual result
       description: |
         Tell us what happened. Include error messages and issues.
       placeholder: |
