@@ -33,7 +33,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     /**
      * Xml default email domain path
      */
-    const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
+    public const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
 
     private const XML_PATH_EMAIL_REQUIRED_CREATE_ORDER = 'customer/create_account/email_required_create_order';
     /**
@@ -100,8 +100,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     protected $_quote;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -1833,9 +1831,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function _prepareCustomer()
     {
-        if ($this->getQuote()->getCustomerIsGuest()) {
-            return $this;
-        }
         /** @var $store \Magento\Store\Model\Store */
         $store = $this->getSession()->getStore();
         $customer = $this->getQuote()->getCustomer();
