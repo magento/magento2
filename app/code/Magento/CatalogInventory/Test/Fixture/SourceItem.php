@@ -72,11 +72,7 @@ class SourceItem implements RevertibleDataFixtureInterface
     public function revert(DataObject $data): void
     {
         $service = $this->serviceFactory->create(SourceItemsDeleteInterface::class, 'execute');
-        $service->execute(
-            [
-                'sourceItems' => [$this->prepareData($data->getData())]
-            ]
-        );
+        $service->execute(['sourceItems' => [$this->prepareData($data->getData())]]);
     }
 
     /**
