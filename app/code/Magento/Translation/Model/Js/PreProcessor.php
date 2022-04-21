@@ -113,8 +113,7 @@ class PreProcessor implements PreProcessorInterface
     {
         if (!isset($this->areasThemesLocales[$context->getAreaCode()]
                 [$context->getThemePath()]
-                [$context->getLocale()]
-        )) {
+                [$context->getLocale()])) {
             $this->areasThemesLocales[$context->getAreaCode()]
                 [$context->getThemePath()]
                 [$context->getLocale()] = true;
