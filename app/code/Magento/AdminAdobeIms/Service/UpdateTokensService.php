@@ -40,9 +40,9 @@ class UpdateTokensService
     /**
      * Token invalidation for the admin users
      *
-     * return @void
+     * @return void
      */
-    public function execute()
+    public function execute(): void
     {
         $adminUsers = $this->adminUserCollection->getItems();
         foreach ($adminUsers as $adminUser) {

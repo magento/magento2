@@ -28,9 +28,12 @@ class ResetAttemptForBackendObserverPlugin
     }
 
     /**
+     * Reset Login attempts for backend only if AdminAdobeIms is disabled
+     *
      * @param ResetAttemptForBackendObserver $subject
      * @param callable $proceed
      * @param Observer $observer
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(ResetAttemptForBackendObserver $subject, callable $proceed, Observer $observer)
     {
