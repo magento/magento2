@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportSimpleProductImageLongNameTest">
+        <annotations>
+            <features value="Import/Export"/>
+            <stories value="Import Products"/>
+            <title value="Import product with long image filename"/>
+            <description value="Import product with long image filename should not cause errors"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-502"/>
+            <useCaseId value="AC-2676"/>
+            <group value="catalog_import_export"/>
+        </annotations>
+
+        <before>
+            <!-- Create Simple Product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <field key="sku">test_image_long_name_sku</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Copy Image to Import Directory for Product Images -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+                <argument name="path">var/import/images/test_image_long_name</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProductBaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderBaseImageLongName.file}}</argument>
+                <argument name="destination">var/import/images/test_image_long_name/{{placeholderBaseImageLongName.file}}</argument>
+            </helper>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+                <argument name="path">var/import/images/test_image_long_name</argument>
+            </helper>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Import product with add/update behavior -->
+        <actionGroup ref="AdminImportProductsWithCustomImagesDirectoryActionGroup" stepKey="importCSVFile">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="import_simple_product_with_image_long_name.csv"/>
+            <argument name="imagesFileDirectory" value="test_image_long_name"/>
+            <argument name="importNoticeMessage" value="Created: 0, Updated: 1, Deleted: 0"/>
+        </actionGroup>
+        <!-- Verify image -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProduct">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertBaseImageIsPresent">
+            <argument name="image" value="{{placeholderBaseImageLongName.name}}"/>
+        </actionGroup>
+    </test>
+</tests>
