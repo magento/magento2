@@ -27,6 +27,8 @@ use Magento\Tax\Api\Data\TaxClassInterface;
 use Magento\Tax\Api\TaxClassRepositoryInterface;
 use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\Config as TaxConfig;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use PHPUnit\Framework\TestCase;
@@ -49,6 +51,11 @@ class ShippingMethodManagementTest extends TestCase
     private $taxClassRepository;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -56,6 +63,7 @@ class ShippingMethodManagementTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->groupRepository = $this->objectManager->get(GroupRepositoryInterface::class);
         $this->taxClassRepository = $this->objectManager->get(TaxClassRepositoryInterface::class);
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -126,33 +134,42 @@ class ShippingMethodManagementTest extends TestCase
     }
 
     /**
+     * phpcs:disable Generic.Files.LineLength.TooLong
+     *
      * @magentoConfigFixture default_store carriers/tablerate/active 1
      * @magentoConfigFixture default_store carriers/flatrate/active 0
      * @magentoConfigFixture current_store carriers/tablerate/condition_name package_value_with_discount
      * @magentoConfigFixture default_store carriers/tablerate/include_virtual_price 0
-     * @magentoDataFixture Magento/Sales/_files/quote_with_simple_and_virtual_product.php
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple", "type_id":"simple"} as:p1
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"virtual", "type_id":"virtual", "weight":0} as:p2
+     * @magentoDataFixture Magento\Quote\Test\Fixture\GuestCart as:cart
+     * @magentoDataFixture Magento\Quote\Test\Fixture\AddProductToCart with:{"cart_id":"$cart.id$", "product_id":"$p1.id$"}
+     * @magentoDataFixture Magento\Quote\Test\Fixture\AddProductToCart with:{"cart_id":"$cart.id$", "product_id":"$p2.id$"}
+     * @magentoDataFixture Magento\Quote\Test\Fixture\SetBillingAddress with:{"cart_id":"$cart.id$"}
+     * @magentoDataFixture Magento\Quote\Test\Fixture\SetShippingAddress with:{"cart_id":"$cart.id$"}
      * @magentoDataFixture Magento/OfflineShipping/_files/tablerates_price.php
      * @return void
+     * @throws NoSuchEntityException
      */
     public function testTableRateWithoutIncludingVirtualProduct()
     {
-        $quote = $this->getQuote('quoteWithVirtualProduct');
-        $cartId = $quote->getId();
+        $cartId = (int)$this->fixtures->get('cart')->getId();
 
         if (!$cartId) {
             $this->fail('quote fixture failed');
         }
 
-        /** @var QuoteIdMask $quoteIdMask */
-        $quoteIdMask = $this->objectManager
-            ->create(QuoteIdMaskFactory::class)
-            ->create()
-            ->load($cartId, 'quote_id');
+        /** @var QuoteRepository $quoteRepository */
+        $quoteRepository = $this->objectManager->get(QuoteRepository::class);
+        $quote = $quoteRepository->get($cartId);
 
-        /** @var  GuestShippingMethodManagementInterface $shippingEstimation */
+        /** @var QuoteIdToMaskedQuoteIdInterface $maskedQuoteId */
+        $maskedQuoteId = $this->objectManager->get(QuoteIdToMaskedQuoteIdInterface::class)->execute($cartId);
+
+        /** @var GuestShippingMethodManagementInterface $shippingEstimation */
         $shippingEstimation = $this->objectManager->get(GuestShippingMethodManagementInterface::class);
         $result = $shippingEstimation->estimateByExtendedAddress(
-            $quoteIdMask->getMaskedId(),
+            $maskedQuoteId,
             $quote->getShippingAddress()
         );
 
