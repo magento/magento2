@@ -60,6 +60,7 @@
                     <config_path>payment/payflow_advanced/buyer_country</config_path>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <attribute type="shared">1</attribute>
+                    <tooltip>The buyer country determines which funding sources are eligible for a given buyer during testing.</tooltip>
                     <depends>
                         <field id="sandbox_flag">1</field>
                     </depends>
