@@ -10,6 +10,7 @@ namespace Magento\SalesRule\Model\Spi;
 
 /**
  * Recollect totals for rule related quotes
+ * @api
  */
 interface RuleQuoteRecollectTotalsInterface
 {
