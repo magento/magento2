@@ -159,7 +159,7 @@ class SearchCriteriaBuilder
     {
         $sortOrderArray = $searchCriteria->getSortOrders();
         $sortDir = SortOrder::SORT_DESC;
-        if (count($sortOrderArray) > 0) {
+        if (is_array($sortOrderArray) && count($sortOrderArray) > 0) {
             $sortOrder = end($sortOrderArray);
             // in the case the last sort order is by position, sort IDs in descendent order
             $sortDir = $sortOrder->getField() === EavAttributeInterface::POSITION
