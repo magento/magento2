@@ -24,7 +24,7 @@ class ImsCommandOptionService
     /**
      * Prompt for 2FA Auth CLI Command option
      */
-    private const TWO_FACTOR_OPTION_QUESTION = 'Is 2FA enabled on AdobeIMS?: ';
+    private const TWO_FACTOR_OPTION_QUESTION = 'Is 2FA enabled on AdobeIMS? (yes/no):';
 
     /**
      * Human-readable name for Organization ID input option
@@ -149,7 +149,7 @@ class ImsCommandOptionService
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @param $helper
+     * @param mixed $helper
      * @param string $optionArgument
      * @return bool
      * @throws LocalizedException
