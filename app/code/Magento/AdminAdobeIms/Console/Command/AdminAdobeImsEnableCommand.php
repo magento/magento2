@@ -24,6 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command to set Admin Adobe IMS Module mode
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdminAdobeImsEnableCommand extends Command
 {
@@ -72,7 +73,7 @@ class AdminAdobeImsEnableCommand extends Command
      * @param ImsConnection $imsConnection
      * @param ImsCommandOptionService $imsCommandOptionService
      * @param TypeListInterface $cacheTypeList
-     * @param UpdateTokensService $cleanupTokensService
+     * @param UpdateTokensService $updateTokensService
      */
     public function __construct(
         ImsConfig $imsConfig,
