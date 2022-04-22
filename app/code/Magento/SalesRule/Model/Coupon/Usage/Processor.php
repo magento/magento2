@@ -93,7 +93,8 @@ class Processor
         $isIncrement = $updateInfo->isIncrement();
         $this->coupon->load($updateInfo->getCouponCode(), 'code');
         if ($this->coupon->getId()) {
-            if ($updateInfo->isIncrement() || $this->coupon->getTimesUsed() > 0) {
+            if (!$updateInfo->isCouponAlreadyApplied()
+                && ($updateInfo->isIncrement() || $this->coupon->getTimesUsed() > 0)) {
                 $this->coupon->setTimesUsed($this->coupon->getTimesUsed() + ($isIncrement ? 1 : -1));
                 $this->coupon->save();
             }

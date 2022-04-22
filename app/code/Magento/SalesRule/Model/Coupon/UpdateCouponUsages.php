@@ -59,6 +59,12 @@ class UpdateCouponUsages
         $updateInfo->setCustomerId((int)$subject->getCustomerId());
         $updateInfo->setIsIncrement($increment);
 
+        if ($subject->getOrigData('customer_id') === null
+            && $subject->getOrigData('coupon_code') !== null
+            && $subject->getOrigData('customer_id') !== $subject->getData('customer_id')) {
+            $updateInfo->setCouponAlreadyApplied(true);
+        }
+
         $this->couponUsageProcessor->process($updateInfo);
 
         return $subject;
