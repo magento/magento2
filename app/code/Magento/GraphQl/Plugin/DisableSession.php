@@ -43,12 +43,14 @@ class DisableSession
     /**
      * Prevents session starting while in graphql area and session is disabled in config.
      * Returns true if session is allowed to start and false to avoid starting the session.
+     * 
      * @see \Magento\Framework\Session\SessionStartChecker::check
      *
      * @param SessionStartChecker $subject
      * @param bool $result
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function afterCheck(SessionStartChecker $subject, bool $result): bool
     {

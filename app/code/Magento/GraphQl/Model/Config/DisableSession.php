@@ -10,7 +10,7 @@ namespace Magento\GraphQl\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Config for catalog media
+ * Session disable in graphql configuration model.
  */
 class DisableSession
 {
