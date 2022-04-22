@@ -1,7 +1,5 @@
 <?php
 /**
- * REST API request.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -12,27 +10,28 @@ use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Phrase;
 
 /**
- * Class Request
+ * REST API request.
  *
  * @api
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Request extends \Magento\Framework\Webapi\Request
 {
     /**#@+
      * HTTP methods supported by REST.
      */
-    const HTTP_METHOD_GET = 'GET';
-    const HTTP_METHOD_DELETE = 'DELETE';
-    const HTTP_METHOD_PUT = 'PUT';
-    const HTTP_METHOD_POST = 'POST';
+    public const HTTP_METHOD_GET = 'GET';
+    public const HTTP_METHOD_DELETE = 'DELETE';
+    public const HTTP_METHOD_PUT = 'PUT';
+    public const HTTP_METHOD_POST = 'POST';
     /**#@-*/
 
     /**
      * Character set which must be used in request.
      */
-    const REQUEST_CHARSET = 'utf-8';
+    public const REQUEST_CHARSET = 'utf-8';
 
-    const DEFAULT_ACCEPT = '*/*';
+    public const DEFAULT_ACCEPT = '*/*';
 
     /**
      * @var string
@@ -197,7 +196,7 @@ class Request extends \Magento\Framework\Webapi\Request
         $requestBodyParams = [];
         $params = $this->getParams();
 
-        $httpMethod = $this->getHttpMethod();
+        $httpMethod = $this->getMethod();
         if ($httpMethod == self::HTTP_METHOD_POST ||
             $httpMethod == self::HTTP_METHOD_PUT
         ) {
