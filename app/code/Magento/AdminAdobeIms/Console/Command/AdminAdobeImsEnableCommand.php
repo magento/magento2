@@ -198,13 +198,10 @@ class AdminAdobeImsEnableCommand extends Command
     ): bool {
         $testAuth = $this->imsConnection->testAuth($clientId);
         if ($testAuth) {
-            $this->imsConfig->enableModule($clientId, $clientSecret, $organizationId);
+            $this->imsConfig->enableModule($clientId, $clientSecret, $organizationId, $isTwoFactorAuthEnabled);
             $this->cacheTypeList->cleanType(Config::TYPE_IDENTIFIER);
             $this->updateTokensService->execute();
 
-            if ($isTwoFactorAuthEnabled) {
-                $twoFactorDisabled = true;
-            }
             return true;
         }
 

@@ -29,6 +29,7 @@ class ImsConfig extends Config
     public const XML_PATH_VALIDATE_TOKEN_URL = 'adobe_ims/integration/validate_token_url';
     public const XML_PATH_LOGOUT_URL = 'adobe_ims/integration/logout_url';
     public const XML_PATH_CERTIFICATE_PATH = 'adobe_ims/integration/certificate_path';
+    public const XML_PATH_TWO_FACTOR_ENABLED = 'adobe_ims/integration/two_factor';
 
     public const XML_PATH_ADMIN_AUTH_URL_PATTERN = 'adobe_ims/integration/admin/auth_url_pattern';
     public const XML_PATH_ADMIN_ADOBE_IMS_SCOPES = 'adobe_ims/integration/admin/scopes';
@@ -101,17 +102,19 @@ class ImsConfig extends Config
     }
 
     /**
-     * Enable Admin Adobe IMS Module and set Client ID and Client Secret and Organization ID
+     * Enable Admin Adobe IMS Module and set Client ID and Client Secret and Organization ID and Two Factor Enabled
      *
      * @param string $clientId
      * @param string $clientSecret
      * @param string $organizationId
+     * @param bool $isTwoFactorAuthEnabled
      * @return void
      */
     public function enableModule(
         string $clientId,
         string $clientSecret,
-        string $organizationId
+        string $organizationId,
+        bool $isTwoFactorAuthEnabled
     ): void {
         $this->updateConfig(
             self::XML_PATH_ENABLED,
@@ -131,6 +134,11 @@ class ImsConfig extends Config
         $this->updateSecureConfig(
             self::XML_PATH_PRIVATE_KEY,
             $clientSecret
+        );
+
+        $this->updateConfig(
+            self::XML_PATH_TWO_FACTOR_ENABLED,
+            $isTwoFactorAuthEnabled ? '0' : '1'
         );
     }
 
