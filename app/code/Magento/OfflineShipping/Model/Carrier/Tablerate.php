@@ -196,6 +196,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
              * Free package weight has been already taken into account.
              */
             $request->setPackageValue($freePackageValue);
+            $request->setPackageValueWithDiscount($freePackageValue);
             $request->setPackageQty($freeQty);
             $rate = $this->getRate($request);
             if (!empty($rate) && $rate['price'] >= 0) {
