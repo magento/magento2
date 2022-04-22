@@ -89,7 +89,7 @@ class SaveHandler implements ExtensionInterface
 
     /**
      * Save custom options
-     * 
+     *
      * @param array $options
      * @param bool $hasChangedSku
      * @param ProductInterface $product
