@@ -42,9 +42,6 @@ class DisableSession
 
     /**
      * Prevents session starting while in graphql area and session is disabled in config.
-     * Returns true if session is allowed to start and false to avoid starting the session.
-     * 
-     * @see \Magento\Framework\Session\SessionStartChecker::check
      *
      * @param SessionStartChecker $subject
      * @param bool $result
@@ -61,7 +58,7 @@ class DisableSession
                 return false;
             }
         } catch (LocalizedException $e) {
-            // If area code is not set.
+            //@codingStandardsIgnoreLine
         } finally {
             return $result;
         }
