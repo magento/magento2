@@ -60,8 +60,7 @@ class ChangeOutputArray
             + $dataObject->getBaseTaxAmount()
             + $dataObject->getBaseDiscountTaxCompensationAmount()
             + $dataObject->getBaseWeeeTaxAppliedAmount()
-            - $dataObject->getBaseDiscountAmount()
-        );
+            - $dataObject->getBaseDiscountAmount());
 
         return $result;
     }
