@@ -38,7 +38,9 @@
         </after>
 
         <!-- Open product edit page -->
-        <amOnPage url="{{AdminProductEditPage.url($createProduct.id$)}}" stepKey="goToProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
         <!-- Add product video -->
         <actionGroup ref="AddProductVideoActionGroup" stepKey="addProductVideo"/>
         <!-- Save product form -->
@@ -54,7 +56,9 @@
         <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoPresentInStorefrontProductPage"/>
 
         <!-- Open product edit page to remove product video -->
-        <amOnPage url="{{AdminProductEditPage.url($createProduct.id$)}}" stepKey="goToProductEditPageToRemoveVideo"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPageToRemoveVideo">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
         <!-- Remove product video -->
         <actionGroup ref="RemoveProductVideoActionGroup" stepKey="removeProductVideo"/>
         <!-- Save product form -->

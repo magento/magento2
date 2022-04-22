@@ -42,7 +42,9 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Open configurable product edit page -->
-            <amOnPage url="{{AdminProductEditPage.url($createConfigurableProduct.id$)}}" stepKey="goToConfigurableProduct"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToConfigurableProduct">
+                <argument name="productId" value="$createConfigurableProduct.id$"/>
+            </actionGroup>
 
             <!-- Add attributes to configurable product-->
             <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>

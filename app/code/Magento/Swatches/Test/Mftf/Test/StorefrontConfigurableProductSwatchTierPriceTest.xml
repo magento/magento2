@@ -51,7 +51,9 @@
             <argument name="option3" value="Blue"/>
         </actionGroup>
         <!-- Open configurable product edit page -->
-        <amOnPage url="{{AdminProductEditPage.url($createConfigurableProduct.id$)}}" stepKey="goToConfigurableProduct"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToConfigurableProduct">
+            <argument name="productId" value="$createConfigurableProduct.id$"/>
+        </actionGroup>
         <!-- Generate configurations for configurable product -->
         <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createProductConfigurations">
             <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
