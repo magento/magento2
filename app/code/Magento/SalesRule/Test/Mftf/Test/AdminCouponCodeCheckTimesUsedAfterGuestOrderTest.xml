@@ -130,7 +130,7 @@
         <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.couponGridUsedHeader}}"  stepKey="waitForCouponGridToLoad"/>
 
         <!--Verify coupon does not used twice-->
-        <see userInput="1" selector="{{AdminCartPriceRulesFormSection.generatedCouponTimesUsed('1')}}" stepKey="seeTimesUsed"/>
+        <dontSee userInput="2" selector="{{AdminCartPriceRulesFormSection.generatedCouponTimesUsed('1')}}" stepKey="seeTimesUsed"/>
         <wait time="5" stepKey="waitToSeeTimesUsed"/>
     </test>
 </tests>
