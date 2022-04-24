@@ -254,10 +254,10 @@
 & when (@media-common = true) {
     .abs-dropdown-simple {
         .lib-dropdown(
-        @_dropdown-list-item-padding: 5px 5px 5px 23px,
-        @_dropdown-list-min-width: 200px,
-        @_icon-font-margin: 0 0 0 5px,
-        @_icon-font-vertical-align: middle
+            @_dropdown-list-item-padding: 5px 5px 5px 23px,
+            @_dropdown-list-min-width: 200px,
+            @_icon-font-margin: 0 0 0 5px,
+            @_icon-font-vertical-align: middle
         );
 
         ul.items {
@@ -300,13 +300,13 @@
 & when (@media-common = true) {
     .abs-remove-button-for-blocks {
         .lib-icon-font(
-        @icon-remove,
-        @_icon-font-size: 12px,
-        @_icon-font-line-height: 15px,
-        @_icon-font-text-hide: true,
-        @_icon-font-color: @color-gray46,
-        @_icon-font-color-hover: @color-gray-darken4,
-        @_icon-font-color-active: @color-gray60
+            @icon-remove,
+            @_icon-font-size: 12px,
+            @_icon-font-line-height: 15px,
+            @_icon-font-text-hide: true,
+            @_icon-font-color: @color-gray46,
+            @_icon-font-color-hover: @color-gray-darken4,
+            @_icon-font-color-active: @color-gray60
         );
     }
 }
@@ -318,16 +318,17 @@
 & when (@media-common = true) {
     .abs-product-link {
         font-weight: @font-weight__regular;
+
         > a {
             .lib-link(
-            @_link-color: @product-name-link__color,
-            @_link-text-decoration: @product-name-link__text-decoration,
-            @_link-color-visited: @product-name-link__color__visited,
-            @_link-text-decoration-visited: @product-name-link__text-decoration__visited,
-            @_link-color-hover: @product-name-link__color__hover,
-            @_link-text-decoration-hover: @product-name-link__text-decoration__hover,
-            @_link-color-active: @product-name-link__color__active,
-            @_link-text-decoration-active: @product-name-link__text-decoration__active
+                @_link-color: @product-name-link__color,
+                @_link-text-decoration: @product-name-link__text-decoration,
+                @_link-color-visited: @product-name-link__color__visited,
+                @_link-text-decoration-visited: @product-name-link__text-decoration__visited,
+                @_link-color-hover: @product-name-link__color__hover,
+                @_link-text-decoration-hover: @product-name-link__text-decoration__hover,
+                @_link-color-active: @product-name-link__color__active,
+                @_link-text-decoration-active: @product-name-link__text-decoration__active
             );
         }
     }
@@ -662,8 +663,8 @@
 & when (@media-common = true) {
     .abs-split-button {
         .lib-dropdown-split(
-        @_options-selector : ~'.items',
-        @_dropdown-split-button-border-radius-fix: true
+            @_options-selector : ~'.items',
+            @_dropdown-split-button-border-radius-fix: true
         );
         vertical-align: middle;
     }
@@ -743,6 +744,7 @@
     .abs-checkout-order-review {
         tbody > tr {
             &:extend(.abs-add-clearfix-mobile all);
+
             &:not(:last-child) {
                 .lib-css(border-bottom, @border-width__base solid @border-color__base);
             }
@@ -795,11 +797,11 @@
         letter-spacing: .05em;
         text-transform: uppercase;
         .lib-icon-font(
-        @_icon-font-content: '',
-        @_icon-font-size: 16px,
-        @_icon-font-line-height: 16px,
-        @_icon-font-margin: -2px 5px 0 0,
-        @_icon-font-vertical-align: middle
+            @_icon-font-content: '',
+            @_icon-font-size: 16px,
+            @_icon-font-line-height: 16px,
+            @_icon-font-margin: -2px 5px 0 0,
+            @_icon-font-vertical-align: middle
         );
 
         &:hover {
@@ -874,13 +876,13 @@
         @abs-toggling-title();
         .lib-css(padding, @indent__s @indent__xl @indent__s @mobile-cart-padding);
         .lib-icon-font(
-        @icon-down,
-        @_icon-font-size: 12px,
-        @_icon-font-line-height: 12px,
-        @_icon-font-text-hide: true,
-        @_icon-font-margin: 3px 0 0,
-        @_icon-font-position: after,
-        @_icon-font-display: block
+            @icon-down,
+            @_icon-font-size: 12px,
+            @_icon-font-line-height: 12px,
+            @_icon-font-text-hide: true,
+            @_icon-font-margin: 3px 0 0,
+            @_icon-font-position: after,
+            @_icon-font-display: block
         );
     }
 }
@@ -891,18 +893,18 @@
         .lib-css(border-bottom, @border-width__base solid @border-color__base);
         .lib-css(padding, @indent__s @indent__xl @indent__s @layout__width-xs-indent);
         .lib-icon-font(
-        @icon-down,
-        @_icon-font-size: 12px,
-        @_icon-font-text-hide: false,
-        @_icon-font-margin: 3px 0 0 0,
-        @_icon-font-position: after,
-        @_icon-font-display: block
+            @icon-down,
+            @_icon-font-size: 12px,
+            @_icon-font-text-hide: false,
+            @_icon-font-margin: 3px 0 0 0,
+            @_icon-font-position: after,
+            @_icon-font-display: block
         );
 
         &.active {
             .lib-icon-font-symbol(
-            @_icon-font-content: @icon-up,
-            @_icon-font-position: after
+                @_icon-font-content: @icon-up,
+                @_icon-font-position: after
             );
         }
     }
@@ -918,6 +920,7 @@
 
         > .title {
             &:extend(.abs-toggling-title all);
+
             &:after {
                 color: @color-gray52;
             }
@@ -932,8 +935,8 @@
         &.active {
             > .title {
                 .lib-icon-font-symbol(
-                @_icon-font-content: @icon-up,
-                @_icon-font-position: after
+                    @_icon-font-content: @icon-up,
+                    @_icon-font-position: after
                 );
             }
 
@@ -983,7 +986,7 @@
                 padding: @indent__s 0 0;
 
                 &:last-child {
-                    padding-bottom: @indent__s
+                    padding-bottom: @indent__s;
                 }
             }
         }
@@ -1024,19 +1027,18 @@
 //  Account pages: title
 //  ---------------------------------------------
 
-& when (@media-common = true) {
-    .abs-account-title {
-        > strong,
-        > span {
-            .lib-font-size(22);
-            .lib-css(font-weight, @font-weight__light);
-        }
-
-        .lib-css(border-bottom, 1px solid @account-title-border-color);
-        .lib-css(margin-bottom, @indent__m);
-        .lib-css(padding-bottom, @indent__s);
+@abs-account-title: {
+    > strong,
+    > span {
+        .lib-font-size(22);
+        .lib-css(font-weight, @font-weight__light);
     }
-}
+
+    .lib-css(border-bottom, 1px solid @account-title-border-color);
+    .lib-css(margin-bottom, @indent__m);
+    .lib-css(padding-bottom, @indent__s);
+};
+
 
 //
 //  Account pages: block font size
@@ -1103,11 +1105,11 @@
 
 @abs-action-print: {
     .lib-icon-font(
-    @icon-print,
-    @_icon-font-size: 16px,
-    @_icon-font-line-height: 16px,
-    @_icon-font-margin: 0 4px 0 0,
-    @_icon-font-position: before
+        @icon-print,
+        @_icon-font-size: 16px,
+        @_icon-font-line-height: 16px,
+        @_icon-font-margin: 0 4px 0 0,
+        @_icon-font-position: before
     );
 
     &:hover {
@@ -1180,11 +1182,11 @@
         position: relative;
 
         .lib-icon-font(
-        @icon-down,
-        @_icon-font-size: 8px,
-        @_icon-font-line-height: 8px,
-        @_icon-font-margin: 3px 0 0 0,
-        @_icon-font-position: after
+            @icon-down,
+            @_icon-font-size: 8px,
+            @_icon-font-line-height: 8px,
+            @_icon-font-margin: 3px 0 0 0,
+            @_icon-font-position: after
         );
 
         &:after {
@@ -1196,8 +1198,8 @@
 
     .abs-tax-total-expanded {
         .lib-icon-font-symbol(
-        @_icon-font-content: @icon-up,
-        @_icon-font-position: after
+            @_icon-font-content: @icon-up,
+            @_icon-font-position: after
         );
     }
 }
@@ -1269,7 +1271,7 @@
 & when (@media-common = true) {
     .abs-account-blocks {
         .block-title {
-            &:extend(.abs-account-title all);
+            @abs-account-title();
 
             > .action {
                 margin-left: 15px;
@@ -1311,10 +1313,10 @@
 & when (@media-common = true) {
     .abs-icon-add {
         .lib-icon-font(
-        @_icon-font-content: @icon-expand,
-        @_icon-font-size: 10px,
-        @_icon-font-line-height: 10px,
-        @_icon-font-vertical-align: middle
+            @_icon-font-content: @icon-expand,
+            @_icon-font-size: 10px,
+            @_icon-font-line-height: 10px,
+            @_icon-font-vertical-align: middle
         );
     }
 }
@@ -1322,12 +1324,12 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-icon-add-mobile {
         .lib-icon-font(
-        @_icon-font-content: @icon-expand,
-        @_icon-font-size: 10px,
-        @_icon-font-line-height: 10px,
-        @_icon-font-vertical-align: middle,
-        @_icon-font-margin: 0 5px 0 0,
-        @_icon-font-display: block
+            @_icon-font-content: @icon-expand,
+            @_icon-font-size: 10px,
+            @_icon-font-line-height: 10px,
+            @_icon-font-vertical-align: middle,
+            @_icon-font-margin: 0 5px 0 0,
+            @_icon-font-display: block
         );
     }
 }
@@ -1346,6 +1348,7 @@
 
         .action.new {
             &:extend(.abs-icon-add all);
+
             &:before {
                 margin-left: -17px;
                 margin-right: @indent__xs;
@@ -1488,8 +1491,8 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-table-bordered-desktop {
         .lib-table-bordered(
-        @_table_type: light,
-        @_table_border-width: 1px
+            @_table_type: light,
+            @_table_border-width: 1px
         );
     }
 }
@@ -1507,6 +1510,7 @@
             position: relative;
             z-index: 1;
         }
+
         .limiter {
             display: inline-block;
             float: right;
@@ -1638,7 +1642,7 @@
 & when (@media-common = true) {
     .abs-field-date-input {
         .lib-css(margin-right, @indent__s);
-        width: calc(~'100% -' @icon-calendar__font-size + @indent__s);
+        width: calc(~'100% ' - (@icon-calendar__font-size + @indent__s));
     }
 }
 
@@ -1653,7 +1657,7 @@
 
         input {
             .lib-css(margin-right, @indent__s);
-            width: calc(~'100% -' @checkout-tooltip-icon__font-size + @indent__s + @indent__xs);
+            width: calc(~'100%' - (@checkout-tooltip-icon__font-size + @indent__s + @indent__xs));
         }
     }
 }
@@ -1670,9 +1674,9 @@
     &:before,
     &:after {
         .lib-arrow(
-        @_position: top,
-        @_size: @checkout-tooltip-icon-arrow__font-size,
-        @_color: @checkout-tooltip-content__background-color
+            @_position: top,
+            @_size: @checkout-tooltip-icon-arrow__font-size,
+            @_color: @checkout-tooltip-content__background-color
         );
         .lib-css(margin-top, @checkout-tooltip-icon-arrow__left);
         .lib-css(right, @indent__s);
@@ -1710,11 +1714,11 @@
     .abs-checkout-title {
         .lib-css(padding-bottom, @checkout-step-title__padding);
         .lib-typography(
-        @_font-size: @checkout-step-title__font-size,
-        @_font-weight: @checkout-step-title__font-weight,
-        @_font-family: false,
-        @_font-style: false,
-        @_line-height: false
+            @_font-size: @checkout-step-title__font-size,
+            @_font-weight: @checkout-step-title__font-weight,
+            @_font-family: false,
+            @_font-style: false,
+            @_line-height: false
         );
     }
 }
@@ -1794,11 +1798,11 @@
                     padding-right: @indent__base;
                     position: relative;
                     .lib-icon-font(
-                    @icon-down,
-                    @_icon-font-size: 12px,
-                    @_icon-font-line-height: 12px,
-                    @_icon-font-text-hide: true,
-                    @_icon-font-position: after
+                        @icon-down,
+                        @_icon-font-size: 12px,
+                        @_icon-font-line-height: 12px,
+                        @_icon-font-text-hide: true,
+                        @_icon-font-position: after
                     );
 
                     &:after {
@@ -1816,8 +1820,8 @@
 
                     .amount .price {
                         .lib-icon-font-symbol(
-                        @_icon-font-content: @icon-up,
-                        @_icon-font-position: after
+                            @_icon-font-content: @icon-up,
+                            @_icon-font-position: after
                         );
                     }
                 }
