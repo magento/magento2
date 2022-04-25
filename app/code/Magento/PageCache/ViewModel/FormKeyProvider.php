@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\PageCache\ViewModel;
 
+use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\PageCache\Model\Config;
@@ -16,11 +17,6 @@ use Magento\PageCache\Model\Config;
  */
 class FormKeyProvider implements ArgumentInterface
 {
-    /**
-     * XML PATH to enable/disable saving toolbar parameters to session
-     */
-    private const XML_PATH_CATALOG_REMEMBER_PAGINATION = 'catalog/frontend/remember_pagination';
-
     /**
      * @var Config
      */
@@ -60,6 +56,6 @@ class FormKeyProvider implements ArgumentInterface
      */
     public function isPaginationCacheEnabled(): bool
     {
-        return $this->scopeConfig->isSetFlag(self::XML_PATH_CATALOG_REMEMBER_PAGINATION);
+        return $this->scopeConfig->isSetFlag(ToolbarMemorizer::XML_PATH_CATALOG_REMEMBER_PAGINATION);
     }
 }
