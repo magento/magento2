@@ -47,9 +47,12 @@
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
+        <actionGroup ref="AssertImageAttributesOnEnhancedMediaGalleryActionGroup" stepKey="assertImageUploaded">
+            <argument name="image" value="ImageUpload3"/>
+        </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteImage"/>
-        <actionGroup ref="AssertAdminEnhancedMediaGalleryImageDeletedActionGroup" stepKey="assertImageDeleted">
-            <argument name="title" value="ImageMetadata.title"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryAssertImageDoesNotExistActionGroup" stepKey="assertImageDeleted">
+            <argument name="image" value="{{ImageUpload3.filename}}"/>
         </actionGroup>
     </test>
 </tests>

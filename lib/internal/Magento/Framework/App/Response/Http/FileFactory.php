@@ -11,6 +11,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class FileFactory serves to declare file content in response for download.
+ *
+ * @api
  */
 class FileFactory
 {

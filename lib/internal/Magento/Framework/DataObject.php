@@ -368,7 +368,8 @@ class DataObject implements \ArrayAccess
         } else {
             preg_match_all('/\{\{([a-z0-9_]+)\}\}/is', $format, $matches);
             foreach ($matches[1] as $var) {
-                $format = str_replace('{{' . $var . '}}', $this->getData($var), $format);
+                $data = $this->getData($var) ?? '';
+                $format = str_replace('{{' . $var . '}}', $data, $format);
             }
             $result = $format;
         }

@@ -104,14 +104,18 @@ class BulkManagement implements BulkManagementInterface
      */
     public function scheduleBulk($bulkUuid, array $operations, $description, $userId = null)
     {
-        $metadata = $this->metadataPool->getMetadata(BulkSummaryInterface::class);
-        $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
-        // save bulk summary and related operations
-        $connection->beginTransaction();
         $userType = $this->userContext->getUserType();
         if ($userType === null) {
             $userType = UserContextInterface::USER_TYPE_ADMIN;
         }
+        if ($userId === null && $userType === UserContextInterface::USER_TYPE_ADMIN) {
+            $userId = $this->userContext->getUserId();
+        }
+
+        $metadata = $this->metadataPool->getMetadata(BulkSummaryInterface::class);
+        $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
+        // save bulk summary and related operations
+        $connection->beginTransaction();
         try {
             /** @var BulkSummaryInterface $bulkSummary */
             $bulkSummary = $this->bulkSummaryFactory->create();

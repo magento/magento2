@@ -341,6 +341,18 @@ interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\
     quantity: Float! @doc(description: "The quantity of this item in the cart.")
     prices: CartItemPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemPrices") @doc(description: "Contains details about the price of the item, including taxes and discounts.")
     product: ProductInterface! @doc(description: "Details about an item in the cart.")
+    errors: [CartItemError!] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemErrors") @doc(description: "An array of errors encountered while loading the cart item")
+}
+
+type CartItemError {
+    code: CartItemErrorType! @doc(description: "An error code that describes the error encountered")
+    message: String! @doc(description: "A localized error message")
+}
+
+enum CartItemErrorType {
+    UNDEFINED
+    ITEM_QTY
+    ITEM_INCREMENTS
 }
 
 type Discount @doc(description:"Defines an individual discount. A discount can be applied to the cart as a whole or to an item.") {
@@ -350,6 +362,7 @@ type Discount @doc(description:"Defines an individual discount. A discount can b
 
 type CartItemPrices @doc(description: "Contains details about the price of the item, including taxes and discounts.") {
     price: Money! @doc(description: "The price of the item before any discounts were applied. The price that might include tax, depending on the configured display settings for cart.")
+    price_including_tax:  Money! @doc(description: "The price of the item before any discounts were applied. The price that might include tax, depending on the configured display settings for cart.")
     row_total: Money! @doc(description: "The value of the price multiplied by the quantity of the item.")
     row_total_including_tax: Money! @doc(description: "The value of `row_total` plus the tax applied to the item.")
     discounts: [Discount] @doc(description: "An array of discounts to be applied to the cart item.")

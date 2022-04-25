@@ -69,7 +69,7 @@ type OrderAddress @doc(description: "Contains detailed information about an orde
     country_code: CountryCodeEnum @doc(description: "The customer's country.")
     street: [String!]! @doc(description: "An array of strings that define the street number and name.")
     company: String @doc(description: "The customer's company.")
-    telephone: String! @doc(description: "The telephone number.")
+    telephone: String @doc(description: "The telephone number.")
     fax: String @doc(description: "The fax number.")
     postcode: String @doc(description: "The customer's ZIP or postal code.")
     city: String! @doc(description: "The city or town.")

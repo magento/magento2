@@ -29,7 +29,7 @@ class Db implements \Magento\Framework\Config\ConverterInterface
     /**
      * Extract and prepare cron job data
      *
-     * @param array $jobs
+     * @param array $cronTab
      * @return array
      */
     protected function _extractParams(array $cronTab)
@@ -92,7 +92,8 @@ class Db implements \Magento\Framework\Config\ConverterInterface
     protected function _processRunModel(array $jobConfig, $jobName, array &$result)
     {
         if (isset($jobConfig['run']) && is_array($jobConfig['run']) && array_key_exists('model', $jobConfig['run'])) {
-            $callPath = explode('::', $jobConfig['run']['model']);
+            $runModel = $jobConfig['run']['model'];
+            $callPath = $runModel ? explode('::', $runModel) : [];
 
             if (empty($callPath) || empty($callPath[0]) || empty($callPath[1])) {
                 unset($result[$jobName]['run']);

@@ -40,7 +40,7 @@ if ($isField) {
         data-role="<?=  $block->escapeHtmlAttr($id) ?>-wrapper">
         <div class="fieldset-wrapper-title admin__fieldset-wrapper-title">
             <strong <?= /* @noEscape */ $isCollapsable ?
-                'class="admin__collapsible-title" data-toggle="collapse" data-target="#' . $id . '-content"' :
+                'class="admin__collapsible-title" data-bs-toggle="collapse" data-bs-target="#' . $id . '-content"' :
                 'class="title"'; ?>>
                 <span><?= $block->escapeHtml($element->getLegend()) ?></span>
             </strong>

@@ -21,12 +21,12 @@ class Sitemap extends \Magento\Framework\App\Config\Value
     /**
      * Cron string path for product alerts
      */
-    const CRON_STRING_PATH = 'crontab/default/jobs/sitemap_generate/schedule/cron_expr';
+    public const CRON_STRING_PATH = 'crontab/default/jobs/sitemap_generate/schedule/cron_expr';
 
     /**
      * Cron mode path
      */
-    const CRON_MODEL_PATH = 'crontab/default/jobs/sitemap_generate/run/model';
+    public const CRON_MODEL_PATH = 'crontab/default/jobs/sitemap_generate/run/model';
 
     /**
      * @var \Magento\Framework\App\Config\ValueFactory
@@ -73,8 +73,12 @@ class Sitemap extends \Magento\Framework\App\Config\Value
      */
     public function afterSave()
     {
-        $time = $this->getData('groups/generate/fields/time/value');
-        $frequency = $this->getData('groups/generate/fields/frequency/value');
+        $time = $this->getData('groups/generate/fields/time/value') ?:
+            explode(
+                ',',
+                $this->_config->getValue('sitemap/generate/time', $this->getScope(), $this->getScopeId()) ?: '0,0,0'
+            );
+        $frequency = $this->getValue();
 
         $cronExprArray = [
             (int)($time[1] ?? 0), //Minute

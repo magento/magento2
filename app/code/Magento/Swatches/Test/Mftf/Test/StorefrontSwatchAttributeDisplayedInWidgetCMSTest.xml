@@ -52,7 +52,7 @@
             <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAttributeGridFiltersToFindSwatchAttribute"/>
             <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersPaneForSwatchAttribute"/>
             <fillField selector="{{AdminDataGridHeaderSection.attributeCodeFilterInput}}" userInput="$createVisualSwatchAttribute.attribute_code$" stepKey="fillAttributeCodeFilterFieldForSwatchAttribute"/>
-            <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButtonForSwatchAttribute"/>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickApplyFiltersButtonForSwatchAttribute"/>
             <click selector="{{AdminDataGridTableSection.rowCheckbox('1')}}" stepKey="selectSwatchAttribute"/>
 
             <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextToSelectOptions"/>
