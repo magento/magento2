@@ -68,9 +68,12 @@ class GraphQlSessionTest extends GraphQlAbstract
 }
 QUERY;
         // Using cURL feature of flushing cookies upon completion of request
-        $this->graphQlClient->getWithResponseHeaders($query, [], '', [], true);
+        $result = $this->graphQlClient->getWithResponseHeaders($query, [], '', [], true);
+        $this->assertEmpty($result['cookies']);
         // perform secondary request after cookies have been flushed
         $result = $this->graphQlClient->getWithResponseHeaders($query, [], '', []);
+
+        // may have other cookies than session
         $this->assertNotEmpty($result['cookies']);
         $this->assertAnyCookieMatchesRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
         $this->assertCount(1, $result['body']['categoryList']);
@@ -100,9 +103,12 @@ QUERY;
 QUERY;
         // CURL flushes cookies only upon completion of the request is the flag is set
         // perform graphql request with flushing cookies upon completion
-        $this->graphQlClient->getWithResponseHeaders($query, [], '', [], true);
+        $result = $this->graphQlClient->getWithResponseHeaders($query, [], '', [], true);
+        $this->assertEmpty($result['cookies']);
+
         // perform secondary request after cookies have been flushed
         $result = $this->graphQlClient->getWithResponseHeaders($query, [], '', []);
+
         // may have other cookies than session
         $this->assertNoCookiesMatchRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
         $this->assertCount(1, $result['body']['categoryList']);
@@ -121,8 +127,14 @@ QUERY;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
 
-        $this->graphQlClient->postWithResponseHeaders($query, [], '', $this->getAuthHeaders(), true);
+        $result = $this->graphQlClient->postWithResponseHeaders($query, [], '', $this->getAuthHeaders(), true);
+        // cookies are never empty and session is restarted for the authorized customer regardless current session
+        $this->assertNotEmpty($result['cookies']);
+        $this->assertAnyCookieMatchesRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
         $result = $this->graphQlClient->postWithResponseHeaders($query, [], '', $this->getAuthHeaders());
+
+        // cookies are never empty and session is restarted for the authorized customer
+        // regardless current session and missing flush
         $this->assertNotEmpty($result['cookies']);
         $this->assertAnyCookieMatchesRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
     }
@@ -140,8 +152,11 @@ QUERY;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
 
-        $this->graphQlClient->postWithResponseHeaders($query, [], '', $this->getAuthHeaders(), true);
+        $result = $this->graphQlClient->postWithResponseHeaders($query, [], '', $this->getAuthHeaders(), true);
+        // cookies may be empty or contain page cache private content version
+        $this->assertNoCookiesMatchRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
         $result = $this->graphQlClient->postWithResponseHeaders($query, [], '', $this->getAuthHeaders());
+        // cookies may be empty or contain page cache private content version
         $this->assertNoCookiesMatchRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
     }
 
