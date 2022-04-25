@@ -13,4 +13,14 @@
         <data key="optional">Optional</data>
         <data key="required">Required</data>
     </entity>
+    <entity name="ShowTelephone">
+        <data key="no">No</data>
+        <data key="optional">Optional</data>
+        <data key="required">Required</data>
+    </entity>
+    <entity name="CustomerConfigurationSectionNameAndAddressOptions">
+        <data key="id">customer_address-head</data>
+        <data key="title">Name and Address Options</data>
+        <data key="link">#customer_address-link</data>
+    </entity>
 </entities>
