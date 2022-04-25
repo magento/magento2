@@ -51,14 +51,15 @@ class DisableSession
      */
     public function afterCheck(SessionStartChecker $subject, bool $result): bool
     {
+        if (!$result) {
+            return false;
+        }
         try {
-            if (!$result ||
-                ($this->appState->getAreaCode() === Area::AREA_GRAPHQL && $this->disableSessionConfig->isDisabled())
-            ) {
-                return false;
+            if ($this->appState->getAreaCode() === Area::AREA_GRAPHQL && $this->disableSessionConfig->isDisabled()) {
+                $result = false;
             }
         } catch (LocalizedException $e) {
-            //@codingStandardsIgnoreLine
+            $result = false;
         } finally {
             return $result;
         }

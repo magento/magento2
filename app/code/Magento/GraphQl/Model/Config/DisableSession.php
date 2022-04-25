@@ -44,10 +44,10 @@ class DisableSession
             $scopeCode
         );
 
-        if ($value === null) {
-            return false;
+        if ($value === '1') {
+            return true;
         }
 
-        return (bool)$value;
+        return false;
     }
 }
