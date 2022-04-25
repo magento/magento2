@@ -15,6 +15,8 @@
         <click selector="{{StorefrontSwitchCurrencyRatesSection.currencyToggle}}" stepKey="openToggle"/>
         <waitForElementVisible selector="{{StorefrontSwitchCurrencyRatesSection.currency(currency)}}" stepKey="waitForCurrency"/>
         <click selector="{{StorefrontSwitchCurrencyRatesSection.currency(currency)}}" stepKey="chooseCurrency"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontSwitchCurrencyRatesSection.selectedCurrency}}" stepKey="waitForSelectedCurrency"/>
         <see selector="{{StorefrontSwitchCurrencyRatesSection.selectedCurrency}}" userInput="{{currency}}" stepKey="seeSelectedCurrency"/>
     </actionGroup>
 </actionGroups>

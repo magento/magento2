@@ -13,7 +13,7 @@
         "magento/module-customer": "*",
         "magento/module-search": "*",
         "magento/module-store": "*",
-        "php": "~7.4.0||~8.0.0||~8.1.0"
+        "php": "~7.4.0||~8.1.0"
     },
     "type": "magento2-module",
     "license": [
