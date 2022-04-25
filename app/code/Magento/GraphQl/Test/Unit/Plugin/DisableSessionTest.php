@@ -55,7 +55,6 @@ class DisableSessionTest extends TestCase
         );
     }
 
-
     /**
      * Test afterCheck plugin result over original method result.
      *
