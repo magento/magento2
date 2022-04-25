@@ -56,6 +56,20 @@ class BundleProductViewTest extends GraphQlAbstract
               type
               position
               sku
+              price_range{
+                  maximum_price {
+                    final_price {
+                      currency
+                      value
+                    }
+                  }
+                  minimum_price {
+                    final_price {
+                      currency
+                      value
+                    }
+                  }
+              }
               options {
                 id
                 quantity
@@ -95,6 +109,9 @@ QUERY;
             $this->assertEquals('PRICE_RANGE', $response['products']['items'][0]['price_view']);
         }
         $this->assertBundleBaseFields($bundleProduct, $response['products']['items'][0]);
+        $product = $response['products']['items'][0]['items'][0];
+        $this->assertEquals(10, $product['price_range']['maximum_price']['final_price']['value']);
+        $this->assertEquals(10, $product['price_range']['minimum_price']['final_price']['value']);
 
         $this->assertBundleProductOptions($bundleProduct, $response['products']['items'][0]);
         $this->assertNotEmpty(

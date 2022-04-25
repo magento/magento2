@@ -13,9 +13,8 @@
         "magento/module-sales": "*",
         "magento/module-store": "*",
         "magento/module-authorization": "*",
-        "laminas/laminas-captcha": "^2.11.0",
-        "laminas/laminas-db": "^2.13.4",
-        "laminas/laminas-session": "^2.12.0"
+        "laminas/laminas-captcha": "^2.12",
+        "laminas/laminas-db": "^2.13.4"
     },
     "type": "magento2-module",
     "license": [
