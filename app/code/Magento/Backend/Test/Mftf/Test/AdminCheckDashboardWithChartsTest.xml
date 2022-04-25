@@ -6,7 +6,7 @@
   */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCheckDashboardWithChartsTest">
         <annotations>
@@ -22,6 +22,9 @@
         </annotations>
         <before>
             <magentoCLI command="config:set admin/dashboard/enable_charts 1" stepKey="setEnableCharts"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <createData entity="SimpleProduct2" stepKey="createProduct">
                 <field key="price">150</field>
             </createData>
@@ -43,11 +46,15 @@
         </before>
         <after>
             <magentoCLI command="config:set admin/dashboard/enable_charts 0" stepKey="setDisableChartsAsDefault"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
+        <waitForElementVisible selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="waitForQuantityBefore"/>
         <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="grabQuantityBefore"/>
 
         <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
@@ -60,8 +67,9 @@
             <requiredEntity createDataKey="createCustomerCart"/>
         </createData>
 
-        <reloadPage stepKey="refreshPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
         <actionGroup ref="AssertAdminDashboardDisplayedWithNoErrorsActionGroup" stepKey="assertAdminDashboardNotBroken"/>
+        <waitForElementVisible selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="waitForQuantityAfter"/>
         <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="grabQuantityAfter"/>
         <assertGreaterThan stepKey="checkQuantityWasChanged">
             <actualResult type="const">$grabQuantityAfter</actualResult>

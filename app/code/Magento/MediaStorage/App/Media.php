@@ -1,7 +1,5 @@
 <?php
 /**
- * Media application
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -45,8 +43,6 @@ class Media implements AppInterface
     private $isAllowed;
 
     /**
-     * Media directory path
-     *
      * @var string
      */
     private $mediaDirectoryPath;
@@ -238,7 +234,10 @@ class Media implements AppInterface
      */
     private function checkMediaDirectoryChanged(): bool
     {
-        return rtrim($this->mediaDirectoryPath, '/') !== rtrim($this->directoryMedia->getAbsolutePath(), '/');
+        $mediaDirectoryPath = $this->mediaDirectoryPath ? rtrim($this->mediaDirectoryPath, '/') : '';
+        $directoryMediaAbsolutePath = $this->directoryMedia->getAbsolutePath();
+        $directoryMediaAbsolutePath = $directoryMediaAbsolutePath ? rtrim($directoryMediaAbsolutePath, '/') : '';
+        return $mediaDirectoryPath !== $directoryMediaAbsolutePath;
     }
 
     /**

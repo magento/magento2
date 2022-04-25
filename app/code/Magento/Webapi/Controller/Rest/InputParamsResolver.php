@@ -4,18 +4,25 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Webapi\Controller\Rest;
 
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
+use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 use Magento\Webapi\Controller\Rest\Router\Route;
 
 /**
  * This class is responsible for retrieving resolved input data
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InputParamsResolver
 {
@@ -55,6 +62,11 @@ class InputParamsResolver
     private $methodsMap;
 
     /**
+     * @var InputArraySizeLimitValue
+     */
+    private $inputArraySizeLimitValue;
+
+    /**
      * Initialize dependencies
      *
      * @param RestRequest $request
@@ -63,6 +75,7 @@ class InputParamsResolver
      * @param Router $router
      * @param RequestValidator $requestValidator
      * @param MethodsMap|null $methodsMap
+     * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      */
     public function __construct(
         RestRequest $request,
@@ -70,7 +83,8 @@ class InputParamsResolver
         ServiceInputProcessor $serviceInputProcessor,
         Router $router,
         RequestValidator $requestValidator,
-        MethodsMap $methodsMap = null
+        MethodsMap $methodsMap = null,
+        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
     ) {
         $this->request = $request;
         $this->paramsOverrider = $paramsOverrider;
@@ -79,29 +93,34 @@ class InputParamsResolver
         $this->requestValidator = $requestValidator;
         $this->methodsMap = $methodsMap ?: ObjectManager::getInstance()
             ->get(MethodsMap::class);
+        $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
+                ->get(InputArraySizeLimitValue::class);
     }
 
     /**
      * Process and resolve input parameters
      *
      * @return array
-     * @throws Exception
+     * @throws Exception|AuthorizationException|LocalizedException
      */
     public function resolve()
     {
         $this->requestValidator->validate();
         $route = $this->getRoute();
-        $serviceMethodName = $route->getServiceMethod();
-        $serviceClassName = $route->getServiceClass();
-        $inputData = $this->getInputData();
+        $this->inputArraySizeLimitValue->set($route->getInputArraySizeLimit());
 
-        return $this->serviceInputProcessor->process($serviceClassName, $serviceMethodName, $inputData);
+        return $this->serviceInputProcessor->process(
+            $route->getServiceClass(),
+            $route->getServiceMethod(),
+            $this->getInputData(),
+        );
     }
 
     /**
      * Get API input data
      *
      * @return array
+     * @throws InputException|Exception
      */
     public function getInputData()
     {
@@ -131,6 +150,7 @@ class InputParamsResolver
      * Retrieve current route.
      *
      * @return Route
+     * @throws Exception
      */
     public function getRoute()
     {
@@ -174,9 +194,9 @@ class InputParamsResolver
             }
         }
         if (!empty($paramOverriders)) {
-            throw new \UnexpectedValueException(
-                __('The current request does not expect the next parameters: ' . implode(', ', $paramOverriders))
-            );
+            $message = 'The current request does not expect the next parameters: '
+                . implode(', ', $paramOverriders);
+            throw new \UnexpectedValueException(__($message)->__toString());
         }
     }
 }

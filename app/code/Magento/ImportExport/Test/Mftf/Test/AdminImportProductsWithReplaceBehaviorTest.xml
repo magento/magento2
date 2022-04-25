@@ -35,6 +35,11 @@
             </createData>
         </before>
 
+        <after>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
+        </after>
+
         <!-- Import products with replace behavior -->
         <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProducts">
             <argument name="behavior" value="Replace"/>

@@ -39,6 +39,7 @@ use Magento\Webapi\Test\Unit\Service\Entity\SimpleArrayData;
 use Magento\Webapi\Test\Unit\Service\Entity\SimpleData;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -167,6 +168,8 @@ class ServiceInputProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $inputArraySizeLimitValue = $this->createMock(InputArraySizeLimitValue::class);
+
         $this->defaultPageSizeSetter = self::getMockBuilder(DefaultPageSizeSetter::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -180,7 +183,11 @@ class ServiceInputProcessorTest extends TestCase
                 'attributeValueFactory' => $this->attributeValueFactoryMock,
                 'methodsMap' => $this->methodsMap,
                 'serviceTypeToEntityTypeMap' => $this->serviceTypeToEntityTypeMap,
-                'serviceInputValidator' => new EntityArrayValidator(50, $this->inputLimitConfig),
+                'serviceInputValidator' => new EntityArrayValidator(
+                    50,
+                    $this->inputLimitConfig,
+                    $inputArraySizeLimitValue
+                ),
                 'defaultPageSizeSetter' => $this->defaultPageSizeSetter,
                 'defaultPageSize' => 123
             ]

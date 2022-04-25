@@ -149,7 +149,7 @@ class StringUtils
      */
     public function strlen($string)
     {
-        return mb_strlen($string, self::ICONV_CHARSET);
+        return $string !== null ? mb_strlen($string, self::ICONV_CHARSET) : 0;
     }
 
     /**

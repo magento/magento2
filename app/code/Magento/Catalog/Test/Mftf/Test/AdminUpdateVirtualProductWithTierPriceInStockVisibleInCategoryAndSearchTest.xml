@@ -35,7 +35,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteVirtualProduct">
                 <argument name="product" value="updateVirtualProductTierPriceInStock"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 

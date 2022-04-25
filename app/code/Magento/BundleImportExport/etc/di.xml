@@ -13,4 +13,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogImportExport\Model\StockItemImporterInterface">
+        <plugin name="update_bundle_products_stock_item_status"
+                type="Magento\BundleImportExport\Plugin\Import\Product\UpdateBundleProductsStockItemStatusPlugin"
+                sortOrder="200"/>
+    </type>
 </config>

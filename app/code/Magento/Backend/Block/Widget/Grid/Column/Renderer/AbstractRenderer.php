@@ -97,7 +97,9 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
             }
             return '';
         }
-        return $row->getData($this->getColumn()->getIndex());
+        return $this->getColumn()->getIndex() !== null
+            ? $row->getData($this->getColumn()->getIndex())
+            : null;
     }
 
     /**

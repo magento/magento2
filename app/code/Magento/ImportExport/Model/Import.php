@@ -574,10 +574,14 @@ class Import extends AbstractModel
             throw new LocalizedException(__('The file cannot be uploaded.'));
         }
 
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
+        $extension = '';
+        $uploadedFile = '';
+        if ($result !== false) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
+            $uploadedFile = $result['path'] . $result['file'];
+        }
 
-        $uploadedFile = $result['path'] . $result['file'];
         if (!$extension) {
             $this->_varDirectory->delete($uploadedFile);
             throw new LocalizedException(__('The file you uploaded has no extension.'));
