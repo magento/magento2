@@ -135,7 +135,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function setDirectives($directives)
     {
-        return $this->local->setDirectives($directives);
+        $this->remote->setDirectives($directives);
     }
 
     /**
@@ -250,6 +250,8 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
             $this->local->clean();
         }
 
+        // Local cache doesn't save tags intentionally since it will cause inconsistency after flushing the cache
+        // in multinode environment
         return $this->local->save($dataToSave, $id, [], $specificLifetime);
     }
 
@@ -260,7 +262,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private function checkIfLocalCacheSpaceExceeded()
     {
-        return $this->getFillingPercentage() >= ($this->_options['cleanup_percentage'] ?? 95);
+        return $this->local->getFillingPercentage() >= ($this->_options['cleanup_percentage'] ?? 95);
     }
 
     /**
@@ -268,9 +270,11 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function remove($id)
     {
-         return $this->removeRemoteDataVersion($id) &&
-            $this->remote->remove($id) &&
-            $this->local->remove($id);
+        $result = $this->removeRemoteDataVersion($id) && $this->remote->remove($id);
+        if ($result && !$this->_options['use_stale_cache']) {
+            $result = $this->local->remove($id);
+        }
+        return $result;
     }
 
     /**
@@ -279,7 +283,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
         return $this->remote->clean($mode, $tags) &&
-            $this->local->clean($mode, $tags);
+            $this->local->clean($mode);
     }
 
     /**
@@ -287,7 +291,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getIds()
     {
-        return $this->local->getIds();
+        return $this->remote->getIds();
     }
 
     /**
@@ -295,7 +299,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getTags()
     {
-        return $this->local->getTags();
+        return $this->remote->getTags();
     }
 
     /**
@@ -303,7 +307,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getIdsMatchingTags($tags = [])
     {
-        return $this->local->getIdsMatchingTags($tags);
+        return $this->remote->getIdsMatchingTags($tags);
     }
 
     /**
@@ -311,7 +315,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getIdsNotMatchingTags($tags = [])
     {
-        return $this->local->getIdsNotMatchingTags($tags);
+        return $this->remote->getIdsNotMatchingTags($tags);
     }
 
     /**
@@ -319,7 +323,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getIdsMatchingAnyTags($tags = [])
     {
-        return $this->local->getIdsMatchingAnyTags($tags);
+        return $this->remote->getIdsMatchingAnyTags($tags);
     }
 
     /**
@@ -327,7 +331,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getFillingPercentage()
     {
-        return $this->local->getFillingPercentage();
+        return $this->remote->getFillingPercentage();
     }
 
     /**
@@ -335,7 +339,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getMetadatas($id)
     {
-        return $this->local->getMetadatas($id);
+        return $this->remote->getMetadatas($id);
     }
 
     /**
@@ -343,7 +347,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function touch($id, $extraLifetime)
     {
-        return $this->local->touch($id, $extraLifetime);
+        return $this->remote->touch($id, $extraLifetime);
     }
 
     /**
@@ -351,7 +355,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function getCapabilities()
     {
-        return $this->local->getCapabilities();
+        return $this->remote->getCapabilities();
     }
 
     /**
