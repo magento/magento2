@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Transoftgroup, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+	<table name="tsg_weather_widget_record" resource="default" engine="innodb" comment="Temperature Record Table">
+		<column name="record_id" xsi:type="int" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+		<column name="city" xsi:type="varchar" nullable="false" comment="City" length="255"/>
+        <column name="temperature" xsi:type="float" unsigned="false" nullable="false" comment="Temperature"/>
+        <column name="recorded_at" nullable="false" xsi:type="timestamp" comment="Record Created Date" default="CURRENT_TIMESTAMP"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="record_id"/>
+        </constraint>
+    </table>
+</schema>

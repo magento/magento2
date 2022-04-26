@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Transoftgroup, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="Tsg\WeatherWidgetApi\Api\Data\RecordInterface" type="Tsg\WeatherWidget\Model\Record"/>
+    <preference for="Tsg\WeatherWidgetApi\Api\GetCityWeatherInterface" type="Tsg\WeatherWidget\Model\GetCityWeather"/>
+    <preference for="Tsg\WeatherWidgetApi\Api\GetCityCoordinatesInterface" type="Tsg\WeatherWidget\Model\GetCityCoordinates"/>
+    <preference for="Tsg\WeatherWidgetApi\Api\Data\CoordinatesInterface" type="Tsg\WeatherWidget\Model\Data\Coordinates"/>
+    <preference for="Tsg\WeatherWidgetApi\Api\GetLastRecordInterface" type="Tsg\WeatherWidget\Model\GetLastRecord"/>
+    <preference for="Tsg\WeatherWidgetApi\Api\RecordRepositoryInterface" type="Tsg\WeatherWidget\Model\RecordRepository"/>
+</config>

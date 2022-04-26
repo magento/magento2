@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Tsg_WeatherWidget::weather_widget" title="Weather Widget" module="Tsg_WeatherWidgetAdminUi"
+             sortOrder="51" resource="Tsg_WeatherWidget::weather_widget"/>
+        <add id="Tsg_WeatherWidget::weather_widget_record" title="Weather Widget Records" translate="title"
+             module="Tsg_WeatherWidgetAdminUi" sortOrder="20"
+             parent="Tsg_WeatherWidget::weather_widget" action="tsg_weather_widget/record/index"
+             resource="Tsg_WeatherWidget::weather_widget_record_view"/>
+    </menu>
+</config>

@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Tsg\WeatherWidget\Model\ResourceModel\Record\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">tsg_weather_widget_record</argument>
+            <argument name="resourceModel" xsi:type="string">Tsg\WeatherWidget\Model\ResourceModel\Record\Collection</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="tsg_weather_widget_record_listing_data_source" xsi:type="string">Tsg\WeatherWidget\Model\ResourceModel\Record\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

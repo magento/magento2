@@ -1,0 +1,20 @@
+{
+    "name": "tsg/module-weather-widget-admin-ui",
+    "type": "magento2-module",
+    "description": "Weather widget admin ui configuration",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "*",
+        "tsg/module-weather-widget-api": "*",
+        "tsg/module-weather-widget-config": "*"
+    },
+    "license": "MIT",
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Tsg\\WeatherWidgetAdminUi\\": ""
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "name": "tsg/module-weather-widget",
+    "type": "magento2-module",
+    "description": "Display weather widget on main page",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "*",
+        "tsg/module-weather-widget-api": "*",
+        "tsg/module-weather-widget-admin-ui": "*",
+        "tsg/module-weather-widget-config": "*"
+    },
+    "license": "MIT",
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Tsg\\WeatherWidget\\": ""
+        }
+    }
+}

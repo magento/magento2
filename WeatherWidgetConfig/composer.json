@@ -1,0 +1,24 @@
+{
+    "name": "tsg/module-weather-widget-config",
+    "description": "Weather widget configuration",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "*"
+    },
+    "suggest": {
+
+    },
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "license": [
+
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Tsg\\WeatherWidgetConfig\\": ""
+        }
+    }
+}

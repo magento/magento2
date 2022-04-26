@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Transoftgroup, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+	<acl>
+		<resources>
+			<resource id="Magento_Backend::admin">
+				<resource id="Tsg_WeatherWidget::record" title="Weather Widget Record" sortOrder="10">
+					<resource id="Tsg_WeatherWidget::record_view" title="View Weather Widget Record" sortOrder="10"/>
+				</resource>
+			</resource>
+		</resources>
+	</acl>
+</config>

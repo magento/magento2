@@ -1,0 +1,32 @@
+{
+    "name": "tsg/module-weather-widget-api",
+    "description": "Weather widget api",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "*"
+    },
+    "suggest": {
+
+    },
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "license": [
+
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Tsg\\WeatherWidgetApi\\": ""
+        }
+    },
+    "extra": {
+        "map": [
+            [
+                "*",
+                "Tsg/WeatherWidgetApi"
+            ]
+        ]
+    }
+}

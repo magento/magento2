@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Transoftgroup, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="tsg" translate="label" sortOrder="400">
+            <label>Tsg</label>
+        </tab>
+        <section id="weather_widget" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Weather Widget</label>
+            <tab>tsg</tab>
+            <resource>Tsg_WeatherWidget::config</resource>
+            <group id="settings" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Weather Widget Configuration</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enabled Weather Widget</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>weather_widget/settings/enabled</config_path>
+                </field>
+                <field id="api_url" translate="label" type="text" sortOrder="20" showInDefault="1" canRestore="1">
+                    <label>Weather widget api url</label>
+                    <validate>required-entry</validate>
+                    <config_path>weather_widget/settings/api_url</config_path>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="api_key" translate="label comment" type="obscure" sortOrder="30" showInDefault="1" canRestore="1">
+                    <label>Weather Widget Api Key</label>
+                    <validate>required-entry</validate>
+                    <config_path>weather_widget/settings/api_key</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="city" translate="label comment" type="text" sortOrder="40" showInDefault="1" canRestore="1">
+                    <label>City</label>
+                    <validate>required-entry</validate>
+                    <config_path>weather_widget/settings/city</config_path>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

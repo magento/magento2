@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Transoftgroup, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <weather_widget>
+            <settings>
+                <enabled>1</enabled>
+                <api_url>http://api.openweathermap.org/</api_url>
+                <api_key>818a984ee3daf680e2bc0285360e81d4</api_key>
+                <city>Lublin</city>
+            </settings>
+        </weather_widget>
+    </default>
+</config>
