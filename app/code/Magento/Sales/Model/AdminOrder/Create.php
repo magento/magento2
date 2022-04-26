@@ -100,6 +100,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     protected $_quote;
 
     /**
+     * Core registry model to bind rules
+     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -1364,7 +1366,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             'adminhtml_checkout',
             $this->customerMapper->toFlatArray($customer),
             false,
-            CustomerForm::IGNORE_INVISIBLE
+            CustomerForm::DONT_IGNORE_INVISIBLE
         );
 
         return $customerForm;
