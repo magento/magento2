@@ -9709,16 +9709,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "3.8.0",
+            "version": "3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "a934c0b09038acf61612451732c6a3e8a1faa090"
+                "reference": "f0ebf219d4bcb66ccc3e444f74c7a34962d90d7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/a934c0b09038acf61612451732c6a3e8a1faa090",
-                "reference": "a934c0b09038acf61612451732c6a3e8a1faa090",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/f0ebf219d4bcb66ccc3e444f74c7a34962d90d7a",
+                "reference": "f0ebf219d4bcb66ccc3e444f74c7a34962d90d7a",
                 "shasum": ""
             },
             "require": {
@@ -9732,6 +9732,7 @@
                 "csharpru/vault-php": "^4.2.1",
                 "ext-curl": "*",
                 "ext-dom": "*",
+                "ext-iconv": "*",
                 "ext-intl": "*",
                 "ext-json": "*",
                 "ext-openssl": "*",
@@ -9793,9 +9794,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.8.0"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.9.0"
             },
-            "time": "2022-01-07T17:02:20+00:00"
+            "time": "2022-04-13T17:26:07+00:00"
         },
         {
             "name": "mustache/mustache",

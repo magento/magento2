@@ -67,8 +67,34 @@ class Website implements OptionSourceInterface
                 $websiteId
             );
             $options[$key]['group_id'] = $groupId;
+            $options[$key]['default_store_view_id'] = $this->getWebsiteDefaultStoreViewId($websiteId);
         }
 
         return $options;
+    }
+
+    /**
+     * Get Default store view id by Website id
+     *
+     * @param string $websiteId
+     * @return mixed
+     */
+    private function getWebsiteDefaultStoreViewId($websiteId)
+    {
+        $defaultStoreViewId = null;
+        $websites = $this->systemStore->getWebsiteCollection();
+
+        foreach ($websites as $website) {
+            if ($website->getId() === $websiteId) {
+                $defaultStore = $website->getDefaultStore();
+                // Check if the default store exist
+                if ($defaultStore) {
+                    $defaultStoreViewId = $defaultStore->getId();
+                }
+                break;
+            }
+        }
+
+        return $defaultStoreViewId;
     }
 }
