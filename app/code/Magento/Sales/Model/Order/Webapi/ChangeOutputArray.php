@@ -10,7 +10,6 @@ namespace Magento\Sales\Model\Order\Webapi;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn;
 use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
-use Magento\Tests\NamingConvention\true\float;
 
 /**
  * Class for changing row total in response.
