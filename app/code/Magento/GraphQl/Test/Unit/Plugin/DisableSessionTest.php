@@ -102,6 +102,7 @@ class DisableSessionTest extends TestCase
      */
     public function testAfterCheckNoArea(bool $config, bool $methodResult, bool $expectedResult)
     {
+        $this->disableSessionConfigMock->expects($this->any())->method('isDisabled')->willReturn($config);
         $this->appStateMock->expects($this->any())
             ->method('getAreaCode')
             ->willThrowException(new LocalizedException(__('Are code not set')));

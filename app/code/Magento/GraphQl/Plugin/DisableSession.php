@@ -47,7 +47,6 @@ class DisableSession
      * @param bool $result
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function afterCheck(SessionStartChecker $subject, bool $result): bool
     {
