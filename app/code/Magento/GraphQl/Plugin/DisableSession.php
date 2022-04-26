@@ -47,6 +47,7 @@ class DisableSession
      * @param bool $result
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function afterCheck(SessionStartChecker $subject, bool $result): bool
     {
@@ -57,9 +58,7 @@ class DisableSession
             if ($this->appState->getAreaCode() === Area::AREA_GRAPHQL && $this->disableSessionConfig->isDisabled()) {
                 $result = false;
             }
-        } catch (LocalizedException $e) {
-            $result = false;
-        } finally {
+        } catch (LocalizedException $e) {} finally { //@codingStandardsIgnoreLine
             return $result;
         }
     }

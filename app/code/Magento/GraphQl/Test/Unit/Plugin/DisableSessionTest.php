@@ -117,9 +117,9 @@ class DisableSessionTest extends TestCase
     public function testAfterCheckDataProviderNoAreaCode()
     {
         return [
-            ['config' => true, 'methodResult' =>  true, 'expected' => false],
+            ['config' => true, 'methodResult' =>  true, 'expected' => true],
             ['config' => true, 'methodResult' =>  false, 'expected' => false],
-            ['config' => false, 'methodResult' =>  true, 'expected' => false],
+            ['config' => false, 'methodResult' =>  true, 'expected' => true],
             ['config' => false, 'methodResult' =>  false, 'expected' => false],
         ];
     }
