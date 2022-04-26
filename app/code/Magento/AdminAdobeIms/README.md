@@ -200,3 +200,11 @@ This authentication mechanism enabled for REST and SOAP web API areas.
 Examples, how developers can test functionality:
 curl -X GET "{domain}/rest/V1/customers/2" -H "Authorization: Bearer AddAdobeImsAccessToken"
 curl -X GET "{domain}/rest/V1/products/24-MB01" -H "Authorization: Bearer AddAdobeImsAccessToken"
+
+###Two-factor authentication.
+
+During CLI enablement of the module, the admin user is asked, whether 2FA is enabled for him on Adobe side.
+If the answer is yes, Magento TFA module (if it's present in the code base), should be disable.
+
+For this purpose the additional config value was added, this config value is read by Magento_TwoFactorAuth module.
+If the config value is not there, the Magento_TwoFactorAuth functionality works by default.

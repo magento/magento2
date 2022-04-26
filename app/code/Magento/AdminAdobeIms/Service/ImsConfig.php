@@ -29,8 +29,7 @@ class ImsConfig extends Config
     public const XML_PATH_VALIDATE_TOKEN_URL = 'adobe_ims/integration/validate_token_url';
     public const XML_PATH_LOGOUT_URL = 'adobe_ims/integration/logout_url';
     public const XML_PATH_CERTIFICATE_PATH = 'adobe_ims/integration/certificate_path';
-    public const XML_PATH_TWO_FACTOR_ENABLED = 'adobe_ims/integration/two_factor';
-
+    public const XML_PATH_ADOBE_IMS_2FA_ENABLED = 'adobe_ims/integration/adobe_ims_2fa_enabled';
     public const XML_PATH_ADMIN_AUTH_URL_PATTERN = 'adobe_ims/integration/admin/auth_url_pattern';
     public const XML_PATH_ADMIN_ADOBE_IMS_SCOPES = 'adobe_ims/integration/admin/scopes';
 
@@ -107,14 +106,14 @@ class ImsConfig extends Config
      * @param string $clientId
      * @param string $clientSecret
      * @param string $organizationId
-     * @param bool $isTwoFactorAuthEnabled
+     * @param bool $isAdobeIms2FAEnabled
      * @return void
      */
     public function enableModule(
         string $clientId,
         string $clientSecret,
         string $organizationId,
-        bool $isTwoFactorAuthEnabled
+        bool $isAdobeIms2FAEnabled
     ): void {
         $this->updateConfig(
             self::XML_PATH_ENABLED,
@@ -137,8 +136,8 @@ class ImsConfig extends Config
         );
 
         $this->updateConfig(
-            self::XML_PATH_TWO_FACTOR_ENABLED,
-            $isTwoFactorAuthEnabled ? '0' : '1'
+            self::XML_PATH_ADOBE_IMS_2FA_ENABLED,
+            $isAdobeIms2FAEnabled ? '1' : '0'
         );
     }
 
@@ -157,6 +156,7 @@ class ImsConfig extends Config
         $this->deleteConfig(self::XML_PATH_ORGANIZATION_ID);
         $this->deleteConfig(self::XML_PATH_API_KEY);
         $this->deleteConfig(self::XML_PATH_PRIVATE_KEY);
+        $this->deleteConfig(self::XML_PATH_ADOBE_IMS_2FA_ENABLED);
     }
 
     /**
