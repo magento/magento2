@@ -106,6 +106,7 @@ class ChangeParentStockStatus
         if ($this->isNeedToUpdateParent($parentStockItem, $childrenIsInStock)) {
             $parentStockItem->setIsInStock($childrenIsInStock);
             $parentStockItem->setStockStatusChangedAuto(1);
+            $parentStockItem->setStockStatusChangedAutomaticallyFlag(true);
             $this->stockItemRepository->save($parentStockItem);
         }
     }
