@@ -19,7 +19,7 @@ class Client
     /**#@+
      * GraphQL HTTP method
      */
-    const GRAPHQL_METHOD_POST = 'POST';
+    public const GRAPHQL_METHOD_POST = 'POST';
     /**#@-*/
 
     /** @var CurlClient */
@@ -87,7 +87,7 @@ class Client
         $requestArray = [
             'query' => $query,
             'variables' => $variables ? $this->json->jsonEncode($variables) : null,
-            'operationName' => $operationName ?? null
+            'operationName' => $operationName ? $operationName : null
         ];
         array_filter($requestArray);
 
@@ -133,6 +133,8 @@ class Client
      * @param array $variables
      * @param string $operationName
      * @param array $headers
+     * @param bool $flushCookies
+     *
      * @return array
      */
     public function getWithResponseHeaders(
@@ -165,6 +167,8 @@ class Client
      * @param array $variables
      * @param string $operationName
      * @param array $headers
+     * @param bool $flushCookies
+     *
      * @return array
      */
     public function postWithResponseHeaders(

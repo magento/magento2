@@ -10,7 +10,7 @@ namespace Magento\TestFramework\TestCase\HttpClient;
  */
 class CurlClient
 {
-    const EMPTY_REQUEST_BODY = 'Empty body';
+    public const EMPTY_REQUEST_BODY = 'Empty body';
 
     /**
      * Perform HTTP GET request
