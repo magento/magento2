@@ -1,0 +1,25 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php /** @var $block \Magento\GoogleGtag\Block\Ga */ ?>
+<?php /** @var \Magento\GoogleGtag\Helper\Data $helper */ ?>
+<?php  $helper = $block->getHelper() ?>
+<?php  $accountId = $helper->getAccountId() ?>
+<!-- BEGIN GOOGLE ANALYTICS 4 CODE -->
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_GoogleGtag/js/google-analytics": {
+            "isCookieRestrictionModeEnabled": <?= (int)$block->isCookieRestrictionModeEnabled() ?>,
+            "currentWebsite": <?= (int)$block->getCurrentWebsiteId() ?>,
+            "cookieName": "<?= /* @noEscape */ \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>",
+            "pageTrackingData": <?= /* @noEscape */ json_encode($block->getPageTrackingData($accountId)) ?>,
+            "ordersTrackingData": <?= /* @noEscape */ json_encode($block->getOrdersTrackingData()) ?>
+        }
+    }
+}
+</script>
+<!-- END GOOGLE ANALYTICS 4 CODE -->

@@ -55,13 +55,20 @@ class DataTest extends TestCase
     {
         $store = 1;
         $this->_scopeConfigMock->expects(
-            $this->once()
+            $this->any()
         )->method(
             'isSetFlag'
-        )->with(
-            Data::XML_PATH_ENABLED,
-            ScopeInterface::SCOPE_STORE,
-            $store
+        )->withConsecutive(
+            [
+                Data::XML_PATH_ENABLED,
+                ScopeInterface::SCOPE_STORE,
+                $store
+            ],
+            [
+                Data::XML_PATH_ENABLED_GA4,
+                ScopeInterface::SCOPE_STORE,
+                $store
+            ]
         )->willReturn(
             $isExperimentsEnabled
         );
@@ -87,13 +94,20 @@ class DataTest extends TestCase
     {
         $store = 1;
         $this->_scopeConfigMock->expects(
-            $this->once()
+            $this->any()
         )->method(
             'isSetFlag'
-        )->with(
-            Data::XML_PATH_ENABLED,
-            ScopeInterface::SCOPE_STORE,
-            $store
+        )->withConsecutive(
+            [
+                Data::XML_PATH_ENABLED,
+                ScopeInterface::SCOPE_STORE,
+                $store
+            ],
+            [
+                Data::XML_PATH_ENABLED_GA4,
+                ScopeInterface::SCOPE_STORE,
+                $store
+            ]
         )->willReturn(
             $isExperimentsEnabled
         );

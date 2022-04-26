@@ -1,0 +1,35 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var \Magento\GoogleGtag\Block\Code $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\GoogleGtag\Helper\Data $helper */
+$helper = $block->getHelper();
+?>
+
+<?php if ($helper->isGoogleAdwordsConfigurable() && $helper->isGoogleAdwordsActive()): ?>
+    <?php $conversionId = $helper->getConversionId(); ?>
+    <?php $gtagSiteSrc = $helper->getConversionGtagGlobalSiteTagSrc(); ?>
+    <script>
+        if (!!window.gtag) {
+          // Inject Global Site Tag
+          var gtagScript = document.createElement('script');
+          gtagScript.type = 'text/javascript';
+          gtagScript.async = true;
+          gtagScript.src = '<?= $block->escapeHtml($gtagSiteSrc) ?>';
+          document.head.appendChild(gtagScript);
+
+          window.dataLayer = window.dataLayer || [];
+
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('set', 'developer_id.dYjhlMD', true);
+        } else {
+          gtag('config', '<?= $block->escapeHtml($conversionId) ?>');
+        }
+      </script>
+<?php endif ?>

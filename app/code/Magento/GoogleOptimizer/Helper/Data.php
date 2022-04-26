@@ -8,7 +8,10 @@
 
 namespace Magento\GoogleOptimizer\Helper;
 
-use \Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\ObjectManager;
+use Magento\GoogleGtag\Helper\Data as GtagHelper;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class Data
@@ -21,7 +24,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Xml path google experiments enabled
      */
-    const XML_PATH_ENABLED = 'google/analytics/experiments';
+    public const XML_PATH_ENABLED = 'google/analytics/experiments';
+
+    /**
+     * Xml path google experiments enabled for GA4
+     */
+    public const XML_PATH_ENABLED_GA4 = 'google/gtag/analytics4/experiments';
 
     /**
      * @var bool
@@ -34,16 +42,24 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_analyticsHelper;
 
     /**
+     * @var GtagHelper|null
+     */
+    protected $gtagHelper;
+
+    /**
      * Data constructor.
      *
-     * @param \Magento\Framework\App\Helper\Context $context
+     * @param Context $context
      * @param \Magento\GoogleAnalytics\Helper\Data $analyticsHelper
+     * @param GtagHelper|null $gtagHelper
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\GoogleAnalytics\Helper\Data $analyticsHelper
+        Context $context,
+        \Magento\GoogleAnalytics\Helper\Data $analyticsHelper,
+        GtagHelper $gtagHelper = null
     ) {
         $this->_analyticsHelper = $analyticsHelper;
+        $this->gtagHelper = $gtagHelper ?: ObjectManager::getInstance()->get(GtagHelper::class);
         parent::__construct($context);
     }
 
@@ -55,7 +71,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isGoogleExperimentEnabled($store = null)
     {
-        return $this->scopeConfig->isSetFlag(self::XML_PATH_ENABLED, ScopeInterface::SCOPE_STORE, $store);
+        return ($this->scopeConfig->isSetFlag(
+            self::XML_PATH_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        )) || ($this->scopeConfig->isSetFlag(
+            self::XML_PATH_ENABLED_GA4,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        ));
     }
 
     /**
@@ -66,6 +90,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isGoogleExperimentActive($store = null)
     {
-        return $this->isGoogleExperimentEnabled($store) && $this->_analyticsHelper->isGoogleAnalyticsAvailable($store);
+        return $this->isGoogleExperimentEnabled($store) &&
+            (
+                $this->_analyticsHelper->isGoogleAnalyticsAvailable($store) ||
+                $this->gtagHelper->isGoogleAnalyticsAvailable($store)
+            );
     }
 }

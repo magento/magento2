@@ -1,0 +1,25 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var \Magento\GoogleGtag\Block\Code $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\GoogleGtag\Helper\Data $helper */
+$helper = $block->getHelper();
+?>
+
+<?php if ($helper->isGoogleAdwordsConfigurable() && $helper->isGoogleAdwordsActive()): ?>
+    <?php $conversionId = $helper->getConversionId(); ?>
+    <?php $conversionLabel = $helper->getConversionLabel(); ?>
+    <script>
+        gtag(
+            'event',
+            'conversion',
+            {'send_to': '<?= $block->escapeHtml($conversionId) ?>' + '/'
+                    + '<?= $block->escapeHtml($conversionLabel) ?>'}
+        );
+    </script>
+<?php endif ?>

@@ -109,3 +109,4 @@ app/code/Magento/Elasticsearch/Elasticsearch5/Model/Adapter/FieldMapper/Product/
 app/code/Magento/Elasticsearch/Model/Layer/Search/ItemCollectionProvider.php
 app/code/Magento/Newsletter/Model/Queue/TransportBuilder.php
 app/code/Magento/ConfigurableProduct/view/adminhtml/templates/catalog/product/edit/attribute/steps/bulk.phtml
+app/code/Magento/GoogleGtag
