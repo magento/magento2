@@ -205,4 +205,12 @@ class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
             }
         }
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
+    {
+        return $item;
+    }
 }
