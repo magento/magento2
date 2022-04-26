@@ -10,6 +10,7 @@ namespace Magento\Sales\Model\Order\Webapi;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn;
 use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
+use Magento\Tests\NamingConvention\true\float;
 
 /**
  * Class for changing row total in response.
@@ -69,10 +70,10 @@ class ChangeOutputArray
      * Remove negative values from row totals
      *
      * @param float $value
-     * @return mixed
+     * @return float
      */
-    private function round(float $value)
+    private function round(float $value): float
     {
-        return max($value, 0);
+        return (float) max($value, 0);
     }
 }
