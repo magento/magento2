@@ -126,7 +126,7 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
                 throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
             }
             $this->organizationService->checkOrganizationAllocation($profile);
-            $this->adminLoginProcessService->execute($profile, $tokenResponse);
+            $this->adminLoginProcessService->reAuth($profile, $tokenResponse);
 
             $response = sprintf(
                 self::RESPONSE_TEMPLATE,

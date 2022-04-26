@@ -24,7 +24,7 @@ use Magento\Framework\Serialize\Serializer\JsonHexTag;
  *
  * @api
  */
-class ReAuth extends Template
+class ImsReAuth extends Template
 {
     private const DATA_ARGUMENT_KEY_CONFIG_PROVIDERS = 'configProviders';
     private const RESPONSE_REGEXP_PATTERN = 'auth\\[code=(success|error);message=(.+)\\]';
@@ -32,33 +32,13 @@ class ReAuth extends Template
     private const RESPONSE_MESSAGE_INDEX = 2;
     private const RESPONSE_SUCCESS_CODE = 'success';
     private const RESPONSE_ERROR_CODE = 'error';
-    private const ADOBE_IMS_JS_REAUTH = 'Magento_AdminAdobeIms/js/adobe-reAuth';
-    private const ADOBE_IMS_REAUTH = 'Magento_AdminAdobeIms/reAuth';
+    private const ADOBE_IMS_JS_REAUTH = 'Magento_AdminAdobeIms/js/adobe-ims-reauth';
+    private const ADOBE_IMS_REAUTH = 'Magento_AdminAdobeIms/adobe-ims-reauth';
 
     /**
      * @var ImsConfig
      */
     private $imsConfig;
-
-    /**
-     * @var UserContextInterface
-     */
-    private $userContext;
-
-    /**
-     * @var UserAuthorizedInterface
-     */
-    private $userAuthorized;
-
-    /**
-     * @var UserProfileRepositoryInterface
-     */
-    private $userProfileRepository;
-
-    /**
-     * @var Auth
-     */
-    private Auth $auth;
 
     /**
      * JsonHexTag Serializer Instance
@@ -72,29 +52,17 @@ class ReAuth extends Template
      *
      * @param Context $context
      * @param ImsConfig $imsConfig
-     * @param UserContextInterface $userContext
-     * @param UserAuthorizedInterface $userAuthorized
-     * @param UserProfileRepositoryInterface $userProfileRepository
      * @param JsonHexTag $json
-     * @param Auth $auth
      * @param array $data
      */
     public function __construct(
         Context $context,
         ImsConfig $imsConfig,
-        UserContextInterface $userContext,
-        UserAuthorizedInterface $userAuthorized,
-        UserProfileRepositoryInterface $userProfileRepository,
         JsonHexTag $json,
-        Auth $auth,
         array $data = []
     ) {
         $this->imsConfig = $imsConfig;
-        $this->userContext = $userContext;
-        $this->userAuthorized = $userAuthorized;
-        $this->userProfileRepository = $userProfileRepository;
         $this->serializer = $json;
-        $this->auth = $auth;
         parent::__construct($context, $data);
     }
 
@@ -123,9 +91,6 @@ class ReAuth extends Template
         return [
             'component' => self::ADOBE_IMS_JS_REAUTH,
             'template' => self::ADOBE_IMS_REAUTH,
-            'profileUrl' => $this->getUrl(ImsConfig::XML_PATH_PROFILE_URL),
-            'logoutUrl' => $this->getUrl(ImsConfig::XML_PATH_LOGOUT_URL),
-            'user' => $this->getUserData(),
             'loginConfig' => [
                 'url' => $this->imsConfig->getAdminAdobeImsReAuthUrl(),
                 'callbackParsingParams' => [
@@ -158,45 +123,5 @@ class ReAuth extends Template
             }
         }
         return $configExtensions;
-    }
-
-    /**
-     * Get user profile information
-     *
-     * @return array
-     */
-    private function getUserData(): array
-    {
-        if (!$this->userAuthorized->execute()) {
-            return $this->getDefaultUserData();
-        }
-
-        try {
-            $userProfile = $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId());
-        } catch (NoSuchEntityException $exception) {
-            return $this->getDefaultUserData();
-        }
-
-        return [
-            'isAuthorized' => true,
-            'name' => $userProfile->getName(),
-            'email' => $userProfile->getEmail(),
-            'image' => $userProfile->getImage(),
-        ];
-    }
-
-    /**
-     * Get default user data for not authenticated or missing user profile
-     *
-     * @return array
-     */
-    private function getDefaultUserData(): array
-    {
-        return [
-            'isAuthorized' => false,
-            'name' => '',
-            'email' => '',
-            'image' => '',
-        ];
     }
 }

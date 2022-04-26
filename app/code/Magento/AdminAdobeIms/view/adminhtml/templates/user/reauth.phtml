@@ -4,23 +4,11 @@
  * See COPYING.txt for license details.
  */
 /**
- * @var $block \Magento\AdminAdobeIms\Block\Adminhtml\ReAuth
+ * @var $block \Magento\AdminAdobeIms\Block\Adminhtml\ImsReAuth
  */
 ?>
 
-<!--<div id="user-reauth-modal" data-role="user_reauth" style="display:none;">-->
-<!--</div>-->
-<!---->
-<!--<script type="text/x-magento-init">-->
-<!--    {-->
-<!--        "[data-role=user_reauth]": {-->
-<!--            "userReauth": {}-->
-<!--        }-->
-<!--    }-->
-<!--</script>-->
-
-
-<div data-bind="scope: 'adobe-reauth'" class="adobe-login-container">
+<div data-bind="scope: 'adobe-ims-reauth'" class="adobe-login-container">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>
 <script type="text/x-magento-init">
@@ -28,7 +16,7 @@
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                    "adobe-reauth": <?= /* @noEscape */ $block->getComponentJsonConfig() ?>
+                    "adobe-ims-reauth": <?= /* @noEscape */ $block->getComponentJsonConfig() ?>
                 }
             }
         }

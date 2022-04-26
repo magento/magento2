@@ -67,15 +67,9 @@ class AdminLoginProcessService
      */
     public function execute(array $profile, TokenResponseInterface $tokenResponse): void
     {
-        $adminUser = $this->adminUser->loadByEmail($profile['email']);
-        if (empty($adminUser['user_id'])) {
-            $this->externalLogout($tokenResponse->getAccessToken());
-            throw new AdobeImsAuthorizationException(
-                __('No matching admin user found for Adobe ID.')
-            );
-        }
-
         try {
+            $adminUser = $this->getAdminUser($profile, $tokenResponse);
+
             $this->auth->loginByUsername($adminUser['username']);
             $session = $this->auth->getAuthStorage();
             $session->setAdobeAccessToken($tokenResponse->getAccessToken());
@@ -86,6 +80,52 @@ class AdminLoginProcessService
                 __($exception->getMessage())
             );
         }
+    }
+
+    /**
+     * Handle Adobe reAuth
+     *
+     * @param array $profile
+     * @param TokenResponseInterface $tokenResponse
+     * @return void
+     * @throws AdobeImsAuthorizationException
+     */
+    public function reAuth(array $profile, TokenResponseInterface $tokenResponse): void
+    {
+        try {
+            $adminUser = $this->getAdminUser($profile, $tokenResponse);
+
+            $this->auth->loginByUsername($adminUser['username']);
+            $session = $this->auth->getAuthStorage();
+            $session->setAdobeReAuthToken($tokenResponse->getAccessToken());
+            $session->setReAuthTokenLastCheckTime($this->dateTime->gmtTimestamp());
+        } catch (Exception $exception) {
+            $this->externalLogout($tokenResponse->getAccessToken());
+            throw new AdobeImsAuthorizationException(
+                __($exception->getMessage())
+            );
+        }
+    }
+
+    /**
+     * Get Admin User for profile
+     *
+     * @param array $profile
+     * @param TokenResponseInterface $tokenResponse
+     * @return array
+     * @throws AdobeImsAuthorizationException
+     */
+    private function getAdminUser(array $profile, TokenResponseInterface $tokenResponse): array
+    {
+        $adminUser = $this->adminUser->loadByEmail($profile['email']);
+        if (empty($adminUser['user_id'])) {
+            $this->externalLogout($tokenResponse->getAccessToken());
+            throw new AdobeImsAuthorizationException(
+                __('No matching admin user found for Adobe ID.')
+            );
+        }
+
+        return $adminUser;
     }
 
     /**
