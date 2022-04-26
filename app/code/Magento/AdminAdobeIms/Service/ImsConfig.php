@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Service;
 
 use Magento\AdminAdobeIms\Controller\Adminhtml\OAuth\ImsCallback;
+use Magento\AdminAdobeIms\Controller\Adminhtml\OAuth\ImsReauthCallback;
 use Magento\AdobeIms\Model\Config;
 use Magento\Backend\Model\UrlInterface as BackendUrlInterface;
 use Magento\Config\Model\Config\Backend\Admin\Custom;
@@ -31,6 +32,7 @@ class ImsConfig extends Config
     public const XML_PATH_CERTIFICATE_PATH = 'adobe_ims/integration/certificate_path';
 
     public const XML_PATH_ADMIN_AUTH_URL_PATTERN = 'adobe_ims/integration/admin/auth_url_pattern';
+    public const XML_PATH_ADMIN_REAUTH_URL_PATTERN = 'adobe_ims/integration/admin/reauth_url_pattern';
     public const XML_PATH_ADMIN_ADOBE_IMS_SCOPES = 'adobe_ims/integration/admin/scopes';
 
     private const OAUTH_CALLBACK_URL = 'adobe_ims_auth/oauth/';
@@ -253,6 +255,25 @@ class ImsConfig extends Config
     }
 
     /**
+     * Generate the AdminAdobeIms AuthUrl for reAuth
+     *
+     * @return string
+     */
+    public function getAdminAdobeImsReAuthUrl(): string
+    {
+        return str_replace(
+            ['#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
+            [
+                $this->getApiKey(),
+                $this->getAdminAdobeImsReAuthCallBackUrl(),
+                $this->getScopes(),
+                $this->getLocale()
+            ],
+            $this->scopeConfig->getValue(self::XML_PATH_ADMIN_REAUTH_URL_PATTERN)
+        );
+    }
+
+    /**
      * Get scopes for AdobeIms
      *
      * @return string
@@ -286,6 +307,18 @@ class ImsConfig extends Config
     {
         return $this->backendUrl->getUrl(
             self::OAUTH_CALLBACK_URL . ImsCallback::ACTION_NAME
+        );
+    }
+
+    /**
+     * Get reAuth callback url for AdminAdobeIms Module
+     *
+     * @return string
+     */
+    private function getAdminAdobeImsReAuthCallBackUrl(): string
+    {
+        return $this->backendUrl->getUrl(
+            self::OAUTH_CALLBACK_URL . ImsReauthCallback::ACTION_NAME
         );
     }
 

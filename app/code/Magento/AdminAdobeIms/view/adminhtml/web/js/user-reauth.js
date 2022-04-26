@@ -5,13 +5,12 @@
 
 define([
     'jquery',
-    'Magento_Ui/js/modal/modal',
     'Magento_AdobeIms/js/action/authorization'
-], function ($, modal, authorization) {
+], function ($, authorization) {
     'use strict';
 
     var loginConfig = {
-        url: 'https://auth-stg1.services.adobe.com/',
+        url: 'https://ims-na1-stg1.adobelogin.com/ims/authorize',
         callbackParsingParams: {
             regexpPattern: /auth\[code=(success|error);message=(.+)\]/,
             codeIndex: 1,
@@ -29,8 +28,7 @@ define([
         popupWindowTimeout: 60000
     }
 
-    $("#save").click('click', function(event) {
-        event.stopImmediatePropagation();
+    $("#save").click('click', function() {
         authorization(loginConfig);
     });
 

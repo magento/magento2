@@ -12,6 +12,7 @@
                 <admin>
                     <enabled>0</enabled>
                     <auth_url_pattern><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code]]></auth_url_pattern>
+                    <reauth_url_pattern><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code&reauth=check]]></reauth_url_pattern>
                     <scopes>
                         <openid>openid</openid>
                         <AdobeID>AdobeID</AdobeID>
