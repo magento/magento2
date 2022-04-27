@@ -95,7 +95,7 @@ class AdminLoginProcessService
         try {
             $adminUser = $this->getAdminUser($profile, $tokenResponse);
 
-            $this->auth->loginByUsername($adminUser['username']);
+            //$this->auth->loginByUsername($adminUser['username']);
             $session = $this->auth->getAuthStorage();
             $session->setAdobeReAuthToken($tokenResponse->getAccessToken());
             $session->setReAuthTokenLastCheckTime($this->dateTime->gmtTimestamp());
