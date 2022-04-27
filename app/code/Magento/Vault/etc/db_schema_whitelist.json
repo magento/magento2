@@ -11,7 +11,8 @@
             "gateway_token": true,
             "details": true,
             "is_active": true,
-            "is_visible": true
+            "is_visible": true,
+            "website_id": true
         },
         "constraint": {
             "PRIMARY": true,
