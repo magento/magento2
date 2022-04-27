@@ -117,7 +117,7 @@ class PreProcessorTest extends TestCase
             ->willReturn($area);
         $chain->expects($this->once())
             ->method('getContent')
-            ->willReturnMap([$this->translateMock]);
+            ->willReturn('$t("Add to Cart")');
         $this->configMock->expects($this->any())
             ->method('getPatterns')
             ->willReturn(new \ArrayIterator(
@@ -128,7 +128,7 @@ class PreProcessorTest extends TestCase
             ));
         $chain->expects($this->once())
             ->method('setContent')
-            ->willReturn($this->translateMock);
+            ->willReturn('In Winkelwagen');
         $this->model->process($chain);
     }
 }
