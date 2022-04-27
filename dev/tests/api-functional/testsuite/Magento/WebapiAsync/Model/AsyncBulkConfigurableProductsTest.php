@@ -21,10 +21,10 @@ use Magento\Framework\Webapi\Rest\Request;
  */
 class AsyncBulkConfigurableProductsTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'asyncBulkConfigurableProductsV1';
-    const ASYNC_BULK_RESOURCE_PATH = '/async/bulk/V1/configurable-products';
+    private const SERVICE_NAME = 'asyncBulkConfigurableProductsV1';
+    private const ASYNC_BULK_RESOURCE_PATH = '/async/bulk/V1/configurable-products';
 
-    const BULK_UUID_KEY = 'bulk_uuid';
+    private const BULK_UUID_KEY = 'bulk_uuid';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
