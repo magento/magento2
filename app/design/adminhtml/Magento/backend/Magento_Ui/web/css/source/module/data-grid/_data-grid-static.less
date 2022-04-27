@@ -24,7 +24,13 @@
                         background-color: fade(@data-grid-td__even__background-color, @data-grid-td__dragging__opacity);
                     }
                 }
+                &:hover {
+                    td {
+                       background-color: @data-grid-td__even__hover__background-color;
+                    }
+                }
             }
+
         }
 
         ul {
