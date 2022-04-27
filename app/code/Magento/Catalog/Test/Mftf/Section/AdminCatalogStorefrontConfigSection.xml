@@ -11,16 +11,8 @@
     <section name="AdminCatalogStorefrontConfigSection">
 
         <element name="sectionHeader" type="button" selector="#catalog_frontend-head"/>
-        <element name="listMode" type="button" selector='//*[@id="catalog_frontend_list_mode"]'/>
-        <element name="gridList" type="button" selector='//option[@value="grid-list"]'/>
         <element name="productsPerPageAllowedValues" type="input" selector="#catalog_frontend_grid_per_page_values"/>
         <element name="productsPerPageDefaultValue" type="input" selector="#catalog_frontend_grid_per_page"/>
-        <element name="productsPerPageListAllowedValues" type="input" selector='//*[@id="catalog_frontend_list_per_page_values"]'/>
-        <element name="productsPerPageListDefaultValue" type="input" selector='//*[@id="catalog_frontend_list_per_page"]'/>
-        <element name="productsListingSort" type="button" selector='//*[@id="catalog_frontend_default_sort_by"]'/>
-        <element name="positionProduct" type="button" selector='//option[@value="position"]'/>
-        <element name="productsPerPage" type="button" selector='//*[@id="catalog_frontend_list_allow_all"]'/>
-        <element name="selectProductsPerPage" type="button" selector='//option[@value="0"]'/>
     </section>
 </sections>
 

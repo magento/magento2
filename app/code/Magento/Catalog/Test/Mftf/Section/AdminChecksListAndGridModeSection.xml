@@ -19,11 +19,7 @@
         <element name="productsPerPage" type="button" selector='//*[@class="field limiter"]//*[@id="limiter"]'/>
         <element name="allButton" type="button" selector='//*[@id="limiter"]/option[4]'/>
         <element name="allProducts" type="text" selector='//ol[@class="products list items product-items"]'/>
-        <element name="pageOptions1" type="text" selector='//*[@id="limiter"]/option'/>
-        <element name="pageOptions2" type="text" selector='//*[@id="limiter"]/option[2]'/>
-        <element name="pageOptions3" type="text" selector='//*[@id="limiter"]/option[3]'/>
-        <element name="pageOptions4" type="text" selector='//*[@id="limiter"]/option[4]'/>
-        <element name="pageOptions5" type="text" selector='//*[@id="limiter"]/option[5]'/>
+        <element name="pageOptions" type="text" selector='//*[@id="limiter"]/option[{{var1}}]' parameterized="true"/>
         <element name="productCount" type="text" selector='//span[@class="product-image-wrapper"]'/>
 
 

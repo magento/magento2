@@ -8,7 +8,7 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminApplyCatalogStorefrontConfigurationSettingsTest">
-             <annotations>
+            <annotations>
             <features value="Catalog"/>
             <stories value="Apply catalog storefront configuration settings"/>
             <title value="You should be able to apply catalog storefront configuration settings."/>
@@ -17,9 +17,11 @@
             <testCaseId value="MC-27444"/>
             </annotations>
             <before>
-                <!-- Create category -->
+
+                <!-- create category -->
                 <createData entity="_defaultCategory" stepKey="createCategory"/>
-                <!-- Create 11 simple products -->
+
+                <!-- create 11 simple products -->
                 <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
                     <requiredEntity createDataKey="createCategory"/>
                 </createData>
@@ -53,50 +55,20 @@
                 <createData entity="SimpleProduct" stepKey="createSimpleProduct11">
                     <requiredEntity createDataKey="createCategory"/>
                     </createData>
+
+                <magentoCLI command="config:set {{CustomListMode.path}} {{CustomListMode.value}}" stepKey="setListMode"/>
+                <magentoCLI command="config:set {{CustomStoreFrontGridPerPageValuesConfigData.path}} {{CustomStoreFrontGridPerPageValuesConfigData.value}}" stepKey="setCustomGridPerPageValues"/>
+                <magentoCLI command="config:set {{CustomStoreFrontGridPerPageConfigData.path}} {{CustomStoreFrontGridPerPageConfigData.value}}" stepKey="setCustomGridPerPage"/>
+                <magentoCLI command="config:set {{CustomStoreFrontListPerPageValuesConfigData.path}} {{CustomStoreFrontListPerPageValuesConfigData.value}}" stepKey="setCustomListPerPageValues"/>
+                <magentoCLI command="config:set {{CustomStoreFrontListPerPageConfigData.path}} {{CustomStoreFrontListPerPageConfigData.value}}" stepKey="setCustomListPerPage"/>
+                <magentoCLI command="config:set {{CustomStoreFrontProductsSortBy.path}} {{CustomStoreFrontProductsSortBy.value}}" stepKey="setProductSortBy"/>
+                <magentoCLI command="config:set {{CustomStoreFrontAllProductsPerPage.path}} {{CustomStoreFrontAllProductsPerPage.value}}" stepKey="setAllProductsPerPage"/>
+
             </before>
 
             <after>
 
-                <actionGroup ref="AdminOpenDashboardPageActionGroup" stepKey="goToDashboardPage"/>
-                <waitForPageLoad stepKey="waitForPageLoad1" time="60"/>
-                <actionGroup ref="AdminOpenStoreConfigCatalogPageActionGroup" stepKey="navigateToConfigurationPage"/>
-                <waitForPageLoad stepKey="waitForPageLoad" time="60"/>
-                <actionGroup ref="AdminConfigExpandStorefrontTabActionGroup" stepKey="expandStorefrontTab"/>
-
-                <!-- Revert changes in storefront config page -->
-                <actionGroup ref="AdminPreDefineDataInCatalogStoreFrontActionGroup" stepKey="FillDataInStoreFront"/>
-                <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForListMode">
-                    <argument name="rowId" value="row_catalog_frontend_list_mode"/>
-                </actionGroup>
-                <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForGridAllowedValues">
-                    <argument name="rowId" value="row_catalog_frontend_grid_per_page_values"/>
-                </actionGroup>
-                <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForGridDefaultValue">
-                    <argument name="rowId" value="row_catalog_frontend_grid_per_page"/>
-                </actionGroup>
-                <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForAllowedValues">
-                    <argument name="rowId" value="row_catalog_frontend_list_per_page_values"/>
-                </actionGroup>
-                <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForListDefaultValue">
-                    <argument name="rowId" value="row_catalog_frontend_list_per_page"/>
-                </actionGroup>
-                <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForListSortingBy">
-                    <argument name="rowId" value="row_catalog_frontend_default_sort_by"/>
-                </actionGroup>
-                <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForProductsPerPage">
-                    <argument name="rowId" value="row_catalog_frontend_list_allow_all"/>
-                </actionGroup>
-
-                <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigurations"/>
-                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                    <argument name="indices" value=""/>
-                </actionGroup>
-
-                <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
-                    <argument name="tags" value=""/>
-                </actionGroup>
-
-              <!-- delete created entities -->
+                <!-- delete created entities -->
                 <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
                 <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
                 <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
@@ -109,69 +81,39 @@
                 <deleteData createDataKey="createSimpleProduct10" stepKey="deleteSimpleProduct10"/>
                 <deleteData createDataKey="createSimpleProduct11" stepKey="deleteSimpleProduct11"/>
                 <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-                <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
 
-               </after>
 
-                <!-- Login to Admin page -->
+                <magentoCLI command="config:set {{DefaultListMode.path}} {{DefaultListMode.value}}" stepKey="setListMode1"/>
+                <magentoCLI command="config:set {{DefaultGridPerPageValuesConfigData.path}} {{DefaultGridPerPageValuesConfigData.value}}" stepKey="setDefaultGridPerPageValues"/>
+                <magentoCLI command="config:set {{DefaultGridPerPageDefaultConfigData.path}} {{DefaultGridPerPageDefaultConfigData.value}}" stepKey="setDefaultGridPerPage"/>
+                <magentoCLI command="config:set {{DefaultStoreFrontListPerPageValuesConfigData.path}} {{DefaultStoreFrontListPerPageValuesConfigData.value}}" stepKey="setDefaultListPerPageValues"/>
+                <magentoCLI command="config:set {{DefaultStoreFrontListPerPageConfigData.path}} {{DefaultStoreFrontListPerPageConfigData.value}}" stepKey="setDefaultListPerPage"/>
+                <magentoCLI command="config:set {{DefaultStoreFrontProductsSortBy.path}} {{DefaultStoreFrontProductsSortBy.value}}" stepKey="setDefaultProductSortBy"/>
+                <magentoCLI command="config:set {{DefaultStoreFrontAllProductsPerPage.path}} {{DefaultStoreFrontAllProductsPerPage.value}}" stepKey="setDefaultAllProductsPerPage"/>
+
+            </after>
+
+                 <!-- Login to Admin page -->
                 <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
                 <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="assertLoggedIn"/>
 
-                <!-- Navigate to config page and fill required data -->
-                <actionGroup ref="AdminOpenStoreConfigCatalogPageActionGroup" stepKey="navigateToConfigurationPage"/>
-                <actionGroup ref="AdminConfigExpandStorefrontTabActionGroup" stepKey="expandStorefrontTab"/>
-                <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForListMode">
-                     <argument name="rowId" value="row_catalog_frontend_list_mode"/>
-                </actionGroup>
-                <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForGridAllowedValues">
-                      <argument name="rowId" value="row_catalog_frontend_grid_per_page_values"/>
-                </actionGroup>
-                <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForGridDefaultValue">
-                       <argument name="rowId" value="row_catalog_frontend_grid_per_page"/>
-                </actionGroup>
-                <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForAllowedValues">
-                      <argument name="rowId" value="row_catalog_frontend_list_per_page_values"/>
-                 </actionGroup>
-                <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForListDefaultValue">
-                  <argument name="rowId" value="row_catalog_frontend_list_per_page"/>
-                </actionGroup>
-                <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForListSortingBy">
-                       <argument name="rowId" value="row_catalog_frontend_default_sort_by"/>
-                </actionGroup>
-                <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForProductsPerPage">
-                        <argument name="rowId" value="row_catalog_frontend_list_allow_all"/>
-                </actionGroup>
-                <actionGroup ref="AdminAddDataInCatalogStoreFrontDetailsActionGroup" stepKey="fillingDataInStoreFrontFields"/>
-                <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigurations"/>
-
-                    <!--Clean cache and reindex-->
-                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                     <argument name="indices" value=""/>
-                </actionGroup>
-                <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
-                      <argument name="tags" value=""/>
-                </actionGroup>
-
-              <!-- navigate to created category page and check the products per page -->
-               <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage1">
+                <!-- navigate to created category page  -->
+                <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage1">
                    <argument name="category" value="$$createCategory$$"/>
                </actionGroup>
 
+               <!-- Go to storefront created category page and verifies list and grid mode -->
+               <actionGroup ref="AdminVerifiesListAndGridModeActionGroup" stepKey="ChangesInListAndGridMode"/>
 
-
-
-             <!-- Go to storefront created category page and verifies list and grid mode -->
-             <actionGroup ref="AdminVerifiesListAndGridModeActionGroup" stepKey="ChangesInListAndGridMode"/>
-
-
-
-                  <!-- again navigate to created category page and check the products per page-->
-             <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage2">
+               <!-- again navigate to created category page and check the products per page -->
+               <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage2">
                     <argument name="category" value="$$createCategory$$"/>
-             </actionGroup>
+               </actionGroup>
 
-             <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="switchToGridMode4"/>
-             <seeNumberOfElements selector="{{AdminChecksListAndGridModeSection.productCount}}" userInput="10" stepKey="seeNumberOfProductsInGridView"/>
+               <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="switchToGridMode4"/>
+               <seeNumberOfElements selector="{{AdminChecksListAndGridModeSection.productCount}}" userInput="10" stepKey="seeNumberOfProductsInGridView"/>
+
+               <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
 
 
     </test>
