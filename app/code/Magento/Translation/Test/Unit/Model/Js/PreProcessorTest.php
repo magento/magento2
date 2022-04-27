@@ -15,6 +15,7 @@ use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Translation\Model\Js\Config;
 use Magento\Translation\Model\Js\PreProcessor;
+use Symfony\Component\Console\Input\ArgvInput;
 use PHPUnit\Framework\TestCase;
 
 class PreProcessorTest extends TestCase
@@ -40,6 +41,11 @@ class PreProcessorTest extends TestCase
     private $translateMock;
 
     /**
+     * @var ArgvInput|MockObject
+     */
+    private $inputMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -47,10 +53,12 @@ class PreProcessorTest extends TestCase
         $this->configMock = $this->createMock(Config::class);
         $this->areaListMock = $this->createMock(AreaList::class);
         $this->translateMock = $this->getMockForAbstractClass(TranslateInterface::class);
+        $this->inputMock = $this->createMock(ArgvInput::class);
         $this->model = new PreProcessor(
             $this->configMock,
             $this->areaListMock,
-            $this->translateMock
+            $this->translateMock,
+            $this->inputMock
         );
     }
 
@@ -93,14 +101,23 @@ class PreProcessorTest extends TestCase
             ->method('loadData')
             ->with($areaCode, false)
             ->willReturnSelf();
+        $this->translateMock->expects($this->any())
+            ->method('getData')
+            ->willReturn(['$t("Add to Cart")' => 'In Winkelwagen']);
         $area->expects($this->once())->method('load')->willReturnSelf();
+        $this->inputMock->expects($this->once())
+            ->method('hasParameterOption')
+            ->willReturn(true);
+        $this->inputMock->expects($this->once())
+            ->method('getParameterOption')
+            ->willReturn('quick');
         $this->areaListMock->expects($this->once())
             ->method('getArea')
             ->with($areaCode)
             ->willReturn($area);
         $chain->expects($this->once())
             ->method('getContent')
-            ->willReturn('$t("Add to Cart")');
+            ->willReturnMap([$this->translateMock]);
         $this->configMock->expects($this->any())
             ->method('getPatterns')
             ->willReturn(new \ArrayIterator(
@@ -109,6 +126,9 @@ class PreProcessorTest extends TestCase
                     '~\$\.mage\.__\(([\'"])(.+?)\1\)~'
                 ],
             ));
+        $chain->expects($this->once())
+            ->method('setContent')
+            ->willReturn($this->translateMock);
         $this->model->process($chain);
     }
 }
