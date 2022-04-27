@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCatalogPriceRuleTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Create catalog price rule"/>
+            <title value="Admin create and apply catalog price rule"/>
+            <description value="Admin create and apply catalog price rule"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-26702"/>
+            <group value="CatalogRule"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory1"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <field key="price">56.78</field>
+                <requiredEntity createDataKey="createCategory1"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="createCategory2"/>
+            <createData entity="_defaultProduct" stepKey="simpleProduct2">
+                <requiredEntity createDataKey="createCategory2"/>
+            </createData>
+        </before>
+
+        <!--Login as admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+        <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToCatalogPriceRulePage"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="addNewRule"/>
+        <waitForPageLoad stepKey="waitForIndividualRulePage"/>
+
+        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForFirstPriceRule">
+            <argument name="name" value="TestCatalogPriceRule"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="createCatalogPriceRule">
+            <argument name="conditionValue" value="$createCategory1.id$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule"/>
+
+        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
+
+
+        <!-- Go to storefront home page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
+
+        <!-- Check Grouped product is visible on the storefront-->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategory1">
+            <argument name="categoryName" value="$$createCategory1.name$$"/>
+        </actionGroup>
+
+
+
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategory2">
+            <argument name="categoryName" value="$$createCategory2.name$$"/>
+        </actionGroup>
+    </test>
+</tests>
