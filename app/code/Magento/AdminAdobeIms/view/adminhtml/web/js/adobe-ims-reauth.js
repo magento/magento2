@@ -32,6 +32,15 @@ define([
         },
 
         /**
+         * @override
+         */
+        initialize: function () {
+            this._super();
+
+            this.login();
+        },
+
+        /**
          * Login to Adobe
          *
          * @return {window.Promise}
@@ -41,11 +50,13 @@ define([
             var deferred = $.Deferred();
             var loginConfig = this.loginConfig;
 
+            console.log('LOGIN!!');
+
             /**
              * Does only work right now, when you remove the data_attribute of the save button
              * src/app/code/Magento/Backend/Block/Widget/Form/Container.php:131
              */
-            $("#save").click('click', function(e) {
+            $("#user_ims_verification").click('click', function(e) {
                 e.preventDefault();
 
                 //check if reAuthToken exists and not expired
@@ -54,6 +65,9 @@ define([
                 //if reAuth token does not exist or is expired
                 login(loginConfig)
                     .then(function (response) {
+                        if (response.isAuthorized === true) {
+                            $('#user_verified').val(true);
+                        }
                         deferred.resolve(response);
                     }.bind(this))
                     .fail(function (error) {
