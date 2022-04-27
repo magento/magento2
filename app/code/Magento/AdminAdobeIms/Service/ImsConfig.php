@@ -137,7 +137,7 @@ class ImsConfig extends Config
 
         $this->updateConfig(
             self::XML_PATH_ADOBE_IMS_2FA_ENABLED,
-            $isAdobeIms2FAEnabled ? '1' : '0'
+            (string) $isAdobeIms2FAEnabled
         );
     }
 

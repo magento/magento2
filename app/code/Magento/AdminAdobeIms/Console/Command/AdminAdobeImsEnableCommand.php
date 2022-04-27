@@ -152,7 +152,7 @@ class AdminAdobeImsEnableCommand extends Command
                 self::CLIENT_SECRET_ARGUMENT
             );
 
-            $isTwoFactorAuthEnabled = $this->imsCommandOptionService->getTwoFactorAuthState(
+            $isTwoFactorAuthEnabled = $this->imsCommandOptionService->isTwoFactorAuthEnabled(
                 $input,
                 $output,
                 $helper,

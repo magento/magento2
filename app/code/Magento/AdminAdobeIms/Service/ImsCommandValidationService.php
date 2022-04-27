@@ -132,6 +132,8 @@ class ImsCommandValidationService
     }
 
     /**
+     * Validate Two-Factor Auth enabled state
+     *
      * @param string $value
      * @return bool
      * @throws LocalizedException

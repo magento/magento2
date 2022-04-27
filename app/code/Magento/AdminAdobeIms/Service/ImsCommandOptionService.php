@@ -154,7 +154,7 @@ class ImsCommandOptionService
      * @return bool
      * @throws LocalizedException
      */
-    public function getTwoFactorAuthState(
+    public function isTwoFactorAuthEnabled(
         InputInterface $input,
         OutputInterface $output,
         $helper,
