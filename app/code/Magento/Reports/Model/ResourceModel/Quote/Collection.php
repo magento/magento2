@@ -200,6 +200,7 @@ class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
         foreach ($this->getItems() as $item) {
             foreach ($customersData as $customerItemData) {
                 if ($item['customer_id'] == $customerItemData['entity_id']) {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $item->setData(array_merge($item->getData(), $customerItemData));
                 }
             }
