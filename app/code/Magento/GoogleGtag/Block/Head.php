@@ -9,7 +9,7 @@ namespace Magento\GoogleGtag\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\GoogleGtag\Helper\Data;
+use Magento\GoogleGtag\Helper\GtagConfiguration;
 
 /**
  * Google Ads Head block
@@ -19,21 +19,21 @@ use Magento\GoogleGtag\Helper\Data;
 class Head extends Template
 {
     /**
-     * @var Data
+     * @var GtagConfiguration
      */
-    protected $googleGtagData;
+    private $googleGtagConfig;
 
     /**
      * @param Context $context
-     * @param Data $googleGtagData
+     * @param GtagConfiguration $googleGtagConfig
      * @param array $data
      */
     public function __construct(
         Context $context,
-        Data $googleGtagData,
+        GtagConfiguration $googleGtagConfig,
         array $data = []
     ) {
-        $this->googleGtagData = $googleGtagData;
+        $this->googleGtagConfig = $googleGtagConfig;
         parent::__construct($context, $data);
     }
 
@@ -44,16 +44,16 @@ class Head extends Template
      */
     protected function _toHtml()
     {
-        return $this->googleGtagData->isGoogleAdwordsActive() ? parent::_toHtml() : '';
+        return $this->googleGtagConfig->isGoogleAdwordsActive() ? parent::_toHtml() : '';
     }
 
     /**
      * Return helper
      *
-     * @return Data
+     * @return GtagConfiguration
      */
-    public function getHelper()
+    public function getHelper(): GtagConfiguration
     {
-        return $this->googleGtagData;
+        return $this->googleGtagConfig;
     }
 }

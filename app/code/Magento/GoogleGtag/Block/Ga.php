@@ -8,10 +8,9 @@ declare(strict_types=1);
 namespace Magento\GoogleGtag\Block;
 
 use Magento\Cookie\Helper\Cookie;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\GoogleGtag\Helper\Data;
+use Magento\GoogleGtag\Helper\GtagConfiguration;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Store\Model\ScopeInterface;
 
@@ -23,14 +22,14 @@ use Magento\Store\Model\ScopeInterface;
 class Ga extends Template
 {
     /**
-     * @var Data
+     * @var GtagConfiguration
      */
-    protected $_googleGtagData = null;
+    private $googleGtagConfig;
 
     /**
      * @var CollectionFactory
      */
-    protected $_salesOrderCollection;
+    private $salesOrderCollection;
 
     /**
      * @var Cookie
@@ -40,20 +39,20 @@ class Ga extends Template
     /**
      * @param Context $context
      * @param CollectionFactory $salesOrderCollection
-     * @param Data $googleGtagData
+     * @param GtagConfiguration $googleGtagConfig
      * @param array $data
-     * @param Cookie|null $cookieHelper
+     * @param Cookie $cookieHelper
      */
     public function __construct(
         Context $context,
         CollectionFactory $salesOrderCollection,
-        Data $googleGtagData,
-        array $data = [],
-        Cookie $cookieHelper = null
+        GtagConfiguration $googleGtagConfig,
+        Cookie $cookieHelper,
+        array $data = []
     ) {
-        $this->_googleGtagData = $googleGtagData;
-        $this->_salesOrderCollection = $salesOrderCollection;
-        $this->cookieHelper = $cookieHelper ?: ObjectManager::getInstance()->get(Cookie::class);
+        $this->googleGtagConfig = $googleGtagConfig;
+        $this->salesOrderCollection = $salesOrderCollection;
+        $this->cookieHelper = $cookieHelper;
         parent::__construct($context, $data);
     }
 
@@ -63,7 +62,7 @@ class Ga extends Template
      * @param string $path
      * @return mixed
      */
-    public function getConfig($path)
+    public function getConfig($path): string
     {
         return $this->_scopeConfig->getValue($path, ScopeInterface::SCOPE_STORE);
     }
@@ -71,11 +70,11 @@ class Ga extends Template
     /**
      * Get helper
      *
-     * @return Data|null
+     * @return GtagConfiguration
      */
-    public function getHelper()
+    public function getHelper(): GtagConfiguration
     {
-        return $this->_googleGtagData;
+        return $this->googleGtagConfig;
     }
 
     /**
@@ -83,7 +82,7 @@ class Ga extends Template
      *
      * @return string|null
      */
-    public function getPageName()
+    public function getPageName(): ?string
     {
         return $this->_getData('page_name');
     }
@@ -95,7 +94,7 @@ class Ga extends Template
      */
     protected function _toHtml()
     {
-        if (!$this->_googleGtagData->isGoogleAnalyticsAvailable()) {
+        if (!$this->googleGtagConfig->isGoogleAnalyticsAvailable()) {
             return '';
         }
 
@@ -107,9 +106,9 @@ class Ga extends Template
      *
      * @return bool
      */
-    public function isCookieRestrictionModeEnabled()
+    public function isCookieRestrictionModeEnabled(): bool
     {
-        return $this->cookieHelper->isCookieRestrictionModeEnabled();
+        return (bool) $this->cookieHelper->isCookieRestrictionModeEnabled();
     }
 
     /**
@@ -117,9 +116,9 @@ class Ga extends Template
      *
      * @return int
      */
-    public function getCurrentWebsiteId()
+    public function getCurrentWebsiteId(): int
     {
-        return $this->_storeManager->getWebsite()->getId();
+        return (int) $this->_storeManager->getWebsite()->getId();
     }
 
     /**
@@ -128,14 +127,14 @@ class Ga extends Template
      * @link https://developers.google.com/analytics/devguides/collection/gtagjs
      * @link https://developers.google.com/analytics/devguides/collection/ga4
      *
-     * @param string $accountId
+     * @param string $measurementId
      * @return array
      */
-    public function getPageTrackingData($accountId)
+    public function getPageTrackingData($measurementId): array
     {
         return [
             'optPageUrl' => $this->getOptPageUrl(),
-            'accountId' => $this->escapeHtmlAttr($accountId, false)
+            'measurementId' => $this->escapeHtmlAttr($measurementId, false)
         ];
     }
 
@@ -150,7 +149,7 @@ class Ga extends Template
      * @return array
      * @since 100.2.0
      */
-    public function getOrdersTrackingData()
+    public function getOrdersTrackingData(): array
     {
         $result = [];
         $orderIds = $this->getOrderIds();
@@ -158,7 +157,7 @@ class Ga extends Template
             return $result;
         }
 
-        $collection = $this->_salesOrderCollection->create();
+        $collection = $this->salesOrderCollection->create();
         $collection->addFieldToFilter('entity_id', ['in' => $orderIds]);
 
         foreach ($collection as $order) {
@@ -166,16 +165,16 @@ class Ga extends Template
                 $result['products'][] = [
                     'item_id' => $this->escapeJsQuote($item->getSku()),
                     'item_name' =>  $this->escapeJsQuote($item->getName()),
-                    'price' => $this->_googleGtagData->formatToDec((float) $item->getPrice()),
+                    'price' => $this->googleGtagConfig->formatToDec((float) $item->getPrice()),
                     'quantity' => (int)$item->getQtyOrdered(),
                 ];
             }
             $result['orders'][] = [
                 'transaction_id' =>  $order->getIncrementId(),
                 'affiliation' => $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
-                'value' => $this->_googleGtagData->formatToDec((float) $order->getGrandTotal()),
-                'tax' => $this->_googleGtagData->formatToDec((float) $order->getTaxAmount()),
-                'shipping' => $this->_googleGtagData->formatToDec((float) $order->getShippingAmount()),
+                'value' => $this->googleGtagConfig->formatToDec((float) $order->getGrandTotal()),
+                'tax' => $this->googleGtagConfig->formatToDec((float) $order->getTaxAmount()),
+                'shipping' => $this->googleGtagConfig->formatToDec((float) $order->getShippingAmount()),
             ];
             $result['currency'] = $order->getOrderCurrencyCode();
         }
@@ -187,7 +186,7 @@ class Ga extends Template
      *
      * @return string
      */
-    private function getOptPageUrl()
+    private function getOptPageUrl(): string
     {
         $optPageURL = '';
         $pageName = $this->getPageName() !== null ? trim($this->getPageName()) : '';

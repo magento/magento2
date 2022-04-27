@@ -12,7 +12,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\GoogleGtag\Block\Ga;
-use Magento\GoogleGtag\Helper\Data;
+use Magento\GoogleGtag\Helper\GtagConfiguration;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
@@ -83,7 +83,7 @@ class GaTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->googleAnalyticsDataMock = $this->getMockBuilder(Data::class)
+        $this->googleGtagConfig = $this->getMockBuilder(GtagConfiguration::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -96,7 +96,7 @@ class GaTest extends TestCase
             [
                 'context' => $contextMock,
                 'salesOrderCollection' => $this->salesOrderCollectionMock,
-                'googleAnalyticsData' => $this->googleAnalyticsDataMock,
+                'googleGtagConfig' => $this->googleGtagConfig,
                 'cookieHelper' => $this->cookieHelperMock
             ]
         );
@@ -161,7 +161,7 @@ class GaTest extends TestCase
         $accountId = "100";
         $expectedResult = [
             'optPageUrl' => ", '" . $pageName . "'",
-            'accountId' => $accountId
+            'measurementId' => $accountId
         ];
         $this->gaBlock->setData('page_name', $pageName);
         $this->assertEquals($expectedResult, $this->gaBlock->getPageTrackingData($accountId));

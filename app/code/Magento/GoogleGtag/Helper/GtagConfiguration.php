@@ -16,7 +16,7 @@ use Magento\Store\Model\Store;
  *
  * @api
  */
-class Data extends AbstractHelper
+class GtagConfiguration extends AbstractHelper
 {
     /**
      * Config paths for using throughout the code
@@ -52,13 +52,13 @@ class Data extends AbstractHelper
      * @param null|string|bool|int|Store $store
      * @return bool
      */
-    public function isGoogleAnalyticsAvailable($store = null)
+    public function isGoogleAnalyticsAvailable($store = null): bool
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_ACTIVE,
             ScopeInterface::SCOPE_STORE,
             $store
-        ) && $this->getAccountId();
+        ) && $this->getMeasurementId();
     }
 
     /**
@@ -66,7 +66,7 @@ class Data extends AbstractHelper
      *
      * @return string
      */
-    public function getAccountId()
+    public function getMeasurementId(): string
     {
         return (string)$this->scopeConfig->getValue(
             self::XML_PATH_MEASUREMENT_ID,
@@ -79,7 +79,7 @@ class Data extends AbstractHelper
      *
      * @return bool
      */
-    public function isGoogleAdwordsActive()
+    public function isGoogleAdwordsActive(): bool
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_ADWORD_ACTIVE,
@@ -94,7 +94,7 @@ class Data extends AbstractHelper
      *
      * @return bool
      */
-    public function isGoogleAdwordsConfigurable()
+    public function isGoogleAdwordsConfigurable(): bool
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_ADWORD_ACTIVE,
@@ -107,7 +107,7 @@ class Data extends AbstractHelper
      *
      * @return string
      */
-    public function getConversionGtagGlobalSiteTagSrc()
+    public function getConversionGtagGlobalSiteTagSrc(): string
     {
         $siteSrc = self::GTAG_GLOBAL_SITE_TAG_SRC;
         $cId = $this->getConversionId();
@@ -119,7 +119,7 @@ class Data extends AbstractHelper
      *
      * @return string
      */
-    public function getConversionId()
+    public function getConversionId(): string
     {
         return (string)$this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_ID,
@@ -132,7 +132,7 @@ class Data extends AbstractHelper
      *
      * @return string
      */
-    public function getConversionLabel()
+    public function getConversionLabel(): string
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_LABEL,

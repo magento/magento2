@@ -11,7 +11,7 @@ namespace Magento\GoogleGtag\Test\Unit\Helper;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\GoogleGtag\Helper\Data as HelperData;
+use Magento\GoogleGtag\Helper\GtagConfiguration as HelperData;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -82,7 +82,7 @@ class DataTest extends TestCase
             ->method('isSetFlag')
             ->with(HelperData::XML_PATH_ACTIVE, ScopeInterface::SCOPE_STORE)
             ->willReturn($flagGaActive);
-        $this->assertEquals($testAccountId, $this->helper->getAccountId());
+        $this->assertEquals($testAccountId, $this->helper->getMeasurementId());
         $this->assertEquals($result, $this->helper->isGoogleAnalyticsAvailable());
     }
 
@@ -100,23 +100,23 @@ class DataTest extends TestCase
     }
 
     /**
-     * Test for getAccountId()
+     * Test for getMeasurementId()
      * @param bool $testAccountType
      * @param bool $testIsGA4Account
      * @param string $testMeasurementId
      * @param string $testTrackingId
      * @param string $result
      * @return void
-     * @dataProvider dataGetAccountId
+     * @dataProvider dataGetMeasurementId
      */
-    public function testGetAccountId($testMeasurementId, $result): void
+    public function testGetMeasurementId($testMeasurementId, $result): void
     {
         $this->scopeConfigMock
             ->method('getValue')
             ->willReturnMap([
                 [HelperData::XML_PATH_MEASUREMENT_ID, ScopeInterface::SCOPE_STORE, null, $testMeasurementId]
             ]);
-        $this->assertEquals($result, $this->helper->getAccountId());
+        $this->assertEquals($result, $this->helper->getMeasurementId());
     }
 
     /**
@@ -195,11 +195,11 @@ class DataTest extends TestCase
     }
 
     /**
-     * Data provider for testGetAccountId()
+     * Data provider for testGetMeasurementId()
      *
      * @return array
      */
-    public function dataGetAccountId(): array
+    public function dataGetMeasurementId(): array
     {
         return [
             ['G-1234', 'G-1234']

@@ -10,8 +10,6 @@ namespace Magento\GoogleGtag\Observer;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\LayoutInterface;
-use Magento\GoogleGtag\Helper\Data;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Google Analytics module observer
@@ -19,33 +17,17 @@ use Magento\Store\Model\StoreManagerInterface;
 class SetGoogleAnalyticsOnOrderSuccessPageViewObserver implements ObserverInterface
 {
     /**
-     * @var Data
-     */
-    protected $_googleGtagData = null;
-
-    /**
      * @var LayoutInterface
      */
-    protected $_layout;
+    private $layout;
 
     /**
-     * @var StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
-     * @param StoreManagerInterface $storeManager
      * @param LayoutInterface $layout
-     * @param Data $googleGtagData
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        LayoutInterface $layout,
-        Data $googleGtagData
+        LayoutInterface $layout
     ) {
-        $this->_googleGtagData = $googleGtagData;
-        $this->_layout = $layout;
-        $this->_storeManager = $storeManager;
+        $this->layout = $layout;
     }
 
     /**
@@ -60,7 +42,7 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserver implements ObserverInterf
         if (empty($orderIds) || !is_array($orderIds)) {
             return;
         }
-        $block = $this->_layout->getBlock('google_gtag_analytics');
+        $block = $this->layout->getBlock('google_gtag_analytics');
         if ($block) {
             $block->setOrderIds($orderIds);
         }

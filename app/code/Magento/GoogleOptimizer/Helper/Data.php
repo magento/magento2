@@ -8,9 +8,10 @@
 
 namespace Magento\GoogleOptimizer\Helper;
 
+use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
-use Magento\GoogleGtag\Helper\Data as GtagHelper;
+use Magento\GoogleGtag\Helper\GtagConfiguration;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -19,7 +20,7 @@ use Magento\Store\Model\ScopeInterface;
  * @api
  * @since 100.0.2
  */
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class Data extends AbstractHelper
 {
     /**
      * Xml path google experiments enabled
@@ -42,24 +43,24 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_analyticsHelper;
 
     /**
-     * @var GtagHelper|null
+     * @var GtagConfiguration|null
      */
-    protected $gtagHelper;
+    private $gtagConfiguration;
 
     /**
      * Data constructor.
      *
      * @param Context $context
      * @param \Magento\GoogleAnalytics\Helper\Data $analyticsHelper
-     * @param GtagHelper|null $gtagHelper
+     * @param GtagConfiguration|null $gtagHelper
      */
     public function __construct(
         Context $context,
         \Magento\GoogleAnalytics\Helper\Data $analyticsHelper,
-        GtagHelper $gtagHelper = null
+        GtagConfiguration $gtagConfiguration = null
     ) {
         $this->_analyticsHelper = $analyticsHelper;
-        $this->gtagHelper = $gtagHelper ?: ObjectManager::getInstance()->get(GtagHelper::class);
+        $this->gtagConfiguration = $gtagConfiguration ?: ObjectManager::getInstance()->get(GtagConfiguration::class);
         parent::__construct($context);
     }
 
@@ -93,7 +94,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->isGoogleExperimentEnabled($store) &&
             (
                 $this->_analyticsHelper->isGoogleAnalyticsAvailable($store) ||
-                $this->gtagHelper->isGoogleAnalyticsAvailable($store)
+                $this->gtagConfiguration->isGoogleAnalyticsAvailable($store)
             );
     }
 }

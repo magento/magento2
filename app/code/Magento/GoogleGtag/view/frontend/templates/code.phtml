@@ -7,13 +7,13 @@
 <?php
 /** @var \Magento\GoogleGtag\Block\Code $block */
 /** @var \Magento\Framework\Escaper $escaper */
-/** @var \Magento\GoogleGtag\Helper\Data $helper */
-$helper = $block->getHelper();
+/** @var \Magento\GoogleGtag\Helper\GtagConfiguration $gtagConfiguration */
+$gtagConfiguration = $block->getHelper();
 ?>
 
-<?php if ($helper->isGoogleAdwordsConfigurable() && $helper->isGoogleAdwordsActive()): ?>
-    <?php $conversionId = $helper->getConversionId(); ?>
-    <?php $conversionLabel = $helper->getConversionLabel(); ?>
+<?php if ($gtagConfiguration->isGoogleAdwordsConfigurable() && $gtagConfiguration->isGoogleAdwordsActive()): ?>
+    <?php $conversionId = $gtagConfiguration->getConversionId(); ?>
+    <?php $conversionLabel = $gtagConfiguration->getConversionLabel(); ?>
     <script>
         gtag(
             'event',

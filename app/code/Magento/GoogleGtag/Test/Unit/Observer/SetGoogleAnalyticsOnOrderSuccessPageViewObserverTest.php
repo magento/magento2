@@ -55,12 +55,6 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->googleAnalyticsDataMock = $this->getMockBuilder(GaDataHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -74,9 +68,7 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserverTest extends TestCase
         $this->orderSuccessObserver = $objectManager->getObject(
             SetGoogleAnalyticsOnOrderSuccessPageViewObserver::class,
             [
-                'storeManager' => $this->storeManagerMock,
-                'layout' => $this->layoutMock,
-                'googleAnalyticsData' => $this->googleAnalyticsDataMock
+                'layout' => $this->layoutMock
             ]
         );
     }
