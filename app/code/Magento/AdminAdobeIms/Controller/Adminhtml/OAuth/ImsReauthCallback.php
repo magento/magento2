@@ -12,7 +12,7 @@ use Exception;
 use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
-use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
+use Magento\AdminAdobeIms\Service\AdminReauthProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdminAdobeIms\Service\ImsOrganizationService;
 use Magento\Backend\App\Action\Context;
@@ -55,9 +55,9 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
     private ImsOrganizationService $organizationService;
 
     /**
-     * @var AdminLoginProcessService
+     * @var AdminReauthProcessService
      */
-    private AdminLoginProcessService $adminLoginProcessService;
+    private AdminReauthProcessService $adminLoginProcessService;
 
     /**
      * @var AdminAdobeImsLogger
@@ -69,7 +69,7 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
      * @param ImsConnection $imsConnection
      * @param ImsConfig $imsConfig
      * @param ImsOrganizationService $organizationService
-     * @param AdminLoginProcessService $adminLoginProcessService
+     * @param AdminReauthProcessService $adminReauthProcessService
      * @param AdminAdobeImsLogger $logger
      */
     public function __construct(
@@ -77,14 +77,14 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
         ImsConnection $imsConnection,
         ImsConfig $imsConfig,
         ImsOrganizationService $organizationService,
-        AdminLoginProcessService $adminLoginProcessService,
+        AdminReauthProcessService $adminReauthProcessService,
         AdminAdobeImsLogger $logger
     ) {
         parent::__construct($context);
         $this->imsConnection = $imsConnection;
         $this->imsConfig = $imsConfig;
         $this->organizationService = $organizationService;
-        $this->adminLoginProcessService = $adminLoginProcessService;
+        $this->adminLoginProcessService = $adminReauthProcessService;
         $this->logger = $logger;
     }
 
@@ -126,7 +126,7 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
                 throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
             }
             $this->organizationService->checkOrganizationAllocation($profile);
-            $this->adminLoginProcessService->reAuth($profile, $tokenResponse);
+            $this->adminLoginProcessService->execute($tokenResponse);
 
             $response = sprintf(
                 self::RESPONSE_TEMPLATE,
