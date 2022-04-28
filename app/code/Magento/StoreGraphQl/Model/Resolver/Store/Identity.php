@@ -22,10 +22,11 @@ class Identity implements IdentityInterface
      */
     public function getIdentities(array $resolvedData): array
     {
+        $data["id"] =  empty($resolvedData) ? [] : $resolvedData["id"];
         $ids =  empty($resolvedData) ?
             [] : array_merge([$this->cacheTag], array_map(function ($key) {
                 return sprintf('%s_%s', $this->cacheTag, $key);
-            }, array_keys($resolvedData)));
+            }, $data));
         return $ids;
     }
 }
