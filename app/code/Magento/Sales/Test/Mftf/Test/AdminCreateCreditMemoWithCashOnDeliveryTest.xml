@@ -8,15 +8,19 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateCreditMemoWithCashOnDeliveryTest">
+    <test name="AdminCreateCreditMemoWithCashOnDeliveryTest" deprecated="Use AdminCreateCreditMemoForOrderWithCashOnDeliveryTest instead">
         <annotations>
             <stories value="Credit memo entity"/>
-            <title value="Create Credit Memo with cash on delivery payment method"/>
+            <title value="DEPRECATED. Create Credit Memo with cash on delivery payment method"/>
             <description value="Create Credit Memo with cash on delivery payment and assert 0 shipping refund"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-15863"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminCreateCreditMemoForOrderWithCashOnDeliveryTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
@@ -70,12 +74,14 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
 
         <!-- Go to Sales > Orders > find out placed order and open -->
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="grabOrderId" />
-        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="grabOrderId">
-			<actualResult type="const">$grabOrderId</actualResult>
+        <comment userInput="BIC workaround" stepKey="grabOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
+            <actualResult type="const">$orderNumber</actualResult>
         </assertNotEmpty>
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
-            <argument name="orderId" value="{$grabOrderId}"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
 
         <!-- Click 'Credit Memo' button and fill data from dataset: refund -->
@@ -118,10 +124,12 @@
         <!-- Assert refunded Grand Total on frontend -->
         <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="onAccountPage"/>
         <scrollTo selector="{{StorefrontCustomerResentOrdersSection.blockResentOrders}}" stepKey="scrollToResent"/>
-        <click selector="{{StorefrontCustomerResentOrdersSection.viewOrder({$grabOrderId})}}" stepKey="clickOnOrder"/>
+        <click selector="{{StorefrontCustomerResentOrdersSection.viewOrder({$orderNumber})}}" stepKey="clickOnOrder"/>
         <waitForPageLoad stepKey="waitForViewOrder"/>
         <actionGroup ref="StorefrontClickRefundTabCustomerOrderViewActionGroup" stepKey="clickRefund"/>
         <scrollTo selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" stepKey="scrollToGrandTotal"/>
-        <see selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" userInput="555.00" stepKey="seeGrandTotal"/>
+        <actionGroup ref="StorefrontCheckRefundGrandTotalActionGroup" stepKey="seeGrandTotal">
+            <argument name="grandTotal" value="555.00"/>
+        </actionGroup>
     </test>
 </tests>

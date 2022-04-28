@@ -57,8 +57,8 @@ class ComposerInformationTest extends TestCase
         $this->packageMock = $this->getMockForAbstractClass(CompletePackageInterface::class);
         $this->lockerMock->method('getLockedRepository')->willReturn($this->lockerRepositoryMock);
         $this->packageMock->method('getType')->willReturn('metapackage');
-        $this->packageMock->method('getPrettyName')->willReturn('magento/product-test-package-name');
-        $this->packageMock->method('getName')->willReturn('magento/product-test-package-name');
+        $this->packageMock->method('getPrettyName')->willReturn('magento/product-test-package-name-edition');
+        $this->packageMock->method('getName')->willReturn('magento/product-test-package-name-edition');
         $this->packageMock->method('getPrettyVersion')->willReturn('123.456.789');
         $this->lockerRepositoryMock->method('getPackages')->willReturn([$this->packageMock]);
 
@@ -75,8 +75,8 @@ class ComposerInformationTest extends TestCase
     public function testGetSystemPackages()
     {
         $expected = [
-            'magento/product-test-package-name' => [
-                'name'    => 'magento/product-test-package-name',
+            'magento/product-test-package-name-edition' => [
+                'name'    => 'magento/product-test-package-name-edition',
                 'type'    => 'metapackage',
                 'version' => '123.456.789'
             ]

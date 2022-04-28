@@ -34,7 +34,7 @@ Important: Provide a set of clear steps to reproduce this bug. We can not provid
 2.
 
 ---
-Please provide [Severity](https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html#backlog) assessment for the Issue as Reporter. This information will help during Confirmation and Issue triage processes.
+Please provide [Severity](https://devdocs.magento.com/guides/v2.4/contributor-guide/contributing.html#backlog) assessment for the Issue as Reporter. This information will help during Confirmation and Issue triage processes.
 
 - [ ] Severity: **S0** _- Affects critical data or functionality and leaves users without workaround._
 - [ ] Severity: **S1** _- Affects critical data or functionality and forces users to employ a workaround._

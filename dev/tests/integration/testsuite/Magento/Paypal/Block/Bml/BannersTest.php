@@ -17,7 +17,7 @@ class BannersTest extends \PHPUnit\Framework\TestCase
      * @param bool $isEmptyHtml
      * @param string $methodWppBml
      * @param string $methodWppPeBml
-     * @dataProvider testToHtmlDataProvider
+     * @dataProvider toHtmlDataProvider
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
      */
@@ -75,7 +75,7 @@ class BannersTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function testToHtmlDataProvider()
+    public function toHtmlDataProvider()
     {
         return [
             [

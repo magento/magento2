@@ -14,6 +14,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Model\StockStateException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
@@ -53,7 +54,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
     /**
      * Wishlist cache tag name
      */
-    const CACHE_TAG = 'wishlist';
+    public const CACHE_TAG = 'wishlist';
 
     /**
      * Prefix of model events names
@@ -84,15 +85,11 @@ class Wishlist extends AbstractModel implements IdentityInterface
     protected $_storeIds;
 
     /**
-     * Wishlist data
-     *
      * @var Data
      */
     protected $_wishlistData;
 
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $_catalogProduct;
@@ -432,6 +429,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      *
+     * @throws StockStateException
      * @throws LocalizedException
      * @throws InvalidArgumentException
      */
@@ -463,7 +461,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
         }
 
         if (!$this->stockConfiguration->isShowOutOfStock($storeId) && !$product->getIsSalable()) {
-            throw new LocalizedException(__('Cannot add product without stock to wishlist.'));
+            throw new StockStateException(__('Cannot add product without stock to wishlist.'));
         }
 
         if ($buyRequest instanceof DataObject) {

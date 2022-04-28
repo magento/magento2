@@ -55,7 +55,7 @@ define([
             });
 
             if (firstSwatch.length) {
-                $(firstSwatch).focus();
+                $(firstSwatch).trigger('focus');
             }
         }
     });
@@ -106,7 +106,7 @@ define([
             $title = $element.find('.title');
             $corner = $element.find('.corner');
 
-            $this.hover(function () {
+            $this.on('mouseenter', function () {
                 if (!$this.hasClass('disabled')) {
                     timer = setTimeout(
                         function () {
@@ -168,7 +168,9 @@ define([
                         $widget.options.delay
                     );
                 }
-            }, function () {
+            });
+
+            $this.on('mouseleave', function () {
                 $element.hide();
                 clearTimeout(timer);
             });
@@ -868,7 +870,7 @@ define([
          */
         _OnMoreClick: function ($this) {
             $this.nextAll().show();
-            $this.blur().remove();
+            $this.trigger('blur').remove();
         },
 
         /**
@@ -877,7 +879,9 @@ define([
          * @private
          */
         _Rewind: function (controls) {
-            controls.find('div[data-option-id], option[data-option-id]').removeClass('disabled').removeAttr('disabled');
+            controls.find('div[data-option-id], option[data-option-id]')
+                .removeClass('disabled')
+                .prop('disabled', false);
             controls.find('div[data-option-empty], option[data-option-empty]')
                 .attr('disabled', true)
                 .addClass('disabled')
@@ -1243,17 +1247,12 @@ define([
          * @param {Array} images
          */
         _setImageType: function (images) {
-            var initial = this.options.mediaGalleryInitial[0].img;
 
-            if (images[0].img === initial) {
-                images = $.extend(true, [], this.options.mediaGalleryInitial);
-            } else {
-                images.map(function (img) {
-                    if (!img.type) {
-                        img.type = 'image';
-                    }
-                });
-            }
+            images.map(function (img) {
+                if (!img.type) {
+                    img.type = 'image';
+                }
+            });
 
             return images;
         },

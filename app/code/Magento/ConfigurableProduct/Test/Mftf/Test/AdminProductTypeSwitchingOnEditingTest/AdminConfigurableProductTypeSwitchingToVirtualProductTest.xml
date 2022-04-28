@@ -29,10 +29,14 @@
         <click selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="clickRemoveOption1"/>
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandOption2Actions"/>
         <click selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="clickRemoveOption2"/>
-        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{SimpleProduct2.price}}" stepKey="fillProductPrice"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{SimpleProduct2.quantity}}" stepKey="fillProductQty"/>
+        <actionGroup ref="AdminFillProductPriceFieldAndPressEnterOnProductEditPageActionGroup" stepKey="fillProductPrice">
+            <argument name="price" value="{{SimpleProduct2.price}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQty">
+            <argument name="productQty" value="{{SimpleProduct2.quantity}}"/>
+        </actionGroup>
         <clearField selector="{{AdminProductFormSection.productWeight}}" stepKey="clearWeightField"/>
-        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has no weight" stepKey="selectNoWeight"/>
+        <actionGroup ref="AdminSelectWeightTypeOnProductFormActionGroup" stepKey="selectNoWeight"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveVirtualProductForm"/>
         <!--Assert virtual product on Admin product page grid-->
         <comment userInput="Assert virtual product on Admin product page grid" stepKey="commentAssertVirtualProductOnAdmin"/>
@@ -43,8 +47,12 @@
         <seeElement selector="{{AdminProductGridSection.productRowByTypeAndName('Virtual Product',$createProduct.name$)}}" stepKey="seeVirtualProductInGrid"/>
         <!--Assert virtual product on storefront-->
         <comment userInput="Assert virtual product on storefront" stepKey="commentAssertVirtualProductOnStorefront"/>
-        <amOnPage url="{{StorefrontProductPage.url($createProduct.name$)}}" stepKey="openVirtualProductPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontVirtualProductPageLoad"/>
-        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertVirtualProductInStock"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openVirtualProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontVirtualProductPageLoad"/>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="assertVirtualProductInStock">
+            <argument name="productStockStatus" value="In Stock"/>
+        </actionGroup>
     </test>
 </tests>

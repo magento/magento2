@@ -29,6 +29,9 @@ class FieldTest extends TestCase
      */
     protected $_groupMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->_fieldMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Field::class);
@@ -48,6 +51,9 @@ class FieldTest extends TestCase
         );
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown(): void
     {
         unset($this->_fieldMock);
@@ -55,48 +61,44 @@ class FieldTest extends TestCase
         unset($this->_model);
     }
 
-    public function testIteratorInitializesCorrespondingFlyweights()
+    /**
+     * @return void
+     */
+    public function testIteratorInitializesCorrespondingFlyweights(): void
     {
-        $this->_groupMock->expects(
-            $this->at(0)
-        )->method(
-            'setData'
-        )->with(
-            ['_elementType' => 'group', 'id' => 'someGroup_1'],
-            'scope'
-        );
-        $this->_groupMock->expects(
-            $this->at(2)
-        )->method(
-            'setData'
-        )->with(
-            ['_elementType' => 'group', 'id' => 'someGroup_2'],
-            'scope'
-        );
+        $this->_groupMock
+            ->method('setData')
+            ->withConsecutive(
+                [
+                    ['_elementType' => 'group', 'id' => 'someGroup_1'],
+                    'scope'
+                ],
+                [
+                    ['_elementType' => 'group', 'id' => 'someGroup_2'],
+                    'scope'
+                ]
+            );
         $this->_groupMock->expects($this->any())->method('isVisible')->willReturn(true);
 
-        $this->_fieldMock->expects(
-            $this->at(0)
-        )->method(
-            'setData'
-        )->with(
-            ['_elementType' => 'field', 'id' => 'someField_1'],
-            'scope'
-        );
-        $this->_fieldMock->expects(
-            $this->at(2)
-        )->method(
-            'setData'
-        )->with(
-            ['_elementType' => 'field', 'id' => 'someField_2'],
-            'scope'
-        );
+        $this->_fieldMock
+            ->method('setData')
+            ->withConsecutive(
+                [
+                    ['_elementType' => 'field', 'id' => 'someField_1'],
+                    'scope'
+                ],
+                [
+                    ['_elementType' => 'field', 'id' => 'someField_2'],
+                    'scope'
+                ]
+            );
         $this->_fieldMock->expects($this->any())->method('isVisible')->willReturn(true);
-
         $items = [];
+
         foreach ($this->_model as $item) {
             $items[] = $item;
         }
+
         $this->assertEquals($this->_groupMock, $items[0]);
         $this->assertEquals($this->_fieldMock, $items[1]);
         $this->assertEquals($this->_groupMock, $items[2]);

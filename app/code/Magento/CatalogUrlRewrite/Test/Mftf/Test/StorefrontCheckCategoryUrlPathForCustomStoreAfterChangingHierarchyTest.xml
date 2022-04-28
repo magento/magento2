@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckCategoryUrlPathForCustomStoreAfterChangingHierarchyTest">
+        <annotations>
+            <features value="CatalogUrlRewrite"/>
+            <stories value="Url rewrites"/>
+            <title value="Checking category URL path for custom store after changing hierarchy"/>
+            <description value="Checks that category and its children have correct URL path for custom store after changing hierarchy"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-41615"/>
+            <useCaseId value="MC-40780"/>
+            <group value="catalog"/>
+            <group value="urlRewrite"/>
+        </annotations>
+        <before>
+            <!-- Create categories -->
+            <createData entity="_defaultCategory" stepKey="createCategory1"/>
+            <createData entity="SubCategoryWithParent" stepKey="createCategory2">
+                <requiredEntity createDataKey="createCategory1"/>
+            </createData>
+            <createData entity="_defaultCategory" stepKey="createCategory3"/>
+            <createData entity="_defaultCategory" stepKey="createCategory4"/>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create "EN" Store View -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createEnStoreView">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+        </before>
+        <after>
+            <!-- Delete categories -->
+            <deleteData createDataKey="createCategory4" stepKey="deleteCategory4"/>
+            <deleteData createDataKey="createCategory3" stepKey="deleteCategory3"/>
+            <deleteData createDataKey="createCategory2" stepKey="deleteCategory2"/>
+            <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteEnStoreView">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <!-- Clear grid filters -->
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearStoreFilters"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Go to Category 1 edit page on "EN" store view -->
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="goToCategory1PageOnEnStoreView">
+            <argument name="Store" value="customStoreEN.name"/>
+            <argument name="CatName" value="$createCategory1.name$"/>
+        </actionGroup>
+
+        <!-- Change Name and URL key for Category 1 -->
+        <actionGroup ref="AdminChangeCategoryNameOnStoreViewLevelActionGroup" stepKey="changeCategory1NameForEnStoreView">
+            <argument name="categoryName" value="EN 1"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeCategory1UrlKeyForEnStoreView">
+            <argument name="value" value="en 1"/>
+        </actionGroup>
+
+        <!-- Change Name and URL key for Category 2 -->
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory2EditPage">
+            <argument name="category" value="$createCategory2$"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeCategoryNameOnStoreViewLevelActionGroup" stepKey="changeCategory2NameForEnStoreView">
+            <argument name="categoryName" value="EN 2"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeCategory2UrlKeyForEnStoreView">
+            <argument name="value" value="en 2"/>
+        </actionGroup>
+
+        <!-- Change Name and URL key for Category 3 -->
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory3EditPage">
+            <argument name="category" value="$createCategory3$"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeCategoryNameOnStoreViewLevelActionGroup" stepKey="changeCategory3NameForEnStoreView">
+            <argument name="categoryName" value="EN 3"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeCategory3UrlKeyForEnStoreView">
+            <argument name="value" value="en 3"/>
+        </actionGroup>
+
+        <!-- Change Name and URL key for Category 4 -->
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory4EditPage">
+            <argument name="category" value="$createCategory4$"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeCategoryNameOnStoreViewLevelActionGroup" stepKey="changeCategory4NameForEnStoreView">
+            <argument name="categoryName" value="EN 4"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeCategory4UrlKeyForEnStoreView">
+            <argument name="value" value="en 4"/>
+        </actionGroup>
+
+        <!-- Go to Home page on the Storefront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <!-- Switch store view to 'EN' -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreViewToEn">
+            <argument name="storeView" value="customStoreEN"/>
+        </actionGroup>
+
+        <!-- Assert Category 2 URL path on the 'EN' store view -->
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="navigateToCategory2Page">
+            <argument name="categoryName" value="EN 1"/>
+            <argument name="subCategoryName" value="EN 2"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProperUrlIsShownActionGroup" stepKey="assertUrlPathForCategory2">
+            <argument name="urlPath" value="/en-1/en-2.html"/>
+        </actionGroup>
+
+        <!-- Go to Categories page on the Admin -->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToAdminCategoriesPage"/>
+        <see userInput="All Store View" selector="{{AdminMainActionsSection.storeViewDropdown}}" stepKey="assertAllStoreView"/>
+
+        <!-- Move Category 2 to 'Default Category' -->
+        <actionGroup ref="MoveCategoryActionGroup" stepKey="moveCategory2ToDefaultCategory">
+            <argument name="childCategory" value="$createCategory2.name$"/>
+            <argument name="parentCategory" value="Default Category"/>
+        </actionGroup>
+        <!-- Move Category 4 to Category 3 -->
+        <actionGroup ref="MoveCategoryActionGroup" stepKey="moveCategory4ToCategory3">
+            <argument name="childCategory" value="$createCategory4.name$"/>
+            <argument name="parentCategory" value="$createCategory3.name$"/>
+        </actionGroup>
+
+        <!-- Create Category 5 -->
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="navigateToCategory2EditPage">
+            <argument name="category" value="$createCategory2$"/>
+        </actionGroup>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickToAddCategory5"/>
+        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory5"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="fillCategory5Name"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory5"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertCategory5Saved"/>
+
+        <!-- Assert Category 5 URL path on the 'EN' store view -->
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="navigateToCategory5Page">
+            <argument name="categoryName" value="EN 2"/>
+            <argument name="subCategoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProperUrlIsShownActionGroup" stepKey="assertUrlPathForCategory5">
+            <argument name="urlPath" value="en-2/{{SimpleSubCategory.name_lwr}}.html"/>
+        </actionGroup>
+
+        <!-- Go to Category 2 edit page on "EN" store view -->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="goToCategory2EditPage">
+            <argument name="category" value="$createCategory2$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToDefaultStoreView">
+            <argument name="storeView" value="customStoreEN.name"/>
+        </actionGroup>
+
+        <!-- Change Category 2 URL key to default value -->
+        <actionGroup ref="AdminChangeSeoUrlKeyToDefaultValueWithoutRedirectActionGroup" stepKey="changeCategory2UrlKeyToDefaultValue"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory2"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertCategory2Saved"/>
+
+        <!-- Go to Home page on the Storefront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="navigateToHomePage"/>
+        <!-- Assert Category 5 URL path on the 'EN' store view after change parent category -->
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="goToCategory5Page">
+            <argument name="categoryName" value="EN 2"/>
+            <argument name="subCategoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProperUrlIsShownActionGroup" stepKey="assertUrlPathForCategory5AfterChangeParent">
+            <argument name="urlPath" value="$createCategory2.name_lwr$/{{SimpleSubCategory.name_lwr}}.html"/>
+        </actionGroup>
+    </test>
+</tests>

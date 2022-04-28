@@ -33,7 +33,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     /**
      * Xml default email domain path
      */
-    const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
+    public const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
 
     private const XML_PATH_EMAIL_REQUIRED_CREATE_ORDER = 'customer/create_account/email_required_create_order';
     /**
@@ -100,7 +100,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     protected $_quote;
 
     /**
-     * Core registry
+     * Core registry model to bind rules
      *
      * @var \Magento\Framework\Registry
      */
@@ -561,8 +561,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $quote = $this->getQuote();
         if (!$quote->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
-            $quote->getBillingAddress()->setCustomerAddressId(
-                $quote->getShippingAddress()->getCustomerAddressId()
+            $quote->getShippingAddress()->setCustomerAddressId(
+                $quote->getBillingAddress()->getCustomerAddressId()
             );
             $this->setShippingAsBilling(1);
         }
@@ -679,22 +679,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 $buyRequest->setQty($qty);
             }
             $productOptions = $orderItem->getProductOptions();
-            if ($productOptions !== null && !empty($productOptions['options'])) {
-                $formattedOptions = [];
-                foreach ($productOptions['options'] as $option) {
-                    if (in_array($option['option_type'], ['date', 'date_time', 'time', 'file'])) {
-                        $product->setSkipCheckRequiredOption(false);
-                        $formattedOptions[$option['option_id']] =
-                            $buyRequest->getDataByKey('options')[$option['option_id']];
-                        continue;
-                    }
 
-                    $formattedOptions[$option['option_id']] = $option['option_value'];
-                }
-                if (!empty($formattedOptions)) {
-                    $buyRequest->setData('options', $formattedOptions);
-                }
-            }
+            $this->formattedOptions($product, $buyRequest, $productOptions);
+
             $item = $this->getQuote()->addProduct($product, $buyRequest);
             if (is_string($item)) {
                 return $item;
@@ -1379,7 +1366,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             'adminhtml_checkout',
             $this->customerMapper->toFlatArray($customer),
             false,
-            CustomerForm::IGNORE_INVISIBLE
+            CustomerForm::DONT_IGNORE_INVISIBLE
         );
 
         return $customerForm;
@@ -2170,5 +2157,44 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         }
 
         return $shippingData == $billingData;
+    }
+
+    /**
+     * Set $buyRequest with formatted product options.
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param object $buyRequest
+     * @param array $productOptions
+     * @return $this
+     */
+    private function formattedOptions(\Magento\Catalog\Model\Product $product, $buyRequest, $productOptions)
+    {
+        if ($productOptions !== null && !empty($productOptions['options'])) {
+            $formattedOptions = [];
+            foreach ($productOptions['options'] as $option) {
+                if (in_array($option['option_type'], ['date', 'date_time', 'time', 'file'])) {
+                    $product->setSkipCheckRequiredOption(false);
+                    if ($option['option_type'] === 'file') {
+                        try {
+                            $formattedOptions[$option['option_id']] =
+                                $this->serializer->unserialize($option['option_value']);
+                            continue;
+                        } catch (\InvalidArgumentException $exception) {
+                            //log the exception as warning
+                            $this->_logger->warning($exception);
+                        }
+                    }
+                    $formattedOptions[$option['option_id']] =
+                        $buyRequest->getDataByKey('options')[$option['option_id']];
+                    continue;
+                }
+
+                $formattedOptions[$option['option_id']] = $option['option_value'];
+            }
+            if (!empty($formattedOptions)) {
+                $buyRequest->setData('options', $formattedOptions);
+            }
+        }
+        return $this;
     }
 }

@@ -7,7 +7,8 @@
 /**
  * Pager template
  *
- * @see \Magento\Theme\Block\Html\Pager
+ * @var \Magento\Theme\Block\Html\Pager $block
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 <?php if ($block->getCollection()->getSize()): ?>
@@ -61,6 +62,10 @@
                 <li class="item">
                     <a class="page previous jump"
                        title=""
+                       aria-label="<?= $escaper->escapeHtmlAttr(__(
+                           'Skip to page %1',
+                           $block->getPreviousJumpPage()
+                       )) ?>"
                        href="<?= $block->escapeUrl($block->getPreviousJumpUrl()) ?>">
                         <span>...</span>
                     </a>
@@ -87,7 +92,13 @@
 
             <?php if ($block->canShowNextJump()): ?>
                 <li class="item">
-                    <a class="page next jump" title="" href="<?= $block->escapeUrl($block->getNextJumpUrl()) ?>">
+                    <a class="page next jump"
+                       title=""
+                       aria-label="<?= $escaper->escapeHtmlAttr(__(
+                           'Skip to page %1',
+                           $block->getNextJumpPage()
+                       )) ?>"
+                       href="<?= $block->escapeUrl($block->getNextJumpUrl()) ?>">
                         <span>...</span>
                     </a>
                 </li>

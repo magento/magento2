@@ -17,6 +17,7 @@
             <severity value="MAJOR" />
             <description value="Check login with restrict role."/>
             <group value="login"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

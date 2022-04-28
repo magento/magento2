@@ -55,6 +55,7 @@ class DocBlock
             new \Magento\TestFramework\Workaround\Segfault(),
             new \Magento\TestFramework\Workaround\Cleanup\TestCaseProperties(),
             new \Magento\TestFramework\Workaround\Cleanup\StaticProperties(),
+            new \Magento\TestFramework\Isolation\FlushDataFixtureStorage(),
             new \Magento\TestFramework\Isolation\WorkingDirectory(),
             new \Magento\TestFramework\Isolation\DeploymentConfig(),
             new \Magento\TestFramework\Workaround\Override\Fixture\Resolver\TestSetter(),

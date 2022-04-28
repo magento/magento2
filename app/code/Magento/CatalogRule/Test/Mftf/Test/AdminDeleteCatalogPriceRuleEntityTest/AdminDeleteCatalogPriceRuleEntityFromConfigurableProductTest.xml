@@ -72,9 +72,7 @@
             </createData>
 
             <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
@@ -115,12 +113,10 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
 
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Assert that the rule isn't present on the Category page -->
-        <amOnPage url="$$createCategory1.name$$.html" stepKey="goToStorefrontCategoryPage1"/>
+        <amOnPage url="$$createCategory1.custom_attributes[url_key]$$.html" stepKey="goToStorefrontCategoryPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <see selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createConfigProduct1.name$$)}}" userInput="$$createConfigChildProduct1.price$$" stepKey="seeRegularPriceText1"/>
 

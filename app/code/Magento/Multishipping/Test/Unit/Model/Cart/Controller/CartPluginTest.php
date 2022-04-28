@@ -13,6 +13,7 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Multishipping\Model\Cart\Controller\CartPlugin;
 use Magento\Multishipping\Model\DisableMultishipping;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -21,6 +22,11 @@ use Magento\Quote\Model\Quote\Address;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test shipping addresses and item assignments after MultiShipping flow
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CartPluginTest extends TestCase
 {
     /**
@@ -57,10 +63,23 @@ class CartPluginTest extends TestCase
         );
     }
 
-    public function testBeforeDispatch()
-    {
-        $addressId = 100;
-        $customerAddressId = 200;
+    /**
+     * Test cart plugin
+     *
+     * @param string $actionName
+     * @param int $addressId
+     * @param int $customerAddressId
+     * @param bool $isMultiShippingAddresses
+     * @throws LocalizedException
+     * @dataProvider getDataDataProvider
+     */
+    public function testBeforeDispatch(
+        string $actionName,
+        int $addressId,
+        int $customerAddressId,
+        bool $isMultiShippingAddresses
+    ): void {
+        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $quoteMock = $this->createPartialMock(Quote::class, [
             'isMultipleShippingAddresses',
             'getAllShippingAddresses',
@@ -68,6 +87,8 @@ class CartPluginTest extends TestCase
             'getShippingAddress',
             'getCustomer'
         ]);
+        $requestMock->method('getActionName')
+            ->willReturn($actionName);
         $this->checkoutSessionMock->method('getQuote')
             ->willReturn($quoteMock);
 
@@ -76,7 +97,7 @@ class CartPluginTest extends TestCase
             ->willReturn($addressId);
 
         $quoteMock->method('isMultipleShippingAddresses')
-            ->willReturn(true);
+            ->willReturn($isMultiShippingAddresses);
         $quoteMock->method('getAllShippingAddresses')
             ->willReturn([$addressMock]);
         $quoteMock->method('removeAddress')
@@ -100,13 +121,25 @@ class CartPluginTest extends TestCase
             ->with($customerAddressMock)
             ->willReturnSelf();
 
-        $this->cartRepositoryMock->expects($this->once())
+        $this->cartRepositoryMock->expects($this->any())
             ->method('save')
             ->with($quoteMock);
 
         $this->model->beforeDispatch(
             $this->createMock(Cart::class),
-            $this->getMockForAbstractClass(RequestInterface::class)
+            $requestMock
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataDataProvider()
+    {
+        return [
+            'test with `add` action and multi shipping address enabled' => ['add', 100, 200, true],
+            'test with `add` action and multi shipping address disabled' => ['add', 100, 200, false],
+            'test with `edit` action and multi shipping address disabled' => ['add', 110, 200, false]
+        ];
     }
 }

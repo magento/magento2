@@ -17,13 +17,25 @@
         <element name="currentVariationsPriceCells" type="textarea" selector=".admin__control-fields[data-index='price_container']"/>
         <element name="currentVariationsQuantityCells" type="textarea" selector=".admin__control-fields[data-index='quantity_container']"/>
         <element name="currentVariationsAttributesCells" type="textarea" selector=".admin__control-fields[data-index='attributes']"/>
+        <element name="currentVariationsCells" type="textarea" selector=".admin__control-fields[data-index='{{var}}']" parameterized="true"/>
         <element name="currentVariationsStatusCells" type="textarea" selector="._no-header[data-index='status']"/>
+        <element name="currentVariations" type="text" selector="[data-index=configurable-matrix]"/>
+        <element name="currentVariationsAllRows" type="text" selector="[data-index=configurable-matrix] .data-row"/>
+        <element name="currentVariationsProductImage" type="text" parameterized="true" selector="[data-index=configurable-matrix] .data-row:nth-of-type({{index}}) td[data-index=thumbnail_image_container] img"/>
+        <element name="currentVariationsProductName" type="text" parameterized="true" selector="[data-index=configurable-matrix] .data-row:nth-of-type({{index}}) td[data-index=name_container]"/>
+        <element name="currentVariationsProductSku" type="text" parameterized="true" selector="[data-index=configurable-matrix] .data-row:nth-of-type({{index}}) td[data-index=sku_container]"/>
+        <element name="currentVariationsProductPrice" type="text" parameterized="true" selector="[data-index=configurable-matrix] .data-row:nth-of-type({{index}}) td[data-index=price_container]"/>
+        <element name="currentVariationsProductQuantity" type="text" parameterized="true" selector="[data-index=configurable-matrix] .data-row:nth-of-type({{index}}) td[data-index=quantity_container]"/>
+        <element name="currentVariationsProductWeight" type="text" parameterized="true" selector="[data-index=configurable-matrix] .data-row:nth-of-type({{index}}) td[data-index=price_weight]"/>
+        <element name="currentVariationsProductStatus" type="text" parameterized="true" selector="[data-index=configurable-matrix] .data-row:nth-of-type({{index}}) td[data-index=status]"/>
+        <element name="currentVariationsProductAttributes" type="text" parameterized="true" selector="[data-index=configurable-matrix] .data-row:nth-of-type({{index}}) td[data-index=attributes]"/>
         <element name="firstSKUInConfigurableProductsGrid" type="input" selector="//input[@name='configurable-matrix[0][sku]']"/>
         <element name="actionsBtn" type="button" selector="(//button[@class='action-select']/span[contains(text(), 'Select')])[{{var1}}]" parameterized="true"/>
         <element name="actionsBtnByProductName" type="textarea" selector="//*[.='Attributes']/ancestor::tr/td[@data-index='attributes']//span[contains(text(), '{{var}}')]/ancestor::tr//button[@class='action-select']" parameterized="true"/>
         <element name="addProduct" type="button" selector="//*[.='Attributes']/ancestor::tr/td[@data-index='attributes']//span[contains(text(), '{{var}}')]/ancestor::tr//a[text()='Choose a different Product']" parameterized="true"/>
         <element name="removeProductBtn" type="button" selector="//a[text()='Remove Product']"/>
         <element name="disableProductBtn" type="button" selector="//a[text()='Disable Product']"/>
+        <element name="disableProductBtnActive" type="button" selector="//*[@class='action-menu _active']//a[text()='Disable Product']"/>
         <element name="enableProductBtn" type="button" selector="//a[text()='Enable Product']"/>
         <element name="confProductSku" type="input" selector="//*[@name='configurable-matrix[{{arg}}][sku]']" parameterized="true"/>
         <element name="confProductNameCell" type="input" selector="//*[.='Attributes']/ancestor::tr//span[contains(text(), '{{var}}')]/ancestor::tr/td[@data-index='name_container']//input" parameterized="true"/>

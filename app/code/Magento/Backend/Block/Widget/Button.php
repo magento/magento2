@@ -15,7 +15,6 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @api
  * @since 100.0.2
  */
 class Button extends \Magento\Backend\Block\Widget

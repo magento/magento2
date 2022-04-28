@@ -6,6 +6,7 @@
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\TestFramework\Annotation\TestCaseAnnotation;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -28,7 +29,7 @@ class Cache
      */
     public function startTest(\PHPUnit\Framework\TestCase $test)
     {
-        $source = $test->getAnnotations();
+        $source = TestCaseAnnotation::getInstance()->getAnnotations($test);
         if (isset($source['method']['magentoCache'])) {
             $annotations = $source['method']['magentoCache'];
         } elseif (isset($source['class']['magentoCache'])) {

@@ -6,6 +6,7 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Api\Data\CategoryInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
@@ -18,7 +19,6 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\Indexer\Collection;
-use Magento\Msrp\Model\Product\Attribute\Source\Type as SourceType;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
@@ -27,7 +27,6 @@ $objectManager = Bootstrap::getObjectManager();
 
 /** @var Config $eavConfig */
 $eavConfig = $objectManager->get(Config::class);
-
 /** @var ProductAttributeRepositoryInterface $attributeRepository */
 $attributeRepository = $objectManager->get(ProductAttributeRepositoryInterface::class);
 /** @var ProductAttributeInterfaceFactory $attributeFactory */
@@ -42,11 +41,13 @@ $groupId = $installer->getDefaultAttributeGroupId(Product::ENTITY, $attributeSet
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $baseWebsite = $websiteRepository->get('base');
 
+$attributes = [];
 for ($i = 1; $i <= 2; $i++) {
+    $attributeCode = 'test_attribute_' . $i;
     $attributeModel = $attributeFactory->create();
     $attributeModel->setData(
         [
-            'attribute_code' => 'test_attribute_' . $i,
+            'attribute_code' => $attributeCode,
             'entity_type_id' => $installer->getEntityTypeId(Product::ENTITY),
             'is_global' => 1,
             'is_user_defined' => 1,
@@ -66,95 +67,75 @@ for ($i = 1; $i <= 2; $i++) {
             'frontend_label' => ['Test Attribute ' . $i],
             'backend_type' => 'int',
             'option' => [
-                'value' => ['option_0' => ['Option 1'], 'option_1' => ['Option 2']],
-                'order' => ['option_0' => 1, 'option_1' => 2],
+                'value' => ['option_1' => ['Option 1'], 'option_2' => ['Option 2'], 'option_3' => ['Option 3']],
+                'order' => ['option_1' => 1, 'option_2' => 2, 'option_3' => 3],
             ],
-            'default' => ['option_0'],
             'position' => 3 - $i
         ]
     );
     $attribute = $attributeRepository->save($attributeModel);
     $installer->addAttributeToGroup(Product::ENTITY, $attributeSetId, $groupId, $attribute->getId());
+    $attributes[$attributeCode] = $attribute;
 }
+
+/** @var ProductAttributeInterface $attribute1 */
+$attribute1 = $attributes['test_attribute_1'];
+/** @var ProductAttributeInterface $attribute2 */
+$attribute2 = $attributes['test_attribute_2'];
 
 CacheCleaner::cleanAll();
 $eavConfig->clear();
+
+/** @var CategoryInterfaceFactory $categoryInterfaceFactory */
+$categoryInterfaceFactory = $objectManager->get(CategoryInterfaceFactory::class);
+
+/** @var Magento\Catalog\Model\Category $category */
+$category = $categoryInterfaceFactory->create();
+$category->isObjectNew(true);
+$category->setId(3334)
+    ->setName('Category 1')
+    ->setParentId(2)
+    ->setPath('1/2/3334')
+    ->setLevel(2)
+    ->setAvailableSortBy(['position', 'name'])
+    ->setDefaultSortBy('name')
+    ->setIsActive(true)
+    ->setPosition(1);
+$category->save();
 
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 /** @var ProductInterfaceFactory $productInterfaceFactory */
 $productInterfaceFactory = $objectManager->get(ProductInterfaceFactory::class);
+$products = [];
+for ($i = 1; $i <= 6; $i++) {
+    $sku = 'simple' . $i;
+    /** @var Product $product */
+    $product = $productInterfaceFactory->create();
+    $product->setTypeId(Type::TYPE_SIMPLE)
+        ->setAttributeSetId($product->getDefaultAttributeSetId())
+        ->setName('Simple Product ' . $i)
+        ->setSku($sku)
+        ->setUrlKey('simple-product-' . $i)
+        ->setTaxClassId('none')
+        ->setDescription('description')
+        ->setShortDescription('short description')
+        ->setPrice($i * 10)
+        ->setWeight(1)
+        ->setMetaTitle('meta title')
+        ->setMetaKeyword('meta keyword')
+        ->setMetaDescription('meta description')
+        ->setVisibility(Visibility::VISIBILITY_BOTH)
+        ->setStatus(Status::STATUS_ENABLED)
+        ->setWebsiteIds([$baseWebsite->getId()])
+        ->setCategoryIds([$category->getId()])
+        ->setStockData(['use_config_manage_stock' => 1, 'qty' => 50, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
+    $product->setData($attribute1->getAttributeCode(), getAttributeOptionValue($attribute1, 'Option 1'));
+    $optionForSecondAttribute = 'Option ' . ($i === 1 ? 1 : ($i <= 3 ? 2 : 3));
+    $product->setData($attribute2->getAttributeCode(), getAttributeOptionValue($attribute2, $optionForSecondAttribute));
 
-/** @var Product $product */
-$product = $productInterfaceFactory->create();
-$product->setTypeId(Type::TYPE_SIMPLE)
-    ->setAttributeSetId($product->getDefaultAttributeSetId())
-    ->setName('Simple Product1')
-    ->setSku('simple1')
-    ->setTaxClassId('none')
-    ->setDescription('description')
-    ->setShortDescription('short description')
-    ->setOptionsContainer('container1')
-    ->setMsrpDisplayActualPriceType(SourceType::TYPE_IN_CART)
-    ->setPrice(10)
-    ->setWeight(1)
-    ->setMetaTitle('meta title')
-    ->setMetaKeyword('meta keyword')
-    ->setMetaDescription('meta description')
-    ->setVisibility(Visibility::VISIBILITY_BOTH)
-    ->setStatus(Status::STATUS_ENABLED)
-    ->setWebsiteIds([$baseWebsite->getId()])
-    ->setCategoryIds([])
-    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
-    ->setSpecialPrice('5.99');
-$simple1 = $productRepository->save($product);
-
-/** @var Product $product */
-$product = $productInterfaceFactory->create();
-$product->setTypeId(Type::TYPE_SIMPLE)
-    ->setAttributeSetId($product->getDefaultAttributeSetId())
-    ->setName('Simple Product2')
-    ->setSku('simple2')
-    ->setTaxClassId('none')
-    ->setDescription('description')
-    ->setShortDescription('short description')
-    ->setOptionsContainer('container1')
-    ->setMsrpDisplayActualPriceType(SourceType::TYPE_ON_GESTURE)
-    ->setPrice(20)
-    ->setWeight(1)
-    ->setMetaTitle('meta title')
-    ->setMetaKeyword('meta keyword')
-    ->setMetaDescription('meta description')
-    ->setVisibility(Visibility::VISIBILITY_BOTH)
-    ->setStatus(Status::STATUS_ENABLED)
-    ->setWebsiteIds([$baseWebsite->getId()])
-    ->setCategoryIds([])
-    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 50, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
-    ->setSpecialPrice('15.99');
-$simple2 = $productRepository->save($product);
-
-/** @var CategoryInterfaceFactory $categoryInterfaceFactory */
-$categoryInterfaceFactory = $objectManager->get(CategoryInterfaceFactory::class);
-
-$category = $categoryInterfaceFactory->create();
-$category->isObjectNew(true);
-$category->setId(3334)
-    ->setCreatedAt('2014-06-23 09:50:07')
-    ->setName('Category 1')
-    ->setParentId(2)
-    ->setPath('1/2/333')
-    ->setLevel(2)
-    ->setAvailableSortBy(['position', 'name'])
-    ->setDefaultSortBy('name')
-    ->setIsActive(true)
-    ->setPosition(1)
-    ->setPostedProducts(
-        [
-            $simple1->getId() => 10,
-            $simple2->getId() => 11
-        ]
-    );
-$category->save();
+    $products[$sku] = $productRepository->save($product);
+}
 
 /** @var Collection $indexerCollection */
 $indexerCollection = $objectManager->get(Collection::class);
@@ -162,4 +143,19 @@ $indexerCollection->load();
 /** @var Indexer $indexer */
 foreach ($indexerCollection->getItems() as $indexer) {
     $indexer->reindexAll();
+}
+
+/**
+ * @param ProductAttributeInterface $attribute
+ * @param string $label
+ * @return int|null
+ */
+function getAttributeOptionValue(ProductAttributeInterface $attribute, string $label): ?int
+{
+    foreach ($attribute->getOptions() as $option) {
+        if ($option->getLabel() === $label) {
+            return (int)$option->getValue();
+        }
+    }
+    return null;
 }

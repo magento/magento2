@@ -65,6 +65,8 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
         $response1 = $this->graphQlMutation($mutation);
         $token1 = $response1['generateCustomerToken']['token'];
 
+        sleep(2);
+
         $response2 = $this->graphQlMutation($mutation);
         $token2 = $response2['generateCustomerToken']['token'];
 

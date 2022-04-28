@@ -11,6 +11,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * Catalog config model.
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -43,6 +44,11 @@ class Config extends \Magento\Eav\Model\Config
      * @var mixed
      */
     protected $_productTypesById;
+
+    /**
+     * @var array
+     */
+    private $_productTypesByName;
 
     /**
      * Array of attributes codes needed for product load
@@ -173,16 +179,6 @@ class Config extends \Magento\Eav\Model\Config
             $scopeConfig,
             $attributesForPreload
         );
-    }
-
-    /**
-     * Initialize resource model
-     *
-     * @return void
-     */
-    protected function _construct()
-    {
-        $this->_init(\Magento\Catalog\Model\ResourceModel\Config::class);
     }
 
     /**

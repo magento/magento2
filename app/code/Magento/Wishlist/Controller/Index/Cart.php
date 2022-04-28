@@ -216,6 +216,12 @@ class Cart extends AbstractIndex implements Action\HttpPostActionInterface
 
             $item->mergeBuyRequest($buyRequest);
             $item->addToCart($this->cart, true);
+
+            $related = $this->getRequest()->getParam('related_product');
+            if (!empty($related)) {
+                $this->cart->addProductsByIds(explode(',', $related));
+            }
+
             $this->cart->save()->getQuote()->collectTotals();
             $wishlist->save();
 
@@ -240,7 +246,8 @@ class Cart extends AbstractIndex implements Action\HttpPostActionInterface
                 $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
                     ->setDuration(3600)
                     ->setPath('/')
-                    ->setHttpOnly(false);
+                    ->setHttpOnly(false)
+                    ->setSameSite('Strict');
 
                 $this->cookieManager->setPublicCookie(
                     'add_to_cart',

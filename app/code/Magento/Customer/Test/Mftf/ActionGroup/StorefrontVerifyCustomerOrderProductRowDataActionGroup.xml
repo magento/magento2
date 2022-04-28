@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontVerifyCustomerOrderProductRowDataActionGroup">
+        <annotations>
+            <description>Verify a customer's order details for a product row on the view order page on the storefront</description>
+        </annotations>
+        <arguments>
+            <argument name="name" type="string"/>
+            <argument name="sku" type="string"/>
+            <argument name="price" type="string"/>
+            <argument name="quantity" type="string"/>
+            <argument name="subtotal" type="string"/>
+            <argument name="index" defaultValue="1" type="string"/>
+        </arguments>
+        <waitForText userInput="{{name}}" selector="{{StorefrontCustomerOrderViewSection.productNameByRow(index)}}" stepKey="seeProductName"/>
+        <waitForText userInput="{{sku}}" selector="{{StorefrontCustomerOrderViewSection.productSkuByRow(index)}}" stepKey="seeProductSku"/>
+        <waitForText userInput="{{price}}" selector="{{StorefrontCustomerOrderViewSection.productPriceByRow(index)}}" stepKey="seeProductPrice"/>
+        <waitForText userInput="{{quantity}}" selector="{{StorefrontCustomerOrderViewSection.productQuantityByRow(index)}}" stepKey="seeProductQuantity"/>
+        <waitForText userInput="{{subtotal}}" selector="{{StorefrontCustomerOrderViewSection.productSubtotalByRow(index)}}" stepKey="seeProductSubtotal"/>
+    </actionGroup>
+</actionGroups>

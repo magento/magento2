@@ -8,7 +8,9 @@
 /** @var \Magento\Customer\ViewModel\Address $viewModel */
 /** @var \Magento\Framework\Escaper $escaper */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Customer\ViewModel\Address\RegionProvider $regionProvider */
 $viewModel = $block->getViewModel();
+$regionProvider = $block->getRegionProvider();
 ?>
 <?php $_company = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Company::class) ?>
 <?php $_telephone = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Telephone::class) ?>
@@ -202,6 +204,7 @@ $viewModel = $block->getViewModel();
             <button type="submit"
                     class="action save primary"
                     data-action="save-address"
+                    disabled="disabled"
                     title="<?= $escaper->escapeHtmlAttr(__('Save Address')) ?>">
                 <span><?= $escaper->escapeHtml(__('Save Address')) ?></span>
             </button>
@@ -221,13 +224,13 @@ $viewModel = $block->getViewModel();
             }
         },
         "#country": {
-            "regionUpdater": {
+            "directoryRegionUpdater": {
                 "optionalRegionAllowed": <?= /* @noEscape */ $_displayAll ? 'true' : 'false' ?>,
                 "regionListId": "#region_id",
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
                 "form": "#form-validate",
-                "regionJson": <?= /* @noEscape */ $viewModel->dataGetRegionJson() ?>,
+                "regionJson": <?= /* @noEscape */ $regionProvider->getRegionJson(); ?>,
                 "defaultRegion": "<?= (int) $block->getRegionId() ?>",
                 "countriesWithOptionalZip": <?= /* @noEscape */ $viewModel->dataGetCountriesWithOptionalZip(true) ?>
             }

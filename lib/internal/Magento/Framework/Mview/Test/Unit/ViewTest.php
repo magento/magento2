@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,12 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mview\Test\Unit;
 
-use Laminas\Log\Filter\Mock;
 use Magento\Framework\Mview\ActionFactory;
 use Magento\Framework\Mview\ActionInterface;
 use Magento\Framework\Mview\ConfigInterface;
 use Magento\Framework\Mview\View;
 use Magento\Framework\Mview\View\Changelog;
+use Magento\Framework\Mview\View\ChangeLogBatchWalkerFactory;
+use Magento\Framework\Mview\View\ChangeLogBatchWalkerInterface;
 use Magento\Framework\Mview\View\StateInterface;
 use Magento\Framework\Mview\View\Subscription;
 use Magento\Framework\Mview\View\SubscriptionFactory;
@@ -55,7 +57,7 @@ class ViewTest extends TestCase
     protected $subscriptionFactoryMock;
 
     /**
-     * @var MockObject|View\ChangeLogBatchIteratorInterface
+     * @var MockObject|ChangeLogBatchWalkerInterface
      */
     private $iteratorMock;
 
@@ -73,7 +75,15 @@ class ViewTest extends TestCase
             true,
             ['getView']
         );
-        $this->iteratorMock = $this->createMock(View\ChangeLogBatchIteratorInterface::class);
+        $this->iteratorMock = $this->getMockBuilder(ChangeLogBatchWalkerInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['walk'])
+            ->getMockForAbstractClass();
+        $changeLogBatchWalkerFactory = $this->getMockBuilder(ChangeLogBatchWalkerFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMockForAbstractClass();
+        $changeLogBatchWalkerFactory->method('create')->willReturn($this->iteratorMock);
         $this->actionFactoryMock = $this->createPartialMock(ActionFactory::class, ['get']);
         $this->stateMock = $this->createPartialMock(
             State::class,
@@ -107,7 +117,7 @@ class ViewTest extends TestCase
             $this->subscriptionFactoryMock,
             [],
             [],
-            $this->iteratorMock
+            $changeLogBatchWalkerFactory
         );
     }
 
@@ -485,7 +495,7 @@ class ViewTest extends TestCase
         );
         $this->iteratorMock->expects($this->any())
             ->method('walk')
-            ->willReturn([2,3]);
+            ->willReturn([2, 3]);
 
         $actionMock = $this->createPartialMock(ActionInterface::class, ['execute']);
         $actionMock->expects($this->once())->method('execute')->with($listId)->willReturnCallback(
@@ -796,6 +806,7 @@ class ViewTest extends TestCase
             'action_class' => 'Some\Class\Name',
             'group' => 'some_group',
             'subscriptions' => ['some_entity' => ['name' => 'some_entity', 'column' => 'entity_id']],
+            'walker' => ChangeLogBatchWalkerInterface::class
         ];
     }
 }

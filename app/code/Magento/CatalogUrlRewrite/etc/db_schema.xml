@@ -15,6 +15,9 @@
                 comment="category_id"/>
         <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
                 comment="product_id"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="url_rewrite_id"/>
+        </constraint>
         <constraint xsi:type="foreign" referenceId="CAT_URL_REWRITE_PRD_CTGR_PRD_ID_CAT_PRD_ENTT_ENTT_ID"
                     table="catalog_url_rewrite_product_category" column="product_id"
                     referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>

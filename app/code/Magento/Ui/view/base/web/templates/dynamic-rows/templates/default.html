@@ -6,7 +6,7 @@
 -->
 <div class="admin__field" visible="visible" disable="disabled" css="element.setClasses(element)">
     <label if="element.label" class="admin__field-label" attr="for: element.uid">
-        <span translate="element.label"/>
+        <span translate="element.label"></span>
     </label>
 
     <div class="admin__field-control" data-role="grid-wrapper" attr="'data-index': index">
@@ -15,19 +15,19 @@
                  class="admin__data-grid-loading-mask"
                  if="$data.showSpinner">
                 <div class="spinner">
-                    <span repeat="8"/>
+                    <span repeat="8"></span>
                 </div>
             </div>
 
             <table class="admin__dynamic-rows admin__control-table" data-role="grid" attr="{'data-index': index}">
                 <thead if="element.columnsHeader">
                     <tr>
-                        <th if="dndConfig.enabled" />
+                        <th if="dndConfig.enabled"></th>
                         <th repeat="foreach: labels, item: '$label'"
                             css="setClasses($label())"
                             visible="$label().visible"
                             disable="$label().disabled">
-                            <span translate="$label().label"/>
+                            <span translate="$label().label"></span>
                         </th>
                     </tr>
                 </thead>
@@ -36,19 +36,19 @@
                     <tr class="data-row" repeat="foreach: elems, item: '$record'">
                         <td if="dndConfig.enabled"
                             class="col-draggable"
-                            template="name: dndConfig.template, data: dnd"/>
+                            template="name: dndConfig.template, data: dnd"></td>
 
                     <!-- ko foreach: { data: $record().elems(), as: 'elem'}  -->
                     <td if="elem.template"
                         css="$parent.setClasses(elem)"
                         visible="elem.visible() && elem.formElement !== 'hidden'"
                         disable="elem.disabled"
-                        template="elem.template"/>
+                        template="elem.template"></td>
                     <!-- /ko -->
                 </tr>
                 </tbody>
 
-                <tfoot visible="element.addButton || (!!element.getRecordCount() && (element.pages() > 1))">
+                <tfoot visible="element.addButton || (!!element.getRecordCount() && pages() > 1)">
                     <tr>
                         <td attr="{'colspan': element.getColumnsCount()}"
                             visible="element.addButton || pages() > 1">
@@ -56,10 +56,10 @@
                                     attr="{disabled: disabled, 'data-action': 'add_new_row'}"
                                     type="button"
                                     click="processingAddChild.bind($data, false, false, false)">
-                                <span translate="addButtonLabel"/>
+                                <span translate="addButtonLabel"></span>
                             </button>
 
-                            <div class="admin__control-table-pagination" visible="!!element.getRecordCount() && element.pages() > 1">
+                            <div class="admin__control-table-pagination" visible="!!element.getRecordCount() && pages() > 1">
                                 <div class="admin__data-grid-pager">
                                     <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
                                     <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">

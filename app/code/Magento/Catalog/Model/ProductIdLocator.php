@@ -124,7 +124,7 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
     private function truncateToLimit()
     {
         if (count($this->idsBySku) > $this->idsLimit) {
-            $this->idsBySku = array_slice($this->idsBySku, round($this->idsLimit / -2));
+            $this->idsBySku = array_slice($this->idsBySku, $this->idsLimit * -1, null, true);
         }
     }
 }

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCreditMemoForOrderWithCashOnDeliveryTest">
+        <annotations>
+            <stories value="Credit memo entity"/>
+            <title value="Create Credit Memo with cash on delivery payment method"/>
+            <description value="Create Credit Memo with cash on delivery payment and assert 0 shipping refund"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-15863"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="defaultSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <magentoCLI command="config:set {{enabledCashOnDeliveryPayment.label}} {{enabledCashOnDeliveryPayment.value}}" stepKey="enableBankTransfer"/>
+
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+
+            <createData entity="CustomerCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+
+            <updateData createDataKey="createCustomerCart" entity="CashOnDeliveryOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
+
+            <createData entity="Invoice" stepKey="invoiceOrderOne">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+
+        </before>
+        <after>
+            <magentoCLI command="config:set {{disabledCashOnDeliveryPayment.label}} {{disabledCashOnDeliveryPayment.value}}" stepKey="disableBankTransfer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openAdminOrderViewPage">
+            <argument name="entityId" value="$createCustomerCart.return$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onOrderPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clearFilters"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabOrderId"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterOrdersGridById"/>
+
+
+        <actionGroup ref="AdminOpenAndFillCreditMemoRefundActionGroup" stepKey="fillCreditMemoRefund">
+            <argument name="itemQtyToRefund" value="1"/>
+            <argument name="shippingRefund" value="0"/>
+            <argument name="adjustmentRefund" value="5"/>
+            <argument name="adjustmentFee" value="10"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminClickRefundOfflineOnCreditMemoDetailPageActionGroup" stepKey="clickRefundOffline"/>
+
+        <actionGroup ref="AdminOpenCreditMemoFromOrderPageActionGroup" stepKey="openCreditMemo"/>
+
+        <actionGroup ref="AssertAdminCreditMemoViewPageTotalsActionGroup" stepKey="assertCreditMemoViewPageTotals">
+            <argument name="subtotal" value="$560.00"/>
+            <argument name="adjustmentRefund" value="$5.00"/>
+            <argument name="adjustmentFee" value="$10.00"/>
+            <argument name="grandTotal" value="$555.00"/>
+        </actionGroup>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenOrderViewPageActionGroup" stepKey="openOrderDetailPage">
+            <argument name="orderId" value="$createCustomerCart.return$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontClickRefundTabCustomerOrderViewActionGroup" stepKey="clickRefund"/>
+        <actionGroup ref="StorefrontCheckRefundGrandTotalActionGroup" stepKey="seeGrandTotal">
+            <argument name="grandTotal" value="555.00"/>
+        </actionGroup>
+    </test>
+</tests>

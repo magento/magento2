@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\File\Uploader;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\Name;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -211,7 +211,7 @@ class ImageUploader
         $baseTmpImagePath = $this->getFilePath($baseTmpPath, $imageName);
 
         try {
-            $this->coreFileStorageDatabase->copyFile(
+            $this->coreFileStorageDatabase->renameFile(
                 $baseTmpImagePath,
                 $baseImagePath
             );
@@ -247,11 +247,11 @@ class ImageUploader
             throw new LocalizedException(__('File validation failed.'));
         }
         $result = $uploader->save($this->mediaDirectory->getAbsolutePath($baseTmpPath));
-        unset($result['path']);
 
         if (!$result) {
             throw new LocalizedException(__('File can not be saved to the destination folder.'));
         }
+        unset($result['path']);
 
         /**
          * Workaround for prototype 1.7 methods "isJSON", "evalJSON" on Windows OS

@@ -107,6 +107,11 @@ class ReindexRuleProduct
         $actionStop = $rule->getStopRulesProcessing();
         $fromTimeInAdminTz = $this->parseDateByWebsiteTz((string)$rule->getFromDate(), self::ADMIN_WEBSITE_ID);
         $toTimeInAdminTz = $this->parseDateByWebsiteTz((string)$rule->getToDate(), self::ADMIN_WEBSITE_ID);
+        $excludedWebsites = [];
+        $ruleExtensionAttributes = $rule->getExtensionAttributes();
+        if ($ruleExtensionAttributes && $ruleExtensionAttributes->getExcludeWebsiteIds()) {
+            $excludedWebsites = $ruleExtensionAttributes->getExcludeWebsiteIds();
+        }
 
         $rows = [];
         foreach ($websiteIds as $websiteId) {
@@ -119,27 +124,31 @@ class ReindexRuleProduct
                 : $toTimeInAdminTz;
 
             foreach ($productIds as $productId => $validationByWebsite) {
-                if (empty($validationByWebsite[$websiteId])) {
+                if (!isset($validationByWebsite[$websiteId]) || $validationByWebsite[$websiteId] === null) {
                     continue;
                 }
 
                 foreach ($customerGroupIds as $customerGroupId) {
-                    $rows[] = [
-                        'rule_id' => $ruleId,
-                        'from_time' => $fromTime,
-                        'to_time' => $toTime,
-                        'website_id' => $websiteId,
-                        'customer_group_id' => $customerGroupId,
-                        'product_id' => $productId,
-                        'action_operator' => $actionOperator,
-                        'action_amount' => $actionAmount,
-                        'action_stop' => $actionStop,
-                        'sort_order' => $sortOrder,
-                    ];
+                    if (!array_key_exists($customerGroupId, $excludedWebsites)
+                        || !in_array((int)$websiteId, array_values($excludedWebsites[$customerGroupId]), true)
+                    ) {
+                        $rows[] = [
+                            'rule_id' => $ruleId,
+                            'from_time' => $fromTime,
+                            'to_time' => $toTime,
+                            'website_id' => $websiteId,
+                            'customer_group_id' => $customerGroupId,
+                            'product_id' => $productId,
+                            'action_operator' => $actionOperator,
+                            'action_amount' => $actionAmount,
+                            'action_stop' => $actionStop,
+                            'sort_order' => $sortOrder,
+                        ];
 
-                    if (count($rows) == $batchCount) {
-                        $connection->insertMultiple($indexTable, $rows);
-                        $rows = [];
+                        if (count($rows) === $batchCount) {
+                            $connection->insertMultiple($indexTable, $rows);
+                            $rows = [];
+                        }
                     }
                 }
             }

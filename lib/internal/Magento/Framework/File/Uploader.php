@@ -12,6 +12,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filter\ArrayFilter;
 use Magento\Framework\Validation\ValidationException;
 use Psr\Log\LoggerInterface;
 
@@ -23,6 +24,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
  * @api
  * @since 100.0.2
@@ -139,31 +141,41 @@ class Uploader
      */
     private $logger;
 
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
     /**#@+
      * File upload type (multiple or single)
      */
-    const SINGLE_STYLE = 0;
+    public const SINGLE_STYLE = 0;
 
-    const MULTIPLE_STYLE = 1;
+    public const MULTIPLE_STYLE = 1;
 
     /**#@-*/
 
     /**
      * Temp file name empty code
      */
-    const TMP_NAME_EMPTY = 666;
+    public const TMP_NAME_EMPTY = 666;
 
     /**
      * Maximum Image Width resolution in pixels. For image resizing on client side
      * @deprecated @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxWidth()
      */
-    const MAX_IMAGE_WIDTH = 1920;
+    public const MAX_IMAGE_WIDTH = 1920;
 
     /**
      * Maximum Image Height resolution in pixels. For image resizing on client side
      * @deprecated @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxHeight()
      */
-    const MAX_IMAGE_HEIGHT = 1200;
+    public const MAX_IMAGE_HEIGHT = 1200;
+
+    /**
+     * Maximum file name length
+     */
+    private const MAX_FILE_NAME_LENGTH = 255;
 
     /**
      * Resulting of uploaded file
@@ -201,6 +213,7 @@ class Uploader
      * @param DirectoryList|null $directoryList
      * @param DriverPool|null $driverPool
      * @param TargetDirectory|null $targetDirectory
+     * @param Filesystem|null $filesystem
      * @throws \DomainException
      */
     public function __construct(
@@ -208,10 +221,13 @@ class Uploader
         Mime $fileMime = null,
         DirectoryList $directoryList = null,
         DriverPool $driverPool = null,
-        TargetDirectory $targetDirectory = null
+        TargetDirectory $targetDirectory = null,
+        Filesystem $filesystem = null
     ) {
         $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
+        $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
 
+        $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(FileSystem::class);
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
@@ -221,7 +237,6 @@ class Uploader
         }
         $this->fileMime = $fileMime ?: ObjectManager::getInstance()->get(Mime::class);
         $this->driverPool = $driverPool ?: ObjectManager::getInstance()->get(DriverPool::class);
-        $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
     }
 
     /**
@@ -306,6 +321,11 @@ class Uploader
      */
     private function validateDestination(string $destinationFolder): void
     {
+        if (strlen($this->getFileDriver()->getRealPathSafety($destinationFolder)) > 4096) {
+            throw new \InvalidArgumentException(
+                'Destination folder path is too long; must be 255 characters or less'
+            );
+        }
         if ($this->_allowCreateFolders) {
             $this->createDestinationFolder($destinationFolder);
         } elseif (!$this->getTargetDirectory()
@@ -477,16 +497,13 @@ class Uploader
      */
     public static function getCorrectFileName($fileName)
     {
-        $fileName = preg_replace('/[^a-z0-9_\\-\\.]+/i', '_', $fileName);
+        $fileName = preg_replace('/[^a-z0-9_\\-\\.]+/i', '_', ltrim($fileName, '.'));
         $fileInfo = pathinfo($fileName);
         $fileInfo['extension'] = $fileInfo['extension'] ?? '';
 
-        // account for excessively long filenames that cannot be stored completely in database
-        $maxFilenameLength = 200;
-
-        if (strlen($fileInfo['basename']) > $maxFilenameLength) {
+        if (strlen($fileInfo['basename']) > self::MAX_FILE_NAME_LENGTH) {
             throw new \LengthException(
-                __('Filename is too long; must be %1 characters or less', $maxFilenameLength)
+                __('Filename is too long; must be %1 characters or less', self::MAX_FILE_NAME_LENGTH)
             );
         }
 
@@ -626,6 +643,11 @@ class Uploader
      */
     public function checkAllowedExtension($extension)
     {
+        //File extensions should only be allowed to contain alphanumeric characters
+        if (preg_match('/[^a-z0-9]/i', $extension)) {
+            return false;
+        }
+
         if (!is_array($this->_allowedExtensions) || empty($this->_allowedExtensions)) {
             return true;
         }
@@ -695,6 +717,7 @@ class Uploader
      * @param array $fileId
      * @return void
      * @throws \InvalidArgumentException
+     * @throws FileSystemException
      */
     private function validateFileId(array $fileId): void
     {
@@ -705,6 +728,7 @@ class Uploader
             if (preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
                 $allowedFolders = [
                     sys_get_temp_dir(),
+                    $this->directoryList->getPath(DirectoryList::SYS_TMP),
                     $this->directoryList->getPath(DirectoryList::MEDIA),
                     $this->directoryList->getPath(DirectoryList::VAR_DIR),
                     $this->directoryList->getPath(DirectoryList::TMP),
@@ -716,14 +740,16 @@ class Uploader
                 ];
 
                 foreach ($allowedFolders as $allowedFolder) {
-                    if (stripos($tmpName, $allowedFolder) === 0) {
+                    $dir = $this->targetDirectory->getDirectoryReadByPath($allowedFolder);
+                    if ($dir->isExist($tmpName)) {
                         $isValid = true;
                         break;
                     }
                 }
 
                 foreach ($disallowedFolders as $disallowedFolder) {
-                    if (stripos($tmpName, $disallowedFolder) === 0) {
+                    $dir = $this->targetDirectory->getDirectoryReadByPath($disallowedFolder);
+                    if ($dir->isExist($tmpName)) {
                         $isValid = false;
                         break;
                     }
@@ -789,7 +815,8 @@ class Uploader
         $fileInfo = pathinfo($destinationFile);
         $index = 1;
         while ($fileExists($fileInfo['dirname'] . '/' . $fileInfo['basename'])) {
-            $fileInfo['basename'] = $fileInfo['filename'] . '_' . $index++ . '.' . $fileInfo['extension'];
+            $fileInfo['basename'] = $fileInfo['filename'] . '_' . ($index++);
+            $fileInfo['basename'] .= isset($fileInfo['extension']) ? '.' . $fileInfo['extension'] : '';
         }
 
         return $fileInfo['basename'];

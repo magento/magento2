@@ -24,6 +24,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="defaultVirtualProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         </after>
 
         <!-- Create product -->
@@ -35,6 +36,6 @@
         </actionGroup>
 
         <!--Checking content storefront-->
-        <amOnPage url="{{defaultVirtualProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{defaultVirtualProduct.urlKey}}.html" stepKey="goToStorefront"/>
     </test>
 </tests>

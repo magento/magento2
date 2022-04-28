@@ -1020,6 +1020,7 @@
             "entity_id": true
         },
         "constraint": {
+            "PRIMARY": true,
             "FK_A6C6C8FAA386736921D3A7C4B50B1185": true,
             "CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_ENTT_ID_CAT_PRD_ENTT_ENTT_ID": true,
             "CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_VAL_ID_ENTT_ID": true

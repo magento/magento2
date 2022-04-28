@@ -175,7 +175,8 @@ class WriterTest extends TestCase
             ->method('getFiles')
             ->willReturn('test.php');
         $this->dirRead->expects($this->any())
-            ->method('getAbsolutePath');
+            ->method('getAbsolutePath')
+            ->willReturn('');
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::CONFIG)
@@ -231,7 +232,8 @@ class WriterTest extends TestCase
             ->method('getFiles')
             ->willReturn('test.php');
         $this->dirRead->expects($this->any())
-            ->method('getAbsolutePath');
+            ->method('getAbsolutePath')
+            ->willReturn('');
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::CONFIG)

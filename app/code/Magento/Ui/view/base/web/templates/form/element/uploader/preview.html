@@ -15,7 +15,7 @@
                 event="load: $parent.onPreviewLoad.bind($parent)"
                 attr="
                     src: $parent.getFilePreview($file),
-                    alt: $file.name">
+                    alt: $file.name"/>
         </a>
 
         <div class="actions">
@@ -25,17 +25,17 @@
                 data-role="delete-button"
                 attr="title: $t('Delete image')"
                 click="$parent.removeFile.bind($parent, $file)">
-                <span translate="'Delete image'"/>
+                <span translate="'Delete image'"></span>
             </button>
         </div>
     </div>
 
-    <div class="file-uploader-filename" text="$file.name"/>
+    <div class="file-uploader-filename" text="$file.name"></div>
 
     <div class="file-uploader-meta">
         <span if="$file.previewType === 'image'">
-            <text args="$file.previewWidth"/>x<text args="$file.previewHeight"/>,
+            <text args="$file.previewWidth"></text>x<text args="$file.previewHeight"></text>,
         </span>
-        <text args="$parent.formatSize($file.size)"/>
+        <text args="$parent.formatSize($file.size)"></text>
     </div>
 </div>

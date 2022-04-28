@@ -40,5 +40,6 @@
         <element name="productOptionList" type="text" selector="#narrow-by-list"/>
         <element name="productImageContainer" type="text" selector="//span[contains(@class, 'product-image-container-')]"/>
         <element name="productNameByPosition" type="text" selector=".products-grid li:nth-of-type({{position}}) .product-item-name a" parameterized="true"/>
+        <element name="sidebarAdditional" type="block" selector="#maincontent .sidebar.sidebar-additional"/>
     </section>
 </sections>

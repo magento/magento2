@@ -14,6 +14,7 @@
             <title value="Admin validates the conversion ID when configuring the Google Adwords"/>
             <description value="Testing for a required Conversion ID when configuring the Google Adwords"/>
             <severity value="MINOR"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

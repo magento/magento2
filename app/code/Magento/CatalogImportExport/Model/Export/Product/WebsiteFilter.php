@@ -1,0 +1,33 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\CatalogImportExport\Model\Export\Product;
+
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\CatalogImportExport\Model\Export\ProductFilterInterface;
+
+/**
+ * Website filter for products export
+ */
+class WebsiteFilter implements ProductFilterInterface
+{
+    private const NAME = 'website_id';
+
+    /**
+     * @inheritDoc
+     */
+    public function filter(Collection $collection, array $filters): Collection
+    {
+        if (!isset($filters[self::NAME])) {
+            return $collection;
+        }
+
+        $collection->addWebsiteFilter($filters[self::NAME]);
+
+        return $collection;
+    }
+}
