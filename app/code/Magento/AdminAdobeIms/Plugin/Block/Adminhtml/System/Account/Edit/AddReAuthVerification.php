@@ -29,6 +29,8 @@ class AddReAuthVerification
     }
 
     /**
+     * Add adobeIms reAuth button to account edit form
+     *
      * @param Form $subject
      * @param Closure $proceed
      * @return mixed

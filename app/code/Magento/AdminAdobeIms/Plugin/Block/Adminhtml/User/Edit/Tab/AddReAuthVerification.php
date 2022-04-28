@@ -29,6 +29,8 @@ class AddReAuthVerification
     }
 
     /**
+     * Add adobeIms reAuth button to user edit and create form
+     *
      * @param Main $subject
      * @param Closure $proceed
      * @return mixed

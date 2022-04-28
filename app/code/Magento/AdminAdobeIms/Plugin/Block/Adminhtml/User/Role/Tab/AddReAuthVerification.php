@@ -29,6 +29,8 @@ class AddReAuthVerification
     }
 
     /**
+     * Add adobeIms reAuth button to role edit and create form
+     *
      * @param Info $subject
      * @param Closure $proceed
      * @return mixed
