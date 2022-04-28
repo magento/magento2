@@ -35,6 +35,8 @@
                 type="Magento\AdminAdobeIms\Plugin\ReplaceVerifyIdentityWithImsPlugin"/>
         <plugin name="user_save"
                 type="Magento\AdminAdobeIms\Plugin\UserSavePlugin"/>
+        <plugin name="change_perform_identity_check_message"
+                type="Magento\AdminAdobeIms\Plugin\PerformIdentityCheckMessagePlugin"/>
     </type>
     <type name="Magento\User\Model\UserValidationRules">
         <plugin name="remove_user_validation_rules"
