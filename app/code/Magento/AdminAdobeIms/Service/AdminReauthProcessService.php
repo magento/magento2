@@ -19,6 +19,7 @@ class AdminReauthProcessService extends AbstractAdminBaseProcessService
      * Handle Adobe reAuth
      *
      * @param TokenResponseInterface $tokenResponse
+     * @param array $profile
      * @return void
      * @throws AdobeImsAuthorizationException
      */
