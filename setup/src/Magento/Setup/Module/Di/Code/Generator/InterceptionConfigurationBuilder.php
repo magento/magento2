@@ -60,6 +60,7 @@ class InterceptionConfigurationBuilder
      * @param Type $typeReader
      * @param Manager $cacheManager
      * @param InterceptableValidator $interceptableValidator
+     * @param ConfigInterface $omConfig
      */
     public function __construct(
         InterceptionConfig $interceptionConfig,
@@ -206,16 +207,25 @@ class InterceptionConfigurationBuilder
      */
     private function getInterceptedMethods($interceptionConfiguration)
     {
-        $pluginDefinitionList = new \Magento\Framework\Interception\Definition\Runtime();
         foreach ($interceptionConfiguration as &$plugins) {
-            $pluginsMethods = [];
-            foreach ($plugins as $plugin) {
-                $pluginsMethods = array_unique(
-                    array_merge($pluginsMethods, array_keys($pluginDefinitionList->getMethodList($plugin)))
-                );
-            }
-            $plugins = $pluginsMethods;
+            $plugins = $this->getPluginsMethods($plugins);
         }
         return $interceptionConfiguration;
+    }
+
+    /**
+     * Returns plugins methods
+     *
+     * @param array $plugins
+     * @return array
+     */
+    private function getPluginsMethods(array $plugins)
+    {
+        $pluginDefinitionList = new \Magento\Framework\Interception\Definition\Runtime();
+        $pluginsMethodsToMerge = [];
+        foreach ($plugins as $plugin) {
+            $pluginsMethodsToMerge[] = array_keys($pluginDefinitionList->getMethodList($plugin));
+        }
+        return array_unique(array_merge(...$pluginsMethodsToMerge));
     }
 }
