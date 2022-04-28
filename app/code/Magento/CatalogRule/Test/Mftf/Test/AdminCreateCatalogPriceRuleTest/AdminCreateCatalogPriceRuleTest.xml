@@ -19,15 +19,34 @@
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory1"/>
-            <createData entity="SimpleProduct" stepKey="simpleProduct1">
-                <field key="price">56.78</field>
+            <!-- Create Simple Product 1 -->
+            <createData entity="_defaultProduct" stepKey="simpleProduct1">
                 <requiredEntity createDataKey="createCategory1"/>
+                <field key="price">56.78</field>
             </createData>
+            <!-- Create Simple Product 2 -->
             <createData entity="SimpleSubCategory" stepKey="createCategory2"/>
             <createData entity="_defaultProduct" stepKey="simpleProduct2">
                 <requiredEntity createDataKey="createCategory2"/>
             </createData>
+
+            <magentoCron groups="index" stepKey="fixInvalidatedIndicesBeforeTest"/>
         </before>
+        <after>
+            <!-- Delete products and category -->
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory1" stepKey="deleteCategory"/>
+
+            <!-- Delete products and category -->
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory2" stepKey="deleteCategory"/>
+
+            <!-- Delete the catalog price rule -->
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesAfterTest"/>
+            <magentoCron groups="index" stepKey="fixInvalidatedIndicesAfter"/>
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
 
         <!--Login as admin -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
