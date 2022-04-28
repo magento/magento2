@@ -10,6 +10,7 @@ namespace Magento\Multishipping\Model\Cart;
 use Magento\Checkout\Controller\Cart;
 use Magento\Checkout\Controller\Sidebar\UpdateItemQty;
 use Magento\Checkout\Model\Session;
+use Magento\Checkout\Model\Cart as CartModel;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -19,6 +20,8 @@ use Magento\Quote\Model\Quote;
 
 /**
  * Cleans shipping addresses and item assignments after MultiShipping flow
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class MultishippingClearItemAddress
 {
@@ -43,21 +46,29 @@ class MultishippingClearItemAddress
     private $disableMultishipping;
 
     /**
+     * @var CartModel
+     */
+    private $cartmodel;
+
+    /**
      * @param CartRepositoryInterface $cartRepository
      * @param Session $checkoutSession
      * @param AddressRepositoryInterface $addressRepository
      * @param DisableMultishipping $disableMultishipping
+     * @param CartModel $cartmodel
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         Session $checkoutSession,
         AddressRepositoryInterface $addressRepository,
-        DisableMultishipping $disableMultishipping
+        DisableMultishipping $disableMultishipping,
+        CartModel $cartmodel
     ) {
         $this->cartRepository = $cartRepository;
         $this->checkoutSession = $checkoutSession;
         $this->addressRepository = $addressRepository;
         $this->disableMultishipping = $disableMultishipping;
+        $this->cartmodel = $cartmodel;
     }
 
     /**
@@ -90,9 +101,8 @@ class MultishippingClearItemAddress
             }
             $this->cartRepository->save($quote);
             if ($subject instanceof UpdateItemQty) {
-                $quote = $this->checkoutSession->getQuote();
-                $quote->setTotalsCollectedFlag(false);
-                $this->cartRepository->save($quote);
+                $quote = $this->cartRepository->get($quote->getId());
+                $this->cartmodel->setQuote($quote);
             }
         } elseif ($this->disableMultishipping->execute($quote) && $this->isVirtualItemInQuote($quote)) {
             $quote->setTotalsCollectedFlag(false);

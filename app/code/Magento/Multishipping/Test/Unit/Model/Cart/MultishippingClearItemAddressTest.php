@@ -10,6 +10,7 @@ namespace Magento\Multishipping\Test\Unit\Model\Cart;
 use Magento\Checkout\Controller\Cart;
 use Magento\Checkout\Controller\Sidebar\UpdateItemQty;
 use Magento\Checkout\Model\Session;
+use Magento\Checkout\Model\Cart as CartModel;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -50,17 +51,24 @@ class MultishippingClearItemAddressTest extends TestCase
      */
     private $addressRepositoryMock;
 
+    /**
+     * @var CartModel|MockObject
+     */
+    private $cartMock;
+
     protected function setUp(): void
     {
         $this->cartRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
         $this->checkoutSessionMock = $this->createMock(Session::class);
         $this->addressRepositoryMock = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
         $disableMultishippingMock = $this->createMock(DisableMultishipping::class);
+        $this->cartMock = $this->createMock(CartModel::class);
         $this->model = new MultishippingClearItemAddress(
             $this->cartRepositoryMock,
             $this->checkoutSessionMock,
             $this->addressRepositoryMock,
-            $disableMultishippingMock
+            $disableMultishippingMock,
+            $this->cartMock
         );
     }
 
@@ -125,7 +133,12 @@ class MultishippingClearItemAddressTest extends TestCase
         $this->cartRepositoryMock->expects($this->any())
             ->method('save')
             ->with($quoteMock);
-
+        if ($actionName instanceof UpdateItemQty) {
+            $quoteMock->expects($this->any())->method('getId')->willReturnSelf();
+            $this->cartRepositoryMock->expects($this->any())
+                ->method('get')->with($quoteMock)->willReturn($quoteMock);
+            $this->cartMock->expects($this->any())->method('setQuote')->with($quoteMock);
+        }
         $this->model->clearAddressItem(
             $this->createMock(Cart::class),
             $requestMock
