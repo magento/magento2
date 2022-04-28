@@ -136,6 +136,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     public function setDirectives($directives)
     {
         $this->remote->setDirectives($directives);
+        $this->local->setDirectives($directives);
     }
 
     /**
