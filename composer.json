@@ -104,6 +104,8 @@
         "magento/module-marketplace": "*",
         "magento/module-admin-analytics": "*",
         "magento/module-admin-notification": "*",
+        "magento/module-adobe-ims": "*",
+        "magento/module-adobe-ims-api": "*",
         "magento/module-advanced-pricing-import-export": "*",
         "magento/module-amqp": "*",
         "magento/module-amqp-store": "*",
