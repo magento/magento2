@@ -70,6 +70,7 @@ class CartFixed extends AbstractDiscount
      * @return Data
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function calculate($rule, $item, $qty)
@@ -104,6 +105,9 @@ class CartFixed extends AbstractDiscount
 
         if ($availableDiscountAmount > 0) {
             $store = $quote->getStore();
+            $shippingPrice = $this->cartFixedDiscountHelper->applyDiscountOnPricesIncludedTax()
+                ? (float) $address->getShippingInclTax()
+                : (float) $address->getShippingExclTax();
             $baseRuleTotals = $shippingMethod ?
                 $this->cartFixedDiscountHelper
                     ->getBaseRuleTotals(
@@ -111,7 +115,8 @@ class CartFixed extends AbstractDiscount
                         $quote,
                         $isMultiShipping,
                         $address,
-                        $baseRuleTotals
+                        $baseRuleTotals,
+                        $shippingPrice
                     ) : $baseRuleTotals;
             if ($isAppliedToShipping) {
                 $baseDiscountAmount = $this->cartFixedDiscountHelper
