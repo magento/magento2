@@ -9631,16 +9631,16 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "21",
+            "version": "22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "470f7a62b2433b0208eebaa6984af86c04736260"
+                "reference": "e086858fe6ba3db4efd4d5644cdabdecada14e73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/470f7a62b2433b0208eebaa6984af86c04736260",
-                "reference": "470f7a62b2433b0208eebaa6984af86c04736260",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/e086858fe6ba3db4efd4d5644cdabdecada14e73",
+                "reference": "e086858fe6ba3db4efd4d5644cdabdecada14e73",
                 "shasum": ""
             },
             "require": {
@@ -9648,7 +9648,7 @@
                 "ext-simplexml": "*",
                 "php": ">=7.3",
                 "phpcompatibility/php-compatibility": "^9.3",
-                "rector/rector": ">=0.12.4 <=0.12.16",
+                "rector/rector": "^0.12.17",
                 "squizlabs/php_codesniffer": "^3.6.1",
                 "webonyx/graphql-php": "^14.9"
             },
@@ -9673,9 +9673,9 @@
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
                 "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/v21"
+                "source": "https://github.com/magento/magento-coding-standard/tree/v22"
             },
-            "time": "2022-04-04T15:22:12+00:00"
+            "time": "2022-04-26T09:38:34+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
@@ -10585,16 +10585,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.5.7",
+            "version": "1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "7fb7e2e1e9f3d59a26a413b2d3d5e47f0edb75ac"
+                "reference": "becb9603a31d70f5007d505877a7b812598dfe46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/7fb7e2e1e9f3d59a26a413b2d3d5e47f0edb75ac",
-                "reference": "7fb7e2e1e9f3d59a26a413b2d3d5e47f0edb75ac",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/becb9603a31d70f5007d505877a7b812598dfe46",
+                "reference": "becb9603a31d70f5007d505877a7b812598dfe46",
                 "shasum": ""
             },
             "require": {
@@ -10620,7 +10620,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.5.7"
+                "source": "https://github.com/phpstan/phpstan/tree/1.6.2"
             },
             "funding": [
                 {
@@ -10640,7 +10640,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-20T12:20:27+00:00"
+            "time": "2022-04-27T11:05:24+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -11114,21 +11114,21 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.12.16",
+            "version": "0.12.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "13412efd0dfda2e2c310dd24397281804441cf7a"
+                "reference": "0e76f19491498c136b698dc22b9b30d44a4e832c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/13412efd0dfda2e2c310dd24397281804441cf7a",
-                "reference": "13412efd0dfda2e2c310dd24397281804441cf7a",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/0e76f19491498c136b698dc22b9b30d44a4e832c",
+                "reference": "0e76f19491498c136b698dc22b9b30d44a4e832c",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1|^8.0",
-                "phpstan/phpstan": "^1.4.2"
+                "php": "^7.2|^8.0",
+                "phpstan/phpstan": "^1.6"
             },
             "conflict": {
                 "phpstan/phpdoc-parser": "<1.2",
@@ -11162,7 +11162,7 @@
             "description": "Instant Upgrade and Automated Refactoring of any PHP code",
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.12.16"
+                "source": "https://github.com/rectorphp/rector/tree/0.12.22"
             },
             "funding": [
                 {
@@ -11170,7 +11170,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-09T14:50:55+00:00"
+            "time": "2022-04-27T22:44:46+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -12806,5 +12806,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
