@@ -54,7 +54,6 @@ class RemovePasswordAndUserConfirmationFormFieldsPlugin
         }
 
         if ($result->getElement('current_user_verification_fieldset')) {
-//            $result->getElement('current_user_verification_fieldset')->addClass('hidden');
             foreach ($result->getElement('current_user_verification_fieldset')->getElements() as $element) {
                 if ($element->getId() === 'current_password') {
                     $element->setType('hidden');

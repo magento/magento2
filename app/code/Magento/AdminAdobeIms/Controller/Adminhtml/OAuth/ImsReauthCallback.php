@@ -9,8 +9,6 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Controller\Adminhtml\OAuth;
 
 use Exception;
-use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
-use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
 use Magento\AdminAdobeIms\Service\AdminReauthProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
@@ -146,23 +144,5 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
         $resultRaw->setContents($response);
 
         return $resultRaw;
-    }
-
-    /**
-     * Add AdminAdobeIMS Error Message
-     *
-     * @param string $headline
-     * @param string $message
-     * @return void
-     */
-    private function imsErrorMessage(string $headline, string $message): void
-    {
-        $this->messageManager->addComplexErrorMessage(
-            'adminAdobeImsMessage',
-            [
-                'headline' => __($headline)->getText(),
-                'message' => __($message)->getText()
-            ]
-        );
     }
 }
