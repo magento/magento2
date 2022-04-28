@@ -13,7 +13,7 @@ use Exception;
 use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 
-class AdminLoginProcessService extends AdminBaseProcessService
+class AdminLoginProcessService extends AbstractAdminBaseProcessService
 {
     /**
      * Check if user exists and then do the login

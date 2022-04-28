@@ -17,7 +17,7 @@ use Magento\AdminAdobeIms\Model\User;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 
-abstract class AdminBaseProcessService
+abstract class AbstractAdminBaseProcessService
 {
     /**
      * @var User

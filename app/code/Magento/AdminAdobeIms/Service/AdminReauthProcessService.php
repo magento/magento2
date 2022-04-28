@@ -13,7 +13,7 @@ use Exception;
 use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 
-class AdminReauthProcessService extends AdminBaseProcessService
+class AdminReauthProcessService extends AbstractAdminBaseProcessService
 {
     /**
      * Handle Adobe reAuth
