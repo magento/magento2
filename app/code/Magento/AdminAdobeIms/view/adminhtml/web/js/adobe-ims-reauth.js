@@ -48,12 +48,11 @@ define([
             var deferred = $.Deferred();
             var loginConfig = this.loginConfig;
 
-            $("#user_ims_verification").click('click', function(e) {
-
+            $("input.ims_verification").click('click', function(e) {
                 login(loginConfig)
                     .then(function (response) {
                         if (response.isAuthorized === true) {
-                            $('#user_verified').val(true);
+                            $('input.ims_verified').val(true);
                         }
                         deferred.resolve(response);
                     }.bind(this))

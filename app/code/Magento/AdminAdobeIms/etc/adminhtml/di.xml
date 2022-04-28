@@ -60,7 +60,17 @@
     </type>
 
     <type name="Magento\User\Block\User\Edit\Tab\Main">
-        <plugin name="admin_user_image"
-                type="Magento\AdminAdobeIms\Plugin\Block\Adminhtml\User\Edit\Tab\UserField" sortOrder="1"/>
+        <plugin name="admin_adobe_ims_reauth_button_user_edit"
+                type="Magento\AdminAdobeIms\Plugin\Block\Adminhtml\User\Edit\Tab\AddReAuthVerification"/>
+    </type>
+
+    <type name="Magento\Backend\Block\System\Account\Edit\Form">
+        <plugin name="admin_adobe_ims_reauth_button_account_edit"
+                type="Magento\AdminAdobeIms\Plugin\Block\Adminhtml\System\Account\Edit\AddReAuthVerification"/>
+    </type>
+
+    <type name="Magento\User\Block\Role\Tab\Info">
+        <plugin name="admin_adobe_ims_reauth_button_role_edit"
+                type="Magento\AdminAdobeIms\Plugin\Block\Adminhtml\User\Role\Tab\AddReAuthVerification"/>
     </type>
 </config>
