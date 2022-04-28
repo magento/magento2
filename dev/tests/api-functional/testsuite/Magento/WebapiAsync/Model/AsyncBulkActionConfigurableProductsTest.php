@@ -19,7 +19,7 @@ use Magento\Framework\Webapi\Rest\Request;
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AsyncBulkConfigurableProductsTest extends WebapiAbstract
+class AsyncBulkActionConfigurableProductsTest extends WebapiAbstract
 {
     private const SERVICE_NAME = 'asyncBulkConfigurableProductsV1';
     private const ASYNC_BULK_RESOURCE_PATH = '/async/bulk/V1/configurable-products';
