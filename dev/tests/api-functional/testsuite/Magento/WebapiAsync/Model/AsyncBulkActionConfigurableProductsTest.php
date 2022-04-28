@@ -48,7 +48,7 @@ class AsyncBulkConfigurableProductsTest extends WebapiAbstract
      *
      * @return void
      */
-    public function testAsyncScheduleBulkMultipleEntities()
+    public function testAsyncBulkUpdate()
     {
         $productSku = 'configurable';
         $attribute = $this->attributeRepository->get('catalog_product', 'test_configurable');
