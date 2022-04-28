@@ -4,7 +4,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Please read [our guidelines](https://devdocs.magento.com/contributor-guide/contributing.html#report) before submitting the issue.
+        Please read [our guidelines](https://developer.adobe.com/commerce/contributor/guides/code-contributions/#report-an-issue) before submitting the issue.
   - type: textarea
     attributes:
       label: Preconditions and environment
@@ -62,7 +62,7 @@ body:
     attributes:
       label: Triage and priority
       description: |
-        Provide [Severity](https://devdocs.magento.com/guides/v2.4/contributor-guide/contributing.html#backlog) assessment for the Issue as a Reporter.
+        Provide [Severity](https://developer.adobe.com/commerce/contributor/guides/code-contributions/#community-backlog-priority) assessment for the Issue as a Reporter.
         This information helps us during the Confirmation and Issue triage processes.
       options:
         - label: 'Severity: **S0** _- Affects critical data or functionality and leaves users without workaround._'
