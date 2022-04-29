@@ -7,9 +7,13 @@ namespace Magento\GroupedProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Catalog\Test\Fixture\Virtual as VirtualProductFixture;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Value;
+use Magento\GroupedProduct\Test\Fixture\Product as GroupedProductFixture;
+use Magento\TestFramework\Fixture\DataFixture;
 
 class GroupedTest extends \PHPUnit\Framework\TestCase
 {
@@ -49,14 +53,21 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product as:p1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Virtual as:p2
-     * @magentoDataFixture Magento\GroupedProduct\Test\Fixture\Product as:gr1
-     * @magentoDataFixtureDataProvider {"p1":{"sku":"simple","name":"Simple Product","price":10}}
-     * @magentoDataFixtureDataProvider {"p2":{"sku":"virtual-product","name":"Virtual Product","price":10}}
-     * @magentoDataFixtureDataProvider {"gr1":{"sku":"gr1","product_links":["$p1$",{"sku":"$p2.sku$","qty":2}]}}
      * @magentoAppArea frontend
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple', 'name' => 'Simple Product', 'price' => 10], 'p1'),
+        DataFixture(
+            VirtualProductFixture::class,
+            ['sku' => 'virtual-product', 'name' => 'Virtual Product', 'price' => 10],
+            'p2'
+        ),
+        DataFixture(
+            GroupedProductFixture::class,
+            ['sku' => 'gr1', 'product_links' => ['$p1$', ['sku' => '$p2.sku$', 'qty' => 2]]],
+            'gr1'
+        ),
+    ]
     public function testGetAssociatedProducts()
     {
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);

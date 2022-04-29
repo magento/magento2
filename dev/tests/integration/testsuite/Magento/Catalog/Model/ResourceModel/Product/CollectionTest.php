@@ -8,9 +8,12 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -151,19 +154,21 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category as:c1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category with:{"parent_id":"$c1.id$","is_anchor":0} as:c11
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category with:{"parent_id":"$c1.id$","is_anchor":0} as:c12
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category with:{"parent_id":"$c11.id$"} as:c111
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category as:c2
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":["$c1.id$"]} as:p1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":["$c111.id$"]} as:p2
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":["$c12.id$"]} as:p3
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":["$c2.id$"]} as:p4
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":["$c2.id$"]} as:p5
      * @magentoAppIsolation enabled
      * @magentoDbIsolation disabled
      */
+    #[
+        DataFixture(CategoryFixture::class, as: 'c1'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$c1.id$', 'is_anchor' => 0], 'c11'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$c1.id$', 'is_anchor' => 0], 'c12'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$c11.id$'], 'c111'),
+        DataFixture(CategoryFixture::class, as: 'c2'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c1.id$']], 'p1'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c111.id$']], 'p2'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c12.id$']], 'p3'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c2.id$']], 'p4'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c2.id$']], 'p5'),
+    ]
     public function testSetCategoryFilter()
     {
         $categoryId = $this->fixtures->get('c1')->getId();

@@ -56,11 +56,11 @@ class ConfigFixtureTest extends TestCase
         $this->createResolverMock();
         $this->object
             ->method('_getConfigValue')
-            ->withConsecutive(['default/web/unsecure/base_url'])
+            ->withConsecutive(['web/unsecure/base_url'])
             ->willReturnOnConsecutiveCalls('http://localhost/');
         $this->object
             ->method('_setConfigValue')
-            ->withConsecutive(['default/web/unsecure/base_url', 'http://example.com/']);
+            ->withConsecutive(['web/unsecure/base_url', 'http://example.com/']);
 
         $this->object->startTest($this);
 
@@ -69,7 +69,7 @@ class ConfigFixtureTest extends TestCase
         )->method(
             '_setConfigValue'
         )->with(
-            'default/web/unsecure/base_url',
+            'web/unsecure/base_url',
             'http://localhost/'
         );
         $this->object->endTest($this);

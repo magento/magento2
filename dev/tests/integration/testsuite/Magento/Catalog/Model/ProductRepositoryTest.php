@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -22,7 +23,11 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
 use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -355,15 +360,17 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento\Store\Test\Fixture\Website as:website2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Group with:{"website_id":"$website2.id$"} as:store_group2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store2
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"website_ids":[1,"$website2.id$"]} as:product1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"website_ids":[1,"$website2.id$"]} as:product2
      * @magentoDataFixture setPriceScopeToWebsite
      * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      */
+    #[
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1, '$website2.id']], 'product1'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1, '$website2.id']], 'product2'),
+    ]
     public function testConsecutivePartialProductsUpdateInStoreView(): void
     {
         $store1 = $this->storeManager->getStore('default')->getId();

@@ -8,6 +8,11 @@ namespace Magento\SalesRule\Model\Rule\Condition;
 
 use Magento\Framework\Registry;
 use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Test\Fixture\ProductCondition as ProductConditionFixture;
+use Magento\SalesRule\Test\Fixture\ProductFoundInCartConditions as ProductFoundInCartConditionsFixture;
+use Magento\SalesRule\Test\Fixture\ProductSubselectionInCartConditions as ProductSubselectionInCartConditionsFixture;
+use Magento\SalesRule\Test\Fixture\Rule as RuleFixture;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
@@ -49,15 +54,26 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      * @magentoDataFixture Magento/Catalog/_files/category.php
-     * @magentoDataFixture Magento\SalesRule\Test\Fixture\ProductCondition as:cond11
-     * @magentoDataFixture Magento\SalesRule\Test\Fixture\ProductFoundInCartConditions as:cond1
-     * @magentoDataFixture Magento\SalesRule\Test\Fixture\Rule as:rule1
-     * @magentoDataFixtureDataProvider {"cond11":{"attribute":"category_ids","value":"333"}}
-     * @magentoDataFixtureDataProvider {"cond1":{"conditions":["$cond11$"]}}
-     * @magentoDataFixtureDataProvider {"rule1":{"discount_amount":50,"conditions":["$cond1$"]}}
      * @dataProvider validateProductConditionDataProvider
      * @magentoDbIsolation disabled
      */
+    #[
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'category_ids', 'value' => '333'],
+            'cond11'
+        ),
+        DataFixture(
+            ProductFoundInCartConditionsFixture::class,
+            ['conditions' => ['$cond11$']],
+            'cond1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            ['discount_amount' => 50, 'conditions' => ['$cond1$']],
+            'rule1'
+        ),
+    ]
     public function testValidateCategorySalesRuleIncludesChildren($categoryId, $expectedResult)
     {
         // Load the quote that contains a child of a configurable product
@@ -129,13 +145,24 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * 2. Attempt to validate the sales rule against the quote and assert the output is negative.
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
-     * @magentoDataFixture Magento\SalesRule\Test\Fixture\ProductCondition as:cond11
-     * @magentoDataFixture Magento\SalesRule\Test\Fixture\ProductSubselectionInCartConditions as:cond1
-     * @magentoDataFixture Magento\SalesRule\Test\Fixture\Rule as:rule1
-     * @magentoDataFixtureDataProvider {"cond11":{"attribute":"attribute_set_id","value":"4"}}
-     * @magentoDataFixtureDataProvider {"cond1":{"attribute":"qty","operator":"==","value":2,"conditions":["$cond11$"]}}
-     * @magentoDataFixtureDataProvider {"rule1":{"discount_amount":50,"conditions":["$cond1$"]}}
      */
+    #[
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'attribute_set_id', 'value' => '4'],
+            'cond11'
+        ),
+        DataFixture(
+            ProductSubselectionInCartConditionsFixture::class,
+            ['attribute' => 'qty', 'operator' => '==', 'value' => 2, 'conditions' => ['$cond11$']],
+            'cond1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            ['discount_amount' => 50, 'conditions' => ['$cond1$']],
+            'rule1'
+        ),
+    ]
     public function testValidateQtySalesRuleWithConfigurable()
     {
         // Load the quote that contains a child of a configurable product with quantity 1.

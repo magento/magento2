@@ -1,14 +1,14 @@
 <?php
 /**
- * Bootstrap of the custom Web API DocBlock annotations.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\TestFramework\Bootstrap;
 
 use Magento\TestFramework\Annotation\ApiConfigFixture;
 use Magento\TestFramework\Annotation\ConfigFixture;
+use Magento\TestFramework\Event\Transaction;
 
 /**
  * @inheritdoc
@@ -28,7 +28,7 @@ class WebapiDocBlock extends \Magento\TestFramework\Bootstrap\DocBlock
     {
         $subscribers = parent::_getSubscribers($application);
         foreach ($subscribers as $key => $subscriber) {
-            if (get_class($subscriber) == ConfigFixture::class) {
+            if (in_array(get_class($subscriber), [ConfigFixture::class, Transaction::class])) {
                 unset($subscribers[$key]);
             }
         }

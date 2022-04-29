@@ -5,6 +5,8 @@
  */
 namespace Magento\Quote\Model;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Catalog\Test\Fixture\Virtual as VirtualProductFixture;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
@@ -22,11 +24,18 @@ use Magento\Quote\Api\Data\EstimateAddressInterface;
 use Magento\Quote\Api\GuestShippingMethodManagementInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
 use Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
+use Magento\SalesRule\Test\Fixture\AddressCondition as AddressConditionFixture;
+use Magento\SalesRule\Test\Fixture\Rule as RuleFixture;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Api\Data\TaxClassInterface;
 use Magento\Tax\Api\TaxClassRepositoryInterface;
 use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\Config as TaxConfig;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -141,17 +150,19 @@ class ShippingMethodManagementTest extends TestCase
      * @magentoConfigFixture default_store carriers/flatrate/active 0
      * @magentoConfigFixture current_store carriers/tablerate/condition_name package_value_with_discount
      * @magentoConfigFixture default_store carriers/tablerate/include_virtual_price 0
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple", "type_id":"simple"} as:p1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"virtual", "type_id":"virtual", "weight":0} as:p2
-     * @magentoDataFixture Magento\Quote\Test\Fixture\GuestCart as:cart
-     * @magentoDataFixture Magento\Quote\Test\Fixture\AddProductToCart with:{"cart_id":"$cart.id$", "product_id":"$p1.id$"}
-     * @magentoDataFixture Magento\Quote\Test\Fixture\AddProductToCart with:{"cart_id":"$cart.id$", "product_id":"$p2.id$"}
-     * @magentoDataFixture Magento\Checkout\Test\Fixture\SetBillingAddress with:{"cart_id":"$cart.id$"}
-     * @magentoDataFixture Magento\Checkout\Test\Fixture\SetShippingAddress with:{"cart_id":"$cart.id$"}
      * @magentoDataFixture Magento/OfflineShipping/_files/tablerates_price.php
      * @return void
      * @throws NoSuchEntityException
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple', 'special_price' => 5.99], 'p1'),
+        DataFixture(VirtualProductFixture::class, ['sku' => 'virtual', 'weight' => 0], 'p2'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p2.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testTableRateWithoutIncludingVirtualProduct()
     {
         $cartId = (int)$this->fixtures->get('cart')->getId();
@@ -514,16 +525,27 @@ class ShippingMethodManagementTest extends TestCase
      * @magentoConfigFixture default_store carriers/flatrate/active 0
      * @magentoConfigFixture default_store carriers/freeshipping/active 0
      * @magentoConfigFixture default_store carriers/tablerate/condition_name package_value_with_discount
-     * @magentoDataFixture Magento\SalesRule\Test\Fixture\AddressCondition as:c1
-     * @magentoDataFixture Magento\SalesRule\Test\Fixture\Rule as:r1
-     * @magentoDataFixture Magento\SalesRule\Test\Fixture\Rule as:r2
-     * @magentoDataFixtureDataProvider {"c1":{"attribute":"base_subtotal","operator":">=","value":30}}
-     * @magentoDataFixtureDataProvider {"r1":{"stop_rules_processing":0,"simple_free_shipping":1,"conditions":["$c1$"]}}
-     * @magentoDataFixtureDataProvider {"r2":{"stop_rules_processing":0,"coupon_code":"123","discount_amount":20}}
      * @magentoDataFixture Magento/Sales/_files/quote_with_multiple_products.php
      * @magentoDataFixture Magento/OfflineShipping/_files/tablerates_price.php
      * @return void
      */
+    #[
+        DataFixture(
+            AddressConditionFixture::class,
+            ['attribute' => 'base_subtotal', 'operator' => '>=', 'value' => 30],
+            'c1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            ['stop_rules_processing' => 0, 'simple_free_shipping' => 1, 'conditions' => ['$c1$']],
+            'r1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            ['stop_rules_processing' => 0, 'coupon_code' => '123', 'discount_amount' => 20],
+            'r1'
+        ),
+    ]
     public function testTableRateWithZeroPriceShownWhenDiscountCouponAndFreeShippingCartRuleApplied()
     {
         $objectManager = Bootstrap::getObjectManager();
