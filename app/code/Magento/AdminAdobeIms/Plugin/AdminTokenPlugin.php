@@ -35,6 +35,7 @@ class AdminTokenPlugin
      * @param string $password
      * @return string
      * @throws AuthenticationException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundCreateAdminAccessToken(AdminTokenService $subject, callable $proceed, $username, $password)
     {

@@ -11,6 +11,7 @@ namespace Magento\AdminAdobeIms\Service;
 use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
 class ImsCommandOptionService
@@ -19,6 +20,11 @@ class ImsCommandOptionService
      * Prompt for CLI command options
      */
     private const OPTION_QUESTION = 'Please enter your %s:';
+
+    /**
+     * Prompt for 2FA Auth CLI Command option
+     */
+    private const TWO_FACTOR_OPTION_QUESTION = 'Is 2FA enabled on AdobeIMS? (yes/no):';
 
     /**
      * Human-readable name for Organization ID input option
@@ -34,6 +40,11 @@ class ImsCommandOptionService
      * Human-readable name for Client Secret input option
      */
     private const CLIENT_SECRET_NAME = 'Client Secret';
+
+    /**
+     * Human-readable name for 2FA Enabled input option
+     */
+    private const TWO_FACTOR_AUTH_NAME = '2FA Enabled';
 
     /**
      * @var ImsCommandValidationService
@@ -134,6 +145,34 @@ class ImsCommandOptionService
     }
 
     /**
+     * Get 2FA State from option arguments or create prompt
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @param mixed $helper
+     * @param string $optionArgument
+     * @return bool
+     * @throws LocalizedException
+     */
+    public function isTwoFactorAuthEnabled(
+        InputInterface $input,
+        OutputInterface $output,
+        $helper,
+        string $optionArgument
+    ): bool {
+        $twoFactorAuthEnabled = trim($input->getOption($optionArgument) ?? '');
+
+        if (!$twoFactorAuthEnabled) {
+            $question = $this->askForTwoFactorAuth();
+            $twoFactorAuthEnabled = $helper->ask($input, $output, $question);
+        } else {
+            $twoFactorAuthEnabled = $this->twoFactorAuthValidation($twoFactorAuthEnabled);
+        }
+
+        return $twoFactorAuthEnabled;
+    }
+
+    /**
      * Prepare Question for parameter
      *
      * @param string $paramName
@@ -144,6 +183,19 @@ class ImsCommandOptionService
         return new Question(
             sprintf(self::OPTION_QUESTION, $paramName),
             ''
+        );
+    }
+
+    /**
+     * Prepare Question for 2FA State
+     *
+     * @return ConfirmationQuestion
+     */
+    private function prepareQuestionForTwoFactorAuth(): ConfirmationQuestion
+    {
+        return new ConfirmationQuestion(
+            self::TWO_FACTOR_OPTION_QUESTION,
+            false
         );
     }
 
@@ -201,6 +253,16 @@ class ImsCommandOptionService
     }
 
     /**
+     * Prepare Question for 2FA state
+     *
+     * @return Question
+     */
+    private function askForTwoFactorAuth(): Question
+    {
+        return $this->prepareQuestionForTwoFactorAuth();
+    }
+
+    /**
      * Validation for organizationId
      *
      * @param string $organizationId
@@ -234,5 +296,17 @@ class ImsCommandOptionService
     private function clientSecretValidation(string $clientSecret): string
     {
         return $this->imsCommandValidationService->clientSecretValidator($clientSecret);
+    }
+
+    /**
+     * Validation for twoFactorAuth
+     *
+     * @param string $twoFactorAuthEnabled
+     * @return bool
+     * @throws LocalizedException
+     */
+    private function twoFactorAuthValidation(string $twoFactorAuthEnabled): bool
+    {
+        return $this->imsCommandValidationService->twoFactorAuthValidator($twoFactorAuthEnabled);
     }
 }

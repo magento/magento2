@@ -145,7 +145,6 @@ class AdminAdobeImsEnableCommandTest extends TestCase
             ->with($outputMessage, null)
             ->willReturnSelf();
 
-
         $this->enableCommand->setHelperSet($this->getHelperSet());
         $this->enableCommand->run($inputMock, $outputMock);
     }

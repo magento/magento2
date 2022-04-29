@@ -30,6 +30,7 @@
             <argument name="organizationIdRegex" xsi:type="string"><![CDATA[/^([A-Z0-9]{24})(@AdobeOrg)?$/i]]></argument>
             <argument name="clientIdRegex" xsi:type="string"><![CDATA[/[^a-z_\-0-9]/i]]></argument>
             <argument name="clientSecretRegex" xsi:type="string"><![CDATA[/[^a-z_\-0-9]/i]]></argument>
+            <argument name="twoFactorAuthRegex" xsi:type="string"><![CDATA[/^y/i]]></argument>
         </arguments>
     </type>
 
