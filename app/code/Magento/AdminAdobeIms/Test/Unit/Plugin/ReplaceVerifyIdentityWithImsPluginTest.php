@@ -56,6 +56,7 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
 
         $this->storageMock = $this->getMockBuilder(StorageInterface::class)
             ->setMethods(['getAdobeAccessToken'])
+            ->setMethods(['getAdobeReAuthToken'])
             ->getMockForAbstractClass();
 
         $this->authMock = $this->getMockBuilder(Auth::class)
@@ -123,6 +124,11 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
             ->method('getAdobeAccessToken')
             ->willReturn('accessToken');
 
+        $this->storageMock
+            ->expects($this->once())
+            ->method('getAdobeReAuthToken')
+            ->willReturn('reAuthToken');
+
         $this->authMock->expects($this->once())
         ->method('getAuthStorage')
         ->willReturn($this->storageMock);
@@ -161,6 +167,11 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
         $this->storageMock
             ->expects($this->once())
             ->method('getAdobeAccessToken')
+            ->willReturn('invalidToken');
+
+        $this->storageMock
+            ->expects($this->once())
+            ->method('getAdobeReAuthToken')
             ->willReturn('invalidToken');
 
         $this->authMock->expects($this->once())
@@ -205,6 +216,11 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
         $this->storageMock
             ->expects($this->once())
             ->method('getAdobeAccessToken')
+            ->willReturn(null);
+
+        $this->storageMock
+            ->expects($this->once())
+            ->method('getAdobeReAuthToken')
             ->willReturn(null);
 
         $this->authMock->expects($this->once())

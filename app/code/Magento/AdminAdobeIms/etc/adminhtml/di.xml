@@ -35,6 +35,8 @@
                 type="Magento\AdminAdobeIms\Plugin\ReplaceVerifyIdentityWithImsPlugin"/>
         <plugin name="user_save"
                 type="Magento\AdminAdobeIms\Plugin\UserSavePlugin"/>
+        <plugin name="change_perform_identity_check_message"
+                type="Magento\AdminAdobeIms\Plugin\PerformIdentityCheckMessagePlugin"/>
     </type>
     <type name="Magento\User\Model\UserValidationRules">
         <plugin name="remove_user_validation_rules"
@@ -57,5 +59,20 @@
     <type name="Magento\Security\Model\AdminSessionsManager">
         <plugin name="keep_other_user_sessions"
                 type="Magento\AdminAdobeIms\Plugin\OtherUserSessionPlugin"/>
+    </type>
+
+    <type name="Magento\User\Block\User\Edit\Tab\Main">
+        <plugin name="admin_adobe_ims_reauth_button_user_edit"
+                type="Magento\AdminAdobeIms\Plugin\Block\Adminhtml\User\Edit\Tab\AddReAuthVerification"/>
+    </type>
+
+    <type name="Magento\Backend\Block\System\Account\Edit\Form">
+        <plugin name="admin_adobe_ims_reauth_button_account_edit"
+                type="Magento\AdminAdobeIms\Plugin\Block\Adminhtml\System\Account\Edit\AddReAuthVerification"/>
+    </type>
+
+    <type name="Magento\User\Block\Role\Tab\Info">
+        <plugin name="admin_adobe_ims_reauth_button_role_edit"
+                type="Magento\AdminAdobeIms\Plugin\Block\Adminhtml\User\Role\Tab\AddReAuthVerification"/>
     </type>
 </config>

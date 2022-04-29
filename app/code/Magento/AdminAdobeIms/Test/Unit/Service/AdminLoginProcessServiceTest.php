@@ -14,14 +14,18 @@ use Magento\AdminAdobeIms\Model\Auth;
 use Magento\AdminAdobeIms\Model\LogOut;
 use Magento\AdminAdobeIms\Model\User;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
-use Magento\AdobeIms\Model\LogIn;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
+use Magento\Backend\Model\Auth\StorageInterface;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
 
 class AdminLoginProcessServiceTest extends TestCase
 {
     private const TEST_EMAIL = 'test@test.com';
+
+    private const ERROR_MESSAGE = 'The account sign-in was incorrect or your account is disabled temporarily. '
+    . 'Please wait and try again later.';
 
     /**
      * @var AdminLoginProcessService
@@ -31,7 +35,7 @@ class AdminLoginProcessServiceTest extends TestCase
     /**
      * @var User
      */
-    private $user;
+    private $adminUser;
 
     /**
      * @var Auth
@@ -39,28 +43,46 @@ class AdminLoginProcessServiceTest extends TestCase
     private $auth;
 
     /**
-     * @var LogIn
-     */
-    private $logIn;
-
-    /**
      * @var LogOut
      */
     private $logOut;
+
+    /**
+     * @var DateTime
+     */
+    private $dateTime;
 
     /**
      * @var TokenResponseInterface
      */
     private $tokenResponse;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->user = $this->createMock(User::class);
-        $this->auth = $this->createMock(Auth::class);
-        $this->logIn = $this->createMock(LogIn::class);
+        $this->adminUser = $this->createMock(User::class);
         $this->logOut = $this->createMock(LogOut::class);
+        $this->dateTime = $this->createMock(DateTime::class);
+
+        $session = $this->getMockBuilder(StorageInterface::class)
+            ->addMethods(['setAdobeAccessToken', 'setTokenLastCheckTime'])
+            ->getMockForAbstractClass()
+        ;
+        $session
+            ->method('setAdobeAccessToken')
+            ->willReturnSelf();
+        $session
+            ->method('setTokenLastCheckTime')
+            ->willReturnSelf();
+
+        $this->auth = $this->createMock(Auth::class);
+        $this->auth
+            ->method('getAuthStorage')
+            ->willReturn($session);
 
         $this->tokenResponse = $this->createMock(TokenResponseInterface::class);
         $this->tokenResponse
@@ -70,17 +92,21 @@ class AdminLoginProcessServiceTest extends TestCase
         $this->loginService = $objectManagerHelper->getObject(
             AdminLoginProcessService::class,
             [
-                'adminUser' => $this->user,
+                'adminUser' => $this->adminUser,
                 'auth' => $this->auth,
-                'logIn' => $this->logIn,
                 'logOut' => $this->logOut,
+                'dateTime' => $this->dateTime
             ]
         );
     }
 
+    /**
+     * @return void
+     * @throws AdobeImsAuthorizationException
+     */
     public function testExceptionWillBeThrownWhenNoUserFound(): void
     {
-        $this->user
+        $this->adminUser
             ->method('loadByEmail')
             ->willReturn([]);
 
@@ -92,34 +118,7 @@ class AdminLoginProcessServiceTest extends TestCase
         $this->expectException(AdobeImsAuthorizationException::class);
         $this->expectExceptionMessage('No matching admin user found for Adobe ID.');
 
-        $this->loginService->execute(['email' => self::TEST_EMAIL], $this->tokenResponse);
-    }
-
-    /**
-     * @return void
-     * @throws AdobeImsAuthorizationException
-     */
-    public function testExceptionWillBeThrownWhenLoginFails(): void
-    {
-        $this->user
-            ->method('loadByEmail')
-            ->willReturn([
-                'user_id' => '1',
-                'email' => self::TEST_EMAIL,
-            ]);
-
-        $this->logIn
-            ->method('execute')
-            ->willThrowException(new Exception());
-
-        $this->logOut
-            ->expects($this->once())
-            ->method('execute')
-            ->with('accessToken');
-
-        $this->expectException(AdobeImsAuthorizationException::class);
-
-        $this->loginService->execute(['email' => self::TEST_EMAIL], $this->tokenResponse);
+        $this->loginService->execute($this->tokenResponse, ['email' => self::TEST_EMAIL]);
     }
 
     /**
@@ -128,7 +127,7 @@ class AdminLoginProcessServiceTest extends TestCase
      */
     public function testExceptionWillBeThrownWhenAuthenticationFails(): void
     {
-        $this->user
+        $this->adminUser
             ->method('loadByEmail')
             ->willReturn([
                 'user_id' => '1',
@@ -138,7 +137,7 @@ class AdminLoginProcessServiceTest extends TestCase
 
         $this->auth
             ->method('loginByUsername')
-            ->willThrowException(new Exception());
+            ->willThrowException(new Exception(self::ERROR_MESSAGE));
 
         $this->logOut
             ->expects($this->once())
@@ -146,7 +145,8 @@ class AdminLoginProcessServiceTest extends TestCase
             ->with('accessToken');
 
         $this->expectException(AdobeImsAuthorizationException::class);
+        $this->expectExceptionMessage(self::ERROR_MESSAGE);
 
-        $this->loginService->execute(['email' => self::TEST_EMAIL], $this->tokenResponse);
+        $this->loginService->execute($this->tokenResponse, ['email' => self::TEST_EMAIL]);
     }
 }

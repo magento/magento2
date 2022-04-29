@@ -208,3 +208,18 @@ If the answer is yes, Magento TFA module (if it's present in the code base), sho
 
 For this purpose the additional config value was added, this config value is read by Magento_TwoFactorAuth module.
 If the config value is not there, the Magento_TwoFactorAuth functionality works by default.
+
+# Updated Current User Identity Verification
+The AdobeAdminIms Module updates the handling of the current user identity verification.
+
+Instead of providing the current user password, the user needs to call the AdobeIms reAuth function.
+We replaced the password field with a "verify identity" button.
+
+By clicking on this button a popup opens with the AdobeIms Login, where the current user must enter his adobe ims password again to verify his identity.
+After successfully validate his identity, we are redirecting to the `Magento/AdminAdobeIms/Controller/Adminhtml/OAuth/ImsReauthCallback.php` Controller and update the `ims_verified` field.
+
+When the form will be submitted, we verify the identity with the `Magento/AdminAdobeIms/Plugin/ReplaceVerifyIdentityWithImsPlugin.php` Plugin.
+Here the existens of the `AdobeAccessToken` and `AdobeReAuthToken` will be checked.
+The reauth_token will be used to call the AdobeIms validateToken Endpoint.
+
+When this call is successfull, the form will be submitted, otherwise we update the Message of the thrown `AuthenticationException` to return a matching error message, done by the `Magento/AdminAdobeIms/Plugin/PerformIdentityCheckMessagePlugin.php` Plugin.

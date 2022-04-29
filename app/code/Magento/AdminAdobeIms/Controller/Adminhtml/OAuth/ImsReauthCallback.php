@@ -9,22 +9,33 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Controller\Adminhtml\OAuth;
 
 use Exception;
-use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
-use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
-use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
+use Magento\AdminAdobeIms\Service\AdminReauthProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdminAdobeIms\Service\ImsOrganizationService;
 use Magento\Backend\App\Action\Context;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\Backend\Controller\Adminhtml\Auth;
-use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\AuthenticationException;
 
-class ImsCallback extends Auth implements HttpGetActionInterface
+class ImsReauthCallback extends Auth implements HttpGetActionInterface
 {
-    public const ACTION_NAME = 'imscallback';
+    public const ACTION_NAME = 'imsreauthcallback';
+
+    /**
+     * Constants of response
+     *
+     * RESPONSE_TEMPLATE - template of response
+     * RESPONSE_SUCCESS_CODE success code
+     * RESPONSE_ERROR_CODE error code
+     */
+    private const RESPONSE_TEMPLATE = 'auth[code=%s;message=%s]';
+    private const RESPONSE_SUCCESS_CODE = 'success';
+    private const RESPONSE_ERROR_CODE = 'error';
 
     /**
      * @var ImsConnection
@@ -42,9 +53,9 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     private ImsOrganizationService $organizationService;
 
     /**
-     * @var AdminLoginProcessService
+     * @var AdminReauthProcessService
      */
-    private AdminLoginProcessService $adminLoginProcessService;
+    private AdminReauthProcessService $adminLoginProcessService;
 
     /**
      * @var AdminAdobeImsLogger
@@ -56,7 +67,7 @@ class ImsCallback extends Auth implements HttpGetActionInterface
      * @param ImsConnection $imsConnection
      * @param ImsConfig $imsConfig
      * @param ImsOrganizationService $organizationService
-     * @param AdminLoginProcessService $adminLoginProcessService
+     * @param AdminReauthProcessService $adminReauthProcessService
      * @param AdminAdobeImsLogger $logger
      */
     public function __construct(
@@ -64,31 +75,39 @@ class ImsCallback extends Auth implements HttpGetActionInterface
         ImsConnection $imsConnection,
         ImsConfig $imsConfig,
         ImsOrganizationService $organizationService,
-        AdminLoginProcessService $adminLoginProcessService,
+        AdminReauthProcessService $adminReauthProcessService,
         AdminAdobeImsLogger $logger
     ) {
         parent::__construct($context);
         $this->imsConnection = $imsConnection;
         $this->imsConfig = $imsConfig;
         $this->organizationService = $organizationService;
-        $this->adminLoginProcessService = $adminLoginProcessService;
+        $this->adminLoginProcessService = $adminReauthProcessService;
         $this->logger = $logger;
     }
 
     /**
      * Execute AdobeIMS callback
      *
-     * @return Redirect
+     * @return ResultInterface
      */
-    public function execute(): Redirect
+    public function execute(): ResultInterface
     {
-        /** @var Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath($this->_helper->getHomePageUrl());
+        /** @var Raw $resultRaw */
+        $resultRaw = $this->resultFactory->create(ResultFactory::TYPE_RAW);
 
         if (!$this->imsConfig->enabled()) {
             $this->getMessageManager()->addErrorMessage('Adobe Sign-In is disabled.');
-            return $resultRedirect;
+
+            $response = sprintf(
+                self::RESPONSE_TEMPLATE,
+                self::RESPONSE_ERROR_CODE,
+                __('Adobe Sign-In is disabled.')
+            );
+
+            $resultRaw->setContents($response);
+
+            return $resultRaw;
         }
 
         try {
@@ -105,49 +124,25 @@ class ImsCallback extends Auth implements HttpGetActionInterface
                 throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
             }
             $this->organizationService->checkOrganizationAllocation($profile);
-            $this->adminLoginProcessService->execute($tokenResponse, $profile);
-        } catch (AdobeImsAuthorizationException $e) {
-            $this->logger->error($e->getMessage());
+            $this->adminLoginProcessService->execute($tokenResponse);
 
-            $this->imsErrorMessage(
-                'You don\'t have access to this Commerce instance',
-                AdobeImsAuthorizationException::ERROR_MESSAGE
-            );
-        } catch (AdobeImsOrganizationAuthorizationException $e) {
-            $this->logger->error($e->getMessage());
-
-            $this->imsErrorMessage(
-                'Unable to sign in with the Adobe ID',
-                AdobeImsOrganizationAuthorizationException::ERROR_MESSAGE
+            $response = sprintf(
+                self::RESPONSE_TEMPLATE,
+                self::RESPONSE_SUCCESS_CODE,
+                __('Authorization was successful')
             );
         } catch (Exception $e) {
             $this->logger->error($e->getMessage());
 
-            $this->imsErrorMessage(
-                'Error signing in',
-                'Something went wrong and we could not sign you in. ' .
-                'Please try again or contact your administrator.'
+            $response = sprintf(
+                self::RESPONSE_TEMPLATE,
+                self::RESPONSE_ERROR_CODE,
+                $e->getMessage()
             );
         }
 
-        return $resultRedirect;
-    }
+        $resultRaw->setContents($response);
 
-    /**
-     * Add AdminAdobeIMS Error Message
-     *
-     * @param string $headline
-     * @param string $message
-     * @return void
-     */
-    private function imsErrorMessage(string $headline, string $message): void
-    {
-        $this->messageManager->addComplexErrorMessage(
-            'adminAdobeImsMessage',
-            [
-                'headline' => __($headline)->getText(),
-                'message' => __($message)->getText()
-            ]
-        );
+        return $resultRaw;
     }
 }

@@ -91,7 +91,8 @@ class ReplaceVerifyIdentityWithImsPlugin
     {
         $session = $this->auth->getAuthStorage();
         $accessToken = $session->getAdobeAccessToken();
-        if (!$accessToken) {
+        $reAuthToken = $session->getAdobeReAuthToken();
+        if (!$accessToken || !$reAuthToken) {
             throw new AuthenticationException(
                 __(
                     'The account sign-in was incorrect or your account is disabled temporarily. '
@@ -100,6 +101,6 @@ class ReplaceVerifyIdentityWithImsPlugin
             );
         }
 
-        return $this->imsConnection->validateToken($accessToken);
+        return $this->imsConnection->validateToken($reAuthToken);
     }
 }
