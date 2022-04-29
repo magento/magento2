@@ -39,6 +39,29 @@ define([
             }
 
             return expiredSections;
+        },
+
+        /**
+         * @param {Object} settings
+         * @constructor
+         */
+        'Magento_Customer/js/customer-data': function (originFn,invalidateOptions) {
+            let date;
+            let storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
+            if (new Date($.localStorage.get('mage-cache-timeout')) < new Date()) {
+                storage.removeAll();
+                this.reload(['persistent','cart'],true);
+            }
+            date = new Date(Date.now() + parseInt(invalidateOptions.cookieLifeTime, 10) * 1000);
+            $.localStorage.set('mage-cache-timeout', date);
+
+            if (!$.cookieStorage.isSet('mage-cache-sessid')) {
+                $.cookieStorage.set('mage-cache-sessid', true);
+                storage.removeAll();
+                this.reload(['persistent','cart'],true);
+            }
+            originFn();
+
         }
     };
 
