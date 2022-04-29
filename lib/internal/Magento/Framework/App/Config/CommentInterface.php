@@ -9,6 +9,8 @@ namespace Magento\Framework\App\Config;
 
 /**
  * Interface CommentInterface
+ *
+ * @api
  */
 interface CommentInterface
 {
