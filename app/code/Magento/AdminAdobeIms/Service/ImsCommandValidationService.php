@@ -28,18 +28,26 @@ class ImsCommandValidationService
     private string $clientSecretRegex;
 
     /**
+     * @var string
+     */
+    private string $twoFactorAuthRegex;
+
+    /**
      * @param string $organizationIdRegex
      * @param string $clientIdRegex
      * @param string $clientSecretRegex
+     * @param string $twoFactorAuthRegex
      */
     public function __construct(
         string $organizationIdRegex,
         string $clientIdRegex,
-        string $clientSecretRegex
+        string $clientSecretRegex,
+        string $twoFactorAuthRegex
     ) {
         $this->organizationIdRegex = $organizationIdRegex;
         $this->clientIdRegex = $clientIdRegex;
         $this->clientSecretRegex = $clientSecretRegex;
+        $this->twoFactorAuthRegex = $twoFactorAuthRegex;
     }
 
     /**
@@ -121,5 +129,23 @@ class ImsCommandValidationService
         }
 
         return $value;
+    }
+
+    /**
+     * Validate Two-Factor Auth enabled state
+     *
+     * @param string $value
+     * @return bool
+     * @throws LocalizedException
+     */
+    public function twoFactorAuthValidator(string $value): bool
+    {
+        $value = $this->emptyValueValidator($value);
+
+        if (preg_match($this->twoFactorAuthRegex, $value)) {
+            return true;
+        }
+
+        return false;
     }
 }

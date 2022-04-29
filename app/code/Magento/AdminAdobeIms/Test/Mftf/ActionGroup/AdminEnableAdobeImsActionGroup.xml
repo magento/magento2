@@ -13,7 +13,7 @@
             <description>Runs bin/magento command to enable Admin Adobe Ims module</description>
         </annotations>
 
-        <magentoCLI command="admin:adobe-ims:enable -o {{ClientCredentialsData.org_id}} -c {{ClientCredentialsData.client_id}} -s {{ClientCredentialsData.client_key}}" stepKey="enableAdminAdobeImsModule" />
+        <magentoCLI command="admin:adobe-ims:enable -o {{ClientCredentialsData.org_id}} -c {{ClientCredentialsData.client_id}} -s {{ClientCredentialsData.client_key}} -t yes" stepKey="enableAdminAdobeImsModule" />
         <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches1"/>
     </actionGroup>
 </actionGroups>

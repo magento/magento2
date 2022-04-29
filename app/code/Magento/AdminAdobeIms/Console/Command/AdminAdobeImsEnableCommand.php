@@ -44,6 +44,11 @@ class AdminAdobeImsEnableCommand extends Command
     private const CLIENT_SECRET_ARGUMENT = 'client-secret';
 
     /**
+     * Name of "two-factor-auth" input option
+     */
+    private const TWO_FACTOR_AUTH_ARGUMENT = '2fa-auth';
+
+    /**
      * @var ImsConfig
      */
     private ImsConfig $imsConfig;
@@ -109,6 +114,12 @@ class AdminAdobeImsEnableCommand extends Command
                     's',
                     InputOption::VALUE_OPTIONAL,
                     'Set the client Secret for Adobe IMS configuration. Required when enabling the module'
+                ),
+                new InputOption(
+                    self::TWO_FACTOR_AUTH_ARGUMENT,
+                    't',
+                    InputOption::VALUE_OPTIONAL,
+                    'Check if 2FA Auth is enabled on Adobe IMS Side. Enables or disables the Magento 2FA'
                 )
             ]);
     }
@@ -142,8 +153,15 @@ class AdminAdobeImsEnableCommand extends Command
                 self::CLIENT_SECRET_ARGUMENT
             );
 
+            $isTwoFactorAuthEnabled = $this->imsCommandOptionService->isTwoFactorAuthEnabled(
+                $input,
+                $output,
+                $helper,
+                self::TWO_FACTOR_AUTH_ARGUMENT
+            );
+
             if ($clientId && $clientSecret && $organizationId) {
-                $enabled = $this->enableModule($clientId, $clientSecret, $organizationId);
+                $enabled = $this->enableModule($clientId, $clientSecret, $organizationId, $isTwoFactorAuthEnabled);
                 if ($enabled) {
                     $output->writeln(__('Admin Adobe IMS integration is enabled'));
                     return Cli::RETURN_SUCCESS;
@@ -169,19 +187,22 @@ class AdminAdobeImsEnableCommand extends Command
      * @param string $clientId
      * @param string $clientSecret
      * @param string $organizationId
+     * @param bool $isTwoFactorAuthEnabled
      * @return bool
      * @throws InvalidArgumentException
      */
     private function enableModule(
         string $clientId,
         string $clientSecret,
-        string $organizationId
+        string $organizationId,
+        bool $isTwoFactorAuthEnabled
     ): bool {
         $testAuth = $this->imsConnection->testAuth($clientId);
         if ($testAuth) {
-            $this->imsConfig->enableModule($clientId, $clientSecret, $organizationId);
+            $this->imsConfig->enableModule($clientId, $clientSecret, $organizationId, $isTwoFactorAuthEnabled);
             $this->cacheTypeList->cleanType(Config::TYPE_IDENTIFIER);
             $this->updateTokensService->execute();
+
             return true;
         }
 
