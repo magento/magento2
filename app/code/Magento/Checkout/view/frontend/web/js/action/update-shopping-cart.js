@@ -5,23 +5,68 @@
 
 define([
     'Magento_Ui/js/modal/alert',
+    'Magento_Ui/js/modal/confirm',
     'jquery',
+    'mage/translate',
     'jquery-ui-modules/widget',
     'mage/validation'
-], function (alert, $) {
+], function (alert, confirm, $, $t) {
     'use strict';
 
     $.widget('mage.updateShoppingCart', {
         options: {
             validationURL: '',
             eventName: 'updateCartItemQty',
-            updateCartActionContainer: ''
+            updateCartActionContainer: '',
+            isCartHasUpdatedContent: false
         },
 
         /** @inheritdoc */
         _create: function () {
             this._on(this.element, {
                 'submit': this.onSubmit
+            });
+            this._on('[data-role=cart-item-qty]', {
+                'change': function (event) {
+                    this.isCartHasUpdatedContent = true;
+                }
+            });
+            this._on('ul.pages-items', {
+                'click a': function (event) {
+                    if (this.isCartHasUpdatedContent) {
+                        event.preventDefault();
+                        this.changePageConfirm($(event.currentTarget).attr('href'));
+                    }
+                }
+            });
+        },
+
+        /**
+         * Show the confirmation popup
+         * @param nextPageUrl
+         */
+        changePageConfirm: function(nextPageUrl) {
+            confirm({
+                title: $t('Are you sure you want to leave the page?'),
+                content: $t('Changes you made to the cart will not be saved.'),
+                actions: {
+                    confirm: function () {
+                        window.location.href = nextPageUrl;
+                    }
+                },
+                buttons: [{
+                    text: $t('Cancel'),
+                    class: 'action-secondary action-dismiss',
+                    click: function (event) {
+                        this.closeModal(event);
+                    }
+                }, {
+                    text: $t('Leave'),
+                    class: 'action-primary action-accept',
+                    click: function (event) {
+                        this.closeModal(event, true);
+                    }
+                }]
             });
         },
 
@@ -83,16 +128,16 @@ define([
                     $(document.body).trigger('processStop');
                 }
             })
-            .done(function (response) {
-                if (response.success) {
-                    this.onSuccess();
-                } else {
-                    this.onError(response);
-                }
-            })
-            .fail(function () {
-                this.submitForm();
-            });
+                .done(function (response) {
+                    if (response.success) {
+                        this.onSuccess();
+                    } else {
+                        this.onError(response);
+                    }
+                })
+                .fail(function () {
+                    this.submitForm();
+                });
         },
 
         /**
