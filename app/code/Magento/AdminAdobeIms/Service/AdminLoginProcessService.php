@@ -51,7 +51,6 @@ class AdminLoginProcessService extends AbstractAdminBaseProcessService
     {
         $adminUser = $this->adminUser->loadByEmail($profile['email']);
         if (empty($adminUser['user_id'])) {
-            $this->externalLogout($tokenResponse->getAccessToken());
             throw new AdobeImsAuthorizationException(
                 __('No matching admin user found for Adobe ID.')
             );
