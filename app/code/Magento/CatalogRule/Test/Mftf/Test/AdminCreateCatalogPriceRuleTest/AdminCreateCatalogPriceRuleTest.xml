@@ -18,38 +18,37 @@
             <group value="CatalogRule"/>
         </annotations>
         <before>
+            <!--Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
             <createData entity="_defaultCategory" stepKey="createCategory1"/>
             <!-- Create Simple Product 1 -->
-            <createData entity="_defaultProduct" stepKey="simpleProduct1">
+            <createData entity="_defaultProduct" stepKey="createProduct1">
                 <requiredEntity createDataKey="createCategory1"/>
-                <field key="price">56.78</field>
+                <field key="price">100.00</field>
             </createData>
             <!-- Create Simple Product 2 -->
             <createData entity="SimpleSubCategory" stepKey="createCategory2"/>
-            <createData entity="_defaultProduct" stepKey="simpleProduct2">
+            <createData entity="_defaultProduct" stepKey="createProduct2">
                 <requiredEntity createDataKey="createCategory2"/>
+                <field key="price">100.00</field>
             </createData>
 
             <magentoCron groups="index" stepKey="fixInvalidatedIndicesBeforeTest"/>
         </before>
         <after>
             <!-- Delete products and category -->
-            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct"/>
-            <deleteData createDataKey="createCategory1" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
 
             <!-- Delete products and category -->
-            <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct"/>
-            <deleteData createDataKey="createCategory2" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createCategory2" stepKey="deleteCategory2"/>
 
-            <!-- Delete the catalog price rule -->
-            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesAfterTest"/>
             <magentoCron groups="index" stepKey="fixInvalidatedIndicesAfter"/>
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
-
-        <!--Login as admin -->
-        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
         <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToCatalogPriceRulePage"/>
         <click selector="{{AdminGridMainControls.add}}" stepKey="addNewRule"/>
@@ -57,6 +56,7 @@
 
         <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForFirstPriceRule">
             <argument name="name" value="TestCatalogPriceRule"/>
+            <argument name="groups" value="'NOT LOGGED IN'"/>
         </actionGroup>
 
         <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="createCatalogPriceRule">
@@ -67,19 +67,58 @@
 
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
-
         <!-- Go to storefront home page -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
 
-        <!-- Check Grouped product is visible on the storefront-->
-        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategory1">
-            <argument name="categoryName" value="$$createCategory1.name$$"/>
+        <!-- Navigate to category on store front -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToStorefrontCategoryPage1">
+            <argument name="category" value="$createCategory1$"/>
         </actionGroup>
 
-
-
-        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategory2">
-            <argument name="categoryName" value="$$createCategory2.name$$"/>
+        <!-- Check product 1 price on store front category page -->
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertStorefrontProduct1Price">
+            <argument name="productName" value="$createProduct1.name$"/>
+            <argument name="productPrice" value="$90.00"/>
         </actionGroup>
+
+        <!-- Check product 1 regular price on store front category page -->
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertStorefrontProduct1RegularPrice">
+            <argument name="productName" value="$createProduct1.name$"/>
+            <argument name="productPrice" value="$100.00"/>
+        </actionGroup>
+
+        <!-- Navigate to category2 on store front -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToStorefrontCategoryPage2">
+            <argument name="category" value="$createCategory2$"/>
+        </actionGroup>
+
+        <!-- Check product 2 price on store front category page -->
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertStorefrontProduct2Price">
+            <argument name="productName" value="$createProduct2.name$"/>
+            <argument name="productPrice" value="$100.00"/>
+        </actionGroup>
+
+        <!-- Navigate to product 1 on store front -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProduct1Page">
+            <argument name="productUrlKey" value="$createProduct1.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Verify price for simple product with attribute option green=$20 -->
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertFirstSimpleProductPrices">
+            <argument name="productPrice" value="$createProduct1.price$"/>
+            <argument name="productFinalPrice" value="$90.00"/>
+        </actionGroup>
+
+        <!-- Navigate to product 2 on store front -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProduct2Page">
+            <argument name="productUrlKey" value="$createProduct2.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Verify price for simple product with attribute option green=$20 -->
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertSecondSimpleProductPrices">
+            <argument name="productPrice" value="$createProduct2.price$"/>
+            <argument name="productFinalPrice" value="$100.00"/>
+        </actionGroup>
+
     </test>
 </tests>
