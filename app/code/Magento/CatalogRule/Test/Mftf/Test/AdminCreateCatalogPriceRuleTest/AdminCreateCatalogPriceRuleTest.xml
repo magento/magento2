@@ -21,12 +21,13 @@
             <!--Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
-            <createData entity="_defaultCategory" stepKey="createCategory1"/>
             <!-- Create Simple Product 1 -->
+            <createData entity="_defaultCategory" stepKey="createCategory1"/>
             <createData entity="_defaultProduct" stepKey="createProduct1">
                 <requiredEntity createDataKey="createCategory1"/>
                 <field key="price">100.00</field>
             </createData>
+
             <!-- Create Simple Product 2 -->
             <createData entity="SimpleSubCategory" stepKey="createCategory2"/>
             <createData entity="_defaultProduct" stepKey="createProduct2">
@@ -45,24 +46,30 @@
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="createCategory2" stepKey="deleteCategory2"/>
 
-            <magentoCron groups="index" stepKey="fixInvalidatedIndicesAfter"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
-        <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToCatalogPriceRulePage"/>
+        <!-- Goto Marketing > Catalog Price Rule -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingCatalogPriceRule">
+            <argument name="menuUiId" value="magento-backend-marketing"/>
+            <argument name="submenuUiId" value="magento-catalogrule-promo-catalog"/>
+        </actionGroup>
+
         <click selector="{{AdminGridMainControls.add}}" stepKey="addNewRule"/>
         <waitForPageLoad stepKey="waitForIndividualRulePage"/>
-
+        <!-- Add a new Catalog Price Rule -->
         <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForFirstPriceRule">
             <argument name="name" value="TestCatalogPriceRule"/>
             <argument name="groups" value="'NOT LOGGED IN'"/>
         </actionGroup>
-
+        <!-- Fill Conditions of Catalog Price Rule -->
         <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="createCatalogPriceRule">
             <argument name="conditionValue" value="$createCategory1.id$"/>
         </actionGroup>
-
+        <!-- Fill Actions of Catalog Price Rule -->
         <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule"/>
 
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
@@ -98,23 +105,23 @@
             <argument name="productPrice" value="$100.00"/>
         </actionGroup>
 
-        <!-- Navigate to product 1 on store front -->
+        <!-- Navigate to product 1 on store front on product page -->
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProduct1Page">
             <argument name="productUrlKey" value="$createProduct1.custom_attributes[url_key]$"/>
         </actionGroup>
 
-        <!-- Verify price for simple product with attribute option green=$20 -->
+        <!-- Verify price for simple product 1 on product page -->
         <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertFirstSimpleProductPrices">
             <argument name="productPrice" value="$createProduct1.price$"/>
             <argument name="productFinalPrice" value="$90.00"/>
         </actionGroup>
 
-        <!-- Navigate to product 2 on store front -->
+        <!-- Navigate to product 2 on store front on product page -->
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProduct2Page">
             <argument name="productUrlKey" value="$createProduct2.custom_attributes[url_key]$"/>
         </actionGroup>
 
-        <!-- Verify price for simple product with attribute option green=$20 -->
+        <!-- Verify price for simple product 2 on product page -->
         <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertSecondSimpleProductPrices">
             <argument name="productPrice" value="$createProduct2.price$"/>
             <argument name="productFinalPrice" value="$100.00"/>
