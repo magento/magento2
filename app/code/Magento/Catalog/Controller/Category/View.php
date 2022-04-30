@@ -40,22 +40,16 @@ use Psr\Log\LoggerInterface;
 class View extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Catalog session
-     *
      * @var Session
      */
     protected $_catalogSession;
 
     /**
-     * Catalog design
-     *
      * @var Design
      */
     protected $_catalogDesign;
@@ -212,6 +206,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         $result = null;
 
         if ($this->_request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED)) {
+            //phpcs:ignore Magento2.Legacy.ObsoleteResponse
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl());
         }
         $category = $this->_initCategory();
@@ -240,7 +235,9 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 $page->addPageLayoutHandles(['type' => $parentPageType], null, false);
             }
             $page->addPageLayoutHandles(['type' => $pageType], null, false);
-            $page->addPageLayoutHandles(['displaymode' => strtolower($category->getDisplayMode())], null, false);
+            $categoryDisplayMode = is_string($category->getDisplayMode()) ?
+                strtolower($category->getDisplayMode()) : '';
+            $page->addPageLayoutHandles(['displaymode' => $categoryDisplayMode], null, false);
             $page->addPageLayoutHandles(['id' => $category->getId()]);
 
             // apply custom layout update once layout is loaded

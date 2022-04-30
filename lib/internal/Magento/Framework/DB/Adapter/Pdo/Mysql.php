@@ -420,6 +420,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $this->_config['driver_options'][\PDO::MYSQL_ATTR_MULTI_STATEMENTS] = false;
         }
 
+        if (!isset($this->_config['driver_options'][\PDO::ATTR_STRINGIFY_FETCHES])) {
+            $this->_config['driver_options'][\PDO::ATTR_STRINGIFY_FETCHES] = true;
+        }
+
         $this->logger->startTimer();
         parent::_connect();
         $this->logger->logStats(LoggerInterface::TYPE_CONNECT, '');
@@ -1746,7 +1750,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $options['unsigned'] = true;
         }
         if ($columnData['NULLABLE'] === false
-            && !($type == Table::TYPE_TEXT && strlen($columnData['DEFAULT']) != 0)
+            && !($type == Table::TYPE_TEXT && isset($columnData['DEFAULT']) && strlen($columnData['DEFAULT']) != 0)
         ) {
             $options['nullable'] = false;
         }
@@ -1756,10 +1760,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if ($columnData['DEFAULT'] !== null && $type != Table::TYPE_TEXT) {
             $options['default'] = $this->quote($columnData['DEFAULT']);
         }
-        if (strlen($columnData['SCALE']) > 0) {
+        if (isset($columnData['SCALE']) && strlen($columnData['SCALE']) > 0) {
             $options['scale'] = $columnData['SCALE'];
         }
-        if (strlen($columnData['PRECISION']) > 0) {
+        if (isset($columnData['PRECISION']) && strlen($columnData['PRECISION']) > 0) {
             $options['precision'] = $columnData['PRECISION'];
         }
 
@@ -3557,6 +3561,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $query .= ' IGNORE';
         }
         $query = sprintf('%s INTO %s', $query, $this->quoteIdentifier($table));
+        $countFieldsInSelect = count($select->getPart(Select::COLUMNS));
+        if (empty($fields) && $countFieldsInSelect > 1) {
+            $fields = array_slice(
+                array_keys($this->describeTable($table)),
+                0,
+                $countFieldsInSelect
+            );
+        }
         if ($fields) {
             $columns = array_map([$this, 'quoteIdentifier'], $fields);
             $query = sprintf('%s (%s)', $query, join(', ', $columns));

@@ -10,6 +10,7 @@ namespace Magento\ConfigurableProductGraphQl\Model\Cart\BuyRequest;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
+use Magento\CatalogInventory\Model\StockStateException;
 use Magento\ConfigurableProductGraphQl\Model\Options\Collection as OptionCollection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
@@ -146,12 +147,13 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
      *
      * @param string $parentSku
      * @param array $superAttributesData
+     * @throws StockStateException
      * @throws LocalizedException
      */
     private function checkSuperAttributeData(string $parentSku, array $superAttributesData): void
     {
         if (empty($superAttributesData)) {
-            throw new LocalizedException(
+            throw new StockStateException(
                 __('The product with SKU %sku is out of stock.', ['sku' => $parentSku])
             );
         }

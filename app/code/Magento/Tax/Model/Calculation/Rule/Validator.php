@@ -73,7 +73,7 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
         }
 
         // Code is required
-        if (!\Zend_Validate::is(trim($value->getCode()), 'NotEmpty')) {
+        if ($value->getCode() === null || !\Zend_Validate::is(trim($value->getCode()), 'NotEmpty')) {
             $this->addErrorMessage(
                 $messages,
                 '"%fieldName" is required. Enter and try again.',

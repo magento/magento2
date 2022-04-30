@@ -18,14 +18,14 @@ class ImageMagick extends AbstractAdapter
     /**
      * The blur factor where > 1 is blurry, < 1 is sharp
      */
-    const BLUR_FACTOR = 0.7;
+    public const BLUR_FACTOR = 0.7;
 
     /**
      * Error messages
      */
-    const ERROR_WATERMARK_IMAGE_ABSENT = 'Watermark Image absent.';
+    public const ERROR_WATERMARK_IMAGE_ABSENT = 'Watermark Image absent.';
 
-    const ERROR_WRONG_IMAGE = 'Image is not readable or file name is empty.';
+    public const ERROR_WRONG_IMAGE = 'Image is not readable or file name is empty.';
 
     /**
      * Options Container
@@ -90,9 +90,9 @@ class ImageMagick extends AbstractAdapter
      */
     public function open($filename)
     {
-        if (!file_exists($filename)) {
+        if ($filename === null || !file_exists($filename)) {
             throw new FileSystemException(
-                new Phrase('File "%1" does not exist.', [$this->_fileName])
+                new Phrase('File "%1" does not exist.', [$filename])
             );
         }
         if (!empty($filename) && !$this->validateURLScheme($filename)) {
@@ -163,7 +163,7 @@ class ImageMagick extends AbstractAdapter
      */
     protected function _applyOptions()
     {
-        $this->_imageHandler->setImageCompressionQuality($this->quality());
+        $this->_imageHandler->setImageCompressionQuality((int)$this->quality());
         $this->_imageHandler->setImageCompression(\Imagick::COMPRESSION_JPEG);
         $this->_imageHandler->setImageUnits(\Imagick::RESOLUTION_PIXELSPERINCH);
         $this->_imageHandler->setImageResolution(

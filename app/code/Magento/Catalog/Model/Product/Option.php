@@ -46,7 +46,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     protected $optionRepository;
 
     /**
-     * Option type percent
+     * Option type percent.
+     *
+     * @var string
      * @since 101.0.0
      */
     protected static $typePercent = 'percent';
@@ -54,22 +56,24 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     /**#@+
      * Constants
      */
-    const KEY_PRODUCT_SKU = 'product_sku';
-    const KEY_OPTION_ID = 'option_id';
-    const KEY_TITLE = 'title';
-    const KEY_TYPE = 'type';
-    const KEY_SORT_ORDER = 'sort_order';
-    const KEY_IS_REQUIRE = 'is_require';
-    const KEY_PRICE = 'price';
-    const KEY_PRICE_TYPE = 'price_type';
-    const KEY_SKU = 'sku';
-    const KEY_FILE_EXTENSION = 'file_extension';
-    const KEY_MAX_CHARACTERS = 'max_characters';
-    const KEY_IMAGE_SIZE_Y = 'image_size_y';
-    const KEY_IMAGE_SIZE_X = 'image_size_x';
+    public const KEY_PRODUCT_SKU = 'product_sku';
+    public const KEY_OPTION_ID = 'option_id';
+    public const KEY_TITLE = 'title';
+    public const KEY_TYPE = 'type';
+    public const KEY_SORT_ORDER = 'sort_order';
+    public const KEY_IS_REQUIRE = 'is_require';
+    public const KEY_PRICE = 'price';
+    public const KEY_PRICE_TYPE = 'price_type';
+    public const KEY_SKU = 'sku';
+    public const KEY_FILE_EXTENSION = 'file_extension';
+    public const KEY_MAX_CHARACTERS = 'max_characters';
+    public const KEY_IMAGE_SIZE_Y = 'image_size_y';
+    public const KEY_IMAGE_SIZE_X = 'image_size_x';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var Product
+     */
     protected $product;
 
     /**
@@ -1003,9 +1007,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      */
     private function cleanFileExtensions()
     {
-        $rawExtensions = $this->getFileExtension();
+        $rawExtensions = is_string($this->getFileExtension()) ? strtolower($this->getFileExtension()) : '';
         $matches = [];
         preg_match_all('/(?<extensions>[a-z0-9]+)/i', strtolower($rawExtensions), $matches);
+
         if (!empty($matches)) {
             $extensions = implode(', ', array_unique($matches['extensions']));
             $this->setFileExtension($extensions);

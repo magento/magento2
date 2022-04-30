@@ -14,6 +14,8 @@ use Magento\Framework\App\Response\HttpInterface as HttpResponse;
  * Renders one policy at a time.
  *
  * Different type of CSPs may require specific renderers due to being represented by different headers.
+ *
+ * @api
  */
 interface PolicyRendererInterface
 {

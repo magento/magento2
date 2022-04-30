@@ -16,6 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory as TaxClassCollectionFactory;
+use Magento\SalesRule\Api\RuleRepositoryInterface;
 
 /**
  * Test cases for applying cart promotions to items in cart
@@ -373,6 +374,73 @@ class CartPromotionsTest extends GraphQlAbstract
     }
 
     /**
+     * Test fixed discount cannot be higher than products price
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     */
+    public function testCartPromotionsFixedDiscountNotHigherThanProductsPrice()
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+        /** @var Product $prod2 */
+        $prod1 = $productRepository->get('simple1');
+        $prod2 = $productRepository->get('simple2');
+        $productsInCart = [$prod1, $prod2];
+        $skus =['simple1', 'simple2'];
+        $qty = 2;
+        $sumOfPricesForBothProducts = 43.96;
+        $couponCode = '2?ds5!2d';
+        /** @var RuleRepositoryInterface $ruleRepository */
+        $ruleRepository = Bootstrap::getObjectManager()->get(RuleRepositoryInterface::class);
+        /** @var Collection $ruleCollection */
+        $ruleCollection = Bootstrap::getObjectManager()->get(Collection::class);
+        $ruleLabels = [];
+        /** @var Rule $rule */
+        foreach ($ruleCollection as $rule) {
+            $ruleLabels =  $rule->getStoreLabels();
+            $salesRule = $ruleRepository->getById($rule->getRuleId());
+            $salesRule->setDiscountAmount(50);
+            $ruleRepository->save($salesRule);
+        }
+        $cartId = $this->createEmptyCart();
+        $this->addMultipleSimpleProductsToCart($cartId, $qty, $skus[0], $skus[1]);
+        $this->applyCouponsToCart($cartId, $couponCode);
+        $query = $this->getCartItemPricesQuery($cartId);
+        $response = $this->graphQlMutation($query);
+
+        $this->assertCount(2, $response['cart']['items']);
+        $productsInResponse = array_map(null, $response['cart']['items'], $productsInCart);
+        $count = count($productsInCart);
+        for ($itemIndex = 0; $itemIndex < $count; $itemIndex++) {
+            $this->assertNotEmpty($productsInResponse[$itemIndex]);
+            $rowTotal = ($productsInCart[$itemIndex]->getSpecialPrice()*$qty);
+            $this->assertResponseFields(
+                $productsInResponse[$itemIndex][0],
+                [
+                    'quantity' => $qty,
+                    'prices' => [
+                        'row_total' => ['value' => $rowTotal],
+                        'row_total_including_tax' => ['value' => $rowTotal],
+                        'total_item_discount' => ['value' => $rowTotal],
+                        'discounts' => [
+                            0 =>[
+                                'amount' =>
+                                    ['value' => $rowTotal],
+                                'label' => $ruleLabels[0]
+                            ]
+                        ]
+                    ],
+                ]
+            );
+        }
+        $this->assertEquals(
+            $response['cart']['prices']['discounts'][0]['amount']['value'],
+            $sumOfPricesForBothProducts
+        );
+    }
+
+    /**
      * Apply coupon to the cart
      *
      * @param string $cartId
@@ -426,7 +494,6 @@ QUERY;
       discounts{
         amount{value}
       }
-      
     }
   }
 }
@@ -460,27 +527,27 @@ QUERY;
         $query = <<<QUERY
 mutation {
   addSimpleProductsToCart(input: {
-    cart_id: "{$cartId}", 
+    cart_id: "{$cartId}",
     cart_items: [
       {
         data: {
           quantity: $qty
           sku: "$sku1"
         }
-      } 
+      }
       {
         data: {
           quantity: $qty
           sku: "$sku2"
         }
-      }    
+      }
     ]
   }
   ) {
     cart {
       items {
         product{sku}
-        quantity       
+        quantity
             }
          }
       }

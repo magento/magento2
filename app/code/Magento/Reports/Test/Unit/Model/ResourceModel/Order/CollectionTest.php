@@ -247,6 +247,7 @@ class CollectionTest extends TestCase
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $orderMock->method('getStoreTZOffsetQuery')->willReturn('');
 
         $this->orderFactoryMock
             ->expects($this->any())

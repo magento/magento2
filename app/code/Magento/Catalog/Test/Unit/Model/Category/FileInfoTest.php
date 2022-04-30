@@ -116,6 +116,9 @@ class FileInfoTest extends TestCase
         $this->pubDirectory->method('getAbsolutePath')
             ->willReturn('/a/b/c/pub/');
 
+        $this->store->method('getBaseUrl')
+            ->willReturn('https://example.com/');
+
         $this->model = new FileInfo(
             $this->filesystem,
             $this->mime,
