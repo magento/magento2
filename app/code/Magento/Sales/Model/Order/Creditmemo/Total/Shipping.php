@@ -18,7 +18,7 @@ class Shipping extends AbstractTotal
     protected $priceCurrency;
 
     /**
-     * Tax config
+     * Tax config from Tax model
      *
      * @var \Magento\Tax\Model\Config
      */
