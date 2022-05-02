@@ -24,7 +24,7 @@ define([
             messageContainer = messageContainer || globalMessageList;
 
             if (response.status == 401) { //eslint-disable-line eqeqeq
-                window.location.replace(url.build('customer/account/login/'));
+                this.reloadPage(url.build('customer/account/login/'));
             } else {
                 try {
                     error = JSON.parse(response.responseText);
@@ -35,6 +35,13 @@ define([
                 }
                 messageContainer.addErrorMessage(error);
             }
+        },
+
+        /**
+         * Method to reload page
+         */
+        reloadPage: function (redirectUrl) {
+            window.location.replace(redirectUrl);
         }
     };
 });
