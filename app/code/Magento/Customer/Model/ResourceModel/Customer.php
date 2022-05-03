@@ -13,6 +13,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Customer entity resource model
@@ -61,6 +62,11 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     private $encryptor;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * Customer constructor.
      *
      * @param \Magento\Eav\Model\Entity\Context $context
@@ -73,6 +79,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @param array $data
      * @param AccountConfirmation $accountConfirmation
      * @param EncryptorInterface|null $encryptor
+     * @param ManagerInterface|null $eventManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -85,7 +92,8 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         $data = [],
         AccountConfirmation $accountConfirmation = null,
-        EncryptorInterface $encryptor = null
+        EncryptorInterface $encryptor = null,
+        ManagerInterface $eventManager = null
     ) {
         parent::__construct($context, $entitySnapshot, $entityRelationComposite, $data);
 
@@ -99,6 +107,8 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         $this->storeManager = $storeManager;
         $this->encryptor = $encryptor ?? ObjectManager::getInstance()
                 ->get(EncryptorInterface::class);
+        $this->eventManager = $eventManager ?? ObjectManager::getInstance()
+                ->get(ManagerInterface::class);
     }
 
     /**
@@ -239,6 +249,11 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         $this->getNotificationStorage()->add(
             NotificationStorage::UPDATE_CUSTOMER_SESSION,
             $customer->getId()
+        );
+        $this->eventManager->dispatch(
+            NotificationStorage::UPDATE_CUSTOMER_SESSION,
+            ['customer' => $customer
+            ]
         );
         if ($customer->getData('rp_token')) {
             $rpToken = $customer->getData('rp_token');
