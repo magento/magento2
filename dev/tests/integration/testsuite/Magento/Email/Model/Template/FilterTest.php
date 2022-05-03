@@ -158,6 +158,8 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      * @param $expectedResult
      * @param array $variables
      * @internal param $translatorData
+     * @magentoConfigFixture default_store dev/translate_inline/active 1
+     * @magentoAppArea frontend
      * @dataProvider transDirectiveDataProvider
      */
     public function testTransDirective($directive, $translations, $expectedResult, $variables = [])
