@@ -51,7 +51,6 @@ define([
 
             originFn();
             if (window.persistent !== undefined && (date < new Date() || !mageCacheSessId)) {
-                debugger;
                 this.reload(['persistent','cart'],true);
             }
         }
