@@ -9,6 +9,8 @@
     <preference for="Magento\AdminAdobeIms\Api\Data\ImsWebapiSearchResultsInterface" type="Magento\AdminAdobeIms\Model\ImsWebapiSearchResults"/>
     <preference for="Magento\AdminAdobeIms\Api\ImsWebapiRepositoryInterface" type="Magento\AdminAdobeIms\Model\ImsWebapiRepository"/>
     <preference for="Magento\AdminAdobeIms\Api\Data\ImsWebapiInterface" type="Magento\AdminAdobeIms\Model\ImsWebapi"/>
+    <preference for="Magento\AdobeImsApi\Api\GetAccessTokenInterface" type="Magento\AdminAdobeIms\Model\GetAccessTokenProxy"/>
+    <preference for="Magento\AdobeImsApi\Api\UserAuthorizedInterface" type="Magento\AdminAdobeIms\Model\UserAuthorizedProxy"/>
 
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>

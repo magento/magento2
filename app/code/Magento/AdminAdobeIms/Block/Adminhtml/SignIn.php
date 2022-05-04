@@ -5,8 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeIms\Block\Adminhtml;
+namespace Magento\AdminAdobeIms\Block\Adminhtml;
 
+use Magento\AdminAdobeIms\Model\Auth;
+use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdobeImsApi\Api\ConfigProviderInterface;
 use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
@@ -14,6 +16,7 @@ use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
 
@@ -63,6 +66,16 @@ class SignIn extends Template
     private $serializer;
 
     /**
+     * @var ImsConfig
+     */
+    private ImsConfig $adminAdobeImsConfig;
+
+    /**
+     * @var Auth
+     */
+    private Auth $auth;
+
+    /**
      * SignIn constructor.
      *
      * @param Context $context
@@ -72,6 +85,8 @@ class SignIn extends Template
      * @param UserProfileRepositoryInterface $userProfileRepository
      * @param JsonHexTag $json
      * @param array $data
+     * @param ImsConfig|null $adminAdobeImsConfig
+     * @param Auth|null $auth
      */
     public function __construct(
         Context $context,
@@ -80,13 +95,17 @@ class SignIn extends Template
         UserAuthorizedInterface $userAuthorized,
         UserProfileRepositoryInterface $userProfileRepository,
         JsonHexTag $json,
-        array $data = []
+        array $data = [],
+        ?ImsConfig $adminAdobeImsConfig = null,
+        ?Auth $auth = null
     ) {
         $this->config = $config;
         $this->userContext = $userContext;
         $this->userAuthorized = $userAuthorized;
         $this->userProfileRepository = $userProfileRepository;
         $this->serializer = $json;
+        $this->adminAdobeImsConfig = $adminAdobeImsConfig ?? ObjectManager::getInstance()->get(ImsConfig::class);
+        $this->auth = $auth ?? ObjectManager::getInstance()->get(Auth::class);
         parent::__construct($context, $data);
     }
 
@@ -161,6 +180,17 @@ class SignIn extends Template
     {
         if (!$this->userAuthorized->execute()) {
             return $this->getDefaultUserData();
+        }
+
+        if ($this->adminAdobeImsConfig->enabled()) {
+            $user = $this->auth->getUser();
+
+            return [
+                'isAuthorized' => true,
+                'name' => $user->getFirstName() . ' ' . $user->getLastName(),
+                'email' => $user->getEmail(),
+                'image' => ''
+            ];
         }
 
         try {

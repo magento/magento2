@@ -5,7 +5,7 @@
 define([
     'uiComponent',
     'jquery',
-    'Magento_AdobeIms/js/action/authorization'
+    'Magento_AdminAdobeIms/js/action/authorization'
 ], function (Component, $, login) {
     'use strict';
 
