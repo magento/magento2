@@ -11,8 +11,9 @@ use Magento\Framework\GraphQl\Schema\TypeInterface;
 
 /**
  * Interface for GraphQl OutputType only used for output
+ *
+ * @api
  */
 interface OutputTypeInterface extends \GraphQL\Type\Definition\OutputType, TypeInterface
 {
-
 }

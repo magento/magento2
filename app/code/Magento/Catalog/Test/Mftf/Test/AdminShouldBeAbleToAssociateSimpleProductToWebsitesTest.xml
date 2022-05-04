@@ -32,6 +32,7 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
 
         <after>
@@ -42,6 +43,7 @@
                 <argument name="websiteName" value="$createCustomWebsite.website[name]$"/>
             </actionGroup>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetFiltersOnStoresIndexPage"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPageToResetFilters"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
