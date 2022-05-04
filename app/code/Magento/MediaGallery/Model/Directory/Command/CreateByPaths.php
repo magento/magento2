@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\MediaGallery\Model\Directory\Command;
 
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\MediaGalleryApi\Api\CreateDirectoriesByPathsInterface;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
@@ -18,6 +20,9 @@ use Psr\Log\LoggerInterface;
  */
 class CreateByPaths implements CreateDirectoriesByPathsInterface
 {
+    private const MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH
+        = 'system/media_storage_configuration/allowed_resources/media_gallery_image_folders';
+
     /**
      * @var LoggerInterface
      */
@@ -34,18 +39,26 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
     private $isPathExcluded;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $coreConfig;
+
+    /**
      * @param LoggerInterface $logger
      * @param Storage $storage
      * @param IsPathExcludedInterface $isPathExcluded
+     * @param ScopeConfigInterface $coreConfig
      */
     public function __construct(
         LoggerInterface $logger,
         Storage $storage,
-        IsPathExcludedInterface $isPathExcluded
+        IsPathExcludedInterface $isPathExcluded,
+        ScopeConfigInterface $coreConfig = null
     ) {
         $this->logger = $logger;
         $this->storage = $storage;
         $this->isPathExcluded = $isPathExcluded;
+        $this->coreConfig = $coreConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -54,6 +67,10 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
     public function execute(array $paths): void
     {
         $failedPaths = [];
+        $mediaGalleryImageFolders = $this->coreConfig->getValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            'default'
+        );
         foreach ($paths as $path) {
             if ($this->isPathExcluded->execute($path)) {
                 $failedPaths[] = $path;
@@ -78,9 +95,11 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
         if (!empty($failedPaths)) {
             throw new CouldNotSaveException(
                 __(
-                    'Could not create directories: %paths',
+                    'Could not create directories: %paths,' .
+                    ' You are allowed to create folders only in: %allowedPaths folders',
                     [
-                        'paths' => implode(' ,', $failedPaths)
+                        'paths' => implode(' ,', $failedPaths),
+                        'allowedPaths' => implode(',', $mediaGalleryImageFolders)
                     ]
                 )
             );
