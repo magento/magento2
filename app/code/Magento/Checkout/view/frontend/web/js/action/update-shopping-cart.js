@@ -27,7 +27,7 @@ define([
                 'submit': this.onSubmit
             });
             this._on('[data-role=cart-item-qty]', {
-                'change': function (event) {
+                'change': function () {
                     this.isCartHasUpdatedContent = true;
                 }
             });
@@ -45,7 +45,7 @@ define([
          * Show the confirmation popup
          * @param nextPageUrl
          */
-        changePageConfirm: function(nextPageUrl) {
+        changePageConfirm: function (nextPageUrl) {
             confirm({
                 title: $t('Are you sure you want to leave the page?'),
                 content: $t('Changes you made to the cart will not be saved.'),
