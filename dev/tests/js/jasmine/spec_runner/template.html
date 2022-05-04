@@ -20,7 +20,7 @@
         </script>
         <% }); %>
         <% with (scripts) { %>
-            <% [].concat(polyfills, jasmine, boot, vendor, src, reporters).forEach(function (script) { %>
+        <% [].concat(polyfills, jasmine, '.grunt/grunt-contrib-jasmine/boot0.js', 'dev/tests/js/jasmine/spec_runner/jasmine-config.js', '.grunt/grunt-contrib-jasmine/boot1.js', vendor, src, reporters).forEach(function (script) { %>
             <script type="text/javascript" src="<%= script %>"></script>
             <% }); %>
         <% } %>
