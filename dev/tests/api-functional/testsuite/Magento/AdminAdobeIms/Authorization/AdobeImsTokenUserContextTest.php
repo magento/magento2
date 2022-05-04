@@ -140,6 +140,8 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
         $this->scopeConfig->clean();
         $this->runWebApiCall($token);
         $this->assertAdminUserIdIsSaved($adminUserNameFromFixture, $token);
+        $this->configWriter->save(ImsConfig::XML_PATH_ENABLED, 0);
+        $this->scopeConfig->clean();
     }
 
     /**
