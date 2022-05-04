@@ -416,6 +416,66 @@ class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product1
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product2
+     */
+    public function testPartialUpdateShouldNotOverrideUrlKeyInheritance(): void
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $store = $this->objectManager->get(Store::class);
+        $defaultStore = $store->load('default', 'code');
+        $sku2 = $this->fixtures->get('product2')->getSku();
+        $sku1Name = $this->fixtures->get('product1')->getName();
+        $sku2NewName = $this->fixtures->get('product2')->getName() . ' storeview';
+        $sku2UrlKey = $this->fixtures->get('product2')->getUrlKey();
+
+        // Change the second product name with the first product name in default store view
+        $this->saveProduct(
+            [
+                ProductInterface::SKU => $sku2,
+                'name' => $sku1Name
+            ],
+            $defaultStore->getCode()
+        );
+        $response = $this->flattenCustomAttributes($this->getProduct($sku2, $defaultStore->getCode()));
+        $this->assertEquals($sku1Name, $response['name']);
+        // Assert that Url Key has not changed
+        $this->assertEquals($sku2UrlKey, $response['url_key']);
+        $product = $productRepository->get($sku2, false, $defaultStore->getId(), true);
+        $this->assertOverriddenValues(
+            [
+                'name' => true,
+                'url_key' => false,
+            ],
+            $product,
+            (int) $defaultStore->getId()
+        );
+
+        // Change the second product name with a new name in default store view
+        $this->saveProduct(
+            [
+                ProductInterface::SKU => $sku2,
+                'name' => $sku2NewName
+            ],
+            $defaultStore->getCode()
+        );
+        $response = $this->flattenCustomAttributes($this->getProduct($sku2, $defaultStore->getCode()));
+        $this->assertEquals($sku2NewName, $response['name']);
+        // Assert that Url Key has not changed
+        $this->assertEquals($sku2UrlKey, $response['url_key']);
+        $product = $productRepository->get($sku2, false, $defaultStore->getId(), true);
+        $this->assertOverriddenValues(
+            [
+                'name' => true,
+                'url_key' => false,
+            ],
+            $product,
+            (int) $defaultStore->getId()
+        );
+    }
+
+    /**
      * @param array $expected
      * @param array $actual
      */
