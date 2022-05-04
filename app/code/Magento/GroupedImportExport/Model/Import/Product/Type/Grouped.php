@@ -1,7 +1,5 @@
 <?php
 /**
- * Import entity of grouped product type
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -12,12 +10,15 @@ use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Model\Import;
 
+/**
+ * Import entity of grouped product type
+ */
 class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
     /**
      * Default delimiter for sku and qty.
      */
-    const SKU_QTY_DELIMITER = '=';
+    public const SKU_QTY_DELIMITER = '=';
 
     /**
      * Column names that holds values with particular meaning.
@@ -42,8 +43,6 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
     private $allowedProductTypes;
 
     /**
-     * Product entity identifier field
-     *
      * @var string
      */
     private $productEntityIdentifierField;
@@ -111,7 +110,7 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                     ) {
                         $linkedProductId = $newSku[$associatedSku][$this->getProductEntityIdentifierField()];
                     } elseif (isset($oldSku[$associatedSku]) &&
-                        in_array($newSku[$associatedSku]['type_id'], $this->allowedProductTypes)
+                        in_array($oldSku[$associatedSku]['type_id'], $this->allowedProductTypes)
                     ) {
                         $linkedProductId = $oldSku[$associatedSku][$this->getProductEntityIdentifierField()];
                     } else {
