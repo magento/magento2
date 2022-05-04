@@ -310,10 +310,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         if ($entityTypeModel) {
             foreach ($this->_rowData as $attrCode => $attrValue) {
                 $attrParams = $entityTypeModel->retrieveAttributeFromCache($attrCode);
-                if ($attrCode === Product::COL_CATEGORY) {
-                    if (!$this->isCategoriesValid($attrValue)) {
-                        return false;
-                    }
+                if ($attrCode === Product::COL_CATEGORY && $attrValue) {
+                    $this->isCategoriesValid($attrValue);
                 } elseif ($attrParams) {
                     $this->isAttributeValid($attrCode, $attrParams, $this->_rowData);
                 }
