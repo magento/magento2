@@ -102,6 +102,7 @@ class AdminAdobeImsEnableCommandTest extends TestCase
      * @param InvokedCountMatcher$enableMethodCallExpection
      * @param InvokedCountMatcher $cleanMethodCallExpection
      * @param string $outputMessage
+     * @param bool $isTwoFactorAuthEnabled
      * @return void
      * @throws Exception
      * @dataProvider cliCommandProvider
@@ -110,7 +111,8 @@ class AdminAdobeImsEnableCommandTest extends TestCase
         bool $testAuthMode,
         InvokedCountMatcher $enableMethodCallExpection,
         InvokedCountMatcher $cleanMethodCallExpection,
-        string $outputMessage
+        string $outputMessage,
+        bool $isTwoFactorAuthEnabled
     ): void {
         $inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
@@ -123,6 +125,7 @@ class AdminAdobeImsEnableCommandTest extends TestCase
         $this->imsCommandOptionService->method('getOrganizationId')->willReturn('orgId');
         $this->imsCommandOptionService->method('getClientId')->willReturn('clientId');
         $this->imsCommandOptionService->method('getClientSecret')->willReturn('clientSecret');
+        $this->imsCommandOptionService->method('isTwoFactorAuthEnabled')->willReturn($isTwoFactorAuthEnabled);
 
         $this->imsConnectionMock->method('testAuth')
             ->willReturn($testAuthMode);
@@ -161,15 +164,33 @@ class AdminAdobeImsEnableCommandTest extends TestCase
                 true,
                 $this->once(),
                 $this->once(),
-                'Admin Adobe IMS integration is enabled'
+                'Admin Adobe IMS integration is enabled',
+                true
             ],
             [
                 false,
                 $this->never(),
                 $this->never(),
-                '<error>The Client ID, Client Secret and Organization ID are required ' .
-                'when enabling the Admin Adobe IMS Module</error>'
+                '<error>The Client ID, Client Secret, Organization ID and 2FA Auth are required ' .
+                'when enabling the Admin Adobe IMS Module</error>',
+                true
             ],
+            [
+                true,
+                $this->never(),
+                $this->never(),
+                '<error>The Client ID, Client Secret, Organization ID and 2FA Auth are required ' .
+                'when enabling the Admin Adobe IMS Module</error>',
+                false
+            ],
+            [
+                false,
+                $this->never(),
+                $this->never(),
+                '<error>The Client ID, Client Secret, Organization ID and 2FA Auth are required ' .
+                'when enabling the Admin Adobe IMS Module</error>',
+                false
+            ]
         ];
     }
 

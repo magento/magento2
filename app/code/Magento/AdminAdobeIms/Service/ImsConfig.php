@@ -16,6 +16,7 @@ use Magento\Config\Model\Config\Backend\Admin\Custom;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 
 class ImsConfig extends Config
@@ -30,7 +31,6 @@ class ImsConfig extends Config
     public const XML_PATH_VALIDATE_TOKEN_URL = 'adobe_ims/integration/validate_token_url';
     public const XML_PATH_LOGOUT_URL = 'adobe_ims/integration/logout_url';
     public const XML_PATH_CERTIFICATE_PATH = 'adobe_ims/integration/certificate_path';
-    public const XML_PATH_ADOBE_IMS_2FA_ENABLED = 'adobe_ims/integration/adobe_ims_2fa_enabled';
     public const XML_PATH_ADMIN_AUTH_URL_PATTERN = 'adobe_ims/integration/admin/auth_url_pattern';
     public const XML_PATH_ADMIN_REAUTH_URL_PATTERN = 'adobe_ims/integration/admin/reauth_url_pattern';
     public const XML_PATH_ADMIN_ADOBE_IMS_SCOPES = 'adobe_ims/integration/admin/scopes';
@@ -110,6 +110,7 @@ class ImsConfig extends Config
      * @param string $organizationId
      * @param bool $isAdobeIms2FAEnabled
      * @return void
+     * @throws LocalizedException
      */
     public function enableModule(
         string $clientId,
@@ -117,6 +118,12 @@ class ImsConfig extends Config
         string $organizationId,
         bool $isAdobeIms2FAEnabled
     ): void {
+        if (!$isAdobeIms2FAEnabled) {
+            throw new LocalizedException(
+                __('2FA Auth is required when enabling the Admin Adobe IMS Module')
+            );
+        }
+
         $this->updateConfig(
             self::XML_PATH_ENABLED,
             '1'
@@ -136,11 +143,6 @@ class ImsConfig extends Config
             self::XML_PATH_PRIVATE_KEY,
             $clientSecret
         );
-
-        $this->updateConfig(
-            self::XML_PATH_ADOBE_IMS_2FA_ENABLED,
-            (string) $isAdobeIms2FAEnabled
-        );
     }
 
     /**
@@ -158,7 +160,6 @@ class ImsConfig extends Config
         $this->deleteConfig(self::XML_PATH_ORGANIZATION_ID);
         $this->deleteConfig(self::XML_PATH_API_KEY);
         $this->deleteConfig(self::XML_PATH_PRIVATE_KEY);
-        $this->deleteConfig(self::XML_PATH_ADOBE_IMS_2FA_ENABLED);
     }
 
     /**
@@ -198,7 +199,7 @@ class ImsConfig extends Config
      * @param string $value
      * @return void
      */
-    public function updateConfig(string $path, string $value): void
+    private function updateConfig(string $path, string $value): void
     {
         $this->writer->save(
             $path,
@@ -213,7 +214,7 @@ class ImsConfig extends Config
      * @param string $value
      * @return void
      */
-    public function updateSecureConfig(string $path, string $value): void
+    private function updateSecureConfig(string $path, string $value): void
     {
         $value = str_replace(['\n', '\r'], ["\n", "\r"], $value);
 
@@ -233,7 +234,7 @@ class ImsConfig extends Config
      * @param string $path
      * @return void
      */
-    public function deleteConfig(string $path): void
+    private function deleteConfig(string $path): void
     {
         $this->writer->delete($path);
     }
@@ -286,7 +287,7 @@ class ImsConfig extends Config
      *
      * @return string
      */
-    public function getScopes(): string
+    private function getScopes(): string
     {
         return implode(
             ',',
