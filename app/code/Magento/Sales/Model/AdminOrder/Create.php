@@ -1833,9 +1833,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function _prepareCustomer()
     {
-        if ($this->getQuote()->getCustomerIsGuest()) {
-            return $this;
-        }
         /** @var $store \Magento\Store\Model\Store */
         $store = $this->getSession()->getStore();
         $customer = $this->getQuote()->getCustomer();
