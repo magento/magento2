@@ -50,6 +50,11 @@ class UsedProductsCache
     private $customerSession;
 
     /**
+     * @var array
+     */
+    private $usedProducts = [];
+
+    /**
      * @param MetadataPool $metadataPool
      * @param FrontendInterface $cache
      * @param SerializerInterface $serializer
@@ -132,25 +137,29 @@ class UsedProductsCache
      */
     private function readUsedProductsCacheData(string $cacheKey): ?array
     {
-        $data = $this->cache->load($cacheKey);
-        if (!$data) {
-            return null;
+        if (!isset($this->usedProducts[$cacheKey])) {
+            $data = $this->cache->load($cacheKey);
+            if (!$data) {
+                return null;
+            }
+
+            $items = $this->serializer->unserialize($data);
+            if (!$items) {
+                return null;
+            }
+
+            $usedProducts = [];
+            foreach ($items as $item) {
+                /** @var Product $productItem */
+                $productItem = $this->productFactory->create();
+                $productItem->setData($item);
+                $usedProducts[] = $productItem;
+            }
+
+            $this->usedProducts[$cacheKey] = $usedProducts;
         }
 
-        $items = $this->serializer->unserialize($data);
-        if (!$items) {
-            return null;
-        }
-
-        $usedProducts = [];
-        foreach ($items as $item) {
-            /** @var Product $productItem */
-            $productItem = $this->productFactory->create();
-            $productItem->setData($item);
-            $usedProducts[] = $productItem;
-        }
-
-        return $usedProducts;
+        return $this->usedProducts[$cacheKey];
     }
 
     /**
