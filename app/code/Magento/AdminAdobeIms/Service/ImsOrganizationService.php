@@ -41,16 +41,10 @@ class ImsOrganizationService
      */
     public function checkOrganizationAllocation(array $profile): bool
     {
-        if (empty($profile['roles'])) {
-            throw new AdobeImsOrganizationAuthorizationException(
-                __('No roles assigned for profile.')
-            );
-        }
-
-        $customerOrganizations = $this->getCustomerOrganizationList($profile['roles']);
         $configuredOrganization = $this->imsConfig->getOrganizationId();
 
-        if (!in_array($configuredOrganization, $customerOrganizations, true)) {
+        //@TODO CABPI-324: Change Org check to use new endpoint
+        if (!$configuredOrganization) {
             throw new AdobeImsOrganizationAuthorizationException(
                 __('Profile is not assigned to defined organization.')
             );
