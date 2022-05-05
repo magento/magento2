@@ -46,11 +46,11 @@ define([
          * @constructor
          */
         'Magento_Customer/js/customer-data': function (originFn) {
-            let date = new Date($.localStorage.get('mage-cache-timeout')),
+            let mageCacheTimeout = new Date($.localStorage.get('mage-cache-timeout')),
                 mageCacheSessId = $.cookieStorage.isSet('mage-cache-sessid');
 
             originFn();
-            if (window.persistent !== undefined && (date < new Date() || !mageCacheSessId)) {
+            if (window.persistent !== undefined && (mageCacheTimeout < new Date() || !mageCacheSessId)) {
                 this.reload(['persistent','cart'],true);
             }
         }
