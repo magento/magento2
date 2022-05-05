@@ -389,14 +389,31 @@ class General extends AbstractModifier
         );
 
         $namePath = $this->arrayManager->findPath(ProductAttributeInterface::CODE_NAME, $meta, null, 'children');
-
-        return $this->arrayManager->merge(
+        $meta = $this->arrayManager->merge(
             $namePath . static::META_CONFIG_PATH,
             $meta,
             [
                 'valueUpdate' => 'keyup'
             ]
         );
+
+        $urlKeyConfig = [
+            'tooltip' => [
+                'link' => 'https://docs.magento.com/user-guide/catalog/catalog-urls.html',
+                'description' => __(
+                    'The URL key should consist of lowercase characters with hyphens to separate words.'
+                ),
+            ],
+        ];
+
+        $urkKeyPath = $this->arrayManager->findPath(
+            ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
+            $meta,
+            null,
+            'children'
+        );
+
+        return $this->arrayManager->merge($urkKeyPath . static::META_CONFIG_PATH, $meta, $urlKeyConfig);
     }
 
     /**

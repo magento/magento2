@@ -48,7 +48,8 @@ define([
             tierPriceBlockSelector: '[data-role="tier-price-block"]',
             tierPriceTemplate: '',
             selectorProduct: '.product-info-main',
-            selectorProductPrice: '[data-role=priceBox]'
+            selectorProductPrice: '[data-role=priceBox]',
+            qtyInfo: '#qty'
         },
 
         /**
@@ -75,6 +76,7 @@ define([
             this._configureForValues();
 
             $(this.element).trigger('configurable.initialized');
+            $(this.options.qtyInfo).on('input', this._reloadPrice.bind(this));
         },
 
         /**
