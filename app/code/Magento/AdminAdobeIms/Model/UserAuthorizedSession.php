@@ -43,19 +43,16 @@ class UserAuthorizedSession implements UserAuthorizedInterface
      */
     public function execute(int $adminUserId = null): bool
     {
-        if (!empty($this->auth->getUser()->getId()) && !empty($this->auth->getAuthStorage()->getAdobeAccessToken())) {
-            $token = $this->auth->getAuthStorage()->getAdobeAccessToken();
+        $token = $this->auth->getAuthStorage()->getAdobeAccessToken();
 
-            try {
-                $isTokenValid = $this->imsConnection->validateToken($token);
-            } catch (AuthorizationException $e) {
-                return false;
-            }
-
-            if ($isTokenValid) {
-                return true;
-            }
+        if (empty($token) || empty($this->auth->getUser()->getId())) {
+            return false;
         }
-        return false;
+
+        try {
+            return $this->imsConnection->validateToken($token);
+        } catch (AuthorizationException $e) {
+            return false;
+        }
     }
 }

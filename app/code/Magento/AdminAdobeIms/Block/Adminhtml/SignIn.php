@@ -137,6 +137,7 @@ class SignIn extends Template
             'profileUrl' => $this->getUrl(self::ADOBE_IMS_USER_PROFILE),
             'logoutUrl' => $this->getUrl(self::ADOBE_IMS_USER_LOGOUT),
             'user' => $this->getUserData(),
+            'isGlobalSignInEnabled' => $this->isGlobalSignInEnabled(),
             'loginConfig' => [
                 'url' => $this->config->getAuthUrl(),
                 'callbackParsingParams' => [
@@ -220,5 +221,19 @@ class SignIn extends Template
             'email' => '',
             'image' => '',
         ];
+    }
+
+    /**
+     * Check if global sign in is enabled
+     *
+     * @return bool
+     */
+    private function isGlobalSignInEnabled(): bool
+    {
+        if ($this->adminAdobeImsConfig->enabled()) {
+            return true;
+        }
+
+        return false;
     }
 }

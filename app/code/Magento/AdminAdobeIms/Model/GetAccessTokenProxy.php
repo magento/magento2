@@ -49,7 +49,7 @@ class GetAccessTokenProxy implements GetAccessTokenInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $adminUserId = null): ?string //
+    public function execute(int $adminUserId = null): ?string
     {
         if ($this->adminAdobeImsConfig->enabled()) {
             return $this->getAccessTokenFromSession->execute($adminUserId);

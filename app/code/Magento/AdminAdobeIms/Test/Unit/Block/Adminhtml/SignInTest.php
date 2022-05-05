@@ -5,9 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeIms\Test\Unit\Block\Adminhtml;
+namespace Magento\AdminAdobeIms\Test\Unit\Block\Adminhtml;
 
-use Magento\AdobeIms\Block\Adminhtml\SignIn as SignInBlock;
+use Magento\AdminAdobeIms\Block\Adminhtml\SignIn as SignInBlock;
+use Magento\AdminAdobeIms\Model\Auth;
+use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\AdobeImsApi\Api\ConfigProviderInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
@@ -19,6 +21,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
+use Magento\User\Model\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -63,6 +66,16 @@ class SignInTest extends TestCase
     private $signInBlock;
 
     /**
+     * @var ImsConfig|MockObject
+     */
+    private ImsConfig $adminAdobeImsConfig;
+
+    /**
+     * @var Auth|MockObject
+     */
+    private Auth $auth;
+
+    /**
      * Prepare test objects.
      */
     protected function setUp(): void
@@ -83,6 +96,8 @@ class SignInTest extends TestCase
         $this->userAuthorizedMock = $this->createMock(UserAuthorizedInterface::class);
         $this->userProfileRepositoryMock = $this->createMock(UserProfileRepositoryInterface::class);
         $this->jsonHexTag = $this->createMock(JsonHexTag::class);
+        $this->adminAdobeImsConfig = $this->createMock(ImsConfig::class);
+        $this->auth = $this->createMock(Auth::class);
 
         $objectManager = new ObjectManager($this);
         $this->signInBlock = $objectManager->getObject(
@@ -93,7 +108,10 @@ class SignInTest extends TestCase
                 'userContext' => $this->userContextMock,
                 'userAuthorized' => $this->userAuthorizedMock,
                 'userProfileRepository' => $this->userProfileRepositoryMock,
-                'json' => $this->jsonHexTag
+                'json' => $this->jsonHexTag,
+                [],
+                'adminAdobeImsConfig' => $this->adminAdobeImsConfig,
+                'auth' => $this->auth
             ]
         );
     }
@@ -126,6 +144,8 @@ class SignInTest extends TestCase
             ->method('getUserId')
             ->willReturn($userId);
 
+        $this->adminAdobeImsConfig->method('enabled')->willReturn(false);
+
         $userRepositoryWillReturn = $userExists
             ? $this->returnValue($userProfile)
             : $this->throwException(new NoSuchEntityException());
@@ -150,12 +170,62 @@ class SignInTest extends TestCase
     }
 
     /**
+     * @dataProvider userDataProviderWithAdminAdobeImsEnabled
+     * @param int $userId
+     * @param bool $userExists
+     * @param array $userData
+     * @param array $configProviderData
+     * @param array $expectedData
+     */
+    public function testGetComponentJsonConfigWithAdminAdobeImsEnabled(
+        int $userId,
+        bool $userExists,
+        array $userData,
+        array $configProviderData,
+        array $expectedData
+    ): void {
+        $this->userAuthorizedMock->expects($this->once())
+            ->method('execute')
+            ->willReturn($userData['isAuthorized']);
+
+        $userProfile = $this->createMock(User::class);
+        $userProfile->method('getFirstName')->willReturn($userData['firstname']);
+        $userProfile->method('getLastName')->willReturn($userData['lastname']);
+        $userProfile->method('getEmail')->willReturn($userData['email']);
+
+        $this->adminAdobeImsConfig->method('enabled')->willReturn(true);
+        $this->auth->method('getUser')->willReturn($userProfile);
+        $this->userContextMock->method('getUserId')->willReturn($userId);
+
+        $userRepositoryWillReturn = $userExists
+            ? $this->returnValue($userProfile)
+            : $this->throwException(new NoSuchEntityException());
+        $this->userProfileRepositoryMock
+            ->method('getByUserId')
+            ->with($userId)
+            ->will($userRepositoryWillReturn);
+
+        $configProviderMock = $this->createMock(ConfigProviderInterface::class);
+        $configProviderMock->method('get')->willReturn($configProviderData);
+        $this->signInBlock->setData('configProviders', [$configProviderMock]);
+
+        $serializedResult = 'Some result';
+        $this->jsonHexTag->expects($this->once())
+            ->method('serialize')
+            ->with($expectedData)
+            ->willReturn($serializedResult);
+
+        $this->assertEquals($serializedResult, $this->signInBlock->getComponentJsonConfig());
+    }
+
+    /**
      * Returns default component config
      *
      * @param array $userData
+     * @param bool $isGlobalSignInEnabled
      * @return array
      */
-    private function getDefaultComponentConfig(array $userData): array
+    private function getDefaultComponentConfig(array $userData, bool $isGlobalSignInEnabled = false): array
     {
         return [
             'component' => 'Magento_AdobeIms/js/signIn',
@@ -172,7 +242,8 @@ class SignInTest extends TestCase
                     'successCode' => self::RESPONSE_SUCCESS_CODE,
                     'errorCode' => self::RESPONSE_ERROR_CODE
                 ]
-            ]
+            ],
+            'isGlobalSignInEnabled' => $isGlobalSignInEnabled
         ];
     }
 
@@ -277,6 +348,35 @@ class SignInTest extends TestCase
                 array_replace_recursive(
                     $this->getDefaultComponentConfig($this->getDefaultUserData()),
                     $this->getConfigProvideConfig()
+                )
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function userDataProviderWithAdminAdobeImsEnabled(): array
+    {
+        return [
+            'Existing authorized user with Admin Adobe IMS enabled' => [
+                15,
+                true,
+                [
+                    'isAuthorized' => true,
+                    'firstname' => 'John',
+                    'lastname' => 'Doe',
+                    'email' => 'john@email.com',
+                ],
+                [],
+                $this->getDefaultComponentConfig(
+                    [
+                        'isAuthorized' => true,
+                        'name' => 'John Doe',
+                        'email' => 'john@email.com',
+                        'image' => ''
+                    ],
+                    true
                 )
             ]
         ];

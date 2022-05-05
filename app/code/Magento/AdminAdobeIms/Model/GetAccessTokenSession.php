@@ -30,15 +30,8 @@ class GetAccessTokenSession implements GetAccessTokenInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $adminUserId = null): ?string //
+    public function execute(int $adminUserId = null): ?string
     {
-        $session = $this->auth->getAuthStorage();
-        $accessToken = $session->getAdobeAccessToken();
-
-        if (!$accessToken) {
-            return null;
-        }
-
-        return $accessToken;
+        return $this->auth->getAuthStorage()->getAdobeAccessToken() ?? null;
     }
 }
