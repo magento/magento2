@@ -88,7 +88,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     protected function setUp(): void
     {
         parent::setUp();
-
+        $this->_markTestAsRestOnly();
         $objectManager = Bootstrap::getObjectManager();
         $this->manager = $objectManager->get(JwtManagerInterface::class);
         $this->cache = $objectManager->get(CacheInterface::class);
@@ -106,7 +106,6 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
      */
     public function testUseAdobeAccessTokenModuleDisabled()
     {
-        $this->_markTestAsRestOnly();
         $this->configWriter->save(ImsConfig::XML_PATH_ENABLED, 0);
         $this->scopeConfig->clean();
 
@@ -135,7 +134,6 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
      */
     public function testUseAdobeAccessTokenSuccess()
     {
-        $this->_markTestAsRestOnly();
         $adminUserNameFromFixture = 'webapi_user';
         $token = $this->createAccessToken();
         $this->configWriter->save(ImsConfig::XML_PATH_ENABLED, 1);
@@ -150,7 +148,6 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
      */
     public function testUseAdobeAccessTokenAdminNotExist()
     {
-        $this->_markTestAsRestOnly();
         $token = $this->createAccessToken();
         $noExceptionOccurred = false;
         try {
@@ -175,7 +172,6 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
      */
     public function testUseAdobeAccessTokenExpired()
     {
-        $this->_markTestAsRestOnly();
         $token = $this->createAccessToken('-2 day');
 
         $noExceptionOccurred = false;
@@ -204,7 +200,6 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
      */
     public function testUseAdobeAccessTokenInvalidCertificate()
     {
-        $this->_markTestAsRestOnly();
         $token = $this->createAccessToken('now', true);
 
         $noExceptionOccurred = false;
