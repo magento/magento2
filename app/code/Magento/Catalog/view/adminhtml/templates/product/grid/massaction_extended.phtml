@@ -75,19 +75,19 @@ script;
         $scriptString .= <<<script
                 case 'selectAll':
                     return {$block->escapeJs($block->getJsObjectName())}.selectAll();
-                    break
+                    break;
                 case 'unselectAll':
                     return {$block->escapeJs($block->getJsObjectName())}.unselectAll();
-                    break
+                    break;
 script;
     endif;
     $scriptString .= <<<script
                 case 'selectVisible':
                     return {$block->escapeJs($block->getJsObjectName())}.selectVisible();
-                    break
+                    break;
                 case 'unselectVisible':
                     return {$block->escapeJs($block->getJsObjectName())}.unselectVisible();
-                    break
+                    break;
             }
             this.blur();
         });
