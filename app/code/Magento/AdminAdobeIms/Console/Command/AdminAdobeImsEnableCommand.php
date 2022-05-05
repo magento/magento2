@@ -160,7 +160,7 @@ class AdminAdobeImsEnableCommand extends Command
                 self::TWO_FACTOR_AUTH_ARGUMENT
             );
 
-            if ($clientId && $clientSecret && $organizationId) {
+            if ($clientId && $clientSecret && $organizationId && $isTwoFactorAuthEnabled) {
                 $enabled = $this->enableModule($clientId, $clientSecret, $organizationId, $isTwoFactorAuthEnabled);
                 if ($enabled) {
                     $output->writeln(__('Admin Adobe IMS integration is enabled'));
@@ -169,7 +169,7 @@ class AdminAdobeImsEnableCommand extends Command
             }
 
             throw new LocalizedException(
-                __('The Client ID, Client Secret and Organization ID are required ' .
+                __('The Client ID, Client Secret, Organization ID and 2FA Auth are required ' .
                     'when enabling the Admin Adobe IMS Module')
             );
         } catch (\Exception $e) {
@@ -189,6 +189,7 @@ class AdminAdobeImsEnableCommand extends Command
      * @param string $organizationId
      * @param bool $isTwoFactorAuthEnabled
      * @return bool
+     * @throws LocalizedException
      * @throws InvalidArgumentException
      */
     private function enableModule(
