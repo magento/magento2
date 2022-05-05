@@ -11,92 +11,102 @@ define([
     'use strict';
 
     var widget,
-        option = '<select name=\'super_attribute[93]\'' +
-            'data-selector=\'super_attribute[93]\'' +
-            'data-validate=\'{required:true}\'' +
-            'id=\'attribute93\'' +
-            'class=\'super-attribute-select\'>' +
-            '<option value=\'\'></option>' +
-            '</select>',
-        selectElement = $(option);
-
-    beforeEach(function () {
-        widget = new Configurable();
-        widget.options = {
-            settings: [
-                {
-                    selectedIndex: 0,
-                    options: [
-                        {
-                            label: 'Chose an Option...'
-                        },
-                        {
-                            label: 'red',
-                            config: {
-                                id: '4',
-                                label: 'red',
-                                products: [
-                                    '4'
-                                ],
-                                initialLabel: 'red',
-                                allowedProducts: ['4']
-                            }
-                        }
-                    ]
-                }
-            ],
-            priceHolderSelector: 'testSelector',
-            spConfig: {
-                chooseText: 'Chose an Option...',
-                optionPrices: {
-                    4: {
-                        testPrice1: {
-                            amount: 40
-                        },
-                        testPrice2: {
-                            amount: 30
-                        }
+        options = {
+            'spConfig': {
+                'attributes': {
+                    '93': {
+                        'id': '93',
+                        'code': 'color',
+                        'label': 'Color',
+                        'options': [
+                            {'id': '14', 'label': 'brown', 'products': ['2']},
+                            {'id': '15', 'label': 'beige', 'products': ['3']}
+                        ],
+                        'position': '0'
                     }
                 },
-                attributes:
-                    {
-                        'size': {
-                            options: [
-                                {
-                                    id: '2',
-                                    value: '2'
-                                },
-                                {
-                                    id: 3,
-                                    value: 'red'
-
-                                }
-                            ]
-                        }
+                'template': '$<%- data.price %>',
+                'currencyFormat': '$%s',
+                'optionPrices': {
+                    '2': {
+                        'baseOldPrice': {'amount': 12},
+                        'oldPrice': {'amount': 12},
+                        'basePrice': {'amount': 12},
+                        'finalPrice': {'amount': 12},
+                        'tierPrices': [{'qty': 4, 'price': 8.4, 'percentage': 30, 'excl_tax_price': 8.4}],
+                        'msrpPrice': {'amount': 0}
                     },
-                prices: {
-                    finalPrice: {
-                        amount: 12
+                    '3': {
+                        'baseOldPrice': {'amount': 10},
+                        'oldPrice': {'amount': 10},
+                        'basePrice': {'amount': 10},
+                        'finalPrice': {'amount': 10},
+                        'tierPrices': [],
+                        'msrpPrice': {'amount': 0}
                     }
-                }
-            },
-            values: {}
-        };
-    });
+                },
+                'priceFormat': {
+                    'pattern': '$%s',
+                    'precision': 2,
+                    'requiredPrecision': 2,
+                    'decimalSymbol': '.',
+                    'groupSymbol': ',',
+                    'groupLength': 3,
+                    'integerRequired': false
+                },
+                'prices': {
+                    'baseOldPrice': {'amount': 10},
+                    'oldPrice': {'amount': 10},
+                    'basePrice': {'amount': 10},
+                    'finalPrice': {'amount': 10}
+                },
+                'productId': '4',
+                'chooseText': 'Choose an Option...',
+                'images': [],
+                'index': { '2': {'93': '14'}, '3': {'93': '15'}},
+                'salable': []
+            }
+        },
+        blockHtml = '<form id="cart"/>'
+            + '<select name=\'super_attribute[93]\'' +
+            ' data-selector=\'super_attribute[93]\'' +
+            ' data-validate=\'{required:true}\'' +
+            ' id=\'attribute93\'' +
+            ' class=\'super-attribute-select\'>' +
+            '<option value=\'\'>Choose an Option...</option>' +
+            '<option value=\'14\'>brown +$2.00</option>' +
+            '<option value=\'15\'>beige</option>' +
+            '</select>' +
+            '<input id="qty"/>' +
+            '</form>',
+        selectElement,
+        qtyElement,
+        formElement;
 
     describe('Magento_ConfigurableProduct/js/configurable', function () {
-
+        beforeEach(function () {
+            $(blockHtml).appendTo('body');
+            selectElement = $('#attribute93');
+            qtyElement = $('#qty');
+            formElement = $('#cart');
+            widget = new Configurable($.extend(true, {}, options), formElement);
+            $.fn.trigFunc = $.fn.trigger;
+        });
+        afterEach(function () {
+            formElement.remove();
+            $.fn.trigger = $.fn.trigFunc;
+            delete $.fn.trigFunc;
+        });
         it('check if attribute value is possible to be set as configurable option', function () {
             expect($.mage.configurable).toBeDefined();
-            widget._parseQueryParams('size=2');
-            expect(widget.options.values.size).toBe('2');
+            widget._parseQueryParams('93=14');
+            expect(widget.options.values['93']).toBe('14');
         });
 
         it('check that attribute value is not set if provided option does not exists', function () {
             expect($.mage.configurable).toBeDefined();
-            widget._parseQueryParams('size=10');
-            widget._fillSelect(selectElement[0]);
-            expect(widget.options.values.size).toBe(undefined);
+            widget._parseQueryParams('93=10');
+            expect(widget.options.values['93']).toBe(undefined);
         });
 
         it('check if widget will return correct price values in case option is selected or not.', function () {
@@ -105,23 +115,32 @@ define([
             spyOn($.fn, 'priceBox').and.callFake(function () {
                 return {
                     prices: {
-                        testPrice1: {
-                            amount: 10
-                        },
-                        testPrice2: {
-                            amount: 20
-                        }
+                        'baseOldPrice': {'amount': 10},
+                        'oldPrice': {'amount': 10},
+                        'basePrice': {'amount': 10},
+                        'finalPrice': {'amount': 10},
+                        'msrpPrice': {'amount': 0}
                     }
                 };
             });
             result = widget._getPrices().prices;
-            expect(result.testPrice1.amount).toBe(0);
-            expect(result.testPrice2.amount).toBe(0);
+            expect(result.baseOldPrice.amount).toBe(0);
+            expect(result.oldPrice.amount).toBe(0);
+            expect(result.basePrice.amount).toBe(0);
+            expect(result.finalPrice.amount).toBe(0);
 
-            widget.options.settings[0].selectedIndex = 1;
+            selectElement.val(14);
             result = widget._getPrices().prices;
-            expect(result.testPrice1.amount).toBe(30);
-            expect(result.testPrice2.amount).toBe(10);
+            expect(result.baseOldPrice.amount).toBe(2);
+            expect(result.oldPrice.amount).toBe(2);
+            expect(result.basePrice.amount).toBe(2);
+            expect(result.finalPrice.amount).toBe(2);
+        });
+
+        it('check that price is reloaded on qty change', function () {
+            spyOn($.fn, 'trigger');
+            qtyElement.trigFunc('input');
+            expect($.fn.trigger).toHaveBeenCalledWith('updatePrice', {});
         });
     });
 });
