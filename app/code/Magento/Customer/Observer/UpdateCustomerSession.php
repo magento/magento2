@@ -20,6 +20,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Observer to check if customer session needs to be regenerated
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class UpdateCustomerSession implements ObserverInterface
 {

@@ -25,24 +25,24 @@ class UpdateCustomerSessionTest extends TestCase
 {
 
     /**
-     * @var Session
+     * @var Session|null $session
      */
-    private Session $session;
+    private ?Session $session;
 
     /**
-     * @var NotificationStorage
+     * @var NotificationStorage|null $notificationStorage
      */
-    private NotificationStorage $notificationStorage;
+    private ?NotificationStorage $notificationStorage;
 
     /**
-     * @var ObjectManagerInterface
+     * @var ObjectManagerInterface|null $objectManager
      */
-    private ObjectManagerInterface $objectManager;
+    private ?ObjectManagerInterface $objectManager;
 
     /**
-     * @var CustomerModel
+     * @var CustomerModel|null $customerModel
      */
-    private CustomerModel $customerModel;
+    private ?CustomerModel $customerModel;
 
     /**
      * @inheritdoc
@@ -81,4 +81,3 @@ class UpdateCustomerSessionTest extends TestCase
         $this->assertNotEquals($sessionId, $newSessionId);
     }
 }
-
