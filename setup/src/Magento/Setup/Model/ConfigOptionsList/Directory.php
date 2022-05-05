@@ -15,7 +15,7 @@ use Magento\Framework\Setup\Option\SelectConfigOption;
 
 /**
  * Deployment configuration options for the folders.
- * @deprecared Magento always uses the pub directory
+ * @deprecated Magento always uses the pub directory
  */
 class Directory implements ConfigOptionsListInterface
 {
