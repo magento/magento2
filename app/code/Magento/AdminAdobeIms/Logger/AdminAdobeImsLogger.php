@@ -47,18 +47,8 @@ class AdminAdobeImsLogger extends Logger
      */
     public function error($message, array $context = []): void
     {
-        if ($this->loggingEnabled()) {
+        if ($this->imsConfig->loggingEnabled()) {
             parent::error($message, $context);
         }
-    }
-
-    /**
-     * Check if AdminAdobeIMS Error logging is enabled
-     *
-     * @return bool
-     */
-    public function loggingEnabled(): bool
-    {
-        return $this->imsConfig->loggingEnabled();
     }
 }

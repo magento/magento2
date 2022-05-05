@@ -84,7 +84,7 @@ class ImsOrganizationService
      * @return string
      * @throws AdobeImsOrganizationAuthorizationException
      */
-    public function validateAndExtractOrganizationId(string $organizationId): string
+    private function validateAndExtractOrganizationId(string $organizationId): string
     {
         if (preg_match(self::ORGANIZATION_REGEX, $organizationId, $matches)) {
             if (!empty($matches) && isset($matches[1])) {

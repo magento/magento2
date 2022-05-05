@@ -58,7 +58,7 @@ class User extends AdminUser
      * @return bool
      * @throws LocalizedException
      */
-    public function authenticateByUsername(string $username): bool
+    private function authenticateByUsername(string $username): bool
     {
         $config = $this->_config->isSetFlag('admin/security/use_case_sensitive_login');
         $result = false;
@@ -99,7 +99,7 @@ class User extends AdminUser
      * @return bool
      * @throws AuthenticationException
      */
-    public function verifyIdentityWithoutPassword(): bool
+    private function verifyIdentityWithoutPassword(): bool
     {
         if ((bool)$this->getIsActive() === false) {
             throw new AuthenticationException(
