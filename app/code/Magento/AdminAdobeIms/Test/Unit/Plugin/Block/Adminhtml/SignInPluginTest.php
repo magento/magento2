@@ -89,16 +89,12 @@ class SignInPluginTest extends TestCase
 
     /**
      * @dataProvider userDataProvider
-     * @param int $userId
-     * @param bool $userExists
      * @param array $userData
      * @param array $configProviderData
      * @param array $expectedData
      * @param bool $isAuthorized
      */
     public function testAroundGetComponentJsonConfig(
-        int $userId,
-        bool $userExists,
         array $userData,
         array $configProviderData,
         array $expectedData,
@@ -172,8 +168,6 @@ class SignInPluginTest extends TestCase
     {
         return [
             'Existing authorized user' => [
-                15,
-                true,
                 [
                     'isAuthorized' => true,
                     'firstname' => 'John',
@@ -190,8 +184,6 @@ class SignInPluginTest extends TestCase
                 true
             ],
             'Existing non-authorized user' => [
-                12,
-                true,
                 [
                     'isAuthorized' => false,
                     'name' => 'John',
