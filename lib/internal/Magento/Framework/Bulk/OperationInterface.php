@@ -15,11 +15,12 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    const ID = 'operation_key';
+    const ID = 'id';
     const BULK_ID = 'bulk_uuid';
     const TOPIC_NAME = 'topic_name';
     const SERIALIZED_DATA = 'serialized_data';
     const RESULT_SERIALIZED_DATA = 'result_serialized_data';
+    const OPERATION_KEY = 'operation_key';
     const STATUS = 'status';
     const RESULT_MESSAGE = 'result_message';
     const ERROR_CODE = 'error_code';
@@ -172,4 +173,21 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @since 103.0.0
      */
     public function setErrorCode($errorCode);
+
+    /**
+     * Get operation key
+     *
+     * @return int|null
+     * @since 103.0.1
+     */
+    public function getOperationKey(): ?int;
+
+    /**
+     * Set operation key
+     *
+     * @param int|null $operationKey
+     * @return $this
+     * @since 103.0.1
+     */
+    public function setOperationKey(?int $operationKey): self;
 }
