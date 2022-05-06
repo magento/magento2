@@ -7,24 +7,45 @@
 
 declare(strict_types=1);
 
-namespace Magento\GoogleGtag\Test\Unit\Helper;
+namespace Magento\GoogleGtag\Test\Unit\Model\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\GoogleGtag\Helper\GtagConfiguration as HelperData;
+use Magento\GoogleGtag\Model\Config\GtagConfig as GtagConfig;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit test for Magento\GoogleAnalytics\Helper\Data
+ * Unit test for Magento\GoogleAnalytics\Model\Config\GtagConfig
  */
-class DataTest extends TestCase
+class GtagConfigTest extends TestCase
 {
     /**
-     * @var HelperData
+     * Config paths for using throughout the code
      */
-    private $helper;
+    private const XML_PATH_ACTIVE = 'google/gtag/analytics4/active';
+
+    private const XML_PATH_MEASUREMENT_ID = 'google/gtag/analytics4/measurement_id';
+
+    /**
+     * Google AdWords conversion src
+     */
+    private const GTAG_GLOBAL_SITE_TAG_SRC = 'https://www.googletagmanager.com/gtag/js?id=';
+
+    /**#@+
+     * Google AdWords config data
+     */
+    private const XML_PATH_ADWORD_ACTIVE = 'google/gtag/adwords/active';
+
+    private const XML_PATH_CONVERSION_ID = 'google/gtag/adwords/conversion_id';
+
+    private const XML_PATH_CONVERSION_LABEL = 'google/gtag/adwords/conversion_label';
+
+    /**
+     * @var GtagConfig
+     */
+    private $gtagConfig;
 
     /**
      * @var ScopeConfigInterface|MockObject
@@ -42,8 +63,8 @@ class DataTest extends TestCase
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
-        $this->helper = $objectManager->getObject(
-            HelperData::class,
+        $this->gtagConfig = $objectManager->getObject(
+            GtagConfig::class,
             [
                 'scopeConfig' => $this->scopeConfigMock
             ]
@@ -71,19 +92,19 @@ class DataTest extends TestCase
     ): void {
         $this->scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
-            ->with(HelperData::XML_PATH_ACTIVE, ScopeInterface::SCOPE_STORE)
+            ->with(self::XML_PATH_ACTIVE, ScopeInterface::SCOPE_STORE)
             ->willReturn($flagGaActive);
         $this->scopeConfigMock
             ->method('getValue')
             ->willReturnMap([
-                [HelperData::XML_PATH_MEASUREMENT_ID, ScopeInterface::SCOPE_STORE, null, $testMeasurementId]
+                [self::XML_PATH_MEASUREMENT_ID, ScopeInterface::SCOPE_STORE, null, $testMeasurementId]
             ]);
         $this->scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
-            ->with(HelperData::XML_PATH_ACTIVE, ScopeInterface::SCOPE_STORE)
+            ->with(self::XML_PATH_ACTIVE, ScopeInterface::SCOPE_STORE)
             ->willReturn($flagGaActive);
-        $this->assertEquals($testAccountId, $this->helper->getMeasurementId());
-        $this->assertEquals($result, $this->helper->isGoogleAnalyticsAvailable());
+        $this->assertEquals($testAccountId, $this->gtagConfig->getMeasurementId());
+        $this->assertEquals($result, $this->gtagConfig->isGoogleAnalyticsAvailable());
     }
 
     /**
@@ -114,9 +135,9 @@ class DataTest extends TestCase
         $this->scopeConfigMock
             ->method('getValue')
             ->willReturnMap([
-                [HelperData::XML_PATH_MEASUREMENT_ID, ScopeInterface::SCOPE_STORE, null, $testMeasurementId]
+                [self::XML_PATH_MEASUREMENT_ID, ScopeInterface::SCOPE_STORE, null, $testMeasurementId]
             ]);
-        $this->assertEquals($result, $this->helper->getMeasurementId());
+        $this->assertEquals($result, $this->gtagConfig->getMeasurementId());
     }
 
     /**
@@ -147,7 +168,7 @@ class DataTest extends TestCase
         )->method(
             'isSetFlag'
         )->with(
-            HelperData::XML_PATH_ADWORD_ACTIVE
+            self::XML_PATH_ADWORD_ACTIVE
         )->willReturn(
             $isActive
         );
@@ -157,7 +178,7 @@ class DataTest extends TestCase
             }
         );
 
-        $this->assertEquals($returnValue, $this->helper->isGoogleAdwordsActive());
+        $this->assertEquals($returnValue, $this->gtagConfig->isGoogleAdwordsActive());
     }
 
     /**
@@ -166,8 +187,8 @@ class DataTest extends TestCase
     public function dataProviderForTestStoreConfig(): array
     {
         return [
-            ['getConversionId', HelperData::XML_PATH_CONVERSION_ID, 'AW-123'],
-            ['getConversionLabel', HelperData::XML_PATH_CONVERSION_LABEL, 'Label']
+            ['getConversionId', self::XML_PATH_CONVERSION_ID, 'AW-123'],
+            ['getConversionLabel', self::XML_PATH_CONVERSION_LABEL, 'Label']
         ];
     }
 
@@ -191,7 +212,7 @@ class DataTest extends TestCase
             $returnValue
         );
 
-        $this->assertEquals($returnValue, $this->helper->{$method}());
+        $this->assertEquals($returnValue, $this->gtagConfig->{$method}());
     }
 
     /**

@@ -11,7 +11,7 @@ namespace Magento\GoogleOptimizer\Helper;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
-use Magento\GoogleGtag\Helper\GtagConfiguration;
+use Magento\GoogleGtag\Model\Config\GtagConfig as GtagConfiguration;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -52,7 +52,7 @@ class Data extends AbstractHelper
      *
      * @param Context $context
      * @param \Magento\GoogleAnalytics\Helper\Data $analyticsHelper
-     * @param GtagConfiguration|null $gtagHelper
+     * @param GtagConfiguration|null $gtagConfiguration
      */
     public function __construct(
         Context $context,
@@ -89,7 +89,7 @@ class Data extends AbstractHelper
      * @param string $store
      * @return bool
      */
-    public function isGoogleExperimentActive($store = null)
+    public function isGoogleExperimentActive($store = null): bool
     {
         return $this->isGoogleExperimentEnabled($store) &&
             (

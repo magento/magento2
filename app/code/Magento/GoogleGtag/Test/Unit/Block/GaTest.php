@@ -8,15 +8,18 @@ declare(strict_types=1);
 namespace Magento\GoogleGtag\Test\Unit\Block;
 
 use Magento\Cookie\Helper\Cookie;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Escaper;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\GoogleGtag\Block\Ga;
-use Magento\GoogleGtag\Helper\GtagConfiguration;
+use Magento\GoogleGtag\Model\Config\GtagConfig as GtagConfiguration;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Api\Data\OrderSearchResultInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\ResourceModel\Order\Collection;
-use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -42,11 +45,6 @@ class GaTest extends TestCase
     /**
      * @var MockObject
      */
-    private $salesOrderCollectionMock;
-
-    /**
-     * @var MockObject
-     */
     private $storeManagerMock;
 
     /**
@@ -58,6 +56,19 @@ class GaTest extends TestCase
      * @var MockObject
      */
     private $googleAnalyticsDataMock;
+
+    /**
+     * @var SearchCriteriaBuilder|mixed|MockObject
+     */
+    private $searchCriteriaBuilder;
+    /**
+     * @var OrderRepositoryInterface|mixed|MockObject
+     */
+    private $orderRepository;
+    /**
+     * @var SerializerInterface|mixed|MockObject
+     */
+    private $serializerMock;
 
     protected function setUp(): void
     {
@@ -73,15 +84,23 @@ class GaTest extends TestCase
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->serializerMock = $this->getMockBuilder(SerializerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->once())->method('getStoreManager')->willReturn($this->storeManagerMock);
 
-        $this->salesOrderCollectionMock = $this->getMockBuilder(CollectionFactory::class)
+        $this->orderRepository = $this->getMockBuilder(OrderRepositoryInterface::class)
+            ->onlyMethods(['getList'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
+        $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
+            ->onlyMethods(['addFilter', 'create'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->googleGtagConfig = $this->getMockBuilder(GtagConfiguration::class)
             ->disableOriginalConstructor()
@@ -95,9 +114,11 @@ class GaTest extends TestCase
             Ga::class,
             [
                 'context' => $contextMock,
-                'salesOrderCollection' => $this->salesOrderCollectionMock,
                 'googleGtagConfig' => $this->googleGtagConfig,
-                'cookieHelper' => $this->cookieHelperMock
+                'cookieHelper' => $this->cookieHelperMock,
+                'serializer' => $this->serializerMock,
+                'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
+                'orderRepository' => $this->orderRepository
             ]
         );
     }
@@ -124,10 +145,18 @@ class GaTest extends TestCase
      */
     public function testOrderTrackingData()
     {
-
-        $this->salesOrderCollectionMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->createCollectionMock());
+        $searchCriteria = $this
+            ->getMockBuilder(SearchCriteriaInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $orderSearchResult = $this->getMockBuilder(OrderSearchResultInterface::class)
+            ->onlyMethods(['getTotalCount', 'getItems'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->orderRepository->method('getList')->willReturn($orderSearchResult);
+        $orderSearchResult->method('getTotalCount')->willReturn(1);
+        $orderSearchResult->method('getItems')->willReturn([ 1 => $this->createOrderMock(1)]);
+        $this->searchCriteriaBuilder->method('create')->willReturn($searchCriteria);
         $this->storeMock->expects($this->once())->method('getFrontendName')->willReturn('test');
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
         $expectedResult = [
@@ -135,9 +164,9 @@ class GaTest extends TestCase
                 [
                     'transaction_id' => 100,
                     'affiliation' => 'test',
-                    'value' => null,
-                    'tax' => null,
-                    'shipping' => null
+                    'value' => 10.00,
+                    'tax' => 2.00,
+                    'shipping' => 1.00
                 ]
             ],
             'products' => [
@@ -196,21 +225,6 @@ class GaTest extends TestCase
         $orderMock->expects($this->once())->method('getShippingAmount')->willReturn($orderItemCount);
         $orderMock->expects($this->once())->method('getOrderCurrencyCode')->willReturn('USD');
         return $orderMock;
-    }
-
-    /**
-     * @return Collection|MockObject
-     */
-    protected function createCollectionMock()
-    {
-        $collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $collectionMock->expects($this->any())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->createOrderMock(1)]));
-        return $collectionMock;
     }
 
     /**

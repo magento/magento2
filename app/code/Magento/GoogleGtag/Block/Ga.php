@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\GoogleGtag\Block;
 
 use Magento\Cookie\Helper\Cookie;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\GoogleGtag\Helper\GtagConfiguration;
-use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
-use Magento\Store\Model\ScopeInterface;
+use Magento\GoogleGtag\Model\Config\GtagConfig as GtagConfiguration;
+use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
  * GoogleAnalytics Page Block
@@ -27,54 +28,49 @@ class Ga extends Template
     private $googleGtagConfig;
 
     /**
-     * @var CollectionFactory
-     */
-    private $salesOrderCollection;
-
-    /**
      * @var Cookie
      */
     private $cookieHelper;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param Context $context
-     * @param CollectionFactory $salesOrderCollection
      * @param GtagConfiguration $googleGtagConfig
-     * @param array $data
      * @param Cookie $cookieHelper
+     * @param SerializerInterface $serializer
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param OrderRepositoryInterface $orderRepository
+     * @param array $data
      */
     public function __construct(
         Context $context,
-        CollectionFactory $salesOrderCollection,
         GtagConfiguration $googleGtagConfig,
         Cookie $cookieHelper,
+        SerializerInterface $serializer,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        OrderRepositoryInterface $orderRepository,
         array $data = []
     ) {
         $this->googleGtagConfig = $googleGtagConfig;
-        $this->salesOrderCollection = $salesOrderCollection;
         $this->cookieHelper = $cookieHelper;
+        $this->serializer = $serializer;
+        $this->orderRepository = $orderRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         parent::__construct($context, $data);
-    }
-
-    /**
-     * Get config
-     *
-     * @param string $path
-     * @return mixed
-     */
-    public function getConfig($path): string
-    {
-        return $this->_scopeConfig->getValue($path, ScopeInterface::SCOPE_STORE);
-    }
-
-    /**
-     * Get helper
-     *
-     * @return GtagConfiguration
-     */
-    public function getHelper(): GtagConfiguration
-    {
-        return $this->googleGtagConfig;
     }
 
     /**
@@ -147,7 +143,6 @@ class Ga extends Template
      * @link https://developers.google.com/gtagjs/reference/event#purchase
      *
      * @return array
-     * @since 100.2.0
      */
     public function getOrdersTrackingData(): array
     {
@@ -156,25 +151,28 @@ class Ga extends Template
         if (empty($orderIds) || !is_array($orderIds)) {
             return $result;
         }
+        $this->searchCriteriaBuilder->addFilter(
+            'entity_id',
+            $orderIds,
+            'in'
+        );
+        $collection = $this->orderRepository->getList($this->searchCriteriaBuilder->create());
 
-        $collection = $this->salesOrderCollection->create();
-        $collection->addFieldToFilter('entity_id', ['in' => $orderIds]);
-
-        foreach ($collection as $order) {
+        foreach ($collection->getItems() as $order) {
             foreach ($order->getAllVisibleItems() as $item) {
                 $result['products'][] = [
                     'item_id' => $this->escapeJsQuote($item->getSku()),
                     'item_name' =>  $this->escapeJsQuote($item->getName()),
-                    'price' => $this->googleGtagConfig->formatToDec((float) $item->getPrice()),
+                    'price' => number_format((float) $item->getPrice(), 2),
                     'quantity' => (int)$item->getQtyOrdered(),
                 ];
             }
             $result['orders'][] = [
                 'transaction_id' =>  $order->getIncrementId(),
                 'affiliation' => $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
-                'value' => $this->googleGtagConfig->formatToDec((float) $order->getGrandTotal()),
-                'tax' => $this->googleGtagConfig->formatToDec((float) $order->getTaxAmount()),
-                'shipping' => $this->googleGtagConfig->formatToDec((float) $order->getShippingAmount()),
+                'value' => number_format((float) $order->getGrandTotal(), 2),
+                'tax' => number_format((float) $order->getTaxAmount(), 2),
+                'shipping' => number_format((float) $order->getShippingAmount(), 2),
             ];
             $result['currency'] = $order->getOrderCurrencyCode();
         }
@@ -194,5 +192,22 @@ class Ga extends Template
             $optPageURL = ", '" . $this->escapeHtmlAttr($pageName, false) . "'";
         }
         return $optPageURL;
+    }
+
+    /**
+     * Provide analytics events data
+     *
+     * @return bool|string
+     */
+    public function getAnalyticsData()
+    {
+        $analyticData = [
+            'isCookieRestrictionModeEnabled' => $this->isCookieRestrictionModeEnabled(),
+            'currentWebsite' => $this->getCurrentWebsiteId(),
+            'cookieName' => Cookie::IS_USER_ALLOWED_SAVE_COOKIE,
+            'pageTrackingData' => $this->getPageTrackingData($this->googleGtagConfig->getMeasurementId()),
+            'ordersTrackingData' => $this->getOrdersTrackingData()
+        ];
+        return $this->serializer->serialize($analyticData);
     }
 }

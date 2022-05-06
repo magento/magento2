@@ -5,46 +5,47 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GoogleGtag\Helper;
+namespace Magento\GoogleGtag\Model\Config;
 
-use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
-/**
- * GoogleAnalytics data helper
- *
- * @api
- */
-class GtagConfiguration extends AbstractHelper
+class GtagConfig
 {
     /**
      * Config paths for using throughout the code
      */
-    public const XML_PATH_ACTIVE = 'google/gtag/analytics4/active';
+    private const XML_PATH_ACTIVE = 'google/gtag/analytics4/active';
 
-    public const XML_PATH_MEASUREMENT_ID = 'google/gtag/analytics4/measurement_id';
+    private const XML_PATH_MEASUREMENT_ID = 'google/gtag/analytics4/measurement_id';
 
     /**
-     * Anonymize IP Default Yes
-     */
-    public const DEFAULT_YES = 1;
-
-    /**#@-*/
-
-    /**#@+
      * Google AdWords conversion src
      */
-    public const GTAG_GLOBAL_SITE_TAG_SRC = 'https://www.googletagmanager.com/gtag/js?id=';
+    private const GTAG_GLOBAL_SITE_TAG_SRC = 'https://www.googletagmanager.com/gtag/js?id=';
 
     /**#@+
      * Google AdWords config data
      */
-    public const XML_PATH_ADWORD_ACTIVE = 'google/gtag/adwords/active';
+    private const XML_PATH_ADWORD_ACTIVE = 'google/gtag/adwords/active';
 
-    public const XML_PATH_CONVERSION_ID = 'google/gtag/adwords/conversion_id';
+    private const XML_PATH_CONVERSION_ID = 'google/gtag/adwords/conversion_id';
 
-    public const XML_PATH_CONVERSION_LABEL = 'google/gtag/adwords/conversion_label';
+    private const XML_PATH_CONVERSION_LABEL = 'google/gtag/adwords/conversion_label';
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     */
+    public function __construct(ScopeConfigInterface $scopeConfig)
+    {
+        $this->scopeConfig = $scopeConfig;
+    }
 
     /**
      * Whether GA is ready to use
@@ -62,7 +63,7 @@ class GtagConfiguration extends AbstractHelper
     }
 
     /**
-     * Get Account Id, depending on property type Tracking Id (UA) or Measurement Id (GA4)
+     * Get Measurement Id (GA4)
      *
      * @return string
      */
@@ -138,16 +139,5 @@ class GtagConfiguration extends AbstractHelper
             self::XML_PATH_CONVERSION_LABEL,
             ScopeInterface::SCOPE_STORE
         );
-    }
-
-    /**
-     * Format Data
-     *
-     * @param float $numberString
-     * @return Float
-     */
-    public function formatToDec($numberString)
-    {
-        return number_format($numberString, 2);
     }
 }

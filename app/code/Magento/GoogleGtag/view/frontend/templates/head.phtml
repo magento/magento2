@@ -5,17 +5,17 @@
  */
 ?>
 <?php
-/** @var \Magento\GoogleGtag\Block\Code $block */
+/** @var \Magento\Framework\View\Element\Template $block */
 /** @var \Magento\Framework\Escaper $escaper */
-/** @var \Magento\GoogleGtag\Helper\GtagConfiguration $gtagConfiguration */
-$gtagConfiguration = $block->getHelper();
+/** @var \Magento\GoogleGtag\ViewModel\Adwords $adsViewModel */
+$adsViewModel = $block->getViewModel();
 ?>
 
-<?php if ($gtagConfiguration->isGoogleAdwordsConfigurable() && $gtagConfiguration->isGoogleAdwordsActive()): ?>
-    <?php $conversionId = $gtagConfiguration->getConversionId(); ?>
-    <?php $gtagSiteSrc = $gtagConfiguration->getConversionGtagGlobalSiteTagSrc(); ?>
+<?php if ($adsViewModel->isGoogleAdwordsConfigurable() && $adsViewModel->isGoogleAdwordsActive()): ?>
+    <?php $conversionId = $adsViewModel->getConversionId(); ?>
+    <?php $gtagSiteSrc = $adsViewModel->getConversionGtagGlobalSiteTagSrc(); ?>
     <script>
-        if (!!window.gtag) {
+        if (!window.gtag) {
           // Inject Global Site Tag
           var gtagScript = document.createElement('script');
           gtagScript.type = 'text/javascript';

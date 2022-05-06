@@ -5,20 +5,12 @@
  */
 ?>
 <?php /** @var $block \Magento\GoogleGtag\Block\Ga */ ?>
-<?php /** @var \Magento\GoogleGtag\Helper\GtagConfiguration $gtagConfiguration */ ?>
-<?php  $gtagConfiguration = $block->getHelper() ?>
-<?php  $measurementId = $gtagConfiguration->getMeasurementId() ?>
+<?php /** @var \Magento\Framework\Escaper $escaper */ ?>
 <!-- BEGIN GOOGLE ANALYTICS 4 CODE -->
 <script type="text/x-magento-init">
 {
     "*": {
-        "Magento_GoogleGtag/js/google-analytics": {
-            "isCookieRestrictionModeEnabled": <?= (int)$block->isCookieRestrictionModeEnabled() ?>,
-            "currentWebsite": <?= (int)$block->getCurrentWebsiteId() ?>,
-            "cookieName": "<?= /* @noEscape */ \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>",
-            "pageTrackingData": <?= /* @noEscape */ json_encode($block->getPageTrackingData($measurementId)) ?>,
-            "ordersTrackingData": <?= /* @noEscape */ json_encode($block->getOrdersTrackingData()) ?>
-        }
+        "Magento_GoogleGtag/js/google-analytics": <?= /* @noEscape */ $block->getAnalyticsData() ?>
     }
 }
 </script>
