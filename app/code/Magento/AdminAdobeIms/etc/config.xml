@@ -11,22 +11,23 @@
             <integration>
                 <admin_enabled>0</admin_enabled>
                 <admin>
-                    <auth_url_pattern><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code]]></auth_url_pattern>
-                    <reauth_url_pattern><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code&reauth=check]]></reauth_url_pattern>
+                    <auth_url_pattern><![CDATA[https://ims-na1.adobelogin.com/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code]]></auth_url_pattern>
+                    <reauth_url_pattern><![CDATA[https://ims-na1.adobelogin.com/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code&reauth=check]]></reauth_url_pattern>
                     <scopes>
-                        <openid>openid</openid>
                         <AdobeID>AdobeID</AdobeID>
-                        <additional_info.roles>additional_info.roles</additional_info.roles>
+                        <openid>openid</openid>
+                        <email>email</email>
+                        <profile>profile</profile>
                     </scopes>
                 </admin>
                 <logging_enabled>0</logging_enabled>
                 <organization_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
-                <auth_url_pattern><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/authorize/v2?client_id=#{client_id}&amp;redirect_uri=#{redirect_uri}&amp;locale=#{locale}&amp;scope=openid,creative_sdk,email,profile&amp;response_type=code]]></auth_url_pattern>
-                <token_url>https://ims-na1-stg1.adobelogin.com/ims/token</token_url>
-                <profile_url><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/profile/v1?client_id=#{client_id}]]></profile_url>
-                <logout_url><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/logout/v1?access_token=#{access_token}&amp;client_id=#{client_id}&amp;client_secret=#{client_secret}]]></logout_url>
+                <auth_url_pattern><![CDATA[https://ims-na1.adobelogin.com/ims/authorize/v2?client_id=#{client_id}&amp;redirect_uri=#{redirect_uri}&amp;locale=#{locale}&amp;scope=openid,creative_sdk,email,profile&amp;response_type=code]]></auth_url_pattern>
+                <token_url>https://ims-na1.adobelogin.com/ims/token</token_url>
+                <profile_url><![CDATA[https://ims-na1.adobelogin.com/ims/profile/v1?client_id=#{client_id}]]></profile_url>
+                <logout_url><![CDATA[https://ims-na1.adobelogin.com/ims/logout/v1?access_token=#{access_token}&amp;client_id=#{client_id}&amp;client_secret=#{client_secret}]]></logout_url>
                 <certificate_path><![CDATA[https://static.adobelogin.com/keys/prod/]]></certificate_path>
-                <validate_token_url><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/validate_token/v1?token=#{token}&client_id=#{client_id}&type=#{token_type}]]></validate_token_url>
+                <validate_token_url><![CDATA[https://ims-na1.adobelogin.com/ims/validate_token/v1?token=#{token}&client_id=#{client_id}&type=#{token_type}]]></validate_token_url>
             </integration>
             <email>
                 <header_template>admin_adobe_ims_email_header_template</header_template>
