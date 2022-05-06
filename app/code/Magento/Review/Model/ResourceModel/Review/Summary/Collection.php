@@ -13,7 +13,7 @@ namespace Magento\Review\Model\ResourceModel\Review\Summary;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -47,10 +47,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         if (is_numeric($storeId)) {
             $this->_select->where('store_id = ?', $storeId);
         } else {
-           $this->_select->where('store_id IN (?)', $storeId);
+            $this->_select->where('store_id IN (?)', $storeId);
         }
 
         return $this;
     }
-
 }
