@@ -5,10 +5,8 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdminAdobeIms\Block\Adminhtml;
+namespace Magento\AdobeIms\Block\Adminhtml;
 
-use Magento\AdminAdobeIms\Model\Auth;
-use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdobeImsApi\Api\ConfigProviderInterface;
 use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
@@ -16,7 +14,6 @@ use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
 
@@ -27,16 +24,16 @@ use Magento\Framework\Serialize\Serializer\JsonHexTag;
  */
 class SignIn extends Template
 {
-    private const DATA_ARGUMENT_KEY_CONFIG_PROVIDERS = 'configProviders';
-    private const RESPONSE_REGEXP_PATTERN = 'auth\\[code=(success|error);message=(.+)\\]';
-    private const RESPONSE_CODE_INDEX = 1;
-    private const RESPONSE_MESSAGE_INDEX = 2;
-    private const RESPONSE_SUCCESS_CODE = 'success';
-    private const RESPONSE_ERROR_CODE = 'error';
-    private const ADOBE_IMS_JS_SIGNIN = 'Magento_AdobeIms/js/signIn';
-    private const ADOBE_IMS_SIGNIN = 'Magento_AdobeIms/signIn';
-    private const ADOBE_IMS_USER_PROFILE = 'adobe_ims/user/profile';
-    private const ADOBE_IMS_USER_LOGOUT = 'adobe_ims/user/logout';
+    public const DATA_ARGUMENT_KEY_CONFIG_PROVIDERS = 'configProviders';
+    public const RESPONSE_REGEXP_PATTERN = 'auth\\[code=(success|error);message=(.+)\\]';
+    public const RESPONSE_CODE_INDEX = 1;
+    public const RESPONSE_MESSAGE_INDEX = 2;
+    public const RESPONSE_SUCCESS_CODE = 'success';
+    public const RESPONSE_ERROR_CODE = 'error';
+    public const ADOBE_IMS_JS_SIGNIN = 'Magento_AdobeIms/js/signIn';
+    public const ADOBE_IMS_SIGNIN = 'Magento_AdobeIms/signIn';
+    public const ADOBE_IMS_USER_PROFILE = 'adobe_ims/user/profile';
+    public const ADOBE_IMS_USER_LOGOUT = 'adobe_ims/user/logout';
 
     /**
      * @var ConfigInterface
@@ -66,16 +63,6 @@ class SignIn extends Template
     private $serializer;
 
     /**
-     * @var ImsConfig
-     */
-    private ImsConfig $adminAdobeImsConfig;
-
-    /**
-     * @var Auth
-     */
-    private Auth $auth;
-
-    /**
      * SignIn constructor.
      *
      * @param Context $context
@@ -85,8 +72,6 @@ class SignIn extends Template
      * @param UserProfileRepositoryInterface $userProfileRepository
      * @param JsonHexTag $json
      * @param array $data
-     * @param ImsConfig|null $adminAdobeImsConfig
-     * @param Auth|null $auth
      */
     public function __construct(
         Context $context,
@@ -95,17 +80,13 @@ class SignIn extends Template
         UserAuthorizedInterface $userAuthorized,
         UserProfileRepositoryInterface $userProfileRepository,
         JsonHexTag $json,
-        array $data = [],
-        ?ImsConfig $adminAdobeImsConfig = null,
-        ?Auth $auth = null
+        array $data = []
     ) {
         $this->config = $config;
         $this->userContext = $userContext;
         $this->userAuthorized = $userAuthorized;
         $this->userProfileRepository = $userProfileRepository;
         $this->serializer = $json;
-        $this->adminAdobeImsConfig = $adminAdobeImsConfig ?? ObjectManager::getInstance()->get(ImsConfig::class);
-        $this->auth = $auth ?? ObjectManager::getInstance()->get(Auth::class);
         parent::__construct($context, $data);
     }
 
@@ -137,7 +118,7 @@ class SignIn extends Template
             'profileUrl' => $this->getUrl(self::ADOBE_IMS_USER_PROFILE),
             'logoutUrl' => $this->getUrl(self::ADOBE_IMS_USER_LOGOUT),
             'user' => $this->getUserData(),
-            'isGlobalSignInEnabled' => $this->isGlobalSignInEnabled(),
+            'isGlobalSignInEnabled' => false,
             'loginConfig' => [
                 'url' => $this->config->getAuthUrl(),
                 'callbackParsingParams' => [
@@ -183,17 +164,6 @@ class SignIn extends Template
             return $this->getDefaultUserData();
         }
 
-        if ($this->adminAdobeImsConfig->enabled()) {
-            $user = $this->auth->getUser();
-
-            return [
-                'isAuthorized' => true,
-                'name' => $user->getFirstName() . ' ' . $user->getLastName(),
-                'email' => $user->getEmail(),
-                'image' => ''
-            ];
-        }
-
         try {
             $userProfile = $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId());
         } catch (NoSuchEntityException $exception) {
@@ -221,19 +191,5 @@ class SignIn extends Template
             'email' => '',
             'image' => '',
         ];
-    }
-
-    /**
-     * Check if global sign in is enabled
-     *
-     * @return bool
-     */
-    private function isGlobalSignInEnabled(): bool
-    {
-        if ($this->adminAdobeImsConfig->enabled()) {
-            return true;
-        }
-
-        return false;
     }
 }
