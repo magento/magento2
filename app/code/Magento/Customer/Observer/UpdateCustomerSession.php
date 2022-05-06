@@ -77,7 +77,6 @@ class UpdateCustomerSession implements ObserverInterface
      * Update Customer Session Observer
      *
      * @param Observer $observer
-     * @throws NoSuchEntityException
      * @throws LocalizedException
      * @return void
      */
