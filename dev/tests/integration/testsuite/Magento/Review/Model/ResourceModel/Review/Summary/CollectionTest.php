@@ -19,7 +19,6 @@ use Magento\Review\Model\ResourceModel\Review\Summary\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
-
 /**
  * Tests some functionality of the Review Summary collection
  */
@@ -31,34 +30,34 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected Collection $collection;
 
     /**
-     * @var Query|MockObject
+     * @var Query
      */
-    protected Query|MockObject $fetchStrategyMock;
+    protected Query $fetchStrategyMock;
 
     /**
-     * @var EntityFactory|MockObject
+     * @var EntityFactory
      */
-    protected EntityFactory|MockObject $entityFactoryMock;
+    protected EntityFactory $entityFactoryMock;
 
     /**
-     * @var LoggerInterface|MockObject
+     * @var LoggerInterface
      */
-    protected LoggerInterface|MockObject $loggerMock;
+    protected LoggerInterface $loggerMock;
 
     /**
-     * @var AbstractDb|MockObject
+     * @var AbstractDb
      */
-    protected MockObject|AbstractDb $resourceMock;
+    protected AbstractDb $resourceMock;
 
     /**
-     * @var AdapterInterface|MockObject
+     * @var AdapterInterface
      */
-    protected MockObject|Mysql|AdapterInterface $connectionMock;
+    protected AdapterInterface $connectionMock;
 
     /**
-     * @var Select|MockObject
+     * @var Select
      */
-    protected Select|MockObject $selectMock;
+    protected Select $selectMock;
 
     protected function setUp(): void
     {
@@ -120,7 +119,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->selectMock->expects($this->once())->method('where')->with($expectedQuery, $storeId);
         $this->collection->addStoreFilter($storeId);
-
     }
 
     /**
