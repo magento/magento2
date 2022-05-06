@@ -14,15 +14,15 @@ use Magento\User\Model\Backend\Config\ObserverConfig;
 class DisableForcedPasswordChangePlugin
 {
     /** @var ImsConfig */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      */
     public function __construct(
-        ImsConfig $imsConfig
+        ImsConfig $adminImsConfig
     ) {
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
     }
 
     /**
@@ -35,7 +35,7 @@ class DisableForcedPasswordChangePlugin
      */
     public function afterIsPasswordChangeForced(ObserverConfig $subject, bool $result): bool
     {
-        if ($this->imsConfig->enabled() === false) {
+        if ($this->adminImsConfig->enabled() === false) {
             return $result;
         }
         return false;

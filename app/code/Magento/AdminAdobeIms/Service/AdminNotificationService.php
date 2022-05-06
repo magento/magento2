@@ -22,7 +22,7 @@ class AdminNotificationService
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @var BackendUrlInterface
@@ -40,18 +40,18 @@ class AdminNotificationService
     private ImsEmailNotification $emailNotification;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      * @param BackendUrlInterface $backendUrl
      * @param StoreManagerInterface $storeManager
      * @param ImsEmailNotification $emailNotification
      */
     public function __construct(
-        ImsConfig $imsConfig,
+        ImsConfig $adminImsConfig,
         BackendUrlInterface $backendUrl,
         StoreManagerInterface $storeManager,
         ImsEmailNotification $emailNotification
     ) {
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
         $this->backendUrl = $backendUrl;
         $this->storeManager = $storeManager;
         $this->emailNotification = $emailNotification;
@@ -68,13 +68,13 @@ class AdminNotificationService
      */
     public function sendWelcomeMailToAdminUser(UserInterface $user): void
     {
-        if (!$this->imsConfig->enabled()) {
+        if (!$this->adminImsConfig->enabled()) {
             return;
         }
 
         $backendUrl = $this->backendUrl->getRouteUrl('adminhtml');
 
-        $emailTemplate = $this->imsConfig->getEmailTemplateForNewAdminUsers();
+        $emailTemplate = $this->adminImsConfig->getEmailTemplateForNewAdminUsers();
 
         $this->emailNotification->sendNotificationEmail(
             $emailTemplate,

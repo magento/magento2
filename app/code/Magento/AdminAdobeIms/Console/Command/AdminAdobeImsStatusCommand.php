@@ -25,16 +25,16 @@ class AdminAdobeImsStatusCommand extends Command
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      */
     public function __construct(
-        ImsConfig $imsConfig
+        ImsConfig $adminImsConfig
     ) {
         parent::__construct();
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
 
         $this->setName('admin:adobe-ims:status')
             ->setDescription('Status of Adobe IMS Module');
@@ -66,6 +66,6 @@ class AdminAdobeImsStatusCommand extends Command
      */
     private function getModuleStatus(): string
     {
-        return $this->imsConfig->enabled() ? self::MODE_ENABLE .'d' : self::MODE_DISABLE.'d';
+        return $this->adminImsConfig->enabled() ? self::MODE_ENABLE .'d' : self::MODE_DISABLE.'d';
     }
 }

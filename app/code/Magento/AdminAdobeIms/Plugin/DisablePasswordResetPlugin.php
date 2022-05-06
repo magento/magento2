@@ -14,15 +14,15 @@ use Magento\User\Model\Backend\Config\ObserverConfig;
 class DisablePasswordResetPlugin
 {
     /** @var ImsConfig */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      */
     public function __construct(
-        ImsConfig $imsConfig
+        ImsConfig $adminImsConfig
     ) {
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
     }
 
     /**
@@ -35,7 +35,7 @@ class DisablePasswordResetPlugin
      */
     public function afterGetAdminPasswordLifetime(ObserverConfig $subject, int $result): int
     {
-        if ($this->imsConfig->enabled() === false) {
+        if ($this->adminImsConfig->enabled() === false) {
             return $result;
         }
         return 0;

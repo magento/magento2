@@ -59,7 +59,7 @@ class TokenReader implements TokenReaderInterface
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @var JwkFactory
@@ -94,7 +94,7 @@ class TokenReader implements TokenReaderInterface
     /**
      * @param JwtManagerInterface $jwtManager
      * @param CacheInterface $cache
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      * @param JwkFactory $jwkFactory
      * @param LoggerInterface $logger
      * @param DateTime $dateTime
@@ -105,7 +105,7 @@ class TokenReader implements TokenReaderInterface
     public function __construct(
         JwtManagerInterface $jwtManager,
         CacheInterface $cache,
-        ImsConfig $imsConfig,
+        ImsConfig $adminImsConfig,
         JwkFactory $jwkFactory,
         LoggerInterface $logger,
         DateTime $dateTime,
@@ -115,7 +115,7 @@ class TokenReader implements TokenReaderInterface
     ) {
         $this->jwtManager = $jwtManager;
         $this->cache = $cache;
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
         $this->jwkFactory = $jwkFactory;
         $this->logger = $logger;
         $this->dateTime = $dateTime;
@@ -195,7 +195,7 @@ class TokenReader implements TokenReaderInterface
         $this->setCertificateCacheId($certificateFileName);
 
         if (!$certificateValue = $this->loadCertificateFromCache()) {
-            $certificateUrl = $this->imsConfig->getCertificateUrl($certificateFileName);
+            $certificateUrl = $this->adminImsConfig->getCertificateUrl($certificateFileName);
             try {
                 $certificateValue = $this->driver->fileGetContents($certificateUrl);
             } catch (FileSystemException $exception) {

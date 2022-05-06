@@ -24,7 +24,7 @@ class AdminAdobeImsDisableCommand extends Command
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @var TypeListInterface
@@ -32,15 +32,15 @@ class AdminAdobeImsDisableCommand extends Command
     private TypeListInterface $cacheTypeList;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      * @param TypeListInterface $cacheTypeList
      */
     public function __construct(
-        ImsConfig $imsConfig,
+        ImsConfig $adminImsConfig,
         TypeListInterface $cacheTypeList
     ) {
         parent::__construct();
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
 
         $this->setName('admin:adobe-ims:disable')
             ->setDescription('Disable Adobe IMS Module');
@@ -53,7 +53,7 @@ class AdminAdobeImsDisableCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         try {
-            $this->imsConfig->disableModule();
+            $this->adminImsConfig->disableModule();
             $this->cacheTypeList->cleanType(Config::TYPE_IDENTIFIER);
             $output->writeln(__('Admin Adobe IMS integration is disabled'));
 

@@ -17,14 +17,14 @@ class RemovePasswordAndUserConfirmationFormFieldsPlugin
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      */
-    public function __construct(ImsConfig $imsConfig)
+    public function __construct(ImsConfig $adminImsConfig)
     {
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
     }
 
     /**
@@ -33,11 +33,12 @@ class RemovePasswordAndUserConfirmationFormFieldsPlugin
      * @param WidgetForm $subject
      * @param DataForm $result
      * @return DataForm
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetForm(WidgetForm $subject, DataForm $result): DataForm
     {
-        if ($this->imsConfig->enabled() === false) {
+        if ($this->adminImsConfig->enabled() === false) {
             return $result;
         }
 

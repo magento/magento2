@@ -19,7 +19,7 @@ class AdminAccountCreatedObserver implements ObserverInterface
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @var AdminNotificationService
@@ -27,14 +27,14 @@ class AdminAccountCreatedObserver implements ObserverInterface
     private AdminNotificationService $adminNotificationService;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      * @param AdminNotificationService $adminNotificationService
      */
     public function __construct(
-        ImsConfig $imsConfig,
+        ImsConfig $adminImsConfig,
         AdminNotificationService $adminNotificationService
     ) {
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
         $this->adminNotificationService = $adminNotificationService;
     }
 
@@ -43,7 +43,7 @@ class AdminAccountCreatedObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if (!$this->imsConfig->enabled()) {
+        if (!$this->adminImsConfig->enabled()) {
             return;
         }
 

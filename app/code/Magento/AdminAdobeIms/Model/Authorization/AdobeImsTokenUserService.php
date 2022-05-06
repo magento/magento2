@@ -48,7 +48,7 @@ class AdobeImsTokenUserService
     /**
      * @var ImsConnection
      */
-    private ImsConnection $imsConnection;
+    private ImsConnection $adminImsConnection;
 
     /**
      * @var ImsWebapiRepositoryInterface
@@ -70,7 +70,7 @@ class AdobeImsTokenUserService
      * @param ImsWebapiRepositoryInterface $imsWebapiRepository
      * @param ImsWebapiInterfaceFactory $imsWebapiFactory
      * @param User $adminUser
-     * @param ImsConnection $imsConnection
+     * @param ImsConnection $adminImsConnection
      * @param EncryptorInterface $encryptor
      * @param DateTime $dateTime
      */
@@ -79,14 +79,14 @@ class AdobeImsTokenUserService
         ImsWebapiRepositoryInterface $imsWebapiRepository,
         ImsWebapiInterfaceFactory $imsWebapiFactory,
         User $adminUser,
-        ImsConnection $imsConnection,
+        ImsConnection $adminImsConnection,
         EncryptorInterface $encryptor,
         DateTime $dateTime
     ) {
         $this->tokenReader = $tokenReader;
         $this->imsWebapiFactory = $imsWebapiFactory;
         $this->adminUser = $adminUser;
-        $this->imsConnection = $imsConnection;
+        $this->adminImsConnection = $adminImsConnection;
         $this->imsWebapiRepository = $imsWebapiRepository;
         $this->encryptor = $encryptor;
         $this->dateTime = $dateTime;
@@ -151,12 +151,12 @@ class AdobeImsTokenUserService
         if ($imsWebapiEntity->getId()) {
             $lastCheckTimestamp = $this->dateTime->gmtTimestamp($imsWebapiEntity->getLastCheckTime());
             if (($lastCheckTimestamp + self::ACCESS_TOKEN_INTERVAL_CHECK) <= $this->dateTime->gmtTimestamp()) {
-                $isTokenValid = $this->imsConnection->validateToken($token);
+                $isTokenValid = $this->adminImsConnection->validateToken($token);
                 $imsWebapiEntity->setLastCheckTime($this->dateTime->gmtDate(self::DATE_FORMAT));
                 $this->imsWebapiRepository->save($imsWebapiEntity);
             }
         } else {
-            $isTokenValid = $this->imsConnection->validateToken($token);
+            $isTokenValid = $this->adminImsConnection->validateToken($token);
         }
 
         if (!$isTokenValid) {
@@ -174,7 +174,7 @@ class AdobeImsTokenUserService
     private function getUserProfile(string $bearerToken): array
     {
         try {
-            return $this->imsConnection->getProfile($bearerToken);
+            return $this->adminImsConnection->getProfile($bearerToken);
         } catch (\Exception $exception) {
             throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
         }

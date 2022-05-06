@@ -23,7 +23,7 @@ class BackendAuthSessionPlugin
     /**
      * @var ImsConnection
      */
-    private ImsConnection $imsConnection;
+    private ImsConnection $adminImsConnection;
 
     /**
      * @var DateTime
@@ -33,21 +33,21 @@ class BackendAuthSessionPlugin
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
-     * @param ImsConnection $imsConnection
+     * @param ImsConnection $adminImsConnection
      * @param DateTime $dateTime
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      */
     public function __construct(
-        ImsConnection $imsConnection,
+        ImsConnection $adminImsConnection,
         DateTime $dateTime,
-        ImsConfig $imsConfig
+        ImsConfig $adminImsConfig
     ) {
-        $this->imsConnection = $imsConnection;
+        $this->adminImsConnection = $adminImsConnection;
         $this->dateTime = $dateTime;
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
     }
 
     /**
@@ -60,11 +60,11 @@ class BackendAuthSessionPlugin
      */
     public function aroundProlong(Session $subject, callable $proceed): void
     {
-        if ($this->imsConfig->enabled()) {
+        if ($this->adminImsConfig->enabled()) {
             $lastCheckTime = $subject->getTokenLastCheckTime();
             if ($lastCheckTime + self::ACCESS_TOKEN_INTERVAL_CHECK <= $this->dateTime->gmtTimestamp()) {
                 $accessToken = $subject->getAdobeAccessToken();
-                if ($this->imsConnection->validateToken($accessToken)) {
+                if ($this->adminImsConnection->validateToken($accessToken)) {
                     $subject->setTokenLastCheckTime($this->dateTime->gmtTimestamp());
                 } else {
                     $subject->destroy();

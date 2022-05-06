@@ -31,7 +31,7 @@ class ImsConnection
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @var Json
@@ -50,20 +50,20 @@ class ImsConnection
 
     /**
      * @param CurlFactory $curlFactory
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      * @param Json $json
      * @param GetToken $token
      * @param AdminAdobeImsLogger $adminAdobeImsLogger
      */
     public function __construct(
         CurlFactory $curlFactory,
-        ImsConfig $imsConfig,
+        ImsConfig $adminImsConfig,
         Json $json,
         GetToken $token,
         AdminAdobeImsLogger $adminAdobeImsLogger
     ) {
         $this->curlFactory = $curlFactory;
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
         $this->json = $json;
         $this->token = $token;
         $this->adminAdobeImsLogger = $adminAdobeImsLogger;
@@ -78,7 +78,7 @@ class ImsConnection
      */
     public function auth(?string $clientId = null): string
     {
-        $authUrl = $this->imsConfig->getAdminAdobeImsAuthUrl($clientId);
+        $authUrl = $this->adminImsConfig->getAdminAdobeImsAuthUrl($clientId);
         return $this->getAuthorizationLocation($authUrl);
     }
 
@@ -167,7 +167,7 @@ class ImsConnection
         $curl->addHeader('cache-control', 'no-cache');
 
         $curl->post(
-            $this->imsConfig->getValidateTokenUrl($token, $tokenType),
+            $this->adminImsConfig->getValidateTokenUrl($token, $tokenType),
             []
         );
 
@@ -223,7 +223,7 @@ class ImsConnection
         $curl->addHeader('cache-control', 'no-cache');
         $curl->addHeader('Authorization', 'Bearer ' . $code);
 
-        $curl->get($this->imsConfig->getProfileUrl());
+        $curl->get($this->adminImsConfig->getProfileUrl());
 
         if ($curl->getBody() === '') {
             throw new AdobeImsAuthorizationException(

@@ -38,24 +38,24 @@ class AdminAdobeImsInfoCommand extends Command
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @var ImsConnection
      */
-    private ImsConnection $imsConnection;
+    private ImsConnection $adminImsConnection;
 
     /**
-     * @param ImsConfig $imsConfig
-     * @param ImsConnection $imsConnection
+     * @param ImsConfig $adminImsConfig
+     * @param ImsConnection $adminImsConnection
      */
     public function __construct(
-        ImsConfig $imsConfig,
-        ImsConnection $imsConnection
+        ImsConfig $adminImsConfig,
+        ImsConnection $adminImsConnection
     ) {
         parent::__construct();
-        $this->imsConfig = $imsConfig;
-        $this->imsConnection = $imsConnection;
+        $this->adminImsConfig = $adminImsConfig;
+        $this->adminImsConnection = $adminImsConnection;
 
         $this->setName('admin:adobe-ims:info')
             ->setDescription('Information of Adobe IMS Module configuration');
@@ -67,12 +67,12 @@ class AdminAdobeImsInfoCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         try {
-            if ($this->imsConfig->enabled()) {
-                $clientId = $this->imsConfig->getApiKey();
-                if ($this->imsConnection->testAuth($clientId)) {
-                    $clientSecret = $this->imsConfig->getPrivateKey() ? 'configured' : 'not configured';
+            if ($this->adminImsConfig->enabled()) {
+                $clientId = $this->adminImsConfig->getApiKey();
+                if ($this->adminImsConnection->testAuth($clientId)) {
+                    $clientSecret = $this->adminImsConfig->getPrivateKey() ? 'configured' : 'not configured';
                     $output->writeln(self::CLIENT_ID_NAME . ': ' . $clientId);
-                    $output->writeln(self::ORGANIZATION_ID_NAME . ': ' . $this->imsConfig->getOrganizationId());
+                    $output->writeln(self::ORGANIZATION_ID_NAME . ': ' . $this->adminImsConfig->getOrganizationId());
                     $output->writeln(self::CLIENT_SECRET_NAME . ' ' . $clientSecret);
                 }
             } else {

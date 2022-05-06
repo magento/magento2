@@ -21,15 +21,15 @@ class ImsOrganizationService
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      */
     public function __construct(
-        ImsConfig $imsConfig
+        ImsConfig $adminImsConfig
     ) {
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
     }
 
     /**
@@ -48,7 +48,7 @@ class ImsOrganizationService
         }
 
         $customerOrganizations = $this->getCustomerOrganizationList($profile['roles']);
-        $configuredOrganization = $this->imsConfig->getOrganizationId();
+        $configuredOrganization = $this->adminImsConfig->getOrganizationId();
 
         if (!in_array($configuredOrganization, $customerOrganizations, true)) {
             throw new AdobeImsOrganizationAuthorizationException(
@@ -84,7 +84,7 @@ class ImsOrganizationService
      * @return string
      * @throws AdobeImsOrganizationAuthorizationException
      */
-    public function validateAndExtractOrganizationId(string $organizationId): string
+    private function validateAndExtractOrganizationId(string $organizationId): string
     {
         if (preg_match(self::ORGANIZATION_REGEX, $organizationId, $matches)) {
             if (!empty($matches) && isset($matches[1])) {
