@@ -21,15 +21,15 @@ class ImsOrganizationService
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      */
     public function __construct(
-        ImsConfig $imsConfig
+        ImsConfig $adminImsConfig
     ) {
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
     }
 
     /**
@@ -41,7 +41,7 @@ class ImsOrganizationService
      */
     public function checkOrganizationAllocation(array $profile): bool
     {
-        $configuredOrganization = $this->imsConfig->getOrganizationId();
+        $configuredOrganization = $this->adminImsConfig->getOrganizationId();
 
         //@TODO CABPI-324: Change Org check to use new endpoint
         if (!$configuredOrganization) {
@@ -78,7 +78,7 @@ class ImsOrganizationService
      * @return string
      * @throws AdobeImsOrganizationAuthorizationException
      */
-    public function validateAndExtractOrganizationId(string $organizationId): string
+    private function validateAndExtractOrganizationId(string $organizationId): string
     {
         if (preg_match(self::ORGANIZATION_REGEX, $organizationId, $matches)) {
             if (!empty($matches) && isset($matches[1])) {

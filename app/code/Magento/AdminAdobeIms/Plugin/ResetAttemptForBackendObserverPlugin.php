@@ -17,14 +17,14 @@ class ResetAttemptForBackendObserverPlugin
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      */
-    public function __construct(ImsConfig $imsConfig)
+    public function __construct(ImsConfig $adminImsConfig)
     {
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
     }
 
     /**
@@ -37,7 +37,7 @@ class ResetAttemptForBackendObserverPlugin
      */
     public function aroundExecute(ResetAttemptForBackendObserver $subject, callable $proceed, Observer $observer)
     {
-        if (!$this->imsConfig->enabled()) {
+        if (!$this->adminImsConfig->enabled()) {
             return $proceed($observer);
         }
     }

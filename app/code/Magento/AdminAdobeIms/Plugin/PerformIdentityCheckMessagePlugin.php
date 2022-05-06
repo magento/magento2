@@ -17,15 +17,15 @@ class PerformIdentityCheckMessagePlugin
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      */
     public function __construct(
-        ImsConfig $imsConfig
+        ImsConfig $adminImsConfig
     ) {
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
     }
 
     /**
@@ -40,7 +40,7 @@ class PerformIdentityCheckMessagePlugin
      */
     public function aroundPerformIdentityCheck(User $subject, callable $proceed, string $passwordString)
     {
-        if ($this->imsConfig->enabled() === false) {
+        if ($this->adminImsConfig->enabled() === false) {
             return $proceed($passwordString);
         }
 

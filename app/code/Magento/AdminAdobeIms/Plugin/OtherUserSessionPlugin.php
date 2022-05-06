@@ -18,7 +18,7 @@ class OtherUserSessionPlugin
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @var ScopeConfigInterface
@@ -26,14 +26,14 @@ class OtherUserSessionPlugin
     private ScopeConfigInterface $scopeConfig;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        ImsConfig $imsConfig,
+        ImsConfig $adminImsConfig,
         ScopeConfigInterface $scopeConfig
     ) {
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
         $this->scopeConfig = $scopeConfig;
     }
 
@@ -48,7 +48,7 @@ class OtherUserSessionPlugin
         AdminSessionsManager $subject,
         callable $proceed
     ): AdminSessionsManager {
-        if ($this->imsConfig->enabled() === false
+        if ($this->adminImsConfig->enabled() === false
             || (bool) $this->scopeConfig->getValue(Config::XML_PATH_ADMIN_ACCOUNT_SHARING) === false
         ) {
             return $proceed();

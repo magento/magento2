@@ -57,7 +57,7 @@ class ImsCommandValidationService
      * @return string
      * @throws LocalizedException
      */
-    public function emptyValueValidator(string $value): string
+    private function emptyValueValidator(string $value): string
     {
         if (trim($value) === '') {
             throw new LocalizedException(

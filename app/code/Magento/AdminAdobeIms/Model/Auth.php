@@ -32,7 +32,7 @@ class Auth extends BackendAuth
     public function loginByUsername(string $username): void
     {
         if (empty($username)) {
-            self::throwException(
+            parent::throwException(
                 __($this->errorMessage)
             );
         }
@@ -51,7 +51,7 @@ class Auth extends BackendAuth
             }
 
             if (!$this->getAuthStorage()->getUser()) {
-                self::throwException(
+                parent::throwException(
                     __($this->errorMessage)
                 );
             }
@@ -66,7 +66,7 @@ class Auth extends BackendAuth
                 'backend_auth_user_login_failed',
                 ['user_name' => $username, 'exception' => $e]
             );
-            self::throwException(
+            parent::throwException(
                 __(
                     $e->getMessage()? : $this->errorMessage
                 )

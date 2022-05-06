@@ -24,7 +24,7 @@ class AdminForgotPasswordPlugin
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @var MessageManagerInterface
@@ -33,16 +33,16 @@ class AdminForgotPasswordPlugin
 
     /**
      * @param RedirectFactory $redirectFactory
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      * @param MessageManagerInterface $messageManager
      */
     public function __construct(
         RedirectFactory $redirectFactory,
-        ImsConfig $imsConfig,
+        ImsConfig $adminImsConfig,
         MessageManagerInterface $messageManager
     ) {
         $this->redirectFactory = $redirectFactory;
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
         $this->messageManager = $messageManager;
     }
 
@@ -56,7 +56,7 @@ class AdminForgotPasswordPlugin
      */
     public function aroundExecute(Forgotpassword $subject, callable $proceed)
     {
-        if ($this->imsConfig->enabled() === false) {
+        if ($this->adminImsConfig->enabled() === false) {
             return $proceed();
         }
 

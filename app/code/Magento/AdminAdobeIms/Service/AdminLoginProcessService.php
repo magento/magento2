@@ -26,7 +26,7 @@ class AdminLoginProcessService extends AbstractAdminBaseProcessService
     public function execute(TokenResponseInterface $tokenResponse, array $profile = []): void
     {
         try {
-            $adminUser = $this->getAdminUser($profile, $tokenResponse);
+            $adminUser = $this->getAdminUser($profile);
             $this->auth->loginByUsername($adminUser['username']);
             $session = $this->auth->getAuthStorage();
             $session->setAdobeAccessToken($tokenResponse->getAccessToken());
@@ -43,11 +43,10 @@ class AdminLoginProcessService extends AbstractAdminBaseProcessService
      * Get Admin User for profile
      *
      * @param array $profile
-     * @param TokenResponseInterface $tokenResponse
      * @return array
      * @throws AdobeImsAuthorizationException
      */
-    private function getAdminUser(array $profile, TokenResponseInterface $tokenResponse): array
+    private function getAdminUser(array $profile): array
     {
         $adminUser = $this->adminUser->loadByEmail($profile['email']);
         if (empty($adminUser['user_id'])) {

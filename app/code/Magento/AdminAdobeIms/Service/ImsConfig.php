@@ -21,7 +21,7 @@ use Magento\Framework\UrlInterface;
 
 class ImsConfig extends Config
 {
-    public const XML_PATH_ENABLED = 'adobe_ims/integration/admin/enabled';
+    public const XML_PATH_ENABLED = 'adobe_ims/integration/admin_enabled';
     public const XML_PATH_LOGGING_ENABLED = 'adobe_ims/integration/logging_enabled';
     public const XML_PATH_ORGANIZATION_ID = 'adobe_ims/integration/organization_id';
     public const XML_PATH_API_KEY = 'adobe_ims/integration/api_key';

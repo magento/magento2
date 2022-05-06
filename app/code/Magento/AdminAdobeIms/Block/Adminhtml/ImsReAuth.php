@@ -7,16 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Block\Adminhtml;
 
-use Magento\AdminAdobeIms\Model\Auth;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdobeImsApi\Api\ConfigProviderInterface;
-use Magento\AdobeImsApi\Api\ConfigInterface;
-use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
 
 /**
@@ -38,7 +32,7 @@ class ImsReAuth extends Template
     /**
      * @var ImsConfig
      */
-    private $imsConfig;
+    private $adminImsConfig;
 
     /**
      * JsonHexTag Serializer Instance
@@ -51,17 +45,17 @@ class ImsReAuth extends Template
      * SignIn constructor.
      *
      * @param Context $context
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      * @param JsonHexTag $json
      * @param array $data
      */
     public function __construct(
         Context $context,
-        ImsConfig $imsConfig,
+        ImsConfig $adminImsConfig,
         JsonHexTag $json,
         array $data = []
     ) {
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
         $this->serializer = $json;
         parent::__construct($context, $data);
     }
@@ -92,7 +86,7 @@ class ImsReAuth extends Template
             'component' => self::ADOBE_IMS_JS_REAUTH,
             'template' => self::ADOBE_IMS_REAUTH,
             'loginConfig' => [
-                'url' => $this->imsConfig->getAdminAdobeImsReAuthUrl(),
+                'url' => $this->adminImsConfig->getAdminAdobeImsReAuthUrl(),
                 'callbackParsingParams' => [
                     'regexpPattern' => self::RESPONSE_REGEXP_PATTERN,
                     'codeIndex' => self::RESPONSE_CODE_INDEX,
