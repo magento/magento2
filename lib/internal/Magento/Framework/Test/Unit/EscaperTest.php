@@ -137,6 +137,8 @@ class EscaperTest extends TestCase
     {
         return [
             'zero length string' => ['', ''],
+            'null as string' => [null, ''],
+            'Magento\Framework\Phrase as string' => [__('test'), 'test'],
             'only digits' => ['123', '123'],
             '<' => ['<', '\u003C'],
             '>' => ['>', '\\u003E'],
@@ -198,7 +200,6 @@ class EscaperTest extends TestCase
             'state',
             $stateMock
         );
-
 
         $actual = $this->escaper->escapeHtmlAttr($input);
         $this->assertEquals($output, $actual);
@@ -385,11 +386,11 @@ class EscaperTest extends TestCase
     {
         return [
             [
-                'data'     => 1,
+                'data' => 1,
                 'expected' => '1',
             ],
             [
-                'data'     => '*%string{foo}%::',
+                'data' => '*%string{foo}%::',
                 'expected' => '\2A \25 string\7B foo\7D \25 \3A \3A ',
             ]
         ];
@@ -416,19 +417,19 @@ class EscaperTest extends TestCase
     {
         return [
             [
-                'data'     => "a3==",
+                'data' => "a3==",
                 'expected' => "a3%3D%3D",
             ],
             [
-                'data'     => "example string",
+                'data' => "example string",
                 'expected' => "example%20string",
             ],
             [
-                'data'     => 1,
+                'data' => 1,
                 'expected' => "1",
             ],
             [
-                'data'     => null,
+                'data' => null,
                 'expected' => "",
             ]
         ];

@@ -50,8 +50,6 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     protected $_enableViewSwitcher = true;
 
     /**
-     * Is Expanded
-     *
      * @var bool
      */
     protected $_isExpanded = true;
@@ -89,15 +87,11 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     protected $_template = 'Magento_Catalog::product/list/toolbar.phtml';
 
     /**
-     * Catalog config
-     *
      * @var \Magento\Catalog\Model\Config
      */
     protected $_catalogConfig;
 
     /**
-     * Catalog session
-     *
      * @var \Magento\Catalog\Model\Session
      * @deprecated 103.0.1
      */
@@ -308,7 +302,9 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         }
 
         $directions = ['asc', 'desc'];
-        $dir = strtolower($this->toolbarMemorizer->getDirection());
+        $dir = is_string($this->toolbarMemorizer->getDirection()) ?
+            strtolower($this->toolbarMemorizer->getDirection()) : '';
+
         if (!$dir || !in_array($dir, $directions)) {
             $dir = $this->_direction;
         }

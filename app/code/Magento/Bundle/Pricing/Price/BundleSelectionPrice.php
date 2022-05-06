@@ -7,6 +7,7 @@ namespace Magento\Bundle\Pricing\Price;
 
 use Magento\Bundle\Model\Product\Price;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Pricing\Price as CatalogPrice;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
@@ -25,7 +26,7 @@ class BundleSelectionPrice extends AbstractPrice
     /**
      * Price model code
      */
-    const PRICE_CODE = 'bundle_selection';
+    public const PRICE_CODE = 'bundle_selection';
 
     /**
      * @var \Magento\Catalog\Model\Product
@@ -33,8 +34,6 @@ class BundleSelectionPrice extends AbstractPrice
     protected $bundleProduct;
 
     /**
-     * Event manager
-     *
      * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $eventManager;
@@ -162,10 +161,10 @@ class BundleSelectionPrice extends AbstractPrice
         if ($product->hasData($bundleSelectionKey)) {
             return $product->getData($bundleSelectionKey);
         }
-        $value = $this->getValue();
+        $value = (string) $this->getValue();
         if (!isset($this->amount[$value])) {
             $exclude = null;
-            if ($this->getProduct()->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
+            if ($this->getProduct()->getTypeId() === Type::TYPE_BUNDLE) {
                 $exclude = $this->excludeAdjustment;
             }
             $this->amount[$value] = $this->calculator->getAmount(
@@ -180,6 +179,8 @@ class BundleSelectionPrice extends AbstractPrice
     }
 
     /**
+     * Returns the bundle product.
+     *
      * @return SaleableInterface
      */
     public function getProduct()

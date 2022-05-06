@@ -23,6 +23,9 @@ use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SaveCustomerGroupExcludedWebsiteTest extends TestCase
 {
     /**
@@ -125,8 +128,8 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testAfterSaveWithoutExtensionAttributes(): void
     {
         $this->groupExtensionMock->method('getExcludeWebsiteIds')->willReturn(null);
@@ -199,8 +202,8 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     private function getAllWebsites(): void
     {
         $websiteMock1 = $this->getMockBuilder(Website::class)

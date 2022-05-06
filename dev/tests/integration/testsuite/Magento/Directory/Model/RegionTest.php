@@ -60,7 +60,7 @@ class RegionTest extends TestCase
      *
      * @return array
      */
-    public function getCountryIdDataProvider():array
+    public function getCountryIdDataProvider(): array
     {
         return [
             ['countryId' => 'US'],
@@ -88,7 +88,8 @@ class RegionTest extends TestCase
             ['countryId' => 'SE'],
             ['countryId' => 'GR'],
             ['countryId' => 'DK'],
-            ['countryId' => 'AL']
+            ['countryId' => 'AL'],
+            ['countryId' => 'BY'],
         ];
     }
 

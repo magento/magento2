@@ -275,6 +275,7 @@ class ConfirmTest extends TestCase
      *
      * @return void
      * @dataProvider getSuccessMessageDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSuccessMessage(
         $customerId,

@@ -1,7 +1,5 @@
 <?php
 /**
- * Catalog super product configurable part block
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -21,7 +19,6 @@ use Magento\Store\Model\Store;
 /**
  * Confugurable product view type
  *
- * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -29,8 +26,6 @@ use Magento\Store\Model\Store;
 class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $catalogProduct = null;
@@ -44,8 +39,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $currentCustomer;
 
     /**
-     * Prices
-     *
      * @var array
      */
     protected $_prices = [];
@@ -339,18 +332,23 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $tierPrices = [];
         $tierPriceModel = $product->getPriceInfo()->getPrice('tier_price');
         foreach ($tierPriceModel->getTierPriceList() as $tierPrice) {
+            $price = $this->_taxData->displayPriceExcludingTax() ?
+                $tierPrice['price']->getBaseAmount() : $tierPrice['price']->getValue();
+
             $tierPriceData = [
                 'qty' => $this->localeFormat->getNumber($tierPrice['price_qty']),
-                'price' => $this->localeFormat->getNumber($tierPrice['price']->getValue()),
+                'price' => $this->localeFormat->getNumber($price),
                 'percentage' => $this->localeFormat->getNumber(
                     $tierPriceModel->getSavePercent($tierPrice['price'])
                 ),
             ];
 
-            if (isset($tierPrice['excl_tax_price'])) {
-                $excludingTax = $tierPrice['excl_tax_price'];
-                $tierPriceData['excl_tax_price'] = $this->localeFormat->getNumber($excludingTax->getBaseAmount());
+            if ($this->_taxData->displayBothPrices()) {
+                $tierPriceData['basePrice'] = $this->localeFormat->getNumber(
+                    $tierPrice['price']->getBaseAmount()
+                );
             }
+
             $tierPrices[] = $tierPriceData;
         }
 

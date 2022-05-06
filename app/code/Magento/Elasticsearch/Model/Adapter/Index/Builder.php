@@ -5,8 +5,10 @@
  */
 namespace Magento\Elasticsearch\Model\Adapter\Index;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
+use Magento\Search\Model\ResourceModel\SynonymReader;
 
 /**
  * Index Builder
@@ -31,15 +33,23 @@ class Builder implements BuilderInterface
     protected $storeId;
 
     /**
+     * @var SynonymReader
+     */
+    private $synonymReader;
+
+    /**
      * @param LocaleResolver $localeResolver
      * @param EsConfigInterface $esConfig
+     * @param SynonymReader $synonymReader
      */
     public function __construct(
         LocaleResolver $localeResolver,
-        EsConfigInterface $esConfig
+        EsConfigInterface $esConfig,
+        SynonymReader $synonymReader
     ) {
         $this->localeResolver = $localeResolver;
         $this->esConfig = $esConfig;
+        $this->synonymReader = $synonymReader;
     }
 
     /**
@@ -50,6 +60,7 @@ class Builder implements BuilderInterface
         $tokenizer = $this->getTokenizer();
         $filter = $this->getFilter();
         $charFilter = $this->getCharFilter();
+        $synonymFilter = $this->getSynonymFilter();
 
         $settings = [
             'analysis' => [
@@ -63,11 +74,14 @@ class Builder implements BuilderInterface
                         ),
                         'char_filter' => array_keys($charFilter)
                     ],
-                    // this analyzer must not include stemmer filter
+                    // this analyzer must not include keyword_repeat and stemmer filters
                     'prefix_search' => [
                         'type' => 'custom',
                         'tokenizer' => key($tokenizer),
-                        'filter' => ['lowercase', 'keyword_repeat', 'asciifolding'],
+                        'filter' => array_merge(
+                            ['lowercase', 'asciifolding'],
+                            array_keys($synonymFilter)
+                        ),
                         'char_filter' => array_keys($charFilter)
                     ],
                     'sku' => [
@@ -78,15 +92,18 @@ class Builder implements BuilderInterface
                             array_keys($filter)
                         ),
                     ],
-                    // this analyzer must not include stemmer filter
+                    // this analyzer must not include keyword_repeat and stemmer filters
                     'sku_prefix_search' => [
                         'type' => 'custom',
                         'tokenizer' => 'keyword',
-                        'filter' => ['lowercase', 'keyword_repeat', 'asciifolding']
+                        'filter' => array_merge(
+                            ['lowercase', 'asciifolding'],
+                            array_keys($synonymFilter)
+                        ),
                     ]
                 ],
                 'tokenizer' => $tokenizer,
-                'filter' => $filter,
+                'filter' => array_merge($filter, $synonymFilter),
                 'char_filter' => $charFilter,
             ],
         ];
@@ -169,5 +186,27 @@ class Builder implements BuilderInterface
             'type' => $stemmerInfo['type'],
             'language' => $stemmerInfo['default'],
         ];
+    }
+
+    /**
+     * Get filter based on defined synonyms
+     *
+     * @throws LocalizedException
+     */
+    private function getSynonymFilter(): array
+    {
+        $synonyms = $this->synonymReader->getAllSynonyms();
+        $synonymFilter = [];
+
+        if ($synonyms) {
+            $synonymFilter = [
+                'synonyms' => [
+                    'type' => 'synonym_graph',
+                    'synonyms' => $synonyms
+                ]
+            ];
+        }
+
+        return $synonymFilter;
     }
 }

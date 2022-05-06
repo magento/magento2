@@ -7,7 +7,7 @@
 <div data-bind="attr: {class: contentClass}">
     <div data-bind="attr: {class: 'fieldset-wrapper address-information ' + defaultAddressClass}">
         <address>
-            <div class="address_caption">
+            <div class="address_caption" data-bind="attr: {id: defaultAddressId}">
                 <text args="title"></text>
                 <each args="data: elems, as: 'element'">
                     <render if="hasTemplate()"></render>

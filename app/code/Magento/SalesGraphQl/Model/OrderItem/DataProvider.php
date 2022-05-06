@@ -227,7 +227,7 @@ class DataProvider
             $discounts [] = [
                 'label' => $associatedOrder->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
-                    'value' => abs($orderItem->getDiscountAmount()) ?? 0,
+                    'value' => abs((float) $orderItem->getDiscountAmount()),
                     'currency' => $associatedOrder->getOrderCurrencyCode()
                 ]
             ];

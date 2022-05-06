@@ -571,6 +571,48 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testAddMoreProductsFromAnotherStore()
+    {
+        $parentSku = 'configurable';
+        $sku = 'simple_20';
+        $quantity = 400; // the number should be greater than the available qty / 3
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $query = $this->getQuery($maskedQuoteId, $parentSku, $sku, $quantity);
+
+        $headerMap = ['Store' => 'default'];
+        $this->graphQlMutation($query, [], '', $headerMap);
+        $headerMap = ['Store' => 'fixture_second_store'];
+        $response = $this->graphQlMutation($query, [], '', $headerMap);
+        self::assertEquals($maskedQuoteId, $response['addConfigurableProductsToCart']['cart']['id']);
+        $cartItem = current($response['addConfigurableProductsToCart']['cart']['items']);
+        self::assertEquals($parentSku, $cartItem['product']['sku']);
+        self::assertEquals($quantity * 2, $cartItem['quantity']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_in_multiple_websites_disable_first_child.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddConfigurableProductWithDisabledChildToCart(): void
+    {
+        $quantity = 1;
+        $parentSku = 'configurable';
+        $sku = 'simple_Option_1';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find specified product.');
+
+        $query = $this->getQuery($maskedQuoteId, $parentSku, $sku, $quantity);
+        $headerMap = ['Store' => 'default'];
+        $this->graphQlMutation($query, [], '', $headerMap);
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @param string $parentSku
      * @param string $sku
@@ -594,6 +636,7 @@ mutation {
     }
   ) {
     cart {
+      id
       items {
         id
         quantity

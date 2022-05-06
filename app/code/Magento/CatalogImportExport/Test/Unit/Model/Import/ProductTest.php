@@ -66,13 +66,13 @@ use Psr\Log\LoggerInterface;
  */
 class ProductTest extends AbstractImportTestCase
 {
-    const MEDIA_DIRECTORY = 'media/import';
+    private const MEDIA_DIRECTORY = 'media/import';
 
-    const ENTITY_TYPE_ID = 1;
+    private const ENTITY_TYPE_ID = 1;
 
-    const ENTITY_TYPE_CODE = 'catalog_product';
+    private const ENTITY_TYPE_CODE = 'catalog_product';
 
-    const ENTITY_ID = 13;
+    private const ENTITY_ID = 13;
 
     /**
      * @var AdapterInterface|MockObject
@@ -179,7 +179,6 @@ class ProductTest extends AbstractImportTestCase
      */
     protected $_resourceFactory;
 
-    // @codingStandardsIgnoreStart
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory|MockObject
      */
@@ -268,7 +267,6 @@ class ProductTest extends AbstractImportTestCase
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor|MockObject
      */
-    // @codingStandardsIgnoreEnd
     protected $taxClassProcessor;
 
     /**
@@ -1607,10 +1605,12 @@ class ProductTest extends AbstractImportTestCase
      */
     public function testGetProductCategoriesDataSave(array $categoriesData, string $tableName, array $result)
     {
-        $this->_connection->expects($this->at(1))->method('fetchOne')->willReturn('0');
-        $this->_connection->expects($this->at(3))->method('fetchOne')->willReturn('-2');
-        $this->skuProcessor->expects($this->at(0))->method('getNewSku')->willReturn(['entity_id' => 2]);
-        $this->skuProcessor->expects($this->at(1))->method('getNewSku')->willReturn(['entity_id' => 5]);
+        $this->_connection->method('fetchOne')->willReturnOnConsecutiveCalls('0', '-2');
+        $this->skuProcessor->method('getNewSku')
+            ->willReturnOnConsecutiveCalls(
+                ['entity_id' => 2],
+                ['entity_id' => 5]
+            );
         $actualResult = $this->invokeMethod(
             $this->importProduct,
             'getProductCategoriesDataSave',

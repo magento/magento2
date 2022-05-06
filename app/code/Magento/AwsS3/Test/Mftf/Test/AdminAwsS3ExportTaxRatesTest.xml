@@ -25,6 +25,8 @@
             <group value="importExport"/>
             <group value="tax"/>
             <group value="remote_storage_aws_s3"/>
+            <group value="skip_in_cloud_native_s3"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

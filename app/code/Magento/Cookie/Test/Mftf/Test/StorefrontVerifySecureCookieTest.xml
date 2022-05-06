@@ -20,6 +20,7 @@
             <group value="cookie"/>
             <group value="configuration"/>
             <group value="secure_storefront_url"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <amOnPage url="/" stepKey="goToHomePage"/>

@@ -1383,8 +1383,7 @@ class TypeTest extends TestCase
                     'getBundleOption',
                     'getBundleOptionsData'
                 ]
-            )
-            ->disableOriginalConstructor()
+            )->disableOriginalConstructor()
             ->getMock();
         /* @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option $option */
         $option = $this->getMockBuilder(Option::class)
@@ -1405,8 +1404,7 @@ class TypeTest extends TestCase
                     'hasData',
                     'getData'
                 ]
-            )
-            ->addMethods(['getHasOptions', 'setCartQty', 'getSkipCheckRequiredOption'])
+            )->addMethods(['getHasOptions', 'setCartQty', 'getSkipCheckRequiredOption'])
             ->disableOriginalConstructor()
             ->getMock();
         /** @var MockObject|Type $productType */
@@ -1419,7 +1417,6 @@ class TypeTest extends TestCase
             ->onlyMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->parentClass($group, $option, $buyRequest, $product);
 
         $product->expects($this->any())
@@ -1444,7 +1441,6 @@ class TypeTest extends TestCase
                             $resultValue = [0 => 5];
                             break;
                     }
-
                     return $resultValue;
                 }
             );
@@ -1456,8 +1452,7 @@ class TypeTest extends TestCase
         $buyRequest->expects($this->once())
             ->method('getBundleOption')
             ->willReturn([3 => 5]);
-        $option
-            ->method('getId')
+        $option->method('getId')
             ->willReturnOnConsecutiveCalls(3);
         $option->expects($this->once())
             ->method('getRequired')
@@ -2791,7 +2786,9 @@ class TypeTest extends TestCase
     private function expectProductEntityMetadata(): void
     {
         $entityMetadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
+            ->onlyMethods(['getLinkField'])
             ->getMockForAbstractClass();
+        $entityMetadataMock->method('getLinkField')->willReturn('test_link_field');
         $this->metadataPool->expects($this->any())->method('getMetadata')
             ->with(ProductInterface::class)
             ->willReturn($entityMetadataMock);

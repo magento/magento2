@@ -24,6 +24,9 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <createData entity="CustomerGroupChange" stepKey="createCustomerGroup"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="navigateToStores"/>
+            <actionGroup ref="AdminDeleteMultipleWebsitesActionGroup" stepKey="deleteWebsites"/>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <!--Delete created data-->

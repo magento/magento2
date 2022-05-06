@@ -24,6 +24,8 @@
         <element name="websitesOptions" type="select" selector="[name='website_ids'] option"/>
         <element name="customerGroups" type="multiselect" selector="select[name='customer_group_ids']"/>
         <element name="customerGroupsOptions" type="multiselect" selector="select[name='customer_group_ids'] option"/>
+        <element name="selectAllCustomerGroup" type="button" selector="button[data-action='select-all']"/>
+        <element name="pressCustomerGroupDoneBtn" type="button" selector="button.action-secondary"/>
         <element name="coupon" type="select" selector="select[name='coupon_type']"/>
         <element name="couponCode" type="input" selector="input[name='coupon_code']"/>
         <element name="useAutoGeneration" type="checkbox" selector="input[name='use_auto_generation']"/>

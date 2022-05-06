@@ -39,7 +39,9 @@ class Elasticsearch
      */
     private const MAPPING_TOTAL_FIELDS_BUFFER_LIMIT = 1000;
 
-    /**#@-*/
+    /**
+     * @var ConnectionManager
+     */
     protected $connectionManager;
 
     /**
@@ -491,7 +493,10 @@ class Elasticsearch
                 'entityType' => $mappedIndexerId,
                 // Use store id instead of website id from context for save existing fields mapping.
                 // In future websiteId will be eliminated due to index stored per store
-                'websiteId' => $storeId
+                'websiteId' => $storeId,
+                // this parameter is introduced to replace 'websiteId' which name does not reflect
+                // the value assigned to it
+                'storeId' => $storeId
             ]
         );
         $settings['index']['mapping']['total_fields']['limit'] = $this->getMappingTotalFieldsLimit($allAttributeTypes);

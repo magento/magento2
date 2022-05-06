@@ -125,6 +125,7 @@ class Mapper
     private function mapQuery($queryName)
     {
         if (!isset($this->queries[$queryName])) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new Exception('Query ' . $queryName . ' does not exist');
         } elseif (in_array($queryName, $this->mappedQueries)) {
             throw new StateException(new Phrase(
@@ -154,6 +155,7 @@ class Mapper
                     $reference = $this->mapFilter($query['filterReference'][0]['ref']);
                     $referenceType = Filter::REFERENCE_FILTER;
                 } else {
+                    // phpcs:ignore Magento2.Exceptions.DirectThrow
                     throw new Exception('Reference is not provided');
                 }
                 $query = $this->objectManager->create(
@@ -195,6 +197,7 @@ class Mapper
     private function mapFilter($filterName)
     {
         if (!isset($this->filters[$filterName])) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new Exception('Filter ' . $filterName . ' does not exist');
         } elseif (in_array($filterName, $this->mappedFilters)) {
             throw new StateException(
@@ -287,6 +290,8 @@ class Mapper
     }
 
     /**
+     * Validate queries and filters.
+     *
      * @return void
      * @throws StateException
      */
@@ -297,6 +302,8 @@ class Mapper
     }
 
     /**
+     * Check if queries are not used.
+     *
      * @return void
      * @throws StateException
      */
@@ -310,6 +317,8 @@ class Mapper
     }
 
     /**
+     * Validate elements that are not used.
+     *
      * @param array $elements
      * @param string[] $mappedElements
      * @param string $errorMessage
@@ -326,6 +335,8 @@ class Mapper
     }
 
     /**
+     * Check if filters are not used.
+     *
      * @return void
      * @throws StateException
      */
@@ -355,38 +366,19 @@ class Mapper
             ];
             switch ($bucketData['type']) {
                 case BucketInterface::TYPE_TERM:
-                    $bucket = $this->objectManager->create(
-                        TermBucket::class,
-                        array_merge(
-                            $arguments,
-                            [
-                                'parameters' => array_column($bucketData['parameter'] ?? [], 'value', 'name'),
-                            ],
-                        )
-                    );
+                    $arguments['parameters'] = array_column($bucketData['parameter'] ?? [], 'value', 'name');
+                    $bucket = $this->objectManager->create(TermBucket::class, $arguments);
                     break;
                 case BucketInterface::TYPE_RANGE:
-                    $bucket = $this->objectManager->create(
-                        RangeBucket::class,
-                        array_merge(
-                            $arguments,
-                            ['ranges' => $this->mapRanges($bucketData)]
-                        )
-                    );
+                    $arguments['ranges'] = $this->mapRanges($bucketData);
+                    $bucket = $this->objectManager->create(RangeBucket::class, $arguments);
                     break;
                 case BucketInterface::TYPE_DYNAMIC:
-                    $bucket = $this->objectManager->create(
-                        DynamicBucket::class,
-                        array_merge(
-                            $arguments,
-                            ['method' => $bucketData['method']]
-                        )
-                    );
+                    $arguments['method'] = $bucketData['method'];
+                    $bucket = $this->objectManager->create(DynamicBucket::class, $arguments);
                     break;
                 default:
-                    throw new StateException(new Phrase(
-                        'The bucket type is invalid. Verify and try again.'
-                    ));
+                    throw new StateException(new Phrase('The bucket type is invalid. Verify and try again.'));
             }
             $buckets[] = $bucket;
         }

@@ -247,6 +247,7 @@ class CollectionTest extends TestCase
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $orderMock->method('getStoreTZOffsetQuery')->willReturn('');
 
         $this->orderFactoryMock
             ->expects($this->any())
@@ -260,6 +261,11 @@ class CollectionTest extends TestCase
         $this->connectionMock
             ->expects($getIfNullSqlResult)
             ->method('getIfNullSql');
+
+        $this->connectionMock->expects($this->once())
+            ->method('getDateFormatSql')
+            ->with('{{attribute}}', '%Y-%m')
+            ->willReturn(new \Zend_Db_Expr('DATE_FORMAT(%2021-%10, %Y-%m)'));
 
         $this->collection->prepareSummary($range, $customStart, $customEnd, $isFilter);
     }
