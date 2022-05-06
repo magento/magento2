@@ -32,7 +32,7 @@ abstract class AbstractEntity
 
     const DB_MAX_PACKET_DATA = 1048576;
 
-    const DB_MAX_VARCHAR_LENGTH = 256;
+    const DB_MAX_VARCHAR_LENGTH = 1024;
 
     const DB_MAX_TEXT_LENGTH = 65536;
 
