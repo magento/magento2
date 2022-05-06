@@ -36,14 +36,14 @@ class ImsConnectionTest extends TestCase
     /**
      * @var ImsConnection
      */
-    private $imsConnection;
+    private $adminImsConnection;
 
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $imsConfigMock = $this->createMock(ImsConfig::class);
-        $imsConfigMock
+        $adminImsConfigMock = $this->createMock(ImsConfig::class);
+        $adminImsConfigMock
             ->method('getAuthUrl')
             ->willReturn(self::AUTH_URL);
 
@@ -51,11 +51,11 @@ class ImsConnectionTest extends TestCase
 
         $json = $this->createMock(Json::class);
 
-        $this->imsConnection = $objectManagerHelper->getObject(
+        $this->adminImsConnection = $objectManagerHelper->getObject(
             ImsConnection::class,
             [
                 'curlFactory' => $this->curlFactory,
-                'imsConfig' => $imsConfigMock,
+                'adminImsConfig' => $adminImsConfigMock,
                 'json' => $json,
             ]
         );
@@ -74,7 +74,7 @@ class ImsConnectionTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Could not get a valid response from Adobe IMS Service.');
-        $this->imsConnection->auth();
+        $this->adminImsConnection->auth();
     }
 
     public function testAuthThrowsExceptionWhenResponseContainsError(): void
@@ -90,6 +90,6 @@ class ImsConnectionTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Could not connect to Adobe IMS Service: invalid_scope.');
-        $this->imsConnection->auth();
+        $this->adminImsConnection->auth();
     }
 }

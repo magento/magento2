@@ -24,18 +24,18 @@ class UserAuthorizedSession implements UserAuthorizedInterface
     /**
      * @var ImsConnection
      */
-    private ImsConnection $imsConnection;
+    private ImsConnection $adminImsConnection;
 
     /**
      * @param Auth $auth
-     * @param ImsConnection $imsConnection
+     * @param ImsConnection $adminImsConnection
      */
     public function __construct(
         Auth $auth,
-        ImsConnection $imsConnection
+        ImsConnection $adminImsConnection
     ) {
         $this->auth = $auth;
-        $this->imsConnection = $imsConnection;
+        $this->adminImsConnection = $adminImsConnection;
     }
 
     /**
@@ -50,7 +50,7 @@ class UserAuthorizedSession implements UserAuthorizedInterface
         }
 
         try {
-            return $this->imsConnection->validateToken($token);
+            return $this->adminImsConnection->validateToken($token);
         } catch (AuthorizationException $e) {
             return false;
         }

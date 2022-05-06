@@ -27,18 +27,18 @@ class ImsOrganizationServiceTest extends TestCase
     /**
      * @var ImsConfig
      */
-    private $imsConfigMock;
+    private $adminImsConfigMock;
 
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->imsConfigMock = $this->createMock(ImsConfig::class);
+        $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
 
         $this->imsOrganizationService = $objectManagerHelper->getObject(
             ImsOrganizationService::class,
             [
-                'imsConfig' => $this->imsConfigMock
+                'adminImsConfig' => $this->adminImsConfigMock
             ]
         );
     }
@@ -52,7 +52,7 @@ class ImsOrganizationServiceTest extends TestCase
 
     public function testCheckOrganizationAllocationReturnsTrueWhenProfileAssignedToOrg()
     {
-        $this->imsConfigMock
+        $this->adminImsConfigMock
             ->method('getOrganizationId')
             ->willReturn(self::VALID_ORGANIZATION_ID);
 
@@ -68,7 +68,7 @@ class ImsOrganizationServiceTest extends TestCase
 
     public function testCheckOrganizationAllocationThrowsExceptionWhenProfileNotAssignedToOrg()
     {
-        $this->imsConfigMock
+        $this->adminImsConfigMock
             ->method('getOrganizationId')
             ->willReturn(self::INVALID_ORGANIZATION_ID);
 

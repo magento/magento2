@@ -32,7 +32,7 @@ class AdminForgotPasswordPluginTest extends TestCase
     /**
      * @var ImsConfig|MockObject
      */
-    private $imsConfigMock;
+    private $adminImsConfigMock;
 
     /**
      * @var MessageManagerInterface|MockObject
@@ -47,14 +47,14 @@ class AdminForgotPasswordPluginTest extends TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->redirectFactory = $this->createMock(RedirectFactory::class);
-        $this->imsConfigMock = $this->createMock(ImsConfig::class);
+        $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
         $this->messageManagerMock = $this->createMock(MessageManagerInterface::class);
 
         $this->plugin = $objectManagerHelper->getObject(
             AdminForgotPasswordPlugin::class,
             [
                 'redirectFactory' => $this->redirectFactory,
-                'imsConfig' => $this->imsConfigMock,
+                'adminImsConfig' => $this->adminImsConfigMock,
                 'messageManager' => $this->messageManagerMock,
             ]
         );
@@ -72,7 +72,7 @@ class AdminForgotPasswordPluginTest extends TestCase
         $redirect->method('setPath')
             ->willReturnSelf();
 
-        $this->imsConfigMock
+        $this->adminImsConfigMock
             ->expects($this->once())
             ->method('enabled')
             ->willReturn(true);
@@ -104,7 +104,7 @@ class AdminForgotPasswordPluginTest extends TestCase
         $subject = $this->createMock(Forgotpassword::class);
         $redirect = $this->createMock(Redirect::class);
 
-        $this->imsConfigMock
+        $this->adminImsConfigMock
             ->expects($this->once())
             ->method('enabled')
             ->willReturn(false);

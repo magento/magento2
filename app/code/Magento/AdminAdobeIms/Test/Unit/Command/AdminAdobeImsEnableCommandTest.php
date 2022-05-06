@@ -37,12 +37,12 @@ class AdminAdobeImsEnableCommandTest extends TestCase
     /**
      * @var ImsConfig
      */
-    private $imsConfigMock;
+    private $adminImsConfigMock;
 
     /**
      * @var ImsConnection
      */
-    private $imsConnectionMock;
+    private $adminImsConnectionMock;
 
     /**
      * @var ImsCommandOptionService
@@ -73,8 +73,8 @@ class AdminAdobeImsEnableCommandTest extends TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->imsConfigMock = $this->createMock(ImsConfig::class);
-        $this->imsConnectionMock = $this->createMock(ImsConnection::class);
+        $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
+        $this->adminImsConnectionMock = $this->createMock(ImsConnection::class);
         $this->imsCommandOptionService = $this->createMock(ImsCommandOptionService::class);
         $this->typeListInterface = $this->createMock(TypeListInterface::class);
         $this->updateTokensService = $this->createMock(UpdateTokensService::class);
@@ -86,8 +86,8 @@ class AdminAdobeImsEnableCommandTest extends TestCase
         $this->enableCommand = $objectManagerHelper->getObject(
             AdminAdobeImsEnableCommand::class,
             [
-                'imsConfig' => $this->imsConfigMock,
-                'imsConnection' => $this->imsConnectionMock,
+                'adminImsConfig' => $this->adminImsConfigMock,
+                'adminImsConnection' => $this->adminImsConnectionMock,
                 'imsCommandOptionService' => $this->imsCommandOptionService,
                 'cacheTypeList' => $this->typeListInterface,
                 'updateTokenService' => $this->updateTokensService
@@ -127,10 +127,10 @@ class AdminAdobeImsEnableCommandTest extends TestCase
         $this->imsCommandOptionService->method('getClientSecret')->willReturn('clientSecret');
         $this->imsCommandOptionService->method('isTwoFactorAuthEnabled')->willReturn($isTwoFactorAuthEnabled);
 
-        $this->imsConnectionMock->method('testAuth')
+        $this->adminImsConnectionMock->method('testAuth')
             ->willReturn($testAuthMode);
 
-        $this->imsConfigMock
+        $this->adminImsConfigMock
             ->expects($enableMethodCallExpection)
             ->method('enableModule');
 

@@ -40,12 +40,12 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
     /**
      * @var ImsConfig|MockObject
      */
-    private $imsConfigMock;
+    private $adminImsConfigMock;
 
     /**
      * @var ImsConnection|MockObject
      */
-    private $imsConnectionMock;
+    private $adminImsConnectionMock;
 
     /**
      * @return void
@@ -63,14 +63,14 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->imsConfigMock = $this->createMock(ImsConfig::class);
-        $this->imsConnectionMock = $this->createMock(ImsConnection::class);
+        $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
+        $this->adminImsConnectionMock = $this->createMock(ImsConnection::class);
 
         $this->plugin = $objectManagerHelper->getObject(
             ReplaceVerifyIdentityWithImsPlugin::class,
             [
-                'imsConfig' => $this->imsConfigMock,
-                'imsConnection' => $this->imsConnectionMock,
+                'adminImsConfig' => $this->adminImsConfigMock,
+                'adminImsConnection' => $this->adminImsConnectionMock,
                 'auth' => $this->authMock,
             ]
         );
@@ -89,7 +89,7 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
         $this->authMock->expects($this->never())
             ->method('getAuthStorage');
 
-        $this->imsConfigMock
+        $this->adminImsConfigMock
             ->expects($this->once())
             ->method('enabled')
             ->willReturn(false);
@@ -102,7 +102,7 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
             return $expectedResult;
         };
 
-        $this->imsConnectionMock
+        $this->adminImsConnectionMock
             ->expects($this->never())
             ->method('validateToken');
 
@@ -133,14 +133,14 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
         ->method('getAuthStorage')
         ->willReturn($this->storageMock);
 
-        $this->imsConfigMock
+        $this->adminImsConfigMock
             ->expects($this->once())
             ->method('enabled')
             ->willReturn(true);
 
         $subject = $this->createMock(User::class);
 
-        $this->imsConnectionMock
+        $this->adminImsConnectionMock
             ->expects($this->once())
             ->method('validateToken')
             ->willReturn(true);
@@ -178,14 +178,14 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
             ->method('getAuthStorage')
             ->willReturn($this->storageMock);
 
-        $this->imsConfigMock
+        $this->adminImsConfigMock
             ->expects($this->once())
             ->method('enabled')
             ->willReturn(true);
 
         $subject = $this->createMock(User::class);
 
-        $this->imsConnectionMock
+        $this->adminImsConnectionMock
             ->expects($this->once())
             ->method('validateToken')
             ->willReturn(false);
@@ -227,14 +227,14 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
             ->method('getAuthStorage')
             ->willReturn($this->storageMock);
 
-        $this->imsConfigMock
+        $this->adminImsConfigMock
             ->expects($this->once())
             ->method('enabled')
             ->willReturn(true);
 
         $subject = $this->createMock(User::class);
 
-        $this->imsConnectionMock
+        $this->adminImsConnectionMock
             ->expects($this->never())
             ->method('validateToken');
 
