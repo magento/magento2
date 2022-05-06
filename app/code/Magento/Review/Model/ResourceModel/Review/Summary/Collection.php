@@ -39,17 +39,17 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Add store filter
      *
-     * @param int $storeId
+     * @param int|array $storeId
      * @return $this
      */
-    public function addStoreFilter($storeId)
+    public function addStoreFilter(int|array $storeId)
     {
         if (is_numeric($storeId)) {
-            $this->_select->where('store_id IN ?', $storeId);
+            $this->_select->where('store_id = ?', $storeId);
         } else {
            $this->_select->where('store_id IN (?)', $storeId);
         }
-        
+
         return $this;
     }
 
