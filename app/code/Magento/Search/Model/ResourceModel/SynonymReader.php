@@ -6,9 +6,11 @@
 
 namespace Magento\Search\Model\ResourceModel;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DB\Helper\Mysql\Fulltext;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -55,12 +57,12 @@ class SynonymReader extends AbstractDb
         $rows = $this->queryByPhrase(strtolower($phrase));
         $synsPerScope = $this->getSynRowsPerScope($rows);
 
-        if (!empty($synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_STORES])) {
-            $object->setData($synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_STORES]);
-        } elseif (!empty($synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES])) {
-            $object->setData($synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES]);
+        if (!empty($synsPerScope[ScopeInterface::SCOPE_STORES])) {
+            $object->setData($synsPerScope[ScopeInterface::SCOPE_STORES]);
+        } elseif (!empty($synsPerScope[ScopeInterface::SCOPE_WEBSITES])) {
+            $object->setData($synsPerScope[ScopeInterface::SCOPE_WEBSITES]);
         } else {
-            $object->setData($synsPerScope[\Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT]);
+            $object->setData($synsPerScope[ScopeConfigInterface::SCOPE_TYPE_DEFAULT]);
         }
         $this->_afterLoad($object);
         return $this;
@@ -74,9 +76,15 @@ class SynonymReader extends AbstractDb
     public function getAllSynonyms(): array
     {
         $connection = $this->getConnection();
-        $select = $connection->select()->from($this->getMainTable(), 'synonyms');
+        $query = $connection->select()->from($this->getMainTable());
+        $rows = $connection->fetchAll($query);
+        $synonymsPerScope = $this->getSynRowsPerScope($rows);
 
-        return $connection->fetchCol($select);
+        return array_merge(
+            array_column($synonymsPerScope[ScopeInterface::SCOPE_STORES], 'synonyms'),
+            array_column($synonymsPerScope[ScopeInterface::SCOPE_WEBSITES], 'synonyms'),
+            array_column($synonymsPerScope[ScopeConfigInterface::SCOPE_TYPE_DEFAULT], 'synonyms')
+        );
     }
 
     /**
@@ -151,9 +159,9 @@ class SynonymReader extends AbstractDb
                 $synRowsForDefault[] = $row;
             }
         }
-        $synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_STORES] = $synRowsForStoreView;
-        $synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES] = $synRowsForWebsite;
-        $synsPerScope[\Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT] = $synRowsForDefault;
+        $synsPerScope[ScopeInterface::SCOPE_STORES] = $synRowsForStoreView;
+        $synsPerScope[ScopeInterface::SCOPE_WEBSITES] = $synRowsForWebsite;
+        $synsPerScope[ScopeConfigInterface::SCOPE_TYPE_DEFAULT] = $synRowsForDefault;
         return $synsPerScope;
     }
 

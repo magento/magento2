@@ -9,6 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 use Magento\Search\Model\ResourceModel\SynonymReader;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Index Builder
@@ -18,19 +19,19 @@ class Builder implements BuilderInterface
     /**
      * @var LocaleResolver
      */
-    protected $localeResolver;
+    private $localeResolver;
 
     /**
      * @var EsConfigInterface
      */
-    protected $esConfig;
+    private $esConfig;
 
     /**
      * Current store ID.
      *
      * @var int
      */
-    protected $storeId;
+    private $storeId;
 
     /**
      * @var SynonymReader
@@ -38,18 +39,26 @@ class Builder implements BuilderInterface
     private $synonymReader;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param LocaleResolver $localeResolver
      * @param EsConfigInterface $esConfig
      * @param SynonymReader $synonymReader
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         LocaleResolver $localeResolver,
         EsConfigInterface $esConfig,
-        SynonymReader $synonymReader
+        SynonymReader $synonymReader,
+        StoreManagerInterface $storeManager
     ) {
         $this->localeResolver = $localeResolver;
         $this->esConfig = $esConfig;
         $this->synonymReader = $synonymReader;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -195,6 +204,8 @@ class Builder implements BuilderInterface
      */
     private function getSynonymFilter(): array
     {
+        $this->storeManager->setCurrentStore($this->storeId);
+
         $synonyms = $this->synonymReader->getAllSynonyms();
         $synonymFilter = [];
 
