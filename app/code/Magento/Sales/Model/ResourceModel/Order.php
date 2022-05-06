@@ -176,13 +176,7 @@ class Order extends SalesResource implements OrderResourceInterface
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order $object */
-        $currentState = $object->getState();
-        $currentStatus = $object->getStatus();
         $this->stateHandler->check($object);
-        parent::save($object);
-        if ($currentState != $object->getState() || $currentStatus != $object->getStatus()) {
-            $object->addStatusHistoryComment('');
-        }
-        return $this;
+        return parent::save($object);
     }
 }
