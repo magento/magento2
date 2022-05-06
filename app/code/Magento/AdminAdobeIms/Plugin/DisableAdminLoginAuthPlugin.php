@@ -17,7 +17,7 @@ use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 class DisableAdminLoginAuthPlugin
 {
     /** @var ImsConfig */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /** @var RedirectFactory */
     private RedirectFactory $redirectFactory;
@@ -26,16 +26,16 @@ class DisableAdminLoginAuthPlugin
     private MessageManagerInterface $messageManager;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      * @param RedirectFactory $redirectFactory
      * @param MessageManagerInterface $messageManager
      */
     public function __construct(
-        ImsConfig $imsConfig,
+        ImsConfig $adminImsConfig,
         RedirectFactory $redirectFactory,
         MessageManagerInterface $messageManager
     ) {
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
         $this->redirectFactory = $redirectFactory;
         $this->messageManager = $messageManager;
     }
@@ -52,7 +52,7 @@ class DisableAdminLoginAuthPlugin
      */
     public function aroundLogin(Auth $subject, callable $proceed, string $username, string $password): void
     {
-        if ($this->imsConfig->enabled() === false) {
+        if ($this->adminImsConfig->enabled() === false) {
             $proceed($username, $password);
             return;
         }

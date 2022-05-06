@@ -29,17 +29,17 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     /**
      * @var ImsConnection
      */
-    private ImsConnection $imsConnection;
+    private ImsConnection $adminImsConnection;
 
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @var ImsOrganizationService
      */
-    private ImsOrganizationService $organizationService;
+    private ImsOrganizationService $adminOrganizationService;
 
     /**
      * @var AdminLoginProcessService
@@ -53,24 +53,24 @@ class ImsCallback extends Auth implements HttpGetActionInterface
 
     /**
      * @param Context $context
-     * @param ImsConnection $imsConnection
-     * @param ImsConfig $imsConfig
-     * @param ImsOrganizationService $organizationService
+     * @param ImsConnection $adminImsConnection
+     * @param ImsConfig $adminImsConfig
+     * @param ImsOrganizationService $adminOrganizationService
      * @param AdminLoginProcessService $adminLoginProcessService
      * @param AdminAdobeImsLogger $logger
      */
     public function __construct(
         Context $context,
-        ImsConnection $imsConnection,
-        ImsConfig $imsConfig,
-        ImsOrganizationService $organizationService,
+        ImsConnection $adminImsConnection,
+        ImsConfig $adminImsConfig,
+        ImsOrganizationService $adminOrganizationService,
         AdminLoginProcessService $adminLoginProcessService,
         AdminAdobeImsLogger $logger
     ) {
         parent::__construct($context);
-        $this->imsConnection = $imsConnection;
-        $this->imsConfig = $imsConfig;
-        $this->organizationService = $organizationService;
+        $this->adminImsConnection = $adminImsConnection;
+        $this->adminImsConfig = $adminImsConfig;
+        $this->adminOrganizationService = $adminOrganizationService;
         $this->adminLoginProcessService = $adminLoginProcessService;
         $this->logger = $logger;
     }
@@ -86,7 +86,7 @@ class ImsCallback extends Auth implements HttpGetActionInterface
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath($this->_helper->getHomePageUrl());
 
-        if (!$this->imsConfig->enabled()) {
+        if (!$this->adminImsConfig->enabled()) {
             $this->getMessageManager()->addErrorMessage('Adobe Sign-In is disabled.');
             return $resultRedirect;
         }
@@ -98,13 +98,13 @@ class ImsCallback extends Auth implements HttpGetActionInterface
                 throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
             }
 
-            $tokenResponse = $this->imsConnection->getTokenResponse($code);
+            $tokenResponse = $this->adminImsConnection->getTokenResponse($code);
 
-            $profile = $this->imsConnection->getProfile($tokenResponse->getAccessToken());
+            $profile = $this->adminImsConnection->getProfile($tokenResponse->getAccessToken());
             if (empty($profile['email'])) {
                 throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
             }
-            $this->organizationService->checkOrganizationAllocation($profile);
+            $this->adminOrganizationService->checkOrganizationAllocation($profile);
             $this->adminLoginProcessService->execute($tokenResponse, $profile);
         } catch (AdobeImsAuthorizationException $e) {
             $this->logger->error($e->getMessage());

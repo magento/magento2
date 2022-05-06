@@ -15,15 +15,15 @@ use Magento\User\Model\UserValidationRules;
 class RemoveUserValidationRulesPlugin
 {
     /** @var ImsConfig */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      */
     public function __construct(
-        ImsConfig $imsConfig
+        ImsConfig $adminImsConfig
     ) {
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
     }
 
     /**
@@ -40,7 +40,7 @@ class RemoveUserValidationRulesPlugin
         callable $proceed,
         DataObject $validator
     ): DataObject {
-        if ($this->imsConfig->enabled() !== true) {
+        if ($this->adminImsConfig->enabled() !== true) {
             return $proceed($validator);
         }
 
@@ -63,7 +63,7 @@ class RemoveUserValidationRulesPlugin
         DataObject $validator,
         string $passwordConfirmation
     ): DataObject {
-        if ($this->imsConfig->enabled() !== true) {
+        if ($this->adminImsConfig->enabled() !== true) {
             return $proceed($validator, $passwordConfirmation);
         }
 

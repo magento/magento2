@@ -41,7 +41,7 @@ class AdobeImsTokenUserContext implements UserContextInterface
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @var AdobeImsTokenUserService
@@ -50,16 +50,16 @@ class AdobeImsTokenUserContext implements UserContextInterface
 
     /**
      * @param Request $request
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      * @param AdobeImsTokenUserService $tokenUserService
      */
     public function __construct(
         Request $request,
-        ImsConfig $imsConfig,
+        ImsConfig $adminImsConfig,
         AdobeImsTokenUserService $tokenUserService
     ) {
         $this->request = $request;
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
         $this->tokenUserService = $tokenUserService;
     }
 
@@ -90,7 +90,7 @@ class AdobeImsTokenUserContext implements UserContextInterface
      */
     private function processRequest()
     {
-        if (!$this->imsConfig->enabled() || $this->isRequestProcessed) {
+        if (!$this->adminImsConfig->enabled() || $this->isRequestProcessed) {
             return;
         }
 

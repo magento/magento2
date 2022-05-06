@@ -37,12 +37,12 @@ class LogOut implements ImsLogOutInterface
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @var ImsConnection
      */
-    private ImsConnection $imsConnection;
+    private ImsConnection $adminImsConnection;
 
     /**
      * @var Auth
@@ -51,22 +51,22 @@ class LogOut implements ImsLogOutInterface
 
     /**
      * @param LoggerInterface $logger
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      * @param CurlFactory $curlFactory
-     * @param ImsConnection $imsConnection
+     * @param ImsConnection $adminImsConnection
      * @param Auth $auth
      */
     public function __construct(
         LoggerInterface $logger,
-        ImsConfig $imsConfig,
+        ImsConfig $adminImsConfig,
         CurlFactory $curlFactory,
-        ImsConnection $imsConnection,
+        ImsConnection $adminImsConnection,
         Auth $auth
     ) {
         $this->logger = $logger;
         $this->curlFactory = $curlFactory;
-        $this->imsConfig = $imsConfig;
-        $this->imsConnection = $imsConnection;
+        $this->adminImsConfig = $adminImsConfig;
+        $this->adminImsConnection = $adminImsConnection;
         $this->auth = $auth;
     }
 
@@ -112,7 +112,7 @@ class LogOut implements ImsLogOutInterface
         $curl->addHeader('cache-control', 'no-cache');
 
         $curl->post(
-            $this->imsConfig->getBackendLogoutUrl($accessToken),
+            $this->adminImsConfig->getBackendLogoutUrl($accessToken),
             []
         );
 
@@ -133,7 +133,7 @@ class LogOut implements ImsLogOutInterface
     private function checkUserProfile(string $accessToken): bool
     {
         try {
-            $profile = $this->imsConnection->getProfile($accessToken);
+            $profile = $this->adminImsConnection->getProfile($accessToken);
             if (!empty($profile['email'])) {
                 return true;
             }

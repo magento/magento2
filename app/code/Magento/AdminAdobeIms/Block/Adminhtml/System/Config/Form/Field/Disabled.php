@@ -17,22 +17,22 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 class Disabled extends Field
 {
     /** @var ImsConfig */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @param Context $context
      * @param SecureHtmlRenderer $secureRenderer
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      * @param array $data
      */
     public function __construct(
         Context $context,
         SecureHtmlRenderer $secureRenderer,
-        ImsConfig $imsConfig,
+        ImsConfig $adminImsConfig,
         array $data = []
     ) {
         parent::__construct($context, $data, $secureRenderer);
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
     }
 
     /**
@@ -43,7 +43,7 @@ class Disabled extends Field
      */
     public function render(AbstractElement $element): string
     {
-        if ($this->imsConfig->enabled() === false) {
+        if ($this->adminImsConfig->enabled() === false) {
             return parent::render($element);
         }
         return '';

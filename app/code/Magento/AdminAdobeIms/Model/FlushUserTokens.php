@@ -9,7 +9,6 @@ namespace Magento\AdminAdobeIms\Model;
 
 use Exception;
 use Magento\AdminAdobeIms\Api\ImsWebapiRepositoryInterface;
-use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Encryption\Encryptor;

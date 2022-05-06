@@ -19,7 +19,7 @@ class RevokeAdminAccessTokenPlugin
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @var FlushUserTokens
@@ -27,14 +27,14 @@ class RevokeAdminAccessTokenPlugin
     private FlushUserTokens $flushUserTokens;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      * @param FlushUserTokens $flushUserTokens
      */
     public function __construct(
-        ImsConfig $imsConfig,
+        ImsConfig $adminImsConfig,
         FlushUserTokens $flushUserTokens
     ) {
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
         $this->flushUserTokens = $flushUserTokens;
     }
 
@@ -54,7 +54,7 @@ class RevokeAdminAccessTokenPlugin
         int $adminId
     ): bool {
 
-        if ($this->imsConfig->enabled() !== true) {
+        if ($this->adminImsConfig->enabled() !== true) {
             return $result;
         }
 

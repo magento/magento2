@@ -18,24 +18,24 @@ class AdminAdobeImsLogger extends Logger
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @param string $name
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      * @param array $handlers
      * @param array $processors
      * @param DateTimeZone|null $timezone
      */
     public function __construct(
         string $name,
-        ImsConfig $imsConfig,
+        ImsConfig $adminImsConfig,
         array $handlers = [],
         array $processors = [],
         ?DateTimeZone $timezone = null
     ) {
         parent::__construct($name, $handlers, $processors, $timezone);
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
     }
 
     /**
@@ -47,7 +47,7 @@ class AdminAdobeImsLogger extends Logger
      */
     public function error($message, array $context = []): void
     {
-        if ($this->imsConfig->loggingEnabled()) {
+        if ($this->adminImsConfig->loggingEnabled()) {
             parent::error($message, $context);
         }
     }

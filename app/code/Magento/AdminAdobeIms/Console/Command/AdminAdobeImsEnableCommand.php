@@ -51,12 +51,12 @@ class AdminAdobeImsEnableCommand extends Command
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @var ImsConnection
      */
-    private ImsConnection $imsConnection;
+    private ImsConnection $adminImsConnection;
 
     /**
      * @var ImsCommandOptionService
@@ -74,22 +74,22 @@ class AdminAdobeImsEnableCommand extends Command
     private UpdateTokensService $updateTokensService;
 
     /**
-     * @param ImsConfig $imsConfig
-     * @param ImsConnection $imsConnection
+     * @param ImsConfig $adminImsConfig
+     * @param ImsConnection $adminImsConnection
      * @param ImsCommandOptionService $imsCommandOptionService
      * @param TypeListInterface $cacheTypeList
      * @param UpdateTokensService $updateTokensService
      */
     public function __construct(
-        ImsConfig $imsConfig,
-        ImsConnection $imsConnection,
+        ImsConfig $adminImsConfig,
+        ImsConnection $adminImsConnection,
         ImsCommandOptionService $imsCommandOptionService,
         TypeListInterface $cacheTypeList,
         UpdateTokensService $updateTokensService
     ) {
         parent::__construct();
-        $this->imsConfig = $imsConfig;
-        $this->imsConnection = $imsConnection;
+        $this->adminImsConfig = $adminImsConfig;
+        $this->adminImsConnection = $adminImsConnection;
         $this->imsCommandOptionService = $imsCommandOptionService;
         $this->cacheTypeList = $cacheTypeList;
         $this->updateTokensService = $updateTokensService;
@@ -198,9 +198,9 @@ class AdminAdobeImsEnableCommand extends Command
         string $organizationId,
         bool $isTwoFactorAuthEnabled
     ): bool {
-        $testAuth = $this->imsConnection->testAuth($clientId);
+        $testAuth = $this->adminImsConnection->testAuth($clientId);
         if ($testAuth) {
-            $this->imsConfig->enableModule($clientId, $clientSecret, $organizationId, $isTwoFactorAuthEnabled);
+            $this->adminImsConfig->enableModule($clientId, $clientSecret, $organizationId, $isTwoFactorAuthEnabled);
             $this->cacheTypeList->cleanType(Config::TYPE_IDENTIFIER);
             $this->updateTokensService->execute();
 

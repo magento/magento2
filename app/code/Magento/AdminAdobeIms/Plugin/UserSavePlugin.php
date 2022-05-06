@@ -17,15 +17,15 @@ class UserSavePlugin
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
-     * @param ImsConfig $imsConfig
+     * @param ImsConfig $adminImsConfig
      */
     public function __construct(
-        ImsConfig $imsConfig
+        ImsConfig $adminImsConfig
     ) {
-        $this->imsConfig = $imsConfig;
+        $this->adminImsConfig = $adminImsConfig;
     }
 
     /**
@@ -40,7 +40,7 @@ class UserSavePlugin
      */
     public function beforeBeforeSave(User $subject): array
     {
-        if ($this->imsConfig->enabled() !== true) {
+        if ($this->adminImsConfig->enabled() !== true) {
             return [];
         }
 

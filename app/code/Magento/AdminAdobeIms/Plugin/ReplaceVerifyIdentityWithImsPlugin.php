@@ -21,12 +21,12 @@ class ReplaceVerifyIdentityWithImsPlugin
     /**
      * @var ImsConfig
      */
-    private ImsConfig $imsConfig;
+    private ImsConfig $adminImsConfig;
 
     /**
      * @var ImsConnection
      */
-    private ImsConnection $imsConnection;
+    private ImsConnection $adminImsConnection;
 
     /**
      * @var Auth
@@ -34,17 +34,17 @@ class ReplaceVerifyIdentityWithImsPlugin
     private Auth $auth;
 
     /**
-     * @param ImsConfig $imsConfig
-     * @param ImsConnection $imsConnection
+     * @param ImsConfig $adminImsConfig
+     * @param ImsConnection $adminImsConnection
      * @param Auth $auth
      */
     public function __construct(
-        ImsConfig $imsConfig,
-        ImsConnection $imsConnection,
+        ImsConfig $adminImsConfig,
+        ImsConnection $adminImsConnection,
         Auth $auth
     ) {
-        $this->imsConfig = $imsConfig;
-        $this->imsConnection = $imsConnection;
+        $this->adminImsConfig = $adminImsConfig;
+        $this->adminImsConnection = $adminImsConnection;
         $this->auth = $auth;
     }
 
@@ -62,7 +62,7 @@ class ReplaceVerifyIdentityWithImsPlugin
      */
     public function aroundVerifyIdentity(User $subject, callable $proceed, string $password): bool
     {
-        if ($this->imsConfig->enabled() !== true) {
+        if ($this->adminImsConfig->enabled() !== true) {
             return $proceed($password);
         }
 
@@ -101,6 +101,6 @@ class ReplaceVerifyIdentityWithImsPlugin
             );
         }
 
-        return $this->imsConnection->validateToken($reAuthToken);
+        return $this->adminImsConnection->validateToken($reAuthToken);
     }
 }
