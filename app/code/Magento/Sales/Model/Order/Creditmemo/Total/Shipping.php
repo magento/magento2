@@ -61,7 +61,7 @@ class Shipping extends AbstractTotal
         $baseAllowedAmountInclTaxDiff = $orderBaseShippingInclTax
             - $order->getBaseShippingRefunded()
             - $order->getBaseShippingTaxRefunded();
-        $baseAllowedAmountInclTax = ($baseAllowedAmountInclTaxDiff > 0) ? $baseAllowedAmountInclTaxDiff : 0;
+        $baseAllowedAmountInclTax = $this->getBaseAllowedAmountInclTax($baseAllowedAmountInclTaxDiff);
         // Check if the desired shipping amount to refund was specified (from invoice or another source).
         if ($creditmemo->hasBaseShippingAmount()) {
             // For the conditional logic, we will either use amounts that always include tax -OR- never include tax.
@@ -141,5 +141,16 @@ class Shipping extends AbstractTotal
             );
         }
         return $this->taxConfig;
+    }
+
+    /**
+     * Get base allowed amount including Tax.
+     *
+     * @return float
+     *
+     */
+    private function getBaseAllowedAmountInclTax($baseAllowedAmountInclTaxDiff)
+    {
+        return ($baseAllowedAmountInclTaxDiff > 0) ? $baseAllowedAmountInclTaxDiff : 0;
     }
 }
