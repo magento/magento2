@@ -62,7 +62,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     private $encryptor;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     private $eventManager;
 
@@ -252,8 +252,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         );
         $this->eventManager->dispatch(
             NotificationStorage::UPDATE_CUSTOMER_SESSION,
-            ['customer' => $customer
-            ]
+            ['customer' => $customer]
         );
         if ($customer->getData('rp_token')) {
             $rpToken = $customer->getData('rp_token');

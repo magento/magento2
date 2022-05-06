@@ -87,17 +87,17 @@ class UpdateCustomerSession implements ObserverInterface
         $customerId = (int)$observer->getCustomer()->getId();
         $isAreaFrontEnd = $this->state->getAreaCode() === Area::AREA_FRONTEND;
 
-        if ($isAreaFrontEnd && $this->isSessionUpdateRegisteredFor($customerId)) {
-            try {
-                $this->session->regenerateId();
-                /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
-                $customer = $this->customerRepository->getById($customerId);
-                $this->session->setCustomerData($customer);
-                $this->session->setCustomerGroupId($customer->getGroupId());
-                $this->notificationStorage->remove(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customer->getId());
-            } catch (NoSuchEntityException $e) {
-                $this->logger->error($e);
-            }
+        if (!$isAreaFrontEnd || !$this->isSessionUpdateRegisteredFor($customerId)) {
+            return;
+        }
+        try {
+            $this->session->regenerateId();
+            $customer = $this->customerRepository->getById($customerId);
+            $this->session->setCustomerData($customer);
+            $this->session->setCustomerGroupId($customer->getGroupId());
+            $this->notificationStorage->remove(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customer->getId());
+        } catch (NoSuchEntityException $e) {
+            $this->logger->error($e);
         }
     }
 
