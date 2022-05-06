@@ -146,10 +146,10 @@ class Shipping extends AbstractTotal
     /**
      * Get base allowed amount including Tax.
      *
+     * @param float $baseAllowedAmountInclTaxDiff
      * @return float
-     *
      */
-    private function getBaseAllowedAmountInclTax($baseAllowedAmountInclTaxDiff)
+    private function getBaseAllowedAmountInclTax(float $baseAllowedAmountInclTaxDiff)
     {
         return ($baseAllowedAmountInclTaxDiff > 0) ? $baseAllowedAmountInclTaxDiff : 0;
     }

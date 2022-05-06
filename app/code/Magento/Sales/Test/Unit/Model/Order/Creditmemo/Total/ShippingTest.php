@@ -486,7 +486,10 @@ class ShippingTest extends TestCase
             ->method('setBaseGrandTotal')
             ->with($expectedBaseGrandTotal)
             ->willReturnSelf();
-        $this->assertEquals(0, $this->shippingCollector->getBaseAllowedAmountInclTax($expectedBaseShippingAmountInclTax));
+        $this->assertEquals(
+            0,
+            $this->shippingCollector->getBaseAllowedAmountInclTax($expectedBaseShippingAmountInclTax)
+        );
         $this->shippingCollector->collect($this->creditmemoMock);
     }
 }
