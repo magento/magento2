@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Observer;
 
-use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\Session;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\ObjectManagerInterface;
@@ -25,24 +24,19 @@ class UpdateCustomerSessionTest extends TestCase
 {
 
     /**
-     * @var Session|null $session
+     * @var Session
      */
-    private ?Session $session;
+    private $session;
 
     /**
-     * @var NotificationStorage|null $notificationStorage
+     * @var ObjectManagerInterface
      */
-    private ?NotificationStorage $notificationStorage;
+    private $objectManager;
 
     /**
-     * @var ObjectManagerInterface|null $objectManager
+     * @var CustomerModel
      */
-    private ?ObjectManagerInterface $objectManager;
-
-    /**
-     * @var CustomerModel|null $customerModel
-     */
-    private ?CustomerModel $customerModel;
+    private $customerModel;
 
     /**
      * @inheritdoc
@@ -51,7 +45,6 @@ class UpdateCustomerSessionTest extends TestCase
     {
         $this->objectManager  = Bootstrap::getObjectManager();
         $this->customerModel = $this->objectManager->create(CustomerModel::class);
-        $this->notificationStorage = $this->objectManager->create(NotificationStorage::class);
         $this->session = $this->objectManager->create(Session::class);
         /** @var $cacheState \Magento\Framework\App\Cache\StateInterface */
         $cacheState = $this->objectManager->get(StateInterface::class);
