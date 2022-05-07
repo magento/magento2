@@ -48,7 +48,8 @@ var config = {
             'jquery-ui-modules/widget': 'jquery/ui-modules/widget',
             'jquery-ui-modules/timepicker': 'jquery/timepicker',
             'vimeo': 'vimeo/player',
-            'vimeoWrapper': 'vimeo/vimeo-wrapper'
+            'vimeoWrapper': 'vimeo/vimeo-wrapper',
+            'jquery/jquery.cookie': 'js-cookie/cookie-wrapper'
         }
     },
     shim: {
