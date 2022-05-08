@@ -135,20 +135,29 @@ class MagentoImport implements PreProcessorInterface
             $relatedAsset = $this->assetRepo->createRelated($matchedFileId, $asset);
             $resolvedPath = $relatedAsset->getFilePath();
             $importFiles = $this->fileSource->getFiles($this->getTheme($relatedAsset), $resolvedPath);
-            $deployOnlyEnabled = (bool)$this->deploymentConfig->get(self::CONFIG_PATH_SCD_ONLY_ENABLED_MODULES);
+            $deployOnlyEnabled = $this->getStaticDeployEnabledModulesFlag();
             /** @var $importFile \Magento\Framework\View\File */
             foreach ($importFiles as $importFile) {
                 $moduleName = $importFile->getModule();
 
-                if ($moduleName && $deployOnlyEnabled && !$this->moduleManager->isEnabled($moduleName)) {
-                    continue;
-                }
-                
-                if (!$deployOnlyEnabled || ($moduleName && $deployOnlyEnabled && $this->moduleManager->isEnabled($moduleName))) {
+                if (!$deployOnlyEnabled) {
                     $referenceString = $isReference ? '(reference) ' : '';
                     $importsContent .= $moduleName
                         ? "@import $referenceString'{$moduleName}::{$resolvedPath}';\n"
                         : "@import $referenceString'{$matchedFileId}';\n";
+                }
+
+                if ($deployOnlyEnabled) {
+                    if ($moduleName && !$this->moduleManager->isEnabled($moduleName)) {
+                        continue;
+                    }
+
+                    if ($moduleName && $this->moduleManager->isEnabled($moduleName)) {
+                        $referenceString = $isReference ? '(reference) ' : '';
+                        $importsContent .= $moduleName
+                            ? "@import $referenceString'{$moduleName}::{$resolvedPath}';\n"
+                            : "@import $referenceString'{$matchedFileId}';\n";
+                    }
                 }
             }
         } catch (\LogicException $e) {
@@ -156,6 +165,16 @@ class MagentoImport implements PreProcessorInterface
         }
 
         return $importsContent;
+    }
+
+    /**
+     * Retrieve flag deploy enabled modules
+     *
+     * @return bool
+     */
+    protected function getStaticDeployEnabledModulesFlag() : bool
+    {
+        return (bool) $this->deploymentConfig->get(self::CONFIG_PATH_SCD_ONLY_ENABLED_MODULES);
     }
 
     /**
