@@ -96,6 +96,12 @@
 
 
         <!--Step 8: Verify product attribute added in product form -->
+       <!-- <actionGroup ref="AdminAssertProductAttributeOnProductEditPageActionGroup" stepKey="adminProductAssertAttribute">
+            <argument name="attributeLabel" value="{{ProductAttributeFrontendLabel.label}}"/>
+            <argument name="attributeCode" value="{{newProductAttribute.attribute_code}}"/>
+        </actionGroup> -->
+
+
         <scrollTo selector="{{AdminProductFormSection.contentTab}}" stepKey="scrollToContentTab"/>
         <waitForElementVisible selector="{{AdminProductFormSection.attributeTab}}" stepKey="waitForAttributeToVisible"/>
         <click selector="{{AdminProductFormSection.attributeTab}}" stepKey="clickOnAttribute"/>
