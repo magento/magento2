@@ -39,26 +39,18 @@ class Builder implements BuilderInterface
     private $synonymReader;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param LocaleResolver $localeResolver
      * @param EsConfigInterface $esConfig
      * @param SynonymReader $synonymReader
-     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         LocaleResolver $localeResolver,
         EsConfigInterface $esConfig,
-        SynonymReader $synonymReader,
-        StoreManagerInterface $storeManager
+        SynonymReader $synonymReader
     ) {
         $this->localeResolver = $localeResolver;
         $this->esConfig = $esConfig;
         $this->synonymReader = $synonymReader;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -204,9 +196,7 @@ class Builder implements BuilderInterface
      */
     private function getSynonymFilter(): array
     {
-        $this->storeManager->setCurrentStore($this->storeId);
-
-        $synonyms = $this->synonymReader->getAllSynonyms();
+        $synonyms = $this->synonymReader->getAllSynonymsForStoreViewId($this->storeId);
         $synonymFilter = [];
 
         if ($synonyms) {

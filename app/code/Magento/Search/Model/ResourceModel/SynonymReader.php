@@ -11,6 +11,7 @@ use Magento\Framework\DB\Helper\Mysql\Fulltext;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -71,20 +72,23 @@ class SynonymReader extends AbstractDb
     /**
      * Get all synonyms as an array
      *
+     * @param int $storeViewId
+     * @return array
      * @throws LocalizedException
      */
-    public function getAllSynonyms(): array
+    public function getAllSynonymsForStoreViewId(int $storeViewId): array
     {
         $connection = $this->getConnection();
-        $query = $connection->select()->from($this->getMainTable());
-        $rows = $connection->fetchAll($query);
-        $synonymsPerScope = $this->getSynRowsPerScope($rows);
 
-        return array_merge(
-            array_column($synonymsPerScope[ScopeInterface::SCOPE_STORES], 'synonyms'),
-            array_column($synonymsPerScope[ScopeInterface::SCOPE_WEBSITES], 'synonyms'),
-            array_column($synonymsPerScope[ScopeConfigInterface::SCOPE_TYPE_DEFAULT], 'synonyms')
-        );
+        $storeIdField = $connection
+            ->quoteIdentifier(sprintf('%s.%s', $this->getMainTable(), 'store_id'));
+
+        $select = $connection
+            ->select()
+            ->from($this->getMainTable(), 'synonyms')
+            ->where($storeIdField . ' IN (?)', [Store::DEFAULT_STORE_ID, $storeViewId]);
+
+        return $connection->fetchCol($select);
     }
 
     /**
