@@ -19,7 +19,9 @@
             <group value="Catalog"/>
         </annotations>
 
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
 
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="amOnAdminCategoryPage"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
@@ -81,7 +83,7 @@
         <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryStorefrontPage1">
             <argument name="categoryUrl" value="{{SubCategory.urlKey}}"/>
         </actionGroup>
-        <see userInput="{{NewCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryNewHtmlOnStorefront"/>
+        <see userInput="{{SubCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryNewHtmlOnStorefront"/>
 
         <!-- Check on storefront that category was created, Its URL path is '.../cat1/new.html'-->
         <amOnPage url="/{{FirstLevelSubCat.name}}/{{SubCategory.name}}.html" stepKey="goToConfigProductPage1"/>
@@ -93,7 +95,6 @@
 
         <after>
             <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage1"/>
-            <wait stepKey="k3" time="100"/>
             <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SecondLevelSubCat.name)}}" stepKey="clickCategoryLink"/>
             <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="clickDelete"/>
             <waitForElementVisible selector="{{AdminCategoryModalSection.message}}" stepKey="waitForConfirmationModal"/>
@@ -129,3 +130,4 @@
 
     </test>
 </tests>
+
