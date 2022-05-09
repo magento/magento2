@@ -6,7 +6,7 @@
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontLayeredNavigationSection">
         <element name="shoppingOptionsByName" type="button" selector="//*[text()='Shopping Options']/..//*[contains(text(),'{{arg}}')]" parameterized="true"/>
         <element name="appliedFilterLabel" type="text" selector=".filter-current .items > li.item:nth-of-type({{position}}) > span.filter-label" parameterized="true"/>
