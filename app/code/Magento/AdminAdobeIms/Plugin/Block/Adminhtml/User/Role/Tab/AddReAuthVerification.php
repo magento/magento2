@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Plugin\Block\Adminhtml\User\Role\Tab;
 
-use Closure;
 use Magento\AdminAdobeIms\Plugin\AdobeImsReauth\AddAdobeImsReAuthButton;
+use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\User\Block\Role\Tab\Info;
 
 class AddReAuthVerification
@@ -20,32 +20,39 @@ class AddReAuthVerification
     private AddAdobeImsReAuthButton $adobeImsReAuthButton;
 
     /**
+     * @var ImsConfig
+     */
+    private ImsConfig $adminAdobeImsConfig;
+
+    /**
      * @param AddAdobeImsReAuthButton $adobeImsReAuthButton
+     * @param ImsConfig $adminAdobeImsConfig
      */
     public function __construct(
-        AddAdobeImsReAuthButton $adobeImsReAuthButton
+        AddAdobeImsReAuthButton $adobeImsReAuthButton,
+        ImsConfig $adminAdobeImsConfig
     ) {
         $this->adobeImsReAuthButton = $adobeImsReAuthButton;
+        $this->adminAdobeImsConfig = $adminAdobeImsConfig;
     }
 
     /**
      * Add adobeIms reAuth button to role edit and create form
      *
      * @param Info $subject
-     * @param Closure $proceed
-     * @return mixed
+     * @return void
      */
-    public function aroundGetFormHtml(Info $subject, Closure $proceed)
+    public function beforeGetFormHtml(Info $subject): void
     {
-        $form = $subject->getForm();
-        if (is_object($form)) {
-            $verificationFieldset = $form->getElement('current_user_verification_fieldset');
-            if ($verificationFieldset !== null) {
-                $this->adobeImsReAuthButton->addAdobeImsReAuthButton($verificationFieldset);
-                $subject->setForm($form);
+        if ($this->adminAdobeImsConfig->enabled()) {
+            $form = $subject->getForm();
+            if (is_object($form)) {
+                $verificationFieldset = $form->getElement('current_user_verification_fieldset');
+                if ($verificationFieldset !== null) {
+                    $this->adobeImsReAuthButton->addAdobeImsReAuthButton($verificationFieldset);
+                    $subject->setForm($form);
+                }
             }
         }
-
-        return $proceed();
     }
 }

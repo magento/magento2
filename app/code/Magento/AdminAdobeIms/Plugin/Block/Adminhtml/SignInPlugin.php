@@ -155,7 +155,7 @@ class SignInPlugin
 
         return [
             'isAuthorized' => true,
-            'name' => $user->getFirstName() . ' ' . $user->getLastName(),
+            'name' => $user->getName(),
             'email' => $user->getEmail(),
             'image' => ''
         ];

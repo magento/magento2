@@ -67,6 +67,10 @@ class ReplaceVerifyIdentityWithImsPlugin
         }
 
         $valid = $this->verifyImsToken();
+
+        $session = $this->auth->getAuthStorage();
+        $session->setAdobeReAuthToken(null);
+
         if ($valid) {
             return true;
         }
