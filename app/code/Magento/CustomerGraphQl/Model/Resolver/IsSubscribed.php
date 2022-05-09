@@ -9,9 +9,9 @@ namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Newsletter\Model\SubscriberFactory;
 
 /**
@@ -49,9 +49,30 @@ class IsSubscribed implements ResolverInterface
         /** @var CustomerInterface $customer */
         $customer = $value['model'];
         $customerId = (int)$customer->getId();
-        $websiteId = (int)$context->getExtensionAttributes()->getStore()->getWebsiteId();
-        $status = $this->subscriberFactory->create()->loadByCustomer($customerId, $websiteId)->isSubscribed();
 
-        return (bool)$status;
+        $extensionAttributes = $context->getExtensionAttributes();
+        if (!$extensionAttributes) {
+            return false;
+        }
+
+        $store = $extensionAttributes->getStore();
+        if (!$store) {
+            return false;
+        }
+
+        return $this->getSubscriptionStatus($customerId, (int)$store->getWebsiteId());
+    }
+
+    /**
+     * @param int $customerId
+     * @param int $websiteId
+     * @return bool
+     */
+    public function getSubscriptionStatus(int $customerId, int $websiteId): bool
+    {
+        $subscriberFactory = $this->subscriberFactory->create();
+        $subscriptionData = $subscriberFactory->loadByCustomer($customerId, $websiteId);
+
+        return $subscriptionData->isSubscribed() ?? false;
     }
 }
