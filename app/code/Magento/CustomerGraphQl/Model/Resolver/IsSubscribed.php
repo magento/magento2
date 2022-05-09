@@ -60,7 +60,7 @@ class IsSubscribed implements ResolverInterface
             return false;
         }
 
-        return $this->getSubscriptionStatus($customerId, (int)$store->getWebsiteId());
+        return $this->isSubscribed($customerId, (int)$store->getWebsiteId());
     }
 
     /**
@@ -70,7 +70,7 @@ class IsSubscribed implements ResolverInterface
      * @param int $websiteId
      * @return bool
      */
-    public function getSubscriptionStatus(int $customerId, int $websiteId): bool
+    public function isSubscribed(int $customerId, int $websiteId): bool
     {
         $subscriberFactory = $this->subscriberFactory->create();
         $subscriptionData = $subscriberFactory->loadByCustomer($customerId, $websiteId);
