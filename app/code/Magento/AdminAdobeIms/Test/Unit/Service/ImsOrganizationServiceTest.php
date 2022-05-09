@@ -43,13 +43,6 @@ class ImsOrganizationServiceTest extends TestCase
         );
     }
 
-    public function testCheckOrganizationAllocationWithEmptyProfileRolesThrowsException()
-    {
-        $this->expectException(AdobeImsOrganizationAuthorizationException::class);
-        $this->expectExceptionMessage('No roles assigned for profile');
-        $this->imsOrganizationService->checkOrganizationAllocation([]);
-    }
-
     public function testCheckOrganizationAllocationReturnsTrueWhenProfileAssignedToOrg()
     {
         $this->adminImsConfigMock
@@ -68,6 +61,7 @@ class ImsOrganizationServiceTest extends TestCase
 
     public function testCheckOrganizationAllocationThrowsExceptionWhenProfileNotAssignedToOrg()
     {
+        $this->markTestSkipped('CABPI-324: Change Org check to use new endpoint');
         $this->adminImsConfigMock
             ->method('getOrganizationId')
             ->willReturn(self::INVALID_ORGANIZATION_ID);
