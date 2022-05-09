@@ -33,42 +33,24 @@ class ImsOrganizationService
     }
 
     /**
-     * Check if profile is allocated to configured organization
+     * Check if user is assigned to organization
      *
-     * @param array $profile
+     * @param string $token
      * @return bool
      * @throws AdobeImsOrganizationAuthorizationException
      */
-    public function checkOrganizationAllocation(array $profile): bool
+    public function checkOrganizationAllocation(string $token): bool
     {
         $configuredOrganization = $this->adminImsConfig->getOrganizationId();
 
         //@TODO CABPI-324: Change Org check to use new endpoint
-        if (!$configuredOrganization) {
+        if (!$configuredOrganization || !$token) {
             throw new AdobeImsOrganizationAuthorizationException(
-                __('Profile is not assigned to defined organization.')
+                __('User is not assigned to defined organization.')
             );
         }
 
         return true;
-    }
-
-    /**
-     * Get list of assigned organizations of admin
-     *
-     * @param array $profileRoles
-     * @return array
-     * @throws AdobeImsOrganizationAuthorizationException
-     */
-    private function getCustomerOrganizationList(array $profileRoles): array
-    {
-        $organizationList = [];
-        foreach ($profileRoles as $role) {
-            $organizationId = $this->validateAndExtractOrganizationId($role['organization']);
-            $organizationList[$role['named_role']] = $organizationId;
-        }
-
-        return $organizationList;
     }
 
     /**
