@@ -51,28 +51,19 @@ class ImsOrganizationServiceTest extends TestCase
 
         $this->assertEquals(
             true,
-            $this->imsOrganizationService->checkOrganizationAllocation([
-                'roles' => [
-                    ['organization' => '12121212ABCD1211AA11ABCD', 'named_role' => 'test']
-                ]
-            ])
+            $this->imsOrganizationService->checkOrganizationAllocation('my_token')
         );
     }
 
     public function testCheckOrganizationAllocationThrowsExceptionWhenProfileNotAssignedToOrg()
     {
-        $this->markTestSkipped('CABPI-324: Change Org check to use new endpoint');
         $this->adminImsConfigMock
             ->method('getOrganizationId')
-            ->willReturn(self::INVALID_ORGANIZATION_ID);
+            ->willReturn('');
 
         $this->expectException(AdobeImsOrganizationAuthorizationException::class);
-        $this->expectExceptionMessage('Profile is not assigned to defined organization.');
+        $this->expectExceptionMessage('User is not assigned to defined organization.');
 
-        $this->imsOrganizationService->checkOrganizationAllocation([
-            'roles' => [
-                ['organization' => '12121212ABCD1211AA11ABCD', 'named_role' => 'test']
-            ]
-        ]);
+        $this->imsOrganizationService->checkOrganizationAllocation('my_token');
     }
 }

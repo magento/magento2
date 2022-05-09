@@ -38,7 +38,7 @@ class ImsOrganizationService
         $configuredOrganization = $this->adminImsConfig->getOrganizationId();
 
         //@TODO CABPI-324: Change Org check to use new endpoint
-        if (!$configuredOrganization || !$token) {
+        if ($configuredOrganization === '' || !$token) {
             throw new AdobeImsOrganizationAuthorizationException(
                 __('User is not assigned to defined organization.')
             );
