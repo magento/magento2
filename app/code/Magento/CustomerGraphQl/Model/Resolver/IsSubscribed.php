@@ -64,6 +64,8 @@ class IsSubscribed implements ResolverInterface
     }
 
     /**
+     * Get customer subscription status
+     *
      * @param int $customerId
      * @param int $websiteId
      * @return bool
