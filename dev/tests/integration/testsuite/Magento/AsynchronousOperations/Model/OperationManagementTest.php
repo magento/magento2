@@ -74,7 +74,7 @@ class OperationManagementTest extends \PHPUnit\Framework\TestCase
         $select = $connection->select()
             ->from($table)
             ->where("bulk_uuid = ?", 'bulk-uuid-5')
-            ->where("operation_key = ?", $operationId);
+            ->where("id = ?", $operationId);
         $updatedOperation = $connection->fetchRow($select);
 
         $this->assertEquals(OperationInterface::STATUS_TYPE_OPEN, $updatedOperation['status']);
