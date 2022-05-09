@@ -9,15 +9,9 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Service;
 
 use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
-use Magento\Framework\Exception\InvalidArgumentException;
 
 class ImsOrganizationService
 {
-    /**
-     * Regex to verify a valid AdobeOrg Organization ID string.
-     */
-    private const ORGANIZATION_REGEX = '/([A-Z0-9]{24})(@AdobeOrg)?/i';
-
     /**
      * @var ImsConfig
      */
@@ -51,25 +45,5 @@ class ImsOrganizationService
         }
 
         return true;
-    }
-
-    /**
-     * Check if OrganizationID matches pattern
-     *
-     * @param string $organizationId
-     * @return string
-     * @throws AdobeImsOrganizationAuthorizationException
-     */
-    private function validateAndExtractOrganizationId(string $organizationId): string
-    {
-        if (preg_match(self::ORGANIZATION_REGEX, $organizationId, $matches)) {
-            if (!empty($matches) && isset($matches[1])) {
-                return $matches[1];
-            }
-        }
-
-        throw new AdobeImsOrganizationAuthorizationException(
-            __('No valid organization ID provided')
-        );
     }
 }
