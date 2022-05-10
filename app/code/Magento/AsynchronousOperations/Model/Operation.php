@@ -6,13 +6,14 @@
 namespace Magento\AsynchronousOperations\Model;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\AsynchronousOperations\Api\Data\BulkOperationInterface;
 use Magento\AsynchronousOperations\Model\OperationStatusValidator;
 use Magento\Framework\DataObject;
 
 /**
  * Class Operation encapsulates methods for Operation Model Object
  */
-class Operation extends DataObject implements OperationInterface
+class Operation extends DataObject implements OperationInterface, BulkOperationInterface
 {
     /**
      * @var OperationStatusValidator
