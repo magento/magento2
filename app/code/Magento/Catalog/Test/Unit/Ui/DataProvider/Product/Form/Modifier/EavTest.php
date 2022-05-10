@@ -441,15 +441,6 @@ class EavTest extends AbstractModifierTest
         $this->searchResultsMock->expects($this->once())->method('getItems')
             ->willReturn([$this->eavAttributeMock]);
 
-        $this->storeMock->expects(($this->once()))->method('getBaseCurrencyCode')
-            ->willReturn('en_US');
-        $this->storeManagerMock->expects($this->once())->method('getStore')
-            ->willReturn($this->storeMock);
-        $this->currencyMock->expects($this->once())->method('toCurrency')
-            ->willReturn('19.99');
-        $this->currencyLocaleMock->expects($this->once())->method('getCurrency')
-            ->willReturn($this->currencyMock);
-
         $this->assertEquals($sourceData, $this->eav->modifyData([]));
     }
 

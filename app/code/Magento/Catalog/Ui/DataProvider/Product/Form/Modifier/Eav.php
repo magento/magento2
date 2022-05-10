@@ -1101,21 +1101,6 @@ class Eav extends AbstractModifier
     }
 
     /**
-     * The getter function to get the locale currency for real application code
-     *
-     * @return \Magento\Framework\Locale\CurrencyInterface
-     *
-     * @deprecated 101.0.0
-     */
-    private function getLocaleCurrency()
-    {
-        if ($this->localeCurrency === null) {
-            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
-        }
-        return $this->localeCurrency;
-    }
-
-    /**
      * Format price according to the locale of the currency
      *
      * @param mixed $value
@@ -1127,7 +1112,11 @@ class Eav extends AbstractModifier
             return null;
         }
 
-        $value = \Zend_Locale_Math::normalize(\Zend_Locale_Math::round($value, self::PRECISION));
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $roundValue = call_user_func([\Zend_Locale_Math::class, 'round'], $value, self::PRECISION);
+
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $value = call_user_func([\Zend_Locale_Math::class, 'normalize'], $roundValue);
 
         return $value;
     }
