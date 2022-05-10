@@ -20,6 +20,8 @@ class AddAdobeImsReAuthButton
      */
     public function addAdobeImsReAuthButton(AbstractElement $fieldset): void
     {
+        $fieldset->setLegend(__('Identity Verification'));
+
         $fieldset->addField(
             'ims_verification',
             'button',
@@ -30,7 +32,8 @@ class AddAdobeImsReAuthButton
                 'class' => 'ims_verification',
                 'title' => __('Verify Identity with Adobe IMS'),
                 'required' => true,
-                'value' => __('Sign In with Adobe IMS'),
+                'value' => __('Confirm Identity'),
+                'note' => __('To apply changes you need to verify your Adobe identity.'),
             ]
         );
 
@@ -39,10 +42,10 @@ class AddAdobeImsReAuthButton
             'hidden',
             [
                 'name' => 'ims_verified',
-                'label' => __('Verify Identity with Adobe IMS'),
+                'label' => __('Identity Verified with Adobe IMS'),
                 'id' => 'ims_verified',
                 'class' => 'ims_verified',
-                'title' => __('Verify Identity with Adobe IMS'),
+                'title' => __('Identity Verified with Adobe IMS'),
                 'required' => true,
             ]
         );

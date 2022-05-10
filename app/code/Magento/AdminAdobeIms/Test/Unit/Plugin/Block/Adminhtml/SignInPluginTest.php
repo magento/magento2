@@ -106,8 +106,7 @@ class SignInPluginTest extends TestCase
 
         $userProfile = $this->createMock(User::class);
         if ($isAuthorized) {
-            $userProfile->method('getFirstName')->willReturn($userData['firstname']);
-            $userProfile->method('getLastName')->willReturn($userData['lastname']);
+            $userProfile->method('getName')->willReturn($userData['name']);
             $userProfile->method('getEmail')->willReturn($userData['email']);
         }
 
@@ -170,8 +169,7 @@ class SignInPluginTest extends TestCase
             'Existing authorized user' => [
                 [
                     'isAuthorized' => true,
-                    'firstname' => 'John',
-                    'lastname' => 'Doe',
+                    'name' => 'John Doe',
                     'email' => 'john@email.com',
                 ],
                 [],
@@ -186,7 +184,7 @@ class SignInPluginTest extends TestCase
             'Existing non-authorized user' => [
                 [
                     'isAuthorized' => false,
-                    'name' => 'John',
+                    'name' => 'John Doe',
                     'email' => 'john@email.com',
                     'image' => 'image.png'
                 ],
