@@ -80,19 +80,14 @@ class ExportInfoFactory
      *
      * @param string $fileFormat
      * @param string $entity
-     * @param array $exportFilter
+     * @param string $exportFilter
      * @param array $skipAttr
      * @param string|null $locale
      * @return ExportInfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function create(
-        string $fileFormat,
-        string $entity,
-        array $exportFilter,
-        array $skipAttr = [],
-        ?string $locale = null
-    ) {
+    public function create($fileFormat, $entity, $exportFilter, $skipAttr = [], ?string $locale = null)
+    {
         $writer = $this->getWriter($fileFormat);
         $entityAdapter = $this->getEntityAdapter(
             $entity,

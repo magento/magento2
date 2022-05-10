@@ -132,7 +132,7 @@ class ExportInfo implements LocalizedExportInfoInterface
     /**
      * @inheritdoc
      */
-    public function getSkipAttr(): ?array
+    public function getSkipAttr()
     {
         return $this->skipAttr;
     }
@@ -140,7 +140,7 @@ class ExportInfo implements LocalizedExportInfoInterface
     /**
      * @inheritdoc
      */
-    public function setSkipAttr(array $skipAttr): void
+    public function setSkipAttr($skipAttr)
     {
         $this->skipAttr = $skipAttr;
     }
