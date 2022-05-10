@@ -41,6 +41,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\AvailablePaymentMethods">
+        <arguments>
+            <argument name="informationShipping" xsi:type="object">Magento\Quote\Api\ShippingMethodManagementInterface</argument>
+        </arguments>
+    </type>
     <type name="Magento\GraphQl\Model\Backpressure\CompositeRequestTypeExtractor">
         <arguments>
             <argument name="extractors" xsi:type="array">

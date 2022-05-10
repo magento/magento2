@@ -28,11 +28,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     /**
      * CONFIG path constants
      */
-    const XML_PATH_CURRENCY_ALLOW = 'currency/options/allow';
+    public const XML_PATH_CURRENCY_ALLOW = 'currency/options/allow';
 
-    const XML_PATH_CURRENCY_DEFAULT = 'currency/options/default';
+    public const XML_PATH_CURRENCY_DEFAULT = 'currency/options/default';
 
-    const XML_PATH_CURRENCY_BASE = 'currency/options/base';
+    public const XML_PATH_CURRENCY_BASE = 'currency/options/base';
 
     /**
      * @var Filter
@@ -438,8 +438,8 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         }
 
         if ((array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
-                && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
-            $formattedCurrency = preg_replace(['/[^0-9.,۰٫]+/', '/ /'], '', $formattedCurrency);
+            && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
+            $formattedCurrency = str_replace(' ', '', $formattedCurrency);
         }
 
         return preg_replace('/^\s+|\s+$/u', '', $formattedCurrency);
@@ -453,13 +453,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     private function getNumberFormatter(array $options): \Magento\Framework\NumberFormatter
     {
-        $key = 'currency_' . hash(
-            'sha256',
-            ($this->localeResolver->getLocale() . $this->serializer->serialize($options))
-        );
+        $locale = $this->localeResolver->getLocale() . ($this->getCode() ? '@currency=' . $this->getCode() : '');
+        $key = 'currency_' . hash('sha256', $locale . $this->serializer->serialize($options));
         if (!isset($this->numberFormatterCache[$key])) {
             $this->numberFormatter = $this->numberFormatterFactory->create(
-                ['locale' => $this->localeResolver->getLocale(), 'style' => \NumberFormatter::CURRENCY]
+                ['locale' => $locale, 'style' => \NumberFormatter::CURRENCY]
             );
 
             $this->setOptions($options);

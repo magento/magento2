@@ -7,6 +7,8 @@ namespace Magento\Framework\View\Element\UiComponent\Config;
 
 /**
  * Interface FileCollectorInterface
+ *
+ * @api
  */
 interface FileCollectorInterface
 {

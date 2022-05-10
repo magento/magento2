@@ -45,7 +45,10 @@ var config = {
             'jquery-ui-modules/tabs': 'jquery/ui-modules/widgets/tabs',
             'jquery-ui-modules/tooltip': 'jquery/ui-modules/widgets/tooltip',
             'jquery-ui-modules/widget': 'jquery/ui-modules/widget',
-            'jquery-ui-modules/timepicker': 'jquery/timepicker'
+            'jquery-ui-modules/timepicker': 'jquery/timepicker',
+            'vimeo': 'vimeo/player',
+            'vimeoWrapper': 'vimeo/vimeo-wrapper',
+            'jquery/jquery.cookie': 'js-cookie/cookie-wrapper'
         }
     },
     shim: {
@@ -57,7 +60,10 @@ var config = {
         'matchMedia': {
             'exports': 'mediaCheck'
         },
-        'magnifier/magnifier': ['jquery']
+        'magnifier/magnifier': ['jquery'],
+        'vimeo/player': {
+            'exports': 'Player'
+        }
     },
     paths: {
         'jquery/validate': 'jquery/jquery.validate',
