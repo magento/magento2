@@ -12,7 +12,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Notification\NotifierInterface;
-use Magento\ImportExport\Api\Data\ExtendedExportInfoInterface;
+use Magento\ImportExport\Api\Data\LocalizedExportInfoInterface;
 use Magento\ImportExport\Api\ExportManagementInterface;
 use Magento\ImportExport\Model\Export\Consumer;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -70,7 +70,7 @@ class ConsumerTest extends TestCase
     public function testProcess()
     {
         $adminLocale = 'de_DE';
-        $exportInfoMock = $this->createMock(ExtendedExportInfoInterface::class);
+        $exportInfoMock = $this->createMock(LocalizedExportInfoInterface::class);
         $exportInfoMock->expects($this->atLeastOnce())
             ->method('getLocale')
             ->willReturn($adminLocale);

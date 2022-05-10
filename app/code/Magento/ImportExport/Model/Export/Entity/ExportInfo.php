@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\ImportExport\Model\Export\Entity;
 
-use Magento\ImportExport\Api\Data\ExtendedExportInfoInterface;
+use Magento\ImportExport\Api\Data\LocalizedExportInfoInterface;
 
 /**
  * Class ExportInfo implementation for ExportInfoInterface.
  */
-class ExportInfo implements ExtendedExportInfoInterface
+class ExportInfo implements LocalizedExportInfoInterface
 {
     /**
      * @var string

@@ -12,7 +12,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Locale\ResolverInterface;
-use Magento\ImportExport\Api\Data\ExtendedExportInfoInterface;
+use Magento\ImportExport\Api\Data\LocalizedExportInfoInterface;
 use Magento\ImportExport\Api\ExportManagementInterface;
 use Magento\Framework\Notification\NotifierInterface;
 
@@ -71,10 +71,10 @@ class Consumer
     /**
      * Consumer logic.
      *
-     * @param ExtendedExportInfoInterface $exportInfo
+     * @param LocalizedExportInfoInterface $exportInfo
      * @return void
      */
-    public function process(ExtendedExportInfoInterface $exportInfo)
+    public function process(LocalizedExportInfoInterface $exportInfo)
     {
         $currentLocale = $this->localeResolver->getLocale();
         if ($exportInfo->getLocale()) {
