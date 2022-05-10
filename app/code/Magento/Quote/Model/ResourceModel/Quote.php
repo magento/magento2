@@ -104,6 +104,11 @@ class Quote extends AbstractDb
         $data = $connection->fetchRow($select);
 
         if ($data) {
+            //Prevent current Store Id to be overridden
+            if ($quote->getStoreId() !== null) {
+                unset($data['store_id']);
+            }
+
             $quote->setData($data);
             $quote->setOrigData();
         }
