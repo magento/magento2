@@ -25,7 +25,7 @@ interface ExtendedExportInfoInterface extends ExportInfoInterface
      * Set skipped attributes
      *
      * @param string $skipAttr
-     * @return mixed
+     * @return void
      */
     public function setSkipAttr($skipAttr);
 }
