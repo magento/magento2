@@ -66,4 +66,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Data\Form\Element\Fieldset">
+        <plugin name="Bundle" type="Magento\Bundle\Plugin\Framework\Data\Form\Element\FieldsetPlugin"/>
+    </type>
 </config>
