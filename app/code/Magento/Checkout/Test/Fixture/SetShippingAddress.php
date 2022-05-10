@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Quote\Test\Fixture;
+namespace Magento\Checkout\Test\Fixture;
 
 use Magento\Framework\DataObject;
 use Magento\Quote\Api\Data\AddressInterface;
