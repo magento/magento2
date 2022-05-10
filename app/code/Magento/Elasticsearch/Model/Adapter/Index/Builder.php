@@ -9,7 +9,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 use Magento\Search\Model\ResourceModel\SynonymReader;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Index Builder
