@@ -138,7 +138,10 @@ class ExportInfo implements LocalizedExportInfoInterface
     }
 
     /**
-     * @inheritdoc
+     * Set skipped attributes
+     *
+     * @param string $skipAttr
+     * @return void
      */
     public function setSkipAttr($skipAttr)
     {
