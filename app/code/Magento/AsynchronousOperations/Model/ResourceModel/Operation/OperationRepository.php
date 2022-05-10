@@ -91,7 +91,7 @@ class OperationRepository implements OperationRepositoryInterface
         ];
         $data = [
             'data' => [
-                OperationInterface::OPERATION_KEY => $operationId,
+                OperationInterface::ID => $operationId,
                 OperationInterface::BULK_ID => $groupId,
                 OperationInterface::TOPIC_NAME => $topicName,
                 OperationInterface::SERIALIZED_DATA => $this->jsonSerializer->serialize($serializedData),

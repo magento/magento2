@@ -53,22 +53,22 @@ class MarkIncompleteOperationsAsFailedTest extends TestCase
         $startedAt = $resource->getConnection()->formatDate(new \DateTime('-14 hours', new \DateTimeZone('UTC')));
         $operationsData = [
             [
-                OperationInterface::OPERATION_KEY => 0,
+                OperationInterface::ID => 0,
                 OperationInterface::STATUS => OperationInterface::STATUS_TYPE_COMPLETE,
                 'started_at' => $startedAt,
             ],
             [
-                OperationInterface::OPERATION_KEY => 1,
+                OperationInterface::ID => 1,
                 OperationInterface::STATUS => OperationInterface::STATUS_TYPE_OPEN,
                 'started_at' => $startedAt,
             ],
             [
-                OperationInterface::OPERATION_KEY => 2,
+                OperationInterface::ID => 2,
                 OperationInterface::STATUS => OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED,
                 'started_at' => $startedAt,
             ],
             [
-                OperationInterface::OPERATION_KEY => 3,
+                OperationInterface::ID => 3,
                 OperationInterface::STATUS => OperationInterface::STATUS_TYPE_OPEN,
                 'started_at' => null,
             ]
