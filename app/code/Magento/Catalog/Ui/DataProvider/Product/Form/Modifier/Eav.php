@@ -193,11 +193,6 @@ class Eav extends AbstractModifier
     private $prevSetAttributes;
 
     /**
-     * @var CurrencyInterface
-     */
-    private $localeCurrency;
-
-    /**
      * @var array
      */
     private $attributesCache = [];
