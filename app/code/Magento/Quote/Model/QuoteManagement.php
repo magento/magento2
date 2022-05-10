@@ -25,6 +25,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -518,8 +519,9 @@ class QuoteManagement implements CartManagementInterface
      * @param Quote $quote
      * @param array $orderData
      * @return AbstractExtensibleModel|OrderInterface|object
-     * @throws \Exception
+     * @throws ValidatorException
      * @throws LocalizedException
+     * @throws \Exception
      */
     protected function submitQuote(QuoteEntity $quote, $orderData = [])
     {

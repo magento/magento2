@@ -212,14 +212,14 @@
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterBeforeOrderDateFilter" after="filterOrderGridByDateComment"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderFilterForOrderDateFrom" after="clearFilterBeforeOrderDateFilter"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('created_at[from]')}}" userInput="01/01/2018" stepKey="fillOrderDateFromFilter" after="openOrderFilterForOrderDateFrom"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="applyFilterOrderDateFrom" after="fillOrderDateFromFilter"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyFilterOrderDateFrom" after="fillOrderDateFromFilter"/>
         <!--Both of our orders should be in grid-->
         <see selector="{{AdminDataGridTableSection.column('Bill')}}" userInput="{{Simple_US_Customer.fullname}}" stepKey="seeFirstOrderInGrid" after="applyFilterOrderDateFrom"/>
         <see selector="{{AdminDataGridTableSection.column('Bill')}}" userInput="{{BillingAddressTX.fullname}}" stepKey="seeSecondOrderInGrid" after="seeFirstOrderInGrid"/>
         <!--Add end date to date range filter (past date)-->
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderFilterForOrderDateTo" after="seeSecondOrderInGrid"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('created_at[to]')}}" userInput="01/10/2018" stepKey="fillOrderDateToFilter" after="openOrderFilterForOrderDateTo"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="applyFilterOrderDateTo" after="fillOrderDateToFilter"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyFilterOrderDateTo" after="fillOrderDateToFilter"/>
         <!--Dont see our orders in the grid-->
         <dontSee selector="{{AdminDataGridTableSection.column('Bill')}}" userInput="{{Simple_US_Customer.fullname}}" stepKey="dontSeeFirstOrderInGrid" after="applyFilterOrderDateTo"/>
         <dontSee selector="{{AdminDataGridTableSection.column('Bill')}}" userInput="{{BillingAddressTX.fullname}}" stepKey="dontSeeSecondOrderInGrid" after="dontSeeFirstOrderInGrid"/>
@@ -289,5 +289,6 @@
         <!--Delete store view created as prerequisites-->
         <comment userInput="Clean up store view" stepKey="cleanUpStoreView" before="deleteStoreView"/>
         <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
+        <magentoCron groups="index" stepKey="reindex" after="deleteStoreView"/>
     </test>
 </tests>

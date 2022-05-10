@@ -8,13 +8,11 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Helper\Error\AggregateExceptionMessageFormatter;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\QuoteGraphQl\Model\Cart\PlaceOrder as PlaceOrderModel;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -40,18 +38,26 @@ class PlaceOrder implements ResolverInterface
     private $orderRepository;
 
     /**
+     * @var AggregateExceptionMessageFormatter
+     */
+    private $errorMessageFormatter;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param PlaceOrderModel $placeOrder
      * @param OrderRepositoryInterface $orderRepository
+     * @param AggregateExceptionMessageFormatter $errorMessageFormatter
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         PlaceOrderModel $placeOrder,
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        AggregateExceptionMessageFormatter $errorMessageFormatter
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->placeOrder = $placeOrder;
         $this->orderRepository = $orderRepository;
+        $this->errorMessageFormatter = $errorMessageFormatter;
     }
 
     /**
@@ -70,12 +76,16 @@ class PlaceOrder implements ResolverInterface
             $cart = $this->getCartForUser->getCartForCheckout($maskedCartId, $userId, $storeId);
             $orderId = $this->placeOrder->execute($cart, $maskedCartId, $userId);
             $order = $this->orderRepository->get($orderId);
-        } catch (GraphQlInputException | GraphQlNoSuchEntityException | GraphQlAuthorizationException $e) {
-            throw $e;
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__('Unable to place order: %message', ['message' => $e->getMessage()]), $e);
+            throw $this->errorMessageFormatter->getFormatted(
+                $e,
+                __('Unable to place order: A server error stopped your order from being placed. ' .
+                    'Please try to place your order again'),
+                'Unable to place order',
+                $field,
+                $context,
+                $info
+            );
         }
 
         return [

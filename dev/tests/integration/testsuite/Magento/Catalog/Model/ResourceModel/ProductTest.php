@@ -6,10 +6,6 @@
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Action;
-use Magento\Eav\Api\Data\AttributeSetInterface;
-use Magento\Eav\Model\AttributeSetRepository;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -56,7 +52,7 @@ class ProductTest extends TestCase
     /**
      * Checks a possibility to retrieve product raw attribute value.
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      */
     public function testGetAttributeRawValue()
     {
@@ -70,7 +66,8 @@ class ProductTest extends TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_store_scope_attribute.php
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
@@ -78,17 +75,18 @@ class ProductTest extends TestCase
      */
     public function testGetAttributeRawValueGetDefault()
     {
-        $product = $this->productRepository->get('simple_with_store_scoped_custom_attribute', true, 0, true);
-        $product->setCustomAttribute('store_scoped_attribute_code', 'default_value');
+        $product = $this->productRepository->get('simple', true, 0, true);
+        $product->setCustomAttribute('prod_attr', 'default_value');
         $this->productRepository->save($product);
 
-        $actual = $this->model->getAttributeRawValue($product->getId(), 'store_scoped_attribute_code', 1);
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'prod_attr', 1);
         $this->assertEquals('default_value', $actual);
     }
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_store_scope_attribute.php
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
@@ -96,21 +94,22 @@ class ProductTest extends TestCase
      */
     public function testGetAttributeRawValueGetStoreSpecificValueNoDefault()
     {
-        $product = $this->productRepository->get('simple_with_store_scoped_custom_attribute', true, 0, true);
-        $product->setCustomAttribute('store_scoped_attribute_code', null);
+        $product = $this->productRepository->get('simple', true, 0, true);
+        $product->setCustomAttribute('prod_attr', null);
         $this->productRepository->save($product);
 
-        $product = $this->productRepository->get('simple_with_store_scoped_custom_attribute', true, 1, true);
-        $product->setCustomAttribute('store_scoped_attribute_code', 'store_value');
+        $product = $this->productRepository->get('simple', true, 1, true);
+        $product->setCustomAttribute('prod_attr', 'store_value');
         $this->productRepository->save($product);
 
-        $actual = $this->model->getAttributeRawValue($product->getId(), 'store_scoped_attribute_code', 1);
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'prod_attr', 1);
         $this->assertEquals('store_value', $actual);
     }
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_store_scope_attribute.php
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
@@ -118,21 +117,22 @@ class ProductTest extends TestCase
      */
     public function testGetAttributeRawValueGetStoreSpecificValueWithDefault()
     {
-        $product = $this->productRepository->get('simple_with_store_scoped_custom_attribute', true, 0, true);
-        $product->setCustomAttribute('store_scoped_attribute_code', 'default_value');
+        $product = $this->productRepository->get('simple', true, 0, true);
+        $product->setCustomAttribute('prod_attr', 'default_value');
         $this->productRepository->save($product);
 
-        $product = $this->productRepository->get('simple_with_store_scoped_custom_attribute', true, 1, true);
-        $product->setCustomAttribute('store_scoped_attribute_code', 'store_value');
+        $product = $this->productRepository->get('simple', true, 1, true);
+        $product->setCustomAttribute('prod_attr', 'store_value');
         $this->productRepository->save($product);
 
-        $actual = $this->model->getAttributeRawValue($product->getId(), 'store_scoped_attribute_code', 1);
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'prod_attr', 1);
         $this->assertEquals('store_value', $actual);
     }
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_store_scope_attribute.php
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
@@ -141,17 +141,17 @@ class ProductTest extends TestCase
      */
     public function testGetAttributeRawValueGetStoreValueFallbackToDefault()
     {
-        $product = $this->productRepository->get('simple_with_store_scoped_custom_attribute', true, 0, true);
-        $product->setCustomAttribute('store_scoped_attribute_code', 'default_value');
+        $product = $this->productRepository->get('simple', true, 0, true);
+        $product->setCustomAttribute('prod_attr', 'default_value');
         $this->productRepository->save($product);
 
-        $actual = $this->model->getAttributeRawValue($product->getId(), 'store_scoped_attribute_code', 1);
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'prod_attr', 1);
         $this->assertEquals('default_value', $actual);
     }
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Catalog/_files/product_special_price.php
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple","special_price":"5.99"}
      * @magentoAppIsolation enabled
      * @magentoConfigFixture default_store catalog/price/scope 1
      */

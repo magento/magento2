@@ -22,6 +22,13 @@ define(
              */
             execute: function () {
                 fullScreenLoader.startLoader();
+                this.reloadPage();
+            },
+
+            /**
+             * Method to reload page
+             */
+            reloadPage: function () {
                 window.location.replace(url.build(this.redirectUrl));
             }
         };
