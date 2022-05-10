@@ -38,9 +38,9 @@
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableNewCategory"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SubCategory.name}}" stepKey="fillSameSubCategoryName"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSameSubCategoryFirstTime"/>
-        <seeElement selector="{{AdminCategoryBasicFieldSection.errorMessages}}" stepKey="validateErrorMessages"/>
+        <seeElement selector="{{AdminCategoryBasicFieldSection.urlExistsErrorMessage}}" stepKey="validateErrorMessages"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSameSubCategoryAgain"/>
-        <seeElement selector="{{AdminCategoryBasicFieldSection.errorMessages}}" stepKey="validateSameErrorMessages"/>
+        <seeElement selector="{{AdminCategoryBasicFieldSection.urlExistsErrorMessage}}" stepKey="validateSameErrorMessages"/>
 
         <!--Create category1/NewCategory-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="amOnAdminCategoryPage2"/>
