@@ -605,12 +605,8 @@ define([
         ],
         'validate-not-negative-number': [
             function (value) {
-                if (utils.isEmptyNoTrim(value)) {
-                    return true;
-                }
-                value = utils.parseNumber(value);
-
-                return !isNaN(value) && value >= 0;
+                return utils.isEmptyNoTrim(value) || !isNaN(utils.parseNumber(value))
+                    && value >= 0 && (/^\s*-?\d+([,.]\d+)*\s*%?\s*$/).test(value);
 
             },
             $.mage.__('Please enter a number 0 or greater in this field.')
@@ -618,23 +614,15 @@ define([
         // validate-not-negative-number should be replaced in all places with this one and then removed
         'validate-zero-or-greater': [
             function (value) {
-                if (utils.isEmptyNoTrim(value)) {
-                    return true;
-                }
-                value = utils.parseNumber(value);
-
-                return !isNaN(value) && value >= 0;
+                return utils.isEmptyNoTrim(value) || !isNaN(utils.parseNumber(value))
+                    && value >= 0 && (/^\s*-?\d+([,.]\d+)*\s*%?\s*$/).test(value);
             },
             $.mage.__('Please enter a number 0 or greater in this field.')
         ],
         'validate-greater-than-zero': [
             function (value) {
-                if (utils.isEmptyNoTrim(value)) {
-                    return true;
-                }
-                value = utils.parseNumber(value);
-
-                return !isNaN(value) && value > 0;
+                return utils.isEmptyNoTrim(value) || !isNaN(utils.parseNumber(value))
+                    && value > 0 && (/^\s*-?\d+([,.]\d+)*\s*%?\s*$/).test(value);
             },
             $.mage.__('Please enter a number greater than 0 in this field.')
         ],

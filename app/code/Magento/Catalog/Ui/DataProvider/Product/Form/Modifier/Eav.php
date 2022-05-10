@@ -53,6 +53,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as Attrib
 class Eav extends AbstractModifier
 {
     public const SORT_ORDER_MULTIPLIER = 10;
+    public const PRECISION = 2;
 
     /**
      * @var LocatorInterface
@@ -1126,9 +1127,7 @@ class Eav extends AbstractModifier
             return null;
         }
 
-        $store = $this->storeManager->getStore();
-        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
-        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+        $value = \Zend_Locale_Math::normalize(\Zend_Locale_Math::round($value, self::PRECISION));
 
         return $value;
     }
