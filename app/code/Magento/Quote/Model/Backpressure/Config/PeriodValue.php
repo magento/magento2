@@ -10,6 +10,7 @@ namespace Magento\Quote\Model\Backpressure\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -49,12 +50,18 @@ class PeriodValue extends Value
 
     /**
      * @inheritDoc
+     * @throws LocalizedException
      */
     public function beforeSave()
     {
+        /**
+         * @var PeriodSource $source
+         */
+        $source = ObjectManager::getInstance()->get(PeriodSource::class);
+
         if ($this->isValueChanged()) {
             $value = (string) $this->getValue();
-            if (!array_key_exists($value, $this->source->toOptionArray())) {
+            if (!array_key_exists($value, $source->toOptionArray())) {
                 throw new LocalizedException(__('Please select a valid rate limit period'));
             }
         }

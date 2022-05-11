@@ -48,6 +48,8 @@ class BackpressureRequestTypeExtractor implements RequestTypeExtractorInterface
 
     /**
      *
+     * Get Resolver
+     *
      * @return string
      */
     private function getResolver(): string
