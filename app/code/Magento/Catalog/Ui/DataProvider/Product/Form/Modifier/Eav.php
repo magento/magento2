@@ -27,7 +27,6 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Filter\Translit;
-use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
@@ -1092,26 +1091,5 @@ class Eav extends AbstractModifier
         }
 
         return $attributeGroupCode;
-    }
-
-    /**
-     * Format price according to the locale of the currency
-     *
-     * @param mixed $value
-     * @return string
-     */
-    protected function formatPrice($value)
-    {
-        if (!is_numeric($value)) {
-            return null;
-        }
-
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $roundValue = call_user_func([\Zend_Locale_Math::class, 'round'], $value, 2);
-
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $value = call_user_func([\Zend_Locale_Math::class, 'normalize'], $roundValue);
-
-        return $value;
     }
 }

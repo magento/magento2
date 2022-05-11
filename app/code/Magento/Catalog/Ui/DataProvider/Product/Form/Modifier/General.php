@@ -412,27 +412,6 @@ class General extends AbstractModifier
     }
 
     /**
-     * Format price
-     *
-     * @param  mixed $value
-     * @return string
-     * @since  101.0.0
-     */
-    protected function formatPrice($value)
-    {
-        if (!is_numeric($value)) {
-            return null;
-        }
-
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $roundValue = call_user_func([\Zend_Locale_Math::class, 'round'], $value, 2);
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $value = call_user_func([\Zend_Locale_Math::class, 'normalize'], $roundValue);
-
-        return $value;
-    }
-
-    /**
      * Format number according precision of input
      *
      * @param  mixed $value
@@ -446,11 +425,6 @@ class General extends AbstractModifier
         }
 
         $value = (float)$value;
-        $precision = strlen(substr(strrchr($value, "."), 1));
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $roundValue = call_user_func([\Zend_Locale_Math::class, 'round'], $value, $precision);
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $value = call_user_func([\Zend_Locale_Math::class, 'normalize'], $roundValue);
 
         return $value;
     }

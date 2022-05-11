@@ -23,7 +23,6 @@ use Magento\Ui\Component\Form\Element\Checkbox;
 use Magento\Ui\Component\Form\Element\ActionDelete;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Element\DataType\Number;
-use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Data provider for "Customizable Options" panel
@@ -1175,27 +1174,5 @@ class CustomOptions extends AbstractModifier
     protected function getCurrencySymbol()
     {
         return $this->storeManager->getStore()->getBaseCurrency()->getCurrencySymbol();
-    }
-
-    /**
-     * Format price
-     *
-     * @param mixed $value
-     * @return string
-     * @since 101.0.0
-     */
-    protected function formatPrice($value)
-    {
-        if (!is_numeric($value)) {
-            return null;
-        }
-
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $roundValue = call_user_func([\Zend_Locale_Math::class, 'round'], $value, 2);
-
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $value = call_user_func([\Zend_Locale_Math::class, 'normalize'], $roundValue);
-
-        return $value;
     }
 }
