@@ -11,7 +11,7 @@
             "access_token_expires_at": true
         },
         "index": {
-            "ADMIN_ADOBE_IMS_WEBAPI_ID": true
+            "ADMIN_ADOBE_IMS_WEBAPI_ADMIN_USER_ID": true
         },
         "constraint": {
             "PRIMARY": true,
