@@ -131,7 +131,7 @@ interface ImsWebapiInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\AdminAdobeIms\Api\Data\ImsWebapiExtensionInterface
+     * @return \Magento\AdminAdobeIms\Api\Data\ImsWebapiExtensionInterface|null
      */
     public function getExtensionAttributes(): ImsWebapiExtensionInterface;
 
@@ -141,7 +141,5 @@ interface ImsWebapiInterface extends ExtensibleDataInterface
      * @param \Magento\AdminAdobeIms\Api\Data\ImsWebapiExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(
-        ImsWebapiExtensionInterface $extensionAttributes
-    ): ImsWebapiInterface;
+    public function setExtensionAttributes(ImsWebapiExtensionInterface $extensionAttributes): ImsWebapiInterface;
 }

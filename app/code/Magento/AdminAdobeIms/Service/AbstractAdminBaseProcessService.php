@@ -30,14 +30,14 @@ abstract class AbstractAdminBaseProcessService
     protected Auth $auth;
 
     /**
-     * @var LogOut
-     */
-    protected LogOut $logOut;
-
-    /**
      * @var DateTime
      */
     protected DateTime $dateTime;
+
+    /**
+     * @var LogOut
+     */
+    private LogOut $logOut;
 
     /**
      * @param User $adminUser
