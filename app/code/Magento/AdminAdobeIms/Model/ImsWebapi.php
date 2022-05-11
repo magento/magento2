@@ -175,6 +175,8 @@ class ImsWebapi extends AbstractExtensibleModel implements ImsWebapiInterface
      */
     public function setExtensionAttributes(ImsWebapiExtensionInterface $extensionAttributes): ImsWebapiInterface
     {
-        return $this->_setExtensionAttributes($extensionAttributes);
+        $this->_setExtensionAttributes($extensionAttributes);
+
+        return $this;
     }
 }
