@@ -31,7 +31,7 @@ class MagentoImport implements PreProcessorInterface
     /**
      * PCRE pattern that matches @magento_import instruction
      */
-    const REPLACE_PATTERN =
+    public const REPLACE_PATTERN =
         '#//@magento_import(?P<reference>\s+\(reference\))?\s+[\'\"](?P<path>(?![/\\\]|\w:[/\\\])[^\"\']+)[\'\"]\s*?;#';
 
     private const CONFIG_PATH_SCD_ONLY_ENABLED_MODULES = 'static_content_only_enabled_modules';
@@ -135,7 +135,7 @@ class MagentoImport implements PreProcessorInterface
             $relatedAsset = $this->assetRepo->createRelated($matchedFileId, $asset);
             $resolvedPath = $relatedAsset->getFilePath();
             $importFiles = $this->fileSource->getFiles($this->getTheme($relatedAsset), $resolvedPath);
-            $deployOnlyEnabled = $this->getStaticDeployEnabledModulesFlag();
+            $deployOnlyEnabled = $this->hasEnabledFlagDeployEnabledModules();
             /** @var $importFile \Magento\Framework\View\File */
             foreach ($importFiles as $importFile) {
                 $moduleName = $importFile->getModule();
@@ -172,7 +172,7 @@ class MagentoImport implements PreProcessorInterface
      *
      * @return bool
      */
-    protected function getStaticDeployEnabledModulesFlag() : bool
+    protected function hasEnabledFlagDeployEnabledModules(): bool
     {
         return (bool) $this->deploymentConfig->get(self::CONFIG_PATH_SCD_ONLY_ENABLED_MODULES);
     }
