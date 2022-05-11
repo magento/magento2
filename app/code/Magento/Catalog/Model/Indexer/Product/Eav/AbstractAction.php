@@ -17,7 +17,7 @@ abstract class AbstractAction
     /**
      * Config path for enable EAV indexer
      */
-    const ENABLE_EAV_INDEXER = 'catalog/search/enable_eav_indexer';
+    public const ENABLE_EAV_INDEXER = 'catalog/search/enable_eav_indexer';
 
     /**
      * EAV Indexers by type
