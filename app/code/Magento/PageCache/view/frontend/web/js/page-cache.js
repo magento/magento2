@@ -54,8 +54,8 @@ define([
                     var iframeHostName;
 
                     // prevent cross origin iframe content reading
-                    if ($(element).prop('tagName') === 'IFRAME') {
-                        iframeHostName = $('<a>').prop('href', $(element).prop('src'))
+                    if ($(el).prop('tagName') === 'IFRAME') {
+                        iframeHostName = $('<a>').prop('href', $(el).prop('src'))
                             .prop('hostname');
 
                         if (window.location.hostname !== iframeHostName) {
