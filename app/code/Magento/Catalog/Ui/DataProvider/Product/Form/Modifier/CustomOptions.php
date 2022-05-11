@@ -138,11 +138,6 @@ class CustomOptions extends AbstractModifier
     protected $meta = [];
 
     /**
-     * @var CurrencyInterface
-     */
-    private $localeCurrency;
-
-    /**
      * @param LocatorInterface $locator
      * @param StoreManagerInterface $storeManager
      * @param ConfigInterface $productOptionsConfig
@@ -1183,22 +1178,7 @@ class CustomOptions extends AbstractModifier
     }
 
     /**
-     * The getter function to get the locale currency for real application code
-     *
-     * @return \Magento\Framework\Locale\CurrencyInterface
-     *
-     * @deprecated 101.0.0
-     */
-    private function getLocaleCurrency()
-    {
-        if ($this->localeCurrency === null) {
-            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
-        }
-        return $this->localeCurrency;
-    }
-
-    /**
-     * Format price according to the locale of the currency
+     * Format price
      *
      * @param mixed $value
      * @return string
@@ -1210,9 +1190,11 @@ class CustomOptions extends AbstractModifier
             return null;
         }
 
-        $store = $this->storeManager->getStore();
-        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
-        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $roundValue = call_user_func([\Zend_Locale_Math::class, 'round'], $value, 2);
+
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $value = call_user_func([\Zend_Locale_Math::class, 'normalize'], $roundValue);
 
         return $value;
     }

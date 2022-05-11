@@ -53,7 +53,6 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as Attrib
 class Eav extends AbstractModifier
 {
     public const SORT_ORDER_MULTIPLIER = 10;
-    public const PRECISION = 2;
 
     /**
      * @var LocatorInterface
@@ -1108,7 +1107,7 @@ class Eav extends AbstractModifier
         }
 
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $roundValue = call_user_func([\Zend_Locale_Math::class, 'round'], $value, self::PRECISION);
+        $roundValue = call_user_func([\Zend_Locale_Math::class, 'round'], $value, 2);
 
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $value = call_user_func([\Zend_Locale_Math::class, 'normalize'], $roundValue);
