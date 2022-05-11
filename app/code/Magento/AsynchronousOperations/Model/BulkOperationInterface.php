@@ -10,7 +10,7 @@ namespace Magento\AsynchronousOperations\Model;
 /**
  * Class BulkOperationInterface
  * @api
- * @since 103.0.0
+ * @since 104.0.0
  */
 interface BulkOperationInterface
 {
