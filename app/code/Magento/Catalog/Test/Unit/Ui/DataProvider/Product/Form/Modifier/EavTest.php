@@ -330,24 +330,11 @@ class EavTest extends AbstractModifierTest
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->setMethods(['load', 'getId', 'getConfig', 'getBaseCurrencyCode'])
             ->getMockForAbstractClass();
-        $this->currencyMock = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['toCurrency'])
-            ->getMock();
-        $this->currencyLocaleMock = $this->getMockBuilder(CurrencyLocale::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCurrency'])
-            ->getMock();
         $this->eavAttributeMock->expects($this->any())
             ->method('load')
             ->willReturnSelf();
 
         $this->eav =$this->getModel();
-        $this->objectManager->setBackwardCompatibleProperty(
-            $this->eav,
-            'localeCurrency',
-            $this->currencyLocaleMock
-        );
     }
 
     /**
