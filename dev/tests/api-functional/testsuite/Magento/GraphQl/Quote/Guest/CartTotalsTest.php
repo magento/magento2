@@ -235,8 +235,8 @@ class CartTotalsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product
      * @magentoApiDataFixture Magento\Quote\Test\Fixture\GuestCart as:cart
      * @magentoApiDataFixture Magento\Quote\Test\Fixture\AddProductToCart as:item1
-     * @magentoApiDataFixture Magento\Quote\Test\Fixture\SetBillingAddress with:{"cart_id":"$cart.id$"}
-     * @magentoApiDataFixture Magento\Quote\Test\Fixture\SetShippingAddress with:{"cart_id":"$cart.id$"}
+     * @magentoApiDataFixture Magento\Checkout\Test\Fixture\SetBillingAddress with:{"cart_id":"$cart.id$"}
+     * @magentoApiDataFixture Magento\Checkout\Test\Fixture\SetShippingAddress with:{"cart_id":"$cart.id$"}
      * @magentoDataFixtureDataProvider {"item1":{"cart_id":"$cart.id$","product_id":"$product.id$","qty":2}}
      */
     public function testGetTotalsWithNoTaxApplied()

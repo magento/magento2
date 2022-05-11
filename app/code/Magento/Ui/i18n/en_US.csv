@@ -105,6 +105,7 @@ Keyword,Keyword
 "Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.","Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed."
 "Please enter a valid date.","Please enter a valid date."
 "Please enter a valid URL Key (Ex: ""example-page"", ""example-page.html"" or ""anotherlevel/example-page"").","Please enter a valid URL Key (Ex: ""example-page"", ""example-page.html"" or ""anotherlevel/example-page"")."
+"Trailing hyphens are not allowed.","Trailing hyphens are not allowed."
 "Please enter a valid zip code.","Please enter a valid zip code."
 "Please select State/Province.","Please select State/Province."
 "Please enter a value less than or equal to {0}.","Please enter a value less than or equal to {0}."
