@@ -142,7 +142,7 @@ abstract class AbstractAction
         $connection->beginTransaction();
         try {
             // remove old index
-            $where = $connection->quoteInto('entity_id IN(?)', $ids);
+            $where = $connection->quoteInto('entity_id IN (?)', $ids, 'INT');
             $connection->delete($destinationTable, $where);
             // insert new index
             $indexer->insertFromTable($indexer->getIdxTable(), $destinationTable);
