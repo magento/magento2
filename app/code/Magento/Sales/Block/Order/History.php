@@ -57,16 +57,16 @@ class History extends \Magento\Framework\View\Element\Template
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
-     * @param array $data
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,
-        array $data = [],
-        StoreManagerInterface $storeManager = null
+        StoreManagerInterface $storeManager = null,
+        array $data = []
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_customerSession = $customerSession;
