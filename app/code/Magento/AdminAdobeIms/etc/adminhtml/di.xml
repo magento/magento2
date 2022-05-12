@@ -9,8 +9,8 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Backend\App\Action\Plugin\Authentication"
                 type="Magento\AdminAdobeIms\App\Action\Plugin\Authentication"/>
-    <preference for="Magento\Backend\Model\Auth\Credential\StorageInterface"
-                type="Magento\AdminAdobeIms\Model\User" />
+<!--    <preference for="Magento\Backend\Model\Auth\Credential\StorageInterface"-->
+<!--                type="Magento\AdminAdobeIms\Model\User" />-->
 
     <type name="Magento\Framework\View\Result\Layout">
         <plugin name="add_adobe_ims_layout_handle"
