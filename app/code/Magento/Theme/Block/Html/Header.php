@@ -34,7 +34,7 @@ class Header extends \Magento\Framework\View\Element\Template
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        $this->_data['welcome'] = str_replace("'", "\'", $this->_data['welcome']);
+        $this->_data['welcome'] =  addslashes($this->_data['welcome']);
         return __($this->_data['welcome']);
     }
 }
