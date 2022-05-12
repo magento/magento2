@@ -53,10 +53,12 @@ class BackpressureRequestTypeExtractor implements RequestTypeExtractorInterface
     }
 
     /**
+     * Resolver to get exact class name
+     *
      * @param $class
      * @return string
      */
-    private static function resolver($class): string
+    private function resolver($class): string
     {
         $reflectionClass = new \ReflectionClass($class);
 

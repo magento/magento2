@@ -20,11 +20,11 @@ use PHPUnit\Framework\TestCase;
 
 class RequestValidatorTest extends TestCase
 {
-    const SERVICE_METHOD = 'testMethod';
+    public const SERVICE_METHOD = 'testMethod';
 
-    const SERVICE_ID = 'Magento\Webapi\Controller\Rest\TestService';
+    public const SERVICE_ID = 'Magento\Webapi\Controller\Rest\TestService';
 
-    const SERVICE_PATH = '/V1/test-service';
+    public const SERVICE_PATH = '/V1/test-service';
 
     /**
      * @var RequestValidator

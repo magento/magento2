@@ -49,6 +49,7 @@ class PeriodValue extends Value
 
     /**
      * @inheritDoc
+     *
      * @throws LocalizedException
      */
     public function beforeSave()
