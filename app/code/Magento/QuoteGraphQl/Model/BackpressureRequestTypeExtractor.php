@@ -36,8 +36,14 @@ class BackpressureRequestTypeExtractor implements RequestTypeExtractorInterface
      */
     public function extract(Field $field): ?string
     {
-        if (($field->getResolver() === SetPaymentAndPlaceOrder::class ||
-                $field->getResolver()  === $this->getResolver())
+        $fieldResolver = $this->resolver($field->getResolver());
+
+        $placeOrderName = $this->resolver(PlaceOrder::class);
+
+        $setPaymentAndPlaceOrder = $this->resolver(SetPaymentAndPlaceOrder::class);
+
+        if (($field->getResolver() === $setPaymentAndPlaceOrder ||
+                $placeOrderName  ===  $fieldResolver)
             && $this->config->isEnforcementEnabled()
         ) {
             return OrderLimitConfigManager::REQUEST_TYPE_ID;
@@ -47,15 +53,13 @@ class BackpressureRequestTypeExtractor implements RequestTypeExtractorInterface
     }
 
     /**
-     *
-     * Get Resolver
-     *
+     * @param $class
      * @return string
      */
-    private function getResolver(): string
+    private static function resolver($class): string
     {
-        $reflectionClass = new \ReflectionClass(PlaceOrder::class);
+        $reflectionClass = new \ReflectionClass($class);
 
-        return $reflectionClass->getNamespaceName();
+        return $reflectionClass->getName();
     }
 }
