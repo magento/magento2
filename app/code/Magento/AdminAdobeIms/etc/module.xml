@@ -9,6 +9,9 @@
     <module name="Magento_AdminAdobeIms">
         <sequence>
             <module name="Magento_AdobeIms"/>
+            <module name="Magento_AdobeImsApi"/>
+            <module name="Magento_Backend"/>
+            <module name="Magento_User"/>
         </sequence>
     </module>
 </config>
