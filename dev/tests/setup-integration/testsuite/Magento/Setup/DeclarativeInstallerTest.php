@@ -216,7 +216,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         );
         self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getTrimmedData(), $shardData);
+        $this->assertTableCreationStatements($this->getTrimmedData(), $shardData);
     }
 
     /**
@@ -246,7 +246,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         );
         self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getData(), $shardData);
+        $this->assertTableCreationStatements($this->getData(), $shardData);
     }
 
     /**
@@ -306,7 +306,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             ['Magento_TestSetupDeclarationModule1']
         );
         $beforeRollback = $this->describeTable->describeShard('default');
-        self::assertEquals($this->getTrimmedData()['before'], $beforeRollback);
+        $this->assertTableCreationStatements($this->getTrimmedData()['before'], $beforeRollback);
         //Move db_schema.xml file and tried to install
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule1',
@@ -317,7 +317,7 @@ class DeclarativeInstallerTest extends SetupTestCase
 
         $this->cliCommand->upgrade();
         $afterRollback = $this->describeTable->describeShard('default');
-        self::assertEquals($this->getData()['after'], $afterRollback);
+        $this->assertTableCreationStatements($this->getData()['after'], $afterRollback);
     }
 
     /**
@@ -344,7 +344,9 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->resourceConnection->getTableName('some_table'),
             $dataToMigrate
         );
-        self::assertEquals($this->getData()['before'], $before['some_table']);
+        $this->isUsingAuroraDb() ?
+            $this->assertStringContainsString($this->getData()['before'], $before['some_table']) :
+            $this->assertEquals($this->getData()['before'], $before['some_table']);
         //Move db_schema.xml file and tried to install
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule1',
@@ -355,7 +357,9 @@ class DeclarativeInstallerTest extends SetupTestCase
 
         $this->cliCommand->upgrade();
         $after = $this->describeTable->describeShard('default');
-        self::assertEquals($this->getData()['after'], $after['some_table_renamed']);
+        $this->isUsingAuroraDb() ?
+            $this->assertStringContainsString($this->getData()['after'], $after['some_table_renamed']) :
+            $this->assertEquals($this->getData()['after'], $after['some_table_renamed']);
         $select = $adapter->select()
             ->from($this->resourceConnection->getTableName('some_table_renamed'));
         self::assertEquals([$dataToMigrate], $adapter->fetchAll($select));
@@ -459,6 +463,26 @@ class DeclarativeInstallerTest extends SetupTestCase
         );
         self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($this->getData(), $shardData);
+        $this->assertTableCreationStatements($this->getData(), $shardData);
+    }
+
+    /**
+     * Assert table creation statements
+     *
+     * @param array $expectedData
+     * @param array $actualData
+     */
+    private function assertTableCreationStatements(array $expectedData, array $actualData): void
+    {
+        if (!$this->isUsingAuroraDb()) {
+            $this->assertEquals($expectedData, $actualData);
+        } else {
+            ksort($expectedData);
+            ksort($actualData);
+            $this->assertSameSize($expectedData, $actualData);
+            foreach ($expectedData as $key => $value) {
+                $this->assertStringContainsString($actualData[$key], $value);
+            }
+        }
     }
 }
