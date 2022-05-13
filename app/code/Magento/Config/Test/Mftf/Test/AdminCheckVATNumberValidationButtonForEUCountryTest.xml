@@ -10,17 +10,14 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCheckVATNumberValidationButtonForEUCountryTest">
         <annotations>
-            <title value="Validate VAT Number button for United Kingdom should work same as for non-EU countries after Brexit 2021"/>
-            <description value="Validate VAT Number button for United Kingdom (GB) should work same as for non-EU countries after Brexit 2021"/>
+            <title value="Validate VAT Number button is not visible for United Kingdom as for non-EU countries after Brexit 2021"/>
+            <description value="Validate VAT Number button is not visible for United Kingdom (GB) as for non-EU countries after Brexit 2021"/>
             <features value="Config"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-2064"/>
             <useCaseId value="ACP2E-182"/>
             <stories value="Store VAT Number Validation"/>
             <group value="configuration"/>
-            <skip>
-                <issueId value="AC-2504"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -47,12 +44,6 @@
 
         <!-- Verify that the `Validate VAT Number` button is visible for EU Country-->
         <seeElement selector="{{StoreConfigSection.validateVATNumber}}" stepKey="validateVatNumberButtonEnabledForEuCountry"/>
-
-        <!-- Click the `Validate VAT Number` button. -->
-        <click selector="{{StoreConfigSection.validateVATNumber}}" stepKey="clickValidateVatNumberButton"/>
-        <waitForPageLoad stepKey="waitForAjaxToLoadVatValidationResult"/>
-        <waitForElementVisible selector="#validation_result" time="20" stepKey="waitForRenderingVatValidationResult"/>
-        <see selector="#validation_result" userInput="VAT Number is valid." stepKey="seeValidVatNumberResult"/>
 
         <!-- Disable `Validate VAT Number` button for non-EU Country (United Kingdom)-->
         <selectOption userInput="{{UK_With_State_Default_Billing.country}}" selector="{{StoreConfigSection.Country}}" stepKey="selectNonEUStoreCountry"/>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontWishlistConfigureProductQtyTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="The qty should get updated in the wishlist product detail page as per the wishlist page."/>
+            <title value="The qty in the wishlist product detail page should get updated as per the wishlist item on the wishlist page."/>
+            <description value="The qty in the wishlist product detail page should get updated as per the wishlist item on the wishlist page."/>
+            <testCaseId value="AC-2555"/>
+            <useCaseId value="ACP2E-459"/>
+            <severity value="AVERAGE"/>
+            <group value="wishlist"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+                <argument name="Customer" value="$$createCustomer$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+        <!-- See the product page main section -->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnProductPage"/>
+
+        <!-- Add product to wishlist -->
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addProductToWishlist">
+            <argument name="productVar" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!-- Check if product available in wishlist -->
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistActionGroup" stepKey="checkProductInWishlist">
+            <argument name="productVar" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!-- Edit wishlist product -->
+        <actionGroup ref="StorefrontCustomerUpdateWishlistItemActionGroup" stepKey="clickEditWishlistItem">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Fill updated quantity to product info main section -->
+        <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="1000" stepKey="fillQuantity"/>
+
+        <!-- Update wishlist with new quantity -->
+        <click selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="clickUpdateWishlist"/>
+
+        <!-- Click edit wishlist product link again to redirect product info main section -->
+        <actionGroup ref="StorefrontCustomerUpdateWishlistItemActionGroup" stepKey="clickEditWishlistItemAgain">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Verify that product info main section contains the updated quantity. -->
+        <seeInField userInput="1000" selector="{{StorefrontProductInfoMainSection.qty}}" stepKey="seeUpdatedQuantity"/>
+    </test>
+</tests>

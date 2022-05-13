@@ -5,10 +5,12 @@
  */
 namespace Magento\Setup\Module\Di\App\Task\Operation;
 
+use Magento\Framework\App;
+use Magento\Framework\Code\Generator\Io;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Magento\Setup\Module\Di\Code\Generator\InterceptionConfigurationBuilder;
-use Magento\Framework\Interception\Code\Generator\Interceptor;
-use Magento\Framework\App;
 use Magento\Setup\Module\Di\Code\GeneratorFactory;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 
@@ -27,7 +29,7 @@ class Interception implements OperationInterface
     /**
      * @var array
      */
-    private $data = [];
+    private $data;
 
     /**
      * @var ClassesScanner
@@ -61,7 +63,7 @@ class Interception implements OperationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function doOperation()
     {
@@ -80,14 +82,12 @@ class Interception implements OperationInterface
                 $paths = (array)$paths;
             }
             foreach ($paths as $path) {
-                $classesList = array_merge($classesList, $this->classesScanner->getList($path));
+                $classesList[] = $this->classesScanner->getList($path);
             }
         }
+        $classesList = array_merge([], ...$classesList);
 
-        $generatorIo = new \Magento\Framework\Code\Generator\Io(
-            new \Magento\Framework\Filesystem\Driver\File(),
-            $this->data['path_to_store']
-        );
+        $generatorIo = new Io(new File(), $this->data['path_to_store']);
         $generator = $this->generatorFactory->create(
             [
                 'ioObject' => $generatorIo,
