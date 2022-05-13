@@ -44,14 +44,14 @@ class FixtureModel
     /**
      * List of fixtures applied to the application
      *
-     * @var \Magento\Setup\Fixtures\Fixture[]
+     * @var Fixture[]
      */
     protected $fixtures = [];
 
     /**
      * List of fixtures indexed by class names
      *
-     * @var \Magento\Setup\Fixtures\Fixture[]
+     * @var Fixture[]
      */
     private $fixturesByNames = [];
 
@@ -109,10 +109,9 @@ class FixtureModel
     public function loadFixtures()
     {
         $files = glob(__DIR__ . DIRECTORY_SEPARATOR . self::FIXTURE_PATTERN, GLOB_NOSORT);
-
         foreach ($files as $file) {
             $file = basename($file, '.php');
-            /** @var \Magento\Setup\Fixtures\Fixture $fixture */
+            /** @var Fixture $fixture */
             $type = 'Magento\Setup\Fixtures' . '\\' . $file;
             $fixture = $this->getObjectManager()->create(
                 $type,
@@ -120,22 +119,40 @@ class FixtureModel
                     'fixtureModel' => $this,
                 ]
             );
-
-            if (isset($this->fixtures[$fixture->getPriority()])) {
-                throw new \InvalidArgumentException(
-                    sprintf('Duplicate priority %d in fixture %s', $fixture->getPriority(), $type)
-                );
-            }
-
-            if ($fixture->getPriority() >= 0) {
-                $this->fixtures[$fixture->getPriority()] = $fixture;
-            }
-
-            $this->fixturesByNames[get_class($fixture)] = $fixture;
+            $this->loadFixture($fixture);
         }
-
+        foreach($this->getFixturesFromRegistry() as $fixture) {
+            $this->loadFixture($fixture);
+        }
         ksort($this->fixtures);
         return $this;
+    }
+
+    private function getFixturesFromRegistry() : array
+    {
+        $fixtureRegistry = $this->getObjectManager()->create(FixtureRegistry::class);
+        $fixtures = [];
+        foreach ($fixtureRegistry->getFixtures() as $fixtureClassName) {
+            $fixtures[] = $this->getObjectManager()->create(
+                $fixtureClassName,
+                ['fixtureModel' => $this]
+            );
+        }
+        return $fixtures;
+    }
+
+    private function loadFixture(Fixture $fixture)
+    {
+        $fixtureClassName = get_class($fixture);
+        if (isset($this->fixtures[$fixture->getPriority()])) {
+            throw new \InvalidArgumentException(
+                sprintf('Duplicate priority %d in fixture %s', $fixture->getPriority(), $fixtureClassName)
+            );
+        }
+        if ($fixture->getPriority() >= 0) {
+            $this->fixtures[$fixture->getPriority()] = $fixture;
+        }
+        $this->fixturesByNames[$fixtureClassName] = $fixture;
     }
 
     /**
@@ -162,7 +179,7 @@ class FixtureModel
     /**
      * Returns fixture by name
      * @param $name string
-     * @return \Magento\Setup\Fixtures\Fixture
+     * @return Fixture
      * @throws \Magento\Setup\Exception
      */
     public function getFixtureByName($name)

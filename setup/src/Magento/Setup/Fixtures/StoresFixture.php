@@ -132,6 +132,12 @@ class StoresFixture extends Fixture
      */
     private $storeViewIds;
 
+
+    /**
+     * @var string[]
+     */
+    private $websiteCodes = [];
+
     /**
      * @var ManagerInterface
      */
@@ -183,7 +189,6 @@ class StoresFixture extends Fixture
         $this->storeGroupsCount = $this->fixtureModel->getValue('store_groups', self::DEFAULT_STORE_COUNT);
         $this->storesCount = $this->fixtureModel->getValue('store_views', self::DEFAULT_STORE_VIEW_COUNT);
         $this->singleRootCategory = (bool)$this->fixtureModel->getValue('assign_entities_to_all_websites', false);
-
         if ($this->websitesCount <= self::DEFAULT_WEBSITE_COUNT
             && $this->storeGroupsCount <= self::DEFAULT_STORE_COUNT
             && $this->storesCount <= self::DEFAULT_STORE_VIEW_COUNT
@@ -207,7 +212,6 @@ class StoresFixture extends Fixture
         $this->defaultStoreGroupId = $this->defaultStoreGroup->getId();
         $this->defaultStoreView = $this->storeManager->getDefaultStoreView();
         $this->storeViewIds = array_keys($this->storeManager->getStores());
-
         $this->generateWebsites();
         $this->generateStoreGroups();
         $this->generateStoreViews();
@@ -220,7 +224,6 @@ class StoresFixture extends Fixture
     private function generateWebsites()
     {
         $existedWebsitesCount = count($this->websiteIds) + self::DEFAULT_WEBSITE_COUNT;
-
         while ($existedWebsitesCount <= $this->websitesCount) {
             $website = clone $this->defaultWebsite;
             $websiteCode = sprintf('website_%d', $existedWebsitesCount);
@@ -236,6 +239,7 @@ class StoresFixture extends Fixture
             $website->save();
             $this->websiteIds[] = $website->getId();
             $existedWebsitesCount++;
+            $this->websiteCodes[] = $websiteCode;
         }
     }
 
@@ -379,5 +383,10 @@ class StoresFixture extends Fixture
             $this->defaultParentCategoryId = $this->storeManager->getStore()->getRootCategoryId();
         }
         return $this->defaultParentCategoryId;
+    }
+
+    public function getWebsiteCodes()
+    {
+        return $this->websiteCodes;
     }
 }
