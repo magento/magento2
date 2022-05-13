@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 
 /**
  * Delete customer
+ * @codingStandardsIgnoreStart
  */
 class DeleteCustomer
 {
@@ -35,7 +36,7 @@ class DeleteCustomer
     /**
      * Delete customer
      *
-     * @param CustomerInterface
+     * @param CustomerInterface $customer
      * @return void
      * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
