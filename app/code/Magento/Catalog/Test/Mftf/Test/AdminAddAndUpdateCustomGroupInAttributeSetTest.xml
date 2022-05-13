@@ -64,7 +64,7 @@
         <waitForPageLoad stepKey="waitForPageLoadAfterClick"/>
         <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.unassignedAttribute($$createConfigProductAttribute.attribute_code$$)}}" selector2="{{AdminProductAttributeSetEditSection.attributeGroupExtender(customGroup.name)}}" stepKey="moveAttribute"/>
         <waitForPageLoad stepKey="waitForDragAndDrop"/>
-        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('attribute626a26a4b13b5')}}" selector2="{{AdminProductAttributeSetEditSection.attributeGroupExtender(customGroup.name)}}" stepKey="dragAndDrop"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('custom_layout')}}" selector2="{{AdminProductAttributeSetEditSection.attributeGroupExtender(customGroup.name)}}" stepKey="dragAndDrop"/>
         <waitForPageLoad stepKey="waitForDragAndDrop1"/>
         <!-- Click 'Save' -->
         <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttribute"/>
