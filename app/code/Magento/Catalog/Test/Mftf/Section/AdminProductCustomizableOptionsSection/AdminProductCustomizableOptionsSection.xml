@@ -57,5 +57,6 @@
         <element name="optionSku" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr//*[@name='product[options][{{index}}][sku]']" parameterized="true"/>
         <element name="optionFileExtensions" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr//*[@name='product[options][{{index}}][file_extension]']" parameterized="true"/>
         <element name="importOptions" type="button" selector="//button[@data-index='button_import']" timeout="30"/>
+        <element name="customOptionTableRows" type="button" selector=".admin__dynamic-rows[data-index='values'] tr.data-row" timeout="30"/>
     </section>
 </sections>

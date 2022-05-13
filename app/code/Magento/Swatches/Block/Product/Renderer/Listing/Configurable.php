@@ -105,6 +105,23 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
     /**
      * @inheritdoc
      */
+    public function getCacheKey()
+    {
+        $key = parent::getCacheKey();
+        $configurableAttributes = $this->getLayeredAttributesIfExists(
+            $this->getProduct(),
+            $this->getRequest()->getQuery()->toArray()
+        );
+        if (!empty($configurableAttributes)) {
+            $key .= '-' . sha1(json_encode($configurableAttributes));
+        }
+
+        return $key;
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function getRendererTemplate()
     {
         return $this->_template;
