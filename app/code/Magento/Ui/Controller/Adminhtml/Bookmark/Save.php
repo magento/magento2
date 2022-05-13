@@ -17,7 +17,7 @@ use Magento\Ui\Api\Data\BookmarkInterfaceFactory;
 use Magento\Ui\Controller\Adminhtml\AbstractAction;
 
 /**
- * Class Bookmark Save action
+ * Bookmark Save action
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
