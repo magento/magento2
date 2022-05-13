@@ -21,6 +21,9 @@
             <actionGroup ref="AdminEnableAdobeImsActionGroup" stepKey="enableIms" />
             <amOnPage url="{{AdminAdobeImsCallbackPage.url}}" stepKey="openCallbackUrl"/>
         </before>
+        <after>
+            <actionGroup ref="AdminDisableAdobeImsActionGroup" stepKey="disableAdminAdobeImsModule" />
+        </after>
 
         <waitForPageLoad stepKey="waitForAdminLoginPageLoad"/>
 
