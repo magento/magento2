@@ -22,6 +22,7 @@
         <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel(productOption)}}" stepKey="clickSwatchOption"/>
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{productQty}}" stepKey="fillProduct1Quantity"/>
+        <waitForElementClickable selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="waitForAddToCart"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="clickOnAddToCartButton"/>
         <waitForPageLoad stepKey="waitForProductToAddInCart"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>

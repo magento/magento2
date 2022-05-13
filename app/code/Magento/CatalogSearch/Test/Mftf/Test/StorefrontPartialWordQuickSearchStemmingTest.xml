@@ -53,6 +53,7 @@
                 <field key="sku">5127AB-BRASS</field>
                 <requiredEntity createDataKey="category1"/>
             </createData>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <!--Delete category-->

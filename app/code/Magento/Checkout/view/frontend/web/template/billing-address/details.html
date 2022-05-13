@@ -7,16 +7,21 @@
 <div if="isAddressDetailsVisible() && currentBillingAddress()" class="billing-address-details">
     <text args="currentBillingAddress().prefix"></text> <text args="currentBillingAddress().firstname"></text>
     <text args="currentBillingAddress().middlename"></text>
-    <text args="currentBillingAddress().lastname"></text> <text args="currentBillingAddress().suffix"></text><br/>
-    <text args="currentBillingAddress().street.join(', ')"></text><br/>
+    <text args="currentBillingAddress().lastname"></text> <text args="currentBillingAddress().suffix"></text><br>
+    <if args="currentBillingAddress().company">
+        <text args="currentBillingAddress().company"></text><br>
+    </if>
+    <text args="_.values(currentBillingAddress().street).join(', ')"></text><br>
     <text args="currentBillingAddress().city "></text>, <span text="currentBillingAddress().region"></span>
-    <text args="currentBillingAddress().postcode"></text><br/>
-    <text args="getCountryName(currentBillingAddress().countryId)"></text><br/>
-    <a if="currentBillingAddress().telephone" attr="'href': 'tel:' + currentBillingAddress().telephone" text="currentBillingAddress().telephone"></a><br/>
-
+    <text args="currentBillingAddress().postcode"></text><br>
+    <text args="getCountryName(currentBillingAddress().countryId)"></text><br>
+    <a if="currentBillingAddress().telephone" attr="'href': 'tel:' + currentBillingAddress().telephone" text="currentBillingAddress().telephone"></a><br>
+    <if args="currentBillingAddress().vatId">
+        VAT: <text args="currentBillingAddress().vatId"></text><br>
+    </if>
     <each args="data: currentBillingAddress().customAttributes, as: 'element'">
         <text args="$parent.getCustomAttributeLabel(element)"></text>
-        <br/>
+        <br>
     </each>
 
     <button visible="!isAddressSameAsShipping()"
