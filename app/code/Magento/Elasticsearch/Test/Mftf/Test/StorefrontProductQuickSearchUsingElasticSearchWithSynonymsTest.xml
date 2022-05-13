@@ -91,7 +91,7 @@
         <!-- Perform the reindex after the synonyms manipulations -->
         <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="performReindexAfterSynonyms"/>
 
-        <!--Navigate to storefront and do a quick searches for the synonyms  -->
+        <!-- Navigate to storefront and do a quick searches for the synonyms -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
 
         <!-- Verify that all store views synonym is searchable on the default store -->
