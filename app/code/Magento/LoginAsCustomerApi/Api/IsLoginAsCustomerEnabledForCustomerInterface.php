@@ -11,6 +11,8 @@ use Magento\LoginAsCustomerApi\Api\Data\IsLoginAsCustomerEnabledForCustomerResul
 
 /**
  * Check if Login as Customer functionality is enabled for Customer.
+ *
+ * @api
  */
 interface IsLoginAsCustomerEnabledForCustomerInterface
 {

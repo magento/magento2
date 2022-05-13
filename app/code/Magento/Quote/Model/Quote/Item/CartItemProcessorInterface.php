@@ -9,6 +9,8 @@ use Magento\Quote\Api\Data\CartItemInterface;
 
 /**
  * Interface CartItemProcessorInterface
+ *
+ * @api
  */
 interface CartItemProcessorInterface
 {
