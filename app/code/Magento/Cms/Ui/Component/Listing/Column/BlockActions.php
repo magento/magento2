@@ -20,9 +20,9 @@ class BlockActions extends Column
     /**
      * Url path
      */
-    const URL_PATH_EDIT = 'cms/block/edit';
-    const URL_PATH_DELETE = 'cms/block/delete';
-    const URL_PATH_DETAILS = 'cms/block/details';
+    public const URL_PATH_EDIT = 'cms/block/edit';
+    public const URL_PATH_DELETE = 'cms/block/delete';
+    public const URL_PATH_DETAILS = 'cms/block/details';
 
     /**
      * @var UrlInterface

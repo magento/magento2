@@ -11,6 +11,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * Catalog config model.
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

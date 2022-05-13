@@ -17,11 +17,9 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
     /**
      * Default theme preview image
      */
-    const DEFAULT_PREVIEW_IMAGE = 'Magento_Theme::theme/default_preview.jpg';
+    public const DEFAULT_PREVIEW_IMAGE = 'Magento_Theme::theme/default_preview.jpg';
 
     /**
-     * Media Directory
-     *
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     protected $mediaDirectory;
