@@ -6,9 +6,12 @@
 
 namespace Magento\Quote\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\SalesSequence\Model\Manager;
 
 /**
@@ -17,26 +20,39 @@ use Magento\SalesSequence\Model\Manager;
 class Quote extends AbstractDb
 {
     /**
-     * @var \Magento\SalesSequence\Model\Manager
+     * Sales sequence manager
+     *
+     * @var Manager
      */
     protected $sequenceManager;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * Quote repository.
+     *
+     * @var CartRepositoryInterface
+     */
+    private $quoteRepository;
+
+    /**
+     * @param Context $context
      * @param Snapshot $entitySnapshot
      * @param RelationComposite $entityRelationComposite
-     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
-     * @param string $connectionName
+     * @param Manager $sequenceManager
+     * @param null $connectionName
+     * @param CartRepositoryInterface|null $quoteRepository
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        Context $context,
         Snapshot $entitySnapshot,
         RelationComposite $entityRelationComposite,
         Manager $sequenceManager,
-        $connectionName = null
+        $connectionName = null,
+        CartRepositoryInterface $quoteRepository = null
     ) {
         parent::__construct($context, $entitySnapshot, $entityRelationComposite, $connectionName);
         $this->sequenceManager = $sequenceManager;
+        $this->quoteRepository = $quoteRepository ?: ObjectManager::getInstance()
+            ->get(CartRepositoryInterface::class);
     }
 
     /**
@@ -105,13 +121,19 @@ class Quote extends AbstractDb
 
         if ($data) {
             //Prevent current StoreId of the quote to be overridden
+            $isStoreSwitched = false;
             $currentStoreId = $quote->getStoreId();
-            if ($currentStoreId !== null && $currentStoreId !== $data['store_id']) {
+            if ($currentStoreId !== null && $currentStoreId !== (int)$data['store_id']) {
                 unset($data['store_id']);
+                $isStoreSwitched = true;
             }
-
             $quote->setData($data);
             $quote->setOrigData();
+
+            //Update StoreId to quote on store switching
+            if ($isStoreSwitched) {
+                $this->quoteRepository->save($quote);
+            }
         }
 
         $this->_afterLoad($quote);
