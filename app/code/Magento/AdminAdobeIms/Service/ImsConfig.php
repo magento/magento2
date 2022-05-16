@@ -34,6 +34,7 @@ class ImsConfig extends Config
     public const XML_PATH_ADMIN_AUTH_URL_PATTERN = 'adobe_ims/integration/admin/auth_url_pattern';
     public const XML_PATH_ADMIN_REAUTH_URL_PATTERN = 'adobe_ims/integration/admin/reauth_url_pattern';
     public const XML_PATH_ADMIN_ADOBE_IMS_SCOPES = 'adobe_ims/integration/admin/scopes';
+    public const XML_PATH_ORGANIZATION_MEMBERSHIP_URL = 'adobe_ims/integration/organization_membership_url';
 
     private const OAUTH_CALLBACK_URL = 'adobe_ims_auth/oauth/';
 
@@ -375,5 +376,20 @@ class ImsConfig extends Config
     public function getCertificateUrl(string $fileName): string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_CERTIFICATE_PATH) . $fileName;
+    }
+
+    /**
+     * Get url to check organization membership
+     *
+     * @param string $orgId
+     * @return string
+     */
+    public function getOrganizationMembershipUrl(string $orgId): string
+    {
+        return str_replace(
+            ['#{orgId}'],
+            [$orgId],
+            $this->scopeConfig->getValue(self::XML_PATH_ORGANIZATION_MEMBERSHIP_URL)
+        );
     }
 }

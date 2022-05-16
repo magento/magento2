@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Service;
 
 use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
+use Magento\AdminAdobeIms\Model\ImsConnection;
 
 class ImsOrganizationService
 {
@@ -18,32 +19,39 @@ class ImsOrganizationService
     private ImsConfig $adminImsConfig;
 
     /**
+     * @var ImsConnection
+     */
+    private ImsConnection $adminImsConnection;
+
+    /**
      * @param ImsConfig $adminImsConfig
+     * @param ImsConnection $adminImsConnection
      */
     public function __construct(
-        ImsConfig $adminImsConfig
+        ImsConfig $adminImsConfig,
+        ImsConnection $adminImsConnection
     ) {
         $this->adminImsConfig = $adminImsConfig;
+        $this->adminImsConnection = $adminImsConnection;
     }
 
     /**
-     * Check if user is assigned to organization
+     * Check if user is a member of Adobe Organization
      *
-     * @param string $token
+     * @param string $access_token
      * @return bool
      * @throws AdobeImsOrganizationAuthorizationException
      */
-    public function checkOrganizationAllocation(string $token): bool
+    public function checkOrganizationMembership(string $access_token): bool
     {
         $configuredOrganization = $this->adminImsConfig->getOrganizationId();
 
-        //@TODO CABPI-324: Change Org check to use new endpoint
-        if ($configuredOrganization === '' || !$token) {
+        if ($configuredOrganization === '' || !$access_token) {
             throw new AdobeImsOrganizationAuthorizationException(
-                __('User is not assigned to defined organization.')
+                __('Can\'t check user membership in organization.')
             );
         }
 
-        return true;
+        $this->adminImsConnection->organizationMembership($configuredOrganization, $access_token);
     }
 }

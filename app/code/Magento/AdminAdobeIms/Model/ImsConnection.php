@@ -15,9 +15,11 @@ use Magento\AdobeIms\Model\GetToken;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\InvalidArgumentException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
+use mysql_xdevapi\Exception;
 
 class ImsConnection
 {
@@ -232,5 +234,57 @@ class ImsConnection
         }
 
         return $this->json->unserialize($curl->getBody());
+    }
+
+    /**
+     * Check if user is a member of Adobe IMS Organization
+     *
+     * @param string $orgId
+     * @param string|null $token
+     * @return bool
+     * @throws AuthorizationException
+     */
+    public function organizationMembership(string $orgId, ?string $token): bool
+    {
+        $result = false;
+        if ($token === null) {
+            return $result;
+        }
+        try {
+            $curl = $this->curlFactory->create();
+
+            $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
+            $curl->addHeader('cache-control', 'no-cache');
+            $curl->addHeader('Authorization', 'Bearer ' . $token);
+
+            $curl->get(
+                $this->adminImsConfig->getOrganizationMembershipUrl($orgId),
+                []
+            );
+
+            if ($curl->getBody() === '') {
+                throw new AuthorizationException(
+                    __('Could not check Organization Membership')
+                );
+            }
+
+            $response = $curl->getBody();
+
+            if ($response == 'true') {
+                $result = true;
+            } else {
+                throw new AdobeImsOrganizationAuthorizationException(
+                    __('User is not a member of configured Adobe Organization.')
+                );
+            }
+
+        } catch (Exception $exception) {
+            throw new LocalizedException(
+                __('Organization Membership check can\'t be performed')
+            );
+
+        }
+
+        return $result;
     }
 }
