@@ -39,10 +39,10 @@ class ImsOrganizationService
      * Check if user is a member of Adobe Organization
      *
      * @param string $access_token
-     * @return bool
+     * @return void
      * @throws AdobeImsOrganizationAuthorizationException
      */
-    public function checkOrganizationMembership(string $access_token): bool
+    public function checkOrganizationMembership(string $access_token): void
     {
         $configuredOrganization = $this->adminImsConfig->getOrganizationId();
 

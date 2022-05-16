@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Model;
 
 use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
+use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdobeIms\Model\GetToken;
@@ -19,7 +20,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
-use mysql_xdevapi\Exception;
 
 class ImsConnection
 {
