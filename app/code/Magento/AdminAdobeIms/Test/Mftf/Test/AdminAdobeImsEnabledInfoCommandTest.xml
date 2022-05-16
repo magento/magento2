@@ -16,6 +16,9 @@
             <description value="Runs bin/magento admin:adobe-ims info command"/>
             <severity value="MINOR"/>
             <group value="admin_ims"/>
+            <skip>
+                <issueId value="DEPRECATED">Temp disable</issueId>
+            </skip>
             <testCaseId value="CABPI-186"/>
         </annotations>
         <before>

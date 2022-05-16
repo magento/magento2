@@ -16,6 +16,9 @@
             <severity value="CRITICAL"/>
             <group value="admin_ims"/>
             <testCaseId value="CABPI-102"/>
+            <skip>
+                <issueId value="DEPRECATED">Temp disable</issueId>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminEnableAdobeImsActionGroup" stepKey="enableAdminAdobeImsModule" />
