@@ -27,7 +27,7 @@ class Quote extends AbstractDb
     protected $sequenceManager;
 
     /**
-     * Quote repository.
+     * Quote repository interface object
      *
      * @var CartRepositoryInterface
      */
@@ -38,7 +38,7 @@ class Quote extends AbstractDb
      * @param Snapshot $entitySnapshot
      * @param RelationComposite $entityRelationComposite
      * @param Manager $sequenceManager
-     * @param null $connectionName
+     * @param $connectionName
      * @param CartRepositoryInterface|null $quoteRepository
      */
     public function __construct(
