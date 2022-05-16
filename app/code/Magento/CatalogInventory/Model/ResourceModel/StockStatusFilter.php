@@ -10,10 +10,8 @@ namespace Magento\CatalogInventory\Model\ResourceModel;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Stock;
-use Magento\CatalogInventory\Model\StockStatusApplierInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Generic in-stock status filter
@@ -33,24 +31,15 @@ class StockStatusFilter implements StockStatusFilterInterface
     private $stockConfiguration;
 
     /**
-     * @var StockStatusApplierInterface
-     */
-    private $stockStatusApplier;
-
-    /**
      * @param ResourceConnection $resource
      * @param StockConfigurationInterface $stockConfiguration
-     * @param StockStatusApplierInterface|null $stockStatusApplier
      */
     public function __construct(
         ResourceConnection $resource,
-        StockConfigurationInterface $stockConfiguration,
-        ?StockStatusApplierInterface $stockStatusApplier = null
+        StockConfigurationInterface $stockConfiguration
     ) {
         $this->resource = $resource;
         $this->stockConfiguration = $stockConfiguration;
-        $this->stockStatusApplier = $stockStatusApplier
-            ?? ObjectManager::getInstance()->get(StockStatusApplierInterface::class);
     }
 
     /**
@@ -79,12 +68,7 @@ class StockStatusFilter implements StockStatusFilterInterface
             implode(' AND ', $joinCondition),
             []
         );
-
-        if ($this->stockStatusApplier->hasSearchResultApplier()) {
-            $select->columns(["{$stockStatusTableAlias}.stock_status AS is_salable"]);
-        } else {
-            $select->where("{$stockStatusTableAlias}.stock_status = ?", StockStatusInterface::STATUS_IN_STOCK);
-        }
+        $select->where("{$stockStatusTableAlias}.stock_status = ?", StockStatusInterface::STATUS_IN_STOCK);
 
         return $select;
     }
