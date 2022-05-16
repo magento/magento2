@@ -16,15 +16,15 @@ class Request
     /**#@+
      * HTTP Response Codes
      */
-    const HTTP_OK = 200;
+    public const HTTP_OK = 200;
 
-    const HTTP_BAD_REQUEST = 400;
+    public const HTTP_BAD_REQUEST = 400;
 
-    const HTTP_UNAUTHORIZED = 401;
+    public const HTTP_UNAUTHORIZED = 401;
 
-    const HTTP_METHOD_NOT_ALLOWED = 405;
+    public const HTTP_METHOD_NOT_ALLOWED = 405;
 
-    const HTTP_INTERNAL_ERROR = 500;
+    public const HTTP_INTERNAL_ERROR = 500;
 
     /**#@-*/
 

@@ -17,7 +17,7 @@ class ConfigurableProduct extends AbstractPrice
     /**
      * Price type final.
      */
-    const PRICE_CODE = 'final_price';
+    public const PRICE_CODE = 'final_price';
 
     /**
      * @var ItemInterface
@@ -58,7 +58,28 @@ class ConfigurableProduct extends AbstractPrice
     public function getValue()
     {
         $price = $this->getProduct()->getPriceInfo()->getPrice(self::PRICE_CODE)->getValue();
-
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = parent::getProduct();
+        /** @var \Magento\Wishlist\Model\Item\Option $configurableCustomOption */
+        $configurableCustomOption = $product->getCustomOption('option_ids');
+        $customPrice = 0;
+        if ($configurableCustomOption && $configurableCustomOption->getValue()) {
+            $item = $this->item;
+            $configurableProduct = $configurableCustomOption->getProduct();
+            foreach (explode(',', $configurableCustomOption->getValue()) as $optionId) {
+                $option = $configurableProduct->getOptionById($optionId);
+                if ($option) {
+                    $itemOption = $item->getOptionByCode('option_' . $option->getId());
+                    /** @var $group \Magento\Catalog\Model\Product\Option\Type\DefaultType */
+                    $group = $option->groupFactory($option->getType())
+                        ->setOption($option);
+                    $customPrice += $group->getOptionPrice($itemOption->getValue(), $price);
+                }
+            }
+        }
+        if ($customPrice) {
+            $price = $price + $customPrice;
+        }
         return max(0, $price);
     }
 
@@ -78,6 +99,7 @@ class ConfigurableProduct extends AbstractPrice
     {
         /** @var \Magento\Catalog\Model\Product $product */
         $product = parent::getProduct();
+
         /** @var \Magento\Wishlist\Model\Item\Option $customOption */
         $customOption = $product->getCustomOption('simple_product');
 

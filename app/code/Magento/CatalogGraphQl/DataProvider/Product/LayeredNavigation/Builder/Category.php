@@ -7,19 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder;
 
-use Magento\CatalogGraphQl\DataProvider\CategoryAttributesMapper;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogGraphQl\DataProvider\Category\Query\CategoryAttributeQuery;
+use Magento\CatalogGraphQl\DataProvider\CategoryAttributesMapper;
+use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\LayerFormatter;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\LayerBuilderInterface;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\RootCategoryProvider;
 use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\LayerFormatter;
-use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Aggregations;
 
 /**
- * @inheritdoc
+ * Category layer builder
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Category implements LayerBuilderInterface
 {
@@ -33,7 +35,7 @@ class Category implements LayerBuilderInterface
      */
     private static $bucketMap = [
         self::CATEGORY_BUCKET => [
-            'request_name' => 'category_id',
+            'request_name' => 'category_uid',
             'label' => 'Category'
         ],
     ];
@@ -41,32 +43,37 @@ class Category implements LayerBuilderInterface
     /**
      * @var CategoryAttributeQuery
      */
-    private $categoryAttributeQuery;
+    private CategoryAttributeQuery $categoryAttributeQuery;
 
     /**
      * @var CategoryAttributesMapper
      */
-    private $attributesMapper;
+    private CategoryAttributesMapper $attributesMapper;
 
     /**
      * @var ResourceConnection
      */
-    private $resourceConnection;
+    private ResourceConnection $resourceConnection;
 
     /**
      * @var RootCategoryProvider
      */
-    private $rootCategoryProvider;
+    private RootCategoryProvider $rootCategoryProvider;
 
     /**
      * @var LayerFormatter
      */
-    private $layerFormatter;
+    private LayerFormatter $layerFormatter;
+
+    /**
+     * @var CollectionFactory
+     */
+    private CollectionFactory $categoryCollectionFactory;
 
     /**
      * @var Aggregations\Category\IncludeDirectChildrenOnly
      */
-    private $includeDirectChildrenOnly;
+    private Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly;
 
     /**
      * @param CategoryAttributeQuery $categoryAttributeQuery
@@ -75,6 +82,7 @@ class Category implements LayerBuilderInterface
      * @param ResourceConnection $resourceConnection
      * @param LayerFormatter $layerFormatter
      * @param Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly
+     * @param CollectionFactory $categoryCollectionFactory
      */
     public function __construct(
         CategoryAttributeQuery $categoryAttributeQuery,
@@ -82,7 +90,8 @@ class Category implements LayerBuilderInterface
         RootCategoryProvider $rootCategoryProvider,
         ResourceConnection $resourceConnection,
         LayerFormatter $layerFormatter,
-        Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly
+        Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly,
+        CollectionFactory $categoryCollectionFactory
     ) {
         $this->categoryAttributeQuery = $categoryAttributeQuery;
         $this->attributesMapper = $attributesMapper;
@@ -90,6 +99,7 @@ class Category implements LayerBuilderInterface
         $this->rootCategoryProvider = $rootCategoryProvider;
         $this->layerFormatter = $layerFormatter;
         $this->includeDirectChildrenOnly = $includeDirectChildrenOnly;
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
     }
 
     /**
@@ -111,6 +121,11 @@ class Category implements LayerBuilderInterface
             },
             $bucket->getValues()
         );
+
+        if ($storeId) {
+            $storeFilteredCategoryIds = $this->getStoreCategoryIds($storeId);
+            $categoryIds = \array_intersect($categoryIds, $storeFilteredCategoryIds);
+        }
 
         $categoryIds = \array_diff($categoryIds, [$this->rootCategoryProvider->getRootCategory($storeId)]);
         $categoryLabels = \array_column(
@@ -136,7 +151,7 @@ class Category implements LayerBuilderInterface
         foreach ($bucket->getValues() as $value) {
             $categoryId = $value->getValue();
             if (!\in_array($categoryId, $categoryIds, true)) {
-                continue ;
+                continue;
             }
             $result['options'][] = $this->layerFormatter->buildItem(
                 $categoryLabels[$categoryId] ?? $categoryId,
@@ -157,5 +172,26 @@ class Category implements LayerBuilderInterface
     private function isBucketEmpty(?BucketInterface $bucket): bool
     {
         return null === $bucket || !$bucket->getValues();
+    }
+
+    /**
+     * List of store categories
+     *
+     * @param int $storeId
+     * @return array
+     */
+    private function getStoreCategoryIds(int $storeId): array
+    {
+        $storeRootCategoryId = $this->rootCategoryProvider->getRootCategory($storeId);
+        $collection = $this->categoryCollectionFactory->create();
+        $select = $collection->getSelect();
+        $connection = $collection->getConnection();
+        $select->where(
+            $connection->quoteInto(
+                'e.path LIKE ? OR e.entity_id=' . $connection->quote($storeRootCategoryId, 'int'),
+                '%/' . $storeRootCategoryId . '/%'
+            )
+        );
+        return $collection->getAllIds();
     }
 }
