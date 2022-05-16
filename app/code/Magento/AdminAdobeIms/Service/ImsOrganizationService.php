@@ -82,7 +82,6 @@ class ImsOrganizationService
             throw new AdobeImsOrganizationAuthorizationException(
                 __('Organization Membership check can\'t be performed')
             );
-
         }
     }
 }
