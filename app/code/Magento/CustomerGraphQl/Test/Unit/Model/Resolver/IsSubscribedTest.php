@@ -98,17 +98,17 @@ class IsSubscribedTest extends TestCase
 
         $this->contextExtensionMock = $this->getMockBuilder(ContextExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getStore'])
+            ->setMethods(['getStore'])
             ->getMockForAbstractClass();
 
         $this->customerMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
+            ->setMethods(['getId'])
             ->getMockForAbstractClass();
 
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getWebsiteId'])
+            ->setMethods(['getWebsiteId'])
             ->getMockForAbstractClass();
 
         $this->fieldMock = $this->getMockBuilder(Field::class)
