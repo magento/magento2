@@ -47,7 +47,7 @@ class ImsOrganizationServiceTest extends TestCase
     {
         $this->adminImsConfigMock
             ->method('getOrganizationId')
-            ->willReturn(self::INVALID_ORGANIZATION_ID);
+            ->willReturn('');
 
         $this->expectException(AdobeImsOrganizationAuthorizationException::class);
         $this->expectExceptionMessage('Can\'t check user membership in organization.');
