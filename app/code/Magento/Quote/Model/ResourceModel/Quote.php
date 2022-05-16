@@ -38,7 +38,7 @@ class Quote extends AbstractDb
      * @param Snapshot $entitySnapshot
      * @param RelationComposite $entityRelationComposite
      * @param Manager $sequenceManager
-     * @param $connectionName
+     * @param string $connectionName
      * @param CartRepositoryInterface|null $quoteRepository
      */
     public function __construct(
