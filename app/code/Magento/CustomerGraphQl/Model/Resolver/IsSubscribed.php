@@ -8,11 +8,13 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Newsletter\Model\SubscriberFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Customer is_subscribed field resolver
@@ -22,15 +24,23 @@ class IsSubscribed implements ResolverInterface
     /**
      * @var SubscriberFactory
      */
-    private $subscriberFactory;
+    private SubscriberFactory $subscriberFactory;
+
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
 
     /**
      * @param SubscriberFactory $subscriberFactory
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
-        SubscriberFactory $subscriberFactory
+        SubscriberFactory $subscriberFactory,
+        LoggerInterface $logger = null
     ) {
         $this->subscriberFactory = $subscriberFactory;
+        $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -57,6 +67,8 @@ class IsSubscribed implements ResolverInterface
 
         $store = $extensionAttributes->getStore();
         if (!$store) {
+            $this->logger->error(__('Store not found'));
+
             return false;
         }
 
