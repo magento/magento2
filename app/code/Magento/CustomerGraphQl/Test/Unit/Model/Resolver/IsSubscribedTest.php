@@ -63,7 +63,7 @@ class IsSubscribedTest extends TestCase
     /**
      * @var Subscriber|MockObject
      */
-    private $subscriber;
+    private $subscriberMock;
 
     /**
      * @var StoreInterface|MockObject
@@ -98,14 +98,17 @@ class IsSubscribedTest extends TestCase
 
         $this->contextExtensionMock = $this->getMockBuilder(ContextExtensionInterface::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
 
         $this->customerMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['getWebsiteId'])
             ->getMockForAbstractClass();
 
         $this->fieldMock = $this->getMockBuilder(Field::class)
@@ -113,7 +116,7 @@ class IsSubscribedTest extends TestCase
             ->getMock();
 
         $this->subscriberFactory = $this->createMock(SubscriberFactory::class);
-        $this->subscriber = $this->createMock(Subscriber::class);
+        $this->subscriberMock = $this->createMock(Subscriber::class);
 
         $this->resolveInfoMock = $this->getMockBuilder(ResolveInfo::class)
             ->disableOriginalConstructor()
@@ -160,9 +163,9 @@ class IsSubscribedTest extends TestCase
 
         $subscriber->expects($this->once())
             ->method('loadByCustomer')
-            ->willReturn($this->subscriber);
+            ->willReturn($this->subscriberMock);
 
-        $this->subscriber->expects($this->once())
+        $this->subscriberMock->expects($this->once())
             ->method('isSubscribed')
             ->willReturn(true);
 
