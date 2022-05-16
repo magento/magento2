@@ -121,18 +121,15 @@ class Quote extends AbstractDb
 
         if ($data) {
             //Prevent current StoreId of the quote to be overridden
-            $isStoreSwitched = false;
             $currentStoreId = $quote->getStoreId();
             if ($currentStoreId !== null && $currentStoreId !== (int)$data['store_id']) {
                 unset($data['store_id']);
-                $isStoreSwitched = true;
-            }
-            $quote->setData($data);
-            $quote->setOrigData();
-
-            //Update StoreId to quote on store switching
-            if ($isStoreSwitched) {
+                $quote->setData($data);
+                $quote->setOrigData();
                 $this->quoteRepository->save($quote);
+            } else {
+                $quote->setData($data);
+                $quote->setOrigData();
             }
         }
 
