@@ -174,11 +174,11 @@ class Currencysymbol
 
             if (isset($currentSymbols[$code]) && !empty($currentSymbols[$code])) {
                 $this->_symbolsData[$code]['displaySymbol'] = $currentSymbols[$code];
+                $this->_symbolsData[$code]['inherited'] = false;
             } else {
                 $this->_symbolsData[$code]['displaySymbol'] = $this->_symbolsData[$code]['parentSymbol'];
+                $this->_symbolsData[$code]['inherited'] = true;
             }
-            $this->_symbolsData[$code]['inherited'] =
-                ($this->_symbolsData[$code]['parentSymbol'] == $this->_symbolsData[$code]['displaySymbol']);
         }
 
         return $this->_symbolsData;
@@ -194,7 +194,7 @@ class Currencysymbol
     {
         if (!$this->_storeManager->isSingleStoreMode()) {
             foreach ($this->getCurrencySymbolsData() as $code => $values) {
-                if (isset($symbols[$code]) && ($symbols[$code] == $values['parentSymbol'] || empty($symbols[$code]))) {
+                if (isset($symbols[$code]) && empty($symbols[$code])) {
                     unset($symbols[$code]);
                 }
             }
