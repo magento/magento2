@@ -609,7 +609,7 @@ define([
                     && value >= 0 && (/^\s*-?\d+([,.]\d+)*\s*%?\s*$/).test(value);
 
             },
-            $.mage.__('Please enter a number 0 or greater in this field.')
+            $.mage.__('Please enter a number 0 or greater, without comma in this field.')
         ],
         // validate-not-negative-number should be replaced in all places with this one and then removed
         'validate-zero-or-greater': [
@@ -617,14 +617,14 @@ define([
                 return utils.isEmptyNoTrim(value) || !isNaN(utils.parseNumber(value))
                     && value >= 0 && (/^\s*-?\d+([,.]\d+)*\s*%?\s*$/).test(value);
             },
-            $.mage.__('Please enter a number 0 or greater in this field.')
+            $.mage.__('Please enter a number 0 or greater, without comma in this field.')
         ],
         'validate-greater-than-zero': [
             function (value) {
                 return utils.isEmptyNoTrim(value) || !isNaN(utils.parseNumber(value))
                     && value > 0 && (/^\s*-?\d+([,.]\d+)*\s*%?\s*$/).test(value);
             },
-            $.mage.__('Please enter a number greater than 0 in this field.')
+            $.mage.__('Please enter a number greater than 0, without comma in this field.')
         ],
         'validate-css-length': [
             function (value) {
