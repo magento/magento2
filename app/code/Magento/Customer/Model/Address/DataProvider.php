@@ -227,11 +227,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $attributes = $entityType->getAttributeCollection();
         $customerId = $this->context->getRequestParam('parent_id');
         $entityId = $this->context->getRequestParam('entity_id');
-        $customerStreetAddressLines = 0;
         if (!$customerId && $entityId) {
             $customerId = $this->addressRegistry->retrieve($entityId)->getParentId();
-            $customerStreetAddress = $this->addressRegistry->retrieve($entityId)->getStreet();
-            $customerStreetAddressLines = count($customerStreetAddress);
         }
 
         if ($customerId) {
@@ -251,10 +248,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 $entityType,
                 $this->allowToShowHiddenAttributes
             );
-            if ($attribute->getAttributeCode() === 'street' && $customerStreetAddressLines !== 0) {
+            if ($attribute->getAttributeCode() === 'street' && $entityId) {
+                $customerAddressStreet = $this->addressRegistry->retrieve($entityId)->getStreet();
                 $meta[$attribute->getAttributeCode()]["arguments"]["data"]["config"]["size"] = max(
                     $meta[$attribute->getAttributeCode()]["arguments"]["data"]["config"]["size"],
-                    $customerStreetAddressLines
+                    count($customerAddressStreet)
                 );
             }
         }
