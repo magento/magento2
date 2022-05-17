@@ -218,6 +218,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Type $entityType
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getAttributesMeta(Type $entityType): array
     {
@@ -226,25 +227,17 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $attributes = $entityType->getAttributeCollection();
         $customerId = $this->context->getRequestParam('parent_id');
         $entityId = $this->context->getRequestParam('entity_id');
-
+        $customerStreetAddressLines = 0;
         if (!$customerId && $entityId) {
             $customerId = $this->addressRegistry->retrieve($entityId)->getParentId();
+            $customerStreetAddress = $this->addressRegistry->retrieve($entityId)->getStreet();
+            $customerStreetAddressLines = count($customerStreetAddress);
         }
 
         if ($customerId) {
             $customer = $this->customerRepository->getById($customerId);
             $attributes->setWebsite($customer->getWebsiteId());
         }
-        $customerAddress = $customer->getAddresses()[0];
-
-        $customerStreetAddressLines = 0;
-        if($customerAddress !== null){
-            $customerStreetAddress = $customerAddress->getStreet();
-            if($customerStreetAddress !== null){
-                $customerStreetAddressLines = count($customerStreetAddress);
-            }
-        }
-
         /* @var AbstractAttribute $attribute */
         foreach ($attributes as $attribute) {
             if (\in_array($attribute->getFrontendInput(), $this->bannedInputTypes, true)) {
@@ -253,16 +246,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             if (\in_array($attribute->getAttributeCode(), self::$attributesToEliminate, true)) {
                 continue;
             }
-
-            $attributeCode = $attribute->getAttributeCode();
-            $meta[$attributeCode] = $this->attributeMetadataResolver->getAttributesMeta(
+            $meta[$attribute->getAttributeCode()] = $this->attributeMetadataResolver->getAttributesMeta(
                 $attribute,
                 $entityType,
                 $this->allowToShowHiddenAttributes
             );
-            if($attributeCode === 'street' && $customerStreetAddressLines !== 0){
-                $meta[$attributeCode]["arguments"]["data"]["config"]["size"] = max(
-                    $meta[$attributeCode]["arguments"]["data"]["config"]["size"],$customerStreetAddressLines);
+            if ($attribute->getAttributeCode() === 'street' && $customerStreetAddressLines !== 0) {
+                $meta[$attribute->getAttributeCode()]["arguments"]["data"]["config"]["size"] = max(
+                    $meta[$attribute->getAttributeCode()]["arguments"]["data"]["config"]["size"],
+                    $customerStreetAddressLines
+                );
             }
         }
         $this->attributeMetadataResolver->processWebsiteMeta($meta);
