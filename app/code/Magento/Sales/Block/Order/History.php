@@ -7,6 +7,7 @@ namespace Magento\Sales\Block\Order;
 
 use \Magento\Framework\App\ObjectManager;
 use \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Sales order history block
@@ -47,10 +48,16 @@ class History extends \Magento\Framework\View\Element\Template
     private $orderCollectionFactory;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -58,11 +65,14 @@ class History extends \Magento\Framework\View\Element\Template
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,
+        StoreManagerInterface $storeManager = null,
         array $data = []
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_customerSession = $customerSession;
         $this->_orderConfig = $orderConfig;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
+            ->get(StoreManagerInterface::class);
         parent::__construct($context, $data);
     }
 
@@ -105,6 +115,9 @@ class History extends \Magento\Framework\View\Element\Template
             )->addFieldToFilter(
                 'status',
                 ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()]
+            )->addAttributeToFilter(
+                'store_id',
+                $this->storeManager->getStore()->getId()
             )->setOrder(
                 'created_at',
                 'desc'
