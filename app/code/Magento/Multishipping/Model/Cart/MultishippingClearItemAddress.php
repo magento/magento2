@@ -10,7 +10,10 @@ namespace Magento\Multishipping\Model\Cart;
 use Magento\Checkout\Controller\Cart;
 use Magento\Checkout\Controller\Sidebar\UpdateItemQty;
 use Magento\Checkout\Model\Session;
+<<<<<<< HEAD
 use Magento\Checkout\Model\Cart as CartModel;
+=======
+>>>>>>> 50b054ffc2e (Resolved conflicts)
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -20,8 +23,11 @@ use Magento\Quote\Model\Quote;
 
 /**
  * Cleans shipping addresses and item assignments after MultiShipping flow
+<<<<<<< HEAD
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+=======
+>>>>>>> 50b054ffc2e (Resolved conflicts)
  */
 class MultishippingClearItemAddress
 {
@@ -46,29 +52,42 @@ class MultishippingClearItemAddress
     private $disableMultishipping;
 
     /**
+<<<<<<< HEAD
      * @var CartModel
      */
     private $cartmodel;
 
     /**
+=======
+>>>>>>> 50b054ffc2e (Resolved conflicts)
      * @param CartRepositoryInterface $cartRepository
      * @param Session $checkoutSession
      * @param AddressRepositoryInterface $addressRepository
      * @param DisableMultishipping $disableMultishipping
+<<<<<<< HEAD
      * @param CartModel $cartmodel
+=======
+>>>>>>> 50b054ffc2e (Resolved conflicts)
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         Session $checkoutSession,
         AddressRepositoryInterface $addressRepository,
+<<<<<<< HEAD
         DisableMultishipping $disableMultishipping,
         CartModel $cartmodel
+=======
+        DisableMultishipping $disableMultishipping
+>>>>>>> 50b054ffc2e (Resolved conflicts)
     ) {
         $this->cartRepository = $cartRepository;
         $this->checkoutSession = $checkoutSession;
         $this->addressRepository = $addressRepository;
         $this->disableMultishipping = $disableMultishipping;
+<<<<<<< HEAD
         $this->cartmodel = $cartmodel;
+=======
+>>>>>>> 50b054ffc2e (Resolved conflicts)
     }
 
     /**
@@ -101,8 +120,14 @@ class MultishippingClearItemAddress
             }
             $this->cartRepository->save($quote);
             if ($subject instanceof UpdateItemQty) {
+<<<<<<< HEAD
                 $quote = $this->cartRepository->get($quote->getId());
                 $this->cartmodel->setQuote($quote);
+=======
+                $quote = $this->checkoutSession->getQuote();
+                $quote->setTotalsCollectedFlag(false);
+                $this->cartRepository->save($quote);
+>>>>>>> 50b054ffc2e (Resolved conflicts)
             }
         } elseif ($this->disableMultishipping->execute($quote) && $this->isVirtualItemInQuote($quote)) {
             $quote->setTotalsCollectedFlag(false);
