@@ -235,6 +235,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $customer = $this->customerRepository->getById($customerId);
             $attributes->setWebsite($customer->getWebsiteId());
         }
+        $customerAddress = $customer->getAddresses()[0];
+
+        $customerStreetAddressLines = 0;
+        if($customerAddress !== null){
+            $customerStreetAddress = $customerAddress->getStreet();
+            if($customerStreetAddress !== null){
+                $customerStreetAddressLines = count($customerStreetAddress);
+            }
+        }
 
         /* @var AbstractAttribute $attribute */
         foreach ($attributes as $attribute) {
@@ -245,11 +254,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 continue;
             }
 
-            $meta[$attribute->getAttributeCode()] = $this->attributeMetadataResolver->getAttributesMeta(
+            $attributeCode = $attribute->getAttributeCode();
+            $meta[$attributeCode] = $this->attributeMetadataResolver->getAttributesMeta(
                 $attribute,
                 $entityType,
                 $this->allowToShowHiddenAttributes
             );
+            if($attributeCode === 'street' && $customerStreetAddressLines !== 0){
+                $meta[$attributeCode]["arguments"]["data"]["config"]["size"] = max(
+                    $meta[$attributeCode]["arguments"]["data"]["config"]["size"],$customerStreetAddressLines);
+            }
         }
         $this->attributeMetadataResolver->processWebsiteMeta($meta);
 
