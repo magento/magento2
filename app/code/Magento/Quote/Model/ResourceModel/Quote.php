@@ -47,7 +47,7 @@ class Quote extends AbstractDb
         RelationComposite $entityRelationComposite,
         Manager $sequenceManager,
         $connectionName = null,
-        CartRepositoryInterface $quoteRepository = null
+        ?CartRepositoryInterface $quoteRepository = null
     ) {
         parent::__construct($context, $entitySnapshot, $entityRelationComposite, $connectionName);
         $this->sequenceManager = $sequenceManager;
