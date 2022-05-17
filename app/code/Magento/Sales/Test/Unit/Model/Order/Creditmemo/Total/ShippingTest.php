@@ -426,6 +426,7 @@ class ShippingTest extends TestCase
         $expectedShippingAmountInclTax = $allowedShippingAmount + $shippingTaxAmount - $shippingTaxAmountRefunded;
         $expectedBaseShippingAmountInclTax =
             $baseAllowedShippingAmount + $baseShippingTaxAmount - $baseShippingTaxAmountRefunded;
+        $expectedBaseShippingAmountInclTax = max($expectedBaseShippingAmountInclTax, 0);
         $grandTotalBefore = 14.35;
         $baseGrandTotalBefore = 14.35;
         $expectedGrandTotal = $grandTotalBefore + $allowedShippingAmount;
@@ -476,7 +477,7 @@ class ShippingTest extends TestCase
             ->willReturnSelf();
         $this->creditmemoMock->expects($this->once())
             ->method('setBaseShippingInclTax')
-            ->with($this->shippingCollector->getBaseAllowedAmountInclTax($expectedBaseShippingAmountInclTax))
+            ->with($expectedBaseShippingAmountInclTax)
             ->willReturnSelf();
         $this->creditmemoMock->expects($this->once())
             ->method('setGrandTotal')
@@ -486,10 +487,6 @@ class ShippingTest extends TestCase
             ->method('setBaseGrandTotal')
             ->with($expectedBaseGrandTotal)
             ->willReturnSelf();
-        $this->assertEquals(
-            0,
-            $this->shippingCollector->getBaseAllowedAmountInclTax($expectedBaseShippingAmountInclTax)
-        );
         $this->shippingCollector->collect($this->creditmemoMock);
     }
 }
