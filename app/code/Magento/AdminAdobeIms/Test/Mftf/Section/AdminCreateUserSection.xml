@@ -10,5 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCreateUserSection">
         <element name="confirmIdentity" type="button" selector="#user_ims_verification"/>
+        <element name="password" type="input" selector="#PasswordPage-PasswordField"/>
     </section>
 </sections>
