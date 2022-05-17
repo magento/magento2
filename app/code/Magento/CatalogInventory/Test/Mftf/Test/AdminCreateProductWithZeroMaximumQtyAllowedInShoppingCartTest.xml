@@ -38,7 +38,7 @@
         <!-- Validate zero value -->
         <actionGroup ref="AdminCatalogInventoryConfigurationMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="validateZeroValue">
             <argument name="qty" value="0"/>
-            <argument name="errorMessage" value="Please enter a number greater than 0, without comma in this field."/>
+            <argument name="errorMessage" value="Please enter a number greater than 0 in this field."/>
         </actionGroup>
         <!-- Validate negative value -->
         <actionGroup ref="AdminCatalogInventoryConfigurationMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="validateNegativeValue">
