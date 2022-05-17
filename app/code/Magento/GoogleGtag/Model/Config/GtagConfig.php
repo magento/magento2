@@ -16,9 +16,9 @@ class GtagConfig
     /**
      * Config paths for using throughout the code
      */
-    protected const XML_PATH_ACTIVE = 'google/gtag/analytics4/active';
+    private const XML_PATH_ACTIVE = 'google/gtag/analytics4/active';
 
-    protected const XML_PATH_MEASUREMENT_ID = 'google/gtag/analytics4/measurement_id';
+    private const XML_PATH_MEASUREMENT_ID = 'google/gtag/analytics4/measurement_id';
 
     /**
      * Google AdWords conversion src
@@ -37,7 +37,7 @@ class GtagConfig
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * @param ScopeConfigInterface $scopeConfig

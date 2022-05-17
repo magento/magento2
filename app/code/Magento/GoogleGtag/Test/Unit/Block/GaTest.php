@@ -53,9 +53,9 @@ class GaTest extends TestCase
     private $storeMock;
 
     /**
-     * @var MockObject
+     * @var GtagConfiguration|mixed|MockObject
      */
-    private $googleAnalyticsDataMock;
+    private $googleGtagConfig;
 
     /**
      * @var SearchCriteriaBuilder|mixed|MockObject

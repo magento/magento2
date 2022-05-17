@@ -1,7 +1,5 @@
 <?php
 /**
- * Google Optimizer Data Helper
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -15,8 +13,6 @@ use Magento\GoogleGtag\Model\Config\GtagConfig as GtagConfiguration;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class Data
- *
  * @api
  * @since 100.0.2
  */
@@ -25,12 +21,12 @@ class Data extends AbstractHelper
     /**
      * Xml path google experiments enabled
      */
-    public const XML_PATH_ENABLED = 'google/analytics/experiments';
+    private const XML_PATH_ENABLED = 'google/analytics/experiments';
 
     /**
      * Xml path google experiments enabled for GA4
      */
-    public const XML_PATH_ENABLED_GA4 = 'google/gtag/analytics4/experiments';
+    private const XML_PATH_ENABLED_GA4 = 'google/gtag/analytics4/experiments';
 
     /**
      * @var bool
@@ -89,7 +85,7 @@ class Data extends AbstractHelper
      * @param string $store
      * @return bool
      */
-    public function isGoogleExperimentActive($store = null): bool
+    public function isGoogleExperimentActive($store = null)
     {
         return $this->isGoogleExperimentEnabled($store) &&
             (

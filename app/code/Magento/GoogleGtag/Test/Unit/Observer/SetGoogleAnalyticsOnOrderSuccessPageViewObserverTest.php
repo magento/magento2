@@ -31,19 +31,9 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserverTest extends TestCase
     private $observerMock;
 
     /**
-     * @var GaDataHelper|MockObject
-     */
-    private $googleAnalyticsDataMock;
-
-    /**
      * @var LayoutInterface|MockObject
      */
     private $layoutMock;
-
-    /**
-     * @var StoreManagerInterface|MockObject
-     */
-    private $storeManagerMock;
 
     /**
      * @var SetGoogleAnalyticsOnOrderSuccessPageViewObserver
