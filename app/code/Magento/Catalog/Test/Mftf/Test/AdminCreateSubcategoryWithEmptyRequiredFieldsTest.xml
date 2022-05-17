@@ -5,7 +5,6 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateSubcategoryWithEmptyRequiredFieldsTest">
@@ -29,7 +28,7 @@
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableNewCategory"/>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="openSEO"/>
-        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{NewCategory.name_lwr}}" stepKey="enterURLKey"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{Gear.name_lwr}}" stepKey="enterURLKey"/>
 
         <!-- Click on Save -->
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveFirstSubCategory"/>
