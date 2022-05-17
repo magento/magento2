@@ -11,7 +11,7 @@
             <argument name="userContexts" xsi:type="array">
                 <item name="adobeImsTokenUserContext" xsi:type="array">
                     <item name="type" xsi:type="object">Magento\AdminAdobeIms\Model\Authorization\AdobeImsTokenUserContext</item>
-                    <item name="sortOrder" xsi:type="string">3</item>
+                    <item name="sortOrder" xsi:type="string">90</item>
                 </item>
             </argument>
         </arguments>
