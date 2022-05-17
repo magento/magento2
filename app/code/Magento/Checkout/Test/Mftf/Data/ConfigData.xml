@@ -120,9 +120,4 @@
         <data key="value">0</data>
         <data key="textValue">No</data>
     </entity>
-    <entity name="AdminFreeshippingMinimumOrderAmountConfigDataWithMinimumAmount">
-        <data key="path">carriers/freeshipping/free_shipping_subtotal</data>
-        <data key="value">76</data>
-        <data key="default">0</data>
-    </entity>
 </entities>
