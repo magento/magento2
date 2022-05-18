@@ -21,7 +21,7 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
     protected $currencySymbolModel;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -31,7 +31,7 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function tearDown(): void
     {
