@@ -7,28 +7,28 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\CategoryLinkManagement;
 use Magento\Catalog\Model\Indexer\Product\Category\Processor;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Config\Model\ResourceModel\Config;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\Config as eavConfig;
+use Magento\Framework\App\Cache;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Catalog\Model\GetCategoryByName;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
-use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Catalog\Api\CategoryLinkManagementInterface;
-use Magento\Config\Model\ResourceModel\Config;
-use Magento\Framework\App\Cache;
-use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -89,6 +89,11 @@ class ProductSearchTest extends GraphQlAbstract
     private $objectManager;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixture;
+
+    /**
      * Setup
      */
     protected function setUp(): void
@@ -103,6 +108,7 @@ class ProductSearchTest extends GraphQlAbstract
         $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
         $this->config = $this->objectManager->get(Config::class);
         $this->cache = $this->objectManager->get(Cache::class);
+        $this->fixture = DataFixtureStorageManager::getStorage();
     }
 
     /**
@@ -235,8 +241,9 @@ QUERY;
     }
 
     /**
-     *  Layered navigation for Configurable products with out of stock options
-     * Two configurable products each having two variations and one of the child products of one Configurable set to OOS
+     * Layered navigation for Configurable products with out of stock options
+     * Two configurable products each having two variations and one of the child products
+     * of one Configurable set to OOS
      *
      * @magentoApiDataFixture Magento/Catalog/_files/configurable_products_with_custom_attribute_layered_navigation.php
      * @magentoApiDataFixture Magento/Indexer/_files/reindex_all_invalid.php
@@ -257,7 +264,11 @@ QUERY;
         $this->assertEquals(2, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['aggregations']);
         $this->assertNotEmpty($response['products']['filters'], 'Filters is empty');
-        $this->assertCount(2, $response['products']['aggregations'], 'Aggregation count does not match');
+        $this->assertCount(
+            2,
+            $response['products']['aggregations'],
+            'Aggregation count does not match'
+        );
 
         // Custom attribute filter layer data
         $this->assertResponseFields(
@@ -402,9 +413,20 @@ QUERY;
         $filteredProducts = [$product3, $product2, $product1];
         $countOfFilteredProducts = count($filteredProducts);
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(3, $response['products']['total_count'], 'Number of products returned is incorrect');
-        $this->assertTrue(count($response['products']['filters']) > 0, 'Product filters is not empty');
-        $this->assertCount(3, $response['products']['aggregations'], 'Incorrect count of aggregations');
+        $this->assertEquals(
+            3,
+            $response['products']['total_count'],
+            'Number of products returned is incorrect'
+        );
+        $this->assertTrue(
+            count($response['products']['filters']) > 0,
+            'Product filters is not empty'
+        );
+        $this->assertCount(
+            3,
+            $response['products']['aggregations'],
+            'Incorrect count of aggregations'
+        );
 
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         for ($itemIndex = 0; $itemIndex < $countOfFilteredProducts; $itemIndex++) {
@@ -670,7 +692,7 @@ QUERY;
         $this->assertResponseFields(
             $response['products']['aggregations'][1],
             [
-                'attribute_code' => 'category_id',
+                'attribute_code' => 'category_uid',
                 'count' => 7,
                 'label' => 'Category'
             ]
@@ -803,7 +825,11 @@ QUERY;
         // presort expected and actual results as different search engines have different orders
         usort($expectedCategoryInAggregations, [$this, 'compareLabels']);
         usort($actualCategoriesFromResponse, [$this, 'compareLabels']);
-        $categoryInAggregations = array_map(null, $expectedCategoryInAggregations, $actualCategoriesFromResponse);
+        $categoryInAggregations = array_map(
+            null,
+            $expectedCategoryInAggregations,
+            $actualCategoriesFromResponse
+        );
 
         //Validate the categories and sub-categories data in the filter layer
         foreach ($categoryInAggregations as $index => $categoryAggregationsData) {
@@ -1184,7 +1210,10 @@ QUERY;
     public function testSortByPosition()
     {
         // Get category ID for filtering
-        $category = $this->categoryCollection->addFieldToFilter('name', 'Category 999')->getFirstItem();
+        $category = $this->categoryCollection->addFieldToFilter(
+            'name',
+            'Category 999'
+        )->getFirstItem();
         $categoryId = $category->getId();
 
         $queryAsc = <<<QUERY
@@ -1256,13 +1285,120 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod1
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod2
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod3
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod4
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod5
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod6
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod7
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod8
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod9
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:cat1
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"parent_id":"$cat1.id$"} as:cat11
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"parent_id":"$cat1.id$"} as:cat12
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"parent_id":"$cat1.id$"} as:cat13
+     * @dataProvider sortByPositionWithMultipleCategoriesDataProvider
+     */
+    public function testSortByPositionWithMultipleCategories(
+        array $config,
+        array $filterBy,
+        array $expectedOrder
+    ): void {
+        $expectedOrderSku = [];
+        $categoryIds  = [];
+
+        foreach ($expectedOrder as $productName) {
+            $expectedOrderSku[] = $this->fixture->get($productName)->getSku();
+        }
+
+        foreach ($filterBy as $categoryName) {
+            $categoryIds[] = $this->fixture->get($categoryName)->getId();
+        }
+        $filter = json_encode($categoryIds);
+
+        foreach ($config as $categoryName => $products) {
+            $categoryId = $this->fixture->get($categoryName)->getId();
+            $category = $this->categoryRepository->get($categoryId);
+            $productPositions = [];
+            foreach ($products as $position => $productName) {
+                $product = $this->fixture->get($productName);
+                $productPositions[$product->getId()] = $position;
+            }
+            $category->setPostedProducts($productPositions);
+            $category->save();
+        }
+
+        $this->indexer->reindexAll();
+
+        $query = <<<QUERY
+{
+  products(filter: {category_id: {in: $filter}}, sort: {position: ASC}) {
+    total_count
+    items {
+      sku
+    }
+  }
+}
+QUERY;
+        $resultDesc = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $resultDesc);
+        $this->assertEquals($expectedOrderSku, array_column($resultDesc['products']['items'], 'sku'));
+    }
+
+    /**
+     * @return array
+     */
+    public function sortByPositionWithMultipleCategoriesDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'cat11' => ['prod9', 'prod8', 'prod7'],
+                    'cat12' => ['prod2', 'prod5', 'prod3', 'prod4', 'prod1', 'prod8'],
+                    'cat13' => ['prod1', 'prod4', 'prod9', 'prod6'],
+                ],
+                [
+                    'cat11', 'cat12'
+                ],
+                ['prod9', 'prod2', 'prod8', 'prod5', 'prod7', 'prod3', 'prod4', 'prod1']
+            ],
+            [
+                [
+                    'cat11' => ['prod9', 'prod8', 'prod7'],
+                    'cat12' => ['prod2', 'prod5', 'prod3', 'prod4', 'prod1', 'prod8'],
+                    'cat13' => ['prod1', 'prod4', 'prod9', 'prod6'],
+                ],
+                [
+                    'cat11', 'cat12', 'cat13'
+                ],
+                ['prod9', 'prod2', 'prod1', 'prod8', 'prod5', 'prod4', 'prod7', 'prod3', 'prod6']
+            ],
+            [
+                [
+                    'cat11' => ['prod9', 'prod8', 'prod7'],
+                    'cat12' => ['prod2', 'prod5', 'prod3', 'prod4', 'prod1', 'prod8'],
+                    'cat13' => ['prod1', 'prod4', 'prod9', 'prod6'],
+                ],
+                [
+                    'cat1'
+                ],
+                ['prod9', 'prod2', 'prod1', 'prod8', 'prod5', 'prod4', 'prod7', 'prod3', 'prod6']
+            ],
+        ];
+    }
+
+    /**
      * Test products with the same relevance reverse position with ASC and DESC sorting
      *
      * @magentoApiDataFixture Magento/Catalog/_files/category_with_three_products.php
      */
     public function testSortByEqualRelevanceAndAscDescReversePosition()
     {
-        $category = $this->categoryCollection->addFieldToFilter('name', 'Category 999')->getFirstItem();
+        $category = $this->categoryCollection->addFieldToFilter(
+            'name',
+            'Category 999'
+        )->getFirstItem();
         $categoryId = (int) $category->getId();
 
         $expectedProductsAsc = ['simple1000', 'simple1001', 'simple1002'];
@@ -1533,7 +1669,7 @@ QUERY;
                 ]
             ],
             [
-                'attribute_code' => 'category_id',
+                'attribute_code' => 'category_uid',
                 'count' => 1,
                 'label' => 'Category',
                 'options' => [
@@ -1642,7 +1778,11 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count'], 'Incorrect count of products returned');
+        $this->assertEquals(
+            2,
+            $response['products']['total_count'],
+            'Incorrect count of products returned'
+        );
         $links = $this->categoryLinkManagement->getAssignedProducts(
             is_numeric($queryCategoryId) ? $queryCategoryId : base64_decode($queryCategoryId)
         );
@@ -1749,12 +1889,18 @@ QUERY;
         $responseAsc = $this->graphQlQuery(sprintf($query, 'ASC'));
         $this->assertEquals(3, $responseDesc['products']['total_count']);
         $this->assertNotEmpty($responseDesc['products']['filters'], 'Filters should have the Category layer');
-        $this->assertEquals('Colorful Category', $responseDesc['products']['filters'][0]['filter_items'][0]['label']);
+        $this->assertEquals(
+            'Colorful Category',
+            $responseDesc['products']['filters'][0]['filter_items'][0]['label']
+        );
         $this->assertCount(2, $responseDesc['products']['aggregations']);
         $expectedProductsInResponse = ['Blue briefs', 'Navy Blue Striped Shoes', 'Grey shorts'];
         $namesDesc = array_column($responseDesc['products']['items'], 'name');
         $this->assertEqualsCanonicalizing($expectedProductsInResponse, $namesDesc);
-        $this->assertEquals($namesDesc, array_reverse(array_column($responseAsc['products']['items'], 'name')));
+        $this->assertEquals(
+            $namesDesc,
+            array_reverse(array_column($responseAsc['products']['items'], 'name'))
+        );
     }
 
     /**

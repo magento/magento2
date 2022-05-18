@@ -24,6 +24,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
  * @api
  * @since 100.0.2
@@ -148,28 +149,33 @@ class Uploader
     /**#@+
      * File upload type (multiple or single)
      */
-    const SINGLE_STYLE = 0;
+    public const SINGLE_STYLE = 0;
 
-    const MULTIPLE_STYLE = 1;
+    public const MULTIPLE_STYLE = 1;
 
     /**#@-*/
 
     /**
      * Temp file name empty code
      */
-    const TMP_NAME_EMPTY = 666;
+    public const TMP_NAME_EMPTY = 666;
 
     /**
      * Maximum Image Width resolution in pixels. For image resizing on client side
      * @deprecated @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxWidth()
      */
-    const MAX_IMAGE_WIDTH = 1920;
+    public const MAX_IMAGE_WIDTH = 1920;
 
     /**
      * Maximum Image Height resolution in pixels. For image resizing on client side
      * @deprecated @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxHeight()
      */
-    const MAX_IMAGE_HEIGHT = 1200;
+    public const MAX_IMAGE_HEIGHT = 1200;
+
+    /**
+     * Maximum file name length
+     */
+    private const MAX_FILE_NAME_LENGTH = 255;
 
     /**
      * Resulting of uploaded file
@@ -491,16 +497,13 @@ class Uploader
      */
     public static function getCorrectFileName($fileName)
     {
-        $fileName = preg_replace('/[^a-z0-9_\\-\\.]+/i', '_', $fileName);
+        $fileName = preg_replace('/[^a-z0-9_\\-\\.]+/i', '_', ltrim($fileName, '.'));
         $fileInfo = pathinfo($fileName);
         $fileInfo['extension'] = $fileInfo['extension'] ?? '';
 
-        // account for excessively long filenames that cannot be stored completely in database
-        $maxFilenameLength = 90;
-
-        if (strlen($fileInfo['basename']) > $maxFilenameLength) {
+        if (strlen($fileInfo['basename']) > self::MAX_FILE_NAME_LENGTH) {
             throw new \LengthException(
-                __('Filename is too long; must be %1 characters or less', $maxFilenameLength)
+                __('Filename is too long; must be %1 characters or less', self::MAX_FILE_NAME_LENGTH)
             );
         }
 
@@ -640,6 +643,11 @@ class Uploader
      */
     public function checkAllowedExtension($extension)
     {
+        //File extensions should only be allowed to contain alphanumeric characters
+        if (preg_match('/[^a-z0-9]/i', $extension)) {
+            return false;
+        }
+
         if (!is_array($this->_allowedExtensions) || empty($this->_allowedExtensions)) {
             return true;
         }

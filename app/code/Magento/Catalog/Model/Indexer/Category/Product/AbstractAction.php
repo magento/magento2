@@ -606,7 +606,7 @@ abstract class AbstractAction
                 'category_id' => 'cc.entity_id',
                 'product_id' => 'ccp.product_id',
                 'position' => new \Zend_Db_Expr(
-                    $this->connection->getIfNullSql('ccp2.position', 'ccp.position + 10000')
+                    $this->connection->getIfNullSql('ccp2.position', 'MIN(ccp.position) + 10000')
                 ),
                 'is_parent' => new \Zend_Db_Expr('0'),
                 'store_id' => new \Zend_Db_Expr($store->getId()),
@@ -853,7 +853,7 @@ abstract class AbstractAction
                     'category_id' => new \Zend_Db_Expr($store->getRootCategoryId()),
                     'product_id' => 'cp.entity_id',
                     'position' => new \Zend_Db_Expr(
-                        $this->connection->getCheckSql('ccp.product_id IS NOT NULL', 'ccp.position', '0')
+                        $this->connection->getCheckSql('ccp.product_id IS NOT NULL', 'MIN(ccp.position)', '10000')
                     ),
                     'is_parent' => new \Zend_Db_Expr(
                         $this->connection->getCheckSql('ccp.product_id IS NOT NULL', '1', '0')
