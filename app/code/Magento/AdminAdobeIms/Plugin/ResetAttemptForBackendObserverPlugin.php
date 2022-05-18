@@ -33,12 +33,13 @@ class ResetAttemptForBackendObserverPlugin
      * @param ResetAttemptForBackendObserver $subject
      * @param callable $proceed
      * @param Observer $observer
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(ResetAttemptForBackendObserver $subject, callable $proceed, Observer $observer)
+    public function aroundExecute(ResetAttemptForBackendObserver $subject, callable $proceed, Observer $observer): void
     {
         if (!$this->adminImsConfig->enabled()) {
-            return $proceed($observer);
+            $proceed($observer);
         }
     }
 }
