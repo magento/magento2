@@ -11,7 +11,7 @@
         <annotations>
             <features value="Customer address"/>
             <stories value="other customer can not access the address of another customer"/>
-            <title value="Storefront - My account - Address Book - add new address"/>
+            <title value="Customer address can't be overwritten by other customer"/>
             <description value="Customer address can't be overwritten [security]"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-27518"/>
