@@ -343,9 +343,10 @@ class DataProviderTest extends TestCase
             $attributeCode .= $options[self::ATTRIBUTE_CODE]['specific_code_prefix'];
         }
 
-        $attributeMock->expects($this->atLeast(2))
+        $attributeMock->expects($this->exactly(3))
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
+
 
         $attributeBooleanMock = $this->getMockBuilder(AbstractAttribute::class)
             ->onlyMethods(
@@ -367,7 +368,7 @@ class DataProviderTest extends TestCase
             $booleanAttributeCode .= $options['test-code-boolean']['specific_code_prefix'];
         }
 
-        $attributeBooleanMock->expects($this->atleast(2))
+        $attributeBooleanMock->expects($this->exactly(3))
             ->method('getAttributeCode')
             ->willReturn($booleanAttributeCode);
 
