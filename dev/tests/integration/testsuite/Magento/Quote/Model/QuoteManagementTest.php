@@ -116,6 +116,8 @@ class QuoteManagementTest extends TestCase
     /**
      * Verify guest customer place order with auto-group assigment.
      *
+     * Since guest is not a registered customer, customer group should be NOT_LOGGED_IN
+     *
      * @magentoDataFixture Magento/Sales/_files/guest_quote_with_addresses.php
      *
      * @magentoConfigFixture default_store customer/create_account/auto_group_assign 1
@@ -131,7 +133,7 @@ class QuoteManagementTest extends TestCase
         $quote = $this->getQuoteByReservedOrderId->execute('guest_quote');
         $this->cartManagement->placeOrder($quote->getId());
         $quoteAfterOrderPlaced = $this->getQuoteByReservedOrderId->execute('guest_quote');
-        self::assertEquals(2, $quoteAfterOrderPlaced->getCustomerGroupId());
+        self::assertEquals(0, $quoteAfterOrderPlaced->getCustomerGroupId());
         self::assertEquals(3, $quoteAfterOrderPlaced->getCustomerTaxClassId());
     }
 
@@ -195,7 +197,6 @@ class QuoteManagementTest extends TestCase
         );
         $this->cartManagement->placeOrder($quote->getId());
     }
-
 
     /**
      * Tries to create order with product that has child items and one of them
