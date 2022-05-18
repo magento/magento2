@@ -13,7 +13,7 @@
             <title value="Admin should be able to check Misleading message for guest customer on checkout"/>
             <description value="Admin should be able to check Misleading message for guest customer on checkout"/>
             <testCaseId value="MC-36852"/>
-            <severity value="Major"/>
+            <severity value="MAJOR"/>
             <group value="product"/>
         </annotations>
         <before>
