@@ -387,7 +387,7 @@ class ImsConfig extends Config
     public function getOrganizationMembershipUrl(string $orgId): string
     {
         return str_replace(
-            ['#{orgId}'],
+            ['#{org_id}'],
             [$orgId],
             $this->scopeConfig->getValue(self::XML_PATH_ORGANIZATION_MEMBERSHIP_URL)
         );

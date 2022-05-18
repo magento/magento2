@@ -59,10 +59,8 @@ class ImsOrganizationService
             $curl->addHeader('cache-control', 'no-cache');
             $curl->addHeader('Authorization', 'Bearer ' . $access_token);
 
-            $curl->get(
-                $this->adminImsConfig->getOrganizationMembershipUrl($configuredOrganizationId),
-                []
-            );
+            $orgCheckUrl = $this->adminImsConfig->getOrganizationMembershipUrl($configuredOrganizationId);
+            $curl->get($orgCheckUrl);
 
             if ($curl->getBody() === '') {
                 throw new AdobeImsOrganizationAuthorizationException(
