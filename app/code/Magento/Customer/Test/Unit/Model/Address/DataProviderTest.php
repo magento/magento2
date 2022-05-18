@@ -347,7 +347,6 @@ class DataProviderTest extends TestCase
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
 
-
         $attributeBooleanMock = $this->getMockBuilder(AbstractAttribute::class)
             ->onlyMethods(
                 [
