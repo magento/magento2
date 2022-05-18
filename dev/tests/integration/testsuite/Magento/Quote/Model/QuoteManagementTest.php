@@ -238,7 +238,11 @@ class QuoteManagementTest extends TestCase
     {
         $this->makeProductOutOfStock('simple');
         $quote = $this->getQuoteByReservedOrderId->execute('test01');
-        $this->expectExceptionObject(new LocalizedException(__('The shipping method is missing. Select the shipping method and try again.')));
+        $this->expectExceptionObject(
+            new LocalizedException(
+                __('The shipping method is missing. Select the shipping method and try again.')
+            )
+        );
         $this->cartManagement->placeOrder($quote->getId());
     }
 
