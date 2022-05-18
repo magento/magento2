@@ -70,12 +70,12 @@ class DataTest extends TestCase
             'isSetFlag'
         )->withConsecutive(
             [
-                Data::XML_PATH_ENABLED,
+                self::XML_PATH_ENABLED,
                 ScopeInterface::SCOPE_STORE,
                 $store
             ],
             [
-                Data::XML_PATH_ENABLED_GA4,
+                self::XML_PATH_ENABLED_GA4,
                 ScopeInterface::SCOPE_STORE,
                 $store
             ]
