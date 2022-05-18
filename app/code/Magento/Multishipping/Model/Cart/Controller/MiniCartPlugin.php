@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Multishipping\Model\Cart\Controller;
 
-use Magento\Checkout\Controller\Cart;
+use Magento\Checkout\Controller\Sidebar\UpdateItemQty;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Multishipping\Model\Cart\MultishippingClearItemAddress;
@@ -15,7 +15,7 @@ use Magento\Multishipping\Model\Cart\MultishippingClearItemAddress;
 /**
  * Cleans shipping addresses and item assignments after MultiShipping flow
  */
-class CartPlugin
+class MiniCartPlugin
 {
     /**
      * @var MultishippingClearItemAddress
@@ -34,13 +34,13 @@ class CartPlugin
     /**
      * Cleans shipping addresses and item assignments after MultiShipping flow
      *
-     * @param Cart $subject
+     * @param UpdateItemQty $subject
      * @param RequestInterface $request
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws LocalizedException
      */
-    public function beforeDispatch(Cart $subject, RequestInterface $request)
+    public function beforeDispatch(UpdateItemQty $subject, RequestInterface $request)
     {
         $this->multishippingClearItemAddress->clearAddressItem($subject, $request);
     }
