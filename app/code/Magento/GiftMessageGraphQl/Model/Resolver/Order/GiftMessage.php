@@ -35,6 +35,7 @@ class GiftMessage implements ResolverInterface
 
     /**
      * @param OrderRepositoryInterface $orderRepository
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
