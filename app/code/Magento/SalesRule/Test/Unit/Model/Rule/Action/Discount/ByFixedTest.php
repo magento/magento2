@@ -65,7 +65,11 @@ class ByFixedTest extends TestCase
 
         $this->model = $helper->getObject(
             ByFixed::class,
-            ['discountDataFactory' => $this->discountDataFactory, 'validator' => $this->validator, 'priceCurrency' => $this->priceCurrency]
+            [
+                'discountDataFactory' => $this->discountDataFactory,
+                'validator' => $this->validator,
+                'priceCurrency' => $this->priceCurrency
+            ]
         );
     }
 
@@ -163,7 +167,8 @@ class ByFixedTest extends TestCase
         )->method(
             'convert'
         )->with(
-            $ruleData['discountAmount'], $store
+            $ruleData['discountAmount'],
+            $store
         )->willReturn(
             $validItemData['baseOriginalPrice']
         );
