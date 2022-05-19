@@ -3,15 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var $block \Magento\GoogleGtag\Block\Ga */
+/** @var \Magento\Framework\Escaper $escaper */
+
+$analyticsData = $block->getAnalyticsData();
 ?>
-<?php /** @var $block \Magento\GoogleGtag\Block\Ga */ ?>
-<?php /** @var \Magento\Framework\Escaper $escaper */ ?>
-<!-- BEGIN GOOGLE ANALYTICS 4 CODE -->
-<script type="text/x-magento-init">
-{
-    "*": {
-        "Magento_GoogleGtag/js/google-analytics": <?= /* @noEscape */ $block->getAnalyticsData() ?>
+
+<?php if ($analyticsData['googleAnalyticsAvailable']): ?>
+    <!-- BEGIN GOOGLE ANALYTICS 4 CODE -->
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_GoogleGtag/js/google-analytics": <?= /* @noEscape */ $block->getAnalyticsData() ?>
+        }
     }
-}
-</script>
-<!-- END GOOGLE ANALYTICS 4 CODE -->
+    </script>
+    <!-- END GOOGLE ANALYTICS 4 CODE -->
+<?php endif; ?>
