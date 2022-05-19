@@ -621,11 +621,12 @@ class EavSetup
      * @param int|string $entityTypeId
      * @param int|string $setId
      * @param int|string $id
-     * @param string $field
+     * @param array|string $field
      * @param mixed $value
      * @return $this
+     * @throws LocalizedException
      */
-    public function updateAttributeGroup($entityTypeId, $setId, $id, $field, $value = null)
+    public function updateAttributeGroup($entityTypeId, $setId, $id, $field, $value = null): self
     {
         $this->setup->updateTableRow(
             'eav_attribute_group',

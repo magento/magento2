@@ -230,10 +230,10 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Sets the reserved order ID for the cart.
      *
-     * @param string $reservedOrderId
+     * @param ?string $reservedOrderId
      * @return $this
      */
-    public function setReservedOrderId($reservedOrderId);
+    public function setReservedOrderId(?string $reservedOrderId);
 
     /**
      * Returns the original order ID for the cart.
