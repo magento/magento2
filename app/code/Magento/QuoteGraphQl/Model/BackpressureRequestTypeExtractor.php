@@ -12,7 +12,6 @@ use Magento\GraphQl\Model\Backpressure\RequestTypeExtractorInterface;
 use Magento\Quote\Model\Backpressure\OrderLimitConfigManager;
 use Magento\QuoteGraphQl\Model\Resolver\PlaceOrder;
 use Magento\QuoteGraphQl\Model\Resolver\SetPaymentAndPlaceOrder;
-use Magento\Tests\NamingConvention\true\string;
 use ReflectionException;
 
 /**
