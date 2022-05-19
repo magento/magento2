@@ -13,7 +13,7 @@
             <stories value="Edit attribute set"/>
             <title value="Add and Update a custom group in an Attribute Set"/>
             <description value="Create a new group. Assign/unassign attributes to/from it"/>
-            <severity value="BLOCKER"/>
+            <severity value="MAJOR"/>
             <testCaseId value="MC-26919"/>
             <group value="Catalog"/>
         </annotations>
@@ -60,7 +60,7 @@
         <!-- Move custom Product Attribute to new 'Custom group' Group -->
 
         <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
-        <click selector="{{AdminProductAttributeSetEditSection.attributeGroupExtender(customGroup.name)}}" stepKey="click"/>
+        <click selector="{{AdminProductAttributeSetEditSection.attributeGroupExtender(customGroup.name)}}" stepKey="clickButtonOk"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterClick"/>
         <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.unassignedAttribute($$createConfigProductAttribute.attribute_code$$)}}" selector2="{{AdminProductAttributeSetEditSection.attributeGroupExtender(customGroup.name)}}" stepKey="moveAttribute"/>
         <waitForPageLoad stepKey="waitForDragAndDrop"/>
