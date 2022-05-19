@@ -16,7 +16,7 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 /**
  * Add Regions/States for India.
  */
-class AddRegionsForIndia implements DataPatchInterface, PatchVersionInterface
+class AddRegionsForIndia implements DataPatchInterface
 {
     /**
      * @var ModuleDataSetupInterface
@@ -77,14 +77,6 @@ class AddRegionsForIndia implements DataPatchInterface, PatchVersionInterface
         return [
             InitializeDirectoryData::class,
         ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function getVersion(): string
-    {
-        return '1.0.0';
     }
 
     /**
