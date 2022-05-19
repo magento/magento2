@@ -19,7 +19,7 @@
 
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
-            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
        </before>
         <after>
             <deleteData createDataKey="category" stepKey="deleteRootCategory"/>
