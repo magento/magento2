@@ -6,12 +6,9 @@
 
 namespace Magento\Quote\Model\ResourceModel;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\SalesSequence\Model\Manager;
 
 /**
@@ -20,39 +17,26 @@ use Magento\SalesSequence\Model\Manager;
 class Quote extends AbstractDb
 {
     /**
-     * Sales sequence manager
-     *
-     * @var Manager
+     * @var \Magento\SalesSequence\Model\Manager
      */
     protected $sequenceManager;
 
     /**
-     * Quote repository interface object
-     *
-     * @var CartRepositoryInterface
-     */
-    private $quoteRepository;
-
-    /**
-     * @param Context $context
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param Snapshot $entitySnapshot
      * @param RelationComposite $entityRelationComposite
-     * @param Manager $sequenceManager
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param string $connectionName
-     * @param CartRepositoryInterface|null $quoteRepository
      */
     public function __construct(
-        Context $context,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
         Snapshot $entitySnapshot,
         RelationComposite $entityRelationComposite,
         Manager $sequenceManager,
-        $connectionName = null,
-        ?CartRepositoryInterface $quoteRepository = null
+        $connectionName = null
     ) {
         parent::__construct($context, $entitySnapshot, $entityRelationComposite, $connectionName);
         $this->sequenceManager = $sequenceManager;
-        $this->quoteRepository = $quoteRepository ?: ObjectManager::getInstance()
-            ->get(CartRepositoryInterface::class);
     }
 
     /**
@@ -120,17 +104,8 @@ class Quote extends AbstractDb
         $data = $connection->fetchRow($select);
 
         if ($data) {
-            //Prevent current StoreId of the quote to be overridden
-            $currentStoreId = $quote->getStoreId();
-            if ($currentStoreId !== null && $currentStoreId !== (int)$data['store_id']) {
-                unset($data['store_id']);
-                $quote->setData($data);
-                $quote->setOrigData();
-                $this->quoteRepository->save($quote);
-            } else {
-                $quote->setData($data);
-                $quote->setOrigData();
-            }
+            $quote->setData($data);
+            $quote->setOrigData();
         }
 
         $this->_afterLoad($quote);

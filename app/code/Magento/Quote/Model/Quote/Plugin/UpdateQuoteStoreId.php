@@ -46,4 +46,16 @@ class UpdateQuoteStoreId
 
         return $result;
     }
+
+    /**
+     * Update store id in requested quote by store id from request for registered customer.
+     *
+     * @param Quote $subject
+     * @param Quote $result
+     * @return Quote
+     */
+    public function afterLoadByCustomer(Quote $subject, Quote $result): Quote
+    {
+        return $this->afterLoadByIdWithoutStore($subject, $result);
+    }
 }
