@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\Quote\Plugin;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -36,13 +37,14 @@ class UpdateQuoteStoreId
      * @param Quote $result
      * @return Quote
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws NoSuchEntityException
      */
     public function afterLoadByIdWithoutStore(Quote $subject, Quote $result): Quote
     {
-        $storeId = $this->storeManager->getStore()
-            ->getId() ?: $this->storeManager->getDefaultStoreView()
-                ->getId();
-        $result->setStoreId($storeId);
+        $storeId = $this->storeManager->getStore()->getId();
+        if ($storeId) {
+            $result->setStoreId($storeId);
+        }
 
         return $result;
     }
