@@ -118,14 +118,16 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
             }
 
             $tokenResponse = $this->adminImsConnection->getTokenResponse($code);
+            $accessToken = $tokenResponse->getAccessToken();
 
-            $profile = $this->adminImsConnection->getProfile($tokenResponse->getAccessToken());
+            $profile = $this->adminImsConnection->getProfile($accessToken);
             if (empty($profile['email'])) {
                 throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
             }
 
-            $accessToken = $tokenResponse->getAccessToken();
-            $this->adminOrganizationService->checkOrganizationAllocation($accessToken);
+            //check membership in organization
+            $this->adminOrganizationService->checkOrganizationMembership($accessToken);
+
             $this->adminReauthProcessService->execute($tokenResponse);
 
             $response = sprintf(

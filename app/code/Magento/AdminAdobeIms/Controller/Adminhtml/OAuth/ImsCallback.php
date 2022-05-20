@@ -102,14 +102,15 @@ class ImsCallback extends Auth implements HttpGetActionInterface
             $tokenResponse = $this->adminImsConnection->getTokenResponse($code);
             $accessToken = $tokenResponse->getAccessToken();
 
-            //check organization assignment
-            $this->adminOrganizationService->checkOrganizationAllocation($accessToken);
-
             //get profile info to check email
             $profile = $this->adminImsConnection->getProfile($accessToken);
             if (empty($profile['email'])) {
                 throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
             }
+
+            //check membership in organization
+            $this->adminOrganizationService->checkOrganizationMembership($accessToken);
+
             $this->adminLoginProcessService->execute($tokenResponse, $profile);
         } catch (AdobeImsAuthorizationException $e) {
             $this->logger->error($e->getMessage());
