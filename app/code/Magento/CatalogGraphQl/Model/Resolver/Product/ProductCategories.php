@@ -68,7 +68,8 @@ class ProductCategories
             ->joinInner(['store' => $storeTable], $connection->quoteInto('store.store_id = ?', $storeId), [])
             ->joinInner(
                 ['store_group' => $storeGroupTable],
-                $connection->quoteInto('store.group_id = store_group.group_id AND NOT EXISTS
+                $connection->quoteInto(
+                    'store.group_id = store_group.group_id AND NOT EXISTS
                     (SELECT 1 FROM store_group WHERE cat_index.category_id IN (store_group.root_category_id)
                     and cat_index.product_id = ?)',
                     $productId,
