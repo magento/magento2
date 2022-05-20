@@ -6,6 +6,8 @@
 
 namespace Magento\Theme\Block\Html;
 
+use Magento\Framework\Escaper;
+
 /**
  * Html page header block
  *
@@ -14,6 +16,27 @@ namespace Magento\Theme\Block\Html;
  */
 class Header extends \Magento\Framework\View\Element\Template
 {
+    /**
+     * @var Escaper
+     */
+    protected $escaper;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param Magento\Framework\Escaper $escaper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Escaper $escaper,
+        array $data = []
+    ) {
+        $this->_escaper = $escaper;
+        parent::__construct($context, $data);
+    }
+
     /**
      * Current template name
      *
@@ -34,7 +57,7 @@ class Header extends \Magento\Framework\View\Element\Template
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        $this->_data['welcome'] =  addslashes($this->_data['welcome']);
+        $this->_data['welcome'] =  $this->_escaper->escapeQuote($this->_data['welcome'], $addSlashes = true);
         return __($this->_data['welcome']);
     }
 }
