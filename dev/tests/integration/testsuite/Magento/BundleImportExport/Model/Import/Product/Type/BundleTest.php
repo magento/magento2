@@ -185,6 +185,44 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Test that Bundle options with question mark are updated correctly by import
+     *
+     *
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @return void
+     */
+    public function testBundleImportUpdateValuesWithQuestionMark(): void
+    {
+        // import data from CSV file
+        $pathToFile = __DIR__ . '/../../_files/import_bundle_with_question_mark.csv';
+        $errors = $this->doImport($pathToFile, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(0, $errors->getErrorsCount());
+
+        // import data from CSV file to update values
+        $pathToFile2 = __DIR__ . '/../../_files/import_bundle_with_question_mark.csv';
+        $errors = $this->doImport($pathToFile2, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(0, $errors->getErrorsCount());
+
+        $resource = $this->objectManager->get(ProductResource::class);
+        $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
+        $this->assertIsNumeric($productId);
+        /** @var Product $product */
+        $product = $this->objectManager->create(ProductRepositoryInterface::class);
+        $ProductRepository = $product->get(self::TEST_PRODUCT_NAME);
+
+        $this->assertEquals(self::TEST_PRODUCT_NAME, $ProductRepository->getName());
+        $this->assertEquals(self::TEST_PRODUCT_TYPE, $ProductRepository->getTypeId());
+        $this->assertEquals(1, $ProductRepository->getShipmentType());
+
+        $bundleOptionCollection = $ProductRepository->getExtensionAttributes()->getBundleProductOptions();
+        $this->assertCount(1, $bundleOptionCollection);
+
+        $this->importedProductSkus = ['Simple 1', 'Bundle 1'];
+    }
+
+    /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml

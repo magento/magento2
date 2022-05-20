@@ -38,6 +38,7 @@
                             </item>
                         </item>
                     </argument>
+                    <argument name="view_model" xsi:type="object">Magento\Customer\ViewModel\Customer\StoreConfig</argument>
                 </arguments>
             </block>
             <block name="customer.section.config" class="Magento\Customer\Block\SectionConfig"
