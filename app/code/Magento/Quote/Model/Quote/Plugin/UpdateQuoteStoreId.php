@@ -37,6 +37,7 @@ class UpdateQuoteStoreId
      * @param Quote $result
      * @return Quote
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws NoSuchEntityException
      */
     public function afterLoadByIdWithoutStore(Quote $subject, Quote $result): Quote
     {
@@ -54,6 +55,7 @@ class UpdateQuoteStoreId
      * @param Quote $subject
      * @param Quote $result
      * @return Quote
+     * @throws NoSuchEntityException
      */
     public function afterLoadByCustomer(Quote $subject, Quote $result): Quote
     {
