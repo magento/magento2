@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GiftMessage\Api\OrderRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -33,16 +34,21 @@ class GiftMessage implements ResolverInterface
      */
     private LoggerInterface $logger;
 
+    /** @var Uid */
+    private $uidEncoder;
+
     /**
      * @param OrderRepositoryInterface $orderRepository
      * @param LoggerInterface|null $logger
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        Uid $uidEncoder = null
     ) {
         $this->orderRepository = $orderRepository;
         $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->uidEncoder = $uidEncoder ?? ObjectManager::getInstance()->get(Uid::class);
     }
 
     /**
@@ -68,8 +74,8 @@ class GiftMessage implements ResolverInterface
         if (!isset($value['id'])) {
             throw new GraphQlInputException(__('"id" value should be specified'));
         }
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $orderId = (int)base64_decode($value['id']) ?: (int)$value['id'];
+
+        $orderId = $this->uidEncoder->decode((string) $value['id']);
 
         try {
             $orderGiftMessage = $this->orderRepository->get($orderId);
