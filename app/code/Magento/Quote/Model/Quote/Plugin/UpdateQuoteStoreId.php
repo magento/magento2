@@ -37,14 +37,13 @@ class UpdateQuoteStoreId
      * @param Quote $result
      * @return Quote
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @throws NoSuchEntityException
      */
     public function afterLoadByIdWithoutStore(Quote $subject, Quote $result): Quote
     {
-        $storeId = $this->storeManager->getStore()->getId();
-        if ($storeId) {
-            $result->setStoreId($storeId);
-        }
+        $storeId = $this->storeManager->getStore()
+            ->getId() ?: $this->storeManager->getDefaultStoreView()
+            ->getId();
+        $result->setStoreId($storeId);
 
         return $result;
     }
@@ -58,6 +57,12 @@ class UpdateQuoteStoreId
      */
     public function afterLoadByCustomer(Quote $subject, Quote $result): Quote
     {
-        return $this->afterLoadByIdWithoutStore($subject, $result);
+        $storeId = $this->storeManager->getStore()->getId();
+        $defaultStoreId = $this->storeManager->getDefaultStoreView()->getId();
+        if ($storeId !== $defaultStoreId) {
+            $result->setStoreId($storeId);
+        }
+
+        return $result;
     }
 }
