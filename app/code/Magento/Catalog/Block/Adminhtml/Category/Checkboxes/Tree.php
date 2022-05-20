@@ -27,6 +27,8 @@ class Tree extends CategoryTree
     protected $_expandedPath = [];
 
     /**
+     * Method to prepare layout.
+     *
      * @return void
      */
     protected function _prepareLayout()
@@ -35,6 +37,8 @@ class Tree extends CategoryTree
     }
 
     /**
+     * Method to get category ids.
+     *
      * @return int[]
      */
     public function getCategoryIds()
@@ -43,6 +47,8 @@ class Tree extends CategoryTree
     }
 
     /**
+     * Method to set category ids.
+     *
      * @param mixed $ids
      * @return $this
      */
@@ -58,6 +64,8 @@ class Tree extends CategoryTree
     }
 
     /**
+     * Method to get expanded path.
+     *
      * @return array
      */
     protected function getExpandedPath()
@@ -66,6 +74,8 @@ class Tree extends CategoryTree
     }
 
     /**
+     * Method to set expanded path.
+     *
      * @param string $path
      * @return $this
      */
@@ -76,6 +86,8 @@ class Tree extends CategoryTree
     }
 
     /**
+     * Method to get node json.
+     *
      * @param array|Node $node
      * @param int $level
      * @return array

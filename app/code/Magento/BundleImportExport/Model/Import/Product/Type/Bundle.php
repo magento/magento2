@@ -22,8 +22,9 @@ use Magento\Store\Model\StoreManagerInterface;
  * Import entity Bundle product type.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Bundle extends Product\Type\AbstractType
+class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
     /**
      * Delimiter before product option value.
@@ -345,7 +346,7 @@ class Bundle extends Product\Type\AbstractType
     /**
      * Retrieve mapping between skus and products.
      *
-     * @return Product\Type\AbstractType
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     protected function retrieveProductsByCachedSkus()
     {
@@ -364,7 +365,7 @@ class Bundle extends Product\Type\AbstractType
     /**
      * Save product type specific data.
      *
-     * @return Product\Type\AbstractType
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     public function saveData()
     {
@@ -468,7 +469,7 @@ class Bundle extends Product\Type\AbstractType
     /**
      * Populates existing options.
      *
-     * @return Product\Type\AbstractType
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     protected function populateExistingOptions()
     {
@@ -507,7 +508,7 @@ class Bundle extends Product\Type\AbstractType
      *
      * @param array $existingOptions
      *
-     * @return Product\Type\AbstractType
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     protected function populateExistingSelections($existingOptions)
     {
@@ -546,7 +547,7 @@ class Bundle extends Product\Type\AbstractType
     /**
      * Insert options.
      *
-     * @return Product\Type\AbstractType
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     protected function insertOptions()
     {
@@ -622,7 +623,7 @@ class Bundle extends Product\Type\AbstractType
     /**
      * Insert selections.
      *
-     * @return Product\Type\AbstractType
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     protected function insertSelections()
     {
@@ -656,7 +657,7 @@ class Bundle extends Product\Type\AbstractType
     /**
      * Insert parent/child product relations
      *
-     * @return Product\Type\AbstractType
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     private function insertParentChildRelations()
     {
@@ -712,7 +713,7 @@ class Bundle extends Product\Type\AbstractType
      *
      * @param array $productIds
      *
-     * @return Product\Type\AbstractType
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     protected function deleteOptionsAndSelections($productIds)
     {
@@ -754,7 +755,7 @@ class Bundle extends Product\Type\AbstractType
     /**
      * Clear cached values between bunches
      *
-     * @return Product\Type\AbstractType
+     * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     protected function clear()
     {

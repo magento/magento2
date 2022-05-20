@@ -8,10 +8,13 @@ namespace Magento\Bundle\Controller\Adminhtml\Bundle\Selection;
 
 use Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class Grid extends Product
 {
     /**
-     * @return mixed
+     * @inheritdoc
      */
     public function execute()
     {

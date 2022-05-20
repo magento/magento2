@@ -17,7 +17,7 @@ use Laminas\Uri\Uri;
  */
 class PurgeCache
 {
-    const HEADER_X_MAGENTO_TAGS_PATTERN = 'X-Magento-Tags-Pattern';
+    public const HEADER_X_MAGENTO_TAGS_PATTERN = 'X-Magento-Tags-Pattern';
 
     /**
      * @var Server

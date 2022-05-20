@@ -5,19 +5,7 @@
  */
 namespace Magento\Backend\Block\Widget\Grid;
 
-use Exception;
-use Magento\Backend\Block\Widget\Button;
-use Magento\Backend\Block\Widget\Grid;
-use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Convert\Excel;
-use Magento\Framework\Data\Collection;
-use Magento\Framework\DataObject;
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\View\Element\AbstractBlock;
-use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
 
 /**
  * Extended Grid Widget
@@ -31,7 +19,7 @@ use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Extended extends Grid implements ExportInterface
+class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Backend\Block\Widget\Grid\ExportInterface
 {
     /**
      * Columns array
@@ -52,7 +40,7 @@ class Extended extends Grid implements ExportInterface
     /**
      * Collection object
      *
-     * @var Collection
+     * @var \Magento\Framework\Data\Collection
      */
     protected $_collection;
 
@@ -66,7 +54,7 @@ class Extended extends Grid implements ExportInterface
     /**
      * Grid export types
      *
-     * @var DataObject[]
+     * @var \Magento\Framework\DataObject[]
      */
     protected $_exportTypes = [];
 
@@ -99,11 +87,9 @@ class Extended extends Grid implements ExportInterface
     protected $_massactionIdFilter;
 
     /**
-     * Massaction block name
-     *
      * @var string
      */
-    protected $_massactionBlockName = Massaction\Extended::class;
+    protected $_massactionBlockName = \Magento\Backend\Block\Widget\Grid\Massaction\Extended::class;
 
     /**
      * Columns view order
@@ -134,8 +120,6 @@ class Extended extends Grid implements ExportInterface
     protected $_headersVisibility = true;
 
     /**
-     * Filter visibility
-     *
      * @var boolean
      */
     protected $_filterVisibility = true;
@@ -160,16 +144,12 @@ class Extended extends Grid implements ExportInterface
     protected $_isCollapsed;
 
     /**
-     * Count subtotals
-     *
      * @var boolean
      */
     protected $_countSubTotals = false;
 
     /**
-     * SubTotals
-     *
-     * @var DataObject[]
+     * @var \Magento\Framework\DataObject[]
      */
     protected $_subtotals = [];
 
@@ -179,7 +159,7 @@ class Extended extends Grid implements ExportInterface
     protected $_template = 'Magento_Backend::widget/grid/extended.phtml';
 
     /**
-     * @var WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $_directory;
 
@@ -194,7 +174,7 @@ class Extended extends Grid implements ExportInterface
      * Initialization
      *
      * @return void
-     * @throws FileSystemException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function _construct()
     {
@@ -208,13 +188,12 @@ class Extended extends Grid implements ExportInterface
      * Initialize child blocks
      *
      * @return $this
-     * @throws LocalizedException
      */
     protected function _prepareLayout()
     {
         $this->setChild(
             'export_button',
-            $this->getLayout()->createBlock(Button::class)->setData(
+            $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Button::class)->setData(
                 [
                     'label' => __('Export'),
                     'onclick' => $this->getJsObjectName() . '.doExport()',
@@ -224,7 +203,7 @@ class Extended extends Grid implements ExportInterface
         );
         $this->setChild(
             'reset_filter_button',
-            $this->getLayout()->createBlock(Button::class)->setData(
+            $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Button::class)->setData(
                 [
                     'label' => __('Reset Filter'),
                     'onclick' => $this->getJsObjectName() . '.resetFilter()',
@@ -238,7 +217,7 @@ class Extended extends Grid implements ExportInterface
         );
         $this->setChild(
             'search_button',
-            $this->getLayout()->createBlock(Button::class)->setData(
+            $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Button::class)->setData(
                 [
                     'label' => __('Search'),
                     'onclick' => $this->getJsObjectName() . '.doFilter()',
@@ -256,15 +235,14 @@ class Extended extends Grid implements ExportInterface
     /**
      * Retrieve column set block
      *
-     * @return AbstractBlock
-     * @throws LocalizedException
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     public function getColumnSet()
     {
         if (!$this->getChildBlock('grid.columnSet')) {
             $this->setChild(
                 'grid.columnSet',
-                $this->getLayout()->createBlock(ColumnSet::class)
+                $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Grid\ColumnSet::class)
             );
         }
         return parent::getColumnSet();
@@ -289,7 +267,7 @@ class Extended extends Grid implements ExportInterface
      */
     public function addExportType($url, $label)
     {
-        $this->_exportTypes[] = new DataObject(
+        $this->_exportTypes[] = new \Magento\Framework\DataObject(
             ['url' => $this->getUrl($url, ['_current' => true]), 'label' => $label]
         );
         return $this;
@@ -299,9 +277,9 @@ class Extended extends Grid implements ExportInterface
      * Add column to grid
      *
      * @param   string $columnId
-     * @param   array|DataObject $column
+     * @param   array|\Magento\Framework\DataObject $column
      * @return  $this
-     * @throws  Exception
+     * @throws  \Exception
      */
     public function addColumn($columnId, $column)
     {
@@ -309,7 +287,7 @@ class Extended extends Grid implements ExportInterface
             $this->getColumnSet()->setChild(
                 $columnId,
                 $this->getLayout()
-                    ->createBlock(Column\Extended::class)
+                    ->createBlock(\Magento\Backend\Block\Widget\Grid\Column\Extended::class)
                     ->setData($column)
                     ->setId($columnId)
                     ->setGrid($this)
@@ -317,7 +295,7 @@ class Extended extends Grid implements ExportInterface
             $this->getColumnSet()->getChildBlock($columnId)->setGrid($this);
         } else {
             // phpcs:ignore Magento2.Exceptions.DirectThrow
-            throw new Exception(__('Please correct the column format and try again.'));
+            throw new \Exception(__('Please correct the column format and try again.'));
         }
 
         $this->_lastColumnId = $columnId;
@@ -329,7 +307,6 @@ class Extended extends Grid implements ExportInterface
      *
      * @param string $columnId
      * @return $this
-     * @throws LocalizedException
      */
     public function removeColumn($columnId)
     {
@@ -347,7 +324,7 @@ class Extended extends Grid implements ExportInterface
      * Add column to grid after specified column.
      *
      * @param   string $columnId
-     * @param   array|DataObject $column
+     * @param   array|\Magento\Framework\DataObject $column
      * @param   string $after
      * @return  $this
      */
@@ -451,13 +428,12 @@ class Extended extends Grid implements ExportInterface
      * Prepare grid massaction column
      *
      * @return $this
-     * @throws LocalizedException
      */
     protected function _prepareMassactionColumn()
     {
         $columnId = 'massaction';
         $massactionColumn = $this->getLayout()
-            ->createBlock(Column::class)
+            ->createBlock(\Magento\Backend\Block\Widget\Grid\Column::class)
             ->setData(
                 [
                     'index' => $this->getMassactionIdField(),
@@ -636,8 +612,8 @@ class Extended extends Grid implements ExportInterface
     /**
      * Check whether should render cell
      *
-     * @param DataObject $item
-     * @param Column $column
+     * @param \Magento\Framework\DataObject $item
+     * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return boolean
      */
     public function shouldRenderCell($item, $column)
@@ -676,7 +652,7 @@ class Extended extends Grid implements ExportInterface
     /**
      * Return row url for js event handlers
      *
-     * @param Product|DataObject $item
+     * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $item
      * @return string
      */
     public function getRowUrl($item)
@@ -689,7 +665,7 @@ class Extended extends Grid implements ExportInterface
     /**
      * Get children of specified item
      *
-     * @param DataObject $item
+     * @param \Magento\Framework\DataObject $item
      * @return array
      */
     public function getMultipleRows($item)
@@ -714,7 +690,7 @@ class Extended extends Grid implements ExportInterface
     /**
      * Check whether subtotal should be rendered
      *
-     * @param DataObject $item
+     * @param \Magento\Framework\DataObject $item
      * @return boolean
      */
     public function shouldRenderSubTotal($item)
@@ -725,8 +701,8 @@ class Extended extends Grid implements ExportInterface
     /**
      * Retrieve rowspan number
      *
-     * @param DataObject $item
-     * @param Column $column
+     * @param \Magento\Framework\DataObject $item
+     * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return int|false
      */
     public function getRowspan($item, $column)
@@ -759,8 +735,8 @@ class Extended extends Grid implements ExportInterface
     /**
      * Check whether should render empty cell
      *
-     * @param DataObject $item
-     * @param Column $column
+     * @param \Magento\Framework\DataObject $item
+     * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return boolean
      */
     public function shouldRenderEmptyCell($item, $column)
@@ -781,8 +757,8 @@ class Extended extends Grid implements ExportInterface
     /**
      * Retrieve subtotal item
      *
-     * @param DataObject $item
-     * @return DataObject|string
+     * @param \Magento\Framework\DataObject $item
+     * @return \Magento\Framework\DataObject|string
      */
     public function getSubTotalItem($item)
     {
@@ -922,7 +898,6 @@ class Extended extends Grid implements ExportInterface
      *
      * @param array $fileData
      * @return string
-     * @throws FileSystemException
      */
     protected function _getFileContainerContent(array $fileData)
     {
@@ -1007,14 +982,13 @@ class Extended extends Grid implements ExportInterface
     /**
      * Write item data to csv export file
      *
-     * @param DataObject $item
-     * @param FileWriteInterface $stream
+     * @param \Magento\Framework\DataObject $item
+     * @param \Magento\Framework\Filesystem\File\WriteInterface $stream
      * @return void
-     * @throws FileSystemException
      */
     protected function _exportCsvItem(
-        DataObject $item,
-        FileWriteInterface $stream
+        \Magento\Framework\DataObject $item,
+        \Magento\Framework\Filesystem\File\WriteInterface $stream
     ) {
         $row = [];
         foreach ($this->getColumns() as $column) {
@@ -1031,7 +1005,6 @@ class Extended extends Grid implements ExportInterface
      * Return array with keys type and value
      *
      * @return array
-     * @throws FileSystemException
      */
     public function getCsvFile()
     {
@@ -1067,6 +1040,7 @@ class Extended extends Grid implements ExportInterface
      * Retrieve Grid data as CSV
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getCsv()
     {
@@ -1151,10 +1125,10 @@ class Extended extends Grid implements ExportInterface
     /**
      *  Get a row data of the particular columns
      *
-     * @param DataObject $data
+     * @param \Magento\Framework\DataObject $data
      * @return string[]
      */
-    public function getRowRecord(DataObject $data)
+    public function getRowRecord(\Magento\Framework\DataObject $data)
     {
         $row = [];
         foreach ($this->getColumns() as $column) {
@@ -1172,14 +1146,13 @@ class Extended extends Grid implements ExportInterface
      *
      * @param string $sheetName
      * @return array
-     * @throws FileSystemException
      */
     public function getExcelFile($sheetName = '')
     {
         $this->_isExport = true;
         $this->_prepareGrid();
 
-        $convert = new Excel(
+        $convert = new \Magento\Framework\Convert\Excel(
             $this->getCollection()->getIterator(),
             [$this, 'getRowRecord']
         );
@@ -1250,14 +1223,14 @@ class Extended extends Grid implements ExportInterface
             $data[] = $row;
         }
 
-        $convert = new Excel(new \ArrayIterator($data));
+        $convert = new \Magento\Framework\Convert\Excel(new \ArrayIterator($data));
         return $convert->convert('single_sheet');
     }
 
     /**
      * Retrieve grid export types
      *
-     * @return DataObject[]|false
+     * @return \Magento\Framework\DataObject[]|false
      */
     public function getExportTypes()
     {
@@ -1267,7 +1240,7 @@ class Extended extends Grid implements ExportInterface
     /**
      * Set collection object
      *
-     * @param Collection $collection
+     * @param \Magento\Framework\Data\Collection $collection
      * @return void
      */
     public function setCollection($collection)
@@ -1278,7 +1251,7 @@ class Extended extends Grid implements ExportInterface
     /**
      * Get collection object
      *
-     * @return Collection
+     * @return \Magento\Framework\Data\Collection
      */
     public function getCollection()
     {
@@ -1311,7 +1284,7 @@ class Extended extends Grid implements ExportInterface
     /**
      * Set subtotal items
      *
-     * @param DataObject[] $items
+     * @param \Magento\Framework\DataObject[] $items
      * @return $this
      */
     public function setSubTotals(array $items)
@@ -1323,7 +1296,7 @@ class Extended extends Grid implements ExportInterface
     /**
      * Retrieve subtotal items
      *
-     * @return DataObject[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getSubTotals()
     {

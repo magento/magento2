@@ -24,8 +24,6 @@ class Helper extends \Magento\Framework\DB\Helper
     protected $_foreignKeys = [];
 
     /**
-     * Core Date
-     *
      * @var DateTime
      */
     protected $_coreDate;
