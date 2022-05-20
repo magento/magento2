@@ -370,7 +370,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                         $cartRules[$rule->getId()] = $rule->getDiscountAmount();
                     }
                     if ($cartRules[$rule->getId()] > 0) {
-                        $shippingAmount = $address->getShippingAmount() - $address->getShippingDiscountAmount();
+                        $shippingQuoteAmount = (float) $address->getShippingAmount()
+                            - (float) $address->getShippingDiscountAmount();
                         $quoteBaseSubtotal = (float) $quote->getBaseSubtotal();
                         $isMultiShipping = $this->cartFixedDiscountHelper->checkMultiShippingQuote($quote);
                         if ($isAppliedToShipping) {
@@ -378,17 +379,18 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                                 $this->cartFixedDiscountHelper->getQuoteTotalsForMultiShipping($quote) :
                                 $this->cartFixedDiscountHelper->getQuoteTotalsForRegularShipping(
                                     $address,
-                                    $quoteBaseSubtotal
+                                    $quoteBaseSubtotal,
+                                    $shippingQuoteAmount
                                 );
                             $discountAmount = $this->cartFixedDiscountHelper->
                             getShippingDiscountAmount(
                                 $rule,
-                                $shippingAmount,
+                                $shippingQuoteAmount,
                                 $quoteBaseSubtotal
                             );
                             $baseDiscountAmount = $discountAmount;
                         } else {
-                            $discountAmount = min($shippingAmount, $quoteAmount);
+                            $discountAmount = min($shippingQuoteAmount, $quoteAmount);
                             $baseDiscountAmount = min(
                                 $baseShippingAmount - $address->getBaseShippingDiscountAmount(),
                                 $cartRules[$rule->getId()]

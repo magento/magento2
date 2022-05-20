@@ -4,12 +4,19 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\Controller\Result;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\Controller\AbstractResult;
 
+/**
+ * Forward Controller Result
+ *
+ * @api
+ */
 class Forward extends AbstractResult
 {
     /**

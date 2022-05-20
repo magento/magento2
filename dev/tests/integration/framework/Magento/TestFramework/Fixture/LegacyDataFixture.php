@@ -66,7 +66,9 @@ class LegacyDataFixture implements RevertibleDataFixtureInterface
             require $filePath;
         } catch (\Throwable $e) {
             throw new \Exception(
-                'Error in fixture ' . $filePath . PHP_EOL . $e->getTraceAsString(),
+                'Error in fixture: ' . $filePath
+                . PHP_EOL . $e->getMessage()
+                . PHP_EOL . $e->getTraceAsString(),
                 0,
                 $e
             );

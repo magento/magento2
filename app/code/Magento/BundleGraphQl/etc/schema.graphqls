@@ -55,6 +55,7 @@ type BundleItem @doc(description: "Defines an individual item within a bundle pr
     type: String @doc(description: "The input type that the customer uses to select the item. Examples include radio button and checkbox.")
     position: Int @doc(description: "A number indicating the sequence order of this item compared to the other bundle items.")
     sku: String @doc(description: "The SKU of the bundle product.")
+    price_range: PriceRange! @doc(description: "The range of prices for the product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\PriceRange")
     options: [BundleItemOption] @doc(description: "An array of additional options for this bundle item.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\BundleItemLinks")
 }
 
