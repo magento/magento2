@@ -15,7 +15,7 @@ class Grid extends Product
      */
     public function execute()
     {
-        $index = $this->getRequest()->getParam('index');
+        $index = $this->getRequest()->getParam('index', '');
         if (!preg_match('/^[a-z0-9_.]*$/i', $index)) {
             throw new \InvalidArgumentException('Invalid parameter "index"');
         }

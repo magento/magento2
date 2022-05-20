@@ -6,7 +6,18 @@
 
 namespace Magento\Backend\Block\Widget\Grid;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget;
+use Magento\Backend\Block\Widget\Button;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Convert\Excel;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\Data\CollectionFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
 
 /**
  * Class Export for exporting grid data as CSV file or MS Excel 2003 XML Document file
@@ -16,12 +27,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Grid\ExportInterface
+class Export extends Widget implements ExportInterface
 {
     /**
      * Grid export types
      *
-     * @var  \Magento\Framework\DataObject[]
+     * @var  DataObject[]
      */
     protected $_exportTypes = [];
 
@@ -40,12 +51,12 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     protected $_template = "Magento_Backend::widget/grid/export.phtml";
 
     /**
-     * @var \Magento\Framework\Data\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var WriteInterface
      */
     protected $_directory;
 
@@ -57,13 +68,13 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     protected $_path = 'export';
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Data\CollectionFactory $collectionFactory
+     * @param Context $context
+     * @param CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Data\CollectionFactory $collectionFactory,
+        Context $context,
+        CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_collectionFactory = $collectionFactory;
@@ -74,7 +85,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Internal constructor, that is called from real constructor
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _construct()
     {
@@ -82,7 +93,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         if ($this->hasData('exportTypes')) {
             foreach ($this->getData('exportTypes') as $type) {
                 if (!isset($type['urlPath']) || !isset($type['label'])) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
+                    throw new LocalizedException(
                         __('Invalid export type supplied for grid export block')
                     );
                 }
@@ -95,7 +106,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      * Retrieve grid columns
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Column[]
+     * @return Column[]
      */
     protected function _getColumns()
     {
@@ -105,7 +116,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      * Retrieve totals
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     protected function _getTotals()
     {
@@ -126,7 +137,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      * Get collection object
      *
-     * @return \Magento\Framework\Data\Collection
+     * @return Collection
      */
     protected function _getCollection()
     {
@@ -136,7 +147,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      * Retrieve grid export types
      *
-     * @return  \Magento\Framework\DataObject[]|false
+     * @return  DataObject[]|false
      */
     public function getExportTypes()
     {
@@ -157,13 +168,14 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Prepare export button
      *
      * @return $this
+     * @throws LocalizedException
      */
     protected function _prepareLayout()
     {
         $this->setChild(
             'export_button',
             $this->getLayout()->createBlock(
-                \Magento\Backend\Block\Widget\Button::class
+                Button::class
             )->setData(
                 [
                     'label' => __('Export'),
@@ -194,7 +206,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      */
     public function addExportType($url, $label)
     {
-        $this->_exportTypes[] = new \Magento\Framework\DataObject(
+        $this->_exportTypes[] = new DataObject(
             ['url' => $this->getUrl($url, ['_current' => true]), 'label' => $label]
         );
         return $this;
@@ -205,6 +217,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      *
      * @param array $fileData
      * @return string
+     * @throws FileSystemException
      */
     protected function _getFileContainerContent(array $fileData)
     {
@@ -255,7 +268,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      */
     public function _exportIterateCollection($callback, array $args)
     {
-        /** @var $originalCollection \Magento\Framework\Data\Collection */
+        /** @var $originalCollection Collection */
         $originalCollection = $this->getParentBlock()->getPreparedCollection();
         $count = null;
         $page = 1;
@@ -291,13 +304,14 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      * Write item data to csv export file
      *
-     * @param \Magento\Framework\DataObject $item
-     * @param \Magento\Framework\Filesystem\File\WriteInterface $stream
+     * @param DataObject $item
+     * @param FileWriteInterface $stream
      * @return void
+     * @throws FileSystemException
      */
     protected function _exportCsvItem(
-        \Magento\Framework\DataObject $item,
-        \Magento\Framework\Filesystem\File\WriteInterface $stream
+        DataObject $item,
+        FileWriteInterface $stream
     ) {
         $row = [];
         foreach ($this->_getColumns() as $column) {
@@ -364,7 +378,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
                     $data[] = '"' . str_replace(
                         ['"', '\\'],
                         ['""', '\\\\'],
-                        $column->getRowFieldExport($item)
+                        $column->getRowFieldExport($item) ?: ''
                     ) . '"';
                 }
             }
@@ -378,7 +392,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
                     $data[] = '"' . str_replace(
                         ['"', '\\'],
                         ['""', '\\\\'],
-                        $column->getRowFieldExport($this->_getTotals())
+                        $column->getRowFieldExport($this->_getTotals()) ?: ''
                     ) . '"';
                 }
             }
@@ -418,10 +432,10 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      *  Get a row data of the particular columns
      *
-     * @param \Magento\Framework\DataObject $data
+     * @param DataObject $data
      * @return string[]
      */
-    public function getRowRecord(\Magento\Framework\DataObject $data)
+    public function getRowRecord(DataObject $data)
     {
         $row = [];
         foreach ($this->_getColumns() as $column) {
@@ -444,7 +458,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     {
         $collection = $this->_getPreparedCollection();
 
-        $convert = new \Magento\Framework\Convert\Excel($collection->getIterator(), [$this, 'getRowRecord']);
+        $convert = new Excel($collection->getIterator(), [$this, 'getRowRecord']);
 
         $name = hash('sha256', microtime());
         $file = $this->_path . '/' . $name . '.xml';
@@ -507,30 +521,30 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
             $data[] = $row;
         }
 
-        $convert = new \Magento\Framework\Convert\Excel(new \ArrayIterator($data));
+        $convert = new Excel(new \ArrayIterator($data));
         return $convert->convert('single_sheet');
     }
 
     /**
      * Reformat base collection into collection without sub-collection in items
      *
-     * @param \Magento\Framework\Data\Collection $baseCollection
-     * @return \Magento\Framework\Data\Collection
+     * @param Collection $baseCollection
+     * @return Collection
      */
-    protected function _getRowCollection(\Magento\Framework\Data\Collection $baseCollection = null)
+    protected function _getRowCollection(Collection $baseCollection = null)
     {
         if (null === $baseCollection) {
             $baseCollection = $this->getParentBlock()->getPreparedCollection();
         }
         $collection = $this->_collectionFactory->create();
 
-        /** @var $item \Magento\Framework\DataObject */
+        /** @var $item DataObject */
         foreach ($baseCollection as $item) {
             if ($item->getIsEmpty()) {
                 continue;
             }
             if ($item->hasChildren() && count($item->getChildren()) > 0) {
-                /** @var $subItem \Magento\Framework\DataObject */
+                /** @var $subItem DataObject */
                 foreach ($item->getChildren() as $subItem) {
                     $tmpItem = clone $item;
                     $tmpItem->unsChildren();
@@ -548,11 +562,11 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      * Return prepared collection as row collection with additional conditions
      *
-     * @return \Magento\Framework\Data\Collection
+     * @return Collection
      */
     public function _getPreparedCollection()
     {
-        /** @var $collection \Magento\Framework\Data\Collection */
+        /** @var $collection Collection */
         $collection = $this->getParentBlock()->getPreparedCollection();
         $collection->setPageSize(0);
         $collection->load();

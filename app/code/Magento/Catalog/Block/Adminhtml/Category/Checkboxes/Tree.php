@@ -11,9 +11,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Checkboxes;
 
+use Magento\Catalog\Block\Adminhtml\Category\Tree as CategoryTree;
 use Magento\Framework\Data\Tree\Node;
 
-class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
+class Tree extends CategoryTree
 {
     /**
      * @var int[]
@@ -70,7 +71,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      */
     protected function setExpandedPath($path)
     {
-        $this->_expandedPath = array_merge($this->_expandedPath, explode('/', $path));
+        $this->_expandedPath = array_merge($this->_expandedPath, explode('/', $path ?: ''));
         return $this;
     }
 
