@@ -12,8 +12,8 @@ use Magento\Framework\Data\OptionSourceInterface;
 class FilterConditionType implements OptionSourceInterface
 {
     public const PARTIAL_MATCH = 0;
-
     public const FULL_MATCH = 1;
+    public const PREFIX_MATCH = 2;
 
     /**
      * @inheritdoc
@@ -22,7 +22,8 @@ class FilterConditionType implements OptionSourceInterface
     {
         return [
             ['value' => self::PARTIAL_MATCH, 'label' => __('Partial Match')],
-            ['value' => self::FULL_MATCH, 'label' => __('Full Match')]
+            ['value' => self::PREFIX_MATCH, 'label' => __('Prefix Match')],
+            ['value' => self::FULL_MATCH, 'label' => __('Full Match')],
         ];
     }
 }

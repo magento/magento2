@@ -253,6 +253,23 @@ class InputTest extends TestCase
                     'setValue' => '%something%',
                 ],
             ],
+            [
+                [
+                    'name' => 'text_attr',
+                    'config' => [
+                        'filter' => [
+                            'filterType' => 'text',
+                            'conditionType' => 'like',
+                            'valueExpression' => '%s%%'
+                        ]
+                    ]
+                ],
+                ['text_attr' => 'something'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => 'something%',
+                ],
+            ],
         ];
     }
 }

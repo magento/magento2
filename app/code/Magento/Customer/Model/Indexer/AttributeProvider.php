@@ -95,18 +95,14 @@ class AttributeProvider implements FieldsetInterface
                         'dataType' => $attribute->getBackendType(),
                         'filters' => [],
                         'entity' => static::ENTITY,
-                        'bind' => isset($fieldset['references']['customer']['to'])
-                            ? $fieldset['references']['customer']['to']
-                            : null,
-                        'index' => $attribute->canBeFilterableInGrid()
-                            && (int) $attribute->getGridFilterConditionType() === FilterConditionType::FULL_MATCH
+                        'bind' => $fieldset['references']['customer']['to'] ?? null,
+                        'index' => $this->getIndex($attribute)
                     ];
                 }
             } else {
                 $fields[$attribute->getName()] = [
                     'type' => $this->getType($attribute),
-                    'index' => $attribute->canBeFilterableInGrid()
-                        && (int) $attribute->getGridFilterConditionType() === FilterConditionType::FULL_MATCH
+                    'index' => $this->getIndex($attribute)
                 ];
             }
         }
@@ -155,5 +151,21 @@ class AttributeProvider implements FieldsetInterface
         }
 
         return $dataFields;
+    }
+
+    /**
+     * Checks whether the attribute should be indexed
+     *
+     * @param Attribute $attribute
+     * @return bool
+     */
+    private function getIndex(Attribute $attribute): bool
+    {
+        return $attribute->canBeFilterableInGrid()
+            && in_array(
+                (int) $attribute->getGridFilterConditionType(),
+                [FilterConditionType::FULL_MATCH, FilterConditionType::PREFIX_MATCH],
+                true
+            );
     }
 }

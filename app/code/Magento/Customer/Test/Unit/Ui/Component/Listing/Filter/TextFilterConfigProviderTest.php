@@ -30,7 +30,8 @@ class TextFilterConfigProviderTest extends TestCase
             [
                 [],
                 [
-                    'conditionType' => 'like'
+                    'conditionType' => 'like',
+                    'valueExpression' => '%%%s%%'
                 ]
             ],
             [
@@ -38,7 +39,8 @@ class TextFilterConfigProviderTest extends TestCase
                     'grid_filter_condition_type' => 0
                 ],
                 [
-                    'conditionType' => 'like'
+                    'conditionType' => 'like',
+                    'valueExpression' => '%%%s%%'
                 ]
             ],
             [
@@ -46,7 +48,17 @@ class TextFilterConfigProviderTest extends TestCase
                     'grid_filter_condition_type' => 1
                 ],
                 [
-                    'conditionType' => 'eq'
+                    'conditionType' => 'eq',
+                    'valueExpression' => null
+                ]
+            ],
+            [
+                [
+                    'grid_filter_condition_type' => 2
+                ],
+                [
+                    'conditionType' => 'like',
+                    'valueExpression' => '%s%%'
                 ]
             ]
         ];

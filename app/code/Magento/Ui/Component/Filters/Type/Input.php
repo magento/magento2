@@ -17,7 +17,7 @@ class Input extends AbstractFilter
 
     public const COMPONENT = 'input';
 
-    private const DEFAULT_CONDITION_TYPE = 'like';
+    private const CONDITION_LIKE = 'like';
 
     /**
      * @var ElementInput
@@ -66,13 +66,19 @@ class Input extends AbstractFilter
     {
         $value = $this->filterData[$this->getName()] ?? '';
         if (strlen($value) > 0) {
-            $conditionType = self::DEFAULT_CONDITION_TYPE;
+            $conditionType = self::CONDITION_LIKE;
+            $valueExpression = null;
             $filterConfig = $this->getData('config/filter');
-            if (is_array($filterConfig) && isset($filterConfig['conditionType'])) {
-                $conditionType = $filterConfig['conditionType'];
+            if (is_array($filterConfig)) {
+                $conditionType = $filterConfig['conditionType'] ?? null;
+                $valueExpression = $filterConfig['valueExpression'] ?? null;
             }
-            if ($conditionType === self::DEFAULT_CONDITION_TYPE) {
-                $value = sprintf('%%%s%%', str_replace(['%', '_'], ['\%', '\_'], $value));
+            if ($conditionType === self::CONDITION_LIKE) {
+                $value = str_replace(['%', '_'], ['\%', '\_'], $value);
+                $valueExpression = $valueExpression ?? '%%%s%%';
+            }
+            if ($valueExpression) {
+                $value = sprintf($valueExpression, $value);
             }
 
             $filter = $this->filterBuilder->setConditionType($conditionType)

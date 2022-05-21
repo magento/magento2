@@ -545,3 +545,4 @@ Addresses,Addresses
 "The specified customer group id does not exist.","The specified customer group id does not exist."
 "Partial Match","Partial Match"
 "Full Match","Full Match"
+"Prefix Match","Prefix Match"
