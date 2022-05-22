@@ -32,32 +32,32 @@ class GiftMessageTest extends TestCase
     /**
      * @var Field|MockObject
      */
-    private Field|MockObject $fieldMock;
+    private Field $fieldMock;
 
     /**
      * @var ContextInterface|MockObject
      */
-    private ContextInterface|MockObject $contextMock;
+    private ContextInterface $contextMock;
 
     /**
-     * @var MockObject|ResolverInterface
+     * @var ResolverInterface|MockObject
      */
-    private ResolverInterface|MockObject $resolverMock;
+    private ResolverInterface $resolverMock;
 
     /**
-     * @var MockObject|ResolveInfo
+     * @var ResolveInfo|MockObject
      */
-    private ResolveInfo|MockObject $resolveInfoMock;
+    private ResolveInfo $resolveInfoMock;
 
     /**
-     * @var MockObject|OrderRepositoryInterface
+     * @var OrderRepositoryInterface|MockObject
      */
-    private OrderRepositoryInterface|MockObject $orderRepositoryMock;
+    private OrderRepositoryInterface $orderRepositoryMock;
 
     /**
      * @var MessageInterface|MockObject
      */
-    private MessageInterface|MockObject $messageMock;
+    private MessageInterface $messageMock;
 
     /**
      * @var array
