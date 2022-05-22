@@ -817,6 +817,12 @@ define([
             },
             $.mage.__('Please enter a valid URL Key (Ex: "example-page", "example-page.html" or "anotherlevel/example-page").')//eslint-disable-line max-len
         ],
+        'validate-trailing-hyphen': [
+            function (value) {
+                return utils.isEmptyNoTrim(value) || /^(?!-)(?!.*-$).+$/.test(value);
+            },
+            $.mage.__('Trailing hyphens are not allowed.')
+        ],
         'validate-zip-international': [
 
             /*function(v) {

@@ -6,14 +6,31 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
-    <publisher topic="multi.topic.queue.topic.c"/>
-    <publisher topic="multi.topic.queue.topic.d"/>
-    <publisher topic="multi.topic.queue.topic.y"/>
-    <publisher topic="multi.topic.queue.topic.z"/>
-    <publisher topic="mtmh.topic.1"/>
-    <publisher topic="mtmh.topic.2"/>
-
-    <publisher topic="segment1.segment2.segment3.wildcard"/>
-    <publisher topic="segment2.segment3.wildcard"/>
-    <publisher topic="not.matching.wildcard.topic"/>
+    <publisher topic="multi.topic.queue.topic.c">
+        <connection name="amqp" exchange="magento" />
+    </publisher>
+    <publisher topic="multi.topic.queue.topic.d">
+        <connection name="amqp" exchange="magento" />
+    </publisher>
+    <publisher topic="multi.topic.queue.topic.y">
+        <connection name="amqp" exchange="magento" />
+    </publisher>
+    <publisher topic="multi.topic.queue.topic.z">
+        <connection name="amqp" exchange="magento" />
+    </publisher>
+    <publisher topic="mtmh.topic.1">
+        <connection name="amqp" exchange="magento" />
+    </publisher>
+    <publisher topic="mtmh.topic.2">
+        <connection name="amqp" exchange="magento" />
+    </publisher>
+    <publisher topic="segment1.segment2.segment3.wildcard">
+        <connection name="amqp" exchange="magento" />
+    </publisher>
+    <publisher topic="segment2.segment3.wildcard">
+        <connection name="amqp" exchange="magento" />
+    </publisher>
+    <publisher topic="not.matching.wildcard.topic">
+        <connection name="amqp" exchange="magento" />
+    </publisher>
 </config>
