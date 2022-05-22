@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GiftMessage\Api\Data\MessageInterface;
 use Magento\GiftMessage\Api\OrderRepositoryInterface;
@@ -24,44 +25,39 @@ use Psr\Log\LoggerInterface;
 class GiftMessageTest extends TestCase
 {
     /**
-     * @var GiftMessage|MockObject
+     * @var GiftMessage
      */
     private GiftMessage $giftMessage;
 
     /**
      * @var Field|MockObject
      */
-    private Field $fieldMock;
+    private Field|MockObject $fieldMock;
 
     /**
      * @var ContextInterface|MockObject
      */
-    private ContextInterface $contextMock;
+    private ContextInterface|MockObject $contextMock;
 
     /**
-     * @var ResolverInterface|MockObject
+     * @var MockObject|ResolverInterface
      */
-    private ResolverInterface $resolverMock;
+    private ResolverInterface|MockObject $resolverMock;
 
     /**
-     * @var ResolveInfo|MockObject
+     * @var MockObject|ResolveInfo
      */
-    private ResolveInfo $resolveInfoMock;
+    private ResolveInfo|MockObject $resolveInfoMock;
 
     /**
-     * @var OrderRepositoryInterface|MockObject
+     * @var MockObject|OrderRepositoryInterface
      */
-    private OrderRepositoryInterface $orderRepositoryMock;
-
-    /**
-     * @var LoggerInterface|MockObject
-     */
-    private LoggerInterface $logger;
+    private OrderRepositoryInterface|MockObject $orderRepositoryMock;
 
     /**
      * @var MessageInterface|MockObject
      */
-    private MessageInterface $messageMock;
+    private MessageInterface|MockObject $messageMock;
 
     /**
      * @var array
@@ -75,11 +71,13 @@ class GiftMessageTest extends TestCase
         $this->resolverMock = $this->createMock(ResolverInterface::class);
         $this->resolveInfoMock = $this->createMock(ResolveInfo::class);
         $this->orderRepositoryMock =$this->createMock(OrderRepositoryInterface::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
+        $uidEncoder = $this->createMock(Uid::class);
         $this->messageMock = $this->createMock(MessageInterface::class);
         $this->giftMessage = new GiftMessage(
             $this->orderRepositoryMock,
-            $this->logger
+            $logger,
+            $uidEncoder
         );
     }
 

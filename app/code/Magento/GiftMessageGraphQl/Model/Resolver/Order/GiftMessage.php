@@ -40,6 +40,7 @@ class GiftMessage implements ResolverInterface
     /**
      * @param OrderRepositoryInterface $orderRepository
      * @param LoggerInterface|null $logger
+     * @param Uid|null $uidEncoder
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
@@ -75,7 +76,7 @@ class GiftMessage implements ResolverInterface
             throw new GraphQlInputException(__('"id" value should be specified'));
         }
 
-        $orderId = $this->uidEncoder->decode((string) $value['id']);
+        $orderId = $this->uidEncoder->decode((string) $this->uidEncoder->encode((string) $value['id']));
 
         try {
             $orderGiftMessage = $this->orderRepository->get($orderId);
