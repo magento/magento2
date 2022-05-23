@@ -10,5 +10,8 @@
         <job name="backend_clean_cache" instance="Magento\Backend\Cron\CleanCache" method="execute">
             <schedule>30 2 * * *</schedule>
         </job>
+        <job name="backend_refresh_invalidated_caches" instance="Magento\Backend\Cron\RefreshInvalidatedCaches" method="execute">
+            <schedule>51 3 * * *</schedule>
+        </job>
     </group>
 </config>
