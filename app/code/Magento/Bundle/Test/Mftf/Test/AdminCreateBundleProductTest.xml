@@ -21,12 +21,12 @@
             <!-- creating category, simple products -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <createData entity="ApiSimpleProduct" stepKey="simpleProduct1"/>
-            <createData entity="ApiSimpleProduct" stepKey="simpleProduct2"/>
+            <createData entity="ApiSimpleProductWithOptions" stepKey="simpleProduct1"/>
+            <createData entity="ApiSimpleProductWithOptions" stepKey="simpleProduct2"/>
         </before>
         <after>
             <!-- Delete bundle product -->
-            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
             <!-- deleting category, simple products -->
@@ -74,6 +74,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty1"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty2"/>
 
+        <wait stepKey="k1" time="10"/>
         <click selector="{{AdminProductFormBundleSection.isDefault('$$simpleProduct1.name$$')}}" stepKey="clickIsDefault"/>
 
         <!--Save the product-->
@@ -91,25 +92,25 @@
 
         <!-- Admin: Verify Bundle Product Information on Edit Product Page -->
         <scrollTo selector="{{AdminProductFormBundleSection.allBundleOptions}}" stepKey="scrollToAllBundleOptions" />
-        <actionGroup ref="AdminVerifyProductInBundleProductOptionActionGroup" stepKey="verifyAssociatedProduct1Admin">
-            <argument name="name" value="$$simpleProduct1.name$$"/>
-            <argument name="attributeSet" value="$$simpleProduct1.attributeSetText$$"/>
-            <argument name="status" value="$$simpleProduct1.statusText$$"/>
-            <argument name="sku" value="$$simpleProduct1.sku$$"/>
-            <argument name="price" value="$$simpleProduct1.price$$"/>
-            <argument name="defaultQuantity" value="50"/>
-            <argument name="index" value="1"/>
+        <actionGroup ref="AdminVerifyProductInBundleProductOptionActionGroup" stepKey="verifyBundleProductOption1Product1">
+            <argument name="name" value="{{ApiSimpleProductWithOptions.name}}"/>
+            <argument name="sku" value="{{ApiSimpleProductWithOptions.sku}}"/>
+            <argument name="defaultQuantity" value="{{ApiSimpleProductWithOptions.bundleDefaultQuantity}}"/>
+            <argument name="isDefault" value="{{ApiSimpleProductWithOptions.bundleIsDefault}}"/>
+            <argument name="userDefined" value="{{ApiSimpleProductWithOptions.bundleUserDefined}}"/>
+            <argument name="optionIndex" value="1"/>
+            <argument name="productIndex" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminVerifyProductInBundleProductOptionActionGroup" stepKey="verifyBundleProductOption1Product2">
+            <argument name="name" value="{{ApiSimpleProductWithOptions.name}}"/>
+            <argument name="sku" value="{{ApiSimpleProductWithOptions.sku}}"/>
+            <argument name="defaultQuantity" value="{{ApiSimpleProductWithOptions.bundleDefaultQuantity}}"/>
+            <argument name="isDefault" value="false"/>
+            <argument name="userDefined" value="false"/>
+            <argument name="optionIndex" value="1"/>
+            <argument name="productIndex" value="2"/>
         </actionGroup>
 
-        <actionGroup ref="AdminVerifyProductInBundleProductOptionActionGroup" stepKey="verifyAssociatedProduct2Admin">
-            <argument name="name" value="$$simpleProduct2.name$$"/>
-            <argument name="attributeSet" value="$$simpleProduct2.attributeSetText$$"/>
-            <argument name="status" value="$$simpleProduct2.statusText$$"/>
-            <argument name="sku" value="$$simpleProduct2.sku$$"/>
-            <argument name="price" value="$$simpleProduct2.price$$"/>
-            <argument name="defaultQuantity" value="50"/>
-            <argument name="index" value="2"/>
-        </actionGroup>
 
         <!-- Storefront: Verify Bundle Product In Category -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductPage">
@@ -125,12 +126,12 @@
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{BundleProduct.sku}}" stepKey="seeSku"/>
         <see userInput="$6,150.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seePrice"/>
 
-        <!-- Storefront: Verify Product 0ption details -->
+        <!-- Storefront: Verify Product option details -->
         <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomizeAndAddToCart"/>
         <click selector="{{StorefrontBundleProductActionSection.dropdownSelectOption}}" stepKey="clickOnSelectOption"/>
-        <wait stepKey="k1" time="10"/>
-        <seeElement selector="{{StorefrontBundleProductActionSection.dropdownProductSelection('$$simpleProduct1.name$$ +$$$simpleProduct1.price$$')}}" stepKey="seeOption1Product1Name"/>
-        <seeElement selector="{{StorefrontBundleProductActionSection.dropdownProductSelection('$$simpleProduct2.name$$ +$$$simpleProduct2.price$$')}}" stepKey="seeOption1Product1Price"/>
+        <wait stepKey="k2" time="10"/>
+        <seeElement selector="{{StorefrontBundleProductActionSection.dropdownProductSelection('$$simpleProduct1.name$$ +$$$simpleProduct1.price$$')}}" stepKey="seeOption1Product1Details"/>
+        <seeElement selector="{{StorefrontBundleProductActionSection.dropdownProductSelection('$$simpleProduct2.name$$ +$$$simpleProduct2.price$$')}}" stepKey="seeOption1Product2Details"/>
 
 
     </test>
