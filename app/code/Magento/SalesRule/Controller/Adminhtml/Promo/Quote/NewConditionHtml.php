@@ -7,6 +7,7 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Rule\Model\Condition\AbstractCondition;
+use Magento\Rule\Model\Condition\ConditionInterface;
 use Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
 /**
@@ -25,6 +26,12 @@ class NewConditionHtml extends Quote implements HttpPostActionInterface
         $formName = $this->getRequest()->getParam('form_namespace');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
+
+        if (class_exists($type) && !in_array(ConditionInterface::class, class_implements($type))) {
+            $html = '';
+            $this->getResponse()->setBody($html);
+            return;
+        }
 
         $model = $this->_objectManager->create(
             $type
