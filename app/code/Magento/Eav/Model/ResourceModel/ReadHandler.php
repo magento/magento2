@@ -146,7 +146,7 @@ class ReadHandler implements AttributeInterface
                 $attributeTables[$attribute->getBackend()->getTable()][] = $attribute->getAttributeId();
                 $attributesMap[$attribute->getAttributeId()] = $attribute->getAttributeCode();
                 $attributeScopeGlobal[$attribute->getAttributeId()] =
-                    $attribute->getIsGlobal() === ScopedAttributeInterface::SCOPE_GLOBAL;
+                    $attribute->getIsGlobal() === ScopedAttributeInterface::SCOPE_GLOBAL ? 1 : 0;
             }
         }
         if (count($attributeTables)) {
@@ -180,13 +180,23 @@ class ReadHandler implements AttributeInterface
             $attributes = $connection->fetchAll($orderedUnionSelect);
             foreach ($attributes as $attributeValue) {
                 if (isset($attributesMap[$attributeValue['attribute_id']])) {
-                    if ($attributeScopeGlobal[$attributeValue['attribute_id']] &&
-                        (int)$attributeValue['store_id'] !== Store::DEFAULT_STORE_ID
-                    ) {
+                    $isGlobalAttribute = $attributeScopeGlobal[$attributeValue['attribute_id']];
+                    $storeId = $attributeValue['store_id'] ?? null;
+
+                    // Set global value if attribute scope is set to Global
+                    if ($isGlobalAttribute && (int)$storeId === Store::DEFAULT_STORE_ID) {
                         $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
                         continue;
                     }
-                    $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
+
+                    if (!$isGlobalAttribute && (int)$storeId === Store::DEFAULT_STORE_ID) {
+                        $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
+                        continue;
+                    }
+
+                    if (!$isGlobalAttribute && (int)$storeId !== Store::DEFAULT_STORE_ID) {
+                        $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
+                    }
                 } else {
                     $this->logger->warning(
                         "Attempt to load value of nonexistent EAV attribute",
