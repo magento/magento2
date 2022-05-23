@@ -317,7 +317,7 @@ class DeclarativeInstallerTest extends SetupTestCase
 
         $this->cliCommand->upgrade();
         $afterRollback = $this->describeTable->describeShard('default');
-        $this->assertTableCreationStatements($this->getData()['after'], $afterRollback);
+        $this->assertTableCreationStatements($this->getTrimmedData()['after'], $afterRollback);
     }
 
     /**
@@ -345,7 +345,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             $dataToMigrate
         );
         $this->isUsingAuroraDb() ?
-            $this->assertStringContainsString($this->getData()['before'], $before['some_table']) :
+            $this->assertStringContainsString($this->getTrimmedData()['before'], $before['some_table']) :
             $this->assertEquals($this->getData()['before'], $before['some_table']);
         //Move db_schema.xml file and tried to install
         $this->moduleManager->updateRevision(
@@ -358,7 +358,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         $this->cliCommand->upgrade();
         $after = $this->describeTable->describeShard('default');
         $this->isUsingAuroraDb() ?
-            $this->assertStringContainsString($this->getData()['after'], $after['some_table_renamed']) :
+            $this->assertStringContainsString($this->getTrimmedData()['after'], $after['some_table_renamed']) :
             $this->assertEquals($this->getData()['after'], $after['some_table_renamed']);
         $select = $adapter->select()
             ->from($this->resourceConnection->getTableName('some_table_renamed'));
