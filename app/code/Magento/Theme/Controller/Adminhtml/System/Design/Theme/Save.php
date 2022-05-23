@@ -8,6 +8,7 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
 /**
  * Class Save use to save Theme data
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  * @deprecated 100.2.0
  */
 class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
@@ -79,8 +80,9 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
         $redirectBack
-            ? $this->_redirect('adminhtml/*/edit', ['id' => $theme->getId()])
-            : $this->_redirect('adminhtml/*/');
+            //phpstan:ignore
+            ? $this->_redirect('adminhtml/*/edit', ['id' => $theme->getId()]) //phpcs:ignore
+            : $this->_redirect('adminhtml/*/'); //phpcs:ignore
     }
 
     /**

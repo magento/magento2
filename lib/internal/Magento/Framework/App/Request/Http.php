@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Request;
 
 use Magento\Framework\App\HttpRequestInterface;
@@ -16,7 +18,9 @@ use Magento\Framework\Stdlib\StringUtils;
 
 /**
  * Http request
+ *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @api
  */
 class Http extends Request implements RequestContentInterface, RequestSafetyInterface, HttpRequestInterface
 {
@@ -255,7 +259,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     /**
      * Get module name of currently used controller
      *
-     * @return  string
+     * @return string
      */
     public function getControllerModule()
     {

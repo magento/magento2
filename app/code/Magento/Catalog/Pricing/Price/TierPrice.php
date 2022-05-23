@@ -33,7 +33,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     /**
      * Price type tier
      */
-    const PRICE_CODE = 'tier_price';
+    public const PRICE_CODE = 'tier_price';
 
     /**
      * @var Session
@@ -176,9 +176,12 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
                 function (&$priceData) {
                     /* convert string value to float */
                     $priceData['price_qty'] *= 1;
-                    if ($this->getConfigTaxDisplayType() === Config::DISPLAY_TYPE_BOTH) {
-                        $exclTaxPrice = $this->calculator->getAmount($priceData['price'], $this->product);
+                    $exclTaxPrice = $this->calculator->getAmount($priceData['price'], $this->product);
+                    if ($this->getConfigTaxDisplayType() === Config::DISPLAY_TYPE_EXCLUDING_TAX) {
                         $priceData['excl_tax_price'] = $exclTaxPrice;
+                    }
+                    if ($this->getConfigTaxDisplayType() === Config::DISPLAY_TYPE_BOTH) {
+                        $priceData['incl_excl_tax_price'] = $exclTaxPrice;
                     }
                     $priceData['price'] = $this->applyAdjustment($priceData['price']);
                 }
@@ -207,13 +210,13 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     protected function filterTierPrices(array $priceList)
     {
         $qtyCache = [];
+        $minPrice = $this->priceInfo->getPrice(FinalPrice::PRICE_CODE)->getValue();
         $allCustomersGroupId = $this->groupManagement->getAllCustomersGroup()->getId();
         foreach ($priceList as $priceKey => &$price) {
-            if ($price['price'] >= $this->priceInfo->getPrice(FinalPrice::PRICE_CODE)->getValue()) {
+            if ($price['price'] >= $minPrice) {
                 unset($priceList[$priceKey]);
                 continue;
             }
-
             if (isset($price['price_qty']) && $price['price_qty'] == 1) {
                 unset($priceList[$priceKey]);
                 continue;
@@ -236,6 +239,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
             } else {
                 $qtyCache[$price['price_qty']] = $priceKey;
             }
+            $minPrice = $price['price'];
         }
         return array_values($priceList);
     }
