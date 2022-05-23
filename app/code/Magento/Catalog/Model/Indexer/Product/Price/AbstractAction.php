@@ -429,6 +429,7 @@ abstract class AbstractAction
      */
     private function deleteIndexData(array $entityIds)
     {
+        $entityIds = array_unique(array_map('intval', $entityIds));
         foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
             $select = $this->getConnection()->select()->from(
                 ['index_price' => $this->tableMaintainer->getMainTableByDimensions($dimensions)],
