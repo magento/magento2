@@ -96,13 +96,13 @@ class AttributeProvider implements FieldsetInterface
                         'filters' => [],
                         'entity' => static::ENTITY,
                         'bind' => $fieldset['references']['customer']['to'] ?? null,
-                        'index' => $this->getIndex($attribute)
+                        'index' => $this->hasIndex($attribute)
                     ];
                 }
             } else {
                 $fields[$attribute->getName()] = [
                     'type' => $this->getType($attribute),
-                    'index' => $this->getIndex($attribute)
+                    'index' => $this->hasIndex($attribute)
                 ];
             }
         }
@@ -159,7 +159,7 @@ class AttributeProvider implements FieldsetInterface
      * @param Attribute $attribute
      * @return bool
      */
-    private function getIndex(Attribute $attribute): bool
+    private function hasIndex(Attribute $attribute): bool
     {
         return $attribute->canBeFilterableInGrid()
             && in_array(
