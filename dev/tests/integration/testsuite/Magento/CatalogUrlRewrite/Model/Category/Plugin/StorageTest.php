@@ -191,8 +191,8 @@ class StorageTest extends TestCase
             DirectoryList::MEDIA : $this->appParams[DirectoryList::MEDIA][DirectoryList::PATH];
         $destDir = $mediaDir . DIRECTORY_SEPARATOR . $this->mediaConfig->getBaseMediaPath();
         $tmpDir =  $mediaDir . DIRECTORY_SEPARATOR . 'import';
-        $this->mediaDirectory->create($destDir);
-        $this->mediaDirectory->create($tmpDir);
+        $this->mediaDirectory->create($this->mediaConfig->getBaseMediaPath());
+        $this->mediaDirectory->create('import');
         $this->import->setParameters([Import::FIELD_NAME_IMG_FILE_DIR => $tmpDir]);
         $uploader = $this->import->getUploader();
         $uploader->setDestDir($destDir);
