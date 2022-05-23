@@ -8,18 +8,25 @@
 /** @var \Magento\Framework\View\Element\Template $block */
 /** @var \Magento\Framework\Escaper $escaper */
 /** @var \Magento\GoogleGtag\ViewModel\Adwords $adsViewModel */
+
 $adsViewModel = $block->getViewModel();
 ?>
 
 <?php if ($adsViewModel->isGoogleAdwordsConfigurable() && $adsViewModel->isGoogleAdwordsActive()): ?>
-    <?php $conversionId = $adsViewModel->getConversionId(); ?>
-    <?php $conversionLabel = $adsViewModel->getConversionLabel(); ?>
-    <script>
-        gtag(
-            'event',
-            'conversion',
-            {'send_to': '<?= $block->escapeHtml($conversionId) ?>' + '/'
-                    + '<?= $block->escapeHtml($conversionLabel) ?>'}
-        );
+    <?php $conversionId = $block->escapeHtml($adsViewModel->getConversionId()); ?>
+    <?php $conversionLabel = $block->escapeHtml($adsViewModel->getConversionLabel()); ?>
+    <?php $gtagSiteSrc = $adsViewModel->getConversionGtagGlobalSiteTagSrc(); ?>
+    <!-- BEGIN GOOGLE ADWORDS CODE -->
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_GoogleGtag/js/google-adwords": {
+                "conversionId": "<?= $block->escapeHtml($conversionId);  ?>",
+                "gtagSiteSrc": "<?= $block->escapeHtml($gtagSiteSrc);  ?>",
+                "conversionLabel": "<?= $block->escapeHtml($conversionLabel);  ?>"
+            }
+        }
+    }
     </script>
+    <!-- END GOOGLE ADWORDS CODE -->
 <?php endif ?>

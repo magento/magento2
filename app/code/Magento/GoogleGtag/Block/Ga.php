@@ -84,20 +84,6 @@ class Ga extends Template
     }
 
     /**
-     * Render GA tracking scripts
-     *
-     * @return string
-     */
-    protected function _toHtml()
-    {
-        if (!$this->googleGtagConfig->isGoogleAnalyticsAvailable()) {
-            return '';
-        }
-
-        return parent::_toHtml();
-    }
-
-    /**
      * Return cookie restriction mode value.
      *
      * @return bool
@@ -206,7 +192,8 @@ class Ga extends Template
             'currentWebsite' => $this->getCurrentWebsiteId(),
             'cookieName' => Cookie::IS_USER_ALLOWED_SAVE_COOKIE,
             'pageTrackingData' => $this->getPageTrackingData($this->googleGtagConfig->getMeasurementId()),
-            'ordersTrackingData' => $this->getOrdersTrackingData()
+            'ordersTrackingData' => $this->getOrdersTrackingData(),
+            'googleAnalyticsAvailable' => $this->googleGtagConfig->isGoogleAnalyticsAvailable()
         ];
         return $this->serializer->serialize($analyticData);
     }

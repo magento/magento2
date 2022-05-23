@@ -21,7 +21,7 @@ class Data extends AbstractHelper
     /**
      * Xml path google experiments enabled
      */
-    private const XML_PATH_ENABLED = 'google/analytics/experiments';
+    public const XML_PATH_ENABLED = 'google/analytics/experiments';
 
     /**
      * Xml path google experiments enabled for GA4
