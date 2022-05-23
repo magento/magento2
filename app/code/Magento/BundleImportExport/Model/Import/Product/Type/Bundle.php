@@ -14,12 +14,15 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as At
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\ImportExport\Model\Import;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Import entity Bundle product type.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -216,7 +219,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     {
         $option = [];
         foreach ($values as $keyValue) {
-            $keyValue = trim($keyValue);
+            $keyValue = $keyValue ? trim($keyValue) : '';
             $pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR);
             if ($pos !== false) {
                 $key = substr($keyValue, 0, $pos);
@@ -366,12 +369,12 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     public function saveData()
     {
-        if ($this->_entityModel->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {
+        if ($this->_entityModel->getBehavior() == Import::BEHAVIOR_DELETE) {
             $productIds = [];
             $newSku = $this->_entityModel->getNewSku();
             while ($bunch = $this->_entityModel->getNextBunch()) {
-                foreach ($bunch as $rowNum => $rowData) {
-                    $productData = $newSku[strtolower($rowData[Product::COL_SKU])];
+                foreach ($bunch as $rowData) {
+                    $productData = $newSku[strtolower($rowData[Product::COL_SKU] ?? '')];
                     $productIds[] = $productData[$this->getProductEntityLinkField()];
                 }
                 $this->deleteOptionsAndSelections($productIds);
@@ -383,7 +386,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
                         continue;
                     }
-                    $productData = $newSku[strtolower($rowData[Product::COL_SKU])];
+                    $productData = $newSku[strtolower($rowData[Product::COL_SKU] ?? '')];
                     if ($this->_type != $productData['type_id']) {
                         continue;
                     }
@@ -481,9 +484,9 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         $orWhere = false;
         foreach ($this->_cachedOptionSelectQuery as $item) {
             if ($orWhere) {
-                $select->orWhere('parent_id = '.$item[0].' AND title = ?', $item[1]);
+                $select->orWhere('parent_id = ' . $item[0] . ' AND title = ?', $item[1]);
             } else {
-                $select->where('parent_id = '.$item[0].' AND title = ?', $item[1]);
+                $select->where('parent_id = ' . $item[0] . ' AND title = ?', $item[1]);
                 $orWhere = true;
             }
         }
@@ -525,9 +528,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 $productId = $this->_cachedSkuToProducts[$selection['sku']];
                 if ($productId == $existingSelection['product_id']) {
                     foreach (array_keys($existingSelection) as $origKey) {
-                        $key = isset($this->_bundleFieldMapping[$origKey])
-                            ? $this->_bundleFieldMapping[$origKey]
-                            : $origKey;
+                        $key = $this->_bundleFieldMapping[$origKey] ?? $origKey;
                         if (
                         !isset($this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'][$selectIndex][$key])
                         ) {
@@ -774,7 +775,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     private function getStoreIdByCode(string $storeCode): int
     {
         if (!isset($this->storeCodeToId[$storeCode])) {
-            /** @var $store \Magento\Store\Model\Store */
+            /** @var $store Store */
             foreach ($this->storeManager->getStores() as $store) {
                 $this->storeCodeToId[$store->getCode()] = $store->getId();
             }
