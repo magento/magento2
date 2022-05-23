@@ -30,6 +30,7 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
 
     /**
      * @var SessionManagerInterface
+     * @deprecated
      */
     private $session;
 
@@ -83,19 +84,13 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
                     );
                 }
             } else {
-                if ($this->session->getCurrencyCode()) {
-                    /** @var \Magento\Store\Model\Store $currentStore */
-                    $currentStore = $this->storeManager->getStore() ?? $this->storeManager->getDefaultStoreView();
-                    $currentStore->setCurrentCurrencyCode($this->session->getCurrencyCode());
-                } else {
-                    /** @var \Magento\Store\Model\Store $store */
-                    $store = $this->storeManager->getStore() ?? $this->storeManager->getDefaultStoreView();
-                    $this->httpContext->setValue(
-                        HttpContext::CONTEXT_CURRENCY,
-                        $store->getCurrentCurrency()->getCode(),
-                        $store->getDefaultCurrency()->getCode()
-                    );
-                }
+                /** @var \Magento\Store\Model\Store $store */
+                $store = $this->storeManager->getStore() ?? $this->storeManager->getDefaultStoreView();
+                $this->httpContext->setValue(
+                    HttpContext::CONTEXT_CURRENCY,
+                    $store->getCurrentCurrency()->getCode(),
+                    $store->getDefaultCurrency()->getCode()
+                );
             }
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             //skip store not found exception as it will be handled in graphql validation
