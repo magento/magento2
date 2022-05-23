@@ -16,4 +16,5 @@
     <type name="Magento\Quote\Model\Quote">
         <plugin name="updateQuoteStoreId" type="Magento\Quote\Model\Quote\Plugin\UpdateQuoteStoreId" />
     </type>
+    <preference for="Magento\Store\Model\StoreCodeInRequestPathInterface" type="Magento\Store\Model\StoreCodeInRequestPath" />
 </config>

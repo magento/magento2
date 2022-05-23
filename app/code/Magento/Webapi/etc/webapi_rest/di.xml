@@ -83,4 +83,5 @@
     <type name="Magento\Store\Model\Validation\StoreCodeValidator">
         <plugin name="check_if_parsed_store_code_is_valid" type="Magento\Webapi\Model\Plugin\Store\Model\Validation\StoreCodeValidator"/>
     </type>
+    <preference for="Magento\Store\Model\StoreCodeInRequestPathInterface" type="Magento\Store\Model\StoreCodeInRequestPath" />
 </config>

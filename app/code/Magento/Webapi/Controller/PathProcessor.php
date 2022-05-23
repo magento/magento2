@@ -8,6 +8,9 @@ namespace Magento\Webapi\Controller;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Store\Model\StoreCodeInRequestPathInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class PathProcessor
@@ -15,29 +18,39 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class PathProcessor
 {
     /**  Store code alias to indicate that all stores should be affected by action */
-    const ALL_STORE_CODE = 'all';
+    public const ALL_STORE_CODE = 'all';
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface
+     * @var ResolverInterface
      */
     private $localeResolver;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @var StoreCodeInRequestPathInterface
+     */
+    private $storeCoeInRequestPath;
+
+    /**
+     * @param StoreManagerInterface $storeManager
+     * @param ResolverInterface|null $localeResolver
+     * @param StoreCodeInRequestPathInterface|null $storeCoeInRequestPath
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver = null
+        StoreManagerInterface $storeManager,
+        ResolverInterface $localeResolver = null,
+        ?StoreCodeInRequestPathInterface $storeCoeInRequestPath = null
     ) {
         $this->storeManager = $storeManager;
         $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Locale\ResolverInterface::class
+            ResolverInterface::class
+        );
+        $this->storeCoeInRequestPath = $storeCoeInRequestPath ?: ObjectManager::getInstance()->get(
+            StoreCodeInRequestPathInterface::class
         );
     }
 
@@ -68,13 +81,14 @@ class PathProcessor
         $storeCode = current($pathParts);
         $stores = $this->storeManager->getStores(false, true);
         if (isset($stores[$storeCode])) {
+            $this->storeCoeInRequestPath->setStoreCodeInRequestPath(true);
             $this->storeManager->setCurrentStore($storeCode);
             $this->localeResolver->emulate($this->storeManager->getStore()->getId());
-            $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
+            $path = '/' . ($pathParts[1] ?? '');
         } elseif ($storeCode === self::ALL_STORE_CODE) {
             $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
             $this->localeResolver->emulate($this->storeManager->getStore()->getId());
-            $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
+            $path = '/' . ($pathParts[1] ?? '');
         } else {
             $path = '/' . implode('/', $pathParts);
         }

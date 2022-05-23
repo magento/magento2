@@ -9,6 +9,7 @@ namespace Magento\Quote\Model\Quote\Plugin;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote;
+use Magento\Store\Model\StoreCodeInRequestPathInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -22,12 +23,20 @@ class UpdateQuoteStoreId
     private $storeManager;
 
     /**
+     * @var StoreCodeInRequestPathInterface
+     */
+    private $storeCoeInRequestPath;
+
+    /**
      * @param StoreManagerInterface $storeManager
+     * @param StoreCodeInRequestPathInterface $storeCoeInRequestPath
      */
     public function __construct(
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        StoreCodeInRequestPathInterface $storeCoeInRequestPath
     ) {
         $this->storeManager = $storeManager;
+        $this->storeCoeInRequestPath = $storeCoeInRequestPath;
     }
 
     /**
@@ -41,9 +50,11 @@ class UpdateQuoteStoreId
      */
     public function afterLoadByIdWithoutStore(Quote $subject, Quote $result): Quote
     {
-        $storeId = $this->storeManager->getStore()->getId();
-        if ((int)$storeId !== $result->getStoreId()) {
-            $result->setStoreId($storeId);
+        if ($this->storeCoeInRequestPath->hasStoreCodeInRequestPath()) {
+            $storeId = $this->storeManager->getStore()->getId();
+            if ((int)$storeId !== $result->getStoreId()) {
+                $result->setStoreId($storeId);
+            }
         }
 
         return $result;
@@ -60,9 +71,11 @@ class UpdateQuoteStoreId
      */
     public function afterLoadByCustomer(Quote $subject, Quote $result): Quote
     {
-        $storeId = $this->storeManager->getStore()->getId();
-        if ((int)$storeId !== $result->getStoreId()) {
-            $result->setStoreId($storeId);
+        if ($this->storeCoeInRequestPath->hasStoreCodeInRequestPath()) {
+            $storeId = $this->storeManager->getStore()->getId();
+            if ((int)$storeId !== $result->getStoreId()) {
+                $result->setStoreId($storeId);
+            }
         }
 
         return $result;
