@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\AdminAdobeIms\Api\Data\ImsWebapiSearchResultsInterface" type="Magento\AdminAdobeIms\Model\ImsWebapiSearchResults"/>
+    <preference for="Magento\AdminAdobeIms\Api\ImsWebapiRepositoryInterface" type="Magento\AdminAdobeIms\Model\ImsWebapiRepository"/>
+    <preference for="Magento\AdminAdobeIms\Api\Data\ImsWebapiInterface" type="Magento\AdminAdobeIms\Model\ImsWebapi"/>
+    <preference for="Magento\AdobeImsApi\Api\GetAccessTokenInterface" type="Magento\AdminAdobeIms\Model\GetAccessTokenProxy"/>
+    <preference for="Magento\AdobeImsApi\Api\UserAuthorizedInterface" type="Magento\AdminAdobeIms\Model\UserAuthorizedProxy"/>
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="adminAdobeEnableImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsEnableCommand</item>
+                <item name="adminAdobeDisableImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsDisableCommand</item>
+                <item name="adminAdobeInfoImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsInfoCommand</item>
+                <item name="adminAdobeStatusImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsStatusCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\User\Controller\Adminhtml\Auth\Forgotpassword">
+        <plugin name="admin_forgot_password_plugin" type="Magento\AdminAdobeIms\Plugin\AdminForgotPasswordPlugin" sortOrder="1"/>
+    </type>
+
+    <type name="Magento\AdminAdobeIms\Service\ImsCommandValidationService">
+        <arguments>
+            <argument name="organizationIdRegex" xsi:type="string"><![CDATA[/^([A-Z0-9]{24})(@AdobeOrg)?$/i]]></argument>
+            <argument name="clientIdRegex" xsi:type="string"><![CDATA[/[^a-z_\-0-9]/i]]></argument>
+            <argument name="clientSecretRegex" xsi:type="string"><![CDATA[/[^a-z_\-0-9]/i]]></argument>
+            <argument name="twoFactorAuthRegex" xsi:type="string"><![CDATA[/^y/i]]></argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Captcha\Observer\CheckUserLoginBackendObserver">
+        <plugin name="captcha_check_user_login_backend_observer_plugin"
+                type="Magento\AdminAdobeIms\Plugin\CheckUserLoginBackendObserverPlugin"/>
+    </type>
+
+    <type name="Magento\Captcha\Observer\ResetAttemptForBackendObserver">
+        <plugin name="captcha_reset_attempt_for_backend_observer_plugin"
+                type="Magento\AdminAdobeIms\Plugin\ResetAttemptForBackendObserverPlugin"/>
+    </type>
+
+    <virtualType name="Magento\AdminAdobeIms\Logger\Handler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/admin_adobe_ims.log</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger">
+        <arguments>
+            <argument name="enabled" xsi:type="string">1</argument>
+            <argument name="name" xsi:type="string">admin_adobe_ims_logger</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Magento\AdminAdobeIms\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Model\Auth">
+        <plugin name="disable_admin_login_auth"
+                type="Magento\AdminAdobeIms\Plugin\DisableAdminLoginAuthPlugin"/>
+    </type>
+
+    <preference for="Magento\AdminAdobeIms\Api\TokenReaderInterface" type="Magento\AdminAdobeIms\Model\TokenReader"/>
+
+
+    <type name="Magento\Integration\Model\AdminTokenService">
+        <plugin name="admin_adobe_ims_admin_token_plugin"
+                type="Magento\AdminAdobeIms\Plugin\AdminTokenPlugin" />
+    </type>
+
+    <type name="Magento\Backend\Model\Auth\Session">
+        <plugin name="admin_adobe_ims_backend_auth_session"
+                type="Magento\AdminAdobeIms\Plugin\BackendAuthSessionPlugin"/>
+    </type>
+</config>
