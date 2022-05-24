@@ -68,19 +68,19 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
         try {
             $currentStore = $this->storeManager->getStore();
             $defaultCode = $currentStore->getDefaultCurrency()->getCode();
-            if (!empty($headerValue)) {
-                $headerCurrency = strtoupper(ltrim(rtrim($headerValue)));
-                if (!in_array($headerCurrency, $currentStore->getAvailableCurrencyCodes(true))) {
-                    //skip store not found exception as it will be handled in graphql validation
-                    $this->logger->warning(__('Currency not allowed for store %1', [$currentStore->getCode()]));
-                }
-                $this->httpContext->setValue(HttpContext::CONTEXT_CURRENCY, $headerCurrency, $defaultCode);
-            } else {
+            if (empty($headerValue)) {
                 $this->httpContext->setValue(
                     HttpContext::CONTEXT_CURRENCY,
                     $currentStore->getCurrentCurrency()->getCode(),
                     $defaultCode
                 );
+            } else {
+                $headerCurrency = strtoupper(trim($headerValue));
+                if (!in_array($headerCurrency, $currentStore->getAvailableCurrencyCodes(true))) {
+                    //skip store not found exception as it will be handled in graphql validation
+                    $this->logger->warning(__('Currency not allowed for store %1', [$currentStore->getCode()]));
+                }
+                $this->httpContext->setValue(HttpContext::CONTEXT_CURRENCY, $headerCurrency, $defaultCode);
             }
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             //skip store not found exception as it will be handled in graphql validation
