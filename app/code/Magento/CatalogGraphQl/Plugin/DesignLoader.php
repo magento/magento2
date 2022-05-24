@@ -8,10 +8,11 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Plugin;
 
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Message\MessageInterface;
-use Magento\Framework\View\DesignLoader as ViewDesignLoader;
+use Magento\Framework\App\AreaList;
+use Magento\Framework\App\State;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Catalog\Block\Product\ImageFactory;
+use Magento\Framework\Message\MessageInterface;
 
 /**
  * Load necessary design files for GraphQL
@@ -19,24 +20,36 @@ use Magento\Catalog\Block\Product\ImageFactory;
 class DesignLoader
 {
     /**
-     * @var DesignLoader
-     */
-    private $designLoader;
-
-    /**
      * @var ManagerInterface
      */
-    private $messageManager;
+    private ManagerInterface $messageManager;
 
     /**
-     * @param ViewDesignLoader $designLoader
+     * Application
+     *
+     * @var AreaList
+     */
+    private AreaList $areaList;
+
+    /**
+     * Layout
+     *
+     * @var State
+     */
+    private State $appState;
+
+    /**
      * @param ManagerInterface $messageManager
+     * @param AreaList $areaList
+     * @param State $appState
      */
     public function __construct(
-        ViewDesignLoader $designLoader,
-        ManagerInterface $messageManager
+        ManagerInterface $messageManager,
+        AreaList $areaList,
+        State $appState
     ) {
-        $this->designLoader = $designLoader;
+        $this->areaList = $areaList;
+        $this->appState = $appState;
         $this->messageManager = $messageManager;
     }
 
@@ -57,10 +70,10 @@ class DesignLoader
         array $attributes = null
     ) {
         try {
-            $this->designLoader->load();
+            $area = $this->areaList->getArea($this->appState->getAreaCode());
+            $area->load(\Magento\Framework\App\Area::PART_DESIGN);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($e->getPrevious() instanceof \Magento\Framework\Config\Dom\ValidationException) {
-                /** @var MessageInterface $message */
                 $message = $this->messageManager
                     ->createMessage(MessageInterface::TYPE_ERROR)
                     ->setText($e->getMessage());
