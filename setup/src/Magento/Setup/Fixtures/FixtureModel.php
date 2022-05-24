@@ -19,15 +19,12 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class FixtureModel
 {
-    /**
-     * Area code
-     */
-    const AREA_CODE = 'adminhtml';
+    public const AREA_CODE = 'adminhtml';
 
     /**
      * Fixtures file name pattern
      */
-    const FIXTURE_PATTERN = '?*Fixture.php';
+    private const FIXTURE_PATTERN = '?*Fixture.php';
 
     /**
      * Application object
@@ -121,13 +118,18 @@ class FixtureModel
             );
             $this->loadFixture($fixture);
         }
-        foreach($this->getFixturesFromRegistry() as $fixture) {
+        foreach ($this->getFixturesFromRegistry() as $fixture) {
             $this->loadFixture($fixture);
         }
         ksort($this->fixtures);
         return $this;
     }
 
+    /**
+     * Gets Fixtures from FixtureRegistry and gets instances of them from ObjectManager
+     *
+     * @return array
+     */
     private function getFixturesFromRegistry() : array
     {
         $fixtureRegistry = $this->getObjectManager()->create(FixtureRegistry::class);
@@ -141,6 +143,12 @@ class FixtureModel
         return $fixtures;
     }
 
+    /**
+     * Loads fixture into $this->>fixturesByName and $this->fixtures
+     *
+     * @param Fixture $fixture
+     * @return void
+     */
     private function loadFixture(Fixture $fixture)
     {
         $fixtureClassName = get_class($fixture);
@@ -178,7 +186,8 @@ class FixtureModel
 
     /**
      * Returns fixture by name
-     * @param $name string
+     *
+     * @param string $name
      * @return Fixture
      * @throws \Magento\Setup\Exception
      */
@@ -253,6 +262,8 @@ class FixtureModel
     }
 
     /**
+     * Gets instance of FixtureConfig from ObjectManager
+     *
      * @return FixtureConfig
      */
     private function getConfig()
@@ -260,7 +271,6 @@ class FixtureModel
         if (null === $this->config) {
             $this->config = $this->getObjectManager()->get(FixtureConfig::class);
         }
-
         return $this->config;
     }
 

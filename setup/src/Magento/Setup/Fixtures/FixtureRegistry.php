@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 /**
  * Registry for fixtures
  */
@@ -15,12 +17,12 @@ class FixtureRegistry
     /**
      * List of fixtures applied to the application
      *
-     * @var Fixture[]
+     * @var string[]
      */
     private $fixtures = [];
 
     /**
-     * @param array $fixtures
+     * @param string[] $fixtures
      */
     public function __construct(array $fixtures = [])
     {
@@ -36,5 +38,4 @@ class FixtureRegistry
     {
         return $this->fixtures;
     }
-
 }
