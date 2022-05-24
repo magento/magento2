@@ -7,12 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Product\Price;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
-use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface;
 use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Provides product prices for configurable products
@@ -100,7 +101,7 @@ class Provider implements ProviderInterface
     {
         if (!isset($this->minimalPrice[$code][$product->getId()])) {
             $minimumAmount = null;
-            foreach ($this->optionsProvider->getProducts($product) as $variant) {
+            foreach ($this->filterDisabledProducts($this->optionsProvider->getProducts($product)) as $variant) {
                 $variantAmount = $variant->getPriceInfo()->getPrice($code)->getAmount();
                 if (!$minimumAmount || ($variantAmount->getValue() < $minimumAmount->getValue())) {
                     $minimumAmount = $variantAmount;
@@ -133,5 +134,18 @@ class Provider implements ProviderInterface
         }
 
         return $this->maximalPrice[$code][$product->getId()];
+    }
+
+    /**
+     * Filter out disabled products
+     *
+     * @param array $products
+     * @return array
+     */
+    private function filterDisabledProducts(array $products): array
+    {
+        return array_filter($products, function ($product) {
+            return (int)$product->getStatus() === ProductStatus::STATUS_ENABLED;
+        });
     }
 }
