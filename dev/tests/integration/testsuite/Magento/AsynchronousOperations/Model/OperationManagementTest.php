@@ -61,7 +61,7 @@ class OperationManagementTest extends \PHPUnit\Framework\TestCase
         }
         /** @var OperationInterface $operation */
         $operation = array_shift($operations);
-        $operationId = $operation->getOperationKey();
+        $operationId = $operation->getId();
 
         $this->assertTrue($this->model->changeOperationStatus(
             'bulk-uuid-5',

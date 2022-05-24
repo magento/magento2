@@ -11,7 +11,7 @@ use Magento\Framework\DataObject;
 /**
  * Class Operation encapsulates methods for Operation Model Object
  */
-class Operation extends DataObject implements OperationInterface, BulkOperationInterface
+class Operation extends DataObject implements OperationInterface
 {
     /**
      * @var OperationStatusValidator
@@ -37,7 +37,7 @@ class Operation extends DataObject implements OperationInterface, BulkOperationI
      */
     public function getId()
     {
-        return $this->getData(self::OPERATION_ID);
+        return $this->getData(self::ID);
     }
 
     /**
@@ -45,7 +45,7 @@ class Operation extends DataObject implements OperationInterface, BulkOperationI
      */
     public function setId($id)
     {
-        return $this->setData(self::OPERATION_ID, $id);
+        return $this->setData(self::ID, $id);
     }
 
     /**
@@ -159,22 +159,6 @@ class Operation extends DataObject implements OperationInterface, BulkOperationI
     public function setErrorCode($errorCode)
     {
         return $this->setData(self::ERROR_CODE, $errorCode);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getOperationKey(): ?int
-    {
-        return $this->getData(self::ID) ? (int) $this->getData(self::ID) : null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setOperationKey(?int $operationKey)
-    {
-        return $this->setData(self::ID, $operationKey);
     }
 
     /**
