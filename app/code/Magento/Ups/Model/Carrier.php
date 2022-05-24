@@ -1461,7 +1461,7 @@ XMLAuth;
             $shipperPart->addChild('PhoneNumber', $request->getRecipientContactPhoneNumber());
 
             $addressPart = $shipperPart->addChild('Address');
-            $addressPart->addChild('AddressLine1', $request->getRecipientAddressStreet());
+            $addressPart->addChild('AddressLine1', $request->getRecipientAddressStreet1());
             $addressPart->addChild('AddressLine2', $request->getRecipientAddressStreet2());
             $addressPart->addChild('City', $request->getRecipientAddressCity());
             $addressPart->addChild('CountryCode', $request->getRecipientAddressCountryCode());
