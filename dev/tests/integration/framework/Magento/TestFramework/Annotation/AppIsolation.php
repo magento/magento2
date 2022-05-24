@@ -10,13 +10,16 @@
 namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\TestFramework\Annotation\TestCaseAnnotation;
 use Magento\TestFramework\Application;
+use Magento\TestFramework\Fixture\ParserInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
 use PHPUnit\Framework\TestCase;
 
 class AppIsolation
 {
+    private const ANNOTATION = 'magentoAppIsolation';
+
     /**
      * Flag to prevent an excessive test case isolation if the last test has been just isolated
      *
@@ -85,10 +88,15 @@ class AppIsolation
     {
         $this->hasNonIsolatedTests = true;
 
-        /* Determine an isolation from doc comment */
-        $annotations = $this->getAnnotations($test);
-        if (isset($annotations['magentoAppIsolation'])) {
-            $isolation = $annotations['magentoAppIsolation'];
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
+        $parser = Bootstrap::getObjectManager()->create(\Magento\TestFramework\Fixture\Parser\AppIsolation::class);
+        $converter = static fn ($stateInfo) => $stateInfo['enabled'] ? 'enabled' : 'disabled';
+        $classAppIsolationState =  array_map($converter, $parser->parse($test, ParserInterface::SCOPE_CLASS))
+            ?: ($annotations['class'][self::ANNOTATION] ?? []);
+        $methodAppIsolationState =  array_map($converter, $parser->parse($test, ParserInterface::SCOPE_METHOD))
+            ?: ($annotations['method'][self::ANNOTATION] ?? []);
+        $isolation = $methodAppIsolationState ?: $classAppIsolationState;
+        if ($isolation) {
             if ($isolation !== ['enabled'] && $isolation !== ['disabled']) {
                 throw new LocalizedException(
                     __('Invalid "@magentoAppIsolation" annotation, can be "enabled" or "disabled" only.')

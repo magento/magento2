@@ -5,14 +5,18 @@
  */
 namespace Magento\TestFramework\Annotation;
 
-use Magento\TestFramework\Annotation\TestCaseAnnotation;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Application;
+use Magento\TestFramework\Fixture\ParserInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 class AppArea
 {
-    const ANNOTATION_NAME = 'magentoAppArea';
+    public const ANNOTATION_NAME = 'magentoAppArea';
 
     /**
-     * @var \Magento\TestFramework\Application
+     * @var Application
      */
     private $_application;
 
@@ -32,9 +36,9 @@ class AppArea
     ];
 
     /**
-     * @param \Magento\TestFramework\Application $application
+     * @param Application $application
      */
-    public function __construct(\Magento\TestFramework\Application $application)
+    public function __construct(Application $application)
     {
         $this->_application = $application;
     }
@@ -44,7 +48,7 @@ class AppArea
      *
      * @param array $annotations
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _getTestAppArea($annotations)
     {
@@ -73,12 +77,28 @@ class AppArea
     /**
      * Start test case event observer
      *
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param TestCase $test
      */
-    public function startTest(\PHPUnit\Framework\TestCase $test)
+    public function startTest(TestCase $test)
     {
         $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
-        $area = $this->_getTestAppArea($annotations);
+        $parser = Bootstrap::getObjectManager()->create(\Magento\TestFramework\Fixture\Parser\AppArea::class);
+        $converter = static fn ($info) => $info['area'];
+        $classAppIsolationState =  array_map($converter, $parser->parse($test, ParserInterface::SCOPE_CLASS))
+            ?: ($annotations['class'][self::ANNOTATION_NAME] ?? []);
+        $methodAppIsolationState =  array_map($converter, $parser->parse($test, ParserInterface::SCOPE_METHOD))
+            ?: ($annotations['method'][self::ANNOTATION_NAME] ?? []);
+        $area = current($methodAppIsolationState ?: $classAppIsolationState) ?: Application::DEFAULT_APP_AREA;
+
+        if (!in_array($area, $this->_allowedAreas, true)) {
+            throw new LocalizedException(
+                __(
+                    'Invalid "@magentoAppArea" annotation, can be "%1" only.',
+                    implode('", "', $this->_allowedAreas)
+                )
+            );
+        }
+
         if ($this->_application->getArea() !== $area) {
             $this->_application->reinitialize();
 

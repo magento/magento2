@@ -265,8 +265,7 @@ abstract class AbstractDataFixture
      */
     protected function getDbIsolationState(TestCase $test)
     {
-        $annotations = $this->getAnnotations($test);
-        return $annotations[DbIsolation::MAGENTO_DB_ISOLATION] ?? null;
+        return Bootstrap::getObjectManager()->get(DbIsolationState::class)->getState($test) ?: null;
     }
 
     /**

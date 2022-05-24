@@ -9,6 +9,10 @@
  */
 namespace Magento\Test\Annotation;
 
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\MockObject\MockObject;
+
 class AppIsolationTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -23,6 +27,19 @@ class AppIsolationTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
+        /** @var ObjectManagerInterface|MockObject $objectManager */
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->onlyMethods(['get', 'create'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $objectManager->method('create')
+            ->willReturnCallback(
+                function (string $type) {
+                    return $this->createMock($type);
+                }
+            );
+        Bootstrap::setObjectManager($objectManager);
         $this->_application = $this->createPartialMock(\Magento\TestFramework\Application::class, ['reinitialize']);
         $this->_object = new \Magento\TestFramework\Annotation\AppIsolation($this->_application);
     }

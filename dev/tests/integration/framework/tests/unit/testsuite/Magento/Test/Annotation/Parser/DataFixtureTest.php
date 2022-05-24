@@ -5,10 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Test\Annotation;
+namespace Magento\Test\Annotation\Parser;
 
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\TestFramework\Annotation\DataFixtureAnnotationsParser;
+use Magento\TestFramework\Annotation\Parser\DataFixture;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,12 +15,12 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoDataFixture path/to/fixture0.php
  */
-class DataFixtureAnnotationsParserTest extends TestCase
+class DataFixtureTest extends TestCase
 {
     /**
-     * @var DataFixtureAnnotationsParser
+     * @var DataFixture
      */
-    private DataFixtureAnnotationsParser $model;
+    private DataFixture $model;
 
     /**
      * @inheritdoc
@@ -29,7 +28,7 @@ class DataFixtureAnnotationsParserTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->model = new DataFixtureAnnotationsParser('magentoDataFixture');
+        $this->model = new DataFixture('magentoDataFixture');
     }
 
     /**

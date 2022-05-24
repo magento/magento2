@@ -15,8 +15,11 @@ use Magento\Store\Model\Store;
 use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 
 /**
  * Test class for \Magento\Catalog\Model\Product\Attribute\Backend\Price.
@@ -131,12 +134,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('9.990000', $product->getPrice());
     }
 
-    /**
-     * @magentoConfigFixture current_store catalog/price/scope 1
-     * @magentoDbIsolation disabled
-     * @magentoAppArea adminhtml
-     */
     #[
+        AppArea('adminhtml'),
+        DbIsolation(false),
+        Config('catalog/price/scope', '1', 'store'),
         DataFixture(WebsiteFixture::class, as: 'website2'),
         DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
         DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),

@@ -6,8 +6,8 @@
 namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\TestFramework\Annotation\TestCaseAnnotation;
 use Magento\TestFramework\Event\Param\Transaction;
+use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -86,9 +86,8 @@ class DbIsolation
      */
     protected function _getIsolation(TestCase $test)
     {
-        $annotations = $this->getAnnotations($test);
-        if (isset($annotations[self::MAGENTO_DB_ISOLATION])) {
-            $isolation = $annotations[self::MAGENTO_DB_ISOLATION];
+        $isolation = Bootstrap::getObjectManager()->get(DbIsolationState::class)->getState($test);
+        if ($isolation) {
             if ($isolation !== ['enabled'] && $isolation !== ['disabled']) {
                 throw new LocalizedException(
                     __('Invalid "@magentoDbIsolation" annotation, can be "enabled" or "disabled" only.')
@@ -97,20 +96,5 @@ class DbIsolation
             return $isolation === ['enabled'];
         }
         return null;
-    }
-
-    /**
-     * Get method annotations.
-     *
-     * Overwrites class-defined annotations.
-     *
-     * @param TestCase $test
-     * @return array
-     */
-    private function getAnnotations(TestCase $test)
-    {
-        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
-
-        return array_replace((array)$annotations['class'], (array)$annotations['method']);
     }
 }

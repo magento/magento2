@@ -7,16 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Fixture\Parser;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Fixture\ParserInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Config attribute parser
+ * DbIsolation attribute parser
  */
-class Config implements ParserInterface
+class DbIsolation implements ParserInterface
 {
     /**
      * @var string
@@ -27,7 +25,7 @@ class Config implements ParserInterface
      * @param string $attributeClass
      */
     public function __construct(
-        string $attributeClass = \Magento\TestFramework\Fixture\Config::class
+        string $attributeClass = \Magento\TestFramework\Fixture\DbIsolation::class
     ) {
         $this->attributeClass = $attributeClass;
     }
@@ -53,29 +51,11 @@ class Config implements ParserInterface
         }
 
         $attributes = $reflection->getAttributes($this->attributeClass);
-        $scopeTypes = [
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            ScopeInterface::SCOPE_STORE,
-            ScopeInterface::SCOPE_WEBSITE
-        ];
+
         foreach ($attributes as $attribute) {
             $args = $attribute->getArguments();
-            $scopeType = $args['scopeType'] ?? $args[2] ?? ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
-            if (!in_array($scopeType, $scopeTypes)) {
-                throw new LocalizedException(
-                    __(
-                        'Invalid scope type "%1" was supplied to %2 at %3',
-                        $scopeType,
-                        get_class($this),
-                        get_class($test) . ($scope === 'class' ? '' : '::' . $test->getName(false))
-                    ),
-                );
-            }
             $fixtures[] = [
-                'path' => $args[0],
-                'value' => $args[1],
-                'scopeType' => $scopeType,
-                'scopeValue' => $args[3] ?? null,
+                'enabled' => $args[0],
             ];
         }
         return $fixtures;

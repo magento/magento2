@@ -37,14 +37,14 @@ class DataFixture implements ParserInterface
     {
         $fixtures = [];
         try {
-            $reflection = $scope === 'class'
+            $reflection = $scope === ParserInterface::SCOPE_CLASS
                 ? new \ReflectionClass($test)
                 : new \ReflectionMethod($test, $test->getName(false));
         } catch (\ReflectionException $e) {
             throw new LocalizedException(
                 __(
                     'Unable to parse attributes for %1',
-                    get_class($test) . ($scope === 'class' ? '' : '::' . $test->getName(false))
+                    get_class($test) . ($scope === ParserInterface::SCOPE_CLASS ? '' : '::' . $test->getName(false))
                 ),
                 $e
             );

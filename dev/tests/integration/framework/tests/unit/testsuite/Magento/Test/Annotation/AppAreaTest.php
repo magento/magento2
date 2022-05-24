@@ -7,7 +7,10 @@
 namespace Magento\Test\Annotation;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Annotation\TestCaseAnnotation;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionProperty;
 
 class AppAreaTest extends \PHPUnit\Framework\TestCase
@@ -37,6 +40,20 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
+        /** @var ObjectManagerInterface|MockObject $objectManager */
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->onlyMethods(['get', 'create'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $objectManager->method('create')
+            ->willReturnCallback(
+                function (string $type) {
+                    return $this->createMock($type);
+                }
+            );
+
+        Bootstrap::setObjectManager($objectManager);
         $this->_testCaseMock = $this->createMock(\PHPUnit\Framework\TestCase::class);
         $this->testCaseAnnotationsMock = $this->createMock(TestCaseAnnotation::class);
         $this->_applicationMock = $this->createMock(\Magento\TestFramework\Application::class);

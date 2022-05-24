@@ -318,7 +318,7 @@ class ConfigFixture
                 '%s%s %s',
                 $data['scopeType'] === ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                     ? 'default/'
-                    : ($data['scopeValue'] ?? 'current') . '_' . $data['scopeType'],
+                    : ($data['scopeValue'] ?? 'current') . '_' . $data['scopeType'] . ' ',
                 $data['path'],
                 $data['value'],
             );

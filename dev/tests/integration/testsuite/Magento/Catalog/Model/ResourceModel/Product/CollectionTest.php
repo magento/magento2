@@ -13,8 +13,10 @@ use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -153,11 +155,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $collectionStoreFilterAfter->getItems());
     }
 
-    /**
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation disabled
-     */
     #[
+        AppIsolation(true),
+        DbIsolation(false),
         DataFixture(CategoryFixture::class, as: 'c1'),
         DataFixture(CategoryFixture::class, ['parent_id' => '$c1.id$', 'is_anchor' => 0], 'c11'),
         DataFixture(CategoryFixture::class, ['parent_id' => '$c1.id$', 'is_anchor' => 0], 'c12'),

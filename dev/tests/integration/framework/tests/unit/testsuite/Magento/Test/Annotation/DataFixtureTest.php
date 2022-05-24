@@ -99,10 +99,11 @@ class DataFixtureTest extends TestCase
         DataFixtureStorageManager::setStorage($this->fixtureStorage);
 
         $dataFixtureFactory = new DataFixtureFactory($objectManager);
+        $annotationParser = new \Magento\TestFramework\Annotation\Parser\DataFixture('magentoDataFixture');
 
         $sharedInstances = [
             TestsIsolation::class => $this->testsIsolationMock,
-            DataFixtureAnnotationsParser::class => new DataFixtureAnnotationsParser('magentoDataFixture'),
+            \Magento\TestFramework\Annotation\Parser\DataFixture::class => $annotationParser,
             DataFixtureFactory::class => $dataFixtureFactory,
             DataFixtureSetup::class => new DataFixtureSetup(new Registry(), $dataFixtureFactory),
             DataFixtureDataProvider::class => new DataFixtureDataProvider(new Json()),
