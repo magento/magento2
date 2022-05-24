@@ -74,6 +74,8 @@ class ByFixedTest extends TestCase
     }
 
     /**
+     * Test fixed discount cannot be higher than products price
+     *
      * @param $qty
      * @param $ruleData
      * @param $itemData
@@ -244,6 +246,8 @@ class ByFixedTest extends TestCase
     }
 
     /**
+     * Test Fixing quantity depending on discount step
+     *
      * @param int $step
      * @param int|float $qty
      * @param int $expected
