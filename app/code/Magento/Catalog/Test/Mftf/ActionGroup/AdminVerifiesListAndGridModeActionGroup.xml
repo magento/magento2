@@ -44,7 +44,5 @@
         <seeElement selector="{{AdminChecksListAndGridModeSection.pageOptions('4')}}" stepKey="seePageOptions4"/>
         <seeElement selector="{{AdminChecksListAndGridModeSection.pageOptions('5')}}" stepKey="seePageOptions5"/>
 
-
-
     </actionGroup>
 </actionGroups>

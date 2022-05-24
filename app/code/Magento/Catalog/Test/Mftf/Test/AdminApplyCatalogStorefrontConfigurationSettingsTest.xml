@@ -115,6 +115,5 @@
 
                <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
 
-
     </test>
 </tests>

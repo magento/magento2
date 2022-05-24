@@ -22,6 +22,5 @@
         <element name="pageOptions" type="text" selector='//*[@id="limiter"]/option[{{var1}}]' parameterized="true"/>
         <element name="productCount" type="text" selector='//span[@class="product-image-wrapper"]'/>
 
-
     </section>
 </sections>
