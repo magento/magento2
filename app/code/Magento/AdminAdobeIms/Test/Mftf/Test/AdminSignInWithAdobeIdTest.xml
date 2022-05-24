@@ -17,7 +17,7 @@
             <group value="admin_ims"/>
             <testCaseId value="CABPI-102"/>
             <skip>
-                <issueId value="DEPRECATED">Temp disable</issueId>
+                <issueId value="AC-3153">Skipped</issueId>
             </skip>
         </annotations>
         <before>
