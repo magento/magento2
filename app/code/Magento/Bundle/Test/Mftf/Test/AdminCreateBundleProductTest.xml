@@ -106,7 +106,7 @@
             <argument name="sku" value="{{ImportProductSimple1_Bundle.sku}}"/>
             <argument name="defaultQuantity" value="50"/>
             <argument name="isDefault" value="{{ImportProductSimple1_Bundle.bundleIsDefault}}"/>
-            <argument name="userDefined" value="{{ImportProductSimple1_Bundle.bundleUserDefined}}"/>
+            <argument name="userDefined" value="false"/>
             <argument name="optionIndex" value="1"/>
             <argument name="productIndex" value="2"/>
         </actionGroup>
