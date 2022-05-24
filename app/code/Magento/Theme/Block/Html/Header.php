@@ -57,7 +57,7 @@ class Header extends \Magento\Framework\View\Element\Template
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        $this->_data['welcome'] =  $this->_escaper->escapeQuote($this->_data['welcome'], $addSlashes = true);
+        $this->_data['welcome'] =  $this->_escaper->escapeQuote($this->_data['welcome'], true);
         return __($this->_data['welcome']);
     }
 }
