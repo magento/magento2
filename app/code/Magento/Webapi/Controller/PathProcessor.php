@@ -13,7 +13,7 @@ use Magento\Store\Model\StoreCodeInRequestPathInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class PathProcessor
+ * Class PathProcessor to resolve the request path
  */
 class PathProcessor
 {
@@ -33,23 +33,23 @@ class PathProcessor
     /**
      * @var StoreCodeInRequestPathInterface
      */
-    private $storeCoeInRequestPath;
+    private $storeCodeInRequestPath;
 
     /**
      * @param StoreManagerInterface $storeManager
      * @param ResolverInterface|null $localeResolver
-     * @param StoreCodeInRequestPathInterface|null $storeCoeInRequestPath
+     * @param StoreCodeInRequestPathInterface|null $storeCodeInRequestPath
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         ResolverInterface $localeResolver = null,
-        ?StoreCodeInRequestPathInterface $storeCoeInRequestPath = null
+        ?StoreCodeInRequestPathInterface $storeCodeInRequestPath = null
     ) {
         $this->storeManager = $storeManager;
         $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(
             ResolverInterface::class
         );
-        $this->storeCoeInRequestPath = $storeCoeInRequestPath ?: ObjectManager::getInstance()->get(
+        $this->storeCodeInRequestPath = $storeCodeInRequestPath ?: ObjectManager::getInstance()->get(
             StoreCodeInRequestPathInterface::class
         );
     }
@@ -81,7 +81,7 @@ class PathProcessor
         $storeCode = current($pathParts);
         $stores = $this->storeManager->getStores(false, true);
         if (isset($stores[$storeCode])) {
-            $this->storeCoeInRequestPath->setStoreCodeInRequestPath(true);
+            $this->storeCodeInRequestPath->setStoreCodeInRequestPath(true);
             $this->storeManager->setCurrentStore($storeCode);
             $this->localeResolver->emulate($this->storeManager->getStore()->getId());
             $path = '/' . ($pathParts[1] ?? '');

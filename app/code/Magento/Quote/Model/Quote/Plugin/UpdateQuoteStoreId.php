@@ -25,7 +25,7 @@ class UpdateQuoteStoreId
     /**
      * @var StoreCodeInRequestPathInterface
      */
-    private $storeCoeInRequestPath;
+    private $storeCodeInRequestPath;
 
     /**
      * @param StoreManagerInterface $storeManager
@@ -33,10 +33,10 @@ class UpdateQuoteStoreId
      */
     public function __construct(
         StoreManagerInterface $storeManager,
-        StoreCodeInRequestPathInterface $storeCoeInRequestPath
+        StoreCodeInRequestPathInterface $storeCodeInRequestPath
     ) {
         $this->storeManager = $storeManager;
-        $this->storeCoeInRequestPath = $storeCoeInRequestPath;
+        $this->storeCodeInRequestPath = $storeCodeInRequestPath;
     }
 
     /**
@@ -50,7 +50,7 @@ class UpdateQuoteStoreId
      */
     public function afterLoadByIdWithoutStore(Quote $subject, Quote $result): Quote
     {
-        if ($this->storeCoeInRequestPath->hasStoreCodeInRequestPath()) {
+        if ($this->storeCodeInRequestPath->hasStoreCodeInRequestPath()) {
             $storeId = $this->storeManager->getStore()->getId();
             if ((int)$storeId !== $result->getStoreId()) {
                 $result->setStoreId($storeId);
@@ -71,7 +71,7 @@ class UpdateQuoteStoreId
      */
     public function afterLoadByCustomer(Quote $subject, Quote $result): Quote
     {
-        if ($this->storeCoeInRequestPath->hasStoreCodeInRequestPath()) {
+        if ($this->storeCodeInRequestPath->hasStoreCodeInRequestPath()) {
             $storeId = $this->storeManager->getStore()->getId();
             if ((int)$storeId !== $result->getStoreId()) {
                 $result->setStoreId($storeId);
