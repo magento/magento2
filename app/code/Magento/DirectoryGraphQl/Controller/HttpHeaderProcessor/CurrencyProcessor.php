@@ -66,30 +66,20 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
     public function processHeaderValue(string $headerValue) : void
     {
         try {
+            $currentStore = $this->storeManager->getStore();
+            $defaultCode = $currentStore->getDefaultCurrency()->getCode();
             if (!empty($headerValue)) {
                 $headerCurrency = strtoupper(ltrim(rtrim($headerValue)));
-                /** @var \Magento\Store\Model\Store $currentStore */
-                $currentStore = $this->storeManager->getStore();
-                if (in_array($headerCurrency, $currentStore->getAvailableCurrencyCodes(true))) {
-                    $currentStore->setCurrentCurrencyCode($headerCurrency);
-                } else {
-                    /** @var \Magento\Store\Model\Store $store */
-                    $store = $this->storeManager->getStore() ?? $this->storeManager->getDefaultStoreView();
+                if (!in_array($headerCurrency, $currentStore->getAvailableCurrencyCodes(true))) {
                     //skip store not found exception as it will be handled in graphql validation
-                    $this->logger->warning(__('Currency not allowed for store %1', [$store->getCode()]));
-                    $this->httpContext->setValue(
-                        HttpContext::CONTEXT_CURRENCY,
-                        $headerCurrency,
-                        $store->getDefaultCurrency()->getCode()
-                    );
+                    $this->logger->warning(__('Currency not allowed for store %1', [$currentStore->getCode()]));
                 }
+                $this->httpContext->setValue(HttpContext::CONTEXT_CURRENCY, $headerCurrency, $defaultCode);
             } else {
-                /** @var \Magento\Store\Model\Store $store */
-                $store = $this->storeManager->getStore() ?? $this->storeManager->getDefaultStoreView();
                 $this->httpContext->setValue(
                     HttpContext::CONTEXT_CURRENCY,
-                    $store->getCurrentCurrency()->getCode(),
-                    $store->getDefaultCurrency()->getCode()
+                    $currentStore->getCurrentCurrency()->getCode(),
+                    $defaultCode
                 );
             }
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
