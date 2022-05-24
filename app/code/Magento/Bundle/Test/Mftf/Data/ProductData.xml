@@ -152,21 +152,4 @@
         <requiredEntity type="custom_attribute">CustomAttributeFixWeight</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeFixSku</requiredEntity>
     </entity>
-    <entity name="ApiSimpleProductWithOptions" type="product">
-        <data key="name" unique="suffix">ApiSimpleProductWithOptions</data>
-        <data key="sku" unique="suffix">ApiSimpleProductWithOptions</data>
-        <data key="attribute_set_id">4</data>
-        <data key="price">123</data>
-        <data key="visibility">4</data>
-        <data key="status">1</data>
-        <data key="statusText">Enabled</data>
-        <data key="quantity">101</data>
-        <data key="weight">1</data>
-        <data key="urlKey" unique="suffix">ApiSimpleProductWithOptions</data>
-        <data key="bundleIsDefault">true</data>
-        <data key="bundleDefaultQuantity">50</data>
-        <data key="bundleUserDefined">false</data>
-        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
-        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
-    </entity>
 </entities>
