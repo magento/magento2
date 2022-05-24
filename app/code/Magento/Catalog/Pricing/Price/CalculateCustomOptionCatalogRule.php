@@ -59,7 +59,7 @@ class CalculateCustomOptionCatalogRule
             $product
         );
         // Apply catalog price rules to product options only if catalog price rules are applied to product.
-        if ($catalogRulePrice < $regularPrice) {
+        if ($catalogRulePrice <= $regularPrice) {
             $optionPrice = $this->getOptionPriceWithoutPriceRule($optionPriceValue, $isPercent, $regularPrice);
             $totalCatalogRulePrice = $this->priceModifier->modifyPrice(
                 $regularPrice + $optionPrice,
