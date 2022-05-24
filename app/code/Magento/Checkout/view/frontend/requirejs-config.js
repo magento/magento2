@@ -15,5 +15,10 @@ var config = {
             proceedToCheckout:      'Magento_Checkout/js/proceed-to-checkout',
             catalogAddToCart:       'Magento_Catalog/js/catalog-add-to-cart'
         }
+    },
+    shim: {
+        'Magento_Checkout/js/model/totals' : {
+            deps: ['Magento_Customer/js/customer-data']
+        }
     }
 };
