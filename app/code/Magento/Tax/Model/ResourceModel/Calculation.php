@@ -16,6 +16,8 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public const USA_COUNTRY_CODE = 'US';
 
+    public const PORTUGAL_COUNTRY_CODE = 'PT';
+
     /**
      * @var array
      */
@@ -342,7 +344,9 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $zipFrom = null;
             $zipTo = null;
             if (is_string($postcode) && preg_match('/^(.+)-(.+)$/', $postcode, $matches)) {
-                if ($countryId == self::USA_COUNTRY_CODE && is_numeric($matches[2]) && strlen($matches[2]) == 4) {
+                if ((self::USA_COUNTRY_CODE === $countryId && is_numeric($matches[2]) && 4 === strlen($matches[2])) ||
+                    (self::PORTUGAL_COUNTRY_CODE === $countryId && is_numeric($matches[2]) && 3 === strlen($matches[2]))
+                ) {
                     $postcodeIsNumeric = true;
                     $originalPostcode = $postcode;
                     $postcode = $matches[1];
