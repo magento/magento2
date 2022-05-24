@@ -29,7 +29,7 @@ class UpdateQuoteStoreId
 
     /**
      * @param StoreManagerInterface $storeManager
-     * @param StoreCodeInRequestPathInterface $storeCoeInRequestPath
+     * @param StoreCodeInRequestPathInterface $storeCodeInRequestPath
      */
     public function __construct(
         StoreManagerInterface $storeManager,
