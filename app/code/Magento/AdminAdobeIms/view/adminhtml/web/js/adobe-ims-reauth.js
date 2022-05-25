@@ -55,7 +55,7 @@ define([
                             $('input.ims_verified').val(true);
                         }
                         deferred.resolve(response);
-                    });
+                    })
                     .fail(function (error) {
                         deferred.reject(error);
                     });
