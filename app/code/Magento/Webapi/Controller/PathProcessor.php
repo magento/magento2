@@ -10,7 +10,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class PathProcessor to resolve the request path
+ * Class PathProcessor
  */
 class PathProcessor
 {
@@ -70,11 +70,11 @@ class PathProcessor
         if (isset($stores[$storeCode])) {
             $this->storeManager->setCurrentStore($storeCode);
             $this->localeResolver->emulate($this->storeManager->getStore()->getId());
-            $path = '/' . ($pathParts[1] ?? '');
+            $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
         } elseif ($storeCode === self::ALL_STORE_CODE) {
             $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
             $this->localeResolver->emulate($this->storeManager->getStore()->getId());
-            $path = '/' . ($pathParts[1] ?? '');
+            $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
         } else {
             $path = '/' . implode('/', $pathParts);
         }
