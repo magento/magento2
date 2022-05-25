@@ -9,5 +9,6 @@
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="MultishippingAdminConfigPage" url="/admin/system_config/edit/section/multishipping" module="Magento_Multishipping" area="admin">
+        <section name="MultipleshippingConfigurationSection"/>
     </page>
 </pages>
