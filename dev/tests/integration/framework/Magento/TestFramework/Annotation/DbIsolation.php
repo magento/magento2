@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DbIsolation
 {
-    const MAGENTO_DB_ISOLATION = 'magentoDbIsolation';
+    public const MAGENTO_DB_ISOLATION = 'magentoDbIsolation';
 
     /**
      * @var bool
