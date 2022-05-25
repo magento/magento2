@@ -295,6 +295,9 @@ class DeclarativeInstallerTest extends SetupTestCase
      */
     public function testInstallWithCodeBaseRollback()
     {
+        if ($this->isUsingAuroraDb()) {
+            $this->markTestSkipped('Test skipped in AWS Aurora');
+        }
         //Move db_schema.xml file and tried to install
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule1',
@@ -306,7 +309,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             ['Magento_TestSetupDeclarationModule1']
         );
         $beforeRollback = $this->describeTable->describeShard('default');
-        $this->assertTableCreationStatements($this->getTrimmedData()['before'], $beforeRollback);
+        self::assertEquals($this->getTrimmedData()['before'], $beforeRollback);
         //Move db_schema.xml file and tried to install
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule1',
@@ -317,7 +320,7 @@ class DeclarativeInstallerTest extends SetupTestCase
 
         $this->cliCommand->upgrade();
         $afterRollback = $this->describeTable->describeShard('default');
-        $this->assertTableCreationStatements($this->getTrimmedData()['after'], $afterRollback);
+        self::assertEquals($this->getData()['after'], $afterRollback);
     }
 
     /**
@@ -345,7 +348,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             $dataToMigrate
         );
         $this->isUsingAuroraDb() ?
-            $this->assertStringContainsString($this->getTrimmedData()['before'], $before['some_table']) :
+            $this->assertStringContainsString($before['some_table'], $this->getTrimmedData()['before']) :
             $this->assertEquals($this->getData()['before'], $before['some_table']);
         //Move db_schema.xml file and tried to install
         $this->moduleManager->updateRevision(
