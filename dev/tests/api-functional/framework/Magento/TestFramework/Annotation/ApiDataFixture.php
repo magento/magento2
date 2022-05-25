@@ -31,11 +31,7 @@ class ApiDataFixture extends DataFixture
     public function startTest(TestCase $test)
     {
         Bootstrap::getInstance()->reinitialize();
-        /** Apply method level fixtures if thy are available, apply class level fixtures otherwise */
-        $this->_applyFixtures(
-            $this->_getFixtures($test, 'method') ?: $this->_getFixtures($test, 'class'),
-            $test
-        );
+        $this->_applyFixtures($this->_getFixtures($test), $test);
     }
 
     /**
@@ -46,8 +42,6 @@ class ApiDataFixture extends DataFixture
     public function endTest(TestCase $test)
     {
         $this->_revertFixtures($test);
-        $objectManager = Bootstrap::getObjectManager();
-        $objectManager->get(AttributeMetadataCache::class)->clean();
     }
 
     /**
@@ -64,5 +58,24 @@ class ApiDataFixture extends DataFixture
     protected function getDbIsolationState(TestCase $test)
     {
         return parent::getDbIsolationState($test) ?: ['disabled'];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _applyFixtures(array $fixtures, TestCase $test)
+    {
+        Bootstrap::getInstance()->reinitialize();
+        parent::_applyFixtures($fixtures, $test);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _revertFixtures(?TestCase $test = null)
+    {
+        parent::_revertFixtures($test);
+        $objectManager = Bootstrap::getObjectManager();
+        $objectManager->get(AttributeMetadataCache::class)->clean();
     }
 }
