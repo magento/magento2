@@ -19,15 +19,15 @@ class CollectionUpdater
      * Adds id value in operation_key in case of bulk operation
      *
      * @param AbstractDb $subject
-     * @param $result
+     * @param array|null $result
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function afterGetData(AbstractDb $subject, $result)
+    public function afterGetData(AbstractDb $subject, ?array $result)
     {
         if (is_array($result) && !empty($result) &&
-            $subject->getResource()->getMainTable() == "magento_operation" &&
-            $subject->getResource()->getTable('magento_bulk') == "magento_bulk"
+            $subject->getResource()->getTable('magento_bulk') == "magento_bulk" &&
+            isset($result[0][OperationInterface::ID])
         ) {
             foreach ($result as $key => $row) {
                 $result[$key][OperationInterface::ID] = $row['id'];
