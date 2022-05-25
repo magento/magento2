@@ -57,10 +57,10 @@ class UpdateQuoteStoreId
     /**
      * Update store id in requested quote by store id from request.
      *
-     * @param $quote
+     * @param Quote $quote
      * @return Quote
      */
-    private function loadQuote($quote): Quote
+    private function loadQuote(Quote $quote): Quote
     {
         $store = $this->getStore($this->request->getPathInfo());
         if ($store) {
