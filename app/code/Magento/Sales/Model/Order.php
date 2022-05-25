@@ -3316,12 +3316,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * Return store_id
-     *
-     * @return int|null
      */
-    public function getStoreId()
+    public function getStoreId(): ?int
     {
-        return $this->getData(OrderInterface::STORE_ID);
+        $storeId = $this->getData(OrderInterface::STORE_ID);
+
+        return $storeId === null ? null : (int) $storeId;
     }
 
     /**
