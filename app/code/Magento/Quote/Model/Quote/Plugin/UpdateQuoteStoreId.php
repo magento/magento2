@@ -40,7 +40,7 @@ class UpdateQuoteStoreId
     }
 
     /**
-     * Update store id in requested quote by store id from request.
+     * Update store id in requested quote by store id from guest's request.
      *
      * @param Quote $subject
      * @param Quote $result
@@ -49,12 +49,7 @@ class UpdateQuoteStoreId
      */
     public function afterLoadByIdWithoutStore(Quote $subject, Quote $result): Quote
     {
-        $storeId = $this->storeManager->getStore()
-            ->getId() ?: $this->storeManager->getDefaultStoreView()
-                ->getId();
-        $result->setStoreId($storeId);
-
-        return $result;
+        return $this->loadQuote($result);
     }
 
     /**
@@ -67,12 +62,7 @@ class UpdateQuoteStoreId
      */
     public function afterLoadByCustomer(Quote $subject, Quote $result): Quote
     {
-        $store = $this->getStore($this->request->getPathInfo());
-        if ($store) {
-            $result->setStoreId($store->getId());
-        }
-
-        return $result;
+        return $this->loadQuote($result);
     }
 
     /**
@@ -88,5 +78,21 @@ class UpdateQuoteStoreId
         $stores = $this->storeManager->getStores(false, true);
 
         return $stores[$storeCode] ?? null;
+    }
+
+    /**
+     * Update store id in requested quote by store id from request.
+     *
+     * @param Quote $quote
+     * @return Quote
+     */
+    private function loadQuote(Quote $quote): Quote
+    {
+        $store = $this->getStore($this->request->getPathInfo());
+        if ($store) {
+            $quote->setStoreId($store->getId());
+        }
+
+        return $quote;
     }
 }
