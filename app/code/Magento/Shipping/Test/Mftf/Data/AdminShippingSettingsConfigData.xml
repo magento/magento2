@@ -31,6 +31,7 @@
     <entity name="AdminFreeshippingMinimumOrderAmountConfigData">
         <data key="path">carriers/freeshipping/free_shipping_subtotal</data>
         <data key="hundred">100</data>
+        <data key="seventysix">76</data>
         <data key="default">0</data>
     </entity>
     <entity name="AdminResetShippingOrigin" type="shipping_origin">
