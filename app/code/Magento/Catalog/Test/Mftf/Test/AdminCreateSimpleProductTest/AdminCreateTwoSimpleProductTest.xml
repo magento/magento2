@@ -41,7 +41,6 @@
 
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
-        <!--<click selector="{{NewProductPageSection.productName}}" stepKey="clickOnProduct"/>-->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
             <argument name="product" value="$createSimpleProduct$"/>
         </actionGroup>
@@ -59,6 +58,5 @@
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
         <actionGroup ref="AssertStorefrontEmailNoteMessageOnCheckoutActionGroup" stepKey="assertEmailNoteMessage"/>
-        <waitForPageLoad stepKey="waitForProductPage2"/>
     </test>
 </tests>
