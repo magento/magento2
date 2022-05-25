@@ -3607,7 +3607,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * @inheritdoc
      */
-    public function setStoreId($id)
+    public function setStoreId(int $id)
     {
         return $this->setData(OrderInterface::STORE_ID, $id);
     }
