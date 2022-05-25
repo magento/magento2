@@ -45,17 +45,17 @@ define([
          * @return {window.Promise}
          */
         login: function () {
-            var deferred = $.Deferred();
-            var loginConfig = this.loginConfig;
+            var deferred = $.Deferred(),
+                loginConfig = this.loginConfig;
 
-            $("input.ims_verification").click('click', function(e) {
+            $('input.ims_verification').on('click', function () {
                 login(loginConfig)
                     .then(function (response) {
                         if (response.isAuthorized === true) {
                             $('input.ims_verified').val(true);
                         }
                         deferred.resolve(response);
-                    }.bind(this))
+                    });
                     .fail(function (error) {
                         deferred.reject(error);
                     });
