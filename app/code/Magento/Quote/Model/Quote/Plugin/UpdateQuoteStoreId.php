@@ -40,38 +40,7 @@ class UpdateQuoteStoreId
     }
 
     /**
-     * Returns store based on web-api request path.
-     *
-     * @param string $requestPath
-     * @return StoreInterface|null
-     */
-    private function getStore(string $requestPath): ?StoreInterface
-    {
-        $pathParts = explode('/', trim($requestPath, '/'));
-        $storeCode = current($pathParts);
-        $stores = $this->storeManager->getStores(false, true);
-
-        return $stores[$storeCode] ?? null;
-    }
-
-    /**
      * Update store id in requested quote by store id from request.
-     *
-     * @param Quote $quote
-     * @return Quote
-     */
-    private function loadQuote(Quote $quote): Quote
-    {
-        $store = $this->getStore($this->request->getPathInfo());
-        if ($store) {
-            $quote->setStoreId($store->getId());
-        }
-
-        return $quote;
-    }
-
-    /**
-     * Update store id in requested quote by store id from guest's request.
      *
      * @param Quote $subject
      * @param Quote $result
@@ -80,7 +49,12 @@ class UpdateQuoteStoreId
      */
     public function afterLoadByIdWithoutStore(Quote $subject, Quote $result): Quote
     {
-        return $this->loadQuote($result);
+        $storeId = $this->storeManager->getStore()
+            ->getId() ?: $this->storeManager->getDefaultStoreView()
+                ->getId();
+        $result->setStoreId($storeId);
+
+        return $result;
     }
 
     /**
@@ -93,6 +67,26 @@ class UpdateQuoteStoreId
      */
     public function afterLoadByCustomer(Quote $subject, Quote $result): Quote
     {
-        return $this->loadQuote($result);
+        $store = $this->getStore($this->request->getPathInfo());
+        if ($store) {
+            $result->setStoreId($store->getId());
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns store based on web-api request path.
+     *
+     * @param string $requestPath
+     * @return StoreInterface|null
+     */
+    private function getStore(string $requestPath): ?StoreInterface
+    {
+        $pathParts = explode('/', trim($requestPath, '/'));
+        $storeCode = current($pathParts);
+        $stores = $this->storeManager->getStores(false, true);
+
+        return $stores[$storeCode] ?? null;
     }
 }
