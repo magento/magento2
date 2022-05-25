@@ -3316,6 +3316,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * Return store_id
+     *
+     * @return ?int
      */
     public function getStoreId(): ?int
     {
