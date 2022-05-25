@@ -1,10 +1,7 @@
 <?php
 /**
- * Scan source code for incorrect or undeclared modules dependencies
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- *
  */
 namespace Magento\Test\Integrity;
 
@@ -29,40 +26,43 @@ use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 
 /**
+ * Scan source code for incorrect or undeclared modules dependencies
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class DependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Soft dependency between modules
      */
-    const TYPE_SOFT = 'soft';
+    public const TYPE_SOFT = 'soft';
 
     /**
      * Hard dependency between modules
      */
-    const TYPE_HARD = 'hard';
+    public const TYPE_HARD = 'hard';
 
     /**
      * The identifier of dependency for mapping.
      */
-    const MAP_TYPE_DECLARED = 'declared';
+    public const MAP_TYPE_DECLARED = 'declared';
 
     /**
      * The identifier of dependency for mapping.
      */
-    const MAP_TYPE_FOUND = 'found';
+    public const MAP_TYPE_FOUND = 'found';
 
     /**
      * The identifier of dependency for mapping.
      */
-    const MAP_TYPE_REDUNDANT = 'redundant';
+    public const MAP_TYPE_REDUNDANT = 'redundant';
 
     /**
      * Count of directories in path
      */
-    const DIR_PATH_COUNT = 4;
+    public const DIR_PATH_COUNT = 4;
 
     /**
      * List of config.xml files by modules
@@ -155,15 +155,11 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     private static $whiteList = [];
 
     /**
-     * Routes whitelist
-     *
      * @var array|null
      */
     private static $routesWhitelist = null;
 
     /**
-     * Redundant dependencies whitelist
-     *
      * @var array|null
      */
     private static $redundantDependenciesWhitelist = null;
@@ -187,6 +183,16 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * @var array
      */
     private $undeclaredDependencyBlacklist;
+
+    /**
+     * @var array|null
+     */
+    private static $extensionConflicts = null;
+
+    /**
+     * @var array|null
+     */
+    private static $allowedDependencies = null;
 
     /**
      * Sets up data
@@ -1201,5 +1207,113 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     protected function _isFake($module)
     {
         return isset(self::$mapDependencies[$module]) ? false : true;
+    }
+
+    /**
+     * Test modules don't have direct dependencies on modules that might be disabled by 3rd-party Magento extensions.
+     *
+     * @inheritdoc
+     * @throws \Exception
+     * @return void
+     */
+    public function testDirectExtensionDependencies()
+    {
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+
+        $extensionConflictList = self::getExtensionConflicts();
+        $allowedDependencies = self::getAllowedDependencies();
+
+        $invoker(
+        /**
+         * Check modules dependencies for specified file
+         *
+         * @param string $fileType
+         * @param string $file
+         */
+            function ($fileType, $file) use ($extensionConflictList, $allowedDependencies) {
+                $module = $this->getModuleNameForRelevantFile($file);
+                if (!$module) {
+                    return;
+                }
+
+                $contents = $this->_getCleanedFileContents($fileType, $file);
+
+                $dependencies = $this->getDependenciesFromFiles($module, $fileType, $file, $contents);
+
+                $modules = [];
+                foreach ($dependencies as $dependency) {
+                    $modules[] = $dependency['modules'];
+                }
+
+                $modulesDependencies = array_merge(...$modules);
+
+                foreach ($extensionConflictList as $extension => $disabledModules) {
+                    $modulesThatMustBeDisabled = \array_unique(array_intersect($modulesDependencies, $disabledModules));
+                    if (!empty($modulesThatMustBeDisabled)) {
+
+                        foreach ($modulesThatMustBeDisabled as $foundedModule) {
+                            if (!empty($allowedDependencies[$foundedModule])
+                                && \in_array($module, $allowedDependencies[$foundedModule])
+                            ) {
+                                // skip, this dependency is allowed
+                                continue;
+                            }
+
+                            $this->fail(
+                                \sprintf(
+                                    'Module "%s" has dependency on: "%s".' .
+                                    ' No direct dependencies must be added on "%s",' .
+                                    ' because it must be disabled when "%s" extension is used.' .
+                                    ' See AC-2516 for more details',
+                                    $module,
+                                    \implode(', ', $modulesThatMustBeDisabled),
+                                    $module,
+                                    $extension
+                                )
+                            );
+                        }
+                    }
+                }
+            },
+            $this->getAllFiles()
+        );
+    }
+
+    /**
+     * Initialize extension conflicts list.
+     *
+     * @return array
+     */
+    private static function getExtensionConflicts(): array
+    {
+        if (null === self::$extensionConflicts) {
+            $extensionConflictsFilePattern =
+                realpath(__DIR__) . '/_files/extension_dependencies_test/extension_conflicts/*.php';
+            $extensionConflicts = [];
+            foreach (glob($extensionConflictsFilePattern) as $fileName) {
+                $extensionConflicts[] = include $fileName;
+            }
+            self::$extensionConflicts = \array_merge_recursive([], ...$extensionConflicts);
+        }
+        return self::$extensionConflicts;
+    }
+
+    /**
+     * Initialize allowed dependencies.
+     *
+     * @return array
+     */
+    private static function getAllowedDependencies(): array
+    {
+        if (null === self::$allowedDependencies) {
+            $allowedDependenciesFilePattern =
+                realpath(__DIR__) . '/_files/extension_dependencies_test/allowed_dependencies/*.php';
+            $allowedDependencies = [];
+            foreach (glob($allowedDependenciesFilePattern) as $fileName) {
+                $allowedDependencies[] = include $fileName;
+            }
+            self::$allowedDependencies = \array_merge_recursive([], ...$allowedDependencies);
+        }
+        return self::$allowedDependencies;
     }
 }

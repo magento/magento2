@@ -59,7 +59,7 @@ class DeploymentsTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->configMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['getNewRelicApiUrl', 'getNewRelicApiKey', 'getNewRelicAppName', 'getNewRelicAppId'])
+            ->setMethods(['getNewRelicApiUrl', 'getNewRelicApiKey', 'getNewRelicAppId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -110,10 +110,6 @@ class DeploymentsTest extends TestCase
             ->willReturn($data['api_key']);
 
         $this->configMock->expects($this->once())
-            ->method('getNewRelicAppName')
-            ->willReturn($data['app_name']);
-
-        $this->configMock->expects($this->once())
             ->method('getNewRelicAppId')
             ->willReturn($data['app_id']);
 
@@ -130,7 +126,14 @@ class DeploymentsTest extends TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertIsString($this->model->setDeployment($data['description'], $data['change'], $data['user']));
+        $this->assertIsString(
+            $this->model->setDeployment(
+                $data['description'],
+                $data['change'],
+                $data['user'],
+                $data['revision']
+            )
+        );
     }
 
     /**
@@ -171,10 +174,6 @@ class DeploymentsTest extends TestCase
             ->willReturn($data['api_key']);
 
         $this->configMock->expects($this->once())
-            ->method('getNewRelicAppName')
-            ->willReturn($data['app_name']);
-
-        $this->configMock->expects($this->once())
             ->method('getNewRelicAppId')
             ->willReturn($data['app_id']);
 
@@ -191,7 +190,14 @@ class DeploymentsTest extends TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertIsBool($this->model->setDeployment($data['description'], $data['change'], $data['user']));
+        $this->assertIsBool(
+            $this->model->setDeployment(
+                $data['description'],
+                $data['change'],
+                $data['user'],
+                $data['revision']
+            )
+        );
     }
 
     /**
@@ -230,10 +236,6 @@ class DeploymentsTest extends TestCase
             ->willReturn($data['api_key']);
 
         $this->configMock->expects($this->once())
-            ->method('getNewRelicAppName')
-            ->willReturn($data['app_name']);
-
-        $this->configMock->expects($this->once())
             ->method('getNewRelicAppId')
             ->willReturn($data['app_id']);
 
@@ -246,7 +248,14 @@ class DeploymentsTest extends TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertIsBool($this->model->setDeployment($data['description'], $data['change'], $data['user']));
+        $this->assertIsBool(
+            $this->model->setDeployment(
+                $data['description'],
+                $data['change'],
+                $data['user'],
+                $data['revision']
+            )
+        );
     }
 
     /**
@@ -258,23 +267,26 @@ class DeploymentsTest extends TestCase
         $change = 'flush the cache username';
         $user = 'username';
         $uri = 'https://example.com/listener';
-        $selfUri = 'https://api.newrelic.com/deployments.xml';
+        $selfUri = 'https://api.newrelic.com/v2/applications/%s/deployments.json';
         $apiKey = '1234';
         $appName = 'app_name';
         $appId = 'application_id';
         $method = ZendClient::POST;
-        $headers = ['x-api-key' => $apiKey];
+        $headers = ['Api-Key' => $apiKey, 'Content-Type' => 'application/json'];
         $responseBody = 'Response body content';
         $statusOk = '200';
         $statusBad = '401';
+        $revision = 'f81d42327219e17b1427096c354e9b8209939d4dd586972f12f0352f8343b91b';
         $params = [
-            'deployment[app_name]'       => $appName,
-            'deployment[application_id]' => $appId,
-            'deployment[description]'    => $description,
-            'deployment[changelog]'      => $change,
-            'deployment[user]'           => $user
+            'deployment' => [
+                'description' => $description,
+                'changelog' => $change,
+                'user' => $user,
+                'revision' => $revision
+            ]
         ];
 
+        $selfUri = sprintf($selfUri, $appId);
         return ['description' => $description,
             'change' => $change,
             'user' => $user,
@@ -288,7 +300,8 @@ class DeploymentsTest extends TestCase
             'status_ok' => $statusOk,
             'status_bad' => $statusBad,
             'response_body' => $responseBody,
-            'params' => $params
+            'params' => $params,
+            'revision' => $revision
         ];
     }
 }
