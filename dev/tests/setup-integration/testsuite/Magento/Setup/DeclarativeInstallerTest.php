@@ -295,9 +295,6 @@ class DeclarativeInstallerTest extends SetupTestCase
      */
     public function testInstallWithCodeBaseRollback()
     {
-        if ($this->isUsingAuroraDb()) {
-            $this->markTestSkipped('Test skipped in AWS Aurora');
-        }
         //Move db_schema.xml file and tried to install
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule1',
@@ -308,6 +305,10 @@ class DeclarativeInstallerTest extends SetupTestCase
         $this->cliCommand->install(
             ['Magento_TestSetupDeclarationModule1']
         );
+
+        if ($this->isUsingAuroraDb()) {
+            $this->markTestSkipped('Test skipped in AWS Aurora');
+        }
         $beforeRollback = $this->describeTable->describeShard('default');
         self::assertEquals($this->getTrimmedData()['before'], $beforeRollback);
         //Move db_schema.xml file and tried to install
