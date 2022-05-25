@@ -5,16 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Multishipping\Test\Unit\Model\Cart\Controller;
+namespace Magento\Multishipping\Test\Unit\Model\Cart;
 
 use Magento\Checkout\Controller\Cart;
+use Magento\Checkout\Controller\Sidebar\UpdateItemQty;
 use Magento\Checkout\Model\Session;
+use Magento\Checkout\Model\Cart as CartModel;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Multishipping\Model\Cart\Controller\CartPlugin;
+use Magento\Multishipping\Model\Cart\MultishippingClearItemAddress;
 use Magento\Multishipping\Model\DisableMultishipping;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
@@ -27,10 +29,10 @@ use PHPUnit\Framework\TestCase;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CartPluginTest extends TestCase
+class MultishippingClearItemAddressTest extends TestCase
 {
     /**
-     * @var CartPlugin
+     * @var MultishippingClearItemAddress
      */
     private $model;
 
@@ -49,22 +51,29 @@ class CartPluginTest extends TestCase
      */
     private $addressRepositoryMock;
 
+    /**
+     * @var CartModel|MockObject
+     */
+    private $cartMock;
+
     protected function setUp(): void
     {
         $this->cartRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
         $this->checkoutSessionMock = $this->createMock(Session::class);
         $this->addressRepositoryMock = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
         $disableMultishippingMock = $this->createMock(DisableMultishipping::class);
-        $this->model = new CartPlugin(
+        $this->cartMock = $this->createMock(CartModel::class);
+        $this->model = new MultishippingClearItemAddress(
             $this->cartRepositoryMock,
             $this->checkoutSessionMock,
             $this->addressRepositoryMock,
-            $disableMultishippingMock
+            $disableMultishippingMock,
+            $this->cartMock
         );
     }
 
     /**
-     * Test cart plugin
+     * Test cart and mini cart plugin
      *
      * @param string $actionName
      * @param int $addressId
@@ -73,7 +82,7 @@ class CartPluginTest extends TestCase
      * @throws LocalizedException
      * @dataProvider getDataDataProvider
      */
-    public function testBeforeDispatch(
+    public function testClearAddressItem(
         string $actionName,
         int $addressId,
         int $customerAddressId,
@@ -124,8 +133,13 @@ class CartPluginTest extends TestCase
         $this->cartRepositoryMock->expects($this->any())
             ->method('save')
             ->with($quoteMock);
-
-        $this->model->beforeDispatch(
+        if ($actionName instanceof UpdateItemQty) {
+            $quoteMock->expects($this->any())->method('getId')->willReturnSelf();
+            $this->cartRepositoryMock->expects($this->any())
+                ->method('get')->with($quoteMock)->willReturn($quoteMock);
+            $this->cartMock->expects($this->any())->method('setQuote')->with($quoteMock);
+        }
+        $this->model->clearAddressItem(
             $this->createMock(Cart::class),
             $requestMock
         );
