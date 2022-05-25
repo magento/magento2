@@ -16,7 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="admin_ims"/>
             <skip>
-                <issueId value="DEPRECATED">Temp disable</issueId>
+                <issueId value="AC-3153">Skipped</issueId>
             </skip>
             <testCaseId value="CABPI-205"/>
         </annotations>
