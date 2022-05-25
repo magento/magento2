@@ -12,15 +12,21 @@ use Magento\Catalog\Model\Category;
 use Magento\CatalogImportExport\Model\Import\ProductTestBase;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
+use Magento\Indexer\Test\Fixture\IndexerMode;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
- *
- * @magentoAppIsolation enabled
- * @magentoAppArea adminhtml
- * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
- * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
  */
+#[
+    AppIsolation(true),
+    AppArea('adminhtml'),
+    DataFixtureBeforeTransaction(IndexerMode::class, ['indexer' => 'catalogsearch_fulltext', 'schedule' => true]),
+    DataFixtureBeforeTransaction(IndexerMode::class, ['indexer' => 'catalog_category_product', 'schedule' => true]),
+    DataFixtureBeforeTransaction(IndexerMode::class, ['indexer' => 'catalog_product_category', 'schedule' => true]),
+]
 class ProductCategoriesTest extends ProductTestBase
 {
     /**

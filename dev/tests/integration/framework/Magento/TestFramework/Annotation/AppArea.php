@@ -81,14 +81,7 @@ class AppArea
      */
     public function startTest(TestCase $test)
     {
-        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
-        $parser = Bootstrap::getObjectManager()->create(\Magento\TestFramework\Fixture\Parser\AppArea::class);
-        $converter = static fn ($info) => $info['area'];
-        $classAppIsolationState =  array_map($converter, $parser->parse($test, ParserInterface::SCOPE_CLASS))
-            ?: ($annotations['class'][self::ANNOTATION_NAME] ?? []);
-        $methodAppIsolationState =  array_map($converter, $parser->parse($test, ParserInterface::SCOPE_METHOD))
-            ?: ($annotations['method'][self::ANNOTATION_NAME] ?? []);
-        $area = current($methodAppIsolationState ?: $classAppIsolationState) ?: Application::DEFAULT_APP_AREA;
+        $area = $this->getArea($test);
 
         if (!in_array($area, $this->_allowedAreas, true)) {
             throw new LocalizedException(
@@ -106,5 +99,24 @@ class AppArea
                 $this->_application->loadArea($area);
             }
         }
+    }
+
+    /**
+     * Get the configured application area
+     *
+     * @param TestCase $test
+     * @return string
+     * @throws LocalizedException
+     */
+    private function getArea(TestCase $test): string
+    {
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
+        $parser = Bootstrap::getObjectManager()->create(\Magento\TestFramework\Fixture\Parser\AppArea::class);
+        $converter = static fn ($info) => $info['area'];
+        $classAppIsolationState =  array_map($converter, $parser->parse($test, ParserInterface::SCOPE_CLASS))
+            ?: ($annotations['class'][self::ANNOTATION_NAME] ?? []);
+        $methodAppIsolationState =  array_map($converter, $parser->parse($test, ParserInterface::SCOPE_METHOD))
+            ?: ($annotations['method'][self::ANNOTATION_NAME] ?? []);
+        return current($methodAppIsolationState ?: $classAppIsolationState) ?: Application::DEFAULT_APP_AREA;
     }
 }
