@@ -211,6 +211,9 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     public function read()
     {
         $response = curl_exec($this->_getResource());
+        if ($response === false) {
+            return '';
+        }
 
         // Remove 100 and 101 responses headers
         while (\Zend_Http_Response::extractCode($response) == 100
