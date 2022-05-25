@@ -8,9 +8,6 @@ namespace Magento\Webapi\Controller;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Locale\ResolverInterface;
-use Magento\Store\Model\StoreCodeInRequestPathInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class PathProcessor to resolve the request path
@@ -18,39 +15,29 @@ use Magento\Store\Model\StoreManagerInterface;
 class PathProcessor
 {
     /**  Store code alias to indicate that all stores should be affected by action */
-    public const ALL_STORE_CODE = 'all';
+    const ALL_STORE_CODE = 'all';
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var ResolverInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
     private $localeResolver;
 
     /**
-     * @var StoreCodeInRequestPathInterface
-     */
-    private $storeCodeInRequestPath;
-
-    /**
-     * @param StoreManagerInterface $storeManager
-     * @param ResolverInterface|null $localeResolver
-     * @param StoreCodeInRequestPathInterface|null $storeCodeInRequestPath
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        ResolverInterface $localeResolver = null,
-        ?StoreCodeInRequestPathInterface $storeCodeInRequestPath = null
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver = null
     ) {
         $this->storeManager = $storeManager;
         $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(
-            ResolverInterface::class
-        );
-        $this->storeCodeInRequestPath = $storeCodeInRequestPath ?: ObjectManager::getInstance()->get(
-            StoreCodeInRequestPathInterface::class
+            \Magento\Framework\Locale\ResolverInterface::class
         );
     }
 
@@ -81,7 +68,6 @@ class PathProcessor
         $storeCode = current($pathParts);
         $stores = $this->storeManager->getStores(false, true);
         if (isset($stores[$storeCode])) {
-            $this->storeCodeInRequestPath->setStoreCodeInRequestPath(true);
             $this->storeManager->setCurrentStore($storeCode);
             $this->localeResolver->emulate($this->storeManager->getStore()->getId());
             $path = '/' . ($pathParts[1] ?? '');

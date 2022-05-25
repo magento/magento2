@@ -66,5 +66,4 @@
             <argument name="fileName" xsi:type="string">webapi.xml</argument>
         </arguments>
     </type>
-    <preference for="Magento\Store\Model\StoreCodeInRequestPathInterface" type="Magento\Store\Model\StoreCodeInRequestPath" />
 </config>

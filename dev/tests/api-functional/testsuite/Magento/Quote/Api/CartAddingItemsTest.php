@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Api;
 
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Model\Quote;
@@ -316,14 +317,14 @@ class CartAddingItemsTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_multistore.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
-     * @param string $storeCode
      * @param string $expectedProductName
+     * @param string|null $storeCode
      *
      * @return void
      * @dataProvider dataProviderForMultiStoreView
-     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws AuthenticationException
      */
-    public function testForProductNameAsPerStoreView(string $storeCode, string $expectedProductName): void
+    public function testForProductNameAsPerStoreView(string $expectedProductName, ?string $storeCode = null): void
     {
         $this->_markTestAsRestOnly();
 
@@ -366,13 +367,9 @@ class CartAddingItemsTest extends WebapiAbstract
         ];
         /** @var \Magento\Quote\Api\Data\CartInterface $cart */
         $cart = $this->_webApiCall($serviceInfo, [], null, $storeCode);
-
-        $actualProductName = '';
         $carts = $cart['items'];
-        foreach ($carts as $item) {
-            $actualProductName = $item['name'];
-            break;
-        }
+        $actualProductName = $carts[0]['name'] ?? '';
+
         $this->assertEquals($expectedProductName, $actualProductName);
     }
 
@@ -382,14 +379,18 @@ class CartAddingItemsTest extends WebapiAbstract
     public function dataProviderForMultiStoreView(): array
     {
         return [
-            'defaultStoreView' => [
-                'default',
-                'Simple Product One'
+            'noStoreCodeInRequestPath' => [
+                'Simple Product One',
+                null
             ],
-            'secondStoreView' => [
-                'fixturestore',
-                'StoreTitle'
+            'defaultStoreCodeInRequestPath' => [
+                'Simple Product One',
+                'default'
             ],
+            'secondStoreCodeInRequestPath' => [
+                'StoreTitle',
+                'fixturestore'
+            ]
         ];
     }
 }

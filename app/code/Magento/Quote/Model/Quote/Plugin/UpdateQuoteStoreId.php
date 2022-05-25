@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\Quote\Plugin;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote;
-use Magento\Store\Model\StoreCodeInRequestPathInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Webapi\Request;
 
 /**
  * Updates quote store id.
@@ -23,61 +23,76 @@ class UpdateQuoteStoreId
     private $storeManager;
 
     /**
-     * @var StoreCodeInRequestPathInterface
+     * @var Request
      */
-    private $storeCodeInRequestPath;
+    private $request;
 
     /**
      * @param StoreManagerInterface $storeManager
-     * @param StoreCodeInRequestPathInterface $storeCodeInRequestPath
+     * @param Request $request
      */
     public function __construct(
         StoreManagerInterface $storeManager,
-        StoreCodeInRequestPathInterface $storeCodeInRequestPath
+        Request $request
     ) {
         $this->storeManager = $storeManager;
-        $this->storeCodeInRequestPath = $storeCodeInRequestPath;
+        $this->request = $request;
+    }
+
+    /**
+     * Returns store based on web-api request path.
+     *
+     * @param string $requestPath
+     * @return StoreInterface|null
+     */
+    private function getStore(string $requestPath): ?StoreInterface
+    {
+        $pathParts = explode('/', trim($requestPath, '/'));
+        $storeCode = current($pathParts);
+        $stores = $this->storeManager->getStores(false, true);
+
+        return $stores[$storeCode] ?? null;
     }
 
     /**
      * Update store id in requested quote by store id from request.
      *
-     * @param Quote $subject
-     * @param Quote $result
+     * @param $quote
      * @return Quote
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @throws NoSuchEntityException
      */
-    public function afterLoadByIdWithoutStore(Quote $subject, Quote $result): Quote
+    private function loadQuote($quote): Quote
     {
-        if ($this->storeCodeInRequestPath->hasStoreCodeInRequestPath()) {
-            $storeId = $this->storeManager->getStore()->getId();
-            if ((int)$storeId !== $result->getStoreId()) {
-                $result->setStoreId($storeId);
-            }
+        $store = $this->getStore($this->request->getPathInfo());
+        if ($store) {
+            $quote->setStoreId($store->getId());
         }
 
-        return $result;
+        return $quote;
     }
 
     /**
-     * Update store id in requested quote by store id from request for registered customer.
+     * Update store id in requested quote by store id from guest's request.
      *
      * @param Quote $subject
      * @param Quote $result
      * @return Quote
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @throws NoSuchEntityException
+     */
+    public function afterLoadByIdWithoutStore(Quote $subject, Quote $result): Quote
+    {
+        return $this->loadQuote($result);
+    }
+
+    /**
+     * Update store id in requested quote by store id from registered customer's request.
+     *
+     * @param Quote $subject
+     * @param Quote $result
+     * @return Quote
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterLoadByCustomer(Quote $subject, Quote $result): Quote
     {
-        if ($this->storeCodeInRequestPath->hasStoreCodeInRequestPath()) {
-            $storeId = $this->storeManager->getStore()->getId();
-            if ((int)$storeId !== $result->getStoreId()) {
-                $result->setStoreId($storeId);
-            }
-        }
-
-        return $result;
+        return $this->loadQuote($result);
     }
 }
