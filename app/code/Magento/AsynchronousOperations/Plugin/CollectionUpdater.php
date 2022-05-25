@@ -26,8 +26,8 @@ class CollectionUpdater
     public function afterGetData(AbstractDb $subject, ?array $result)
     {
         if (is_array($result) && !empty($result) &&
-            $subject->getResource()->getTable('magento_bulk') == "magento_bulk" &&
-            isset($result[0][OperationInterface::ID])
+            isset($result[0][OperationInterface::ID]) &&
+            $subject->getResource()->getTable('magento_bulk') == "magento_bulk"
         ) {
             foreach ($result as $key => $row) {
                 $result[$key][OperationInterface::ID] = $row['id'];
