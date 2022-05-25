@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
@@ -617,7 +618,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                             $product->getStoreId()
                         )
                     ) {
-                        $product->setData($attributeCode);
+                        $product->setData(
+                            $attributeCode,
+                            $attributeCode === ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY ? false : null
+                        );
                         $hasDataChanged = true;
                     }
                 }
