@@ -28,11 +28,19 @@ class WebapiDocBlock extends \Magento\TestFramework\Bootstrap\DocBlock
     {
         $subscribers = parent::_getSubscribers($application);
         foreach ($subscribers as $key => $subscriber) {
-            if (in_array(get_class($subscriber), [ConfigFixture::class, Transaction::class])) {
+            if (get_class($subscriber) == ConfigFixture::class) {
                 unset($subscribers[$key]);
+            } elseif (get_class($subscriber) == Transaction::class) {
+                $subscribers[$key] = new \Magento\TestFramework\Event\Transaction(
+                    new \Magento\TestFramework\EventManager(
+                        [
+                            new \Magento\TestFramework\Annotation\DbIsolation(),
+                            new \Magento\TestFramework\Annotation\ApiDataFixture(),
+                        ]
+                    )
+                );
             }
         }
-        $subscribers[] = new \Magento\TestFramework\Annotation\ApiDataFixture();
         $subscribers[] = new ApiConfigFixture();
 
         return $subscribers;

@@ -57,4 +57,12 @@ class ApiDataFixture extends DataFixture
     {
         return self::ANNOTATION;
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getDbIsolationState(TestCase $test)
+    {
+        return parent::getDbIsolationState($test) ?: ['disabled'];
+    }
 }
