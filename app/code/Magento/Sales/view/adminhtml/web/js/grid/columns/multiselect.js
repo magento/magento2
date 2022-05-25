@@ -16,7 +16,7 @@ define([
          */
         updateState: function () {
             var selected = this.selected().length,
-                totalRecords = this.totalRecords()
+                totalRecords = this.totalRecords();
 
             if (totalRecords && selected === totalRecords && !this.preserveSelectionsOnFilter) {
                 return this;
