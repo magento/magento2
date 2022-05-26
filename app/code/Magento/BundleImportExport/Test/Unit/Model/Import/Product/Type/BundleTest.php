@@ -74,24 +74,25 @@ class BundleTest extends AbstractImportTestCase
      */
     protected $setCollection;
 
-    /** @var ScopeResolverInterface|MockObject */
+    /**
+     * @var ScopeResolverInterface|MockObject
+     */
     private $scopeResolver;
 
     /**
-     *
      * @return void
      */
-    protected function initFetchAllCalls()
+    protected function initFetchAllCalls(): void
     {
         $fetchAllForInitAttributes = [
             [
                 'attribute_set_name' => '1',
-                'attribute_id' => '1',
+                'attribute_id' => '1'
             ],
             [
                 'attribute_set_name' => '2',
-                'attribute_id' => '2',
-            ],
+                'attribute_id' => '2'
+            ]
         ];
 
         $fetchAllForOtherCalls = [[
@@ -124,9 +125,7 @@ class BundleTest extends AbstractImportTestCase
     }
 
     /**
-     * Set up
-     *
-     * @return void
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
@@ -158,8 +157,9 @@ class BundleTest extends AbstractImportTestCase
                     'insertOnDuplicate',
                     'delete',
                     'quoteInto',
-                'fetchAssoc'
-            ])
+                    'fetchAssoc'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->select = $this->createMock(Select::class);
@@ -206,7 +206,7 @@ class BundleTest extends AbstractImportTestCase
         ];
         $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getScope'])
+            ->onlyMethods(['getScope'])
             ->getMockForAbstractClass();
         $this->bundle = $this->objectManagerHelper->getObject(
             Bundle::class,
@@ -215,7 +215,7 @@ class BundleTest extends AbstractImportTestCase
                 'prodAttrColFac' => $this->prodAttrColFac,
                 'resource' => $this->resource,
                 'params' => $this->params,
-                'scopeResolver' => $this->scopeResolver,
+                'scopeResolver' => $this->scopeResolver
             ]
         );
 
@@ -239,14 +239,18 @@ class BundleTest extends AbstractImportTestCase
      *
      * @param array $skus
      * @param array $bunch
-     * @param $allowImport
+     * @param bool $allowImport
+     *
+     * @return void
      * @dataProvider saveDataProvider
      */
-    public function testSaveData($skus, $bunch, $allowImport)
+    public function testSaveData(array $skus, array $bunch, bool $allowImport): void
     {
         $this->entityModel->expects($this->any())->method('getBehavior')->willReturn(Import::BEHAVIOR_APPEND);
         $this->entityModel->expects($this->once())->method('getNewSku')->willReturn($skus['newSku']);
-        $this->entityModel->expects($this->at(2))->method('getNextBunch')->willReturn([$bunch]);
+        $this->entityModel
+            ->method('getNextBunch')
+            ->willReturnOnConsecutiveCalls([$bunch]);
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn($allowImport);
         $scope = $this->getMockBuilder(ScopeInterface::class)->getMockForAbstractClass();
         $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($scope);
@@ -289,6 +293,7 @@ class BundleTest extends AbstractImportTestCase
                         'type' => 'bundle',
                         'value_id' => '6',
                         'title' => 'Bundle6',
+                        'name' => 'Bundle6',
                         'selections' => [
                             [
                                 'name' => 'Bundlen6',
@@ -316,7 +321,7 @@ class BundleTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function saveDataProvider()
+    public function saveDataProvider(): array
     {
         return [
             [
@@ -342,7 +347,7 @@ class BundleTest extends AbstractImportTestCase
             'Import without bundle values' => [
                 'skus' => ['newSku' => ['sku' => ['sku' => 'sku', 'entity_id' => 3, 'type_id' => 'bundle']]],
                 'bunch' => ['sku' => 'sku', 'name' => 'name'],
-                'allowImport' => true,
+                'allowImport' => true
             ],
             [
                 'skus' => ['newSku' => [
@@ -381,16 +386,22 @@ class BundleTest extends AbstractImportTestCase
 
     /**
      * Test for method saveData()
+     *
+     * @return void
      */
-    public function testSaveDataDelete()
+    public function testSaveDataDelete(): void
     {
         $this->entityModel->expects($this->any())->method('getBehavior')->willReturn(Import::BEHAVIOR_DELETE);
         $this->entityModel->expects($this->once())->method('getNewSku')->willReturn([
             'sku' => ['sku' => 'sku', 'entity_id' => 3, 'attr_set_code' => 'Default', 'type_id' => 'bundle']
         ]);
-        $this->entityModel->expects($this->at(2))->method('getNextBunch')->willReturn([
-            ['bundle_values' => 'value1', 'sku' => 'sku', 'name' => 'name']
-        ]);
+        $this->entityModel
+            ->method('getNextBunch')
+            ->willReturnOnConsecutiveCalls(
+                [
+                    ['bundle_values' => 'value1', 'sku' => 'sku', 'name' => 'name']
+                ]
+            );
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn(true);
         $select = $this->createMock(Select::class);
         $this->connection->expects($this->any())->method('select')->willReturn($select);
@@ -404,7 +415,10 @@ class BundleTest extends AbstractImportTestCase
         $this->assertNotNull($bundle);
     }
 
-    public function testPrepareAttributesWithDefaultValueForSaveInsideCall()
+    /**
+     * @return void
+     */
+    public function testPrepareAttributesWithDefaultValueForSaveInsideCall(): void
     {
         $bundleMock = $this->createPartialMock(
             Bundle::class,
@@ -430,8 +444,10 @@ class BundleTest extends AbstractImportTestCase
 
     /**
      * Test for isRowValid()
+     *
+     * @return void
      */
-    public function testIsRowValid()
+    public function testIsRowValid(): void
     {
         $this->entityModel->expects($this->any())->method('getRowScope')->willReturn(-1);
         $rowData = [

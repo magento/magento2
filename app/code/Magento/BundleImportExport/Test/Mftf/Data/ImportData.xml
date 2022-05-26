@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <!-- Categories -->
+    <entity name="ImportCategory_Bundle" type="category">
+        <data key="name">import-category-bundle</data>
+        <data key="name_lwr">import-category-bundle</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <data key="urlKey">import-category-bundle</data>
+    </entity>
+
+    <!-- Products -->
+    <entity name="ImportProductSimple1_Bundle" type="product">
+        <data key="name">import-product-simple1-bundle</data>
+        <data key="sku">import-product-simple1-bundle</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="attributeSetText">Default</data>
+        <data key="price">10.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="statusText">Enabled</data>
+        <data key="quantity">101</data>
+        <data key="weight">1</data>
+        <data key="urlKey">import-product-simple1-bundle</data>
+        <data key="baseImage">magento-logo.png</data>
+        <data key="baseImageName">magento-logo</data>
+        <data key="smallImage">magento-logo.png</data>
+        <data key="smallImageName">magento-logo</data>
+        <data key="thumbnailImage">magento-logo.png</data>
+        <data key="thumbnailImageName">magento-logo</data>
+        <data key="bundleIsDefault">false</data>
+        <data key="bundleDefaultQuantity">2</data>
+        <data key="bundleUserDefined">true</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ImportProductSimple2_Bundle" type="product">
+        <data key="name">import-product-simple2-bundle</data>
+        <data key="sku">import-product-simple2-bundle</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="attributeSetText">Default</data>
+        <data key="price">20.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="statusText">Enabled</data>
+        <data key="quantity">102</data>
+        <data key="weight">2</data>
+        <data key="urlKey">import-product-simple2-bundle</data>
+        <data key="baseImage">m-logo.gif</data>
+        <data key="baseImageName">m-logo</data>
+        <data key="smallImage">m-logo.gif</data>
+        <data key="smallImageName">m-logo</data>
+        <data key="thumbnailImage">m-logo.gif</data>
+        <data key="thumbnailImageName">m-logo</data>
+        <data key="bundleIsDefault">true</data>
+        <data key="bundleDefaultQuantity">4</data>
+        <data key="bundleUserDefined">false</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ImportProductSimple3_Bundle" type="product">
+        <data key="name">import-product-simple3-bundle</data>
+        <data key="sku">import-product-simple3-bundle</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="attributeSetText">Default</data>
+        <data key="price">30.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="statusText">Enabled</data>
+        <data key="quantity">103</data>
+        <data key="weight">3</data>
+        <data key="urlKey">import-product-simple3-bundle</data>
+        <data key="baseImage">adobe-base.jpg</data>
+        <data key="baseImageName">adobe-base</data>
+        <data key="smallImage">adobe-base.jpg</data>
+        <data key="smallImageName">adobe-base</data>
+        <data key="thumbnailImage">adobe-base.jpg</data>
+        <data key="thumbnailImageName">adobe-base</data>
+        <data key="bundleIsDefault">false</data>
+        <data key="bundleDefaultQuantity">3</data>
+        <data key="bundleUserDefined">false</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ImportProduct_Bundle" type="product">
+        <data key="fileName">import_bundle_product.csv</data>
+        <data key="importSummary">Created: 4, Updated: 0, Deleted: 0</data>
+        <data key="name">import-product-bundle</data>
+        <data key="sku">import-product-bundle</data>
+        <data key="type_id">bundle</data>
+        <data key="attribute_set_id">4</data>
+        <data key="attributeSetText">Default</data>
+        <data key="price"/>
+        <data key="dynamicSkuCheckedValue">true</data>
+        <data key="dynamicPriceCheckedValue">true</data>
+        <data key="dynamicWeightCheckedValue">true</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">0</data>
+        <data key="weight"/>
+        <data key="urlKey">import-product-bundle</data>
+        <data key="baseImage">magento-logo.png</data>
+        <data key="baseImageName">magento-logo</data>
+        <data key="smallImage">m-logo.gif</data>
+        <data key="smallImageName">m-logo</data>
+        <data key="thumbnailImage">adobe-base.jpg</data>
+        <data key="thumbnailImageName">adobe-base</data>
+        <data key="totalBundleOptions">2</data>
+        <data key="bundleOptionShipmentType">Together</data>
+        <data key="bundleOption1Title">Bundle Option A</data>
+        <data key="bundleOption1InputType">radio</data>
+        <data key="bundleOption1Required">true</data>
+        <data key="bundleOption1NumberOfProducts">2</data>
+        <data key="bundleOption2Title">Bundle Option B</data>
+        <data key="bundleOption2InputType">checkbox</data>
+        <data key="bundleOption2Required">false</data>
+        <data key="bundleOption2NumberOfProducts">1</data>
+    </entity>
+</entities>

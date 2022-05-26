@@ -165,6 +165,11 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     private $pillPut;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $_coreConfig;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory

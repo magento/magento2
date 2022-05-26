@@ -36,9 +36,7 @@
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
             <!-- TODO: Remove this action when MC-37719 will be fixed -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
-                <argument name="indices" value="cataloginventory_stock"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexInvalidatedIndices"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -50,16 +48,23 @@
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProductBySku">
             <argument name="sku" value="$createDynamicBundleProduct.sku$"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         <!-- Verify product on Product Page -->
-        <amOnPage url="{{StorefrontProductPage.url($createDynamicBundleProduct.custom_attributes[url_key]$)}}" stepKey="openBundleProductPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoopsMessage"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="productUrl" value="$$createDynamicBundleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeWhoopsMessage">
+            <argument name="value" value="Whoops, our bad..."/>
+        </actionGroup>
         <!-- Search for the product by sku -->
         <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchBySku">
             <argument name="query" value="$createDynamicBundleProduct.sku$"/>
         </actionGroup>
          <!-- Should not see bundle product -->
         <dontSee userInput="$createDynamicBundleProduct.sku$" selector="{{StorefrontCatalogSearchMainSection.searchResults}}" stepKey="dontSeeProduct"/>
-        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="openCategoryPage"/>
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="openCategoryPage">
+            <argument name="categoryUrl" value="$$createCategory.custom_attributes[url_key]$$"/>
+        </actionGroup>
         <!-- Should not see any products in category -->
         <dontSee userInput="$createDynamicBundleProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeProductInCategory"/>
         <see selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" userInput="We can't find products matching the selection." stepKey="seeEmptyProductMessage"/>

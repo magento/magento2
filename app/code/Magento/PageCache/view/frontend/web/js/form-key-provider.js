@@ -18,13 +18,16 @@ define(function () {
             var expires,
                 secure,
                 date = new Date(),
-                isSecure = !!window.cookiesConfig && window.cookiesConfig.secure;
+                cookiesConfig = window.cookiesConfig || {},
+                isSecure = !!cookiesConfig.secure,
+                samesite = cookiesConfig.samesite || 'lax';
 
             date.setTime(date.getTime() + 86400000);
             expires = '; expires=' + date.toUTCString();
             secure = isSecure ? '; secure' : '';
+            samesite = '; samesite=' + samesite;
 
-            document.cookie = 'form_key=' + (value || '') + expires + secure + '; path=/';
+            document.cookie = 'form_key=' + (value || '') + expires + secure + '; path=/' + samesite;
         }
 
         /**

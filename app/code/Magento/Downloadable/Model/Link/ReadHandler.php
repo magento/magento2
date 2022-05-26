@@ -9,7 +9,7 @@ use Magento\Downloadable\Api\LinkRepositoryInterface as LinkRepository;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
- * Class ReadHandler
+ * Read Handler for Downloadable Product Links.
  */
 class ReadHandler implements ExtensionInterface
 {
@@ -27,6 +27,8 @@ class ReadHandler implements ExtensionInterface
     }
 
     /**
+     * Read Downloadable Links for the provided Product.
+     *
      * @param object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
@@ -40,10 +42,9 @@ class ReadHandler implements ExtensionInterface
         }
         $entityExtension = $entity->getExtensionAttributes();
         $links = $this->linkRepository->getLinksByProduct($entity);
-        if ($links) {
-            $entityExtension->setDownloadableProductLinks($links);
-        }
+        $entityExtension->setDownloadableProductLinks($links);
         $entity->setExtensionAttributes($entityExtension);
+
         return $entity;
     }
 }

@@ -313,10 +313,16 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     private function getNextAutoIncrementValue(string $tableName, string $resource): int
     {
         $adapter = $this->resourceConnection->getConnection($resource);
-        $sql = sprintf('SELECT MAX(`%s`) + 1 FROM `%s`', $adapter->getAutoIncrementField($tableName), $tableName);
-        $adapter->resetDdlCache($tableName);
-        $stmt = $adapter->query($sql);
+        $autoIncrementField = $adapter->getAutoIncrementField($tableName);
+        if ($autoIncrementField) {
+            $sql = sprintf('SELECT MAX(`%s`) + 1 FROM `%s`', $autoIncrementField, $tableName);
+            $adapter->resetDdlCache($tableName);
+            $stmt = $adapter->query($sql);
 
-        return (int)$stmt->fetchColumn();
+            return (int)$stmt->fetchColumn();
+        } else {
+            return 1;
+        }
+
     }
 }

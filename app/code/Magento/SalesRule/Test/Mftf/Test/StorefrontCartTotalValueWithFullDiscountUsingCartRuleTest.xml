@@ -56,15 +56,13 @@
             <createData entity="SimpleProduct2" stepKey="createSimpleProductThird">
                 <field key="price">5.50</field>
             </createData>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Removed created Data -->
+            <deleteData createDataKey="initialTaxRule" stepKey="deleteTaxRule"/>
+            <deleteData createDataKey="initialTaxRate" stepKey="deleteTaxRate"/>
             <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
                 <argument name="name" value="SampleRule"/>
@@ -117,8 +115,10 @@
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.orderTotal}}" stepKey="waitForOrderTotalVisible"/>
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectCountry"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForOrderTotalUpdate"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$29.00" stepKey="seeDiscountAmount"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForOrderTotalUpdate"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountAmount">
+            <argument name="discount" value="29.00"/>
+        </actionGroup>
         <see selector="{{CheckoutCartSummarySection.subTotal}}" userInput="$29.00" stepKey="seeSubTotal"/>
         <see selector="{{CheckoutCartSummarySection.orderTotal}}" userInput="0.00" stepKey="seeOrderTotal"/>
     </test>

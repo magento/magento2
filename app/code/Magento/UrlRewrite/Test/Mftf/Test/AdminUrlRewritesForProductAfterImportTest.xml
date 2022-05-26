@@ -21,8 +21,10 @@
             <comment userInput="Set the configuration for Generate category/product URL Rewrites" stepKey="commentSetURLRewriteConfiguration" />
             <comment userInput="Enable config to generate category/product URL Rewrites " stepKey="commentEnableConfig" />
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
+            <!-- Must create custom root category and assign to custom store to support cases where a test ran before this one that deleted the Default Category -->
+            <createData entity="NewRootCategory" stepKey="newRootCategory"/>
             <createData entity="NewRootCategory" stepKey="simpleSubCategory1">
-                <field key="parent_id">2</field>
+                <field key="parent_id">$$newRootCategory.id$$</field>
             </createData>
             <createData entity="SubCategoryWithParent" stepKey="simpleSubCategory2">
                 <requiredEntity createDataKey="simpleSubCategory1"/>
@@ -34,6 +36,28 @@
             <createData entity="SimpleProductAfterImport1" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="simpleSubCategory3"/>
             </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="store" value="{{customStoreGroup.name}}"/>
+                <argument name="rootCategory" value="$$newRootCategory.name$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct">
+                <argument name="productId" value="$$createSimpleProduct.id$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminChangeWebSiteAssignedToProductActionGroup" stepKey="changeProductWebsite">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="websiteToDeselect" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
         </before>
         <after>
             <comment userInput="Delete all products that replaced products in the before block post import " stepKey="commentDeleteAllProducts" />
@@ -43,17 +67,22 @@
             <deleteData createDataKey="simpleSubCategory1" stepKey="deleteSimpleSubCategory1"/>
             <comment userInput="Disable config to generate category/product URL Rewrites " stepKey="commentDisableConfig" />
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="disableGenerateUrlRewrite"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <deleteData createDataKey="newRootCategory" stepKey="deleteRootCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
-        <comment userInput="1. Log in to Admin " stepKey="commentAdminLogin" />
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <comment userInput="BIC workaround" stepKey="commentAdminLogin"/>
+        <comment userInput="BIC workaround" stepKey="loginAsAdmin"/>
 
         <comment userInput="2. Open Marketing - SEO and Search - URL Rewrites " stepKey="commentVerifyUrlRewrite" />
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickSearchButton"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue1"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue2"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue3"/>
@@ -75,7 +104,7 @@
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage2"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters2"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="$createSimpleProduct.custom_attributes[url_key]$-new.html" stepKey="inputProductName2"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton2"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickSearchButton2"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $createSimpleProduct.custom_attributes[url_key]$-new.html)}}" stepKey="seeInListValue1"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$-new.html)}}" stepKey="seeInListValue2"/>
         <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$-new.html)}}" stepKey="seeInListValue3"/>

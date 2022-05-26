@@ -229,6 +229,17 @@
         </arguments>
     </type>
     <preference for="Magento\AsynchronousOperations\Model\ConfigInterface" type="Magento\WebapiAsync\Model\Config\Proxy" />
+    <virtualType name="Magento\Framework\Communication\Config\Reader\XmlReader" type="Magento\Framework\Config\Reader\Filesystem">
+        <arguments>
+            <argument name="converter" xsi:type="object">Magento\Framework\Communication\Config\Reader\XmlReader\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Framework\Communication\Config\Reader\XmlReader\SchemaLocator</argument>
+            <argument name="fileName" xsi:type="string">communication.xml</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/config/topic" xsi:type="string">name</item>
+                <item name="/config/topic/handler" xsi:type="string">name</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Framework\Communication\Config\CompositeReader">
         <arguments>
             <argument name="readers" xsi:type="array">
@@ -686,6 +697,9 @@
             <argument name="classWhitelist" xsi:type="array">
                 <item name="0" xsi:type="string">Magento\Framework\Data\OptionSourceInterface</item>
                 <item name="1" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface</item>
+            </argument>
+            <argument name="deniedClassList" xsi:type="array">
+                <item name="0" xsi:type="string">Magento\Framework\Model\ResourceModel\AbstractResource</item>
             </argument>
         </arguments>
     </type>
@@ -1598,7 +1612,7 @@
                 <item name="longtext" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
                 <item name="blob" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
                 <item name="mediumblob" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
-                <item name="longblog" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
+                <item name="longblob" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
                 <item name="varbinary" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
                 <item name="varchar" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
                 <item name="char" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\CharDefinition</item>
@@ -1730,7 +1744,7 @@
         <arguments>
             <argument name="connectionToExchangeMap" xsi:type="array">
                 <item name="amqp" xsi:type="string">magento</item>
-                <item name="db" xsi:type="string">magento-db</item>
+                <item name="db" xsi:type="string">magento</item>
             </argument>
         </arguments>
     </type>
@@ -1738,7 +1752,7 @@
         <arguments>
             <argument name="publisherNameToConnectionMap" xsi:type="array">
                 <item name="amqp-magento" xsi:type="string">amqp</item>
-                <item name="db-magento-db" xsi:type="string">db</item>
+                <item name="db-magento" xsi:type="string">db</item>
             </argument>
         </arguments>
     </type>
@@ -1752,6 +1766,11 @@
     <!-- \Magento\Framework\MessageQueue\Bulk\PublisherPool is @api -->
     <virtualType name="Magento\Framework\MessageQueue\Bulk\PublisherPool" type="Magento\Framework\MessageQueue\PublisherPool" />
     <type name="Magento\Framework\Session\Config">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Session\SessionMaxSizeConfig">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
         </arguments>
@@ -1818,7 +1837,7 @@
         <plugin name="execute_commit_callbacks" type="Magento\Framework\Model\ExecuteCommitCallbacks" />
     </type>
     <preference for="Magento\Framework\GraphQl\Query\ErrorHandlerInterface" type="Magento\Framework\GraphQl\Query\ErrorHandler"/>
-    <preference for="Magento\Framework\Filter\VariableResolverInterface" type="Magento\Framework\Filter\VariableResolver\StrategyResolver"/>
+    <preference for="Magento\Framework\Filter\VariableResolverInterface" type="Magento\Framework\Filter\VariableResolver\StrictResolver"/>
     <virtualType name="configured_block_cache" type="Magento\Framework\App\Cache">
         <arguments>
             <argument name="cacheIdentifier" xsi:type="string">block_html</argument>
@@ -1865,6 +1884,10 @@
                 <item name="hr" xsi:type="string">hr</item>
                 <item name="figure" xsi:type="string">figure</item>
                 <item name="button" xsi:type="string">button</item>
+                <item name="i" xsi:type="string">i</item>
+                <item name="u" xsi:type="string">u</item>
+                <item name="br" xsi:type="string">br</item>
+                <item name="b" xsi:type="string">b</item>
             </argument>
             <argument name="allowedAttributes" xsi:type="array">
                 <item name="class" xsi:type="string">class</item>
@@ -1898,7 +1921,56 @@
             <argument name="blockVariables" xsi:type="array">
                 <item name="secureRenderer" xsi:type="object">Magento\Framework\View\Helper\SecureHtmlRenderer\Proxy</item>
                 <item name="escaper" xsi:type="object">Magento\Framework\Escaper</item>
+                <item name="localeFormatter" xsi:type="object">Magento\Framework\Locale\LocaleFormatter</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Validator\UrlKey">
+        <arguments>
+            <argument name="restrictedValues" xsi:type="array">
+                <item name="0" xsi:type="string">admin</item>
+                <item name="1" xsi:type="string">soap</item>
+                <item name="2" xsi:type="string">rest</item>
+                <item name="3" xsi:type="string">graphql</item>
+                <item name="4" xsi:type="string">standard</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface" type="Magento\Framework\Webapi\Validator\CompositeServiceInputValidator"/>
+    <type name="Magento\Framework\Webapi\Validator\CompositeServiceInputValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="entityArrayValidator" xsi:type="object">Magento\Framework\Webapi\Validator\EntityArrayValidator</item>
+                <item name="searchCriteriaValidator" xsi:type="object">Magento\Framework\Webapi\Validator\SearchCriteriaValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Webapi\Validator\EntityArrayValidator">
+        <arguments>
+            <argument name="complexArrayItemLimit" xsi:type="number">20</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Webapi\Validator\SearchCriteriaValidator">
+        <arguments>
+            <argument name="maximumPageSize" xsi:type="number">300</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\GraphQl\Query\Resolver\Argument\ValidatorInterface" type="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator"/>
+    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="searchCriteriaValidator" xsi:type="object">Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator">
+        <arguments>
+            <argument name="maxPageSize" xsi:type="number">300</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Webapi\ServiceInputProcessor">
+        <arguments>
+            <argument name="defaultPageSize" xsi:type="number">20</argument>
         </arguments>
     </type>
 </config>

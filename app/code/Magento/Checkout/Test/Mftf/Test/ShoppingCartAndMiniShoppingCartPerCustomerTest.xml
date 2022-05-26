@@ -19,10 +19,7 @@
             <group value="checkout"/>
         </annotations>
         <before>
-            <!-- Flush cache -->
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
             <!-- Create two customers -->
             <createData entity="Simple_US_Customer" stepKey="createFirstCustomer"/>
@@ -132,8 +129,9 @@
         <see selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute($$createSimpleProductWithCustomOptions.name$$, ProductOptionValueDropdown.title)}}" userInput="{{ProductOptionValueWithSkuDropdown1.title}}" stepKey="seeDropDownOption"/>
 
         <!-- Assert subtotal and grand total -->
+        <waitForPageLoad stepKey="waitForPriceLoad"/>
         <see selector="{{StorefrontProductPageSection.subTotal}}" userInput="{{quoteQty2Subtotal266.currency}}{{quoteQty2Subtotal266.subtotal}}" stepKey="seeFirstCustomerSubTotal"/>
-        <see selector="{{StorefrontProductPageSection.orderTotal}}" userInput="{{quoteQty2Subtotal266.currency}}{{quoteQty2Subtotal266.total}}" stepKey="seeFirstCustomerOrderTotal"/>
+        <waitForText selector="{{StorefrontProductPageSection.orderTotal}}" userInput="{{quoteQty2Subtotal266.currency}}{{quoteQty2Subtotal266.total}}" stepKey="seeFirstCustomerOrderTotal"/>
 
         <!-- Assert products in mini cart for first customer -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFrontHomePage"/>
@@ -163,8 +161,9 @@
         </actionGroup>
 
         <!-- Assert subtotal and grand total -->
+        <waitForPageLoad stepKey="waitForPriceLoad2"/>
         <see selector="{{StorefrontProductPageSection.subTotal}}" userInput="{{quoteQty2Price123.currency}}{{quoteQty2Price123.subtotal}}" stepKey="seeSecondCustomerSubTotal"/>
-        <see selector="{{StorefrontProductPageSection.orderTotal}}" userInput="{{quoteQty2Price123.currency}}{{quoteQty2Price123.total}}" stepKey="seeSecondCustomerOrderTotal"/>
+        <waitForText selector="{{StorefrontProductPageSection.orderTotal}}" userInput="{{quoteQty2Price123.currency}}{{quoteQty2Price123.total}}" stepKey="seeSecondCustomerOrderTotal"/>
 
         <!-- Assert product in mini cart -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>

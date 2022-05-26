@@ -282,4 +282,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced">
+        <arguments>
+            <argument name="disableScopeChangeList" xsi:type="array">
+                <item name="sku" xsi:type="string">sku</item>
+                <item name="media_gallery" xsi:type="string">media_gallery</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

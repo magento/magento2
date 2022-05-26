@@ -142,9 +142,9 @@ define([
                     this.options.form.validation.apply(this.options.form, _.compact(args));
 
                 // Clean up errors on region & zip fix
-                $(this.options.regionInputId).removeClass('mage-error').parent().find('[generated]').remove();
-                $(this.options.regionListId).removeClass('mage-error').parent().find('[generated]').remove();
-                $(this.options.postcodeId).removeClass('mage-error').parent().find('[generated]').remove();
+                $(this.options.regionInputId).removeClass('mage-error').parent().find('.mage-error').remove();
+                $(this.options.regionListId).removeClass('mage-error').parent().find('.mage-error').remove();
+                $(this.options.postcodeId).removeClass('mage-error').parent().find('.mage-error').remove();
             }
         },
 
@@ -192,7 +192,7 @@ define([
                 }
 
                 if (this.options.isRegionRequired) {
-                    regionList.addClass('required-entry').removeAttr('disabled');
+                    regionList.addClass('required-entry').prop('disabled', false);
                     container.addClass('required').show();
                 } else {
                     regionList.removeClass('required-entry validate-select').removeAttr('data-validate');
@@ -202,7 +202,7 @@ define([
                         regionList.hide();
                         container.hide();
                     } else {
-                        regionList.removeAttr('disabled').show();
+                        regionList.prop('disabled', false).show();
                     }
                 }
 
@@ -213,7 +213,7 @@ define([
                 this._removeSelectOptions(regionList);
 
                 if (this.options.isRegionRequired) {
-                    regionInput.addClass('required-entry').removeAttr('disabled');
+                    regionInput.addClass('required-entry').prop('disabled', false);
                     container.addClass('required').show();
                 } else {
                     if (!this.options.optionalRegionAllowed) { //eslint-disable-line max-depth
@@ -238,6 +238,7 @@ define([
 
             // Add defaultvalue attribute to state/province select element
             regionList.attr('defaultvalue', this.options.defaultRegion);
+            this.options.form.find('[type="submit"]').prop('disabled', false).show();
         },
 
         /**

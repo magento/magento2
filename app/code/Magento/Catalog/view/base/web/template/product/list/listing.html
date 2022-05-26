@@ -9,7 +9,7 @@
     <div class="block-title">
         <strong role="heading"
                 aria-level="2"
-                text="label"/>
+                text="label"></strong>
     </div>
     <div class="block-content">
         <div css="'products-' + displayMode">
@@ -17,19 +17,19 @@
                 <li class="product-item" repeat="foreach: filteredRows, item: '$row'">
                     <div class="product-item-info">
                         <fastForEach args="data: getRegion('general-area'), as: '$col'" >
-                            <render args="$col.getBody()"/>
+                            <render args="$col.getBody()"></render>
                         </fastForEach>
 
                         <div class="product-item-details">
                             <fastForEach args="data: getRegion('details-area'), as: '$col'" >
-                                <render args="$col.getBody()"/>
+                                <render args="$col.getBody()"></render>
                             </fastForEach>
 
                             <div if="regionHasElements('action-primary-area') || regionHasElements('action-secondary-area')"
                                  class="product-item-actions">
                                 <div class="actions-primary" if="regionHasElements('action-primary-area')">
                                     <fastForEach args="data: getRegion('action-primary-area'), as: '$col'" >
-                                        <render args="$col.getBody()"/>
+                                        <render args="$col.getBody()"></render>
                                     </fastForEach>
                                 </div>
 
@@ -37,7 +37,7 @@
                                      class="actions-secondary"
                                      data-role="add-to-links">
                                     <fastForEach args="data: getRegion('action-secondary-area'), as: '$col'" >
-                                        <render args="$col.getBody()"/>
+                                        <render args="$col.getBody()"></render>
                                     </fastForEach>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                             <div if="regionHasElements('description-area')"
                                  class="product-item-description">
                                 <fastForEach args="data: getRegion('description-area'), as: '$col'" >
-                                    <render args="$col.getBody()"/>
+                                    <render args="$col.getBody()"></render>
                                 </fastForEach>
                             </div>
                         </div>

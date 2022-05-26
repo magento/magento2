@@ -10,11 +10,9 @@ namespace Magento\TestFramework\MessageQueue;
 
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\OsInfo;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Amqp;
 
-/**
- * Publisher Consumer Controller
- */
 class PublisherConsumerController
 {
     /**
@@ -53,6 +51,11 @@ class PublisherConsumerController
     private $amqpHelper;
 
     /**
+     * @var ClearQueueProcessor
+     */
+    private $clearQueueProcessor;
+
+    /**
      * PublisherConsumerController constructor.
      * @param PublisherInterface $publisher
      * @param OsInfo $osInfo
@@ -61,6 +64,7 @@ class PublisherConsumerController
      * @param array $consumers
      * @param array $appInitParams
      * @param null|int $maxMessages
+     * @param ClearQueueProcessor $clearQueueProcessor
      */
     public function __construct(
         PublisherInterface $publisher,
@@ -69,7 +73,8 @@ class PublisherConsumerController
         $logFilePath,
         $consumers,
         $appInitParams,
-        $maxMessages = null
+        $maxMessages = null,
+        ClearQueueProcessor $clearQueueProcessor = null
     ) {
         $this->consumers = $consumers;
         $this->publisher = $publisher;
@@ -78,6 +83,8 @@ class PublisherConsumerController
         $this->osInfo = $osInfo;
         $this->appInitParams = $appInitParams;
         $this->amqpHelper = $amqpHelper;
+        $this->clearQueueProcessor = $clearQueueProcessor
+            ?: Bootstrap::getObjectManager()->get(ClearQueueProcessor::class);
     }
 
     /**
@@ -90,12 +97,7 @@ class PublisherConsumerController
     {
         $this->validateEnvironmentPreconditions();
 
-        $connections = $this->amqpHelper->getConnections();
-        foreach (array_keys($connections) as $connectionName) {
-            $this->amqpHelper->deleteConnection($connectionName);
-        }
-        $this->amqpHelper->clearQueue("async.operations.all");
-
+        $this->clearQueueProcessor->execute("async.operations.all");
         $this->stopConsumers();
         $this->startConsumers();
 
@@ -123,12 +125,6 @@ class PublisherConsumerController
                 "This test relies on *nix shell and should be skipped in Windows environment."
             );
         }
-
-        if (!$this->amqpHelper->isAvailable()) {
-            throw new PreconditionFailedException(
-                'This test relies on RabbitMQ Management Plugin.'
-            );
-        }
     }
 
     /**
@@ -138,6 +134,8 @@ class PublisherConsumerController
     {
         foreach ($this->consumers as $consumer) {
             foreach ($this->getConsumerProcessIds($consumer) as $consumerProcessId) {
+                // exec() have to be here since this is test.
+                // phpcs:ignore Magento2.Security.InsecureFunction
                 exec("kill {$consumerProcessId}");
             }
         }
@@ -165,6 +163,8 @@ class PublisherConsumerController
      */
     private function getConsumerProcessIds($consumer)
     {
+        // exec() have to be here since this is test.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         exec("ps ax | grep -v grep | grep '{$this->getConsumerStartCommand($consumer)}' | awk '{print $1}'", $output);
         return $output;
     }
@@ -232,6 +232,8 @@ class PublisherConsumerController
     {
         foreach ($this->consumers as $consumer) {
             if (!$this->getConsumerProcessIds($consumer)) {
+                // exec() have to be here since this is test.
+                // phpcs:ignore Magento2.Security.InsecureFunction
                 exec("{$this->getConsumerStartCommand($consumer, true)} > /dev/null &");
             }
             sleep(5);

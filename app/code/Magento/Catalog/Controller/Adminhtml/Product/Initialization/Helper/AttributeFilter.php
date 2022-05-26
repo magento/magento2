@@ -102,6 +102,6 @@ class AttributeFilter
     {
         $considerUseDefaultsAttribute = !isset($useDefaults[$attribute]) || $useDefaults[$attribute] === '1';
 
-        return ($value === '' && $considerUseDefaultsAttribute && !$product->getData($attribute));
+        return ($value === '' && $considerUseDefaultsAttribute && ($product->getData($attribute) === null));
     }
 }

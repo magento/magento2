@@ -61,7 +61,6 @@ abstract class AbstractAction
     protected $_storeManager;
 
     /**
-     * Currency factory
      *
      * @var CurrencyFactory
      */
@@ -83,7 +82,6 @@ abstract class AbstractAction
     protected $_catalogProductType;
 
     /**
-     * Indexer price factory
      *
      * @var Factory
      */
@@ -343,16 +341,15 @@ abstract class AbstractAction
      */
     protected function _insertFromTable($sourceTable, $destTable, $where = null)
     {
-        $sourceColumns = array_keys($this->getConnection()->describeTable($sourceTable));
-        $targetColumns = array_keys($this->getConnection()->describeTable($destTable));
-        $select = $this->getConnection()->select()->from($sourceTable, $sourceColumns);
+        $columns = array_keys($this->getConnection()->describeTable($destTable));
+        $select = $this->getConnection()->select()->from($sourceTable, $columns);
         if ($where) {
             $select->where($where);
         }
         $query = $this->getConnection()->insertFromSelect(
             $select,
             $destTable,
-            $targetColumns,
+            $columns,
             AdapterInterface::INSERT_ON_DUPLICATE
         );
         $this->getConnection()->query($query);
@@ -465,10 +462,11 @@ abstract class AbstractAction
             []
         )->where(
             'e.entity_id IN(?)',
-            $parentIds
+            $parentIds,
+            \Zend_Db::INT_TYPE
         );
         if (!empty($excludeIds)) {
-            $select->where('child_id NOT IN(?)', $excludeIds);
+            $select->where('child_id NOT IN(?)', $excludeIds, \Zend_Db::INT_TYPE);
         }
 
         $children = $this->getConnection()->fetchCol($select);
@@ -479,7 +477,8 @@ abstract class AbstractAction
                     $this->getIndexTargetTableByDimension($dimensions)
                 )->where(
                     'entity_id IN(?)',
-                    $children
+                    $children,
+                    \Zend_Db::INT_TYPE
                 );
                 $query = $select->insertFromSelect($this->_defaultIndexerResource->getIdxTable(), [], false);
                 $this->getConnection()->query($query);
@@ -578,13 +577,14 @@ abstract class AbstractAction
             ['e.entity_id as parent_id', 'type_id']
         )->where(
             'l.child_id IN(?)',
-            $productsIds
+            $productsIds,
+            \Zend_Db::INT_TYPE
         );
         $pairs = $this->getConnection()->fetchPairs($select);
 
         $byType = [];
         foreach ($pairs as $productId => $productType) {
-            $byType[$productType][$productId] = $productId;
+            $byType[$productType][$productId] = (int)$productId;
         }
 
         return $byType;

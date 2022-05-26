@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Type;
 
@@ -505,21 +504,17 @@ abstract class AbstractType
                         /** @var $uploader \Zend_File_Transfer_Adapter_Http */
                         $uploader = $queueOptions['uploader'] ?? null;
                         $isUploaded = false;
-                        if ($uploader && $uploader->isValid()) {
+                        if ($uploader && $uploader->isValid($src)) {
+                            // phpcs:ignore Magento2.Functions.DiscouragedFunction
                             $path = pathinfo($dst, PATHINFO_DIRNAME);
                             $uploader = $this->uploaderFactory->create(['fileId' => $src]);
                             $uploader->setFilesDispersion(false);
                             $uploader->setAllowRenameFiles(true);
+                            // phpcs:ignore Magento2.Functions.DiscouragedFunction
                             $isUploaded = $uploader->save($path, pathinfo($dst, PATHINFO_FILENAME));
                         }
 
                         if (empty($src) || empty($dst) || !$isUploaded) {
-                            /**
-                             * @todo: show invalid option
-                             */
-                            if (isset($queueOptions['option'])) {
-                                $queueOptions['option']->setIsValid(false);
-                            }
                             throw new \Magento\Framework\Exception\LocalizedException(
                                 __('The file upload failed. Try to upload again.')
                             );
@@ -605,7 +600,11 @@ abstract class AbstractType
                     if ($product->getSkipCheckRequiredOption() !== true) {
                         $group->validateUserValue($optionsFromRequest);
                     } elseif ($optionsFromRequest !== null && isset($optionsFromRequest[$option->getId()])) {
-                        $transport->options[$option->getId()] = $optionsFromRequest[$option->getId()];
+                        if (is_array($optionsFromRequest[$option->getId()])) {
+                            $group->validateUserValue($optionsFromRequest);
+                        } else {
+                            $transport->options[$option->getId()] = $optionsFromRequest[$option->getId()];
+                        }
                     }
 
                 } catch (LocalizedException $e) {
@@ -753,6 +752,9 @@ abstract class AbstractType
      */
     public function beforeSave($product)
     {
+        if (!$product->getTypeId()) {
+            $product->setTypeId($this->_typeId);
+        }
         $this->_removeNotApplicableAttributes($product);
         $product->canAffectOptions(true);
         return $this;

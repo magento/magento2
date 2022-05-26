@@ -56,7 +56,7 @@
         <waitForText selector="{{AdminCategoryModalSection.message}}" userInput="This operation can take a long time" stepKey="seeWarningMessage"/>
         <click selector="{{AdminCategoryModalSection.cancel}}" stepKey="clickCancelButtonOnWarningPopup"/>
         <!-- Verify Category in store front page after clicking cancel button -->
-        <amOnPage url="/$$createDefaultCategory.name$$/{{FirstLevelSubCat.name}}/{{SecondLevelSubCat.name}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
+        <amOnPage url="/$$createDefaultCategory.custom_attributes[url_key]$$/{{FirstLevelSubCat.urlKey}}/{{SecondLevelSubCat.urlKey}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontPageLoad"/>
         <waitForElementVisible selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeDefaultCategoryOnStoreNavigationBar"/>
         <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="dontSeeSubCategoryOnStoreNavigationBar"/>
@@ -76,10 +76,10 @@
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkButtonOnWarningPopup"/>
         <waitForPageLoad stepKey="waitTheForPageToLoad"/>
         <waitForText selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You moved the category." stepKey="seeSuccessMoveMessage"/>
-        <amOnPage url="/{{SimpleSubCategory.name}}.html" stepKey="seeCategoryNameInStoreFrontPage"/>
+        <amOnPage url="/{{SimpleSubCategory.urlKey}}.html" stepKey="seeCategoryNameInStoreFrontPage"/>
         <waitForPageLoad  stepKey="waitForStoreFrontPageToLoad"/>
         <!-- Verify Category in store front after moving category to another position in category tree -->
-        <amOnPage url="{{StorefrontCategoryPage.url(SecondLevelSubCat.name)}}"  stepKey="amOnCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url(SecondLevelSubCat.urlKey)}}"  stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.CategoryTitle(SecondLevelSubCat.name)}}" stepKey="seeCategoryInTitle"/>
         <waitForElementVisible selector="{{StorefrontHeaderSection.NavigationCategoryByName(SecondLevelSubCat.name)}}" stepKey="seeCategoryOnStoreNavigationBarAfterMove"/>
@@ -98,8 +98,8 @@
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
         <waitForElementVisible selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" stepKey="waitForCategoryUrlKey"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{SecondLevelSubCat.name_lwr}}.html" stepKey="fillCategoryUrlKey"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickOrderApplyFilters"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
         <!-- Verify new Redirect Path after move -->
         <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('2', 'Request Path')}}" userInput="{{SecondLevelSubCat.name_lwr}}.html" stepKey="verifyTheRequestPathAfterMove"/>
         <!-- Verify new Target Path after move -->
@@ -110,8 +110,8 @@
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters1"/>
         <waitForElementVisible selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" stepKey="waitForTheCategoryUrlKey"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{SecondLevelSubCat.name_lwr}}" stepKey="fillTheCategoryUrlKey"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters1"/>
-        <waitForPageLoad stepKey="waitForSearch1"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickOrderApplyFilters1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch1"/>
         <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Redirect Type')}}" userInput="Permanent (301)" stepKey="verifyTheRedirectTypeBeforeMove"/>
         <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{_defaultCategory.name_lwr}}2/{{FirstLevelSubCat.name_lwr}}/{{SecondLevelSubCat.name_lwr}}.html" stepKey="verifyTheRequestPathBeforeMove"/>
         <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Target Path')}}" userInput="{{SecondLevelSubCat.name_lwr}}.html" stepKey="verifyTheTargetPathBeforeMove"/>

@@ -13,6 +13,7 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\App\ProductMetadata;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
@@ -99,7 +100,7 @@ class CategoryTest extends AbstractBackendController
      * @param array $defaultAttributes
      * @param array $attributesSaved
      * @return void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function testSaveAction(array $inputData, array $defaultAttributes, array $attributesSaved = []): void
     {
@@ -145,7 +146,7 @@ class CategoryTest extends AbstractBackendController
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function testDefaultValueForCategoryUrlPath(): void
     {
@@ -235,6 +236,39 @@ class CategoryTest extends AbstractBackendController
         ];
 
         return [[$postData], [$postData + ['return_session_messages_only' => 1]]];
+    }
+
+    /**
+     * Test save action with different store
+     *
+     * @return void
+     * @throws NoSuchEntityException
+     * @magentoDbIsolation enabled
+     */
+    public function testSaveActionWithDifferentStore(): void
+    {
+        $categoryDetails =
+        [
+            'id' => '20',
+            'entity_id' => '20',
+            'path' => '1/2',
+            'url_key' => 'test-category',
+            'is_anchor' => false,
+            'use_default' =>
+            [
+                'name' => 'test-category',
+                'is_active' => 1,
+                'thumbnail' => 1,
+                'description' => 'Test description for test-category'
+            ]
+        ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($categoryDetails);
+        $this->getRequest()->setParam('id', $categoryDetails['id']);
+
+        $this->dispatch('backend/catalog/category/save');
+        $body = $this->getResponse()->getBody();
+        $this->assertEmpty($body);
     }
 
     /**
@@ -911,7 +945,7 @@ class CategoryTest extends AbstractBackendController
             $this->equalTo(
                 [
                     'URL key "backend" matches a reserved endpoint name '
-                    . '(admin, soap, rest, graphql, standard, backend). Use another URL key.'
+                    . '(backend). Use another URL key.'
                 ]
             ),
             MessageInterface::TYPE_ERROR

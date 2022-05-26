@@ -20,13 +20,14 @@
             <skip>
                 <issueId value="MQE-1964"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
                         stepKey="enableLoginAsCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
                         stepKey="enableLoginAsCustomerAutoDetection"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -70,7 +71,7 @@
 
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
                         stepKey="disableLoginAsCustomer"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
         </after>
 
         <!-- Login as new User -->

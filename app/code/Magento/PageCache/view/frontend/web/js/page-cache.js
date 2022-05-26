@@ -65,7 +65,7 @@ define([
             contents = function (elem) {
                 return $.map(elem, function (el) {
                     try {
-                        return $.nodeName(el, 'iframe') ?
+                        return el.nodeName.toLowerCase() === 'iframe' ?
                             el.contentDocument || (el.contentWindow ? el.contentWindow.document : []) :
                             $.merge([], el.childNodes);
                     } catch (e) {

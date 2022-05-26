@@ -25,15 +25,14 @@
             </createData>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <!--Create new website -->
+
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
                 <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
                 <argument name="websiteCode" value="{{customWebsite.code}}"/>
             </actionGroup>
             <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterEnableWebUrlOptions">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterEnableWebUrlOptions"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -45,40 +44,35 @@
             <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <!--Assign Custom Website to Simple Product -->
-        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToCatalogProductGrid"/>
-
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="navigateToCatalogProductGrid"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickClearFiltersInitial"/>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="assignCustomWebsiteToProduct">
             <argument name="product" value="$$productAssignedToCustomWebsite$$"/>
         </actionGroup>
-        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToWebsites"/>
-        <conditionalClick selector="{{ProductInWebsitesSection.sectionHeader}}" dependentSelector="{{AdminProductContentSection.sectionHeaderShow}}" visible="false" stepKey="expandSection"/>
-        <waitForPageLoad stepKey="waitForPageOpened"/>
-        <uncheckOption selector="{{ProductInWebsitesSection.website(_defaultWebsite.name)}}" stepKey="deselectMainWebsite"/>
-        <checkOption selector="{{ProductInWebsitesSection.website(customWebsite.name)}}" stepKey="selectWebsite"/>
+        <actionGroup ref="AdminChangeWebSiteAssignedToProductActionGroup" stepKey="scrollToWebsites">
+            <argument name="website" value="{{customWebsite.name}}"/>
+            <argument name="websiteToDeselect" value="{{_defaultWebsite.name}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandSection"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageOpened"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="deselectMainWebsite"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectWebsite"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSave"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSaveProductMessageAgain"/>
 
-        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageAgain"/>
-
-        <!--Navigate To Product Grid To Check Website Sorting-->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToCatalogProductGridToSortByWebsite"/>
-
-        <!--Sorting works (By Websites) ASC-->
-        <click selector="{{AdminProductGridSection.columnHeader('Websites')}}" stepKey="clickWebsitesHeaderToSortAsc"/>
+        <actionGroup ref="AdminSortProductsGridByActionGroup" stepKey="clickWebsitesHeaderToSortAsc">
+            <argument name="field" value="Websites"/>
+        </actionGroup>
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Main Website" stepKey="checkIfProduct1WebsitesAsc"/>
-
-        <!--Sorting works (By Websites) DESC-->
-        <click selector="{{AdminProductGridSection.columnHeader('Websites')}}" stepKey="clickWebsitesHeaderToSortDesc"/>
+        <actionGroup ref="AdminSortProductsGridByActionGroup" stepKey="clickWebsitesHeaderToSortDesc">
+            <argument name="field" value="Websites"/>
+        </actionGroup>
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="{{customWebsite.name}}" stepKey="checkIfProduct1WebsitesDesc"/>
     </test>
 </tests>

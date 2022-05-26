@@ -94,12 +94,8 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct1"/>
             </createData>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
@@ -153,7 +149,8 @@
         <!-- Verify order information -->
         <comment userInput="Verify order information" stepKey="verifyOrderInformationComment"/>
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <comment userInput="BIC workaround" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
         <!-- Cancel the Order -->
         <comment userInput="Cancel the Order" stepKey="cancelTheOrder"/>
         <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
@@ -220,12 +217,12 @@
         <!-- Open Order Index Page -->
         <comment userInput="Open Order Index Page" stepKey="openOrderIndexPageComemnt"/>
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
-        <!-- Filter order using orderId -->
-        <comment userInput="Filter order using orderId" stepKey="filterOrderUsingOrderIdComment"/>
+        <!-- Filter order using order number -->
+        <comment userInput="Filter order using order number" stepKey="filterOrderUsingOrderIdComment"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$orderId"/>
+            <argument name="orderId" value="{$orderNumber}"/>
         </actionGroup>
-        <see selector="{{AdminOrdersGridSection.firstRow}}" userInput="$orderId" stepKey="seeOrderIdInGrid"/>
+        <see selector="{{AdminOrdersGridSection.firstRow}}" userInput="$orderNumber" stepKey="seeOrderIdInGrid"/>
         <see selector="{{AdminOrdersGridSection.firstRow}}" userInput="Canceled" stepKey="seeStatusInGrid"/>
         <!-- Log in to Storefront as Customer  -->
         <comment userInput="Log in to Storefront as Customer" stepKey="logInAsCustomerComment"/>
@@ -236,6 +233,9 @@
         <comment userInput="Assert Order status in frontend order grid " stepKey="assertOrderStatusInFrontendComment"/>
         <click selector="{{StorefrontCustomerSidebarSection.sidebarCurrentTab('My Orders')}}" stepKey="clickOnMyOrders"/>
         <waitForPageLoad stepKey="waitForOrderDetailsToLoad"/>
-        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderStatusInGrid('$orderId', 'Canceled')}}" stepKey="seeOrderStatusInGrid"/>
+        <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
+            <argument name="orderId" value="$orderNumber"/>
+            <argument name="status" value="Canceled"/>
+        </actionGroup>
     </test>
 </tests>

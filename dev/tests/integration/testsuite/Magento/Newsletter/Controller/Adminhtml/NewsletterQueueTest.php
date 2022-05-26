@@ -46,15 +46,10 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
 
     /**
      * @magentoDataFixture Magento/Newsletter/_files/newsletter_sample.php
+     * @dataProvider postValuesForRequest
      */
-    public function testSaveActionQueueTemplateAndVerifySuccessMessage()
+    public function testSaveActionQueueTemplateAndVerifySuccessMessage(array $postForQueue)
     {
-        $postForQueue = [
-            'sender_email' => 'johndoe_gieee@unknown-domain.com',
-            'sender_name' => 'john doe',
-            'subject' => 'test subject',
-            'text' => 'newsletter text',
-        ];
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postForQueue);
 
@@ -80,5 +75,60 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
             $this->equalTo(['You saved the newsletter queue.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
+    }
+
+    /**
+     * The data provider for possible request values of the start_at.
+     *
+     * @return array
+     */
+    public function postValuesForRequest(): array
+    {
+        return [
+            'start_at_value_is_integer_zero' => [
+                [
+                    'sender_email' => 'johndoe_gieee@unknown-domain.com',
+                    'sender_name' => 'john doe',
+                    'subject' => 'test subject',
+                    'text' => 'newsletter text',
+                    'start_at' => 0
+                ]
+            ],
+            'start_at_value_is_string_zero' => [
+                [
+                    'sender_email' => 'johndoe_gieee@unknown-domain.com',
+                    'sender_name' => 'john doe',
+                    'subject' => 'test subject',
+                    'text' => 'newsletter text',
+                    'start_at' => '0'
+                ]
+            ],
+            'start_at_value_is_empty_string' => [
+                [
+                    'sender_email' => 'johndoe_gieee@unknown-domain.com',
+                    'sender_name' => 'john doe',
+                    'subject' => 'test subject',
+                    'text' => 'newsletter text',
+                    'start_at' => ''
+                ]
+            ],
+            'start_at_value_not_provided' => [
+                [
+                    'sender_email' => 'johndoe_gieee@unknown-domain.com',
+                    'sender_name' => 'john doe',
+                    'subject' => 'test subject',
+                    'text' => 'newsletter text'
+                ]
+            ],
+            'start_at_value_is_date_time_string' => [
+                [
+                    'sender_email' => 'johndoe_gieee@unknown-domain.com',
+                    'sender_name' => 'john doe',
+                    'subject' => 'test subject',
+                    'text' => 'newsletter text',
+                    'start_at' => date('Y-m-d H:i:s')
+                ]
+            ]
+        ];
     }
 }

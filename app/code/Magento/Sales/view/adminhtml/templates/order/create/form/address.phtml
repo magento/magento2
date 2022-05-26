@@ -11,12 +11,16 @@
 
 /**
  * @var \Magento\Customer\Model\ResourceModel\Address\Collection $addressCollection
+ * @var \Magento\Sales\ViewModel\Customer\Address\AddressAttributeFilter $viewModel
  */
+
 $addressCollection = $block->getData('customerAddressCollection');
+$AddressCollectionAttributeFilter = $block->getData('customerAddressCollectionAttributeFilter');
 
 $addressArray = [];
 if ($block->getCustomerId()):
-    $addressArray = $addressCollection->setCustomerFilter([$block->getCustomerId()])->toArray();
+    $addressArray = $AddressCollectionAttributeFilter->setScopeFilter($addressCollection, $block->getStoreId())
+        ->setCustomerFilter([$block->getCustomerId()])->toArray();
 endif;
 
 /**
@@ -125,7 +129,7 @@ endif; ?>
                 <?php endif; ?>
                    class="admin__control-checkbox"/>
             <label for="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlIdPrefix()) ?>save_in_address_book"
-                   class="admin__field-label"><?= $block->escapeHtml(__('Save in address book')) ?></label>
+                   class="admin__field-label"><?= $block->escapeHtml(__('Add to address book')) ?></label>
         </div>
     </div>
     <?php $hideElement = 'address-' . ($block->getIsShipping() ? 'shipping' : 'billing') . '-overlay'; ?>
@@ -142,9 +146,10 @@ endif; ?>
             order.bindAddressFields('{$block->escapeJs($_addressChoiceContainerId)}');
 
 script;
-    if ($block->getIsShipping() && $block->getIsAsBilling()):
-                $scriptString .= <<<script
-            order.disableShippingAddress(true);
+    if ($block->getIsShipping()):
+        $disable = $block->getIsAsBilling() ? 'true' : 'false';
+        $scriptString .= <<<script
+            order.disableShippingAddress({$disable});
 
 script;
             endif;

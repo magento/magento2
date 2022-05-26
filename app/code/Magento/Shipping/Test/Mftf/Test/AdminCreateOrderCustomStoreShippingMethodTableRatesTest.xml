@@ -37,6 +37,7 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <!--Create customer associated to website-->
             <actionGroup ref="AdminGoCreatedWebsitePageActionGroup" stepKey="DeleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
@@ -64,9 +65,7 @@
                 <argument name="file" value="usa_tablerates.csv"/>
             </actionGroup>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!--Delete created data-->
@@ -75,6 +74,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Assign product to custom website-->

@@ -84,13 +84,15 @@ class Bundle
     private $file;
 
     /**
-     * Bundle constructor
-     *
+     * @var BundleConfig
+     */
+    private $bundleConfig;
+
+    /**
      * @param Filesystem $filesystem
      * @param BundleInterfaceFactory $bundleFactory
      * @param BundleConfig $bundleConfig
      * @param Files $files
-     *
      * @param File|null $file
      *
      * @throws \Magento\Framework\Exception\FileSystemException

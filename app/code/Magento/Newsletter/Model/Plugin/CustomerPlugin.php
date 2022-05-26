@@ -3,21 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Newsletter\Model\Plugin;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerExtensionInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Api\SearchResults;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Newsletter\Model\Subscriber;
+use Magento\Newsletter\Model\CustomerSubscriberCache;
 use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory;
-use Magento\Customer\Api\Data\CustomerExtensionInterface;
+use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Newsletter\Model\SubscriptionManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Api\SearchResults;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -53,11 +56,6 @@ class CustomerPlugin
     private $storeManager;
 
     /**
-     * @var array
-     */
-    private $customerSubscriber = [];
-
-    /**
      * @var SubscriberFactory
      */
     private $subscriberFactory;
@@ -68,6 +66,11 @@ class CustomerPlugin
     private $logger;
 
     /**
+     * @var CustomerSubscriberCache
+     */
+    private $customerSubscriberCache;
+
+    /**
      * @param SubscriberFactory $subscriberFactory
      * @param ExtensionAttributesFactory $extensionFactory
      * @param CollectionFactory $collectionFactory
@@ -75,6 +78,7 @@ class CustomerPlugin
      * @param Share $shareConfig
      * @param StoreManagerInterface $storeManager
      * @param LoggerInterface $logger
+     * @param CustomerSubscriberCache|null $customerSubscriberCache
      */
     public function __construct(
         SubscriberFactory $subscriberFactory,
@@ -83,7 +87,8 @@ class CustomerPlugin
         SubscriptionManagerInterface $subscriptionManager,
         Share $shareConfig,
         StoreManagerInterface $storeManager,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        CustomerSubscriberCache $customerSubscriberCache = null
     ) {
         $this->subscriberFactory = $subscriberFactory;
         $this->extensionFactory = $extensionFactory;
@@ -92,6 +97,8 @@ class CustomerPlugin
         $this->shareConfig = $shareConfig;
         $this->storeManager = $storeManager;
         $this->logger = $logger;
+        $this->customerSubscriberCache = $customerSubscriberCache
+            ?? ObjectManager::getInstance()->get(CustomerSubscriberCache::class);
     }
 
     /**
@@ -129,10 +136,11 @@ class CustomerPlugin
         }
         if ($needToUpdate) {
             $storeId = $this->getCurrentStoreId($result);
+            $customerId = (int)$result->getId();
             $subscriber = $subscribeStatus
-                ? $this->subscriptionManager->subscribeCustomer((int)$result->getId(), $storeId)
-                : $this->subscriptionManager->unsubscribeCustomer((int)$result->getId(), $storeId);
-            $this->customerSubscriber[(int)$result->getId()] = $subscriber;
+                ? $this->subscriptionManager->subscribeCustomer($customerId, $storeId)
+                : $this->subscriptionManager->unsubscribeCustomer($customerId, $storeId);
+            $this->customerSubscriberCache->setCustomerSubscriber($customerId, $subscriber);
         }
         $this->addIsSubscribedExtensionAttribute($result, $subscriber->isSubscribed());
 
@@ -244,11 +252,21 @@ class CustomerPlugin
      */
     public function afterGetList(CustomerRepositoryInterface $subject, SearchResults $searchResults): SearchResults
     {
+        $customerEmails = [];
+
+        foreach ($searchResults->getItems() as $customer) {
+            $customerEmails[] = $customer->getEmail();
+        }
+
+        $collection = $this->collectionFactory->create();
+        $collection->addFieldToFilter('subscriber_email', ['in' => $customerEmails]);
+
         foreach ($searchResults->getItems() as $customer) {
             /** @var CustomerExtensionInterface $extensionAttributes */
             $extensionAttributes = $customer->getExtensionAttributes();
-
-            $isSubscribed = (int) $extensionAttributes->getIsSubscribed() === Subscriber::STATUS_SUBSCRIBED ?: false;
+            /** @var Subscriber $subscribe */
+            $subscribe = $collection->getItemByColumnValue('subscriber_email', $customer->getEmail());
+            $isSubscribed = $subscribe && (int)$subscribe->getStatus() === Subscriber::STATUS_SUBSCRIBED;
             $extensionAttributes->setIsSubscribed($isSubscribed);
         }
 
@@ -305,22 +323,20 @@ class CustomerPlugin
     private function getSubscriber(CustomerInterface $customer): Subscriber
     {
         $customerId = (int)$customer->getId();
-        if (isset($this->customerSubscriber[$customerId])) {
-            return $this->customerSubscriber[$customerId];
+        $subscriber = $this->customerSubscriberCache->getCustomerSubscriber($customerId);
+        if ($subscriber === null) {
+            $subscriber = $this->subscriberFactory->create();
+            $websiteId = $this->getCurrentWebsiteId($customer);
+            $subscriber->loadByCustomer((int)$customer->getId(), $websiteId);
+            /**
+             * If subscriber wasn't found by customer id then try to find subscriber by customer email.
+             * It need when the customer is creating and he has already subscribed as guest by same email.
+             */
+            if (!$subscriber->getId()) {
+                $subscriber->loadBySubscriberEmail((string)$customer->getEmail(), $websiteId);
+            }
+            $this->customerSubscriberCache->setCustomerSubscriber($customerId, $subscriber);
         }
-
-        /** @var Subscriber $subscriber */
-        $subscriber = $this->subscriberFactory->create();
-        $websiteId = $this->getCurrentWebsiteId($customer);
-        $subscriber->loadByCustomer((int)$customer->getId(), $websiteId);
-        /**
-         * If subscriber was't found by customer id then try to find subscriber by customer email.
-         * It need when the customer is creating and he has already subscribed as guest by same email.
-         */
-        if (!$subscriber->getId()) {
-            $subscriber->loadBySubscriberEmail((string)$customer->getEmail(), $websiteId);
-        }
-        $this->customerSubscriber[$customerId] = $subscriber;
 
         return $subscriber;
     }

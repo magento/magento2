@@ -8,7 +8,7 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="productFPTAttribute" type="ProductAttribute">
+    <entity name="productFPTAttribute" type="ProductAttribute" deprecated="Use FPTProductAttribute instead">
         <data key="attribute_code" unique="suffix">attribute</data>
         <data key="is_unique">true</data>
         <data key="frontend_input">weee</data>
@@ -16,5 +16,14 @@
         <data key="is_visible_in_grid">true</data>
         <data key="is_filterable_in_grid">true</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="FPTProductAttribute" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">weee_attribute</data>
+        <data key="is_unique">true</data>
+        <data key="frontend_input">weee</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabelWeee</requiredEntity>
     </entity>
 </entities>

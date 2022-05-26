@@ -37,4 +37,7 @@
         <data key="region_code">AFE</data>
         <data key="region_id">9</data>
     </entity>
+    <entity name="RegionUKGL" type="region">
+        <data key="region">Greater London</data>
+    </entity>
 </entities>

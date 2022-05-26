@@ -48,6 +48,7 @@
                 <argument name="sku" value="{{ProductWithLongNameSku.sku}}"/>
                 <argument name="name" value="{{ProductWithLongNameSku.name}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <!--Clean up attribute-->
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <!--Clean up category-->
@@ -91,9 +92,7 @@
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="{{ProductWithLongNameSku.price}}" stepKey="seeConfigurationsPrice"/>
 
         <!--Run re-index task-->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
          <!--Assert storefront category list page-->
         <amOnPage url="/" stepKey="amOnStorefront"/>
@@ -107,7 +106,9 @@
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(ProductWithLongNameSku.name)}}" stepKey="clickOnProductName"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <seeInTitle userInput="{{ProductWithLongNameSku.name}}" stepKey="assertProductNameTitle"/>
-        <see userInput="{{ProductWithLongNameSku.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertProductName">
+            <argument name="value" value="{{ProductWithLongNameSku.name}}"/>
+        </actionGroup>
         <see userInput="{{ProductWithLongNameSku.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
         <see selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="$$createConfigProductAttribute.default_frontend_label$$" stepKey="seeColorAttributeName1"/>
         <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="seeInDropDown1"/>

@@ -47,10 +47,14 @@ define([
          * Initialize object
          */
         initialize: function () {
-            var self = this;
+            var self = this,
+                popupDialog = jQuery('#product_composite_configure');
 
             this._initWindowElements();
             jQuery.async('#product_composite_configure', function (el) {
+                if (el !== popupDialog[0]) {
+                    el = popupDialog[0];
+                }
                 self.dialog = jQuery(el).modal({
                     title: jQuery.mage.__('Configure Product'),
                     type: 'slide',
@@ -60,7 +64,10 @@ define([
                         click: function () {
                             self.onConfirmBtn();
                         }
-                    }]
+                    }],
+                    closed: function () {
+                        self.clean('window');
+                    },
                 });
             });
         },
@@ -223,7 +230,9 @@ define([
                             if (response.error) {
                                 this.blockMsg.show();
                                 this.blockMsgError.innerHTML = response.message;
-                                this.blockCancelBtn.hide();
+                                if(this.blockCancelBtn) {
+                                    this.blockCancelBtn.hide();
+                                }
                                 this.setConfirmCallback(listType, null);
                                 this._showWindow();
                             }
@@ -402,6 +411,7 @@ define([
                         this.blockMsgError.innerHTML = response.message;
                         this._showWindow();
 
+                        jQuery(this.blockForm).trigger('processStop');
                         return false;
                     }
                 }
@@ -442,6 +452,13 @@ define([
                     return elms[i];
                 }
             }
+        },
+
+        /**
+         * Helper to find select element of currently confirmed item
+         */
+        getCurrentConfirmedSelectElement: function () {
+            return $(this.confirmedCurrentId).getElementsByTagName('select');
         },
 
         /**
@@ -569,7 +586,9 @@ define([
                     this.blockFormFields.update();
                     this.blockMsg.hide();
                     this.blockMsgError.update();
-                    this.blockCancelBtn.show();
+                    if(this.blockCancelBtn) {
+                        this.blockCancelBtn.show();
+                    }
                     break;
                 default:
                     // search in list types for its cleaning
@@ -588,7 +607,9 @@ define([
                         this.blockFormFields.update();
                         this.blockMsg.hide();
                         this.blockMsgError.update();
-                        this.blockCancelBtn.show();
+                        if(this.blockCancelBtn) {
+                            this.blockCancelBtn.show();
+                        }
                     }
                     break;
             }
@@ -607,6 +628,7 @@ define([
          * @param method can be 'item_confirm', 'item_restore', 'current_confirmed_to_form', 'form_confirmed_to_confirmed'
          */
         _processFieldsData: function (method) {
+            var self = this;
 
             /**
              * Internal function for rename fields names of some list type
@@ -616,12 +638,14 @@ define([
              * @param blockItem
              */
             var _renameFields = function (method, blockItem, listType) {
-                var pattern         = null;
-                var patternFlat     = null;
-                var replacement     = null;
-                var replacementFlat = null;
-                var scopeArr        = blockItem.id.match(/.*\[\w+\]\[([^\]]+)\]$/);
-                var itemId          = scopeArr[1];
+                var pattern           = null;
+                var patternFlat       = null;
+                var patternPrefix     = RegExp('\\s', 'g');
+                var replacement       = null;
+                var replacementFlat   = null;
+                var replacementPrefix = '_';
+                var scopeArr          = blockItem.id.match(/.*\[\w+\]\[([^\]]+)\]$/);
+                var itemId            = scopeArr[1];
 
                 if (method == 'current_confirmed_to_form') {
                     pattern         = RegExp('(\\w+)(\\[?)');
@@ -651,6 +675,14 @@ define([
                 var rename = function (elms) {
                     for (var i = 0; i < elms.length; i++) {
                         if (elms[i].name && elms[i].type == 'file') {
+                            var prefixName = 'options[files_prefix]',
+                                prefixValue = 'item_' + itemId + '_';
+
+                            self.blockFormFields.insert(new Element('input', {
+                                type: 'hidden',
+                                name: prefixName.replace(pattern, replacement),
+                                value: prefixValue.replace(patternPrefix, replacementPrefix)
+                            }));
                             elms[i].name = elms[i].name.replace(patternFlat, replacementFlat);
                         } else if (elms[i].name) {
                             elms[i].name = elms[i].name.replace(pattern, replacement);

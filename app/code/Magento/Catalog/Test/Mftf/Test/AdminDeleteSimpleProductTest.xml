@@ -32,21 +32,36 @@
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteSimpleProductFilteredBySkuAndName">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="deleteMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="deleteMessage">
+            <argument name="message" value="A total of 1 record(s) have been deleted."/>
+        </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+
         <!--Verify product on Product Page -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="amOnSimpleProductPage">
+            <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertPageNotFoundErrorOnProductDetailPageActionGroup" stepKey="seeWhoops">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
         <!-- Search for the product by sku -->
         <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchByCreatedTerm">
             <argument name="query" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
         <!-- Should not see any search results -->
-        <dontSee userInput="$$createSimpleProduct.sku$$" selector="{{StorefrontCatalogSearchMainSection.searchResults}}" stepKey="dontSeeProduct"/>
-        <see selector="{{StorefrontCatalogSearchMainSection.message}}" userInput="Your search returned no results." stepKey="seeCantFindProductOneMessage"/>
+        <actionGroup ref="AssertStorefrontProductIsMissingOnSearchResultPageActionGroup" stepKey="dontSeeProduct">
+            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontNoResultsMessageOnSearchPageActionGroup" stepKey="seeCantFindProductOneMessage"/>
+
         <!-- Go to the category page that we created in the before block -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onCategoryPage"/>
         <!-- Should not see the product -->
-        <dontSee userInput="$$createSimpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeProductInCategory"/>
-        <see selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" userInput="We can't find products matching the selection." stepKey="seeEmptyProductMessage"/>
+        <actionGroup ref="AssertStorefrontProductAbsentOnCategoryPageActionGroup" stepKey="dontSeeProductInCategory">
+            <argument name="categoryUrlKey" value="$$createCategory.name$$"/>
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeEmptyProductMessage"/>
     </test>
 </tests>

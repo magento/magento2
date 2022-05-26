@@ -19,6 +19,7 @@
             <argument name="shippingMethod" defaultValue="" type="string"/>
         </arguments>
 
+        <waitForElementVisible selector="{{CheckoutShippingSection.email}}" stepKey="waitForEmailField"/>
         <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customerVar.email}}" stepKey="enterEmail"/>
         <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
         <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{customerVar.lastname}}" stepKey="enterLastName"/>
@@ -27,12 +28,14 @@
         <selectOption selector="{{CheckoutShippingSection.region}}" userInput="{{customerAddressVar.state}}" stepKey="selectRegion"/>
         <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{customerAddressVar.postcode}}" stepKey="enterPostcode"/>
         <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{customerAddressVar.telephone}}" stepKey="enterTelephone"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
-        <waitForElement selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('shippingMethod')}}" stepKey="waitForShippingMethod"/>
+        <waitForPageLoad stepKey="waitForLoadingMask"/>
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('shippingMethod')}}" stepKey="waitForShippingMethod"/>
         <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('shippingMethod')}}" stepKey="selectShippingMethod"/>
-        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <waitForPageLoad stepKey="waitForShippingLoading"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <waitForPageLoad stepKey="waitForPaymentLoading"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
     </actionGroup>
 </actionGroups>

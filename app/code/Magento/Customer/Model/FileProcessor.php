@@ -27,7 +27,11 @@ class FileProcessor
     /**
      * Temporary directory name
      */
-    const TMP_DIR = 'tmp';
+    public const TMP_DIR = 'tmp';
+
+    private const CUSTOMER_FILE_URL_PATH = 'customer/index/viewfile';
+
+    private const CUSTOMER_ADDRESS_FILE_URL_PATH = 'customer/address/viewfile';
 
     /**
      * @var WriteInterface
@@ -65,6 +69,16 @@ class FileProcessor
     private $mime;
 
     /**
+     * @var string
+     */
+    private $customerFileUrlPath;
+
+    /**
+     * @var string
+     */
+    private $customerAddressFileUrlPath;
+
+    /**
      * @param Filesystem $filesystem
      * @param UploaderFactory $uploaderFactory
      * @param UrlInterface $urlBuilder
@@ -72,6 +86,8 @@ class FileProcessor
      * @param string $entityTypeCode
      * @param Mime $mime
      * @param array $allowedExtensions
+     * @param string $customerFileUrlPath
+     * @param string $customerAddressFileUrlPath
      */
     public function __construct(
         Filesystem $filesystem,
@@ -80,7 +96,9 @@ class FileProcessor
         EncoderInterface $urlEncoder,
         $entityTypeCode,
         Mime $mime,
-        array $allowedExtensions = []
+        array $allowedExtensions = [],
+        string $customerFileUrlPath = self::CUSTOMER_FILE_URL_PATH,
+        string $customerAddressFileUrlPath = self::CUSTOMER_ADDRESS_FILE_URL_PATH
     ) {
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->uploaderFactory = $uploaderFactory;
@@ -89,6 +107,8 @@ class FileProcessor
         $this->entityTypeCode = $entityTypeCode;
         $this->mime = $mime;
         $this->allowedExtensions = $allowedExtensions;
+        $this->customerFileUrlPath = $customerFileUrlPath;
+        $this->customerAddressFileUrlPath = $customerAddressFileUrlPath;
     }
 
     /**
@@ -158,14 +178,15 @@ class FileProcessor
         $viewUrl = '';
 
         if ($this->entityTypeCode == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
-            $filePath = $this->entityTypeCode . '/' . ltrim($filePath, '/');
-            $viewUrl = $this->urlBuilder->getBaseUrl(['_type' => UrlInterface::URL_TYPE_MEDIA])
-                . $this->mediaDirectory->getRelativePath($filePath);
+            $viewUrl = $this->urlBuilder->getUrl(
+                $this->customerAddressFileUrlPath,
+                [$type => $this->urlEncoder->encode(ltrim($filePath, '/'))]
+            );
         }
 
         if ($this->entityTypeCode == CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER) {
             $viewUrl = $this->urlBuilder->getUrl(
-                'customer/index/viewfile',
+                $this->customerFileUrlPath,
                 [$type => $this->urlEncoder->encode(ltrim($filePath, '/'))]
             );
         }
@@ -194,12 +215,13 @@ class FileProcessor
         );
 
         $result = $uploader->save($path);
-        unset($result['path']);
+
         if (!$result) {
             throw new LocalizedException(
                 __('File can not be saved to the destination folder.')
             );
         }
+        unset($result['path']);
 
         return $result;
     }
