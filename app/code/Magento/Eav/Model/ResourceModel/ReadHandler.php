@@ -125,6 +125,7 @@ class ReadHandler implements AttributeInterface
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute($entityType, $entityData, $arguments = [])
     {
