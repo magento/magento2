@@ -45,7 +45,7 @@ class Field
     public function __construct(array $fieldData = [], $fieldPrefix = "")
     {
         if (isset($fieldData['separator'])) {
-            $this->_values = explode($fieldData['separator'], $fieldData['value']);
+            $this->_values = isset($fieldData['value']) ? explode($fieldData['separator'], $fieldData['value']) : [''];
         } else {
             $this->_values = [isset($fieldData['value']) ? $fieldData['value'] : ''];
         }
