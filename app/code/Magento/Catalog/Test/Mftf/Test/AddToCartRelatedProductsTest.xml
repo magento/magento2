@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddToCartRelatedProductsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Promote Products as Related Products"/>
+            <title value="Assert that only visible related product will be added to the cart from PDP when 'select all' used"/>
+            <description value="When the number of assigned related products exceeds the number of Related Products to show on PDP an 'select all' used, only visible products should be added to a cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-3172"/>
+            <useCaseId value="ACP2E-853"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{CatalogMaximumNumberOfProductsInRelatedProductsList.path}} 1" stepKey="customLimitForRelatedProducts"/>
+            <createData entity="SimpleSubCategory" stepKey="category1"/>
+            <createData entity="_defaultProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="simpleProduct2">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="simpleProduct3">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logInAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{CatalogMaximumNumberOfProductsInRelatedProductsList.path}} {{CatalogMaximumNumberOfProductsInRelatedProductsList.value}}"
+                        stepKey="defaultLimitForRelatedProducts"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimp1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimp2"/>
+            <deleteData createDataKey="simpleProduct3" stepKey="deleteSimp3"/>
+            <deleteData createDataKey="category1" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Assign related products to simpleProduct1 -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct1">
+            <argument name="productId" value="$simpleProduct1.id$"/>
+        </actionGroup>
+        <click stepKey="openHeader1" selector="{{AdminProductFormRelatedUpSellCrossSellSection.sectionHeader}}"/>
+
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addProduct2ToSimp1">
+            <argument name="sku" value="$simpleProduct2.sku$"/>
+        </actionGroup>
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addProduct3ToSimp1">
+            <argument name="sku" value="$simpleProduct3.sku$"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
+
+        <!-- Go to the simpleProduct1 on storefrontend, select all visible related products, add to cart-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront">
+            <argument name="product" value="$simpleProduct1$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontProductRelatedProductsSection.relatedProductsListSectionText}}" stepKey="waitForRelatedProductsList"/>
+        <click selector="{{StorefrontProductRelatedProductsSection.relatedProductsActionsHeaderBtn}}" stepKey="clickSelectAll"/>
+
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
+
+        <!-- Check that cart page contains only 2 items -->
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="2" stepKey="seeCartQuantity"/>
+    </test>
+</tests>
