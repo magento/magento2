@@ -96,8 +96,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     continue 2;
 
                 case XML_TEXT_NODE:
-                    if (
-                        $children->length
+                    if ($children->length
                         && ($child->nodeValue === null || trim($child->nodeValue, "\n ") === '')
                     ) {
                         continue 2;
