@@ -116,9 +116,6 @@
             <argument name="bulkManagement" xsi:type="object">Magento\AsynchronousOperations\Model\VirtualType\BulkManagement</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Data\Collection\AbstractDb">
-        <plugin name="collection_updater" type="Magento\AsynchronousOperations\Plugin\CollectionUpdater"/>
-    </type>
     <preference for="Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface" type="Magento\AsynchronousOperations\Model\AsyncResponse" />
     <preference for="Magento\AsynchronousOperations\Api\Data\ItemStatusInterface" type="Magento\AsynchronousOperations\Model\ItemStatus" />
 </config>
