@@ -10,7 +10,7 @@ namespace Magento\Quote\Model\Quote\Plugin;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Webapi\Request;
+use Magento\Framework\App\Request\Http as Request;
 
 /**
  * Updates quote store id.
@@ -74,6 +74,7 @@ class UpdateQuoteStoreId
     private function getStore(string $requestPath): ?StoreInterface
     {
         $pathParts = explode('/', trim($requestPath, '/'));
+        array_shift($pathParts);
         $storeCode = current($pathParts);
         $stores = $this->storeManager->getStores(false, true);
 
