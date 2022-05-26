@@ -158,6 +158,18 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
         $entityIdField = $indexList[$connection->getPrimaryKeyName($entityTable)]['COLUMNS_LIST'][0];
 
         if ($storeId) {
+
+            foreach ($attributeIds as $id) {
+                $attribute = $this->_eavConfig->getAttribute(
+                    $this->getEntity()->getType(),
+                    $id
+                );
+
+                if ($attribute->getAttributeCode() === 'price' && (int)$attribute->getIsGlobal() === 1) {
+                    $storeId = $this->getDefaultStoreId();
+                }
+            }
+
             $joinCondition = [
                 't_s.attribute_id = t_d.attribute_id',
                 "t_s.{$entityIdField} = t_d.{$entityIdField}",
@@ -228,67 +240,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
             $select = parent::_addLoadAttributesSelectValues($select, $table, $type);
         }
         return $select;
-    }
-
-    /**
-     * Initialize entity object property value
-     *
-     * Update attribute value if attribute scope is global
-     *
-     * Parameter $valueInfo is _getLoadAttributesSelect fetch result row
-     *
-     * @param array $valueInfo
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
-     * @throws LocalizedException
-     */
-    protected function _setItemAttributeValue($valueInfo)
-    {
-        $entityIdField = $this->getEntity()->getEntityIdField();
-        $entityId = $valueInfo[$entityIdField];
-        if (!isset($this->_itemsById[$entityId])) {
-            throw new LocalizedException(
-                __('A header row is missing for an attribute. Verify the header row and try again.')
-            );
-        }
-
-        $attribute = $this->_eavConfig->getAttribute(
-            $this->getEntity()->getType(),
-            $valueInfo['attribute_id']
-        );
-        if ((int)$attribute->getIsGlobal() === ScopedAttributeInterface::SCOPE_GLOBAL) {
-            $select = $this->getConnection()->select()
-                ->from(
-                    ['e' => $this->getEntity()->getEntityTable()],
-                    ['entity_id']
-                )
-                ->join(
-                    ['t_d' => $attribute->getBackend()->getTable()],
-                    "e.{$this->getEntity()->getLinkField()} = t_d.{$attribute->getEntity()->getLinkField()}",
-                    ['t_d.value']
-                )->where(
-                    " e.entity_id = ?",
-                    $entityId,
-                    \Zend_Db::INT_TYPE
-                )->where(
-                    't_d.attribute_id = ?',
-                    $attribute->getAttributeId(),
-                    \Zend_Db::INT_TYPE
-                )->where(
-                    't_d.store_id = ?',
-                    $this->getDefaultStoreId(),
-                    \Zend_Db::INT_TYPE
-                );
-            $data = $this->getConnection()->fetchRow($select);
-            if ($data && is_array($data)) {
-                $valueInfo['value'] = $data['value'];
-            }
-        }
-
-        foreach ($this->_itemsById[$entityId] as $object) {
-            $object->setData($attribute->getAttributeCode(), $valueInfo['value']);
-        }
-
-        return $this;
     }
 
     /**
