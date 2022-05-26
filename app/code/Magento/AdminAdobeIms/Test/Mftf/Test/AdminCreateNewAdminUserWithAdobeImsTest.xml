@@ -15,9 +15,6 @@
             <description value="Create a new admin user when AdminAdobeImsModule is enabled"/>
             <severity value="CRITICAL"/>
             <group value="admin_ims"/>
-            <skip>
-                <issueId value="AC-3153">Skipped</issueId>
-            </skip>
             <testCaseId value="CABPI-227"/>
         </annotations>
         <before>
