@@ -15,6 +15,7 @@
             <description value="Set on Hold status on all existing orders through Mass Action when Pagination is set 2 per page"/>
             <severity value="AVERAGE"/>
             <testCaseId value="AC-3159"/>
+            <useCaseId value="ACP2E-397"/>
             <group value="sales"/>
         </annotations>
 
