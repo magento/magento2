@@ -565,16 +565,16 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         if ($this->_isDomestic) {
             $allowedMethods = array_merge(
-                explode(',', $this->getConfigData('doc_methods')),
-                explode(',', $this->getConfigData('nondoc_methods'))
+                explode(',', $this->getConfigData('doc_methods') ?? ''),
+                explode(',', $this->getConfigData('nondoc_methods') ?? '')
             );
         } else {
             switch ($contentType) {
                 case self::DHL_CONTENT_TYPE_DOC:
-                    $allowedMethods = explode(',', $this->getConfigData('doc_methods'));
+                    $allowedMethods = explode(',', $this->getConfigData('doc_methods') ?? '');
                     break;
                 case self::DHL_CONTENT_TYPE_NON_DOC:
-                    $allowedMethods = explode(',', $this->getConfigData('nondoc_methods'));
+                    $allowedMethods = explode(',', $this->getConfigData('nondoc_methods') ?? '');
                     break;
                 default:
                     throw new \Magento\Framework\Exception\LocalizedException(__('Wrong Content Type'));
