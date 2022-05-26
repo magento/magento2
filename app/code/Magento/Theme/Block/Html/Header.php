@@ -33,7 +33,7 @@ class Header extends \Magento\Framework\View\Element\Template
         \Magento\Framework\Escaper $escaper,
         array $data = []
     ) {
-        $this->_escaper = $escaper;
+        $this->escaper = $escaper;
         parent::__construct($context, $data);
     }
 
@@ -57,7 +57,7 @@ class Header extends \Magento\Framework\View\Element\Template
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        $this->_data['welcome'] =  $this->_escaper->escapeQuote($this->_data['welcome'], true);
+        $this->_data['welcome'] =  $this->escaper->escapeQuote($this->_data['welcome'], true);
         return __($this->_data['welcome']);
     }
 }
