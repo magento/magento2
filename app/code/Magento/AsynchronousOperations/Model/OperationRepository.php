@@ -25,32 +25,32 @@ class OperationRepository implements \Magento\AsynchronousOperations\Api\Operati
     /**
      * @var EntityManager
      */
-    private $entityManager;
+    private EntityManager $entityManager;
 
     /**
      * @var CollectionFactory
      */
-    private $collectionFactory;
+    private CollectionFactory $collectionFactory;
 
     /**
      * @var SearchResultFactory
      */
-    private $searchResultFactory;
+    private SearchResultFactory $searchResultFactory;
 
     /**
      * @var JoinProcessorInterface
      */
-    private $joinProcessor;
+    private JoinProcessorInterface $joinProcessor;
 
     /**
      * @var \Magento\AsynchronousOperations\Api\Data\OperationExtensionInterfaceFactory
      */
-    private $operationExtensionFactory;
+    private OperationExtensionInterfaceFactory $operationExtensionFactory;
 
     /**
      * @var CollectionProcessorInterface
      */
-    private $collectionProcessor;
+    private CollectionProcessorInterface $collectionProcessor;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -99,7 +99,11 @@ class OperationRepository implements \Magento\AsynchronousOperations\Api\Operati
         $collection = $this->collectionFactory->create();
         $collection->addFieldToSelect('id', 'operation_key');
         $collection->addFieldToSelect('operation_key', 'id');
-        $collection->addFieldToSelect(['bulk_uuid', 'topic_name', 'serialized_data', 'result_serialized_data', 'status', 'error_code', 'result_message', 'started_at']);
+        $collection->addFieldToSelect([
+            'bulk_uuid', 'topic_name', 'serialized_data',
+            'result_serialized_data', 'status', 'error_code',
+            'result_message', 'started_at'
+        ]);
         $this->joinProcessor->process($collection, \Magento\AsynchronousOperations\Api\Data\OperationInterface::class);
         $this->collectionProcessor->process($searchCriteria, $collection);
         $searchResult->setSearchCriteria($searchCriteria);
