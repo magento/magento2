@@ -23,7 +23,10 @@ class NewConditionHtml extends Quote implements HttpPostActionInterface
     {
         $id = $this->getRequest()->getParam('id');
         $formName = $this->getRequest()->getParam('form_namespace');
-        $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
+        $typeArr = explode(
+            '|',
+            str_replace('-', '/', $this->getRequest()->getParam('type', ''))
+        );
         $type = $typeArr[0];
 
         $model = $this->_objectManager->create(

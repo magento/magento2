@@ -19,11 +19,6 @@ use Magento\Framework\Api\Search\FilterGroup;
 class OrderFilter
 {
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * Translator field from graphql to collection field
      *
      * @var string[]
@@ -56,7 +51,6 @@ class OrderFilter
     ) {
         $this->filterBuilder = $filterBuilder;
         $this->filterGroupBuilder = $filterGroupBuilder;
-        $this->scopeConfig = $scopeConfig;
         $this->fieldTranslatorArray = array_replace($this->fieldTranslatorArray, $fieldTranslatorArray);
     }
 
@@ -95,7 +89,7 @@ class OrderFilter
                         if (is_array($value)) {
                             throw new InputException(__('Invalid match filter'));
                         }
-                        $searchValue = str_replace('%', '', $value);
+                        $searchValue = $value !== null ? str_replace('%', '', $value) : '';
                         $filters[] = $this->filterBuilder->setField($field)
                             ->setValue("%{$searchValue}%")
                             ->setConditionType('like')
