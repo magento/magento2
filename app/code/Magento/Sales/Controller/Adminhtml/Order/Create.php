@@ -401,7 +401,7 @@ abstract class Create extends \Magento\Backend\App\Action
      */
     protected function _getAclResource()
     {
-        $action = strtolower($this->getRequest()->getActionName());
+        $action = strtolower($this->getRequest()->getActionName() ?? '');
         if (in_array($action, ['index', 'save', 'cancel']) && $this->_getSession()->getReordered()) {
             $action = 'reorder';
         }
