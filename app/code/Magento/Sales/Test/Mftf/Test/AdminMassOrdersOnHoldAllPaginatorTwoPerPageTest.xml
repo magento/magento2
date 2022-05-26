@@ -11,7 +11,7 @@
     <test name="AdminMassOrdersOnHoldAllPaginatorTwoPerPageTest">
         <annotations>
             <stories value="Mass Update Orders"/>
-            <title value="Mass Update On Hold All Existing Orders When Pagination Is Set Two Orders Per Page"/>
+            <title value="Mass Update to set all existing orders to On Hold when Pagination Is set to two orders per page should work as expected"/>
             <description value="Set on Hold status on all existing orders through Mass Action when Pagination is set 2 per page"/>
             <severity value="AVERAGE"/>
             <testCaseId value="AC-3159"/>
