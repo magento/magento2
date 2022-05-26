@@ -82,7 +82,7 @@
         <actionGroup ref="AdminGridSelectAllActionGroup" stepKey="selectAllOrders"/>
 
         <!-- Put On Hold all order Mass Action -->
-        <actionGroup ref="SelectActionForOrdersActionGroup" stepKey="OnHoldOrders">
+        <actionGroup ref="SelectActionForOrdersActionGroup" stepKey="onHoldOrders">
             <argument name="action" value="Hold"/>
         </actionGroup>
 
