@@ -49,7 +49,7 @@ class UpdateQuoteStoreId
      */
     public function afterLoadByIdWithoutStore(Quote $subject, Quote $result): Quote
     {
-        return $this->loadQuote($result);
+        return $this->updateStoreId($result);
     }
 
     /**
@@ -62,7 +62,7 @@ class UpdateQuoteStoreId
      */
     public function afterLoadByCustomer(Quote $subject, Quote $result): Quote
     {
-        return $this->loadQuote($result);
+        return $this->updateStoreId($result);
     }
 
     /**
@@ -87,7 +87,7 @@ class UpdateQuoteStoreId
      * @param Quote $quote
      * @return Quote
      */
-    private function loadQuote(Quote $quote): Quote
+    private function updateStoreId(Quote $quote): Quote
     {
         $store = $this->getStore($this->request->getPathInfo());
         if ($store) {
