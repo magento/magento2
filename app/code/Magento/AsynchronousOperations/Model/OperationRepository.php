@@ -84,7 +84,6 @@ class OperationRepository implements \Magento\AsynchronousOperations\Api\Operati
         $this->operationExtensionFactory = $operationExtension;
         $this->collectionProcessor = $collectionProcessor;
         $this->logger = $logger;
-        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**
