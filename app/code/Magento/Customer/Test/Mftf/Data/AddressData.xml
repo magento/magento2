@@ -67,6 +67,9 @@
         <data key="telephone">512-345-6789</data>
         <requiredEntity type="region">RegionTX</requiredEntity>
     </entity>
+    <entity name="US_Address_TX_Without_Default_And_Telephone" extends="US_Address_TX_Without_Default">
+        <data key="telephone"></data>
+    </entity>
     <entity name="US_Address_TX_Default_Billing" type="address">
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
@@ -388,5 +391,31 @@
         <data key="state">Greater London</data>
         <data key="default_billing">Yes</data>
         <data key="vatNumber">GB571903731</data>
+    </entity>
+    <entity name="USACustomerAddress" type="address">
+        <data key="id">0</data>
+        <data key="customer_id">15</data>
+        <requiredEntity type="region">CustomerRegionOne</requiredEntity>
+        <data key="region_id">0</data>
+        <data key="country_id">US</data>
+        <array key="street">
+            <item>2718 Pinchelone Street</item>
+            <item>Bld D</item>
+        </array>
+        <data key="company">Magento</data>
+        <data key="telephone">1234568910</data>
+        <data key="fax">1234568910</data>
+        <data key="postcode">23464</data>
+        <data key="city">Virginia</data>
+        <data key="state">Virginia</data>
+        <data key="firstname">Lasonya G </data>
+        <data key="lastname">Butler</data>
+        <data key="middlename">string</data>
+        <data key="prefix">Mr</data>
+        <data key="suffix">Sr</data>
+        <data key="vat_id">vatData</data>
+        <data key="default_shipping">true</data>
+        <data key="default_billing">true</data>
+        <data key="region_qty">66</data>
     </entity>
 </entities>

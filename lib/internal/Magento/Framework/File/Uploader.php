@@ -173,6 +173,11 @@ class Uploader
     public const MAX_IMAGE_HEIGHT = 1200;
 
     /**
+     * Maximum file name length
+     */
+    private const MAX_FILE_NAME_LENGTH = 255;
+
+    /**
      * Resulting of uploaded file
      *
      * @var array|bool      Array with file info keys: path, file. Result is
@@ -496,12 +501,9 @@ class Uploader
         $fileInfo = pathinfo($fileName);
         $fileInfo['extension'] = $fileInfo['extension'] ?? '';
 
-        // account for excessively long filenames that cannot be stored completely in database
-        $maxFilenameLength = 90;
-
-        if (strlen($fileInfo['basename']) > $maxFilenameLength) {
+        if (strlen($fileInfo['basename']) > self::MAX_FILE_NAME_LENGTH) {
             throw new \LengthException(
-                __('Filename is too long; must be %1 characters or less', $maxFilenameLength)
+                __('Filename is too long; must be %1 characters or less', self::MAX_FILE_NAME_LENGTH)
             );
         }
 

@@ -45,7 +45,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {
@@ -155,12 +155,16 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      */
     protected function hasSsCardType($methodCode)
     {
-        $result = false;
-        $availableTypes = explode(',', $this->methods[$methodCode]->getConfigData('cctypes'));
+        $ccTypes = $this->methods[$methodCode]->getConfigData('cctypes');
+        if ($ccTypes === null) {
+            return false;
+        }
+
+        $availableTypes = explode(',', $ccTypes);
         $ssPresentations = array_intersect(['SS', 'SM', 'SO'], $availableTypes);
         if ($availableTypes && count($ssPresentations) > 0) {
-            $result = true;
+            return true;
         }
-        return $result;
+        return false;
     }
 }
