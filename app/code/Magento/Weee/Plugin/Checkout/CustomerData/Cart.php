@@ -9,7 +9,7 @@ namespace Magento\Weee\Plugin\Checkout\CustomerData;
 class Cart extends \Magento\Tax\Plugin\Checkout\CustomerData\Cart
 {
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\Checkout\Model\Session
      */
     protected $checkoutSession;
 
