@@ -146,8 +146,8 @@ class ShippingMethodManagementTest extends TestCase
      * @magentoDataFixture Magento\Quote\Test\Fixture\GuestCart as:cart
      * @magentoDataFixture Magento\Quote\Test\Fixture\AddProductToCart with:{"cart_id":"$cart.id$", "product_id":"$p1.id$"}
      * @magentoDataFixture Magento\Quote\Test\Fixture\AddProductToCart with:{"cart_id":"$cart.id$", "product_id":"$p2.id$"}
-     * @magentoDataFixture Magento\Quote\Test\Fixture\SetBillingAddress with:{"cart_id":"$cart.id$"}
-     * @magentoDataFixture Magento\Quote\Test\Fixture\SetShippingAddress with:{"cart_id":"$cart.id$"}
+     * @magentoDataFixture Magento\Checkout\Test\Fixture\SetBillingAddress with:{"cart_id":"$cart.id$"}
+     * @magentoDataFixture Magento\Checkout\Test\Fixture\SetShippingAddress with:{"cart_id":"$cart.id$"}
      * @magentoDataFixture Magento/OfflineShipping/_files/tablerates_price.php
      * @return void
      * @throws NoSuchEntityException
