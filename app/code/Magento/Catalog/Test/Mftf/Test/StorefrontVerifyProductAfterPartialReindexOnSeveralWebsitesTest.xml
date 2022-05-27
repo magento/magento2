@@ -59,7 +59,7 @@
             <magentoCLI command="indexer:set-mode realtime" stepKey="setRealtimeMode"/>
 
             <!-- Delete data -->
-            <!--<deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="productAssignedToCustomWebsite" stepKey="deleteProductAssignedToCustomWebsite"/>
             <deleteData createDataKey="productAssignedToMainWebsite" stepKey="deleteProductAssignedToMainWebsite"/>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
@@ -70,7 +70,7 @@
             <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
             <magentoCron groups="index" stepKey="reindex"/>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AssertStorefrontProductAbsentOnCategoryPageActionGroup" stepKey="doNotSeeProductInCategoryPage">
@@ -79,7 +79,6 @@
         </actionGroup>
 
         <!-- Run cron -->
-        <!--<magentoCron groups="index" stepKey="runCronIndex"/>-->
         <magentoCLI command="cron:run" stepKey="runCron"/>
 
         <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
