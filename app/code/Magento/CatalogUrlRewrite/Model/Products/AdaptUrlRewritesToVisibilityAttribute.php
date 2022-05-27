@@ -79,6 +79,7 @@ class AdaptUrlRewritesToVisibilityAttribute
                     [
                         UrlRewrite::ENTITY_ID => $product->getId(),
                         UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+                        UrlRewrite::STORE_ID => $storeId,
                     ]
                 );
             } elseif ($visibility !== Visibility::VISIBILITY_NOT_VISIBLE) {

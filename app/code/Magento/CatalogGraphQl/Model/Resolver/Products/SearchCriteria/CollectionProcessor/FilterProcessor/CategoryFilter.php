@@ -10,8 +10,10 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\SearchCriteria\Collecti
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\JoinMinimalPosition;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
@@ -60,15 +62,24 @@ class CategoryFilter implements CustomFilterInterface
     private $categoryResourceModel;
 
     /**
+     * @var JoinMinimalPosition
+     */
+    private $joinMinimalPosition;
+
+    /**
      * @param CategoryFactory $categoryFactory
      * @param CategoryResourceModel $categoryResourceModel
+     * @param JoinMinimalPosition|null $joinMinimalPosition
      */
     public function __construct(
         CategoryFactory $categoryFactory,
-        CategoryResourceModel $categoryResourceModel
+        CategoryResourceModel $categoryResourceModel,
+        ?JoinMinimalPosition $joinMinimalPosition = null
     ) {
         $this->categoryFactory = $categoryFactory;
         $this->categoryResourceModel = $categoryResourceModel;
+        $this->joinMinimalPosition = $joinMinimalPosition
+            ?? ObjectManager::getInstance()->get(JoinMinimalPosition::class);
     }
 
     /**
@@ -82,33 +93,64 @@ class CategoryFilter implements CustomFilterInterface
      */
     public function apply(Filter $filter, AbstractDb $collection)
     {
-        $conditionType = $filter->getConditionType() ?: self::CONDITION_TYPE_IN;
-        $value = $filter->getValue();
-        if ($value && in_array($conditionType, self::CONDITION_TYPES)) {
-            if ($conditionType === self::CONDITION_TYPE_EQ) {
-                $category = $this->getCategory((int) $value);
-                /** @var Collection $collection */
+        if ($this->isApplicable($filter)) {
+            /** @var Collection $collection */
+            $conditionType = $filter->getConditionType() ?: self::CONDITION_TYPE_IN;
+            $value = $filter->getValue();
+            $ids = is_array($value) ? $value : explode(',', (string) $value);
+            if (in_array($conditionType, [self::CONDITION_TYPE_EQ, self::CONDITION_TYPE_IN]) && count($ids) === 1) {
+                $category = $this->getCategory((int) reset($ids));
                 /** This filter adds ability to sort by position*/
                 $collection->addCategoryFilter($category);
-            } elseif (!$collection->getFlag('search_resut_applied')) {
-                /** Prevent filtering duplication as the filter should be already applied to the search result */
-                $values = is_array($value) ? $value : explode(',', (string) $value);
-                $categoryIds = [];
-                foreach ($values as $value) {
-                    $category = $this->getCategory((int) $value);
-                    $children = [];
-                    $childrenStr = $category->getIsAnchor() ? $category->getChildren(true) : '';
-                    if ($childrenStr) {
-                        $children = explode(',',  $childrenStr);
-                    }
-                    array_push($categoryIds, $value, ...$children);
-                }
-                /** @var Collection $collection */
-                $collection->addCategoriesFilter([$conditionType => array_map('intval', $categoryIds)]);
+            } elseif ($conditionType === self::CONDITION_TYPE_IN) {
+                $this->joinMinimalPosition->execute($collection, $ids);
+            }
+            /** Prevent filtering duplication as the filter should be already applied to the search result */
+            if (!$collection->getFlag('search_resut_applied')) {
+                $collection->addCategoriesFilter(
+                    [
+                        $conditionType => array_map('intval', $this->getCategoryIds($ids))
+                    ]
+                );
             }
         }
 
         return true;
+    }
+
+    /**
+     * Check whether the filter can be applied
+     *
+     * @param Filter $filter
+     * @return bool
+     */
+    private function isApplicable(Filter $filter): bool
+    {
+        /** @var Collection $collection */
+        $conditionType = $filter->getConditionType() ?: self::CONDITION_TYPE_IN;
+
+        return $filter->getValue() && in_array($conditionType, self::CONDITION_TYPES);
+    }
+
+    /**
+     * Returns all children category IDs for anchor categories including the provided categories
+     *
+     * @param array $values
+     * @return array
+     */
+    private function getCategoryIds(array $values): array
+    {
+        $categoryIds = [];
+        foreach ($values as $value) {
+            $category = $this->getCategory((int) $value);
+            $children = [];
+            $childrenStr = $category->getIsAnchor() ? $category->getChildren(true) : '';
+            if ($childrenStr) {
+                $children = explode(',', $childrenStr);
+            }
+            array_push($categoryIds, $value, ...$children);
+        }
+        return $categoryIds;
     }
 
     /**
