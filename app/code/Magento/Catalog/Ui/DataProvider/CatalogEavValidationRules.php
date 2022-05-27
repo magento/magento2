@@ -70,6 +70,7 @@ class CatalogEavValidationRules
             case 'validate-digits':
             case 'validate-email':
             case 'validate-url':
+            case 'validate-trailing-hyphen':
             case 'validate-alpha':
             case 'validate-alphanum':
                 $rules = array_merge($rules, [$class => true]);
