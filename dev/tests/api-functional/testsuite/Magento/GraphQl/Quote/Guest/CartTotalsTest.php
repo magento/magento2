@@ -62,6 +62,7 @@ class CartTotalsTest extends GraphQlAbstract
 
         $cartItem = $response['cart']['items'][0];
         self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(10.75, $cartItem['prices']['price_including_tax']['value']);
         self::assertEquals(20, $cartItem['prices']['row_total']['value']);
         self::assertEquals(21.5, $cartItem['prices']['row_total_including_tax']['value']);
 
@@ -129,6 +130,7 @@ class CartTotalsTest extends GraphQlAbstract
 
         $cartItem = $response['cart']['items'][0];
         self::assertEquals(9, $cartItem['prices']['price']['value']);
+        self::assertEquals(9, $cartItem['prices']['price_including_tax']['value']);
         self::assertEquals(18, $cartItem['prices']['row_total']['value']);
         self::assertEquals(18, $cartItem['prices']['row_total_including_tax']['value']);
 
@@ -157,6 +159,7 @@ class CartTotalsTest extends GraphQlAbstract
 
         $cartItem = $response['cart']['items'][0];
         self::assertEquals(9, $cartItem['prices']['price']['value']);
+        self::assertEquals(9.68, $cartItem['prices']['price_including_tax']['value']);
         self::assertEquals(18, $cartItem['prices']['row_total']['value']);
         self::assertEquals(19.35, $cartItem['prices']['row_total_including_tax']['value']);
 
@@ -185,6 +188,7 @@ class CartTotalsTest extends GraphQlAbstract
 
         $cartItem = $response['cart']['items'][0];
         self::assertEquals(9, $cartItem['prices']['price']['value']);
+        self::assertEquals(9, $cartItem['prices']['price_including_tax']['value']);
         self::assertEquals(18, $cartItem['prices']['row_total']['value']);
         self::assertEquals(18, $cartItem['prices']['row_total_including_tax']['value']);
         self::assertEquals(9, $cartItem['prices']['total_item_discount']['value']);
@@ -231,8 +235,8 @@ class CartTotalsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product
      * @magentoApiDataFixture Magento\Quote\Test\Fixture\GuestCart as:cart
      * @magentoApiDataFixture Magento\Quote\Test\Fixture\AddProductToCart as:item1
-     * @magentoApiDataFixture Magento\Quote\Test\Fixture\SetBillingAddress with:{"cart_id":"$cart.id$"}
-     * @magentoApiDataFixture Magento\Quote\Test\Fixture\SetShippingAddress with:{"cart_id":"$cart.id$"}
+     * @magentoApiDataFixture Magento\Checkout\Test\Fixture\SetBillingAddress with:{"cart_id":"$cart.id$"}
+     * @magentoApiDataFixture Magento\Checkout\Test\Fixture\SetShippingAddress with:{"cart_id":"$cart.id$"}
      * @magentoDataFixtureDataProvider {"item1":{"cart_id":"$cart.id$","product_id":"$product.id$","qty":2}}
      */
     public function testGetTotalsWithNoTaxApplied()
@@ -244,6 +248,7 @@ class CartTotalsTest extends GraphQlAbstract
 
         $cartItem = $response['cart']['items'][0];
         self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(10, $cartItem['prices']['price_including_tax']['value']);
         self::assertEquals(20, $cartItem['prices']['row_total']['value']);
         self::assertEquals(20, $cartItem['prices']['row_total_including_tax']['value']);
 
@@ -271,6 +276,7 @@ class CartTotalsTest extends GraphQlAbstract
 
         $cartItem = $response['cart']['items'][0];
         self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(10, $cartItem['prices']['price_including_tax']['value']);
         self::assertEquals(20, $cartItem['prices']['row_total']['value']);
         self::assertEquals(20, $cartItem['prices']['row_total_including_tax']['value']);
 
@@ -318,6 +324,10 @@ class CartTotalsTest extends GraphQlAbstract
     items {
       prices {
         price {
+          value
+          currency
+        }
+        price_including_tax {
           value
           currency
         }
