@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertDisableAdminSignInWithAdobeIdTestActionGroup">
+        <annotations>
+            <description>Check for Sign in with Adobe ID button not being shown.</description>
+        </annotations>
+
+        <dontSeeElement selector="{{AdminSignInWithAdobeIdSection.signInButton}}"
+                    stepKey="assertAdminSignInWithAdobeIdButtonElement"/>
+
+        <dontSeeElement selector="{{AdminSignInWithAdobeIdSection.organizationNoteLeft}}"
+                    stepKey="assertAdminSignInWithAdobeIdOrganizationNoteLeft"/>
+
+        <dontSeeElement selector="{{AdminSignInWithAdobeIdSection.organizationNoteRight}}"
+                        stepKey="assertAdminSignInWithAdobeIdOrganizationNoteRight"/>
+    </actionGroup>
+</actionGroups>
