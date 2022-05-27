@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product as ProductEntity;
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
@@ -139,6 +140,9 @@ class StorageTest extends TestCase
      */
     private function removeProducts(): void
     {
+        $resource = $this->objectManager->get(ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $connection->delete('catalog_category_product');
         foreach ($this->createdProductsSkus as $sku) {
             try {
                 $this->productRepository->deleteById($sku);
