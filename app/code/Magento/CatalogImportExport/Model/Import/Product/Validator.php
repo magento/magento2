@@ -122,7 +122,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     protected function numericValidation($attrCode, $type)
     {
-        $val = trim($this->_rowData[$attrCode]);
+        $val = trim($this->_rowData[$attrCode] ?? '');
         if ($type == 'int') {
             $valid = (string)(int)$val === $val;
         } else {

@@ -274,7 +274,8 @@ class Topmenu extends Template implements IdentityInterface
     {
         $html = '';
         foreach ($this->_getMenuItemAttributes($item) as $attributeName => $attributeValue) {
-            $html .= ' ' . $attributeName . '="' . str_replace('"', '\"', $attributeValue) . '"';
+            $value = $attributeValue !== null ? str_replace('"', '\"', $attributeValue) : '';
+            $html .= ' ' . $attributeName . '="' . $value . '"';
         }
         return $html;
     }
