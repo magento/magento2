@@ -23,7 +23,7 @@
         </annotations>
         <before>
             <!-- Change indexers to "Update by Schedule" mode -->
-            <magentoCLI command="indexer:set-mode" arguments="schedule" stepKey="setIndexerMode"/>
+            <magentoCLI command="indexer:set-mode schedule" stepKey="setScheduleIndexer"/>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
@@ -56,7 +56,7 @@
         </before>
         <after>
             <!-- Change indexers to "Update on Save" mode -->
-            <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="setRealtimeMode"/>
+            <magentoCLI command="indexer:set-mode realtime" stepKey="setRealtimeMode"/>
 
             <!-- Delete data -->
             <!--<deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
