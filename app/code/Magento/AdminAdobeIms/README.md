@@ -6,7 +6,7 @@ For information about module installation in Magento 2, see [Enable or disable m
 # CLI command usage:
 ## bin/magento admin:adobe-ims:enable
 Enables the AdminAdobeIMS Module. \
-Required values are `Organization ID`, `Client ID`, `Client Secret` and `2FA enabled on AdobeIMS`
+Required values are `Organization ID`, `Client ID`, `Client Secret` and `2FA enabled`
 
 ### Argument Validation
 On enabling the AdminAdobeIMS Module, the input arguments will be validated. \
@@ -27,7 +27,7 @@ We check if the arguments are not empty, as they are all required.
 
 For the Organization ID, Client ID and Client Secret, we check if they contain only alphanumeric characters. \
 Additionally for the Organization ID, we check if it matches 24 characters and optional has the suffix `@AdobeOrg`. But we only store the ID and ignore the suffix.
-Also make sure 2FA is enabled on AdobeIMS.
+Also make sure 2FA is enabled for the Organization in Adobe Admin Console.
 
 ## bin/magento admin:adobe-ims:disable
 Disables the AdminAdobeIMS Module.
@@ -197,7 +197,7 @@ curl -X GET "{domain}/rest/V1/customers/2" -H "Authorization: Bearer AddAdobeIms
 curl -X GET "{domain}/rest/V1/products/24-MB01" -H "Authorization: Bearer AddAdobeImsAccessToken"
 
 ### Two-factor authentication.
-During CLI enablement of the module, the admin user is asked, whether 2FA is enabled for him on Adobe side.
+During CLI enablement of the module, the admin user is asked, whether 2FA is enabled for Organization in Adobe Admin Console.
 If the answer is yes, Magento TFA module (if it's present in the code base), should be disable.
 
 For this purpose the additional config value was added, this config value is read by Magento_TwoFactorAuth module.
