@@ -10,6 +10,8 @@ namespace Magento\Catalog\Test\Unit\Block\Product\Compare;
 use Magento\Catalog\Block\Product\Compare\ListCompare;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Entity\Attribute\AttributeInterface;
+use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
@@ -50,6 +52,48 @@ class ListCompareTest extends TestCase
         $this->block = null;
     }
 
+    /**
+     * @dataProvider attributeDataProvider
+     * @param array $attributeData
+     * @param string $expectedResult
+     */
+    public function testProductAttributeValue($attributeData, $expectedResult)
+    {
+        $attribute = $this->getMockBuilder(AttributeInterface::class)
+            ->addMethods(['getAttributeCode', 'getSourceModel', 'getFrontendInput', 'getFrontend'])
+            ->getMockForAbstractClass();
+        $frontEndModel = $this->createPartialMock(AbstractFrontend::class, ['getValue']);
+        $productMock = $this->createPartialMock(Product::class, ['getId', 'getData', 'hasData']);
+        $productMock->expects($this->any())
+            ->method('hasData')
+            ->with($attributeData['attribute_code'])
+            ->willReturn(true);
+        $productMock->expects($this->any())
+            ->method('getData')
+            ->with($attributeData['attribute_code'])
+            ->willReturn($attributeData['attribute_value']);
+        $attribute->expects($this->any())
+            ->method('getAttributeCode')
+            ->willReturn($attributeData['attribute_code']);
+        $attribute->expects($this->any())
+            ->method('getSourceModel')
+            ->willReturn($attributeData['source_model']);
+        $attribute->expects($this->any())
+            ->method('getFrontendInput')
+            ->willReturn($attributeData['frontend_input']);
+        $frontEndModel->expects($this->any())
+            ->method('getValue')
+            ->with($productMock)
+            ->willReturn($attributeData['attribute_value']);
+        $attribute->expects($this->any())
+            ->method('getFrontend')
+            ->willReturn($frontEndModel);
+        $this->assertEquals(
+            $expectedResult,
+            $this->block->getProductAttributeValue($productMock, $attribute)
+        );
+    }
+
     public function testGetProductPrice()
     {
         //Data
@@ -83,5 +127,32 @@ class ListCompareTest extends TestCase
             ->willReturn($blockMock);
 
         $this->assertEquals($expectedResult, $this->block->getProductPrice($product, '-compare-list-top'));
+    }
+
+    /**
+     * @return array
+     */
+    public function attributeDataProvider(): array
+    {
+        return [
+            [
+                'attributeData' => [
+                    'attribute_code' => 'tier_price',
+                    'source_model' => null,
+                    'frontend_input' => 'text',
+                    'attribute_value' => []
+                ],
+                'expectedResult' => __('N/A')
+            ],
+            [
+                'attributeData' => [
+                    'attribute_code' => 'special_price',
+                    'source_model' => null,
+                    'frontend_input' => 'decimal',
+                    'attribute_value' => 50.00
+                ],
+                'expectedResult' => '50.00'
+            ]
+        ];
     }
 }
