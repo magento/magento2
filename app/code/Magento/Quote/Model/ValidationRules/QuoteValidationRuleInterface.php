@@ -12,6 +12,8 @@ use Magento\Quote\Model\Quote;
 
 /**
  * Provides validation of Quote model.
+ *
+ * @api
  */
 interface QuoteValidationRuleInterface
 {
