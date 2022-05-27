@@ -759,7 +759,8 @@ class AccountManagement implements AccountManagementInterface
                 )
             );
         }
-        if ($this->stringHelper->strlen(trim($password)) != $length) {
+        $trimmedPassLength = $this->stringHelper->strlen($password === null ? '' : trim($password));
+        if ($trimmedPassLength != $length) {
             throw new InputException(
                 __("The password can't begin or end with a space. Verify the password and try again.")
             );
@@ -789,17 +790,19 @@ class AccountManagement implements AccountManagementInterface
         $requiredNumber = $this->scopeConfig->getValue(self::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
         $return = 0;
 
-        if (preg_match('/[0-9]+/', $password)) {
-            $counter++;
-        }
-        if (preg_match('/[A-Z]+/', $password)) {
-            $counter++;
-        }
-        if (preg_match('/[a-z]+/', $password)) {
-            $counter++;
-        }
-        if (preg_match('/[^a-zA-Z0-9]+/', $password)) {
-            $counter++;
+        if ($password !== null) {
+            if (preg_match('/[0-9]+/', $password)) {
+                $counter++;
+            }
+            if (preg_match('/[A-Z]+/', $password)) {
+                $counter++;
+            }
+            if (preg_match('/[a-z]+/', $password)) {
+                $counter++;
+            }
+            if (preg_match('/[^a-zA-Z0-9]+/', $password)) {
+                $counter++;
+            }
         }
 
         if ($counter < $requiredNumber) {
@@ -1387,7 +1390,7 @@ class AccountManagement implements AccountManagementInterface
      */
     protected function canSkipConfirmation($customer)
     {
-        if (!$customer->getId()) {
+        if (!$customer->getId() || $customer->getEmail() === null) {
             return false;
         }
 
