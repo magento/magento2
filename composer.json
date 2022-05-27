@@ -99,6 +99,7 @@
     },
     "replace": {
         "magento/module-marketplace": "*",
+        "magento/module-admin-adobe-ims": "*",
         "magento/module-admin-analytics": "*",
         "magento/module-admin-notification": "*",
         "magento/module-adobe-ims": "*",
