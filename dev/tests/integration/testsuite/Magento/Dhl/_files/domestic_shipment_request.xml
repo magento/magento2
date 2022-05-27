@@ -6,7 +6,7 @@
  */
 -->
 <req:ShipmentRequest xmlns:req="http://www.dhl.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                     xsi:schemaLocation="http://www.dhl.com ship-val-global-req-6.0.xsd" schemaVersion="6.0">
+                     xsi:schemaLocation="http://www.dhl.com ship-val-global-req.xsd" schemaVersion="6.2">
     <Request xmlns="">
         <ServiceHeader>
             <MessageTime>currentTime</MessageTime>
@@ -14,6 +14,10 @@
             <SiteID>some ID</SiteID>
             <Password>some password</Password>
         </ServiceHeader>
+        <MetaData>
+            <SoftwareName>Magento</SoftwareName>
+            <SoftwareVersion>1.0.0+no-v</SoftwareVersion>
+        </MetaData>
     </Request>
     <RegionCode xmlns="">CHECKED</RegionCode>
     <RequestedPickupTime xmlns="">N</RequestedPickupTime>
