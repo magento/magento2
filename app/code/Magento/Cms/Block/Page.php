@@ -27,15 +27,11 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
     protected $_page;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Page factory
-     *
      * @var \Magento\Cms\Model\PageFactory
      */
     protected $_pageFactory;
@@ -131,7 +127,7 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
             'web/default/cms_home_page',
             ScopeInterface::SCOPE_STORE
         );
-        $homePageDelimiterPosition = strrpos($homePageIdentifier, '|');
+        $homePageDelimiterPosition = $homePageIdentifier === null ? false : strrpos($homePageIdentifier, '|');
         if ($homePageDelimiterPosition) {
             $homePageIdentifier = substr($homePageIdentifier, 0, $homePageDelimiterPosition);
         }
