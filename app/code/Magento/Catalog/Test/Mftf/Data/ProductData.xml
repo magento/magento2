@@ -431,6 +431,11 @@
         <data key="file">test_image.jpg</data>
         <data key="filename">test_image</data>
     </entity>
+    <entity name="TestImageWithDotInFilename" extends="MagentoLogo" type="image">
+        <data key="title" unique="suffix">TestImageWithDotInFilename</data>
+        <data key="file">m.agento-logo.png</data>
+        <data key="filename">m.agento-logo</data>
+    </entity>
     <entity name="ProductWithUnicode" type="product">
         <data key="name" unique="suffix">&#38657;&#20135;&#21697;</data>
         <data key="sku" unique="suffix">&#38657;&#20135;&#21697;</data>
@@ -1465,4 +1470,5 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+
 </entities>
