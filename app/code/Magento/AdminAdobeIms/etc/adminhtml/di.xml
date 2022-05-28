@@ -79,4 +79,9 @@
         <plugin name="authentication_component_config"
                 type="Magento\AdminAdobeIms\Plugin\Block\Adminhtml\SignInPlugin"/>
     </type>
+
+    <type name="Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info">
+        <plugin name="admin_adobe_ims_reauth_button_integration_edit"
+                type="Magento\AdminAdobeIms\Plugin\Block\Adminhtml\Integration\Edit\Tab\AddReAuthVerification"/>
+    </type>
 </config>

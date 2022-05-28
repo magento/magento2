@@ -43,27 +43,15 @@ class ImsOrganizationServiceTest extends TestCase
         );
     }
 
-    public function testCheckOrganizationAllocationReturnsTrueWhenProfileAssignedToOrg()
-    {
-        $this->adminImsConfigMock
-            ->method('getOrganizationId')
-            ->willReturn(self::VALID_ORGANIZATION_ID);
-
-        $this->assertEquals(
-            true,
-            $this->imsOrganizationService->checkOrganizationAllocation('my_token')
-        );
-    }
-
-    public function testCheckOrganizationAllocationThrowsExceptionWhenProfileNotAssignedToOrg()
+    public function testCheckOrganizationMembershipThrowsExceptionWhenProfileNotAssignedToOrg()
     {
         $this->adminImsConfigMock
             ->method('getOrganizationId')
             ->willReturn('');
 
         $this->expectException(AdobeImsOrganizationAuthorizationException::class);
-        $this->expectExceptionMessage('User is not assigned to defined organization.');
+        $this->expectExceptionMessage('Can\'t check user membership in organization.');
 
-        $this->imsOrganizationService->checkOrganizationAllocation('my_token');
+        $this->imsOrganizationService->checkOrganizationMembership('my_token');
     }
 }

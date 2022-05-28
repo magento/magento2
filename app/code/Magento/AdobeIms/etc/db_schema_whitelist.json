@@ -13,7 +13,7 @@
       "updated_at": true
     },
     "index": {
-      "ADOBE_USER_PROFILE_ID": true
+      "ADOBE_USER_PROFILE_ADMIN_USER_ID": true
     },
     "constraint": {
       "PRIMARY": true,

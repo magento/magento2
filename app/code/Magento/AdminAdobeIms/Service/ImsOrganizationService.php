@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Service;
 
 use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
+use Magento\Framework\HTTP\Client\CurlFactory;
 
 class ImsOrganizationService
 {
@@ -18,32 +19,67 @@ class ImsOrganizationService
     private ImsConfig $adminImsConfig;
 
     /**
+     * @var CurlFactory
+     */
+    private CurlFactory $curlFactory;
+
+    /**
      * @param ImsConfig $adminImsConfig
+     * @param CurlFactory $curlFactory
      */
     public function __construct(
-        ImsConfig $adminImsConfig
+        ImsConfig $adminImsConfig,
+        CurlFactory $curlFactory
     ) {
         $this->adminImsConfig = $adminImsConfig;
+        $this->curlFactory = $curlFactory;
     }
 
     /**
-     * Check if user is assigned to organization
+     * Check if user is a member of Adobe Organization
      *
-     * @param string $token
-     * @return bool
+     * @param string $access_token
+     * @return void
      * @throws AdobeImsOrganizationAuthorizationException
      */
-    public function checkOrganizationAllocation(string $token): bool
+    public function checkOrganizationMembership(string $access_token): void
     {
-        $configuredOrganization = $this->adminImsConfig->getOrganizationId();
+        $configuredOrganizationId = $this->adminImsConfig->getOrganizationId();
 
-        //@TODO CABPI-324: Change Org check to use new endpoint
-        if ($configuredOrganization === '' || !$token) {
+        if ($configuredOrganizationId === '' || !$access_token) {
             throw new AdobeImsOrganizationAuthorizationException(
-                __('User is not assigned to defined organization.')
+                __('Can\'t check user membership in organization.')
             );
         }
 
-        return true;
+        try {
+            $curl = $this->curlFactory->create();
+
+            $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
+            $curl->addHeader('cache-control', 'no-cache');
+            $curl->addHeader('Authorization', 'Bearer ' . $access_token);
+
+            $orgCheckUrl = $this->adminImsConfig->getOrganizationMembershipUrl($configuredOrganizationId);
+            $curl->get($orgCheckUrl);
+
+            if ($curl->getBody() === '') {
+                throw new AdobeImsOrganizationAuthorizationException(
+                    __('Could not check Organization Membership. Response is empty.')
+                );
+            }
+
+            $response = $curl->getBody();
+
+            if ($response !== 'true') {
+                throw new AdobeImsOrganizationAuthorizationException(
+                    __('User is not a member of configured Adobe Organization.')
+                );
+            }
+
+        } catch (\Exception $exception) {
+            throw new AdobeImsOrganizationAuthorizationException(
+                __('Organization Membership check can\'t be performed')
+            );
+        }
     }
 }
