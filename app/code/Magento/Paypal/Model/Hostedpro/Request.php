@@ -213,8 +213,9 @@ class Request extends DataObject
      */
     protected function getPaymentData(Hostedpro $paymentMethod)
     {
+        $paymentAction = $paymentMethod->getConfigData('payment_action');
         $request = [
-            'paymentaction' => strtolower($paymentMethod->getConfigData('payment_action')),
+            'paymentaction' => $paymentAction !== null ? strtolower($paymentAction) : '',
             'notify_url' => $paymentMethod->getNotifyUrl(),
             'cancel_return' => $paymentMethod->getCancelUrl(),
             'return' => $paymentMethod->getReturnUrl(),
