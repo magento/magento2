@@ -1,5 +1,5 @@
 {
-    "name": "magento/module-google-optimizer",
+    "name": "magento/module-google-gtag",
     "description": "N/A",
     "config": {
         "sort-packages": true
@@ -7,13 +7,12 @@
     "require": {
         "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
-        "magento/module-backend": "*",
-        "magento/module-catalog": "*",
-        "magento/module-cms": "*",
-        "magento/module-google-analytics": "*",
-        "magento/module-google-gtag": "*",
-        "magento/module-store": "*",
-        "magento/module-ui": "*"
+        "magento/module-cookie": "*",
+        "magento/module-sales": "*",
+        "magento/module-store": "*"
+    },
+    "suggest": {
+        "magento/module-config": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -25,7 +24,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\GoogleOptimizer\\": ""
+            "Magento\\GoogleGtag\\": ""
         }
     }
 }

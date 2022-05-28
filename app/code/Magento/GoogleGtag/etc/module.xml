@@ -6,13 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Magento_GoogleOptimizer" >
+    <module name="Magento_GoogleGtag" >
         <sequence>
-            <module name="Magento_GoogleAnalytics"/>
-            <module name="Magento_GoogleGtag"/>
-            <module name="Magento_Catalog"/>
-            <module name="Magento_Cms"/>
-            <module name="Magento_Ui"/>
+            <module name="Magento_Store"/>
+            <module name="Magento_Checkout"/>
         </sequence>
     </module>
 </config>
