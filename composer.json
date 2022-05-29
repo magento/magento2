@@ -170,6 +170,7 @@
         "magento/module-google-adwords": "*",
         "magento/module-google-analytics": "*",
         "magento/module-google-optimizer": "*",
+        "magento/module-google-gtag": "*",
         "magento/module-graph-ql": "*",
         "magento/module-graph-ql-cache": "*",
         "magento/module-catalog-graph-ql": "*",
