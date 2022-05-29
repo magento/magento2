@@ -612,7 +612,7 @@ class EavSetup
      */
     public function convertToAttributeGroupCode($groupName)
     {
-        return trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($groupName)), '-');
+        return trim(preg_replace('/[^a-z0-9]+/', '-', strtolower((string)$groupName)), '-');
     }
 
     /**
