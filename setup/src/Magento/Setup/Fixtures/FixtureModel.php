@@ -144,7 +144,7 @@ class FixtureModel
     }
 
     /**
-     * Loads fixture into $this->>fixturesByName and $this->fixtures
+     * Loads fixture into $this->fixturesByName and $this->fixtures
      *
      * @param Fixture $fixture
      * @return void
