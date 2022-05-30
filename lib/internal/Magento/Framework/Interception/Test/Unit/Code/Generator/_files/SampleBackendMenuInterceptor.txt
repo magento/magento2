@@ -124,7 +124,7 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\SampleB
     /**
      * {@inheritdoc}
      */
-    public function offsetExists($key)
+    public function offsetExists($key) : bool
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'offsetExists');
         return $pluginInfo ? $this->___callPlugins('offsetExists', func_get_args(), $pluginInfo) : parent::offsetExists($key);
@@ -160,7 +160,7 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\SampleB
     /**
      * {@inheritdoc}
      */
-    public function count()
+    public function count() : int
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'count');
         return $pluginInfo ? $this->___callPlugins('count', func_get_args(), $pluginInfo) : parent::count();
@@ -178,7 +178,7 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\SampleB
     /**
      * {@inheritdoc}
      */
-    public function getArrayCopy()
+    public function getArrayCopy() : array
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getArrayCopy');
         return $pluginInfo ? $this->___callPlugins('getArrayCopy', func_get_args(), $pluginInfo) : parent::getArrayCopy();
@@ -187,7 +187,7 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\SampleB
     /**
      * {@inheritdoc}
      */
-    public function getFlags()
+    public function getFlags() : int
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getFlags');
         return $pluginInfo ? $this->___callPlugins('getFlags', func_get_args(), $pluginInfo) : parent::getFlags();
@@ -241,7 +241,7 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\SampleB
     /**
      * {@inheritdoc}
      */
-    public function exchangeArray($array)
+    public function exchangeArray($array) : array
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'exchangeArray');
         return $pluginInfo ? $this->___callPlugins('exchangeArray', func_get_args(), $pluginInfo) : parent::exchangeArray($array);
@@ -277,7 +277,7 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\SampleB
     /**
      * {@inheritdoc}
      */
-    public function __serialize()
+    public function __serialize() : array
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, '__serialize');
         return $pluginInfo ? $this->___callPlugins('__serialize', func_get_args(), $pluginInfo) : parent::__serialize();
@@ -295,7 +295,7 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\SampleB
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator() : \ArrayIterator
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getIterator');
         return $pluginInfo ? $this->___callPlugins('getIterator', func_get_args(), $pluginInfo) : parent::getIterator();
@@ -304,7 +304,7 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\SampleB
     /**
      * {@inheritdoc}
      */
-    public function getIteratorClass()
+    public function getIteratorClass() : string
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getIteratorClass');
         return $pluginInfo ? $this->___callPlugins('getIteratorClass', func_get_args(), $pluginInfo) : parent::getIteratorClass();
@@ -313,7 +313,7 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\SampleB
     /**
      * {@inheritdoc}
      */
-    public function __debugInfo()
+    public function __debugInfo() : array
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, '__debugInfo');
         return $pluginInfo ? $this->___callPlugins('__debugInfo', func_get_args(), $pluginInfo) : parent::__debugInfo();

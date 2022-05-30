@@ -321,134 +321,192 @@ class Menu extends \ArrayObject
 
     // Need to override and suppress return type deprecation warnings for php8 compatibility
 
-    #[\ReturnTypeWillChange]
-    public function offsetExists($key)
+    /**
+     * @inheritDoc
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
+     */
+    public function offsetExists($key): bool
     {
         return parent::offsetExists($key);
     }
 
+    /**
+     * @inheritDoc
+     */
     #[\ReturnTypeWillChange]
     public function offsetGet($key)
     {
         return parent::offsetGet($key);
     }
 
+    /**
+     * @inheritDoc
+     */
     #[\ReturnTypeWillChange]
     public function offsetSet($key, $value)
     {
         parent::offsetSet($key, $value);
     }
 
+    /**
+     * @inheritDoc
+     */
     #[\ReturnTypeWillChange]
     public function offsetUnset($key)
     {
         parent::offsetUnset($key);
     }
 
-    #[\ReturnTypeWillChange]
-    public function count()
+    /**
+     * @inheritDoc
+     */
+    public function count(): int
     {
         return parent::count();
     }
 
+    /**
+     * @inheritDoc
+     */
     #[\ReturnTypeWillChange]
     public function append($value)
     {
         parent::append($value);
     }
 
-    #[\ReturnTypeWillChange]
-    public function getArrayCopy()
+    /**
+     * @inheritDoc
+     */
+    public function getArrayCopy(): array
     {
         return parent::getArrayCopy();
     }
 
-    #[\ReturnTypeWillChange]
-    public function getFlags()
+    /**
+     * @inheritDoc
+     */
+    public function getFlags(): int
     {
         return parent::getFlags();
     }
 
+    /**
+     * @inheritDoc
+     */
     #[\ReturnTypeWillChange]
     public function setFlags($flags)
     {
         parent::setFlags($flags);
     }
 
+    /**
+     * @inheritDoc
+     */
     #[\ReturnTypeWillChange]
     public function asort($flags = SORT_REGULAR)
     {
         parent::asort($flags);
     }
 
+    /**
+     * @inheritDoc
+     */
     #[\ReturnTypeWillChange]
     public function ksort($flags = SORT_REGULAR)
     {
         parent::ksort($flags);
     }
 
+    /**
+     * @inheritDoc
+     */
     #[\ReturnTypeWillChange]
     public function uasort($callback)
     {
         parent::uasort($callback);
     }
 
+    /**
+     * @inheritDoc
+     */
     #[\ReturnTypeWillChange]
     public function uksort($callback)
     {
         parent::uksort($callback);
     }
 
-    #[\ReturnTypeWillChange]
-    public function exchangeArray($array)
+    /**
+     * @inheritDoc
+     */
+    public function exchangeArray($array): array
     {
         return parent::exchangeArray($array);
     }
 
+    /**
+     * @inheritDoc
+     */
     #[\ReturnTypeWillChange]
     public function setIteratorClass($iteratorClass)
     {
         parent::setIteratorClass($iteratorClass);
     }
 
+    /**
+     * @inheritDoc
+     */
     #[\ReturnTypeWillChange]
     public function natsort()
     {
         parent::natsort();
     }
 
+    /**
+     * @inheritDoc
+     */
     #[\ReturnTypeWillChange]
     public function natcasesort()
     {
         parent::natcasesort();
     }
 
-    #[\ReturnTypeWillChange]
-    public function __serialize()
+    /**
+     * @inheritDoc
+     */
+    public function __serialize(): array
     {
         return parent::__serialize();
     }
 
+    /**
+     * @inheritDoc
+     */
     #[\ReturnTypeWillChange]
     public function __unserialize(array $data)
     {
         parent::__unserialize($data);
     }
 
-    #[\ReturnTypeWillChange]
-    public function getIterator()
+    /**
+     * @inheritDoc
+     */
+    public function getIterator(): \ArrayIterator
     {
         return parent::getIterator();
     }
 
-    #[\ReturnTypeWillChange]
-    public function getIteratorClass()
+    /**
+     * @inheritDoc
+     */
+    public function getIteratorClass(): string
     {
         return parent::getIteratorClass();
     }
 
-    #[\ReturnTypeWillChange]
-    public function __debugInfo()
+    /**
+     * @inheritDoc
+     */
+    public function __debugInfo(): array
     {
         return parent::__debugInfo();
     }

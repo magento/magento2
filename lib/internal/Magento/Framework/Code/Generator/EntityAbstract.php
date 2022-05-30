@@ -18,7 +18,7 @@ abstract class EntityAbstract
     /**
      * Entity type abstract
      */
-    const ENTITY_TYPE = 'abstract';
+    public const ENTITY_TYPE = 'abstract';
 
     /**
      * @var string[]
