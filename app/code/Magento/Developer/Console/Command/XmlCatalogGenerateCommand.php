@@ -31,12 +31,12 @@ class XmlCatalogGenerateCommand extends Command
     /**
      * Option for the type of IDE
      */
-    const IDE_OPTION = 'ide';
+    public const IDE_OPTION = 'ide';
 
     /**
      * Argument for the path to IDE config file
      */
-    const IDE_FILE_PATH_ARGUMENT = 'path';
+    public const IDE_FILE_PATH_ARGUMENT = 'path';
 
     /**
      * @var Files
@@ -175,7 +175,7 @@ class XmlCatalogGenerateCommand extends Command
      */
     private function getFormatters($format)
     {
-        $format = strtolower($format);
+        $format = $format === null ? '' : strtolower($format);
         if (!isset($this->formats[$format])) {
             return false;
         }

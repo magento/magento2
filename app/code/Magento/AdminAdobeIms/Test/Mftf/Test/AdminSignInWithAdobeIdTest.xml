@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSignInWithAdobeIdTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Check for Sign in with Adobe ID option on the Admin Login page"/>
+            <title value="Admin should be able to see Sign in with Adobe Id option"/>
+            <description value="Admin should be able to see Sign in with Adobe Id option"/>
+            <severity value="CRITICAL"/>
+            <group value="admin_ims"/>
+            <testCaseId value="CABPI-102"/>
+            <skip>
+                <issueId value="AC-3153">Skipped</issueId>
+            </skip>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminEnableAdobeImsActionGroup" stepKey="enableAdminAdobeImsModule" />
+        </before>
+        <after>
+            <actionGroup ref="AdminDisableAdobeImsActionGroup" stepKey="disableAdminAdobeImsModule" />
+        </after>
+
+        <!-- Navigate to admin page -->
+        <amOnPage url="{{AdminLoginPage.url}}" stepKey="openAdminPanelPage" />
+
+        <!-- Check for Sign in with Adobe Id option -->
+        <actionGroup ref="AssertAdminSignInWithAdobeIdTestActionGroup"
+                     stepKey="assertSignInWithAdobeId"/>
+    </test>
+</tests>
