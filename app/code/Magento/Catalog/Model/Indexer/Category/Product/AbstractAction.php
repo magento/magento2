@@ -717,7 +717,7 @@ abstract class AbstractAction
     }
 
     /**
-     * Retrieve select for reindex products of non anchor categories
+     * Retrieve select for reindex products of anchor categories
      *
      * @param Store $store
      * @return Select
