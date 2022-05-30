@@ -163,6 +163,7 @@ class SignInTest extends TestCase
             'profileUrl' => self::PROFILE_URL,
             'logoutUrl' => self::LOGOUT_URL,
             'user' => $userData,
+            'isGlobalSignInEnabled' => false,
             'loginConfig' => [
                 'url' => self::AUTH_URL,
                 'callbackParsingParams' => [

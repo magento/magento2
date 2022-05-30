@@ -282,7 +282,7 @@ class Attribute extends AbstractDb
                 $connection->delete($this->getTable('eav_attribute_label'), $condition);
             }
             foreach ($storeLabels as $storeId => $label) {
-                if ($storeId == 0 || !strlen($label)) {
+                if ($storeId == 0 || $label === null || !strlen($label)) {
                     continue;
                 }
                 $bind = ['attribute_id' => $object->getId(), 'store_id' => $storeId, 'value' => $label];

@@ -7,30 +7,34 @@
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\StringUtils;
 
 /**
  * Catalog product SKU backend attribute model.
  */
-class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+class Sku extends AbstractBackend
 {
     /**
      * Maximum SKU string length
      *
      * @var string
      */
-    const SKU_MAX_LENGTH = 64;
+    public const SKU_MAX_LENGTH = 64;
 
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     protected $string;
 
     /**
-     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param StringUtils $string
      */
-    public function __construct(\Magento\Framework\Stdlib\StringUtils $string)
+    public function __construct(StringUtils $string)
     {
         $this->string = $string;
     }
@@ -40,21 +44,20 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param Product $object
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function validate($object)
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
-        $value = $object->getData($attrCode);
+        $value = $object->getData($attrCode) ?? '';
         if ($this->getAttribute()->getIsRequired() && strlen($value) === 0) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The "%1" attribute value is empty. Set the attribute and try again.', $attrCode)
             );
         }
 
         if ($this->string->strlen($object->getSku()) > self::SKU_MAX_LENGTH) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('SKU length should be %1 characters maximum.', self::SKU_MAX_LENGTH)
             );
         }
@@ -77,8 +80,8 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             if ($increment === null) {
                 $increment = $this->_getLastSimilarAttributeValueIncrement($attribute, $object);
             }
-            $sku = trim($attributeValue);
-            if (strlen($sku . '-' . ++$increment) > self::SKU_MAX_LENGTH) {
+            $sku = $attributeValue === null ? '' : trim($attributeValue);
+            if (strlen($sku . '-' . (++$increment)) > self::SKU_MAX_LENGTH) {
                 $sku = substr($sku, 0, -strlen($increment) - 1);
             }
             $sku = $sku . '-' . $increment;
@@ -102,7 +105,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Return increment needed for SKU uniqueness
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+     * @param AbstractAttribute $attribute
      * @param Product $object
      * @return int
      */
@@ -110,7 +113,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         $connection = $this->getAttribute()->getEntity()->getConnection();
         $select = $connection->select();
-        $value = $object->getData($attribute->getAttributeCode());
+        $value = $object->getData($attribute->getAttributeCode()) ?? '';
         $bind = ['attribute_code' => trim($value) . '-%'];
 
         $select->from(
