@@ -1,0 +1,321 @@
+namespace Magento\Framework\Interception\Code\Generator\SampleBackendMenu;
+
+/**
+ * Interceptor class for @see \Magento\Framework\Interception\Code\Generator\SampleBackendMenu
+ */
+class Interceptor extends \Magento\Framework\Interception\Code\Generator\SampleBackendMenu implements \Magento\Framework\Interception\InterceptorInterface
+{
+    use \Magento\Framework\Interception\Interceptor;
+
+    public function __construct(\Psr\Log\LoggerInterface $logger, $pathInMenuStructure = '', ?\Magento\Backend\Model\Menu\Item\Factory $menuItemFactory = null, ?\Magento\Framework\Serialize\SerializerInterface $serializer = null)
+    {
+        $this->___init();
+        parent::__construct($logger, $pathInMenuStructure, $menuItemFactory, $serializer);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(\Magento\Backend\Model\Menu\Item $item, $parentId = null, $index = null)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'add');
+        return $pluginInfo ? $this->___callPlugins('add', func_get_args(), $pluginInfo) : parent::add($item, $parentId, $index);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function get($itemId)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'get');
+        return $pluginInfo ? $this->___callPlugins('get', func_get_args(), $pluginInfo) : parent::get($itemId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function move($itemId, $toItemId, $sortIndex = null)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'move');
+        return $pluginInfo ? $this->___callPlugins('move', func_get_args(), $pluginInfo) : parent::move($itemId, $toItemId, $sortIndex);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove($itemId)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'remove');
+        return $pluginInfo ? $this->___callPlugins('remove', func_get_args(), $pluginInfo) : parent::remove($itemId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reorder($itemId, $position)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'reorder');
+        return $pluginInfo ? $this->___callPlugins('reorder', func_get_args(), $pluginInfo) : parent::reorder($itemId, $position);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isLast(\Magento\Backend\Model\Menu\Item $item)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'isLast');
+        return $pluginInfo ? $this->___callPlugins('isLast', func_get_args(), $pluginInfo) : parent::isLast($item);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFirstAvailable()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getFirstAvailable');
+        return $pluginInfo ? $this->___callPlugins('getFirstAvailable', func_get_args(), $pluginInfo) : parent::getFirstAvailable();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParentItems($itemId)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getParentItems');
+        return $pluginInfo ? $this->___callPlugins('getParentItems', func_get_args(), $pluginInfo) : parent::getParentItems($itemId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'serialize');
+        return $pluginInfo ? $this->___callPlugins('serialize', func_get_args(), $pluginInfo) : parent::serialize();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'toArray');
+        return $pluginInfo ? $this->___callPlugins('toArray', func_get_args(), $pluginInfo) : parent::toArray();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'unserialize');
+        return $pluginInfo ? $this->___callPlugins('unserialize', func_get_args(), $pluginInfo) : parent::unserialize($serialized);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function populateFromArray(array $data)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'populateFromArray');
+        return $pluginInfo ? $this->___callPlugins('populateFromArray', func_get_args(), $pluginInfo) : parent::populateFromArray($data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetExists($key)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'offsetExists');
+        return $pluginInfo ? $this->___callPlugins('offsetExists', func_get_args(), $pluginInfo) : parent::offsetExists($key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetGet($key)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'offsetGet');
+        return $pluginInfo ? $this->___callPlugins('offsetGet', func_get_args(), $pluginInfo) : parent::offsetGet($key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetSet($key, $value)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'offsetSet');
+        return $pluginInfo ? $this->___callPlugins('offsetSet', func_get_args(), $pluginInfo) : parent::offsetSet($key, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetUnset($key)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'offsetUnset');
+        return $pluginInfo ? $this->___callPlugins('offsetUnset', func_get_args(), $pluginInfo) : parent::offsetUnset($key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'count');
+        return $pluginInfo ? $this->___callPlugins('count', func_get_args(), $pluginInfo) : parent::count();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function append($value)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'append');
+        return $pluginInfo ? $this->___callPlugins('append', func_get_args(), $pluginInfo) : parent::append($value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getArrayCopy()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getArrayCopy');
+        return $pluginInfo ? $this->___callPlugins('getArrayCopy', func_get_args(), $pluginInfo) : parent::getArrayCopy();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFlags()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getFlags');
+        return $pluginInfo ? $this->___callPlugins('getFlags', func_get_args(), $pluginInfo) : parent::getFlags();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFlags($flags)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'setFlags');
+        return $pluginInfo ? $this->___callPlugins('setFlags', func_get_args(), $pluginInfo) : parent::setFlags($flags);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function asort($flags = 0)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'asort');
+        return $pluginInfo ? $this->___callPlugins('asort', func_get_args(), $pluginInfo) : parent::asort($flags);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function ksort($flags = 0)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'ksort');
+        return $pluginInfo ? $this->___callPlugins('ksort', func_get_args(), $pluginInfo) : parent::ksort($flags);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function uasort($callback)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'uasort');
+        return $pluginInfo ? $this->___callPlugins('uasort', func_get_args(), $pluginInfo) : parent::uasort($callback);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function uksort($callback)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'uksort');
+        return $pluginInfo ? $this->___callPlugins('uksort', func_get_args(), $pluginInfo) : parent::uksort($callback);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function exchangeArray($array)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'exchangeArray');
+        return $pluginInfo ? $this->___callPlugins('exchangeArray', func_get_args(), $pluginInfo) : parent::exchangeArray($array);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIteratorClass($iteratorClass)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'setIteratorClass');
+        return $pluginInfo ? $this->___callPlugins('setIteratorClass', func_get_args(), $pluginInfo) : parent::setIteratorClass($iteratorClass);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function natsort()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'natsort');
+        return $pluginInfo ? $this->___callPlugins('natsort', func_get_args(), $pluginInfo) : parent::natsort();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function natcasesort()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'natcasesort');
+        return $pluginInfo ? $this->___callPlugins('natcasesort', func_get_args(), $pluginInfo) : parent::natcasesort();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __serialize()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, '__serialize');
+        return $pluginInfo ? $this->___callPlugins('__serialize', func_get_args(), $pluginInfo) : parent::__serialize();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __unserialize(array $data)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, '__unserialize');
+        return $pluginInfo ? $this->___callPlugins('__unserialize', func_get_args(), $pluginInfo) : parent::__unserialize($data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getIterator');
+        return $pluginInfo ? $this->___callPlugins('getIterator', func_get_args(), $pluginInfo) : parent::getIterator();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIteratorClass()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getIteratorClass');
+        return $pluginInfo ? $this->___callPlugins('getIteratorClass', func_get_args(), $pluginInfo) : parent::getIteratorClass();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __debugInfo()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, '__debugInfo');
+        return $pluginInfo ? $this->___callPlugins('__debugInfo', func_get_args(), $pluginInfo) : parent::__debugInfo();
+    }
+}

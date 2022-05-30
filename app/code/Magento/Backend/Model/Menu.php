@@ -318,4 +318,138 @@ class Menu extends \ArrayObject
         }
         $this->exchangeArray($items);
     }
+
+    // Need to override and suppress return type deprecation warnings for php8 compatibility
+
+    #[\ReturnTypeWillChange]
+    public function offsetExists($key)
+    {
+        return parent::offsetExists($key);
+    }
+
+    #[\ReturnTypeWillChange]
+    public function offsetGet($key)
+    {
+        return parent::offsetGet($key);
+    }
+
+    #[\ReturnTypeWillChange]
+    public function offsetSet($key, $value)
+    {
+        parent::offsetSet($key, $value);
+    }
+
+    #[\ReturnTypeWillChange]
+    public function offsetUnset($key)
+    {
+        parent::offsetUnset($key);
+    }
+
+    #[\ReturnTypeWillChange]
+    public function count()
+    {
+        return parent::count();
+    }
+
+    #[\ReturnTypeWillChange]
+    public function append($value)
+    {
+        parent::append($value);
+    }
+
+    #[\ReturnTypeWillChange]
+    public function getArrayCopy()
+    {
+        return parent::getArrayCopy();
+    }
+
+    #[\ReturnTypeWillChange]
+    public function getFlags()
+    {
+        return parent::getFlags();
+    }
+
+    #[\ReturnTypeWillChange]
+    public function setFlags($flags)
+    {
+        parent::setFlags($flags);
+    }
+
+    #[\ReturnTypeWillChange]
+    public function asort($flags = SORT_REGULAR)
+    {
+        parent::asort($flags);
+    }
+
+    #[\ReturnTypeWillChange]
+    public function ksort($flags = SORT_REGULAR)
+    {
+        parent::ksort($flags);
+    }
+
+    #[\ReturnTypeWillChange]
+    public function uasort($callback)
+    {
+        parent::uasort($callback);
+    }
+
+    #[\ReturnTypeWillChange]
+    public function uksort($callback)
+    {
+        parent::uksort($callback);
+    }
+
+    #[\ReturnTypeWillChange]
+    public function exchangeArray($array)
+    {
+        return parent::exchangeArray($array);
+    }
+
+    #[\ReturnTypeWillChange]
+    public function setIteratorClass($iteratorClass)
+    {
+        parent::setIteratorClass($iteratorClass);
+    }
+
+    #[\ReturnTypeWillChange]
+    public function natsort()
+    {
+        parent::natsort();
+    }
+
+    #[\ReturnTypeWillChange]
+    public function natcasesort()
+    {
+        parent::natcasesort();
+    }
+
+    #[\ReturnTypeWillChange]
+    public function __serialize()
+    {
+        return parent::__serialize();
+    }
+
+    #[\ReturnTypeWillChange]
+    public function __unserialize(array $data)
+    {
+        parent::__unserialize($data);
+    }
+
+    #[\ReturnTypeWillChange]
+    public function getIterator()
+    {
+        return parent::getIterator();
+    }
+
+    #[\ReturnTypeWillChange]
+    public function getIteratorClass()
+    {
+        return parent::getIteratorClass();
+    }
+
+    #[\ReturnTypeWillChange]
+    public function __debugInfo()
+    {
+        return parent::__debugInfo();
+    }
 }
