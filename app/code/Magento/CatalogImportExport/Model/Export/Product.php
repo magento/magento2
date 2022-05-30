@@ -469,7 +469,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     $childCategory = $collection->getItemById($structure[$i]);
                     if ($childCategory) {
                         $name = $childCategory->getName();
-                        $path[] = $this->quoteCategoryDelimiter($name);
+                        $path[] = $name !== null ? $this->quoteCategoryDelimiter($name) : '';
                     }
                 }
                 $this->_rootCategories[$category->getId()] = array_shift($path);
@@ -1124,7 +1124,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     {
         if (!empty($this->_parameters[\Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE])) {
             $wrap = function ($value) {
-                return sprintf('"%s"', str_replace('"', '""', $value));
+                return sprintf('"%s"', $value !== null ? str_replace('"', '""', $value) : '');
             };
 
             $value = is_array($value) ? array_map($wrap, $value) : $wrap($value);
@@ -1200,7 +1200,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function collectMultiselectValues($item, $attrCode, $storeId)
     {
         $attrValue = $item->getData($attrCode);
-        $optionIds = explode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $attrValue);
+        $optionIds = $attrValue !== null ? explode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $attrValue) : [];
         $options = array_intersect_key(
             $this->_attributeValues[$attrCode],
             array_flip($optionIds)
