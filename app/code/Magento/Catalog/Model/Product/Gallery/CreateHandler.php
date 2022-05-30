@@ -45,8 +45,6 @@ class CreateHandler implements ExtensionInterface
     protected $attributeRepository;
 
     /**
-     * Resource model
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
      * @since 101.0.0
      */
@@ -174,7 +172,7 @@ class CreateHandler implements ExtensionInterface
                 if (!empty($image['removed'])) {
                     $clearImages[] = $image['file'];
                 } elseif (empty($image['value_id']) || !empty($image['recreate'])) {
-                    $newFile = $this->moveImageFromTmp($image['file']);
+                    $newFile = $this->moveImageFromTmp($image['file'] ?? '');
                     $image['new_file'] = $newFile;
                     $newImages[$image['file']] = $image;
                     $image['file'] = $newFile;
@@ -193,7 +191,7 @@ class CreateHandler implements ExtensionInterface
                 if (empty($image['value_id']) || !empty($image['removed'])) {
                     continue;
                 }
-                $duplicate[$image['value_id']] = $this->copyImage($image['file']);
+                $duplicate[$image['value_id']] = $this->copyImage($image['file'] ?? '');
                 $image['new_file'] = $duplicate[$image['value_id']];
                 $newImages[$image['file']] = $image;
             }
