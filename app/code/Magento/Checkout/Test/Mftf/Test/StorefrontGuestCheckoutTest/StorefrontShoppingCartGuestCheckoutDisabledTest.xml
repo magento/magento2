@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontShoppingCartGuestCheckoutDisabledTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Modal window for Sign In is shown if Guest checkout is disabled. "/>
+            <title value="Modal window for Sign In is shown if Guest checkout is disabled."/>
+            <description value="Modal window for Sign In is shown if Guest checkout is disabled. Flow from Shopping Cart"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-27419"/>
+            <group value="module-checkout"/>
+        </annotations>
+        <before>
+            <!-- create category and simple product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Goto Admin Configuration page and Allow Guest Checkout is No-->
+            <createData entity="DisableAllowGuestCheckout" stepKey="storeConfigurationAllowGuestCheckoutNo">
+            </createData>
+            <!-- create customer and clean the cache and index-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+               </before>
+        <!-- Goto storefront and add product to cart-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad6"/>
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
+        <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
+        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
+        <!-- Checkout form mini cart-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMiniCart"/>
+        <!-- click on Place Order and Guest sing in -->
+        <actionGroup ref="StorefrontGuestSignInActionGroup" stepKey="singInForPlaceOrder">
+            <argument name="email" value="$$createCustomer.email$$"/>
+            <argument name="password" value="$$createCustomer.password$$"/>
+        </actionGroup>
+        <after>
+            <!--Goto Admin Configuration page and Allow Guest Checkout is Yes-->
+            <createData entity="EnableAllowGuestCheckout" stepKey="storeConfigurationAllowGuestCheckoutYes">
+            </createData>
+            <!-- Delete created category, product and customer-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+    </test>
+</tests>
