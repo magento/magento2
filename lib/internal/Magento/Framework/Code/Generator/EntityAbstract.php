@@ -10,6 +10,8 @@ use Magento\Framework\GetParameterClassTrait;
 
 /**
  * Abstract entity
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class EntityAbstract
 {

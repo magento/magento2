@@ -401,6 +401,8 @@ class Menu extends \ArrayObject
 
     /**
      * @inheritDoc
+     *
+     * @phpstan-return void
      */
     #[\ReturnTypeWillChange]
     public function asort($flags = SORT_REGULAR)
@@ -410,6 +412,8 @@ class Menu extends \ArrayObject
 
     /**
      * @inheritDoc
+     *
+     * @phpstan-return void
      */
     #[\ReturnTypeWillChange]
     public function ksort($flags = SORT_REGULAR)
@@ -454,6 +458,8 @@ class Menu extends \ArrayObject
 
     /**
      * @inheritDoc
+     *
+     * @phpstan-return void
      */
     #[\ReturnTypeWillChange]
     public function natsort()
@@ -463,6 +469,8 @@ class Menu extends \ArrayObject
 
     /**
      * @inheritDoc
+     *
+     * @phpstan-return void
      */
     #[\ReturnTypeWillChange]
     public function natcasesort()
