@@ -274,7 +274,7 @@
                     <dataType>text</dataType>
                     <label translate="true">Default Robots</label>
                     <dataScope>default_robots</dataScope>
-                    <scopeLabel>[WEBSITE]</scopeLabel>
+                    <scopeLabel>[STOREVIEW]</scopeLabel>
                 </settings>
                 <formElements>
                     <select>
