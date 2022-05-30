@@ -184,7 +184,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         }
 
         $classType = $taxClass->getClassType();
-        if (!\Zend_Validate::is(trim($classType), 'NotEmpty')) {
+        if (!\Zend_Validate::is($classType !== null ? trim($classType) : '', 'NotEmpty')) {
             $exception->addError(
                 __('"%fieldName" is required. Enter and try again.', ['fieldName' => ClassModel::KEY_TYPE])
             );

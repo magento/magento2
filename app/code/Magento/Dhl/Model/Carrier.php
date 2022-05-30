@@ -565,16 +565,16 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         if ($this->_isDomestic) {
             $allowedMethods = array_merge(
-                explode(',', $this->getConfigData('doc_methods')),
-                explode(',', $this->getConfigData('nondoc_methods'))
+                explode(',', $this->getConfigData('doc_methods') ?? ''),
+                explode(',', $this->getConfigData('nondoc_methods') ?? '')
             );
         } else {
             switch ($contentType) {
                 case self::DHL_CONTENT_TYPE_DOC:
-                    $allowedMethods = explode(',', $this->getConfigData('doc_methods'));
+                    $allowedMethods = explode(',', $this->getConfigData('doc_methods') ?? '');
                     break;
                 case self::DHL_CONTENT_TYPE_NON_DOC:
-                    $allowedMethods = explode(',', $this->getConfigData('nondoc_methods'));
+                    $allowedMethods = explode(',', $this->getConfigData('nondoc_methods') ?? '');
                     break;
                 default:
                     throw new \Magento\Framework\Exception\LocalizedException(__('Wrong Content Type'));
@@ -1522,6 +1522,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+
     protected function _doRequest()
     {
         $rawRequest = $this->_request;
@@ -1530,8 +1531,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             '<req:ShipmentRequest' .
             ' xmlns:req="http://www.dhl.com"' .
             ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' .
-            ' xsi:schemaLocation="http://www.dhl.com ship-val-global-req-6.0.xsd"' .
-            ' schemaVersion="6.0" />';
+            ' xsi:schemaLocation="http://www.dhl.com ship-val-global-req.xsd"' .
+            ' schemaVersion="6.2" />';
         $xml = $this->_xmlElFactory->create(['data' => $xmlStr]);
 
         $nodeRequest = $xml->addChild('Request', '', '');
@@ -1544,6 +1545,10 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         );
         $nodeServiceHeader->addChild('SiteID', (string)$this->getConfigData('id'));
         $nodeServiceHeader->addChild('Password', (string)$this->getConfigData('password'));
+
+        $nodeMetaData = $nodeRequest->addChild('MetaData');
+        $nodeMetaData->addChild('SoftwareName', $this->buildSoftwareName());
+        $nodeMetaData->addChild('SoftwareVersion', $this->buildSoftwareVersion());
 
         $originRegion = $this->getCountryParams(
             $this->_scopeConfig->getValue(
@@ -1585,10 +1590,10 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             ->getRecipientContactCompanyName() : $rawRequest
             ->getRecipientContactPersonName();
 
-        $nodeConsignee->addChild('CompanyName', is_string($companyName) ? substr($companyName, 0, 35) : '');
+        $nodeConsignee->addChild('CompanyName', is_string($companyName) ? substr($companyName, 0, 60) : '');
 
         $address = $rawRequest->getRecipientAddressStreet1() . ' ' . $rawRequest->getRecipientAddressStreet2();
-        $address = $this->string->split($address, 35, false, true);
+        $address = $this->string->split($address, 45, false, true);
         if (is_array($address)) {
             foreach ($address as $addressLine) {
                 $nodeConsignee->addChild('AddressLine', $addressLine);
@@ -1657,7 +1662,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $nodeShipper->addChild('RegisteredAccount', (string)$this->getConfigData('account'));
 
         $address = $rawRequest->getShipperAddressStreet1() . ' ' . $rawRequest->getShipperAddressStreet2();
-        $address = $this->string->split($address, 35, false, true);
+        $address = $this->string->split($address, 45, false, true);
         if (is_array($address)) {
             foreach ($address as $addressLine) {
                 $nodeShipper->addChild('AddressLine', $addressLine);
@@ -1714,7 +1719,6 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             $this->_debug($debugData);
         }
         $this->_isShippingLabelFlag = true;
-
         return $this->_parseResponse($responseBody);
     }
 
@@ -1940,7 +1944,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                             $shipmentEventArray['deliverydate'] = (string)$shipmentEvent->Date;
                             $shipmentEventArray['deliverytime'] = (string)$shipmentEvent->Time;
                             $shipmentEventArray['deliverylocation'] = (string)$shipmentEvent->ServiceArea
-                                ->Description . ' [' . (string)$shipmentEvent->ServiceArea->ServiceAreaCode . ']';
+                                    ->Description . ' [' . (string)$shipmentEvent->ServiceArea->ServiceAreaCode . ']';
                             $packageProgress[] = $shipmentEventArray;
                         }
                         $awbinfoData['progressdetail'] = $packageProgress;
