@@ -163,6 +163,7 @@ class DataProvider extends AbstractDataProvider
      */
     private function getSearchEngineRobotsMetadata($scope, array $fields = [])
     {
+        unset($fields['default_robots']);
         if ($scope == \Magento\Store\Model\ScopeInterface::SCOPE_STORES) {
             $resetToDefaultsData = [
                 'arguments' => [
