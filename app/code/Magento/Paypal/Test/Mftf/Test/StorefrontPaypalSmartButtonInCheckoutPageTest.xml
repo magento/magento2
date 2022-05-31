@@ -16,10 +16,11 @@
             <description value="Users are able to place order using Paypal Smart Button on Checkout Page, payment action is Sale"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13690"/>
+            <group value="paypalExpress"/>
             <skip>
                 <issueId value="MC-37236"/>
             </skip>
-            <group value="paypalExpress"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Login -->
@@ -41,7 +42,7 @@
         <after>
             <magentoCLI command="config:set {{StorefrontPaypalEnableTransferCartLineConfigData.path}} {{StorefrontPaypalEnableTransferCartLineConfigData.value}}" stepKey="enableTransferCartLine"/>
             <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="setPaymentAction"/>
-            <magentoCLI command="config:set {{DisableFreeShippingMethod.path}} {{DisableFreeShippingMethod.value}}" stepKey="disableFreeShipping"/>
+            <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShipping"/>
             <!-- Delete product -->
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
@@ -57,7 +58,7 @@
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage"/>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>

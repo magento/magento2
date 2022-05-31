@@ -22,7 +22,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
              * @param string $path
              */
             function ($path) {
-                $this->assertFileNotExists(
+                $this->assertFileDoesNotExist(
                     BP . '/' . $path
                 );
             },

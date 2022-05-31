@@ -12,15 +12,15 @@ The Magento_AsynchronousOperations module creates the following tables in the da
 
 Before disabling or uninstalling this module, note that the following modules depends on this module:
 
-- Magento_WebapiAsync 
+- Magento_WebapiAsync
 
-For information about module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.3/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ## Extensibility
 
-Extension developers can interact with the Magento_AsynchronousOperations module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.3/extension-dev-guide/plugins.html).
+Extension developers can interact with the Magento_AsynchronousOperations module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
 
-[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.3/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_AsynchronousOperations module.
+[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_AsynchronousOperations module.
 
 ### Layouts
 
@@ -30,7 +30,7 @@ This module introduces the following layouts and layout handles in the `view/adm
 - `bulk_bulk_details_modal`
 - `bulk_index_index`
 
-For more information about layouts in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.3/frontend-dev-guide/layouts/layout-overview.html).
+For more information about layouts in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
 
 ### UI components
 
@@ -45,4 +45,4 @@ You can extend Magento_AsynchronousOperations module using the following configu
 - `retriable_operation_listing`
 - `retriable_operation_modal_listing`
 
-For information about UI components in Magento 2, see [Overview of UI components](https://devdocs.magento.com/guides/v2.3/ui_comp_guide/bk-ui_comps.html).
+For information about UI components in Magento 2, see [Overview of UI components](https://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).

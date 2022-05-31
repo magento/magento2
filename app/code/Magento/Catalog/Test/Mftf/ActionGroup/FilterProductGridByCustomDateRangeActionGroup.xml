@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FilterProductGridByCustomDateRangeActionGroup">
+        <annotations>
+            <description>Filters the Admin Products grid by the provided Date Filter.</description>
+        </annotations>
+        <arguments>
+            <argument name="code" type="string"/>
+            <argument name="date" type="string"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.inputByCodeRangeFrom(code)}}" userInput="{{date}}" stepKey="fillProductDatetimeFromFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.inputByCodeRangeTo(code)}}" userInput="{{date}}" stepKey="fillProductDatetimeToFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
+    </actionGroup>
+</actionGroups>

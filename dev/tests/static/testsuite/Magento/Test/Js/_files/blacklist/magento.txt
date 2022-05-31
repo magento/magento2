@@ -1,13 +1,13 @@
 app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/swagger-ui-bundle.js
+app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/swagger-ui-bundle.min.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/swagger-ui-standalone-preset.js
-app/code/Magento/Tinymce3/view/base/web/tiny_mce/**/*.js
 app/code/Magento/Catalog/view/adminhtml/web/catalog/product/composite/configure.js
 app/code/Magento/Rule/view/adminhtml/web/rules.js
 app/code/Magento/Sales/view/adminhtml/web/order/create/giftmessage.js
 app/code/Magento/Sales/view/adminhtml/web/order/create/scripts.js
 app/code/Magento/Shipping/view/adminhtml/web/order/packaging.js
-app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/swagger-ui.js
+app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/magento-swagger.js
+app/code/Magento/AdminAdobeIms/view/adminhtml/web/js/loadicons.js
 lib/web/mage/adminhtml/tools.js
 lib/web/mage/adminhtml/varienLoader.js
 lib/web/magnifier/magnifier.js
@@ -16,3 +16,6 @@ lib/web/varien/js.js
 
 // MINIFIED FILES
 app/code/**/*.min.js
+
+// TEST
+vendor/magento/magento-coding-standard/Magento2/Tests/Eslint/*

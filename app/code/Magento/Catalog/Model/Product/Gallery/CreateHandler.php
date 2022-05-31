@@ -45,8 +45,6 @@ class CreateHandler implements ExtensionInterface
     protected $attributeRepository;
 
     /**
-     * Resource model
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
      * @since 101.0.0
      */
@@ -174,7 +172,7 @@ class CreateHandler implements ExtensionInterface
                 if (!empty($image['removed'])) {
                     $clearImages[] = $image['file'];
                 } elseif (empty($image['value_id']) || !empty($image['recreate'])) {
-                    $newFile = $this->moveImageFromTmp($image['file']);
+                    $newFile = $this->moveImageFromTmp($image['file'] ?? '');
                     $image['new_file'] = $newFile;
                     $newImages[$image['file']] = $image;
                     $image['file'] = $newFile;
@@ -193,7 +191,7 @@ class CreateHandler implements ExtensionInterface
                 if (empty($image['value_id']) || !empty($image['removed'])) {
                     continue;
                 }
-                $duplicate[$image['value_id']] = $this->copyImage($image['file']);
+                $duplicate[$image['value_id']] = $this->copyImage($image['file'] ?? '');
                 $image['new_file'] = $duplicate[$image['value_id']];
                 $newImages[$image['file']] = $image;
             }
@@ -267,27 +265,48 @@ class CreateHandler implements ExtensionInterface
     {
         foreach ($images as &$image) {
             if (empty($image['removed'])) {
+                $isNew = empty($image['value_id']);
                 $data = $this->processNewImage($product, $image);
 
-                if (!$product->isObjectNew()) {
-                    $this->resourceModel->deleteGalleryValueInStore(
-                        $image['value_id'],
-                        $product->getData($this->metadata->getLinkField()),
-                        $product->getStoreId()
-                    );
-                }
                 // Add per store labels, position, disabled
                 $data['value_id'] = $image['value_id'];
                 $data['label'] = isset($image['label']) ? $image['label'] : '';
-                $data['position'] = isset($image['position']) ? (int)$image['position'] : 0;
+                $data['position'] = isset($image['position']) && $image['position'] !== ''
+                    ? (int)$image['position']
+                    : null;
                 $data['disabled'] = isset($image['disabled']) ? (int)$image['disabled'] : 0;
                 $data['store_id'] = (int)$product->getStoreId();
 
                 $data[$this->metadata->getLinkField()] = (int)$product->getData($this->metadata->getLinkField());
 
-                $this->resourceModel->insertGalleryValueInStore($data);
+                $this->saveGalleryStoreValue($product, $data);
+                if ($isNew && $data['store_id'] !== Store::DEFAULT_STORE_ID) {
+                    $dataForDefaultScope = $data;
+                    $dataForDefaultScope['store_id'] = Store::DEFAULT_STORE_ID;
+                    $dataForDefaultScope['disabled'] = 0;
+                    $dataForDefaultScope['label'] = null;
+                    $this->saveGalleryStoreValue($product, $dataForDefaultScope);
+                }
             }
         }
+    }
+
+    /**
+     * Save media gallery store value
+     *
+     * @param Product $product
+     * @param array $data
+     */
+    private function saveGalleryStoreValue(Product $product, array $data): void
+    {
+        if (!$product->isObjectNew()) {
+            $this->resourceModel->deleteGalleryValueInStore(
+                $data['value_id'],
+                $data[$this->metadata->getLinkField()],
+                $data['store_id']
+            );
+        }
+        $this->resourceModel->insertGalleryValueInStore($data);
     }
 
     /**
@@ -529,6 +548,7 @@ class CreateHandler implements ExtensionInterface
      * @param array $clearImages
      * @param array $newImages
      * @param array $existImages
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processMediaAttributeLabel(
         Product $product,
@@ -550,6 +570,9 @@ class CreateHandler implements ExtensionInterface
 
         if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
             $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
+            if ($existImages[$attrData]['label'] == null) {
+                $resetLabel = true;
+            }
         }
 
         if ($attrData === 'no_selection' && !empty($product->getData($mediaAttrCode . '_label'))) {

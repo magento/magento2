@@ -15,6 +15,7 @@ use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Store\Model\StoreDimensionProvider;
 use Magento\Indexer\Model\ProcessManager;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Provide functionality for Fulltext Search indexing.
@@ -32,12 +33,12 @@ class Fulltext implements
     /**
      * Indexer ID in configuration
      */
-    const INDEXER_ID = 'catalogsearch_fulltext';
+    public const INDEXER_ID = 'catalogsearch_fulltext';
 
     /**
      * Default batch size
      */
-    private const BATCH_SIZE = 100;
+    private const BATCH_SIZE = 1000;
 
     /**
      * @var array index structure
@@ -89,6 +90,18 @@ class Fulltext implements
     private $batchSize;
 
     /**
+     * @var DeploymentConfig|null
+     */
+    private $deploymentConfig;
+
+    /**
+     * Deployment config path
+     *
+     * @var string
+     */
+    private const DEPLOYMENT_CONFIG_INDEXER_BATCHES = 'indexer/batch_size/';
+
+    /**
      * @param FullFactory $fullActionFactory
      * @param IndexerHandlerFactory $indexerHandlerFactory
      * @param FulltextResource $fulltextResource
@@ -96,9 +109,11 @@ class Fulltext implements
      * @param StateFactory $indexScopeStateFactory
      * @param DimensionProviderInterface $dimensionProvider
      * @param array $data
-     * @param ProcessManager $processManager
+     * @param ProcessManager|null $processManager
      * @param int|null $batchSize
+     * @param DeploymentConfig|null $deploymentConfig
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FullFactory $fullActionFactory,
@@ -109,7 +124,8 @@ class Fulltext implements
         DimensionProviderInterface $dimensionProvider,
         array $data,
         ProcessManager $processManager = null,
-        ?int $batchSize = null
+        ?int $batchSize = null,
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
         $this->indexerHandlerFactory = $indexerHandlerFactory;
@@ -120,6 +136,7 @@ class Fulltext implements
         $this->dimensionProvider = $dimensionProvider;
         $this->processManager = $processManager ?: ObjectManager::getInstance()->get(ProcessManager::class);
         $this->batchSize = $batchSize ?? self::BATCH_SIZE;
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -164,6 +181,10 @@ class Fulltext implements
             $entityIds = iterator_to_array($entityIds);
             $currentBatch = [];
             $i = 0;
+
+            $this->batchSize = $this->deploymentConfig->get(
+                self::DEPLOYMENT_CONFIG_INDEXER_BATCHES . self::INDEXER_ID . '/partial_reindex'
+            ) ?? $this->batchSize;
 
             foreach ($entityIds as $entityId) {
                 $currentBatch[] = $entityId;

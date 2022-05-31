@@ -28,7 +28,7 @@ class Parser implements ParserInterface
     /**
      * data-translate html element attribute name
      */
-    const DATA_TRANSLATE = 'data-translate';
+    public const DATA_TRANSLATE = 'data-translate';
 
     /**
      * @var Escaper
@@ -426,7 +426,12 @@ class Parser implements ParserInterface
                     'location' => htmlspecialchars_decode($locationCallback($matches, $options)),
                 ]
             );
-            $text = substr_replace($text, $matches[1][0], $matches[0][1], strlen($matches[0][0]));
+
+            if (!str_contains($text, 'text/x-magento-init')) {
+                $text = substr_replace($text, $matches[1][0], $matches[0][1], strlen($matches[0][0]));
+            } else {
+                $text = substr_replace($text, $matches[3][0], $matches[0][1], strlen($matches[0][0]));
+            }
             $next = $matches[0][1];
         }
         return $trArr;
@@ -475,7 +480,7 @@ class Parser implements ParserInterface
                 } else {
                     $trAttr = ' ' . $this->_getHtmlAttribute(
                         self::DATA_TRANSLATE,
-                        '[' . str_replace("\"", "'", join(',', $trArr)) . ']'
+                        '[' . str_replace("\"", "&quot;", join(',', $trArr)) . ']'
                     );
                 }
                 $trAttr = $this->_addTranslateAttribute($trAttr);

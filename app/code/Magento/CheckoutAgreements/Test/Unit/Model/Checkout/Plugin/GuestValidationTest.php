@@ -20,6 +20,7 @@ use Magento\Quote\Api\Data\PaymentExtension;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -78,9 +79,7 @@ class GuestValidationTest extends TestCase
         $this->subjectMock = $this->getMockForAbstractClass(GuestPaymentInformationManagementInterface::class);
         $this->paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
         $this->addressMock = $this->getMockForAbstractClass(AddressInterface::class);
-        $this->extensionAttributesMock = $this->getMockBuilder(PaymentExtension::class)
-            ->addMethods(['getAgreementIds'])
-            ->getMock();
+        $this->extensionAttributesMock = $this->getPaymentExtension();
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->checkoutAgreementsListMock = $this->createMock(
             CheckoutAgreementsListInterface::class
@@ -164,5 +163,22 @@ class GuestValidationTest extends TestCase
         $this->expectExceptionMessage(
             "The order wasn't placed. First, agree to the terms and conditions, then try placing your order again."
         );
+    }
+
+    /**
+     * Build payment extension mock.
+     *
+     * @return MockObject
+     */
+    private function getPaymentExtension(): MockObject
+    {
+        $mockBuilder = $this->getMockBuilder(PaymentExtension::class);
+        try {
+            $mockBuilder->addMethods(['getAgreementIds']);
+        } catch (RuntimeException $e) {
+            // Payment extension already generated.
+        }
+
+        return $mockBuilder->getMock();
     }
 }

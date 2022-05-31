@@ -1,0 +1,1 @@
+magento/module-aws-s3

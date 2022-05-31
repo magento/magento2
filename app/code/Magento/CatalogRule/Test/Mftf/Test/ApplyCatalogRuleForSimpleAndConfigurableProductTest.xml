@@ -115,12 +115,10 @@
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
             <argument name="indices" value=""/>
         </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Navigate to category on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
 
         <!-- Sort products By Price -->
         <actionGroup ref="StorefrontCategoryPageSortProductActionGroup" stepKey="sortProductByPrice"/>
@@ -158,7 +156,7 @@
         </actionGroup>
 
         <!-- Navigate to simple product on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct.name$)}}" stepKey="goToProductPage1"/>
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct.custom_attributes[url_key]$)}}" stepKey="goToProductPage1"/>
 
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
         <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertStorefrontProductPrices">

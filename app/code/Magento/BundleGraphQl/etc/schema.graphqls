@@ -2,122 +2,128 @@
 # See COPYING.txt for license details.
 
 type Mutation {
-    addBundleProductsToCart(input: AddBundleProductsToCartInput): AddBundleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
+    addBundleProductsToCart(input: AddBundleProductsToCartInput @doc(description: "An input object that defines which bundle products to add to the cart.")): AddBundleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart") @doc(description: "Add one or more bundle products to the specified cart. We recommend using `addProductsToCart` instead.")
 }
 
-input AddBundleProductsToCartInput {
-    cart_id: String!
-    cart_items: [BundleProductCartItemInput!]!
+input AddBundleProductsToCartInput @doc(description: "Defines the bundle products to add to the cart.") {
+    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_items: [BundleProductCartItemInput!]! @doc(description: "An array of bundle products to add.")
 }
 
-input BundleProductCartItemInput {
-    data: CartItemInput!
-    bundle_options:[BundleOptionInput!]!
-    customizable_options:[CustomizableOptionInput!]
+input BundleProductCartItemInput @doc(description: "Defines a single bundle product.") {
+    data: CartItemInput! @doc(description: "The quantity and SKU of the bundle product.")
+    bundle_options:[BundleOptionInput!]! @doc(description: "A mandatory array of options for the bundle product, including each chosen option and specified quantity.")
+    customizable_options:[CustomizableOptionInput!] @doc(description: "The ID and value of the option.")
 }
 
-input BundleOptionInput {
-    id: Int!
-    quantity: Float!
-    value: [String!]!
+input BundleOptionInput @doc(description: "Defines the input for a bundle option.") {
+    id: Int! @doc(description: "The ID of the option.")
+    quantity: Float! @doc(description: "The number of the selected item to add to the cart.")
+    value: [String!]! @doc(description: "An array with the chosen value of the option.")
 }
 
-type AddBundleProductsToCartOutput {
-    cart: Cart!
+type AddBundleProductsToCartOutput @doc(description: "Contains details about the cart after adding bundle products.") {
+    cart: Cart! @doc(description: "The cart after adding products.")
 }
 
-type BundleCartItem implements CartItemInterface {
-    customizable_options: [SelectedCustomizableOption]! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
-    bundle_options: [SelectedBundleOption!]! @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\BundleOption")
+type BundleCartItem implements CartItemInterface @doc(description: "An implementation for bundle product cart items.") {
+    customizable_options: [SelectedCustomizableOption]! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions") @doc(description: "An array containing the customizable options the shopper selected.")
+    bundle_options: [SelectedBundleOption!]! @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\BundleOption") @doc(description: "An array containing the bundle options the shopper selected.")
 }
 
-type SelectedBundleOption {
-    id: Int!
-    label: String!
-    type: String!
-    values: [SelectedBundleOptionValue!]!
+type SelectedBundleOption @doc(description: "Contains details about a selected bundle option.") {
+    id: Int! @deprecated(reason: "Use `uid` instead")
+    uid: ID! @doc(description: "The unique ID for a `SelectedBundleOption` object")
+    label: String! @doc(description: "The display name of the selected bundle product option.")
+    type: String! @doc(description: "The type of selected bundle product option.")
+    values: [SelectedBundleOptionValue!]! @doc(description: "An array of selected bundle option values.")
 }
 
-type SelectedBundleOptionValue {
-    id: Int!
-    label: String!
-    quantity: Float!
-    price: Float!
+type SelectedBundleOptionValue @doc(description: "Contains details about a value for a selected bundle option.") {
+    id: Int! @doc(description: "Use `uid` instead")
+    uid: ID! @doc(description: "The unique ID for a `SelectedBundleOptionValue` object")
+    label: String! @doc(description: "The display name of the value for the selected bundle product option.")
+    quantity: Float! @doc(description: "The quantity of the value for the selected bundle product option.")
+    price: Float! @doc(description: "The price of the value for the selected bundle product option.")
 }
 
-type BundleItem @doc(description: "BundleItem defines an individual item in a bundle product.") {
-    option_id: Int @doc(description: "An ID assigned to each type of item in a bundle product.")
+type BundleItem @doc(description: "Defines an individual item within a bundle product.") {
+    option_id: Int @deprecated(reason: "Use `uid` instead") @doc(description: "An ID assigned to each type of item in a bundle product.")
+    uid: ID @doc(description: "The unique ID for a `BundleItem` object.")
     title: String @doc(description: "The display name of the item.")
     required: Boolean @doc(description: "Indicates whether the item must be included in the bundle.")
     type: String @doc(description: "The input type that the customer uses to select the item. Examples include radio button and checkbox.")
-    position: Int @doc(description: "he relative position of this item compared to the other bundle items.")
+    position: Int @doc(description: "A number indicating the sequence order of this item compared to the other bundle items.")
     sku: String @doc(description: "The SKU of the bundle product.")
+    price_range: PriceRange! @doc(description: "The range of prices for the product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\PriceRange")
     options: [BundleItemOption] @doc(description: "An array of additional options for this bundle item.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\BundleItemLinks")
 }
 
-type BundleItemOption @doc(description: "BundleItemOption defines characteristics and options for a specific bundle item.") {
-    id: Int @doc(description: "The ID assigned to the bundled item option.")
+type BundleItemOption @doc(description: "Defines the characteristics that comprise a specific bundle item and its options.") {
+    id: Int @deprecated(reason: "Use `uid` instead") @doc(description: "The ID assigned to the bundled item option.")
     label: String @doc(description: "The text that identifies the bundled item option.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Options\\Label")
-    qty: Float @deprecated(reason: "The `qty` is deprecated. Use `quantity` instead.") @doc(description: "Indicates the quantity of this specific bundle item.")
-    quantity: Float @doc(description: "Indicates the quantity of this specific bundle item.")
+    qty: Float @deprecated(reason: "Use `quantity` instead.") @doc(description: "Indicates the quantity of this specific bundle item.")
+    quantity: Float @doc(description: "The quantity of this specific bundle item.")
     position: Int @doc(description: "When a bundle item contains multiple options, the relative position of this option compared to the other options.")
     is_default: Boolean @doc(description: "Indicates whether this option is the default option.")
     price: Float @doc(description: "The price of the selected option.")
     price_type: PriceTypeEnum @doc(description: "One of FIXED, PERCENT, or DYNAMIC.")
     can_change_quantity: Boolean @doc(description: "Indicates whether the customer can change the number of items for this option.")
     product: ProductInterface @doc(description: "Contains details about this product option.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product")
-    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Options\\BundleItemOptionUid") # A Base64 string that encodes option details.
+    uid: ID! @doc(description: "The unique ID for a `BundleItemOption` object.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Options\\BundleItemOptionUid")
 }
 
-type BundleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "BundleProduct defines basic features of a bundle product and contains multiple BundleItems.") {
+type BundleProduct implements ProductInterface, RoutableInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "Defines basic features of a bundle product and contains multiple BundleItems.") {
     price_view: PriceViewEnum @doc(description: "One of PRICE_RANGE or AS_LOW_AS.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Product\\Fields\\PriceView")
     dynamic_price: Boolean @doc(description: "Indicates whether the bundle product has a dynamic price.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Product\\Fields\\DynamicPrice")
-    dynamic_sku: Boolean @doc(description: "Indicates whether the bundle product has a dynamic SK.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Product\\Fields\\DynamicSku")
+    dynamic_sku: Boolean @doc(description: "Indicates whether the bundle product has a dynamic SKU.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Product\\Fields\\DynamicSku")
     ship_bundle_items: ShipBundleItemsEnum @doc(description: "Indicates whether to ship bundle items together or individually.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Product\\Fields\\ShipBundleItems")
     dynamic_weight: Boolean @doc(description: "Indicates whether the bundle product has a dynamically calculated weight.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Product\\Fields\\DynamicWeight")
     items: [BundleItem] @doc(description: "An array containing information about individual bundle items.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\BundleItems")
 }
 
-enum PriceViewEnum @doc(description: "This enumeration defines whether a bundle product's price is displayed as the lowest possible value or as a range.") {
+enum PriceViewEnum @doc(description: "Defines whether a bundle product's price is displayed as the lowest possible value or as a range.") {
     PRICE_RANGE
     AS_LOW_AS
 }
 
-enum ShipBundleItemsEnum @doc(description: "This enumeration defines whether bundle items must be shipped together.") {
+enum ShipBundleItemsEnum @doc(description: "Defines whether bundle items must be shipped together.") {
     TOGETHER
     SEPARATELY
 }
 
-type BundleOrderItem implements OrderItemInterface {
-    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
+type BundleOrderItem implements OrderItemInterface @doc(description: "Defines bundle product options for `OrderItemInterface`.") {
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
 }
 
-type BundleInvoiceItem implements InvoiceItemInterface{
-    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
+type BundleInvoiceItem implements InvoiceItemInterface @doc(description: "Defines bundle product options for `InvoiceItemInterface`.") {
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to an invoiced bundle product.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
 }
 
-type BundleShipmentItem implements ShipmentItemInterface {
-    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
+type BundleShipmentItem implements ShipmentItemInterface @doc(description: "Defines bundle product options for `ShipmentItemInterface`.") {
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to a shipped product.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
 }
 
-type BundleCreditMemoItem implements CreditMemoItemInterface {
-    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
+type BundleCreditMemoItem implements CreditMemoItemInterface @doc(description: "Defines bundle product options for `CreditMemoItemInterface`.") {
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to a bundle product that is part of a credit memo.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
 }
 
-type ItemSelectedBundleOption @doc(description: "A list of options of the selected bundle product") {
-    id: ID! @doc(description: "The unique identifier of the option")
-    label: String! @doc(description: "The label of the option")
-    values: [ItemSelectedBundleOptionValue] @doc(description: "A list of products that represent the values of the parent option")
+type ItemSelectedBundleOption @doc(description: "A list of options of the selected bundle product.") {
+    id: ID! @deprecated(reason: "Use `uid` instead.") @doc(description: "The unique ID for a `ItemSelectedBundleOption` object.")
+    uid: ID! @doc(description: "The unique ID for a `ItemSelectedBundleOption` object.")
+    label: String! @doc(description: "The label of the option.")
+    values: [ItemSelectedBundleOptionValue] @doc(description: "A list of products that represent the values of the parent option.")
 }
 
-type ItemSelectedBundleOptionValue @doc(description: "A list of values for the selected bundle product") {
-    id: ID! @doc(description: "The unique identifier of the value")
-    product_name: String! @doc(description: "The name of the child bundle product")
-    product_sku: String! @doc(description: "The SKU of the child bundle product")
-    quantity: Float! @doc(description: "Indicates how many of this bundle product were ordered")
-    price: Money! @doc(description: "The price of the child bundle product")
+type ItemSelectedBundleOptionValue @doc(description: "A list of values for the selected bundle product.") {
+    id: ID! @deprecated(reason: "Use `uid` instead.") @doc(description: "The unique ID for a `ItemSelectedBundleOptionValue` object.")
+    uid: ID! @doc(description: "The unique ID for a `ItemSelectedBundleOptionValue` object.")
+    product_name: String! @doc(description: "The name of the child bundle product.")
+    product_sku: String! @doc(description: "The SKU of the child bundle product.")
+    quantity: Float! @doc(description: "The number of this bundle product that were ordered.")
+    price: Money! @doc(description: "The price of the child bundle product.")
 }
 
-type BundleWishlistItem implements WishlistItemInterface {
-    bundle_options: [SelectedBundleOption!] @doc(description: "An array containing information about the selected bundle items") @resolver(class: "\\Magento\\BundleGraphQl\\Model\\Wishlist\\BundleOptions")
+type BundleWishlistItem implements WishlistItemInterface @doc(description: "Defines bundle product options for `WishlistItemInterface`.") {
+    bundle_options: [SelectedBundleOption!] @doc(description: "An array containing information about the selected bundle items.") @resolver(class: "\\Magento\\BundleGraphQl\\Model\\Wishlist\\BundleOptions")
 }

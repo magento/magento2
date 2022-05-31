@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 use Magento\CatalogRule\Model\Indexer\ProductPriceCalculator;
@@ -51,6 +50,9 @@ class ReindexRuleProductPriceTest extends TestCase
      */
     private $pricesPersistorMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
@@ -64,11 +66,15 @@ class ReindexRuleProductPriceTest extends TestCase
             $this->ruleProductsSelectBuilderMock,
             $this->productPriceCalculatorMock,
             $this->localeDate,
-            $this->pricesPersistorMock
+            $this->pricesPersistorMock,
+            true
         );
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $websiteId = 234;
         $defaultGroupId = 11;
@@ -116,12 +122,9 @@ class ReindexRuleProductPriceTest extends TestCase
             ->with($defaultStoreId, null, true)
             ->willReturn(new \DateTime());
 
-        $statementMock->expects($this->at(0))
+        $statementMock
             ->method('fetch')
-            ->willReturn($ruleData);
-        $statementMock->expects($this->at(1))
-            ->method('fetch')
-            ->willReturn(false);
+            ->willReturnOnConsecutiveCalls($ruleData, false);
 
         $this->productPriceCalculatorMock->expects($this->atLeastOnce())
             ->method('calculate');

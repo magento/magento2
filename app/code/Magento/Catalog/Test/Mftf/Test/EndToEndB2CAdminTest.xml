@@ -19,6 +19,7 @@
             <skip>
                 <issueId value="MQE-891"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
@@ -63,7 +64,9 @@
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{VirtualProduct.sku}}" stepKey="fillVirtualName"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{VirtualProduct.name}}" stepKey="fillVirtualSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{VirtualProduct.price}}" stepKey="fillVirtualPrice"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{VirtualProduct.quantity}}" stepKey="fillVirtualQty"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillVirtualQty">
+            <argument name="productQty" value="{{VirtualProduct.quantity}}"/>
+        </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveVirtualProduct"/>
         <actionGroup ref="ViewProductInAdminGridActionGroup" stepKey="viewVirtualProductInGrid">
             <argument name="product" value="VirtualProduct"/>
@@ -260,5 +263,6 @@
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteVirtualProduct">
             <argument name="product" value="VirtualProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

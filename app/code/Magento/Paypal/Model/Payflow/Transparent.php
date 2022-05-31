@@ -9,6 +9,8 @@ namespace Magento\Paypal\Model\Payflow;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Framework\Validator\Exception as ValidatorException;
+use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Payment\Helper\Formatter;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
@@ -32,9 +34,9 @@ class Transparent extends Payflowpro implements TransparentInterface
 {
     use Formatter;
 
-    const CC_DETAILS = 'cc_details';
+    public const CC_DETAILS = 'cc_details';
 
-    const CC_VAULT_CODE = 'payflowpro_cc_vault';
+    public const CC_VAULT_CODE = 'payflowpro_cc_vault';
 
     /**
      * Result code of account verification transaction request.
@@ -178,7 +180,9 @@ class Transparent extends Payflowpro implements TransparentInterface
      * @param InfoInterface|Object $payment
      * @param float $amount
      * @return $this
+     * @throws CommandException
      * @throws InvalidTransitionException
+     * @throws ValidatorException
      * @throws LocalizedException
      */
     public function authorize(InfoInterface $payment, $amount)
@@ -218,10 +222,10 @@ class Transparent extends Payflowpro implements TransparentInterface
 
         try {
             $this->responseValidator->validate($response, $this);
-        } catch (LocalizedException $exception) {
+        } catch (ValidatorException $exception) {
             $payment->setParentTransactionId($response->getData(self::PNREF));
             $this->void($payment);
-            throw new LocalizedException(__("The payment couldn't be processed at this time. Please try again later."));
+            throw new ValidatorException(__("The payment couldn't be processed at this time. Please try again later."));
         }
 
         $this->setTransStatus($payment, $response);
@@ -331,11 +335,9 @@ class Transparent extends Payflowpro implements TransparentInterface
         $zeroAmountAuthorizationId = $this->getZeroAmountAuthorizationId($payment);
         /** @var PaymentTokenInterface $vaultPaymentToken */
         $vaultPaymentToken = $payment->getExtensionAttributes()->getVaultPaymentToken();
-        if ($vaultPaymentToken && empty($zeroAmountAuthorizationId)) {
+        if ($vaultPaymentToken && empty($zeroAmountAuthorizationId) && empty($payment->getParentTransactionId())) {
             $payment->setAdditionalInformation(self::PNREF, $vaultPaymentToken->getGatewayToken());
-            if (!$payment->getParentTransactionId()) {
-                $payment->setParentTransactionId($vaultPaymentToken->getGatewayToken());
-            }
+            $payment->setParentTransactionId($vaultPaymentToken->getGatewayToken());
         }
         parent::capture($payment, $amount);
 

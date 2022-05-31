@@ -122,7 +122,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     protected function numericValidation($attrCode, $type)
     {
-        $val = trim($this->_rowData[$attrCode]);
+        $val = trim($this->_rowData[$attrCode] ?? '');
         if ($type == 'int') {
             $valid = (string)(int)$val === $val;
         } else {
@@ -205,7 +205,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             return $valid;
         }
 
-        if (!strlen(trim($rowData[$attrCode]))) {
+        if ($rowData[$attrCode] === null || trim($rowData[$attrCode]) === '') {
             return true;
         }
 
@@ -213,6 +213,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             return true;
         }
 
+        $valid = false;
         switch ($attrParams['type']) {
             case 'varchar':
             case 'text':

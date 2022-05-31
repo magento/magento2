@@ -43,6 +43,7 @@
             <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
+            <deleteData createDataKey="virtualProduct1" stepKey="deleteVirtualProduct"/>
             <!-- Go to the tax rule page and delete the row we created-->
             <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
@@ -66,9 +67,13 @@
 
             <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{Simple_US_Customer_NY.email}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
-            <deleteData createDataKey="virtualProduct1" stepKey="deleteVirtualProduct1"/>
+            <comment userInput="BIC workaround" stepKey="deleteVirtualProduct1"/>
         </after>
 
         <!-- Fill out form for a new user with address -->
@@ -87,11 +92,12 @@
         </actionGroup>
 
         <!-- Go to the created product page and add it to the cart -->
-        <amOnPage url="$$virtualProduct1.sku$$.html" stepKey="goToVirtualProductPage"/>
+        <amOnPage url="$$virtualProduct1.custom_attributes[url_key]$$.html" stepKey="goToVirtualProductPage"/>
         <waitForPageLoad stepKey="waitForVirtualProductPage"/>
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
         <click stepKey="addVirtualProductToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForPageLoad stepKey="waitForProductAdded"/>
-        <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You added"/>
+        <see stepKey="seeSuccess" selector="{{StorefrontMessagesSection.success}}" userInput="You added"/>
 
         <!-- Assert that taxes are applied correctly for NY -->
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
@@ -115,9 +121,9 @@
             <argument name="Address" value="US_Address_CA"/>
             <argument name="classPrefix" value="[aria-hidden=false]"/>
         </actionGroup>
-        <click stepKey="saveAddress" selector="{{CheckoutShippingSection.updateAddress}}"/>
+        <actionGroup ref="StorefrontClickUpdateAddressInCheckoutActionGroup" stepKey="saveAddress"/>
 
-        <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <comment userInput="BIC workaround" stepKey="waitForAddressSaved"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <see stepKey="seeAddress2" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxCA.state}}"/>

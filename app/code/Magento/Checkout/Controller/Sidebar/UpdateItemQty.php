@@ -5,15 +5,18 @@
  */
 namespace Magento\Checkout\Controller\Sidebar;
 
+use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Checkout\Model\Sidebar;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class UpdateItemQty extends Action
+class UpdateItemQty extends Action implements HttpPostActionInterface
 {
     /**
      * @var Sidebar
@@ -31,31 +34,41 @@ class UpdateItemQty extends Action
     protected $jsonHelper;
 
     /**
+     * @var RequestQuantityProcessor
+     */
+    private $quantityProcessor;
+
+    /**
      * @param Context $context
      * @param Sidebar $sidebar
      * @param LoggerInterface $logger
      * @param Data $jsonHelper
+     * @param RequestQuantityProcessor|null $quantityProcessor
      * @codeCoverageIgnore
      */
     public function __construct(
         Context $context,
         Sidebar $sidebar,
         LoggerInterface $logger,
-        Data $jsonHelper
+        Data $jsonHelper,
+        ?RequestQuantityProcessor $quantityProcessor = null
     ) {
         $this->sidebar = $sidebar;
         $this->logger = $logger;
         $this->jsonHelper = $jsonHelper;
         parent::__construct($context);
+        $this->quantityProcessor = $quantityProcessor
+            ?? ObjectManager::getInstance()->get(RequestQuantityProcessor::class);
     }
 
     /**
-     * @return $this
+     * @inheritdoc
      */
     public function execute()
     {
         $itemId = (int)$this->getRequest()->getParam('item_id');
-        $itemQty = $this->getRequest()->getParam('item_qty') * 1;
+        $itemQty = (float)$this->getRequest()->getParam('item_qty') * 1;
+        $itemQty = $this->quantityProcessor->prepareQuantity($itemQty);
 
         try {
             $this->sidebar->checkQuoteItem($itemId);

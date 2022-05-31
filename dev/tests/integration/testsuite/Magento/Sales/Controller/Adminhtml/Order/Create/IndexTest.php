@@ -52,9 +52,17 @@ class IndexTest extends AbstractBackendController
     public function testExecute(): void
     {
         $customerId = 1;
+        $editingOrderId = 10;
+
         $this->getRequest()->setMethod(Http::METHOD_GET);
         $this->getRequest()->setParam('customer_id', $customerId);
+        $this->quoteSession->setOrderId($editingOrderId);
+        $this->assertEquals($editingOrderId, $this->quoteSession->getOrderId());
         $this->dispatch('backend/sales/order_create/index');
+
+        // Check that existing order in session was cleared
+        $this->assertEquals(null, $this->quoteSession->getOrderId());
+
         $store = $this->storeManager->getStore();
         $this->assertEquals($customerId, $this->quoteSession->getCustomerId());
         $ruleData = $this->registry->registry('rule_data');

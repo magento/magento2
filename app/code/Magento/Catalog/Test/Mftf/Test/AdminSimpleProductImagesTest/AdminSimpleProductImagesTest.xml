@@ -106,7 +106,7 @@
 
         <!-- Save the first product and go to the storefront -->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
-        <amOnPage url="$$firstProduct.name$$.html" stepKey="goToStorefront"/>
+        <amOnPage url="$$firstProduct.custom_attributes[url_key]$$.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
 
         <!-- See all of the images that we uploaded -->
@@ -118,7 +118,7 @@
         <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('png')}}" stepKey="seePng"/>
 
         <!-- Go to the category page and see a placeholder image for the second product -->
-        <amOnPage url="$$category.name$$.html" stepKey="goToCategoryPage"/>
+        <amOnPage url="$$category.custom_attributes[url_key]$$.html" stepKey="goToCategoryPage"/>
         <seeElement selector=".products-grid img[src*='placeholder/small_image.jpg']" stepKey="seePlaceholder"/>
 
         <!-- Go to the second product edit page -->
@@ -141,12 +141,8 @@
 
         <!-- Save the second product -->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Go to the admin grid and see the uploaded image -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex3"/>
@@ -157,11 +153,11 @@
         <seeElement selector="img.admin__control-thumbnail[src*='/large']" stepKey="seeImgInGrid"/>
 
         <!-- Go to the category page and see the uploaded image -->
-        <amOnPage url="$$category.name$$.html" stepKey="goToCategoryPage2"/>
+        <amOnPage url="$$category.custom_attributes[url_key]$$.html" stepKey="goToCategoryPage2"/>
         <seeElement selector=".products-grid img[src*='/large']" stepKey="seeUploadedImg"/>
 
         <!-- Go to the product page and see the uploaded image -->
-        <amOnPage url="$$secondProduct.name$$.html" stepKey="goToStorefront2"/>
+        <amOnPage url="$$secondProduct.custom_attributes[url_key]$$.html" stepKey="goToStorefront2"/>
         <waitForPageLoad stepKey="waitForStorefront2"/>
         <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge2"/>
     </test>

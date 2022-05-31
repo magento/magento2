@@ -17,6 +17,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Async\CallbackDeferred;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\HTTP\AsyncClient\HttpException;
 use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
@@ -28,11 +29,13 @@ use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory as RateErrorFactory;
 use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory as RateMethodFactory;
 use Magento\Sales\Model\Order\Shipment as OrderShipment;
+use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Carrier\CarrierInterface;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\Result\ProxyDeferredFactory;
 use Magento\Shipping\Model\Rate\ResultFactory as RateFactory;
+use Magento\Shipping\Model\Shipment\Request as Shipment;
 use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Shipping\Model\Simplexml\ElementFactory;
 use Magento\Shipping\Model\Tracking\Result\ErrorFactory as TrackErrorFactory;
@@ -40,7 +43,6 @@ use Magento\Shipping\Model\Tracking\Result\StatusFactory as TrackStatusFactory;
 use Magento\Shipping\Model\Tracking\ResultFactory as TrackFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Ups\Helper\Config;
-use Magento\Shipping\Model\Shipment\Request as Shipment;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Throwable;
@@ -59,14 +61,14 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      *
      * @var string
      */
-    const CODE = 'ups';
+    public const CODE = 'ups';
 
     /**
      * Delivery Confirmation level based on origin/destination
      */
-    const DELIVERY_CONFIRMATION_SHIPMENT = 1;
+    public const DELIVERY_CONFIRMATION_SHIPMENT = 1;
 
-    const DELIVERY_CONFIRMATION_PACKAGE = 2;
+    public const DELIVERY_CONFIRMATION_PACKAGE = 2;
 
     /**
      * Code of the carrier
@@ -90,22 +92,16 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     protected $_result;
 
     /**
-     * Base currency rate
-     *
      * @var float
      */
     protected $_baseCurrencyRate;
 
     /**
-     * Xml access request
-     *
      * @var string
      */
     protected $_xmlAccessRequest;
 
     /**
-     * Default cgi gateway url
-     *
      * @var string
      */
     protected $_defaultCgiGatewayUrl = 'https://www.ups.com/using/services/rave/qcostcgi.cgi';
@@ -153,7 +149,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     protected $configHelper;
 
     /**
-     * @inheritdoc
+     * @var string[]
      */
     protected $_debugReplacePrivateDataKeys = [
         'UserId',
@@ -253,7 +249,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      */
     public function collectRates(RateRequest $request)
     {
-        $this->setRequest($request);
         if (!$this->canCollectRates()) {
             return $this->getErrorMessage();
         }
@@ -375,27 +370,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $destCountry = self::USA_COUNTRY_ID;
         }
 
-        //for UPS, puerto rico state for US will assume as puerto rico country
-        if ($destCountry == self::USA_COUNTRY_ID
-            && ($request->getDestPostcode() == '00912'
-                || $request->getDestRegionCode() == self::PUERTORICO_COUNTRY_ID)
-        ) {
-            $destCountry = self::PUERTORICO_COUNTRY_ID;
-        }
-
-        // For UPS, Guam state of the USA will be represented by Guam country
-        if ($destCountry == self::USA_COUNTRY_ID && $request->getDestRegionCode() == self::GUAM_REGION_CODE) {
-            $destCountry = self::GUAM_COUNTRY_ID;
-        }
-
-        // For UPS, Las Palmas and Santa Cruz de Tenerife will be represented by Canary Islands country
-        if ($destCountry === 'ES' &&
-            ($request->getDestRegionCode() === 'Las Palmas'
-                || $request->getDestRegionCode() === 'Santa Cruz de Tenerife')
-        ) {
-            $destCountry = 'IC';
-        }
-
         $country = $this->_countryFactory->create()->load($destCountry);
         $rowRequest->setDestCountry($country->getData('iso2_code') ?: $destCountry);
 
@@ -405,15 +379,33 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $rowRequest->setDestPostal($request->getDestPostcode());
         }
 
-        $weight = $this->getTotalNumOfBoxes($request->getPackageWeight());
+        $rowRequest->setOrigCountry(
+            $this->getNormalizedCountryCode(
+                $rowRequest->getOrigCountry(),
+                $rowRequest->getOrigRegionCode(),
+                $rowRequest->getOrigPostal()
+            )
+        );
 
-        $weight = $this->_getCorrectWeight($weight);
+        $rowRequest->setDestCountry(
+            $this->getNormalizedCountryCode(
+                $rowRequest->getDestCountry(),
+                $rowRequest->getDestRegionCode(),
+                $rowRequest->getDestPostal()
+            )
+        );
 
-        $rowRequest->setWeight($weight);
         if ($request->getFreeMethodWeight() != $request->getPackageWeight()) {
             $rowRequest->setFreeMethodWeight($request->getFreeMethodWeight());
         }
 
+        $rowRequest->setPackages(
+            $this->createPackages(
+                (float) $request->getPackageWeight(),
+                (array) $request->getPackages()
+            )
+        );
+        $rowRequest->setWeight($this->_getCorrectWeight($request->getPackageWeight()));
         $rowRequest->setValue($request->getPackageValue());
         $rowRequest->setValueWithDiscount($request->getPackageValueWithDiscount());
 
@@ -429,6 +421,40 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $this->_rawRequest = $rowRequest;
 
         return $this;
+    }
+
+    /**
+     * Return country code according to UPS
+     *
+     * @param string $countryCode
+     * @param string $regionCode
+     * @param string $postCode
+     * @return string
+     */
+    private function getNormalizedCountryCode($countryCode, $regionCode, $postCode)
+    {
+        //for UPS, puerto rico state for US will assume as puerto rico country
+        if ($countryCode == self::USA_COUNTRY_ID
+            && ($postCode == '00912'
+                || $regionCode == self::PUERTORICO_COUNTRY_ID)
+        ) {
+            $countryCode = self::PUERTORICO_COUNTRY_ID;
+        }
+
+        // For UPS, Guam state of the USA will be represented by Guam country
+        if ($countryCode == self::USA_COUNTRY_ID && $regionCode == self::GUAM_REGION_CODE) {
+            $countryCode = self::GUAM_COUNTRY_ID;
+        }
+
+        // For UPS, Las Palmas and Santa Cruz de Tenerife will be represented by Canary Islands country
+        if ($countryCode === 'ES' &&
+            ($regionCode === 'Las Palmas'
+                || $regionCode === 'Santa Cruz de Tenerife')
+        ) {
+            $countryCode = 'IC';
+        }
+
+        return $countryCode;
     }
 
     /**
@@ -775,7 +801,10 @@ XMLRequest;
           <StateProvinceCode>{$params['origRegionCode']}</StateProvinceCode>
       </Address>
     </ShipFrom>
+XMLRequest;
 
+        foreach ($rowRequest->getPackages() as $package) {
+            $xmlParams .= <<<XMLRequest
     <Package>
       <PackagingType>
         <Code>{$params['48_container']}</Code>
@@ -784,10 +813,11 @@ XMLRequest;
         <UnitOfMeasurement>
           <Code>{$rowRequest->getUnitMeasure()}</Code>
         </UnitOfMeasurement>
-        <Weight>{$params['23_weight']}</Weight>
+        <Weight>{$this->_getCorrectWeight($package['weight'])}</Weight>
       </PackageWeight>
     </Package>
 XMLRequest;
+        }
 
         if ($this->getConfigFlag('negotiated_active')) {
             $xmlParams .= "<RateInformation><NegotiatedRatesIndicator/></RateInformation>";
@@ -806,16 +836,24 @@ XMLRequest;
         $httpResponse = $this->asyncHttpClient->request(
             new Request($url, Request::METHOD_POST, ['Content-Type' => 'application/xml'], $xmlRequest)
         );
-
+        $debugData['request'] = $xmlParams;
         return $this->deferredProxyFactory->create(
             [
                 'deferred' => new CallbackDeferred(
-                    function () use ($httpResponse) {
-                        if ($httpResponse->get()->getStatusCode() >= 400) {
-                            $xmlResponse = '';
-                        } else {
-                            $xmlResponse = $httpResponse->get()->getBody();
+                    function () use ($httpResponse, $debugData) {
+                        $responseResult = null;
+                        $xmlResponse = '';
+                        try {
+                            $responseResult = $httpResponse->get();
+                        } catch (HttpException $e) {
+                            $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
+                            $this->_logger->critical($e);
                         }
+                        if ($responseResult) {
+                            $xmlResponse = $responseResult->getStatusCode() >= 400 ? '' : $responseResult->getBody();
+                        }
+                        $debugData['result'] = $xmlResponse;
+                        $this->_debug($debugData);
 
                         return $this->_parseXmlResponse($xmlResponse);
                     }
@@ -879,7 +917,7 @@ XMLRequest;
             $success = (int)$arr[0];
             if ($success === 1) {
                 $arr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment");
-                $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
+                $allowedMethods = explode(",", $this->getConfigData('allowed_methods') ?? '');
 
                 // Negotiated rates
                 $negotiatedArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates");
@@ -1034,6 +1072,40 @@ XMLRequest;
     }
 
     /**
+     * Get final price for shipping method with handling fee per package
+     *
+     * @param float $cost
+     * @param string $handlingType
+     * @param float $handlingFee
+     * @return float
+     */
+    protected function _getPerpackagePrice($cost, $handlingType, $handlingFee)
+    {
+        if ($handlingType == AbstractCarrier::HANDLING_TYPE_PERCENT) {
+            return $cost + $cost * $this->_numBoxes * $handlingFee / 100;
+        }
+
+        return $cost + $this->_numBoxes * $handlingFee;
+    }
+
+    /**
+     * Get final price for shipping method with handling fee per order
+     *
+     * @param float $cost
+     * @param string $handlingType
+     * @param float $handlingFee
+     * @return float
+     */
+    protected function _getPerorderPrice($cost, $handlingType, $handlingFee)
+    {
+        if ($handlingType == self::HANDLING_TYPE_PERCENT) {
+            return $cost + $cost * $handlingFee / 100;
+        }
+
+        return $cost + $handlingFee;
+    }
+
+    /**
      * Get tracking
      *
      * @param string|string[] $trackings
@@ -1119,6 +1191,7 @@ XMLAuth;
         /** @var HttpResponseDeferredInterface[] $trackingResponses */
         $trackingResponses = [];
         $tracking = '';
+        $debugData = [];
         foreach ($trackings as $tracking) {
             /**
              * RequestOption==>'1' to request all activities
@@ -1135,7 +1208,7 @@ XMLAuth;
     <IncludeFreight>01</IncludeFreight>
 </TrackRequest>
 XMLAuth;
-
+            $debugData[$tracking] = ['request' => $this->filterDebugData($this->_xmlAccessRequest) . $xmlRequest];
             $trackingResponses[$tracking] = $this->asyncHttpClient->request(
                 new Request(
                     $url,
@@ -1149,6 +1222,8 @@ XMLAuth;
             $httpResponse = $response->get();
             $xmlResponse = $httpResponse->getStatusCode() >= 400 ? '' : $httpResponse->getBody();
 
+            $debugData[$tracking]['result'] = $xmlResponse;
+            $this->_debug($debugData);
             $this->_parseXmlTrackingResponse($tracking, $xmlResponse);
         }
 
@@ -1315,11 +1390,8 @@ XMLAuth;
                 }
             }
         }
-        if (empty($statuses)) {
-            $statuses = __('Empty response');
-        }
 
-        return $statuses;
+        return $statuses ?: __('Empty response');
     }
 
     /**
@@ -1389,7 +1461,7 @@ XMLAuth;
             $shipperPart->addChild('PhoneNumber', $request->getRecipientContactPhoneNumber());
 
             $addressPart = $shipperPart->addChild('Address');
-            $addressPart->addChild('AddressLine1', $request->getRecipientAddressStreet());
+            $addressPart->addChild('AddressLine1', $request->getRecipientAddressStreet1());
             $addressPart->addChild('AddressLine2', $request->getRecipientAddressStreet2());
             $addressPart->addChild('City', $request->getRecipientAddressCity());
             $addressPart->addChild('CountryCode', $request->getRecipientAddressCountryCode());
@@ -1667,6 +1739,22 @@ XMLAuth;
      */
     private function requestQuotes(DataObject $request): array
     {
+        $request->setShipperAddressCountryCode(
+            $this->getNormalizedCountryCode(
+                $request->getShipperAddressCountryCode(),
+                $request->getShipperAddressStateOrProvinceCode(),
+                $request->getShipperAddressPostalCode(),
+            )
+        );
+
+        $request->setRecipientAddressCountryCode(
+            $this->getNormalizedCountryCode(
+                $request->getRecipientAddressCountryCode(),
+                $request->getRecipientAddressStateOrProvinceCode(),
+                $request->getRecipientAddressPostalCode(),
+            )
+        );
+
         /** @var HttpResponseDeferredInterface[] $quotesRequests */
         //Getting quotes
         $this->_prepareShipmentRequest($request);
@@ -2046,5 +2134,25 @@ XMLAuth;
         }
 
         return self::DELIVERY_CONFIRMATION_SHIPMENT;
+    }
+
+    /**
+     * Creates packages for rate request.
+     *
+     * @param float $totalWeight
+     * @param array $packages
+     * @return array
+     */
+    private function createPackages(float $totalWeight, array $packages): array
+    {
+        if (empty($packages)) {
+            $dividedWeight = $this->getTotalNumOfBoxes($totalWeight);
+            for ($i=0; $i < $this->_numBoxes; $i++) {
+                $packages[$i]['weight'] = $this->_getCorrectWeight($dividedWeight);
+            }
+        }
+        $this->_numBoxes = count($packages);
+
+        return $packages;
     }
 }

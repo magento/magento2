@@ -31,30 +31,24 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Cache group Tag
      */
-    const CACHE_GROUP = \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER;
+    public const CACHE_GROUP = \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER;
 
     /**
      * Prefix for cache key of block
      */
-    const CACHE_KEY_PREFIX = 'BLOCK_';
+    public const CACHE_KEY_PREFIX = 'BLOCK_';
 
     /**
-     * Design
-     *
      * @var \Magento\Framework\View\DesignInterface
      */
     protected $_design;
 
     /**
-     * Session
-     *
      * @var \Magento\Framework\Session\SessionManagerInterface
      */
     protected $_session;
 
     /**
-     * SID Resolver
-     *
      * @var \Magento\Framework\Session\SidResolverInterface
      * @deprecated 102.0.5 Not used anymore.
      */
@@ -82,15 +76,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected $jsLayout = [];
 
     /**
-     * Request
-     *
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
     /**
-     * Url Builder
-     *
      * @var \Magento\Framework\UrlInterface
      */
     protected $_urlBuilder;
@@ -125,29 +115,21 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected $_viewConfig;
 
     /**
-     * Cache State
-     *
      * @var \Magento\Framework\App\Cache\StateInterface
      */
     protected $_cacheState;
 
     /**
-     * Logger
-     *
      * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
     /**
-     * Escaper
-     *
      * @var \Magento\Framework\Escaper
      */
     protected $_escaper;
 
     /**
-     * Filter manager
-     *
      * @var \Magento\Framework\Filter\FilterManager
      */
     protected $filterManager;
@@ -166,7 +148,10 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * The property is used to define content-scope of block. Can be private or public.
      * If it isn't defined then application considers it as false.
      *
+     * @see https://devdocs.magento.com/guides/v2.4/extension-dev-guide/cache/page-caching/private-content.html
      * @var bool
+     * @deprecated
+     * @since 103.0.1
      */
     protected $_isScopePrivate = false;
 
@@ -951,10 +936,9 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function stripTags($data, $allowableTags = null, $allowHtmlEntities = false)
     {
-        return $this->filterManager->stripTags(
-            $data,
-            ['allowableTags' => $allowableTags, 'escape' => $allowHtmlEntities]
-        );
+        $params = ['allowableTags' => $allowableTags, 'escape' => $allowHtmlEntities];
+
+        return $data ? $this->filterManager->stripTags($data, $params) : '';
     }
 
     /**
@@ -1190,6 +1174,8 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Returns true if scope is private, false otherwise
      *
      * @return bool
+     * @deprecated
+     * @since 103.0.1
      */
     public function isScopePrivate()
     {

@@ -13,6 +13,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 
 // phpcs:disable Magento2.Classes.AbstractApi
@@ -29,23 +30,23 @@ abstract class AbstractAction
     /**
      * Chunk size
      */
-    const RANGE_CATEGORY_STEP = 500;
+    public const RANGE_CATEGORY_STEP = 500;
 
     /**
      * Chunk size for product
      */
-    const RANGE_PRODUCT_STEP = 1000000;
+    public const RANGE_PRODUCT_STEP = 1000000;
 
     /**
      * Catalog category index table name
      */
-    const MAIN_INDEX_TABLE = 'catalog_category_product_index';
+    public const MAIN_INDEX_TABLE = 'catalog_category_product_index';
 
     /**
      * Suffix for table to show it is temporary
      * @deprecated see getIndexTable
      */
-    const TEMPORARY_TABLE_SUFFIX = '_tmp';
+    public const TEMPORARY_TABLE_SUFFIX = '_tmp';
 
     /**
      * Cached non anchor categories select by store id
@@ -126,9 +127,9 @@ abstract class AbstractAction
     private $queryGenerator;
 
     /**
-     * @var int
+     * @var StoreInterface
      */
-    private $currentStoreId = 0;
+    private $currentStore;
 
     /**
      * @param ResourceConnection $resource
@@ -171,12 +172,34 @@ abstract class AbstractAction
     {
         foreach ($this->storeManager->getStores() as $store) {
             if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
-                $this->currentStoreId = $store->getId();
+                $this->setCurrentStore($store);
                 $this->reindexRootCategory($store);
                 $this->reindexAnchorCategories($store);
                 $this->reindexNonAnchorCategories($store);
             }
         }
+    }
+
+    /**
+     * Set current store
+     *
+     * @param StoreInterface $store
+     * @return $this
+     */
+    private function setCurrentStore(StoreInterface $store): self
+    {
+        $this->currentStore = $store;
+        return $this;
+    }
+
+    /**
+     * Get current store
+     *
+     * @return StoreInterface
+     */
+    private function getCurrentStore(): StoreInterface
+    {
+        return $this->currentStore;
     }
 
     /**
@@ -430,7 +453,7 @@ abstract class AbstractAction
                 $field,
                 $select,
                 $range,
-                \Magento\Framework\DB\Query\BatchIteratorInterface::NON_UNIQUE_FIELD_ITERATOR
+                \Magento\Framework\DB\Query\BatchIteratorInterface::UNIQUE_FIELD_ITERATOR
             );
 
             $queries = [];
@@ -484,6 +507,7 @@ abstract class AbstractAction
      */
     protected function createAnchorSelect(Store $store)
     {
+        $this->setCurrentStore($store);
         $isAnchorAttributeId = $this->config->getAttribute(
             \Magento\Catalog\Model\Category::ENTITY,
             'is_anchor'
@@ -582,7 +606,7 @@ abstract class AbstractAction
                 'category_id' => 'cc.entity_id',
                 'product_id' => 'ccp.product_id',
                 'position' => new \Zend_Db_Expr(
-                    $this->connection->getIfNullSql('ccp2.position', 'ccp.position + 10000')
+                    $this->connection->getIfNullSql('ccp2.position', 'MIN(ccp.position) + 10000')
                 ),
                 'is_parent' => new \Zend_Db_Expr('0'),
                 'store_id' => new \Zend_Db_Expr($store->getId()),
@@ -690,7 +714,7 @@ abstract class AbstractAction
                     ['ccacs' => $this->getTable('catalog_category_entity_int')],
                     'ccacs.' . $categoryLinkField . ' = c.' . $categoryLinkField
                     . ' AND ccacs.attribute_id = ccacd.attribute_id AND ccacs.store_id = ' .
-                    $this->currentStoreId,
+                    $this->getCurrentStore()->getId(),
                     []
                 )->where(
                     $this->connection->getIfNullSql('ccacs.value', 'ccacd.value') . ' = ?',
@@ -702,8 +726,14 @@ abstract class AbstractAction
         foreach ($selects as $select) {
             $values = [];
 
-            foreach ($this->connection->fetchAll($select) as $category) {
-                foreach (explode('/', $category['path']) as $parentId) {
+            $categories = $this->connection->fetchAll($select);
+            foreach ($categories as $category) {
+                $categoriesTree = explode('/', $category['path']);
+                foreach ($categoriesTree as $parentId) {
+                    if (!in_array($this->getCurrentStore()->getRootCategoryId(), $categoriesTree, true)) {
+                        break;
+                    }
+
                     if ($parentId !== $category['entity_id']) {
                         $values[] = [$parentId, $category['entity_id']];
                     }
@@ -717,7 +747,7 @@ abstract class AbstractAction
     }
 
     /**
-     * Retrieve select for reindex products of non anchor categories
+     * Retrieve select for reindex products of anchor categories
      *
      * @param Store $store
      * @return Select
@@ -823,7 +853,7 @@ abstract class AbstractAction
                     'category_id' => new \Zend_Db_Expr($store->getRootCategoryId()),
                     'product_id' => 'cp.entity_id',
                     'position' => new \Zend_Db_Expr(
-                        $this->connection->getCheckSql('ccp.product_id IS NOT NULL', 'ccp.position', '0')
+                        $this->connection->getCheckSql('ccp.product_id IS NOT NULL', 'MIN(ccp.position)', '10000')
                     ),
                     'is_parent' => new \Zend_Db_Expr(
                         $this->connection->getCheckSql('ccp.product_id IS NOT NULL', '1', '0')

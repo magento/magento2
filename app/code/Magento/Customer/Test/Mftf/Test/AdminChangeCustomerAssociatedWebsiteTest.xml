@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminChangeCustomerAssociatedWebsiteTest">
+        <annotations>
+            <features value="Customer"/>
+            <title value="Admin should be able to change customer associated website ID"/>
+            <description value="Admin should be able to change customer associated website ID"/>
+            <severity value="AVERAGE"/>
+            <useCaseId value="MC-38913"/>
+            <testCaseId value="MC-39764"/>
+            <stories value="Customer Edit"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <!--Login to admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create second website-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
+                <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>
+            </actionGroup>
+            <!--Create store group and associate it to second website-->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeGroupName" value="{{NewStoreData.name}}"/>
+                <argument name="storeGroupCode" value="{{NewStoreData.code}}"/>
+            </actionGroup>
+            <!--Create store view and associate it to second store group-->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="NewStoreData"/>
+                <argument name="customStore" value="NewStoreViewData"/>
+            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <!--Create customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <!--Delete customer-->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Delete custom website-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <!--Logout from admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Open customer edit page-->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+        <!--Navigate to "Account Information" tab-->
+        <actionGroup ref="AdminOpenAccountInformationTabFromCustomerEditPageActionGroup" stepKey="openAccountInformationEditPage"/>
+        <!--Verify that "Main Website" is selected in website selector-->
+        <seeOptionIsSelected selector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" userInput="{{_defaultWebsite.name}}" stepKey="assertThatMainWebsiteIsSelected"/>
+        <!--Change customer website to "Second Website"-->
+        <actionGroup ref="AdminUpdateCustomerWebsiteInCustomerInformationPageActionGroup" stepKey="updateCustomerWebsite">
+            <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+        </actionGroup>
+        <!--Verify that changes are saved successfully-->
+        <actionGroup ref="AdminSaveCustomerAndAssertSuccessMessage" stepKey="assertThatChangesAreSavedSuccessfully"/>
+        <!--Open customer edit page-->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage2">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+        <!--Navigate to "Account Information" tab-->
+        <actionGroup ref="AdminOpenAccountInformationTabFromCustomerEditPageActionGroup" stepKey="openAccountInformationEditPage2"/>
+        <!--Verify that "Second Website" is selected in website selector-->
+        <seeOptionIsSelected selector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" userInput="{{NewWebSiteData.name}}" stepKey="assertThatSecondWebsiteIsSelected"/>
+    </test>
+</tests>

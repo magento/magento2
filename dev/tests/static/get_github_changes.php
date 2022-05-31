@@ -485,6 +485,8 @@ class GitRepo
             escapeshellarg($this->workTree)
         );
         $tmp = sprintf('%s %s', $gitCmd, $command);
+        // exec() have to be here since this is test.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         exec($tmp, $output);
         return $output;
     }

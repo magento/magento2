@@ -10,13 +10,13 @@
     repeat="foreach: $col.getVisibleActions($row()._rowIndex), item: '$action'"
     click="$col.getActionHandler($action())"
     text="$action().label"
-    attr="target: $col.getTarget($action()), href: $action().href"/>
+    attr="target: $col.getTarget($action()), href: $action().href, 'aria-label': $action().ariaLabel"></a>
 
 <div class="action-select-wrap" if="$col.isMultiple($row()._rowIndex)" collapsible>
-    <button class="action-select" translate="'Select'" toggleCollapsible/>
+    <button class="action-select" translate="'Select'" toggleCollapsible></button>
     <ul class="action-menu" css="_active: $collapsible.opened">
         <li repeat="foreach: $col.getVisibleActions($row()._rowIndex), item: '$action'">
-            <a class="action-menu-item" click="$col.getActionHandler($action())" text="$action().label" attr="target: $col.getTarget($action()), href: $action().href, 'data-action': 'item-' + $action().index"/>
+            <a class="action-menu-item" click="$col.getActionHandler($action())" text="$action().label" attr="target: $col.getTarget($action()), href: $action().href, 'data-action': 'item-' + $action().index"></a>
         </li>
     </ul>
 </div>

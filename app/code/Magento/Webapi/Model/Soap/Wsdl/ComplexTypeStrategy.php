@@ -16,12 +16,12 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     /**
      *  Array item key value for element.
      */
-    const ARRAY_ITEM_KEY_NAME = 'item';
+    public const ARRAY_ITEM_KEY_NAME = 'item';
 
     /**
      * Appinfo nodes namespace.
      */
-    const APP_INF_NS = 'inf';
+    public const APP_INF_NS = 'inf';
 
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor
@@ -119,7 +119,9 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
                 $this->_processParameter($element, $isRequired, $parameterData, $parameterType, $callInfo);
             }
 
-            $this->addAnnotation($element, $parameterData['documentation'], $default, $callInfo);
+            if (isset($parameterData['documentation'])) {
+                $this->addAnnotation($element, $parameterData['documentation'], $default, $callInfo);
+            }
             $sequence->appendChild($element);
         }
 
@@ -222,13 +224,13 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
         $appInfoNode->setAttributeNS(
             Wsdl::XML_NS_URI,
             Wsdl::XML_NS . ':' . self::APP_INF_NS,
-            $this->getContext()->getTargetNamespace()
+            (string) $this->getContext()->getTargetNamespace()
         );
 
         $this->_processDefaultValueAnnotation($elementType, $default, $appInfoNode);
         $this->_processElementType($elementType, $documentation, $appInfoNode);
 
-        if (preg_match_all('/{([a-z]+):(.+)}/Ui', $documentation, $matches)) {
+        if ($documentation && preg_match_all('/{([a-z]+):(.+)}/Ui', $documentation, $matches)) {
             $count = count($matches[0]);
             for ($i = 0; $i < $count; $i++) {
                 $appinfoTag = $matches[0][$i];
@@ -256,7 +258,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
         }
         $this->_processCallInfo($appInfoNode, $callInfo);
         $documentationNode = $this->_getDom()->createElement(Wsdl::XSD_NS . ':documentation');
-        $documentationText = trim($documentation);
+        $documentationText = $documentation ? trim($documentation) : '';
         $documentationNode->appendChild($this->_getDom()->createTextNode($documentationText));
         $annotationNode->appendChild($documentationNode);
         $annotationNode->appendChild($appInfoNode);

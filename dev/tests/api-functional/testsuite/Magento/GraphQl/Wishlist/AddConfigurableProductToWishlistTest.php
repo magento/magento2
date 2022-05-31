@@ -9,7 +9,6 @@ namespace Magento\GraphQl\Wishlist;
 
 use Exception;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -53,13 +52,12 @@ class AddConfigurableProductToWishlistTest extends GraphQlAbstract
         $product = $this->getConfigurableProductInfo();
         $customerId = 1;
         $qty = 2;
-        $attributeId = (int) $product['configurable_options'][0]['attribute_id'];
-        $valueIndex = $product['configurable_options'][0]['values'][0]['value_index'];
         $childSku = $product['variants'][0]['product']['sku'];
+        $selectedOptions = array_column($product['variants'][0]['attributes'], 'uid');
         $parentSku = $product['sku'];
-        $selectedConfigurableOptionsQuery = $this->generateSuperAttributesUidQuery($attributeId, $valueIndex);
+        $additionalInput = $this->getSelectedOptionsQuery($selectedOptions);
 
-        $query = $this->getQuery($parentSku, $childSku, $qty, $selectedConfigurableOptionsQuery);
+        $query = $this->getQuery($parentSku, $childSku, $qty, $additionalInput);
 
         $response = $this->graphQlMutation($query, [], '', $this->getHeadersMap());
         $wishlist = $this->wishlistFactory->create()->loadByCustomerId($customerId, true);
@@ -68,17 +66,91 @@ class AddConfigurableProductToWishlistTest extends GraphQlAbstract
 
         $this->assertArrayHasKey('addProductsToWishlist', $response);
         $this->assertArrayHasKey('wishlist', $response['addProductsToWishlist']);
+        $this->assertEmpty($response['addProductsToWishlist']['user_errors']);
         $wishlistResponse = $response['addProductsToWishlist']['wishlist'];
         $this->assertEquals($wishlist->getItemsCount(), $wishlistResponse['items_count']);
         $this->assertEquals($wishlist->getSharingCode(), $wishlistResponse['sharing_code']);
         $this->assertEquals($wishlist->getUpdatedAt(), $wishlistResponse['updated_at']);
-        $this->assertEquals($wishlistItem->getId(), $wishlistResponse['items_v2'][0]['id']);
-        $this->assertEquals($wishlistItem->getData('qty'), $wishlistResponse['items_v2'][0]['quantity']);
-        $this->assertEquals($wishlistItem->getDescription(), $wishlistResponse['items_v2'][0]['description']);
-        $this->assertEquals($wishlistItem->getAddedAt(), $wishlistResponse['items_v2'][0]['added_at']);
-        $this->assertNotEmpty($wishlistResponse['items_v2'][0]['configurable_options']);
-        $configurableOptions = $wishlistResponse['items_v2'][0]['configurable_options'];
+        $this->assertEquals($wishlistItem->getId(), $wishlistResponse['items_v2']['items'][0]['id']);
+        $this->assertEquals($wishlistItem->getData('qty'), $wishlistResponse['items_v2']['items'][0]['quantity']);
+        $this->assertEquals($wishlistItem->getDescription(), $wishlistResponse['items_v2']['items'][0]['description']);
+        $this->assertEquals($wishlistItem->getAddedAt(), $wishlistResponse['items_v2']['items'][0]['added_at']);
+        $this->assertNotEmpty($wishlistResponse['items_v2']['items'][0]['configurable_options']);
+        $configurableOptions = $wishlistResponse['items_v2']['items'][0]['configurable_options'];
         $this->assertEquals('Test Configurable', $configurableOptions[0]['option_label']);
+        $this->assertEquals('Option 1', $configurableOptions[0]['value_label']);
+        $this->assertEquals($childSku, $wishlistResponse['items_v2']['items'][0]['configured_variant']['sku']);
+    }
+
+    /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     *
+     * @throws Exception
+     */
+    public function testAddConfigurableProductWithoutOption(): void
+    {
+        $product = $this->getConfigurableProductInfo();
+        $query = $this->getQuery($product['sku'], $product['sku'], 2);
+        $response = $this->graphQlMutation($query, [], '', $this->getHeadersMap());
+
+        $this->assertArrayHasKey('addProductsToWishlist', $response);
+        $this->assertArrayHasKey('wishlist', $response['addProductsToWishlist']);
+        $this->assertEmpty(
+            $response['addProductsToWishlist']['user_errors'],
+            json_encode($response['addProductsToWishlist']['user_errors'])
+        );
+        $wishlistResponse = $response['addProductsToWishlist']['wishlist'];
+
+        $this->assertCount(1, $wishlistResponse['items_v2']['items']);
+        $this->assertEquals($product['sku'], $wishlistResponse['items_v2']['items'][0]['product']['sku']);
+        $this->assertEmpty($wishlistResponse['items_v2']['items'][0]['configurable_options']);
+        $this->assertNull($wishlistResponse['items_v2']['items'][0]['configured_variant']);
+    }
+
+    /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_with_custom_option_dropdown.php
+     *
+     * @throws Exception
+     */
+    public function testAddConfigurableProductWithCustomOptions(): void
+    {
+        $product = $this->getConfigurableProductInfo();
+        $qty = 2;
+        $childSku = $product['variants'][0]['product']['sku'];
+        $parentSku = $product['sku'];
+        $selectedOptions = array_column($product['variants'][0]['attributes'], 'uid');
+        $optionId = $product['options'][0]['uid'];
+        $optionValue = $product['options'][0]['value'][0]['option_type_id'];
+        $customOptions = [$optionId => $optionValue];
+        $additionalInput = $this->getSelectedOptionsQuery($selectedOptions)
+            . PHP_EOL
+            . $this->getCustomOptionsQuery($customOptions);
+
+        $query = $this->getQuery($parentSku, $childSku, $qty, $additionalInput);
+        $response = $this->graphQlMutation($query, [], '', $this->getHeadersMap());
+
+        $this->assertArrayHasKey('addProductsToWishlist', $response);
+        $this->assertArrayHasKey('wishlist', $response['addProductsToWishlist']);
+        $this->assertEmpty($response['addProductsToWishlist']['user_errors']);
+
+        $wishlistResponse = $response['addProductsToWishlist']['wishlist'];
+        $this->assertCount(1, $wishlistResponse['items_v2']['items']);
+
+        $this->assertEquals($childSku, $wishlistResponse['items_v2']['items'][0]['configured_variant']['sku']);
+
+        $this->assertNotEmpty($wishlistResponse['items_v2']['items'][0]['configurable_options']);
+        $configurableOptions = $wishlistResponse['items_v2']['items'][0]['configurable_options'];
+        $this->assertEquals('Test Configurable', $configurableOptions[0]['option_label']);
+        $this->assertEquals('Option 1', $configurableOptions[0]['value_label']);
+
+        $this->assertNotEmpty($wishlistResponse['items_v2']['items'][0]['customizable_options']);
+        $customizableOptions = $wishlistResponse['items_v2']['items'][0]['customizable_options'];
+        $this->assertEquals($optionId, $customizableOptions[0]['customizable_option_uid']);
+        $this->assertEquals($optionValue, $customizableOptions[0]['values'][0]['value']);
     }
 
     /**
@@ -101,10 +173,10 @@ class AddConfigurableProductToWishlistTest extends GraphQlAbstract
     /**
      * Returns GraphQl mutation string
      *
-     * @param string $parentSku
+     * @param string|null $parentSku
      * @param string $childSku
      * @param int $qty
-     * @param string $customizableOptions
+     * @param string $additionalInput
      * @param int $wishlistId
      *
      * @return string
@@ -113,7 +185,7 @@ class AddConfigurableProductToWishlistTest extends GraphQlAbstract
         string $parentSku,
         string $childSku,
         int $qty,
-        string $customizableOptions,
+        string $additionalInput = '',
         int $wishlistId = 0
     ): string {
         return <<<MUTATION
@@ -125,7 +197,7 @@ mutation {
         sku: "{$childSku}"
         parent_sku: "{$parentSku}"
         quantity: {$qty}
-        {$customizableOptions}
+        {$additionalInput}
       }
     ]
 ) {
@@ -138,20 +210,43 @@ mutation {
       sharing_code
       items_count
       updated_at
-      items_v2 {
-        id
+      items_v2(currentPage:1,pageSize:1) {
+      items{
+          id
         description
         quantity
         added_at
         ... on ConfigurableWishlistItem {
-          child_sku
           configurable_options {
             id
+            configurable_product_option_uid
             option_label
             value_id
+            configurable_product_option_value_uid
             value_label
           }
+          configured_variant {
+            sku
+          }
         }
+        customizable_options {
+          customizable_option_uid
+          is_required
+          label
+          type
+          values {
+            customizable_option_value_uid
+            label
+            value
+            price {
+              value
+            }
+          }
+        }
+        product {
+          sku
+        }
+      }
       }
     }
   }
@@ -160,16 +255,32 @@ MUTATION;
     }
 
     /**
-     * Generates uid for super configurable product super attributes
+     * Generates GQL for selected_options
      *
-     * @param int $attributeId
-     * @param int $valueIndex
-     *
+     * @param array $options
      * @return string
      */
-    private function generateSuperAttributesUidQuery(int $attributeId, int $valueIndex): string
+    private function getSelectedOptionsQuery(array $options): string
     {
-        return 'selected_options: ["' . base64_encode("configurable/$attributeId/$valueIndex") . '"]';
+        return 'selected_options: ' . json_encode($options);
+    }
+
+    /**
+     * Generates GQL for entered_options
+     *
+     * @param array $options
+     * @return string
+     */
+    private function getCustomOptionsQuery(array $options): string
+    {
+        $output = [];
+        foreach ($options as $id => $value) {
+            $output[] = [
+                'uid' => $id,
+                'value' => $value
+            ];
+        }
+        return 'entered_options: ' . preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($output));
     }
 
     /**
@@ -203,8 +314,21 @@ MUTATION;
   ) {
     items {
       sku
+      ... on CustomizableProductInterface {
+        options {
+          uid
+          ... on CustomizableDropDownOption {
+            value {
+              option_type_id
+            }
+          }
+        }
+      }
       ... on ConfigurableProduct {
         variants {
+          attributes {
+            uid
+          }
           product {
             sku
           }

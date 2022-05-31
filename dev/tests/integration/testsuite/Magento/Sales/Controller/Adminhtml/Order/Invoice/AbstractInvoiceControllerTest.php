@@ -97,15 +97,21 @@ abstract class AbstractInvoiceControllerTest extends AbstractBackendController
      * @param array $items
      * @param string $commentText
      * @param bool $doShipment
+     * @param bool $sendEmail
      * @return array
      */
-    protected function hydratePost(array $items, string $commentText = '', $doShipment = false): array
-    {
+    protected function hydratePost(
+        array $items,
+        string $commentText = '',
+        $doShipment = false,
+        $sendEmail = false
+    ): array {
         return [
             'invoice' => [
                 'items' => $items,
                 'comment_text' => $commentText,
-                'do_shipment' => $doShipment
+                'do_shipment' => $doShipment,
+                'send_email' => $sendEmail
             ],
         ];
     }

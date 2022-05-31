@@ -36,8 +36,8 @@ class RequiredColumnsProcessor implements CollectionProcessorInterface
         ContextInterface $context = null
     ): Collection {
         $collection->addAttributeToSelect('special_price');
-        $collection->addAttributeToSelect('special_price_from');
-        $collection->addAttributeToSelect('special_price_to');
+        $collection->addAttributeToSelect('special_from_date');
+        $collection->addAttributeToSelect('special_to_date');
         $collection->addAttributeToSelect('tax_class_id');
 
         return $collection;

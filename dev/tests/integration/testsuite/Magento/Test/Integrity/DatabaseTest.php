@@ -24,6 +24,8 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         $command = $checkerPath . ' -d ' . $db->getSchema()
             . ' h=' . $db->getHost()['db-host'] . ',u=' . $db->getUser() . ',p=' . $db->getPassword();
 
+        // exec() have to be here since this is test.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         exec($command, $output, $exitCode);
         $this->assertEquals(0, $exitCode);
         $output = implode(PHP_EOL, $output);

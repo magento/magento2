@@ -72,11 +72,12 @@
         </after>
 
         <!-- Go to the created product page and add it to the cart -->
-        <amOnPage url="$$simpleProduct1.sku$$.html" stepKey="goToSimpleProductPage"/>
+        <amOnPage url="$$simpleProduct1.custom_attributes[url_key]$$.html" stepKey="goToSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForSimpleProductPage"/>
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
         <click stepKey="addSimpleProductToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForPageLoad stepKey="waitForProductAdded"/>
-        <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You added"/>
+        <see stepKey="seeSuccess" selector="{{StorefrontMessagesSection.success}}" userInput="You added"/>
 
         <!-- Fill in address for CA -->
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>

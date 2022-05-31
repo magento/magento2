@@ -15,7 +15,7 @@
             <title value="Checking Product name in Minicart and on Checkout page with different store views"/>
             <description value="Checking Product name in Minicart and on Checkout page with different store views"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-96466"/>
+            <testCaseId value="MC-28566"/>
             <useCaseId value="MAGETWO-96421"/>
             <group value="checkout"/>
         </annotations>
@@ -31,6 +31,8 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -39,6 +41,7 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
             <argument name="customStore" value="customStore"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Go to created product page-->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
@@ -56,7 +59,7 @@
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
 
         <!--Add product to cart-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$createProduct.name$$"/>
@@ -81,7 +84,8 @@
         </assertStringContainsString>
 
         <!--Check product name in Shopping Cart page-->
-        <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="clickViewAndEdit"/>
+        <comment userInput="BIC workaround" stepKey="clickViewAndEdit"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCart"/>
         <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.productName}}" stepKey="grabProductNameCart"/>
         <assertStringContainsString stepKey="assertProductNameCart">
@@ -94,9 +98,9 @@
         </assertStringContainsString>
 
         <!--Proceed to checkout and check product name in Order Summary area-->
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="proceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForShippingPageLoad"/>
-        <click selector="{{CheckoutShippingGuestInfoSection.itemInCart}}" stepKey="clickItemInCart"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="proceedToCheckout"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.email}}" stepKey="waitForShippingPageLoad"/>
+        <conditionalClick selector="{{CheckoutShippingGuestInfoSection.itemInCart}}" dependentSelector="{{CheckoutShippingGuestInfoSection.itemInCartActive}}" visible="false" stepKey="clickItemInCart"/>
         <grabTextFrom selector="{{CheckoutShippingGuestInfoSection.productName}}" stepKey="grabProductNameShipping"/>
         <assertStringContainsString stepKey="assertProductNameShipping">
 			<actualResult type="const">$grabProductNameShipping</actualResult>

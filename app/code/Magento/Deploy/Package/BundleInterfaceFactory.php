@@ -24,6 +24,11 @@ class BundleInterfaceFactory
     private $objectManager;
 
     /**
+     * @var string
+     */
+    private $type;
+
+    /**
      * BundleFactory constructor
      *
      * @param ObjectManagerInterface $objectManager

@@ -12,6 +12,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
@@ -27,12 +28,19 @@ class CartItems implements ResolverInterface
      */
     private $getCartProducts;
 
+    /** @var Uid */
+    private $uidEncoder;
+
     /**
      * @param GetCartProducts $getCartProducts
+     * @param Uid $uidEncoder
      */
-    public function __construct(GetCartProducts $getCartProducts)
-    {
+    public function __construct(
+        GetCartProducts $getCartProducts,
+        Uid $uidEncoder
+    ) {
         $this->getCartProducts = $getCartProducts;
+        $this->uidEncoder = $uidEncoder;
     }
 
     /**
@@ -46,13 +54,6 @@ class CartItems implements ResolverInterface
         $cart = $value['model'];
 
         $itemsData = [];
-        if ($cart->getData('has_error')) {
-            $errors = $cart->getErrors();
-            foreach ($errors as $error) {
-                $itemsData[] = new GraphQlInputException(__($error->getText()));
-            }
-        }
-
         $cartProductsData = $this->getCartProductsData($cart);
         $cartItems = $cart->getAllVisibleItems();
         /** @var QuoteItem $cartItem */
@@ -68,6 +69,7 @@ class CartItems implements ResolverInterface
 
             $itemsData[] = [
                 'id' => $cartItem->getItemId(),
+                'uid' => $this->uidEncoder->encode((string) $cartItem->getItemId()),
                 'quantity' => $cartItem->getQty(),
                 'product' => $productData,
                 'model' => $cartItem,
@@ -89,6 +91,7 @@ class CartItems implements ResolverInterface
         foreach ($products as $product) {
             $productsData[$product->getId()] = $product->getData();
             $productsData[$product->getId()]['model'] = $product;
+            $productsData[$product->getId()]['uid'] = $this->uidEncoder->encode((string) $product->getId());
         }
 
         return $productsData;

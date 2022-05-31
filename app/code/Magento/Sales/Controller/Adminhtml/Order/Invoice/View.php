@@ -44,9 +44,10 @@ class View extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\V
     {
         $invoice = $this->getInvoice();
         if (!$invoice) {
-            /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
-            $resultForward = $this->resultForwardFactory->create();
-            return $resultForward->forward('noroute');
+            /** @var \Magento\Framework\Controller\Result\RedirectFactory $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('sales/invoice');
+            return $resultRedirect;
         }
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */

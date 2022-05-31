@@ -7,6 +7,9 @@
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Store\Model\Group as StoreGroup;
+use Magento\Store\Model\Store;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class Save
@@ -33,6 +36,17 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
             $websiteModel->setId(null);
         }
 
+        $groupModel = $this->_objectManager->create(StoreGroup::class);
+        $groupModel->load($websiteModel->getDefaultGroupId());
+        $storeModel = $this->_objectManager->create(Store::class);
+        $storeModel->load($groupModel->getDefaultStoreId());
+
+        if ($websiteModel->getIsDefault() && !$storeModel->isActive()) {
+            throw new LocalizedException(
+                __('Please enable your Store View before using this Web Site as Default')
+            );
+        }
+
         $websiteModel->save();
         $this->messageManager->addSuccessMessage(__('You saved the website.'));
 
@@ -43,13 +57,13 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
      * Process Store model save
      *
      * @param array $postData
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return array
      */
     private function processStoreSave($postData)
     {
-        /** @var \Magento\Store\Model\Store $storeModel */
-        $storeModel = $this->_objectManager->create(\Magento\Store\Model\Store::class);
+        /** @var Store $storeModel */
+        $storeModel = $this->_objectManager->create(Store::class);
         $postData['store']['name'] = $this->filterManager->removeTags($postData['store']['name']);
         if ($postData['store']['store_id']) {
             $storeModel->load($postData['store']['store_id']);
@@ -59,13 +73,13 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
             $storeModel->setId(null);
         }
         $groupModel = $this->_objectManager->create(
-            \Magento\Store\Model\Group::class
+            StoreGroup::class
         )->load(
             $storeModel->getGroupId()
         );
         $storeModel->setWebsiteId($groupModel->getWebsiteId());
         if (!$storeModel->isActive() && $storeModel->isDefault()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The default store cannot be disabled')
             );
         }
@@ -79,14 +93,14 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
      * Process StoreGroup model save
      *
      * @param array $postData
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return array
      */
     private function processGroupSave($postData)
     {
         $postData['group']['name'] = $this->filterManager->removeTags($postData['group']['name']);
-        /** @var \Magento\Store\Model\Group $groupModel */
-        $groupModel = $this->_objectManager->create(\Magento\Store\Model\Group::class);
+        /** @var StoreGroup $groupModel */
+        $groupModel = $this->_objectManager->create(StoreGroup::class);
         if ($postData['group']['group_id']) {
             $groupModel->load($postData['group']['group_id']);
         }
@@ -95,10 +109,11 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
             $groupModel->setId(null);
         }
         if (!$this->isSelectedDefaultStoreActive($postData, $groupModel)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('An inactive store view cannot be saved as default store view')
             );
         }
+
         $groupModel->save();
         $this->messageManager->addSuccessMessage(__('You saved the store.'));
 
@@ -135,7 +150,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
                 }
                 $redirectResult->setPath('adminhtml/*/');
                 return $redirectResult;
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_getSession()->setPostData($postData);
             } catch (\Exception $e) {
@@ -156,10 +171,10 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
      * Verify if selected default store is active
      *
      * @param array $postData
-     * @param \Magento\Store\Model\Group $groupModel
+     * @param StoreGroup $groupModel
      * @return bool
      */
-    private function isSelectedDefaultStoreActive(array $postData, \Magento\Store\Model\Group $groupModel)
+    private function isSelectedDefaultStoreActive(array $postData, StoreGroup $groupModel)
     {
         if (!empty($postData['group']['default_store_id'])) {
             $defaultStoreId = $postData['group']['default_store_id'];

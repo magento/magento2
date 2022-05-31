@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Backend\App\Action\Context;
@@ -40,6 +41,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Registry;
+use Magento\Framework\Validator\Exception;
 use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Newsletter\Model\SubscriberFactory;
@@ -243,10 +245,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     /**
      * Saves default_billing and default_shipping flags for customer address
      *
-     * @deprecated 102.0.1 must be removed because addresses are save separately for now
      * @param array $addressIdList
      * @param array $extractedCustomerData
      * @return array
+     * @deprecated 102.0.1 must be removed because addresses are save separately for now
      */
     protected function saveDefaultFlags(array $addressIdList, array &$extractedCustomerData)
     {
@@ -286,9 +288,9 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     /**
      * Reformat customer addresses data to be compatible with customer service interface
      *
-     * @deprecated 102.0.1 addresses are saved separately for now
      * @param array $extractedCustomerData
      * @return array
+     * @deprecated 102.0.1 addresses are saved separately for now
      */
     protected function _extractCustomerAddressData(array &$extractedCustomerData)
     {
@@ -318,6 +320,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     {
         $returnToEdit = false;
         $customerId = $this->getCurrentCustomerId();
+        $customer = $this->customerDataFactory->create();
 
         if ($this->getRequest()->getPostValue()) {
             try {
@@ -335,8 +338,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                     $customerData['id'] = $customerId;
                 }
 
-                /** @var CustomerInterface $customer */
-                $customer = $this->customerDataFactory->create();
                 $this->dataObjectHelper->populateWithArray(
                     $customer,
                     $customerData,
@@ -353,7 +354,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                     try {
                         $this->customerAccountManagement->validateCustomerStoreIdByWebsiteId($customer);
                     } catch (LocalizedException $exception) {
-                        throw new LocalizedException(__("The Store View selected for sending Welcome email from".
+                        throw new LocalizedException(__("The Store View selected for sending Welcome email from" .
                             " is not related to the customer's associated website."));
                     }
                 }
@@ -361,7 +362,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                 // Save customer
                 if ($customerId) {
                     $this->_customerRepository->save($customer);
-
                     $this->getEmailNotification()->credentialsChanged($customer, $currentCustomer->getEmail());
                 } else {
                     $customer = $this->customerAccountManagement->createAccount($customer);
@@ -386,13 +386,13 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                     __('Something went wrong while saving the customer.')
                 );
                 $returnToEdit = false;
-            } catch (\Magento\Framework\Validator\Exception $exception) {
+            } catch (Exception $exception) {
                 $messages = $exception->getMessages();
                 if (empty($messages)) {
                     $messages = $exception->getMessage();
                 }
                 $this->_addSessionErrorMessages($messages);
-                $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData());
+                $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData($customer));
                 $returnToEdit = true;
             } catch (AbstractAggregateException $exception) {
                 $errors = $exception->getErrors();
@@ -401,18 +401,18 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                     $messages[] = $error->getMessage();
                 }
                 $this->_addSessionErrorMessages($messages);
-                $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData());
+                $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData($customer));
                 $returnToEdit = true;
             } catch (LocalizedException $exception) {
                 $this->_addSessionErrorMessages($exception->getMessage());
-                $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData());
+                $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData($customer));
                 $returnToEdit = true;
             } catch (\Exception $exception) {
                 $this->messageManager->addExceptionMessage(
                     $exception,
                     __('Something went wrong while saving the customer.')
                 );
-                $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData());
+                $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData($customer));
                 $returnToEdit = true;
             }
         }
@@ -444,10 +444,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      */
     private function updateSubscriptions(CustomerInterface $customer): void
     {
-        if (!$this->_authorization->isAllowed(null)) {
-            return;
-        }
-
         $subscriptionStatus = (array)$this->getRequest()->getParam('subscription_status');
         $subscriptionStore = (array)$this->getRequest()->getParam('subscription_store');
         if (empty($subscriptionStatus)) {
@@ -502,7 +498,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         }
 
         if ($entityType == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
-            $scopeData = explode('/', $scope);
+            $scopeData = $scope !== null ? explode('/', $scope) : [];
             if (isset($scopeData[1]) && is_numeric($scopeData[1])) {
                 $customerAddress = $this->addressRepository->getById($scopeData[1]);
                 $attributeValues = $this->addressMapper->toFlatArray($customerAddress);
@@ -553,21 +549,16 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     /**
      * Retrieve formatted form data
      *
+     * @param CustomerInterface $customer
      * @return array
      */
-    private function retrieveFormattedFormData(): array
+    private function retrieveFormattedFormData(CustomerInterface $customer): array
     {
         $originalRequestData = $this->getRequest()->getPostValue();
+        $customerData = $this->customerMapper->toFlatArray($customer);
 
         /* Customer data filtration */
         if (isset($originalRequestData['customer'])) {
-            $customerData = $this->_extractData(
-                'adminhtml_customer',
-                CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-                [],
-                'customer'
-            );
-
             $customerData = array_intersect_key($customerData, $originalRequestData['customer']);
             $originalRequestData['customer'] = array_merge($originalRequestData['customer'], $customerData);
         }

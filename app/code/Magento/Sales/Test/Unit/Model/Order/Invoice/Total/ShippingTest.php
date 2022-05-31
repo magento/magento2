@@ -44,9 +44,9 @@ class ShippingTest extends TestCase
     public function testCollectWithNoOrZeroPrevInvoice(array $prevInvoicesData, $orderShipping, $expectedShipping)
     {
         $invoice = $this->createInvoiceStub($prevInvoicesData, $orderShipping);
-        $invoice->expects($this->exactly(2))
+        $invoice->expects($this->once())
             ->method('setShippingAmount')
-            ->withConsecutive([0], [$expectedShipping]);
+            ->with($expectedShipping);
 
         $this->total->collect($invoice);
     }
@@ -63,7 +63,7 @@ class ShippingTest extends TestCase
                 'expectedShipping' => 10.00,
             ],
             'zero shipping in previous invoices' => [
-                'prevInvoicesData' => [['shipping_amount' => '0.0000']],
+                'prevInvoicesData' => [['shipping_amount' => null]],
                 'orderShipping' => 10.00,
                 'expectedShipping' => 10.00,
             ],
@@ -75,9 +75,8 @@ class ShippingTest extends TestCase
         $orderShipping = 10.00;
         $prevInvoicesData = [['shipping_amount' => '10.000']];
         $invoice = $this->createInvoiceStub($prevInvoicesData, $orderShipping);
-        $invoice->expects($this->once())
-            ->method('setShippingAmount')
-            ->with(0);
+        $invoice->expects($this->never())
+            ->method('setShippingAmount');
 
         $this->total->collect($invoice);
     }

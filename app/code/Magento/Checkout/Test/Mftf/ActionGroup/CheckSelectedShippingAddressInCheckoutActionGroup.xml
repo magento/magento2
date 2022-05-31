@@ -16,13 +16,12 @@
             <argument name="customerVar"/>
             <argument name="customerAddressVar"/>
         </arguments>
-
         <waitForElement selector="{{CheckoutShippingSection.shippingTab}}" time="30" stepKey="waitForShippingSectionLoaded"/>
-        <see stepKey="VerifyFirstNameInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerVar.firstname}}"/>
-        <see stepKey="VerifyLastNameInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerVar.lastname}}"/>
-        <see stepKey="VerifyStreetInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.street[0]}}"/>
-        <see stepKey="VerifyCityInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.city}}"/>
-        <see stepKey="VerifyZipInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.postcode}}"/>
-        <see stepKey="VerifyPhoneInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.telephone}}"/>
+        <see selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerVar.firstname}}" stepKey="VerifyFirstNameInSelectedAddress"/>
+        <see selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerVar.lastname}}" stepKey="VerifyLastNameInSelectedAddress"/>
+        <see selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.street[0]}}" stepKey="VerifyStreetInSelectedAddress"/>
+        <see selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.city}}" stepKey="VerifyCityInSelectedAddress"/>
+        <see selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.postcode}}" stepKey="VerifyZipInSelectedAddress"/>
+        <see selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.telephone}}" stepKey="VerifyPhoneInSelectedAddress"/>
     </actionGroup>
 </actionGroups>

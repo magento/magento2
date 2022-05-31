@@ -19,7 +19,7 @@ class Client
     /**#@+
      * GraphQL HTTP method
      */
-    const GRAPHQL_METHOD_POST = 'POST';
+    public const GRAPHQL_METHOD_POST = 'POST';
     /**#@-*/
 
     /** @var CurlClient */
@@ -87,7 +87,7 @@ class Client
         $requestArray = [
             'query' => $query,
             'variables' => $variables ? $this->json->jsonEncode($variables) : null,
-            'operationName' => $operationName ?? null
+            'operationName' => $operationName ? $operationName : null
         ];
         array_filter($requestArray);
 
@@ -133,13 +133,16 @@ class Client
      * @param array $variables
      * @param string $operationName
      * @param array $headers
+     * @param bool $flushCookies
+     *
      * @return array
      */
     public function getWithResponseHeaders(
         string $query,
         array $variables = [],
         string $operationName = '',
-        array $headers = []
+        array $headers = [],
+        bool $flushCookies = false
     ): array {
         $url = $this->getEndpointUrl();
         $requestArray = [
@@ -149,11 +152,47 @@ class Client
         ];
         array_filter($requestArray);
 
-        $response = $this->curlClient->getWithFullResponse($url, $requestArray, $headers);
+        $response = $this->curlClient->getWithFullResponse($url, $requestArray, $headers, $flushCookies);
         $responseBody = $this->processResponse($response['body']);
         $responseHeaders = !empty($response['header']) ? $this->processResponseHeaders($response['header']) : [];
+        $responseCookies = !empty($response['header']) ? $this->processResponseCookies($response['header']) : [];
 
-        return ['headers' => $responseHeaders, 'body' => $responseBody];
+        return ['headers' => $responseHeaders, 'body' => $responseBody, 'cookies' => $responseCookies];
+    }
+
+    /**
+     * Perform HTTP POST request, return response data and headers
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @param bool $flushCookies
+     *
+     * @return array
+     */
+    public function postWithResponseHeaders(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = [],
+        bool $flushCookies = false
+    ): array {
+        $url = $this->getEndpointUrl();
+        $headers = array_merge($headers, ['Accept: application/json', 'Content-Type: application/json']);
+        $requestArray = [
+            'query' => $query,
+            'variables' => !empty($variables) ? $variables : null,
+            'operationName' => !empty($operationName) ? $operationName : null
+        ];
+        $postData = $this->json->jsonEncode($requestArray);
+
+        $response = $this->curlClient->postWithFullResponse($url, $postData, $headers, $flushCookies);
+        $responseBody = $this->processResponse($response['body']);
+        $responseHeaders = !empty($response['header']) ? $this->processResponseHeaders($response['header']) : [];
+        $responseCookies = !empty($response['header']) ? $this->processResponseCookies($response['header']) : [];
+
+        return ['headers' => $responseHeaders, 'body' => $responseBody, 'cookies' => $responseCookies];
     }
 
     /**
@@ -222,5 +261,26 @@ class Client
         }
 
         return $headersArray;
+    }
+
+    /**
+     * Prepare separate array of cookies.
+     *
+     * @param string $headers
+     * @return array
+     */
+    private function processResponseCookies(string $headers): array
+    {
+        $cookiesArray = [];
+        $headers = preg_split('/((\r?\n)|(\r\n?))/', $headers);
+        foreach ($headers as $header) {
+            if (strpos($header, 'Set-Cookie:') === 0) {
+                $cookie = preg_split('/: /', $header, 2);
+                if (isset($cookie[1]) && !empty($cookie[1])) {
+                    $cookiesArray[] = $cookie[1];
+                }
+            }
+        }
+        return $cookiesArray;
     }
 }

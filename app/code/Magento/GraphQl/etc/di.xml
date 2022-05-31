@@ -14,6 +14,8 @@
     <preference for="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface" type="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeReaderComposite"/>
     <preference for="Magento\GraphQl\Model\Query\ContextFactoryInterface" type="Magento\GraphQl\Model\Query\ContextFactory"/>
     <preference for="Magento\GraphQl\Model\Query\ContextParametersInterface" type="Magento\GraphQl\Model\Query\ContextParameters"/>
+    <preference for="Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface" type="Magento\Framework\GraphQl\Query\Resolver\ArgumentsCompositeProcessor"/>
+    <preference for="Magento\GraphQl\Model\Query\Logger\LoggerInterface" type="Magento\GraphQl\Model\Query\Logger\LoggerPool"/>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
@@ -100,6 +102,13 @@
         <arguments>
             <argument name="queryDepth" xsi:type="number">20</argument>
             <argument name="queryComplexity" xsi:type="number">300</argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQl\Model\Query\Logger\LoggerPool">
+        <arguments>
+            <argument name="loggers" xsi:type="array">
+                <item name="newRelic" xsi:type="object">Magento\GraphQl\Model\Query\Logger\NewRelic</item>
+            </argument>
         </arguments>
     </type>
 </config>

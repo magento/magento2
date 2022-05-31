@@ -33,4 +33,17 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\GraphQl\Query\Resolver\ArgumentsCompositeProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="cart_item_id" xsi:type="object">Magento\QuoteGraphQl\Model\CartItem\CartItemUidArgsProcessor</item>
+                <item name="cart_items_id" xsi:type="object">Magento\QuoteGraphQl\Model\CartItem\CartItemsUidArgsProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\AvailablePaymentMethods">
+        <arguments>
+            <argument name="informationShipping" xsi:type="object">Magento\Quote\Api\ShippingMethodManagementInterface</argument>
+        </arguments>
+    </type>
 </config>

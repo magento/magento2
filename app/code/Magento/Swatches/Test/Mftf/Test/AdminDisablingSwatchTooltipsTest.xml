@@ -43,9 +43,7 @@
 
             <!-- Enable swatch tooltips -->
             <magentoCLI command="config:set catalog/frontend/show_swatch_tooltip 1" stepKey="disableTooltips"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterEnabling">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterEnabling"/>
         </after>
 
         <!-- Go to the edit page for the "color" attribute -->
@@ -94,8 +92,9 @@
                    stepKey="fillSKU"/>
         <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}"
                    stepKey="fillPrice"/>
-        <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}"
-                   stepKey="fillQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillQuantity">
+            <argument name="productQty" value="{{_defaultProduct.quantity}}"/>
+        </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
                                     parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
@@ -150,7 +149,7 @@
         <!-- Disable swatch tooltips -->
         <magentoCLI command="config:set catalog/frontend/show_swatch_tooltip 0" stepKey="disableTooltips"/>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterDisabling">
-            <argument name="tags" value=""/>
+            <argument name="tags" value="config full_page"/>
         </actionGroup>
 
         <!-- Verify swatch tooltips are not visible -->

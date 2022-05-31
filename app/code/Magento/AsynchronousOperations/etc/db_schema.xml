@@ -30,6 +30,9 @@
         <index referenceId="MAGENTO_BULK_USER_ID_ADMIN_USER_USER_ID" indexType="btree">
             <column name="user_id"/>
         </index>
+        <index referenceId="MAGENTO_BULK_START_TIME" indexType="btree">
+            <column name="start_time"/>
+        </index>
     </table>
     <table name="magento_operation" resource="default" engine="innodb" comment="Operation entity">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
@@ -49,6 +52,8 @@
                 comment="Code of the error that appeared during operation execution (used to aggregate related failed operations)"/>
         <column xsi:type="varchar" name="result_message" nullable="true" length="255"
                 comment="Operation result message"/>
+        <column xsi:type="timestamp" name="started_at" on_update="false" nullable="true" default="NULL"
+                comment="Datetime the operation started processing"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
@@ -57,6 +62,10 @@
         <index referenceId="MAGENTO_OPERATION_BULK_UUID_ERROR_CODE" indexType="btree">
             <column name="bulk_uuid"/>
             <column name="error_code"/>
+        </index>
+        <index referenceId="MAGENTO_OPERATION_STATUS_STARTED_AT" indexType="btree">
+            <column name="status"/>
+            <column name="started_at"/>
         </index>
     </table>
     <table name="magento_acknowledged_bulk" resource="default" engine="innodb"

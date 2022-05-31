@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Controller\Index;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\CartFactory;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Request\Http as HttpRequest;
@@ -14,6 +15,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\TestFramework\Wishlist\Model\GetWishlistByCustomerId;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
  * Test for add product to cart from wish list.
@@ -35,6 +37,14 @@ class CartTest extends AbstractController
     /** @var Escaper */
     private $escaper;
 
+    /** @var ProductRepositoryInterface */
+    private $productRepository;
+
+    /**
+     * @var \Magento\TestFramework\Fixture\DataFixtureStorage
+     */
+    private $fixtures;
+
     /**
      * @inheritdoc
      */
@@ -46,6 +56,8 @@ class CartTest extends AbstractController
         $this->getWishlistByCustomerId = $this->_objectManager->get(GetWishlistByCustomerId::class);
         $this->cartFactory = $this->_objectManager->get(CartFactory::class);
         $this->escaper = $this->_objectManager->get(Escaper::class);
+        $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
+        $this->fixtures = $this->_objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -105,6 +117,39 @@ class CartTest extends AbstractController
         $this->customerSession->setCustomerId(1);
         $this->performAddToCartRequest(['item' => 989]);
         $this->assertRedirect($this->stringContains('wishlist/index/'));
+    }
+
+    /**
+     * Add wishlist item with related Products to Cart.
+     *
+     * @return void
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist_with_simple_product.php
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product as:product1
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product as:product2
+     */
+    public function testAddItemWithRelatedProducts(): void
+    {
+        $firstProductId = $this->fixtures->get('product1')->getId();
+        $secondProductID = $this->fixtures->get('product2')->getId();
+        $relatedIds = $expectedAddedIds = [$firstProductId, $secondProductID];
+
+        $this->customerSession->setCustomerId(1);
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'simple-1');
+        $this->assertNotNull($item);
+
+        $this->performAddToCartRequest([
+            'item' => $item->getId(),
+            'qty' => 1,
+            'related_product' => implode(',', $relatedIds),
+        ]);
+
+        $this->assertCount(0, $this->getWishlistByCustomerId->execute(1)->getItemCollection());
+        $cart = $this->cartFactory->create();
+        $this->assertEquals(3, $cart->getItemsCount());
+        $expectedAddedIds[] = $item->getProductId();
+        foreach ($expectedAddedIds as $addedId) {
+            $this->assertContains($addedId, $cart->getProductIds());
+        }
     }
 
     /**

@@ -9,6 +9,8 @@
  */
 namespace Magento\TestFramework\Annotation;
 
+use PHPUnit\Util\Test as TestUtil;
+
 /**
  * Represents following construction handling:
  *
@@ -70,7 +72,7 @@ class SchemaFixture
             $this->_revertFixtures();
         }
     }
-    
+
     /**
      * Retrieve fixtures from annotation.
      *
@@ -84,7 +86,11 @@ class SchemaFixture
         if ($scope === null) {
             $annotations = $this->getAnnotations($test);
         } else {
-            $annotations = $test->getAnnotations()[$scope];
+            $source = TestUtil::parseTestMethodAnnotations(
+                get_class($test),
+                $test->getName(false)
+            );
+            $annotations = $source[$scope];
         }
         $result = [];
         if (!empty($annotations['magentoSchemaFixture'])) {
@@ -114,7 +120,11 @@ class SchemaFixture
      */
     private function getAnnotations(\PHPUnit\Framework\TestCase $test)
     {
-        $annotations = $test->getAnnotations();
+        $annotations = TestUtil::parseTestMethodAnnotations(
+            get_class($test),
+            $test->getName(false)
+        );
+
         return array_replace($annotations['class'], $annotations['method']);
     }
 

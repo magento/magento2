@@ -48,6 +48,7 @@
             <argument name="filters" xsi:type="array">
                 <item name="category_ids" xsi:type="object">Magento\CatalogImportExport\Model\Export\Product\CategoryFilter</item>
                 <item name="quantity_and_stock_status" xsi:type="object">Magento\CatalogImportExport\Model\Export\Product\StockStatusFilter</item>
+                <item name="website_ids" xsi:type="object">Magento\CatalogImportExport\Model\Export\Product\WebsiteFilter</item>
             </argument>
         </arguments>
     </type>

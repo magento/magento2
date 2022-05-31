@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Service\V1;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
@@ -105,7 +108,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $this->assertEquals($orderStatus, $order->getStatus());
 
         $requestData = [
-            'orderId' => $order->getId()
+            'orderId' => $order->getId(),
         ];
         /** @var OrderItemInterface $item */
         foreach ($order->getAllItems() as $item) {
@@ -145,9 +148,9 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
                 [
                     'track_number' => 'TEST_TRACK_0001',
                     'title' => 'Simple shipment track',
-                    'carrier_code' => 'UPS'
-                ]
-            ]
+                    'carrier_code' => 'UPS',
+                ],
+            ],
         ];
 
         /** @var OrderItemInterface $item */
@@ -205,9 +208,9 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             'tracks' => [
                 [
                     'title' => 'Simple shipment track',
-                    'carrier_code' => 'UPS'
-                ]
-            ]
+                    'carrier_code' => 'UPS',
+                ],
+            ],
         ];
 
         $this->_webApiCall($this->getServiceInfo($existingOrder), $requestData);
@@ -231,9 +234,9 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
                 [
                     'track_number' => 'TEST_TRACK_0001',
                     'title' => 'Simple shipment track',
-                    'carrier_code' => 'UPS'
-                ]
-            ]
+                    'carrier_code' => 'UPS',
+                ],
+            ],
         ];
 
         $shippedItemId = null;
@@ -267,8 +270,9 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             if ($item->getItemId() == $shippedItemId) {
                 $this->assertEquals(1, $item->getQtyShipped());
                 continue;
+            } elseif ($item->getParentItem()) {
+                $this->assertEquals(0, $item->getQtyShipped());
             }
-            $this->assertEquals(0, $item->getQtyShipped());
         }
     }
 
@@ -334,6 +338,116 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
                 'Shipment Document Validation Error(s): You can\'t create a shipment without products.'
             );
         }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Bundle/_files/order_with_bundle_shipped_separately.php
+     */
+    public function testValidationShipTogetherWithBundleShippedSeparate()
+    {
+        $order = $this->getOrder('100000001');
+
+        $requestData = [
+            'orderId' => $order->getId(),
+            'items' => [],
+            'comment' => [
+                'comment' => 'Test Comment',
+                'is_visible_on_front' => 1,
+            ],
+            'tracks' => [],
+        ];
+
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getProductType() === Type::TYPE_BUNDLE) {
+                $requestData['items'][] = [
+                    'order_item_id' => $item->getItemId(),
+                    'qty' => $item->getQtyOrdered(),
+                ];
+                break;
+            }
+        }
+
+        try {
+            $this->_webApiCall($this->getServiceInfo($order), $requestData);
+            $this->fail('Expected exception was not raised');
+        } catch (\Exception $exception) {
+            $this->assertExceptionMessage(
+                $exception,
+                'Shipment Document Validation Error(s): '
+                . 'You can\'t create a shipment without products. '
+                . 'Cannot create shipment as bundle product "bundle-product" has shipment type "Separately". '
+                . 'Bundle product options should be shipped instead.'
+            );
+        }
+
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getProductType() === Type::TYPE_SIMPLE) {
+                $requestData['items'] = [
+                    [
+                        'order_item_id' => $item->getItemId(),
+                        'qty' => $item->getQtyOrdered(),
+                    ],
+                ];
+                break;
+            }
+        }
+
+        $this->_webApiCall($this->getServiceInfo($order), $requestData);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Bundle/_files/order_with_bundle_shipped_together.php
+     */
+    public function testValidationShipTogetherWithBundleShippedTogether()
+    {
+        $order = $this->getOrder('100000001');
+
+        $requestData = [
+            'orderId' => $order->getId(),
+            'items' => [],
+            'comment' => [
+                'comment' => 'Test Comment',
+                'is_visible_on_front' => 1,
+            ],
+            'tracks' => [],
+        ];
+
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getProductType() === Type::TYPE_SIMPLE) {
+                $requestData['items'][] = [
+                    'order_item_id' => $item->getItemId(),
+                    'qty' => $item->getQtyOrdered(),
+                ];
+                break;
+            }
+        }
+
+        try {
+            $this->_webApiCall($this->getServiceInfo($order), $requestData);
+            $this->fail('Expected exception was not raised');
+        } catch (\Exception $exception) {
+            $this->assertExceptionMessage(
+                $exception,
+                'Shipment Document Validation Error(s): '
+                . 'You can\'t create a shipment without products. '
+                . 'Cannot create shipment as bundle product "bundle-product" has shipment type "Together". '
+                . 'Bundle product itself should be shipped instead.'
+            );
+        }
+
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getProductType() === Type::TYPE_BUNDLE) {
+                $requestData['items'] = [
+                    [
+                        'order_item_id' => $item->getItemId(),
+                        'qty' => $item->getQtyOrdered(),
+                    ],
+                ];
+                break;
+            }
+        }
+
+        $this->_webApiCall($this->getServiceInfo($order), $requestData);
     }
 
     /**

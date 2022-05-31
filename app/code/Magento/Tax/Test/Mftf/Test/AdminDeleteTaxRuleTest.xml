@@ -31,7 +31,7 @@
         </after>
 
         <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex1"/>
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters1"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters1"/>
         <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="$$initialTaxRule.code$$" stepKey="fillTaxCodeSearch"/>
         <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch1"/>
         <click selector="{{AdminTaxRuleGridSection.nthRow('1')}}" stepKey="clickFirstRow1"/>
@@ -46,7 +46,7 @@
 
         <!-- Confirm Deleted Tax Rule(from the above step) on the tax rule grid page -->
         <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex2"/>
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters2"/>
         <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="$$initialTaxRule.code$$" stepKey="fillTaxCodeSearch2"/>
         <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch2"/>
         <see selector="{{AdminTaxRuleGridSection.emptyText}}" userInput="We couldn't find any records." stepKey="seeAssertTaxRuleNotFound"/>

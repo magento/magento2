@@ -142,7 +142,7 @@ define([
                 .on('submit', function (event) {
                     event.stopPropagation();
                 });
-            $(tmpl).appendTo(iframe).submit();
+            $(tmpl).appendTo(iframe).trigger('submit');
             iframe.html('');
         },
 
