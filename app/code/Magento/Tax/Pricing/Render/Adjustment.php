@@ -185,6 +185,6 @@ class Adjustment extends AbstractAdjustment
     {
         return $this->amountRender->getPriceType() === 'finalPrice'
             ? 'basePrice'
-            : 'base' . ucfirst($this->amountRender->getPriceType());
+            : 'base' . ucfirst($this->amountRender->getPriceType() ?? "");
     }
 }
