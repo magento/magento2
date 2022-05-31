@@ -25,7 +25,7 @@
         <closeAdminNotification stepKey="closeAdminNotification"/>
         <actionGroup ref="AssertLinkActionGroup" stepKey="seePrivacyPolicyLinkDashboard">
             <argument name="text" value="Privacy Policy"/>
-            <argument name="url" value="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf"/>
+            <argument name="url" value="https://www.adobe.com/privacy/policy.html"/>
         </actionGroup>
         <!-- Checking for Privacy policy footer in salesOrderPage -->
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSalesOrder">
@@ -34,7 +34,7 @@
         </actionGroup>
         <actionGroup ref="AssertLinkActionGroup" stepKey="seePrivacyPolicyLinkSalesOrder">
             <argument name="text" value="Privacy Policy"/>
-            <argument name="url" value="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf"/>
+            <argument name="url" value="https://www.adobe.com/privacy/policy.html"/>
         </actionGroup>
         <!-- Checking for Privacy policy footer in catalogProductsPage -->
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToCatalogProducts">
@@ -43,7 +43,7 @@
         </actionGroup>
         <actionGroup ref="AssertLinkActionGroup" stepKey="seePrivacyPolicyLinkCatalogProducts">
             <argument name="text" value="Privacy Policy"/>
-            <argument name="url" value="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf"/>
+            <argument name="url" value="https://www.adobe.com/privacy/policy.html"/>
         </actionGroup>
         <!-- Checking for Privacy policy footer in customersAllCustomersPage -->
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToCustomersAllCustomers">
@@ -52,7 +52,7 @@
         </actionGroup>
         <actionGroup ref="AssertLinkActionGroup" stepKey="seePrivacyPolicyLinkCustomersAllCustomers">
             <argument name="text" value="Privacy Policy"/>
-            <argument name="url" value="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf"/>
+            <argument name="url" value="https://www.adobe.com/privacy/policy.html"/>
         </actionGroup>
         <!-- Checking for Privacy policy footer in marketingCatalogPriceRulePage -->
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingCatalogPriceRule">
@@ -61,7 +61,7 @@
         </actionGroup>
         <actionGroup ref="AssertLinkActionGroup" stepKey="seePrivacyPolicyLinkMarketingCatalogPriceRule">
             <argument name="text" value="Privacy Policy"/>
-            <argument name="url" value="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf"/>
+            <argument name="url" value="https://www.adobe.com/privacy/policy.html"/>
         </actionGroup>
         <!-- Checking for Privacy policy footer in contentBlocksPage -->
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentBlocks">
@@ -70,7 +70,7 @@
         </actionGroup>
         <actionGroup ref="AssertLinkActionGroup" stepKey="seePrivacyPolicyLinkContentBlocks">
             <argument name="text" value="Privacy Policy"/>
-            <argument name="url" value="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf"/>
+            <argument name="url" value="https://www.adobe.com/privacy/policy.html"/>
         </actionGroup>
         <!-- Checking for Privacy policy footer in reportSearcbTermsPage -->
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsSearchTerms">
@@ -79,7 +79,7 @@
         </actionGroup>
         <actionGroup ref="AssertLinkActionGroup" stepKey="seePrivacyPolicyLinkReportsSearchTerms">
             <argument name="text" value="Privacy Policy"/>
-            <argument name="url" value="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf"/>
+            <argument name="url" value="https://www.adobe.com/privacy/policy.html"/>
         </actionGroup>
         <!-- Checking for Privacy policy footer in storesAllStoresPage -->
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresAllStores">
@@ -88,7 +88,7 @@
         </actionGroup>
         <actionGroup ref="AssertLinkActionGroup" stepKey="seePrivacyPolicyLinkStoresAllStores">
             <argument name="text" value="Privacy Policy"/>
-            <argument name="url" value="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf"/>
+            <argument name="url" value="https://www.adobe.com/privacy/policy.html"/>
         </actionGroup>
         <!-- Checking for Privacy policy footer in systemImportPage -->
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSystemImport">
@@ -97,7 +97,7 @@
         </actionGroup>
         <actionGroup ref="AssertLinkActionGroup" stepKey="seePrivacyPolicyLinkSystemImport">
             <argument name="text" value="Privacy Policy"/>
-            <argument name="url" value="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf"/>
+            <argument name="url" value="https://www.adobe.com/privacy/policy.html"/>
         </actionGroup>
         <!-- Checking for Privacy policy footer in findPartnersAndExtensionsPage -->
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToFindPartnersAndExtensions">
@@ -106,7 +106,7 @@
         </actionGroup>
         <actionGroup ref="AssertLinkActionGroup" stepKey="seePrivacyPolicyLinkFindPartnersAndExtensions">
             <argument name="text" value="Privacy Policy"/>
-            <argument name="url" value="https://magento.com/sites/default/files/REVISED-MAGENTO-PRIVACY-POLICY.pdf"/>
+            <argument name="url" value="https://www.adobe.com/privacy/policy.html"/>
         </actionGroup>
     </test>
 </tests>

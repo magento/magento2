@@ -36,14 +36,14 @@ class File extends AbstractIo
      *
      * @const
      */
-    const GREP_FILES = 'files_only';
+    public const GREP_FILES = 'files_only';
 
     /**
      * Used to grep ls() output
      *
      * @const
      */
-    const GREP_DIRS = 'dirs_only';
+    public const GREP_DIRS = 'dirs_only';
 
     /**
      * If this variable is set to TRUE, our library will be able to automatically create
@@ -444,6 +444,7 @@ class File extends AbstractIo
         $result = false;
 
         $this->_cwd();
+        $filename = (string)$filename;
         if ($dest === null) {
             $result = @file_get_contents($filename);
         } elseif (is_resource($dest)) {
@@ -541,6 +542,9 @@ class File extends AbstractIo
      */
     public function getDestinationFolder($filePath)
     {
+        if ($filePath === null) {
+            return null;
+        }
         preg_match('/^(.*[!\/])/', $filePath, $matches);
         if (isset($matches[0])) {
             return $matches[0];
