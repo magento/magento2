@@ -126,7 +126,7 @@ class SaveHandler implements SaveHandlerInterface
         $sessionMaxSize = $this->sessionMaxSizeConfig->getSessionMaxSize();
         $sessionSize = $sessionData !== null ? strlen($sessionData) : 0;
 
-        if ($sessionSize !== null && $sessionMaxSize < $sessionSize) {
+        if ($sessionMaxSize !== null && $sessionMaxSize < $sessionSize) {
             $sessionData = '';
             if ($this->appState->getAreaCode() === Area::AREA_FRONTEND) {
                 $this->messageManager->addErrorMessage(
