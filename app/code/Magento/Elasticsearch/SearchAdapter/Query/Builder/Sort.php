@@ -117,7 +117,7 @@ class Sort
             }
             $sorts[] = [
                 $fieldName => [
-                    'order' => strtolower($item['direction'])
+                    'order' => strtolower($item['direction'] ?? '')
                 ]
             ];
         }
