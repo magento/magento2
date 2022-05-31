@@ -52,4 +52,7 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <plugin name="orderGridCollectionFilterPlugin" type="Magento\Sales\Plugin\Model\ResourceModel\Order\OrderGridCollectionFilter"/>
     </type>
+    <type name="Magento\Customer\Model\Metadata\AddressMetadata">
+        <plugin name="OrderDetailUpdateAddress" type="Magento\Sales\Plugin\Model\Customer\Metadata\AddressMetadata"/>
+    </type>
 </config>
