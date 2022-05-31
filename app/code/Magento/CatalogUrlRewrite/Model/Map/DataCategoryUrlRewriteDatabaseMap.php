@@ -15,7 +15,7 @@ use Magento\UrlRewrite\Model\MergeDataProvider;
  */
 class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
 {
-    const ENTITY_TYPE = 'category';
+    public const ENTITY_TYPE = 'category';
 
     /**
      * @var string[]
@@ -39,7 +39,7 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
 
     /**
      * @param ResourceConnection $connection
-     * @param HashMapPool $hashMapPool,
+     * @param HashMapPool $hashMapPool
      * @param TemporaryTableService $temporaryTableService
      */
     public function __construct(
@@ -67,6 +67,7 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
 
     /**
      * Queries the database for all category url rewrites that are affected by the category identified by $categoryId
+     *
      * It returns the name of the temporary table where the resulting data is stored
      *
      * @param int $categoryId
@@ -110,7 +111,7 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function destroyTableAdapter($categoryId)
     {
@@ -134,7 +135,7 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
         $this->generateTableAdapter($categoryId);
         $urlRewritesConnection = $this->connection->getConnection();
         $select = $urlRewritesConnection->select()->from(['e' => $this->createdTableAdapters[$categoryId]]);
-        if (strlen($key) > 0) {
+        if ($key && strlen($key) > 0) {
             $select->where('hash_key = ?', $key);
         }
 

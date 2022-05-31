@@ -117,7 +117,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
         if (!$merchantEmail) {
             return $this->_config;
         }
-        $receiver = $this->getRequestData('business') ?: $this->getRequestData('receiver_email');
+        $receiver = $this->getRequestData('business') ?: ($this->getRequestData('receiver_email') ?? '');
         if (strtolower($merchantEmail) != strtolower($receiver)) {
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new Exception(

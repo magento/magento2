@@ -5,13 +5,14 @@
  */
 namespace Magento\Developer\Console\Command;
 
+use Magento\Framework\App\View\Asset\Publisher;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Validator\Locale;
 use Magento\Framework\View\Asset\Repository;
 use Symfony\Component\Console\Command\Command;
-use Magento\Framework\App\View\Asset\Publisher;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -24,27 +25,27 @@ class SourceThemeDeployCommand extends Command
     /**
      * Locale option key
      */
-    const LOCALE_OPTION = 'locale';
+    public const LOCALE_OPTION = 'locale';
 
     /**
      * Area option key
      */
-    const AREA_OPTION = 'area';
+    public const AREA_OPTION = 'area';
 
     /**
      * Theme option key
      */
-    const THEME_OPTION = 'theme';
+    public const THEME_OPTION = 'theme';
 
     /**
      * Type argument key
      */
-    const TYPE_ARGUMENT = 'type';
+    public const TYPE_ARGUMENT = 'type';
 
     /**
      * Files argument key
      */
-    const FILE_ARGUMENT = 'file';
+    public const FILE_ARGUMENT = 'file';
 
     /**
      * @var Locale
@@ -146,7 +147,7 @@ class SourceThemeDeployCommand extends Command
             );
         }
 
-        if (!preg_match('#^[\w\-]+\/[\w\-]+$#', $theme)) {
+        if ($theme === null || !preg_match('#^[\w\-]+\/[\w\-]+$#', $theme)) {
             throw new \InvalidArgumentException(
                 'Value "' . $theme . '" of the option "' . self::THEME_OPTION .
                 '" has invalid format. The format should be "Vendor/theme".'
@@ -163,6 +164,7 @@ class SourceThemeDeployCommand extends Command
         $output->writeln($message);
 
         foreach ($files as $file) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $fileInfo = pathinfo($file);
             $asset = $this->assetRepository->createAsset(
                 $fileInfo['dirname'] . DIRECTORY_SEPARATOR . $fileInfo['basename'] . '.' . $type,
@@ -185,5 +187,7 @@ class SourceThemeDeployCommand extends Command
         }
 
         $output->writeln('<info>Successfully processed.</info>');
+
+        return Cli::RETURN_SUCCESS;
     }
 }
