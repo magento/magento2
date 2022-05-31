@@ -13,7 +13,7 @@ namespace Magento\Review\Model\ResourceModel\Review\Summary;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -39,12 +39,17 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Add store filter
      *
-     * @param int $storeId
+     * @param array|int $storeId
      * @return $this
      */
     public function addStoreFilter($storeId)
     {
-        $this->_select->where('store_id = ?', $storeId);
+        if (is_numeric($storeId)) {
+            $this->_select->where('store_id = ?', $storeId);
+        } else {
+            $this->_select->where('store_id IN (?)', $storeId);
+        }
+
         return $this;
     }
 }
