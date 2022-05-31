@@ -21,7 +21,7 @@ class Trim implements \Magento\Framework\Data\Form\Filter\FilterInterface
      */
     public function inputFilter($value)
     {
-        return trim($value, ' ');
+        return $value !== null ? trim($value, ' ') : '';
     }
 
     /**

@@ -175,7 +175,7 @@ class InputParamsResolver
     ): void {
         $methodParams = $this->methodsMap->getMethodParams($serviceClassName, $serviceMethodName);
         foreach ($paramOverriders as $key => $param) {
-            $arrayKeys = explode('.', $param);
+            $arrayKeys = explode('.', $param ?? '');
             $value = array_shift($arrayKeys);
 
             foreach ($methodParams as $serviceMethodParam) {

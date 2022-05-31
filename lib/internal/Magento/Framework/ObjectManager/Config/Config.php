@@ -170,7 +170,7 @@ class Config implements ConfigInterface
      */
     public function getPreference($type)
     {
-        $type = ltrim($type, '\\');
+        $type = $type !== null ? ltrim($type, '\\') : '';
         $preferencePath = [];
         while (isset($this->_preferences[$type])) {
             if (isset($preferencePath[$this->_preferences[$type]])) {
