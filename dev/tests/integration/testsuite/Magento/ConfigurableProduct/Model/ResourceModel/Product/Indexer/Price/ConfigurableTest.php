@@ -171,7 +171,6 @@ class ConfigurableTest extends TestCase
      */
     public function testReindexIfAllChildrenIsOutOfStock(): void
     {
-
         $configurableProduct = $this->getConfigurableProductFromCollection(1);
         $this->assertEquals(10, $configurableProduct->getMinimalPrice());
 
