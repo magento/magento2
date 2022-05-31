@@ -25,6 +25,8 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Set ManageStock to Yes-->
+            <magentoCLI command="config:set {{CatalogInventoryManageStockDisable.path}} 1" stepKey="manageStockEnable"/>
             <!--Logout From Admin Panel -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
         </after>
