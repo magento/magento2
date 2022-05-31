@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Annotation;
 
 use Magento\Customer\Model\Metadata\AttributeMetadataCache;
+use Magento\TestFramework\Event\Param\Transaction;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -37,6 +38,8 @@ class ApiDataFixture extends DataFixture
     public function endTest(TestCase $test)
     {
         $this->_revertFixtures($test);
+        $objectManager = Bootstrap::getObjectManager();
+        $objectManager->get(AttributeMetadataCache::class)->clean();
     }
 
     /**
@@ -58,18 +61,18 @@ class ApiDataFixture extends DataFixture
     /**
      * @inheritdoc
      */
-    protected function _applyFixtures(array $fixtures, TestCase $test)
+    public function startTestTransactionRequest(TestCase $test, Transaction $param): void
     {
         Bootstrap::getInstance()->reinitialize();
-        parent::_applyFixtures($fixtures, $test);
+        parent::startTestTransactionRequest($test, $param);
     }
 
     /**
      * @inheritdoc
      */
-    protected function _revertFixtures(?TestCase $test = null)
+    public function endTestTransactionRequest(TestCase $test, Transaction $param): void
     {
-        parent::_revertFixtures($test);
+        parent::endTestTransactionRequest($test, $param);
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get(AttributeMetadataCache::class)->clean();
     }

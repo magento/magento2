@@ -76,8 +76,8 @@ class ProductTest extends TestCase
      * @throws StateException
      */
     #[
-        AttributeFixture(['attribute_code' => 'prod_attr']),
-        ProductFixture(['sku' => 'simple']),
+        DataFixture(AttributeFixture::class, ['attribute_code' => 'prod_attr']),
+        DataFixture(ProductFixture::class, ['sku' => 'simple']),
     ]
     public function testGetAttributeRawValueGetDefault()
     {
