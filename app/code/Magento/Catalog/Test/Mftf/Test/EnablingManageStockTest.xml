@@ -16,6 +16,7 @@
             <description value="Admin can EnableManage Stock During Product Creation"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-27457"/>
+            <group value="catalog"/>
         </annotations>
         <before>
         <!-- Set ManageStock to No-->
