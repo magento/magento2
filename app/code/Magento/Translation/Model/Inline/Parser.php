@@ -344,7 +344,7 @@ class Parser implements ParserInterface
      */
     protected function _getTagLocation($matches, $options)
     {
-        $tagName = strtolower($options['tagName']);
+        $tagName = isset($options['tagName']) ? strtolower($options['tagName']) : '';
 
         return $options['tagList'][$tagName] ?? (ucfirst($tagName) . ' Text');
     }
@@ -386,6 +386,8 @@ class Parser implements ParserInterface
      */
     protected function _applySimpleTagsFormat($tagHtml, $tagName, $trArr)
     {
+        $tagHtml = $tagHtml !== null ? $tagHtml : '';
+        $tagName = $tagName !== null ? $tagName : '';
         $simpleTags = substr(
             $tagHtml,
             0,
@@ -568,6 +570,7 @@ class Parser implements ParserInterface
      * @param callable $formatCallback
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function _translateTags(string &$content, array $tagsList, callable $formatCallback)
     {
@@ -621,7 +624,7 @@ class Parser implements ParserInterface
                         && $tagBodyOpenStartPosition > $tagMatch[0][1]
                     ) {
                         $tagHtmlHead = $formatCallback($tagHtml, $tagName, $trArr);
-                        $headTranslateTags .= substr($tagHtmlHead, strlen($tagHtml));
+                        $headTranslateTags .= $tagHtmlHead !== null ? substr($tagHtmlHead, strlen($tagHtml)) : '';
                     } else {
                         $tagHtml = $formatCallback($tagHtml, $tagName, $trArr);
                     }
@@ -654,13 +657,14 @@ class Parser implements ParserInterface
      */
     private function _findEndOfTag($body, $tagName, $from)
     {
+        $body = $body !== null ? $body : '';
         $openTag = '<' . $tagName;
         $closeTag = ($this->_isJson ? '<\\/' : '</') . $tagName;
         $tagLength = strlen($tagName);
         $length = $tagLength + 1;
         $end = $from + 1;
         while (substr_count($body, $openTag, $from, $length) !== substr_count($body, $closeTag, $from, $length)) {
-            $end = strpos($body, (string) $closeTag, $end + $tagLength + 1);
+            $end = strpos($body, $closeTag, $end + $tagLength + 1);
             if ($end === false) {
                 return false;
             }
