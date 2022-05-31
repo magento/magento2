@@ -236,12 +236,12 @@ class GraphQlReader implements ReaderInterface
         $unionTypes = array_filter(
             $types,
             function ($t) {
-                return (strpos($t, 'union ') !== false) && (strpos($t, PHP_EOL . PHP_EOL) !== false);
+                return (strpos((string)$t, 'union ') !== false) && (strpos((string)$t, PHP_EOL . PHP_EOL) !== false);
             }
         );
 
         foreach ($unionTypes as $type => $schema) {
-            $splitSchema = explode(PHP_EOL . PHP_EOL, $schema);
+            $splitSchema = explode(PHP_EOL . PHP_EOL, (string)$schema);
             // Get the type data at the bottom, this will be the additional type data not related to the union
             $additionalTypeSchema = end($splitSchema);
             // Parse the additional type from the bottom so we can have its type key => schema pair
@@ -338,6 +338,7 @@ class GraphQlReader implements ReaderInterface
 
         if (!empty($allMatchesForImplements)) {
             foreach (array_unique($allMatchesForImplements[0]) as $implementsString) {
+                $implementsString = $implementsString ?? '';
                 $implementsStatementString = preg_replace(
                     "/{$spacePattern}{$implementsKindsPattern}{$spacePattern}/m",
                     '',
