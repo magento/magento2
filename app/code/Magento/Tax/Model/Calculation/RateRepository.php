@@ -278,7 +278,7 @@ class RateRepository implements TaxRateRepositoryInterface
         }
 
         if ($taxRate->getCode() === null
-            || !\Zend_Validate::is(trim($taxRate->getCode()), 'NotEmpty')
+            || !\Zend_Validate::is(trim($taxRate->getCode() ?? ''), 'NotEmpty')
         ) {
             $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'code']));
         }
@@ -303,7 +303,7 @@ class RateRepository implements TaxRateRepositoryInterface
             }
         } else {
             if ($taxRate->getTaxPostcode() === null
-                || !\Zend_Validate::is(trim($taxRate->getTaxPostcode()), 'NotEmpty')
+                || !\Zend_Validate::is(trim($taxRate->getTaxPostcode() ?? ''), 'NotEmpty')
             ) {
                 $exception->addError(
                     __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'postcode'])
