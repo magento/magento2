@@ -15,6 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\ImportExport\Model\Import;
@@ -67,6 +68,9 @@ class StorageTest extends TestCase
     /** @var Data */
     private $importDataResource;
 
+    /** @var Write */
+    private $mediaDirectory;
+
     /**
      * @inheritdoc
      */
@@ -85,6 +89,7 @@ class StorageTest extends TestCase
         $this->importDataResource = $this->objectManager->get(Data::class);
         $this->appParams = Bootstrap::getInstance()->getBootstrap()->getApplication()
             ->getInitParams()[AppBootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
+        $this->mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
 
     /**
@@ -182,17 +187,14 @@ class StorageTest extends TestCase
      */
     private function updateUploader(): void
     {
+        $mediaDir = !$this->mediaDirectory->getDriver() instanceof File ?
+            DirectoryList::MEDIA : $this->appParams[DirectoryList::MEDIA][DirectoryList::PATH];
+        $destDir = $mediaDir . DIRECTORY_SEPARATOR . $this->mediaConfig->getBaseMediaPath();
+        $tmpDir =  $mediaDir . DIRECTORY_SEPARATOR . 'import';
+        $this->mediaDirectory->create($this->mediaConfig->getBaseMediaPath());
+        $this->mediaDirectory->create('import');
+        $this->import->setParameters([Import::FIELD_NAME_IMG_FILE_DIR => $tmpDir]);
         $uploader = $this->import->getUploader();
-        $rootDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::ROOT);
-        $destDir = $rootDirectory->getRelativePath(
-            $this->appParams[DirectoryList::MEDIA][DirectoryList::PATH]
-            . DIRECTORY_SEPARATOR . $this->mediaConfig->getBaseMediaPath()
-        );
-        $tmpDir = $rootDirectory->getRelativePath(
-            $this->appParams[DirectoryList::MEDIA][DirectoryList::PATH]
-        );
-        $rootDirectory->create($destDir);
-        $rootDirectory->create($tmpDir);
         $uploader->setDestDir($destDir);
         $uploader->setTmpDir($tmpDir);
     }

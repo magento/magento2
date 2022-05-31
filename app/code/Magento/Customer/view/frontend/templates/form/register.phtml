@@ -113,7 +113,8 @@ $createAccountButtonViewModel = $block->getData('create_account_button_view_mode
                            class="input-text <?= $escaper->escapeHtmlAttr($_streetValidationClass) ?>">
                     <div class="nested">
                         <?php
-                            $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass));
+                            $_streetValidationClass = $_streetValidationClass !== null ?
+                                trim(str_replace('required-entry', '', $_streetValidationClass)) : '';
                             $streetLines = $addressHelper->getStreetLines();
                         ?>
                         <?php for ($_i = 2, $_n = $streetLines; $_i <= $_n; $_i++): ?>

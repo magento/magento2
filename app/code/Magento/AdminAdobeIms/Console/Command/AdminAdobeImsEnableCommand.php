@@ -46,7 +46,7 @@ class AdminAdobeImsEnableCommand extends Command
     /**
      * Name of "two-factor-auth" input option
      */
-    private const TWO_FACTOR_AUTH_ARGUMENT = '2fa-auth';
+    private const TWO_FACTOR_AUTH_ARGUMENT = '2fa';
 
     /**
      * @var ImsConfig
@@ -119,7 +119,8 @@ class AdminAdobeImsEnableCommand extends Command
                     self::TWO_FACTOR_AUTH_ARGUMENT,
                     't',
                     InputOption::VALUE_OPTIONAL,
-                    'Check if 2FA Auth is enabled on Adobe IMS Side. Enables or disables the Magento 2FA'
+                    'Check if 2FA is enabled for Organization in Adobe Admin Console. ' .
+                    'Required when enabling the module'
                 )
             ]);
     }
@@ -169,7 +170,7 @@ class AdminAdobeImsEnableCommand extends Command
             }
 
             throw new LocalizedException(
-                __('The Client ID, Client Secret, Organization ID and 2FA Auth are required ' .
+                __('The Client ID, Client Secret, Organization ID and 2FA are required ' .
                     'when enabling the Admin Adobe IMS Module')
             );
         } catch (\Exception $e) {
