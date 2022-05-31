@@ -171,7 +171,7 @@ class AdminAdobeImsEnableCommandTest extends TestCase
                 false,
                 $this->never(),
                 $this->never(),
-                '<error>The Client ID, Client Secret, Organization ID and 2FA Auth are required ' .
+                '<error>The Client ID, Client Secret, Organization ID and 2FA are required ' .
                 'when enabling the Admin Adobe IMS Module</error>',
                 true
             ],
@@ -179,7 +179,7 @@ class AdminAdobeImsEnableCommandTest extends TestCase
                 true,
                 $this->never(),
                 $this->never(),
-                '<error>The Client ID, Client Secret, Organization ID and 2FA Auth are required ' .
+                '<error>The Client ID, Client Secret, Organization ID and 2FA are required ' .
                 'when enabling the Admin Adobe IMS Module</error>',
                 false
             ],
@@ -187,7 +187,7 @@ class AdminAdobeImsEnableCommandTest extends TestCase
                 false,
                 $this->never(),
                 $this->never(),
-                '<error>The Client ID, Client Secret, Organization ID and 2FA Auth are required ' .
+                '<error>The Client ID, Client Secret, Organization ID and 2FA are required ' .
                 'when enabling the Admin Adobe IMS Module</error>',
                 false
             ]
