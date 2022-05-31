@@ -38,7 +38,7 @@ class Cache
             $this->getFixturesFromCacheAnnotation($test, ParserInterface::SCOPE_METHOD)
         );
         if (!$statusList) {
-            array_merge(
+            $statusList = array_merge(
                 $this->getFixturesFromCacheAttribute($test, ParserInterface::SCOPE_CLASS),
                 $this->getFixturesFromCacheAnnotation($test, ParserInterface::SCOPE_CLASS)
             );
@@ -58,7 +58,6 @@ class Cache
             }
             $this->setValues($values, $test);
         }
-
     }
 
     /**

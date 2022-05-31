@@ -57,7 +57,10 @@ class DataFixtureBeforeTransaction extends AbstractDataFixture
     {
         $parsers = [];
         $parsers[] = Bootstrap::getObjectManager()->create(
-            \Magento\TestFramework\Fixture\Parser\DataFixtureBeforeTransaction::class
+            \Magento\TestFramework\Fixture\Parser\DataFixture::class,
+            [
+                'attributeClass' => \Magento\TestFramework\Fixture\DataFixtureBeforeTransaction::class
+            ]
         );
         return array_merge(
             parent::getParsers(),
