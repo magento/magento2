@@ -33,28 +33,28 @@ use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
  */
 class Instance extends \Magento\Framework\Model\AbstractModel
 {
-    const SPECIFIC_ENTITIES = 'specific';
+    public const SPECIFIC_ENTITIES = 'specific';
 
-    const ALL_ENTITIES = 'all';
+    public const ALL_ENTITIES = 'all';
 
-    const DEFAULT_LAYOUT_HANDLE = 'default';
+    public const DEFAULT_LAYOUT_HANDLE = 'default';
 
-    const PRODUCT_LAYOUT_HANDLE = 'catalog_product_view';
+    public const PRODUCT_LAYOUT_HANDLE = 'catalog_product_view';
 
     /**
      * @deprecated see self::SINGLE_PRODUCT_LAYOUT_HANDLE
      */
-    const SINGLE_PRODUCT_LAYOUT_HANLDE = self::SINGLE_PRODUCT_LAYOUT_HANDLE;
+    public const SINGLE_PRODUCT_LAYOUT_HANLDE = self::SINGLE_PRODUCT_LAYOUT_HANDLE;
 
-    const SINGLE_PRODUCT_LAYOUT_HANDLE = 'catalog_product_view_id_{{ID}}';
+    public const SINGLE_PRODUCT_LAYOUT_HANDLE = 'catalog_product_view_id_{{ID}}';
 
-    const PRODUCT_TYPE_LAYOUT_HANDLE = 'catalog_product_view_type_{{TYPE}}';
+    public const PRODUCT_TYPE_LAYOUT_HANDLE = 'catalog_product_view_type_{{TYPE}}';
 
-    const ANCHOR_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_type_layered';
+    public const ANCHOR_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_type_layered';
 
-    const NOTANCHOR_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_type_default';
+    public const NOTANCHOR_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_type_default';
 
-    const SINGLE_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_id_{{ID}}';
+    public const SINGLE_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_id_{{ID}}';
 
     /**
      * @var array
@@ -268,7 +268,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                     ];
                     if ($pageGroupData['for'] == self::SPECIFIC_ENTITIES) {
                         $layoutHandleUpdates = [];
-                        foreach (explode(',', $pageGroupData['entities']) as $entity) {
+                        foreach (explode(',', $pageGroupData['entities'] ?? '') as $entity) {
                             $layoutHandleUpdates[] = str_replace(
                                 '{{ID}}',
                                 $entity,
