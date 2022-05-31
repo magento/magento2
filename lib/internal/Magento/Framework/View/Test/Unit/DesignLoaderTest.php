@@ -11,11 +11,17 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
+use Magento\Framework\View\DesignLoader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DesignLoaderTest extends TestCase
 {
+    /**
+     * @var DesignLoader
+     */
+    protected $_model;
+
     /**
      * @var MockObject
      */
@@ -39,6 +45,11 @@ class DesignLoaderTest extends TestCase
         $this->_areaListMock = $this->createMock(AreaList::class);
         $this->_requestMock = $this->createMock(Http::class);
         $this->appState = $this->createMock(State::class);
+        $this->_model = new DesignLoader(
+            $this->_requestMock,
+            $this->_areaListMock,
+            $this->appState
+        );
     }
 
     /**
@@ -51,7 +62,8 @@ class DesignLoaderTest extends TestCase
         $this->_areaListMock->expects($this->once())->method('getArea')->with('area')->willReturn($area);
         $area
             ->method('load')
-            ->withConsecutive([Area::PART_DESIGN])
-            ->willReturnOnConsecutiveCalls($area);
+            ->withConsecutive([Area::PART_DESIGN], [Area::PART_TRANSLATE])
+            ->willReturnOnConsecutiveCalls($area, $area);
+        $this->_model->load($this->_requestMock);
     }
 }
