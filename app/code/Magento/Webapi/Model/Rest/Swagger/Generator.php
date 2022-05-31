@@ -31,11 +31,11 @@ class Generator extends AbstractSchemaGenerator
     /**
      * Error response schema
      */
-    const ERROR_SCHEMA = '#/definitions/error-response';
+    private const ERROR_SCHEMA = '#/definitions/error-response';
 
-    const UNAUTHORIZED_DESCRIPTION = '401 Unauthorized';
+    private const UNAUTHORIZED_DESCRIPTION = '401 Unauthorized';
 
-    const ARRAY_SIGNIFIER = '[0]';
+    protected const ARRAY_SIGNIFIER = '[0]';
 
     /**
      * Wrapper node for XML requests
@@ -47,14 +47,14 @@ class Generator extends AbstractSchemaGenerator
      *
      * @var SwaggerFactory
      */
-    protected $swaggerFactory;
+    protected SwaggerFactory $swaggerFactory;
 
     /**
      * Magento product metadata
      *
      * @var ProductMetadataInterface
      */
-    protected $productMetadata;
+    protected ProductMetadataInterface $productMetadata;
 
     /**
      * A map of Tags
@@ -68,7 +68,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @var array
      */
-    protected $tags = [];
+    protected array $tags = [];
 
     /**
      * A map of definition
@@ -82,7 +82,7 @@ class Generator extends AbstractSchemaGenerator
      * Note: definitionName is converted from class name
      * @var array
      */
-    protected $definitions = [];
+    protected array $definitions = [];
 
     /**
      * List of simple parameter types not to be processed by the definitions generator
@@ -90,7 +90,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @var string[]
      */
-    protected $simpleTypeList = [
+    protected array $simpleTypeList = [
         'bool'                              => 'boolean',
         'boolean'                           => 'boolean',
         'int'                               => 'integer',
@@ -165,7 +165,7 @@ class Generator extends AbstractSchemaGenerator
                     $swagger->addPath(
                         $this->convertPathParams($uri),
                         $httpOperation,
-                        $this->generatePathInfo($httpOperation, $httpMethodData, $serviceName)
+                        $this->generatePathInfo($httpOperation, $httpMethodData, $serviceName, $uri)
                     );
                 }
             }
@@ -226,15 +226,15 @@ class Generator extends AbstractSchemaGenerator
      * @param string $methodName
      * @param array $httpMethodData
      * @param string $tagName
+     * @param string $uri
      * @return array
      */
-    protected function generatePathInfo($methodName, $httpMethodData, $tagName)
+    protected function generatePathInfo(string $methodName, array $httpMethodData, string $tagName, string $uri): array
     {
         $methodData = $httpMethodData[Converter::KEY_METHOD];
-
-        $operationId = $this->typeProcessor->getOperationName($tagName, $methodData[Converter::KEY_METHOD]);
-        $operationId .= ucfirst($methodName);
-
+        $uri = ucwords(str_replace(['/{', '}/', '{', '}'], '/', $uri), "/");
+     
+        $operationId = ucfirst($methodName).str_replace(['/', '-'], '', $uri);
         $pathInfo = [
             'tags' => [$tagName],
             'description' => $methodData['documentation'],

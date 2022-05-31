@@ -638,7 +638,7 @@ class Filter extends Template
      */
     protected function getTransParameters($value)
     {
-        if (preg_match(self::TRANS_DIRECTIVE_REGEX, $value, $matches) !== 1) {
+        if ($value === null || preg_match(self::TRANS_DIRECTIVE_REGEX, $value, $matches) !== 1) {
             return ['', []];  // malformed directive body; return without breaking list
         }
         // phpcs:disable Magento2.Functions.DiscouragedFunction
@@ -691,7 +691,7 @@ class Filter extends Template
      */
     protected function explodeModifiers($value, $default = null)
     {
-        $parts = explode('|', $value, 2);
+        $parts = $value !== null ? explode('|', $value, 2) : [];
         if (2 === count($parts)) {
             return $parts;
         }
@@ -710,7 +710,8 @@ class Filter extends Template
      */
     protected function applyModifiers($value, $modifiers)
     {
-        foreach (explode('|', $modifiers) as $part) {
+        $modifiersParts = $modifiers !== null ? explode('|', $modifiers) : [];
+        foreach ($modifiersParts as $part) {
             if (empty($part)) {
                 continue;
             }
