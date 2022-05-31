@@ -42,6 +42,8 @@ class OrderFilter
      * @param FilterBuilder $filterBuilder
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param string[] $fieldTranslatorArray
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,

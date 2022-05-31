@@ -165,6 +165,7 @@ class Ftp extends AbstractRollback
         );
 
         foreach ($iterator as $item) {
+            // @phpstan-ignore-next-line
             $ftpPath = $this->_snapshot->getFtpPath() . '/' . str_replace($rootDir ?? '', '', $item->__toString());
             $ftpPath = str_replace('\\', '/', $ftpPath);
 
@@ -193,6 +194,7 @@ class Ftp extends AbstractRollback
         );
 
         foreach ($filesystemIterator as $item) {
+            // @phpstan-ignore-next-line
             $ftpPath = $this->_snapshot->getFtpPath() . '/' . str_replace($tmpDir ?? '', '', $item->__toString());
             $ftpPath = str_replace('\\', '/', $ftpPath);
 
