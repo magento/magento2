@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\AsynchronousOperations\Test\Unit\Model;
 
 use Magento\AsynchronousOperations\Api\Data\OperationExtensionInterfaceFactory;
-use Magento\AsynchronousOperations\Model\BulkStatus;
 use Magento\AsynchronousOperations\Model\OperationRepository;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection as OperationCollection;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory as OperationCollectionFactory;
@@ -16,6 +15,8 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\AsynchronousOperations\Api\Data\OperationSearchResultsInterfaceFactory as SearchResultFactory;
+use Magento\AsynchronousOperations\Api\Data\OperationSearchResultsInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,7 +30,7 @@ class OperationRepositoryTest extends TestCase
     /**
      * @var OperationRepository
      */
-    private OperationRepository $model;
+    private $model;
 
     /**
      * @var EntityManager|MockObject
@@ -67,6 +68,66 @@ class OperationRepositoryTest extends TestCase
     private $logger;
 
     /**
+     * private $item
+     */
+    private array $items = [
+        "items"=> [
+            [
+                "extension_attributes" => [
+                    "start_time" => "2022-05-06 05:48:04"
+                ],
+                "id" => 1,
+                "bulk_uuid" => "89300764-2502-44c6-a377-70b9565c34b8",
+                "topic_name" => "async.magento.customer.api.accountmanagementinterface.createaccount.post",
+                "serialized_data" => "{\"entity_id\":null,\"entity_link\":\"\",\"meta_information\":\"{\\\"customer\\\":{\\\"email\\\":\\\"mshaw@example.com\\\",\\\"firstname\\\":\\\"Melanie Shaw\\\",\\\"lastname\\\":\\\"Doe\\\"},\\\"password\\\":\\\"Strong-Password\\\"}\"}",
+                "result_serialized_data" => null,
+                "status"=> 4,
+                "result_message" => null,
+                "error_code" => null
+            ],
+            [
+                "extension_attributes" => [
+                    "start_time" => "2022-05-06 05:48:04"
+                ],
+                "id" => 2,
+                "bulk_uuid" => "89300764-2502-44c6-a377-70b9565c34b8",
+                "topic_name" => "async.magento.customer.api.accountmanagementinterface.createaccount.post",
+                "serialized_data" => "{\"entity_id\":null,\"entity_link\":\"\",\"meta_information\":\"{\\\"customer\\\":{\\\"email\\\":\\\"bmartin@example.com\\\",\\\"firstname\\\":\\\"Bryce\\\",\\\"lastname\\\":\\\"Martin\\\"},\\\"password\\\":\\\"Strong-Password\\\"}\"}",
+                "result_serialized_data" => null,
+                "status" => 4,
+                "result_message" => null,
+                "error_code" => null
+            ],
+            [
+                "extension_attributes"=> [
+                "start_time"=> "2022-05-06 05:48:04"
+                ],
+                "id" => 3,
+                "bulk_uuid" => "89300764-2502-44c6-a377-70b9565c34b8",
+                "topic_name" => "async.magento.customer.api.accountmanagementinterface.createaccount.post",
+                "serialized_data" => "{\"entity_id\":null,\"entity_link\":\"\",\"meta_information\":\"{\\\"customer\\\":{\\\"email\\\":\\\"bmartin@example.com\\\",\\\"firstname\\\":\\\"Bryce\\\",\\\"lastname\\\":\\\"Martin\\\"},\\\"password\\\":\\\"Strong-Password\\\"}\"}",
+                "result_serialized_data" => null,
+                "status" => 4,
+                "result_message" => null,
+                "error_code" => null
+            ],
+            [
+                "extension_attributes" => [
+                    "start_time" => "2022-05-06 05:48:04"
+                ],
+                "id" => 4,
+                "bulk_uuid" => "89300764-2502-44c6-a377-70b9565c34b8",
+                "topic_name" => "async.magento.customer.api.accountmanagementinterface.createaccount.post",
+                "serialized_data" => "{\"entity_id\":null,\"entity_link\":\"\",\"meta_information\":\"{\\\"customer\\\":{\\\"email\\\":\\\"tgomez@example.com\\\",\\\"firstname\\\":\\\"Teresa\\\",\\\"lastname\\\":\\\"Gomez\\\"},\\\"password\\\":\\\"Strong-Password\\\"}\"}",
+                "result_serialized_data" => null,
+                "status" => 4,
+                "result_message" => null,
+                "error_code" => null
+            ],
+        ],
+    ];
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -91,22 +152,18 @@ class OperationRepositoryTest extends TestCase
     }
 
     /**
-     * @param int|null $failureType
-     * @param array $failureCodes
-     *
      * @return void
-     * @dataProvider getFailedOperationsByBulkIdDataProvider
      */
-    public function testGetFailedOperationsByBulkId(?int $failureType, array $failureCodes): void
+    public function testGetFailedOperationsByBulkId(): void
     {
-        $bulkUuid = 'bulk-1';
+        $searchResultInterface = $this->createMock(OperationSearchResultsInterface::class);
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
+        $this->searchResultFactory->expects($this->once())->method('create')->willReturn($searchResultInterface);
         $operationCollection = $this->createMock(OperationCollection::class);
+
+        $operationCollection->expects($this->once())->method('getItems')->willReturn($this->items);
+        $operationCollection->expects($this->exactly(3))->method('addFieldToSelect')->willReturnSelf();
         $this->operationCollectionFactory->expects($this->once())->method('create')->willReturn($operationCollection);
-        $operationCollection
-            ->method('addFieldToFilter')
-            ->withConsecutive(['bulk_uuid', $bulkUuid], ['status', $failureCodes])
-            ->willReturnOnConsecutiveCalls($operationCollection, $operationCollection);
-        $operationCollection->expects($this->once())->method('getItems')->willReturn([$this->operationMock]);
-        $this->assertEquals([$this->operationMock], $this->model->getFailedOperationsByBulkId($bulkUuid, $failureType));
+        $this->model->getList($searchCriteria);
     }
 }

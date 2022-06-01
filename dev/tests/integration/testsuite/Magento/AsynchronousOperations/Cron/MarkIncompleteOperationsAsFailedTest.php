@@ -103,7 +103,7 @@ class MarkIncompleteOperationsAsFailedTest extends TestCase
         );
         $this->assertEquals(1, $collection->count());
         $operation = $collection->getFirstItem();
-        $this->assertEquals(1, $operation->getId());
+        $this->assertEquals(2, $operation->getId());
         $this->assertEquals(0, $operation->getErrorCode());
         $this->assertEquals('Unknown Error', $operation->getResultMessage());
     }
