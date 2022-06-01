@@ -16,9 +16,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Block\Product\ImageFactory">
-        <plugin name="designLoader" type="Magento\CatalogGraphQl\Plugin\DesignLoader" />
-    </type>
     <virtualType name="Magento\Framework\GraphQlSchemaStitching\Reader" type="Magento\Framework\GraphQlSchemaStitching\Common\Reader">
         <arguments>
             <argument name="readers" xsi:type="array">
