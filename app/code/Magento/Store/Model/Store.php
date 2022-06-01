@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model;
 
+use Laminas\Uri\UriFactory;
 use Magento\Catalog\Model\Category;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -19,7 +20,6 @@ use Magento\Framework\Url\ModifierInterface;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Laminas\Uri\UriFactory;
 
 /**
  * Store model
@@ -653,12 +653,12 @@ class Store extends AbstractExtensibleModel implements
                     throw new \InvalidArgumentException('Invalid base url type');
             }
 
-            if (false !== strpos($url, self::BASE_URL_PLACEHOLDER)) {
+            if ($url && false !== strpos($url, self::BASE_URL_PLACEHOLDER)) {
                 $url = str_replace(self::BASE_URL_PLACEHOLDER, $this->_request->getDistroBaseUrl(), $url);
             }
 
             $this->_baseUrlCache[$cacheKey] = $this->urlModifier->execute(
-                rtrim($url, '/') . '/',
+                $url !== null ? rtrim($url, '/') . '/' : '/',
                 ModifierInterface::MODE_BASE
             );
         }
@@ -887,7 +887,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function setCurrentCurrencyCode($code)
     {
-        $code = is_string($code) && '' !== $code ?  strtoupper($code): '';
+        $code = is_string($code) && '' !== $code ? strtoupper($code) : '';
         if (in_array($code, $this->getAvailableCurrencyCodes())) {
             $this->_getSession()->setCurrencyCode($code);
 
@@ -933,7 +933,7 @@ class Store extends AbstractExtensibleModel implements
     {
         $codes = $this->getData('available_currency_codes');
         if (null === $codes) {
-            $codes = explode(',', $this->getConfig(Currency::XML_PATH_CURRENCY_ALLOW));
+            $codes = explode(',', $this->getConfig(Currency::XML_PATH_CURRENCY_ALLOW) ?? '');
             // add base currency, if it is not in allowed currencies
             $baseCurrencyCode = $this->getBaseCurrencyCode();
             if (!in_array($baseCurrencyCode, $codes)) {
@@ -964,7 +964,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function getAllowedCurrencies()
     {
-        return explode(',', $this->getConfig($this->_currencyInstalled));
+        return explode(',', $this->getConfig($this->_currencyInstalled) ?? '');
     }
 
     /**
