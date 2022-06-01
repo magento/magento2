@@ -362,7 +362,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         $this->cliCommand->upgrade();
         $after = $this->describeTable->describeShard('default');
         $this->isUsingAuroraDb() ?
-            $this->assertStringContainsString($this->getTrimmedData()['after'], $after['some_table_renamed']) :
+            $this->assertStringContainsString($after['some_table_renamed'], $this->getTrimmedData()['after']) :
             $this->assertEquals($this->getData()['after'], $after['some_table_renamed']);
         $select = $adapter->select()
             ->from($this->resourceConnection->getTableName('some_table_renamed'));
