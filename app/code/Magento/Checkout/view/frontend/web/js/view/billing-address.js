@@ -146,14 +146,12 @@ function (
 
             addressUpadated = true;
 
-            if (this.selectedAddress() && !this.isAddressFormVisible()) {
-                if (this.isAddressDetailsVisible()) {
-                    selectBillingAddress(quote.shippingAddress());
-                    checkoutData.setSelectedBillingAddress(quote.shippingAddress().getKey());
-                } else {
-                    selectBillingAddress(this.selectedAddress());
-                    checkoutData.setSelectedBillingAddress(this.selectedAddress().getKey());
-                }
+            if (this.isAddressSameAsShipping()) {
+                selectBillingAddress(quote.shippingAddress());
+                checkoutData.setSelectedBillingAddress(quote.shippingAddress().getKey());
+            } else if (this.selectedAddress() && !this.isAddressFormVisible()) {
+                selectBillingAddress(this.selectedAddress());
+                checkoutData.setSelectedBillingAddress(this.selectedAddress().getKey());
             } else {
                 this.source.set('params.invalid', false);
                 this.source.trigger(this.dataScopePrefix + '.data.validate');
