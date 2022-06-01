@@ -41,6 +41,7 @@
         "composer/composer": "^1.9 || ^2.0",
         "elasticsearch/elasticsearch": "~7.17.0",
         "guzzlehttp/guzzle": "^7.4.2",
+        "ezyang/htmlpurifier": "^4.14",
         "laminas/laminas-captcha": "^2.12",
         "laminas/laminas-code": "~4.5.0",
         "laminas/laminas-db": "^2.15.0",
