@@ -42,7 +42,8 @@ class RegisterCaptureNotificationCommand implements CommandInterface
     public function execute(OrderPaymentInterface $payment, $amount, OrderInterface $order)
     {
         $state = $order->getState();
-        if (!$state || $state === Order::STATE_NEW || $state === Order::STATE_PENDING_PAYMENT || $state === Order::STATE_PAYMENT_REVIEW) {   
+        if (!$state || $state === Order::STATE_NEW || $state === Order::STATE_PENDING_PAYMENT
+            || $state === Order::STATE_PAYMENT_REVIEW) {
             $state = Order::STATE_PROCESSING;
         }
 
