@@ -238,8 +238,8 @@ class TypeProcessor
         $shortDescription = $doc->getShortDescription();
         $longDescription = $doc->getLongDescription();
 
-        $description = rtrim($shortDescription);
-        $longDescription = str_replace(["\n", "\r"], '', $longDescription);
+        $description = $shortDescription !== null ? rtrim($shortDescription) : '';
+        $longDescription = $longDescription !== null ? str_replace(["\n", "\r"], '', $longDescription) : '';
         if (!empty($longDescription) && !empty($description)) {
             $description .= " ";
         }
@@ -558,7 +558,7 @@ class TypeProcessor
      */
     public function getAliasMapping(ClassReflection $sourceClass): array
     {
-        $uses = (new FileScanner($sourceClass->getFileName()))->getUses();
+        $uses = (new FileScanner($sourceClass->getFileName()))->getUses() ?? [];
         $aliases = [];
         foreach ($uses as $use) {
             if ($use['as'] !== null) {

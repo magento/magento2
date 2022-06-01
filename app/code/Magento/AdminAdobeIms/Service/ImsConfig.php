@@ -121,7 +121,7 @@ class ImsConfig extends Config
     ): void {
         if (!$isAdobeIms2FAEnabled) {
             throw new LocalizedException(
-                __('2FA Auth is required when enabling the Admin Adobe IMS Module')
+                __('2FA is required when enabling the Admin Adobe IMS Module')
             );
         }
 
