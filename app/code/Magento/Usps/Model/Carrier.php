@@ -643,7 +643,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected function _parseXmlResponse($response)
     {
         $r = $this->_rawRequest;
-        $allowedMethods = explode(',', $this->getConfigData('allowed_methods'));
+        $allowedMethods = explode(',', $this->getConfigData('allowed_methods') ?? '');
         $serviceCodeToActualNameMap = [];
         $isUS = $this->_isUSCountry($r->getDestCountryId());
         $costArr = [];
@@ -1235,7 +1235,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getAllowedMethods()
     {
-        $allowed = explode(',', $this->getConfigData('allowed_methods'));
+        $allowed = explode(',', $this->getConfigData('allowed_methods') ?? '');
         $arr = [];
         foreach ($allowed as $k) {
             $arr[$k] = $this->getCode('method', $k);
@@ -2135,14 +2135,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $zip4 = '';
         $zip5 = '';
         $zip = [$zipString];
-        if (preg_match('/[\\d\\w]{5}\\-[\\d\\w]{4}/', $zipString) != 0) {
+        if ($zipString !== null && preg_match('/[\\d\\w]{5}\\-[\\d\\w]{4}/', $zipString) != 0) {
             $zip = explode('-', $zipString);
         }
         $count = count($zip);
         for ($i = 0; $i < $count; ++$i) {
-            if (strlen($zip[$i]) == 5) {
+            if (strlen($zip[$i] ?? '') == 5) {
                 $zip5 = $zip[$i];
-            } elseif (strlen($zip[$i]) == 4) {
+            } elseif (strlen($zip[$i] ?? '') == 4) {
                 $zip4 = $zip[$i];
             }
         }

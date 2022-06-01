@@ -52,7 +52,7 @@ class SynonymReader extends AbstractDb
      */
     public function loadByPhrase(\Magento\Search\Model\SynonymReader $object, $phrase)
     {
-        $rows = $this->queryByPhrase(strtolower($phrase));
+        $rows = $this->queryByPhrase($phrase !== null ? strtolower($phrase) : '');
         $synsPerScope = $this->getSynRowsPerScope($rows);
 
         if (!empty($synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_STORES])) {
