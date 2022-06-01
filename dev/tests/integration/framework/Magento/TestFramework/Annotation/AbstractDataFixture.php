@@ -48,22 +48,26 @@ abstract class AbstractDataFixture
 
         $resolver = Resolver::getInstance();
         $resolver->setCurrentFixtureType($annotationKey);
-        $parsers = $this->getParsers();
+        $parsers = Bootstrap::getObjectManager()
+            ->create(
+                \Magento\TestFramework\Annotation\Parser\Composite::class,
+                [
+                    'parsers' => $this->getParsers()
+                ]
+            );
         $scopes = $scope ? [$scope] : [ParserInterface::SCOPE_METHOD, ParserInterface::SCOPE_CLASS];
         $fixtures = [];
         foreach ($scopes as $scp) {
-            foreach ($parsers as $parser) {
-                try {
-                    array_push($fixtures, ...$parser->parse($test, $scp));
-                } catch (\Throwable $exception) {
-                    throw new Exception(
-                        sprintf(
-                            "Unable to parse fixtures\n#0 %s",
-                            $this->getTestReference($this->getTestMetadata($test))
-                        ),
-                        $exception
-                    );
-                }
+            try {
+                $fixtures = $parsers->parse($test, $scp);
+            } catch (\Throwable $exception) {
+                throw new Exception(
+                    sprintf(
+                        "Unable to parse fixtures\n#0 %s",
+                        $this->getTestReference($this->getTestMetadata($test))
+                    ),
+                    $exception
+                );
             }
             if (!empty($fixtures)) {
                 break;
@@ -265,7 +269,8 @@ abstract class AbstractDataFixture
      */
     protected function getDbIsolationState(TestCase $test)
     {
-        return Bootstrap::getObjectManager()->get(DbIsolationState::class)->getState($test) ?: null;
+        $isEnabled = Bootstrap::getObjectManager()->get(DbIsolationState::class)->isEnabled($test);
+        return $isEnabled === null ? null : [$isEnabled];
     }
 
     /**

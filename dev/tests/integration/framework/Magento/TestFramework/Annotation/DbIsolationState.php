@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Fixture\ParserInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -17,18 +18,30 @@ class DbIsolationState
      * Returns the db isolation state
      *
      * @param TestCase $test
-     * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return bool|null
+     * @throws LocalizedException
      */
-    public function getState(TestCase $test): array
+    public function isEnabled(TestCase $test): ?bool
     {
-        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
-        $parser = Bootstrap::getObjectManager()->create(\Magento\TestFramework\Fixture\Parser\DbIsolation::class);
-        $converter = static fn ($stateInfo) => $stateInfo['enabled'] ? 'enabled' : 'disabled';
-        $classDbIsolationState =  array_map($converter, $parser->parse($test, ParserInterface::SCOPE_CLASS))
-            ?: ($annotations['class'][DbIsolation::MAGENTO_DB_ISOLATION] ?? []);
-        $methodDbIsolationState =  array_map($converter, $parser->parse($test, ParserInterface::SCOPE_METHOD))
-            ?: ($annotations['method'][DbIsolation::MAGENTO_DB_ISOLATION] ?? []);
-        return $methodDbIsolationState ?: $classDbIsolationState;
+        $objectManager = Bootstrap::getObjectManager();
+        $parsers = $objectManager
+            ->create(
+                \Magento\TestFramework\Annotation\Parser\Composite::class,
+                [
+                    'parsers' => [
+                        $objectManager->get(\Magento\TestFramework\Annotation\Parser\DbIsolation::class),
+                        $objectManager->get(\Magento\TestFramework\Fixture\Parser\DbIsolation::class)
+                    ]
+                ]
+            );
+        $values = $parsers->parse($test, ParserInterface::SCOPE_METHOD)
+            ?: $parsers->parse($test, ParserInterface::SCOPE_CLASS);
+
+        if (count($values) > 1) {
+            throw new LocalizedException(
+                __('Only one "@%1" annotation is allowed per test', DbIsolation::MAGENTO_DB_ISOLATION)
+            );
+        }
+        return $values[0]['enabled'] ?? null;
     }
 }

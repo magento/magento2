@@ -86,15 +86,6 @@ class DbIsolation
      */
     protected function _getIsolation(TestCase $test)
     {
-        $isolation = Bootstrap::getObjectManager()->get(DbIsolationState::class)->getState($test);
-        if ($isolation) {
-            if ($isolation !== ['enabled'] && $isolation !== ['disabled']) {
-                throw new LocalizedException(
-                    __('Invalid "@magentoDbIsolation" annotation, can be "enabled" or "disabled" only.')
-                );
-            }
-            return $isolation === ['enabled'];
-        }
-        return null;
+        return Bootstrap::getObjectManager()->get(DbIsolationState::class)->isEnabled($test);
     }
 }

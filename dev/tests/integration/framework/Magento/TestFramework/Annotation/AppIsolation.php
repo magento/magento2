@@ -87,22 +87,27 @@ class AppIsolation
     public function endTest(TestCase $test)
     {
         $this->hasNonIsolatedTests = true;
+        $objectManager = Bootstrap::getObjectManager();
+        $parsers = $objectManager
+            ->create(
+                \Magento\TestFramework\Annotation\Parser\Composite::class,
+                [
+                    'parsers' => [
+                        $objectManager->get(\Magento\TestFramework\Annotation\Parser\AppIsolation::class),
+                        $objectManager->get(\Magento\TestFramework\Fixture\Parser\AppIsolation::class)
+                    ]
+                ]
+            );
+        $values = $parsers->parse($test, ParserInterface::SCOPE_METHOD)
+            ?: $parsers->parse($test, ParserInterface::SCOPE_CLASS);
 
-        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
-        $parser = Bootstrap::getObjectManager()->create(\Magento\TestFramework\Fixture\Parser\AppIsolation::class);
-        $converter = static fn ($stateInfo) => $stateInfo['enabled'] ? 'enabled' : 'disabled';
-        $classAppIsolationState =  array_map($converter, $parser->parse($test, ParserInterface::SCOPE_CLASS))
-            ?: ($annotations['class'][self::ANNOTATION] ?? []);
-        $methodAppIsolationState =  array_map($converter, $parser->parse($test, ParserInterface::SCOPE_METHOD))
-            ?: ($annotations['method'][self::ANNOTATION] ?? []);
-        $isolation = $methodAppIsolationState ?: $classAppIsolationState;
-        if ($isolation) {
-            if ($isolation !== ['enabled'] && $isolation !== ['disabled']) {
-                throw new LocalizedException(
-                    __('Invalid "@magentoAppIsolation" annotation, can be "enabled" or "disabled" only.')
-                );
-            }
-            $isIsolationEnabled = $isolation === ['enabled'];
+        if (count($values) > 1) {
+            throw new LocalizedException(
+                __('Only one "@magentoAppIsolation" annotation is allowed per test')
+            );
+        }
+        if ($values) {
+            $isIsolationEnabled = $values[0]['enabled'];
         } else {
             /* Controller tests should be isolated by default */
             $isIsolationEnabled = $test instanceof AbstractController;
@@ -111,19 +116,5 @@ class AppIsolation
         if ($isIsolationEnabled) {
             $this->_isolateApp();
         }
-    }
-
-    /**
-     * Get method annotations. Overwrites class-defined annotations.
-     *
-     * @param TestCase $test
-     *
-     * @return array
-     */
-    private function getAnnotations(TestCase $test): array
-    {
-        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
-
-        return array_replace((array)$annotations['class'], (array)$annotations['method']);
     }
 }

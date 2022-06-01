@@ -6,8 +6,6 @@
 
 namespace Magento\TestFramework\Annotation;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\TestFramework\Fixture\Parser\Cache as CacheFixtureParser;
 use Magento\TestFramework\Fixture\ParserInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -33,16 +31,19 @@ class Cache
      */
     public function startTest(TestCase $test)
     {
-        $statusList = array_merge(
-            $this->getFixturesFromCacheAttribute($test, ParserInterface::SCOPE_METHOD),
-            $this->getFixturesFromCacheAnnotation($test, ParserInterface::SCOPE_METHOD)
-        );
-        if (!$statusList) {
-            $statusList = array_merge(
-                $this->getFixturesFromCacheAttribute($test, ParserInterface::SCOPE_CLASS),
-                $this->getFixturesFromCacheAnnotation($test, ParserInterface::SCOPE_CLASS)
+        $objectManager = Bootstrap::getObjectManager();
+        $parsers = $objectManager
+            ->create(
+                \Magento\TestFramework\Annotation\Parser\Composite::class,
+                [
+                    'parsers' => [
+                        $objectManager->get(\Magento\TestFramework\Annotation\Parser\Cache::class),
+                        $objectManager->get(\Magento\TestFramework\Fixture\Parser\Cache::class)
+                    ]
+                ]
             );
-        }
+        $statusList = $parsers->parse($test, ParserInterface::SCOPE_METHOD)
+            ?: $parsers->parse($test, ParserInterface::SCOPE_CLASS);
 
         if ($statusList) {
             $values = [];
@@ -120,41 +121,5 @@ class Cache
     {
         $test->fail("{$message} in the test '{$test->toString()}'");
         throw new \Exception('The above line was supposed to throw an exception.');
-    }
-
-    /**
-     * Returns cache fixtures defined using Cache annotation
-     *
-     * @param TestCase $test
-     * @param string $scope
-     * @return array
-     * @throws \Exception
-     */
-    private function getFixturesFromCacheAnnotation(TestCase $test, string $scope): array
-    {
-        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
-        $configs = [];
-
-        foreach ($annotations[$scope][self::ANNOTATION] ?? [] as $annotation) {
-            if (!preg_match('/^([a-z_]+)\s(enabled|disabled)$/', $annotation, $matches)) {
-                self::fail("Invalid @magentoCache declaration: '{$annotation}'", $test);
-            }
-            $configs[] = ['type' => $matches[1], 'status' => $matches[2] === 'enabled'];
-        }
-
-        return $configs;
-    }
-
-    /**
-     * Returns cache fixtures defined using Cache attribute
-     *
-     * @param TestCase $test
-     * @param string $scope
-     * @return array
-     * @throws LocalizedException
-     */
-    private function getFixturesFromCacheAttribute(TestCase $test, string $scope): array
-    {
-        return Bootstrap::getObjectManager()->create(CacheFixtureParser::class)->parse($test, $scope);
     }
 }

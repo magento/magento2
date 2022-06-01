@@ -7,6 +7,8 @@
 namespace Magento\TestFramework\Annotation;
 
 use Magento\TestFramework\Annotation\TestCaseAnnotation;
+use Magento\TestFramework\Fixture\ParserInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
@@ -21,8 +23,8 @@ class ComponentRegistrarFixture
     /**#@+
      * Properties of components registrar
      */
-    const REGISTRAR_CLASS = \Magento\Framework\Component\ComponentRegistrar::class;
-    const PATHS_FIELD = 'paths';
+    public const REGISTRAR_CLASS = \Magento\Framework\Component\ComponentRegistrar::class;
+    public const PATHS_FIELD = 'paths';
     /**#@-*/
 
     /**
@@ -80,18 +82,20 @@ class ComponentRegistrarFixture
      */
     private function registerComponents(\PHPUnit\Framework\TestCase $test)
     {
-        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
-        $componentAnnotations = [];
-        if (isset($annotations['class'][self::ANNOTATION_NAME])) {
-            $componentAnnotations = array_merge($componentAnnotations, $annotations['class'][self::ANNOTATION_NAME]);
-        }
-        if (isset($annotations['method'][self::ANNOTATION_NAME])) {
-            $componentAnnotations = array_merge($componentAnnotations, $annotations['method'][self::ANNOTATION_NAME]);
-        }
-        if (empty($componentAnnotations)) {
-            return;
-        }
-        $componentAnnotations = array_unique($componentAnnotations);
+        $objectManager = Bootstrap::getObjectManager();
+        $parsers = $objectManager
+            ->create(
+                \Magento\TestFramework\Annotation\Parser\Composite::class,
+                [
+                    'parsers' => [
+                        $objectManager->get(\Magento\TestFramework\Annotation\Parser\ComponentsDir::class),
+                        $objectManager->get(\Magento\TestFramework\Fixture\Parser\ComponentsDir::class)
+                    ]
+                ]
+            );
+        $values = $parsers->parse($test, ParserInterface::SCOPE_METHOD)
+            ?: $parsers->parse($test, ParserInterface::SCOPE_CLASS);
+        $componentAnnotations = array_unique(array_column($values, 'path'));
         $reflection = new \ReflectionClass(self::REGISTRAR_CLASS);
         $paths = $reflection->getProperty(self::PATHS_FIELD);
         $paths->setAccessible(true);

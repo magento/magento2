@@ -13,9 +13,11 @@ use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcherConfiguration;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Annotation\TestCaseAnnotation;
 use Magento\TestFramework\App\Config;
+use Magento\TestFramework\Fixture\ParserInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +27,8 @@ use PHPUnit\Framework\TestCase;
  */
 class IndexerDimensionMode
 {
+    private const ANNOTATION = 'magentoIndexerDimensionMode';
+
     /** @var TypeListInterface */
     private $cacheTypeList;
 
@@ -94,29 +98,29 @@ class IndexerDimensionMode
      */
     public function startTest(TestCase $test)
     {
-        $source = TestCaseAnnotation::getInstance()->getAnnotations($test);
+        $objectManager = Bootstrap::getObjectManager();
+        $parsers = $objectManager
+            ->create(
+                \Magento\TestFramework\Annotation\Parser\Composite::class,
+                [
+                    'parsers' => [
+                        $objectManager->get(\Magento\TestFramework\Annotation\Parser\IndexerDimensionMode::class),
+                        $objectManager->get(\Magento\TestFramework\Fixture\Parser\IndexerDimensionMode::class)
+                    ]
+                ]
+            );
+        $values = $parsers->parse($test, ParserInterface::SCOPE_METHOD)
+            ?: $parsers->parse($test, ParserInterface::SCOPE_CLASS);
 
-        if (isset($source['method']['magentoIndexerDimensionMode'])) {
-            $annotations = $source['method']['magentoIndexerDimensionMode'];
-        } elseif (isset($source['class']['magentoIndexerDimensionMode'])) {
-            $annotations = $source['class']['magentoIndexerDimensionMode'];
-        } else {
-            return;
+        $dbIsolation = Bootstrap::getObjectManager()->get(DbIsolationState::class)->isEnabled($test);
+
+        if ($dbIsolation) {
+            $this->fail("@magentoDbIsolation must be disabled when using @magentoIndexerDimensionMode", $test);
         }
 
-        $dbIsolation = $source['method']['magentoDbIsolation']
-            ?? $source['class']['magentoDbIsolation']
-            ?? ['disabled'];
-
-        if ($dbIsolation[0] != 'disabled') {
-            $this->fail("Invalid @magentoDbIsolation declaration: $dbIsolation[0]", $test);
-        }
-
-        list($indexerType, $indexerMode) = explode(' ', $annotations[0]);
-
-        if ($indexerType == Processor::INDEXER_ID) {
+        if ($values && $values[0]['indexer'] === Processor::INDEXER_ID) {
             $this->isDimensionMode = true;
-            $this->setDimensionMode($indexerMode, $test);
+            $this->setDimensionMode($values[0]['dimension'], $test);
         }
     }
 
@@ -143,5 +147,41 @@ class IndexerDimensionMode
     private function fail($message, TestCase $test)
     {
         $test->fail("{$message} in the test '{$test->toString()}'");
+    }
+
+    /**
+     * Returns fixtures defined using IndexerDimensionMode annotation
+     *
+     * @param TestCase $test
+     * @param string $scope
+     * @return array
+     * @throws \Exception
+     */
+    private function getFixturesFromAnnotation(TestCase $test, string $scope): array
+    {
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
+        $configs = [];
+
+        foreach ($annotations[$scope][self::ANNOTATION] ?? [] as $annotation) {
+            $parts = explode(' ', $annotation);
+            $configs[] = ['indexer' => $parts[0], 'dimension' => $parts[1]];
+        }
+
+        return $configs;
+    }
+
+    /**
+     * Returns fixtures defined using IndexerDimensionMode attribute
+     *
+     * @param TestCase $test
+     * @param string $scope
+     * @return array
+     * @throws LocalizedException
+     */
+    private function getFixturesFromAttribute(TestCase $test, string $scope): array
+    {
+        return Bootstrap::getObjectManager()
+            ->create(\Magento\TestFramework\Fixture\Parser\IndexerDimensionMode::class)
+            ->parse($test, $scope);
     }
 }
