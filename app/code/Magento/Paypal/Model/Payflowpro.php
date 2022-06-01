@@ -632,7 +632,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $request = $this->buildBasicRequest();
         $request->setAmt($this->formatPrice($amount));
         $request->setAcct($payment->getCcNumber());
-        $request->setExpdate(sprintf('%02d', $payment->getCcExpMonth()) . substr($payment->getCcExpYear(), -2, 2));
+        $expYear = $payment->getCcExpYear() !== null ? substr($payment->getCcExpYear(), -2, 2) : '';
+        $request->setExpdate(sprintf('%02d', $payment->getCcExpMonth()) . $expYear);
         $request->setCvv2($payment->getCcCid());
 
         $order = $payment->getOrder();

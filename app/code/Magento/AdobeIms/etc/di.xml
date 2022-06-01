@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\AdobeImsApi\Api\UserProfileRepositoryInterface" type="Magento\AdobeIms\Model\UserProfileRepository"/>
+    <preference for="Magento\AdobeImsApi\Api\Data\UserProfileInterface" type="Magento\AdobeIms\Model\UserProfile"/>
+    <preference for="Magento\AdobeImsApi\Api\ConfigInterface" type="Magento\AdobeIms\Model\Config"/>
+    <preference for="Magento\AdobeImsApi\Api\Data\TokenResponseInterface" type="Magento\AdobeIms\Model\OAuth\TokenResponse"/>
+    <preference for="Magento\AdobeImsApi\Api\GetTokenInterface" type="Magento\AdobeIms\Model\GetToken"/>
+    <preference for="Magento\AdobeImsApi\Api\GetImageInterface" type="Magento\AdobeIms\Model\GetImage"/>
+    <preference for="Magento\AdobeImsApi\Api\UserAuthorizedInterface" type="Magento\AdobeIms\Model\UserAuthorized"/>
+    <preference for="Magento\AdobeImsApi\Api\LogInInterface" type="Magento\AdobeIms\Model\LogIn"/>
+    <preference for="Magento\AdobeImsApi\Api\LogOutInterface" type="Magento\AdobeIms\Model\LogOut"/>
+    <preference for="Magento\AdobeImsApi\Api\GetAccessTokenInterface" type="Magento\AdobeIms\Model\GetAccessToken"/>
+    <preference for="Magento\AdobeImsApi\Api\FlushUserTokensInterface" type="Magento\AdobeIms\Model\FlushUserTokens"/>
+</config>
