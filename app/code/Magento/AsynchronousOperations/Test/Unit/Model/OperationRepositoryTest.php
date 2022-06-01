@@ -68,9 +68,9 @@ class OperationRepositoryTest extends TestCase
     private $logger;
 
     /**
-     * private $item
+     * @var array of items
      */
-    private array $items = [
+    private $items = [
         "items"=> [
             [
                 "extension_attributes" => [
@@ -79,7 +79,7 @@ class OperationRepositoryTest extends TestCase
                 "id" => 1,
                 "bulk_uuid" => "89300764-2502-44c6-a377-70b9565c34b8",
                 "topic_name" => "async.magento.customer.api.accountmanagementinterface.createaccount.post",
-                "serialized_data" => "{\"entity_id\":null,\"entity_link\":\"\",\"meta_information\":\"{\\\"customer\\\":{\\\"email\\\":\\\"mshaw@example.com\\\",\\\"firstname\\\":\\\"Melanie Shaw\\\",\\\"lastname\\\":\\\"Doe\\\"},\\\"password\\\":\\\"Strong-Password\\\"}\"}",
+                "serialized_data" => "{}",
                 "result_serialized_data" => null,
                 "status"=> 4,
                 "result_message" => null,
@@ -92,7 +92,7 @@ class OperationRepositoryTest extends TestCase
                 "id" => 2,
                 "bulk_uuid" => "89300764-2502-44c6-a377-70b9565c34b8",
                 "topic_name" => "async.magento.customer.api.accountmanagementinterface.createaccount.post",
-                "serialized_data" => "{\"entity_id\":null,\"entity_link\":\"\",\"meta_information\":\"{\\\"customer\\\":{\\\"email\\\":\\\"bmartin@example.com\\\",\\\"firstname\\\":\\\"Bryce\\\",\\\"lastname\\\":\\\"Martin\\\"},\\\"password\\\":\\\"Strong-Password\\\"}\"}",
+                "serialized_data" => "{}",
                 "result_serialized_data" => null,
                 "status" => 4,
                 "result_message" => null,
@@ -105,7 +105,7 @@ class OperationRepositoryTest extends TestCase
                 "id" => 3,
                 "bulk_uuid" => "89300764-2502-44c6-a377-70b9565c34b8",
                 "topic_name" => "async.magento.customer.api.accountmanagementinterface.createaccount.post",
-                "serialized_data" => "{\"entity_id\":null,\"entity_link\":\"\",\"meta_information\":\"{\\\"customer\\\":{\\\"email\\\":\\\"bmartin@example.com\\\",\\\"firstname\\\":\\\"Bryce\\\",\\\"lastname\\\":\\\"Martin\\\"},\\\"password\\\":\\\"Strong-Password\\\"}\"}",
+                "serialized_data" => "{}",
                 "result_serialized_data" => null,
                 "status" => 4,
                 "result_message" => null,
@@ -118,7 +118,7 @@ class OperationRepositoryTest extends TestCase
                 "id" => 4,
                 "bulk_uuid" => "89300764-2502-44c6-a377-70b9565c34b8",
                 "topic_name" => "async.magento.customer.api.accountmanagementinterface.createaccount.post",
-                "serialized_data" => "{\"entity_id\":null,\"entity_link\":\"\",\"meta_information\":\"{\\\"customer\\\":{\\\"email\\\":\\\"tgomez@example.com\\\",\\\"firstname\\\":\\\"Teresa\\\",\\\"lastname\\\":\\\"Gomez\\\"},\\\"password\\\":\\\"Strong-Password\\\"}\"}",
+                "serialized_data" => "{}",
                 "result_serialized_data" => null,
                 "status" => 4,
                 "result_message" => null,
@@ -154,7 +154,7 @@ class OperationRepositoryTest extends TestCase
     /**
      * @return void
      */
-    public function testGetFailedOperationsByBulkId(): void
+    public function testGetListSelect(): void
     {
         $searchResultInterface = $this->createMock(OperationSearchResultsInterface::class);
         $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
