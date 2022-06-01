@@ -20,7 +20,7 @@ class NewConditionHtml extends Quote implements HttpPostActionInterface
      *
      * @return void
      */
-    public function execute()
+    public function execute() //phpcs:ignore CopyPaste
     {
         $id = $this->getRequest()->getParam('id');
         $formName = $this->getRequest()->getParam('form_namespace');
