@@ -270,7 +270,7 @@ abstract class AbstractDataFixture
     protected function getDbIsolationState(TestCase $test)
     {
         $isEnabled = Bootstrap::getObjectManager()->get(DbIsolationState::class)->isEnabled($test);
-        return $isEnabled === null ? null : [$isEnabled];
+        return $isEnabled === null ? null : [$isEnabled ? 'enabled' : 'disabled'];
     }
 
     /**

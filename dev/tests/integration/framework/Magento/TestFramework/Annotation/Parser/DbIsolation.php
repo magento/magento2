@@ -33,7 +33,7 @@ class DbIsolation implements ParserInterface
                     __('Invalid "@%1" annotation, can be "enabled" or "disabled" only.', self::ANNOTATION)
                 );
             }
-            $values[] = ['state' => $value === 'enabled'];
+            $values[] = ['enabled' => $value === 'enabled'];
         }
 
         return $values;
