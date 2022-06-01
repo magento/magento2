@@ -50,6 +50,7 @@ class NewRelic implements LoggerInterface
         }
 
         $transactionName = $queryDetails[LoggerInterface::OPERATION_NAMES] ?: '';
+
         $this->newRelicWrapper->setTransactionName('GraphQL-' . $transactionName);
     }
 }

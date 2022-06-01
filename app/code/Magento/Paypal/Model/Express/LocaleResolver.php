@@ -93,7 +93,7 @@ class LocaleResolver implements ResolverInterface
             ? $this->config->getValue('smart_buttons_supported_locales')
             : $this->config->getValue('supported_locales');
 
-        return strpos($allowedLocales, $locale) !== false ? $locale : 'en_US';
+        return $allowedLocales !== null && strpos($allowedLocales, $locale) !== false ? $locale : 'en_US';
     }
 
     /**

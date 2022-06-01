@@ -9,23 +9,56 @@ namespace Magento\AdminAdobeIms\ViewModel;
 
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\Framework\Exception\InvalidArgumentException;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Psr\Log\LoggerInterface;
 
 class LinkViewModel implements ArgumentInterface
 {
-    /** @var string */
-    private string $authUrl;
+    /**
+     * @var string|null
+     */
+    private ?string $authUrl;
+
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
+     * @var MessageManagerInterface
+     */
+    private MessageManagerInterface $messageManager;
 
     /**
      * @param ImsConnection $connection
+     * @param LoggerInterface $logger
+     * @param MessageManagerInterface $messageManager
      */
     public function __construct(
-        ImsConnection $connection
+        ImsConnection $connection,
+        LoggerInterface $logger,
+        MessageManagerInterface $messageManager
     ) {
+        $this->logger = $logger;
+        $this->messageManager = $messageManager;
+
         try {
             $this->authUrl = $connection->auth();
-        } catch (InvalidArgumentException $exception) {
-            $this->authUrl = '';
+        } catch (InvalidArgumentException $e) {
+            $this->logger->error($e->getMessage());
+            $this->authUrl = null;
+            $this->addImsErrorMessage(
+                'Could not connect to Adobe IMS.',
+                $e->getMessage()
+            );
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            $this->authUrl = null;
+            $this->addImsErrorMessage(
+                'Could not connect to Adobe IMS.',
+                'Something went wrong during Adobe IMS connection check.'
+            );
         }
     }
 
@@ -42,10 +75,28 @@ class LinkViewModel implements ArgumentInterface
     /**
      * Get authorization URL for Login Button
      *
-     * @return string
+     * @return string|null
      */
-    public function getButtonLink(): string
+    public function getButtonLink(): ?string
     {
         return $this->authUrl;
+    }
+
+    /**
+     * Add Admin Adobe IMS Error Message
+     *
+     * @param string $headline
+     * @param string $message
+     * @return void
+     */
+    private function addImsErrorMessage(string $headline, string $message): void
+    {
+        $this->messageManager->addComplexErrorMessage(
+            'adminAdobeImsMessage',
+            [
+                'headline' => __($headline)->getText(),
+                'message' => __($message)->getText()
+            ]
+        );
     }
 }
