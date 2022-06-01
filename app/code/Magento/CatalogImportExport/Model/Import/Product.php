@@ -2748,7 +2748,7 @@ class Product extends AbstractEntity
         $code = '';
         foreach ($attributeNameValuePairs as $attributeData) {
             //process case when attribute has ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR inside its value
-            if (strpos($attributeData, self::PAIR_NAME_VALUE_SEPARATOR) === false) {
+            if ($attributeData === null || strpos($attributeData, self::PAIR_NAME_VALUE_SEPARATOR) === false) {
                 if (!$code) {
                     continue;
                 }
@@ -2813,7 +2813,7 @@ class Product extends AbstractEntity
                 $delimiter = $this->getMultipleValueSeparator();
             }
 
-            return explode($delimiter, $values);
+            return $values !== null ? explode($delimiter, $values) : [];
         }
         if (preg_match_all('~"((?:[^"]|"")*)"~', $values, $matches)) {
             return $values = array_map(
@@ -3307,7 +3307,8 @@ class Product extends AbstractEntity
     {
         $result = '';
         if ($paths) {
-            $result = rtrim(array_shift($paths), DIRECTORY_SEPARATOR);
+            $firstPath = array_shift($paths);
+            $result = $firstPath !== null ? rtrim($firstPath, DIRECTORY_SEPARATOR) : '';
             foreach ($paths as $path) {
                 $result .= DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
             }

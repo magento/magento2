@@ -30,7 +30,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     protected $_host = 'localhost';
 
     /**
-     * Port
      * @var int
      */
     protected $_port = 80;
@@ -60,19 +59,16 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     protected $_cookies = [];
 
     /**
-     * Response headers
      * @var array
      */
     protected $_responseHeaders = [];
 
     /**
-     * Response body
      * @var string
      */
     protected $_responseBody = '';
 
     /**
-     * Response status
      * @var int
      */
     protected $_responseStatus = 0;
@@ -282,7 +278,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         }
         $out = [];
         foreach ($this->_responseHeaders['Set-Cookie'] as $row) {
-            $values = explode("; ", $row);
+            $values = explode("; ", $row ?? '');
             $c = count($values);
             if (!$c) {
                 continue;
@@ -309,7 +305,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         }
         $out = [];
         foreach ($this->_responseHeaders['Set-Cookie'] as $row) {
-            $values = explode("; ", $row);
+            $values = explode("; ", $row ?? '');
             $c = count($values);
             if (!$c) {
                 continue;
@@ -326,7 +322,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
             }
             for ($i = 0; $i < $c; $i++) {
                 list($subkey, $val) = explode("=", $values[$i]);
-                $out[trim($key)][trim($subkey)] = trim($val);
+                $out[trim($key)][trim($subkey)] = $val !== null ? trim($val) : '';
             }
         }
         return $out;
@@ -442,6 +438,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      */
     protected function parseHeaders($ch, $data)
     {
+        $data = $data !== null ? $data : '';
         if ($this->_headerCount == 0) {
             $line = explode(" ", trim($data), 3);
             if (count($line) < 2) {

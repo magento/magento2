@@ -509,7 +509,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     {
         $formatted = $this->formatTxt(0);
         $number = $this->formatTxt(0, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
-        return str_replace($this->trimUnicodeDirectionMark($number), '%s', $formatted);
+        return $formatted !== null ? str_replace($this->trimUnicodeDirectionMark($number), '%s', $formatted) : '';
     }
 
     /**
