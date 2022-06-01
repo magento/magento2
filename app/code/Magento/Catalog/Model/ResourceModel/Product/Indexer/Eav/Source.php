@@ -343,7 +343,7 @@ class Source extends AbstractEav
         $this->_addAttributeToSelect($select, 'status', "pvd.{$productIdField}", 'cs.store_id', $statusCond);
 
         if ($entityIds !== null) {
-            $select->where('cpe.entity_id IN(?)', $entityIds);
+            $select->where('cpe.entity_id IN(?)', $entityIds, \Zend_Db::INT_TYPE);
         }
         /**
          * Add additional external limitation
