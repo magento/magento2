@@ -47,6 +47,8 @@ class DesignLoader
     /**
      * @param ViewDesignLoader $designLoader
      * @param ManagerInterface $messageManager
+     * @param AreaList $areaList
+     * @param State $appState
      */
     public function __construct(
         ViewDesignLoader $designLoader,
