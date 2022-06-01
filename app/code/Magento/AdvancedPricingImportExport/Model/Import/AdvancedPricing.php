@@ -649,7 +649,12 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         foreach ($tierPrices as $productPrices) {
             $this->countItemsCreated += count($productPrices);
         }
-        $this->countItemsCreated -= $this->countItemsUpdated;
+
+        if ($this->countItemsCreated >= $this->countItemsUpdated) {
+            $this->countItemsCreated -= $this->countItemsUpdated;
+        } else {
+            $this->countItemsCreated = 0;
+        }
 
         return $this;
     }
