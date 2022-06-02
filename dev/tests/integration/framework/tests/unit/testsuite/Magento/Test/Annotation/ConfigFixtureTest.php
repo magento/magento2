@@ -45,6 +45,13 @@ class ConfigFixtureTest extends TestCase
                 }
             );
 
+        $objectManager->method('get')
+            ->willReturnCallback(
+                function (string $type) {
+                    return $this->createMock($type);
+                }
+            );
+
         Bootstrap::setObjectManager($objectManager);
 
         $this->object = $this->createPartialMock(
