@@ -19,7 +19,7 @@ class NewConditionHtml extends CatalogAction implements HttpPostActionInterface,
      *
      * @return void
      */
-    public function execute() //phpcs:ignore CopyPaste
+    public function execute()
     {
         $id = $this->getRequest()->getParam('id');
         $formName = $this->getRequest()->getParam('form_namespace');
