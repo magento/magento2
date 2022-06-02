@@ -22,12 +22,12 @@ class NewConditionHtml extends Quote implements HttpPostActionInterface
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('id');
         $formName = $this->getRequest()->getParam('form_namespace');
-        $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
-        $type = $typeArr[0];
+        $id = $this->getRequest()->getParam('id');
+        $typeArray = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
+        $type = $typeArray[0];
 
-        if (class_exists($type) && !in_array(ConditionInterface::class, class_implements($type))) {
+        if ($type && class_exists($type) && !in_array(ConditionInterface::class, class_implements($type))) {
             $html = '';
             $this->getResponse()->setBody($html);
             return;
@@ -44,8 +44,8 @@ class NewConditionHtml extends Quote implements HttpPostActionInterface
         )->setPrefix(
             'conditions'
         );
-        if (!empty($typeArr[1])) {
-            $model->setAttribute($typeArr[1]);
+        if (!empty($typeArray[1])) {
+            $model->setAttribute($typeArray[1]);
         }
 
         if ($model instanceof AbstractCondition) {
