@@ -1580,8 +1580,13 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
          * Shipment bill to account – required if Shipping PaymentType is other than 'S'
          */
         $nodeBilling->addChild('BillingAccountNumber', (string)$this->getConfigData('account'));
-        $nodeBilling->addChild('DutyPaymentType', 'S');
-        $nodeBilling->addChild('DutyAccountNumber', (string)$this->getConfigData('account'));
+        if ($this->isDutiable(
+            $rawRequest->getShipperAddressCountryCode(),
+            $rawRequest->getRecipientAddressCountryCode()
+        )) {
+            $nodeBilling->addChild('DutyPaymentType', 'S');
+            $nodeBilling->addChild('DutyAccountNumber', (string)$this->getConfigData('account'));
+        }
 
         /** Receiver */
         $nodeConsignee = $xml->addChild('Consignee', '', '');
@@ -1789,7 +1794,10 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $contentType = isset($package['params']['container']) ? $package['params']['container'] : '';
         $packageType = $contentType === self::DHL_CONTENT_TYPE_NON_DOC ? 'CP' : 'EE';
         $nodeShipmentDetails->addChild('PackageType', $packageType);
-        if ($this->isDutiable($rawRequest->getOrigCountryId(), $rawRequest->getDestCountryId())) {
+        if ($this->isDutiable(
+            $rawRequest->getShipperAddressCountryCode(),
+            $rawRequest->getRecipientAddressCountryCode()
+        )) {
             $nodeShipmentDetails->addChild('IsDutiable', 'Y');
         }
         $nodeShipmentDetails->addChild(
@@ -2044,9 +2052,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         $origCountry = (string)$this->getCountryParams($origCountryCode)->getData('name');
         $destCountry = (string)$this->getCountryParams($destCountryCode)->getData('name');
-        $isDomestic = (string)$this->getCountryParams($destCountryCode)->getData('domestic');
 
-        if (($origCountry == $destCountry && $isDomestic)
+        if (($origCountry == $destCountry)
             || (
                 $this->_carrierHelper->isCountryInEU($origCountryCode)
                 && $this->_carrierHelper->isCountryInEU($destCountryCode)
