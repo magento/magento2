@@ -106,14 +106,15 @@ $createAccountButtonViewModel = $block->getData('create_account_button_view_mode
                 </label>
                 <div class="control">
                     <input type="text"
-                           name="street[]"
+                           name="street[0]"
                            value="<?= $escaper->escapeHtmlAttr($formData->getStreet(0)) ?>"
                            title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('street') ?>"
                            id="street_1"
                            class="input-text <?= $escaper->escapeHtmlAttr($_streetValidationClass) ?>">
                     <div class="nested">
                         <?php
-                            $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass));
+                            $_streetValidationClass = $_streetValidationClass !== null ?
+                                trim(str_replace('required-entry', '', $_streetValidationClass)) : '';
                             $streetLines = $addressHelper->getStreetLines();
                         ?>
                         <?php for ($_i = 2, $_n = $streetLines; $_i <= $_n; $_i++): ?>
@@ -123,7 +124,7 @@ $createAccountButtonViewModel = $block->getData('create_account_button_view_mode
                                 </label>
                                 <div class="control">
                                     <input type="text"
-                                           name="street[]"
+                                           name="street[<?= /* @noEscape */ $_i ?>]"
                                            value="<?= $escaper->escapeHtml($formData->getStreetLine($_i - 1)) ?>"
                                            title="<?= $escaper->escapeHtmlAttr(__('Street Address %1', $_i)) ?>"
                                            id="street_<?= /* @noEscape */ $_i ?>"
