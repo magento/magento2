@@ -19,7 +19,6 @@
             <useCaseId value="ACP2E-789"/>
             <group value="catalog"/>
             <group value="indexer"/>
-            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Change indexers to "Update by Schedule" mode -->
@@ -51,7 +50,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
-            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterEnableWebUrlOptions"/>
+            <magentoCLI command="cache:clean" stepKey="cleanCacheBefore"/>
         </before>
         <after>
             <!-- Change indexers to "Update on Save" mode -->
@@ -67,10 +66,9 @@
             <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCacheCLI"/>
-            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:clean" stepKey="cleanCacheAfter"/>
         </after>
 
         <!--Switch to custom store storefront page-->
