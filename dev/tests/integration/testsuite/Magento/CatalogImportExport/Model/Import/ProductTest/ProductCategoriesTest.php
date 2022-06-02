@@ -15,7 +15,7 @@ use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Indexer\Test\Fixture\IndexerMode;
+use Magento\Indexer\Test\Fixture\ScheduleMode;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
@@ -26,9 +26,9 @@ use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
 #[
     AppIsolation(true),
     AppArea('adminhtml'),
-    DataFixtureBeforeTransaction(IndexerMode::class, ['indexer' => 'catalogsearch_fulltext', 'schedule' => true]),
-    DataFixtureBeforeTransaction(IndexerMode::class, ['indexer' => 'catalog_category_product', 'schedule' => true]),
-    DataFixtureBeforeTransaction(IndexerMode::class, ['indexer' => 'catalog_product_category', 'schedule' => true]),
+    DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => 'catalogsearch_fulltext']),
+    DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => 'catalog_category_product']),
+    DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => 'catalog_product_category']),
 ]
 class ProductCategoriesTest extends ProductTestBase
 {

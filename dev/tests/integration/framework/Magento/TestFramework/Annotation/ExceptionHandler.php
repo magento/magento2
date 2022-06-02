@@ -14,6 +14,8 @@ use ReflectionException;
 class ExceptionHandler
 {
     /**
+     * Format exception message and throws PHPUnit\Framework\Exception
+     *
      * @param string $message
      * @param string $testClass
      * @param string|null $testMethod

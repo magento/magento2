@@ -94,7 +94,7 @@ class DbIsolationTest extends \PHPUnit\Framework\TestCase
      */
     public function testStartTestTransactionRequestInvalidAnnotation()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(\PHPUnit\Framework\Exception::class);
 
         $this->_object->startTestTransactionRequest($this, new \Magento\TestFramework\Event\Param\Transaction());
     }
@@ -105,7 +105,7 @@ class DbIsolationTest extends \PHPUnit\Framework\TestCase
      */
     public function testStartTestTransactionRequestAmbiguousAnnotation()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(\PHPUnit\Framework\Exception::class);
 
         $this->_object->startTestTransactionRequest($this, new \Magento\TestFramework\Event\Param\Transaction());
     }

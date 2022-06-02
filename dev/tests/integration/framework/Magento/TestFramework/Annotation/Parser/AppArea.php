@@ -46,7 +46,7 @@ class AppArea implements ParserInterface
             if (!in_array($value, self::ALLOWED_AREAS, true)) {
                 throw new LocalizedException(
                     __(
-                        "Invalid annotation format: @%1 %2. The valid format is: @%1 %3.",
+                        "Invalid annotation format: @%1 %2. The valid format is: @%1 [%3].",
                         self::ANNOTATION,
                         $value,
                         implode('|', self::ALLOWED_AREAS)

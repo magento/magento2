@@ -30,7 +30,11 @@ class Cache implements ParserInterface
         foreach ($annotations[$scope][self::ANNOTATION] ?? [] as $value) {
             if (!preg_match('/^([a-z_]+)\s(enabled|disabled)$/', $value, $matches)) {
                 throw new LocalizedException(
-                    __('Invalid @%1 declaration: \'%2\'', self::ANNOTATION)
+                    __(
+                        "Invalid annotation format: @%1 %2. The valid format is: @%1 [<type>|all] [enabled|disabled].",
+                        self::ANNOTATION,
+                        $value
+                    )
                 );
             }
             $values[] = ['type' => $matches[1], 'status' => $matches[2] === 'enabled'];

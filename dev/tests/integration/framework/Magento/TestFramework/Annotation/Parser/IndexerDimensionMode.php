@@ -31,7 +31,11 @@ class IndexerDimensionMode implements ParserInterface
             $args = explode(' ', $value);
             if (count($args) !== 2) {
                 throw new LocalizedException(
-                    __('Invalid @%1 declaration: \'%2\'', self::ANNOTATION)
+                    __(
+                        "Invalid annotation format: @%1 %2. The valid format is: @%1 <indexer> <dimension>.",
+                        self::ANNOTATION,
+                        $value
+                    )
                 );
             }
             $values[] = ['indexer' => $args[0], 'dimension' => $args[1]];

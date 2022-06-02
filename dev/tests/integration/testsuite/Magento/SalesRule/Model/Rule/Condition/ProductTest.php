@@ -12,8 +12,10 @@ use Magento\SalesRule\Test\Fixture\ProductCondition as ProductConditionFixture;
 use Magento\SalesRule\Test\Fixture\ProductFoundInCartConditions as ProductFoundInCartConditionsFixture;
 use Magento\SalesRule\Test\Fixture\ProductSubselectionInCartConditions as ProductSubselectionInCartConditionsFixture;
 use Magento\SalesRule\Test\Fixture\Rule as RuleFixture;
+use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -48,16 +50,16 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * 2. Set product's associated category according to test case
      * 3. Attempt to validate the sales rule against the quote and assert the output is as expected
      *
-     * @magentoAppIsolation enabled
      * @param int $categoryId
      * @param bool $expectedResult
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      * @magentoDataFixture Magento/Catalog/_files/category.php
      * @dataProvider validateProductConditionDataProvider
-     * @magentoDbIsolation disabled
      */
     #[
+        AppIsolation(true),
+        DbIsolation(false),
         DataFixture(
             ProductConditionFixture::class,
             ['attribute' => 'category_ids', 'value' => '333'],

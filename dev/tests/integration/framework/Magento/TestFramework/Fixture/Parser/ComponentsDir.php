@@ -12,7 +12,7 @@ use Magento\TestFramework\Fixture\ParserInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * AppArea attribute parser
+ * ComponentsDir attribute parser
  */
 class ComponentsDir implements ParserInterface
 {

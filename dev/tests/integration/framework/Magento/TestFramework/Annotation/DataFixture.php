@@ -94,7 +94,7 @@ class DataFixture extends AbstractDataFixture
     protected function getParsers(): array
     {
         $parsers = [];
-        $parsers[] = Bootstrap::getObjectManager()->create(
+        $parsers[] = Bootstrap::getObjectManager()->get(
             \Magento\TestFramework\Fixture\Parser\DataFixture::class
         );
         return array_merge(

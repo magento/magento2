@@ -342,12 +342,12 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/price/scope 1
-     * @magentoDbIsolation disabled
-     * @magentoAppArea adminhtml
      * @dataProvider saveCustomPriceAttributeDataProvider
      */
     #[
+        AppArea('adminhtml'),
+        DbIsolation(false),
+        Config('catalog/price/scope', '1', 'store'),
         DataFixture(WebsiteFixture::class, as: 'website2'),
         DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
         DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),

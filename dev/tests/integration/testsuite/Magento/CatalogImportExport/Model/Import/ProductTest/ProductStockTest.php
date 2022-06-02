@@ -12,9 +12,6 @@ use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogInventory\Model\StockRegistry;
 use Magento\CatalogInventory\Model\StockRegistryStorage;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Indexer\Test\Fixture\IndexerMode;
-use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
-use Magento\TestFramework\Fixture\DbIsolation;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.

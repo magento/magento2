@@ -12,13 +12,8 @@ use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
-class IndexerMode implements RevertibleDataFixtureInterface
+class ScheduleMode implements RevertibleDataFixtureInterface
 {
-    private const DEFAULT_DATA = [
-        'indexer' => null,
-        'schedule' => true
-    ];
-
     /**
      * @var IndexerRegistry
      */
@@ -42,11 +37,17 @@ class IndexerMode implements RevertibleDataFixtureInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @param array $data Parameters
+     * <pre>
+     *    $data = [
+     *      'indexer' => (string) Indexer code. Required.
+     *    ]
+     * </pre>
      */
     public function apply(array $data = []): ?DataObject
     {
-        $this->indexerRegistry->get($data['indexer'])->setScheduled($data['schedule']);
+        $this->indexerRegistry->get($data['indexer'])->setScheduled(true);
 
         return $this->dataObjectFactory->create(['data' => $data]);
     }

@@ -82,21 +82,21 @@ class ComponentRegistrarFixture
      */
     private function registerComponents(\PHPUnit\Framework\TestCase $test)
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $parsers = $objectManager
-            ->create(
-                \Magento\TestFramework\Annotation\Parser\Composite::class,
-                [
-                    'parsers' => [
-                        $objectManager->get(\Magento\TestFramework\Annotation\Parser\ComponentsDir::class),
-                        $objectManager->get(\Magento\TestFramework\Fixture\Parser\ComponentsDir::class)
-                    ]
-                ]
+        $values = [];
+        try {
+            $values = $this->parse($test);
+        } catch (\Throwable $exception) {
+            ExceptionHandler::handle(
+                'Unable to parse fixtures',
+                get_class($test),
+                $test->getName(false),
+                $exception
             );
-        $values = array_merge(
-            $parsers->parse($test, ParserInterface::SCOPE_CLASS),
-            $parsers->parse($test, ParserInterface::SCOPE_METHOD)
-        );
+        }
+        if (!$values) {
+            return;
+        }
+
         $componentAnnotations = array_unique(array_column($values, 'path'));
         $reflection = new \ReflectionClass(self::REGISTRAR_CLASS);
         $paths = $reflection->getProperty(self::PATHS_FIELD);
@@ -138,5 +138,31 @@ class ComponentRegistrarFixture
             $paths->setAccessible(false);
             $this->origComponents = null;
         }
+    }
+
+    /**
+     * Returns ComponentsDir fixtures configuration
+     *
+     * @param \PHPUnit\Framework\TestCase $test
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function parse(\PHPUnit\Framework\TestCase $test): array
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $parsers = $objectManager
+            ->create(
+                \Magento\TestFramework\Annotation\Parser\Composite::class,
+                [
+                    'parsers' => [
+                        $objectManager->get(\Magento\TestFramework\Annotation\Parser\ComponentsDir::class),
+                        $objectManager->get(\Magento\TestFramework\Fixture\Parser\ComponentsDir::class)
+                    ]
+                ]
+            );
+        return array_merge(
+            $parsers->parse($test, ParserInterface::SCOPE_CLASS),
+            $parsers->parse($test, ParserInterface::SCOPE_METHOD)
+        );
     }
 }

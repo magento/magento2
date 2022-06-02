@@ -21,6 +21,7 @@ use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\ObjectManager;
@@ -87,12 +88,9 @@ class CalculateTest extends TestCase
         $this->assertEquals(25.4, $items['weee_tax']->getValue());
     }
 
-    /**
-     * @magentoConfigFixture default_store tax/weee/enable 1
-     * @magentoConfigFixture default_store tax/weee/apply_vat 1
-     * @return void
-     */
     #[
+        Config('tax/weee/enable', '1', 'store', 'default'),
+        Config('tax/weee/apply_vat', '1', 'store', 'default'),
         DataFixture(FptAttributeFixture::class, ['attribute_code' => 'fpt_attr'], 'fpt'),
         DataFixture(
             ProductFixture::class,
@@ -127,11 +125,9 @@ class CalculateTest extends TestCase
         $this->assertEquals(0.8, $weeeTaxes[0]['row_amount_incl_tax']);
     }
 
-    /**
-     * @magentoConfigFixture default_store tax/weee/enable 1
-     * @magentoConfigFixture default_store tax/weee/apply_vat 1
-     */
     #[
+        Config('tax/weee/enable', '1', 'store', 'default'),
+        Config('tax/weee/apply_vat', '1', 'store', 'default'),
         DataFixture(FptAttributeFixture::class, ['attribute_code' => 'fpt_attr'], 'fpt'),
         DataFixture(
             ProductFixture::class,

@@ -13,6 +13,7 @@ use Magento\Tax\Test\Fixture\CustomerTaxClass as CustomerTaxClassFixture;
 use Magento\Tax\Test\Fixture\ProductTaxClass as ProductTaxClassFixture;
 use Magento\Tax\Test\Fixture\TaxRate as TaxRateFixture;
 use Magento\Tax\Test\Fixture\TaxRule as TaxRuleFixture;
+use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -67,11 +68,8 @@ class CalculationTest extends TestCase
         $this->assertEquals($taxRate->getRateIds(), $taxCalculation->getRate($data));
     }
 
-    /**
-     * phpcs:disable Generic.Files.LineLength.TooLong
-     * @magentoAppIsolation enabled
-     */
     #[
+        AppIsolation(true),
         DataFixture(CustomerTaxClassFixture::class, as: 'c1'),
         DataFixture(ProductTaxClassFixture::class, as: 'p1'),
         DataFixture(

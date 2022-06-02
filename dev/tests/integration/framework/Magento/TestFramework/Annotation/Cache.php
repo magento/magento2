@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
  */
 class Cache
 {
-    public const ANNOTATION = 'magentoCache';
     /**
      * Original values for cache type states
      *
@@ -31,19 +30,17 @@ class Cache
      */
     public function startTest(TestCase $test)
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $parsers = $objectManager
-            ->create(
-                \Magento\TestFramework\Annotation\Parser\Composite::class,
-                [
-                    'parsers' => [
-                        $objectManager->get(\Magento\TestFramework\Annotation\Parser\Cache::class),
-                        $objectManager->get(\Magento\TestFramework\Fixture\Parser\Cache::class)
-                    ]
-                ]
+        $statusList = [];
+        try {
+            $statusList = $this->parse($test);
+        } catch (\Throwable $exception) {
+            ExceptionHandler::handle(
+                'Unable to parse fixtures',
+                get_class($test),
+                $test->getName(false),
+                $exception
             );
-        $statusList = $parsers->parse($test, ParserInterface::SCOPE_METHOD)
-            ?: $parsers->parse($test, ParserInterface::SCOPE_CLASS);
+        }
 
         if ($statusList) {
             $values = [];
@@ -94,7 +91,11 @@ class Cache
         $states = Bootstrap::getInstance()->getObjectManager()->get(\Magento\Framework\App\Cache\StateInterface::class);
         foreach ($values as $type => $isEnabled) {
             if (!isset($this->origValues[$type])) {
-                self::fail("Unknown cache type specified: '{$type}' in @magentoCache", $test);
+                ExceptionHandler::handle(
+                    "Unknown cache type specified: '{$type}' in @magentoCache",
+                    get_class($test),
+                    $test->getName(false)
+                );
             }
             $states->setEnabled($type, $isEnabled);
         }
@@ -111,15 +112,26 @@ class Cache
     }
 
     /**
-     * Fails the test with specified error message
+     * Returns Cache fixtures configuration
      *
-     * @param string $message
      * @param TestCase $test
-     * @throws \Exception
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private static function fail($message, TestCase $test)
+    private function parse(TestCase $test): array
     {
-        $test->fail("{$message} in the test '{$test->toString()}'");
-        throw new \Exception('The above line was supposed to throw an exception.');
+        $objectManager = Bootstrap::getObjectManager();
+        $parsers = $objectManager
+            ->create(
+                \Magento\TestFramework\Annotation\Parser\Composite::class,
+                [
+                    'parsers' => [
+                        $objectManager->get(\Magento\TestFramework\Annotation\Parser\Cache::class),
+                        $objectManager->get(\Magento\TestFramework\Fixture\Parser\Cache::class)
+                    ]
+                ]
+            );
+        return $parsers->parse($test, ParserInterface::SCOPE_METHOD)
+            ?: $parsers->parse($test, ParserInterface::SCOPE_CLASS);
     }
 }

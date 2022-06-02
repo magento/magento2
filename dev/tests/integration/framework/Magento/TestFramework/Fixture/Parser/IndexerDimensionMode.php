@@ -12,7 +12,7 @@ use Magento\TestFramework\Fixture\ParserInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Cache attribute parser
+ * IndexerDimensionMode attribute parser
  */
 class IndexerDimensionMode implements ParserInterface
 {

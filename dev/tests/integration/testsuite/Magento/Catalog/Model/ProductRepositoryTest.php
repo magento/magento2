@@ -27,9 +27,11 @@ use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\Store\Test\Fixture\Website as WebsiteFixture;
 use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
+use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -361,10 +363,10 @@ class ProductRepositoryTest extends TestCase
 
     /**
      * @magentoDataFixture setPriceScopeToWebsite
-     * @magentoDbIsolation disabled
-     * @magentoAppArea adminhtml
      */
     #[
+        AppArea('adminhtml'),
+        DbIsolation(false),
         DataFixture(WebsiteFixture::class, as: 'website2'),
         DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
         DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),

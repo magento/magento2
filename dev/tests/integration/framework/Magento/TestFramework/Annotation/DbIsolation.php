@@ -85,8 +85,9 @@ class DbIsolation
      */
     protected function _getIsolation(TestCase $test)
     {
+        $state = null;
         try {
-            return Bootstrap::getObjectManager()->get(DbIsolationState::class)->isEnabled($test);
+            $state = Bootstrap::getObjectManager()->get(DbIsolationState::class)->isEnabled($test);
         } catch (\Throwable $exception) {
             ExceptionHandler::handle(
                 'Unable to parse fixtures',
@@ -95,5 +96,6 @@ class DbIsolation
                 $exception
             );
         }
+        return $state;
     }
 }

@@ -76,4 +76,21 @@ class ApiDataFixture extends DataFixture
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get(AttributeMetadataCache::class)->clean();
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getParsers(): array
+    {
+        $parsers = [];
+        // Add magentoDataFixture annotations
+        $parsers[] = Bootstrap::getObjectManager()->create(
+            \Magento\TestFramework\Annotation\Parser\DataFixture::class,
+            ['annotation' => DataFixture::ANNOTATION]
+        );
+        return array_merge(
+            parent::getParsers(),
+            $parsers
+        );
+    }
 }

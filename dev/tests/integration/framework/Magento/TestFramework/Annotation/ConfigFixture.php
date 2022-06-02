@@ -310,7 +310,7 @@ class ConfigFixture
      */
     private function getConfigFixturesFromAttribute(TestCase $test): array
     {
-        $parser = Bootstrap::getObjectManager()->create(ConfigFixtureParser::class);
+        $parser = Bootstrap::getObjectManager()->get(ConfigFixtureParser::class);
         $configs = [];
 
         foreach ($parser->parse($test, ParserInterface::SCOPE_METHOD) as $data) {

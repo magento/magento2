@@ -55,22 +55,19 @@ abstract class AbstractDataFixture
                     'parsers' => $this->getParsers()
                 ]
             );
-        $scopes = $scope ? [$scope] : [ParserInterface::SCOPE_METHOD, ParserInterface::SCOPE_CLASS];
-        $fixtures = [];
-        foreach ($scopes as $scp) {
-            try {
-                $fixtures = $parsers->parse($test, $scp);
-            } catch (\Throwable $exception) {
-                ExceptionHandler::handle(
-                    'Unable to parse fixtures',
-                    get_class($test),
-                    $test->getName(false),
-                    $exception
-                );
+
+        try {
+            $fixtures = $parsers->parse($test, $scope ?: ParserInterface::SCOPE_METHOD);
+            if (!$fixtures && !$scope) {
+                $fixtures = $parsers->parse($test, ParserInterface::SCOPE_CLASS);
             }
-            if (!empty($fixtures)) {
-                break;
-            }
+        } catch (\Throwable $exception) {
+            ExceptionHandler::handle(
+                'Unable to parse fixtures',
+                get_class($test),
+                $test->getName(false),
+                $exception
+            );
         }
 
         /* Need to be applied even test does not have added fixtures because fixture can be added via config */
@@ -127,8 +124,8 @@ abstract class AbstractDataFixture
             } catch (\Throwable $exception) {
                 ExceptionHandler::handle(
                     'Unable to apply fixture: ' . $this->getFixtureReference($fixture),
-                    get_class($test),
-                    $test->getName(false),
+                    $fixture['test']['class'],
+                    $fixture['test']['method'],
                     $exception
                 );
             }

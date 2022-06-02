@@ -10,6 +10,9 @@ use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\Config as ConfigFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -69,13 +72,13 @@ class ProductTest extends TestCase
     }
 
     /**
-     * @magentoAppArea adminhtml
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
      * @throws StateException
      */
     #[
+        AppArea('adminhtml'),
         DataFixture(AttributeFixture::class, ['attribute_code' => 'prod_attr']),
         DataFixture(ProductFixture::class, ['sku' => 'simple']),
     ]
@@ -90,13 +93,13 @@ class ProductTest extends TestCase
     }
 
     /**
-     * @magentoAppArea adminhtml
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
      * @throws StateException
      */
     #[
+        AppArea('adminhtml'),
         DataFixture(AttributeFixture::class, ['attribute_code' => 'prod_attr']),
         DataFixture(ProductFixture::class, ['sku' => 'simple']),
     ]
@@ -115,13 +118,13 @@ class ProductTest extends TestCase
     }
 
     /**
-     * @magentoAppArea adminhtml
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
      * @throws StateException
      */
     #[
+        AppArea('adminhtml'),
         DataFixture(AttributeFixture::class, ['attribute_code' => 'prod_attr']),
         DataFixture(ProductFixture::class, ['sku' => 'simple']),
     ]
@@ -140,7 +143,6 @@ class ProductTest extends TestCase
     }
 
     /**
-     * @magentoAppArea adminhtml
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
@@ -148,6 +150,7 @@ class ProductTest extends TestCase
      * @throws NoSuchEntityException
      */
     #[
+        AppArea('adminhtml'),
         DataFixture(AttributeFixture::class, ['attribute_code' => 'prod_attr']),
         DataFixture(ProductFixture::class, ['sku' => 'simple']),
     ]
@@ -161,12 +164,10 @@ class ProductTest extends TestCase
         $this->assertEquals('default_value', $actual);
     }
 
-    /**
-     * @magentoAppArea adminhtml
-     * @magentoAppIsolation enabled
-     * @magentoConfigFixture default_store catalog/price/scope 1
-     */
     #[
+        AppArea('adminhtml'),
+        AppIsolation(true),
+        ConfigFixture('catalog/price/scope', '1', 'store'),
         DataFixture(ProductFixture::class, ['sku' => 'simple', 'special_price' => 5.99]),
     ]
     public function testUpdateStoreSpecificSpecialPrice()

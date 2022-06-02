@@ -13,6 +13,7 @@ use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\GroupedProduct\Test\Fixture\Product as GroupedProductFixture;
+use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\DataFixture;
 
 class GroupedTest extends \PHPUnit\Framework\TestCase
@@ -52,10 +53,8 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Grouped::class, $type);
     }
 
-    /**
-     * @magentoAppArea frontend
-     */
     #[
+        AppArea('frontend'),
         DataFixture(ProductFixture::class, ['sku' => 'simple', 'name' => 'Simple Product', 'price' => 10], 'p1'),
         DataFixture(
             VirtualProductFixture::class,

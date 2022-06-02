@@ -35,6 +35,7 @@ use Magento\Tax\Api\Data\TaxClassInterface;
 use Magento\Tax\Api\TaxClassRepositoryInterface;
 use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\Config as TaxConfig;
+use Magento\TestFramework\Fixture\Config as ConfigFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -144,17 +145,15 @@ class ShippingMethodManagementTest extends TestCase
     }
 
     /**
-     * phpcs:disable Generic.Files.LineLength.TooLong
-     *
-     * @magentoConfigFixture default_store carriers/tablerate/active 1
-     * @magentoConfigFixture default_store carriers/flatrate/active 0
-     * @magentoConfigFixture current_store carriers/tablerate/condition_name package_value_with_discount
-     * @magentoConfigFixture default_store carriers/tablerate/include_virtual_price 0
      * @magentoDataFixture Magento/OfflineShipping/_files/tablerates_price.php
      * @return void
      * @throws NoSuchEntityException
      */
     #[
+        ConfigFixture('carriers/tablerate/active', '1', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/active', '0', 'store', 'default'),
+        ConfigFixture('carriers/tablerate/condition_name', 'package_value_with_discount', 'store'),
+        ConfigFixture('carriers/tablerate/include_virtual_price', '0', 'store', 'default'),
         DataFixture(ProductFixture::class, ['sku' => 'simple', 'special_price' => 5.99], 'p1'),
         DataFixture(VirtualProductFixture::class, ['sku' => 'virtual', 'weight' => 0], 'p2'),
         DataFixture(GuestCartFixture::class, as: 'cart'),

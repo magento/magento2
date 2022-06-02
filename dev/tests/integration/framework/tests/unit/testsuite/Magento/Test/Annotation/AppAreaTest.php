@@ -117,7 +117,7 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTestAppAreaWithInvalidArea()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(\PHPUnit\Framework\Exception::class);
 
         $annotations = ['method' => ['magentoAppArea' => ['some_invalid_area']]];
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');

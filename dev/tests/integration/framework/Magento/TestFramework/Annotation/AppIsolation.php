@@ -18,8 +18,6 @@ use PHPUnit\Framework\TestCase;
 
 class AppIsolation
 {
-    private const ANNOTATION = 'magentoAppIsolation';
-
     /**
      * Flag to prevent an excessive test case isolation if the last test has been just isolated
      *
@@ -87,6 +85,7 @@ class AppIsolation
     public function endTest(TestCase $test)
     {
         $this->hasNonIsolatedTests = true;
+        $values = [];
         try {
             $values = $this->parse($test);
         } catch (\Throwable $exception) {
@@ -113,10 +112,10 @@ class AppIsolation
      * Returns AppIsolation fixtures configuration
      *
      * @param TestCase $test
-     * @return array|mixed
+     * @return array
      * @throws LocalizedException
      */
-    private function parse(TestCase $test): mixed
+    private function parse(TestCase $test): array
     {
         $objectManager = Bootstrap::getObjectManager();
         $parsers = $objectManager

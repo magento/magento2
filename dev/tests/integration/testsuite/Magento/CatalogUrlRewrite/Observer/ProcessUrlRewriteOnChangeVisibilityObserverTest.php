@@ -16,6 +16,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -170,10 +171,9 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
     /**
      * Test for multistore properties of the product to be respected in generated UrlRewrites
      * during the mass update for visibility change
-     *
-     * @magentoAppIsolation enabled
      */
     #[
+        AppIsolation(true),
         DataFixture(WebsiteFixture::class, as: 'w1'),
         DataFixture(StoreGroupFixture::class, ['website_id' => '$w1.id$'], 'g1'),
         DataFixture(StoreFixture::class, ['store_group_id' => '$g1.id$'], 's1'),

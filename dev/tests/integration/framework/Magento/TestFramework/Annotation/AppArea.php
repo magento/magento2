@@ -82,6 +82,7 @@ class AppArea
      */
     public function startTest(TestCase $test)
     {
+        $values = [];
         try {
             $values = $this->parse($test);
         } catch (\Throwable $exception) {

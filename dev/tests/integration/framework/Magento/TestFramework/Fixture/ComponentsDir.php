@@ -10,7 +10,7 @@ namespace Magento\TestFramework\Fixture;
 use Attribute;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
-#[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_CLASS)]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
 class ComponentsDir
 {
     /**

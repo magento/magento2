@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Magento\SalesRule\Test\Fixture\ProductCondition as ProductConditionFixture;
 use Magento\SalesRule\Test\Fixture\Rule as RuleFixture;
+use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -48,7 +49,6 @@ class DiscountTest extends TestCase
     }
 
     /**
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Checkout/_files/quote_with_bundle_product_with_dynamic_price.php
      * @dataProvider bundleProductWithDynamicPriceAndCartPriceRuleDataProvider
      * @param string $coupon
@@ -57,6 +57,7 @@ class DiscountTest extends TestCase
      * @return void
      */
     #[
+        AppIsolation(true),
         DataFixture(
             ProductConditionFixture::class,
             ['attribute' => 'sku', 'value' => 'bundle_product_with_dynamic_price'],
