@@ -61,6 +61,9 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
      * Loading page block
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\Controller\Result\Raw
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
