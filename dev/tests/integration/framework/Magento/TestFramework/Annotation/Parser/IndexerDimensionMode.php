@@ -17,7 +17,7 @@ class IndexerDimensionMode implements ParserInterface
     /**
      * @var string
      */
-    private const ANNOTATION = 'magentoCache';
+    private const ANNOTATION = 'magentoIndexerDimensionMode';
 
     /**
      * @inheritdoc

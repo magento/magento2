@@ -12,14 +12,13 @@ use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Annotation\DataFixture as DataFixtureAnnotation;
-use Magento\TestFramework\Annotation\DataFixtureDataProvider;
 use Magento\TestFramework\Annotation\DataFixtureSetup;
 use Magento\TestFramework\Event\Param\Transaction;
-use Magento\TestFramework\Annotation\DataFixtureAnnotationsParser;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureInterface;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Fixture\LegacyDataFixturePathResolver;
 use Magento\TestFramework\Fixture\DataFixtureFactory;
 use Magento\TestFramework\Fixture\LegacyDataFixture;
@@ -321,10 +320,8 @@ class DataFixtureTest extends TestCase
         $this->assertEquals('3', getenv('sample_fixture_three'));
     }
 
-    /**
-     * @magentoDbIsolation disabled
-     */
     #[
+        DbIsolation(false),
         DataFixture('MockFixture1'),
         DataFixture('MockFixture2'),
         DataFixture('MockFixture3'),
@@ -354,10 +351,8 @@ class DataFixtureTest extends TestCase
         $this->revertFixtures();
     }
 
-    /**
-     * @magentoDbIsolation disabled
-     */
     #[
+        DbIsolation(false),
         DataFixture('MockFixture1', as: 'fixture1'),
         DataFixture('MockFixture2', as: 'fixture2'),
         DataFixture('MockFixture3', as: 'fixture3'),
@@ -390,10 +385,8 @@ class DataFixtureTest extends TestCase
         $this->revertFixtures();
     }
 
-    /**
-     * @magentoDbIsolation disabled
-     */
     #[
+        DbIsolation(false),
         DataFixture('MockFixture1', ['key1' => 'value1']),
         DataFixture('MockFixture2', ['key2' => 'value2']),
         DataFixture('MockFixture3', ['key3' => 'value3']),
@@ -423,10 +416,8 @@ class DataFixtureTest extends TestCase
         $this->revertFixtures();
     }
 
-    /**
-     * @magentoDbIsolation disabled
-     */
     #[
+        DbIsolation(false),
         DataFixture('MockFixture1', ['alias-key1' => 'alias-value1'], 'fixture1'),
         DataFixture('MockFixture2', ['alias-key2' => 'alias-value2'], 'fixture2'),
         DataFixture('MockFixture3', ['alias-key3' => 'alias-value3'], 'fixture3'),
@@ -459,10 +450,8 @@ class DataFixtureTest extends TestCase
         $this->revertFixtures();
     }
 
-    /**
-     * @magentoDbIsolation disabled
-     */
     #[
+        DbIsolation(false),
         DataFixture('MockFixture1', ['p1' => 'param-value1'], 'fixture1'),
         DataFixture('MockFixture2', ['p2' => '$fixture1.attr_1$'], 'fixture2'),
         DataFixture('MockFixture3', ['p3' => '$fixture2.attr_3$', 'p4' => ['p5' => '$fixture1$']], 'fixture3'),

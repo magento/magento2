@@ -61,11 +61,10 @@ abstract class AbstractDataFixture
             try {
                 $fixtures = $parsers->parse($test, $scp);
             } catch (\Throwable $exception) {
-                throw new Exception(
-                    sprintf(
-                        "Unable to parse fixtures\n#0 %s",
-                        $this->getTestReference($this->getTestMetadata($test))
-                    ),
+                ExceptionHandler::handle(
+                    'Unable to parse fixtures',
+                    get_class($test),
+                    $test->getName(false),
                     $exception
                 );
             }
@@ -118,16 +117,18 @@ abstract class AbstractDataFixture
             if (is_callable([get_class($test), $fixture['factory']])) {
                 $fixture['factory'] = get_class($test) . '::' . $fixture['factory'];
             }
-            $fixture['test'] = $this->getTestMetadata($test);
+            $fixture['test'] = [
+                'class' => get_class($test),
+                'method' => $test->getName(false),
+                'dataSet' => $test->dataName(),
+            ];
             try {
                 $fixture['result'] = $dataFixtureSetup->apply($fixture);
             } catch (\Throwable $exception) {
-                throw new Exception(
-                    sprintf(
-                        "Unable to apply fixture: %s.\n#0 %s",
-                        $this->getFixtureReference($fixture),
-                        $this->getTestReference($fixture['test'])
-                    ),
+                ExceptionHandler::handle(
+                    'Unable to apply fixture: ' . $this->getFixtureReference($fixture),
+                    get_class($test),
+                    $test->getName(false),
                     $exception
                 );
             }
@@ -154,12 +155,10 @@ abstract class AbstractDataFixture
             try {
                 $dataFixtureSetup->revert($fixture);
             } catch (\Throwable $exception) {
-                throw new Exception(
-                    sprintf(
-                        "Unable to revert fixture: %s.\n#0 %s",
-                        $this->getFixtureReference($fixture),
-                        $this->getTestReference($fixture['test'])
-                    ),
+                ExceptionHandler::handle(
+                    'Unable to revert fixture: ' . $this->getFixtureReference($fixture),
+                    $fixture['test']['class'],
+                    $fixture['test']['method'],
                     $exception
                 );
             }
@@ -176,21 +175,6 @@ abstract class AbstractDataFixture
     }
 
     /**
-     * Returns information about the class name
-     *
-     * @param TestCase $test
-     * @return array
-     */
-    private function getTestMetadata(TestCase $test): array
-    {
-        return [
-            'class' => get_class($test),
-            'method' => $test->getName(false),
-            'dataSet' => $test->dataName(),
-        ];
-    }
-
-    /**
      * Get reference to the fixture definition
      *
      * @param array $fixture
@@ -202,47 +186,6 @@ abstract class AbstractDataFixture
             '%s%s',
             $fixture['factory'],
             $fixture['name'] ? ' (' . $fixture['name'] . ')' : '',
-        );
-    }
-
-    /**
-     * Get reference to the test definition
-     *
-     * @param array $testMetadata
-     * @return string
-     */
-    private function getTestReference(array $testMetadata): string
-    {
-        try {
-            $reflected = new ReflectionClass($testMetadata['class']);
-        } catch (ReflectionException $e) {
-            throw new \PHPUnit\Framework\Exception(
-                $e->getMessage(),
-                (int) $e->getCode(),
-                $e
-            );
-        }
-
-        $name = $testMetadata['method'];
-
-        if ($name && $reflected->hasMethod($name)) {
-            try {
-                $reflected = $reflected->getMethod($name);
-            } catch (ReflectionException $e) {
-                throw new \PHPUnit\Framework\Exception(
-                    $e->getMessage(),
-                    (int) $e->getCode(),
-                    $e
-                );
-            }
-        }
-
-        return sprintf(
-            "%s(%d): %s->%s()",
-            $reflected->getFileName(),
-            $reflected->getStartLine(),
-            $testMetadata['class'],
-            $testMetadata['method']
         );
     }
 

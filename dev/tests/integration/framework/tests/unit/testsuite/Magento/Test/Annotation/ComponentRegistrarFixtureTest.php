@@ -20,10 +20,10 @@ class ComponentRegistrarFixtureTest extends \PHPUnit\Framework\TestCase
      */
     private $componentRegistrar;
 
-    const LIBRARY_NAME = 'magento/library';
-    const MODULE_NAME = 'Magento_ModuleOne';
-    const THEME_NAME = 'frontend/Magento/theme';
-    const LANGUAGE_NAME = 'magento_language';
+    private const LIBRARY_NAME = 'magento/library';
+    private const MODULE_NAME = 'Magento_ModuleOne';
+    private const THEME_NAME = 'frontend/Magento/theme';
+    private const LANGUAGE_NAME = 'magento_language';
 
     protected function setUp(): void
     {
@@ -44,7 +44,7 @@ class ComponentRegistrarFixtureTest extends \PHPUnit\Framework\TestCase
             );
         $objectManager->method('create')
             ->willReturnCallback(
-                function (string $type, array $arguments = []){
+                function (string $type, array $arguments = []) {
                     return new $type(...array_values($arguments));
                 }
             );

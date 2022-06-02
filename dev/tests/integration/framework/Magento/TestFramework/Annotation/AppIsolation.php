@@ -87,6 +87,37 @@ class AppIsolation
     public function endTest(TestCase $test)
     {
         $this->hasNonIsolatedTests = true;
+        try {
+            $values = $this->parse($test);
+        } catch (\Throwable $exception) {
+            ExceptionHandler::handle(
+                'Unable to parse fixtures',
+                get_class($test),
+                $test->getName(false),
+                $exception
+            );
+        }
+        if ($values) {
+            $isIsolationEnabled = $values[0]['enabled'];
+        } else {
+            /* Controller tests should be isolated by default */
+            $isIsolationEnabled = $test instanceof AbstractController;
+        }
+
+        if ($isIsolationEnabled) {
+            $this->_isolateApp();
+        }
+    }
+
+    /**
+     * Returns AppIsolation fixtures configuration
+     *
+     * @param TestCase $test
+     * @return array|mixed
+     * @throws LocalizedException
+     */
+    private function parse(TestCase $test): mixed
+    {
         $objectManager = Bootstrap::getObjectManager();
         $parsers = $objectManager
             ->create(
@@ -106,15 +137,6 @@ class AppIsolation
                 __('Only one "@magentoAppIsolation" annotation is allowed per test')
             );
         }
-        if ($values) {
-            $isIsolationEnabled = $values[0]['enabled'];
-        } else {
-            /* Controller tests should be isolated by default */
-            $isIsolationEnabled = $test instanceof AbstractController;
-        }
-
-        if ($isIsolationEnabled) {
-            $this->_isolateApp();
-        }
+        return $values;
     }
 }

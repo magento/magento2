@@ -41,7 +41,7 @@ class DbIsolationTest extends \PHPUnit\Framework\TestCase
             );
         $objectManager->method('create')
             ->willReturnCallback(
-                function (string $type, array $arguments = []){
+                function (string $type, array $arguments = []) {
                     return new $type(...array_values($arguments));
                 }
             );

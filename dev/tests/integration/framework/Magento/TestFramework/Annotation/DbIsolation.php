@@ -82,10 +82,18 @@ class DbIsolation
      *
      * @param TestCase $test
      * @return bool|null Returns NULL, if isolation is not defined for the current scope
-     * @throws LocalizedException
      */
     protected function _getIsolation(TestCase $test)
     {
-        return Bootstrap::getObjectManager()->get(DbIsolationState::class)->isEnabled($test);
+        try {
+            return Bootstrap::getObjectManager()->get(DbIsolationState::class)->isEnabled($test);
+        } catch (\Throwable $exception) {
+            ExceptionHandler::handle(
+                'Unable to parse fixtures',
+                get_class($test),
+                $test->getName(false),
+                $exception
+            );
+        }
     }
 }

@@ -82,6 +82,37 @@ class AppArea
      */
     public function startTest(TestCase $test)
     {
+        try {
+            $values = $this->parse($test);
+        } catch (\Throwable $exception) {
+            ExceptionHandler::handle(
+                'Unable to parse fixtures',
+                get_class($test),
+                $test->getName(false),
+                $exception
+            );
+        }
+
+        $area = $values[0]['area'] ?? Application::DEFAULT_APP_AREA;
+
+        if ($this->_application->getArea() !== $area) {
+            $this->_application->reinitialize();
+
+            if ($this->_application->getArea() !== $area) {
+                $this->_application->loadArea($area);
+            }
+        }
+    }
+
+    /**
+     * Returns AppArea fixtures configuration
+     *
+     * @param TestCase $test
+     * @return array
+     * @throws LocalizedException
+     */
+    private function parse(TestCase $test): array
+    {
         $objectManager = Bootstrap::getObjectManager();
         $parsers = $objectManager
             ->create(
@@ -101,15 +132,6 @@ class AppArea
                 __('Only one "@magentoAppArea" annotation is allowed per test')
             );
         }
-
-        $area = $values[0]['area'] ?? Application::DEFAULT_APP_AREA;
-
-        if ($this->_application->getArea() !== $area) {
-            $this->_application->reinitialize();
-
-            if ($this->_application->getArea() !== $area) {
-                $this->_application->loadArea($area);
-            }
-        }
+        return $values;
     }
 }

@@ -30,7 +30,11 @@ class AppIsolation implements ParserInterface
         foreach ($annotations[$scope][self::ANNOTATION] ?? [] as $value) {
             if (!in_array($value, ['enabled', 'disabled'])) {
                 throw new LocalizedException(
-                    __('Invalid "@%1" annotation, can be "enabled" or "disabled" only.', self::ANNOTATION)
+                    __(
+                        "Invalid annotation format: @%1 %2. The valid format is: @%1 enabled|disabled.",
+                        self::ANNOTATION,
+                        $value
+                    )
                 );
             }
             $values[] = ['enabled' => $value === 'enabled'];

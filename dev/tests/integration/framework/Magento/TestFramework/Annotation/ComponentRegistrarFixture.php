@@ -93,8 +93,10 @@ class ComponentRegistrarFixture
                     ]
                 ]
             );
-        $values = $parsers->parse($test, ParserInterface::SCOPE_METHOD)
-            ?: $parsers->parse($test, ParserInterface::SCOPE_CLASS);
+        $values = array_merge(
+            $parsers->parse($test, ParserInterface::SCOPE_CLASS),
+            $parsers->parse($test, ParserInterface::SCOPE_METHOD)
+        );
         $componentAnnotations = array_unique(array_column($values, 'path'));
         $reflection = new \ReflectionClass(self::REGISTRAR_CLASS);
         $paths = $reflection->getProperty(self::PATHS_FIELD);

@@ -27,8 +27,6 @@ use PHPUnit\Framework\TestCase;
  */
 class IndexerDimensionMode
 {
-    private const ANNOTATION = 'magentoIndexerDimensionMode';
-
     /** @var TypeListInterface */
     private $cacheTypeList;
 
@@ -112,9 +110,9 @@ class IndexerDimensionMode
         $values = $parsers->parse($test, ParserInterface::SCOPE_METHOD)
             ?: $parsers->parse($test, ParserInterface::SCOPE_CLASS);
 
-        $dbIsolation = Bootstrap::getObjectManager()->get(DbIsolationState::class)->isEnabled($test);
 
         if ($values) {
+            $dbIsolation = Bootstrap::getObjectManager()->get(DbIsolationState::class)->isEnabled($test);
             if ($dbIsolation) {
                 $this->fail("@magentoDbIsolation must be disabled when using @magentoIndexerDimensionMode", $test);
             }
