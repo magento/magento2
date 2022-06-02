@@ -71,14 +71,11 @@
             <magentoCLI command="cache:clean" stepKey="cleanCacheAfter"/>
         </after>
 
-        <!-- Open storefront -->
-        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontPage"/>
+        <!-- Open storefront on second store  -->
+        <amOnPage url="{{StorefrontStoreHomePage.url(customStore.code)}}" stepKey="openStorefrontPage"/>
+        <waitForPageLoad time="30" stepKey="waitStorefrontPage"/>
 
-        <!--Switch to custom store storefront page-->
-        <actionGroup ref="StorefrontSwitchStoreActionGroup" stepKey="switchToCustomStore">
-            <argument name="storeName" value="{{customStoreGroup.name}}"/>
-        </actionGroup>
-
+        <!-- Check product is not present in category before cron run -->
         <actionGroup ref="AssertStorefrontProductAbsentOnCategoryPageActionGroup" stepKey="doNotSeeProductInCategoryPage">
             <argument name="categoryUrlKey" value="$$createCategory.name$$"/>
             <argument name="productName" value="{{_defaultProduct.name}}"/>
@@ -87,6 +84,7 @@
         <!-- Run cron -->
         <magentoCLI command="cron:run" stepKey="runCron"/>
 
+        <!-- Check product is present in category after cron run -->
         <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
             <argument name="category" value="$$createCategory$$"/>
             <argument name="product" value="_defaultProduct"/>
