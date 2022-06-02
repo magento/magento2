@@ -1,21 +1,24 @@
 <?php
 /**
- * Import entity of grouped product type
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedImportExport\Model\Import\Product\Type;
 
+use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Model\Import;
 
+/**
+ * Import entity of grouped product type
+ */
 class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
     /**
      * Default delimiter for sku and qty.
      */
-    const SKU_QTY_DELIMITER = '=';
+    public const SKU_QTY_DELIMITER = '=';
 
     /**
      * Column names that holds values with particular meaning.
@@ -30,8 +33,16 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
     protected $links;
 
     /**
-     * Product entity identifier field
-     *
+     * @var ConfigInterface
+     */
+    protected $config;
+
+    /**
+     * @var string[]
+     */
+    private $allowedProductTypes;
+
+    /**
      * @var string
      */
     private $productEntityIdentifierField;
@@ -42,15 +53,19 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $params
      * @param Grouped\Links $links
+     * @param ConfigInterface|null $config
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
         \Magento\Framework\App\ResourceConnection $resource,
         array $params,
-        Grouped\Links $links
+        Grouped\Links $links,
+        ConfigInterface $config = null
     ) {
         $this->links = $links;
+        $this->config = $config ?: ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->allowedProductTypes = $this->config->getComposableTypes();
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
     }
 
@@ -90,9 +105,13 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                     ++$position;
                     $associatedSkuAndQty = explode(self::SKU_QTY_DELIMITER, $associatedSkuAndQty);
                     $associatedSku = isset($associatedSkuAndQty[0]) ? strtolower(trim($associatedSkuAndQty[0])) : null;
-                    if (isset($newSku[$associatedSku])) {
+                    if (isset($newSku[$associatedSku]) &&
+                        in_array($newSku[$associatedSku]['type_id'], $this->allowedProductTypes)
+                    ) {
                         $linkedProductId = $newSku[$associatedSku][$this->getProductEntityIdentifierField()];
-                    } elseif (isset($oldSku[$associatedSku])) {
+                    } elseif (isset($oldSku[$associatedSku]) &&
+                        in_array($oldSku[$associatedSku]['type_id'], $this->allowedProductTypes)
+                    ) {
                         $linkedProductId = $oldSku[$associatedSku][$this->getProductEntityIdentifierField()];
                     } else {
                         continue;

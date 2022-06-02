@@ -11,7 +11,10 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogImportExport\Model\Import\ProductTestBase;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Indexer\Test\Fixture\IndexerMode;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
@@ -207,5 +210,25 @@ class ProductCategoriesTest extends ProductTestBase
         $collection = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
         $collection->addNameToResult()->load();
         return $collection->getItemByColumnValue('name', $categoryName);
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     */
+    public function testCategoryNameValidation()
+    {
+        $csvFixture = 'import_categories_with_long_names.csv';
+        $pathToFile = __DIR__ . '/../_files/' . $csvFixture;
+        $filesystem = Bootstrap::getObjectManager()->create(Filesystem::class);
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            Csv::class,
+            ['file' => $pathToFile, 'directory' => $directory]
+        );
+        $errors = $this->_model->setSource($source)->setParameters(
+            ['behavior' => Import::BEHAVIOR_ADD_UPDATE, 'entity' => 'catalog_product']
+        )->validateData();
+        $this->assertTrue($errors->getErrorsCount() === 1);
     }
 }
