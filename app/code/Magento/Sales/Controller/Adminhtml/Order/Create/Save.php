@@ -6,50 +6,11 @@
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
-use Magento\Backend\App\Action\Context;
-use Magento\Backend\Model\View\Result\ForwardFactory;
-use Magento\Catalog\Helper\Product;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Escaper;
 use Magento\Framework\Exception\PaymentException;
-use Magento\Framework\View\Result\PageFactory;
-use Magento\Store\Model\StoreManagerInterface;
 
 class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create implements HttpPostActionInterface
 {
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @param Context $context
-     * @param Product $productHelper
-     * @param Escaper $escaper
-     * @param PageFactory $resultPageFactory
-     * @param ForwardFactory $resultForwardFactory
-     * @param StoreManagerInterface|null $storeManager
-     */
-    public function __construct(
-        Context $context,
-        Product $productHelper,
-        Escaper $escaper,
-        PageFactory $resultPageFactory,
-        ForwardFactory $resultForwardFactory,
-        StoreManagerInterface $storeManager = null
-    ) {
-        parent::__construct(
-            $context,
-            $productHelper,
-            $escaper,
-            $resultPageFactory,
-            $resultForwardFactory
-        );
-        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
-            ->get(StoreManagerInterface::class);
-    }
-
     /**
      * Saving quote and create order
      *
@@ -70,7 +31,6 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create implements H
             ) {
                 return $this->resultForwardFactory->create()->forward('denied');
             }
-            $this->storeManager->setCurrentStore($this->_getSession()->getQuote()->getStore()->getCode());
             $this->_getOrderCreateModel()->getQuote()->setCustomerId($this->_getSession()->getCustomerId());
             $this->_processActionData('save');
             $paymentData = $this->getRequest()->getPost('payment');
