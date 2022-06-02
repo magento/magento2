@@ -56,6 +56,7 @@ abstract class AbstractDataFixture
                 ]
             );
 
+        $fixtures = [];
         try {
             $fixtures = $parsers->parse($test, $scope ?: ParserInterface::SCOPE_METHOD);
             if (!$fixtures && !$scope) {

@@ -6,15 +6,25 @@
 
 namespace Magento\TestFramework\Annotation;
 
-use Magento\TestFramework\Annotation\TestCaseAnnotation;
+use FilesystemIterator;
+use InvalidArgumentException;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Annotation\Parser\Composite;
 use Magento\TestFramework\Fixture\ParserInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use ReflectionClass;
 use RegexIterator;
+use SplFileInfo;
+use Throwable;
 
 /**
  * Implementation of the @magentoComponentsDir DocBlock annotation
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ComponentRegistrarFixture
 {
@@ -23,7 +33,7 @@ class ComponentRegistrarFixture
     /**#@+
      * Properties of components registrar
      */
-    public const REGISTRAR_CLASS = \Magento\Framework\Component\ComponentRegistrar::class;
+    public const REGISTRAR_CLASS = ComponentRegistrar::class;
     public const PATHS_FIELD = 'paths';
     /**#@-*/
 
@@ -54,10 +64,10 @@ class ComponentRegistrarFixture
     /**
      * Handler for 'startTest' event
      *
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param TestCase $test
      * @return void
      */
-    public function startTest(\PHPUnit\Framework\TestCase $test)
+    public function startTest(TestCase $test)
     {
         $this->registerComponents($test);
     }
@@ -65,12 +75,12 @@ class ComponentRegistrarFixture
     /**
      * Handler for 'endTest' event
      *
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param TestCase $test
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function endTest(\PHPUnit\Framework\TestCase $test)
+    public function endTest(TestCase $test)
     {
         $this->restoreComponents();
     }
@@ -78,14 +88,14 @@ class ComponentRegistrarFixture
     /**
      * Register fixture components
      *
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param TestCase $test
      */
-    private function registerComponents(\PHPUnit\Framework\TestCase $test)
+    private function registerComponents(TestCase $test)
     {
         $values = [];
         try {
             $values = $this->parse($test);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             ExceptionHandler::handle(
                 'Unable to parse fixtures',
                 get_class($test),
@@ -98,7 +108,7 @@ class ComponentRegistrarFixture
         }
 
         $componentAnnotations = array_unique(array_column($values, 'path'));
-        $reflection = new \ReflectionClass(self::REGISTRAR_CLASS);
+        $reflection = new ReflectionClass(self::REGISTRAR_CLASS);
         $paths = $reflection->getProperty(self::PATHS_FIELD);
         $paths->setAccessible(true);
         $this->origComponents = $paths->getValue();
@@ -106,18 +116,18 @@ class ComponentRegistrarFixture
         foreach ($componentAnnotations as $fixturePath) {
             $fixturesDir = $this->fixtureBaseDir . '/' . $fixturePath;
             if (!file_exists($fixturesDir)) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     self::ANNOTATION_NAME . " fixture '$fixturePath' does not exist"
                 );
             }
             $iterator = new RegexIterator(
                 new RecursiveIteratorIterator(
-                    new RecursiveDirectoryIterator($fixturesDir, \FilesystemIterator::SKIP_DOTS)
+                    new RecursiveDirectoryIterator($fixturesDir, FilesystemIterator::SKIP_DOTS)
                 ),
                 '/^.+\/registration\.php$/'
             );
             /**
-             * @var \SplFileInfo $registrationFile
+             * @var SplFileInfo $registrationFile
              */
             foreach ($iterator as $registrationFile) {
                 require $registrationFile->getRealPath();
@@ -131,7 +141,7 @@ class ComponentRegistrarFixture
     private function restoreComponents()
     {
         if (null !== $this->origComponents) {
-            $reflection = new \ReflectionClass(self::REGISTRAR_CLASS);
+            $reflection = new ReflectionClass(self::REGISTRAR_CLASS);
             $paths = $reflection->getProperty(self::PATHS_FIELD);
             $paths->setAccessible(true);
             $paths->setValue($this->origComponents);
@@ -143,16 +153,16 @@ class ComponentRegistrarFixture
     /**
      * Returns ComponentsDir fixtures configuration
      *
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param TestCase $test
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    private function parse(\PHPUnit\Framework\TestCase $test): array
+    private function parse(TestCase $test): array
     {
         $objectManager = Bootstrap::getObjectManager();
         $parsers = $objectManager
             ->create(
-                \Magento\TestFramework\Annotation\Parser\Composite::class,
+                Composite::class,
                 [
                     'parsers' => [
                         $objectManager->get(\Magento\TestFramework\Annotation\Parser\ComponentsDir::class),
