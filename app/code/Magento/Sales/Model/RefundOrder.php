@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -19,7 +20,7 @@ use Magento\Sales\Model\Order\Validation\RefundOrderInterface as RefundOrderVali
 use Psr\Log\LoggerInterface;
 
 /**
- * Class RefundOrder
+ * Class RefundOrder for an order
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RefundOrder implements RefundOrderInterface
@@ -75,6 +76,11 @@ class RefundOrder implements RefundOrderInterface
     private $logger;
 
     /**
+     * @var OrderMutexInterface
+     */
+    private $orderMutex;
+
+    /**
      * RefundOrder constructor.
      *
      * @param ResourceConnection $resourceConnection
@@ -87,6 +93,7 @@ class RefundOrder implements RefundOrderInterface
      * @param NotifierInterface $notifier
      * @param OrderConfig $config
      * @param LoggerInterface $logger
+     * @param OrderMutex|null $orderMutex
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -99,7 +106,8 @@ class RefundOrder implements RefundOrderInterface
         RefundOrderValidator $validator,
         NotifierInterface $notifier,
         OrderConfig $config,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?OrderMutexInterface $orderMutex = null
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->orderStateResolver = $orderStateResolver;
@@ -111,6 +119,7 @@ class RefundOrder implements RefundOrderInterface
         $this->notifier = $notifier;
         $this->config = $config;
         $this->logger = $logger;
+        $this->orderMutex = $orderMutex ?: ObjectManager::getInstance()->get(OrderMutexInterface::class);
     }
 
     /**
@@ -124,7 +133,45 @@ class RefundOrder implements RefundOrderInterface
         \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
-        $connection = $this->resourceConnection->getConnection('sales');
+        return $this->orderMutex->execute(
+            (int) $orderId,
+            \Closure::fromCallable([$this, 'createRefund']),
+            [
+                $orderId,
+                $items,
+                $notify,
+                $appendComment,
+                $comment,
+                $arguments
+            ]
+        );
+    }
+
+    /**
+     * Creates refund for provided order ID
+     *
+     * @param int $orderId
+     * @param array $items
+     * @param bool $notify
+     * @param bool $appendComment
+     * @param \Magento\Sales\Api\Data\InvoiceCommentCreationInterface|null $comment
+     * @param \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface|null $arguments
+     * @return int
+     * @throws \Magento\Sales\Api\Exception\DocumentValidationExceptionInterface
+     * @throws \Magento\Sales\Api\Exception\CouldNotRefundException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \DomainException
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
+    private function createRefund(
+        $orderId,
+        array $items = [],
+        $notify = false,
+        $appendComment = false,
+        \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
+        \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
+    ) {
         $order = $this->orderRepository->get($orderId);
         $creditmemo = $this->creditmemoDocumentFactory->createFromOrder(
             $order,
@@ -147,7 +194,6 @@ class RefundOrder implements RefundOrderInterface
                 __("Creditmemo Document Validation Error(s):\n" . implode("\n", $validationMessages->getMessages()))
             );
         }
-        $connection->beginTransaction();
         try {
             $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
             $order->setCustomerNoteNotify($notify);
@@ -162,10 +208,8 @@ class RefundOrder implements RefundOrderInterface
 
             $order = $this->orderRepository->save($order);
             $creditmemo = $this->creditmemoRepository->save($creditmemo);
-            $connection->commit();
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            $connection->rollBack();
             throw new \Magento\Sales\Exception\CouldNotRefundException(
                 __('Could not save a Creditmemo, see error log for details')
             );
