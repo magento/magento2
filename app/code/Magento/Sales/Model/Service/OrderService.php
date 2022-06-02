@@ -10,8 +10,6 @@ use Magento\Payment\Gateway\Command\CommandException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class OrderService
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderService implements OrderManagementInterface
@@ -141,8 +139,8 @@ class OrderService implements OrderManagementInterface
         $order = $this->orderRepository->get($id);
         $order->addStatusHistory($statusHistory);
         $this->orderRepository->save($order);
-        $notify = isset($statusHistory['is_customer_notified']) ? $statusHistory['is_customer_notified'] : false;
-        $comment = trim(strip_tags($statusHistory->getComment()));
+        $notify = $statusHistory['is_customer_notified'] ?? false;
+        $comment = $statusHistory->getComment() !== null ? trim(strip_tags($statusHistory->getComment())) : '';
         $this->orderCommentSender->send($order, $notify, $comment);
         return true;
     }
