@@ -11,7 +11,6 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\TestFramework\Annotation\DataFixture as DataFixtureAnnotation;
 use Magento\TestFramework\Annotation\DataFixtureDataProvider;
 use Magento\TestFramework\Annotation\DataFixtureSetup;
@@ -106,7 +105,6 @@ class DataFixtureTest extends TestCase
             \Magento\TestFramework\Annotation\Parser\DataFixture::class => $annotationParser,
             DataFixtureFactory::class => $dataFixtureFactory,
             DataFixtureSetup::class => new DataFixtureSetup(new Registry(), $dataFixtureFactory),
-            DataFixtureDataProvider::class => new DataFixtureDataProvider(new Json()),
             'MockFixture1' => $this->fixture1,
             'MockFixture2' => $this->fixture2,
             'MockFixture3' => $this->fixture3,

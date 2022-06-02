@@ -23,15 +23,15 @@ class Composite implements ParserInterface
     /**
      * @var string
      */
-    private string $strategy;
+    private int $strategy;
 
     /**
      * @param ParserInterface[] $parsers
-     * @param string $strategy
+     * @param int $strategy
      */
     public function __construct(
         array $parsers,
-        string $strategy = self::STRATEGY_MERGE
+        int $strategy = self::STRATEGY_MERGE
     ) {
         $this->parsers = $parsers;
         $this->strategy = $strategy;

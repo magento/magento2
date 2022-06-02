@@ -6,6 +6,7 @@
 namespace Magento\Test\Annotation;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Fixture\Parser\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -29,15 +30,18 @@ class DbIsolationTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $objectManager->method('create')
-            ->willReturnCallback(
-                function (string $type) {
-                    return $this->createMock($type);
-                }
-            );
+        $sharedInstances = [
+            DbIsolation::class => $this->createConfiguredMock(DbIsolation::class, ['parse' => []])
+        ];
         $objectManager->method('get')
             ->willReturnCallback(
-                function (string $type, array $arguments = []) {
+                function (string $type) use ($sharedInstances) {
+                    return $sharedInstances[$type] ?? new $type();
+                }
+            );
+        $objectManager->method('create')
+            ->willReturnCallback(
+                function (string $type, array $arguments = []){
                     return new $type(...array_values($arguments));
                 }
             );
