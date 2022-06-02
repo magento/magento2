@@ -71,6 +71,9 @@
             <magentoCLI command="cache:clean" stepKey="cleanCacheAfter"/>
         </after>
 
+        <!-- Open storefront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontPage"/>
+
         <!--Switch to custom store storefront page-->
         <actionGroup ref="StorefrontSwitchStoreActionGroup" stepKey="switchToCustomStore">
             <argument name="storeName" value="{{customStoreGroup.name}}"/>
