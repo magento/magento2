@@ -17,6 +17,8 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Session\SaveHandlerInterface;
 
 /**
  * Observer to check if customer session needs to be regenerated
@@ -51,6 +53,12 @@ class UpdateCustomerSession implements ObserverInterface
     private LoggerInterface $logger;
 
     /**
+     * @var SaveHandlerInterface|null
+     */
+    private $saveHandler;
+
+    /**
+     *
      * Initialize dependencies.
      *
      * @param Session $session
@@ -58,19 +66,24 @@ class UpdateCustomerSession implements ObserverInterface
      * @param State $state
      * @param CustomerRepositoryInterface $customerRepository
      * @param LoggerInterface $logger
+     * @param SaveHandlerInterface|null $saveHandler
      */
     public function __construct(
         Session $session,
         NotificationStorage $notificationStorage,
         State $state,
         CustomerRepositoryInterface $customerRepository,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        SaveHandlerInterface $saveHandler = null
+
     ) {
         $this->session = $session;
         $this->notificationStorage = $notificationStorage;
         $this->state = $state;
         $this->customerRepository = $customerRepository;
         $this->logger = $logger;
+        $this->saveHandler = $saveHandler ?? ObjectManager::getInstance()->create(SaveHandlerInterface::class);
+
     }
 
     /**
@@ -90,11 +103,13 @@ class UpdateCustomerSession implements ObserverInterface
             return;
         }
         try {
+            $oldSessionId = session_id();
             $this->session->regenerateId();
             $customer = $this->customerRepository->getById($customerId);
             $this->session->setCustomerData($customer);
             $this->session->setCustomerGroupId($customer->getGroupId());
             $this->notificationStorage->remove(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customer->getId());
+            $this->destroyPreviousSession($oldSessionId);
         } catch (NoSuchEntityException $e) {
             $this->logger->error($e);
         }
@@ -112,5 +127,17 @@ class UpdateCustomerSession implements ObserverInterface
             NotificationStorage::UPDATE_CUSTOMER_SESSION,
             $customerId
         );
+    }
+
+    /**
+     * Destroy previous session id
+     *
+     * @param string $sessionId
+     * @return void
+     */
+    private function destroyPreviousSession(string $sessionId): void
+    {
+        $this->session->start();
+        $this->saveHandler->destroy($sessionId);
     }
 }
