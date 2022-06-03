@@ -152,16 +152,26 @@ class OperationRepositoryTest extends TestCase
     }
 
     /**
+     * Check for Get List methods if its calling addFieldToSelect method
+     *
      * @return void
      */
     public function testGetListSelect(): void
     {
         $searchResultInterface = $this->createMock(OperationSearchResultsInterface::class);
+        $searchResultInterface->expects($this->once())->method('setSearchCriteria')->willReturnSelf();
+        $searchResultInterface->expects($this->once())->method('setTotalCount')->willReturnSelf();
+        $searchResultInterface->expects($this->once())->method('setItems')->willReturnSelf();
+
+        $this->joinProcessor->expects($this->once())->method('process');
+        $this->collectionProcessor->expects($this->once())->method('process');
+
         $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($searchResultInterface);
         $operationCollection = $this->createMock(OperationCollection::class);
 
         $operationCollection->expects($this->once())->method('getItems')->willReturn($this->items);
+        $operationCollection->expects($this->once())->method('getSize')->willReturn(count($this->items));
         $operationCollection->expects($this->exactly(3))->method('addFieldToSelect')->willReturnSelf();
         $this->operationCollectionFactory->expects($this->once())->method('create')->willReturn($operationCollection);
         $this->model->getList($searchCriteria);
