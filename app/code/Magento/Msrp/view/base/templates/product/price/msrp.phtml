@@ -7,7 +7,7 @@
 /**
  * Template for displaying product price at product view page, gift registry and wish-list
  *
- * @var $block \Magento\Msrp\Pricing\Render\PriceBox
+ * @var \Magento\Msrp\Pricing\Render\PriceBox $block
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
@@ -16,7 +16,7 @@
 /** @var Magento\Msrp\Pricing\Price\MsrpPriceInterface $priceType */
 $priceType = $block->getPrice();
 
-/** @var $product \Magento\Catalog\Model\Product */
+/** @var \Magento\Catalog\Model\Product $product */
 $product = $block->getSaleableItem();
 $productId = $product->getId();
 

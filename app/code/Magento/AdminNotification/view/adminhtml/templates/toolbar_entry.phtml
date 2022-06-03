@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 // phpcs:disable Generic.Files.LineLength
-/** @var $block \Magento\AdminNotification\Block\ToolbarEntry */
+/** @var \Magento\AdminNotification\Block\ToolbarEntry $block */
     $notificationCount = $block->getUnreadNotificationCount();
     $notificationCounterMax = $block->getNotificationCounterMax();
 ?>
@@ -27,7 +27,7 @@
             class="admin__action-dropdown-menu"
             data-mark-as-read-url="<?= $block->escapeUrl($block->getUrl('adminhtml/notification/ajaxMarkAsRead')) ?>">
             <?php foreach ($block->getLatestUnreadNotifications() as $notification): ?>
-                <?php /** @var $notification \Magento\AdminNotification\Model\Inbox */ ?>
+                <?php /** @var \Magento\AdminNotification\Model\Inbox $notification */ ?>
                 <li class="notifications-entry<?php if ($notification->getSeverity() == 1): ?> notifications-critical<?php endif; ?>"
                     data-notification-id="<?= $block->escapeHtmlAttr($notification->getId()) ?>"
                     data-notification-severity="<?php if ($notification->getSeverity() == 1): ?>1<?php endif; ?>">

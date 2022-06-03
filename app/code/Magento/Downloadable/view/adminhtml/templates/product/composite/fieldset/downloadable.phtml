@@ -6,7 +6,7 @@
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // @deprecated
 ?>
-<?php /* @var $block \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Downloadable */ ?>
+<?php /* @var \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Downloadable $block */ ?>
 <?php $_linksPurchasedSeparately = $block->getLinksPurchasedSeparately(); ?>
 <?php $_skipSaleableCheck = $this->helper(Magento\Catalog\Helper\Product::class)->getSkipSaleableCheck(); ?>
 <?php if (($block->getProduct()->isSaleable() || $_skipSaleableCheck) && $block->hasLinks()) :?>

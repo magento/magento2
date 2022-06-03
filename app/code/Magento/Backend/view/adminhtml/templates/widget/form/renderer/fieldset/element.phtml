@@ -5,7 +5,7 @@
  */
 ?>
 <?php
-/* @var $block \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element */
+/* @var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element $block */
 $element = $block->getElement();
 $note = $element->getNote() ? '<div class="note admin__field-note" id="' . $element->getId() . '-note">' . $element->getNote() . '</div>' : '';
 $elementBeforeLabel = $element->getExtType() == 'checkbox admin__control-checkbox' || $element->getExtType() == 'radio admin__control-radio';

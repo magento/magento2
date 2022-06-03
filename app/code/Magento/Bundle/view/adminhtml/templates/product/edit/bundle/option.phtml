@@ -5,7 +5,7 @@
  */
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
-/** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option */
+/** @var \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option $block */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <script id="bundle-option-template" type="text/x-magento-template">
@@ -309,11 +309,11 @@ bOption = new Bundle.Option(optionTemplate);
 script;
 
 foreach ($block->getOptions() as $_option) {
-    /** @var $_option \Magento\Bundle\Model\Option */
+    /** @var \Magento\Bundle\Model\Option $_option */
     $scriptString .= /* @noEscape */ 'optionIndex = bOption.add('. $_option->toJson() . ');' . PHP_EOL;
     if ($_option->getSelections()) {
         foreach ($_option->getSelections() as $_selection) {
-            /** @var $_selection \Magento\Catalog\Model\Product */
+            /** @var \Magento\Catalog\Model\Product $_selection */
             $_selection->setName($block->escapeHtml($_selection->getName()));
             $scriptString .= /* @noEscape */ 'bSelection.addRow(optionIndex,' . $_selection->toJson() . ');' . PHP_EOL;
         }

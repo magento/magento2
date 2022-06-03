@@ -8,7 +8,7 @@
 // phpcs:disable PSR2.ControlStructures.SwitchDeclaration
 // phpcs:disable Generic.WhiteSpace.ScopeIndent
 
-/* @var $block \Magento\Catalog\Block\Product\Compare\ListCompare */
+/* @var \Magento\Catalog\Block\Product\Compare\ListCompare $block */
 ?>
 <?php $total = $block->getItems()->getSize() ?>
 <?php if ($total) :?>
@@ -45,7 +45,7 @@
                 <tr>
                     <?php $index = 0; ?>
                     <?php $helper = $this->helper(Magento\Catalog\Helper\Output::class); ?>
-                    <?php /** @var $item \Magento\Catalog\Model\Product */ ?>
+                    <?php /** @var \Magento\Catalog\Model\Product $item */ ?>
                     <?php foreach ($block->getItems() as $item) :?>
                         <?php if ($index++ == 0) :?>
                             <th scope="row" class="cell label product">

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $block \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer */ ?>
+<?php /** @var \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer $block */ ?>
 <?php $_item = $block->getItem() ?>
 <?php $block->setPriceDataObject($_item)?>
     <td class="col-product"><?= $block->getColumnHtml($_item, 'name') ?></td>

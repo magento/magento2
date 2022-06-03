@@ -10,7 +10,7 @@ use Magento\Framework\App\Action\Action;
 /**
  * Product list template
  *
- * @var $block \Magento\Catalog\Block\Product\ListProduct
+ * @var \Magento\Catalog\Block\Product\ListProduct $block
  * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
@@ -46,7 +46,7 @@ $_helper = $block->getData('outputHelper');
     ?>
     <div class="products wrapper <?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
         <ol class="products list items product-items">
-            <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+            <?php /** @var \Magento\Catalog\Model\Product $_product */ ?>
             <?php foreach ($_productCollection as $_product): ?>
             <li class="item product product-item">
                 <div class="product-item-info"
