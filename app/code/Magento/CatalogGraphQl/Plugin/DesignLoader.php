@@ -9,7 +9,6 @@ namespace Magento\CatalogGraphQl\Plugin;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Message\MessageInterface;
-use Magento\Framework\View\DesignLoader as ViewDesignLoader;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Catalog\Block\Product\ImageFactory;
 use Magento\Framework\App\AreaList;
@@ -21,42 +20,34 @@ use Magento\Framework\App\State;
 class DesignLoader
 {
     /**
-     * @var DesignLoader
-     */
-    private $designLoader;
-
-    /**
      * @var ManagerInterface
      */
-    private ManagerInterface $messageManager;
+    private $messageManager;
 
     /**
      * Application
      *
      * @var AreaList
      */
-    private AreaList $areaList;
+    private $areaList;
 
     /**
      * Layout
      *
      * @var State
      */
-    private State $appState;
+    private $appState;
 
     /**
-     * @param ViewDesignLoader $designLoader
      * @param ManagerInterface $messageManager
      * @param AreaList $areaList
      * @param State $appState
      */
     public function __construct(
-        ViewDesignLoader $designLoader,
         ManagerInterface $messageManager,
         AreaList $areaList,
         State $appState
     ) {
-        $this->designLoader = $designLoader;
         $this->messageManager = $messageManager;
         $this->areaList = $areaList;
         $this->appState = $appState;
