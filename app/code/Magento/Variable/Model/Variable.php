@@ -22,9 +22,11 @@ use Magento\Framework\App\ObjectManager;
  */
 class Variable extends AbstractModel
 {
-    const TYPE_TEXT = 'text';
-
-    const TYPE_HTML = 'html';
+    /**
+     * Variable value types.
+     */
+    public const TYPE_TEXT = 'text';
+    public const TYPE_HTML = 'html';
 
     /**
      * @var int
@@ -129,7 +131,7 @@ class Variable extends AbstractModel
             $value = $this->getData('plain_value');
             //escape html if type is html, but html value is not defined
             if ($type == self::TYPE_HTML) {
-                $value = nl2br($this->_escaper->escapeHtml($value));
+                $value = nl2br((string)$this->_escaper->escapeHtml($value));
             }
             return $value;
         }
@@ -169,7 +171,8 @@ class Variable extends AbstractModel
     }
 
     /**
-     * Retrieve variables option array
+     * Retrieve variables option array.
+     *
      * @todo: extract method as separate class
      * @param bool $withGroup
      * @return array
