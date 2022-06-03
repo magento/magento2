@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCashOnDeliveryPaymentForSpecificCountryTest">
+        <annotations>
+            <title value="OnePageCheckout Cash on Delivery method is not visible, if it is not allowed for that specific Country."/>
+            <description value="OnePageCheckout Cash on Delivery method is visible only for the allowed Countries, while disappears if the billing address selected from the not allowed Countries."/>
+            <stories value="OnePageCheckout Cash on Delivery method disappears, if the address changed to the Country which is not allowed for it."/>
+            <features value="OnePageCheckout"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value=""/>
+            <useCaseId value="ACP2E-862"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!--Enable Cash On Delivery payment method-->
+            <magentoCLI command="config:set {{CashOnDeliveryEnableConfigData.path}} {{CashOnDeliveryEnableConfigData.value}}" stepKey="enableCashOnDelivery"/>
+            <!--Allow Cash On Delivery for Specific Country-->
+            <magentoCLI command="config:set payment/cashondelivery/allowspecific 1" stepKey="allowSpecificValue"/>
+            <magentoCLI command="config:set payment/cashondelivery/specificcountry GB" stepKey="specificCountryValue"/>
+
+            <!--Create Simple Product-->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <!--Create Customer-->
+            <createData entity="Simple_US_Customer_US_UK_Addresses" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set payment/cashondelivery/allowspecific 0" stepKey="allowSpecificValue"/>
+            <magentoCLI command="config:set payment/cashondelivery/specificcountry ''" stepKey="specificCountryValue"/>
+            <!--Disable Cash On Delivery method-->
+            <magentoCLI command="config:set {{CashOnDeliveryDisabledConfigData.path}} {{CashOnDeliveryDisabledConfigData.value}}" stepKey="disabledCashOnDelivery"/>
+
+            <!--Customer log out-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <!--Delete created product-->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <!--Delete Customer-->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!--Login as Customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!--Add Simple Product to cart-->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go to Cart and click 'Proceed To Checkout' button-->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCartPage"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <waitForElement selector="{{CheckoutShippingSection.shippingTab}}" stepKey="waitForCheckoutPage"/>
+
+        <!-- Select Shipping Method-->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+
+        <!--Click next button to open payment section-->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+
+        <!--Uncheck billing and shipping addresses are same-->
+        <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="uncheckSameBillingAndShippingAddress"/>
+
+        <!--Select another existing address option from dropdown-->
+        <selectOption selector="{{CheckoutPaymentSection.billingAddressSelectShared}}" userInput="{{UK_Not_Default_Address.street[0]}}" stepKey="chooseAnotherExistingAddress"/>
+        <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickUpdateButton"/>
+        <waitForPageLoad stepKey="waitForNewAddressPageLoad"/>
+
+        <!--Assert COD payment method is available for the specific allowed Country-->
+        <seeElement selector="input#cashondelivery" stepKey="seeCodPaymentMethod"/>
+
+        <!--Select payment method-->
+        <click selector="{{StorefrontCheckoutPaymentMethodsSection.cashOnDelivery}}" stepKey="selectCashOnDeliveryMethod"/>
+
+        <!--Billing is same as shipping-->
+        <checkOption selector="#billing-address-same-as-shipping-cashondelivery" stepKey="selectPaymentSolution" />
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!--Assert COD payment method not available anymore-->
+        <dontSeeElement selector="input#cashondelivery" stepKey="dontSeeCodPaymentMethod"/>
+    </test>
+</tests>
