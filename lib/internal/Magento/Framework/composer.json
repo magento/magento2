@@ -7,10 +7,7 @@
         "AFL-3.0"
     ],
     "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "magento/composer-dependency-version-audit-plugin": true
-        }
+        "sort-packages": true
     },
     "require": {
         "php": "~7.4.0||~8.1.0",
