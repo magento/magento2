@@ -15,7 +15,7 @@
             <stories value="OnePageCheckout Cash on Delivery method disappears, if the address changed to the Country which is not allowed for it."/>
             <features value="OnePageCheckout"/>
             <severity value="AVERAGE"/>
-            <testCaseId value=""/>
+            <testCaseId value="AC-3216"/>
             <useCaseId value="ACP2E-862"/>
             <group value="checkout"/>
         </annotations>
@@ -27,7 +27,7 @@
             <magentoCLI command="config:set payment/cashondelivery/specificcountry GB" stepKey="specificCountryValue"/>
 
             <!--Create Simple Product-->
-            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct"/>
             <!--Create Customer-->
             <createData entity="Simple_US_Customer_US_UK_Addresses" stepKey="createCustomer"/>
         </before>
@@ -40,7 +40,7 @@
             <!--Customer log out-->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <!--Delete created product-->
-            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <!--Delete Customer-->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
@@ -50,17 +50,13 @@
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
-        <!--Add Simple Product to cart-->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
-        <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
-        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
-            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        <!--Add Simple Product to Shopping Cart and Proceed to checkout-->
+        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="productCount" value="1"/>
         </actionGroup>
-
-        <!--Go to Cart and click 'Proceed To Checkout' button-->
-        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCartPage"/>
-        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
-        <waitForElement selector="{{CheckoutShippingSection.shippingTab}}" stepKey="waitForCheckoutPage"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
 
         <!-- Select Shipping Method-->
         <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>

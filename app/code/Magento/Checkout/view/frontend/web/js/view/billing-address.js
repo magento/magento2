@@ -124,9 +124,13 @@ function (
          */
         useShippingAddress: function () {
             if (this.isAddressSameAsShipping()) {
-                selectBillingAddress(quote.shippingAddress());
+                addressUpadated = true;
 
-                this.updateAddress();
+                selectBillingAddress(quote.shippingAddress());
+                checkoutData.setSelectedBillingAddress(quote.shippingAddress().getKey());
+                setBillingAddressAction(globalMessageList);
+
+                this.updateAddresses();
                 this.isAddressDetailsVisible(true);
             } else {
                 lastSelectedBillingAddress = quote.billingAddress();
@@ -146,10 +150,7 @@ function (
 
             addressUpadated = true;
 
-            if (this.isAddressSameAsShipping()) {
-                selectBillingAddress(quote.shippingAddress());
-                checkoutData.setSelectedBillingAddress(quote.shippingAddress().getKey());
-            } else if (this.selectedAddress() && !this.isAddressFormVisible()) {
+            if (this.selectedAddress() && !this.isAddressFormVisible()) {
                 selectBillingAddress(this.selectedAddress());
                 checkoutData.setSelectedBillingAddress(this.selectedAddress().getKey());
             } else {
