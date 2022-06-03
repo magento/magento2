@@ -25,14 +25,14 @@ class DesignLoader
     private $messageManager;
 
     /**
-     * Application
+     * Application arealist
      *
      * @var AreaList
      */
     private $areaList;
 
     /**
-     * Layout
+     * Application State
      *
      * @var State
      */
