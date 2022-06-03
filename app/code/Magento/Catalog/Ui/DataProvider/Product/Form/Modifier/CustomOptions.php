@@ -23,7 +23,6 @@ use Magento\Ui\Component\Form\Element\Checkbox;
 use Magento\Ui\Component\Form\Element\ActionDelete;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Element\DataType\Number;
-use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Data provider for "Customizable Options" panel
@@ -136,11 +135,6 @@ class CustomOptions extends AbstractModifier
      * @since 101.0.0
      */
     protected $meta = [];
-
-    /**
-     * @var CurrencyInterface
-     */
-    private $localeCurrency;
 
     /**
      * @param LocatorInterface $locator
@@ -1180,40 +1174,5 @@ class CustomOptions extends AbstractModifier
     protected function getCurrencySymbol()
     {
         return $this->storeManager->getStore()->getBaseCurrency()->getCurrencySymbol();
-    }
-
-    /**
-     * The getter function to get the locale currency for real application code
-     *
-     * @return \Magento\Framework\Locale\CurrencyInterface
-     *
-     * @deprecated 101.0.0
-     */
-    private function getLocaleCurrency()
-    {
-        if ($this->localeCurrency === null) {
-            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
-        }
-        return $this->localeCurrency;
-    }
-
-    /**
-     * Format price according to the locale of the currency
-     *
-     * @param mixed $value
-     * @return string
-     * @since 101.0.0
-     */
-    protected function formatPrice($value)
-    {
-        if (!is_numeric($value)) {
-            return null;
-        }
-
-        $store = $this->storeManager->getStore();
-        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
-        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
-
-        return $value;
     }
 }
