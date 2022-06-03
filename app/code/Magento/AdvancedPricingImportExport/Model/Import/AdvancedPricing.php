@@ -76,7 +76,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $needColumnCheck = true;
 
     /**
-     * Valid column names.
+     * Valid column names array
      *
      * @var array
      */
