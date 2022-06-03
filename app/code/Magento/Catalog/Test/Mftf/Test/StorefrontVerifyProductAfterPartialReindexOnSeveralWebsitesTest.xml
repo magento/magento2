@@ -15,7 +15,7 @@
             <title value="Verify Cron Partial Reindex for Products assigned to Categories and several new websites."/>
             <description value="Verify that Merchant Developer can use console commands to perform partial reindex for Category Products, Product Categories, and Product Price."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="TBD-123"/>
+            <testCaseId value="AC-3215"/>
             <useCaseId value="ACP2E-789"/>
             <group value="catalog"/>
             <group value="indexer"/>
