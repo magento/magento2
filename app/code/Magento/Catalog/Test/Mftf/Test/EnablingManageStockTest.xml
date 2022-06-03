@@ -16,6 +16,7 @@
             <description value="Admin can EnableManage Stock During Product Creation"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-27457"/>
+            <group value="catalog"/>
         </annotations>
         <before>
         <!-- Set ManageStock to No-->
@@ -24,6 +25,8 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Set ManageStock to Yes-->
+            <magentoCLI command="config:set {{CatalogInventoryManageStockDisable.path}} 1" stepKey="manageStockEnable"/>
             <!--Logout From Admin Panel -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
         </after>

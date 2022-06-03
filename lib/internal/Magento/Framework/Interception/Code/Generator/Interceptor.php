@@ -72,7 +72,7 @@ class Interceptor extends EntityAbstract
         $reflectionClass = new \ReflectionClass($this->getSourceClassName());
         $publicMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
         foreach ($publicMethods as $method) {
-            if ($this->isInterceptedMethod($method)) {
+            if (!$method->isInternal() && $this->isInterceptedMethod($method)) {
                 $methods[] = $this->_getMethodInfo($method);
             }
         }
