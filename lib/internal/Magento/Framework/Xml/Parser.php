@@ -48,6 +48,8 @@ class Parser
     }
 
     /**
+     * Get DOM
+     *
      * @return \DOMDocument|null
      */
     public function getDom()
@@ -56,6 +58,8 @@ class Parser
     }
 
     /**
+     * Get current DOM
+     *
      * @return \DOMDocument
      */
     protected function _getCurrentDom()
@@ -64,6 +68,8 @@ class Parser
     }
 
     /**
+     * Set current DOM
+     *
      * @param \DOMDocument $node
      * @return $this
      */
@@ -74,6 +80,8 @@ class Parser
     }
 
     /**
+     * XML to array
+     *
      * @return array
      */
     public function xmlToArray()
@@ -83,6 +91,8 @@ class Parser
     }
 
     /**
+     * XML to array
+     *
      * @param bool $currentNode
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -127,7 +137,7 @@ class Parser
                     $content = $node->nodeValue;
                     break;
                 case XML_TEXT_NODE:
-                    if (trim($node->nodeValue) !== '') {
+                    if ($node->nodeValue !== null && trim($node->nodeValue) !== '') {
                         $content = $node->nodeValue;
                     }
                     break;
@@ -137,6 +147,8 @@ class Parser
     }
 
     /**
+     * Load
+     *
      * @param string $file
      * @return $this
      */
@@ -147,6 +159,8 @@ class Parser
     }
 
     /**
+     * Load XML
+     *
      * @param string $string
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException

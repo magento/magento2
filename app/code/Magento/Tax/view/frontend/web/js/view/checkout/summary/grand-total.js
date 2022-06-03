@@ -53,7 +53,7 @@ define([
                 price = this.totals()['base_grand_total'];
             }
 
-            return priceUtils.formatPrice(price, quote.getBasePriceFormat());
+            return priceUtils.formatPriceLocale(price, quote.getBasePriceFormat());
         },
 
         /**
