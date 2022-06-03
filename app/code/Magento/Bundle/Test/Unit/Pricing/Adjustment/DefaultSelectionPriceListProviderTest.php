@@ -25,6 +25,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Bundle\Pricing\DefaultSelectionPriceListProvider
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DefaultSelectionPriceListProviderTest extends TestCase
 {
