@@ -268,7 +268,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                     ];
                     if ($pageGroupData['for'] == self::SPECIFIC_ENTITIES) {
                         $layoutHandleUpdates = [];
-                        foreach (explode(',', $pageGroupData['entities']) as $entity) {
+                        foreach (explode(',', $pageGroupData['entities'] ?? '') as $entity) {
                             $layoutHandleUpdates[] = str_replace(
                                 '{{ID}}',
                                 $entity,

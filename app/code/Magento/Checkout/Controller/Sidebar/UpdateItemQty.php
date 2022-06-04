@@ -11,12 +11,12 @@ use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Checkout\Model\Sidebar;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Class used to update item quantity.
@@ -67,14 +67,12 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
     }
 
     /**
-     * Action for Quantity update
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function execute()
     {
         $itemId = (int)$this->getRequest()->getParam('item_id');
-        $itemQty = (int)$this->getRequest()->getParam('item_qty');
+        $itemQty = (float)$this->getRequest()->getParam('item_qty') * 1;
 
         if ($itemQty <= 0) {
             return  $this->jsonResponse(__('Invalid Item Quantity Requested.'));
