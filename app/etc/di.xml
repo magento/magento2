@@ -1973,4 +1973,5 @@
             <argument name="defaultPageSize" xsi:type="number">20</argument>
         </arguments>
     </type>
+    <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>
 </config>
