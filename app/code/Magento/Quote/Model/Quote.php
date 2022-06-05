@@ -693,7 +693,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * @inheritdoc
      */
-    public function setReservedOrderId(?string $reservedOrderId)
+    public function setReservedOrderId($reservedOrderId)
     {
         return $this->setData(self::KEY_RESERVED_ORDER_ID, $reservedOrderId);
     }
