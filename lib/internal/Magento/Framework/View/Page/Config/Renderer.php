@@ -134,11 +134,21 @@ class Renderer implements RendererInterface
         $result .= $this->renderMetadata();
         $result .= $this->renderTitle();
         $this->prepareFavicon();
+        return $result;
+    }
+
+    /**
+     * Render head assets
+     *
+     * @return string
+     */
+    public function renderHeadAssets()
+    {
+        $result = '';
         $result .= $this->renderAssets($this->getAvailableResultGroups());
         $result .= $this->pageConfig->getIncludes();
         return $result;
     }
-
     /**
      * Render title
      *
