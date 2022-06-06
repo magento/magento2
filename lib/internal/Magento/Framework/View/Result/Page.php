@@ -245,11 +245,14 @@ class Page extends Layout
         if ($this->getPageLayout()) {
             $config = $this->getConfig();
             $this->addDefaultBodyClasses();
+            $addCritical = $this->getLayout()->getBlock('head.critical');
             $addBlock = $this->getLayout()->getBlock('head.additional'); // todo
             $requireJs = $this->getLayout()->getBlock('require.js');
             $this->assign([
-                'requireJs' => $requireJs ? $requireJs->toHtml() : null,
                 'headContent' => $this->pageConfigRenderer->renderHeadContent(),
+                'headCritical' => $addCritical ? $addCritical->toHtml() : null,                
+                'requireJs' => $requireJs ? $requireJs->toHtml() : null,
+                'headAssets' => $this->pageConfigRenderer->renderHeadAssets(),
                 'headAdditional' => $addBlock ? $addBlock->toHtml() : null,
                 'htmlAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_HTML),
                 'headAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_HEAD),
