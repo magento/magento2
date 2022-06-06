@@ -63,7 +63,8 @@ class Inline implements RendererInterface
                 return $text;
             }
 
-            if (strpos($text, '{{{') === false
+            if ($text === null
+                || strpos($text, '{{{') === false
                 || strpos($text, '}}}') === false
                 || strpos($text, '}}{{') === false
             ) {
