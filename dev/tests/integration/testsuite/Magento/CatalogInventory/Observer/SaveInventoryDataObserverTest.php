@@ -19,6 +19,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
  * Test for SaveInventoryDataObserver
@@ -36,6 +38,11 @@ class SaveInventoryDataObserverTest extends TestCase
     private $stockItemRepository;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -44,6 +51,7 @@ class SaveInventoryDataObserverTest extends TestCase
             ->get(ProductRepositoryInterface::class);
         $this->stockItemRepository = Bootstrap::getObjectManager()
             ->get(StockItemRepositoryInterface::class);
+        $this->fixtures = DataFixtureStorageManager::getStorage();
     }
 
     /**
@@ -66,7 +74,6 @@ class SaveInventoryDataObserverTest extends TestCase
 
         /** @var ProductExtensionInterface $attributes*/
         $attributes = $product->getExtensionAttributes();
-
         /** @var StockItemInterface $stockItem */
         $stockItem = $attributes->getStockItem();
         $stockItem->setQty(0);
@@ -75,9 +82,29 @@ class SaveInventoryDataObserverTest extends TestCase
         $product->setExtensionAttributes($attributes);
         $this->productRepository->save($product);
 
-        /** @var ProductInterface $product */
-        $parentProduct = $this->productRepository->get('configurable');
+         /** @var ProductInterface $product */
+         $parentProduct = $this->productRepository->get('configurable');
 
+         $parentProductStockItem = $this->stockItemRepository->get(
+             $parentProduct->getExtensionAttributes()->getStockItem()->getItemId()
+         );
+         $this->assertFalse($parentProductStockItem->getIsInStock());
+    }
+
+    /**
+     * Check that a configurable product will be created with out_of_stock status if no children in stock
+     *
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"stock_item":{"qty": 0}} as:p1
+     * @magentoDataFixture Magento\ConfigurableProduct\Test\Fixture\Attribute as:attr
+     * @magentoDataFixture Magento\ConfigurableProduct\Test\Fixture\Product as:conf1
+     * @magentoDataFixtureDataProvider {"conf1":{"_options":["$attr$"],"_links":["$p1$"]}}
+     * @return void
+     */
+    public function testAutoChangingIsInStockForNewConfigurable(): void
+    {
+        $sku = $this->fixtures->get('conf1')->getSku();
+        /** @var ProductInterface $parentProduct */
+        $parentProduct = $this->productRepository->get($sku);
         $parentProductStockItem = $this->stockItemRepository->get(
             $parentProduct->getExtensionAttributes()->getStockItem()->getItemId()
         );
