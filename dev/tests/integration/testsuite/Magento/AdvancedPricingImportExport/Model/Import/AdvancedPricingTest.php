@@ -335,7 +335,8 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         string $file,
         string $directoryCode = DirectoryList::ROOT,
         string $behavior = Import::BEHAVIOR_APPEND,
-        bool $validateOnly = false
+        bool $validateOnly = false,
+        string $entity = 'advanced_pricing'
     ): ProcessingErrorAggregatorInterface {
         /** @var Filesystem $filesystem */
         $filesystem = $this->objectManager->create(Filesystem::class);
@@ -351,7 +352,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             ->setParameters(
                 [
                     'behavior' => $behavior,
-                    'entity' => 'advanced_pricing'
+                    'entity' => $entity
                 ]
             )
             ->validateData();
@@ -425,5 +426,38 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         $stream->unlock();
         $stream->close();
         return $varDir->getAbsolutePath($tmpFilename);
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     */
+    public function testImportAddUpdateCounts()
+    {
+        $this->model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
+
+        // Import product data from CSV file
+        $productFilePath = __DIR__ . '/_files/import_catalog_product.csv';
+        $errors = $this->doImport($productFilePath, DirectoryList::ROOT, Import::BEHAVIOR_ADD_UPDATE, true, 'catalog_product');
+        $this->assertEquals(0, $errors->getErrorsCount(), 'Product import validation error');
+        $this->model->importData();
+
+        $this->assertEquals(64, $this->model->getCreatedItemsCount(), 'Products create item count');
+        $this->assertEquals(0, $this->model->getUpdatedItemsCount(), 'Products update item count');
+
+        // Import advance pricing data from CSV file
+        $this->model = $this->objectManager->create(
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
+        );
+        $pathToFile = __DIR__ . '/_files/import_advanced_pricing_for_additional_attributes_products.csv';
+        $errors = $this->doImport($pathToFile, DirectoryList::ROOT, Import::BEHAVIOR_ADD_UPDATE, true);
+        $this->assertEquals(0, $errors->getErrorsCount(), 'Advanced pricing import validation error');
+        $this->model->importData();
+
+        $this->assertEquals(127, $this->model->getCreatedItemsCount(), 'Advance pricing create count1');
+        $this->assertEquals(0, $this->model->getUpdatedItemsCount(), 'Advance pricing update count1');
+
+        $this->doImport($pathToFile, DirectoryList::ROOT, Import::BEHAVIOR_ADD_UPDATE);
+        $this->assertEquals(0, $this->model->getCreatedItemsCount(), 'Advance pricing create count2');
+        $this->assertEquals(127, $this->model->getUpdatedItemsCount(), 'Advance pricing update count2');
     }
 }
