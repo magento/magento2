@@ -5,7 +5,15 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo;
 
-abstract class Quote extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\Filter\Date;
+use Magento\SalesRule\Model\RegistryConstants;
+use Magento\SalesRule\Model\Rule;
+
+abstract class Quote extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -17,31 +25,31 @@ abstract class Quote extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @var FileFactory
      */
     protected $_fileFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     * @var Date
      */
     protected $_dateFilter;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param FileFactory $fileFactory
+     * @param Date $dateFilter
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+        Context $context,
+        Registry $coreRegistry,
+        FileFactory $fileFactory,
+        Date $dateFilter
     ) {
         parent::__construct($context);
         $this->_coreRegistry = $coreRegistry;
@@ -57,8 +65,8 @@ abstract class Quote extends \Magento\Backend\App\Action
     protected function _initRule()
     {
         $this->_coreRegistry->register(
-            \Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE,
-            $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class)
+            RegistryConstants::CURRENT_SALES_RULE,
+            $this->_objectManager->create(Rule::class)
         );
         $id = (int)$this->getRequest()->getParam('id');
 
@@ -67,7 +75,7 @@ abstract class Quote extends \Magento\Backend\App\Action
         }
 
         if ($id) {
-            $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE)->load($id);
+            $this->_coreRegistry->registry(RegistryConstants::CURRENT_SALES_RULE)->load($id);
         }
     }
 

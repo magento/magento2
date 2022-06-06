@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Rule\Model\Condition\AbstractCondition;
-use Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 use Magento\SalesRule\Model\Rule;
+use Magento\Rule\Model\Condition\AbstractCondition;
 
 /**
  * New action html action
  */
-class NewActionHtml extends Quote implements HttpPostActionInterface
+class NewActionHtml extends NewHtml
 {
+    /**
+     * @var string
+     */
+    protected string $typeChecked = 'Magento\Rule\Model\Condition\AbstractCondition';
+
     /**
      * New action html action
      *
@@ -30,31 +35,24 @@ class NewActionHtml extends Quote implements HttpPostActionInterface
         );
         $type = $typeArr[0];
 
-        $model = $this->_objectManager->create(
-            $type
-        )->setId(
-            $id
-        )->setType(
-            $type
-        )->setRule(
-            $this->_objectManager->create(Rule::class)
-        )->setPrefix(
-            'actions'
-        );
-        if (!empty($typeArr[1])) {
-            $model->setAttribute($typeArr[1]);
-        }
+        $model = $this->_objectManager->create($type);
+        if ($this->verifyClassName($model)) {
+            $model->setId($id)
+                ->setType($type)
+                ->setRule($this->_objectManager->create(Rule::class))
+                ->setPrefix('actions');
+            if (!empty($typeArr[1])) {
+                $model->setAttribute($typeArr[1]);
+            }
 
-        if ($model instanceof AbstractCondition) {
             $model->setJsFormObject($formName);
             $model->setFormName($formName);
             $this->setJsFormObject($model);
             $html = $model->asHtmlRecursive();
         } else {
-            $html = '';
+            $html = $this->getErrorJson();
         }
-        $this->getResponse()
-            ->setBody($html);
+        $this->getResponse()->setBody($html);
     }
 
     /**

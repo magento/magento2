@@ -347,9 +347,11 @@ define([
                 },
                 onComplete: this.onAddNewChildComplete.bind(this, new_elem),
                 onSuccess: function (transport) {
+                    let responseElement = '';
                     if (this._processSuccess(transport)) {
-                        $(new_elem).update(transport.responseText);
+                        responseElement = transport.responseText;
                     }
+                    $(new_elem).update(responseElement);
                 }.bind(this),
                 onFailure: this._processFailure.bind(this)
             });

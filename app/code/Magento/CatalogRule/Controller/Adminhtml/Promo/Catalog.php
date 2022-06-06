@@ -43,7 +43,7 @@ abstract class Catalog extends Action
     /**
      * Date filter instance
      *
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     * @var Date
      */
     protected $_dateFilter;
 
