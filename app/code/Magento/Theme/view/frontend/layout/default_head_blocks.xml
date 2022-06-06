@@ -12,7 +12,7 @@
         <script src="requirejs/require.js"/>
     </head>
     <body>
-        <referenceBlock name="head.additional">
+        <referenceBlock name="head.critical">
             <block name="critical_css_block" as="critical_css" template="Magento_Theme::html/header/criticalCss.phtml" ifconfig="dev/css/use_css_critical_path">
                 <arguments>
                     <argument name="criticalCssViewModel" xsi:type="object">Magento\Theme\Block\Html\Header\CriticalCss</argument>
