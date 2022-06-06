@@ -7,8 +7,10 @@
 <!doctype html>
 <html <?= /* @noEscape */ $htmlAttributes ?>>
     <head <?= /* @noEscape */ $headAttributes ?>>
-        <?= /* @noEscape */ $requireJs ?>
         <?= /* @noEscape */ $headContent ?>
+        <?= /* @noEscape */ $headCritical ?>        
+        <?= /* @noEscape */ $requireJs ?>
+        <?= /* @noEscape */ $headAssets ?>
         <?= /* @noEscape */ $headAdditional ?>
     </head>
     <body data-container="body"
