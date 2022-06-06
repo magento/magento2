@@ -18,6 +18,7 @@
     <event name="customer_logout">
         <observer name="customer_visitor" instance="Magento\Customer\Observer\Visitor\BindCustomerLogoutObserver" />
         <observer name="customer_log_logout" instance="Magento\Customer\Observer\LogLastLogoutAtObserver" />
+        <observer name="clear_previous_sessions" instance="Magento\Customer\Observer\ClearPreviousSessionsObserver" />
     </event>
     <event name="checkout_quote_destroy">
         <observer name="customer_visitor" instance="Magento\Customer\Observer\Visitor\BindQuoteDestroyObserver" />
@@ -30,6 +31,6 @@
         <observer name="customer_unlock" instance="Magento\Customer\Observer\CustomerLoginSuccessObserver" />
     </event>
     <event name="update_customer_session">
-        <observer name="customer_session" instance="Magento\Customer\Observer\UpdateCustomerSession" />
+        <observer name="update_customer_session" instance="Magento\Customer\Observer\UpdateCustomerSessionObserver" />
     </event>
 </config>
