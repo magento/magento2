@@ -148,6 +148,7 @@
             <argument name="fieldsProviders" xsi:type="array">
                 <item name="categories" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy</item>
                 <item name="prices" xsi:type="object">Magento\Elasticsearch\Model\Adapter\BatchDataMapper\PriceFieldsProvider</item>
+                <item name="isOutOfStock" xsi:type="object">Magento\Elasticsearch\Model\Adapter\BatchDataMapper\IsOutOfStockFieldsProvider</item>
             </argument>
         </arguments>
     </virtualType>
@@ -369,6 +370,7 @@
                 <item name="price" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Price</item>
                 <item name="categoryName" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CategoryName</item>
                 <item name="position" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Position</item>
+                <item name="isOutOfStock" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\IsOutOfStock</item>
                 <item name="default" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver</item>
             </argument>
         </arguments>
@@ -381,6 +383,7 @@
                 <item name="price" xsi:type="object" sortOrder="30">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Price</item>
                 <item name="categoryName" xsi:type="object" sortOrder="40">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CategoryName</item>
                 <item name="position" xsi:type="object" sortOrder="50">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Position</item>
+                <item name="isOutOfStock" xsi:type="object" sortOrder="150">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\IsOutOfStock</item>
                 <item name="default" xsi:type="object" sortOrder="100">elasticsearch5FieldNameDefaultResolver</item>
             </argument>
         </arguments>

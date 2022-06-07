@@ -21,4 +21,7 @@
             <argument name="catalogLayer" xsi:type="object">Magento\Catalog\Model\Layer\Search</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection">
+        <plugin name="is_salable_filter" type="Magento\CatalogSearch\Plugin\Model\ResourceModel\Fulltext\CollectionPlugin"/>
+    </type>
 </config>

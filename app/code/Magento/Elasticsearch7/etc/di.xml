@@ -139,6 +139,9 @@
                 <item name="price" xsi:type="object" sortOrder="30">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Price</item>
                 <item name="categoryName" xsi:type="object" sortOrder="40">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CategoryName</item>
                 <item name="position" xsi:type="object" sortOrder="50">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Position</item>
+                <item name="isOutOfStock" xsi:type="object" sortOrder="150">
+                    \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\IsOutOfStock
+                </item>
                 <item name="default" xsi:type="object" sortOrder="100">Magento\Elasticsearch7\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver</item>
             </argument>
         </arguments>
