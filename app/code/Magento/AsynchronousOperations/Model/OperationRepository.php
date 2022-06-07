@@ -94,13 +94,6 @@ class OperationRepository implements \Magento\AsynchronousOperations\Api\Operati
 
         /** @var \Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection $collection */
         $collection = $this->collectionFactory->create();
-        $collection->addFieldToSelect('id', 'operation_key');
-        $collection->addFieldToSelect('operation_key', 'id');
-        $collection->addFieldToSelect([
-            'bulk_uuid', 'topic_name', 'serialized_data',
-            'result_serialized_data', 'status', 'error_code',
-            'result_message', 'started_at'
-        ]);
         $this->joinProcessor->process($collection, \Magento\AsynchronousOperations\Api\Data\OperationInterface::class);
         $this->collectionProcessor->process($searchCriteria, $collection);
         $searchResult->setSearchCriteria($searchCriteria);

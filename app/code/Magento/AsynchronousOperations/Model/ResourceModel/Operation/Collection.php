@@ -6,6 +6,9 @@
  */
 namespace Magento\AsynchronousOperations\Model\ResourceModel\Operation;
 
+use Magento\AsynchronousOperations\Model\Operation;
+use Magento\AsynchronousOperations\Model\ResourceModel\Operation as OperationResourceModel;
+
 /**
  * Class Collection
  * @codeCoverageIgnore
@@ -20,9 +23,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            \Magento\AsynchronousOperations\Model\Operation::class,
-            \Magento\AsynchronousOperations\Model\ResourceModel\Operation::class
+            Operation::class,
+            OperationResourceModel::class
         );
         $this->setMainTable('magento_operation');
+        $this->_setIdFieldName(OperationResourceModel::TABLE_PRIMARY_KEY);
     }
 }
