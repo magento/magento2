@@ -14,13 +14,15 @@ use Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog as CatalogAction;
 class NewConditionHtml extends CatalogAction implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
+     * Execute new condition html.
+     *
      * @return void
      */
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
         $formName = $this->getRequest()->getParam('form_namespace');
-        $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
+        $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type', '')));
         $type = $typeArr[0];
 
         $model = $this->_objectManager->create($type)
