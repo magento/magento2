@@ -31,17 +31,11 @@ class Config
     public const AMQP_CONFIG = 'amqp';
 
     public const HOST = 'host';
-
     public const PORT = 'port';
-
     public const USERNAME = 'user';
-
     public const PASSWORD = 'password';
-
     public const VIRTUALHOST = 'virtualhost';
-
     public const SSL = 'ssl';
-
     public const SSL_OPTIONS = 'ssl_options';
 
     /**

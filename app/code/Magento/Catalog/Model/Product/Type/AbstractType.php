@@ -64,16 +64,16 @@ abstract class AbstractType
      */
     protected $_fileQueue = [];
 
-    const CALCULATE_CHILD = 0;
+    public const CALCULATE_CHILD = 0;
 
-    const CALCULATE_PARENT = 1;
+    public const CALCULATE_PARENT = 1;
 
     /**#@+
      * values for shipment type (invoice etc)
      */
-    const SHIPMENT_SEPARATELY = 1;
+    public const SHIPMENT_SEPARATELY = 1;
 
-    const SHIPMENT_TOGETHER = 0;
+    public const SHIPMENT_TOGETHER = 0;
     /**#@-*/
 
     /**
@@ -82,19 +82,19 @@ abstract class AbstractType
      * Full validation - all required options must be set, whole configuration
      * must be valid
      */
-    const PROCESS_MODE_FULL = 'full';
+    public const PROCESS_MODE_FULL = 'full';
 
     /**
      * Process modes
      *
      * Lite validation - only received options are validated
      */
-    const PROCESS_MODE_LITE = 'lite';
+    public const PROCESS_MODE_LITE = 'lite';
 
     /**
      * Item options prefix
      */
-    const OPTION_PREFIX = 'option_';
+    public const OPTION_PREFIX = 'option_';
 
     /**
      * @var \Magento\Framework\Filesystem
@@ -127,8 +127,6 @@ abstract class AbstractType
     abstract public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product);
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
@@ -146,22 +144,16 @@ abstract class AbstractType
     protected $_logger;
 
     /**
-     * Catalog product type
-     *
      * @var \Magento\Catalog\Model\Product\Type
      */
     protected $_catalogProductType;
 
     /**
-     * Eav config
-     *
      * @var \Magento\Eav\Model\Config
      */
     protected $_eavConfig;
 
     /**
-     * Catalog product option
-     *
      * @var \Magento\Catalog\Model\Product\Option
      */
     protected $_catalogProductOption;
@@ -644,7 +636,7 @@ abstract class AbstractType
             foreach ($options as $option) {
                 if ($option->getIsRequire()) {
                     $customOption = $product->getCustomOption(self::OPTION_PREFIX . $option->getId());
-                    if (!$customOption || strlen($customOption->getValue()) == 0) {
+                    if (!$customOption || strlen($customOption->getValue() ?? '') == 0) {
                         $product->setSkipCheckRequiredOption(true);
                         throw new \Magento\Framework\Exception\LocalizedException(
                             __('The product has required options. Enter the options and try again.')
@@ -673,7 +665,7 @@ abstract class AbstractType
 
         $optionIds = $product->getCustomOption('option_ids');
         if ($optionIds) {
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+            foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
                 $option = $product->getOptionById($optionId);
                 if ($option) {
                     $confItemOption = $product->getCustomOption(self::OPTION_PREFIX . $option->getId());
@@ -824,7 +816,7 @@ abstract class AbstractType
         }
         $optionIds = $product->getCustomOption('option_ids');
         if ($optionIds) {
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+            foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
                 $option = $product->getOptionById($optionId);
                 if ($option) {
                     $confItemOption = $product->getCustomOption(self::OPTION_PREFIX . $optionId);
