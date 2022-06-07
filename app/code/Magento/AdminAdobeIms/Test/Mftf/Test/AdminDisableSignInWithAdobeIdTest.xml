@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDisableSignInWithAdobeIdTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Check for Sign in with Adobe ID option is not shown on the Admin Login page when inactive"/>
+            <title value="Admin should not be able to see Sign in with Adobe Id option when inactive"/>
+            <description value="Admin should not be able to see Sign in with Adobe Id option when inactive"/>
+            <severity value="CRITICAL"/>
+            <group value="admin_ims"/>
+            <testCaseId value="CABPI-110"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminDisableAdobeImsActionGroup" stepKey="disableAdminAdobeImsModule" />
+        </before>
+        <after />
+
+        <!-- Navigate to admin page -->
+        <amOnPage url="admin" stepKey="openAdminPanelPage" />
+
+        <!-- Check for Sign in with Adobe Id option -->
+        <actionGroup ref="AssertDisableAdminSignInWithAdobeIdTestActionGroup"
+                     stepKey="assertSignInWithAdobeIdNotVisible"/>
+    </test>
+</tests>

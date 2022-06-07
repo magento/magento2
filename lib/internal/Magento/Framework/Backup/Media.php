@@ -65,7 +65,9 @@ class Media extends Snapshot
             foreach (new \DirectoryIterator($path) as $item) {
                 $filename = $item->getFilename();
                 if (!$item->isDot() && !in_array($filename, $whiteList)) {
-                    $this->addIgnorePaths(str_replace('\\', '/', $item->getPathname()));
+                    $this->addIgnorePaths(
+                        str_replace('\\', '/', $item->getPathname() !== null ? $item->getPathname() : '')
+                    );
                 }
             }
         }
