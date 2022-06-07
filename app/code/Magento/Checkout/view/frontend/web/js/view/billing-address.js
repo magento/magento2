@@ -42,7 +42,7 @@ function (
     'use strict';
 
     var lastSelectedBillingAddress = null,
-        addressUpadated = false,
+        addressUpdated = false,
         addressEdited = false,
         countryData = customerData.get('directory-data'),
         addressOptions = addressList().filter(function (address) {
@@ -123,17 +123,15 @@ function (
          * @return {Boolean}
          */
         useShippingAddress: function () {
-            if (this.isAddressSameAsShipping()) {
-                addressUpadated = true;
+            lastSelectedBillingAddress = quote.billingAddress();
 
+            if (this.isAddressSameAsShipping()) {
                 selectBillingAddress(quote.shippingAddress());
                 checkoutData.setSelectedBillingAddress(quote.shippingAddress().getKey());
-                setBillingAddressAction(globalMessageList);
 
-                this.updateAddresses();
+                setBillingAddressAction(globalMessageList);
                 this.isAddressDetailsVisible(true);
             } else {
-                lastSelectedBillingAddress = quote.billingAddress();
                 quote.billingAddress(null);
                 this.isAddressDetailsVisible(false);
             }
@@ -148,7 +146,7 @@ function (
         updateAddress: function () {
             var addressData, newBillingAddress;
 
-            addressUpadated = true;
+            addressUpdated = true;
 
             if (this.selectedAddress() && !this.isAddressFormVisible()) {
                 selectBillingAddress(this.selectedAddress());
@@ -183,7 +181,7 @@ function (
          * Edit address action
          */
         editAddress: function () {
-            addressUpadated = false;
+            addressUpdated = false;
             addressEdited = true;
             lastSelectedBillingAddress = quote.billingAddress();
             quote.billingAddress(null);
@@ -194,7 +192,7 @@ function (
          * Cancel address edit action
          */
         cancelAddressEdit: function () {
-            addressUpadated = true;
+            addressUpdated = true;
             this.restoreBillingAddress();
 
             if (quote.billingAddress()) {
@@ -219,7 +217,7 @@ function (
          * Check if Billing Address Changes should be canceled
          */
         needCancelBillingAddressChanges: function () {
-            if (addressEdited && !addressUpadated) {
+            if (addressEdited && !addressUpdated) {
                 this.cancelAddressEdit();
             }
         },
