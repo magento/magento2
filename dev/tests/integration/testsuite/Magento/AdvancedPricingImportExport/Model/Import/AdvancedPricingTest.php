@@ -437,7 +437,14 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
 
         // Import product data from CSV file
         $productFilePath = __DIR__ . '/_files/import_catalog_product.csv';
-        $errors = $this->doImport($productFilePath, DirectoryList::ROOT, Import::BEHAVIOR_ADD_UPDATE, true, 'catalog_product');
+        $errors = $this->doImport(
+            $productFilePath,
+            DirectoryList::ROOT,
+            Import::BEHAVIOR_ADD_UPDATE,
+            true,
+            'catalog_product'
+        );
+        print_r($errors->getAllErrors());
         $this->assertEquals(0, $errors->getErrorsCount(), 'Product import validation error');
         $this->model->importData();
 
