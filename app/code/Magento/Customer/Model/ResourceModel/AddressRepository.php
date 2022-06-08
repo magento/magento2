@@ -274,7 +274,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor::class
+                CollectionProcessorInterface::class
             );
         }
         return $this->collectionProcessor;
