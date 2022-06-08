@@ -744,6 +744,68 @@ class TaxTest extends TestCase
             ],
         ];
 
+        // scenario 7: 1 items, 1 invoiced, rowtotal of  with 8.25 tax rate
+        // shipping is partially returned
+        $result['last_creditmemo_with_discount_for_entire_shipping_all_prices_including_tax'] = [
+            'order_data' => [
+                'data_fields' => [
+                    'shipping_tax_amount' => 0,
+                    'base_shipping_tax_amount' => 0,
+                    'shipping_discount_tax_compensation_amount' => 1.36,
+                    'base_shipping_discount_tax_compensation_amount' => 1.36,
+                    'tax_amount' => 1.22,
+                    'base_tax_amount' => 1.22,
+                    'tax_invoiced' => 1.22,
+                    'base_tax_invoiced' => 1.22,
+                    'shipping_amount' => 13.64,
+                    'shipping_discount_amount' => 15,
+                    'base_shipping_amount' => 13.64,
+                    'discount_tax_compensation_invoiced' => 1.73,
+                    'base_discount_tax_compensation_invoiced' => 1.73
+                ],
+            ],
+            'creditmemo_data' => [
+                'items' => [
+                    'item_1' => [
+                        'order_item' => [
+                            'qty_invoiced' => 1,
+                            'tax_invoiced' => 1.22,
+                            'base_tax_invoiced' => 1.22,
+                            'discount_tax_compensation_amount' => 1.73,
+                            'base_discount_tax_compensation_amount' => 1.73,
+                            'discount_tax_compensation_invoiced' => 1.73,
+                            'base_discount_tax_compensation_invoiced' => 1.73
+                        ],
+                        'is_last' => true,
+                        'qty' => 1,
+                    ],
+                ],
+                'is_last' => true,
+                'data_fields' => [
+                    'shipping_amount' => 0,
+                    'base_shipping_amount' => 0,
+                    'grand_total' => 10.45,
+                    'base_grand_total' => 10.45,
+                    'tax_amount' => 0,
+                    'base_tax_amount' => 0
+                ],
+            ],
+            'expected_results' => [
+                'creditmemo_items' => [
+                    'item_1' => [
+                        'tax_amount' => 1.22,
+                        'base_tax_amount' => 1.22,
+                    ],
+                ],
+                'creditmemo_data' => [
+                    'grand_total' => 13.4,
+                    'base_grand_total' => 13.4,
+                    'tax_amount' => 1.22,
+                    'base_tax_amount' => 1.22,
+                ],
+            ],
+        ];
+
         return $result;
     }
 
