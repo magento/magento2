@@ -234,7 +234,7 @@ class AddressRepositoryTest extends TestCase
         $this->repository->save($customerAddress);
     }
 
-    public function testSaveWithConfigShareScopeWebsite()
+    public function testSaveWithConfigCustomerAccountShareScopeWebsite()
     {
         $customerId = 34;
         $addressId = 53;
@@ -304,7 +304,7 @@ class AddressRepositoryTest extends TestCase
         $this->repository->save($customerAddress);
     }
 
-    public function testSaveWithConfigShareScopeGlobal()
+    public function testSaveWithConfigCustomerAccountShareScopeGlobal()
     {
         $customerId = 34;
         $addressId = 53;
