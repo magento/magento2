@@ -1,7 +1,5 @@
 <?php
 /**
- * Customer address entity resource model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -17,15 +15,11 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\InputException;
 
 /**
- * Address repository.
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterface
 {
     /**
-     * Directory data
-     *
      * @var \Magento\Directory\Helper\Data
      */
     protected $directoryData;
@@ -277,7 +271,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor'
+                \Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor::class
             );
         }
         return $this->collectionProcessor;
