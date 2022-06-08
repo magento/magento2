@@ -276,7 +276,7 @@ abstract class AbstractCalculator
      */
     protected function isSameRateAsStore($rate, $storeRate)
     {
-        if ((bool)$this->config->crossBorderTradeEnabled($this->storeId)) {
+        if ((bool)$this->config->crossBorderTradeEnabled($this->storeId) && $rate > 0.0) {
             return true;
         } else {
             return (abs($rate - $storeRate) < 0.00001);
