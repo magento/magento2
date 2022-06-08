@@ -10,7 +10,7 @@ use Magento\AsynchronousOperations\Model\Operation;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation as OperationResourceModel;
 
 /**
- * Class Collection
+ * Class Collection for Magento Operation table
  * @codeCoverageIgnore
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
