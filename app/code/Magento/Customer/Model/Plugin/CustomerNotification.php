@@ -16,6 +16,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Session\SaveHandlerInterface;
+use Magento\Framework\Session\StorageInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -54,6 +56,21 @@ class CustomerNotification
     private $request;
 
     /**
+     * @var SaveHandlerInterface
+     */
+    private SaveHandlerInterface $saveHandler;
+
+    /**
+     * @var StorageInterface
+     */
+    private StorageInterface $storage;
+
+    /**#@+
+     * Array key for all active previous session ids.
+     */
+    private const PREVIOUS_ACTIVE_SESSIONS = 'previous_active_sessions';
+
+    /**
      * Initialize dependencies.
      *
      * @param Session $session
@@ -61,7 +78,9 @@ class CustomerNotification
      * @param State $state
      * @param CustomerRepositoryInterface $customerRepository
      * @param LoggerInterface $logger
-     * @param RequestInterface|null $request
+     * @param RequestInterface $request
+     * @param SaveHandlerInterface $saveHandler
+     * @param StorageInterface $storage
      */
     public function __construct(
         Session $session,
@@ -69,7 +88,9 @@ class CustomerNotification
         State $state,
         CustomerRepositoryInterface $customerRepository,
         LoggerInterface $logger,
-        RequestInterface $request
+        RequestInterface $request,
+        SaveHandlerInterface $saveHandler,
+        StorageInterface $storage
     ) {
         $this->session = $session;
         $this->notificationStorage = $notificationStorage;
@@ -77,6 +98,8 @@ class CustomerNotification
         $this->customerRepository = $customerRepository;
         $this->logger = $logger;
         $this->request = $request;
+        $this->saveHandler = $saveHandler;
+        $this->storage = $storage;
     }
 
     /**
@@ -93,6 +116,14 @@ class CustomerNotification
 
         if ($this->isFrontendRequest() && $this->isPostRequest() && $this->isSessionUpdateRegisteredFor($customerId)) {
             try {
+                $oldSessionId = session_id();
+                $previousSessions = $this->storage->getData(self::PREVIOUS_ACTIVE_SESSIONS);
+
+                if(empty($previousSessions)) {
+                    $previousSessions = [];
+                }
+                $previousSessions[] = $oldSessionId;
+                $this->storage->setData(self::PREVIOUS_ACTIVE_SESSIONS, $previousSessions);
                 $this->session->regenerateId();
                 $customer = $this->customerRepository->getById($customerId);
                 $this->session->setCustomerData($customer);

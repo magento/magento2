@@ -367,7 +367,7 @@
         <plugin name="transactionWrapper" type="Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper" sortOrder="-1"/>
     </type>
     <type name="Magento\Framework\App\ActionInterface">
-        <plugin name="customerNotification" type="Magento\Customer\Model\Plugin\CustomerNotification" disabled="true"/>
+        <plugin name="customerNotification" type="Magento\Customer\Model\Plugin\CustomerNotification" />
     </type>
     <type name="Magento\Customer\Model\Authorization\CustomerSessionUserContext">
         <arguments>

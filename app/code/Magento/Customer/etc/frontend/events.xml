@@ -29,7 +29,4 @@
         <observer name="customer_password" instance="Magento\Customer\Observer\UpgradeCustomerPasswordObserver" />
         <observer name="customer_unlock" instance="Magento\Customer\Observer\CustomerLoginSuccessObserver" />
     </event>
-    <event name="update_customer_session">
-        <observer name="update_customer_session" instance="Magento\Customer\Observer\UpdateCustomerSessionObserver" />
-    </event>
 </config>
