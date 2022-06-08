@@ -158,6 +158,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
 
     /**
      * @inheritDoc
+     *
      * @throws LocalizedException
      */
     public function addFieldToFilter($field, $condition = null)
