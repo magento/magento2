@@ -744,7 +744,7 @@ class TaxTest extends TestCase
             ],
         ];
 
-        // scenario 7: 1 items, 1 invoiced, rowtotal of  with 8.25 tax rate
+        // scenario 7: 1 items, 1 invoiced, shipping covered by cart rule
         // shipping is partially returned
         $result['last_creditmemo_with_discount_for_entire_shipping_all_prices_including_tax'] = [
             'order_data' => [
