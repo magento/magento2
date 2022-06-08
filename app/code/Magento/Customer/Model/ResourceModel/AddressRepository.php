@@ -120,8 +120,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         } else {
             $addressModel->updateData($address);
         }
-        if (
-            $customerModel->getSharingConfig() !== null &&
+        if ($customerModel->getSharingConfig() !== null &&
             $customerModel->getSharingConfig()->isWebsiteScope()
         ) {
             $addressModel->setStoreId($customerModel->getStoreId());
