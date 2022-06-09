@@ -123,15 +123,12 @@ function (
          * @return {Boolean}
          */
         useShippingAddress: function () {
-            lastSelectedBillingAddress = quote.billingAddress();
-
             if (this.isAddressSameAsShipping()) {
                 selectBillingAddress(quote.shippingAddress());
-                checkoutData.setSelectedBillingAddress(quote.shippingAddress().getKey());
-
-                setBillingAddressAction(globalMessageList);
+                this.updateAddresses();
                 this.isAddressDetailsVisible(true);
             } else {
+                lastSelectedBillingAddress = quote.billingAddress();
                 quote.billingAddress(null);
                 this.isAddressDetailsVisible(false);
             }
@@ -173,7 +170,6 @@ function (
                     checkoutData.setNewCustomerBillingAddress(addressData);
                 }
             }
-            setBillingAddressAction(globalMessageList);
             this.updateAddresses();
         },
 
@@ -241,6 +237,11 @@ function (
          * @return {*}
          */
         getCountryName: function (countryId) {
+            if (lastSelectedBillingAddress && lastSelectedBillingAddress["countryId"] != countryId) {
+                this.updateAddresses();
+            }
+            lastSelectedBillingAddress = quote.billingAddress();
+
             return countryData()[countryId] != undefined ? countryData()[countryId].name : ''; //eslint-disable-line
         },
 
@@ -248,11 +249,7 @@ function (
          * Trigger action to update shipping and billing addresses
          */
         updateAddresses: function () {
-            if (window.checkoutConfig.reloadOnBillingAddress ||
-                !window.checkoutConfig.displayBillingOnPaymentMethod
-            ) {
-                setBillingAddressAction(globalMessageList);
-            }
+            setBillingAddressAction(globalMessageList);
         },
 
         /**

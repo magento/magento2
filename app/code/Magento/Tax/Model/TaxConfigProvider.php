@@ -72,7 +72,6 @@ class TaxConfigProvider implements ConfigProviderInterface
             'includeTaxInGrandTotal' => $this->isTaxDisplayedInGrandTotal(),
             'isFullTaxSummaryDisplayed' => $this->isFullTaxSummaryDisplayed(),
             'isZeroTaxDisplayed' => $this->taxConfig->displayCartZeroTax(),
-            'reloadOnBillingAddress' => $this->reloadOnBillingAddress(),
             'defaultCountryId' => $this->scopeConfig->getValue(
                 \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -171,20 +170,5 @@ class TaxConfigProvider implements ConfigProviderInterface
     public function isTaxDisplayedInGrandTotal()
     {
         return $this->taxConfig->displayCartTaxWithGrandTotal();
-    }
-
-    /**
-     * Reload totals(taxes) on billing address update
-     *
-     * @return bool
-     */
-    protected function reloadOnBillingAddress()
-    {
-        $quote = $this->checkoutSession->getQuote();
-        $configValue = $this->scopeConfig->getValue(
-            Config::CONFIG_XML_PATH_BASED_ON,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        return 'billing' == $configValue || $quote->isVirtual();
     }
 }
