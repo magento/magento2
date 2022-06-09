@@ -460,13 +460,14 @@ define([
                     '</div>'
                 );
 
-                if ($widget.options.jsonConfig.canDisplayShowOutOfStockStatus)
-                {
-                    var salableProd = $widget.options.jsonConfig.salable[item.id],
+                if ($widget.options.jsonConfig.canDisplayShowOutOfStockStatus) {
+                    let salableProd = $widget.options.jsonConfig.salable[item.id],
                         swatchOptions = container.find('.swatch-option');
-                    swatchOptions.each(function(key, value) {
-                        var optionId = $(value).data('option-id');
-                        if(!salableProd.hasOwnProperty(optionId)) {
+
+                    swatchOptions.each(function (key, value) {
+                        let optionId = $(value).data('option-id');
+
+                        if (!salableProd.hasOwnProperty(optionId)) {
                             $(value).attr('disabled', true).addClass('disabled');
                         }
                     });
@@ -501,9 +502,6 @@ define([
 
             // Handle events like click or change
             $widget._EventListener();
-
-            // Rewind options
-            // $widget._Rewind(container);
 
             //Emulate click on all swatches from Request
             $widget._EmulateSelected($.parseQuery());
