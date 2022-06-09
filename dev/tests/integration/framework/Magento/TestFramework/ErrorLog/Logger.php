@@ -69,7 +69,8 @@ class Logger extends Monolog
     public function addRecord(
         int $level,
         string $message,
-        array $context = []
+        array $context = [],
+        DateTimeImmutable $datetime = null
     ): bool {
         if ($level <= $this->minimumErrorLevel) {
             $this->messages[] = [
