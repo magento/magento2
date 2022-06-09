@@ -72,11 +72,19 @@ class SaveWishlistDataAndAddReferenceKeyToBackUrl
         $storeId = null,
         $sendemailStoreId = null
     ): array {
-        if ($this->customerSession->getBeforeWishlistRequest() != null
-            && $customer->getConfirmation() != null
+        if (($this->customerSession->getBeforeWishlistRequest() != null)
+            && ($customer->getConfirmation() != null)
+            && (strpos($backUrl, 'wishlist/index/add') !== false)
         ) {
             $token = $this->dataSerializer->serialize($this->customerSession->getBeforeWishlistRequest());
-            $backUrl = $this->urlBuilder->getUrl('wishlist/index/add', ['_query' => ['token' => $token]]);
+            $query = [];
+            if (strpos($backUrl, '?') !== false) {
+                $queryString = explode('?', $backUrl);
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                parse_str($queryString[1], $query);
+            }
+            $query['token'] = $token;
+            $backUrl = $this->urlBuilder->getUrl('wishlist/index/add', ['_query' => $query]);
         }
 
         return [$customer, $type, $backUrl, $storeId, $sendemailStoreId];

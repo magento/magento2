@@ -173,6 +173,79 @@ class AddTest extends AbstractController
     }
 
     /**
+     * Add Product to Wishlist Before Login, Create Customer & Send Confirmation Email
+     *
+     * @magentoAppArea frontend
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoConfigFixture current_website customer/create_account/confirm 1
+     *
+     * @return void
+     */
+    public function testCreateCustomerWithEmailConfirmationAfterAddToWishlist(): void
+    {
+        $product = $this->productRepository->get('simple');
+        $data = [];
+        $data['product'] = (int) $product->getId();
+        $this->customerSession->setBeforeWishlistRequest($data);
+        $email = 'test_example_new31@email.com';
+        $this->fillRequestWithCustomerData($email);
+        $this->dispatch('customer/account/createPost');
+        $this->assertRedirect($this->stringContains('customer/account/index'));
+        $message = 'You must confirm your account.'
+            . ' Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.';
+        $url = $this->urlBuilder->getUrl('customer/account/confirmation', ['_query' => ['email' => $email]]);
+        $this->assertSessionMessages($this->containsEqual((string)__($message, $url)), MessageInterface::TYPE_SUCCESS);
+        /** @var CustomerInterface $customer */
+        $customer = $this->customerRepository->get($email);
+        $confirmation = $customer->getConfirmation();
+        $sendMessage = $this->transportBuilder->getSentMessage();
+        $this->assertNotNull($sendMessage);
+        $rawMessage = $sendMessage->getBody()->getParts()[0]->getRawContent();
+        $this->assertStringContainsString(
+            (string)__(
+                'You must confirm your %customer_email email before you can sign in (link is only valid once):',
+                ['customer_email' => $email]
+            ),
+            $rawMessage
+        );
+        $this->assertStringContainsString(
+            sprintf('token'),
+            $rawMessage
+        );
+        $this->assertStringContainsString(
+            sprintf('id=%s&amp;key=%s', $customer->getId(), $confirmation),
+            $rawMessage
+        );
+    }
+
+    /**
+     * Save Wishlist Product Data into Cache.
+     * Also Add Product To Wishlist based on the data retrieved from Cache Token
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
+     * @magentoDataFixture Magento/Customer/_files/unconfirmed_customer.php
+     * @magentoDbIsolation disabled
+     *
+     * @return void
+     */
+    public function testAddToWishlistOnCustomerConfirmation(): void
+    {
+        $this->prepareReferer();
+        $product = $this->productRepository->get('simple');
+        $data = [];
+        $data['product'] = (int) $product->getId();
+        $token = $this->dataSerializer->serialize($data);//Save into Cache
+        $customer = $this->customerRepository->get('unconfirmedcustomer@example.com');
+        $customer->setConfirmation(null);
+        $this->customerRepository->save($customer);
+        $this->assertEquals(null, $customer->getConfirmation());
+        $this->customerSession->setCustomerId((int) $customer->getId());
+        $this->performAddToWishListRequest(['token' => $token]);
+        $this->assertSuccess((int) $customer->getId(), 1, $product->getName());
+    }
+
+    /**
      * Perform request add item to wish list.
      *
      * @param array $params
@@ -215,58 +288,12 @@ class AddTest extends AbstractController
     }
 
     /**
-     * Add Product to Wishlist Before Login, Create Customer & Send Confirmation Email
-     *
-     * @magentoAppArea frontend
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoConfigFixture current_website customer/create_account/confirm 1
-     *
-     * @return void
-     */
-    public function testCreateCustomerWithEmailConfirmationAfterAddToWishlist(): void
-    {
-        $product = $this->productRepository->get('simple');
-        $data = [];
-        $data['product'] = (int) $product->getId();
-        $this->customerSession->setBeforeWishlistRequest($data);
-        $email = 'test_example_new@email.com';
-        $this->fillRequestWithAccountData($email);
-        $this->dispatch('customer/account/createPost');
-        $this->assertRedirect($this->stringContains('customer/account/index'));
-        $message = 'You must confirm your account.'
-            . ' Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.';
-        $url = $this->urlBuilder->getUrl('customer/account/confirmation', ['_query' => ['email' => $email]]);
-        $this->assertSessionMessages($this->containsEqual((string)__($message, $url)), MessageInterface::TYPE_SUCCESS);
-        /** @var CustomerInterface $customer */
-        $customer = $this->customerRepository->get($email);
-        $confirmation = $customer->getConfirmation();
-        $sendMessage = $this->transportBuilder->getSentMessage();
-        $this->assertNotNull($sendMessage);
-        $rawMessage = $sendMessage->getBody()->getParts()[0]->getRawContent();
-        $this->assertStringContainsString(
-            (string)__(
-                'You must confirm your %customer_email email before you can sign in (link is only valid once):',
-                ['customer_email' => $email]
-            ),
-            $rawMessage
-        );
-        $this->assertStringContainsString(
-            sprintf('token'),
-            $rawMessage
-        );
-        $this->assertStringContainsString(
-            sprintf('id=%s&amp;key=%s', $customer->getId(), $confirmation),
-            $rawMessage
-        );
-    }
-
-    /**
      * Fills request with customer data.
      *
      * @param string $email
      * @return void
      */
-    private function fillRequestWithAccountData(string $email): void
+    private function fillRequestWithCustomerData(string $email): void
     {
         $this->getRequest()
             ->setMethod(HttpRequest::METHOD_POST)
@@ -275,36 +302,5 @@ class AddTest extends AbstractController
             ->setParam(CustomerInterface::EMAIL, $email)
             ->setParam('password', '_Password1')
             ->setParam('password_confirmation', '_Password1');
-    }
-
-    /**
-     * Save Wishlist Product Data into Cache, Prepare Customer Email Confirmation Link
-     * Also Confirm the Customer & Add Product To Wishlist based on the data retrieved from Cache
-     *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
-     * @magentoDataFixture Magento/Customer/_files/unconfirmed_customer.php
-     * @magentoDbIsolation disabled
-     *
-     * @return void
-     */
-    public function testAddToWishlistOnCustomerConfirmation(): void
-    {
-        $product = $this->productRepository->get('simple');
-        $data = [];
-        $data['product'] = (int) $product->getId();
-        $token = $this->dataSerializer->serialize($data);
-
-        $customer = $this->customerRepository->get('unconfirmedcustomer@example.com');
-
-        $this->getRequest()
-            ->setParam('back_url', $this->urlBuilder->getUrl(
-                'wishlist/index/add', ['_query' => ['token' => $token]]
-            ))
-            ->setParam('id', (int) $customer->getId())
-            ->setParam('key', $customer->getConfirmation());
-
-        $this->dispatch('customer/account/confirm');
-        $this->assertSuccess((int) $customer->getId(), 1, $product->getName());
     }
 }

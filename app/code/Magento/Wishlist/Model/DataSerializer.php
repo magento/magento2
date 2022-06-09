@@ -105,21 +105,21 @@ class DataSerializer
      */
     public function unserialize(string $token): array
     {
-        if (strlen($token) !== self::CACHE_ID_LENGTH) {
-            $this->logger->error("Invalid Token '$token' supplied.");
-        }
-
         $result = [];
-        $cacheKey = self::CACHE_KEY_PREFIX.$token;
-        $json = $this->cache->load($cacheKey);
-        if ($json) {
-            $result = $this->serializer->unserialize($json);
-        }
+        if (strlen($token) === self::CACHE_ID_LENGTH) {
+            $cacheKey = self::CACHE_KEY_PREFIX.$token;
+            $json = $this->cache->load($cacheKey);
+            if ($json) {
+                $result = $this->serializer->unserialize($json);
+            }
 
-        try {
-            $this->cache->remove($token);
-        } catch (Throwable $exception) {
-            $this->logger->error('Unable to remove cache: '.$exception);
+            try {
+                $this->cache->remove($token);
+            } catch (Throwable $exception) {
+                $this->logger->error('Unable to remove cache: '.$exception);
+            }
+        } else {
+            $this->logger->error("Invalid Token '$token' supplied.");
         }
 
         return $result;
