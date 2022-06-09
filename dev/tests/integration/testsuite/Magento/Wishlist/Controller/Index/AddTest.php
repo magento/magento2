@@ -185,9 +185,9 @@ class AddTest extends AbstractController
     {
         $product = $this->productRepository->get('simple');
         $data = [];
-        $data['product'] = (int) $product->getId();
+        $data['product'] = (int)$product->getId();
         $this->customerSession->setBeforeWishlistRequest($data);
-        $email = 'test_example_new31@email.com';
+        $email = 'test_example_new@email.com';
         $this->fillRequestWithCustomerData($email);
         $this->dispatch('customer/account/createPost');
         $this->assertRedirect($this->stringContains('customer/account/index'));
@@ -234,15 +234,15 @@ class AddTest extends AbstractController
         $this->prepareReferer();
         $product = $this->productRepository->get('simple');
         $data = [];
-        $data['product'] = (int) $product->getId();
+        $data['product'] = (int)$product->getId();
         $token = $this->dataSerializer->serialize($data);//Save into Cache
         $customer = $this->customerRepository->get('unconfirmedcustomer@example.com');
         $customer->setConfirmation(null);
         $this->customerRepository->save($customer);
         $this->assertEquals(null, $customer->getConfirmation());
-        $this->customerSession->setCustomerId((int) $customer->getId());
+        $this->customerSession->setCustomerId((int)$customer->getId());
         $this->performAddToWishListRequest(['token' => $token]);
-        $this->assertSuccess((int) $customer->getId(), 1, $product->getName());
+        $this->assertSuccess((int)$customer->getId(), 1, $product->getName());
     }
 
     /**

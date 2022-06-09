@@ -74,7 +74,7 @@ class SaveWishlistDataAndAddReferenceKeyToBackUrl
     ): array {
         if (($this->customerSession->getBeforeWishlistRequest() != null)
             && ($customer->getConfirmation() != null)
-            && (strpos($backUrl, 'wishlist/index/add') !== false)
+            && ($backUrl !== null && strpos($backUrl, 'wishlist/index/add') !== false)
         ) {
             $token = $this->dataSerializer->serialize($this->customerSession->getBeforeWishlistRequest());
             $query = [];
