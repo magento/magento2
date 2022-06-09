@@ -141,7 +141,7 @@
     <xs:simpleType name="typeDependsConfig">
         <xs:annotation>
             <xs:documentation>
-                Item resource attribute can has only [a-z0-9_]. Minimal length 3 symbol. Case insensitive.
+                Item dependsOnConfig attribute can has only [a-z0-9_]. Minimal length 3 symbol. Case insensitive.
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
