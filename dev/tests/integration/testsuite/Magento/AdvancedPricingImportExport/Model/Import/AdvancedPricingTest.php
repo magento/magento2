@@ -429,6 +429,12 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * For checking if correct add and update count are being displayed after importing file having 100+ records
+     *
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\SelectAttribute as:attr1
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\SelectAttribute as:attr2
+     * @magentoDataFixtureDataProvider {"attr1":{"attribute_code":"size","default_frontend_label":"Size","options":[28,29,30,31,32,33,34,36,38]}}
+     * @magentoDataFixtureDataProvider {"attr2":{"attribute_code":"color","default_frontend_label":"Color","options":["Red","Blue","Yellow","Orange","Green"]}}
      * @magentoAppArea adminhtml
      */
     public function testImportAddUpdateCounts()
