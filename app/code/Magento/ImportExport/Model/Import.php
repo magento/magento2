@@ -631,6 +631,26 @@ class Import extends AbstractModel
     }
 
     /**
+     * Move uploaded file and provide source instance.
+     *
+     * @return Import\AbstractSource
+     * @throws LocalizedException
+     * @since 100.2.7
+     */
+    public function uploadFileAndGetSourceForRest()
+    {
+        $sourceFile = $this->getWorkingDir() . $this->getEntity() . '.csv';
+        try {
+            $source = $this->_getSourceAdapter($sourceFile);
+        } catch (\Exception $e) {
+            $this->_varDirectory->delete($this->_varDirectory->getRelativePath($sourceFile));
+            throw new LocalizedException(__($e->getMessage()));
+        }
+
+        return $source;
+    }
+
+    /**
      * Remove BOM from a file
      *
      * @param string $sourceFile
