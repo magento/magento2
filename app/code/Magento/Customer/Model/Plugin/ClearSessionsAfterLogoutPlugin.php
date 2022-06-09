@@ -12,11 +12,13 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Framework\Session\SaveHandlerInterface;
 use Magento\Framework\Session\StorageInterface;
-Use Magento\Framework\Exception\SessionException;
+use Magento\Framework\Exception\SessionException;
 use Psr\Log\LoggerInterface;
 
 /**
  * Clear Previous Active Sessions after Logout
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class ClearSessionsAfterLogoutPlugin
 {
@@ -78,6 +80,7 @@ class ClearSessionsAfterLogoutPlugin
      *
      * @param Session $subject
      * @param Session $result
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterLogout(Session $subject, Session $result): Session
     {
@@ -100,4 +103,3 @@ class ClearSessionsAfterLogoutPlugin
         return $result;
     }
 }
-

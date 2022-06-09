@@ -22,6 +22,11 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Session\StorageInterface;
 
+/**
+ * Unit test for CustomerNotification plugin
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CustomerNotificationTest extends TestCase
 {
     private const STUB_CUSTOMER_ID = 1;
