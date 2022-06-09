@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model;
 
-use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\ScopeInterface;
@@ -32,11 +31,6 @@ class TaxConfigProviderTest extends TestCase
     /**
      * @var MockObject
      */
-    protected $checkoutSessionMock;
-
-    /**
-     * @var MockObject
-     */
     protected $scopeConfigMock;
 
     /**
@@ -53,14 +47,11 @@ class TaxConfigProviderTest extends TestCase
     {
         $this->taxHelperMock = $this->createMock(Data::class);
         $this->taxConfigMock = $this->createMock(Config::class);
-        $this->checkoutSessionMock = $this->createMock(Session::class);
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->quoteMock = $this->createMock(Quote::class);
-        $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
         $this->model = new TaxConfigProvider(
             $this->taxHelperMock,
             $this->taxConfigMock,
-            $this->checkoutSessionMock,
             $this->scopeConfigMock
         );
     }
