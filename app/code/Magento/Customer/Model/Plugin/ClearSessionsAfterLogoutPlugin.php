@@ -16,7 +16,7 @@ Use Magento\Framework\Exception\SessionException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Plugin verifies permissions using Action Name against injected (`fontend/di.xml`) rules
+ * Clear Previous Active Sessions after Logout
  */
 class ClearSessionsAfterLogoutPlugin
 {
@@ -74,7 +74,7 @@ class ClearSessionsAfterLogoutPlugin
     }
 
     /**
-     * Initialize Dependencies
+     * Plugin to clear session after logout
      *
      * @param Session $subject
      * @param Session $result
