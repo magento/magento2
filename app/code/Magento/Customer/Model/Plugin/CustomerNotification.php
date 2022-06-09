@@ -16,7 +16,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Session\SaveHandlerInterface;
 use Magento\Framework\Session\StorageInterface;
 use Psr\Log\LoggerInterface;
 
@@ -56,11 +55,6 @@ class CustomerNotification
     private $request;
 
     /**
-     * @var SaveHandlerInterface
-     */
-    private SaveHandlerInterface $saveHandler;
-
-    /**
      * @var StorageInterface
      */
     private StorageInterface $storage;
@@ -79,7 +73,6 @@ class CustomerNotification
      * @param CustomerRepositoryInterface $customerRepository
      * @param LoggerInterface $logger
      * @param RequestInterface $request
-     * @param SaveHandlerInterface $saveHandler
      * @param StorageInterface $storage
      */
     public function __construct(
@@ -89,7 +82,6 @@ class CustomerNotification
         CustomerRepositoryInterface $customerRepository,
         LoggerInterface $logger,
         RequestInterface $request,
-        SaveHandlerInterface $saveHandler,
         StorageInterface $storage
     ) {
         $this->session = $session;
@@ -98,7 +90,6 @@ class CustomerNotification
         $this->customerRepository = $customerRepository;
         $this->logger = $logger;
         $this->request = $request;
-        $this->saveHandler = $saveHandler;
         $this->storage = $storage;
     }
 
@@ -116,10 +107,10 @@ class CustomerNotification
 
         if ($this->isFrontendRequest() && $this->isPostRequest() && $this->isSessionUpdateRegisteredFor($customerId)) {
             try {
-                $oldSessionId = session_id();
+                $oldSessionId = $this->session->getSessionId();
                 $previousSessions = $this->storage->getData(self::PREVIOUS_ACTIVE_SESSIONS);
 
-                if(empty($previousSessions)) {
+                if (empty($previousSessions)) {
                     $previousSessions = [];
                 }
                 $previousSessions[] = $oldSessionId;
