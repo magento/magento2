@@ -78,6 +78,6 @@ class Logger extends Monolog
                 'message' => $message,
             ];
         }
-        return parent::addRecord($level, $message, $context);
+        return parent::addRecord($level, $message, $context, $datetime);
     }
 }
