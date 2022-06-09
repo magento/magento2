@@ -187,6 +187,7 @@ class AddTest extends AbstractController
         $data = [];
         $data['product'] = (int)$product->getId();
         $this->customerSession->setBeforeWishlistRequest($data);
+        $this->customerSession->setBeforeAuthUrl($this->urlBuilder->getUrl('wishlist/index/add'));
         $email = 'test_example_new@email.com';
         $this->fillRequestWithCustomerData($email);
         $this->dispatch('customer/account/createPost');
