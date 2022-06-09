@@ -9,7 +9,6 @@ namespace Magento\Eav\Model\Validator\Attribute;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Eav\Model\Entity\Attribute;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validator\AbstractValidator;
 use Zend_Validate;
 
@@ -23,7 +22,7 @@ class Code extends AbstractValidator
     /**
      * Validation pattern for attribute code
      */
-    const VALIDATION_RULE_PATTERN = '/^[a-zA-Z]+[a-zA-Z0-9_]*$/u';
+    public const VALIDATION_RULE_PATTERN = '/^[a-zA-Z]+[a-zA-Z0-9_]*$/u';
 
     /**
      * Validates the correctness of the attribute code
@@ -38,6 +37,7 @@ class Code extends AbstractValidator
         /**
          * Check attribute_code for allowed characters
          */
+        $attributeCode = $attributeCode === null ? '' : $attributeCode;
         if (trim($attributeCode)
             && !preg_match(self::VALIDATION_RULE_PATTERN, trim($attributeCode))
         ) {
