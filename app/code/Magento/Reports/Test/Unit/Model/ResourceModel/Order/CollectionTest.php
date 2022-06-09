@@ -295,10 +295,11 @@ class CollectionTest extends TestCase
      * @param string $customStart
      * @param string $customEnd
      * @param string $config
+     * @param string $configVal
      * @dataProvider secondPartDateRangeDataProvider
      * @return void
      */
-    public function testGetDateRangeSecondPart($range, $customStart, $customEnd, $config): void
+    public function testGetDateRangeSecondPart($range, $customStart, $customEnd, $config, $configVal): void
     {
         $this->scopeConfigMock
             ->expects($this->once())
@@ -307,10 +308,39 @@ class CollectionTest extends TestCase
                 $config,
                 ScopeInterface::SCOPE_STORE
             )
-            ->willReturn(1);
+            ->willReturn($configVal);
+
+        $dateStart = new \DateTime();
+        $dateStart->setTime(0, 0, 0);
+
+        switch ($range) {
+            case '1m':
+                $dateStart->setDate(
+                    (int)$dateStart->format('Y'),
+                    (int)$dateStart->format('m'),
+                    (int)$configVal
+                );
+                break;
+
+            case '1y':
+            case '2y':
+                $startMonthDay = explode(
+                    ',',
+                    $configVal
+                );
+                $startMonth = isset($startMonthDay[0]) ? (int)$startMonthDay[0] : 1;
+                $startDay = isset($startMonthDay[1]) ? (int)$startMonthDay[1] : 1;
+                $dateStart->setDate((int)$dateStart->format('Y'), $startMonth, $startDay);
+                if ($range == '2y') {
+                    $dateStart->modify('-1 year');
+                }
+                break;
+        }
 
         $result = $this->collection->getDateRange($range, $customStart, $customEnd);
         $this->assertCount(3, $result);
+        $resultStartDate = $result['from'];
+        $this->assertEquals($dateStart->format('Y'), $resultStartDate->format('Y'));
     }
 
     /**
@@ -469,9 +499,9 @@ class CollectionTest extends TestCase
     public function secondPartDateRangeDataProvider(): array
     {
         return [
-            ['1m', 1, 10, 'reports/dashboard/mtd_start'],
-            ['1y', 1, 10, 'reports/dashboard/ytd_start'],
-            ['2y', 1, 10, 'reports/dashboard/ytd_start']
+            ['1m', 1, 10, 'reports/dashboard/mtd_start', '1'],
+            ['1y', 1, 10, 'reports/dashboard/ytd_start', '1,1'],
+            ['2y', 1, 10, 'reports/dashboard/ytd_start', '1,1']
         ];
     }
 
