@@ -20,7 +20,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Session\SaveHandlerInterface;
 use Magento\Framework\Session\StorageInterface;
 
 class CustomerNotificationTest extends TestCase
@@ -71,11 +70,6 @@ class CustomerNotificationTest extends TestCase
      * @var StorageInterface|MockObject
      */
     private $storage;
-
-    /**
-     * @var SaveHandlerInterface|MockObject
-     */
-    private $saveHandler;
 
     protected function setUp(): void
     {
