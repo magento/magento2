@@ -59,9 +59,16 @@ class GiftMessageTest extends GraphQlAbstract
         $query = $this->getCustomerOrdersQuery();
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Can\'t load gift message for order');
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
+        self::assertEquals(1, count($response['customerOrders']));
+        foreach ($response['customerOrders']['items'] as $order) {
+            self::assertArrayHasKey('gift_message', $order);
+        }
     }
 
     /**
