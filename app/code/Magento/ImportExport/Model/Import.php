@@ -33,6 +33,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Magento\ImportExport\Model\Source\Import\AbstractBehavior;
 use Magento\ImportExport\Model\Source\Import\Behavior\Factory as BehaviorFactory;
+use Magento\ImportExport\Model\Source\Upload;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Psr\Log\LoggerInterface;
@@ -202,8 +203,14 @@ class Import extends AbstractModel
     private $filesystemIo;
 
     /**
+     * @var Upload
+     */
+    private $upload;
+
+    /**
      * @param LoggerInterface $logger
      * @param Filesystem $filesystem
+     * @param Upload $upload
      * @param \Magento\Framework\Filesystem\Io\File $filesystemIo
      * @param DataHelper $importExportData
      * @param ScopeConfigInterface $coreConfig
@@ -225,6 +232,7 @@ class Import extends AbstractModel
     public function __construct(
         LoggerInterface $logger,
         Filesystem $filesystem,
+        Upload $upload,
         \Magento\Framework\Filesystem\Io\File $filesystemIo,
         DataHelper $importExportData,
         ScopeConfigInterface $coreConfig,
@@ -256,6 +264,7 @@ class Import extends AbstractModel
         $this->filesystemIo = $filesystemIo;
         $this->importHistoryModel = $importHistoryModel;
         $this->localeDate = $localeDate;
+        $this->upload = $upload;
         $this->messageManager = $messageManager ?: ObjectManager::getInstance()
             ->get(ManagerInterface::class);
         $this->random = $random ?: ObjectManager::getInstance()
@@ -551,74 +560,6 @@ class Import extends AbstractModel
     }
 
     /**
-     * Move uploaded file.
-     *
-     * @throws LocalizedException
-     * @return string Source file path
-     */
-    public function uploadSource()
-    {
-        /** @var $adapter \Zend_File_Transfer_Adapter_Http */
-        $adapter = $this->_httpFactory->create();
-        if (!$adapter->isValid(self::FIELD_NAME_SOURCE_FILE)) {
-            $errors = $adapter->getErrors();
-            if ($errors[0] == \Zend_Validate_File_Upload::INI_SIZE) {
-                $errorMessage = $this->_importExportData->getMaxUploadSizeMessage();
-            } else {
-                $errorMessage = __('The file was not uploaded.');
-            }
-            throw new LocalizedException($errorMessage);
-        }
-
-        $entity = $this->getEntity();
-        /** @var $uploader Uploader */
-        $uploader = $this->_uploaderFactory->create(['fileId' => self::FIELD_NAME_SOURCE_FILE]);
-        $uploader->setAllowedExtensions(['csv', 'zip']);
-        $uploader->skipDbProcessing(true);
-        $fileName = $this->random->getRandomString(32) . '.' . $uploader->getFileExtension();
-        try {
-            $result = $uploader->save($this->getWorkingDir(), $fileName);
-        } catch (\Exception $e) {
-            throw new LocalizedException(__('The file cannot be uploaded.'));
-        }
-
-        $extension = '';
-        $uploadedFile = '';
-        if ($result !== false) {
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
-            $uploadedFile = $result['path'] . $result['file'];
-        }
-
-        if (!$extension) {
-            $this->_varDirectory->delete($uploadedFile);
-            throw new LocalizedException(__('The file you uploaded has no extension.'));
-        }
-        $sourceFile = $this->getWorkingDir() . $entity;
-
-        $sourceFile .= '.' . $extension;
-        $sourceFileRelative = $this->_varDirectory->getRelativePath($sourceFile);
-
-        if (strtolower($uploadedFile) != strtolower($sourceFile)) {
-            if ($this->_varDirectory->isExist($sourceFileRelative)) {
-                $this->_varDirectory->delete($sourceFileRelative);
-            }
-
-            try {
-                $this->_varDirectory->renameFile(
-                    $this->_varDirectory->getRelativePath($uploadedFile),
-                    $sourceFileRelative
-                );
-            } catch (FileSystemException $e) {
-                throw new LocalizedException(__('The source file moving process failed.'));
-            }
-        }
-        $this->_removeBom($sourceFile);
-        $this->createHistoryReport($sourceFileRelative, $entity, $extension, $result);
-        return $sourceFile;
-    }
-
-    /**
      * Move uploaded file and provide source instance.
      *
      * @return Import\AbstractSource
@@ -627,7 +568,7 @@ class Import extends AbstractModel
      */
     public function uploadFileAndGetSource()
     {
-        $sourceFile = $this->uploadSource();
+        $sourceFile = $this->upload->uploadSource($this);
         try {
             $source = $this->_getSourceAdapter($sourceFile);
         } catch (\Exception $e) {
@@ -639,55 +580,11 @@ class Import extends AbstractModel
     }
 
     /**
-     * Move uploaded file and provide source instance.
-     *
-     * @return Import\AbstractSource
-     * @throws LocalizedException
-     * @since 100.2.7
+     * @return Filesystem\Directory\WriteInterface
      */
-    public function uploadFileAndGetSourceForRest()
+    public function getVarDirectory()
     {
-        $entity = $this->getEntity();
-        /** @var $uploader Uploader */
-        $fileName = $this->random->getRandomString(32) . '.' . 'csv';
-        $uploadedFile = '';
-        $extension = 'csv';
-        $uploadedFile = $this->getWorkingDir() . $fileName;
-
-        if (!$extension) {
-            $this->_varDirectory->delete($uploadedFile);
-            throw new LocalizedException(__('The file you uploaded has no extension.'));
-        }
-        $sourceFile = $this->getWorkingDir() . $entity;
-
-        $sourceFile .= '.' . $extension;
-        $sourceFileRelative = $this->_varDirectory->getRelativePath($sourceFile);
-        $this->filesystemIo->cp($sourceFile, $uploadedFile);
-
-        if (strtolower($uploadedFile) != strtolower($sourceFile)) {
-            if ($this->_varDirectory->isExist($sourceFileRelative)) {
-                $this->_varDirectory->delete($sourceFileRelative);
-            }
-
-            try {
-                $this->_varDirectory->renameFile(
-                    $this->_varDirectory->getRelativePath($uploadedFile),
-                    $sourceFileRelative
-                );
-            } catch (FileSystemException $e) {
-                throw new LocalizedException(__('The source file moving process failed.'));
-            }
-        }
-        $this->_removeBom($sourceFile);
-        $this->createHistoryReport($sourceFileRelative, $entity, $extension, ['name'=> $entity . 'csv']);
-        try {
-            $source = $this->_getSourceAdapter($sourceFile);
-        } catch (\Exception $e) {
-            $this->_varDirectory->delete($this->_varDirectory->getRelativePath($sourceFile));
-            throw new LocalizedException(__($e->getMessage()));
-        }
-
-        return $source;
+        return $this->_varDirectory;
     }
 
     /**
@@ -697,7 +594,7 @@ class Import extends AbstractModel
      * @return $this
      * @throws FileSystemException
      */
-    protected function _removeBom($sourceFile)
+    public function _removeBom($sourceFile)
     {
         $driver = $this->_varDirectory->getDriver();
         $string = $driver->fileGetContents($this->_varDirectory->getAbsolutePath($sourceFile));
@@ -880,7 +777,7 @@ class Import extends AbstractModel
      * @return $this
      * @throws LocalizedException
      */
-    protected function createHistoryReport($sourceFileRelative, $entity, $extension = null, $result = null)
+    public function createHistoryReport($sourceFileRelative, $entity, $extension = null, $result = null)
     {
         if ($this->isReportEntityType($entity)) {
             if (is_array($sourceFileRelative)) {
