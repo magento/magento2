@@ -135,6 +135,7 @@ class OrderListTest extends WebapiAbstract
         $searchCriteriaBuilder->addFilters([$filter1]);
         $searchCriteriaBuilder->addFilters([$filter2, $filter3]);
         $searchCriteriaBuilder->addSortOrder($sortOrder);
+        $searchCriteriaBuilder->setPageSize(20);
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
         return $searchData;

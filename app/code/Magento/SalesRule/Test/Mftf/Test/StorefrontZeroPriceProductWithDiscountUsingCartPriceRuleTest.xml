@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontZeroPriceProductWithDiscountUsingCartPriceRuleTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Create cart price rule"/>
+            <title value="Zero price product should not have negative discount amount in order"/>
+            <description value="Zero price product should not have negative discount amount in order"/>
+            <severity value="MINOR"/>
+            <testCaseId value="MC-42802"/>
+            <useCaseId value="MC-42612"/>
+            <group value="SalesRule"/>
+        </annotations>
+        <before>
+            <!-- Log in -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!-- Create 2 simple products -->
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+                <field key="price">33.50</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2">
+                <field key="price">0.00</field>
+            </createData>
+            <!-- Create the sales rule -->
+            <createData entity="SalesRuleSpecificCouponAndByPercent25" stepKey="createSalesRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createSalesRule"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="DeleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="DeleteSimpleProduct2"/>
+            <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Add the first product to the cart -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductPage1">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad1"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
+
+        <!-- Add the second product to the cart -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductPage2">
+            <argument name="product" value="$$simpleProduct2$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage2"/>
+
+        <!-- Go to cart and apply coupon -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
+        <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="applyDiscount">
+            <argument name="coupon" value="$$createCouponForCartPriceRule$$"/>
+        </actionGroup>
+
+        <!-- Assert Discount amount in storefront -->
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
+            <argument name="discount" value="8.38"/>
+        </actionGroup>
+
+        <!-- Go to Checkout page -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+
+        <!-- Fill email field and addresses form and go next -->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+
+        <!-- Place Order -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <!-- Navigate to admin order details page -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+
+        <!-- Assert Discount amount in admin -->
+        <see selector="{{AdminOrderItemsOrderedSection.itemDiscountAmountByProductName($simpleProduct1.name$)}}" userInput="$8.38" stepKey="seeProduct1DiscountAmount"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemDiscountAmountByProductName($simpleProduct2.name$)}}" userInput="$0.00" stepKey="seeProduct2DiscountAmount"/>
+        <see selector="{{AdminOrderTotalSection.discount}}" userInput="-$8.38" stepKey="seeDiscountAmount"/>
+
+    </test>
+</tests>

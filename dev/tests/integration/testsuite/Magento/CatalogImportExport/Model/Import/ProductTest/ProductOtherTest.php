@@ -26,6 +26,7 @@ use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
  * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductOtherTest extends ProductTestBase
 {
@@ -147,32 +148,17 @@ class ProductOtherTest extends ProductTestBase
             );
             $productAfterImport->load($productBeforeImport->getId());
             $this->assertEquals(
-                @strtotime(date('m/d/Y', @strtotime($row['news_from_date']))),
-                @strtotime($productAfterImport->getNewsFromDate())
+                strtotime(date('m/d/Y', strtotime($row['news_from_date']))),
+                strtotime($productAfterImport->getNewsFromDate())
             );
             $this->assertEquals(
-                @strtotime($row['news_to_date']),
-                @strtotime($productAfterImport->getNewsToDate())
+                strtotime($row['news_to_date']),
+                strtotime($productAfterImport->getNewsToDate())
             );
             unset($productAfterImport);
         }
         unset($productsBeforeImport, $product);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * @magentoAppArea adminhtml
@@ -243,8 +229,6 @@ class ProductOtherTest extends ProductTestBase
         $this->assertEquals($linksData, $importedProductLinks);
     }
 
-
-
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      * @magentoDbIsolation enabled
@@ -303,9 +287,6 @@ class ProductOtherTest extends ProductTestBase
         }
     }
 
-
-
-
     /**
      * @magentoAppIsolation enabled
      */
@@ -345,8 +326,6 @@ class ProductOtherTest extends ProductTestBase
             $this->assertEquals($manageStockUseConfig, $stockItem->getUseConfigManageStock());
         }
     }
-
-
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/multiselect_attribute_with_incorrect_values.php
@@ -608,10 +587,6 @@ class ProductOtherTest extends ProductTestBase
             );
         }
     }
-
-
-
-
 
     /**
      * Checks possibility to double importing products using the same import file.

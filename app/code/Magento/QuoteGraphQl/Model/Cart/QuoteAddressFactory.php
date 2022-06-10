@@ -16,6 +16,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\AddressFactory as BaseQuoteAddressFactory;
 
@@ -99,6 +100,10 @@ class QuoteAddressFactory
             throw new GraphQlInputException(__('Country is not available'));
         }
 
+        if (!empty($addressInput['region'])) {
+            $this->normalizeRegion($addressInput);
+        }
+
         $this->validateRegion($addressInput);
 
         $maxAllowedLineCount = $this->addressHelper->getStreetLines();
@@ -139,6 +144,26 @@ class QuoteAddressFactory
                 throw new GraphQlInputException(
                     __('The specified region is not a part of the selected country or region')
                 );
+            }
+        }
+    }
+
+    /**
+     * Normalize region code to region id while requesting to setShippingAddress
+     *
+     * @param array $addressInput
+     */
+    private function normalizeRegion(array &$addressInput)
+    {
+        $shippingAddressRegion = $addressInput['region'];
+        if (is_numeric($shippingAddressRegion)) {
+            $regionCollection = $this->regionCollectionFactory
+                ->create()
+                ->addCountryFilter($addressInput['country_code']);
+            $allRegions = $regionCollection->toOptionArray();
+            $regionId = (int) $addressInput['region'];
+            if (array_key_exists($regionId, $allRegions)) {
+                $addressInput['region'] = $allRegions[$regionId]['value'];
             }
         }
     }
@@ -192,6 +217,23 @@ class QuoteAddressFactory
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()), $e);
         }
+        return $quoteAddress;
+    }
+
+    /**
+     * Create quote address based on the shipping address.
+     *
+     * @param CartInterface $quote
+     * @return QuoteAddress
+     */
+    public function createBasedOnShippingAddress(CartInterface $quote): QuoteAddress
+    {
+        $shippingAddressData = $quote->getShippingAddress()->exportCustomerAddress();
+
+        /** @var QuoteAddress $quoteAddress */
+        $quoteAddress = $this->quoteAddressFactory->create();
+        $quoteAddress->importCustomerAddressData($shippingAddressData);
+
         return $quoteAddress;
     }
 }

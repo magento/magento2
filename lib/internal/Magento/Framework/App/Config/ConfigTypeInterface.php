@@ -9,6 +9,8 @@ namespace Magento\Framework\App\Config;
 
 /**
  * Interface ConfigTypeInterface
+ *
+ * @api
  */
 interface ConfigTypeInterface
 {

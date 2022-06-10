@@ -13,7 +13,7 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
-use Magento\Framework\Session\Generic as Session;
+use Magento\Checkout\Model\Session;
 use Magento\Framework\View\Layout\ProcessorInterface;
 use Magento\Framework\View\Result\Layout;
 use Magento\Framework\View\Result\LayoutFactory;

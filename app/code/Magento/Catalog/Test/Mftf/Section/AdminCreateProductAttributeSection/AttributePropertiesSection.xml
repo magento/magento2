@@ -19,7 +19,6 @@
         <element name="Save" type="button" selector="#save" timeout="30"/>
         <element name="DeleteAttribute" type="button" selector="#delete" timeout="30"/>
         <element name="SaveAndEdit" type="button" selector="#save_and_edit_button" timeout="30"/>
-        <element name="TinyMCE4" type="button" selector="//span[text()='Default Value']/parent::label/following-sibling::div//*[contains(@class,'mce-branding')]"/>
         <element name="checkIfTabOpen" selector="//div[@id='advanced_fieldset-wrapper' and not(contains(@class,'opened'))]" type="button"/>
         <element name="useInLayeredNavigation" type="select" selector="#is_filterable"/>
         <element name="addSwatch" type="button" selector="#add_new_swatch_text_option_button"/>

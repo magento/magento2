@@ -83,14 +83,17 @@
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
 
         <!-- Grab order id -->
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
+        <comment userInput="BIC workaround" stepKey="getOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <!-- Open created order -->
-        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersPage"/>
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
-            <argument name="orderId" value="$getOrderId"/>
+        <comment userInput="BIC workaround" stepKey="goToOrdersPage"/>
+        <comment userInput="BIC workaround" stepKey="filterOrdersGridById"/>
+        <comment userInput="BIC workaround" stepKey="clickCreatedOrderInGrid"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
-        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickCreatedOrderInGrid"/>
 
         <!-- Go to invoice tab and fill data -->
         <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceAction"/>

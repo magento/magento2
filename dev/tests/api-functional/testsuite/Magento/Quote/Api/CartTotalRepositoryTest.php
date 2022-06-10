@@ -116,7 +116,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
     {
         foreach ($data as $key => $field) {
             if (is_numeric($field)) {
-                $data[$key] = round($field, 1);
+                $data[$key] = round((float) $field, 1);
                 if ($data[$key] === null) {
                     $data[$key] = 0.0;
                 }

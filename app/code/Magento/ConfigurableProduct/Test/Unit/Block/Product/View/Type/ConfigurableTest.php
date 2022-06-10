@@ -32,6 +32,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Tax\Helper\Data as TaxData;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -160,6 +161,10 @@ class ConfigurableTest extends TestCase
         $this->context->expects($this->once())
             ->method('getResolver')
             ->willReturn($fileResolverMock);
+        $taxData = $this->createMock(TaxData::class);
+        $this->context->expects($this->once())
+            ->method('getTaxData')
+            ->willReturn($taxData);
         $this->currency = $this->getMockBuilder(Currency::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -435,6 +440,8 @@ class ConfigurableTest extends TestCase
             'chooseText' => __('Choose an Option...'),
             'images' => [],
             'index' => [],
+            'salable' => [],
+            'canDisplayShowOutOfStockStatus' => false
         ];
 
         return $expectedArray;

@@ -30,6 +30,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\Mview\TriggerCleaner;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\FilePermissions;
@@ -46,6 +47,7 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Validation\ValidationException;
 use Magento\PageCache\Model\Cache\Type as PageCache;
+use Magento\RemoteStorage\Driver\DriverException;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Exception;
@@ -55,6 +57,8 @@ use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Validator\DbValidator;
 use Magento\Store\Model\Store;
+use Magento\RemoteStorage\Setup\ConfigOptionsList as RemoteStorageValidator;
+use ReflectionException;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -65,35 +69,32 @@ use Magento\Store\Model\Store;
  */
 class Installer
 {
-    /**#@+
+    /**
      * Parameters for enabling/disabling modules
      */
-    const ENABLE_MODULES = 'enable-modules';
-    const DISABLE_MODULES = 'disable-modules';
-    /**#@- */
+    public const ENABLE_MODULES = 'enable-modules';
+    public const DISABLE_MODULES = 'disable-modules';
 
-    /**#@+
+    /**
      * Formatting for progress log
      */
-    const PROGRESS_LOG_RENDER = '[Progress: %d / %d]';
-    const PROGRESS_LOG_REGEX = '/\[Progress: (\d+) \/ (\d+)\]/s';
-    /**#@- */
+    public const PROGRESS_LOG_RENDER = '[Progress: %d / %d]';
+    public const PROGRESS_LOG_REGEX = '/\[Progress: (\d+) \/ (\d+)\]/s';
 
-    /**#@+
+    /**
      * Instance types for schema and data handler
      */
-    const SCHEMA_INSTALL = \Magento\Framework\Setup\InstallSchemaInterface::class;
-    const SCHEMA_UPGRADE = \Magento\Framework\Setup\UpgradeSchemaInterface::class;
-    const DATA_INSTALL = \Magento\Framework\Setup\InstallDataInterface::class;
-    const DATA_UPGRADE = \Magento\Framework\Setup\UpgradeDataInterface::class;
-    /**#@- */
+    public const SCHEMA_INSTALL = \Magento\Framework\Setup\InstallSchemaInterface::class;
+    public const SCHEMA_UPGRADE = \Magento\Framework\Setup\UpgradeSchemaInterface::class;
+    public const DATA_INSTALL = \Magento\Framework\Setup\InstallDataInterface::class;
+    public const DATA_UPGRADE = \Magento\Framework\Setup\UpgradeDataInterface::class;
 
-    const INFO_MESSAGE = 'message';
+    public const INFO_MESSAGE = 'message';
 
     /**
      * The lowest supported MySQL verion
      */
-    const MYSQL_VERSION_REQUIRED = '5.6.0';
+    public const MYSQL_VERSION_REQUIRED = '5.6.0';
 
     /**
      * File permissions checker
@@ -103,22 +104,16 @@ class Installer
     private $filePermissions;
 
     /**
-     * Deployment configuration repository
-     *
      * @var Writer
      */
     private $deploymentConfigWriter;
 
     /**
-     * Deployment configuration reader
-     *
      * @var Reader
      */
     private $deploymentConfigReader;
 
     /**
-     * Module list
-     *
      * @var ModuleListInterface
      */
     private $moduleList;
@@ -131,8 +126,6 @@ class Installer
     private $moduleLoader;
 
     /**
-     * Admin account factory
-     *
      * @var AdminAccountFactory
      */
     private $adminAccountFactory;
@@ -229,8 +222,6 @@ class Installer
     protected $sampleDataState;
 
     /**
-     * Component Registrar
-     *
      * @var ComponentRegistrar
      */
     private $componentRegistrar;
@@ -356,6 +347,11 @@ class Installer
         }
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing search configuration...', 'installSearchConfiguration', [$request]];
+        $script[] = [
+            'Validating remote storage configuration...',
+            'validateRemoteStorageConfiguration',
+            [$request]
+        ];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'updateCaches', [true]];
         $script[] = ['Installing data...', 'installDataFixtures', [$request]];
@@ -385,8 +381,13 @@ class Installer
         foreach ($script as $item) {
             list($message, $method, $params) = $item;
             $this->log->log($message);
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            call_user_func_array([$this, $method], $params);
+            try {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                call_user_func_array([$this, $method], $params);
+            } catch (RuntimeException | DriverException $e) {
+                $this->revertRemoteStorageConfiguration();
+                throw $e;
+            }
             $this->logProgress();
         }
         $this->log->logSuccess('Magento installation complete.');
@@ -1016,7 +1017,7 @@ class Installer
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw  new Exception("Unsupported operation type $type is requested");
         }
-        $resource = new \Magento\Framework\Module\ModuleResource($this->context);
+        $resource = $this->getModuleResource();
         $verType = $type . '-version';
         $installType = $type . '-install';
         $upgradeType = $type . '-upgrade';
@@ -1050,7 +1051,7 @@ class Installer
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
             $currentVersion = $moduleContextList[$moduleName]->getVersion();
             // Schema/Data is installed
-            if ($currentVersion !== '') {
+            if ($configVer !== null && $currentVersion !== '') {
                 $status = version_compare($configVer, $currentVersion);
                 if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
                     $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
@@ -1118,6 +1119,16 @@ class Installer
             }
             $this->logProgress();
         }
+    }
+
+    /**
+     * Get a module Resource object
+     *
+     * @return ModuleResource
+     */
+    public function getModuleResource(): ModuleResource
+    {
+        return new ModuleResource($this->context);
     }
 
     /**
@@ -1195,6 +1206,31 @@ class Installer
         /** @var SearchConfig $searchConfig */
         $searchConfig = $this->objectManagerProvider->get()->get(SearchConfig::class);
         $searchConfig->saveConfiguration($data);
+    }
+
+    /**
+     * Validate remote storage on install.  Since it is a deployment-based configuration, the config is already present,
+     * but this function confirms it can connect after Object Manager
+     * has all necessary dependencies loaded to do so.
+     *
+     * @param array $data
+     * @throws ValidationException
+     * @throws Exception
+     */
+    public function validateRemoteStorageConfiguration(array $data)
+    {
+        try {
+            $remoteStorageValidator = $this->objectManagerProvider->get()->get(RemoteStorageValidator::class);
+        } catch (ReflectionException $e) { // RemoteStorage module is not available; return early
+            return;
+        }
+
+        $validationErrors = $remoteStorageValidator->validate($data, $this->deploymentConfig);
+
+        if (!empty($validationErrors)) {
+            $this->revertRemoteStorageConfiguration();
+            throw new ValidationException(__(implode(PHP_EOL, $validationErrors)));
+        }
     }
 
     /**
@@ -1625,7 +1661,7 @@ class Installer
     /**
      * Generates list of ModuleContext
      *
-     * @param \Magento\Framework\Module\ModuleResource $resource
+     * @param ModuleResource $resource
      * @param string $type
      * @return ModuleContext[]
      * @throws Exception
@@ -1761,5 +1797,20 @@ class Installer
         }
 
         return $disabledCaches;
+    }
+
+    /**
+     * Revert remote storage configuration back to local file driver
+     */
+    private function revertRemoteStorageConfiguration()
+    {
+        if (!$this->deploymentConfigWriter->checkIfWritable()) {
+            return;
+        }
+
+        $remoteStorageData = new ConfigData(ConfigFilePool::APP_ENV);
+        $remoteStorageData->set('remote_storage', ['driver' => 'file']);
+        $configData = [$remoteStorageData->getFileKey() => $remoteStorageData->getData()];
+        $this->deploymentConfigWriter->saveConfig($configData, true);
     }
 }

@@ -16,41 +16,26 @@ define([
     $.widget('mage.rolesTree', {
         options: {
             treeInitData: {},
-            treeInitSelectedData: {}
+            editFormSelector: '',
+            resourceFieldName: 'resource[]',
+            checkboxVisible: true
         },
 
         /** @inheritdoc */
         _create: function () {
             this.element.jstree({
-                plugins: ['themes', 'json_data', 'ui', 'crrm', 'types', 'vcheckbox', 'hotkeys'],
-                vcheckbox: {
-                    'two_state': true,
-                    'real_checkboxes': true,
-
-                    /**
-                     * @param {*} n
-                     * @return {Array}
-                     */
-                    'real_checkboxes_names': function (n) {
-                        return ['resource[]', $(n).data('id')];
-                    }
+                plugins: ['checkbox'],
+                checkbox: {
+                    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+                    three_state: false,
+                    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+                    visible: this.options.checkboxVisible,
+                    cascade: 'undetermined'
                 },
-                'json_data': {
-                    data: this.options.treeInitData
-                },
-                ui: {
-                    'select_limit': 0
-                },
-                hotkeys: {
-                    space: this._changeState,
-                    'return': this._changeState
-                },
-                types: {
-                    'types': {
-                        'disabled': {
-                            'check_node': false,
-                            'uncheck_node': false
-                        }
+                core: {
+                    data: this.options.treeInitData,
+                    themes: {
+                        dots: false
                     }
                 }
             });
@@ -68,46 +53,69 @@ define([
          * @private
          */
         _bind: function () {
-            this.element.on('loaded.jstree', $.proxy(this._checkNodes, this));
-            this.element.on('click.jstree', 'a', $.proxy(this._checkNode, this));
+            this.element.on('select_node.jstree', $.proxy(this._selectChildNodes, this));
+            this.element.on('deselect_node.jstree', $.proxy(this._deselectChildNodes, this));
+            this.element.on('changed.jstree', $.proxy(this._changedNode, this));
         },
 
         /**
-         * @param {jQuery.Event} event
+         * @param {Event} event
+         * @param {Object} selected
          * @private
          */
-        _checkNode: function (event) {
-            event.stopPropagation();
-            this.element.jstree(
-                'change_state',
-                event.currentTarget,
-                this.element.jstree('is_checked', event.currentTarget)
-            );
+        _selectChildNodes: function (event, selected) {
+            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+            selected.instance.open_node(selected.node);
+            selected.node.children.each(function (id) {
+                var selector = '[id="' + id + '"]';
+
+                selected.instance.select_node(
+                    selected.instance.get_node($(selector), false)
+                );
+            });
+            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         },
 
         /**
+         * @param {Event} event
+         * @param {Object} selected
          * @private
          */
-        _checkNodes: function () {
-            var $items = $('[data-id="' + this.options.treeInitSelectedData.join('"],[data-id="') + '"]');
+        _deselectChildNodes: function (event, selected) {
+            selected.node.children.each(function (id) {
+                var selector = '[id="' + id + '"]';
 
-            $items.removeClass('jstree-unchecked').addClass('jstree-checked');
-            $items.children(':checkbox').prop('checked', true);
+                // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+                selected.instance.deselect_node(
+                    selected.instance.get_node($(selector), false)
+                );
+                // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+            });
         },
 
         /**
-         * @return {Boolean}
+         * Add selected resources to form to be send later
+         *
+         * @param {Event} event
+         * @param {Object} selected
          * @private
          */
-        _changeState: function () {
-            var element;
+        _changedNode: function (event, selected) {
+            var form = $(this.options.editFormSelector),
+                fieldName = this.options.resourceFieldName,
+                items = selected.selected.concat($(this.element).jstree('get_undetermined'));
 
-            if (this.data.ui.hovered) {
-                element = this.data.ui.hovered;
-                this['change_state'](element, this['is_checked'](element));
+            if (this.options.editFormSelector === '') {
+                return;
             }
-
-            return false;
+            form.find('input[name="' + this.options.resourceFieldName +  '"]').remove();
+            items.each(function (id) {
+                $('<input>', {
+                    type: 'hidden',
+                    name: fieldName,
+                    value: id
+                }).appendTo(form);
+            });
         }
     });
 

@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-/* global $break $ FORM_KEY */
+/* global FORM_KEY */
 
 /**
  * @api
@@ -184,11 +184,11 @@ define([
                         display: 'none'
                     }).appendTo($('body'));
 
-                    this.iframe = $('<iframe />', {
+                    this.iframe = $('<iframe></iframe>', {
                         name: 'upload_iframe_' + elementName
                     }).appendTo(this.wrapper);
 
-                    this.form = $('<form />', {
+                    this.form = $('<form></form>', {
                         name: 'swatch_form_image_upload_' + elementName,
                         target: 'upload_iframe_' + elementName,
                         method: 'post',
@@ -250,7 +250,7 @@ define([
              */
             $(container).on('click', '.btn_choose_file_upload', function () {
                 swatchComponents.inputFile.attr('data-called-by', $(this).data('class'));
-                swatchComponents.inputFile.click();
+                swatchComponents.inputFile.trigger('click');
             });
 
             /**

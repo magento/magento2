@@ -22,6 +22,16 @@ define([
          */
         getSafeHtml: function (label) {
             return escaper.escapeHtml(label, this.allowedTags);
+        },
+
+        /**
+         * UnsanitizedHtml version of getSafeHtml.
+         *
+         * @param {String} label
+         * @returns {String}
+         */
+        getSafeUnsanitizedHtml: function (label) {
+            return this.getSafeHtml(label);
         }
     });
 });

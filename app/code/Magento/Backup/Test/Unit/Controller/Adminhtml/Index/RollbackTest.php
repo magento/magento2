@@ -83,21 +83,6 @@ class RollbackTest extends TestCase
     private $fileFactoryMock;
 
     /**
-     * @var RedirectFactory|MockObject
-     */
-    private $resultRedirectFactoryMock;
-
-    /**
-     * @var Redirect|MockObject
-     */
-    private $resultRedirectMock;
-
-    /**
-     * @var Forward|MockObject
-     */
-    private $resultForwardMock;
-
-    /**
      * @var Factory|MockObject
      */
     private $backupFactoryMock;
@@ -112,51 +97,44 @@ class RollbackTest extends TestCase
      */
     private $backupResourceModelMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['initForward', 'setDispatched', 'isAjax'])
+            ->addMethods(['initForward', 'setDispatched', 'isAjax'])
             ->getMockForAbstractClass();
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->setMethods(['setRedirect', 'representJson'])
+            ->addMethods(['setRedirect', 'representJson'])
             ->getMockForAbstractClass();
         $this->backupModelFactoryMock = $this->getMockBuilder(BackupFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->backupModelMock = $this->getMockBuilder(Backup::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTime', 'exists', 'getSize', 'output', 'validateUserPassword'])
+            ->onlyMethods(['exists', 'getSize', 'output', 'validateUserPassword'])
+            ->addMethods(['getTime'])
             ->getMock();
         $this->backupResourceModelMock = $this->getMockBuilder(Db::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isRollbackAllowed', 'getBackupsDir', 'invalidateCache'])
+            ->onlyMethods(['isRollbackAllowed', 'getBackupsDir', 'invalidateCache'])
             ->getMock();
         $this->fileFactoryMock = $this->getMockBuilder(FileFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectFactoryMock =
-            $this->getMockBuilder(RedirectFactory::class)
-                ->disableOriginalConstructor()
-                ->setMethods(['create'])
-                ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultForwardMock = $this->getMockBuilder(Forward::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->backupFactoryMock = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->backupManagerMock = $this->getMockBuilder(BackupInterface::class)
-            ->setMethods(['setName'])
+            ->addMethods(['setName'])
             ->getMockForAbstractClass();
         $this->objectManager = new ObjectManager($this);
         $this->context = $this->objectManager->getObject(
@@ -164,8 +142,7 @@ class RollbackTest extends TestCase
             [
                 'objectManager' => $this->objectManagerMock,
                 'request' => $this->requestMock,
-                'response' => $this->responseMock,
-                'resultRedirectFactory' => $this->resultRedirectFactoryMock,
+                'response' => $this->responseMock
             ]
         );
         $this->rollbackController = $this->objectManager->getObject(
@@ -174,12 +151,15 @@ class RollbackTest extends TestCase
                 'context' => $this->context,
                 'backupFactory' => $this->backupFactoryMock,
                 'backupModelFactory' => $this->backupModelFactoryMock,
-                'fileFactory' => $this->fileFactoryMock,
+                'fileFactory' => $this->fileFactoryMock
             ]
         );
     }
 
-    public function testExecuteRollbackDisabled()
+    /**
+     * @return void
+     */
+    public function testExecuteRollbackDisabled(): void
     {
         $rollbackAllowed = false;
 
@@ -194,7 +174,10 @@ class RollbackTest extends TestCase
         $this->assertSame($this->responseMock, $this->rollbackController->execute());
     }
 
-    public function testExecuteBackupNotFound()
+    /**
+     * @return void
+     */
+    public function testExecuteBackupNotFound(): void
     {
         $rollbackAllowed = true;
         $isAjax = true;
@@ -223,7 +206,7 @@ class RollbackTest extends TestCase
             ->willReturnMap(
                 [
                     ['time', null, $time],
-                    ['type', null, $type],
+                    ['type', null, $type]
                 ]
             );
         $this->backupModelFactoryMock->expects($this->once())
@@ -234,7 +217,10 @@ class RollbackTest extends TestCase
         $this->assertSame($this->responseMock, $this->rollbackController->execute());
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $rollbackAllowed = true;
         $isAjax = true;
@@ -290,14 +276,10 @@ class RollbackTest extends TestCase
             ->method('create')
             ->with($type)
             ->willReturn($this->backupManagerMock);
-        $this->objectManagerMock->expects($this->at(2))
+        $this->objectManagerMock
             ->method('create')
-            ->with(Db::class, [])
-            ->willReturn($this->backupResourceModelMock);
-        $this->objectManagerMock->expects($this->at(3))
-            ->method('create')
-            ->with(Backup::class, [])
-            ->willReturn($this->backupModelMock);
+            ->withConsecutive([Db::class, []], [Backup::class, []])
+            ->willReturnOnConsecutiveCalls($this->backupResourceModelMock, $this->backupModelMock);
         $this->backupModelMock->expects($this->once())
             ->method('validateUserPassword')
             ->willReturn($passwordValid);

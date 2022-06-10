@@ -15,6 +15,7 @@ use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
+use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\Result\ProxyDeferredFactory;
@@ -28,45 +29,45 @@ use Magento\Usps\Helper\Data as DataHelper;
 class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
     /** @deprecated Redundant dependency */
-    const CONTAINER_VARIABLE = 'VARIABLE';
+    public const CONTAINER_VARIABLE = 'VARIABLE';
 
     /** @deprecated Redundant dependency */
-    const CONTAINER_FLAT_RATE_BOX = 'FLAT RATE BOX';
+    public const CONTAINER_FLAT_RATE_BOX = 'FLAT RATE BOX';
 
     /** @deprecated Redundant dependency */
-    const CONTAINER_FLAT_RATE_ENVELOPE = 'FLAT RATE ENVELOPE';
+    public const CONTAINER_FLAT_RATE_ENVELOPE = 'FLAT RATE ENVELOPE';
 
     /** @deprecated Redundant dependency */
-    const CONTAINER_RECTANGULAR = 'RECTANGULAR';
+    public const CONTAINER_RECTANGULAR = 'RECTANGULAR';
 
     /** @deprecated Redundant dependency */
-    const CONTAINER_NONRECTANGULAR = 'NONRECTANGULAR';
+    public const CONTAINER_NONRECTANGULAR = 'NONRECTANGULAR';
 
     /**
      * USPS size
      */
-    const SIZE_REGULAR = 'REGULAR';
+    public const SIZE_REGULAR = 'REGULAR';
 
-    const SIZE_LARGE = 'LARGE';
+    public const SIZE_LARGE = 'LARGE';
 
     /**
      * Default api revision
      *
      * @var int
      */
-    const DEFAULT_REVISION = 2;
+    public const DEFAULT_REVISION = 2;
 
     /**
      * Code of the carrier
      *
      * @var string
      */
-    const CODE = 'usps';
+    public const CODE = 'usps';
 
     /**
      * Ounces in one pound for conversion
      */
-    const OUNCES_POUND = 16;
+    public const OUNCES_POUND = 16;
 
     /**
      * Code of the carrier
@@ -76,8 +77,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_code = self::CODE;
 
     /**
-     * Weight precision
-     *
      * @var int
      */
     private static $weightPrecision = 10;
@@ -101,7 +100,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @var string
      */
-    protected $_defaultGatewayUrl = 'http://production.shippingapis.com/ShippingAPI.dll';
+    protected $_defaultGatewayUrl = 'https://production.shippingapis.com/ShippingAPI.dll';
 
     /**
      * Container types that could be customized for USPS carrier
@@ -111,7 +110,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_customizableContainerTypes = ['VARIABLE', 'RECTANGULAR', 'NONRECTANGULAR'];
 
     /**
-     * Carrier helper
+     * The carrier helper
      *
      * @var \Magento\Shipping\Helper\Carrier
      */
@@ -130,7 +129,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_httpClientFactory;
 
     /**
-     * @inheritdoc
+     * @var string[]
      */
     protected $_debugReplacePrivateDataKeys = [
         'USERID'
@@ -178,6 +177,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param array $data
      * @param AsyncClientInterface|null $httpClient
      * @param ProxyDeferredFactory|null $proxyDeferredFactory
+     * @param DataHelper|null $dataHelper
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -202,7 +202,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
         array $data = [],
         ?AsyncClientInterface $httpClient = null,
-        ?ProxyDeferredFactory $proxyDeferredFactory = null
+        ?ProxyDeferredFactory $proxyDeferredFactory = null,
+        ?DataHelper $dataHelper = null
     ) {
         $this->_carrierHelper = $carrierHelper;
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -228,6 +229,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $this->httpClient = $httpClient ?? ObjectManager::getInstance()->get(AsyncClientInterface::class);
         $this->proxyDeferredFactory = $proxyDeferredFactory
             ?? ObjectManager::getInstance()->get(ProxyDeferredFactory::class);
+        $this->dataHelper = $dataHelper ?? ObjectManager::getInstance()->get(DataHelper::class);
     }
 
     /**
@@ -377,14 +379,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $r->setDestPostal($request->getDestPostcode());
         }
 
-        $weight = $this->getTotalNumOfBoxes($request->getPackageWeight());
-        $r->setWeightPounds(floor($weight));
-        $ounces = ($weight - floor($weight)) * self::OUNCES_POUND;
-        $r->setWeightOunces(sprintf('%.' . self::$weightPrecision . 'f', $ounces));
         if ($request->getFreeMethodWeight() != $request->getPackageWeight()) {
             $r->setFreeMethodWeight($request->getFreeMethodWeight());
         }
 
+        $r->setPackages($this->createPackages((float) $request->getPackageWeight(), (array) $request->getPackages()));
+        $r->setWeightPounds(floor($request->getPackageWeight()));
+        $ounces = ($request->getPackageWeight() - floor($request->getPackageWeight())) * self::OUNCES_POUND;
+        $r->setWeightOunces(sprintf('%.' . self::$weightPrecision . 'f', $ounces));
         $r->setValue($request->getPackageValue());
         $r->setValueWithDiscount($request->getPackageValueWithDiscount());
 
@@ -393,6 +395,39 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $this->setRawRequest($r);
 
         return $this;
+    }
+    /**
+     * Get final price for shipping method with handling fee per package
+     *
+     * @param float $cost
+     * @param string $handlingType
+     * @param float $handlingFee
+     * @return float
+     */
+    protected function _getPerpackagePrice($cost, $handlingType, $handlingFee)
+    {
+        if ($handlingType == AbstractCarrier::HANDLING_TYPE_PERCENT) {
+            return $cost + $cost * $this->_numBoxes * $handlingFee / 100;
+        }
+
+        return $cost + $this->_numBoxes * $handlingFee;
+    }
+
+    /**
+     * Get final price for shipping method with handling fee per order
+     *
+     * @param float $cost
+     * @param string $handlingType
+     * @param float $handlingFee
+     * @return float
+     */
+    protected function _getPerorderPrice($cost, $handlingType, $handlingFee)
+    {
+        if ($handlingType == self::HANDLING_TYPE_PERCENT) {
+            return $cost + $cost * $handlingFee / 100;
+        }
+
+        return $cost + $handlingFee;
     }
 
     /**
@@ -470,42 +505,47 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             // according to usps v4 documentation
             $xml->addChild('Revision', '2');
 
-            $package = $xml->addChild('Package');
-            $package->addAttribute('ID', 0);
-            $service = $this->getCode('service_to_code', $r->getService());
-            if (!$service) {
-                $service = $r->getService();
-            }
-
-            if (strpos($r->getContainer(), 'FLAT RATE ENVELOPE') !== false ||
-                strpos($r->getContainer(), 'FLAT RATE BOX') !== false
-            ) {
-                $service = 'Priority';
-            }
-
-            $package->addChild('Service', $service);
-
-            // no matter Letter, Flat or Parcel, use Parcel
-            if ($r->getService() == 'FIRST CLASS' || $r->getService() == 'FIRST CLASS HFP COMMERCIAL') {
-                $package->addChild('FirstClassMailType', 'PARCEL');
-            }
-            $package->addChild('ZipOrigination', $r->getOrigPostal());
-            //only 5 chars available
-            $package->addChild('ZipDestination', substr($r->getDestPostal(), 0, 5));
-            $package->addChild('Pounds', $r->getWeightPounds());
-            $package->addChild('Ounces', $r->getWeightOunces());
-            // Because some methods don't accept VARIABLE and (NON)RECTANGULAR containers
-            $package->addChild('Container', $r->getContainer());
-            $package->addChild('Size', $r->getSize());
-            if ($r->getSize() == 'LARGE') {
-                $package->addChild('Width', $r->getWidth());
-                $package->addChild('Length', $r->getLength());
-                $package->addChild('Height', $r->getHeight());
-                if ($r->getContainer() == 'NONRECTANGULAR' || $r->getContainer() == 'VARIABLE') {
-                    $package->addChild('Girth', $r->getGirth());
+            foreach ($r->getPackages() as $key => $packageData) {
+                $package = $xml->addChild('Package');
+                $package->addAttribute('ID', $key);
+                $service = $this->getCode('service_to_code', $r->getService());
+                if (!$service) {
+                    $service = $r->getService();
                 }
+
+                if ($r->getContainer() !== null && (strpos($r->getContainer(), 'FLAT RATE ENVELOPE') !== false ||
+                        strpos($r->getContainer(), 'FLAT RATE BOX') !== false)
+                ) {
+                    $service = 'Priority';
+                }
+
+                $package->addChild('Service', $service);
+
+                // no matter Letter, Flat or Parcel, use Parcel
+                if ($r->getService() == 'FIRST CLASS' || $r->getService() == 'FIRST CLASS HFP COMMERCIAL') {
+                    $package->addChild('FirstClassMailType', 'PARCEL');
+                }
+                $package->addChild('ZipOrigination', $r->getOrigPostal());
+                //only 5 chars available
+                $package->addChild(
+                    'ZipDestination',
+                    is_string($r->getDestPostal()) ? substr($r->getDestPostal(), 0, 5) : ''
+                );
+                $package->addChild('Pounds', $packageData['weight_pounds']);
+                $package->addChild('Ounces', $packageData['weight_ounces']);
+                // Because some methods don't accept VARIABLE and (NON)RECTANGULAR containers
+                $package->addChild('Container', $r->getContainer());
+                $package->addChild('Size', $r->getSize());
+                if ($r->getSize() == 'LARGE') {
+                    $package->addChild('Width', $r->getWidth());
+                    $package->addChild('Length', $r->getLength());
+                    $package->addChild('Height', $r->getHeight());
+                    if ($r->getContainer() == 'NONRECTANGULAR' || $r->getContainer() == 'VARIABLE') {
+                        $package->addChild('Girth', $r->getGirth());
+                    }
+                }
+                $package->addChild('Machinable', $r->getMachinable());
             }
-            $package->addChild('Machinable', $r->getMachinable());
 
             $api = 'RateV4';
         } else {
@@ -516,32 +556,34 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             // according to usps v4 documentation
             $xml->addChild('Revision', '2');
 
-            $package = $xml->addChild('Package');
-            $package->addAttribute('ID', 0);
-            $package->addChild('Pounds', $r->getWeightPounds());
-            $package->addChild('Ounces', $r->getWeightOunces());
-            $package->addChild('MailType', 'All');
-            $package->addChild('ValueOfContents', $r->getValue());
-            $package->addChild('Country', $r->getDestCountryName());
-            $package->addChild('Container', $r->getContainer());
-            $package->addChild('Size', $r->getSize());
-            $width = $length = $height = $girth = '';
-            if ($r->getSize() == 'LARGE') {
-                $width = $r->getWidth();
-                $length = $r->getLength();
-                $height = $r->getHeight();
-                if ($r->getContainer() == 'NONRECTANGULAR') {
-                    $girth = $r->getGirth();
+            foreach ($r->getPackages() as $key => $packageData) {
+                $package = $xml->addChild('Package');
+                $package->addAttribute('ID', $key);
+                $package->addChild('Pounds', $packageData['weight_pounds']);
+                $package->addChild('Ounces', $packageData['weight_ounces']);
+                $package->addChild('MailType', 'All');
+                $package->addChild('ValueOfContents', $r->getValue());
+                $package->addChild('Country', $r->getDestCountryName());
+                $package->addChild('Container', $r->getContainer());
+                $package->addChild('Size', $r->getSize());
+                $width = $length = $height = $girth = '';
+                if ($r->getSize() == 'LARGE') {
+                    $width = $r->getWidth();
+                    $length = $r->getLength();
+                    $height = $r->getHeight();
+                    if ($r->getContainer() == 'NONRECTANGULAR') {
+                        $girth = $r->getGirth();
+                    }
                 }
-            }
-            $package->addChild('Width', $width);
-            $package->addChild('Length', $length);
-            $package->addChild('Height', $height);
-            $package->addChild('Girth', $girth);
+                $package->addChild('Width', $width);
+                $package->addChild('Length', $length);
+                $package->addChild('Height', $height);
+                $package->addChild('Girth', $girth);
 
-            $package->addChild('OriginZip', $r->getOrigPostal());
-            $package->addChild('AcceptanceDateTime', date('c'));
-            $package->addChild('DestinationPostalCode', $r->getDestPostal());
+                $package->addChild('OriginZip', $r->getOrigPostal());
+                $package->addChild('AcceptanceDateTime', date('c'));
+                $package->addChild('DestinationPostalCode', $r->getDestPostal());
+            }
 
             $api = 'IntlRateV2';
         }
@@ -596,12 +638,16 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @link http://www.usps.com/webtools/htm/Rate-Calculators-v2-3.htm
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
     protected function _parseXmlResponse($response)
     {
         $r = $this->_rawRequest;
+        $allowedMethods = explode(',', $this->getConfigData('allowed_methods') ?? '');
+        $serviceCodeToActualNameMap = [];
+        $isUS = $this->_isUSCountry($r->getDestCountryId());
         $costArr = [];
-        $priceArr = [];
+
         if (strlen(trim($response)) > 0 && strpos(trim($response), '<?xml') === 0) {
             if (strpos($response, '<?xml version="1.0"?>') !== false) {
                 $response = str_replace(
@@ -613,75 +659,63 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $xml = $this->parseXml($response);
 
             if (is_object($xml) && is_object($xml->Package)) {
-                $allowedMethods = explode(',', $this->getConfigData('allowed_methods'));
-                $serviceCodeToActualNameMap = [];
-                $isUS = $this->_isUSCountry($r->getDestCountryId());
+                foreach ($xml->Package as $package) {
+                    if ($isUS && is_object($package->Postage)) {
+                        /**
+                         * US Rates
+                         */
+                        foreach ($package->Postage as $postage) {
+                            $serviceName = $this->_filterServiceName((string)$postage->MailService);
+                            $serviceCode = $this->getCode('method_to_code', $serviceName)
+                                ?: (string) $postage->attributes()->CLASSID;
 
-                if ($isUS && is_object($xml->Package->Postage)) {
-                    /**
-                     * US Rates
-                     */
-                    foreach ($xml->Package->Postage as $postage) {
-                        $serviceName = $this->_filterServiceName((string)$postage->MailService);
-                        $_serviceCode = $this->getCode('method_to_code', $serviceName);
-                        $serviceCode = $_serviceCode ? $_serviceCode : (string)$postage->attributes()->CLASSID;
-                        $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
-                        if (in_array($serviceCode, $allowedMethods)) {
-                            $costArr[$serviceCode] = (string)$postage->Rate;
-                            $priceArr[$serviceCode] = $this->getMethodPrice(
-                                (string)$postage->Rate,
-                                $serviceCode
-                            );
+                            $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
+                            if (in_array($serviceCode, $allowedMethods)) {
+                                $costArr[$serviceCode] = isset($costArr[$serviceCode])
+                                    ? $costArr[$serviceCode] + (float) $postage->Rate
+                                    : (float) $postage->Rate;
+                            }
+                        }
+                    } elseif (!$isUS && is_object($package->Service)) {
+                        /*
+                         * International Rates
+                         */
+                        foreach ($package->Service as $service) {
+                            $serviceName = $this->_filterServiceName((string)$service->SvcDescription);
+                            $serviceCode = 'INT_' . $service->attributes()->ID;
+
+                            $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
+                            if ($this->isServiceAvailable($service) && in_array($serviceCode, $allowedMethods)) {
+                                $costArr[$serviceCode] = isset($costArr[$serviceCode])
+                                    ? $costArr[$serviceCode] + (float) $service->Postage
+                                    : (float) $service->Postage;
+                            }
                         }
                     }
-                    asort($priceArr);
-                } elseif (!$isUS && is_object($xml->Package->Service)) {
-                    /*
-                     * International Rates
-                     */
-                    foreach ($xml->Package->Service as $service) {
-                        $serviceName = $this->_filterServiceName((string)$service->SvcDescription);
-                        $serviceCode = 'INT_' . (string)$service->attributes()->ID;
-                        $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
-                        if (!$this->isServiceAvailable($service)) {
-                            continue;
-                        }
-                        if (in_array($serviceCode, $allowedMethods)) {
-                            $costArr[$serviceCode] = (string)$service->Postage;
-                            $priceArr[$serviceCode] = $this->getMethodPrice(
-                                (string)$service->Postage,
-                                $serviceCode
-                            );
-                        }
-                    }
-                    asort($priceArr);
                 }
             }
         }
 
+        uasort($costArr, function ($previous, $next) {
+            return ($previous <= $next) ? -1 : 1;
+        });
+
         $result = $this->_rateFactory->create();
-        if (empty($priceArr)) {
+        if (empty($costArr)) {
             $error = $this->_rateErrorFactory->create();
             $error->setCarrier('usps');
             $error->setCarrierTitle($this->getConfigData('title'));
             $error->setErrorMessage($this->getConfigData('specificerrmsg'));
             $result->append($error);
         } else {
-            foreach ($priceArr as $method => $price) {
+            foreach ($costArr as $method => $cost) {
                 $rate = $this->_rateMethodFactory->create();
                 $rate->setCarrier('usps');
                 $rate->setCarrierTitle($this->getConfigData('title'));
                 $rate->setMethod($method);
-                $rate->setMethodTitle(
-                    isset(
-                        $serviceCodeToActualNameMap[$method]
-                    ) ? $serviceCodeToActualNameMap[$method] : $this->getCode(
-                        'method',
-                        $method
-                    )
-                );
+                $rate->setMethodTitle($serviceCodeToActualNameMap[$method] ?? $this->getCode('method', $method));
                 $rate->setCost($costArr[$method]);
-                $rate->setPrice($price);
+                $rate->setPrice($this->getMethodPrice($cost, $method));
                 $result->append($rate);
             }
         }
@@ -1190,11 +1224,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 }
             }
         }
-        if (empty($statuses)) {
-            $statuses = __('Empty response');
-        }
 
-        return $statuses;
+        return $statuses ?: __('Empty response');
     }
 
     /**
@@ -1204,7 +1235,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getAllowedMethods()
     {
-        $allowed = explode(',', $this->getConfigData('allowed_methods'));
+        $allowed = explode(',', $this->getConfigData('allowed_methods') ?? '');
         $arr = [];
         foreach ($allowed as $k) {
             $arr[$k] = $this->getCode('method', $k);
@@ -1493,7 +1524,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $packageWeight = $request->getPackageWeight();
         if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
             $packageWeight = round(
-                $this->_carrierHelper->convertMeasureWeight(
+                (float) $this->_carrierHelper->convertMeasureWeight(
                     (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
                     \Zend_Measure_Weight::OUNCE
@@ -1587,7 +1618,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $packageWeight = $request->getPackageWeight();
         if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
             $packageWeight = round(
-                $this->_carrierHelper->convertMeasureWeight(
+                (float) $this->_carrierHelper->convertMeasureWeight(
                     (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
                     \Zend_Measure_Weight::OUNCE
@@ -1680,21 +1711,21 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
         if ($packageParams->getDimensionUnits() != \Zend_Measure_Length::INCH) {
             $length = round(
-                $this->_carrierHelper->convertMeasureDimension(
+                (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getLength(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
             );
             $width = round(
-                $this->_carrierHelper->convertMeasureDimension(
+                (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getWidth(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
             );
             $height = round(
-                $this->_carrierHelper->convertMeasureDimension(
+                (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getHeight(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
@@ -1703,7 +1734,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
         if ($packageParams->getGirthDimensionUnits() != \Zend_Measure_Length::INCH) {
             $girth = round(
-                $this->_carrierHelper->convertMeasureDimension(
+                (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getGirth(),
                     $packageParams->getGirthDimensionUnits(),
                     \Zend_Measure_Length::INCH
@@ -1977,15 +2008,15 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $result->setErrors($debugData['result']['error']);
             } else {
                 if ($recipientUSCountry && $service == 'Priority Express') {
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    // phpcs:disable Magento2.Functions.DiscouragedFunction
                     $labelContent = base64_decode((string)$response->EMLabel);
                     $trackingNumber = (string)$response->EMConfirmationNumber;
                 } elseif ($recipientUSCountry) {
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    // phpcs:disable Magento2.Functions.DiscouragedFunction
                     $labelContent = base64_decode((string)$response->SignatureConfirmationLabel);
                     $trackingNumber = (string)$response->SignatureConfirmationNumber;
                 } else {
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    // phpcs:disable Magento2.Functions.DiscouragedFunction
                     $labelContent = base64_decode((string)$response->LabelImage);
                     $trackingNumber = (string)$response->BarcodeNumber;
                 }
@@ -2064,8 +2095,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function isGirthAllowed($countyDest = null, $carrierMethodCode = null)
     {
-        return $this->_isUSCountry($countyDest)
-            && $this->getDataHelper()->displayGirthValue($carrierMethodCode) ? false : true;
+        return !($this->_isUSCountry($countyDest) && $this->dataHelper->displayGirthValue($carrierMethodCode));
     }
 
     /**
@@ -2105,14 +2135,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $zip4 = '';
         $zip5 = '';
         $zip = [$zipString];
-        if (preg_match('/[\\d\\w]{5}\\-[\\d\\w]{4}/', $zipString) != 0) {
+        if ($zipString !== null && preg_match('/[\\d\\w]{5}\\-[\\d\\w]{4}/', $zipString) != 0) {
             $zip = explode('-', $zipString);
         }
         $count = count($zip);
         for ($i = 0; $i < $count; ++$i) {
-            if (strlen($zip[$i]) == 5) {
+            if (strlen($zip[$i] ?? '') == 5) {
                 $zip5 = $zip[$i];
-            } elseif (strlen($zip[$i]) == 4) {
+            } elseif (strlen($zip[$i] ?? '') == 4) {
                 $zip4 = $zip[$i];
             }
         }
@@ -2180,17 +2210,30 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     }
 
     /**
-     * Gets Data helper object
+     * Creates packages for rate request.
      *
-     * @return DataHelper
-     * @deprecated 100.2.0
+     * @param float $totalWeight
+     * @param array $packages
+     * @return array
      */
-    private function getDataHelper()
+    private function createPackages(float $totalWeight, array $packages): array
     {
-        if (!$this->dataHelper) {
-            $this->dataHelper = ObjectManager::getInstance()->get(DataHelper::class);
+        if (empty($packages)) {
+            $dividedWeight = $this->getTotalNumOfBoxes($totalWeight);
+            for ($i=0; $i < $this->_numBoxes; $i++) {
+                $packages[$i]['weight_pounds'] = floor($dividedWeight);
+                $ounces = ($dividedWeight - floor($dividedWeight)) * self::OUNCES_POUND;
+                $packages[$i]['weight_ounces'] = sprintf('%.' . self::$weightPrecision . 'f', $ounces);
+            }
+        } else {
+            foreach ($packages as $key => $package) {
+                $packages[$key]['weight_pounds'] = floor($package['weight']);
+                $ounces = ($package['weight'] - floor($package['weight'])) * self::OUNCES_POUND;
+                $packages[$key]['weight_ounces'] = sprintf('%.' . self::$weightPrecision . 'f', $ounces);
+            }
         }
+        $this->_numBoxes = count($packages);
 
-        return $this->dataHelper;
+        return $packages;
     }
 }

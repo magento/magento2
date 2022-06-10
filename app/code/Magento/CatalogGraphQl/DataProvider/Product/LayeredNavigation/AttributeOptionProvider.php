@@ -63,6 +63,7 @@ class AttributeOptionProvider
                     'attribute_id' => 'a.attribute_id',
                     'attribute_code' => 'a.attribute_code',
                     'attribute_label' => 'a.frontend_label',
+                    'position' => 'attribute_configuration.position'
                 ]
             )
             ->joinLeft(
@@ -71,6 +72,11 @@ class AttributeOptionProvider
                 [
                     'attribute_store_label' => 'attribute_label.value',
                 ]
+            )
+            ->joinLeft(
+                ['attribute_configuration' => $this->resourceConnection->getTableName('catalog_eav_attribute')],
+                'a.attribute_id = attribute_configuration.attribute_id',
+                []
             )
             ->joinLeft(
                 ['options' => $this->resourceConnection->getTableName('eav_attribute_option')],
@@ -131,6 +137,7 @@ class AttributeOptionProvider
                     'attribute_code' => $option['attribute_code'],
                     'attribute_label' => $option['attribute_store_label']
                         ? $option['attribute_store_label'] : $option['attribute_label'],
+                    'position' => $option['position'],
                     'options' => [],
                 ];
             }

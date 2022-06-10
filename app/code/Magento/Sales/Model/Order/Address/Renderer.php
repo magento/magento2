@@ -13,9 +13,11 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Sales\Model\Order\Address;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Renderer used for formatting an order address
+ *
  * @api
  * @since 100.0.2
  */
@@ -37,20 +39,26 @@ class Renderer
     private $scopeConfig;
 
     /**
-     * Constructor
-     *
+     * @var StoreManagerInterface|null
+     */
+    private $storeManager;
+
+    /**
      * @param AddressConfig $addressConfig
      * @param EventManager $eventManager
      * @param ScopeConfigInterface|null $scopeConfig
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         AddressConfig $addressConfig,
         EventManager $eventManager,
-        ?ScopeConfigInterface $scopeConfig = null
+        ?ScopeConfigInterface $scopeConfig = null,
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->addressConfig = $addressConfig;
         $this->eventManager = $eventManager;
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -62,15 +70,15 @@ class Renderer
      */
     public function format(Address $address, $type)
     {
-        $storeId = $address->getOrder()->getStoreId();
-        $this->addressConfig->setStore($storeId);
+        $orderStore = $address->getOrder()->getStore();
+        $this->storeManager->setCurrentStore($orderStore);
         $formatType = $this->addressConfig->getFormatByCode($type);
         if (!$formatType || !$formatType->getRenderer()) {
             return null;
         }
         $this->eventManager->dispatch('customer_address_format', ['type' => $formatType, 'address' => $address]);
         $addressData = $address->getData();
-        $addressData['locale'] = $this->getLocaleByStoreId((int) $storeId);
+        $addressData['locale'] = $this->getLocaleByStoreId((int) $orderStore->getId());
 
         return $formatType->getRenderer()->renderArray($addressData);
     }

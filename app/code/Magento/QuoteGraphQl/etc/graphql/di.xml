@@ -10,11 +10,53 @@
                 type="Magento\QuoteGraphQl\Model\Cart\SetShippingAddressesOnCart"/>
     <preference for="Magento\QuoteGraphQl\Model\Cart\SetShippingMethodsOnCartInterface"
                 type="Magento\QuoteGraphQl\Model\Cart\SetShippingMethodsOnCart"/>
+    <preference for="Magento\QuoteGraphQl\Model\Cart\MergeCarts\CartQuantityValidatorInterface"
+                type="Magento\QuoteGraphQl\Model\Cart\MergeCarts\CartQuantityValidator"/>
     <type name="Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder">
         <arguments>
             <argument name="providers" xsi:type="array">
                 <item name="quantity" xsi:type="object">Magento\QuoteGraphQl\Model\Cart\BuyRequest\QuantityDataProvider</item>
                 <item name="customizable_options" xsi:type="object">Magento\QuoteGraphQl\Model\Cart\BuyRequest\CustomizableOptionsDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Config">
+        <plugin name="append_requested_graphql_attributes" type="Magento\QuoteGraphQl\Plugin\ProductAttributesExtender"/>
+    </type>
+    <type name="Magento\Framework\GraphQl\Query\ResolverInterface">
+        <plugin name="reset-totals" type="Magento\QuoteGraphQl\Plugin\ResetStoredTotalsBeforeTopResolver" sortOrder="1"/>
+    </type>
+    <type name="Magento\QuoteGraphQl\Model\Cart\TotalsCollector">
+        <arguments>
+            <argument name="quoteTotalsCollector" xsi:type="object">Magento\Quote\Model\Quote\TotalsCollector\Proxy</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\QuoteGraphQl\Helper\Error\PlaceOrderMessageFormatter" type="Magento\GraphQl\Helper\Error\AggregateExceptionMessageFormatter">
+        <arguments>
+            <argument name="messageFormatters" xsi:type="array">
+                <item name="graphql" xsi:type="object">Magento\GraphQl\Helper\Error\MessageFormatters\GraphQlExceptionMessageFormatter</item>
+                <item name="no_such_entity" xsi:type="object">Magento\GraphQl\Helper\Error\MessageFormatters\NoSuchEntityExceptionMessageFormatter</item>
+                <item name="validation" xsi:type="object">Magento\GraphQl\Helper\Error\MessageFormatters\ValidationExceptionMessageFormatter</item>
+                <item name="payment" xsi:type="object">Magento\GraphQl\Helper\Error\MessageFormatters\PaymentExceptionMessageFormatter</item>
+                <item name="payment_gateway_command" xsi:type="object">Magento\PaymentGraphQl\Helper\Error\MessageFormatters\GatewayCommandExceptionMessageFormatter</item>
+                <item name="payment_gateway_http_client" xsi:type="object">Magento\PaymentGraphQl\Helper\Error\MessageFormatters\GatewayHttpClientExceptionMessageFormatter</item>
+                <item name="stock_state" xsi:type="object">Magento\CatalogInventoryGraphQl\Helper\Error\MessageFormatters\StockStateExceptionMessageFormatter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\PlaceOrder">
+        <arguments>
+            <argument name="errorMessageFormatter" xsi:type="object">Magento\QuoteGraphQl\Helper\Error\PlaceOrderMessageFormatter</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="CartItemErrorType" xsi:type="array">
+                    <item name="undefined" xsi:type="string">0</item>
+                    <item name="item_qty" xsi:type="string">1</item>
+                    <item name="item_increment" xsi:type="string">2</item>
+                </item>
             </argument>
         </arguments>
     </type>

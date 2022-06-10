@@ -11,13 +11,15 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogImportExport\Model\Import\ProductTestBase;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
  *
  * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
@@ -25,10 +27,7 @@ use Magento\ImportExport\Model\Import;
 class ProductCategoriesTest extends ProductTestBase
 {
     /**
-     * @magentoAppArea adminhtml
      * @dataProvider categoryTestDataProvider
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
      */
     public function testProductCategories($fixture, $separator)
     {
@@ -74,9 +73,6 @@ class ProductCategoriesTest extends ProductTestBase
     }
 
     /**
-     * @magentoAppArea adminhtml
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoDataFixture Magento/Catalog/_files/category.php
      */
@@ -149,9 +145,7 @@ class ProductCategoriesTest extends ProductTestBase
     }
 
     /**
-     * @magentoAppArea adminhtml
      * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/CatalogImportExport/_files/update_category_duplicates.php
      */
     public function testProductDuplicateCategories()
@@ -210,5 +204,25 @@ class ProductCategoriesTest extends ProductTestBase
         $collection = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
         $collection->addNameToResult()->load();
         return $collection->getItemByColumnValue('name', $categoryName);
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     */
+    public function testCategoryNameValidation()
+    {
+        $csvFixture = 'import_categories_with_long_names.csv';
+        $pathToFile = __DIR__ . '/../_files/' . $csvFixture;
+        $filesystem = Bootstrap::getObjectManager()->create(Filesystem::class);
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            Csv::class,
+            ['file' => $pathToFile, 'directory' => $directory]
+        );
+        $errors = $this->_model->setSource($source)->setParameters(
+            ['behavior' => Import::BEHAVIOR_ADD_UPDATE, 'entity' => 'catalog_product']
+        )->validateData();
+        $this->assertTrue($errors->getErrorsCount() === 1);
     }
 }

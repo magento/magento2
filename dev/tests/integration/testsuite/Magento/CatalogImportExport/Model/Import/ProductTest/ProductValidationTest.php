@@ -21,8 +21,6 @@ use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
  *
- * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
@@ -32,7 +30,6 @@ class ProductValidationTest extends ProductTestBase
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
      * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      */
     public function testValidateInvalidMultiselectValues()
     {
@@ -66,8 +63,6 @@ class ProductValidationTest extends ProductTestBase
      * @param string|null $behavior
      * @param bool $expectedResult
      * @magentoAppArea adminhtml
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
      * @dataProvider validateRowDataProvider
      */
@@ -213,7 +208,6 @@ class ProductValidationTest extends ProductTestBase
      *
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @dataProvider getEmptyLinkedData
      */
@@ -301,8 +295,6 @@ class ProductValidationTest extends ProductTestBase
      * Tests that no products imported if source file contains errors
      *
      * In this case, the second product data has an invalid attribute set.
-     *
-     * @magentoDbIsolation enabled
      */
     public function testInvalidSkuLink()
     {
@@ -351,7 +343,7 @@ class ProductValidationTest extends ProductTestBase
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * Test invalid weight
      */
     public function testProductWithInvalidWeight()
     {
@@ -380,5 +372,33 @@ class ProductValidationTest extends ProductTestBase
             "Value for 'weight' attribute contains incorrect value",
             $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
         );
+    }
+
+    /**
+     * Test validate multiselect values with custom separator
+     *
+     * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     *
+     * @return void
+     */
+    public function testValidateMultiselectValuesWithCustomSeparator(): void
+    {
+        $pathToFile = __DIR__ . './../_files/products_with_custom_multiselect_values_separator.csv';
+        $filesystem = $this->objectManager->create(Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(Csv::class, ['file' => $pathToFile, 'directory' => $directory]);
+        $params = [
+            'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+            'entity' => 'catalog_product',
+            Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR => '|||'
+        ];
+
+        $errors = $this->_model->setParameters($params)
+            ->setSource($source)
+            ->validateData();
+
+        $this->assertEmpty($errors->getAllErrors());
     }
 }

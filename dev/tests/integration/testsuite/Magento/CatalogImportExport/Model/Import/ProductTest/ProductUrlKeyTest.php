@@ -18,8 +18,7 @@ use Magento\ImportExport\Model\Import\Source\Csv;
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
  *
- * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
@@ -31,8 +30,6 @@ class ProductUrlKeyTest extends ProductTestBase
      * To reach the goal we need to not send the name column, as the url key is generated from it.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      */
     public function testImportWithoutUrlKeysAndName()
     {
@@ -67,7 +64,6 @@ class ProductUrlKeyTest extends ProductTestBase
 
     /**
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
-     * @magentoAppIsolation enabled
      * @dataProvider validateUrlKeysDataProvider
      * @param $importFile string
      * @param $expectedErrors array
@@ -136,8 +132,6 @@ class ProductUrlKeyTest extends ProductTestBase
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      */
     public function testValidateUrlKeysMultipleStores()
     {
@@ -164,8 +158,6 @@ class ProductUrlKeyTest extends ProductTestBase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      */
     public function testExistingProductWithUrlKeys()
     {
@@ -207,15 +199,13 @@ class ProductUrlKeyTest extends ProductTestBase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_wrong_url_key.php
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      */
     public function testAddUpdateProductWithInvalidUrlKeys() : void
     {
         $products = [
-            'simple1' => 'cuvée merlot-cabernet igp pays d\'oc frankrijk',
+            'simple1' => 'cuvee-merlot-cabernet-igp-pays-d-oc-frankrijk',
             'simple2' => 'normal-url',
-            'simple3' => 'some!wrong\'url'
+            'simple3' => 'some-wrong-url'
         ];
         // added by _files/products_to_import_with_invalid_url_keys.csv
         $this->importedProducts[] = 'simple3';
@@ -250,8 +240,6 @@ class ProductUrlKeyTest extends ProductTestBase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
      */
     public function testImportWithoutChangingUrlKeys()
     {
@@ -279,8 +267,6 @@ class ProductUrlKeyTest extends ProductTestBase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      */
     public function testImportWithoutUrlKeys()
     {
@@ -319,8 +305,6 @@ class ProductUrlKeyTest extends ProductTestBase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_non_latin_url_key.php
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -328,10 +312,10 @@ class ProductUrlKeyTest extends ProductTestBase
     {
         $productsCreatedByFixture = [
             'ukrainian-with-url-key' => 'nove-im-ja-pislja-importu-scho-stane-url-key',
-            'ukrainian-without-url-key' => 'новий url key після імпорту',
+            'ukrainian-without-url-key' => 'novij-url-key-pislja-importu',
         ];
         $productsImportedByCsv = [
-            'imported-ukrainian-with-url-key' => 'імпортований продукт',
+            'imported-ukrainian-with-url-key' => 'importovanij-produkt',
             'imported-ukrainian-without-url-key' => 'importovanij-produkt-bez-url-key',
         ];
         $productSkuMap = array_merge($productsCreatedByFixture, $productsImportedByCsv);
@@ -359,6 +343,44 @@ class ProductUrlKeyTest extends ProductTestBase
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         foreach ($productSkuMap as $productSku => $productUrlKey) {
+            $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
+        }
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_spaces_in_url_key.php
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testImportWithSpacesInUrlKeys()
+    {
+        $products = [
+            'simple1' => 'url-with-spaces-1',
+            'simple2' => 'url-with-spaces-2'
+        ];
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/../_files/products_to_import_with_spaces_in_url_keys.csv',
+                'directory' => $directory,
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE, 'entity' => 'catalog_product']
+        )
+            ->setSource($source)
+            ->validateData();
+
+        $this->assertEquals($errors->getErrorsCount(), 0);
+        $this->_model->importData();
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        foreach ($products as $productSku => $productUrlKey) {
             $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
         }
     }

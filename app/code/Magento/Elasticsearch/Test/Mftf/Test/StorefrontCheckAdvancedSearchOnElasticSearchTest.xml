@@ -19,6 +19,7 @@
             <group value="SearchEngineElasticsearch"/>
             <group value="configurableProduct"/>
             <group value="catalog_search"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

@@ -173,7 +173,10 @@ class Builder
         ) {
             $sql = str_replace(
                 ':field',
-                $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), $defaultValue),
+                (string) $this->_connection->getIfNullSql(
+                    $this->_connection->quoteIdentifier($argument),
+                    $defaultValue
+                ),
                 $this->stringConditionOperatorMap[$conditionOperator]
             );
             $bindValue = $condition->getBindArgumentValue();
@@ -181,7 +184,10 @@ class Builder
         } else {
             $sql = str_replace(
                 ':field',
-                $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), $defaultValue),
+                (string) $this->_connection->getIfNullSql(
+                    $this->_connection->quoteIdentifier($argument),
+                    $defaultValue
+                ),
                 $this->_conditionOperatorMap[$conditionOperator]
             );
             $bindValue = $condition->getBindArgumentValue();
