@@ -296,11 +296,18 @@ class CollectionTest extends TestCase
      * @param string $customEnd
      * @param string $config
      * @param string $configVal
+     * @param DateTime $expectedYear
      * @dataProvider secondPartDateRangeDataProvider
      * @return void
      */
-    public function testGetDateRangeSecondPart($range, $customStart, $customEnd, $config, $configVal): void
-    {
+    public function testGetDateRangeSecondPart(
+        $range,
+        $customStart,
+        $customEnd,
+        $config,
+        $configVal,
+        $expectedYear
+    ): void {
         $this->scopeConfigMock
             ->expects($this->once())
             ->method('getValue')
@@ -310,37 +317,10 @@ class CollectionTest extends TestCase
             )
             ->willReturn($configVal);
 
-        $dateStart = new \DateTime();
-        $dateStart->setTime(0, 0, 0);
-
-        switch ($range) {
-            case '1m':
-                $dateStart->setDate(
-                    (int)$dateStart->format('Y'),
-                    (int)$dateStart->format('m'),
-                    (int)$configVal
-                );
-                break;
-
-            case '1y':
-            case '2y':
-                $startMonthDay = explode(
-                    ',',
-                    $configVal
-                );
-                $startMonth = isset($startMonthDay[0]) ? (int)$startMonthDay[0] : 1;
-                $startDay = isset($startMonthDay[1]) ? (int)$startMonthDay[1] : 1;
-                $dateStart->setDate((int)$dateStart->format('Y'), $startMonth, $startDay);
-                if ($range == '2y') {
-                    $dateStart->modify('-1 year');
-                }
-                break;
-        }
-
         $result = $this->collection->getDateRange($range, $customStart, $customEnd);
         $this->assertCount(3, $result);
         $resultStartDate = $result['from'];
-        $this->assertEquals($dateStart->format('Y'), $resultStartDate->format('Y'));
+        $this->assertEquals($expectedYear, $resultStartDate->format('Y'));
     }
 
     /**
@@ -498,10 +478,14 @@ class CollectionTest extends TestCase
      */
     public function secondPartDateRangeDataProvider(): array
     {
+        $dateStart = new \DateTime();
+        $expectedYear = $dateStart->format('Y');
+        $expected2YTDYear = $expectedYear - 1;
+
         return [
-            ['1m', 1, 10, 'reports/dashboard/mtd_start', '1'],
-            ['1y', 1, 10, 'reports/dashboard/ytd_start', '1,1'],
-            ['2y', 1, 10, 'reports/dashboard/ytd_start', '1,1']
+            ['1m', 1, 10, 'reports/dashboard/mtd_start', '1', $expectedYear],
+            ['1y', 1, 10, 'reports/dashboard/ytd_start', '1,1', $expectedYear],
+            ['2y', 1, 10, 'reports/dashboard/ytd_start', '1,1', $expected2YTDYear]
         ];
     }
 
