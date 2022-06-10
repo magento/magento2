@@ -8,6 +8,7 @@ namespace Magento\SalesRule\Model\Rule\Condition;
 
 use Magento\Framework\Registry;
 use Magento\SalesRule\Model\Rule;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -22,11 +23,17 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
+     * @var \Magento\TestFramework\Fixture\DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->fixtures = DataFixtureStorageManager::getStorage();
     }
 
     /**
@@ -41,7 +48,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @param bool $expectedResult
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
-     * @magentoDataFixture Magento/SalesRule/_files/rules_category.php
+     * @magentoDataFixture Magento/Catalog/_files/category.php
+     * @magentoDataFixture Magento\SalesRule\Test\Fixture\ProductCondition as:cond11
+     * @magentoDataFixture Magento\SalesRule\Test\Fixture\ProductFoundInCartConditions as:cond1
+     * @magentoDataFixture Magento\SalesRule\Test\Fixture\Rule as:rule1
+     * @magentoDataFixtureDataProvider {"cond11":{"attribute":"category_ids","value":"333"}}
+     * @magentoDataFixtureDataProvider {"cond1":{"conditions":["$cond11$"]}}
+     * @magentoDataFixtureDataProvider {"rule1":{"discount_amount":50,"conditions":["$cond1$"]}}
      * @dataProvider validateProductConditionDataProvider
      * @magentoDbIsolation disabled
      */
@@ -52,10 +65,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)
             ->load('test_cart_with_configurable', 'reserved_order_id');
 
+        $ruleId = $this->fixtures->get('rule1')->getId();
         // Load the SalesRule looking for products in a specific category
         /** @var $rule Rule */
-        $rule = $this->objectManager->get(Registry::class)
-            ->registry('_fixture/Magento_SalesRule_Category');
+        $rule = $this->objectManager->create(Rule::class)->load($ruleId);
 
         // Prepare the parent product with the given category setting
         /** @var $product \Magento\Catalog\Model\Product */
@@ -95,7 +108,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function validateProductConditionDataProvider()
     {
-        $validCategoryId = 66;
+        $validCategoryId = 333;
         $invalidCategoryId = 2;
         return [
             [
@@ -116,15 +129,22 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * 2. Attempt to validate the sales rule against the quote and assert the output is negative.
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
-     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off.php
+     * @magentoDataFixture Magento\SalesRule\Test\Fixture\ProductCondition as:cond11
+     * @magentoDataFixture Magento\SalesRule\Test\Fixture\ProductSubselectionInCartConditions as:cond1
+     * @magentoDataFixture Magento\SalesRule\Test\Fixture\Rule as:rule1
+     * @magentoDataFixtureDataProvider {"cond11":{"attribute":"attribute_set_id","value":"4"}}
+     * @magentoDataFixtureDataProvider {"cond1":{"attribute":"qty","operator":"==","value":2,"conditions":["$cond11$"]}}
+     * @magentoDataFixtureDataProvider {"rule1":{"discount_amount":50,"conditions":["$cond1$"]}}
      */
     public function testValidateQtySalesRuleWithConfigurable()
     {
         // Load the quote that contains a child of a configurable product with quantity 1.
         $quote = $this->getQuote('test_cart_with_configurable');
 
-        // Load the SalesRule looking for products with quantity 2.
-        $rule = $this->getSalesRule('10% Off on orders with two items');
+        $ruleId = $this->fixtures->get('rule1')->getId();
+        // Load the SalesRule looking for products in a specific category
+        /** @var $rule Rule */
+        $rule = $this->objectManager->create(Rule::class)->load($ruleId);
 
         $this->assertFalse(
             $rule->validate($quote->getBillingAddress())

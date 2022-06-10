@@ -69,7 +69,7 @@ class ServiceMetadata
     protected $cache;
 
     /**
-     * @var \Magento\Webapi\Model\Config
+     * @var Config
      */
     protected $config;
 
@@ -220,7 +220,7 @@ class ServiceMetadata
      */
     public function getServiceName($interfaceName, $version, $preserveVersion = true)
     {
-        if (!preg_match(\Magento\Webapi\Model\Config::SERVICE_CLASS_PATTERN, $interfaceName, $matches)) {
+        if ($interfaceName && !preg_match(Config::SERVICE_CLASS_PATTERN, $interfaceName, $matches)) {
             $apiClassPattern = "#^(.+?)\\\\(.+?)\\\\Api\\\\(.+?)(Interface)?$#";
             preg_match($apiClassPattern, $interfaceName, $matches);
         }
@@ -232,7 +232,7 @@ class ServiceMetadata
             if ($matches[4] === 'Interface') {
                 $matches[4] = $matches[3];
             }
-            $serviceNameParts = explode('\\', trim($matches[4], '\\'));
+            $serviceNameParts = explode('\\', trim($matches[4] ?? '', '\\'));
             if ($moduleName == $serviceNameParts[0]) {
                 /** Avoid duplication of words in service name */
                 $moduleName = '';
@@ -242,11 +242,11 @@ class ServiceMetadata
             if ($preserveVersion) {
                 $serviceNameParts[] = $version;
             }
-        } elseif (preg_match(\Magento\Webapi\Model\Config::API_PATTERN, $interfaceName, $matches)) {
+        } elseif ($interfaceName && preg_match(Config::API_PATTERN, $interfaceName, $matches)) {
             $moduleNamespace = $matches[1];
             $moduleName = $matches[2];
             $moduleNamespace = ($moduleNamespace == 'Magento') ? '' : $moduleNamespace;
-            $serviceNameParts = explode('\\', trim($matches[3], '\\'));
+            $serviceNameParts = explode('\\', trim($matches[3] ?? '', '\\'));
             if ($moduleName == $serviceNameParts[0]) {
                 /** Avoid duplication of words in service name */
                 $moduleName = '';

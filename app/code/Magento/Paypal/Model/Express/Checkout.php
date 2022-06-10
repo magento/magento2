@@ -42,6 +42,7 @@ class Checkout
     public const PAYMENT_INFO_TRANSPORT_PAYER_ID = 'paypal_express_checkout_payer_id';
     public const PAYMENT_INFO_TRANSPORT_REDIRECT = 'paypal_express_checkout_redirect_required';
     public const PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT = 'paypal_ec_create_ba';
+    public const PAYMENT_INFO_FUNDING_SOURCE = 'paypal_funding_source';
 
     /**
      * Flag which says that was used PayPal Express Checkout button for checkout
