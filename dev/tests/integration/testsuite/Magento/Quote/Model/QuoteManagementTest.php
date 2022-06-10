@@ -34,6 +34,7 @@ use Psr\Log\LoggerInterface;
  *
  * @see \Magento\Quote\Model\QuoteManagement
  * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QuoteManagementTest extends TestCase
