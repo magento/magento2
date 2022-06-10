@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Declaration\Schema\Diff;
 
@@ -11,6 +12,8 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
 /**
  * DiffInterface is type of classes, that holds all information
  * that need to be changed from one installation to another.
+ *
+ * @api
  */
 interface DiffInterface
 {

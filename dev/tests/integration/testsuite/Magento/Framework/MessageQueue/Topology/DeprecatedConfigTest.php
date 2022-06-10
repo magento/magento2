@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue\Topology;
 
+use Magento\Framework\MessageQueue\DefaultValueProvider;
 use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Binding\Iterator as BindingIterator;
 
 /**
@@ -19,9 +20,15 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
+    /**
+     * @var DefaultValueProvider
+     */
+    private $defaultValueProvider;
+
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->defaultValueProvider = $this->objectManager->get(DefaultValueProvider::class);
     }
 
     public function testGetTopology()
@@ -62,10 +69,10 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
     {
         /** @var \Magento\Framework\MessageQueue\Topology\ConfigInterface $config */
         $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Topology\ConfigInterface::class);
-        $topology = $config->getExchange('overlappingDeprecatedExchange', 'amqp');
+        $topology = $config->getExchange('overlappingDeprecatedExchange', $this->defaultValueProvider->getConnection());
         $this->assertEquals('overlappingDeprecatedExchange', $topology->getName());
         $this->assertEquals('topic', $topology->getType());
-        $this->assertEquals('amqp', $topology->getConnection());
+        $this->assertEquals($this->defaultValueProvider->getConnection(), $topology->getConnection());
         $this->assertTrue($topology->isDurable());
         $this->assertFalse($topology->isAutoDelete());
         $this->assertFalse($topology->isInternal());
@@ -92,7 +99,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertIsArray($arguments);
         $this->assertCount(0, $arguments);
 
-        $bindingId = 'binding1';
+        $bindingId = 'queue--topology.config.queue--overlapping.topic.declaration';
         $this->assertArrayHasKey($bindingId, $bindings);
         $binding = $bindings[$bindingId];
         $this->assertEquals('queue', $binding->getDestinationType());
@@ -103,7 +110,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertIsArray($arguments);
         $this->assertCount(0, $arguments);
 
-        $bindingId = 'binding2';
+        $bindingId = 'queue--topology.config.queue--deprecated.config.async.string.topic';
         $this->assertArrayHasKey($bindingId, $bindings);
         $binding = $bindings[$bindingId];
         $this->assertEquals('queue', $binding->getDestinationType());

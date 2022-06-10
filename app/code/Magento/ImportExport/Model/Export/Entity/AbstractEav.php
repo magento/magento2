@@ -14,6 +14,7 @@ use Magento\Store\Model\Store;
 /**
  * Export EAV entity abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -37,8 +38,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
     protected $attributeTypes = [];
 
     /**
-     * Entity type id.
-     *
      * @var int
      */
     protected $_entityTypeId;
@@ -131,6 +130,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * @param AbstractCollection $collection
      * @return AbstractCollection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function filterEntityCollection(AbstractCollection $collection)
     {
@@ -158,7 +158,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
                             $attributeCode,
                             ['eq' => $exportFilter[$attributeCode]]
                         );
-                    } else if (is_array($exportFilter[$attributeCode])) {
+                    } elseif (is_array($exportFilter[$attributeCode])) {
                         $collection->addAttributeToFilter(
                             $attributeCode,
                             ['in' => $exportFilter[$attributeCode]]
@@ -214,6 +214,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
         }
         return $collection;
     }
+    // phpcs:enable Generic.Metrics.NestingLevel
 
     /**
      * Add not skipped attributes to select
@@ -249,12 +250,13 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
                 foreach ($attribute->getSource()->getAllOptions(false) as $option) {
                     $optionValues = is_array($option['value']) ? $option['value'] : [$option];
                     foreach ($optionValues as $innerOption) {
-                        if (strlen($innerOption['value'])) {
+                        if (isset($innerOption['value']) && strlen($innerOption['value'])) {
                             // skip ' -- Please Select -- ' option
                             $options[$innerOption['value']] = $innerOption[$index];
                         }
                     }
                 }
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\Exception $e) {
                 // ignore exceptions connected with source models
             }
