@@ -296,7 +296,7 @@ class CollectionTest extends TestCase
      * @param string $customEnd
      * @param string $config
      * @param string $configVal
-     * @param DateTime $expectedYear
+     * @param int $expectedYear
      * @dataProvider secondPartDateRangeDataProvider
      * @return void
      */
