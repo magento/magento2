@@ -1751,7 +1751,7 @@ class AccountManagementTest extends TestCase
         $this->expectException(InputException::class);
         $this->expectExceptionMessage('"resetPasswordLinkToken" is required. Enter and try again.');
 
-        $this->accountManagement->validateResetPasswordLinkToken(22, null);
+        $this->accountManagement->validateResetPasswordLinkToken(22, '');
     }
 
     /**
@@ -1850,7 +1850,7 @@ class AccountManagementTest extends TestCase
             ->getMockForAbstractClass();
 
         $dateTime = '2017-10-25 18:57:08';
-        $timestamp = '1508983028';
+        $timestamp = 1508983028;
         $dateTimeMock = $this->getMockBuilder(\DateTime::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['format', 'getTimestamp', 'setTimestamp'])
@@ -2363,7 +2363,7 @@ class AccountManagementTest extends TestCase
     private function prepareDateTimeFactory(): string
     {
         $dateTime = '2017-10-25 18:57:08';
-        $timestamp = '1508983028';
+        $timestamp = 1508983028;
         $dateTimeMock = $this->createMock(\DateTime::class);
         $dateTimeMock->expects($this->any())
             ->method('format')

@@ -66,7 +66,7 @@
                 </field>
                 <field id="error_email" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Error Email Recipient</label>
-                    <validate>validate-email</validate>
+                    <validate>validate-emails</validate>
                     <depends>
                         <field id="enabled">1</field>
                     </depends>

@@ -16,11 +16,9 @@
             <description value="Print Order from Guest on Frontend"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-28494"/>
-            <skip>
-                <issueId value="MQE-2834" />
-            </skip>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
@@ -121,7 +119,7 @@
             </actionGroup>
             <grabTextFrom selector="{{AdminConfigurableProductFormSection.currentAttribute}}" stepKey="grabAttribute"/>
             <assertNotEmpty stepKey="assertNotEmpty">
-    			<actualResult type="const">$grabAttribute</actualResult>
+                <actualResult type="const">$grabAttribute</actualResult>
             </assertNotEmpty>
 
             <!-- Create bundle Product -->
@@ -156,7 +154,7 @@
             </actionGroup>
             <grabTextFrom selector="{{AdminProductFormBundleSection.currentBundleOption}}" stepKey="grabBundleOption"/>
             <assertNotEmpty stepKey="assertBundleOptionNotEmpty">
-        		<actualResult type="const">$grabBundleOption</actualResult>
+                <actualResult type="const">$grabBundleOption</actualResult>
             </assertNotEmpty>
 
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductGridFilters"/>
@@ -246,9 +244,11 @@
 
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
 
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
+        <comment userInput="BIC workaround" stepKey="getOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
         <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
-			<actualResult type="const">$getOrderId</actualResult>
+            <actualResult type="const">$orderNumber</actualResult>
         </assertNotEmpty>
 
         <!-- Find the Order on frontend > Navigate to: Orders and Returns -->
@@ -257,7 +257,7 @@
 
         <!-- Fill the form with correspondent Order data -->
         <actionGroup ref="StorefrontFillOrdersAndReturnsFormActionGroup" stepKey="fillOrder">
-            <argument name="orderNumber" value="{$getOrderId}"/>
+            <argument name="orderNumber" value="{$orderNumber}"/>
             <argument name="customer" value="$createCustomer$"/>
         </actionGroup>
 
@@ -267,12 +267,17 @@
 
         <!--  Click on the "Print Order" button -->
         <click selector="{{StorefrontGuestOrderViewSection.printOrder}}" stepKey="printOrder"/>
-        <waitForPageLoad stepKey="waitForPrintWindowToOpen" />
-        <switchToWindow stepKey="switchToWindow"/>
-        <waitForElement selector="{{SalesOrderPrintSection.isOrderPrintPage}}" stepKey="waitForPrintTabToOpen"/>
-        <switchToNextTab stepKey="switchToTab"/>
-        <waitForPageLoad stepKey="waitForPrintPreviewToLoad"/>
-        <seeInCurrentUrl url="sales/guest/print/order_id/" stepKey="seePrintPage"/>
+        <helper class="Magento\Sales\Test\Mftf\Helper\SalesHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
+            <argument name="expectedUrl">sales/guest/print/order_id/</argument>
+            <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
+        </helper>
+
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintWindowToOpen" />
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToWindow"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintTabToOpen"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToTab"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintPreviewToLoad"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="seePrintPage"/>
 
         <!-- AssertSalesPrintOrderProducts -->
         <see userInput="$createBundleProduct.name$" selector="{{StorefrontOrderDetailsSection.productNameCell}}" stepKey="seeBundleProduct"/>

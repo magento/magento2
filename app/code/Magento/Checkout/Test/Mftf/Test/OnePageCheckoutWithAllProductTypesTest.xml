@@ -191,10 +191,11 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
 
         <!-- Check order summary in checkout -->
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
-        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced" />
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="waitForPaymentSectionLoaded"/>
+        <comment userInput="BIC workaround" stepKey="clickPlaceOrderButton"/>
+        <comment userInput="BIC workaround" stepKey="orderIsSuccessfullyPlaced"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
         <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="openOrderViewPage"/>
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
@@ -202,12 +203,12 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open created order -->
+        <comment userInput="BIC workaround" stepKey="goToOrders"/>
+        <comment userInput="BIC workaround" stepKey="filterOrderGridById"/>
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openAdminOrderViewPage">
-            <argument name="entityId" value="$grabOrderId"/>
+            <argument name="entityId" value="{$grabOrderId}"/>
         </actionGroup>
 
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToOrders"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterOrderGridById"/>
         <!-- Assert that addresses on order page the same -->
         <grabTextFrom selector="{{AdminShipmentAddressInformationSection.shippingAddress}}" stepKey="shippingAddressOrderPage"/>
         <grabTextFrom selector="{{AdminShipmentAddressInformationSection.billingAddress}}" stepKey="billingAddressOrderPage"/>

@@ -27,9 +27,11 @@
         <selectOption selector="{{AdminNewWidgetSection.displayOnByIndex(index)}}" userInput="{{widget.display_on}}" stepKey="setDisplayOn"/>
         <waitForPageLoad stepKey="waitForDisplayOnChangesApplied"/>
         <selectOption selector="{{AdminNewWidgetSection.layoutByIndex(index)}}" userInput="{{widget.page}}" stepKey="selectPage"/>
+        <waitForPageLoad stepKey="waitForPageChangesApplied"/>
         <selectOption selector="{{AdminNewWidgetSection.templateByIndex(index)}}" userInput="{{widget.template}}" stepKey="selectTemplate"/>
-        <scrollTo selector="{{AdminNewWidgetSection.containerByIndex(index)}}" stepKey="scrollToSelectContainerElement"/>
-        <waitForPageLoad stepKey="waitForScroll"/>
+        <waitForPageLoad stepKey="waitForTemplateChangesApplied"/>
+        <comment userInput="BIC workaround" stepKey="scrollToSelectContainerElement"/>
+        <comment userInput="BIC workaround" stepKey="waitForScroll"/>
         <selectOption selector="{{AdminNewWidgetSection.containerByIndex(index)}}" userInput="{{widget.container}}" stepKey="setContainer"/>
         <waitForPageLoad stepKey="waitForContainerChangesApplied"/>
     </actionGroup>

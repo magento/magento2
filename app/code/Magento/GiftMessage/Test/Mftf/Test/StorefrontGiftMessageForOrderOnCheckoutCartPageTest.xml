@@ -14,6 +14,7 @@
             <title value="Gift Message for order present on checkout cart page."/>
             <description value="Gift Message for order present on checkout cart page."/>
             <severity value="MAJOR"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set sales/gift_options/allow_order 1" stepKey="enableGiftMessageForOrder"/>

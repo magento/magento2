@@ -1,13 +1,13 @@
 <?php
 /**
- * API permissions tab template for integration activation dialog.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- *
- * @var \Magento\Integration\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi $block
+ */
+/**
+ * API permissions tab template for integration activation dialog.
  */
 
+/** @var \Magento\Integration\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi $block */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <fieldset class="admin__fieldset form-inline entry-edit">
@@ -27,18 +27,9 @@ if (!$block->isTreeEmpty()):
     $selectedJson = /* @noEscape */ $block->getSelectedResourcesJson();
     $scriptString = <<<script
         require(["jquery", "Magento_User/js/roles-tree"], function($){
-            $.widget('mage.rolesTree', $.mage.rolesTree, {
-                _checkNode: function(event) {},
-                _checkNodes: function() {
-                    this._super();
-                    this.element.jstree('disable_hotkeys').jstree('hide_checkboxes')
-                        .find('li.jstree-unchecked').hide().end().find('li.jstree-checked').attr('rel', 'disabled');
-                }
-            });
-
             $('[data-role="resource-tree"]').rolesTree({
                 'treeInitData': {$treeJson},
-                'treeInitSelectedData': {$selectedJson}
+                'checkboxVisible': false
             });
         });
 script;

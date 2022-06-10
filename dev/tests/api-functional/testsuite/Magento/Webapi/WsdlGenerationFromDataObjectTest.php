@@ -6,6 +6,8 @@
 
 namespace Magento\Webapi;
 
+use Magento\TestFramework\Authentication\OauthHelper;
+use Magento\TestFramework\Authentication\Rest\OauthClient;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -33,6 +35,39 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         parent::setUp();
     }
 
+    /**
+     * @magentoConfigFixture default_store oauth/consumer/enable_integration_as_bearer 0
+     */
+    public function testDisabledIntegrationAsBearer()
+    {
+        $wsdlUrl = $this->_getBaseWsdlUrl() . 'testModule5AllSoapAndRestV1,testModule5AllSoapAndRestV2';
+        $accessCredentials = \Magento\TestFramework\Authentication\OauthHelper::getApiAccessCredentials()['key'];
+        $connection = curl_init($wsdlUrl);
+        curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($connection, CURLOPT_HTTPHEADER, ['header' => "Authorization: Bearer " . $accessCredentials]);
+        $responseContent = curl_exec($connection);
+        $this->assertEquals(curl_getinfo($connection, CURLINFO_HTTP_CODE), 401);
+        $this->assertStringContainsString(
+            "The consumer isn't authorized to access %resources.",
+            htmlspecialchars_decode($responseContent, ENT_QUOTES)
+        );
+    }
+
+    public function testAuthenticationWithOAuth()
+    {
+        $wsdlUrl = $this->_getBaseWsdlUrl() . 'testModule5AllSoapAndRestV2';
+        $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV2";
+        $this->isSingleService = true;
+
+        $connection = curl_init($wsdlUrl);
+        curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($connection, CURLOPT_HTTPHEADER, ['header' => $this->getAuthHeader($wsdlUrl)]);
+        $responseContent = curl_exec($connection);
+        $this->assertEquals(curl_getinfo($connection, CURLINFO_HTTP_CODE), 200);
+        $wsdlContent = $this->_convertXmlToString($responseContent);
+        $this->checkAll($wsdlContent);
+    }
+
     public function testMultiServiceWsdl()
     {
         $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}"
@@ -41,12 +76,7 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         $wsdlContent = $this->_convertXmlToString($this->_getWsdlContent($wsdlUrl));
         $this->isSingleService = false;
 
-        $this->_checkTypesDeclaration($wsdlContent);
-        $this->_checkPortTypeDeclaration($wsdlContent);
-        $this->_checkBindingDeclaration($wsdlContent);
-        $this->_checkServiceDeclaration($wsdlContent);
-        $this->_checkMessagesDeclaration($wsdlContent);
-        $this->_checkFaultsDeclaration($wsdlContent);
+        $this->checkAll($wsdlContent);
     }
 
     public function testSingleServiceWsdl()
@@ -56,12 +86,7 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         $wsdlContent = $this->_convertXmlToString($this->_getWsdlContent($wsdlUrl));
         $this->isSingleService = true;
 
-        $this->_checkTypesDeclaration($wsdlContent);
-        $this->_checkPortTypeDeclaration($wsdlContent);
-        $this->_checkBindingDeclaration($wsdlContent);
-        $this->_checkServiceDeclaration($wsdlContent);
-        $this->_checkMessagesDeclaration($wsdlContent);
-        $this->_checkFaultsDeclaration($wsdlContent);
+        $this->checkAll($wsdlContent);
     }
 
     public function testNoAuthorizedServices()
@@ -71,7 +96,10 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
         $responseContent = curl_exec($connection);
         $this->assertEquals(curl_getinfo($connection, CURLINFO_HTTP_CODE), 401);
-        $this->assertStringContainsString("The consumer isn't authorized to access %resources.", $responseContent);
+        $this->assertStringContainsString(
+            "The consumer isn't authorized to access %resources.",
+            htmlspecialchars_decode($responseContent, ENT_QUOTES)
+        );
     }
 
     public function testInvalidWsdlUrlNoServices()
@@ -979,5 +1007,29 @@ WRAPPED_ERRORS_COMPLEX_TYPE;
             $wsdlContent,
             'Details wrapped errors (array of wrapped errors) complex types declaration is invalid.'
         );
+    }
+
+    private function getAuthHeader(string $url): string
+    {
+        $accessCredentials = OauthHelper::getApiAccessCredentials();
+        /** @var OauthClient $oAuthClient */
+        $oAuthClient = $accessCredentials['oauth_client'];
+        return $oAuthClient->buildOauthAuthorizationHeader(
+            $url,
+            $accessCredentials['key'],
+            $accessCredentials['secret'],
+            [],
+            'GET'
+        )[0];
+    }
+
+    private function checkAll(string $wsdlContent): void
+    {
+        $this->_checkTypesDeclaration($wsdlContent);
+        $this->_checkPortTypeDeclaration($wsdlContent);
+        $this->_checkBindingDeclaration($wsdlContent);
+        $this->_checkServiceDeclaration($wsdlContent);
+        $this->_checkMessagesDeclaration($wsdlContent);
+        $this->_checkFaultsDeclaration($wsdlContent);
     }
 }

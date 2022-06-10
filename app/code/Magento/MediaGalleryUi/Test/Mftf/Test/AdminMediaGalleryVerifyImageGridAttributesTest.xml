@@ -36,11 +36,11 @@
         </after>
 
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="image" value="ImageUpload3"/>
         </actionGroup>
 
         <actionGroup ref="AssertImageAttributesOnEnhancedMediaGalleryActionGroup" stepKey="assertImageAttributes">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="image" value="ImageUpload3"/>
         </actionGroup>
     </test>
 </tests>

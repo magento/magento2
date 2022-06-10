@@ -45,12 +45,13 @@ var config = {
             'jquery-ui-modules/tabs': 'jquery/ui-modules/widgets/tabs',
             'jquery-ui-modules/tooltip': 'jquery/ui-modules/widgets/tooltip',
             'jquery-ui-modules/widget': 'jquery/ui-modules/widget',
-            'jquery-ui-modules/timepicker': 'jquery/timepicker'
+            'jquery-ui-modules/timepicker': 'jquery/timepicker',
+            'vimeo': 'vimeo/player',
+            'vimeoWrapper': 'vimeo/vimeo-wrapper'
         }
     },
     shim: {
         'jquery/jquery-migrate': ['jquery'],
-        'jquery/jstree/jquery.hotkeys': ['jquery'],
         'mage/adminhtml/backup': ['prototype'],
         'mage/captcha': ['prototype'],
         'mage/new-gallery': ['jquery'],
@@ -58,13 +59,17 @@ var config = {
         'matchMedia': {
             'exports': 'mediaCheck'
         },
-        'magnifier/magnifier': ['jquery']
+        'magnifier/magnifier': ['jquery'],
+        'vimeo/player': {
+            'exports': 'Player'
+        }
     },
     paths: {
         'jquery/validate': 'jquery/jquery.validate',
         'jquery/file-uploader': 'jquery/fileUploader/jquery.fileuploader',
         'prototype': 'legacy-build.min',
-        'jquery/jquery-storageapi': 'jquery/jquery.storageapi.min',
+        'jquery/jquery.cookie': 'js-cookie/cookie-wrapper',
+        'jquery/jquery-storageapi': 'js-storage/storage-wrapper',
         'text': 'mage/requirejs/text',
         'domReady': 'requirejs/domReady',
         'spectrum': 'jquery/spectrum/spectrum',
@@ -75,14 +80,6 @@ var config = {
         'jquery/jquery-migrate'
     ],
     config: {
-        mixins: {
-            'jquery/jstree/jquery.jstree': {
-                'mage/backend/jstree-mixin': true
-            },
-            'jquery': {
-                'jquery/patches/jquery': true
-            }
-        },
         text: {
             'headers': {
                 'X-Requested-With': 'XMLHttpRequest'
