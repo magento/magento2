@@ -299,13 +299,8 @@ class CollectionTest extends TestCase
      * @dataProvider secondPartDateRangeDataProvider
      * @return void
      */
-    public function testGetDateRangeSecondPart(
-        $range,
-        $customStart,
-        $customEnd,
-        $config,
-        $expectedYear
-    ): void {
+    public function testGetDateRangeSecondPart($range, $customStart, $customEnd, $config, $expectedYear): void
+    {
         $this->scopeConfigMock
             ->expects($this->once())
             ->method('getValue')
