@@ -17,6 +17,7 @@
             <severity value="AVERAGE"/>
             <useCaseId value="MC-41194"/>
             <testCaseId value="MC-41325"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Enable singe store view to view ratings-->

@@ -7,6 +7,7 @@ namespace Magento\ImportExport\Model\Import;
 
 use Magento\ImportExport\Model\Import\AbstractEntity;
 
+// phpcs:disable Magento2.Classes.AbstractApi
 /**
  * Data source with columns for Magento_ImportExport
  *
@@ -83,6 +84,7 @@ abstract class AbstractSource implements \SeekableIterator
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         $row = $this->_row;
@@ -101,6 +103,7 @@ abstract class AbstractSource implements \SeekableIterator
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         $this->_key++;
@@ -127,6 +130,7 @@ abstract class AbstractSource implements \SeekableIterator
      *
      * @return int -1 if out of bounds, 0 or more otherwise
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->_key;
@@ -137,6 +141,7 @@ abstract class AbstractSource implements \SeekableIterator
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return -1 !== $this->_key;
@@ -147,6 +152,7 @@ abstract class AbstractSource implements \SeekableIterator
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->_key = -1;
@@ -161,6 +167,7 @@ abstract class AbstractSource implements \SeekableIterator
      * @return void
      * @throws \OutOfBoundsException
      */
+    #[\ReturnTypeWillChange]
     public function seek($position)
     {
         if ($position == $this->_key) {

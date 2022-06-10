@@ -6,9 +6,7 @@
 namespace Magento\Framework\View\Asset\PreProcessor;
 
 /**
- * Class FileNameResolver
- *
- * @package Magento\Framework\View\Asset\PreProcessor
+ * The filename resolver
  */
 class FileNameResolver
 {
@@ -46,7 +44,9 @@ class FileNameResolver
             if ($alternative->isExtensionSupported($extension)
                 && strpos(basename($fileName), '_') !== 0
             ) {
-                $compiledFile = substr($fileName, 0, strlen($fileName) - strlen($extension) - 1);
+                $compiledFile = $fileName !== null
+                    ? substr($fileName, 0, strlen($fileName) - strlen($extension) - 1)
+                    : '';
                 $compiledFile = $compiledFile . '.' . $name;
             }
         }

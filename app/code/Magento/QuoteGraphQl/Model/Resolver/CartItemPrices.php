@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Cart\Totals;
 use Magento\Quote\Model\Quote\Item;
-use Magento\Quote\Model\Quote\TotalsCollector;
+use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 
 /**
  * @inheritdoc
@@ -62,6 +62,10 @@ class CartItemPrices implements ResolverInterface
             'price' => [
                 'currency' => $currencyCode,
                 'value' => $cartItem->getCalculationPrice(),
+            ],
+            'price_including_tax' => [
+                'currency' => $currencyCode,
+                'value' => $cartItem->getPriceInclTax(),
             ],
             'row_total' => [
                 'currency' => $currencyCode,

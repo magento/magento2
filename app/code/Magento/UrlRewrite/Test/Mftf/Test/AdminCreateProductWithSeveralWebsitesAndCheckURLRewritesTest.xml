@@ -33,6 +33,7 @@
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStore2">
                 <argument name="storeGroupName" value="customStoreGroup.name"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -61,6 +62,7 @@
             <argument name="StoreGroup" value="customStoreGroup"/>
             <argument name="customStore" value="customStoreEN"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!-- Create simple product with categories created in create data -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductsGrid"/>

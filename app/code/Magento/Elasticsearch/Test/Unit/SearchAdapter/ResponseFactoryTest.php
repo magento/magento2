@@ -72,8 +72,32 @@ class ResponseFactoryTest extends TestCase
     public function testCreate(): void
     {
         $documents = [
-            ['title' => 'oneTitle', 'description' => 'oneDescription'],
-            ['title' => 'twoTitle', 'description' => 'twoDescription']
+            [
+                'title' => 'oneTitle',
+                'description' => 'oneDescription',
+                'fields' => [
+                    '_id' => ['1']
+                ]
+            ],
+            [
+                'title' => 'twoTitle',
+                'description' => 'twoDescription',
+                'fields' => [
+                    '_id' => ['2']
+                ]
+            ]
+        ];
+        $modifiedDocuments = [
+            [
+                'title' => 'oneTitle',
+                'description' => 'oneDescription',
+                '_id' => '1'
+            ],
+            [
+                'title' => 'twoTitle',
+                'description' => 'twoDescription',
+                '_id' => '2'
+            ]
         ];
         $aggregations = [
             'aggregation1' => [
@@ -113,7 +137,7 @@ class ResponseFactoryTest extends TestCase
 
         $this->documentFactory
             ->method('create')
-            ->withConsecutive([$documents[0]], [$documents[1]])
+            ->withConsecutive([$modifiedDocuments[0]], [$modifiedDocuments[1]])
             ->willReturnOnConsecutiveCalls('document1', 'document2');
 
         $this->aggregationFactory

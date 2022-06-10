@@ -69,6 +69,7 @@
         <actionGroup ref="SaveImageActionGroup" stepKey="insertImage"/>
         <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMceActionGroup" stepKey="clickOk"/>
         <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtnFirstTime"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtnSecondTime"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <!--Switch to content frame and click on image-->
@@ -76,6 +77,7 @@
         <switchToIFrame selector="{{TinyMCESection.EditAreaIframe}}" stepKey="switchToContentFrame"/>
         <click selector="{{TinyMCESection.IframeContent}} {{BlockContentSection.image}}" stepKey="clickImage"/>
         <switchToIFrame stepKey="switchBack"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <!--Add image second time and assert-->
         <comment userInput="Add image second time and assert" stepKey="commentAddImageAndAssert"/>
         <comment userInput="BIC workaround" stepKey="addImageSecondTime"/>

@@ -70,7 +70,7 @@ class CollectionTest extends TestCase
         $this->collection->addItem($elementOne);
         $this->collection->addItem($elementTwo);
         $this->collection->addItem($elementThree);
-        $this->collection->walk([$this, 'modifyObjectNames'], ['testPrefix' => 'test prefix']);
+        $this->collection->walk([$this, 'modifyObjectNames'], ['test prefix']);
         $expectedNames = [
             'test prefix firstElement',
             'test prefix secondElement',

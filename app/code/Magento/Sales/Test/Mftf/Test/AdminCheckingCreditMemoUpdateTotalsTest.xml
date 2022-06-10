@@ -27,16 +27,16 @@
             <createData entity="CustomerCart" stepKey="createCustomerCart">
                 <requiredEntity createDataKey="createCustomer"/>
             </createData>
-    
+
             <createData entity="CustomerCartItem" stepKey="addCartItem">
                 <requiredEntity createDataKey="createCustomerCart"/>
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
-    
+
             <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
                 <requiredEntity createDataKey="createCustomerCart"/>
             </createData>
-    
+
             <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
                 <requiredEntity createDataKey="createCustomerCart"/>
             </updateData>
@@ -74,6 +74,6 @@
         <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemosTab"/>
         <waitForPageLoad stepKey="waitForCreditMemosGridToLoad"/>
 
-        <see selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" userInput="$123" stepKey="seeCreditMemoInGrid"/>
+        <waitForText selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" userInput="$123" stepKey="seeCreditMemoInGrid"/>
     </test>
 </tests>
