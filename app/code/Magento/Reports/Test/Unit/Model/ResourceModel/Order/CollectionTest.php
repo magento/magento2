@@ -295,7 +295,6 @@ class CollectionTest extends TestCase
      * @param string $customStart
      * @param string $customEnd
      * @param string $config
-     * @param string $configVal
      * @param int $expectedYear
      * @dataProvider secondPartDateRangeDataProvider
      * @return void
@@ -305,7 +304,6 @@ class CollectionTest extends TestCase
         $customStart,
         $customEnd,
         $config,
-        $configVal,
         $expectedYear
     ): void {
         $this->scopeConfigMock
@@ -315,7 +313,7 @@ class CollectionTest extends TestCase
                 $config,
                 ScopeInterface::SCOPE_STORE
             )
-            ->willReturn($configVal);
+            ->willReturn(1);
 
         $result = $this->collection->getDateRange($range, $customStart, $customEnd);
         $this->assertCount(3, $result);
@@ -483,9 +481,9 @@ class CollectionTest extends TestCase
         $expected2YTDYear = $expectedYear - 1;
 
         return [
-            ['1m', 1, 10, 'reports/dashboard/mtd_start', '1', $expectedYear],
-            ['1y', 1, 10, 'reports/dashboard/ytd_start', '1,1', $expectedYear],
-            ['2y', 1, 10, 'reports/dashboard/ytd_start', '1,1', $expected2YTDYear]
+            ['1m', 1, 10, 'reports/dashboard/mtd_start', $expectedYear],
+            ['1y', 1, 10, 'reports/dashboard/ytd_start', $expectedYear],
+            ['2y', 1, 10, 'reports/dashboard/ytd_start', $expected2YTDYear]
         ];
     }
 
