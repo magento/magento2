@@ -1198,7 +1198,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         }
 
         $response = preg_split('/^\r?$/m', $response, 2);
-        $response = trim($response[1]);
+        $response = trim($response[1] ?? '');
         $response = $this->_deformatNVP($response);
 
         $debugData['response'] = $response;

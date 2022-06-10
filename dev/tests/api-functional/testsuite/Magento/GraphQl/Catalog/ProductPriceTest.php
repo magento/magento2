@@ -12,6 +12,7 @@ use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\ConfigurableProduct\Api\LinkManagementInterface;
 use Magento\ConfigurableProduct\Model\LinkManagement;
@@ -19,9 +20,14 @@ use Magento\Customer\Model\Group;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\GraphQl\Customer\LockCustomer;
 use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductPriceTest extends GraphQlAbstract
 {
     /** @var ObjectManager $objectManager */
@@ -40,6 +46,11 @@ class ProductPriceTest extends GraphQlAbstract
      */
     private $lockCustomer;
 
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -47,6 +58,7 @@ class ProductPriceTest extends GraphQlAbstract
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
         $this->lockCustomer = $this->objectManager->get(LockCustomer::class);
+        $this->fixtures = DataFixtureStorageManager::getStorage();
     }
 
     /**
@@ -1255,6 +1267,129 @@ QUERY;
         $this->assertArrayNotHasKey('errors', $resultDesc);
         $productsDesc = array_column($resultDesc['products']['items'], 'sku');
         $this->assertEquals($expectedProductsDesc, $productsDesc);
+    }
+
+    /**
+     * Check pricing for Configurable product with "Display Out of Stock Products" enabled
+     *
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product with:{"price":10, "special_price":7} as:p1
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product with:{"price":18, "special_price":12.6} as:p2
+     * @magentoApiDataFixture Magento\ConfigurableProduct\Test\Fixture\Attribute as:attr
+     * @magentoApiDataFixture Magento\ConfigurableProduct\Test\Fixture\Product as:conf1
+     * @magentoDataFixtureDataProvider {"conf1":{"_options":["$attr$"],"_links":["$p1$","$p2$"]}}
+     * @magentoConfigFixture default_store cataloginventory/options/show_out_of_stock 1
+     * @dataProvider configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider
+     */
+    public function testConfigurableProductPriceRangeWithDisplayOutOfStockProductsEnabled(
+        array $productsConfiguration,
+        array $expected
+    ) {
+        $expectedPriceRange = [
+            'minimum_price' => [
+                'regular_price' => [
+                    'value' => $expected['regular_price'][0],
+                    'currency' => 'USD',
+                ],
+                'final_price' => [
+                    'value' => $expected['final_price'][0],
+                    'currency' => 'USD',
+                ],
+                'discount' => [
+                    'amount_off' => $expected['amount_off'][0],
+                    'percent_off' => $expected['percent_off'][0],
+                ],
+            ],
+            'maximum_price' => [
+                'regular_price' => [
+                    'value' => $expected['regular_price'][1],
+                    'currency' => 'USD',
+                ],
+                'final_price' => [
+                    'value' => $expected['final_price'][1],
+                    'currency' => 'USD',
+                ],
+                'discount' => [
+                    'amount_off' => $expected['amount_off'][1],
+                    'percent_off' => $expected['percent_off'][1],
+                ]
+            ]
+        ];
+        foreach ($productsConfiguration as $fixture => $data) {
+            $id = (int) $this->fixtures->get($fixture)->getId();
+            $product = $this->productRepository->getById($id);
+            $product->addData($data);
+            if (isset($data['is_in_stock'])) {
+                $extendedAttributes = $product->getExtensionAttributes();
+                $stockItem = $extendedAttributes->getStockItem();
+                $stockItem->setIsInStock($data['is_in_stock']);
+                $extendedAttributes->setStockItem($stockItem);
+                $product->setExtensionAttributes($extendedAttributes);
+            }
+            $this->productRepository->save($product);
+        }
+        $sku = $this->fixtures->get('conf1')->getSku();
+        $query = $this->getProductQuery([$sku]);
+        $result = $this->graphQlQuery($query);
+
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertNotEmpty($result['products']['items']);
+        $product = $result['products']['items'][0];
+        $this->assertNotEmpty($product['price_range']);
+        $this->assertEquals($expectedPriceRange, $product['price_range']);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'p1' => [
+                        'is_in_stock' => false
+                    ]
+                ],
+                [
+                    'regular_price' => [18, 18],
+                    'final_price' => [12.6, 12.6],
+                    'amount_off' => [5.4, 5.4],
+                    'percent_off' => [30, 30],
+                ]
+            ],
+            [
+                [
+                    'p1' => [
+                        'is_in_stock' => false
+                    ],
+                    'p2' => [
+                        'status' => Status::STATUS_DISABLED
+                    ]
+                ],
+                [
+                    'regular_price' => [10, 10],
+                    'final_price' => [7, 7],
+                    'amount_off' => [3, 3],
+                    'percent_off' => [30, 30],
+                ]
+            ],
+            [
+                [
+                    'p1' => [
+                        'is_in_stock' => false
+                    ],
+                    'p2' => [
+                        'is_in_stock' => false
+                    ]
+                ],
+                [
+                    'regular_price' => [10, 18],
+                    'final_price' => [7, 12.6],
+                    'amount_off' => [3, 5.4],
+                    'percent_off' => [30, 30],
+                ]
+            ]
+        ];
     }
 
     /**
