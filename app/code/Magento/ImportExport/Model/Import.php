@@ -15,11 +15,9 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\ImportExport\Helper\Data as DataHelper;
 use Magento\ImportExport\Model\Export\Adapter\CsvFactory;
 use Magento\ImportExport\Model\Import\AbstractEntity as ImportAbstractEntity;
 use Magento\ImportExport\Model\Import\AbstractSource;
@@ -34,7 +32,6 @@ use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Magento\ImportExport\Model\Source\Import\AbstractBehavior;
 use Magento\ImportExport\Model\Source\Import\Behavior\Factory as BehaviorFactory;
 use Magento\ImportExport\Model\Source\Upload;
-use Magento\MediaStorage\Model\File\Uploader;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Psr\Log\LoggerInterface;
 
@@ -123,11 +120,6 @@ class Import extends AbstractModel
     protected $_entityAdapter;
 
     /**
-     * @var DataHelper
-     */
-    protected $_importExportData = null;
-
-    /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $_coreConfig;
@@ -151,11 +143,6 @@ class Import extends AbstractModel
      * @var CsvFactory
      */
     protected $_csvFactory;
-
-    /**
-     * @var FileTransferFactory
-     */
-    protected $_httpFactory;
 
     /**
      * @var UploaderFactory
@@ -198,11 +185,6 @@ class Import extends AbstractModel
     private $random;
 
     /**
-     * @var \Magento\Framework\Filesystem\Io\File
-     */
-    private $filesystemIo;
-
-    /**
      * @var Upload
      */
     private $upload;
@@ -211,14 +193,11 @@ class Import extends AbstractModel
      * @param LoggerInterface $logger
      * @param Filesystem $filesystem
      * @param Upload $upload
-     * @param \Magento\Framework\Filesystem\Io\File $filesystemIo
-     * @param DataHelper $importExportData
      * @param ScopeConfigInterface $coreConfig
      * @param Import\ConfigInterface $importConfig
      * @param Import\Entity\Factory $entityFactory
      * @param Data $importData
      * @param Export\Adapter\CsvFactory $csvFactory
-     * @param FileTransferFactory $httpFactory
      * @param UploaderFactory $uploaderFactory
      * @param Source\Import\Behavior\Factory $behaviorFactory
      * @param IndexerRegistry $indexerRegistry
@@ -226,49 +205,39 @@ class Import extends AbstractModel
      * @param DateTime $localeDate
      * @param array $data
      * @param ManagerInterface|null $messageManager
-     * @param Random|null $random
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         LoggerInterface $logger,
         Filesystem $filesystem,
         Upload $upload,
-        \Magento\Framework\Filesystem\Io\File $filesystemIo,
-        DataHelper $importExportData,
         ScopeConfigInterface $coreConfig,
         ConfigInterface $importConfig,
         Factory $entityFactory,
         Data $importData,
         CsvFactory $csvFactory,
-        FileTransferFactory $httpFactory,
         UploaderFactory $uploaderFactory,
         BehaviorFactory $behaviorFactory,
         IndexerRegistry $indexerRegistry,
         History $importHistoryModel,
         DateTime $localeDate,
         array $data = [],
-        ManagerInterface $messageManager = null,
-        Random $random = null
+        ManagerInterface $messageManager = null
     ) {
-        $this->_importExportData = $importExportData;
         $this->_coreConfig = $coreConfig;
         $this->_importConfig = $importConfig;
         $this->_entityFactory = $entityFactory;
         $this->_importData = $importData;
         $this->_csvFactory = $csvFactory;
-        $this->_httpFactory = $httpFactory;
         $this->_uploaderFactory = $uploaderFactory;
         $this->indexerRegistry = $indexerRegistry;
         $this->_behaviorFactory = $behaviorFactory;
         $this->_filesystem = $filesystem;
-        $this->filesystemIo = $filesystemIo;
         $this->importHistoryModel = $importHistoryModel;
         $this->localeDate = $localeDate;
         $this->upload = $upload;
         $this->messageManager = $messageManager ?: ObjectManager::getInstance()
             ->get(ManagerInterface::class);
-        $this->random = $random ?: ObjectManager::getInstance()
-            ->get(Random::class);
         parent::__construct($logger, $filesystem, $data);
     }
 
@@ -324,7 +293,7 @@ class Import extends AbstractModel
      * @return AbstractSource
      * @throws FileSystemException
      */
-    protected function _getSourceAdapter($sourceFile)
+    public function _getSourceAdapter($sourceFile)
     {
         return Adapter::findAdapterFor(
             $sourceFile,
@@ -839,5 +808,13 @@ class Import extends AbstractModel
     public function getDeletedItemsCount()
     {
         return $this->_getEntityAdapter()->getDeletedItemsCount();
+    }
+
+    /**
+     * @return Upload
+     */
+    public function getUpload()
+    {
+        return $this->upload;
     }
 }

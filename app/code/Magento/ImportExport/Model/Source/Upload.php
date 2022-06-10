@@ -5,6 +5,7 @@ namespace Magento\ImportExport\Model\Source;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Math\Random;
 use Magento\ImportExport\Helper\Data as DataHelper;
@@ -38,17 +39,20 @@ class Upload
      * @param FileTransferFactory $httpFactory
      * @param DataHelper $importExportData
      * @param UploaderFactory $uploaderFactory
+     * @param File $filesystemIo
      * @param Random|null $random
      */
     public function __construct(
         FileTransferFactory $httpFactory,
         DataHelper $importExportData,
         UploaderFactory $uploaderFactory,
+        File $filesystemIo,
         Random $random
     ) {
         $this->_httpFactory = $httpFactory;
         $this->_importExportData = $importExportData;
         $this->_uploaderFactory = $uploaderFactory;
+        $this->filesystemIo = $filesystemIo;
         $this->random = $random ?: ObjectManager::getInstance()
             ->get(Random::class);
     }
@@ -124,52 +128,52 @@ class Upload
     /**
      * Move uploaded file and provide source instance.
      *
+     * * @param Import
      * @return Import\AbstractSource
      * @throws LocalizedException
      * @since 100.2.7
      */
-    public function uploadFileAndGetSourceForRest()
+    public function uploadFileAndGetSourceForRest(Import $import)
     {
-        $entity = $this->getEntity();
+        $entity = $import->getEntity();
         /** @var $uploader Uploader */
         $fileName = $this->random->getRandomString(32) . '.' . 'csv';
         $uploadedFile = '';
         $extension = 'csv';
-        $uploadedFile = $this->getWorkingDir() . $fileName;
+        $uploadedFile = $import->getWorkingDir() . $fileName;
 
         if (!$extension) {
-            $this->_varDirectory->delete($uploadedFile);
+            $import->getVarDirectory()->delete($uploadedFile);
             throw new LocalizedException(__('The file you uploaded has no extension.'));
         }
-        $sourceFile = $this->getWorkingDir() . $entity;
+        $sourceFile = $import->getWorkingDir() . $entity;
 
         $sourceFile .= '.' . $extension;
-        $sourceFileRelative = $this->_varDirectory->getRelativePath($sourceFile);
+        $sourceFileRelative = $import->getVarDirectory()->getRelativePath($sourceFile);
         $this->filesystemIo->cp($sourceFile, $uploadedFile);
 
         if (strtolower($uploadedFile) != strtolower($sourceFile)) {
-            if ($this->_varDirectory->isExist($sourceFileRelative)) {
-                $this->_varDirectory->delete($sourceFileRelative);
+            if ($import->getVarDirectory()->isExist($sourceFileRelative)) {
+                $import->getVarDirectory()->delete($sourceFileRelative);
             }
 
             try {
-                $this->_varDirectory->renameFile(
-                    $this->_varDirectory->getRelativePath($uploadedFile),
+                $import->getVarDirectory()->renameFile(
+                    $import->getVarDirectory()->getRelativePath($uploadedFile),
                     $sourceFileRelative
                 );
             } catch (FileSystemException $e) {
                 throw new LocalizedException(__('The source file moving process failed.'));
             }
         }
-        $this->_removeBom($sourceFile);
-        $this->createHistoryReport($sourceFileRelative, $entity, $extension, ['name'=> $entity . 'csv']);
+        $import->_removeBom($sourceFile);
+        $import->createHistoryReport($sourceFileRelative, $entity, $extension, ['name'=> $entity . 'csv']);
         try {
-            $source = $this->_getSourceAdapter($sourceFile);
+            $source = $import->_getSourceAdapter($sourceFile);
         } catch (\Exception $e) {
-            $this->_varDirectory->delete($this->_varDirectory->getRelativePath($sourceFile));
+            $import->getVarDirectory()->delete($this->_varDirectory->getRelativePath($sourceFile));
             throw new LocalizedException(__($e->getMessage()));
         }
-
         return $source;
     }
 }
