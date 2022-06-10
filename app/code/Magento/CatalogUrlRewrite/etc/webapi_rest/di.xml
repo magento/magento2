@@ -12,4 +12,9 @@
     <type name="Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator">
         <plugin name="category_set_save_rewrites_history_rest_plugin" type="Magento\CatalogUrlRewrite\Plugin\Model\CategorySetSaveRewriteHistory" disabled="false" />
     </type>
+    <type name="Magento\Catalog\Model\CategoryRepository">
+        <plugin name="format_url_key_and_path"
+                type="Magento\CatalogUrlRewrite\Plugin\Webapi\Model\FormatUrlKeyAndPath"
+                sortOrder="99"/>
+    </type>
 </config>
