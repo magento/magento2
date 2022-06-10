@@ -28,8 +28,6 @@
         <ShipperAccountNumber>1234567890</ShipperAccountNumber>
         <ShippingPaymentType>S</ShippingPaymentType>
         <BillingAccountNumber>1234567890</BillingAccountNumber>
-        <DutyPaymentType>S</DutyPaymentType>
-        <DutyAccountNumber>1234567890</DutyAccountNumber>
     </Billing>
     <Consignee xmlns="">
         <CompanyName/>
