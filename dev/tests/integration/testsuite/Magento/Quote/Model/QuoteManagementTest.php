@@ -197,7 +197,6 @@ class QuoteManagementTest extends TestCase
         $this->cartManagement->placeOrder($quote->getId());
     }
 
-
     /**
      * Tries to create order with product that has child items and one of them
      * was deleted when item data check is disabled on quote load.
@@ -238,7 +237,11 @@ class QuoteManagementTest extends TestCase
     {
         $this->makeProductOutOfStock('simple');
         $quote = $this->getQuoteByReservedOrderId->execute('test01');
-        $this->expectExceptionObject(new LocalizedException(__('The shipping method is missing. Select the shipping method and try again.')));
+        $this->expectExceptionObject(
+            new LocalizedException(
+                __('The shipping method is missing. Select the shipping method and try again.')
+            )
+        );
         $this->cartManagement->placeOrder($quote->getId());
     }
 
