@@ -78,6 +78,7 @@ class Config
      * Tax cart display discount
      *
      * @deprecated
+     * @see MC-22931
      */
     public const XML_PATH_DISPLAY_CART_DISCOUNT = 'tax/cart_display/discount';
 
@@ -100,6 +101,7 @@ class Config
      * Tax sales display discount
      *
      * @deprecated
+     * @see MC-22931
      */
     public const XML_PATH_DISPLAY_SALES_DISCOUNT = 'tax/sales_display/discount';
 
@@ -506,6 +508,7 @@ class Config
      * @param null|string|bool|int|Store $store
      * @return bool
      * @deprecated 100.1.3
+     * @see MAGETWO-71174
      */
     public function displayCartDiscountInclTax($store = null)
     {
@@ -522,6 +525,7 @@ class Config
      * @param null|string|bool|int|Store $store
      * @return bool
      * @deprecated 100.1.3
+     * @see MAGETWO-71174s
      */
     public function displayCartDiscountExclTax($store = null)
     {
@@ -538,6 +542,7 @@ class Config
      * @param null|string|bool|int|Store $store
      * @return bool
      * @deprecated 100.1.3
+     * @see MAGETWO-71174
      */
     public function displayCartDiscountBoth($store = null)
     {
@@ -734,6 +739,7 @@ class Config
      * @param null|string|bool|int|Store $store
      * @return bool
      * @deprecated 100.1.3
+     * @see MAGETWO-71174
      */
     public function displaySalesDiscountInclTax($store = null)
     {
@@ -750,6 +756,7 @@ class Config
      * @param null|string|bool|int|Store $store
      * @return bool
      * @deprecated 100.1.3
+     * @see MAGETWO-71174
      */
     public function displaySalesDiscountExclTax($store = null)
     {
@@ -766,6 +773,7 @@ class Config
      * @param null|string|bool|int|Store $store
      * @return bool
      * @deprecated 100.1.3
+     * @see MAGETWO-71174
      */
     public function displaySalesDiscountBoth($store = null)
     {
