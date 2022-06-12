@@ -40,6 +40,9 @@ var config = {
         mixins: {
             'Magento_Theme/js/view/breadcrumbs': {
                 'Magento_Theme/js/view/add-home-breadcrumb': true
+            },
+            'jquery': {
+                'jquery/jquery-scroll-passive-patch': true
             }
         }
     }
