@@ -18,6 +18,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total as AddressTotal;
 use Magento\Sales\Model\Status;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
 /**
  * Quote model
@@ -1429,7 +1430,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $items = [];
         foreach ($this->getItemsCollection() as $item) {
             /** @var \Magento\Quote\Model\Quote\Item $item */
-            if (!$item->isDeleted()) {
+            if (!$item->isDeleted() && (int)$item->getProduct()->getStatus() !== ProductStatus::STATUS_DISABLED) {
                 $items[] = $item;
             }
         }
