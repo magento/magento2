@@ -876,6 +876,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      *
      * @param \Magento\Customer\Model\Customer|int $customer
      * @deprecated 101.0.0 Deprecated to handle external usages of customer methods
+     * @see https://jira.corp.magento.com/browse/MAGETWO-19935
      * @return $this
      */
     public function loadByCustomer($customer)
