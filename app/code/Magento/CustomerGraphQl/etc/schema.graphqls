@@ -354,6 +354,7 @@ enum CountryCodeEnum @doc(description: "The list of country codes.") {
     PN @doc(description: "Pitcairn Islands")
     PL @doc(description: "Poland")
     PT @doc(description: "Portugal")
+    PR @doc(description: "Puerto Rico")
     QA @doc(description: "Qatar")
     RE @doc(description: "Réunion")
     RO @doc(description: "Romania")
