@@ -84,7 +84,7 @@ class ProductCategoryCondition implements CustomConditionInterface
      */
     private function getCategoryIds(Filter $filter): array
     {
-        $categoryIds = explode(',', $filter->getValue());
+        $categoryIds = $filter->getValue() !== null ? explode(',', $filter->getValue()) : [];
         $childCategoryIds = [];
 
         foreach ($categoryIds as $categoryId) {
