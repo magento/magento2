@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Model\Plugin;
 
@@ -24,6 +25,11 @@ use Psr\Log\LoggerInterface;
  */
 class CustomerNotification
 {
+    /**
+     * Array key for all active previous session ids.
+     */
+    private const PREVIOUS_ACTIVE_SESSIONS = 'previous_active_sessions';
+
     /**
      * @var Session
      */
@@ -59,11 +65,6 @@ class CustomerNotification
      */
     private StorageInterface $storage;
 
-    /**#@+
-     * Array key for all active previous session ids.
-     */
-    private const PREVIOUS_ACTIVE_SESSIONS = 'previous_active_sessions';
-
     /**
      * Initialize dependencies.
      *
@@ -73,7 +74,7 @@ class CustomerNotification
      * @param CustomerRepositoryInterface $customerRepository
      * @param LoggerInterface $logger
      * @param RequestInterface $request
-     * @param StorageInterface $storage
+     * @param StorageInterface|null $storage
      */
     public function __construct(
         Session $session,
@@ -82,7 +83,7 @@ class CustomerNotification
         CustomerRepositoryInterface $customerRepository,
         LoggerInterface $logger,
         RequestInterface $request,
-        StorageInterface $storage
+        StorageInterface $storage = null
     ) {
         $this->session = $session;
         $this->notificationStorage = $notificationStorage;
@@ -90,7 +91,7 @@ class CustomerNotification
         $this->customerRepository = $customerRepository;
         $this->logger = $logger;
         $this->request = $request;
-        $this->storage = $storage;
+        $this->storage = $storage ?? ObjectManager::getInstance()->get(StorageInterface::class);
     }
 
     /**
@@ -105,24 +106,31 @@ class CustomerNotification
     {
         $customerId = $this->session->getCustomerId();
 
-        if ($this->isFrontendRequest() && $this->isPostRequest() && $this->isSessionUpdateRegisteredFor($customerId)) {
-            try {
-                $oldSessionId = $this->session->getSessionId();
-                $previousSessions = $this->storage->getData(self::PREVIOUS_ACTIVE_SESSIONS);
+        if (!$this->isFrontendRequest()
+            || !$this->isPostRequest()
+            || !$this->isSessionUpdateRegisteredFor($customerId)) {
+            return;
+        }
 
-                if (empty($previousSessions)) {
-                    $previousSessions = [];
-                }
-                $previousSessions[] = $oldSessionId;
-                $this->storage->setData(self::PREVIOUS_ACTIVE_SESSIONS, $previousSessions);
-                $this->session->regenerateId();
-                $customer = $this->customerRepository->getById($customerId);
-                $this->session->setCustomerData($customer);
-                $this->session->setCustomerGroupId($customer->getGroupId());
-                $this->notificationStorage->remove(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customer->getId());
-            } catch (NoSuchEntityException $e) {
-                $this->logger->error($e);
+        try {
+            $oldSessionId = $this->session->getSessionId();
+            $previousSessions = $this->storage->getData(self::PREVIOUS_ACTIVE_SESSIONS);
+
+            if (empty($previousSessions)) {
+                $previousSessions = [];
             }
+            $previousSessions[] = $oldSessionId;
+            $this->storage->setData(self::PREVIOUS_ACTIVE_SESSIONS, $previousSessions);
+            $this->session->regenerateId();
+            $customer = $this->customerRepository->getById($customerId);
+            $this->session->setCustomerData($customer);
+            $this->session->setCustomerGroupId($customer->getGroupId());
+            $this->notificationStorage->remove(
+                NotificationStorage::UPDATE_CUSTOMER_SESSION,
+                $customer->getId()
+            );
+        } catch (NoSuchEntityException $e) {
+            $this->logger->error($e);
         }
     }
 

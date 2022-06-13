@@ -14,14 +14,20 @@ use Magento\Framework\Session\SaveHandlerInterface;
 use Magento\Framework\Session\StorageInterface;
 use Magento\Framework\Exception\SessionException;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Clear Previous Active Sessions after Logout
+ * Clears previous active sessions after logout
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class ClearSessionsAfterLogoutPlugin
 {
+    /**
+     * Array key for all active previous session ids.
+     */
+    private const PREVIOUS_ACTIVE_SESSIONS = 'previous_active_sessions';
+
     /**
      * @var Session
      */
@@ -41,11 +47,6 @@ class ClearSessionsAfterLogoutPlugin
      * @var State
      */
     private State $state;
-
-    /**#@+
-     * Array key for all active previous session ids.
-     */
-    private const PREVIOUS_ACTIVE_SESSIONS = 'previous_active_sessions';
 
     /**
      * @var LoggerInterface
@@ -80,6 +81,8 @@ class ClearSessionsAfterLogoutPlugin
      *
      * @param Session $subject
      * @param Session $result
+     * @return Session
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterLogout(Session $subject, Session $result): Session
