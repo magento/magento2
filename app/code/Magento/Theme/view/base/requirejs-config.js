@@ -85,6 +85,11 @@ var config = {
             'headers': {
                 'X-Requested-With': 'XMLHttpRequest'
             }
+        },
+        mixins: {
+            'jquery': {
+                'jquery/jquery-scroll-passive-patch': true
+            }
         }
     }
 };
