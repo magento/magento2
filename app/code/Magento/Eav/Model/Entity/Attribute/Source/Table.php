@@ -149,7 +149,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     public function getOptionText($value)
     {
         $isMultiple = false;
-        if (strpos($value, ',') !== false) {
+        if (is_string($value) && strpos($value, ',') !== false) {
             $isMultiple = true;
             $value = explode(',', $value);
         }

@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
 class SaveHandlerTest extends TestCase
 {
     /**
-     * Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 

@@ -18,6 +18,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\ManagerInterface;
@@ -274,7 +275,7 @@ class QuoteManagementTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->customerSessionMock = $this->createMock(CustomerSession::class);
         $this->accountManagementMock = $this->getMockForAbstractClass(AccountManagementInterface::class);
 
         $this->quoteFactoryMock = $this->createPartialMock(QuoteFactory::class, ['create']);
@@ -716,6 +717,8 @@ class QuoteManagementTest extends TestCase
 
     /**
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSubmit(): void
     {
@@ -737,11 +740,9 @@ class QuoteManagementTest extends TestCase
         $convertedShipping = $this->createPartialMockForAbstractClass(OrderAddressInterface::class, ['setData']);
         $convertedPayment = $this->getMockForAbstractClass(OrderPaymentInterface::class);
         $convertedQuoteItem = $this->getMockForAbstractClass(OrderItemInterface::class);
-
         $addresses = [$convertedShipping, $convertedBilling];
         $quoteItems = [$quoteItem];
         $convertedItems = [$convertedQuoteItem];
-
         $quote = $this->getQuote(
             $isGuest,
             $isVirtual,
@@ -862,7 +863,7 @@ class QuoteManagementTest extends TestCase
             ->setConstructorArgs(
                 [
                     'eventManager' => $this->eventManager,
-                    'quoteValidator' => $this->submitQuoteValidator,
+                    'submitQuoteValidator' => $this->submitQuoteValidator,
                     'orderFactory' => $this->orderFactory,
                     'orderManagement' => $this->orderManagement,
                     'customerManagement' => $this->customerManagement,
@@ -930,7 +931,7 @@ class QuoteManagementTest extends TestCase
             ->setConstructorArgs(
                 [
                     'eventManager' => $this->eventManager,
-                    'quoteValidator' => $this->submitQuoteValidator,
+                    'submitQuoteValidator' => $this->submitQuoteValidator,
                     'orderFactory' => $this->orderFactory,
                     'orderManagement' => $this->orderManagement,
                     'customerManagement' => $this->customerManagement,
@@ -976,9 +977,6 @@ class QuoteManagementTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('getCheckoutMethod')
             ->willReturn(Onepage::METHOD_CUSTOMER);
-        $this->quoteMock->expects($this->never())
-            ->method('setCustomerIsGuest')
-            ->with(true);
 
         $this->remoteAddressMock
             ->method('getRemoteAddress')

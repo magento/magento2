@@ -128,8 +128,8 @@ class CategoryProcessUrlRewriteSavingObserverTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteForRootDirectory(): void
     {
         $this->category->expects($this->once())
@@ -142,8 +142,8 @@ class CategoryProcessUrlRewriteSavingObserverTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteHasStoreId(): void
     {
         $this->category->expects($this->once())
@@ -171,8 +171,8 @@ class CategoryProcessUrlRewriteSavingObserverTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteHasNotChanges(): void
     {
         $this->category->expects($this->once())
@@ -202,8 +202,8 @@ class CategoryProcessUrlRewriteSavingObserverTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteHasChanges(): void
     {
         $this->category->expects($this->once())

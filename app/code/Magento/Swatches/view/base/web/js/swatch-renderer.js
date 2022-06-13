@@ -280,7 +280,8 @@ define([
             // tier prise selectors end
 
             // A price label selector
-            normalPriceLabelSelector: '.product-info-main .normal-price .price-label'
+            normalPriceLabelSelector: '.product-info-main .normal-price .price-label',
+            qtyInfo: '#qty'
         },
 
         /**
@@ -369,6 +370,7 @@ define([
 
             this.productForm = this.element.parents(this.options.selectorProductTile).find('form:first');
             this.inProductList = this.productForm.length > 0;
+            $(this.options.qtyInfo).on('input', this._onQtyChanged.bind(this));
         },
 
         /**
@@ -1247,17 +1249,12 @@ define([
          * @param {Array} images
          */
         _setImageType: function (images) {
-            var initial = this.options.mediaGalleryInitial[0].img;
 
-            if (images[0].img === initial) {
-                images = $.extend(true, [], this.options.mediaGalleryInitial);
-            } else {
-                images.map(function (img) {
-                    if (!img.type) {
-                        img.type = 'image';
-                    }
-                });
-            }
+            images.map(function (img) {
+                if (!img.type) {
+                    img.type = 'image';
+                }
+            });
 
             return images;
         },
@@ -1450,6 +1447,21 @@ define([
 
                 this.options.mediaCache[JSON.stringify(mediaCallData)] = this.options.jsonConfig.preSelectedGallery;
             }
+        },
+
+        /**
+         * Callback for quantity change event.
+         */
+        _onQtyChanged: function () {
+            var $price = this.element.parents(this.options.selectorProduct)
+                .find(this.options.selectorProductPrice);
+
+            $price.trigger(
+                'updatePrice',
+                {
+                    'prices': this._getPrices(this._getNewPrices(), $price.priceBox('option').prices)
+                }
+            );
         }
     });
 

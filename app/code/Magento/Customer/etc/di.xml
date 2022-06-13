@@ -366,9 +366,6 @@
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="transactionWrapper" type="Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper" sortOrder="-1"/>
     </type>
-    <type name="Magento\Directory\Model\AllowedCountries">
-        <plugin name="customerAllowedCountries" type="Magento\Customer\Model\Plugin\AllowedCountries"/>
-    </type>
     <type name="Magento\Framework\App\ActionInterface">
         <plugin name="customerNotification" type="Magento\Customer\Model\Plugin\CustomerNotification"/>
     </type>
@@ -562,5 +559,12 @@
         <plugin name="deleteCustomerGroupExcludedWebsite" type="Magento\Customer\Model\Plugin\DeleteCustomerGroupExcludedWebsite"/>
         <plugin name="getByIdCustomerGroupExcludedWebsite" type="Magento\Customer\Model\Plugin\GetByIdCustomerGroupExcludedWebsite"/>
         <plugin name="getListCustomerGroupExcludedWebsite" type="Magento\Customer\Model\Plugin\GetListCustomerGroupExcludedWebsite"/>
+    </type>
+    <type name="Magento\Customer\Ui\Component\Listing\Columns">
+        <arguments>
+            <argument name="filterConfigProviders" xsi:type="array">
+                <item name="text" xsi:type="object">Magento\Customer\Ui\Component\Listing\Filter\TextFilterConfigProvider</item>
+            </argument>
+        </arguments>
     </type>
 </config>

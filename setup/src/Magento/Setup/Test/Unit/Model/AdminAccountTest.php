@@ -72,8 +72,8 @@ class AdminAccountTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveUserExistsAdminRoleExists(): void
     {
         // existing user data
@@ -132,8 +132,8 @@ class AdminAccountTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveUserExistsNewAdminRole(): void
     {
         // existing user data
@@ -216,8 +216,8 @@ class AdminAccountTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveNewUserAdminRoleExists(): void
     {
         // existing admin role data
@@ -264,8 +264,8 @@ class AdminAccountTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveNewUserNewAdminRole(): void
     {
         // special admin role data
@@ -327,8 +327,8 @@ class AdminAccountTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveExceptionUsernameNotMatch(): void
     {
         $this->expectException('Exception');
@@ -349,8 +349,8 @@ class AdminAccountTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveExceptionEmailNotMatch(): void
     {
         $this->expectException('Exception');
@@ -370,8 +370,8 @@ class AdminAccountTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveExceptionSpecialAdminRoleNotFound(): void
     {
         $this->expectException('Exception');
@@ -383,8 +383,8 @@ class AdminAccountTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveExceptionPasswordEmpty(): void
     {
         $this->expectException('Exception');
@@ -432,8 +432,8 @@ class AdminAccountTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveExceptionPasswordAndUsernameEqual(): void
     {
         $this->expectException('Exception');

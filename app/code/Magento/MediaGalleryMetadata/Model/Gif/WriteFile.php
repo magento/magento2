@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\Gif;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
@@ -31,15 +34,23 @@ class WriteFile implements WriteFileInterface
     private $segmentNames;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param DriverInterface $driver
      * @param SegmentNames $segmentNames
+     * @param Filesystem|null $filesystem
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         DriverInterface $driver,
-        SegmentNames $segmentNames
+        SegmentNames $segmentNames,
+        Filesystem $filesystem = null
     ) {
-        $this->driver = $driver;
         $this->segmentNames = $segmentNames;
+        $this->filesystem = $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);
     }
 
     /**
@@ -51,10 +62,10 @@ class WriteFile implements WriteFileInterface
      */
     public function execute(FileInterface $file): void
     {
-        $resource = $this->driver->fileOpen($file->getPath(), 'wb');
+        $resource = $this->getDriver()->fileOpen($file->getPath(), 'wb');
 
         $this->writeSegments($resource, $file->getSegments());
-        $this->driver->fileClose($resource);
+        $this->getDriver()->fileClose($resource);
     }
 
     /**
@@ -66,11 +77,26 @@ class WriteFile implements WriteFileInterface
     private function writeSegments($resource, array $segments): void
     {
         foreach ($segments as $segment) {
-            $this->driver->fileWrite(
+            $this->getDriver()->fileWrite(
                 $resource,
                 $segment->getData()
             );
         }
-        $this->driver->fileWrite($resource, pack("C", ord(";")));
+        $this->getDriver()->fileWrite($resource, pack("C", ord(";")));
+    }
+
+    /**
+     * Returns current driver for media directory
+     *
+     * @return DriverInterface
+     * @throws FileSystemException
+     */
+    private function getDriver(): DriverInterface
+    {
+        if ($this->driver === null) {
+            $this->driver = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
+        }
+
+        return $this->driver;
     }
 }

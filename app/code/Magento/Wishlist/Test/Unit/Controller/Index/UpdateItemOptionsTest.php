@@ -121,7 +121,6 @@ class UpdateItemOptionsTest extends TestCase
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT, [])
             ->willReturn($this->resultRedirectMock);
-
     }
 
     /**

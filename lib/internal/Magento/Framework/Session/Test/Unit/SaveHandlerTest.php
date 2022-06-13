@@ -119,16 +119,49 @@ class SaveHandlerTest extends TestCase
         $this->assertTrue($this->saveHandler->write("test_session_id", "testdata"));
     }
 
-    public function testWriteMoreThanSessionMaxSize()
+    public function testWriteMoreThanSessionMaxSize(): void
     {
-        $this->sessionMaxSizeConfigMock->expects($this->once())
+        $this->sessionMaxSizeConfigMock
+            ->expects($this->once())
             ->method('getSessionMaxSize')
             ->willReturn(1);
 
-        $this->saveHandlerAdapterMock->expects($this->once())
-            ->method('read')
-            ->with('test_session_id');
+        $this->saveHandlerAdapterMock
+            ->expects($this->never())
+            ->method('read');
 
         $this->assertTrue($this->saveHandler->write("test_session_id", "testdata"));
+    }
+
+    public function testReadMoreThanSessionMaxSize(): void
+    {
+        $this->sessionMaxSizeConfigMock
+            ->expects($this->once())
+            ->method('getSessionMaxSize')
+            ->willReturn(1);
+
+        $this->saveHandlerAdapterMock
+            ->expects($this->once())
+            ->method('read')
+            ->with('test_session_id')
+            ->willReturn('test_session_data');
+
+        $this->assertEquals(null, $this->saveHandler->read("test_session_id"));
+    }
+
+    public function testReadSessionMaxZero(): void
+    {
+        $this->sessionMaxSizeConfigMock
+            ->expects($this->once())
+            ->method('getSessionMaxSize')
+            ->willReturn(0);
+
+        $this->saveHandlerAdapterMock
+            ->expects($this->once())
+            ->method('read')
+            ->with('test_session_id')
+            ->willReturn('test_session_data');
+
+        $this->assertEquals(null, $this->saveHandler->read("test_session_id"));
     }
 }

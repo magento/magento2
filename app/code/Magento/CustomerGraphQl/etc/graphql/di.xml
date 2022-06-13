@@ -21,6 +21,16 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CustomerGraphQl\Plugin\ClearCustomerSessionAfterRequest">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
         <arguments>
             <argument name="extendedConfigData" xsi:type="array">

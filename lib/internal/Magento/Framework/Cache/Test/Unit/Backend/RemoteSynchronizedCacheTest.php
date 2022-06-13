@@ -337,12 +337,21 @@ class RemoteSynchronizedCacheTest extends TestCase
      */
     public function testClean(): void
     {
+        $mode = 'clean_tags';
+        $tags = ['MAGE'];
         $this->remoteCacheMockExample
             ->expects($this->exactly(1))
             ->method('clean')
+            ->with($mode, $tags)
             ->willReturn(true);
 
-        $this->remoteSyncCacheInstance->clean();
+        $this->localCacheMockExample
+            ->expects($this->once())
+            ->method('clean')
+            ->with($mode, [])
+            ->willReturn(true);
+
+        $this->remoteSyncCacheInstance->clean($mode, $tags);
     }
 
     /**
@@ -353,6 +362,7 @@ class RemoteSynchronizedCacheTest extends TestCase
     public function testSaveWithEqualRemoteData(): void
     {
         $remoteData = 1;
+        $tags = ['MAGE'];
 
         $this->remoteCacheMockExample
             ->method('load')
@@ -361,14 +371,15 @@ class RemoteSynchronizedCacheTest extends TestCase
         $this->localCacheMockExample
             ->expects($this->once())
             ->method('save')
+            ->with($remoteData, 1, [])
             ->willReturn(true);
 
-        $this->remoteSyncCacheInstance->save($remoteData, 1);
+        $this->remoteSyncCacheInstance->save($remoteData, 1, $tags);
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveWithMismatchedRemoteData(): void
     {
         $remoteData = '1';

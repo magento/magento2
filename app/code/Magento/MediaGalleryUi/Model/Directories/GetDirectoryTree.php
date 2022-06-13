@@ -88,11 +88,10 @@ class GetDirectoryTree
 
             $pathArray = explode('/', $path);
             $directories[] = [
-                'data' => count($pathArray) > 0 ? end($pathArray) : $path,
-                'attr' => ['id' => $path],
-                'metadata' => [
-                    'path' => $path
-                ],
+                'text' => count($pathArray) > 0 ? end($pathArray) : $path,
+                'id' => $path,
+                'li_attr' => ['data-id' => $path],
+                'path' => $path,
                 'path_array' => $pathArray
             ];
         }

@@ -11,7 +11,6 @@ use Magento\Downloadable\Model\ResourceModel\Link as Resource;
 /**
  * Downloadable link model
  *
- * @api
  * @method int getProductId()
  * @method Link setProductId(int $value)
  *
@@ -20,36 +19,36 @@ use Magento\Downloadable\Model\ResourceModel\Link as Resource;
  */
 class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, LinkInterface
 {
-    const XML_PATH_LINKS_TITLE = 'catalog/downloadable/links_title';
+    public const XML_PATH_LINKS_TITLE = 'catalog/downloadable/links_title';
 
-    const XML_PATH_DEFAULT_DOWNLOADS_NUMBER = 'catalog/downloadable/downloads_number';
+    public const XML_PATH_DEFAULT_DOWNLOADS_NUMBER = 'catalog/downloadable/downloads_number';
 
-    const XML_PATH_TARGET_NEW_WINDOW = 'catalog/downloadable/links_target_new_window';
+    public const XML_PATH_TARGET_NEW_WINDOW = 'catalog/downloadable/links_target_new_window';
 
-    const XML_PATH_CONFIG_IS_SHAREABLE = 'catalog/downloadable/shareable';
+    public const XML_PATH_CONFIG_IS_SHAREABLE = 'catalog/downloadable/shareable';
 
-    const LINK_SHAREABLE_YES = 1;
+    public const LINK_SHAREABLE_YES = 1;
 
-    const LINK_SHAREABLE_NO = 0;
+    public const LINK_SHAREABLE_NO = 0;
 
-    const LINK_SHAREABLE_CONFIG = 2;
+    public const LINK_SHAREABLE_CONFIG = 2;
 
     /**#@+
      * Constants for field names
      */
-    const KEY_TITLE = 'title';
-    const KEY_SORT_ORDER = 'sort_order';
-    const KEY_IS_SHAREABLE = 'is_shareable';
-    const KEY_PRICE = 'price';
-    const KEY_NUMBER_OF_DOWNLOADS = 'number_of_downloads';
-    const KEY_LINK_TYPE = 'link_type';
-    const KEY_LINK_FILE = 'link_file';
-    const KEY_LINK_FILE_CONTENT = 'link_file_content';
-    const KEY_LINK_URL = 'link_url';
-    const KEY_SAMPLE_TYPE = 'sample_type';
-    const KEY_SAMPLE_FILE = 'sample_file';
-    const KEY_SAMPLE_FILE_CONTENT = 'sample_file_content';
-    const KEY_SAMPLE_URL = 'sample_url';
+    public const KEY_TITLE = 'title';
+    public const KEY_SORT_ORDER = 'sort_order';
+    public const KEY_IS_SHAREABLE = 'is_shareable';
+    public const KEY_PRICE = 'price';
+    public const KEY_NUMBER_OF_DOWNLOADS = 'number_of_downloads';
+    public const KEY_LINK_TYPE = 'link_type';
+    public const KEY_LINK_FILE = 'link_file';
+    public const KEY_LINK_FILE_CONTENT = 'link_file_content';
+    public const KEY_LINK_URL = 'link_url';
+    public const KEY_SAMPLE_TYPE = 'sample_type';
+    public const KEY_SAMPLE_FILE = 'sample_file';
+    public const KEY_SAMPLE_FILE_CONTENT = 'sample_file_content';
+    public const KEY_SAMPLE_URL = 'sample_url';
     /**#@-*/
 
     /**
@@ -60,6 +59,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -93,6 +93,8 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
+     * After save process
+     *
      * @return $this
      */
     public function afterSave()
@@ -154,7 +156,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getTitle()
@@ -163,7 +165,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getPrice()
@@ -172,7 +174,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getIsShareable()
@@ -181,7 +183,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getSortOrder()
@@ -190,7 +192,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getNumberOfDownloads()
@@ -199,7 +201,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getLinkType()
@@ -208,7 +210,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getLinkFile()
@@ -227,7 +229,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getLinkUrl()
@@ -236,7 +238,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getSampleType()
@@ -245,7 +247,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getSampleFile()
@@ -264,7 +266,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getSampleUrl()
@@ -275,6 +277,8 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     //@codeCoverageIgnoreStart
 
     /**
+     * Set link title
+     *
      * @param string $title
      * @return $this
      */
@@ -284,6 +288,8 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
+     * Set sort order
+     *
      * @param int $sortOrder
      * @return $this
      */
@@ -293,6 +299,8 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
+     * Set is shareable
+     *
      * @param int $isShareable
      * @return $this
      */
@@ -313,8 +321,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * Set number of downloads per user
-     * Null for unlimited downloads
+     * Set number of downloads per user (Null for unlimited downloads)
      *
      * @param int $numberOfDownloads
      * @return $this
@@ -325,6 +332,8 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
+     * Set link type
+     *
      * @param string $linkType
      * @return $this
      */
@@ -367,6 +376,8 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
+     * Set sample type
+     *
      * @param string $sampleType
      * @return $this
      */
@@ -410,7 +421,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Downloadable\Api\Data\LinkExtensionInterface|null
      */
@@ -420,7 +431,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Downloadable\Api\Data\LinkExtensionInterface $extensionAttributes
      * @return $this

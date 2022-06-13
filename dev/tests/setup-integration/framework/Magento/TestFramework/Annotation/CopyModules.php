@@ -89,7 +89,7 @@ class CopyModules
      * The component registrar uses static private variable and does not provide unregister method,
      * however unregister is required to remove registered modules after they are deleted from app/code.
      *
-     * @param $moduleName
+     * @param string $moduleName
      *
      * @return void
      */

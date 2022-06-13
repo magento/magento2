@@ -31,8 +31,6 @@ class ExpressRedirectTest extends TestCase
     protected $objectManager;
 
     /**
-     * Customer session
-     *
      * @var MockObject
      */
     protected $customerSession;

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontQuickSearchSkuWithSpecialCharRankingTest">
+        <annotations>
+            <features value="Search"/>
+            <stories value="Search Product on Storefront"/>
+            <title value="Quick Search should rank product which SKU matches exactly the search term highly in the result"/>
+            <description value="Quick Search should rank product which SKU matches exactly the search term highly in the result"/>
+            <severity value="AVERAGE"/>
+            <useCaseId value="ACP2E-8"/>
+            <testCaseId value="AC-1259"/>
+            <group value="SearchEngineElasticsearch"/>
+        </annotations>
+        <before>
+            <!--Create product1-->
+            <createData entity="SimpleTwo" stepKey="product1">
+                <field key="sku">ZXH-QJ185</field>
+            </createData>
+            <!--Create product2-->
+            <createData entity="SimpleTwo" stepKey="product2">
+                <field key="name">ZXH-QJ185</field>
+            </createData>
+            <!--Login as admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Open "SKU" attribute in admin-->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="OpenSkuAttribute">
+                <argument name="productAttributeCode" value="sku"/>
+            </actionGroup>
+            <!--Set "SKU" attribute search weight-->
+            <actionGroup ref="AdminProductAttributeSetSearchWeightActionGroup" stepKey="setSkuSearchWeight">
+                <argument name="value" value="10"/>
+            </actionGroup>
+            <!--Save "SKU" attribute-->
+            <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveSkuAttribute"/>
+            <!--Open "Name" attribute in admin-->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="OpenNameAttribute">
+                <argument name="productAttributeCode" value="name"/>
+            </actionGroup>
+            <!--Set "Name" attribute search weight-->
+            <actionGroup ref="AdminProductAttributeSetSearchWeightActionGroup" stepKey="setNameSearchWeight">
+                <argument name="value" value="2"/>
+            </actionGroup>
+            <!--Save "Name" attribute-->
+            <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveNameAttribute"/>
+            <!--Reindex-->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!--Clean cache-->
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete product1-->
+            <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
+            <!--Delete product2-->
+            <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
+            <!--Open "SKU" attribute in admin-->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="OpenSkuAttribute">
+                <argument name="productAttributeCode" value="sku"/>
+            </actionGroup>
+            <!--Reset "SKU" attribute search weight-->
+            <actionGroup ref="AdminProductAttributeSetSearchWeightActionGroup" stepKey="setSkuSearchWeight">
+                <argument name="value" value="6"/>
+            </actionGroup>
+            <!--Save "SKU" attribute-->
+            <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveSkuAttribute"/>
+            <!--Open "Name" attribute in admin-->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="OpenNameAttribute">
+                <argument name="productAttributeCode" value="name"/>
+            </actionGroup>
+            <!--Reset "Name" attribute search weight-->
+            <actionGroup ref="AdminProductAttributeSetSearchWeightActionGroup" stepKey="setNameSearchWeight">
+                <argument name="value" value="5"/>
+            </actionGroup>
+            <!--Save "Name" attribute-->
+            <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveNameAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!--Clear grid filter-->
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+            <!--Logout from admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Navigate to home page-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <!--Search for word "ZXH-QJ185"-->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="search">
+            <argument name="phrase" value="ZXH-QJ185"/>
+        </actionGroup>
+        <!--Assert that product1 is first in the search result-->
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct1Position">
+            <argument name="productName" value="$product1.name$"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <!--Assert that product2 is second in the search result-->
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct2Position">
+            <argument name="productName" value="$product2.name$"/>
+            <argument name="index" value="2"/>
+        </actionGroup>
+    </test>
+</tests>
+

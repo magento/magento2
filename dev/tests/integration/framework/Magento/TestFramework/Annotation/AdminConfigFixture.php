@@ -23,7 +23,7 @@ class AdminConfigFixture
     public const ANNOTATION = 'magentoAdminConfigFixture';
 
     /**
-     * Test instance that is available between 'startTest' and 'stopTest' events
+     * The test instance that is available between 'startTest' and 'stopTest' events.
      *
      * @var TestCase
      */

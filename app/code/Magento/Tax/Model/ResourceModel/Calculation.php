@@ -14,18 +14,16 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Store ISO 3166-1 alpha-2 USA country code
      */
-    const USA_COUNTRY_CODE = 'US';
+    public const USA_COUNTRY_CODE = 'US';
+
+    public const PORTUGAL_COUNTRY_CODE = 'PT';
 
     /**
-     * Rates cache
-     *
      * @var array
      */
     protected $_ratesCache = [];
 
     /**
-     * Tax data
-     *
      * @var \Magento\Tax\Helper\Data
      */
     protected $_taxData;
@@ -233,7 +231,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         // as needed, reduce the postcode to the correct length
         $len = $this->_taxData->getPostCodeSubStringLength();
-        $postcode = substr($postcode, 0, $len);
+        $postcode = $postcode !== null ? substr($postcode, 0, $len) : '';
 
         // begin creating the search template array
         $strArr = [$postcode, $postcode . '*'];
@@ -254,8 +252,9 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Returns tax rates for request - either pereforms SELECT from DB, or returns already cached result
-     * Notice that productClassId due to optimization can be array of ids
+     * Returns tax rates for request - either pereforms SELECT from DB, or returns already cached result.
+     *
+     * Notice that productClassId due to optimization can be array of ids.
      *
      * @param \Magento\Framework\DataObject $request
      * @return array
@@ -342,8 +341,12 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $postcodeIsNumeric = is_numeric($postcode);
             $postcodeIsRange = false;
             $originalPostcode = null;
+            $zipFrom = null;
+            $zipTo = null;
             if (is_string($postcode) && preg_match('/^(.+)-(.+)$/', $postcode, $matches)) {
-                if ($countryId == self::USA_COUNTRY_CODE && is_numeric($matches[2]) && strlen($matches[2]) == 4) {
+                if ((self::USA_COUNTRY_CODE === $countryId && is_numeric($matches[2]) && 4 === strlen($matches[2])) ||
+                    (self::PORTUGAL_COUNTRY_CODE === $countryId && is_numeric($matches[2]) && 3 === strlen($matches[2]))
+                ) {
                     $postcodeIsNumeric = true;
                     $originalPostcode = $postcode;
                     $postcode = $matches[1];
@@ -354,6 +357,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 }
             }
 
+            $selectClone = null;
             if ($postcodeIsNumeric || $postcodeIsRange) {
                 $selectClone = clone $select;
                 $selectClone->where('rate.zip_is_range IS NOT NULL');

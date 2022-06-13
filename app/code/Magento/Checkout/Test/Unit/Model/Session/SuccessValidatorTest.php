@@ -29,8 +29,8 @@ class SuccessValidatorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIsValid(): void
     {
         $checkoutSession = $this->getMockBuilder(
@@ -41,8 +41,8 @@ class SuccessValidatorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIsValidWithNotEmptyGetLastSuccessQuoteId(): void
     {
         $checkoutSession = $this->getMockBuilder(
@@ -59,8 +59,8 @@ class SuccessValidatorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIsValidWithEmptyQuoteAndOrder(): void
     {
         $checkoutSession = $this->getMockBuilder(
@@ -77,8 +77,8 @@ class SuccessValidatorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIsValidTrue(): void
     {
         $checkoutSession = $this->getMockBuilder(

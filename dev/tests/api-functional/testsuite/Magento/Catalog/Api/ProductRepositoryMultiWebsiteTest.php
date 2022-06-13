@@ -10,6 +10,8 @@ namespace Magento\Catalog\Api;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
@@ -26,9 +28,9 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products';
+    private const SERVICE_NAME = 'catalogProductRepositoryV1';
+    private const SERVICE_VERSION = 'V1';
+    private const RESOURCE_PATH = '/V1/products';
 
     /**
      * @var array
@@ -41,12 +43,18 @@ class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
     private $objectManager;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -330,6 +338,144 @@ class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento\Store\Test\Fixture\Website as:website2
+     * @magentoApiDataFixture Magento\Store\Test\Fixture\Group with:{"website_id":"$website2.id$"} as:store_group2
+     * @magentoApiDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store2
+     * @magentoApiDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store3
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product with:{"website_ids":[1,"$website2.id$"]} as:product
+     * @magentoConfigFixture catalog/price/scope 1
+     */
+    public function testUpdatePrice(): void
+    {
+        $store = $this->objectManager->get(Store::class);
+        $defaultWebsiteStore1 = $store->load('default', 'code')->getCode();
+        $secondWebsiteStore1 = $this->fixtures->get('store2')->getCode();
+        $secondWebsiteStore2 = $this->fixtures->get('store3')->getCode();
+        $sku = $this->fixtures->get('product')->getSku();
+
+        // change any attribute value in second store
+        $request = [
+            ProductInterface::SKU => $sku,
+            'name' => 'updated product name for storeview'
+        ];
+        $this->saveProduct($request, $secondWebsiteStore1);
+
+        // now update prices in second website
+        $request = [
+            ProductInterface::SKU => $sku,
+            'price' => 9,
+            ProductInterface::CUSTOM_ATTRIBUTES => [
+                [
+                    'attribute_code' => 'special_price',
+                    'value' => 8,
+                ]
+            ],
+        ];
+        $this->saveProduct($request, $secondWebsiteStore1);
+        $defaultWebsiteStore1Response = $this->flattenCustomAttributes($this->getProduct($sku, $defaultWebsiteStore1));
+        $this->assertEquals(10, $defaultWebsiteStore1Response['price']);
+        $this->assertArrayNotHasKey('special_price', $defaultWebsiteStore1Response);
+        $secondWebsiteStore1Response = $this->flattenCustomAttributes($this->getProduct($sku, $secondWebsiteStore1));
+        $this->assertEquals(9, $secondWebsiteStore1Response['price']);
+        $this->assertEquals(8, $secondWebsiteStore1Response['special_price']);
+        $secondWebsiteStore2Response = $this->flattenCustomAttributes($this->getProduct($sku, $secondWebsiteStore2));
+        $this->assertEquals(9, $secondWebsiteStore2Response['price']);
+        $this->assertEquals(8, $secondWebsiteStore2Response['special_price']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testPartialUpdateShouldNotOverrideImagesRolesInheritance(): void
+    {
+        $sku = 'simple';
+        $name = 'Product Simple edited';
+        $store = $this->objectManager->get(Store::class);
+        $storeId = (int) $store->load('fixture_third_store', 'code')->getId();
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($sku);
+        $request = [
+            ProductInterface::SKU => $sku,
+            ProductInterface::NAME => $name,
+        ];
+        $response = $this->saveProduct($request, 'fixture_third_store');
+        $this->assertEquals($name, $response['name']);
+        $this->assertOverriddenValues(
+            [
+                'name' => true,
+                'image' => false,
+                'small_image' => false,
+                'thumbnail' => false,
+            ],
+            $product,
+            $storeId
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product1
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product2
+     */
+    public function testPartialUpdateShouldNotOverrideUrlKeyInheritance(): void
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $store = $this->objectManager->get(Store::class);
+        $defaultStore = $store->load('default', 'code');
+        $sku2 = $this->fixtures->get('product2')->getSku();
+        $sku1Name = $this->fixtures->get('product1')->getName();
+        $sku2NewName = $this->fixtures->get('product2')->getName() . ' storeview';
+        $sku2UrlKey = $this->fixtures->get('product2')->getUrlKey();
+
+        // Change the second product name with the first product name in default store view
+        $this->saveProduct(
+            [
+                ProductInterface::SKU => $sku2,
+                'name' => $sku1Name
+            ],
+            $defaultStore->getCode()
+        );
+        $response = $this->flattenCustomAttributes($this->getProduct($sku2, $defaultStore->getCode()));
+        $this->assertEquals($sku1Name, $response['name']);
+        // Assert that Url Key has not changed
+        $this->assertEquals($sku2UrlKey, $response['url_key']);
+        $product = $productRepository->get($sku2, false, $defaultStore->getId(), true);
+        $this->assertOverriddenValues(
+            [
+                'name' => true,
+                'url_key' => false,
+            ],
+            $product,
+            (int) $defaultStore->getId()
+        );
+
+        // Change the second product name with a new name in default store view
+        $this->saveProduct(
+            [
+                ProductInterface::SKU => $sku2,
+                'name' => $sku2NewName
+            ],
+            $defaultStore->getCode()
+        );
+        $response = $this->flattenCustomAttributes($this->getProduct($sku2, $defaultStore->getCode()));
+        $this->assertEquals($sku2NewName, $response['name']);
+        // Assert that Url Key has not changed
+        $this->assertEquals($sku2UrlKey, $response['url_key']);
+        $product = $productRepository->get($sku2, false, $defaultStore->getId(), true);
+        $this->assertOverriddenValues(
+            [
+                'name' => true,
+                'url_key' => false,
+            ],
+            $product,
+            (int) $defaultStore->getId()
+        );
+    }
+
+    /**
      * @param array $expected
      * @param array $actual
      */
@@ -380,5 +526,40 @@ class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
         $attribute = $attributeRepository->get($code);
         $attribute->addData($data);
         $attributeRepository->save($attribute);
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function flattenCustomAttributes(array $data): array
+    {
+        $customAttributes = $data[ProductInterface::CUSTOM_ATTRIBUTES] ?? [];
+        unset($data[ProductInterface::CUSTOM_ATTRIBUTES]);
+        return array_merge(array_column($customAttributes, 'value', 'attribute_code'), $data);
+    }
+
+    /**
+     * Get product
+     *
+     * @param string $sku
+     * @param string|null $storeCode
+     * @return array|bool|float|int|string
+     */
+    private function getProduct($sku, $storeCode = null)
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
+                'httpMethod' => Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Get',
+            ],
+        ];
+
+        return $this->_webApiCall($serviceInfo, ['sku' => $sku], null, $storeCode);
     }
 }

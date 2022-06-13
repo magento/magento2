@@ -5,6 +5,7 @@
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
+use Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
 use Magento\Framework\App\ObjectManager;
 
 class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
@@ -69,7 +70,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabClass()
     {
@@ -77,7 +78,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabUrl()
     {
@@ -85,7 +86,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAjaxLoaded()
     {
@@ -93,7 +94,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabLabel()
     {
@@ -101,7 +102,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabTitle()
     {
@@ -109,7 +110,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canShowTab()
     {
@@ -117,7 +118,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isHidden()
     {
@@ -165,7 +166,9 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
-        $renderer = $this->_rendererFieldset->setTemplate(
+
+        $renderer = $this->getLayout()->createBlock(Fieldset::class);
+        $renderer->setTemplate(
             'Magento_CatalogRule::promo/fieldset.phtml'
         )->setNewChildUrl(
             $newChildUrl

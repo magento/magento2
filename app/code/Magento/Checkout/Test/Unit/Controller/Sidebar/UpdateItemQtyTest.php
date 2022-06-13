@@ -96,8 +96,8 @@ class UpdateItemQtyTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecute(): void
     {
         $this->requestMock
@@ -153,8 +153,8 @@ class UpdateItemQtyTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteWithLocalizedException(): void
     {
         $this->requestMock
@@ -196,8 +196,8 @@ class UpdateItemQtyTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteWithException(): void
     {
         $this->requestMock
@@ -216,6 +216,49 @@ class UpdateItemQtyTest extends TestCase
             ->method('critical')
             ->with($exception)
             ->willReturn(null);
+
+        $this->sidebarMock->expects($this->once())
+            ->method('getResponseData')
+            ->with('Error!')
+            ->willReturn(
+                [
+                    'success' => false,
+                    'error_message' => 'Error!'
+                ]
+            );
+
+        $this->jsonHelperMock->expects($this->once())
+            ->method('jsonEncode')
+            ->with(
+                [
+                    'success' => false,
+                    'error_message' => 'Error!'
+                ]
+            )
+            ->willReturn('json encoded');
+
+        $this->responseMock->expects($this->once())
+            ->method('representJson')
+            ->with('json encoded')
+            ->willReturn('json represented');
+
+        $this->assertEquals('json represented', $this->updateItemQty->execute());
+    }
+
+    /**
+     * @return void
+     */
+    public function testExecuteWithWrongRequestParams(): void
+    {
+        $this->requestMock
+            ->method('getParam')
+            ->withConsecutive(['item_id'], ['item_qty'])
+            ->willReturnOnConsecutiveCalls(0, 'error');
+
+        $this->sidebarMock->expects($this->once())
+            ->method('checkQuoteItem')
+            ->with(0)
+            ->willThrowException(new LocalizedException(__('Error!')));
 
         $this->sidebarMock->expects($this->once())
             ->method('getResponseData')

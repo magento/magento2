@@ -98,8 +98,8 @@ class DataTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetCalculatedTaxesEmptySource(): void
     {
         $source = null;
@@ -107,8 +107,8 @@ class DataTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetCalculatedTaxesForOrder(): void
     {
         $orderId = 1;
@@ -287,7 +287,7 @@ class DataTest extends TestCase
             ->method('round')
             ->willReturnCallback(
                 function ($arg) {
-                    return round($arg, 2);
+                    return round((float) $arg, 2);
                 }
             );
 

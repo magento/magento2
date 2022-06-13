@@ -69,16 +69,16 @@ class RuleProductPricesPersistorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteWithEmptyPriceData(): void
     {
         $this->assertFalse($this->model->execute([]));
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecute(): void
     {
         $priceData = [
@@ -126,8 +126,8 @@ class RuleProductPricesPersistorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteWithException(): void
     {
         $this->expectException('Exception');

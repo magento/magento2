@@ -233,7 +233,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             \IntlDateFormatter::NONE,
             $adminTimeZone
         );
-        $simpleRes = new \DateTime(null, $adminTimeZone);
+        $simpleRes = new \DateTime('now', $adminTimeZone);
         $simpleRes->setTimestamp($formatter->parse($date));
         $simpleRes->setTime(0, 0, 0);
         $simpleRes->setTimezone(new \DateTimeZone('UTC'));

@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote;
 
+use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -31,6 +34,16 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     private $getCartItemOptionsFromUID;
 
     /**
+     * @var QuoteIdToMaskedQuoteIdInterface
+     */
+    private $quoteIdToMaskedQuoteIdInterface;
+
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -41,6 +54,8 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
         $this->getCustomOptionsWithIDV2ForQueryBySku = $objectManager->get(
             GetCustomOptionsWithUIDForQueryBySku::class
         );
+        $this->quoteIdToMaskedQuoteIdInterface = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->fixtures = $objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -81,7 +96,7 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
         $customizableOptionsOutput =
             $response['addProductsToCart']['cart']['items'][0]['customizable_options'];
 
-        foreach ($customizableOptionsOutput as $key => $customizableOptionOutput) {
+        foreach ($customizableOptionsOutput as $customizableOptionOutput) {
             $customizableOptionOutputValues = [];
             foreach ($customizableOptionOutput['values'] as $customizableOptionOutputValue) {
                 $customizableOptionOutputValues[] =  $customizableOptionOutputValue['value'];
@@ -221,6 +236,149 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product1
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product2
+     * @magentoApiDataFixture Magento\Quote\Test\Fixture\GuestCart as:cart
+     */
+    public function testAddMultipleProductsToEmptyCart(): void
+    {
+        $product1 = $this->fixtures->get('product1');
+        $product2 = $this->fixtures->get('product2');
+        $cart = $this->fixtures->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
+        $query = $this->getAddMultipleProductsToCartAndReturnCartTotalsMutation(
+            $maskedQuoteId,
+            [
+                [
+                    'sku' => $product1->getSku(),
+                    'quantity' => 2
+                ],
+                [
+                    'sku' => $product2->getSku(),
+                    'quantity' => 3
+                ]
+            ]
+        );
+        $response = $this->graphQlMutation($query);
+        $result = $response['addProductsToCart'];
+        self::assertEmpty($result['user_errors']);
+        self::assertCount(2, $result['cart']['items']);
+
+        $cartItem = $result['cart']['items'][0];
+        self::assertEquals($product1->getSku(), $cartItem['product']['sku']);
+        self::assertEquals(2, $cartItem['quantity']);
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total']['value']);
+
+        $cartItem = $result['cart']['items'][1];
+        self::assertEquals($product2->getSku(), $cartItem['product']['sku']);
+        self::assertEquals(3, $cartItem['quantity']);
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(30, $cartItem['prices']['row_total']['value']);
+
+        $cartTotals = $result['cart']['prices'];
+        self::assertEquals(50, $cartTotals['grand_total']['value']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product1
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product2
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product3
+     * @magentoApiDataFixture Magento\Quote\Test\Fixture\GuestCart as:cart
+     * @magentoApiDataFixture Magento\Quote\Test\Fixture\AddProductToCart as:cartItem1
+     * @magentoApiDataFixture Magento\Quote\Test\Fixture\AddProductToCart as:cartItem2
+     * @magentoDataFixtureDataProvider {"cartItem1":{"cart_id":"$cart.id$","product_id":"$product1.id$","qty":1}}
+     * @magentoDataFixtureDataProvider {"cartItem2":{"cart_id":"$cart.id$","product_id":"$product2.id$","qty":1}}
+     */
+    public function testAddMultipleProductsToNotEmptyCart(): void
+    {
+        $product1 = $this->fixtures->get('product1');
+        $product2 = $this->fixtures->get('product2');
+        $product3 = $this->fixtures->get('product3');
+        $cart = $this->fixtures->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
+        $query = $this->getAddMultipleProductsToCartAndReturnCartTotalsMutation(
+            $maskedQuoteId,
+            [
+                [
+                    'sku' => $product1->getSku(),
+                    'quantity' => 1
+                ],
+                [
+                    'sku' => $product3->getSku(),
+                    'quantity' => 1
+                ]
+            ]
+        );
+        $response = $this->graphQlMutation($query);
+        $result = $response['addProductsToCart'];
+        self::assertEmpty($result['user_errors']);
+        self::assertCount(3, $result['cart']['items']);
+
+        $cartItem = $result['cart']['items'][0];
+        self::assertEquals($product1->getSku(), $cartItem['product']['sku']);
+        self::assertEquals(2, $cartItem['quantity']);
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total']['value']);
+
+        $cartItem = $result['cart']['items'][1];
+        self::assertEquals($product2->getSku(), $cartItem['product']['sku']);
+        self::assertEquals(1, $cartItem['quantity']);
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(10, $cartItem['prices']['row_total']['value']);
+
+        $cartItem = $result['cart']['items'][2];
+        self::assertEquals($product3->getSku(), $cartItem['product']['sku']);
+        self::assertEquals(1, $cartItem['quantity']);
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(10, $cartItem['prices']['row_total']['value']);
+
+        $cartTotals = $result['cart']['prices'];
+        self::assertEquals(40, $cartTotals['grand_total']['value']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product with:{"stock_item":{"qty": 1}} as:product1
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product2
+     * @magentoApiDataFixture Magento\Quote\Test\Fixture\GuestCart as:cart
+     */
+    public function testAddMultipleProductsWithInsufficientStockToEmptyCart(): void
+    {
+        $product1 = $this->fixtures->get('product1');
+        $product2 = $this->fixtures->get('product2');
+        $cart = $this->fixtures->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
+        $query = $this->getAddMultipleProductsToCartAndReturnCartTotalsMutation(
+            $maskedQuoteId,
+            [
+                [
+                    'sku' => $product1->getSku(),
+                    'quantity' => 2
+                ],
+                [
+                    'sku' => $product2->getSku(),
+                    'quantity' => 3
+                ]
+            ]
+        );
+        $response = $this->graphQlMutation($query);
+        $result = $response['addProductsToCart'];
+        self::assertCount(1, $result['user_errors']);
+        self::assertEquals('INSUFFICIENT_STOCK', $result['user_errors'][0]['code']);
+
+        self::assertCount(1, $result['cart']['items']);
+
+        $cartItem = $result['cart']['items'][0];
+        self::assertEquals($product2->getSku(), $cartItem['product']['sku']);
+        self::assertEquals(3, $cartItem['quantity']);
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(30, $cartItem['prices']['row_total']['value']);
+
+        $cartTotals = $result['cart']['prices'];
+        self::assertEquals(30, $cartTotals['grand_total']['value']);
+    }
+
+    /**
      * @return array
      */
     public function addProductNotAssignedToWebsiteDataProvider(): array
@@ -309,6 +467,61 @@ mutation {
                         }
                     }
                 }
+            }
+        },
+        user_errors {
+            code
+            message
+        }
+    }
+}
+MUTATION;
+    }
+
+    /**
+     * Returns GraphQl mutation for addProductsToCart with cart totals
+     *
+     * @param string $maskedQuoteId
+     * @param array $cartItems
+     * @return string
+     */
+    private function getAddMultipleProductsToCartAndReturnCartTotalsMutation(
+        string $maskedQuoteId,
+        array $cartItems
+    ): string {
+        $cartItemsQuery = preg_replace(
+            '/"([^"]+)"\s*:\s*/',
+            '$1:',
+            json_encode($cartItems)
+        );
+        return  <<<MUTATION
+mutation {
+    addProductsToCart(
+        cartId: "{$maskedQuoteId}",
+        cartItems: $cartItemsQuery
+    ) {
+        cart {
+            items {
+              product {
+                sku
+              }
+              quantity
+              prices {
+                price {
+                  value
+                  currency
+                }
+                row_total {
+                  value
+                  currency
+                }
+              }
+            }
+            prices {
+              grand_total {
+                value
+                currency
+              }
             }
         },
         user_errors {
