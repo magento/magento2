@@ -38,7 +38,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function getAttribute(): string
     {
         $attribute = $this->getData('attribute');
-        if (strpos($attribute, '::') !== false) {
+        if ($attribute !== null && strpos($attribute, '::') !== false) {
             list(, $attribute) = explode('::', $attribute);
         }
 

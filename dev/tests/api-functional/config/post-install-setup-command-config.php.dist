@@ -12,7 +12,7 @@ return [
         'config' => [
             '--remote-storage-driver' => 'aws-s3',
             '--remote-storage-bucket' => 'myBucket',
-            '--remote-storage-region' => 'us-east-1'
+            '--remote-storage-region' => 'us-east-1',
         ]
     ]
     */
