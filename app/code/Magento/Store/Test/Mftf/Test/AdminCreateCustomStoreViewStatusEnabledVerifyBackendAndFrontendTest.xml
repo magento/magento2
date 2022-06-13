@@ -29,6 +29,7 @@
                 <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStore">
                     <argument name="storeGroupName" value="customStore.name"/>
                 </actionGroup>
+                <magentoCron groups="index" stepKey="reindex"/>
                 <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
 
@@ -37,6 +38,7 @@
                 <argument name="StoreGroup" value="customStore"/>
                 <argument name="customStore" value="storeViewData"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
             <actionGroup ref="AdminCreateStoreViewSaveActionGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>

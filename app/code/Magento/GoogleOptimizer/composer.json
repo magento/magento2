@@ -11,6 +11,7 @@
         "magento/module-catalog": "*",
         "magento/module-cms": "*",
         "magento/module-google-analytics": "*",
+        "magento/module-google-gtag": "*",
         "magento/module-store": "*",
         "magento/module-ui": "*"
     },

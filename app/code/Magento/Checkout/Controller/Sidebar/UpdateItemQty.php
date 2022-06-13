@@ -14,8 +14,9 @@ use Magento\Framework\App\Response\Http;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class UpdateItemQty extends Action
+class UpdateItemQty extends Action implements HttpPostActionInterface
 {
     /**
      * @var Sidebar
@@ -61,12 +62,12 @@ class UpdateItemQty extends Action
     }
 
     /**
-     * @return $this
+     * @inheritdoc
      */
     public function execute()
     {
         $itemId = (int)$this->getRequest()->getParam('item_id');
-        $itemQty = $this->getRequest()->getParam('item_qty') * 1;
+        $itemQty = (float)$this->getRequest()->getParam('item_qty') * 1;
         $itemQty = $this->quantityProcessor->prepareQuantity($itemQty);
 
         try {

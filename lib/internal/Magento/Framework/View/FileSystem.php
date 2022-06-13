@@ -171,7 +171,7 @@ class FileSystem
      */
     public static function normalizePath($path)
     {
-        $parts = explode('/', $path);
+        $parts = $path !== null ? explode('/', $path) : [];
         $result = [];
 
         foreach ($parts as $part) {
