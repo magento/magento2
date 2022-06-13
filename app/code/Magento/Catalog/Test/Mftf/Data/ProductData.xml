@@ -829,7 +829,8 @@
     <entity name="virtualProductCustomImportOptions" type="product">
         <data key="name" unique="suffix">VirtualProduct</data>
         <data key="sku" unique="suffix">virtual_sku</data>
-        <data key="price">9,000.00</data>
+        <data key="price">9000.00</data>
+        <data key="formattedPrice">9,000.00</data>
         <data key="quantity">999</data>
         <data key="status">In Stock</data>
         <data key="visibility">Catalog, Search</data>
@@ -850,7 +851,8 @@
     <entity name="virtualProductOutOfStock" type="product">
         <data key="name" unique="suffix">VirtualProduct</data>
         <data key="sku" unique="suffix">virtual_sku</data>
-        <data key="price">9,000.00</data>
+        <data key="price">9000.00</data>
+        <data key="formattedPrice">9,000.00</data>
         <data key="quantity">999</data>
         <data key="status">Out of Stock</data>
         <data key="visibility">Catalog, Search</data>
@@ -1468,4 +1470,5 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+
 </entities>

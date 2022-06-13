@@ -175,7 +175,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $option = $this->getOption();
         $result = '';
         if (!$this->_isSingleSelection()) {
-            foreach (explode(',', $optionValue) as $_value) {
+            foreach (explode(',', (string)$optionValue) as $_value) {
                 $_result = $option->getValueById($_value);
                 if ($_result) {
                     $result .= $_result->getTitle() . ', ';
@@ -216,7 +216,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $values = [];
         if (!$this->_isSingleSelection()) {
             foreach (explode(',', $optionValue) as $value) {
-                $value = trim($value);
+                $value = $value === null ? '' : trim($value);
                 if (array_key_exists($value, $productOptionValues)) {
                     $values[] = $productOptionValues[$value];
                 }
@@ -240,7 +240,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function prepareOptionValueForRequest($optionValue)
     {
         if (!$this->_isSingleSelection()) {
-            return explode(',', $optionValue);
+            return explode(',', (string)$optionValue);
         }
         return $optionValue;
     }
@@ -258,7 +258,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $result = 0;
 
         if (!$this->_isSingleSelection()) {
-            foreach (explode(',', $optionValue) as $value) {
+            foreach (explode(',', (string)$optionValue) as $value) {
                 $_result = $option->getValueById($value);
                 if ($_result) {
                     $result += $this->getCalculatedOptionValue($option, $_result, $basePrice);
@@ -309,7 +309,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
         if (!$this->_isSingleSelection()) {
             $skus = [];
-            foreach (explode(',', $optionValue) as $value) {
+            foreach (explode(',', (string)$optionValue) as $value) {
                 $optionSku = $option->getValueById($value);
                 if ($optionSku) {
                     $skus[] = $optionSku->getSku();

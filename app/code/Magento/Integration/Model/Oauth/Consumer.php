@@ -113,12 +113,16 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
 
     /**
      * @inheritDoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate()
     {
         if ($this->getCallbackUrl() || $this->getRejectedCallbackUrl()) {
-            $this->setCallbackUrl(trim($this->getCallbackUrl()));
-            $this->setRejectedCallbackUrl(trim($this->getRejectedCallbackUrl()));
+            $this->setCallbackUrl($this->getCallbackUrl() !== null ? trim($this->getCallbackUrl()) : '');
+            $this->setRejectedCallbackUrl(
+                $this->getRejectedCallbackUrl() !== null ? trim($this->getRejectedCallbackUrl()) : ''
+            );
 
             if ($this->getCallbackUrl() && !$this->urlValidator->isValid($this->getCallbackUrl())) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Invalid Callback URL'));

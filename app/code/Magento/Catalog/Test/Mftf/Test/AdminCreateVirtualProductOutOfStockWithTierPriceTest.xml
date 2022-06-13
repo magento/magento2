@@ -97,7 +97,7 @@
         </assertEquals>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="productPriceAmount"/>
         <assertEquals stepKey="assertOldPriceTextOnProductPage">
-            <expectedResult type="string">${{virtualProductOutOfStock.price}}</expectedResult>
+            <expectedResult type="string">${{virtualProductOutOfStock.formattedPrice}}</expectedResult>
             <actualResult type="variable">productPriceAmount</actualResult>
         </assertEquals>
     </test>

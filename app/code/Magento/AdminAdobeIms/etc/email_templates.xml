@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="admin_adobe_ims_email_header_template" label="Header" file="admin_adobe_ims_email_header.html" type="html" module="Magento_AdminAdobeIms" area="adminhtml"/>
+    <template id="admin_adobe_ims_email_footer_template" label="Footer" file="admin_adobe_ims_email_footer.html" type="html" module="Magento_AdminAdobeIms" area="adminhtml"/>
+
+    <template id="admin_emails_new_user_created_template"
+              label="New AdminAdobeIMS Admin Created"
+              file="new_admin_adobe_ims_admin_created.html"
+              type="html"
+              module="Magento_AdminAdobeIms"
+              area="adminhtml"/>
+</config>
