@@ -10,9 +10,9 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontCashOnDeliveryPaymentForSpecificCountryTest">
         <annotations>
-            <title value="OnePageCheckout Cash on Delivery method is not visible, if it is not allowed for that specific Country."/>
-            <description value="OnePageCheckout Cash on Delivery method is visible only for the allowed Countries, while disappears if the billing address selected from the not allowed Countries."/>
-            <stories value="OnePageCheckout Cash on Delivery method disappears, if the address changed to the Country which is not allowed for it."/>
+            <title value="OnePageCheckout cash on delivery method available only for the allowed specific Countries."/>
+            <description value="OnePageCheckout cash on delivery method is visible only for the allowed Countries, while disappears if the billing address changed to not allowed Countries."/>
+            <stories value="OnePageCheckout cash on delivery method disappears, if the address changed to the Country which is not allowed for it."/>
             <features value="OnePageCheckout"/>
             <severity value="AVERAGE"/>
             <testCaseId value="AC-3216"/>
@@ -20,6 +20,7 @@
             <group value="checkout"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{DisplayBillingAddressOnPaymentMethod.path}} {{DisplayBillingAddressOnPaymentMethod.value}}" stepKey="displayBillingAddressOnPaymentMethod"/>
             <!--Enable Cash On Delivery payment method-->
             <magentoCLI command="config:set {{CashOnDeliveryEnableConfigData.path}} {{CashOnDeliveryEnableConfigData.value}}" stepKey="enableCashOnDelivery"/>
             <!--Allow Cash On Delivery for Specific Country-->
@@ -60,7 +61,6 @@
 
         <!-- Select Shipping Method-->
         <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-
         <!--Click next button to open payment section-->
         <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
 
@@ -84,5 +84,9 @@
 
         <!--Assert COD payment method not available anymore-->
         <dontSeeElement selector="input#cashondelivery" stepKey="dontSeeCodPaymentMethod"/>
+
+        <!-- Place order -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="PlaceOrder" />
     </test>
 </tests>
+

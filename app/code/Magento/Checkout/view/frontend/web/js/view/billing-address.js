@@ -237,11 +237,6 @@ function (
          * @return {*}
          */
         getCountryName: function (countryId) {
-            if (lastSelectedBillingAddress && String(lastSelectedBillingAddress['countryId']) !== String(countryId)) {
-                this.updateAddresses();
-            }
-            lastSelectedBillingAddress = quote.billingAddress();
-
             return countryData()[countryId] != undefined ? countryData()[countryId].name : ''; //eslint-disable-line
         },
 
