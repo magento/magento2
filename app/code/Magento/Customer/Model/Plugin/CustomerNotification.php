@@ -104,7 +104,7 @@ class CustomerNotification
      */
     public function beforeExecute(ActionInterface $subject)
     {
-        $customerId = $this->session->getCustomerId();
+        $customerId = (int)$this->session->getCustomerId();
 
         if (!$this->isFrontendRequest()
             || !$this->isPostRequest()
@@ -161,8 +161,8 @@ class CustomerNotification
      * @param int $customerId
      * @return bool
      */
-    private function isSessionUpdateRegisteredFor($customerId): bool
+    private function isSessionUpdateRegisteredFor(int $customerId): bool
     {
-        return $this->notificationStorage->isExists(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customerId);
+        return (bool)$this->notificationStorage->isExists(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customerId);
     }
 }
