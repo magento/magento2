@@ -39,13 +39,16 @@ var config = {
             'jquery-ui-modules/progressbar': 'jquery/ui-modules/widgets/progressbar',
             'jquery-ui-modules/resizable': 'jquery/ui-modules/widgets/resizable',
             'jquery-ui-modules/selectable': 'jquery/ui-modules/widgets/selectable',
-            'jquery-ui-modules/slider': 'jquery/ui-modules/widgets/selectmenu',
+            'jquery-ui-modules/selectmenu': 'jquery/ui-modules/widgets/selectmenu',
+            'jquery-ui-modules/slider': 'jquery/ui-modules/widgets/slider',
             'jquery-ui-modules/sortable': 'jquery/ui-modules/widgets/sortable',
             'jquery-ui-modules/spinner': 'jquery/ui-modules/widgets/spinner',
             'jquery-ui-modules/tabs': 'jquery/ui-modules/widgets/tabs',
             'jquery-ui-modules/tooltip': 'jquery/ui-modules/widgets/tooltip',
             'jquery-ui-modules/widget': 'jquery/ui-modules/widget',
-            'jquery-ui-modules/timepicker': 'jquery/timepicker'
+            'jquery-ui-modules/timepicker': 'jquery/timepicker',
+            'vimeo': 'vimeo/player',
+            'vimeoWrapper': 'vimeo/vimeo-wrapper'
         }
     },
     shim: {
@@ -57,13 +60,17 @@ var config = {
         'matchMedia': {
             'exports': 'mediaCheck'
         },
-        'magnifier/magnifier': ['jquery']
+        'magnifier/magnifier': ['jquery'],
+        'vimeo/player': {
+            'exports': 'Player'
+        }
     },
     paths: {
         'jquery/validate': 'jquery/jquery.validate',
         'jquery/file-uploader': 'jquery/fileUploader/jquery.fileuploader',
         'prototype': 'legacy-build.min',
-        'jquery/jquery-storageapi': 'jquery/jquery.storageapi.min',
+        'jquery/jquery.cookie': 'js-cookie/cookie-wrapper',
+        'jquery/jquery-storageapi': 'js-storage/storage-wrapper',
         'text': 'mage/requirejs/text',
         'domReady': 'requirejs/domReady',
         'spectrum': 'jquery/spectrum/spectrum',

@@ -267,6 +267,8 @@ type SelectedShippingMethod @doc(description: "Contains details about the select
     method_title: String! @doc(description: "The label for the method code.")
     amount: Money! @doc(description: "The cost of shipping using this shipping method.")
     base_amount: Money @deprecated(reason: "The field should not be used on the storefront.")
+    price_excl_tax: Money! @doc(description: "The cost of shipping using this shipping method, excluding tax.")
+    price_incl_tax: Money! @doc(description: "The cost of shipping using this shipping method, including tax.")
 }
 
 type AvailableShippingMethod @doc(description: "Contains details about the possible shipping methods and carriers.") {
@@ -360,6 +362,7 @@ type Discount @doc(description:"Defines an individual discount. A discount can b
 
 type CartItemPrices @doc(description: "Contains details about the price of the item, including taxes and discounts.") {
     price: Money! @doc(description: "The price of the item before any discounts were applied. The price that might include tax, depending on the configured display settings for cart.")
+    price_including_tax:  Money! @doc(description: "The price of the item before any discounts were applied. The price that might include tax, depending on the configured display settings for cart.")
     row_total: Money! @doc(description: "The value of the price multiplied by the quantity of the item.")
     row_total_including_tax: Money! @doc(description: "The value of `row_total` plus the tax applied to the item.")
     discounts: [Discount] @doc(description: "An array of discounts to be applied to the cart item.")
