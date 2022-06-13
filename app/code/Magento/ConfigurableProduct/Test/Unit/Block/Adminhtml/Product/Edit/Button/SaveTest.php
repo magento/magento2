@@ -63,5 +63,6 @@ class SaveTest extends TestCase
 
         $this->assertArrayHasKey('data_attribute', $result);
         $this->assertArrayHasKey('options', $result);
+        $this->assertArrayHasKey('dropdown_button_aria_label', $result);
     }
 }

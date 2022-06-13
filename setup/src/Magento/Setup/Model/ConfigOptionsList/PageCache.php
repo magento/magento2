@@ -19,26 +19,28 @@ use Magento\Setup\Validator\RedisConnectionValidator;
  */
 class PageCache implements ConfigOptionsListInterface
 {
-    const INPUT_VALUE_PAGE_CACHE_REDIS = 'redis';
-    const CONFIG_VALUE_PAGE_CACHE_REDIS = \Magento\Framework\Cache\Backend\Redis::class;
+    public const INPUT_VALUE_PAGE_CACHE_REDIS = 'redis';
+    public const CONFIG_VALUE_PAGE_CACHE_REDIS = \Magento\Framework\Cache\Backend\Redis::class;
 
-    const INPUT_KEY_PAGE_CACHE_BACKEND = 'page-cache';
-    const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER = 'page-cache-redis-server';
-    const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE = 'page-cache-redis-db';
-    const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT = 'page-cache-redis-port';
-    const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD = 'page-cache-redis-password';
-    const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA = 'page-cache-redis-compress-data';
-    const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESSION_LIB = 'page-cache-redis-compression-lib';
-    const INPUT_KEY_PAGE_CACHE_ID_PREFIX = 'page-cache-id-prefix';
+    public const INPUT_KEY_PAGE_CACHE_BACKEND = 'page-cache';
+    public const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER = 'page-cache-redis-server';
+    public const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE = 'page-cache-redis-db';
+    public const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT = 'page-cache-redis-port';
+    public const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD = 'page-cache-redis-password';
+    public const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA = 'page-cache-redis-compress-data';
+    public const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESSION_LIB = 'page-cache-redis-compression-lib';
+    public const INPUT_KEY_PAGE_CACHE_ID_PREFIX = 'page-cache-id-prefix';
 
-    const CONFIG_PATH_PAGE_CACHE_BACKEND = 'cache/frontend/page_cache/backend';
-    const CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER = 'cache/frontend/page_cache/backend_options/server';
-    const CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE = 'cache/frontend/page_cache/backend_options/database';
-    const CONFIG_PATH_PAGE_CACHE_BACKEND_PORT = 'cache/frontend/page_cache/backend_options/port';
-    const CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD = 'cache/frontend/page_cache/backend_options/password';
-    const CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA = 'cache/frontend/page_cache/backend_options/compress_data';
-    const CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB = 'cache/frontend/page_cache/backend_options/compression_lib';
-    const CONFIG_PATH_PAGE_CACHE_ID_PREFIX = 'cache/frontend/page_cache/id_prefix';
+    public const CONFIG_PATH_PAGE_CACHE_BACKEND = 'cache/frontend/page_cache/backend';
+    public const CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER = 'cache/frontend/page_cache/backend_options/server';
+    public const CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE = 'cache/frontend/page_cache/backend_options/database';
+    public const CONFIG_PATH_PAGE_CACHE_BACKEND_PORT = 'cache/frontend/page_cache/backend_options/port';
+    public const CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD = 'cache/frontend/page_cache/backend_options/password';
+    public const CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA =
+        'cache/frontend/page_cache/backend_options/compress_data';
+    public const CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB =
+        'cache/frontend/page_cache/backend_options/compression_lib';
+    public const CONFIG_PATH_PAGE_CACHE_ID_PREFIX = 'cache/frontend/page_cache/id_prefix';
 
     /**
      * @var array
@@ -153,7 +155,7 @@ class PageCache implements ConfigOptionsListInterface
         $configData = new ConfigData(ConfigFilePool::APP_ENV);
         if (isset($options[self::INPUT_KEY_PAGE_CACHE_ID_PREFIX])) {
             $configData->set(self::CONFIG_PATH_PAGE_CACHE_ID_PREFIX, $options[self::INPUT_KEY_PAGE_CACHE_ID_PREFIX]);
-        } else {
+        } elseif (!$deploymentConfig->get(self::CONFIG_PATH_PAGE_CACHE_ID_PREFIX)) {
             $configData->set(self::CONFIG_PATH_PAGE_CACHE_ID_PREFIX, $this->generateCachePrefix());
         }
 
@@ -284,6 +286,7 @@ class PageCache implements ConfigOptionsListInterface
      */
     private function generateCachePrefix(): string
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         return substr(\hash('sha256', dirname(__DIR__, 6)), 0, 3) . '_';
     }
 }

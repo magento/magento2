@@ -23,5 +23,9 @@
         <element name="collapsibleSectionByTitle" type="text" selector="//form[@id='config-edit-form']//div[@class='section-config'][contains(.,'{{sectionTitle}}')]" parameterized="true" />
         <element name="expandedSectionByTitle" type="text" selector="//form[@id='config-edit-form']//div[@class='section-config active'][contains(.,'{{sectionTitle}}')]" parameterized="true" />
         <element name="errorElement" type="text" selector="#{{inputId}}-error" parameterized="true" />
+        <element name="defaultCurrency" type="select" selector="#currency_options_default" />
+        <element name="allowedCurrencies" type="multiselect" selector="#currency_options_allow" />
+        <element name="defaultCurrencyCheckbox" type="checkbox" selector="#currency_options_default_inherit"/>
+        <element name="allowedCurrencyCheckbox" type="checkbox" selector="#currency_options_allow_inherit"/>
     </section>
 </sections>

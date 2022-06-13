@@ -3,8 +3,10 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~7.4.0||~8.0.0",
-        "magento/framework": "*"
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "*",
+        "magento/module-payment": "*",
+        "magento/module-graph-ql": "*"
     },
     "suggest": {
         "magento/module-store-graph-ql": "*"

@@ -207,6 +207,7 @@ define([
                         'margin-top' : topMargin,
                         'z-index': 1000
                     });
+                    jQuery(this).closest('.ui-dialog').nextAll('.ui-widget-overlay').css('z-index', 999);
                 },
                 close: function () {
                     jQuery(this).closest('.ui-dialog').removeClass('ui-dialog-active');
@@ -248,7 +249,7 @@ define([
                 return false;
             }
 
-            if (jQuery.isFunction(giftOptionsForm[0].reset)) {
+            if (typeof (giftOptionsForm[0].reset) === 'function') {
                 giftOptionsForm[0].reset();
             }
             this.closeWindow();

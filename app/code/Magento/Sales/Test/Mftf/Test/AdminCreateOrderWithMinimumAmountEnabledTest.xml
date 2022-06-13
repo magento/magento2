@@ -49,7 +49,7 @@
         <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillEmail">
             <argument name="email" value="{{Simple_US_Customer.email}}"/>
         </actionGroup>
-        
+
         <!--Fill customer address information-->
         <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress">
             <argument name="customer" value="Simple_US_Customer"/>
@@ -70,9 +70,10 @@
 
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingStatus"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <comment userInput="BIC workaround" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
         <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
-			<actualResult type="const">$orderId</actualResult>
+            <actualResult type="const">$orderNumber</actualResult>
         </assertNotEmpty>
         <actionGroup ref="VerifyBasicOrderInformationActionGroup" stepKey="verifyOrderInformation">
             <argument name="customer" value="Simple_US_Customer"/>

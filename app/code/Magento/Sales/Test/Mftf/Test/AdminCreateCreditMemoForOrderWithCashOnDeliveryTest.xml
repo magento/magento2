@@ -66,7 +66,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clearFilters"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabOrderId"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterOrdersGridById"/>
-        
+
 
         <actionGroup ref="AdminOpenAndFillCreditMemoRefundActionGroup" stepKey="fillCreditMemoRefund">
             <argument name="itemQtyToRefund" value="1"/>
