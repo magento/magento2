@@ -302,7 +302,7 @@ class AfterImportDataObserver implements ObserverInterface
             (empty($newSku) || !isset($newSku['entity_id']))
                 || ($this->import->getRowScope($rowData) == ImportProduct::SCOPE_STORE
                     && empty($rowData[self::URL_KEY_ATTRIBUTE_CODE]))
-                || (array_key_exists(strtolower($rowData[ImportProduct::COL_SKU]), $oldSku)
+                || (array_key_exists(strtolower($rowData[ImportProduct::COL_SKU] ?? ''), $oldSku)
                     && !isset($rowData[self::URL_KEY_ATTRIBUTE_CODE])
                     && $this->import->getBehavior() === ImportExport::BEHAVIOR_APPEND)
             )
