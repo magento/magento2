@@ -87,8 +87,6 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     protected $_massactionIdFilter;
 
     /**
-     * Massaction block name
-     *
      * @var string
      */
     protected $_massactionBlockName = \Magento\Backend\Block\Widget\Grid\Massaction\Extended::class;
@@ -122,8 +120,6 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     protected $_headersVisibility = true;
 
     /**
-     * Filter visibility
-     *
      * @var boolean
      */
     protected $_filterVisibility = true;
@@ -148,15 +144,11 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     protected $_isCollapsed;
 
     /**
-     * Count subtotals
-     *
      * @var boolean
      */
     protected $_countSubTotals = false;
 
     /**
-     * SubTotals
-     *
      * @var \Magento\Framework\DataObject[]
      */
     protected $_subtotals = [];
@@ -1048,6 +1040,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
      * Retrieve Grid data as CSV
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getCsv()
     {
@@ -1074,7 +1067,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
                     $data[] = '"' . str_replace(
                         ['"', '\\'],
                         ['""', '\\\\'],
-                        $column->getRowFieldExport($item)
+                        $column->getRowFieldExport($item) ?: ''
                     ) . '"';
                 }
             }
@@ -1088,7 +1081,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
                     $data[] = '"' . str_replace(
                         ['"', '\\'],
                         ['""', '\\\\'],
-                        $column->getRowFieldExport($this->getTotals())
+                        $column->getRowFieldExport($this->getTotals()) ?: ''
                     ) . '"';
                 }
             }

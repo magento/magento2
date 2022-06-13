@@ -52,8 +52,8 @@
             <argument name="customerAddressVar" value="US_Address_NY"/>
             <argument name="paymentMethod" value="Check / Money order"/>
         </actionGroup>
-        <click selector="{{CheckoutShippingSection.updateAddress}}" stepKey="saveAddress"/>
-        <waitForPageLoad stepKey="waitUpdateAddress"/>
+        <actionGroup ref="StorefrontClickUpdateAddressInCheckoutActionGroup" stepKey="saveAddress"/>
+        <comment userInput="BIC workaround" stepKey="waitUpdateAddress"/>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />

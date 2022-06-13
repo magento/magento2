@@ -15,7 +15,7 @@ use Magento\Analytics\Model\ReportWriterInterface;
 use Magento\Framework\Archive;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -127,7 +127,7 @@ class ExportDataHandlerTest extends TestCase
         $this->filesystemMock
             ->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::SYS_TMP)
+            ->with(DirectoryList::TMP)
             ->willReturn($this->directoryMock);
         $this->directoryMock
             ->expects($this->exactly(4))
@@ -228,7 +228,7 @@ class ExportDataHandlerTest extends TestCase
         $this->filesystemMock
             ->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::SYS_TMP)
+            ->with(DirectoryList::TMP)
             ->willReturn($this->directoryMock);
         $this->reportWriterMock
             ->expects($this->once())

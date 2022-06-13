@@ -90,9 +90,9 @@
         <waitForPageLoad stepKey="waitForShippingPageLoad"/>
         <click stepKey="chooseFlatRateShipping" selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Flat Rate')}}"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext2"/>
-        <waitForPageLoad stepKey="waitForReviewAndPayments2"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder2"/>
-        <waitForPageLoad stepKey="waitForSuccessfullyPlacedOrder"/>
+        <comment userInput="BIC workaround" stepKey="waitForReviewAndPayments2"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder2"/>
+        <comment userInput="BIC workaround" stepKey="waitForSuccessfullyPlacedOrder"/>
         <see stepKey="seeSuccessMessageForPlacedOrder" userInput="Thank you for your purchase!"/>
     </test>
 </tests>
