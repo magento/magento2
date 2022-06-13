@@ -20,7 +20,6 @@
             <group value="checkout"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set {{DisplayBillingAddressOnPaymentMethod.path}} {{DisplayBillingAddressOnPaymentMethod.value}}" stepKey="displayBillingAddressOnPaymentMethod"/>
             <!--Enable Cash On Delivery payment method-->
             <magentoCLI command="config:set {{CashOnDeliveryEnableConfigData.path}} {{CashOnDeliveryEnableConfigData.value}}" stepKey="enableCashOnDelivery"/>
             <!--Allow Cash On Delivery for Specific Country-->
@@ -33,9 +32,9 @@
             <createData entity="Simple_US_Customer_US_UK_Addresses" stepKey="createCustomer"/>
         </before>
         <after>
+            <!--Disable Cash On Delivery method-->
             <magentoCLI command="config:set payment/cashondelivery/allowspecific 0" stepKey="allowSpecificValue"/>
             <magentoCLI command="config:set payment/cashondelivery/specificcountry ''" stepKey="specificCountryValue"/>
-            <!--Disable Cash On Delivery method-->
             <magentoCLI command="config:set {{CashOnDeliveryDisabledConfigData.path}} {{CashOnDeliveryDisabledConfigData.value}}" stepKey="disabledCashOnDelivery"/>
 
             <!--Customer log out-->
