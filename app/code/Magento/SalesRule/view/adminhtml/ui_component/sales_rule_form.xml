@@ -538,7 +538,11 @@
         </field>
         <container name="store_view_labels" sortOrder="40">
             <htmlContent name="html_content">
-                <block name="store_view_labels" class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels"/>
+                <block name="store_view_labels" class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels">
+                    <arguments>
+                        <argument name="target_form" xsi:type="string">sales_rule_form</argument>
+                    </arguments>
+                </block>
             </htmlContent>
         </container>
     </fieldset>
