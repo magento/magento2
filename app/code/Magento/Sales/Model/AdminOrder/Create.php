@@ -822,7 +822,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $item = $this->_getQuoteItem($item);
         if ($item) {
             $removeItem = false;
-            $moveTo = explode('_', $moveTo);
+            $moveTo = explode('_', $moveTo ?: '');
             switch ($moveTo[0]) {
                 case 'order':
                     $info = $item->getBuyRequest();
@@ -1308,7 +1308,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $newInfoOptions = [];
         $optionIds = $item->getOptionByCode('option_ids');
         if ($optionIds) {
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+            foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
                 $option = $item->getProduct()->getOptionById($optionId);
                 $optionValue = $item->getOptionByCode('option_' . $optionId)->getValue();
 
@@ -1833,9 +1833,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function _prepareCustomer()
     {
-        if ($this->getQuote()->getCustomerIsGuest()) {
-            return $this;
-        }
         /** @var $store \Magento\Store\Model\Store */
         $store = $this->getSession()->getStore();
         $customer = $this->getQuote()->getCustomer();
