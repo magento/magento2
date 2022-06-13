@@ -76,7 +76,7 @@ class ExpressionConverter
      */
     public static function shortName($name)
     {
-        return strtr($name, self::$_translateMap);
+        return $name !== null ? strtr($name, self::$_translateMap) : '';
     }
 
     /**
@@ -103,7 +103,7 @@ class ExpressionConverter
      */
     public static function shortenEntityName($entityName, $prefix)
     {
-        if (strlen($entityName) > self::MYSQL_IDENTIFIER_LEN) {
+        if ($entityName !== null && strlen($entityName) > self::MYSQL_IDENTIFIER_LEN) {
             $shortName = ExpressionConverter::shortName($entityName);
             if (strlen($shortName) > self::MYSQL_IDENTIFIER_LEN) {
                 // md5() here is not for cryptographic use.

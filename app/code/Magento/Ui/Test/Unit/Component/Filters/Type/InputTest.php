@@ -85,13 +85,13 @@ class InputTest extends TestCase
     /**
      * Run test prepare method
      *
-     * @param string $name
+     * @param array $data
      * @param array $filterData
      * @param array|null $expectedCondition
      * @dataProvider getPrepareDataProvider
      * @return void
      */
-    public function testPrepare(string $name, array $filterData, ?array $expectedCondition): void
+    public function testPrepare(array $data, array $filterData, ?array $expectedCondition): void
     {
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
@@ -131,23 +131,23 @@ class InputTest extends TestCase
 
         $this->uiComponentFactory->expects($this->any())
             ->method('create')
-            ->with($name, Input::COMPONENT, ['context' => $this->contextMock])
+            ->with($data['name'], Input::COMPONENT, ['context' => $this->contextMock])
             ->willReturn($uiComponent);
 
         if ($expectedCondition !== null) {
             $this->filterBuilderMock->expects($this->once())
                 ->method('setConditionType')
-                ->with('like')
+                ->with($expectedCondition['setConditionType'])
                 ->willReturnSelf();
 
             $this->filterBuilderMock->expects($this->once())
                 ->method('setField')
-                ->with($name)
+                ->with($data['name'])
                 ->willReturnSelf();
 
             $this->filterBuilderMock->expects($this->once())
                 ->method('setValue')
-                ->with($expectedCondition['like'])
+                ->with($expectedCondition['setValue'])
                 ->willReturnSelf();
 
             $filterMock = $this->getMockBuilder(Filter::class)
@@ -165,7 +165,7 @@ class InputTest extends TestCase
             $this->filterBuilderMock,
             $this->filterModifierMock,
             [],
-            ['name' => $name]
+            $data
         );
 
         $date->prepare();
@@ -178,29 +178,97 @@ class InputTest extends TestCase
     {
         return [
             [
-                'test_date',
+                [
+                    'name' => 'test_date',
+                ],
                 ['test_date' => ''],
                 null,
             ],
             [
-                'test_date',
+                [
+                    'name' => 'test_date',
+                ],
                 ['test_date' => null],
                 null,
             ],
             [
-                'test_date',
+                [
+                    'name' => 'test_date',
+                ],
                 ['test_date' => '0'],
-                ['like' => '%0%'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => '%0%',
+                ],
             ],
             [
-                'test_date',
+                [
+                    'name' => 'test_date',
+                ],
                 ['test_date' => 'some_value'],
-                ['like' => '%some\_value%'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => '%some\_value%',
+                ],
             ],
             [
-                'test_date',
+                [
+                    'name' => 'test_date',
+                ],
                 ['test_date' => '%'],
-                ['like' => '%\%%'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => '%\%%',
+                ],
+            ],
+            [
+                [
+                    'name' => 'text_attr',
+                    'config' => [
+                        'filter' => [
+                            'filterType' => 'text',
+                            'conditionType' => 'eq',
+                        ]
+                    ]
+                ],
+                ['text_attr' => 'something'],
+                [
+                    'setConditionType' => 'eq',
+                    'setValue' => 'something',
+                ],
+            ],
+            [
+                [
+                    'name' => 'text_attr',
+                    'config' => [
+                        'filter' => [
+                            'filterType' => 'text',
+                            'conditionType' => 'like',
+                        ]
+                    ]
+                ],
+                ['text_attr' => 'something'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => '%something%',
+                ],
+            ],
+            [
+                [
+                    'name' => 'text_attr',
+                    'config' => [
+                        'filter' => [
+                            'filterType' => 'text',
+                            'conditionType' => 'like',
+                            'valueExpression' => '%s%%'
+                        ]
+                    ]
+                ],
+                ['text_attr' => 'something'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => 'something%',
+                ],
             ],
         ];
     }

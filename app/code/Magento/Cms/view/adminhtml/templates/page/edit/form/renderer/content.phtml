@@ -6,8 +6,8 @@
 ?>
 <?php $_element = $block->getElement() ?>
 
-<?php if (!$_element->getNoDisplay()) : ?>
+<?php if (!$_element->getNoDisplay()): ?>
 <div class="cms-manage-content-actions">
-    <?= /* @noEscape */ trim($_element->getElementHtml()) ?>
+    <?= /* @noEscape */ $_element->getElementHtml() !== null ? trim($_element->getElementHtml()) : '' ?>
 </div>
 <?php endif; ?>

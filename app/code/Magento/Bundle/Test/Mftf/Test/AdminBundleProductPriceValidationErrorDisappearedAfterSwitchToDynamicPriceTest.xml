@@ -34,7 +34,7 @@
             <argument name="price" value="test"/>
         </actionGroup>
         <actionGroup ref="AssertAdminValidationErrorAppearedForPriceFieldOnProductEditPageActionGroup" stepKey="assertVisibleError">
-            <argument name="errorMessage" value="Please enter a number 0 or greater in this field."/>
+            <argument name="errorMessage" value="Please enter a number 0 or greater, without comma in this field."/>
         </actionGroup>
         <actionGroup ref="AdminToggleSwitchDynamicPriceOnProductEditPageActionGroup" stepKey="enableDynamicPrice"/>
         <actionGroup ref="AssertAdminNoValidationErrorForPriceFieldOnProductEditPageActionGroup" stepKey="assertNotVisibleError"/>
