@@ -34,7 +34,7 @@
                 <argument name="customStore" value="storeViewData"/>
             </actionGroup>
 
-            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
@@ -45,6 +45,7 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                 <argument name="customStore" value="storeViewData"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

@@ -6,6 +6,8 @@
 
 /**
  * Marker interface for controllers on product view page
+ *
+ * @api
  */
 namespace Magento\Catalog\Controller\Product\View;
 
