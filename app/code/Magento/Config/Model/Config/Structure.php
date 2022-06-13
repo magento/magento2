@@ -49,7 +49,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     /**
      * Key that contains field type in structure array
      */
-    const TYPE_KEY = '_elementType';
+    public const TYPE_KEY = '_elementType';
 
     /**
      * Configuration structure represented as tree
@@ -177,7 +177,8 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      */
     public function getElement($path)
     {
-        return $this->getElementByPathParts(explode('/', $path));
+        $parts = $path !== null ? explode('/', $path) : [];
+        return $this->getElementByPathParts($parts);
     }
 
     /**
@@ -195,7 +196,8 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
             $path = array_shift($allPaths[$path]);
         }
 
-        return $this->getElementByPathParts(explode('/', $path));
+        $parts = $path !== null ? explode('/', $path) : [];
+        return $this->getElementByPathParts($parts);
     }
 
     /**

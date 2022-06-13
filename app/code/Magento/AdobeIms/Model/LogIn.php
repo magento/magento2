@@ -135,7 +135,7 @@ class LogIn implements LogInInterface
     {
         return $this->dateTime->gmtDate(
             self::DATE_FORMAT,
-            $this->dateTime->gmtTimestamp() + round($expiresIn / 1000)
+            $this->dateTime->gmtTimestamp() + (int)round($expiresIn / 1000)
         );
     }
 }
