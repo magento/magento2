@@ -69,7 +69,7 @@ class Tree extends \Magento\Backend\Block\Template
             $data = [
                 'text' => $this->_cmsWysiwygImages->getShortFilename($item->getBasename(), 20),
                 'id' => $this->_cmsWysiwygImages->convertPathToId($item->getFilename()),
-                'path' => substr($item->getFilename(), strlen($storageRoot)),
+                'path' => substr($item->getFilename() ?? '', strlen($storageRoot)),
                 'cls' => 'folder',
             ];
             $hasNestedDirectories = $this->hasNestedDirectories($storageRoot, $item->getFilename());
