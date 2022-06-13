@@ -28,6 +28,9 @@
             <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteAttributeSet2">
                 <argument name="label" value="{{ProductAttributeFrontendLabelTwo.label}}"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clearGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>

@@ -29,7 +29,9 @@
         <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
         <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
         <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
-        <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillQuantity">
+            <argument name="productQty" value="{{_defaultProduct.quantity}}"/>
+        </actionGroup>
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
         <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForDescription" />

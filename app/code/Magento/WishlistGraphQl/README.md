@@ -31,11 +31,11 @@ Extension developers can interact with the Magento_WishlistGraphQl module. For m
 
 For more information about the Magento_WishlistGraphQl [Queries](#queries) and [Mutations](#mutations) see below:
 
-### Queries {#queries}
+### Queries
 
 - [`wishlist`](https://devdocs.magento.com/guides/v2.4/graphql/queries/wishlist.html)
 
-### Mutations {#mutations}
+### Mutations
 
 - [`addProductsToWishlist`](https://devdocs.magento.com/guides/v2.4/graphql/mutations/add-products-to-wishlist.html)
 - [`removeProductsFromWishlist`](https://devdocs.magento.com/guides/v2.4/graphql/mutations/remove-products-from-wishlist.html)

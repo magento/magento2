@@ -19,7 +19,7 @@
         </arguments>
 
         <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customerVar.email}}" stepKey="enterEmail"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading3"/>
+        <waitForPageLoad stepKey="waitForLoading3"/>
         <fillField selector="{{CheckoutPaymentSection.guestFirstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
         <fillField selector="{{CheckoutPaymentSection.guestLastName}}" userInput="{{customerVar.lastname}}" stepKey="enterLastName"/>
         <fillField selector="{{CheckoutPaymentSection.guestStreet}}" userInput="{{customerAddressVar.street[0]}}" stepKey="enterStreet"/>

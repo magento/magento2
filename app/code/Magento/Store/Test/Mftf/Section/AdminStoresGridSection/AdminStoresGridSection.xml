@@ -12,7 +12,7 @@
         <element name="websiteFilterTextField" type="input" selector="#storeGrid_filter_website_title"/>
         <element name="storeFilterTextField" type="input" selector="#storeGrid_filter_store_title" timeout="90"/>
         <element name="searchButton" type="button" selector=".admin__data-grid-header button[title=Search]" timeout="30"/>
-        <element name="resetButton" type="button" selector="button[title='Reset Filter']" timeout="30"/>
+        <element name="resetButton" type="button" selector="button[title='Reset Filter']" timeout="30" deprecated="Use AdminDataGridHeaderSection.clearFilters instead"/>
         <element name="websiteNameInFirstRow" type="text" selector="tr:nth-of-type(1) &gt; .col-website_title &gt; a"/>
         <element name="storeGrpNameInFirstRow" type="text" selector=".col-group_title&gt;a"/>
         <element name="storeNameInFirstRow" type="text" selector=".col-store_title&gt;a"/>

@@ -32,7 +32,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProduct">
                 <argument name="sku" value="{{BundleProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
         <!--Go to bundle product creation page-->
