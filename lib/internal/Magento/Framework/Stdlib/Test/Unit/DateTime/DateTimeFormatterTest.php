@@ -139,4 +139,41 @@ class DateTimeFormatterTest extends TestCase
         $reflectionProperty->setValue($dateTimeFormatter, $this->localeResolverMock);
         $dateTimeFormatter->formatObject(new \DateTime('2013-06-06 17:05:06 Europe/Dublin'), new \StdClass());
     }
+
+    /**
+     * @dataProvider formatObjectNumericFormatDataProvider
+     */
+    public function testFormatObjectNumericFormat($format, $expected)
+    {
+        /** @var DateTimeFormatter $dateTimeFormatter */
+        $dateTimeFormatter = $this->objectManager->getObject(
+            DateTimeFormatter::class,
+            [
+                'useIntlFormatObject' => false,
+            ]
+        );
+
+        $reflection = new \ReflectionClass(get_class($dateTimeFormatter));
+        $reflectionProperty = $reflection->getProperty('localeResolver');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($dateTimeFormatter, $this->localeResolverMock);
+        $result = $dateTimeFormatter->formatObject(
+            new \DateTime('2022-03-30 00:01:02 GMT'),
+            $format,
+            'en_US'
+        );
+        $this->assertEquals($expected, $result);
+    }
+
+    public function formatObjectNumericFormatDataProvider()
+    {
+        return [
+            [null, 'Mar 30, 2022, 12:01:02 AM'],
+            [\IntlDateFormatter::NONE, '12:01:02 AM Greenwich Mean Time'],
+            [\IntlDateFormatter::SHORT, '3/30/22, 12:01:02 AM Greenwich Mean Time'],
+            [\IntlDateFormatter::MEDIUM, 'Mar 30, 2022, 12:01:02 AM Greenwich Mean Time'],
+            [\IntlDateFormatter::LONG, 'March 30, 2022 at 12:01:02 AM Greenwich Mean Time'],
+            [\IntlDateFormatter::FULL, 'Wednesday, March 30, 2022 at 12:01:02 AM Greenwich Mean Time'],
+        ];
+    }
 }

@@ -340,7 +340,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function setDefaultDirection($dir)
     {
-        if (in_array(strtolower($dir), ['asc', 'desc'])) {
+        if ($dir && in_array(strtolower($dir), ['asc', 'desc'])) {
             $this->_direction = strtolower($dir);
         }
         return $this;

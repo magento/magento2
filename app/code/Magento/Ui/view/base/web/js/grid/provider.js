@@ -35,7 +35,8 @@ define([
             },
             ignoreTmpls: {
                 data: true
-            }
+            },
+            triggerDataReload: false
         },
 
         /**
@@ -138,6 +139,8 @@ define([
             // after the initial loading has been made.
             if (!this.firstLoad) {
                 this.reload();
+            } else {
+                this.triggerDataReload = true;
             }
         },
 
@@ -152,6 +155,7 @@ define([
             this.set('lastError', true);
 
             this.firstLoad = false;
+            this.triggerDataReload = false;
 
             alert({
                 content: $t('Something went wrong.')
@@ -165,11 +169,14 @@ define([
          */
         onReload: function (data) {
             this.firstLoad = false;
-
             this.set('lastError', false);
-
             this.setData(data)
                 .trigger('reloaded');
+
+            if (this.triggerDataReload) {
+                this.triggerDataReload = false;
+                this.reload();
+            }
         },
 
         /**
