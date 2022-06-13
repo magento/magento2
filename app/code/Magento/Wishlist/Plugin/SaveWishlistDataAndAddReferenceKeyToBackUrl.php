@@ -14,6 +14,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\Url\Helper\Data as UrlHelper;
 
 /**
  * Cache wishlist data & Modify back Url
@@ -38,18 +39,26 @@ class SaveWishlistDataAndAddReferenceKeyToBackUrl
     private $urlBuilder;
 
     /**
+     * @var UrlHelper
+     */
+    private $urlHelper;
+
+    /**
      * @param DataSerializer $dataSerializer
      * @param CustomerSession $customerSession
      * @param UrlInterface $urlBuilder
+     * @param UrlHelper $urlHelper
      */
     public function __construct(
         DataSerializer $dataSerializer,
         CustomerSession $customerSession,
-        UrlInterface $urlBuilder
+        UrlInterface $urlBuilder,
+        UrlHelper $urlHelper
     ) {
         $this->dataSerializer = $dataSerializer;
         $this->customerSession = $customerSession;
         $this->urlBuilder = $urlBuilder;
+        $this->urlHelper = $urlHelper;
     }
 
     /**
@@ -77,14 +86,7 @@ class SaveWishlistDataAndAddReferenceKeyToBackUrl
             && ($backUrl !== null && strpos($backUrl, 'wishlist/index/add') !== false)
         ) {
             $token = $this->dataSerializer->serialize($this->customerSession->getBeforeWishlistRequest());
-            $query = [];
-            if (strpos($backUrl, '?') !== false) {
-                $queryString = explode('?', $backUrl);
-                // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                parse_str($queryString[1], $query);
-            }
-            $query['token'] = $token;
-            $backUrl = $this->urlBuilder->getUrl('wishlist/index/add', ['_query' => $query]);
+            $backUrl = $this->urlHelper->addRequestParam($backUrl, ['token' => $token]);
         }
 
         return [$customer, $type, $backUrl, $storeId, $sendemailStoreId];
