@@ -18,6 +18,7 @@ use Magento\Framework\Filter\DirectiveProcessor\LegacyDirective;
 use Magento\Framework\Filter\DirectiveProcessor\TemplateDirective;
 use Magento\Framework\Filter\DirectiveProcessor\VarDirective;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\Filter\Template\SignatureProvider;
 
 /**
  * Template filter
@@ -101,22 +102,31 @@ class Template implements \Zend_Filter_Interface
     private $variableResolver;
 
     /**
+     * @var SignatureProvider|null
+     */
+    private $signatureProvider;
+
+    /**
      * @param StringUtils $string
      * @param array $variables
      * @param DirectiveProcessorInterface[] $directiveProcessors
      * @param VariableResolverInterface|null $variableResolver
+     * @param SignatureProvider|null $signatureProvider
      */
     public function __construct(
         StringUtils $string,
         $variables = [],
         $directiveProcessors = [],
-        VariableResolverInterface $variableResolver = null
+        VariableResolverInterface $variableResolver = null,
+        SignatureProvider $signatureProvider = null
     ) {
         $this->string = $string;
         $this->setVariables($variables);
         $this->directiveProcessors = $directiveProcessors;
         $this->variableResolver = $variableResolver ?? ObjectManager::getInstance()
                 ->get(VariableResolverInterface::class);
+        $this->signatureProvider = $signatureProvider ?? ObjectManager::getInstance()
+                ->get(SignatureProvider::class);
 
         if (empty($directiveProcessors)) {
             $this->directiveProcessors = [
@@ -180,6 +190,54 @@ class Template implements \Zend_Filter_Interface
             )->render());
         }
 
+        // Processing of template directives.
+        $templateDirectivesResults = $this->processDirectives($value);
+
+        foreach ($templateDirectivesResults as $result) {
+            $value = str_replace($result['directive'], $result['output'], $value);
+        }
+
+        // Processing of deferred directives received from child templates.
+        $deferredDirectivesResults = $this->processDirectives($value, true);
+
+        foreach ($deferredDirectivesResults as $result) {
+            $value = str_replace($result['directive'], $result['output'], $value);
+        }
+
+        // Signing own deferred directives (if any).
+        $signature = $this->signatureProvider->get();
+
+        foreach ($templateDirectivesResults as $result) {
+            if ($result['directive'] === $result['output']) {
+                $value = str_replace(
+                    $result['output'],
+                    $signature . $result['output'] . $signature,
+                    $value
+                );
+            }
+        }
+
+        $value = $this->afterFilter($value);
+
+        return $value;
+    }
+
+    /**
+     * Processes template directives and returns an array
+     * that contains results produced by each directive.
+     *
+     * @param string $value
+     * @param bool $isSigned
+     *
+     * @return array
+     *
+     * @throws InvalidArgumentException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function processDirectives($value, $isSigned = false)
+    {
+        $results = [];
+
         foreach ($this->directiveProcessors as $directiveProcessor) {
             if (!$directiveProcessor instanceof DirectiveProcessorInterface) {
                 throw new InvalidArgumentException(
@@ -187,15 +245,28 @@ class Template implements \Zend_Filter_Interface
                 );
             }
 
-            if (preg_match_all($directiveProcessor->getRegularExpression(), $value, $constructions, PREG_SET_ORDER)) {
+            $pattern = $directiveProcessor->getRegularExpression();
+
+            if ($isSigned) {
+                $signature = $this->signatureProvider->get();
+
+                $pattern = substr_replace($pattern, $signature, strpos($pattern, '/') + 1, 0);
+                $pattern = substr_replace($pattern, $signature, strrpos($pattern, '/'), 0);
+            }
+
+            if (preg_match_all($pattern, $value, $constructions, PREG_SET_ORDER)) {
                 foreach ($constructions as $construction) {
                     $replacedValue = $directiveProcessor->process($construction, $this, $this->templateVars);
-                    $value = str_replace($construction[0], $replacedValue, $value);
+
+                    $results[] = [
+                        'directive' => $construction[0],
+                        'output' => $replacedValue
+                    ];
                 }
             }
         }
 
-        return $this->afterFilter($value);
+        return $results;
     }
 
     /**
