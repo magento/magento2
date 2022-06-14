@@ -29,11 +29,13 @@
                     <argument name="storeGroupName" value="{{customStore.name}}"/>
                     <argument name="storeGroupCode" value="{{customStore.code}}"/>
                 </actionGroup>
+                <magentoCron groups="index" stepKey="reindex"/>
             </before>
             <after>
                 <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                     <argument name="websiteName" value="{{customWebsite.name}}"/>
                 </actionGroup>
+                <magentoCron groups="index" stepKey="reindex"/>
                 <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
 

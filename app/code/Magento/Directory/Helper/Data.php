@@ -33,36 +33,36 @@ class Data extends AbstractHelper
     /**
      * Config value that lists ISO2 country codes which have optional Zip/Postal pre-configured
      */
-    const OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH = 'general/country/optional_zip_countries';
+    public const OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH = 'general/country/optional_zip_countries';
 
-    /*
+    /**
      * Path to config value, which lists countries, for which state is required.
      */
-    const XML_PATH_STATES_REQUIRED = 'general/region/state_required';
+    public const XML_PATH_STATES_REQUIRED = 'general/region/state_required';
 
-    /*
+    /**
      * Path to config value, which detects whether or not display the state for the country, if it is not required
      */
-    const XML_PATH_DISPLAY_ALL_STATES = 'general/region/display_all';
+    public const XML_PATH_DISPLAY_ALL_STATES = 'general/region/display_all';
 
     /**#@+
      * Path to config value, which is default country
      */
-    const XML_PATH_DEFAULT_COUNTRY = 'general/country/default';
-    const XML_PATH_DEFAULT_LOCALE = 'general/locale/code';
-    const XML_PATH_DEFAULT_TIMEZONE = 'general/locale/timezone';
+    public const XML_PATH_DEFAULT_COUNTRY = 'general/country/default';
+    public const XML_PATH_DEFAULT_LOCALE = 'general/locale/code';
+    public const XML_PATH_DEFAULT_TIMEZONE = 'general/locale/timezone';
     /**#@-*/
 
     /**
      * Path to config value that contains codes of the most used countries.
      * Such countries can be shown on the top of the country list.
      */
-    const XML_PATH_TOP_COUNTRIES = 'general/country/destinations';
+    public const XML_PATH_TOP_COUNTRIES = 'general/country/destinations';
 
     /**
      * Path to config value that contains weight unit
      */
-    const XML_PATH_WEIGHT_UNIT = 'general/locale/weight_unit';
+    public const XML_PATH_WEIGHT_UNIT = 'general/locale/weight_unit';
 
     /**
      * @var Collection
@@ -234,7 +234,7 @@ class Data extends AbstractHelper
     {
         if (null === $this->_optZipCountries) {
             $value = trim(
-                $this->scopeConfig->getValue(
+                (string)$this->scopeConfig->getValue(
                     self::OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH,
                     ScopeInterface::SCOPE_STORE
                 )
@@ -268,7 +268,7 @@ class Data extends AbstractHelper
     public function getCountriesWithStatesRequired($asJson = false)
     {
         $value = trim(
-            $this->scopeConfig->getValue(
+            (string)$this->scopeConfig->getValue(
                 self::XML_PATH_STATES_REQUIRED,
                 ScopeInterface::SCOPE_STORE
             )
@@ -348,7 +348,7 @@ class Data extends AbstractHelper
             AllowedCountries::ALLOWED_COUNTRIES_PATH,
             $scope['type'],
             $scope['value']
-        );
+        ) ?? '';
         $countryIds = explode(',', $allowedCountries);
         $collection = $this->_regCollectionFactory->create();
         $collection->addCountryFilter($countryIds)->load();

@@ -117,7 +117,7 @@ class AbstractIpn
         }
 
         $response = preg_split('/^\r?$/m', $postbackResult, 2);
-        $response = trim($response[1]);
+        $response = isset($response[1]) ? trim($response[1]) : '';
         if ($response != 'VERIFIED') {
             $this->_addDebugData('postback', $postbackQuery);
             $this->_addDebugData('postback_result', $postbackResult);

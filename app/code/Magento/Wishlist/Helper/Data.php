@@ -28,12 +28,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Config key 'Display Wishlist Summary'
      */
-    const XML_PATH_WISHLIST_LINK_USE_QTY = 'wishlist/wishlist_link/use_qty';
+    public const XML_PATH_WISHLIST_LINK_USE_QTY = 'wishlist/wishlist_link/use_qty';
 
     /**
      * Config key 'Display Out of Stock Products'
      */
-    const XML_PATH_CATALOGINVENTORY_SHOW_OUT_OF_STOCK = 'cataloginventory/options/show_out_of_stock';
+    public const XML_PATH_CATALOGINVENTORY_SHOW_OUT_OF_STOCK = 'cataloginventory/options/show_out_of_stock';
 
     /**
      * Currently logged in customer
@@ -64,7 +64,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_wishlistItemCollection;
 
     /**
-     * Core registry
+     * Magento framework Core registry
      *
      * @var \Magento\Framework\Registry
      */
@@ -322,7 +322,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             'wishlist/index/configure',
             [
                 'id' => $item->getWishlistItemId(),
-                'product_id' => $item->getProductId()
+                'product_id' => $item->getProductId(),
+                'qty' => (int)$item->getQty()
             ]
         );
     }
