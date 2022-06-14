@@ -21,10 +21,12 @@
         </annotations>
         <before>
             <!--Enable Cash On Delivery payment method-->
-            <magentoCLI command="config:set {{CashOnDeliveryEnableConfigData.path}} {{CashOnDeliveryEnableConfigData.value}}" stepKey="enableCashOnDelivery"/>
-            <!--Allow Cash On Delivery for Specific Country-->
-            <magentoCLI command="config:set payment/cashondelivery/allowspecific 1" stepKey="allowSpecificValue"/>
-            <magentoCLI command="config:set payment/cashondelivery/specificcountry GB" stepKey="specificCountryValue"/>
+            <actionGroup ref="CashOnDeliverySpecificCountryActionGroup" stepKey="enableCashOnDelivery">
+                <argument name="path" value="{{CashOnDeliveryEnableConfigData.path}}"/>
+                <argument name="value" value="{{CashOnDeliveryEnableConfigData.value}}"/>
+                <argument name="allowSpecific" value="1"/>
+                <argument name="specificCountry" value="GB"/>
+            </actionGroup>
 
             <!--Create Simple Product-->
             <createData entity="SimpleProduct" stepKey="simpleProduct"/>
@@ -33,10 +35,7 @@
         </before>
         <after>
             <!--Disable Cash On Delivery method-->
-            <magentoCLI command="config:set payment/cashondelivery/allowspecific 0" stepKey="allowSpecificValue"/>
-            <magentoCLI command="config:set payment/cashondelivery/specificcountry ''" stepKey="specificCountryValue"/>
-            <magentoCLI command="config:set {{CashOnDeliveryDisabledConfigData.path}} {{CashOnDeliveryDisabledConfigData.value}}" stepKey="disabledCashOnDelivery"/>
-
+            <actionGroup ref="CashOnDeliverySpecificCountryActionGroup" stepKey="disableCashOnDelivery"/>
             <!--Customer log out-->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <!--Delete created product-->
@@ -72,20 +71,19 @@
         <waitForPageLoad stepKey="waitForNewAddressPageLoad"/>
 
         <!--Assert COD payment method is available for the specific allowed Country-->
-        <seeElement selector="input#cashondelivery" stepKey="seeCodPaymentMethod"/>
+        <seeElement selector="{{StorefrontCheckoutPaymentMethodsSection.cashOnDelivery}}" stepKey="seeCodPaymentMethod"/>
 
         <!--Select payment method-->
         <click selector="{{StorefrontCheckoutPaymentMethodsSection.cashOnDelivery}}" stepKey="selectCashOnDeliveryMethod"/>
 
         <!--Billing is same as shipping-->
-        <checkOption selector="#billing-address-same-as-shipping-cashondelivery" stepKey="selectPaymentSolution" />
+        <checkOption selector="{{CheckoutPaymentSection.billingAddressSameAsShippingCheckboxCod}}" stepKey="selectPaymentSolution" />
         <waitForPageLoad stepKey="waitForPageLoad"/>
 
         <!--Assert COD payment method not available anymore-->
-        <dontSeeElement selector="input#cashondelivery" stepKey="dontSeeCodPaymentMethod"/>
+        <dontSeeElement selector="{{StorefrontCheckoutPaymentMethodsSection.cashOnDelivery}}" stepKey="dontSeeCodPaymentMethod"/>
 
         <!-- Place order -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="PlaceOrder" />
     </test>
 </tests>
-

@@ -125,7 +125,7 @@ function (
         useShippingAddress: function () {
             if (this.isAddressSameAsShipping()) {
                 selectBillingAddress(quote.shippingAddress());
-                this.updateAddresses();
+                this.updateAddresses(true);
                 this.isAddressDetailsVisible(true);
             } else {
                 lastSelectedBillingAddress = quote.billingAddress();
@@ -170,7 +170,7 @@ function (
                     checkoutData.setNewCustomerBillingAddress(addressData);
                 }
             }
-            this.updateAddresses();
+            this.updateAddresses(true);
         },
 
         /**
@@ -242,9 +242,14 @@ function (
 
         /**
          * Trigger action to update shipping and billing addresses
+         *
+         * @param {Boolean} force
          */
-        updateAddresses: function () {
-            setBillingAddressAction(globalMessageList);
+        updateAddresses: function (force = false) {
+            if (force || window.checkoutConfig.reloadOnBillingAddress ||
+                !window.checkoutConfig.displayBillingOnPaymentMethod) {
+                setBillingAddressAction(globalMessageList);
+            }
         },
 
         /**
