@@ -22,6 +22,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Refresh the Customer session if `UpdateSession` notification registered
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerNotification
 {
