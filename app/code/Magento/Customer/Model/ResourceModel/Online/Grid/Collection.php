@@ -69,7 +69,6 @@ class Collection extends SearchResult
      */
     protected function _initSelect(): Collection
     {
-        $this->addFilterToMap('customer_id', 'main_table.customer_id');
         parent::_initSelect();
         $connection = $this->getConnection();
         $lastDate = $this->date->gmtTimestamp() - $this->visitorModel->getOnlineInterval() * self::SECONDS_IN_MINUTE;
@@ -81,6 +80,7 @@ class Collection extends SearchResult
             'main_table.last_visit_at >= ?',
             $connection->formatDate($lastDate)
         );
+        $this->addFilterToMap('customer_id', 'main_table.customer_id');
         $expression = $connection->getCheckSql(
             'main_table.customer_id IS NOT NULL AND main_table.customer_id != 0',
             $connection->quote(Visitor::VISITOR_TYPE_CUSTOMER),
