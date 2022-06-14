@@ -14,6 +14,8 @@ use Magento\AsynchronousOperations\Api\Data\OperationSearchResultsInterfaceFacto
 use Magento\AsynchronousOperations\Api\Data\OperationExtensionInterfaceFactory;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Repository class for @see \Magento\AsynchronousOperations\Api\OperationRepositoryInterface
@@ -82,6 +84,7 @@ class OperationRepository implements \Magento\AsynchronousOperations\Api\Operati
         $this->operationExtensionFactory = $operationExtension;
         $this->collectionProcessor = $collectionProcessor;
         $this->logger = $logger;
+        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**
