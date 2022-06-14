@@ -25,7 +25,11 @@ class SuggestedQueriesTest extends TestCase
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"name":"fresh arugula salad"}
+     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix suggested_queries_test
+     * @magentoConfigFixture current_store catalog/search/search_suggestion_enabled 1
      * @magentoConfigFixture current_store catalog/search/search_suggestion_count 8
      */
     public function testGetItems(): void
