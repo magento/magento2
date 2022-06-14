@@ -15,6 +15,7 @@
             <features value="Catalog"/>
             <severity value="MINOR"/>
             <group value="Catalog"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

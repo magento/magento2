@@ -7,23 +7,27 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\CategoryLinkManagement;
 use Magento\Catalog\Model\Indexer\Product\Category\Processor;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Config\Model\ResourceModel\Config;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
-use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Config as eavConfig;
+use Magento\Framework\App\Cache;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Catalog\Model\GetCategoryByName;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
-use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -34,6 +38,79 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class ProductSearchTest extends GraphQlAbstract
 {
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var eavConfig
+     */
+    private $eavConfig;
+
+    /**
+     * @var GetCategoryByName
+     */
+    private $getCategoryByName;
+
+    /**
+     * @var Collection
+     */
+    private $categoryCollection;
+
+    /**
+     * @var Processor
+     */
+    private $indexer;
+
+    /**
+     * @var CategoryLinkManagementInterface
+     */
+    private $categoryLinkManagement;
+
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @var Cache
+     */
+    private $cache;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixture;
+
+    /**
+     * Setup
+     */
+    protected function setUp(): void
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->eavConfig = $this->objectManager->get(eavConfig::class);
+        $this->getCategoryByName = $this->objectManager->get(GetCategoryByName::class);
+        $this->categoryCollection = $this->objectManager->get(Collection::class);
+        $this->indexer = $this->objectManager->get(Processor::class);
+        $this->categoryLinkManagement = $this->objectManager->get(CategoryLinkManagementInterface::class);
+        $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
+        $this->config = $this->objectManager->get(Config::class);
+        $this->cache = $this->objectManager->get(Cache::class);
+        $this->fixture = DataFixtureStorageManager::getStorage();
+    }
+
     /**
      * Verify that filters for non-existing category are empty
      *
@@ -164,8 +241,9 @@ QUERY;
     }
 
     /**
-     *  Layered navigation for Configurable products with out of stock options
-     * Two configurable products each having two variations and one of the child products of one Configurable set to OOS
+     * Layered navigation for Configurable products with out of stock options
+     * Two configurable products each having two variations and one of the child products
+     * of one Configurable set to OOS
      *
      * @magentoApiDataFixture Magento/Catalog/_files/configurable_products_with_custom_attribute_layered_navigation.php
      * @magentoApiDataFixture Magento/Indexer/_files/reindex_all_invalid.php
@@ -174,10 +252,7 @@ QUERY;
     public function testLayeredNavigationForConfigurableProducts()
     {
         $attributeCode = 'test_configurable';
-
-        /** @var Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
-        $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
+        $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
         array_shift($options);
@@ -189,7 +264,11 @@ QUERY;
         $this->assertEquals(2, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['aggregations']);
         $this->assertNotEmpty($response['products']['filters'], 'Filters is empty');
-        $this->assertCount(2, $response['products']['aggregations'], 'Aggregation count does not match');
+        $this->assertCount(
+            2,
+            $response['products']['aggregations'],
+            'Aggregation count does not match'
+        );
 
         // Custom attribute filter layer data
         $this->assertResponseFields(
@@ -328,18 +407,26 @@ QUERY;
 }
 QUERY;
 
-        $objectManager = Bootstrap::getObjectManager();
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $objectManager->get(ProductRepositoryInterface::class);
-        $product1 = $productRepository->get('simple');
-        $product2 = $productRepository->get('12345');
-        $product3 = $productRepository->get('simple-4');
+        $product1 = $this->productRepository->get('simple');
+        $product2 = $this->productRepository->get('12345');
+        $product3 = $this->productRepository->get('simple-4');
         $filteredProducts = [$product3, $product2, $product1];
         $countOfFilteredProducts = count($filteredProducts);
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(3, $response['products']['total_count'], 'Number of products returned is incorrect');
-        $this->assertTrue(count($response['products']['filters']) > 0, 'Product filters is not empty');
-        $this->assertCount(3, $response['products']['aggregations'], 'Incorrect count of aggregations');
+        $this->assertEquals(
+            3,
+            $response['products']['total_count'],
+            'Number of products returned is incorrect'
+        );
+        $this->assertTrue(
+            count($response['products']['filters']) > 0,
+            'Product filters is not empty'
+        );
+        $this->assertCount(
+            3,
+            $response['products']['aggregations'],
+            'Incorrect count of aggregations'
+        );
 
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         for ($itemIndex = 0; $itemIndex < $countOfFilteredProducts; $itemIndex++) {
@@ -354,9 +441,7 @@ QUERY;
             );
         }
 
-        /** @var Config $eavConfig */
-        $eavConfig = $objectManager->get(Config::class);
-        $attribute = $eavConfig->getAttribute('catalog_product', 'second_test_configurable');
+        $attribute = $this->eavConfig->getAttribute('catalog_product', 'second_test_configurable');
         // Validate custom attribute filter layer data from aggregations
         $this->assertResponseFields(
             $response['products']['aggregations'][2],
@@ -384,11 +469,8 @@ QUERY;
      */
     public function testFilterProductsByMultiSelectCustomAttributes()
     {
-        $objectManager = Bootstrap::getObjectManager();
         $attributeCode = 'multiselect_attribute';
-        /** @var Config $eavConfig */
-        $eavConfig = $objectManager->get(Config::class);
-        $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
+        $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
         array_shift($options);
@@ -460,9 +542,7 @@ QUERY;
      */
     private function getDefaultAttributeOptionValue(string $attributeCode): string
     {
-        /** @var Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
-        $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
+        $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
         array_shift($options);
@@ -612,7 +692,7 @@ QUERY;
         $this->assertResponseFields(
             $response['products']['aggregations'][1],
             [
-                'attribute_code' => 'category_id',
+                'attribute_code' => 'category_uid',
                 'count' => 7,
                 'label' => 'Category'
             ]
@@ -628,9 +708,7 @@ QUERY;
      */
     public function testFilterByCategoryIdAndCustomAttribute()
     {
-        /** @var GetCategoryByName $getCategoryByName */
-        $getCategoryByName = Bootstrap::getObjectManager()->get(GetCategoryByName::class);
-        $category = $getCategoryByName->execute('Category 1.2');
+        $category = $this->getCategoryByName->execute('Category 1.2');
         $optionValue = $this->getDefaultAttributeOptionValue('second_test_configurable');
         $categoryUid = base64_encode($category->getId());
         $query = <<<QUERY
@@ -683,10 +761,8 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals(2, $response['products']['total_count']);
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product1 = $productRepository->get('simple');
-        $product2 = $productRepository->get('simple-4');
+        $product1 = $this->productRepository->get('simple');
+        $product2 = $this->productRepository->get('simple-4');
         $filteredProducts = [$product2, $product1];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
@@ -749,7 +825,11 @@ QUERY;
         // presort expected and actual results as different search engines have different orders
         usort($expectedCategoryInAggregations, [$this, 'compareLabels']);
         usort($actualCategoriesFromResponse, [$this, 'compareLabels']);
-        $categoryInAggregations = array_map(null, $expectedCategoryInAggregations, $actualCategoriesFromResponse);
+        $categoryInAggregations = array_map(
+            null,
+            $expectedCategoryInAggregations,
+            $actualCategoriesFromResponse
+        );
 
         //Validate the categories and sub-categories data in the filter layer
         foreach ($categoryInAggregations as $index => $categoryAggregationsData) {
@@ -787,10 +867,8 @@ QUERY;
      */
     public function testFilterBySingleProductUrlKey()
     {
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         /** @var Product $product */
-        $product = $productRepository->get('simple-4');
+        $product = $this->productRepository->get('simple-4');
         $urlKey = $product->getUrlKey();
 
         $query = <<<QUERY
@@ -855,7 +933,7 @@ QUERY;
         $this->assertEquals('Category', $response['products']['aggregations'][1]['label']);
         //Disable the product
         $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
-        $productRepository->save($product);
+        $this->productRepository->save($product);
         $query2 = <<<QUERY
 {
   products(filter:{
@@ -907,12 +985,10 @@ QUERY;
      */
     public function testFilterByMultipleProductUrlKeys()
     {
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         /** @var Product $product */
-        $product1 = $productRepository->get('simple');
-        $product2 = $productRepository->get('12345');
-        $product3 = $productRepository->get('simple-4');
+        $product1 = $this->productRepository->get('simple');
+        $product2 = $this->productRepository->get('12345');
+        $product3 = $this->productRepository->get('simple-4');
         $filteredProducts = [$product3, $product2, $product1];
         $urlKey = [];
         foreach ($filteredProducts as $product) {
@@ -987,9 +1063,7 @@ QUERY;
      */
     private function getExpectedFiltersDataSet()
     {
-        /** @var Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
-        $attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
+        $attribute = $this->eavConfig->getAttribute('catalog_product', 'test_configurable');
         /** @var \Magento\Eav\Api\Data\AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
         // Fetching option ID is required for continuous debug as of autoincrement IDs.
@@ -1118,12 +1192,8 @@ QUERY;
     }
 }
 QUERY;
-        /**
-         * @var ProductRepositoryInterface $productRepository
-         */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product1 = $productRepository->get('simple1');
-        $product2 = $productRepository->get('simple2');
+        $product1 = $this->productRepository->get('simple1');
+        $product2 = $this->productRepository->get('simple2');
         $filteredProducts = [$product2, $product1];
 
         $response = $this->graphQlQuery($query);
@@ -1140,9 +1210,10 @@ QUERY;
     public function testSortByPosition()
     {
         // Get category ID for filtering
-        /** @var Collection $categoryCollection */
-        $categoryCollection = Bootstrap::getObjectManager()->get(Collection::class);
-        $category = $categoryCollection->addFieldToFilter('name', 'Category 999')->getFirstItem();
+        $category = $this->categoryCollection->addFieldToFilter(
+            'name',
+            'Category 999'
+        )->getFirstItem();
         $categoryId = $category->getId();
 
         $queryAsc = <<<QUERY
@@ -1193,9 +1264,7 @@ QUERY;
         $category->save();
 
         // Reindex products from the result to invalidate query cache.
-        /** @var $indexer Processor */
-        $indexer = Bootstrap::getObjectManager()->get(Processor::class);
-        $indexer->reindexList(array_keys($productPositions));
+        $this->indexer->reindexList(array_keys($productPositions));
 
         $queryDesc = <<<QUERY
 {
@@ -1213,6 +1282,162 @@ QUERY;
         $productsDesc = array_column($resultDesc['products']['items'], 'sku');
         // position NOT equal and oldest entity first
         $this->assertEquals(array_reverse($expectedProductsAsc), $productsDesc);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod1
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod2
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod3
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod4
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod5
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod6
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod7
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod8
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod9
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:cat1
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"parent_id":"$cat1.id$"} as:cat11
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"parent_id":"$cat1.id$"} as:cat12
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"parent_id":"$cat1.id$"} as:cat13
+     * @dataProvider sortByPositionWithMultipleCategoriesDataProvider
+     */
+    public function testSortByPositionWithMultipleCategories(
+        array $config,
+        array $filterBy,
+        array $expectedOrder
+    ): void {
+        $expectedOrderSku = [];
+        $categoryIds  = [];
+
+        foreach ($expectedOrder as $productName) {
+            $expectedOrderSku[] = $this->fixture->get($productName)->getSku();
+        }
+
+        foreach ($filterBy as $categoryName) {
+            $categoryIds[] = $this->fixture->get($categoryName)->getId();
+        }
+        $filter = json_encode($categoryIds);
+
+        foreach ($config as $categoryName => $products) {
+            $categoryId = $this->fixture->get($categoryName)->getId();
+            $category = $this->categoryRepository->get($categoryId);
+            $productPositions = [];
+            foreach ($products as $position => $productName) {
+                $product = $this->fixture->get($productName);
+                $productPositions[$product->getId()] = $position;
+            }
+            $category->setPostedProducts($productPositions);
+            $category->save();
+        }
+
+        $this->indexer->reindexAll();
+
+        $query = <<<QUERY
+{
+  products(filter: {category_id: {in: $filter}}, sort: {position: ASC}) {
+    total_count
+    items {
+      sku
+    }
+  }
+}
+QUERY;
+        $resultDesc = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $resultDesc);
+        $this->assertEquals($expectedOrderSku, array_column($resultDesc['products']['items'], 'sku'));
+    }
+
+    /**
+     * @return array
+     */
+    public function sortByPositionWithMultipleCategoriesDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'cat11' => ['prod9', 'prod8', 'prod7'],
+                    'cat12' => ['prod2', 'prod5', 'prod3', 'prod4', 'prod1', 'prod8'],
+                    'cat13' => ['prod1', 'prod4', 'prod9', 'prod6'],
+                ],
+                [
+                    'cat11', 'cat12'
+                ],
+                ['prod9', 'prod2', 'prod8', 'prod5', 'prod7', 'prod3', 'prod4', 'prod1']
+            ],
+            [
+                [
+                    'cat11' => ['prod9', 'prod8', 'prod7'],
+                    'cat12' => ['prod2', 'prod5', 'prod3', 'prod4', 'prod1', 'prod8'],
+                    'cat13' => ['prod1', 'prod4', 'prod9', 'prod6'],
+                ],
+                [
+                    'cat11', 'cat12', 'cat13'
+                ],
+                ['prod9', 'prod2', 'prod1', 'prod8', 'prod5', 'prod4', 'prod7', 'prod3', 'prod6']
+            ],
+            [
+                [
+                    'cat11' => ['prod9', 'prod8', 'prod7'],
+                    'cat12' => ['prod2', 'prod5', 'prod3', 'prod4', 'prod1', 'prod8'],
+                    'cat13' => ['prod1', 'prod4', 'prod9', 'prod6'],
+                ],
+                [
+                    'cat1'
+                ],
+                ['prod9', 'prod2', 'prod1', 'prod8', 'prod5', 'prod4', 'prod7', 'prod3', 'prod6']
+            ],
+        ];
+    }
+
+    /**
+     * Test products with the same relevance reverse position with ASC and DESC sorting
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/category_with_three_products.php
+     */
+    public function testSortByEqualRelevanceAndAscDescReversePosition()
+    {
+        $category = $this->categoryCollection->addFieldToFilter(
+            'name',
+            'Category 999'
+        )->getFirstItem();
+        $categoryId = (int) $category->getId();
+
+        $expectedProductsAsc = ['simple1000', 'simple1001', 'simple1002'];
+        $queryAsc = $this->getCategoryFilterRelevanceQuery($categoryId, 'ASC');
+        $resultAsc = $this->graphQlQuery($queryAsc);
+        $this->assertArrayNotHasKey('errors', $resultAsc);
+        $productsAsc = array_column($resultAsc['products']['items'], 'sku');
+        $this->assertEquals($expectedProductsAsc, $productsAsc);
+
+        $expectedProductsDesc = array_reverse($expectedProductsAsc);
+        $queryDesc = $this->getCategoryFilterRelevanceQuery($categoryId, 'DESC');
+        $resultDesc = $this->graphQlQuery($queryDesc);
+        $this->assertArrayNotHasKey('errors', $resultDesc);
+        $productsDesc = array_column($resultDesc['products']['items'], 'sku');
+        $this->assertEquals($expectedProductsDesc, $productsDesc);
+    }
+
+    /**
+     * Query for category filter relevance
+     *
+     * @param int $categoryId
+     * @param string $direction
+     * @return string
+     */
+    protected function getCategoryFilterRelevanceQuery(int $categoryId, string $direction): string
+    {
+        $query = <<<QUERY
+{
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {relevance: $direction}) {
+    total_count
+    items {
+      sku
+      name
+    }
+  }
+}
+QUERY;
+
+        return $query;
     }
 
     /**
@@ -1342,12 +1567,8 @@ QUERY;
     }
 }
 QUERY;
-        /**
-         * @var ProductRepositoryInterface $productRepository
-         */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $childProduct1 = $productRepository->get('simple1');
-        $childProduct2 = $productRepository->get('simple2');
+        $childProduct1 = $this->productRepository->get('simple1');
+        $childProduct2 = $this->productRepository->get('simple2');
         $filteredChildProducts = [$childProduct1, $childProduct2];
 
         $response = $this->graphQlQuery($query);
@@ -1415,12 +1636,8 @@ QUERY;
     }
 }
 QUERY;
-        /**
-         * @var ProductRepositoryInterface $productRepository
-         */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product1 = $productRepository->get('grey_shorts');
-        $product2 = $productRepository->get('white_shorts');
+        $product1 = $this->productRepository->get('grey_shorts');
+        $product2 = $this->productRepository->get('white_shorts');
         $response = $this->graphQlQuery($query);
         $this->assertEquals(2, $response['products']['total_count']);
         $this->assertEquals(['page_size' => 2, 'current_page' => 1], $response['products']['page_info']);
@@ -1452,7 +1669,7 @@ QUERY;
                 ]
             ],
             [
-                'attribute_code' => 'category_id',
+                'attribute_code' => 'category_uid',
                 'count' => 1,
                 'label' => 'Category',
                 'options' => [
@@ -1501,18 +1718,13 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        /** @var ProductRepositoryInterface $productRepository */
         $this->assertEquals(3, $response['products']['total_count']);
         $actualProducts = [];
         foreach ($categoriesIds as $categoriesId) {
-            /** @var CategoryLinkManagement $productLinks */
-            $productLinks = ObjectManager::getInstance()->get(CategoryLinkManagement::class);
-            $links = $productLinks->getAssignedProducts($categoriesId);
+            $links = $this->categoryLinkManagement->getAssignedProducts($categoriesId);
             $links = array_reverse($links);
             foreach ($links as $linkProduct) {
-                $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-                /** @var ProductInterface $product */
-                $product = $productRepository->get($linkProduct->getSku());
+                $product = $this->productRepository->get($linkProduct->getSku());
                 $actualProducts[$linkProduct->getSku()] = $product->getName();
             }
         }
@@ -1566,23 +1778,20 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count'], 'Incorrect count of products returned');
-        /** @var CategoryLinkManagement $productLinks */
-        $productLinks = ObjectManager::getInstance()->get(CategoryLinkManagement::class);
-        /** @var CategoryRepositoryInterface $categoryRepository */
-        $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
-
-        $links = $productLinks->getAssignedProducts(
+        $this->assertEquals(
+            2,
+            $response['products']['total_count'],
+            'Incorrect count of products returned'
+        );
+        $links = $this->categoryLinkManagement->getAssignedProducts(
             is_numeric($queryCategoryId) ? $queryCategoryId : base64_decode($queryCategoryId)
         );
         $links = array_reverse($links);
         foreach ($response['products']['items'] as $itemIndex => $itemData) {
             $this->assertNotEmpty($itemData);
             $this->assertEquals($response['products']['items'][$itemIndex]['sku'], $links[$itemIndex]->getSku());
-            /** @var ProductRepositoryInterface $productRepository */
-            $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
             /** @var ProductInterface $product */
-            $product = $productRepository->get($links[$itemIndex]->getSku());
+            $product = $this->productRepository->get($links[$itemIndex]->getSku());
             $this->assertEquals($response['products']['items'][$itemIndex]['name'], $product->getName());
             $this->assertEquals($response['products']['items'][$itemIndex]['type_id'], $product->getTypeId());
             $categoryIds = $product->getCategoryIds();
@@ -1597,7 +1806,7 @@ QUERY;
             foreach ($categoryInResponse as $key => $categoryData) {
                 $this->assertNotEmpty($categoryData);
                 /** @var CategoryInterface | Category $category */
-                $category = $categoryRepository->get($categoryInResponse[$key][0]);
+                $category = $this->categoryRepository->get($categoryInResponse[$key][0]);
                 $this->assertResponseFields(
                     $categoryInResponse[$key][1],
                     [
@@ -1616,11 +1825,16 @@ QUERY;
     /**
      * Sorting the search results by relevance (DESC => most relevant)
      *
+     * Sorting by relevance may return different results depending on the ES.
+     * To check that sorting works, we compare results with ASC and DESC relevance sorting
+     *
      * Search for products for a fuzzy match and checks if all matching results returned including
      * results based on matching keywords from description
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_relevance_sorting.php
      * @return void
+     *
+     * @throws \Exception
      */
     public function testSearchAndSortByRelevance()
     {
@@ -1630,7 +1844,7 @@ QUERY;
 {
   products(
         search:"{$search_term}"
-        sort:{relevance:DESC}
+        sort:{relevance:%s}
         pageSize: 5
         currentPage: 1
        )
@@ -1671,16 +1885,22 @@ QUERY;
 
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertEquals(3, $response['products']['total_count']);
-        $this->assertNotEmpty($response['products']['filters'], 'Filters should have the Category layer');
-        $this->assertEquals('Colorful Category', $response['products']['filters'][0]['filter_items'][0]['label']);
-        $this->assertCount(2, $response['products']['aggregations']);
-        $productsInResponse = ['Blue briefs', 'Navy Blue Striped Shoes', 'Grey shorts'];
-        $count = count($response['products']['items']);
-        for ($i = 0; $i < $count; $i++) {
-            $this->assertEquals($productsInResponse[$i], $response['products']['items'][$i]['name']);
-        }
+        $responseDesc = $this->graphQlQuery(sprintf($query, 'DESC'));
+        $responseAsc = $this->graphQlQuery(sprintf($query, 'ASC'));
+        $this->assertEquals(3, $responseDesc['products']['total_count']);
+        $this->assertNotEmpty($responseDesc['products']['filters'], 'Filters should have the Category layer');
+        $this->assertEquals(
+            'Colorful Category',
+            $responseDesc['products']['filters'][0]['filter_items'][0]['label']
+        );
+        $this->assertCount(2, $responseDesc['products']['aggregations']);
+        $expectedProductsInResponse = ['Blue briefs', 'Navy Blue Striped Shoes', 'Grey shorts'];
+        $namesDesc = array_column($responseDesc['products']['items'], 'name');
+        $this->assertEqualsCanonicalizing($expectedProductsInResponse, $namesDesc);
+        $this->assertEquals(
+            $namesDesc,
+            array_reverse(array_column($responseAsc['products']['items'], 'name'))
+        );
     }
 
     /**
@@ -1733,9 +1953,7 @@ QUERY;
     }
 }
 QUERY;
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $visibleProduct1 = $productRepository->get('simple1');
+        $visibleProduct1 = $this->productRepository->get('simple1');
 
         $filteredProducts = [$visibleProduct1];
         $response = $this->graphQlQuery($query);
@@ -1804,12 +2022,9 @@ QUERY;
       }
 }
 QUERY;
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-
-        $prod1 = $productRepository->get('blue_briefs');
-        $prod2 = $productRepository->get('grey_shorts');
-        $prod3 = $productRepository->get('navy-striped-shoes');
+        $prod1 = $this->productRepository->get('blue_briefs');
+        $prod2 = $this->productRepository->get('grey_shorts');
+        $prod3 = $this->productRepository->get('navy-striped-shoes');
         $response = $this->graphQlQuery($query);
         $this->assertEquals(3, $response['products']['total_count']);
 
@@ -1895,11 +2110,8 @@ QUERY;
       }
 }
 QUERY;
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-
-        $prod1 = $productRepository->get('simple1');
-        $prod2 = $productRepository->get('simple2');
+        $prod1 = $this->productRepository->get('simple1');
+        $prod2 = $this->productRepository->get('simple2');
         $response = $this->graphQlQuery($query);
         $this->assertEquals(2, $response['products']['total_count']);
 
@@ -1985,11 +2197,8 @@ QUERY;
       }
 }
 QUERY;
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-
-        $prod1 = $productRepository->get('prd1sku');
-        $prod2 = $productRepository->get('prd2-sku2');
+        $prod1 = $this->productRepository->get('prd1sku');
+        $prod2 = $this->productRepository->get('prd2-sku2');
         $response = $this->graphQlQuery($query);
         $this->assertEquals(2, $response['products']['total_count']);
 
@@ -2023,10 +2232,7 @@ QUERY;
      */
     public function testProductPartialSkuHyphenatedFullTextSearchQuery()
     {
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-
-        $prod2 = $productRepository->get('prd2-sku2');
+        $prod2 = $this->productRepository->get('prd2-sku2');
         $textToSearch = 'sku2';
         $query
             = <<<QUERY
@@ -2113,17 +2319,12 @@ QUERY;
      */
     public function testFilterWithinASpecificPriceRangeSortedByPriceDESC()
     {
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-
-        $prod1 = $productRepository->get('simple1');
-        $prod2 = $productRepository->get('simple2');
+        $prod1 = $this->productRepository->get('simple1');
+        $prod2 = $this->productRepository->get('simple2');
         $filteredProducts = [$prod1, $prod2];
         /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
-        $categoryLinkManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
         foreach ($filteredProducts as $product) {
-            $categoryLinkManagement->assignProductToCategories(
+            $this->categoryLinkManagement->assignProductToCategories(
                 $product->getSku(),
                 [333]
             );
@@ -2382,16 +2583,13 @@ QUERY;
     }
 }
 QUERY;
-        /** @var \Magento\Config\Model\ResourceModel\Config $config */
-        $config = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
-        $config->saveConfig(
+        $this->config->saveConfig(
             \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
             0,
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             0
         );
-        ObjectManager::getInstance()->get(\Magento\Framework\App\Cache::class)
-            ->clean(\Magento\Framework\App\Config::CACHE_TAG);
+        $this->cache->clean(\Magento\Framework\App\Config::CACHE_TAG);
         $response = $this->graphQlQuery($query);
         $responseObject = new DataObject($response);
         self::assertEquals(

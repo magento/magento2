@@ -40,6 +40,21 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                    title="<?= $block->escapeHtml(__('Credit Card Number')) ?>"
                    class="admin__control-text validate-cc-number"
                    value="<?= /* @noEscape */ $block->getInfoData('cc_number') ?>"/>
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'oncopy',
+                "event.preventDefault();",
+                '#' . $code . '_cc_number'
+            ) ?>
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'oncut',
+                "event.preventDefault();",
+                '#' . $code . '_cc_number'
+            ) ?>
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'onpaste',
+                "event.preventDefault();",
+                '#' . $code . '_cc_number'
+            ) ?>
         </div>
     </div>
     <div class="field-date admin__field _required">
@@ -78,6 +93,21 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                        class="required-entry validate-cc-cvn admin__control-cvn admin__control-text"
                        id="<?= /* @noEscape */ $code ?>_cc_cid"
                        name="payment[cc_cid]" value="<?= /* @noEscape */ $block->getInfoData('cc_cid') ?>"/>
+                <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                    'oncopy',
+                    "event.preventDefault();",
+                    '#' . $code . '_cc_cid'
+                ) ?>
+                <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                    'oncut',
+                    "event.preventDefault();",
+                    '#' . $code . '_cc_cid'
+                ) ?>
+                <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                    'onpaste',
+                    "event.preventDefault();",
+                    '#' . $code . '_cc_cid'
+                ) ?>
             </div>
         </div>
     <?php endif; ?>

@@ -10,8 +10,7 @@
          colors="true"
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
-         bootstrap="./framework/bootstrap.php"
->
+         bootstrap="./framework/bootstrap.php">
     <!-- Test suites definition -->
     <testsuites>
         <testsuite name="Unit Tests for Integration Tests Framework">

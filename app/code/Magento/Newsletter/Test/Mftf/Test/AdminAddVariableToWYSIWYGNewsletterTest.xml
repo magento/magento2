@@ -40,7 +40,7 @@
         <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
         <conditionalClick selector="{{TinyMCESection.ShowHideBtn}}" dependentSelector="{{TinyMCESection.TinyMCE}}" visible="false" stepKey="toggleEditorIfHidden"/>
         <waitForPageLoad time="10" stepKey="waitForPageLoad21"/>
-        <conditionalClick selector="#toggletext" dependentSelector=".mce-tinymce" visible="false" stepKey="clickBtnIfTinyMCEHidden"/>
+        <conditionalClick selector="#toggletext" dependentSelector=".tox-tinymce" visible="false" stepKey="clickBtnIfTinyMCEHidden"/>
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE"/>
         <executeJS function="tinyMCE.get('text').setContent('Hello World From Newsletter Template!');" stepKey="executeJSFillContent"/>
         <seeElement selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />

@@ -17,6 +17,7 @@
             <testCaseId value="MC-35133"/>
             <severity value="MINOR"/>
             <group value="Bundle"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simpleProduct1" before="bundleProduct"/>

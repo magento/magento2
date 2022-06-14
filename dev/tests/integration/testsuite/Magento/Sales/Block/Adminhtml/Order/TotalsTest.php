@@ -13,6 +13,8 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Block\Adminhtml\Order\Totals\Tax;
 use Magento\Sales\Model\Order;
+use Magento\Tax\Model\ResourceModel\Sales\Order\Tax\Collection as TaxCollection;
+use Magento\Tax\Model\Sales\Order\Tax as SalesTax;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -51,8 +53,9 @@ class TotalsTest extends TestCase
      *
      * @magentoConfigFixture default_store tax/sales_display/subtotal 2
      * @magentoConfigFixture default_store tax/sales_display/shipping 2
+     * @magentoConfigFixture default_store tax/sales_display/full_summary 1
      *
-     * @magentoDataFixture Magento/Sales/_files/order.php
+     * @magentoDataFixture Magento/Tax/_files/order_with_tax.php
      *
      * @return void
      */
@@ -68,6 +71,11 @@ class TotalsTest extends TestCase
         $blockTotals->setChild('child_tax_block', $blockTax);
         $blockTax->initTotals();
 
+        /** @var TaxCollection $taxCollection */
+        $taxCollection = $this->om->get(TaxCollection::class);
+        $tax = $taxCollection->loadByOrder($order)->getItems();
+        $tax = array_pop($tax);
+        $this->assertTaxRate($blockTax->toHtml(), $tax);
         $this->assertSubtotal($blockTotals->toHtml(), (float) $order->getSubtotalInclTax());
         $this->assertShipping($blockTotals->toHtml(), (float) $order->getShippingInclTax());
     }
@@ -129,6 +137,21 @@ class TotalsTest extends TestCase
         $this->assertTrue(
             $this->isBlockContainsTotalAmount($blockTotalsHtml, __('Shipping & Handling'), $amount),
             'Shipping & Handling amount is missing or incorrect.'
+        );
+    }
+
+    /**
+     * Check if tax rate present in block.
+     *
+     * @param string $blockTaxHtml
+     * @param SalesTax $tax
+     * @return void
+     */
+    private function assertTaxRate(string $blockTaxHtml, SalesTax $tax)
+    {
+        $this->assertStringContainsString(
+            $tax->getTitle() . ' (' . (int)$tax->getAmount() . '%)',
+            $blockTaxHtml
         );
     }
 

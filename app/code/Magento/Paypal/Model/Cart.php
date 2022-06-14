@@ -126,7 +126,7 @@ class Cart extends \Magento\Payment\Model\Cart
             $subAggregatedLabel = '';
 
             // workaround in case if item subtotal precision is not compatible with PayPal (.2)
-            if ($amount - round($amount, 2)) {
+            if ($amount - round((float) $amount, 2)) {
                 $amount = $amount * $qty;
                 $subAggregatedLabel = ' x' . $qty;
                 $qty = 1;
@@ -150,7 +150,7 @@ class Cart extends \Magento\Payment\Model\Cart
         $this->addSubtotal($this->_salesModel->getBaseSubtotal());
         $this->addTax($this->_salesModel->getBaseTaxAmount());
         $this->addShipping($this->_salesModel->getBaseShippingAmount());
-        $this->addDiscount(abs($this->_salesModel->getBaseDiscountAmount()));
+        $this->addDiscount(abs((float) $this->_salesModel->getBaseDiscountAmount()));
     }
 
     /**
@@ -180,7 +180,11 @@ class Cart extends \Magento\Payment\Model\Cart
     ) {
         $dataContainer = $salesEntity->getTaxContainer();
         $this->addTax((double)$dataContainer->getBaseDiscountTaxCompensationAmount());
-        $this->addTax((double)$dataContainer->getBaseShippingDiscountTaxCompensationAmnt());
+        if ($dataContainer->getBaseShippingDiscountTaxCompensationAmnt() !== null) {
+            $this->addTax((double)$dataContainer->getBaseShippingDiscountTaxCompensationAmnt());
+        } else {
+            $this->addTax((double)$dataContainer->getBaseShippingDiscountTaxCompensationAmount());
+        }
     }
 
     /**

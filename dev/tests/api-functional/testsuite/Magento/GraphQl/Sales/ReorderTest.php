@@ -56,7 +56,6 @@ class ReorderTest extends GraphQlAbstract
         } catch (NoSuchEntityException $e) {
         }
     }
-
     /**
      * @magentoApiDataFixture Magento/Sales/_files/customer_order_item_with_product_and_custom_options.php
      */
@@ -188,7 +187,7 @@ class ReorderTest extends GraphQlAbstract
     }
 
     /**
-     * Assert that simple product is not available.
+     * Assert that simple product is not available
      */
     private function assertProductNotAvailable()
     {
@@ -196,7 +195,9 @@ class ReorderTest extends GraphQlAbstract
         $expectedResponse = [
             'userInputErrors' => [
                 [
-                    'path' => ['orderNumber'],
+                    'path' => [
+                        'orderNumber'
+                    ],
                     'code' => 'NOT_SALABLE',
                 ],
             ],

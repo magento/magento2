@@ -2333,7 +2333,7 @@
                     "blueimp/jquery-file-upload": "lib/web/jquery/fileUploader",
                     "components/jqueryui": "lib/web/jquery/jquery-ui.js",
                     "twbs/bootstrap": "lib/web/jquery/jquery.tabs.js",
-                    "tinymce/tinymce": "lib/web/tiny_mce_4"
+                    "tinymce/tinymce": "lib/web/tiny_mce_5"
                 },
                 "map": [
                     [
@@ -2577,24 +2577,12 @@
                         "lib/internal/LinLibertineFont"
                     ],
                     [
-                        "lib/web/FormData.js",
-                        "lib/web/FormData.js"
-                    ],
-                    [
-                        "lib/web/MutationObserver.js",
-                        "lib/web/MutationObserver.js"
-                    ],
-                    [
                         "lib/web/blank.html",
                         "lib/web/blank.html"
                     ],
                     [
                         "lib/web/css",
                         "lib/web/css"
-                    ],
-                    [
-                        "lib/web/es6-collections.js",
-                        "lib/web/es6-collections.js"
                     ],
                     [
                         "lib/web/extjs",
@@ -2653,10 +2641,6 @@
                         "lib/web/matchMedia.js"
                     ],
                     [
-                        "lib/web/modernizr",
-                        "lib/web/modernizr"
-                    ],
-                    [
                         "lib/web/moment-timezone-with-data.js",
                         "lib/web/moment-timezone-with-data.js"
                     ],
@@ -2681,8 +2665,8 @@
                         "lib/web/spacer.gif"
                     ],
                     [
-                        "lib/web/tiny_mce_4",
-                        "lib/web/tiny_mce_4"
+                        "lib/web/tiny_mce_5",
+                        "lib/web/tiny_mce_5"
                     ],
                     [
                         "lib/web/underscore.js",
@@ -10445,7 +10429,7 @@
                     "phpseclib/bootstrap.php"
                 ],
                 "psr-4": {
-                    "phpseclib\\": "phpseclib/"
+                    "phpseclib3\\": "phpseclib/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",

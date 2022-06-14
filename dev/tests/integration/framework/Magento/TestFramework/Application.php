@@ -13,6 +13,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem\Glob;
 use Magento\Framework\Mail;
 use Magento\TestFramework;
+use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Psr\Log\LoggerInterface;
 use DomainException;
 
@@ -27,7 +28,7 @@ class Application
     /**
      * Default application area.
      */
-    const DEFAULT_APP_AREA = 'global';
+    public const DEFAULT_APP_AREA = 'global';
 
     /**
      * DB vendor adapter instance.
@@ -276,6 +277,8 @@ class Application
         if (null === $this->installConfig) {
             // phpcs:ignore Magento2.Security.IncludeFile
             $this->installConfig = include $this->installConfigFile;
+            $this->installConfig['use-secure'] = '0';
+            $this->installConfig['use-secure-admin'] = '0';
         }
         return $this->installConfig;
     }
@@ -416,6 +419,7 @@ class Application
                 \Magento\Framework\App\State::class => TestFramework\App\State::class,
                 Mail\TransportInterface::class => TestFramework\Mail\TransportInterfaceMock::class,
                 Mail\Template\TransportBuilder::class => TestFramework\Mail\Template\TransportBuilderMock::class,
+                ProcessorInterface::class => \Magento\TestFramework\Fixture\Data\CompositeProcessor::class,
             ]
         ];
         if ($this->loadTestExtensionAttributes) {
@@ -559,6 +563,39 @@ class Application
             array_merge([BP . '/bin/magento'], array_values($installParams))
         );
 
+        $this->runPostInstallCommands();
+
+        // enable only specified list of caches
+        $initParamsQuery = $this->getInitParamsQuery();
+        $this->_shell->execute(
+            PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
+            [BP . '/bin/magento', $initParamsQuery]
+        );
+        $this->_shell->execute(
+            PHP_BINARY . ' -f %s cache:enable -vvv %s %s %s %s --bootstrap=%s',
+            [
+                BP . '/bin/magento',
+                \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
+                \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
+                \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER,
+                \Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER,
+                $initParamsQuery,
+            ]
+        );
+
+        // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
+        if (!$db->isDbDumpExists() && $this->dumpDb) {
+            $this->getDbInstance()->storeDbDump();
+        }
+    }
+
+    /**
+     * Run commands after installation configured in post-install-setup-command-config.php
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function runPostInstallCommands()
+    {
         // run post-install setup commands
         $postInstallSetupCommands = $this->getPostInstallSetupCommands();
 
@@ -594,29 +631,6 @@ class Application
                     array_values($argumentsAndOptions)
                 ),
             );
-        }
-
-        // enable only specified list of caches
-        $initParamsQuery = $this->getInitParamsQuery();
-        $this->_shell->execute(
-            PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
-            [BP . '/bin/magento', $initParamsQuery]
-        );
-        $this->_shell->execute(
-            PHP_BINARY . ' -f %s cache:enable -vvv %s %s %s %s --bootstrap=%s',
-            [
-                BP . '/bin/magento',
-                \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
-                \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
-                \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER,
-                \Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER,
-                $initParamsQuery,
-            ]
-        );
-
-        // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
-        if (!$db->isDbDumpExists() && $this->dumpDb) {
-            $this->getDbInstance()->storeDbDump();
         }
     }
 

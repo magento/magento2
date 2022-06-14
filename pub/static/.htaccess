@@ -1,9 +1,9 @@
-<IfModule mod_php5.c>
-php_flag engine 0
+<IfModule mod_php7.c>
+    php_flag engine 0
 </IfModule>
 
-<IfModule mod_php7.c>
-php_flag engine 0
+<IfModule mod_php.c>
+    php_flag engine 0
 </IfModule>
 
 # To avoid situation when web server automatically adds extension to path
@@ -102,7 +102,7 @@ AddType application/xml xml
     ExpiresByType application/zip "access plus 0 seconds"
     ExpiresByType application/x-gzip "access plus 0 seconds"
     ExpiresByType application/x-bzip2 "access plus 0 seconds"
-    
+
     # Manifest
     <FilesMatch \.(webmanifest)$>
         ExpiresDefault "access plus 0 seconds"

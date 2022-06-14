@@ -18,129 +18,129 @@ class Table
     /**
      * Types of columns
      */
-    const TYPE_BOOLEAN = 'boolean';
+    public const TYPE_BOOLEAN = 'boolean';
 
-    const TYPE_SMALLINT = 'smallint';
+    public const TYPE_SMALLINT = 'smallint';
 
-    const TYPE_INTEGER = 'integer';
+    public const TYPE_INTEGER = 'integer';
 
-    const TYPE_BIGINT = 'bigint';
+    public const TYPE_BIGINT = 'bigint';
 
-    const TYPE_FLOAT = 'float';
+    public const TYPE_FLOAT = 'float';
 
-    const TYPE_NUMERIC = 'numeric';
+    public const TYPE_NUMERIC = 'numeric';
 
-    const TYPE_DECIMAL = 'decimal';
+    public const TYPE_DECIMAL = 'decimal';
 
-    const TYPE_DATE = 'date';
+    public const TYPE_DATE = 'date';
 
-    const TYPE_TIMESTAMP = 'timestamp';
+    public const TYPE_TIMESTAMP = 'timestamp';
 
     // Capable to support date-time from 1970 + auto-triggers in some RDBMS
-    const TYPE_DATETIME = 'datetime';
+    public const TYPE_DATETIME = 'datetime';
 
     // Capable to support long date-time before 1970
-    const TYPE_TEXT = 'text';
+    public const TYPE_TEXT = 'text';
 
     // A real blob, stored as binary inside DB
-    const TYPE_BLOB = 'blob';
+    public const TYPE_BLOB = 'blob';
 
     // Used for back compatibility, when query param can't use statement options
-    const TYPE_VARBINARY = 'varbinary';
+    public const TYPE_VARBINARY = 'varbinary';
 
     /**
      * Default and maximal TEXT and BLOB columns sizes we can support for different DB systems.
      */
-    const DEFAULT_TEXT_SIZE = 1024;
+    public const DEFAULT_TEXT_SIZE = 1024;
 
-    const MAX_TEXT_SIZE = 2147483648;
+    public const MAX_TEXT_SIZE = 2147483648;
 
-    const MAX_VARBINARY_SIZE = 2147483648;
+    public const MAX_VARBINARY_SIZE = 2147483648;
 
     /**
      * Default values for timestamps - fill with current timestamp on inserting record, on changing and both cases
      */
-    const TIMESTAMP_INIT_UPDATE = 'TIMESTAMP_INIT_UPDATE';
+    public const TIMESTAMP_INIT_UPDATE = 'TIMESTAMP_INIT_UPDATE';
 
-    const TIMESTAMP_INIT = 'TIMESTAMP_INIT';
+    public const TIMESTAMP_INIT = 'TIMESTAMP_INIT';
 
-    const TIMESTAMP_UPDATE = 'TIMESTAMP_UPDATE';
+    public const TIMESTAMP_UPDATE = 'TIMESTAMP_UPDATE';
 
     /**
      * Actions used for foreign keys
      */
-    const ACTION_CASCADE = 'CASCADE';
+    public const ACTION_CASCADE = 'CASCADE';
 
-    const ACTION_SET_NULL = 'SET NULL';
+    public const ACTION_SET_NULL = 'SET NULL';
 
-    const ACTION_NO_ACTION = 'NO ACTION';
+    public const ACTION_NO_ACTION = 'NO ACTION';
 
-    const ACTION_RESTRICT = 'RESTRICT';
+    public const ACTION_RESTRICT = 'RESTRICT';
 
-    const ACTION_SET_DEFAULT = 'SET DEFAULT';
+    public const ACTION_SET_DEFAULT = 'SET DEFAULT';
 
     /**
      * Column option 'default'
      *
      * @var string
      */
-    const OPTION_DEFAULT = 'default';
+    public const OPTION_DEFAULT = 'default';
 
     /**
      * Column option 'identity'
      *
      * @var string
      */
-    const OPTION_IDENTITY = 'identity';
+    public const OPTION_IDENTITY = 'identity';
 
     /**
      * Column option 'length'
      *
      * @var string
      */
-    const OPTION_LENGTH = 'length';
+    public const OPTION_LENGTH = 'length';
 
     /**
      * Column option 'nullable'
      *
      * @var string
      */
-    const OPTION_NULLABLE = 'nullable';
+    public const OPTION_NULLABLE = 'nullable';
 
     /**
      * Column option 'precision'
      *
      * @var string
      */
-    const OPTION_PRECISION = 'precision';
+    public const OPTION_PRECISION = 'precision';
 
     /**
      * Column option 'primary'
      *
      * @var string
      */
-    const OPTION_PRIMARY = 'primary';
+    public const OPTION_PRIMARY = 'primary';
 
     /**
      * Column option 'scale'
      *
      * @var string
      */
-    const OPTION_SCALE = 'scale';
+    public const OPTION_SCALE = 'scale';
 
     /**
      * Column option 'type'
      *
      * @var string
      */
-    const OPTION_TYPE = 'type';
+    public const OPTION_TYPE = 'type';
 
     /**
      * Column option 'unsigned'
      *
      * @var string
      */
-    const OPTION_UNSIGNED = 'unsigned';
+    public const OPTION_UNSIGNED = 'unsigned';
 
     /**
      * Name of table
@@ -150,8 +150,6 @@ class Table
     protected $_tableName;
 
     /**
-     * Schema name
-     *
      * @var string
      */
     protected $_schemaName;
@@ -381,7 +379,7 @@ class Table
                         $precision = $size[0];
                         $scale = $size[1];
                     }
-                } elseif (preg_match('#^(\d+),(\d+)$#', $size, $match)) {
+                } elseif ($size && preg_match('#^(\d+),(\d+)$#', $size, $match)) {
                     $precision = $match[1];
                     $scale = $match[2];
                 }
@@ -637,6 +635,7 @@ class Table
 
     /**
      * Retrieve table option value by option name
+     *
      * Return null if option does not exits
      *
      * @param string $key
@@ -673,7 +672,7 @@ class Table
     }
 
     /**
-     * table column position comparison function
+     * Table column position comparison function
      *
      * @param array $a
      * @param array $b

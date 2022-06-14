@@ -28,7 +28,7 @@
         <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{_defaultNewsletter.subject}}" stepKey="fillTemplateSubject" />
         <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />
         <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
-        <conditionalClick selector="#toggletext" dependentSelector=".mce-tinymce" visible="false" stepKey="clickBtnIfTinyMCEHidden"/>
+        <conditionalClick selector="#toggletext" dependentSelector=".tox-tinymce" visible="false" stepKey="clickBtnIfTinyMCEHidden"/>
         <waitForPageLoad stepKey="waitForTinyMce"/>
         <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE"/>
         <actionGroup ref="VerifyMagentoEntityActionGroup" stepKey="verifyMagentoEntities"/>

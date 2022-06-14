@@ -30,6 +30,7 @@
             <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct">
                 <field key="price">560</field>
             </createData>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <!-- Admin logout -->
@@ -83,7 +84,7 @@
         <click selector="{{AdminCustomerActivitiesComparisonListSection.addProductToOrder($$createSecondSimpleProduct.name$$)}}" stepKey="addSecondProductToOrder"/>
 
         <!-- Click 'Update Changes' -->
-        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickUpdateChangesBtn"/>
+        <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesBtn"/>
 
         <!-- Assert products in items ordered grid -->
         <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Product')}}" userInput="$$createFirstSimpleProduct.name$$" stepKey="seeFirstProductName"/>

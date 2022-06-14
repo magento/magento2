@@ -29,6 +29,7 @@
             </actionGroup>
             <!-- Set Germany as default country for created store view -->
             <magentoCLI command="config:set --scope=stores --scope-code={{customStore.code}} general/country/default {{DE_Address_Berlin_Not_Default_Address.country_id}}" stepKey="changeDefaultCountry"/>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <!--Delete product and store view-->
@@ -36,6 +37,7 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </after>
         <!-- Open product and add product to cart-->
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">

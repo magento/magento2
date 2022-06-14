@@ -43,8 +43,10 @@
             <argument name="rate" value="0.8"/>
         </actionGroup>
         <!--Open created product on Storefront and place for order-->
-        <amOnPage url="{{StorefrontProductPage.url($$createNewProduct.custom_attributes[url_key]$$)}}" stepKey="goToNewProductPage"/>
-        <waitForPageLoad stepKey="waitForNewProductPagePageLoad"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToNewProductPage">
+            <argument name="product" value="$createNewProduct$"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForNewProductPagePageLoad"/>
         <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchCurrency">
             <argument name="currency" value="RUB"/>
         </actionGroup>

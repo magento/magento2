@@ -24,6 +24,8 @@
         <element name="websitesOptions" type="select" selector="[name='website_ids'] option"/>
         <element name="customerGroups" type="multiselect" selector="select[name='customer_group_ids']"/>
         <element name="customerGroupsOptions" type="multiselect" selector="select[name='customer_group_ids'] option"/>
+        <element name="selectAllCustomerGroup" type="button" selector="button[data-action='select-all']"/>
+        <element name="pressCustomerGroupDoneBtn" type="button" selector="button.action-secondary"/>
         <element name="coupon" type="select" selector="select[name='coupon_type']"/>
         <element name="couponCode" type="input" selector="input[name='coupon_code']"/>
         <element name="useAutoGeneration" type="checkbox" selector="input[name='use_auto_generation']"/>
@@ -102,7 +104,9 @@
         <element name="couponQty" type="input" selector="#coupons_qty"/>
         <element name="generateCouponsButton" type="button" selector="#coupons_generate_button" timeout="30"/>
         <element name="generatedCouponByIndex" type="text" selector="#couponCodesGrid_table > tbody > tr:nth-child({{var}}) > td.col-code" parameterized="true"/>
+        <element name="generatedCouponTimesUsed" type="text" selector="#couponCodesGrid_table > tbody > tr:nth-child({{var}}) > td.col-times_used" parameterized="true"/>
         <element name="couponGridUsedHeader" type="text" selector="#couponCodesGrid thead th[data-sort='used']"/>
         <element name="fieldError" type="text" selector="//input[@name='{{fieldName}}']/following-sibling::label[@class='admin__field-error']" parameterized="true"/>
+        <element name="modalMessage" type="text" selector="aside.modal-popup div.modal-content div"/>
     </section>
 </sections>

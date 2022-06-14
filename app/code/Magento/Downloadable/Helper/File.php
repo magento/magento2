@@ -5,7 +5,10 @@
  */
 namespace Magento\Downloadable\Helper;
 
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaStorage\Model\File\Uploader;
 
 /**
  * Downloadable Products File Helper
@@ -16,8 +19,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class File extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * Core file storage database
-     *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
@@ -41,6 +42,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $mimeTypes
+     * @throws FileSystemException
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -61,28 +63,34 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Upload file from temporary folder.
+     *
      * @param string $tmpPath
-     * @param \Magento\MediaStorage\Model\File\Uploader $uploader
+     * @param Uploader $uploader
+     *
      * @return array
      */
-    public function uploadFromTmp($tmpPath, \Magento\MediaStorage\Model\File\Uploader $uploader)
+    public function uploadFromTmp($tmpPath, Uploader $uploader)
     {
         $uploader->setAllowRenameFiles(true);
         $uploader->setFilesDispersion(true);
         $absoluteTmpPath = $this->_mediaDirectory->getAbsolutePath($tmpPath);
         $result = $uploader->save($absoluteTmpPath);
-        unset($result['path']);
+        if (is_array($result)) {
+            unset($result['path']);
+        }
 
         return $result;
     }
 
     /**
      * Checking file for moving and move it
+     *
      * @param string $baseTmpPath
      * @param string $basePath
      * @param string $file
+     *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function moveFileFromTmp($baseTmpPath, $basePath, $file)
     {
@@ -92,7 +100,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
                 try {
                     $fileName = $this->_moveFileFromTmp($baseTmpPath, $basePath, $file[0]['file']);
                 } catch (\Exception $e) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
+                    throw new LocalizedException(
                         __('Something went wrong while saving the file(s).')
                     );
                 }
@@ -104,6 +112,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Check if file exist in filesystem and try to re-create it from database record if negative.
+     *
      * @param string $file
      * @return bool|int
      */
@@ -127,15 +136,12 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _moveFileFromTmp($baseTmpPath, $basePath, $file)
     {
-        if (strrpos($file, '.tmp') == strlen($file) - 4) {
+        if ($file && strrpos($file, '.tmp') == strlen($file) - 4) {
             $file = substr($file, 0, strlen($file) - 4);
         }
-
-        $destFile = dirname(
-            $file
-        ) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
-            $this->getFilePath($basePath, $file)
-        );
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $destFile = dirname($file) . '/'
+            . Uploader::getNewFileName($this->getFilePath($basePath, $file));
 
         $this->_coreFileStorageDatabase->copyFile(
             $this->getFilePath($baseTmpPath, $file),
@@ -159,8 +165,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getFilePath($path, $file)
     {
-        $path = rtrim($path, '/');
-        $file = ltrim($file, '/');
+        $path = $path !== null ? rtrim($path, '/') : '';
+        $file = $file !== null ? ltrim($file, '/') : '';
 
         return $path . '/' . $file;
     }
@@ -173,13 +179,14 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getFileFromPathFile($pathFile)
     {
-        $file = substr($pathFile, strrpos($pathFile, '/') + 1);
+        $file = $pathFile !== null ? substr($pathFile, strrpos($pathFile, '/') + 1) : '';
 
         return $file;
     }
 
     /**
      * Get filesize in bytes.
+     *
      * @param string $file
      * @return int
      */
@@ -189,16 +196,20 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get file type
+     *
      * @param string $filePath
      * @return string
      */
     public function getFileType($filePath)
     {
-        $ext = substr($filePath, strrpos($filePath, '.') + 1);
+        $ext = $filePath !== null ? substr($filePath, strrpos($filePath, '.') + 1) : '';
         return $this->_getFileTypeByExt($ext);
     }
 
     /**
+     * Get file type by ext
+     *
      * @param string $ext
      * @return string
      */
@@ -212,6 +223,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get all file types
+     *
      * @return array
      */
     public function getAllFileTypes()
@@ -220,6 +233,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get all mine types
+     *
      * @return array
      */
     public function getAllMineTypes()

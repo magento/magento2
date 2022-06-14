@@ -1,7 +1,5 @@
 <?php
 /**
- * Application area list
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,12 +7,12 @@ namespace Magento\Framework\App;
 
 /**
  * Lists router area codes & processes resolves FrontEndNames to area codes
+ *
+ * @api
  */
 class AreaList
 {
     /**
-     * Area configuration list
-     *
      * @var array
      */
     protected $_areas = [];
@@ -66,7 +64,6 @@ class AreaList
      *
      * @param string $frontName
      * @return null|string
-     * @api
      */
     public function getCodeByFrontName($frontName)
     {
@@ -87,7 +84,6 @@ class AreaList
      *
      * @param string $areaCode
      * @return string
-     * @api
      */
     public function getFrontName($areaCode)
     {
@@ -98,7 +94,6 @@ class AreaList
      * Retrieve area codes
      *
      * @return string[]
-     * @api
      */
     public function getCodes()
     {
@@ -110,7 +105,6 @@ class AreaList
      *
      * @param string $areaCode
      * @return string
-     * @api
      */
     public function getDefaultRouter($areaCode)
     {

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontValidateQuantityBundleProductsTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Bundle product details page"/>
+            <title value="Validation for negative quantity on bundle products."/>
+            <description value="Customer should not be able to add the products to the cart if the quantity is negative value"/>
+            <severity value="MINOR"/>
+            <testCaseId value="MC-42765"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct2"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+        </before>
+        <after>
+            <!-- Delete the bundled product -->
+            <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteSimpleProduct2"/>
+        </after>
+
+        <!-- Start creating a bundle product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillNameAndSku">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <!-- Add Option One, a "Drop-down" type option -->
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts1">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$createProduct1.sku$$"/>
+            <argument name="prodTwoSku" value="$$createProduct2.sku$$"/>
+            <argument name="optionTitle" value="Option One"/>
+            <argument name="inputType" value="select"/>
+        </actionGroup>
+        <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '0')}}" stepKey="userDefinedQuantitiyOption0Product0"/>
+        <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '1')}}" stepKey="userDefinedQuantitiyOption0Product1"/>
+
+        <!-- Add Option Two, a "Radio Buttons" type option -->
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts2">
+            <argument name="x" value="1"/>
+            <argument name="n" value="2"/>
+            <argument name="prodOneSku" value="$$createProduct1.sku$$"/>
+            <argument name="prodTwoSku" value="$$createProduct2.sku$$"/>
+            <argument name="optionTitle" value="Option Two"/>
+            <argument name="inputType" value="radio"/>
+        </actionGroup>
+        <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('1', '0')}}" stepKey="userDefinedQuantitiyOption1Product0"/>
+        <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('1', '1')}}" stepKey="userDefinedQuantitiyOption1Product1"/>
+
+        <!-- Save product and go to storefront -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <wait stepKey="waitBeforeIndexerAfterBundle" time="60"/>
+        <magentoCLI command="cron:run --group=index" stepKey="runCronIndexerAfterBundle"/>
+
+        <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForStorefront"/>
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+
+        <!--"Drop-down" type option-->
+        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$createProduct1.name$$ +$$$createProduct1.price$$.00" stepKey="selectOption0Product0"/>
+        <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$createProduct1.name$$ +$$$createProduct1.price$$.00" stepKey="checkOption0Product0"/>
+        <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="-1" stepKey="fillQuantity00"/>
+        <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="-1" stepKey="checkQuantity00"/>
+        <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddToCartDropDown"/>
+        <see selector="{{StorefrontBundledSection.dropDownQuantityValidation('Option One')}}" userInput="Please enter a quantity greater than 0." stepKey="seeQuantityNegativeErrorMessageDropDown"/>
+
+        <!--"Radio Buttons" type option-->
+        <checkOption selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '1')}}" stepKey="selectOption1Product0"/>
+        <seeCheckboxIsChecked selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '1')}}" stepKey="checkOption1Product0"/>
+        <fillField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="-1" stepKey="fillQuantity10"/>
+        <seeInField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="-1" stepKey="checkQuantity10"/>
+        <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddToCartRadioButton"/>
+        <see selector="{{StorefrontBundledSection.radioButtonQuantityValidation('Option Two')}}" userInput="Please enter a quantity greater than 0." stepKey="seeQuantityNegativeErrorMessageRadioButton"/>
+    </test>
+</tests>

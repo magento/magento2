@@ -92,7 +92,8 @@
             <argument name="orderNumber" value="{$grabOrderId}"/>
         </actionGroup>
         <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeReorder"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabReorderId"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabReorderId"/>
 
         <!-- Assert Storefront Order page contains message about Order created by a Store Administrator -->
         <actionGroup ref="StorefrontAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyStorefrontMessageOrderCreatedByAdmin">

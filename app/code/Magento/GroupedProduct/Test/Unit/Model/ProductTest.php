@@ -56,47 +56,47 @@ class ProductTest extends TestCase
     /**
      * @var ObjectManagerHelper
      */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
-    protected $model;
+    private $model;
 
     /**
      * @var Manager|MockObject
      */
-    protected $moduleManager;
+    private $moduleManager;
 
     /**
      * @var MockObject
      */
-    protected $stockItemFactoryMock;
+    private $stockItemFactoryMock;
 
     /**
      * @var IndexerInterface|MockObject
      */
-    protected $categoryIndexerMock;
+    private $categoryIndexerMock;
 
     /**
      * @var Processor|MockObject
      */
-    protected $productFlatProcessor;
+    private $productFlatProcessor;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor|MockObject
      */
-    protected $productPriceProcessor;
+    private $productPriceProcessor;
 
     /**
      * @var Product\Type|MockObject
      */
-    protected $productTypeInstanceMock;
+    private $productTypeInstanceMock;
 
     /**
      * @var Product\Option|MockObject
      */
-    protected $optionInstanceMock;
+    private $optionInstanceMock;
 
     /**
      * @var Base|MockObject
@@ -131,7 +131,7 @@ class ProductTest extends TestCase
     /**
      * @var IndexerRegistry|MockObject
      */
-    protected $indexerRegistryMock;
+    private $indexerRegistryMock;
 
     /**
      * @var CategoryRepositoryInterface|MockObject
@@ -146,49 +146,51 @@ class ProductTest extends TestCase
     /**
      * @var Cache|MockObject
      */
-    protected $imageCache;
+    private $imageCache;
 
     /**
      * @var CacheFactory|MockObject
      */
-    protected $imageCacheFactory;
+    private $imageCacheFactory;
 
     /**
      * @var MockObject
      */
-    protected $mediaGalleryEntryFactoryMock;
+    private $mediaGalleryEntryFactoryMock;
 
     /**
      * @var MockObject
      */
-    protected $productLinkFactory;
+    private $productLinkFactory;
 
     /**
      * @var MockObject
      */
-    protected $dataObjectHelperMock;
+    private $dataObjectHelperMock;
 
     /**
      * @var MockObject
      */
-    protected $metadataServiceMock;
+    private $metadataServiceMock;
 
     /**
      * @var MockObject
      */
-    protected $attributeValueFactory;
+    private $attributeValueFactory;
 
     /**
      * @var MockObject
      */
-    protected $linkTypeProviderMock;
+    private $linkTypeProviderMock;
 
     /**
      * @var MockObject
      */
-    protected $entityCollectionProviderMock;
+    private $entityCollectionProviderMock;
 
     /**
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
@@ -233,7 +235,8 @@ class ProductTest extends TestCase
             ->willReturn($actionValidatorMock);
 
         $this->optionInstanceMock = $this->getMockBuilder(Option::class)
-            ->setMethods(['setProduct', 'saveOptions', '__wakeup', '__sleep'])
+            ->onlyMethods(['setProduct', '__wakeup', '__sleep'])
+            ->addMethods(['saveOptions'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -282,17 +285,17 @@ class ProductTest extends TestCase
             ->getMock();
         $this->imageCacheFactory = $this->getMockBuilder(CacheFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->productLinkFactory = $this->getMockBuilder(ProductLinkInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->mediaGalleryEntryFactoryMock =
             $this->getMockBuilder(ProductAttributeMediaGalleryEntryInterfaceFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -311,7 +314,7 @@ class ProductTest extends TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             [
                 'context' => $contextMock,
                 'catalogProductType' => $this->productTypeInstanceMock,
@@ -340,9 +343,11 @@ class ProductTest extends TestCase
     }
 
     /**
-     *  Test for getProductLinks() with associated product links
+     *  Test for getProductLinks() with associated product links.
+     *
+     * @return void
      */
-    public function testGetProductLinks()
+    public function testGetProductLinks(): void
     {
         $this->markTestIncomplete('Skipped due to https://jira.corp.x.com/browse/MAGETWO-36926');
         $linkTypes = ['related' => 1, 'upsell' => 4, 'crosssell' => 5, 'associated' => 3];
@@ -385,38 +390,26 @@ class ProductTest extends TestCase
         $outputGroupLink->setPosition(0);
         $outputGroupLink->setExtensionAttributes($groupExtension);
 
-        $this->entityCollectionProviderMock->expects($this->at(0))
-            ->method('getCollection')
-            ->with($this->model, 'related')
-            ->willReturn([$inputRelatedLink]);
-        $this->entityCollectionProviderMock->expects($this->at(1))
-            ->method('getCollection')
-            ->with($this->model, 'upsell')
-            ->willReturn([]);
-        $this->entityCollectionProviderMock->expects($this->at(2))
-            ->method('getCollection')
-            ->with($this->model, 'crosssell')
-            ->willReturn([]);
-        $this->entityCollectionProviderMock->expects($this->at(3))
-            ->method('getCollection')
-            ->with($this->model, 'associated')
-            ->willReturn([$inputGroupLink]);
+        $this->entityCollectionProviderMock->method('getCollection')
+            ->withConsecutive(
+                [$this->model, 'related'],
+                [$this->model, 'upsell'],
+                [$this->model, 'crosssell'],
+                [$this->model, 'associated']
+            )
+            ->willReturnOnConsecutiveCalls([$inputRelatedLink], [], [], [$inputGroupLink]);
 
         $expectedOutput = [$outputRelatedLink, $outputGroupLink];
         $typeInstanceMock = $this->getMockBuilder(SimpleProductType::class)
-            ->setMethods(["getSku"])
+            ->addMethods(['"getSku"'])
             ->getMock();
         $typeInstanceMock->expects($this->atLeastOnce())->method('getSku')->willReturn("Simple Product 1");
         $this->model->setTypeInstance($typeInstanceMock);
 
         $productLink1 = $this->objectManagerHelper->getObject(Link::class);
         $productLink2 = $this->objectManagerHelper->getObject(Link::class);
-        $this->productLinkFactory->expects($this->at(0))
-            ->method('create')
-            ->willReturn($productLink1);
-        $this->productLinkFactory->expects($this->at(1))
-            ->method('create')
-            ->willReturn($productLink2);
+        $this->productLinkFactory->method('create')
+            ->willReturnOnConsecutiveCalls($productLink1, $productLink2);
 
         $extension = $this->objectManagerHelper->getObject(ProductLinkExtension::class);
         $productLink2->setExtensionAttributes($extension);

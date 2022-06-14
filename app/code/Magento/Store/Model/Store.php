@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model;
 
+use Laminas\Uri\UriFactory;
 use Magento\Catalog\Model\Category;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -15,10 +16,10 @@ use Magento\Framework\App\ScopeInterface as AppScopeInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Url\ModifierInterface;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Laminas\Uri\UriFactory;
 
 /**
  * Store model
@@ -45,89 +46,82 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Store Id key name
      */
-    const STORE_ID = 'store_id';
+    public const STORE_ID = 'store_id';
 
     /**
      * Entity name
      */
-    const ENTITY = 'store';
+    public const ENTITY = 'store';
 
     /**
      * Parameter used to determine app context.
      */
-    const CUSTOM_ENTRY_POINT_PARAM = 'custom_entry_point';
+    public const CUSTOM_ENTRY_POINT_PARAM = 'custom_entry_point';
 
-    /**#@+
+    /**
      * Configuration paths
      */
-    const XML_PATH_STORE_IN_URL = 'web/url/use_store';
+    public const XML_PATH_STORE_IN_URL = 'web/url/use_store';
 
-    const XML_PATH_USE_REWRITES = 'web/seo/use_rewrites';
+    public const XML_PATH_USE_REWRITES = 'web/seo/use_rewrites';
 
-    const XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
+    public const XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
 
-    const XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
+    public const XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
 
-    const XML_PATH_SECURE_IN_FRONTEND = 'web/secure/use_in_frontend';
+    public const XML_PATH_SECURE_IN_FRONTEND = 'web/secure/use_in_frontend';
 
-    const XML_PATH_SECURE_IN_ADMINHTML = 'web/secure/use_in_adminhtml';
+    public const XML_PATH_SECURE_IN_ADMINHTML = 'web/secure/use_in_adminhtml';
 
-    const XML_PATH_ENABLE_HSTS = 'web/secure/enable_hsts';
+    public const XML_PATH_ENABLE_HSTS = 'web/secure/enable_hsts';
 
-    const XML_PATH_ENABLE_UPGRADE_INSECURE = 'web/secure/enable_upgrade_insecure';
+    public const XML_PATH_ENABLE_UPGRADE_INSECURE = 'web/secure/enable_upgrade_insecure';
 
-    const XML_PATH_SECURE_BASE_LINK_URL = 'web/secure/base_link_url';
+    public const XML_PATH_SECURE_BASE_LINK_URL = 'web/secure/base_link_url';
 
-    const XML_PATH_UNSECURE_BASE_LINK_URL = 'web/unsecure/base_link_url';
+    public const XML_PATH_UNSECURE_BASE_LINK_URL = 'web/unsecure/base_link_url';
 
-    const XML_PATH_SECURE_BASE_STATIC_URL = 'web/secure/base_static_url';
+    public const XML_PATH_SECURE_BASE_STATIC_URL = 'web/secure/base_static_url';
 
-    const XML_PATH_UNSECURE_BASE_STATIC_URL = 'web/unsecure/base_static_url';
+    public const XML_PATH_UNSECURE_BASE_STATIC_URL = 'web/unsecure/base_static_url';
 
-    const XML_PATH_SECURE_BASE_MEDIA_URL = 'web/secure/base_media_url';
+    public const XML_PATH_SECURE_BASE_MEDIA_URL = 'web/secure/base_media_url';
 
-    const XML_PATH_UNSECURE_BASE_MEDIA_URL = 'web/unsecure/base_media_url';
+    public const XML_PATH_UNSECURE_BASE_MEDIA_URL = 'web/unsecure/base_media_url';
 
-    const XML_PATH_PRICE_SCOPE = 'catalog/price/scope';
+    public const XML_PATH_PRICE_SCOPE = 'catalog/price/scope';
 
-    /**#@-*/
+    public const PRICE_SCOPE_GLOBAL = 0;
 
-    /**#@+
-     * Price scope constants
-     */
-    const PRICE_SCOPE_GLOBAL = 0;
+    public const PRICE_SCOPE_WEBSITE = 1;
 
-    const PRICE_SCOPE_WEBSITE = 1;
-
-    /**#@-*/
-
-    const ADMIN_CODE = 'admin';
+    public const ADMIN_CODE = 'admin';
 
     /**
      * Tag to use to cache stores.
      */
-    const CACHE_TAG = 'store';
+    public const CACHE_TAG = 'store';
 
     /**
      * Script name, which returns all the images
      */
-    const MEDIA_REWRITE_SCRIPT = 'get.php/';
+    public const MEDIA_REWRITE_SCRIPT = 'get.php/';
 
     /**
      * A placeholder for generating base URL
      */
-    const BASE_URL_PLACEHOLDER = '{{base_url}}';
+    public const BASE_URL_PLACEHOLDER = '{{base_url}}';
 
     /**
      * Identifier of default store
      * used for loading data of default scope
      */
-    const DEFAULT_STORE_ID = 0;
+    public const DEFAULT_STORE_ID = 0;
 
     /**
      * Default store Id (for install)
      */
-    const DISTRO_STORE_ID = 1;
+    public const DISTRO_STORE_ID = 1;
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
@@ -156,8 +150,6 @@ class Store extends AbstractExtensibleModel implements
     protected $_eventObject = 'store';
 
     /**
-     * Price filter
-     *
      * @var \Magento\Directory\Model\Currency\Filter
      */
     protected $_priceFilter;
@@ -184,15 +176,11 @@ class Store extends AbstractExtensibleModel implements
     protected $_dirCache = [];
 
     /**
-     * URL cache
-     *
      * @var array
      */
     protected $_urlCache = [];
 
     /**
-     * Base URL cache
-     *
      * @var array
      */
     protected $_baseUrlCache = [];
@@ -256,8 +244,6 @@ class Store extends AbstractExtensibleModel implements
     protected $_configDataResource;
 
     /**
-     * Core file storage database
-     *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
@@ -318,7 +304,7 @@ class Store extends AbstractExtensibleModel implements
     private $_storeManager;
 
     /**
-     * @var \Magento\Framework\Url\ModifierInterface
+     * @var ModifierInterface
      */
     private $urlModifier;
 
@@ -359,13 +345,13 @@ class Store extends AbstractExtensibleModel implements
      * @param string $currencyInstalled
      * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param bool $isCustomEntryPoint
      * @param array $data optional generic object data
      * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
      * @param \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface|null $pillPut
      * @param \Magento\Store\Model\Validation\StoreValidator|null $modelValidator
-     *
+     * @param ModifierInterface|null $urlModifier
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -395,7 +381,8 @@ class Store extends AbstractExtensibleModel implements
         array $data = [],
         \Magento\Framework\Event\ManagerInterface $eventManager = null,
         \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null,
-        \Magento\Store\Model\Validation\StoreValidator $modelValidator = null
+        \Magento\Store\Model\Validation\StoreValidator $modelValidator = null,
+        ModifierInterface $urlModifier = null
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_config = $config;
@@ -414,13 +401,13 @@ class Store extends AbstractExtensibleModel implements
         $this->_currencyInstalled = $currencyInstalled;
         $this->groupRepository = $groupRepository;
         $this->websiteRepository = $websiteRepository;
-        $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->eventManager = $eventManager ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Event\ManagerInterface::class);
-        $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->pillPut = $pillPut ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class);
-        $this->modelValidator = $modelValidator ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->modelValidator = $modelValidator ?: ObjectManager::getInstance()
             ->get(\Magento\Store\Model\Validation\StoreValidator::class);
-
+        $this->urlModifier = $urlModifier ?: ObjectManager::getInstance()->get(ModifierInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -666,13 +653,13 @@ class Store extends AbstractExtensibleModel implements
                     throw new \InvalidArgumentException('Invalid base url type');
             }
 
-            if (false !== strpos($url, self::BASE_URL_PLACEHOLDER)) {
+            if ($url && false !== strpos($url, self::BASE_URL_PLACEHOLDER)) {
                 $url = str_replace(self::BASE_URL_PLACEHOLDER, $this->_request->getDistroBaseUrl(), $url);
             }
 
-            $this->_baseUrlCache[$cacheKey] = $this->getUrlModifier()->execute(
-                rtrim($url, '/') . '/',
-                \Magento\Framework\Url\ModifierInterface::MODE_BASE
+            $this->_baseUrlCache[$cacheKey] = $this->urlModifier->execute(
+                $url !== null ? rtrim($url, '/') . '/' : '/',
+                ModifierInterface::MODE_BASE
             );
         }
 
@@ -713,7 +700,7 @@ class Store extends AbstractExtensibleModel implements
             } else {
                 $scriptFilename = $this->_request->getServer('SCRIPT_FILENAME');
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                $indexFileName = basename($scriptFilename);
+                $indexFileName = is_string($scriptFilename) ? basename($scriptFilename) : '';
             }
             $url .= $indexFileName . '/';
         }
@@ -900,7 +887,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function setCurrentCurrencyCode($code)
     {
-        $code = strtoupper($code);
+        $code = is_string($code) && '' !== $code ? strtoupper($code) : '';
         if (in_array($code, $this->getAvailableCurrencyCodes())) {
             $this->_getSession()->setCurrencyCode($code);
 
@@ -946,7 +933,7 @@ class Store extends AbstractExtensibleModel implements
     {
         $codes = $this->getData('available_currency_codes');
         if (null === $codes) {
-            $codes = explode(',', $this->getConfig(Currency::XML_PATH_CURRENCY_ALLOW));
+            $codes = explode(',', $this->getConfig(Currency::XML_PATH_CURRENCY_ALLOW) ?? '');
             // add base currency, if it is not in allowed currencies
             $baseCurrencyCode = $this->getBaseCurrencyCode();
             if (!in_array($baseCurrencyCode, $codes)) {
@@ -977,7 +964,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function getAllowedCurrencies()
     {
-        return explode(',', $this->getConfig($this->_currencyInstalled));
+        return explode(',', $this->getConfig($this->_currencyInstalled) ?? '');
     }
 
     /**
@@ -1416,22 +1403,5 @@ class Store extends AbstractExtensibleModel implements
         \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
-     * Gets URL modifier.
-     *
-     * @return \Magento\Framework\Url\ModifierInterface
-     * @deprecated 100.1.0
-     */
-    private function getUrlModifier()
-    {
-        if ($this->urlModifier === null) {
-            $this->urlModifier = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Url\ModifierInterface::class
-            );
-        }
-
-        return $this->urlModifier;
     }
 }
