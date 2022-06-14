@@ -16,12 +16,12 @@
         <arguments>
             <argument name="path" type="string" defaultValue="{{CashOnDeliveryDisabledConfigData.path}}"/>
             <argument name="value" type="string" defaultValue="{{CashOnDeliveryDisabledConfigData.value}}"/>
-            <argument name="allowSpecific" type="string" defaultValue="0"/>
-            <argument name="specificCountry" type="string" defaultValue="''"/>
+            <argument name="allowSpecific" type="string" defaultValue="{{CashOnDeliveryApplicableAllAllowedCountryConfigData.value}}"/>
+            <argument name="specificCountry" type="string" defaultValue="{{CashOnDeliveryAllAllowedCountryConfigData.value}}"/>
         </arguments>
 
         <magentoCLI command="config:set {{path}} {{value}}" stepKey="enableCashOnDelivery"/>
-        <magentoCLI command="config:set payment/cashondelivery/allowspecific {{allowSpecific}}" stepKey="allowSpecificValue"/>
-        <magentoCLI command="config:set payment/cashondelivery/specificcountry {{specificCountry}}" stepKey="specificCountryValue"/>
+        <magentoCLI command="config:set {{CashOnDeliveryApplicableAllAllowedCountryConfigData.path}} {{allowSpecific}}" stepKey="allowSpecificValue"/>
+        <magentoCLI command="config:set {{CashOnDeliveryAllAllowedCountryConfigData.path}} {{specificCountry}}" stepKey="specificCountryValue"/>
     </actionGroup>
 </actionGroups>

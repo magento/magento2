@@ -24,7 +24,7 @@
             <actionGroup ref="CashOnDeliverySpecificCountryActionGroup" stepKey="enableCashOnDelivery">
                 <argument name="path" value="{{CashOnDeliveryEnableConfigData.path}}"/>
                 <argument name="value" value="{{CashOnDeliveryEnableConfigData.value}}"/>
-                <argument name="allowSpecific" value="1"/>
+                <argument name="allowSpecific" value="{{CashOnDeliveryApplicableSpecificCountryConfigData.value}}"/>
                 <argument name="specificCountry" value="GB"/>
             </actionGroup>
 
