@@ -16,8 +16,8 @@ use Magento\Customer\Api\Data\CustomerInterface;
 
 class OperationRepositoryInterfaceTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/bulk';
-    const SERVICE_NAME = 'asynchronousOperationsOperationRepositoryV1';
+    public const RESOURCE_PATH = '/V1/bulk';
+    public const SERVICE_NAME = 'asynchronousOperationsOperationRepositoryV1';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
