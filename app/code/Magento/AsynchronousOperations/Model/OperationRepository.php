@@ -25,32 +25,32 @@ class OperationRepository implements \Magento\AsynchronousOperations\Api\Operati
     /**
      * @var EntityManager
      */
-    private EntityManager $entityManager;
+    private $entityManager;
 
     /**
      * @var CollectionFactory
      */
-    private CollectionFactory $collectionFactory;
+    private $collectionFactory;
 
     /**
      * @var SearchResultFactory
      */
-    private SearchResultFactory $searchResultFactory;
+    private $searchResultFactory;
 
     /**
      * @var JoinProcessorInterface
      */
-    private JoinProcessorInterface $joinProcessor;
+    private $joinProcessor;
 
     /**
      * @var \Magento\AsynchronousOperations\Api\Data\OperationExtensionInterfaceFactory
      */
-    private OperationExtensionInterfaceFactory $operationExtensionFactory;
+    private $operationExtensionFactory;
 
     /**
      * @var CollectionProcessorInterface
      */
-    private CollectionProcessorInterface $collectionProcessor;
+    private $collectionProcessor;
 
     /**
      * @var \Psr\Log\LoggerInterface
