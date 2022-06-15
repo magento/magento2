@@ -109,6 +109,8 @@
         "magento/module-amqp": "*",
         "magento/module-amqp-store": "*",
         "magento/module-analytics": "*",
+        "magento/module-asynchronous-import-csv": "*",
+        "magento/module-asynchronous-import-csv-api": "*",
         "magento/module-asynchronous-operations": "*",
         "magento/module-authorization": "*",
         "magento/module-advanced-search": "*",
