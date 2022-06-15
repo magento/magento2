@@ -104,7 +104,7 @@ class MassConsumerEnvelopeCallback
                 $subject->getQueue()->reject($message, false, $e->getMessage());
                 return;
             }
-            if (isset($storeId) && $storeId !== $currentStoreId) {
+            if ($storeId !== $currentStoreId) {
                 $this->storeManager->setCurrentStore($storeId);
             }
         }
