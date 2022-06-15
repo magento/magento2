@@ -15,9 +15,11 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\ImportExport\Helper\Data as DataHelper;
 use Magento\ImportExport\Model\Export\Adapter\CsvFactory;
 use Magento\ImportExport\Model\Import\AbstractEntity as ImportAbstractEntity;
 use Magento\ImportExport\Model\Import\AbstractSource;
@@ -31,7 +33,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Magento\ImportExport\Model\Source\Import\AbstractBehavior;
 use Magento\ImportExport\Model\Source\Import\Behavior\Factory as BehaviorFactory;
-use Magento\ImportExport\Model\Source\Upload;
+use Magento\MediaStorage\Model\File\Uploader;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Psr\Log\LoggerInterface;
 
@@ -120,6 +122,11 @@ class Import extends AbstractModel
     protected $_entityAdapter;
 
     /**
+     * @var DataHelper
+     */
+    protected $_importExportData = null;
+
+    /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $_coreConfig;
@@ -143,6 +150,11 @@ class Import extends AbstractModel
      * @var CsvFactory
      */
     protected $_csvFactory;
+
+    /**
+     * @var FileTransferFactory
+     */
+    protected $_httpFactory;
 
     /**
      * @var UploaderFactory
@@ -185,19 +197,15 @@ class Import extends AbstractModel
     private $random;
 
     /**
-     * @var Upload
-     */
-    private $upload;
-
-    /**
      * @param LoggerInterface $logger
      * @param Filesystem $filesystem
-     * @param Upload $upload
+     * @param DataHelper $importExportData
      * @param ScopeConfigInterface $coreConfig
      * @param Import\ConfigInterface $importConfig
      * @param Import\Entity\Factory $entityFactory
      * @param Data $importData
      * @param Export\Adapter\CsvFactory $csvFactory
+     * @param FileTransferFactory $httpFactory
      * @param UploaderFactory $uploaderFactory
      * @param Source\Import\Behavior\Factory $behaviorFactory
      * @param IndexerRegistry $indexerRegistry
@@ -205,39 +213,45 @@ class Import extends AbstractModel
      * @param DateTime $localeDate
      * @param array $data
      * @param ManagerInterface|null $messageManager
+     * @param Random|null $random
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         LoggerInterface $logger,
         Filesystem $filesystem,
-        Upload $upload,
+        DataHelper $importExportData,
         ScopeConfigInterface $coreConfig,
         ConfigInterface $importConfig,
         Factory $entityFactory,
         Data $importData,
         CsvFactory $csvFactory,
+        FileTransferFactory $httpFactory,
         UploaderFactory $uploaderFactory,
         BehaviorFactory $behaviorFactory,
         IndexerRegistry $indexerRegistry,
         History $importHistoryModel,
         DateTime $localeDate,
         array $data = [],
-        ManagerInterface $messageManager = null
+        ManagerInterface $messageManager = null,
+        Random $random = null
     ) {
+        $this->_importExportData = $importExportData;
         $this->_coreConfig = $coreConfig;
         $this->_importConfig = $importConfig;
         $this->_entityFactory = $entityFactory;
         $this->_importData = $importData;
         $this->_csvFactory = $csvFactory;
+        $this->_httpFactory = $httpFactory;
         $this->_uploaderFactory = $uploaderFactory;
         $this->indexerRegistry = $indexerRegistry;
         $this->_behaviorFactory = $behaviorFactory;
         $this->_filesystem = $filesystem;
         $this->importHistoryModel = $importHistoryModel;
         $this->localeDate = $localeDate;
-        $this->upload = $upload;
         $this->messageManager = $messageManager ?: ObjectManager::getInstance()
             ->get(ManagerInterface::class);
+        $this->random = $random ?: ObjectManager::getInstance()
+            ->get(Random::class);
         parent::__construct($logger, $filesystem, $data);
     }
 
@@ -293,7 +307,7 @@ class Import extends AbstractModel
      * @return AbstractSource
      * @throws FileSystemException
      */
-    public function _getSourceAdapter($sourceFile)
+    protected function _getSourceAdapter($sourceFile)
     {
         return Adapter::findAdapterFor(
             $sourceFile,
@@ -529,6 +543,74 @@ class Import extends AbstractModel
     }
 
     /**
+     * Move uploaded file.
+     *
+     * @throws LocalizedException
+     * @return string Source file path
+     */
+    public function uploadSource()
+    {
+        /** @var $adapter \Zend_File_Transfer_Adapter_Http */
+        $adapter = $this->_httpFactory->create();
+        if (!$adapter->isValid(self::FIELD_NAME_SOURCE_FILE)) {
+            $errors = $adapter->getErrors();
+            if ($errors[0] == \Zend_Validate_File_Upload::INI_SIZE) {
+                $errorMessage = $this->_importExportData->getMaxUploadSizeMessage();
+            } else {
+                $errorMessage = __('The file was not uploaded.');
+            }
+            throw new LocalizedException($errorMessage);
+        }
+
+        $entity = $this->getEntity();
+        /** @var $uploader Uploader */
+        $uploader = $this->_uploaderFactory->create(['fileId' => self::FIELD_NAME_SOURCE_FILE]);
+        $uploader->setAllowedExtensions(['csv', 'zip']);
+        $uploader->skipDbProcessing(true);
+        $fileName = $this->random->getRandomString(32) . '.' . $uploader->getFileExtension();
+        try {
+            $result = $uploader->save($this->getWorkingDir(), $fileName);
+        } catch (\Exception $e) {
+            throw new LocalizedException(__('The file cannot be uploaded.'));
+        }
+
+        $extension = '';
+        $uploadedFile = '';
+        if ($result !== false) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
+            $uploadedFile = $result['path'] . $result['file'];
+        }
+
+        if (!$extension) {
+            $this->_varDirectory->delete($uploadedFile);
+            throw new LocalizedException(__('The file you uploaded has no extension.'));
+        }
+        $sourceFile = $this->getWorkingDir() . $entity;
+
+        $sourceFile .= '.' . $extension;
+        $sourceFileRelative = $this->_varDirectory->getRelativePath($sourceFile);
+
+        if (strtolower($uploadedFile) != strtolower($sourceFile)) {
+            if ($this->_varDirectory->isExist($sourceFileRelative)) {
+                $this->_varDirectory->delete($sourceFileRelative);
+            }
+
+            try {
+                $this->_varDirectory->renameFile(
+                    $this->_varDirectory->getRelativePath($uploadedFile),
+                    $sourceFileRelative
+                );
+            } catch (FileSystemException $e) {
+                throw new LocalizedException(__('The source file moving process failed.'));
+            }
+        }
+        $this->_removeBom($sourceFile);
+        $this->createHistoryReport($sourceFileRelative, $entity, $extension, $result);
+        return $sourceFile;
+    }
+
+    /**
      * Move uploaded file and provide source instance.
      *
      * @return Import\AbstractSource
@@ -537,7 +619,7 @@ class Import extends AbstractModel
      */
     public function uploadFileAndGetSource()
     {
-        $sourceFile = $this->upload->uploadSource($this);
+        $sourceFile = $this->uploadSource();
         try {
             $source = $this->_getSourceAdapter($sourceFile);
         } catch (\Exception $e) {
@@ -549,21 +631,13 @@ class Import extends AbstractModel
     }
 
     /**
-     * @return Filesystem\Directory\WriteInterface
-     */
-    public function getVarDirectory()
-    {
-        return $this->_varDirectory;
-    }
-
-    /**
      * Remove BOM from a file
      *
      * @param string $sourceFile
      * @return $this
      * @throws FileSystemException
      */
-    public function _removeBom($sourceFile)
+    protected function _removeBom($sourceFile)
     {
         $driver = $this->_varDirectory->getDriver();
         $string = $driver->fileGetContents($this->_varDirectory->getAbsolutePath($sourceFile));
@@ -746,7 +820,7 @@ class Import extends AbstractModel
      * @return $this
      * @throws LocalizedException
      */
-    public function createHistoryReport($sourceFileRelative, $entity, $extension = null, $result = null)
+    protected function createHistoryReport($sourceFileRelative, $entity, $extension = null, $result = null)
     {
         if ($this->isReportEntityType($entity)) {
             if (is_array($sourceFileRelative)) {
@@ -808,13 +882,5 @@ class Import extends AbstractModel
     public function getDeletedItemsCount()
     {
         return $this->_getEntityAdapter()->getDeletedItemsCount();
-    }
-
-    /**
-     * @return Upload
-     */
-    public function getUpload()
-    {
-        return $this->upload;
     }
 }
