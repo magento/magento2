@@ -65,7 +65,7 @@ class History extends \Magento\Framework\View\Element\Template
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,
-        StoreManagerInterface $storeManager = null,
+        StoreManagerInterface $storeManager,
         array $data = []
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
