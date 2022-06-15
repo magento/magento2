@@ -585,7 +585,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                 if ($this->getIdFieldName()) {
                     $item->setIdFieldName($this->getIdFieldName());
                 }
-                $item->addData($row);
+                $item->setData($row);
                 $this->beforeAddLoadedItem($item);
                 $this->addItem($item);
             }
