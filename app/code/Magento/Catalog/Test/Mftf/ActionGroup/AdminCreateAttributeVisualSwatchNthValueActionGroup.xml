@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateAttributeVisualSwatchNthValueActionGroup" >
+        <annotations>
+            <description>Fills in the visual swatch Field.</description>
+        </annotations>
+        <arguments>
+            <argument name="row" type="string"/>
+            <argument name="adminName" type="string"/>
+            <argument name="storeName" type="string"/>
+        </arguments>
+
+        <scrollTo selector="{{AdminCreateNewProductAttributeSection.addValue}}" stepKey="scrollToOption"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.addValue}}" stepKey="clickOnAddSwatch"/>
+        <waitForPageLoad stepKey="waitForNewTextSwatch"/>
+        <waitForPageLoad stepKey="waitForNewVisualSwatch"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.visualSwatchAdmin(row)}}" userInput="{{adminName}}" stepKey="fillSwatchForAdmin"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.visualSwatchStore(row)}}" userInput="{{storeName}}" stepKey="fillSwatchForStore"/>
+    </actionGroup>
+</actionGroups>
+
+
