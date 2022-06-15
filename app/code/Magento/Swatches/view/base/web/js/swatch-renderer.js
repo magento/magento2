@@ -459,7 +459,7 @@ define([
                         '</div>' + input +
                     '</div>'
                 );
-                
+
                 $widget.optionsMap[item.id] = {};
 
                 // Aggregate options array to hash (key => value)
@@ -505,13 +505,13 @@ define([
                 let item = this;
 
                 if ($widget.options.jsonConfig.canDisplayShowOutOfStockStatus) {
-                    let salableProd = $widget.options.jsonConfig.salable[item.id],
+                    let salableProducts = $widget.options.jsonConfig.salable[item.id],
                         swatchOptions = container.find('.swatch-option');
 
                     swatchOptions.each(function (key, value) {
                         let optionId = $(value).data('option-id');
 
-                        if (!salableProd.hasOwnProperty(optionId)) {
+                        if (!salableProducts.hasOwnProperty(optionId)) {
                             $(value).attr('disabled', true).addClass('disabled');
                         }
                     });
