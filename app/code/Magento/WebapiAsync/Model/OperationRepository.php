@@ -11,6 +11,7 @@ use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 use Magento\AsynchronousOperations\Model\OperationRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\MessageQueue\MessageValidator;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\EntityManager\EntityManager;
@@ -96,8 +97,15 @@ class OperationRepository implements OperationRepositoryInterface
             'entity_id'        => null,
             'entity_link'      => '',
             'meta_information' => $encodedMessage,
-            "store_id" => $this->storeManager->getStore()->getId(),
         ];
+
+        try {
+            $storeId = $this->storeManager->getStore()->getId();
+            $serializedData['store_id'] = $storeId;
+        } catch (NoSuchEntityException $e) {
+            // skip setting store id in the serialized data if store doesn't exist
+        }
+
         $data = [
             'data' => [
                 OperationInterface::ID => $operationId,
