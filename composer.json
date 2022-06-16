@@ -107,7 +107,6 @@
         "magento/module-adobe-ims-api": "*",
         "magento/module-advanced-pricing-import-export": "*",
         "magento/module-amqp": "*",
-        "magento/module-amqp-store": "*",
         "magento/module-analytics": "*",
         "magento/module-asynchronous-operations": "*",
         "magento/module-authorization": "*",
