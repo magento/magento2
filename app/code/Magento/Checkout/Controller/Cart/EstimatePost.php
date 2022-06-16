@@ -65,7 +65,6 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
             ->setRegionId($regionId)
             ->setRegion($region)
             ->setCollectShippingRates(true);
-        $this->quoteRepository->save($this->cart->getQuote());
         $this->cart->save();
         return $this->_goBack();
     }
