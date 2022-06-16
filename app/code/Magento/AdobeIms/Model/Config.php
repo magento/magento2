@@ -108,6 +108,10 @@ class Config implements ConfigInterface
      */
     public function getLogoutUrl(string $accessToken, string $redirectUrl = '') : string
     {
+        // there is no success response with empty redirect url
+        if ($redirectUrl === '') {
+            $redirectUrl = 'self';
+        }
         return str_replace(
             ['#{access_token}', '#{redirect_uri}'],
             [$accessToken, $redirectUrl],
