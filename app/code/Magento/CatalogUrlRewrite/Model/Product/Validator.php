@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogUrlRewrite\Model\Product;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Visibility as ProductVisibility;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
@@ -68,6 +69,11 @@ class Validator
 
         foreach ($stores as $store) {
             if (!in_array($store->getWebsiteId(), $product->getWebsiteIds())) {
+                continue;
+            }
+
+            // check if product visibility on store is not set to "Not Visible Individually"
+            if ($product->setStoreId($store->getId())->getVisibility() == ProductVisibility::VISIBILITY_NOT_VISIBLE) {
                 continue;
             }
 
