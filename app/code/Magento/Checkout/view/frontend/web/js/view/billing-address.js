@@ -245,9 +245,14 @@ function (
          *
          * @param {Boolean} force
          */
-        updateAddresses: function (force = false) {
-            if (force || window.checkoutConfig.reloadOnBillingAddress ||
-                !window.checkoutConfig.displayBillingOnPaymentMethod) {
+        updateAddresses: function (force) {
+            if (typeof force === "undefined"){
+                force = false;
+            }
+
+            if (force
+                || window.checkoutConfig.reloadOnBillingAddress
+                || !window.checkoutConfig.displayBillingOnPaymentMethod) {
                 setBillingAddressAction(globalMessageList);
             }
         },

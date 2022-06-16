@@ -77,7 +77,7 @@
         <click selector="{{StorefrontCheckoutPaymentMethodsSection.cashOnDelivery}}" stepKey="selectCashOnDeliveryMethod"/>
 
         <!--Billing is same as shipping-->
-        <checkOption selector="{{CheckoutPaymentSection.billingAddressSameAsShippingCheckboxCod}}" stepKey="selectPaymentSolution" />
+        <checkOption selector="{{CheckoutPaymentSection.billingAddressSameAsShippingCashOnDeliveryCheckbox}}" stepKey="selectPaymentSolution" />
         <waitForPageLoad stepKey="waitForPageLoad"/>
 
         <!--Assert COD payment method not available anymore-->
