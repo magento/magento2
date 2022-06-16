@@ -14,7 +14,7 @@
             <title value="Validate configurable product swatch option to be pre-select when user edit from cart edit page."/>
             <description value="Validate configurable product swatch option to be pre-select when user edit from cart edit page."/>
             <severity value="AVERAGE"/>
-            <testCaseId value=""/>
+            <testCaseId value="AC-3591"/>
             <useCaseId value="ACP2E-891"/>
             <group value="Swatches"/>
         </annotations>
