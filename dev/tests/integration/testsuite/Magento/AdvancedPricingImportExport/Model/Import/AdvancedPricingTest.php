@@ -5,6 +5,7 @@
  */
 namespace Magento\AdvancedPricingImportExport\Model\Import;
 
+use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
@@ -13,8 +14,6 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
-use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 
 /**
  * @magentoAppArea adminhtml
@@ -433,8 +432,8 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento\Catalog\Test\Fixture\SelectAttribute as:attr1
      * @magentoDataFixture Magento\Catalog\Test\Fixture\SelectAttribute as:attr2
-     * @magentoDataFixtureDataProvider {"attr1":{"attribute_code":"size","default_frontend_label":"Size","options":[28,29,30,31,32,33,34,36,38]}}
-     * @magentoDataFixtureDataProvider {"attr2":{"attribute_code":"color","default_frontend_label":"Color","options":["Red","Blue","Yellow","Orange","Green"]}}
+     * @magentoDataFixtureDataProvider {"attr1":{"attribute_code":"size","default_frontend_label":"Size","scope":"global","options":[28,29,30,31,32,33,34,36,38]}}
+     * @magentoDataFixtureDataProvider {"attr2":{"attribute_code":"colors","default_frontend_label":"Colors","scope":"global","options":["Red","Green","Yellow","Blue","Orange"]}}
      * @magentoAppArea adminhtml
      */
     public function testImportAddUpdateCounts()
@@ -450,7 +449,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             true,
             'catalog_product'
         );
-        print_r($errors->getAllErrors());
+
         $this->assertEquals(0, $errors->getErrorsCount(), 'Product import validation error');
         $this->model->importData();
 
