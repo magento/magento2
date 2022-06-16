@@ -45,6 +45,13 @@ define([
         resolveEstimationAddress: function () {
             var address;
 
+            if (checkoutData.getShippingAddressFromData()) {
+                address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
+                selectShippingAddress(address);
+            } else {
+                this.resolveShippingAddress();
+            }
+
             if (quote.isVirtual()) {
                 if (checkoutData.getBillingAddressFromData()) {
                     address = addressConverter.formAddressDataToQuoteAddress(
@@ -54,11 +61,6 @@ define([
                 } else {
                     this.resolveBillingAddress();
                 }
-            } else if (checkoutData.getShippingAddressFromData()) {
-                address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
-                selectShippingAddress(address);
-            } else {
-                this.resolveShippingAddress();
             }
         },
 
@@ -218,6 +220,18 @@ define([
         applyBillingAddress: function () {
             var shippingAddress,
                 isBillingAddressInitialized;
+
+            isBillingAddressInitialized = addressList.some(function (addressFromList) {
+            if (addressFromList.isDefaultBilling()) {
+                selectBillingAddress(addressFromList);
+                return true;
+            }
+            return false;
+            });
+            
+            if(isBillingAddressInitialized){
+                return;
+            }
 
             if (quote.billingAddress()) {
                 selectBillingAddress(quote.billingAddress());
