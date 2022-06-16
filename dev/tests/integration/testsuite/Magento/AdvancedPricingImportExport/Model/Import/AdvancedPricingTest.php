@@ -5,7 +5,6 @@
  */
 namespace Magento\AdvancedPricingImportExport\Model\Import;
 
-use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
@@ -14,6 +13,8 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 
 /**
  * @magentoAppArea adminhtml
