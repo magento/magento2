@@ -5,14 +5,13 @@
  */
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
+use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
+use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
-use Magento\Framework\MessageQueue\ConsumerInterface;
-use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
-use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
-use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
  * Class which creates Consumers
@@ -126,7 +125,7 @@ class ConsumerFactory
      *
      * @return ConsumerConfig
      *
-     * @deprecated 100.2.0
+     * @deprecated 103.0.0
      */
     private function getConsumerConfig()
     {
@@ -141,7 +140,7 @@ class ConsumerFactory
      *
      * @return CommunicationConfig
      *
-     * @deprecated 100.2.0
+     * @deprecated 103.0.0
      */
     private function getCommunicationConfig()
     {

@@ -8,6 +8,8 @@ namespace Magento\Backend\Block\Widget\Grid;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * Extended Grid Widget
+ *
  * @api
  * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -85,8 +87,6 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     protected $_massactionIdFilter;
 
     /**
-     * Massaction block name
-     *
      * @var string
      */
     protected $_massactionBlockName = \Magento\Backend\Block\Widget\Grid\Massaction\Extended::class;
@@ -120,8 +120,6 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     protected $_headersVisibility = true;
 
     /**
-     * Filter visibility
-     *
      * @var boolean
      */
     protected $_filterVisibility = true;
@@ -146,15 +144,11 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     protected $_isCollapsed;
 
     /**
-     * Count subtotals
-     *
      * @var boolean
      */
     protected $_countSubTotals = false;
 
     /**
-     * SubTotals
-     *
      * @var \Magento\Framework\DataObject[]
      */
     protected $_subtotals = [];
@@ -177,7 +171,10 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     protected $_path = 'export';
 
     /**
+     * Initialization
+     *
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function _construct()
     {
@@ -297,6 +294,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
             );
             $this->getColumnSet()->getChildBlock($columnId)->setGrid($this);
         } else {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(__('Please correct the column format and try again.'));
         }
 
@@ -471,10 +469,6 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     protected function _prepareCollection()
     {
         if ($this->getCollection()) {
-            if ($this->getCollection()->isLoaded()) {
-                $this->getCollection()->clear();
-            }
-
             parent::_prepareCollection();
 
             if (!$this->_isExport) {
@@ -663,6 +657,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
      */
     public function getRowUrl($item)
     {
+        // phpstan:ignore "Call to an undefined static method"
         $res = parent::getRowUrl($item);
         return $res ? $res : '#';
     }
@@ -680,6 +675,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
 
     /**
      * Retrieve columns for multiple rows
+     *
      * @return array
      */
     public function getMultipleRowColumns()
@@ -943,6 +939,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
 
     /**
      * Iterate collection and call callback method per item
+     *
      * For callback method first argument always is item object
      *
      * @param string $callback
@@ -972,7 +969,12 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
             $page++;
 
             foreach ($collection as $item) {
-                call_user_func_array([$this, $callback], array_merge([$item], $args));
+                //phpcs:ignore Magento2.Functions.DiscouragedFunction
+                call_user_func_array(
+                    [$this, $callback],
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                    array_merge([$item], $args)
+                );
             }
         }
     }
@@ -1009,6 +1011,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
         $this->_isExport = true;
         $this->_prepareGrid();
 
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $name = md5(microtime());
         $file = $this->_path . '/' . $name . '.csv';
 
@@ -1037,6 +1040,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
      * Retrieve Grid data as CSV
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getCsv()
     {
@@ -1063,7 +1067,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
                     $data[] = '"' . str_replace(
                         ['"', '\\'],
                         ['""', '\\\\'],
-                        $column->getRowFieldExport($item)
+                        $column->getRowFieldExport($item) ?: ''
                     ) . '"';
                 }
             }
@@ -1077,7 +1081,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
                     $data[] = '"' . str_replace(
                         ['"', '\\'],
                         ['""', '\\\\'],
-                        $column->getRowFieldExport($this->getTotals())
+                        $column->getRowFieldExport($this->getTotals()) ?: ''
                     ) . '"';
                 }
             }
@@ -1153,6 +1157,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
             [$this, 'getRowRecord']
         );
 
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $name = md5(microtime());
         $file = $this->_path . '/' . $name . '.xml';
 
@@ -1244,7 +1249,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     }
 
     /**
-     * get collection object
+     * Get collection object
      *
      * @return \Magento\Framework\Data\Collection
      */

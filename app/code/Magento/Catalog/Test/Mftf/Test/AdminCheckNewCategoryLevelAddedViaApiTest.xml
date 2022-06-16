@@ -17,6 +17,8 @@
                 Check category tree: parent element has child element. "/>
             <group value="catalog"/>
             <severity value="MAJOR"/>
+            <group value="pr_exclude"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>

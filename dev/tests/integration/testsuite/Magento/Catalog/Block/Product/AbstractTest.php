@@ -3,7 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Block\Product;
+
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Framework\Pricing\Render;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\View\DesignInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Catalog\Block\Product\Abstract.
@@ -11,7 +24,7 @@ namespace Magento\Catalog\Block\Product;
  * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
  * @magentoAppArea frontend
  */
-class AbstractTest extends \PHPUnit\Framework\TestCase
+class AbstractTest extends TestCase
 {
     /**
      * Stub class name for class under test
@@ -19,17 +32,17 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     const STUB_CLASS = 'Magento_Catalog_Block_Product_AbstractProduct_Stub';
 
     /**
-     * @var \Magento\Catalog\Block\Product\AbstractProduct
+     * @var AbstractProduct
      */
     protected $block;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var ProductInterface
      */
     protected $product;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
@@ -40,43 +53,51 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
      */
     protected static $isStubClass = false;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @var LayoutInterface
+     */
+    private $layout;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $json;
+
+    /**
+     * @inheritdoc
+     */
+
     protected function setUp(): void
     {
         if (!self::$isStubClass) {
             $this->getMockForAbstractClass(
-                \Magento\Catalog\Block\Product\AbstractProduct::class,
+                AbstractProduct::class,
                 [],
                 self::STUB_CLASS,
                 false
             );
             self::$isStubClass = true;
         }
-
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
-        $objectManager->get(\Magento\Framework\View\DesignInterface::class)->setDefaultDesignTheme();
-        $this->block = $objectManager->get(
-            \Magento\Framework\View\LayoutInterface::class
-        )->createBlock(self::STUB_CLASS);
-        $this->productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-
-        $this->product = $this->productRepository->get('simple');
-        $this->product->addData(
-            [
-                'image' => '/m/a/magento_image.jpg',
-                'small_image' => '/m/a/magento_image.jpg',
-                'thumbnail' => '/m/a/magento_image.jpg',
-            ]
-        );
-        $this->block->setProduct($this->product);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->objectManager->get(DesignInterface::class)->setDefaultDesignTheme();
+        $this->layout = $this->objectManager->get(LayoutInterface::class);
+        $this->block = $this->layout->createBlock(self::STUB_CLASS);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
+        $this->json = $this->objectManager->get(SerializerInterface::class);
     }
 
     /**
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_simple.php
      * @magentoAppIsolation enabled
+     * @return void
      */
-    public function testGetAddToCartUrl()
+    public function testGetAddToCartUrlWithProductRequiredOptions(): void
     {
         $product = $this->productRepository->get('simple');
         $url = $this->block->getAddToCartUrl($product);
@@ -84,18 +105,38 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $this->assertStringMatchesFormat('%ssimple-product.html%s', $url);
     }
 
-    public function testGetSubmitUrl()
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
+     * @return void
+     */
+    public function testGetAddToCartUrlWithSimpleProduct(): void
     {
+        $product = $this->productRepository->get('simple-1');
+        $url = $this->block->getAddToCartUrl($product);
+        $this->assertStringEndsWith(sprintf('product/%s/', $product->getId()), $url);
+        $this->assertStringContainsString('checkout/cart/add', $url);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetSubmitUrl(): void
+    {
+        $this->product = $this->productRepository->get('simple');
         /* by default same as add to cart */
         $this->assertStringEndsWith('?options=cart', $this->block->getSubmitUrl($this->product));
         $this->block->setData('submit_route_data', ['route' => 'catalog/product/view']);
         $this->assertStringEndsWith('catalog/product/view/', $this->block->getSubmitUrl($this->product));
     }
 
-    public function testGetAddToWishlistParams()
+    /**
+     * @return void
+     */
+    public function testGetAddToWishlistParams(): void
     {
+        $this->product = $this->productRepository->get('simple');
         $json = $this->block->getAddToWishlistParams($this->product);
-        $params = (array)json_decode($json);
+        $params = (array)$this->json->unserialize($json);
         $data = (array)$params['data'];
         $this->assertEquals($this->product->getId(), $data['product']);
         $this->assertArrayHasKey('uenc', $data);
@@ -105,53 +146,70 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetAddToCompareUrl()
+    /**
+     * @return void
+     */
+    public function testGetAddToCompareUrl(): void
     {
         $this->assertStringMatchesFormat('%scatalog/product_compare/add/', $this->block->getAddToCompareUrl());
     }
 
-    public function testGetMinimalQty()
+    /**
+     * @return void
+     */
+    public function testGetMinimalQty(): void
     {
+        $this->product = $this->productRepository->get('simple');
         $this->assertGreaterThan(0, $this->block->getMinimalQty($this->product));
     }
 
-    public function testGetReviewsSummaryHtml()
+    /**
+     * @return void
+     */
+    public function testGetReviewsSummaryHtml(): void
     {
-        $this->block->setLayout(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get(\Magento\Framework\View\LayoutInterface::class)
-        );
+        $this->product = $this->productRepository->get('simple');
         $html = $this->block->getReviewsSummaryHtml($this->product, false, true);
         $this->assertNotEmpty($html);
         $this->assertStringContainsString('review', $html);
     }
 
-    public function testGetProduct()
+    /**
+     * @return void
+     */
+    public function testGetProduct(): void
     {
+        $this->product = $this->productRepository->get('simple');
+        $this->block->setProduct($this->product);
         $this->assertSame($this->product, $this->block->getProduct());
     }
 
     /**
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_simple.php
      * @magentoAppIsolation enabled
+     * @return void
      */
-    public function testGetProductUrl()
+    public function testGetProductUrl(): void
     {
         $product = $this->productRepository->get('simple');
         $this->assertStringEndsWith('simple-product.html', $this->block->getProductUrl($product));
     }
 
-    public function testHasProductUrl()
+    /**
+     * @return void
+     */
+    public function testHasProductUrl(): void
     {
+        $this->product = $this->productRepository->get('simple');
         $this->assertTrue($this->block->hasProductUrl($this->product));
     }
 
-    public function testLayoutDependColumnCount()
+    /**
+     * @return void
+     */
+    public function testLayoutDependColumnCount(): void
     {
-        $this->block->setLayout(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get(\Magento\Framework\View\LayoutInterface::class)
-        );
+        $this->block->setLayout($this->layout);
         $this->assertEquals(3, $this->block->getColumnCount());
         /* default column count */
 
@@ -161,8 +219,35 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->block->getColumnCountLayoutDepend('test'));
     }
 
-    public function testGetCanShowProductPrice()
+    /**
+     * @return void
+     */
+    public function testGetCanShowProductPrice(): void
     {
+        $this->product = $this->productRepository->get('simple');
         $this->assertTrue($this->block->getCanShowProductPrice($this->product));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
+     * @return void
+     */
+    public function testGetProductPriceHtml(): void
+    {
+        $product = $this->productRepository->get('simple-1');
+        $this->assertEmpty($this->block->getProductPriceHtml($product, FinalPrice::PRICE_CODE));
+        $this->layout->createBlock(
+            Render::class,
+            'product.price.render.default',
+            [
+                'data' => [
+                    'price_render_handle' => 'catalog_product_prices',
+                    'use_link_for_as_low_as' => true,
+                ],
+            ]
+        );
+        $finalPriceHtml = $this->block->getProductPriceHtml($product, FinalPrice::PRICE_CODE);
+        $this->assertStringContainsString('price-' . FinalPrice::PRICE_CODE, $finalPriceHtml);
+        $this->assertStringContainsString('product-price-' . $product->getId(), $finalPriceHtml);
     }
 }

@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\MessageQueue;
 
 /**
- * Configuration for the consumer.
+ * Configuration for the consumer interface
+ *
+ * @api
  */
 interface ConsumerConfigurationInterface
 {
@@ -45,7 +49,7 @@ interface ConsumerConfigurationInterface
      * Get consumer type sync|async.
      *
      * @return string
-     * @deprecated 100.2.0
+     * @deprecated 103.0.0
      * @see \Magento\Framework\Communication\ConfigInterface::getTopic
      * @throws \LogicException
      */

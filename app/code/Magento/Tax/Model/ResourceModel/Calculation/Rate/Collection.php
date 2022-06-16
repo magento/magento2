@@ -206,7 +206,7 @@ class Collection extends AbstractCollection
     {
         $size = self::TAX_RULES_CHUNK_SIZE;
         $page = 1;
-        $rates = [[]];
+        $rates = [];
         do {
             $offset = $size * ($page - 1);
             $this->getSelect()->reset();
@@ -222,6 +222,6 @@ class Collection extends AbstractCollection
             $page++;
         } while ($this->getSize() > $offset);
 
-        return array_merge(...$rates);
+        return array_merge([], ...$rates);
     }
 }

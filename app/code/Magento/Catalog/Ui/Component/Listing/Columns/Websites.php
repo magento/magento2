@@ -109,6 +109,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
      * Apply sorting.
      *
      * @return void
+     * @since 103.0.2
      */
     protected function applySorting()
     {
@@ -118,6 +119,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
             && !empty($sorting['field'])
             && !empty($sorting['direction'])
             && $sorting['field'] === $this->getName()
+            && in_array(strtoupper($sorting['direction']), ['ASC', 'DESC'], true)
         ) {
             /** @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection */
             $collection = $this->getContext()->getDataProvider()->getCollection();

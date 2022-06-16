@@ -18,6 +18,11 @@ use Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor as FileProce
 class CustomOption extends AbstractExtensibleModel implements CustomOptionInterface
 {
     /**
+     * @var FileProcessor
+     */
+    private $fileProcessor;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param ExtensionAttributesFactory $extensionFactory

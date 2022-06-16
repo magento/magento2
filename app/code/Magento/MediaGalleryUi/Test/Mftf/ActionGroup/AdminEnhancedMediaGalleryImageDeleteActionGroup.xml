@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnhancedMediaGalleryImageDeleteActionGroup">
+        <annotations>
+            <description>Delete image from the Media Gallery</description>
+        </annotations>
+        <arguments>
+            <argument name="imageName" type="string" defaultValue=""/>
+        </arguments>
+
+        <click selector="{{AdminEnhancedMediaGalleryImageActionsSection.openContextMenuByImage(imageName)}}" stepKey="openContextMenu"/>
+        <click selector="{{AdminEnhancedMediaGalleryImageActionsSection.delete}}" stepKey="deleteImage"/>
+        <waitForPageLoad stepKey="waitForDeleteModal"/>
+        <click selector="{{AdminEnhancedMediaGalleryDeleteModalSection.confirmDelete}}" stepKey="confirmDelete"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear"/>
+    </actionGroup>
+</actionGroups>

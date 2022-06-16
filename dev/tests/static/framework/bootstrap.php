@@ -16,8 +16,19 @@ use Magento\Framework\View\Design\Theme\ThemePackageFactory;
 
 require __DIR__ . '/autoload.php';
 
+error_reporting(E_ALL);
 if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', dirname(__DIR__) . '/tmp');
+}
+
+// PHP 8 compatibility. Define constants that are not present in PHP < 8.0
+if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 80000) {
+    if (!defined('T_NAME_QUALIFIED')) {
+        define('T_NAME_QUALIFIED', 24001);
+    }
+    if (!defined('T_NAME_FULLY_QUALIFIED')) {
+        define('T_NAME_FULLY_QUALIFIED', 24002);
+    }
 }
 
 setCustomErrorHandler();
@@ -38,7 +49,8 @@ function setCustomErrorHandler()
 {
     set_error_handler(
         function ($errNo, $errStr, $errFile, $errLine) {
-            if (error_reporting()) {
+            $errLevel = error_reporting();
+            if (($errLevel & $errNo) !== 0) {
                 $errorNames = [
                     E_ERROR => 'Error',
                     E_WARNING => 'Warning',

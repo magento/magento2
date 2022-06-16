@@ -114,7 +114,7 @@
                 <dataScope>content_heading</dataScope>
             </settings>
         </field>
-        <field name="content" formElement="wysiwyg">
+        <field name="content" template="ui/form/field" formElement="wysiwyg">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">page</item>
@@ -125,6 +125,7 @@
                     <class name="admin__field-wide">true</class>
                 </additionalClasses>
                 <label/>
+                <notice translate="true">Note: Keyboard shortcut to activate editor help : Alt + 0 (Windows) or &#x2325;0 (MacOS)</notice>
                 <dataScope>content</dataScope>
             </settings>
             <formElements>
@@ -208,7 +209,7 @@
                 </validation>
                 <dataType>int</dataType>
                 <tooltip>
-                    <link>https://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
+                    <link>https://docs.magento.com/user-guide/configuration/scope.html</link>
                     <description>What is this?</description>
                 </tooltip>
                 <label translate="true">Store View</label>

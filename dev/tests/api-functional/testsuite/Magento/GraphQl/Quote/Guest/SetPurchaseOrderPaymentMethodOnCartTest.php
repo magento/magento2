@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
-use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\OfflinePayments\Model\Purchaseorder;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -91,9 +90,6 @@ QUERY;
      */
     public function testSetPurchaseOrderPaymentMethodOnCartWithoutPurchaseOrderNumber()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Purchase order number is a required field.');
-
         $methodCode = Purchaseorder::PAYMENT_METHOD_PURCHASEORDER_CODE;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -113,7 +109,18 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlMutation($query);
+        $response = $this->graphQlMutation($query);
+        self::assertArrayHasKey('setPaymentMethodOnCart', $response);
+        self::assertArrayHasKey('cart', $response['setPaymentMethodOnCart']);
+        self::assertArrayHasKey('selected_payment_method', $response['setPaymentMethodOnCart']['cart']);
+        self::assertEquals(
+            $methodCode,
+            $response['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']
+        );
+        self::assertArrayNotHasKey(
+            'purchase_order_number',
+            $response['setPaymentMethodOnCart']['cart']['selected_payment_method']
+        );
     }
 
     /**

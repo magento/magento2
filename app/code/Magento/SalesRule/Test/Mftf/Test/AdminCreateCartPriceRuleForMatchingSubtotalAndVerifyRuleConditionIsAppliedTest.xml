@@ -31,8 +31,7 @@
         </after>
 
         <!--Create cart price rule as per data and verify AssertCartPriceRuleSuccessSaveMessage-->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForPriceList"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.name}}" stepKey="fillRuleName"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.description}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.description}}" stepKey="fillDescription"/>
@@ -117,6 +116,8 @@
             <argument name="shippingMethod" value="Flat Rate - Fixed"/>
             <argument name="total" value="$285.00"/>
         </actionGroup>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$280.00" stepKey="seeAssertDiscountAmountAppliedForSubtotalConditionIsTrue"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeAssertDiscountAmountAppliedForSubtotalConditionIsTrue">
+            <argument name="discount" value="280.00"/>
+        </actionGroup>
     </test>
 </tests>

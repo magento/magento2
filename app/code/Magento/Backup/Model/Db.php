@@ -16,7 +16,7 @@ use Magento\Framework\Exception\RuntimeException;
  *
  * @api
  * @since 100.0.2
- * @deprecated Backup module is to be removed.
+ * @deprecated 100.2.6 Backup module is to be removed.
  */
 class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 {

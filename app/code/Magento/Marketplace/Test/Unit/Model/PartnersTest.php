@@ -140,7 +140,7 @@ class PartnersTest extends TestCase
      */
     public function getPartnersModelMock($methods)
     {
-        return $this->createPartialMock(Partners::class, $methods, []);
+        return $this->createPartialMock(Partners::class, $methods);
     }
 
     /**
@@ -150,7 +150,7 @@ class PartnersTest extends TestCase
      */
     public function getCurlMock($methods)
     {
-        return $this->createPartialMock(Curl::class, $methods, []);
+        return $this->createPartialMock(Curl::class, $methods);
     }
 
     /**
@@ -160,6 +160,6 @@ class PartnersTest extends TestCase
      */
     public function getCacheMock($methods)
     {
-        return $this->createPartialMock(Cache::class, $methods, []);
+        return $this->createPartialMock(Cache::class, $methods);
     }
 }

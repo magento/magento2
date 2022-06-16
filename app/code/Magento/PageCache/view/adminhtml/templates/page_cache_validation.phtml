@@ -4,9 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\PageCache\Block\System\Config\Form\Field\Export $block */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
-<script>
+
+<?php $scriptString = <<<script
 require(['jquery'], function($){
 
     //<![CDATA[
@@ -31,4 +34,6 @@ require(['jquery'], function($){
     //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>

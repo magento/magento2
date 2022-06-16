@@ -19,8 +19,11 @@ use Magento\Directory\Model\ResourceModel\Country\CollectionFactory as CountryCo
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollectionFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory as AttrubuteOptionFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Return allowed countries for specified website
@@ -53,12 +56,24 @@ class CountryWithWebsites extends Table
     private $shareConfig;
 
     /**
+     * @var Http
+     */
+    private $request;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
      * @param OptionCollectionFactory $attrOptionCollectionFactory
      * @param AttrubuteOptionFactory $attrOptionFactory
      * @param CountryCollectionFactory $countriesFactory
      * @param AllowedCountries $allowedCountriesReader
      * @param StoreManagerInterface $storeManager
      * @param Share $shareConfig
+     * @param Http|null $request
+     * @param CustomerRepositoryInterface|null $customerRepository
      */
     public function __construct(
         OptionCollectionFactory $attrOptionCollectionFactory,
@@ -66,12 +81,18 @@ class CountryWithWebsites extends Table
         CountryCollectionFactory $countriesFactory,
         AllowedCountries $allowedCountriesReader,
         StoreManagerInterface $storeManager,
-        CustomerShareConfig $shareConfig
+        CustomerShareConfig $shareConfig,
+        ?Http $request = null,
+        ?CustomerRepositoryInterface $customerRepository = null
     ) {
         $this->countriesFactory = $countriesFactory;
         $this->allowedCountriesReader = $allowedCountriesReader;
         $this->storeManager = $storeManager;
         $this->shareConfig = $shareConfig;
+        $this->request = $request
+            ?? ObjectManager::getInstance()->get(Http::class);
+        $this->customerRepository = $customerRepository
+            ?? ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
         parent::__construct($attrOptionCollectionFactory, $attrOptionFactory);
     }
 
@@ -84,7 +105,7 @@ class CountryWithWebsites extends Table
             $websiteIds = [];
 
             if (!$this->shareConfig->isGlobalScope()) {
-                $allowedCountries = [[]];
+                $allowedCountries = [];
 
                 foreach ($this->storeManager->getWebsites() as $website) {
                     $countries = $this->allowedCountriesReader
@@ -96,9 +117,20 @@ class CountryWithWebsites extends Table
                     }
                 }
 
-                $allowedCountries = array_unique(array_merge(...$allowedCountries));
+                $allowedCountries = array_unique(array_merge([], ...$allowedCountries));
             } else {
-                $allowedCountries = $this->allowedCountriesReader->getAllowedCountries();
+                // Address can be added only for the allowed country list.
+                $storeId = null;
+                $customerId = $this->request->getParam('parent_id') ?? null;
+                if ($customerId) {
+                    $customer = $this->customerRepository->getById($customerId);
+                    $storeId = $customer->getStoreId();
+                }
+
+                $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(
+                    ScopeInterface::SCOPE_WEBSITE,
+                    $storeId
+                );
             }
 
             $this->options = $this->createCountriesCollection()

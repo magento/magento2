@@ -86,7 +86,8 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         $this->shipmentFactory = $shipmentFactory;
         $this->invoiceService = $invoiceService;
         parent::__construct($context);
-        $this->salesData = $salesData ?? $this->_objectManager->get(SalesData::class);
+        $this->salesData = $salesData ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(SalesData::class);
     }
 
     /**
@@ -213,7 +214,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
 
             // send invoice/shipment emails
             try {
-                if (!empty($data['send_email']) || $this->salesData->canSendNewInvoiceEmail()) {
+                if (!empty($data['send_email']) && $this->salesData->canSendNewInvoiceEmail()) {
                     $this->invoiceSender->send($invoice);
                 }
             } catch (\Exception $e) {
@@ -222,7 +223,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             }
             if ($shipment) {
                 try {
-                    if (!empty($data['send_email']) || $this->salesData->canSendNewShipmentEmail()) {
+                    if (!empty($data['send_email']) && $this->salesData->canSendNewShipmentEmail()) {
                         $this->shipmentSender->send($shipment);
                     }
                 } catch (\Exception $e) {

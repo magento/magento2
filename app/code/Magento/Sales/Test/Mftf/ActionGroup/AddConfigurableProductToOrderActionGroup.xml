@@ -18,6 +18,8 @@
             <argument name="option"/>
         </arguments>
 
+        <scrollToTopOfPage stepKey="scrollToTopOfThePage"/>
+        <waitForElementVisible selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitForAddProductsButton"/>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
         <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterConfigurable"/>
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchConfigurable"/>

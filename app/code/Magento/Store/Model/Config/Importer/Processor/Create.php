@@ -51,7 +51,7 @@ class Create implements ProcessorInterface
     /**
      * The event manager.
      *
-     * @deprecated logic moved inside of "afterSave" method
+     * @deprecated 100.2.5 logic moved inside of "afterSave" method
      *             \Magento\Store\Model\Website::afterSave
      *             \Magento\Store\Model\Group::afterSave
      *             \Magento\Store\Model\Store::afterSave

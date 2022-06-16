@@ -12,7 +12,7 @@ use Magento\Catalog\Api\Data\ProductRenderInterface;
  * Allows to collect absolutely different product render information from different modules
  *
  * @api
- * @since 101.1.0
+ * @since 102.0.0
  */
 interface ProductRenderCollectorInterface
 {
@@ -22,7 +22,7 @@ interface ProductRenderCollectorInterface
      * @param ProductInterface $product
      * @param ProductRenderInterface $productRender
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function collect(ProductInterface $product, ProductRenderInterface $productRender);
 }

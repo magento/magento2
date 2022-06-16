@@ -7,6 +7,8 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface" type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CompositeCollectionProcessor"/>
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessorInterface" type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CompositeCollectionPostProcessor"/>
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessorInterface" type="Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CompositeCollectionProcessor"/>
     <type name="Magento\EavGraphQl\Model\Resolver\Query\Type">
         <arguments>
             <argument name="customTypes" xsi:type="array">
@@ -53,9 +55,33 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CompositeCollectionPostProcessor">
+        <arguments>
+            <argument name="collectionPostProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CompositeCollectionProcessor">
+        <arguments>
+            <argument name="collectionProcessors" xsi:type="array">
+                <item name="catalog" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessor\CatalogProcessor</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\SearchCriteriaProcessor">
         <arguments>
             <argument name="searchCriteriaApplier" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\GraphQl\Query\Resolver\ArgumentsCompositeProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="category_uid" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\Query\CategoryUidArgsProcessor</item>
+                <item name="category_uids" xsi:type="object">Magento\CatalogGraphQl\Model\Category\CategoryUidsArgsProcessor</item>
+                <item name="parent_category_uids" xsi:type="object">Magento\CatalogGraphQl\Model\Category\ParentCategoryUidsArgsProcessor</item>
+            </argument>
         </arguments>
     </type>
 
@@ -82,6 +108,11 @@
                 <item name="upsell" xsi:type="string">upsell</item>
                 <item name="crosssell" xsi:type="string">crosssell</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessor\CatalogProcessor">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
 </config>

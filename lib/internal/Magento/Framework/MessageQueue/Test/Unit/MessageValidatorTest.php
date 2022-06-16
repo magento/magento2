@@ -255,6 +255,14 @@ class MessageValidatorTest extends TestCase
                 $customerMock,
                 'Data in topic "topic" must be of type "Magento\Customer\Api\Data\CustomerInterface[]". '
             ],
+            [
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface[]'
+                ],
+                [1=>23, 3=>545],
+                'Data in topic "topic" must be of type "Magento\Customer\Api\Data\CustomerInterface[]". '
+            ],
         ];
     }
 }

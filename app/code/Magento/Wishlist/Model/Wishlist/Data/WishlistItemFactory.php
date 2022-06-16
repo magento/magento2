@@ -24,7 +24,7 @@ class WishlistItemFactory
     public function create(array $data): WishlistItem
     {
         return new WishlistItem(
-            $data['quantity'],
+            $data['quantity'] ?? 0,
             $data['sku'] ?? null,
             $data['parent_sku'] ?? null,
             isset($data['wishlist_item_id']) ? (int) $data['wishlist_item_id'] : null,
@@ -45,12 +45,12 @@ class WishlistItemFactory
     {
         return \array_map(
             function (array $option) {
-                if (!isset($option['id'], $option['value'])) {
+                if (!isset($option['uid'], $option['value'])) {
                     throw new InputException(
-                        __('Required fields are not present EnteredOption.id, EnteredOption.value')
+                        __('Required fields are not present EnteredOption.uid, EnteredOption.value')
                     );
                 }
-                return new EnteredOption($option['id'], $option['value']);
+                return new EnteredOption($option['uid'], $option['value']);
             },
             $options
         );

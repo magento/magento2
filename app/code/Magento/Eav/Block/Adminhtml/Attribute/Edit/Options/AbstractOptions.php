@@ -9,7 +9,7 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
  * Attribute add/edit form options tab
  *
  * @api
- * @deprecated 100.2.0
+ * @deprecated 101.0.0
  * @since 100.0.2
  */
 abstract class AbstractOptions extends \Magento\Framework\View\Element\AbstractBlock

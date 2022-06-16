@@ -32,7 +32,7 @@
 
             <!-- Assign attribute to set -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="GoToAttributeGridPageActionGroup" stepKey="goToAttributeSetPage"/>
+            <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="goToAttributeSetPage"/>
             <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="openAttributeSetByName">
                 <argument name="name" value="$createAttributeSet.attribute_set_name$"/>
             </actionGroup>
@@ -72,8 +72,9 @@
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
 
-            <!-- Perform reindex -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>
@@ -81,6 +82,9 @@
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>

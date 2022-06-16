@@ -8,7 +8,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="media_gallery_asset" resource="default" engine="innodb" comment="Media Gallery Asset">
         <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
-        <column xsi:type="varchar" name="path" length="255" nullable="true" comment="Path"/>
+        <column xsi:type="text" name="path" nullable="true" comment="Path"/>
         <column xsi:type="varchar" name="title" length="255" nullable="true" comment="Title"/>
         <column xsi:type="text" name="description" nullable="true" comment="Description"/>
         <column xsi:type="varchar" name="source" length="255" nullable="true" comment="Source"/>
@@ -25,9 +25,6 @@
         <index referenceId="MEDIA_GALLERY_ID" indexType="btree">
             <column name="id"/>
         </index>
-        <constraint xsi:type="unique" referenceId="MEDIA_GALLERY_ID_PATH_TITLE_CONTENT_TYPE_WIDTH_HEIGHT">
-            <column name="path"/>
-        </constraint>
         <index referenceId="MEDIA_GALLERY_ASSET_TITLE" indexType="fulltext">
             <column name="title"/>
         </index>

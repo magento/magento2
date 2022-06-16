@@ -15,7 +15,7 @@
                 <container>VARIABLE</container>
                 <cutoff_cost />
                 <free_method />
-                <gateway_url>http://production.shippingapis.com/ShippingAPI.dll</gateway_url>
+                <gateway_url>https://production.shippingapis.com/ShippingAPI.dll</gateway_url>
                 <gateway_secure_url>https://secure.shippingapis.com/ShippingAPI.dll</gateway_secure_url>
                 <shipment_requesttype>0</shipment_requesttype>
                 <handling />

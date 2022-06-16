@@ -89,7 +89,7 @@
 
         <!--See correct placeholder images on category page-->
         <comment userInput="Check placeholder images on the storefront" stepKey="checkStorefrontComment"/>
-        <amOnPage url="$$category.name$$.html" stepKey="goToCategoryStorefront1"/>
+        <amOnPage url="$$category.custom_attributes[url_key]$$.html" stepKey="goToCategoryStorefront1"/>
         <waitForPageLoad stepKey="waitForStorefrontCategory1"/>
         <!--Product with no images uses placeholder-->
         <seeElement selector="{{StorefrontCategoryProductSection.ProductImageByName($$productNoImages.name$$)}}" stepKey="seeProductNoImagesInCategory"/>
@@ -124,7 +124,7 @@
             <argument name="productName" value="$$productNoImages.name$$"/>
         </actionGroup>
         <!--Product which is NOT using placeholder-->
-        <amOnPage url="$$category.name$$.html" stepKey="goToCategoryStorefront2"/>
+        <amOnPage url="$$category.custom_attributes[url_key]$$.html" stepKey="goToCategoryStorefront2"/>
         <waitForPageLoad stepKey="waitForStorefrontCategory2"/>
         <click selector="{{StorefrontCategoryProductSection.ProductImageByName($$productWithImages.name$$)}}" stepKey="goToProductWithImages"/>
         <waitForPageLoad stepKey="waitForProductPageLoad2"/>

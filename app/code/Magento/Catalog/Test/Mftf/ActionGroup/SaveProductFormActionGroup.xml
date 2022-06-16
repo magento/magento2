@@ -17,6 +17,7 @@
         <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveProductButton"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitProductSaveSuccessMessage"/>
+        <dontSee selector="{{AdminProductMessagesSection.saveProductWarningMessage}}" stepKey="dontSeeWarningMessage"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
     </actionGroup>
 </actionGroups>

@@ -38,8 +38,6 @@ class Link extends \Magento\Downloadable\Controller\Download
      */
     public function execute()
     {
-        $session = $this->_getCustomerSession();
-
         $id = $this->getRequest()->getParam('id', 0);
         /** @var PurchasedLink $linkPurchasedItem */
         $linkPurchasedItem = $this->_objectManager->create(
@@ -53,6 +51,7 @@ class Link extends \Magento\Downloadable\Controller\Download
             return $this->_redirect('*/customer/products');
         }
         if (!$this->_objectManager->get(\Magento\Downloadable\Helper\Data::class)->getIsShareable($linkPurchasedItem)) {
+            $session = $this->_getCustomerSession();
             $customerId = $session->getCustomerId();
             if (!$customerId) {
                 /** @var \Magento\Catalog\Model\Product $product */
@@ -125,7 +124,7 @@ class Link extends \Magento\Downloadable\Controller\Download
                 // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
                 exit(0);
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('Something went wrong while getting the requested content.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while getting the requested content.'));
             }
         } elseif ($status == PurchasedLink::LINK_STATUS_EXPIRED) {
             $this->messageManager->addNotice(__('The link has expired.'));
@@ -133,7 +132,7 @@ class Link extends \Magento\Downloadable\Controller\Download
         ) {
             $this->messageManager->addNotice(__('The link is not available.'));
         } else {
-            $this->messageManager->addError(__('Something went wrong while getting the requested content.'));
+            $this->messageManager->addErrorMessage(__('Something went wrong while getting the requested content.'));
         }
         return $this->_redirect('*/customer/products');
     }

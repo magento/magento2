@@ -5,10 +5,10 @@
  */
 -->
 <div class="action-select-wrap" collapsible="onTarget: true">
-    <button class="action-select" translate="'Actions'"/>
+    <button class="action-select" translate="'Actions'"></button>
     <ul class="action-menu"css="_active: $collapsible.opened">
         <li repeat="foreach: actions, item: '$action'" click="applyAction.bind($data, $action().type)">
-            <span class="action-menu-item" text="$action().label"/>
+            <span class="action-menu-item" text="$action().label"></span>
         </li>
     </ul>
 </div>

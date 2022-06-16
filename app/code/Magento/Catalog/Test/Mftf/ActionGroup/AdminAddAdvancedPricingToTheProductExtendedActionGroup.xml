@@ -15,7 +15,9 @@
 
         <remove keyForRemoval="selectProductTierPriceCustomerGroupInput"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect(index)}}" stepKey="clickProductTierPriceCustGroupSelect" after="selectProductTierPriceWebsiteInput"/>
-        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceGroupOrCatalogOption(groupPrice.customer_group)}}" time="30" stepKey="waitProductTierPriceGroupOrCatalogOption" after="clickProductTierPriceCustGroupSelect"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.productTierPriceGroupOrCatalogOption(groupPrice.customer_group)}}" stepKey="clickAllGroupsOption" after="waitProductTierPriceGroupOrCatalogOption"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupFilterInputByIndex(index)}}" time="30" stepKey="waitProductTierPriceGroupOrCatalogOption" after="clickProductTierPriceCustGroupSelect"/>
+        <selectMultipleOptions filterSelector="{{AdminProductFormAdvancedPricingSection.customerGroupFilterInputByIndex(index)}}" optionSelector="{{AdminProductFormAdvancedPricingSection.customerGroupOptionByIndex(index)}}" stepKey="clickAllGroupsOption" after="waitProductTierPriceGroupOrCatalogOption">
+            <array>['{{groupPrice.customer_group}}']</array>
+        </selectMultipleOptions>
     </actionGroup>
 </actionGroups>

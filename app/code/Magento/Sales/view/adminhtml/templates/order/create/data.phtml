@@ -5,22 +5,39 @@
  */
 
 /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Data $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <div class="page-create-order">
-    <script>
+    <?php $scriptString = <<<script
     require(["Magento_Sales/order/create/form"], function(){
-        order.setCurrencySymbol('<?= $block->escapeJs($block->getCurrencySymbol($block->getCurrentCurrencyCode())) ?>')
+        order.setCurrencySymbol('{$block->escapeJs($block->getCurrencySymbol($block->getCurrentCurrencyCode()))}')
     });
-</script>
-    <div class="order-details<?php if ($block->getCustomerId()) : ?> order-details-existing-customer<?php endif; ?>">
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+    <div class="order-details<?php if ($block->getCustomerId()): ?> order-details-existing-customer<?php endif; ?>">
 
-        <div id="order-additional_area" style="display: none" class="admin__page-section order-additional-area">
+        <div id="order-additional_area" class="admin__page-section order-additional-area">
             <?= $block->getChildHtml('additional_area') ?>
         </div>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+            'display:none',
+            'div#order-additional_area'
+        ) ?>
 
-        <div id="order-search" style="display: none" class="admin__page-section order-search-items">
+        <div id="order-search" class="admin__page-section order-search-items no-display">
             <?= $block->getChildHtml('search') ?>
         </div>
+        <?= /* @noEscape */ $secureRenderer->renderTag(
+            'script',
+            [],
+            "var elemOrderSearch = document.querySelector('div#order-search');
+            if (elemOrderSearch) {
+                elemOrderSearch.style.display = 'none';
+                elemOrderSearch.classList.remove('no-display');
+            }",
+            false
+        ) ?>
 
         <section id="order-items" class="admin__page-section order-items" data-mage-init='{"loader": {}}'>
             <?= $block->getChildHtml('items') ?>
@@ -60,7 +77,7 @@
             </div>
         </section>
 
-        <?php if ($block->getChildBlock('card_validation')) : ?>
+        <?php if ($block->getChildBlock('card_validation')): ?>
         <section id="order-card_validation" class="admin__page-section order-card-validation">
             <?= $block->getChildHtml('card_validation') ?>
         </section>
@@ -85,7 +102,7 @@
         </section>
     </div>
 
-    <?php if ($block->getCustomerId()) : ?>
+    <?php if ($block->getCustomerId()): ?>
         <div class="order-sidebar">
             <div class="store-switcher order-currency">
                 <label class="admin__field-label" for="currency_switcher">
@@ -93,14 +110,22 @@
                 </label>
                 <select id="currency_switcher"
                         class="admin__control-select"
-                        name="order[currency]"
-                        onchange="order.setCurrencyId(this.value); order.setCurrencySymbol(this.options[this.selectedIndex].getAttribute('symbol'));">
-                    <?php foreach ($block->getAvailableCurrencies() as $_code) : ?>
-                        <option value="<?= $block->escapeHtmlAttr($_code) ?>"<?php if ($_code == $block->getCurrentCurrencyCode()) : ?> selected="selected"<?php endif; ?> symbol="<?= $block->escapeHtmlAttr($block->getCurrencySymbol($_code)) ?>">
+                        name="order[currency]">
+                    <?php foreach ($block->getAvailableCurrencies() as $_code): ?>
+                        <option value="<?= $block->escapeHtmlAttr($_code) ?>"
+                            <?php if ($_code == $block->getCurrentCurrencyCode()): ?> selected="selected"<?php endif; ?>
+                                symbol="<?= $block->escapeHtmlAttr($block->getCurrencySymbol($_code)) ?>">
                             <?= $block->escapeHtml($block->getCurrencyName($_code)) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
+                <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                    'onchange',
+                    "order.setCurrencyId(this.value);
+                     order.setCurrencySymbol(this.options[this.selectedIndex].getAttribute('symbol'));",
+                    'select#currency_switcher'
+                ) ?>
+
             </div>
             <div class="customer-current-activity" id="order-sidebar">
                 <?= $block->getChildHtml('sidebar') ?>

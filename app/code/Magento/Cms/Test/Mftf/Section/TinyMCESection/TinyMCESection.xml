@@ -10,27 +10,34 @@
     <section name="TinyMCESection">
         <element name="checkIfContentTabOpen" type="button" selector="//span[text()='Content']/parent::strong/parent::*[@data-state-collapsible='closed']"/>
         <element name="CheckIfTabExpand" type="button" selector="//div[@data-state-collapsible='closed']//span[text()='Content']"/>
-        <element name="TinyMCE4" type="text" selector=".mce-branding"/>
+        <element name="TinyMCE" type="text" selector=".tox-tinymce"/>
         <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
-        <element name="InsertWidgetIcon" type="button" selector="div[aria-label='Insert Widget']"/>
+        <element name="InsertWidgetIcon" type="button" selector="button[aria-label='Insert Widget']" timeout="30"/>
         <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
-        <element name="InsertVariableIcon" type="button" selector="div[aria-label='Insert Variable']"/>
+        <element name="InsertVariableIcon" type="button" selector="button[aria-label='Insert Variable']"/>
         <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
-        <element name="InsertImageIcon" type="button" selector=".mce-i-image"/>
-        <element name="Style" type="button" selector=".mce-txt"/>
-        <element name="Bold" type="button" selector=".mce-i-bold"/>
-        <element name="Italic" type="button" selector=".mce-i-italic"/>
-        <element name="Underline" type="button" selector=".mce-i-underline"/>
-        <element name="AlignLeft" type="button" selector=".mce-i-alignleft"/>
-        <element name="AlignCenter" type="button" selector=".mce-i-aligncenter"/>
-        <element name="AlignRight" type="button" selector=".mce-i-alignright"/>
-        <element name="Bullet" type="button" selector=".mce-i-bullist"/>
-        <element name="Numlist" type="button" selector=".mce-i-numlist"/>
-        <element name="InsertLink" type="button" selector=".mce-i-link"/>
-        <element name="InsertImage" type="button" selector=".mce-i-image"/>
-        <element name="InsertTable" type="button" selector=".mce-i-table"/>
-        <element name="SpecialCharacter" type="button" selector=".mce-i-charmap"/>
+        <element name="InsertImageIcon" type="button" selector="button[title='Insert/edit image']" timeout="30"/>
+        <element name="Style" type="button" selector="button[title='Blocks']"/>
+        <element name="Bold" type="button" selector="button[title='Bold']"/>
+        <element name="Italic" type="button" selector="button[title='Italic']"/>
+        <element name="Underline" type="button" selector="button[title='Underline']"/>
+        <element name="AlignLeft" type="button" selector="button[title='Align left']"/>
+        <element name="AlignCenter" type="button" selector="button[title='Align center']"/>
+        <element name="AlignRight" type="button" selector="button[title='Align right']"/>
+        <element name="Bullet" type="button" selector="div[title='Bullet list']"/>
+        <element name="Numlist" type="button" selector="div[title='Numbered list']"/>
+        <element name="InsertLink" type="button" selector="button[title='Insert/edit link']"/>
+        <element name="InsertTable" type="button" selector="button[title='Table']"/>
+        <element name="SpecialCharacter" type="button" selector="button[title='Special character']"/>
         <element name="WidgetButton" type="button" selector="span[class*='magento-widget mceNonEditable']"/>
         <element name="EditorContent" type="input" selector="#tinymce"/>
+        <element name="Content" type="textarea" selector="textarea"/>
+        <element name="ContentEditor" type="textarea" selector="#text"/>
+        <element name="ShowHideBtn" type="button" selector=".scalable.action-show-hide"/>
+        <element name="EditArea" type="text" selector=".tox-edit-area"/>
+        <element name="EditAreaIframe" type="iframe" selector=".tox-edit-area iframe"/>
+        <element name="IframeContent" type="block" selector=".mce-content-body"/>
+        <element name="imageSource" type="text" selector="//img[contains(@src,'{{var1}}')]" parameterized="true"/>
+        <element name="ImageAlt" type="text" selector="//img[contains(@alt,'{{var1}}')]" parameterized="true"/>
     </section>
 </sections>

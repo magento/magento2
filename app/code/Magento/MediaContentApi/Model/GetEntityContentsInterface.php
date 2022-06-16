@@ -12,6 +12,7 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 /**
  * Get Entity Contents.
  * @api
+ * @since 100.4.0
  */
 interface GetEntityContentsInterface
 {
@@ -20,6 +21,7 @@ interface GetEntityContentsInterface
      *
      * @param ContentIdentityInterface $contentIdentity
      * @return string[]
+     * @since 100.4.0
      */
     public function execute(ContentIdentityInterface $contentIdentity): array;
 }

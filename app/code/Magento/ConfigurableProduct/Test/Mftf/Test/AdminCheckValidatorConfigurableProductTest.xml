@@ -37,8 +37,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
                 <argument name="sku" value="{{ApiConfigurableProduct.name}}-thisIsShortName"/>
             </actionGroup>
-            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
-                              dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clickClearFilters"/>
             <!-- Remove attribute -->
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="productDropDownAttribute"/>
@@ -57,8 +56,7 @@
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductFilterLoad"/>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage"/>
 
         <!-- Create configurations based off the Text Swatch we created earlier -->
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
@@ -85,7 +83,7 @@
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickOnFilters"/>
         <fillField selector="{{AdminDataGridHeaderSection.attributeCodeFilterInput}}" userInput="{{productDropDownAttribute.attribute_code}}" stepKey="fillFilterAttributeCodeField"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickApplyFiltersButton"/>
         <click selector="{{AdminDataGridTableSection.rowCheckbox('1')}}" stepKey="clickOnFirstCheckbox"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextStep1"/>
         <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(productDropDownAttribute.attribute_code)}}" stepKey="waitForNextPageOpened"/>
@@ -100,7 +98,7 @@
         <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextPageOpened3"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateProducts"/>
         <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveButtonVisible"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
         <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="waitForPopUpVisible"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
         <dontSeeElement selector="{{AdminMessagesSection.success}}" stepKey="dontSeeSaveProductMessage"/>
@@ -118,7 +116,7 @@
 
         <!--Click on "Save"-->
         <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveBtnVisible"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductAgain"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductAgain"/>
 
         <!--Click on "Confirm". Product is saved, success message appears -->
         <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="waitPopUpVisible"/>

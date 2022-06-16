@@ -28,20 +28,25 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{nameAndAttributeSkuMaskSimpleProduct.name}}-{{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" />
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
-        <waitForPageLoad stepKey="waitForProductToggleToSelectSimpleProduct"/>
-        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickSimpleProductFromDropDownList"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickAddProductToggle"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForProductToggleToSelectSimpleProduct"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickSimpleProductFromDropDownList">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
 
         <!-- Create simple product with country of manufacture attribute -->
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.name}}" stepKey="fillSimpleProductName"/>
         <selectOption selector="{{AdminProductFormSection.countryOfManufacture}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" stepKey="selectCountryOfManufacture"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.price}}" stepKey="fillSimpleProductPrice"/>
         <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.weight}}" stepKey="fillSimpleProductWeight"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.quantity}}" stepKey="fillSimpleProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillSimpleProductQuantity">
+            <argument name="productQty" value="{{nameAndAttributeSkuMaskSimpleProduct.quantity}}"/>
+        </actionGroup>
         <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
         <!-- Verify customer see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>

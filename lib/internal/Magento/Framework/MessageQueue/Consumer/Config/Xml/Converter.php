@@ -26,8 +26,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $configParser;
 
     /**
-     * Default value provider.
-     *
      * @var DefaultValueProvider
      */
     private $defaultValueProvider;
@@ -61,7 +59,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
             $result[$consumerName] = [
                 'name' => $consumerName,
-                'queue' => $this->getAttributeValue($consumerNode, 'queue'),
+                'queue' => $this->getAttributeValue($consumerNode, 'queue', $consumerName),
                 'consumerInstance' => $this->getAttributeValue(
                     $consumerNode,
                     'consumerInstance',
@@ -77,7 +75,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 'maxIdleTime' => $this->getAttributeValue($consumerNode, 'maxIdleTime'),
                 'sleep' => $this->getAttributeValue($consumerNode, 'sleep'),
                 'onlySpawnWhenMessageAvailable' =>
-                    $onlySpawnWhenMessageAvailable === 'false' ? false : boolval($onlySpawnWhenMessageAvailable)
+                    $onlySpawnWhenMessageAvailable === null ? null : boolval($onlySpawnWhenMessageAvailable)
             ];
         }
         return $result;

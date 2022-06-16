@@ -20,6 +20,8 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 class EditorTest extends TestCase
 {
@@ -70,6 +72,23 @@ class EditorTest extends TestCase
         $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->configMock = $this->createPartialMock(DataObject::class, ['getData']);
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('some-rando-string');
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $listener, string $selector): string {
+                    return "<script>document.querySelector('{$selector}').{$event} = () => { {$listener} };</script>";
+                }
+            );
+        $secureRendererMock->method('renderTag')
+            ->willReturnCallback(
+                function (string $tag, array $attrs, ?string $content): string {
+                    $attrs = new DataObject($attrs);
+
+                    return "<$tag {$attrs->serialize()}>$content</$tag>";
+                }
+            );
 
         $this->serializer = $this->createMock(Json::class);
 
@@ -80,7 +99,9 @@ class EditorTest extends TestCase
                 'factoryCollection' => $this->collectionFactoryMock,
                 'escaper' => $this->escaperMock,
                 'data' => ['config' => $this->configMock],
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'random' => $randomMock,
+                'secureRenderer' => $secureRendererMock
             ]
         );
 

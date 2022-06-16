@@ -114,6 +114,7 @@ class Attribute extends AbstractDb
 
         if ($data) {
             $object->setData($data);
+            $object->setOrigData('entity_type_id', $object->getEntityTypeId());
             $this->_afterLoad($object);
             return true;
         }
@@ -204,6 +205,7 @@ class Attribute extends AbstractDb
      * @param AbstractModel $attribute
      * @return AbstractDb
      * @throws CouldNotDeleteException
+     * @since 102.0.2
      */
     protected function _beforeDelete(AbstractModel $attribute)
     {
@@ -280,7 +282,7 @@ class Attribute extends AbstractDb
                 $connection->delete($this->getTable('eav_attribute_label'), $condition);
             }
             foreach ($storeLabels as $storeId => $label) {
-                if ($storeId == 0 || !strlen($label)) {
+                if ($storeId == 0 || $label === null || !strlen($label)) {
                     continue;
                 }
                 $bind = ['attribute_id' => $object->getId(), 'store_id' => $storeId, 'value' => $label];
@@ -521,7 +523,7 @@ class Attribute extends AbstractDb
         $where = $connection->quoteInto('attribute_id = ?', $attributeId);
         $update = [];
 
-        if ($object->getBackendType() === 'varchar') {
+        if ($object->getBackendType() === 'text') {
             $where.= ' AND ' . $connection->prepareSqlCondition('value', ['finset' => $optionId]);
             $concat = $connection->getConcatSql(["','", 'value', "','"]);
             $expr = $connection->quoteInto(
@@ -776,7 +778,8 @@ class Attribute extends AbstractDb
             ['attribute_id']
         )->where(
             'attribute_id IN (?)',
-            $attributeIds
+            $attributeIds,
+            \Zend_Db::INT_TYPE
         );
 
         return $connection->fetchCol($select);

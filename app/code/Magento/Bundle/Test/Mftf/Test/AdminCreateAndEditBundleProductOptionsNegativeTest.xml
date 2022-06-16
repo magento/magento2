@@ -20,10 +20,12 @@
                 <issueId value="https://github.com/magento/magento2/issues/25468"/>
             </skip>
             <group value="Catalog"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Create a Website -->
             <createData entity="customWebsite" stepKey="createWebsite"/>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <!-- Create first simple product for a bundle option -->
             <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct"/>
@@ -45,6 +47,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="Second Website"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -111,12 +114,13 @@
 
         <!-- Save product form -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveWithTwoOptions"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveWithTwoOptions"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
         <!-- Delete created bundle product -->
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

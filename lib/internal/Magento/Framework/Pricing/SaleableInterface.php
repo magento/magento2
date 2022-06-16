@@ -10,6 +10,7 @@ namespace Magento\Framework\Pricing;
  * Interface SaleableInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface SaleableInterface
 {

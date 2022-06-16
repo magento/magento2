@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryApi\Model\Asset\Command;
 
 /**
  * A command represents the get media gallery asset by using media gallery asset id as a filter parameter.
- * @deprecated use \Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface instead
+ * @deprecated 101.0.0 use \Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface instead
  * @see \Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface
  */
 interface GetByIdInterface

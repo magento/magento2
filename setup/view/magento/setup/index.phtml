@@ -3,19 +3,69 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Magento</title>
+    <link href="<?= $basePath ?>/pub/styles/setup.css" media="screen" rel="stylesheet" type="text/css" />
+    <script src="<?= $basePath ?>/pub/scripts/main.js"></script>
+    <link
+        rel="icon"
+        type="image/x-icon"
+        href="<?= $basePath ?>/pub/images/favicon/favicon.ico"
+        sizes="16x16">
+    <link
+        rel="icon"
+        type="image/png"
+        href="<?= $basePath ?>/pub/images/favicon/favicon-96x96.png"
+        sizes="96x96">
+    <link
+        rel="icon"
+        type="image/png"
+        href="<?= $basePath ?>/pub/images/favicon/favicon-32x32.png"
+        sizes="32x32">
+    <link
+        rel="icon"
+        type="image/png"
+        href="<?= $basePath ?>/pub/images/favicon/favicon-16x16.png"
+        sizes="16x16">
+    <style>
+        a.white-space-pre-line {
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
 <div class="container">
-    <main id="anchor-content" class="page-content">
-        <?= /* @noEscape */ $this->render('navigation/menu.phtml') ?>
-        <div
-            id="main"
-            ng-controller="mainController"
-            >
-            <div ui-view="root">
-                <div ui-view></div>
+    <main class="page-content">
+        <section data-section="landing" class="page-landing">
+            <img class="logo" src="<?= $basePath ?>/pub/images/magento-logo.svg" alt="Magento"/>
+            <p class="text-version">Version <?= htmlspecialchars($version, ENT_COMPAT) ?></p>
+            <p class="text-welcome">
+                Welcome to Magento Admin, your online store headquarters.
+                <br>
+                Please review <a href="javascript:showSection('license')">Terms & Agreement</a>
+                and read <a href="https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli.html" target="_blank">Getting Started</a>
+                to learn how to install Magento using the command line.
+            </p>
+        </section>
+        <section data-section="license" class="row page-license" style="display: none">
+            <div class="col-m-offset-2 col-m-8 col-xs-12">
+                <div class="license-text">
+                    <?= nl2br(htmlspecialchars($license, ENT_COMPAT)) ?>
+                </div>
+                <div class="page-license-footer">
+                    <div class="btn-wrap-triangle-left">
+                        <button type="button" class="btn" onclick="showSection('landing')">Go Back</button>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
     </main>
 </div>
+</body>
+</html>

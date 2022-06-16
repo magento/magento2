@@ -90,8 +90,8 @@
             <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct1"/>
             <waitForPageLoad time='60' stepKey="waitForSpecialPriceProductSaved"/>
             <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSaveSuccessMessage1"/>
-            <magentoCLI command="indexer:reindex"  stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -130,8 +130,8 @@
 
         <!-- Fill the Estimate Shipping and Tax section -->
         <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
 
         <!-- Sign in using already existed customer details -->
         <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="$$createCustomer.email$$" stepKey="fillEmailAddress"/>
@@ -139,8 +139,7 @@
         <fillField selector="{{CheckoutShippingSection.password}}" userInput="$$createCustomer.password$$" stepKey="fillPassword"/>
         <click selector="{{CheckoutShippingSection.loginButton}}" stepKey="clickLoginButton"/>
         <waitForPageLoad stepKey="waitForLoginPageToLoad"/>
-        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
 
         <!-- Place order and Assert success message -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>

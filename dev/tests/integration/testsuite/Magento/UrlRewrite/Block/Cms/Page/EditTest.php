@@ -5,11 +5,13 @@
  */
 namespace Magento\UrlRewrite\Block\Cms\Page;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Test for \Magento\UrlRewrite\Block\Cms\Page\Edit
  * @magentoAppArea adminhtml
  */
-class EditTest extends \PHPUnit\Framework\TestCase
+class EditTest extends TestCase
 {
     /**
      * Test prepare layout
@@ -123,24 +125,20 @@ class EditTest extends \PHPUnit\Framework\TestCase
         if (isset($expected['back_button'])) {
             if ($expected['back_button']) {
                 if ($block->getCmsPage()->getId()) {
-                    $this->assertEquals(
-                        1,
-                        \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                            '//button[contains(@class, "back") and contains(@onclick, "/cms_page")]',
-                            $buttonsHtml
-                        ),
-                        'Back button is not present in CMS page URL rewrite edit block'
-                    );
-                } else {
-                    $this->assertEquals(
-                        1,
-                        \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                            '//button[contains(@class,"back")]',
-                            $buttonsHtml
-                        ),
-                        'Back button is not present in CMS page URL rewrite edit block'
+                    $this->assertMatchesRegularExpression(
+                        '/setLocation\([\\\'\"]\S+?\/cms_page/i',
+                        $buttonsHtml,
+                        'Back button is not present in category URL rewrite edit block'
                     );
                 }
+                $this->assertEquals(
+                    1,
+                    \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                        '//button[contains(@class, "back")]',
+                        $buttonsHtml
+                    ),
+                    'Back button is not present in CMS page URL rewrite edit block'
+                );
             } else {
                 $this->assertEquals(
                     0,

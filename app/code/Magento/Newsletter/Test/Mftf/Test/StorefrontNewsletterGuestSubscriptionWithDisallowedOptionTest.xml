@@ -18,6 +18,7 @@
             <group value="newsletter"/>
             <group value="configuration"/>
             <testCaseId value="MC-35728"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI stepKey="disableGuestSubscription" command="config:set newsletter/subscription/allow_guest_subscribe 0"/>

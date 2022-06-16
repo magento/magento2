@@ -35,6 +35,9 @@
                 <argument name="useInSearchValue" value="No"/>
             </actionGroup>
             <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttributeChanges"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
             <!-- Logout from admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
@@ -47,9 +50,13 @@
         <actionGroup ref="AdminSetUseInSearchValueForProductAttributeActionGroup" stepKey="makeAttributeSearchableInAQuickSearch"/>
         <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttribute"/>
         <!-- Step 3 -->
-        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <!-- Step 4 -->
-        <magentoCLI command="cache:clean" arguments="full_page" stepKey="clearFPC"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="clearFPC">
+            <argument name="tags" value="full_page"/>
+        </actionGroup>
         <!-- Step 5 -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
         <!-- Step 6 -->

@@ -33,7 +33,7 @@ class LinkedProductSelectBuilderComposite implements LinkedProductSelectBuilderI
         foreach ($this->linkedProductSelectBuilder as $productSelectBuilder) {
             $selects[] = $productSelectBuilder->build($productId, $storeId);
         }
-        $selects = array_merge(...$selects);
+        $selects = array_merge([], ...$selects);
 
         return $selects;
     }

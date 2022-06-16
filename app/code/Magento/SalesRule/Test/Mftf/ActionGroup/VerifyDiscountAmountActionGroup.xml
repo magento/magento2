@@ -21,12 +21,14 @@
         <amOnPage url="{{productUrl}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartDisabled}}" stepKey="waitForAddToCartButtonToRemoveDisabledState"/>
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
         <waitForPageLoad stepKey="waitForAddToCart"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
         <waitForPageLoad stepKey="waitForCartPage"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="{{expectedDiscount}}" stepKey="seeDiscountTotal"/>
+        <waitForText selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="{{expectedDiscount}}" stepKey="seeDiscountTotal"/>
     </actionGroup>
 </actionGroups>

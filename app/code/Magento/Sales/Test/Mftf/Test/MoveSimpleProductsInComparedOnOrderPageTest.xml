@@ -30,6 +30,7 @@
             <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct">
                 <field key="price">560</field>
             </createData>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <!-- Admin logout -->
@@ -70,9 +71,7 @@
         <!-- Login as admin -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
-        <!-- Open Customers -> All Customers -->
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
-        <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
@@ -85,7 +84,7 @@
         <click selector="{{AdminCustomerActivitiesComparisonListSection.addProductToOrder($$createSecondSimpleProduct.name$$)}}" stepKey="addSecondProductToOrder"/>
 
         <!-- Click 'Update Changes' -->
-        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickUpdateChangesBtn"/>
+        <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesBtn"/>
 
         <!-- Assert products in items ordered grid -->
         <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Product')}}" userInput="$$createFirstSimpleProduct.name$$" stepKey="seeFirstProductName"/>

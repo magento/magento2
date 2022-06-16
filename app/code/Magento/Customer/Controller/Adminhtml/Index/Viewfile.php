@@ -14,6 +14,8 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Address\Mapper;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\DataObjectFactory;
@@ -130,7 +132,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Customer view file action
      *
-     * @return \Magento\Framework\Controller\ResultInterface|void
+     * @return ResultInterface|ResponseInterface|void
      * @throws NotFoundException
      */
     public function execute()
@@ -181,7 +183,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         } else {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $name = pathinfo($path, PATHINFO_BASENAME);
-            $this->_fileFactory->create(
+            return $this->_fileFactory->create(
                 $name,
                 ['type' => 'filename', 'value' => $fileName],
                 DirectoryList::MEDIA
@@ -197,17 +199,16 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      */
     private function getFileParams()
     {
-        $file = null;
         $plain = false;
-        if ($this->getRequest()->getParam('file')) {
+        if ($this->getRequest()->getParam('file', '')) {
             // download file
             $file = $this->urlDecoder->decode(
-                $this->getRequest()->getParam('file')
+                $this->getRequest()->getParam('file', '')
             );
-        } elseif ($this->getRequest()->getParam('image')) {
+        } elseif ($this->getRequest()->getParam('image', '')) {
             // show plain image
             $file = $this->urlDecoder->decode(
-                $this->getRequest()->getParam('image')
+                $this->getRequest()->getParam('image', '')
             );
             $plain = true;
         } else {

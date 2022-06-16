@@ -25,9 +25,8 @@
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <!--Set Minimal Query Length-->
             <magentoCLI command="config:set {{SetMinQueryLength2Config.path}} {{SetMinQueryLength2Config.value}}" stepKey="setMinQueryLength"/>
-            <!--Reindex indexes and clear cache-->
-            <magentoCLI command="indexer:reindex catalogsearch_fulltext" stepKey="reindex"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCache"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!--Set configs to default-->
@@ -46,8 +45,10 @@
             <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductCatalog"/>
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProduct"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
-            <magentoCLI command="indexer:reindex catalogsearch_fulltext" stepKey="reindex"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Create new searchable product attribute-->
@@ -76,10 +77,11 @@
             <argument name="categoryName" value="$$createCategory.name$$"/>
         </actionGroup>
         <fillField selector="{{AdminProductFormSection.attributeRequiredInput(textProductAttribute.attribute_code)}}" userInput="searchable" stepKey="fillTheAttributeRequiredInputField"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
-        <!-- TODO: REMOVE AFTER FIX MC-21717 -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush eav" stepKey="flushCache"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         <!--Assert search results on storefront-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForFirstSearchTerm">

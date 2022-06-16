@@ -56,13 +56,12 @@
             <argument name="coupon" value="$$createCouponForCartPriceRule$$"/>
         </actionGroup>
 
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
 
         <!-- Fill the guest form -->
         <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillGuestForm"/>
-        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="waitForPlaceOrderButton"/>
         <checkOption selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="selectBankTransfer"/>
 

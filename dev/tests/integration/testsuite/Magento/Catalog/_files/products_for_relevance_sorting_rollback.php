@@ -4,6 +4,10 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Framework/Search/_files/products_rollback.php');
+
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Framework\Registry $registry */
 $registry = $objectManager->get(\Magento\Framework\Registry::class);

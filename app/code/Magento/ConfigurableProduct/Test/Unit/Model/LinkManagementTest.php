@@ -64,14 +64,14 @@ class LinkManagementTest extends TestCase
      */
     protected $dataObjectHelperMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->productFactory = $this->createPartialMock(
-            ProductInterfaceFactory::class,
-            ['create']
-        );
+        $this->productFactory = $this->createPartialMock(ProductInterfaceFactory::class, ['create']);
         $this->dataObjectHelperMock = $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -87,12 +87,15 @@ class LinkManagementTest extends TestCase
                 'productRepository' => $this->productRepository,
                 'productFactory' => $this->productFactory,
                 'configurableType' => $this->configurableType,
-                'dataObjectHelper' => $this->dataObjectHelperMock,
+                'dataObjectHelper' => $this->dataObjectHelperMock
             ]
         );
     }
 
-    public function testGetChildren()
+    /**
+     * @return void
+     */
+    public function testGetChildren(): void
     {
         $productId = 'test';
 
@@ -144,7 +147,10 @@ class LinkManagementTest extends TestCase
         $this->assertEquals($productMock, $products[0]);
     }
 
-    public function testGetWithNonConfigurableProduct()
+    /**
+     * @return void
+     */
+    public function testGetWithNonConfigurableProduct(): void
     {
         $productId= 'test';
         $product = $this->getMockBuilder(Product::class)
@@ -158,22 +164,25 @@ class LinkManagementTest extends TestCase
         $this->assertEmpty($this->object->getChildren($productId));
     }
 
-    public function testAddChild()
+    /**
+     * @return void
+     */
+    public function testAddChild(): void
     {
         $productSku = 'configurable-sku';
         $childSku = 'simple-sku';
 
         $configurable = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getExtensionAttributes'])
+            ->onlyMethods(['getId', 'getExtensionAttributes'])
             ->getMock();
         $simple = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getData'])
+            ->onlyMethods(['getId', 'getData'])
             ->getMock();
         $extensionAttributesMock = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 [
                     'getConfigurableProductOptions',
                     'setConfigurableProductOptions',
@@ -183,15 +192,16 @@ class LinkManagementTest extends TestCase
             ->getMockForAbstractClass();
         $optionMock = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProductAttribute', 'getPosition', 'getAttributeId'])
+            ->onlyMethods(['getPosition', 'getAttributeId'])
+            ->addMethods(['getProductAttribute'])
             ->getMockForAbstractClass();
         $productAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode'])
+            ->onlyMethods(['getAttributeCode'])
             ->getMock();
         $optionsFactoryMock = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $reflectionClass = new \ReflectionClass(LinkManagement::class);
         $optionsFactoryReflectionProperty = $reflectionClass->getProperty('optionsFactory');
@@ -200,7 +210,7 @@ class LinkManagementTest extends TestCase
 
         $attributeFactoryMock = $this->getMockBuilder(AttributeFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $attributeFactoryReflectionProperty = $reflectionClass->getProperty('attributeFactory');
         $attributeFactoryReflectionProperty->setAccessible(true);
@@ -208,21 +218,21 @@ class LinkManagementTest extends TestCase
 
         $attributeMock = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCollection', 'getOptions', 'getId', 'getAttributeCode', 'getStoreLabel'])
+            ->onlyMethods(['getCollection', 'getOptions', 'getId', 'getAttributeCode', 'getStoreLabel'])
             ->getMock();
         $attributeOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue', 'getLabel'])
+            ->onlyMethods(['getValue', 'getLabel'])
             ->getMock();
-        $attributeCollectionMock = $this->getMockBuilder(
-            Collection::class
-        )
+        $attributeCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter', 'getItems'])
+            ->onlyMethods(['addFieldToFilter', 'getItems'])
             ->getMock();
 
-        $this->productRepository->expects($this->at(0))->method('get')->with($productSku)->willReturn($configurable);
-        $this->productRepository->expects($this->at(1))->method('get')->with($childSku)->willReturn($simple);
+        $this->productRepository
+            ->method('get')
+            ->withConsecutive([$productSku], [$childSku])
+            ->willReturnOnConsecutiveCalls($configurable, $simple);
 
         $this->configurableType->expects($this->once())->method('getChildrenIds')->with(666)
             ->willReturn(
@@ -255,7 +265,10 @@ class LinkManagementTest extends TestCase
         $this->assertTrue($this->object->addChild($productSku, $childSku));
     }
 
-    public function testAddChildStateException()
+    /**
+     * @return void
+     */
+    public function testAddChildStateException(): void
     {
         $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('The product is already attached.');
@@ -274,8 +287,10 @@ class LinkManagementTest extends TestCase
 
         $simple->expects($this->any())->method('getId')->willReturn(1);
 
-        $this->productRepository->expects($this->at(0))->method('get')->with($productSku)->willReturn($configurable);
-        $this->productRepository->expects($this->at(1))->method('get')->with($childSku)->willReturn($simple);
+        $this->productRepository
+            ->method('get')
+            ->withConsecutive([$productSku], [$childSku])
+            ->willReturnOnConsecutiveCalls($configurable, $simple);
 
         $this->configurableType->expects($this->once())->method('getChildrenIds')->with(666)
             ->willReturn(
@@ -285,18 +300,21 @@ class LinkManagementTest extends TestCase
         $this->object->addChild($productSku, $childSku);
     }
 
-    public function testRemoveChild()
+    /**
+     * @return void
+     */
+    public function testRemoveChild(): void
     {
         $productSku = 'configurable';
         $childSku = 'simple_10';
 
         $product = $this->getMockBuilder(Product::class)
-            ->setMethods(['getTypeInstance', 'save', 'getTypeId', 'addData', 'getExtensionAttributes'])
+            ->onlyMethods(['getTypeInstance', 'save', 'getTypeId', 'addData', 'getExtensionAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $productType = $this->getMockBuilder(Configurable::class)
-            ->setMethods(['getUsedProducts'])
+            ->onlyMethods(['getUsedProducts'])
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->once())->method('getTypeInstance')->willReturn($productType);
@@ -310,7 +328,7 @@ class LinkManagementTest extends TestCase
             ->willReturn($product);
 
         $option = $this->getMockBuilder(Product::class)
-            ->setMethods(['getSku', 'getId'])
+            ->onlyMethods(['getSku', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $option->expects($this->any())->method('getSku')->willReturn($childSku);
@@ -320,7 +338,7 @@ class LinkManagementTest extends TestCase
             ->willReturn([$option]);
 
         $extensionAttributesMock = $this->getMockBuilder(ExtensionAttributesInterface::class)
-            ->setMethods(['setConfigurableProductLinks'])
+            ->addMethods(['setConfigurableProductLinks'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -329,7 +347,10 @@ class LinkManagementTest extends TestCase
         $this->assertTrue($this->object->removeChild($productSku, $childSku));
     }
 
-    public function testRemoveChildForbidden()
+    /**
+     * @return void
+     */
+    public function testRemoveChildForbidden(): void
     {
         $this->expectException('Magento\Framework\Exception\InputException');
         $productSku = 'configurable';
@@ -344,21 +365,24 @@ class LinkManagementTest extends TestCase
         $this->object->removeChild($productSku, $childSku);
     }
 
-    public function testRemoveChildInvalidChildSku()
+    /**
+     * @return void
+     */
+    public function testRemoveChildInvalidChildSku(): void
     {
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $productSku = 'configurable';
         $childSku = 'simple_10';
 
         $product = $this->getMockBuilder(Product::class)
-            ->setMethods(['getTypeInstance', 'save', 'getTypeId', 'addData'])
+            ->onlyMethods(['getTypeInstance', 'save', 'getTypeId', 'addData'])
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->any())
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
         $productType = $this->getMockBuilder(Configurable::class)
-            ->setMethods(['getUsedProducts'])
+            ->onlyMethods(['getUsedProducts'])
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->once())->method('getTypeInstance')->willReturn($productType);
@@ -366,7 +390,7 @@ class LinkManagementTest extends TestCase
         $this->productRepository->expects($this->any())->method('get')->willReturn($product);
 
         $option = $this->getMockBuilder(Product::class)
-            ->setMethods(['getSku', 'getId'])
+            ->onlyMethods(['getSku', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $option->expects($this->any())->method('getSku')->willReturn($childSku . '_invalid');

@@ -74,8 +74,9 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
-
-            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
@@ -92,12 +93,13 @@
 	        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Create the rule -->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{SimpleSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
@@ -124,11 +126,11 @@
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
 
         <!-- Add the first product to the cart -->
-        <amOnPage url="$$createConfigChildProduct1.sku$$.html" stepKey="goToProductPage1"/>
+        <amOnPage url="$$createConfigChildProduct1.custom_attributes[url_key]$$.html" stepKey="goToProductPage1"/>
         <waitForPageLoad stepKey="waitForProductPageLoad1"/>
         <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
         <!-- Add the second product to the cart -->
-        <amOnPage url="$$createConfigChildProduct2.sku$$.html" stepKey="goToProductPage2"/>
+        <amOnPage url="$$createConfigChildProduct2.custom_attributes[url_key]$$.html" stepKey="goToProductPage2"/>
         <waitForPageLoad stepKey="waitForProductPageLoad2"/>
         <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage2"/>
 

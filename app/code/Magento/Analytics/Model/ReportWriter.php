@@ -103,14 +103,14 @@ class ReportWriter implements ReportWriterInterface
     /**
      * Replace wrong symbols in row
      *
+     * Strip backslashes before double quotes so they will be properly escaped in the generated csv
+     *
+     * @see fputcsv()
      * @param array $row
      * @return array
      */
     private function prepareRow(array $row): array
     {
-        $row = preg_replace('/(?<!\\\\)"/', '\\"', $row);
-        $row = preg_replace('/[\\\\]+/', '\\', $row);
-
-        return $row;
+        return preg_replace('/\\\+(?=\")/', '', $row);
     }
 }

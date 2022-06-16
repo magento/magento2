@@ -7,6 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\Directory;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\File\WriteInterface;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Magento\MediaGalleryApi\Model\ExcludedPatternsConfigInterface;
 
@@ -15,17 +20,47 @@ use Magento\MediaGalleryApi\Model\ExcludedPatternsConfigInterface;
  */
 class IsExcluded implements IsPathExcludedInterface
 {
+    private const MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH
+        = 'system/media_storage_configuration/allowed_resources/media_gallery_image_folders';
+
     /**
      * @var ExcludedPatternsConfigInterface
+     * @deprecated
      */
     private $config;
 
     /**
-     * @param ExcludedPatternsConfigInterface $config
+     * @var Filesystem
      */
-    public function __construct(ExcludedPatternsConfigInterface $config)
-    {
+    private $filesystem;
+
+    /** @var WriteInterface */
+    private $mediaDirectory;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $coreConfig;
+
+    /**
+     * @var string
+     */
+    private $allowedPathPattern;
+
+    /**
+     * @param ExcludedPatternsConfigInterface $config
+     * @param Filesystem $filesystem
+     * @param ScopeConfigInterface $coreConfig
+     */
+    public function __construct(
+        ExcludedPatternsConfigInterface $config,
+        Filesystem $filesystem,
+        ScopeConfigInterface $coreConfig = null
+    ) {
         $this->config = $config;
+        $this->filesystem = $filesystem;
+        $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->coreConfig = $coreConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -36,16 +71,32 @@ class IsExcluded implements IsPathExcludedInterface
      */
     public function execute(string $path): bool
     {
-        foreach ($this->config->get() as $pattern) {
-            if (empty($pattern)) {
-                continue;
-            }
-            preg_match($pattern, $path, $result);
+        $realPath = $this->mediaDirectory->getDriver()->getRealPathSafety($path);
+        return preg_match($this->getAllowedPathPattern(), $realPath) != 1;
+    }
 
-            if ($result) {
-                return true;
+    /**
+     * Get allowed path pattern
+     *
+     * @return string
+     */
+    private function getAllowedPathPattern()
+    {
+        if (null === $this->allowedPathPattern) {
+            $mediaGalleryImageFolders = $this->coreConfig->getValue(
+                self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+                'default'
+            );
+            $regExp = '/^(';
+            $or = '';
+            foreach ($mediaGalleryImageFolders as $folder) {
+                $folderPattern = $folder !== null ? str_replace('/', '[\/]+', $folder) : '';
+                $regExp .= $or . $folderPattern . '\b(?!-)(?:\/?[^\/]+)*\/?$';
+                $or = '|';
             }
+            $regExp .= ')/';
+            $this->allowedPathPattern = $regExp;
         }
-        return false;
+        return $this->allowedPathPattern;
     }
 }

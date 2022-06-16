@@ -120,7 +120,7 @@ class DeleteTest extends IntegrationTest
             ->willReturn(true);
         // verify error message
         $this->_messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('Uninstall the extension to remove integration \'%1\'.', $intData[Info::DATA_NAME]));
         $this->_integrationSvcMock->expects($this->never())->method('delete');
         // Use real translate model
@@ -143,7 +143,7 @@ class DeleteTest extends IntegrationTest
         $this->_translateModelMock = null;
         // verify error message
         $this->_messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('Integration ID is not specified or is invalid.'));
 
         $this->integrationController->execute();
@@ -166,7 +166,7 @@ class DeleteTest extends IntegrationTest
         $this->_integrationSvcMock->expects($this->once())
             ->method('delete')
             ->willThrowException($invalidIdException);
-        $this->_messageManager->expects($this->once())->method('addError');
+        $this->_messageManager->expects($this->once())->method('addErrorMessage');
 
         $this->integrationController->execute();
     }
@@ -188,7 +188,7 @@ class DeleteTest extends IntegrationTest
         $this->_integrationSvcMock->expects($this->once())
             ->method('delete')
             ->willThrowException($invalidIdException);
-        $this->_messageManager->expects($this->never())->method('addError');
+        $this->_messageManager->expects($this->never())->method('addErrorMessage');
 
         $this->integrationController->execute();
     }

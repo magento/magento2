@@ -26,27 +26,44 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveTest extends TestCase
 {
-    /** @var RequestInterface|MockObject */
+    /**
+     * @var RequestInterface|MockObject
+     */
     private $request;
 
-    /** @var Redirect|MockObject */
+    /**
+     * @var Redirect|MockObject
+     */
     private $redirect;
 
-    /** @var ManagerInterface|MockObject */
+    /**
+     * @var ManagerInterface|MockObject
+     */
     private $messageManager;
 
-    /** @var Session|MockObject */
+    /**
+     * @var Session|MockObject
+     */
     private $session;
 
-    /** @var Context|MockObject */
+    /**
+     * @var Context|MockObject
+     */
     private $context;
 
-    /** @var Query|MockObject */
+    /**
+     * @var Query|MockObject
+     */
     private $query;
 
-    /** @var Save */
+    /**
+     * @var Save
+     */
     private $controller;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -56,11 +73,11 @@ class SaveTest extends TestCase
             ->getMock();
 
         $this->redirect = $this->getMockBuilder(Redirect::class)
-            ->setMethods(['setPath'])
+            ->onlyMethods(['setPath'])
             ->disableOriginalConstructor()
             ->getMock();
         $redirectFactory = $this->getMockBuilder(ResultFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $redirectFactory->expects($this->any())
@@ -75,7 +92,7 @@ class SaveTest extends TestCase
 
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPostValue', 'isPost', 'getPost'])
+            ->addMethods(['getPostValue', 'isPost', 'getPost'])
             ->getMockForAbstractClass();
         $this->context->expects($this->atLeastOnce())
             ->method('getRequest')
@@ -83,7 +100,7 @@ class SaveTest extends TestCase
 
         $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->context->expects($this->any())
             ->method('getObjectManager')
@@ -91,7 +108,7 @@ class SaveTest extends TestCase
 
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addSuccessMessage', 'addErrorMessage', 'addExceptionMessage'])
+            ->onlyMethods(['addSuccessMessage', 'addErrorMessage', 'addExceptionMessage'])
             ->getMockForAbstractClass();
         $this->context->expects($this->any())
             ->method('getMessageManager')
@@ -99,7 +116,7 @@ class SaveTest extends TestCase
 
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setPageData'])
+            ->addMethods(['setPageData'])
             ->getMock();
         $this->context->expects($this->any())
             ->method('getSession')
@@ -107,10 +124,11 @@ class SaveTest extends TestCase
 
         $this->query = $this->getMockBuilder(Query::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'load', 'addData', 'setIsProcessed', 'save', 'loadByQueryText', 'setStoreId'])
+            ->onlyMethods(['getId', 'load', 'addData', 'save', 'loadByQueryText', 'setStoreId'])
+            ->addMethods(['setIsProcessed'])
             ->getMock();
         $queryFactory = $this->getMockBuilder(QueryFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $queryFactory->expects($this->any())
@@ -129,12 +147,18 @@ class SaveTest extends TestCase
     /**
      * @param bool $isPost
      * @param array $data
+     *
+     * @return void
      * @dataProvider executeIsPostDataDataProvider
      */
-    public function testExecuteIsPostData($isPost, $data)
+    public function testExecuteIsPostData(bool $isPost, array $data): void
     {
-        $this->request->expects($this->at(0))->method('getPostValue')->willReturn($data);
-        $this->request->expects($this->at(1))->method('isPost')->willReturn($isPost);
+        $this->request
+            ->method('getPostValue')
+            ->willReturn($data);
+        $this->request
+            ->method('isPost')
+            ->willReturn($isPost);
         $this->redirect->expects($this->once())->method('setPath')->willReturnSelf();
         $this->assertSame($this->redirect, $this->controller->execute());
     }
@@ -142,7 +166,7 @@ class SaveTest extends TestCase
     /**
      * @return array
      */
-    public function executeIsPostDataDataProvider()
+    public function executeIsPostDataDataProvider(): array
     {
         return [
             [false, ['0' => '0']],
@@ -150,11 +174,14 @@ class SaveTest extends TestCase
         ];
     }
 
-    public function testExecuteLoadQueryQueryId()
+    /**
+     * @return void
+     */
+    public function testExecuteLoadQueryQueryId(): void
     {
         $queryId = 1;
         $queryText = '';
-        $this->mockGetRequestData($queryText, $queryId);
+        $this->mockGetRequestData($queryText, $queryId, false);
 
         $this->query->expects($this->once())->method('getId')->willReturn(false);
         $this->query->expects($this->once())->method('load')->with($queryId);
@@ -165,13 +192,14 @@ class SaveTest extends TestCase
         $this->assertSame($this->redirect, $this->controller->execute());
     }
 
-    public function testExecuteLoadQueryQueryIdQueryText()
+    /**
+     * @return void
+     */
+    public function testExecuteLoadQueryQueryIdQueryText(): void
     {
         $queryId = 1;
         $queryText = 'search';
         $this->mockGetRequestData($queryText, $queryId);
-
-        $this->request->expects($this->at(4))->method('getPost')->with('store_id', false)->willReturn(1);
 
         $this->query->expects($this->once())->method('setStoreId');
         $this->query->expects($this->once())->method('loadByQueryText')->with($queryText);
@@ -183,13 +211,14 @@ class SaveTest extends TestCase
         $this->assertSame($this->redirect, $this->controller->execute());
     }
 
-    public function testExecuteLoadQueryQueryIdQueryText2()
+    /**
+     * @return void
+     */
+    public function testExecuteLoadQueryQueryIdQueryText2(): void
     {
         $queryId = 1;
         $queryText = 'search';
         $this->mockGetRequestData($queryText, $queryId);
-
-        $this->request->expects($this->at(4))->method('getPost')->with('store_id', false)->willReturn(1);
 
         $this->query->expects($this->once())->method('setStoreId');
         $this->query->expects($this->once())->method('loadByQueryText')->with($queryText);
@@ -202,14 +231,15 @@ class SaveTest extends TestCase
         $this->assertSame($this->redirect, $this->controller->execute());
     }
 
-    public function testExecuteLoadQueryQueryIdQueryTextException()
+    /**
+     * @return void
+     */
+    public function testExecuteLoadQueryQueryIdQueryTextException(): void
     {
         $queryId = 1;
         $anotherQueryId = 2;
         $queryText = 'search';
         $this->mockGetRequestData($queryText, $queryId);
-
-        $this->request->expects($this->at(4))->method('getPost')->with('store_id', false)->willReturn(1);
 
         $this->query->expects($this->once())->method('setStoreId');
         $this->query->expects($this->once())->method('loadByQueryText')->with($queryText);
@@ -221,13 +251,14 @@ class SaveTest extends TestCase
         $this->assertSame($this->redirect, $this->controller->execute());
     }
 
-    public function testExecuteException()
+    /**
+     * @return void
+     */
+    public function testExecuteException(): void
     {
         $queryId = 1;
         $queryText = 'search';
         $this->mockGetRequestData($queryText, $queryId);
-
-        $this->request->expects($this->at(4))->method('getPost')->with('store_id', false)->willReturn(1);
 
         $this->query->expects($this->once())->method('setStoreId');
         $this->query->expects($this->once())->method('loadByQueryText')->willThrowException(new \Exception());
@@ -241,12 +272,31 @@ class SaveTest extends TestCase
     /**
      * @param string $queryText
      * @param int $queryId
+     * @param bool $withStoreId
+     *
+     * @return void
      */
-    private function mockGetRequestData($queryText, $queryId)
-    {
-        $this->request->expects($this->at(0))->method('getPostValue')->willReturn(['0' => '0']);
-        $this->request->expects($this->at(1))->method('isPost')->willReturn(true);
-        $this->request->expects($this->at(2))->method('getPost')->with('query_text', false)->willReturn($queryText);
-        $this->request->expects($this->at(3))->method('getPost')->with('query_id', null)->willReturn($queryId);
+    private function mockGetRequestData(
+        string $queryText,
+        int $queryId,
+        bool $withStoreId = true
+    ): void {
+        $this->request
+            ->method('getPostValue')
+            ->willReturn(['0' => '0']);
+        $this->request
+            ->method('isPost')
+            ->willReturn(true);
+        if ($withStoreId) {
+            $this->request
+                ->method('getPost')
+                ->withConsecutive(['query_text', false], ['query_id', null], ['store_id', false])
+                ->willReturnOnConsecutiveCalls($queryText, $queryId, 1);
+        } else {
+            $this->request
+                ->method('getPost')
+                ->withConsecutive(['query_text', false], ['query_id', null])
+                ->willReturnOnConsecutiveCalls($queryText, $queryId);
+        }
     }
 }

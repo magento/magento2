@@ -138,8 +138,8 @@ define([
                 $table.offset().top - originRecord.offset().top + $table.children('thead').outerHeight();
             drEl.maxYpos = drEl.minYpos + $table.children('tbody').outerHeight() - originRecord.outerHeight();
             $tableWrapper.append(recordNode);
-            this.body.bind('mousemove touchmove', this.mousemoveHandler);
-            this.body.bind('mouseup touchend', this.mouseupHandler);
+            this.body.on('mousemove touchmove', this.mousemoveHandler);
+            this.body.on('mouseup touchend', this.mouseupHandler);
         },
 
         /**
@@ -199,8 +199,8 @@ define([
 
             drEl.originRow.removeClass(this.draggableElementClass);
 
-            this.body.unbind('mousemove touchmove', this.mousemoveHandler);
-            this.body.unbind('mouseup touchend', this.mouseupHandler);
+            this.body.off('mousemove touchmove', this.mousemoveHandler);
+            this.body.off('mouseup touchend', this.mouseupHandler);
 
             this.draggableElement = {};
         },

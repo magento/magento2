@@ -15,10 +15,11 @@
         <arguments>
             <argument name="Customer"/>
             <argument name="Store"/>
+            <argument name="StoreGroup"/>
         </arguments>
 
         <amOnPage stepKey="amOnStorefrontPage" url="{{Store.code}}"/>
         <see stepKey="seeDescriptionNewsletter" userInput="You aren't subscribed to our newsletter." selector="{{CustomerMyAccountPage.DescriptionNewsletter}}"/>
-        <see stepKey="seeThankYouMessage" userInput="Thank you for registering with NewStore."/>
+        <see stepKey="seeThankYouMessage" userInput="Thank you for registering with {{StoreGroup.name}}."/>
     </actionGroup>
 </actionGroups>

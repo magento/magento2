@@ -17,6 +17,7 @@
             <testCaseId value="MC-14793"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -24,9 +25,8 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
-            <!-- Perform reindex and flush cache -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>

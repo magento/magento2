@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminResetWidgetTest">
+        <annotations>
+            <features value="Widget"/>
+            <stories value="CMS Widgets"/>
+            <title value="Reset Widget"/>
+            <description value="Check that admin user can reset widget form after filling out all information"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-37892"/>
+            <group value="widget"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteWidget">
+                <argument name="widget" value="ProductsListWidget"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <amOnPage url="{{AdminNewWidgetPage.url}}" stepKey="amOnAdminNewWidgetPage"/>
+        <actionGroup ref="AdminSetWidgetTypeAndDesignActionGroup" stepKey="firstSetTypeAndDesign">
+            <argument name="widgetType" value="{{ProductsListWidget.type}}"/>
+            <argument name="widgetDesign" value="{{ProductsListWidget.design_theme}}"/>
+        </actionGroup>
+        <click selector="{{AdminNewWidgetSection.resetBtn}}" stepKey="resetInstance"/>
+        <dontSeeInField userInput="{{ProductsListWidget.type}}" selector="{{AdminNewWidgetSection.widgetType}}" stepKey="dontSeeTypeAfterReset"/>
+        <dontSeeInField userInput="{{ProductsListWidget.design_theme}}" selector="{{AdminNewWidgetSection.widgetDesignTheme}}" stepKey="dontSeeDesignAfterReset"/>
+        <actionGroup ref="AdminSetWidgetTypeAndDesignActionGroup" stepKey="setTypeAndDesignAfterReset">
+            <argument name="widgetType" value="{{ProductsListWidget.type}}"/>
+            <argument name="widgetDesign" value="{{ProductsListWidget.design_theme}}"/>
+        </actionGroup>
+        <click selector="{{AdminNewWidgetSection.continue}}" stepKey="clickContinue"/>
+        <actionGroup ref="AdminSetWidgetNameAndStoreActionGroup" stepKey="setNameAndStore">
+            <argument name="widgetTitle" value="{{ProductsListWidget.name}}"/>
+            <argument name="widgetStoreIds" value="{{ProductsListWidget.store_ids}}"/>
+            <argument name="widgetSortOrder" value="{{ProductsListWidget.sort_order}}"/>
+        </actionGroup>
+        <click selector="{{AdminNewWidgetSection.resetBtn}}" stepKey="resetNameAndStore"/>
+        <dontSeeInField userInput="{{ProductsListWidget.name}}" selector="{{AdminNewWidgetSection.widgetTitle}}" stepKey="dontSeeNameAfterReset"/>
+        <dontSeeInField userInput="{{ProductsListWidget.store_ids[0]}}" selector="{{AdminNewWidgetSection.widgetStoreIds}}" stepKey="dontSeeStoreAfterReset"/>
+        <dontSeeInField userInput="{{ProductsListWidget.sort_order}}" selector="{{AdminNewWidgetSection.widgetSortOrder}}" stepKey="dontSeeSortOrderAfterReset"/>
+        <actionGroup ref="AdminSetWidgetNameAndStoreActionGroup" stepKey="setNameAndStoreAfterReset">
+            <argument name="widgetTitle" value="{{ProductsListWidget.name}}"/>
+            <argument name="widgetStoreIds" value="{{ProductsListWidget.store_ids}}"/>
+            <argument name="widgetSortOrder" value="{{ProductsListWidget.sort_order}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveAndContinueWidgetActionGroup" stepKey="saveWidgetAndContinue"/>
+        <click selector="{{AdminNewWidgetSection.resetBtn}}" stepKey="resetWidgetForm"/>
+        <seeInField userInput="{{ProductsListWidget.name}}" selector="{{AdminNewWidgetSection.widgetTitle}}" stepKey="seeNameAfterReset"/>
+        <seeInField userInput="{{ProductsListWidget.store_ids[0]}}" selector="{{AdminNewWidgetSection.widgetStoreIds}}" stepKey="seeStoreAfterReset"/>
+        <seeInField userInput="{{ProductsListWidget.sort_order}}" selector="{{AdminNewWidgetSection.widgetSortOrder}}" stepKey="seeSortOrderAfterReset"/>
+        <seeInField userInput="{{ProductsListWidget.type}}" selector="{{AdminNewWidgetSection.widgetInstanceType}}" stepKey="seeTypeAfterReset"/>
+        <seeInField userInput="{{ProductsListWidget.design_theme}}" selector="{{AdminNewWidgetSection.widgetDesignTheme}}" stepKey="seeThemeAfterReset"/>
+    </test>
+</tests>

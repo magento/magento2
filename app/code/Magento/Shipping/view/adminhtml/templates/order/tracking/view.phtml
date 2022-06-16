@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-//phpcs:disable Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace
-//phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
-//phpcs:disable Magento2.Files.LineLength.MaxExceeded
+
+/**
+ * @var $block Magento\Shipping\Block\Adminhtml\Order\Tracking\View
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+
+/** @var \Magento\Shipping\Helper\Data $shippingHelper */
+$shippingHelper = $block->getData('shippingHelper');
 ?>
-<?php /** @var $block Magento\Shipping\Block\Adminhtml\Order\Tracking\View */ ?>
 <div class="admin__control-table-wrapper">
     <form id="tracking-shipping-form" data-mage-init='{"validation": {}}'>
         <table class="data-table admin__control-table" id="shipment_tracking_info">
@@ -22,13 +26,17 @@
             <tfoot>
                 <tr>
                     <td class="col-carrier">
-                        <select name="carrier"
-                                class="select admin__control-select"
-                                onchange="selectCarrier(this)">
-                            <?php foreach ($block->getCarriers() as $_code => $_name) : ?>
-                            <option value="<?= $block->escapeHtmlAttr($_code) ?>"><?= $block->escapeHtml($_name) ?></option>
+                        <select name="carrier" class="select admin__control-select">
+                            <?php foreach ($block->getCarriers() as $_code => $_name): ?>
+                            <option value="<?= $block->escapeHtmlAttr($_code) ?>">
+                                <?= $block->escapeHtml($_name) ?></option>
                             <?php endforeach; ?>
                         </select>
+                        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                            'onchange',
+                            'selectCarrier(this)',
+                            "select[name='carrier']"
+                        ) ?>
                     </td>
                     <td class="col-title">
                         <input class="input-text admin__control-text"
@@ -47,23 +55,42 @@
                     <td class="col-delete last"><?= $block->getSaveButtonHtml() ?></td>
                 </tr>
             </tfoot>
-        <?php if ($_tracks = $block->getShipment()->getAllTracks()) : ?>
+        <?php if ($_tracks = $block->getShipment()->getAllTracks()): ?>
             <tbody>
-            <?php $i = 0; foreach ($_tracks as $_track) :$i++ ?>
+            <?php $i = 0; foreach ($_tracks as $_track): $i++ ?>
                 <tr class="<?= /* @noEscape */ ($i%2 == 0) ? 'even' : 'odd' ?>">
                     <td class="col-carrier">
                         <?= $block->escapeHtml($block->getCarrierTitle($_track->getCarrierCode())) ?>
                     </td>
                     <td class="col-title"><?= $block->escapeHtml($_track->getTitle()) ?></td>
                     <td class="col-number">
-                        <?php if ($_track->isCustom()) : ?>
+                        <?php if ($_track->isCustom()): ?>
                             <?= $block->escapeHtml($_track->getNumber()) ?>
-                        <?php else : ?>
-                        <a href="#" onclick="popWin('<?= $block->escapeJs($block->escapeUrl($this->helper(Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel($_track))) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')"><?= $block->escapeHtml($_track->getNumber()) ?></a>
+                        <?php else: ?>
+                        <a id="col-track-<?= (int) $_track->getId() ?>" href="#">
+                            <?= $block->escapeHtml($_track->getNumber()) ?>
+                         </a>
+                            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                                'onclick',
+                                "event.preventDefault();
+                                popWin('{$block->escapeJs($shippingHelper->getTrackingPopupUrlBySalesModel($_track))}',
+                                'trackorder','width=800,height=600,resizable=yes,scrollbars=yes')",
+                                'a#col-track-' .  (int) $_track->getId()
+                            ) ?>
                         <div id="shipment_tracking_info_response_<?= (int) $_track->getId() ?>"></div>
                         <?php endif; ?>
                     </td>
-                    <td class="col-delete last"><button class="action-delete" type="button" onclick="deleteTrackingNumber('<?= $block->escapeJs($block->escapeUrl($block->getRemoveUrl($_track))) ?>'); return false;"><span><?= $block->escapeHtml(__('Delete')) ?></span></button></td>
+                    <td class="col-delete last">
+                        <button class="action-delete" type="button" id="del-track-<?= (int) $_track->getId() ?>">
+                            <span><?= $block->escapeHtml(__('Delete')) ?></span>
+                        </button>
+                    </td>
+                    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                        'onclick',
+                        "deleteTrackingNumber('{$block->escapeJs($block->getRemoveUrl($_track))}');
+                         event.preventDefault();",
+                        '#del-track-' . (int) $_track->getId()
+                    ) ?>
                 </tr>
             <?php endforeach; ?>
             </tbody>
@@ -71,9 +98,9 @@
         </table>
     </form>
 </div>
+<?php $scriptString = <<<script
 
-<script>
-require(['prototype', 'jquery', 'Magento_Ui/js/modal/confirm'], function(prototype, $j, confirm) {
+require(['prototype', 'jquery', 'Magento_Ui/js/modal/confirm'], function(prototype, \$j, confirm) {
 //<![CDATA[
 function selectCarrier(elem) {
     var option = elem.options[elem.selectedIndex];
@@ -81,7 +108,7 @@ function selectCarrier(elem) {
 }
 
 function saveTrackingInfo(node, url) {
-    var form = $j('#tracking-shipping-form');
+    var form = \$j('#tracking-shipping-form');
 
     if (form.validation() && form.validation('isValid')) {
         submitAndReloadArea(node, url);
@@ -90,7 +117,7 @@ function saveTrackingInfo(node, url) {
 
 function deleteTrackingNumber(url) {
     confirm({
-        content: '<?= $block->escapeJs($block->escapeHtml(__('Are you sure?'))) ?>',
+        content: '{$block->escapeJs(__('Are you sure?'))}',
         actions: {
             /**
              * Confirm action.
@@ -108,4 +135,7 @@ window.saveTrackingInfo = saveTrackingInfo;
 //]]>
 
 });
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

@@ -16,27 +16,27 @@ use Magento\Framework\Amqp\Connection\Factory as ConnectionFactory;
  * Reads the Amqp config in the deployed environment configuration
  *
  * @api
- * @since 100.0.0
+ * @since 103.0.0
  */
 class Config
 {
     /**
      * Queue config key
      */
-    const QUEUE_CONFIG = 'queue';
+    public const QUEUE_CONFIG = 'queue';
 
     /**
      * Amqp config key
      */
-    const AMQP_CONFIG = 'amqp';
+    public const AMQP_CONFIG = 'amqp';
 
-    const HOST = 'host';
-    const PORT = 'port';
-    const USERNAME = 'user';
-    const PASSWORD = 'password';
-    const VIRTUALHOST = 'virtualhost';
-    const SSL = 'ssl';
-    const SSL_OPTIONS = 'ssl_options';
+    public const HOST = 'host';
+    public const PORT = 'port';
+    public const USERNAME = 'user';
+    public const PASSWORD = 'password';
+    public const VIRTUALHOST = 'virtualhost';
+    public const SSL = 'ssl';
+    public const SSL_OPTIONS = 'ssl_options';
 
     /**
      * Deployment configuration
@@ -96,7 +96,6 @@ class Config
      * @param DeploymentConfig $config
      * @param string $connectionName
      * @param ConnectionFactory|null $connectionFactory
-     * @since 100.0.0
      */
     public function __construct(
         DeploymentConfig $config,
@@ -113,7 +112,7 @@ class Config
      * Destructor
      *
      * @return void
-     * @since 100.0.0
+     * @since 103.0.0
      */
     public function __destruct()
     {
@@ -126,7 +125,7 @@ class Config
      * @param string $key
      * @return string
      * @throws \LogicException
-     * @since 100.0.0
+     * @since 103.0.0
      */
     public function getValue($key)
     {
@@ -141,7 +140,7 @@ class Config
      */
     private function createConnection(): AbstractConnection
     {
-        $sslEnabled = trim($this->getValue(self::SSL)) === 'true';
+        $sslEnabled = $this->getValue(self::SSL) && trim($this->getValue(self::SSL)) === 'true';
         $options = new FactoryOptions();
         $options->setHost($this->getValue(self::HOST));
         $options->setPort($this->getValue(self::PORT));
@@ -162,7 +161,7 @@ class Config
      *
      * @return AMQPChannel
      * @throws \LogicException
-     * @since 100.0.0
+     * @since 103.0.0
      */
     public function getChannel()
     {

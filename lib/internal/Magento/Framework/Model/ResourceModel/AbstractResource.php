@@ -15,17 +15,19 @@ use Magento\Framework\Serialize\Serializer\Json;
  *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractResource
 {
     /**
      * @var Json
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected $serializer;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 102.0.0
      */
     protected $_logger;
 
@@ -58,7 +60,6 @@ abstract class AbstractResource
      * Start resource transaction
      *
      * @return $this
-     * @api
      */
     public function beginTransaction()
     {
@@ -71,7 +72,6 @@ abstract class AbstractResource
      *
      * @param callable|array $callback
      * @return $this
-     * @api
      */
     public function addCommitCallback($callback)
     {
@@ -84,7 +84,6 @@ abstract class AbstractResource
      *
      * @deprecated see \Magento\Framework\Model\ExecuteCommitCallbacks::afterCommit
      * @return $this
-     * @api
      */
     public function commit()
     {
@@ -110,7 +109,6 @@ abstract class AbstractResource
      * Roll back resource transaction
      *
      * @return $this
-     * @api
      */
     public function rollBack()
     {
@@ -201,7 +199,7 @@ abstract class AbstractResource
      */
     protected function _prepareTableValueForSave($value, $type)
     {
-        $type = strtolower($type);
+        $type = $value !== null ? strtolower($type) : '';
         if ($type == 'decimal' || $type == 'numeric' || $type == 'float') {
             $value = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Framework\Locale\FormatInterface::class
@@ -250,8 +248,8 @@ abstract class AbstractResource
      * Get serializer
      *
      * @return Json
-     * @deprecated 100.2.0
-     * @since 100.2.0
+     * @deprecated 101.0.0
+     * @since 101.0.0
      */
     protected function getSerializer()
     {
@@ -265,7 +263,7 @@ abstract class AbstractResource
      * Get logger
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated
+     * @deprecated 101.0.1
      */
     private function getLogger()
     {

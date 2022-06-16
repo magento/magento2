@@ -23,7 +23,7 @@ use Magento\Config\Model\Config\PathValidatorFactory;
  * Command provides possibility to show saved system configuration.
  *
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigShowCommand extends Command
@@ -31,12 +31,14 @@ class ConfigShowCommand extends Command
     /**#@+
      * Names of input arguments or options.
      */
-    const INPUT_OPTION_SCOPE = 'scope';
-    const INPUT_OPTION_SCOPE_CODE = 'scope-code';
-    const INPUT_ARGUMENT_PATH = 'path';
+    public const INPUT_OPTION_SCOPE = 'scope';
+    public const INPUT_OPTION_SCOPE_CODE = 'scope-code';
+    public const INPUT_ARGUMENT_PATH = 'path';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var ValidatorInterface
+     */
     private $scopeValidator;
 
     /**
@@ -121,7 +123,7 @@ class ConfigShowCommand extends Command
 
     /**
      * @inheritdoc
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function configure()
     {
@@ -158,14 +160,15 @@ class ConfigShowCommand extends Command
      * or scope/scope-code doesn't pass validation.
      *
      * @inheritdoc
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
             $this->scope = $input->getOption(self::INPUT_OPTION_SCOPE);
             $this->scopeCode = $input->getOption(self::INPUT_OPTION_SCOPE_CODE);
-            $this->inputPath = trim($input->getArgument(self::INPUT_ARGUMENT_PATH), '/');
+            $inputPath = $input->getArgument(self::INPUT_ARGUMENT_PATH);
+            $this->inputPath = $inputPath !== null ? trim($inputPath, '/') : '';
 
             $configValue = $this->emulatedAreaProcessor->process(function () {
                 $this->scopeValidator->isValid($this->scope, $this->scopeCode);

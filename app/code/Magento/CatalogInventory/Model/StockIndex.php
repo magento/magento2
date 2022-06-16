@@ -169,11 +169,11 @@ class StockIndex implements StockIndexInterface
 
         $requiredChildrenIds = $typeInstance->getChildrenIds($productId, true);
         if ($requiredChildrenIds) {
-            $childrenIds = [[]];
+            $childrenIds = [];
             foreach ($requiredChildrenIds as $groupedChildrenIds) {
                 $childrenIds[] = $groupedChildrenIds;
             }
-            $childrenIds = array_merge(...$childrenIds);
+            $childrenIds = array_merge([], ...$childrenIds);
 
             $childrenWebsites = $this->productWebsite->getWebsites($childrenIds);
             foreach ($websitesWithStores as $websiteId => $storeId) {
@@ -232,13 +232,13 @@ class StockIndex implements StockIndexInterface
      */
     protected function processParents($productId, $websiteId)
     {
-        $parentIds = [[]];
+        $parentIds = [];
         foreach ($this->getProductTypeInstances() as $typeInstance) {
             /* @var ProductType\AbstractType $typeInstance */
             $parentIds[] = $typeInstance->getParentIdsByChild($productId);
         }
 
-        $parentIds = array_merge(...$parentIds);
+        $parentIds = array_merge([], ...$parentIds);
 
         if (empty($parentIds)) {
             return;

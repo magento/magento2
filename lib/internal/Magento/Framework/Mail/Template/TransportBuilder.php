@@ -31,6 +31,7 @@ use Magento\Framework\Phrase;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class TransportBuilder
 {
@@ -242,7 +243,7 @@ class TransportBuilder
      * @throws InvalidArgumentException
      * @see setFromByScope()
      *
-     * @deprecated This function sets the from address but does not provide
+     * @deprecated 102.0.1 This function sets the from address but does not provide
      * a way of setting the correct from addresses based on the scope.
      */
     public function setFrom($from)
@@ -259,6 +260,7 @@ class TransportBuilder
      * @return $this
      * @throws InvalidArgumentException
      * @throws MailException
+     * @since 102.0.1
      */
     public function setFromByScope($from, $scopeId = null)
     {

@@ -1,7 +1,5 @@
 <?php
 /**
- * High-level interface for email templates data that hides format from the client code
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +8,9 @@ namespace Magento\Email\Model\Template;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
 
+/**
+ * High-level interface for email templates data that hides format from the client code
+ */
 class Config implements \Magento\Framework\Mail\Template\ConfigInterface
 {
     /**
@@ -78,6 +79,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
                 'group' => $this->getTemplateModule($templateId),
             ];
             $themeTemplates = $this->getThemeTemplates($templateId);
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $templates = array_merge($templates, $themeTemplates);
         }
         return $templates;
@@ -137,7 +139,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
             'theme' => null
         ];
         $pattern = "#^(?<templateId>[^/]+)/(?<themeVendor>[^/]+)/(?<themeName>[^/]+)#i";
-        if (preg_match($pattern, $templateId, $matches)) {
+        if ($templateId !== null && preg_match($pattern, $templateId, $matches)) {
             $parts['templateId'] = $matches['templateId'];
             $parts['theme'] = $matches['themeVendor'] . '/' . $matches['themeName'];
         }

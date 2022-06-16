@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="WebSetupPageLandingSection">
+        <element name="section" type="text" selector="section[data-section=landing]"/>
+        <element name="logo" type="text" selector="section[data-section=landing] > img.logo"/>
+        <element name="version" type="text" selector="section[data-section=landing] > p.text-version"/>
+        <element name="welcome" type="text" selector="section[data-section=landing] > p.text-welcome"/>
+        <element name="terms_and_agreement_link" type="text" selector="section[data-section=landing] > p.text-welcome > a[href^='javascript:showSection'][href*='license']"/>
+    </section>
+</sections>

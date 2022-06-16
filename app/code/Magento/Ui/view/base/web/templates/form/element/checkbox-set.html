@@ -10,7 +10,7 @@
      css="$data.additionalClasses"
      attr="'data-config-scope': $data.scopeLabel, 'data-index': index">
     <legend class="admin__field-label" if="$data.label" attr="for: uid">
-        <span text="label"/>
+        <span text="label"></span>
     </legend>
 
     <div class="admin__field-control"
@@ -27,17 +27,17 @@
                     value: value,
                     type: $parent.multiple ? 'checkbox' : 'radio'"/>
 
-            <label class="admin__field-label" text="label" attr="for: ko.uid"/>
+            <label class="admin__field-label" text="label" attr="for: ko.uid"></label>
         </div>
 
-        <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
+        <label class="admin__field-error" if="error" attr="for: uid" text="error"></label>
 
         <div class="admin__field-note" if="$data.notice" attr="id: noticeId">
-            <span html="notice"/>
+            <span><strong translate="NOTE"></strong>: <translate args="$data.notice"></translate></span>
         </div>
 
-        <div class="admin__additional-info" if="$data.additionalInfo" html="$data.additionalInfo"></div>
+        <div class="admin__additional-info" if="$data.additionalInfo" html="$data.additionalInfoUnsanitizedHtml"></div>
 
-        <render args="$data.service.template" if="$data.hasService()"/>
+        <render args="$data.service.template" if="$data.hasService()"></render>
     </div>
 </fieldset>

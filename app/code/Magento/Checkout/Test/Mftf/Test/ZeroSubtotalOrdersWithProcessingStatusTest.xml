@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94178"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminCheckZeroSubtotalOrderIsInProcessingStatusTest instead</issueId>
+            </skip> 
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
@@ -41,9 +44,7 @@
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
         </after>
 
-        <!--Open MARKETING > Cart Price Rules-->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
 
         <!--Add New Rule-->
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
@@ -81,8 +82,8 @@
         <waitForPageLoad stepKey="WaitForDiscountToBeAdded"/>
         <see userInput="Your coupon was successfully applied." stepKey="verifyText"/>
 
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPlaceOrderButton"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
         <!--Proceed to Admin panel > SALES > Orders. Created order should be in Processing status-->

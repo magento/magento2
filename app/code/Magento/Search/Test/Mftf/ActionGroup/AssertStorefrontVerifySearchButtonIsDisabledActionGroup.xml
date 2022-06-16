@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Filter by search query and select -->
+    <actionGroup name="AssertStorefrontVerifySearchButtonIsDisabledActionGroup">
+        <annotations>
+            <description>Verify search button has disabled attribute</description>
+        </annotations>
+
+        <grabAttributeFrom selector="{{StorefrontQuickSearchSection.searchButton}}" userInput="disabled" stepKey="grabSearchButtonDisabledAttribute"/>
+
+        <assertEquals stepKey="assertSearchButtonDisabled">
+            <actualResult type="const">$grabSearchButtonDisabledAttribute</actualResult>
+            <expectedResult type="string">true</expectedResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

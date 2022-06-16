@@ -20,6 +20,7 @@ use Magento\Framework\Phrase;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractDb extends AbstractResource
 {
@@ -31,64 +32,46 @@ abstract class AbstractDb extends AbstractResource
     protected $_resources;
 
     /**
-     * Prefix for resources that will be used in this resource model
-     *
      * @var string
      */
     protected $connectionName = \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION;
 
     /**
-     * Connections cache for this resource model
-     *
      * @var array
      */
     protected $_connections = [];
 
     /**
-     * Resource model name that contains entities (names of tables)
-     *
      * @var string
      */
     protected $_resourceModel;
 
     /**
-     * Tables used in this resource model
-     *
      * @var array
      */
     protected $_tables = [];
 
     /**
-     * Main table name
-     *
      * @var string
      */
     protected $_mainTable;
 
     /**
-     * Main table primary key field name
-     *
      * @var string
      */
     protected $_idFieldName;
 
     /**
-     * Primary key auto increment flag
-     *
      * @var bool
      */
     protected $_isPkAutoIncrement = true;
 
     /**
-     * Use is object new method for save of object
-     *
      * @var bool
      */
     protected $_useIsObjectNew = false;
 
     /**
-     * Fields of main table
-     *
      * @var array
      */
     protected $_mainTableFields;
@@ -245,7 +228,6 @@ abstract class AbstractDb extends AbstractResource
      *
      * @throws LocalizedException
      * @return string
-     * @api
      */
     public function getIdFieldName()
     {
@@ -263,7 +245,6 @@ abstract class AbstractDb extends AbstractResource
      *
      * @throws LocalizedException
      * @return string
-     * @api
      */
     public function getMainTable()
     {
@@ -278,7 +259,6 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param string $tableName
      * @return string
-     * @api
      */
     public function getTable($tableName)
     {
@@ -390,7 +370,6 @@ abstract class AbstractDb extends AbstractResource
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @throws \Exception
      * @throws AlreadyExistsException
-     * @api
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

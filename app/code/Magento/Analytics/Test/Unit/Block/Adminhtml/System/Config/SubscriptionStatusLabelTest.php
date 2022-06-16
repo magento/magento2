@@ -49,7 +49,7 @@ class SubscriptionStatusLabelTest extends TestCase
         $this->subscriptionStatusProviderMock = $this->createMock(SubscriptionStatusProvider::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(['getComment'])
+            ->setMethods(['getComment', 'getElementHtml'])
             ->disableOriginalConstructor()
             ->getMock();
 

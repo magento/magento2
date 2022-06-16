@@ -20,6 +20,8 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Config\Data;
+use Magento\Framework\Config\DataInterfaceFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\ArrayUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -69,6 +71,11 @@ class DataProviderTest extends TestCase
      * @var CategoryFactory|MockObject
      */
     private $categoryFactory;
+
+    /**
+     * @var DataInterfaceFactory|MockObject
+     */
+    private $uiConfigFactory;
 
     /**
      * @var Collection|MockObject
@@ -151,6 +158,15 @@ class DataProviderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $dataMock = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->uiConfigFactory = $this->getMockBuilder(DataInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->uiConfigFactory->method('create')
+            ->willReturn($dataMock);
+
         $this->fileInfo = $this->getMockBuilder(FileInfo::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -198,6 +214,7 @@ class DataProviderTest extends TestCase
                 'eavConfig' => $this->eavConfig,
                 'request' => $this->request,
                 'categoryFactory' => $this->categoryFactory,
+                'uiConfigFactory' => $this->uiConfigFactory,
                 'pool' => $this->modifierPool,
                 'auth' => $this->auth,
                 'arrayUtils' => $this->arrayUtils,

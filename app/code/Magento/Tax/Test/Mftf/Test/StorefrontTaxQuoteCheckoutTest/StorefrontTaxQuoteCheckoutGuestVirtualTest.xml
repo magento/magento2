@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-255"/>
             <group value="Tax"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -51,8 +52,7 @@
             </actionGroup>
 
             <!-- Go to the tax rate page -->
-            <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRatesPage"/>
-            <waitForPageLoad stepKey="waitForRatesPage"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
 
             <!-- Delete the two tax rates that were created -->
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
@@ -73,15 +73,15 @@
         </after>
 
         <!-- Go to the created product page and add it to the cart -->
-        <amOnPage url="$$virtualProduct1.sku$$.html" stepKey="goToVirtualProductPage"/>
+        <amOnPage url="$$virtualProduct1.custom_attributes[url_key]$$.html" stepKey="goToVirtualProductPage"/>
         <waitForPageLoad stepKey="waitForVirtualProductPage"/>
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
         <click stepKey="addVirtualProductToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForPageLoad stepKey="waitForProductAdded"/>
-        <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You added"/>
+        <see stepKey="seeSuccess" selector="{{StorefrontMessagesSection.success}}" userInput="You added"/>
 
         <!-- Assert that taxes are applied correctly for CA -->
-        <amOnPage url="{{CheckoutPage.url}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForShippingSection"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
 
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
         <see stepKey="seeTax2" selector="{{CheckoutPaymentSection.tax}}" userInput="$8.25"/>
@@ -96,9 +96,9 @@
             <argument name="customerAddressVar" value="US_Address_NY"/>
             <argument name="paymentMethod" value="Check / Money order"/>
         </actionGroup>
-        <click stepKey="saveAddress" selector="{{CheckoutShippingSection.updateAddress}}"/>
+        <actionGroup ref="StorefrontClickUpdateAddressInCheckoutActionGroup" stepKey="saveAddress"/>
 
-        <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <comment userInput="BIC workaround" stepKey="waitForAddressSaved"/>
         <see stepKey="seeEditButton" selector="{{CheckoutShippingSection.editAddressButton}}" userInput="Edit"/>
         <see stepKey="seeAddress2" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxNY.state}}"/>
 

@@ -96,11 +96,11 @@ class HelperTest extends TestCase
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
         $this->request = $this->objectManager->get(RequestInterface::class);
-        $this->helper = $this->objectManager->create(Helper::class);
+        $this->helper = $this->objectManager->get(Helper::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
         $this->productResource =$this->objectManager->get(ProductResource::class);
-        $this->productAttributeRepository = $this->objectManager->create(ProductAttributeRepositoryInterface::class);
+        $this->productAttributeRepository = $this->objectManager->get(ProductAttributeRepositoryInterface::class);
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
         $this->searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
         $this->config = $this->objectManager->get(Config::class);
@@ -315,8 +315,8 @@ class HelperTest extends TestCase
                 foreach ($roles as $role) {
                     $this->assertEquals($image, $simpleProduct->getData($role));
                 }
-                $this->assertFileExists(
-                    $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $image)
+                $this->assertTrue(
+                    $this->mediaDirectory->isExist($this->config->getBaseMediaPath() . $image)
                 );
             }
         }
@@ -364,6 +364,21 @@ class HelperTest extends TestCase
                     ]
                 );
             $this->productResource->save($simpleProduct);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setAccessible(true);
+                $property->setValue($this, null);
+            }
         }
     }
 }

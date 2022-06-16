@@ -4,40 +4,50 @@
  * See COPYING.txt for license details.
  */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
 <?php
 /** @var $block \Magento\Framework\View\Element\Template */
-/** @var $helper \Magento\Search\Helper\Data */
+/** @var $escaper \Magento\Framework\Escaper */
 /** @var $configProvider \Magento\Search\ViewModel\ConfigProvider */
-$helper = $this->helper(\Magento\Search\Helper\Data::class);
 $configProvider = $block->getData('configProvider');
+/** @var $versionManager \Magento\Search\ViewModel\AdditionalSearchFormData */
+$additionalSearchFormData = $block->getData('additionalSearchFormData');
+/** @var $helper \Magento\Search\Helper\Data */
+$helper = $configProvider->getSearchHelperData();
+$allowedSuggestion = $configProvider->isSuggestionsAllowed();
+$quickSearchUrl = $allowedSuggestion ? $escaper->escapeUrl($helper->getSuggestUrl()) : '';
 ?>
 <div class="block block-search">
-    <div class="block block-title"><strong><?= $block->escapeHtml(__('Search')) ?></strong></div>
+    <div class="block block-title"><strong><?= $escaper->escapeHtml(__('Search')) ?></strong></div>
     <div class="block block-content">
         <form class="form minisearch" id="search_mini_form"
-              action="<?= $block->escapeUrl($helper->getResultUrl()) ?>" method="get">
+              action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>" method="get">
+            <?php  if (!empty($queryParams = $additionalSearchFormData->getFormData())): ?>
+                <?php foreach ($queryParams as $param): ?>
+                    <input type="hidden" name="<?= $escaper->escapeHtmlAttr($param['name']) ?>"
+                           value="<?= $escaper->escapeHtmlAttr($param['value']) ?>"/>
+                <?php endforeach; ?>
+            <?php endif; ?>
             <div class="field search">
                 <label class="label" for="search" data-role="minisearch-label">
-                    <span><?= $block->escapeHtml(__('Search')) ?></span>
+                    <span><?= $escaper->escapeHtml(__('Search')) ?></span>
                 </label>
                 <div class="control">
                     <input id="search"
-                            <?php if ($configProvider->isSuggestionsAllowed()):?>
-                               data-mage-init='{"quickSearch":{
-                                    "formSelector":"#search_mini_form",
-                                    "url":"<?= $block->escapeUrl($helper->getSuggestUrl())?>",
-                                    "destinationSelector":"#search_autocomplete",
-                                    "minSearchLength":"<?= $block->escapeHtml($helper->getMinQueryLength()) ?>"}
-                               }'
-                            <?php endif;?>
+                           data-mage-init='{
+                            "quickSearch": {
+                                "formSelector": "#search_mini_form",
+                                "url": "<?= /* @noEscape */ $quickSearchUrl ?>",
+                                "destinationSelector": "#search_autocomplete",
+                                "minSearchLength": "<?= $escaper->escapeHtml($helper->getMinQueryLength()) ?>"
+                            }
+                        }'
                            type="text"
-                           name="<?= $block->escapeHtmlAttr($helper->getQueryParamName()) ?>"
+                           name="<?= $escaper->escapeHtmlAttr($helper->getQueryParamName()) ?>"
                            value="<?= /* @noEscape */ $helper->getEscapedQueryText() ?>"
-                           placeholder="<?= $block->escapeHtmlAttr(__('Search entire store here...')) ?>"
+                           placeholder="<?= $escaper->escapeHtmlAttr(__('Search entire store here...')) ?>"
                            class="input-text"
-                           maxlength="<?= $block->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
+                           maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
                            role="combobox"
                            aria-haspopup="false"
                            aria-autocomplete="both"
@@ -49,11 +59,11 @@ $configProvider = $block->getData('configProvider');
             </div>
             <div class="actions">
                 <button type="submit"
-                    title="<?= $block->escapeHtml(__('Search')) ?>"
-                    class="action search"
-                    aria-label="Search"
+                        title="<?= $escaper->escapeHtml(__('Search')) ?>"
+                        class="action search"
+                        aria-label="Search"
                 >
-                    <span><?= $block->escapeHtml(__('Search')) ?></span>
+                    <span><?= $escaper->escapeHtml(__('Search')) ?></span>
                 </button>
             </div>
         </form>

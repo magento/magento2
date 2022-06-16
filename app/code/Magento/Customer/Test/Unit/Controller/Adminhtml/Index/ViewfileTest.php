@@ -177,7 +177,7 @@ class ViewfileTest extends TestCase
         $stat = ['size' => 10, 'mtime' => 10];
 
         $this->requestMock->expects($this->any())->method('getParam')
-            ->willReturnMap([['file', null, null], ['image', null, $decodedFile]]);
+            ->willReturnMap([['file', '', ''], ['image', '', $decodedFile]]);
 
         $this->directoryMock->expects($this->once())->method('getAbsolutePath')->with($fileName)->willReturn($path);
         $this->directoryMock->expects($this->once())->method('stat')->with($fileName)->willReturn($stat);
@@ -257,11 +257,7 @@ class ViewfileTest extends TestCase
 
         $this->urlDecoderMock->expects($this->once())->method('decode')->with($decodedFile)->willReturn($file);
         $fileFactoryMock = $this->createMock(
-            FileFactory::class,
-            [],
-            [],
-            '',
-            false
+            FileFactory::class
         );
 
         $controller = $this->objectManager->getObject(

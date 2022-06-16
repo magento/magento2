@@ -18,18 +18,24 @@
             <severity value="MAJOR"/>
             <group value="backend"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{MinifyJavaScriptFilesEnableConfigData.path}} {{MinifyJavaScriptFilesEnableConfigData.value}}" stepKey="enableJsMinification"/>
-            <magentoCLI command="cache:clean config" stepKey="cleanCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+            <magentoCLI command="setup:static-content:deploy -f" stepKey="deployStaticContent"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <magentoCLI command="config:set {{MinifyJavaScriptFilesDisableConfigData.path}} {{MinifyJavaScriptFilesDisableConfigData.value}}" stepKey="disableJsMinification"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <see userInput="Dashboard" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeDashboardTitle"/>
         <waitForPageLoad stepKey="waitForPageLoadOnDashboard"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeDashboardTitle">
+            <argument name="value" value="Dashboard"/>
+        </actionGroup>
         <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="loggedInSuccessfully"/>
         <actionGroup ref="AssertAdminPageIsNot404ActionGroup" stepKey="dontSee404Page"/>
     </test>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyFieldToFilterOnOrdersGridTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Github issue: #28385 Resolve issue with filter visibility with column visibility in grid"/>
+            <title value="Verify field to filter"/>
+            <description value="Verify not appear fields to filter on Orders grid if it disables in columns dropdown."/>
+            <severity value="MAJOR"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin" />
+        </before>
+
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout" />
+        </after>
+
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="goToOrders"/>
+        <actionGroup ref="AdminSelectFieldToColumnActionGroup" stepKey="unSelectPurchasePoint" />
+        <click selector="{{AdminOrdersGridSection.filters}}" stepKey="openColumnsDropdown" />
+        <dontSeeElement selector="{{AdminOrdersGridSection.purchasePoint}}" stepKey="dontSeeElement"/>
+
+        <click selector="{{AdminOrdersGridSection.filters}}" stepKey="closeColumnsDropdown" />
+        <actionGroup ref="AdminSelectFieldToColumnActionGroup" stepKey="selectPurchasePoint" />
+        <click selector="{{AdminOrdersGridSection.filters}}" stepKey="openColumnsDropdown2" />
+        <seeElement selector="{{AdminOrdersGridSection.purchasePoint}}" stepKey="seeElement"/>
+    </test>
+</tests>

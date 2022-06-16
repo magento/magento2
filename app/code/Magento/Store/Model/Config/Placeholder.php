@@ -84,7 +84,7 @@ class Placeholder
     /**
      * Process array data recursively
      *
-     * @deprecated This method isn't used in process() implementation anymore
+     * @deprecated 101.0.4 This method isn't used in process() implementation anymore
      *
      * @param array &$data
      * @param string $path
@@ -164,7 +164,7 @@ class Placeholder
      */
     protected function _getValue($path, array $data)
     {
-        $keys = explode('/', $path);
+        $keys = explode('/', (string)$path);
         foreach ($keys as $key) {
             if (is_array($data) && (isset($data[$key]) || array_key_exists($key, $data))) {
                 $data = $data[$key];
@@ -178,7 +178,7 @@ class Placeholder
     /**
      * Set array value by path
      *
-     * @deprecated This method isn't used in process() implementation anymore
+     * @deprecated 101.0.4 This method isn't used in process() implementation anymore
      *
      * @param array &$container
      * @param string $path
@@ -187,7 +187,7 @@ class Placeholder
      */
     protected function _setValue(array &$container, $path, $value)
     {
-        $segments       = explode('/', $path);
+        $segments       = explode('/', (string)$path);
         $currentPointer = &$container;
         foreach ($segments as $segment) {
             if (!isset($currentPointer[$segment])) {

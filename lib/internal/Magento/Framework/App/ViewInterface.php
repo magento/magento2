@@ -10,8 +10,9 @@ namespace Magento\Framework\App;
  * Later replaced with Magento\Framework\View\Result component
  *
  * @api
- * @deprecated 100.2.0
+ * @deprecated 101.0.0
  * @see \Magento\Framework\View\Result\Layout
+ * @since 100.0.2
  */
 interface ViewInterface
 {

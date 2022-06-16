@@ -91,6 +91,9 @@ class UtilityTest extends TestCase
      */
     protected $priceCurrency;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->usageFactory = $this->createPartialMock(
@@ -165,8 +168,10 @@ class UtilityTest extends TestCase
 
     /**
      * Check rule for specific address
+     *
+     * @return void
      */
-    public function testCanProcessRuleValidAddress()
+    public function testCanProcessRuleValidAddress(): void
     {
         $this->rule->expects($this->once())
             ->method('hasIsValidForAddress')
@@ -184,8 +189,10 @@ class UtilityTest extends TestCase
 
     /**
      * Check coupon entire usage limit
+     *
+     * @return void
      */
-    public function testCanProcessRuleCouponUsageLimitFail()
+    public function testCanProcessRuleCouponUsageLimitFail(): void
     {
         $couponCode = 111;
         $couponId = 4;
@@ -219,8 +226,10 @@ class UtilityTest extends TestCase
 
     /**
      * Check coupon per customer usage limit
+     *
+     * @return void
      */
-    public function testCanProcessRuleCouponUsagePerCustomerFail()
+    public function testCanProcessRuleCouponUsagePerCustomerFail(): void
     {
         $couponCode = 111;
         $couponId = 4;
@@ -264,8 +273,10 @@ class UtilityTest extends TestCase
 
     /**
      * Check rule per customer usage limit
+     *
+     * @return void
      */
-    public function testCanProcessRuleUsagePerCustomer()
+    public function testCanProcessRuleUsagePerCustomer(): void
     {
         $customerId = 1;
         $usageLimit = 1;
@@ -288,8 +299,10 @@ class UtilityTest extends TestCase
 
     /**
      * Quote does not meet rule's conditions
+     *
+     * @return void
      */
-    public function testCanProcessRuleInvalidConditions()
+    public function testCanProcessRuleInvalidConditions(): void
     {
         $this->rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
         $this->assertFalse($this->utility->canProcessRule($this->rule, $this->address));
@@ -297,8 +310,10 @@ class UtilityTest extends TestCase
 
     /**
      * Quote does not meet rule's conditions
+     *
+     * @return void
      */
-    public function testCanProcessRule()
+    public function testCanProcessRule(): void
     {
         $this->rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
         $this->rule->expects($this->once())
@@ -307,13 +322,19 @@ class UtilityTest extends TestCase
         $this->assertTrue($this->utility->canProcessRule($this->rule, $this->address));
     }
 
-    public function testGetItemPrice()
+    /**
+     * @return void
+     */
+    public function testGetItemPrice(): void
     {
         $price = $this->getItemPrice();
         $this->assertEquals($price, $this->utility->getItemPrice($this->item));
     }
 
-    public function testGetItemPriceNull()
+    /**
+     * @return void
+     */
+    public function testGetItemPriceNull(): void
     {
         $price = 4;
 
@@ -326,13 +347,19 @@ class UtilityTest extends TestCase
         $this->assertEquals($price, $this->utility->getItemPrice($this->item));
     }
 
-    public function testGetItemBasePrice()
+    /**
+     * @return void
+     */
+    public function testGetItemBasePrice(): void
     {
         $price = $this->getItemBasePrice();
         $this->assertEquals($price, $this->utility->getItemBasePrice($this->item));
     }
 
-    public function testGetBaseItemPriceCalculation()
+    /**
+     * @return void
+     */
+    public function testGetBaseItemPriceCalculation(): void
     {
         $calcPrice = 5;
         $this->item->expects($this->once())
@@ -344,7 +371,10 @@ class UtilityTest extends TestCase
         $this->assertEquals($calcPrice, $this->utility->getItemBasePrice($this->item));
     }
 
-    public function testGetItemQtyMin()
+    /**
+     * @return void
+     */
+    public function testGetItemQtyMin(): void
     {
         $qty = 7;
         $discountQty = 4;
@@ -357,7 +387,10 @@ class UtilityTest extends TestCase
         $this->assertEquals(min($discountQty, $qty), $this->utility->getItemQty($this->item, $this->rule));
     }
 
-    public function testGetItemQty()
+    /**
+     * @return void
+     */
+    public function testGetItemQty(): void
     {
         $qty = 7;
         $this->item->expects($this->once())
@@ -370,14 +403,15 @@ class UtilityTest extends TestCase
     }
 
     /**
-     * @dataProvider mergeIdsDataProvider
-     *
-     * @param [] $a1
-     * @param [] $a2
+     * @param mixed $a1
+     * @param mixed $a2
      * @param bool $isSting
-     * @param [] $expected
+     * @param mixed $expected
+     *
+     * @return void
+     * @dataProvider mergeIdsDataProvider
      */
-    public function testMergeIds($a1, $a2, $isSting, $expected)
+    public function testMergeIds($a1, $a2, bool $isSting, $expected): void
     {
         $this->assertEquals($expected, $this->utility->mergeIds($a1, $a2, $isSting));
     }
@@ -385,7 +419,7 @@ class UtilityTest extends TestCase
     /**
      * @return array
      */
-    public function mergeIdsDataProvider()
+    public function mergeIdsDataProvider(): array
     {
         return [
             ['id1,id2', '', true, 'id1,id2'],
@@ -397,7 +431,10 @@ class UtilityTest extends TestCase
         ];
     }
 
-    public function testMinFix()
+    /**
+     * @return void
+     */
+    public function testMinFix(): void
     {
         $qty = 13;
         $amount = 10;
@@ -428,7 +465,7 @@ class UtilityTest extends TestCase
     /**
      * @return int
      */
-    protected function getItemPrice()
+    protected function getItemPrice(): int
     {
         $price = 4;
         $calcPrice = 5;
@@ -445,7 +482,7 @@ class UtilityTest extends TestCase
     /**
      * @return int
      */
-    protected function getItemBasePrice()
+    protected function getItemBasePrice(): int
     {
         $price = 4;
         $calcPrice = 5;
@@ -458,11 +495,16 @@ class UtilityTest extends TestCase
         return $price;
     }
 
-    public function testDeltaRoundignFix()
+    /**
+     * @dataProvider deltaRoundingFixDataProvider
+     * @param $discountAmount
+     * @param $baseDiscountAmount
+     * @param $percent
+     * @param $rowTotal
+     * @return void
+     */
+    public function testDeltaRoundignFix($discountAmount, $baseDiscountAmount, $percent, $rowTotal): void
     {
-        $discountAmount = 10.003;
-        $baseDiscountAmount = 12.465;
-        $percent = 15;
         $roundedDiscount = round($discountAmount, 2);
         $roundedBaseDiscount = round($baseDiscountAmount, 2);
         $delta = $discountAmount - $roundedDiscount;
@@ -482,7 +524,7 @@ class UtilityTest extends TestCase
                     [$discountAmount, $roundedDiscount],
                     [$baseDiscountAmount, $roundedBaseDiscount],
                     [$discountAmount + $delta, $secondRoundedDiscount], //?
-                    [$baseDiscountAmount + $baseDelta, $secondRoundedBaseDiscount], //?
+                    [$baseDiscountAmount + $baseDelta, $secondRoundedBaseDiscount] //?
                 ]
             );
 
@@ -491,41 +533,34 @@ class UtilityTest extends TestCase
             ->willReturn($store);
 
         $this->item->setDiscountPercent($percent);
+        $this->item->setRowTotal($rowTotal);
 
         $discountData = $this->createMock(Data::class);
-        $discountData->expects($this->at(0))
-            ->method('getAmount')
-            ->willReturn($discountAmount);
-        $discountData->expects($this->at(1))
-            ->method('getBaseAmount')
-            ->willReturn($baseDiscountAmount);
 
-        $discountData->expects($this->at(2))
-            ->method('setAmount')
-            ->with($roundedDiscount);
-        $discountData->expects($this->at(3))
-            ->method('setBaseAmount')
-            ->with($roundedBaseDiscount);
+        $discountData->method('getAmount')
+            ->willReturnOnConsecutiveCalls($discountAmount, $discountAmount);
+        $discountData->method('setBaseAmount')
+            ->withConsecutive([$roundedBaseDiscount], [$secondRoundedBaseDiscount]);
+        $discountData->method('setAmount')
+            ->withConsecutive([$roundedDiscount], [$secondRoundedDiscount]);
+        $discountData->method('getBaseAmount')
+            ->willReturnOnConsecutiveCalls($baseDiscountAmount, $baseDiscountAmount);
 
-        $discountData->expects($this->at(4))
-            ->method('getAmount')
-            ->willReturn($discountAmount);
-        $discountData->expects($this->at(5))
-            ->method('getBaseAmount')
-            ->willReturn($baseDiscountAmount);
-
-        $discountData->expects($this->at(6))
-            ->method('setAmount')
-            ->with($secondRoundedDiscount);
-        $discountData->expects($this->at(7))
-            ->method('setBaseAmount')
-            ->with($secondRoundedBaseDiscount);
-
-        $this->assertEquals($this->utility, $this->utility->deltaRoundingFix($discountData, $this->item));
         $this->assertEquals($this->utility, $this->utility->deltaRoundingFix($discountData, $this->item));
     }
 
-    public function testResetRoundingDeltas()
+    public function deltaRoundingFixDataProvider()
+    {
+        return [
+            ['discountAmount' => 10.003, 'baseDiscountAmount' => 12.465, 'percent' => 15, 'rowTotal' => 100],
+            ['discountAmount' => 5.0015, 'baseDiscountAmount' => 6.2325, 'percent' => 7.5, 'rowTotal' => 100],
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testResetRoundingDeltas(): void
     {
         $this->assertNull($this->utility->resetRoundingDeltas());
     }

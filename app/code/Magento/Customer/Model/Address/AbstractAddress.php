@@ -40,9 +40,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     /**
      * Possible customer address types
      */
-    const TYPE_BILLING = 'billing';
+    public const TYPE_BILLING = 'billing';
 
-    const TYPE_SHIPPING = 'shipping';
+    public const TYPE_SHIPPING = 'shipping';
 
     /**
      * Prefix of model events
@@ -73,8 +73,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     protected static $_regionModels = [];
 
     /**
-     * Directory data
-     *
      * @var \Magento\Directory\Helper\Data
      */
     protected $_directoryData = null;
@@ -241,7 +239,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     public function getStreetFull()
     {
         $street = $this->getData('street');
-        return is_array($street) ? implode("\n", $street) : $street;
+        return is_array($street) ? implode("\n", $street) : ($street ?? '');
     }
 
     /**
@@ -331,10 +329,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
                 return '';
             }
 
-            $isScalar = false;
+            $isScalar = true;
             foreach ($value as $val) {
-                if (is_scalar($val)) {
-                    $isScalar = true;
+                if (!is_scalar($val)) {
+                    $isScalar = false;
+                    break;
                 }
             }
             if ($isScalar) {
@@ -632,7 +631,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Unset Region from address
      *
      * @return $this
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function unsRegion()
     {
@@ -644,7 +643,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function isCompanyRequired()
     {
@@ -656,7 +655,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function isTelephoneRequired()
     {
@@ -668,7 +667,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function isFaxRequired()
     {

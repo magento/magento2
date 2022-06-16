@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontLoginAsCustomerBannerPresentOnAllPagesInSessionTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Notification banner appears on all pages in session"/>
+            <title value="Verify banner is persistent and appears during all page views in session"/>
+            <description value="Banner is persistent and appears on all pages in session"/>
+            <severity value="CRITICAL"/>
+            <group value="login_as_customer"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushConfigCache"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <closeTab stepKey="closeLoginAsCustomerTab"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Customer Log Out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushConfigCache"/>
+        </after>
+
+        <!-- Admin Login as Customer from Customer page and assert notification banner -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup" stepKey="loginAsCustomerFromCustomerPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBanner">
+            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
+        </actionGroup>
+
+        <!-- Go to Wishlist and assert notification banner -->
+        <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="amOnWishListPage"/>
+        <waitForPageLoad stepKey="waitForWishlistPageLoad"/>
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnWishList">
+            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
+        </actionGroup>
+
+        <!-- Go to category page and assert notification banner -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage"/>
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnCategoryPage">
+            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
+        </actionGroup>
+
+        <!-- Go to product page and assert notification banner -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrlKey" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnProductPage">
+            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
+        </actionGroup>
+
+        <!-- Add product to cart and assert notification banner -->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCartPage"/>
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnCartPage">
+            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
+        </actionGroup>
+
+        <!-- Proceed to checkout and assert notification banner -->
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnCheckoutPage">
+            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
+        </actionGroup>
+
+        <!-- Assert notification banner before place order -->
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <comment userInput="BIC workaround" stepKey="waitForNextButton"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <comment userInput="BIC workaround" stepKey="waitForLoadingMaskAfterClickNext"/>
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerBeforePlaceOrder">
+            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
+        </actionGroup>
+
+        <!-- Assert notification banner after place order -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerAfterPlaceOrder">
+            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
+        </actionGroup>
+    </test>
+</tests>

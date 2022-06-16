@@ -88,7 +88,7 @@ class Data extends AbstractHelper
     /**
      * Prepare array with periods for dashboard graphs
      *
-     * @deprecated periods were moved to it's own class
+     * @deprecated 102.0.0 periods were moved to it's own class
      * @see Period::getDatePeriods()
      *
      * @return array

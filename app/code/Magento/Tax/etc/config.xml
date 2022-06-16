@@ -49,7 +49,7 @@
                 <zero_tax>0</zero_tax>
             </sales_display>
             <notification>
-                <info_url>https://docs.magento.com/m2/ce/user_guide/tax/warning-messages.html</info_url>
+                <info_url>https://docs.magento.com/user-guide/tax/warning-messages.html</info_url>
             </notification>
         </tax>
     </default>

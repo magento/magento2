@@ -117,6 +117,8 @@
     <preference for="Magento\Sales\Api\RefundInvoiceInterface" type="Magento\Sales\Model\RefundInvoice"/>
     <preference for="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider" />
     <preference for="Magento\Sales\Model\ConfigInterface" type="Magento\Sales\Model\Config" />
+    <preference for="Magento\Sales\Model\Order\Shipment\ShipmentItemsValidatorInterface" type="Magento\Sales\Model\Order\Shipment\ShipmentItemsValidator" />
+    <preference for="Magento\Sales\Model\OrderMutexInterface" type="Magento\Sales\Model\OrderMutex"/>
     <type name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
         <arguments>
             <argument name="providers" xsi:type="array">
@@ -213,6 +215,11 @@
             <argument name="dataProviders" xsi:type="array">
                 <item name="order_status" xsi:type="string">Magento\Sales\Model\Rss\OrderStatus</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\EmailSenderHandler">
+        <arguments>
+            <argument name="modifyStartFromDate" xsi:type="string">-1 day</argument>
         </arguments>
     </type>
     <virtualType name="SalesOrderIndexGridSyncRemove" type="Magento\Sales\Observer\GridSyncRemoveObserver">
@@ -1019,6 +1026,16 @@
     <type name="Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityChecker">
         <arguments>
             <argument name="productAvailabilityChecks" xsi:type="array" />
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\StatusLabel">
+        <arguments>
+            <argument name="maskStatusesMapping" xsi:type="array">
+                <item name="frontend" xsi:type="array">
+                    <item name="fraud" xsi:type="const">Magento\Sales\Model\Order::STATUS_FRAUD</item>
+                    <item name="payment_review" xsi:type="const">Magento\Sales\Model\Order::STATE_PROCESSING</item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>

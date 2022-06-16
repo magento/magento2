@@ -13,6 +13,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Interface for asset's keywords aggregation
  * @api
+ * @since 101.0.0
  */
 interface AssetKeywordsInterface extends ExtensibleDataInterface
 {
@@ -20,6 +21,7 @@ interface AssetKeywordsInterface extends ExtensibleDataInterface
      * Get ID
      *
      * @return int
+     * @since 101.0.0
      */
     public function getAssetId(): int;
 
@@ -27,6 +29,7 @@ interface AssetKeywordsInterface extends ExtensibleDataInterface
      * Get the keyword
      *
      * @return KeywordInterface[]
+     * @since 101.0.0
      */
     public function getKeywords(): array;
 
@@ -34,6 +37,7 @@ interface AssetKeywordsInterface extends ExtensibleDataInterface
      * Get extension attributes
      *
      * @return \Magento\MediaGalleryApi\Api\Data\AssetKeywordsExtensionInterface|null
+     * @since 101.0.0
      */
     public function getExtensionAttributes(): ?AssetKeywordsExtensionInterface;
 
@@ -42,6 +46,7 @@ interface AssetKeywordsInterface extends ExtensibleDataInterface
      *
      * @param \Magento\MediaGalleryApi\Api\Data\AssetKeywordsExtensionInterface|null $extensionAttributes
      * @return void
+     * @since 101.0.0
      */
     public function setExtensionAttributes(?AssetKeywordsExtensionInterface $extensionAttributes): void;
 }

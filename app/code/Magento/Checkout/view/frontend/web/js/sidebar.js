@@ -42,7 +42,6 @@ define([
         update: function () {
             $(this.options.targetElement).trigger('contentUpdated');
             this._calcHeight();
-            this._isOverflowed();
         },
 
         /**
@@ -135,23 +134,6 @@ define([
 
             this._on(this.element, events);
             this._calcHeight();
-            this._isOverflowed();
-        },
-
-        /**
-         * Add 'overflowed' class to minicart items wrapper element
-         *
-         * @private
-         */
-        _isOverflowed: function () {
-            var list = $(this.options.minicart.list),
-                cssOverflowClass = 'overflowed';
-
-            if (this.scrollHeight > list.innerHeight()) {
-                list.parent().addClass(cssOverflowClass);
-            } else {
-                list.parent().removeClass(cssOverflowClass);
-            }
         },
 
         /**

@@ -73,6 +73,7 @@ class ElasticsearchTest extends TestCase
                     'delete',
                     'putMapping',
                     'deleteMapping',
+                    'getMapping',
                     'stats',
                     'updateAliases',
                     'existsAlias',
@@ -606,6 +607,22 @@ class ElasticsearchTest extends TestCase
             'indexName',
             'product'
         );
+    }
+
+    /**
+     * Test get Elasticsearch mapping process.
+     *
+     * @return void
+     */
+    public function testGetMapping(): void
+    {
+        $params = ['index' => 'indexName'];
+        $this->indicesMock->expects($this->once())
+            ->method('getMapping')
+            ->with($params)
+            ->willReturn([]);
+
+        $this->model->getMapping($params);
     }
 
     /**

@@ -6,8 +6,8 @@
 var config = {
     deps: [],
     shim: {
-        'chartjs/Chart.min': ['moment'],
-        'tiny_mce_4/tinymce.min': {
+        'chartjs/chartjs-adapter-moment': ['moment'],
+        'tiny_mce_5/tinymce.min': {
             exports: 'tinyMCE'
         }
     },
@@ -26,34 +26,9 @@ var config = {
             uiLayout:       'Magento_Ui/js/core/renderer/layout',
             buttonAdapter:  'Magento_Ui/js/form/button-adapter',
             chartJs:        'chartjs/Chart.min',
-            tinymce4:       'tiny_mce_4/tinymce.min',
-            wysiwygAdapter: 'mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter'
+            'chart.js':     'chartjs/Chart.min',
+            tinymce:        'tiny_mce_5/tinymce.min',
+            wysiwygAdapter: 'mage/adminhtml/wysiwyg/tiny_mce/tinymce5Adapter'
         }
     }
 };
-
-/**
- * Adds polyfills only for browser contexts which prevents bundlers from including them.
- */
-if (typeof window !== 'undefined' && window.document) {
-    /**
-     * Polyfill Map and WeakMap for older browsers that do not support them.
-     */
-    if (typeof Map === 'undefined' || typeof WeakMap === 'undefined') {
-        config.deps.push('es6-collections');
-    }
-
-    /**
-     * Polyfill MutationObserver only for the browsers that do not support it.
-     */
-    if (typeof MutationObserver === 'undefined') {
-        config.deps.push('MutationObserver');
-    }
-
-    /**
-     * Polyfill FormData object for old browsers that don't have full support for it.
-     */
-    if (typeof FormData === 'undefined' || typeof FormData.prototype.get === 'undefined') {
-        config.deps.push('FormData');
-    }
-}

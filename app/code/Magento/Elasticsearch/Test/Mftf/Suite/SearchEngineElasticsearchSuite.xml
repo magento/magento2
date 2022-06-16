@@ -9,8 +9,13 @@
     <suite name="SearchEngineElasticsearchSuite">
         <before>
             <magentoCLI stepKey="setSearchEngineToElasticsearch" command="config:set {{SearchEngineElasticsearchConfigData.path}} {{SearchEngineElasticsearchConfigData.value}}"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after></after>
         <include>

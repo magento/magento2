@@ -13,6 +13,7 @@ namespace Magento\Framework;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Event extends \Magento\Framework\DataObject
 {

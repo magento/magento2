@@ -121,9 +121,9 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block implements HttpPostAc
 
         if ($redirect ==='continue') {
             $resultRedirect->setPath('*/*/edit', ['block_id' => $model->getId()]);
-        } else if ($redirect === 'close') {
+        } elseif ($redirect === 'close') {
             $resultRedirect->setPath('*/*/');
-        } else if ($redirect === 'duplicate') {
+        } elseif ($redirect === 'duplicate') {
             $duplicateModel = $this->blockFactory->create(['data' => $data]);
             $duplicateModel->setId(null);
             $duplicateModel->setIdentifier($data['identifier'] . '-' . uniqid());

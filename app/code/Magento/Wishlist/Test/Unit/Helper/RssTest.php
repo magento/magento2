@@ -73,11 +73,14 @@ class RssTest extends TestCase
      */
     protected $scopeConfigMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->wishlistFactoryMock = $this->getMockBuilder(WishlistFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
@@ -88,7 +91,7 @@ class RssTest extends TestCase
 
         $this->customerFactoryMock = $this->getMockBuilder(CustomerInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->customerSessionMock = $this->getMockBuilder(Session::class)
@@ -117,12 +120,15 @@ class RssTest extends TestCase
                 'customerSession' => $this->customerSessionMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'moduleManager' => $this->moduleManagerMock,
-                'scopeConfig' => $this->scopeConfigMock,
+                'scopeConfig' => $this->scopeConfigMock
             ]
         );
     }
 
-    public function testGetWishlistWithWishlistId()
+    /**
+     * @return void
+     */
+    public function testGetWishlistWithWishlistId(): void
     {
         $wishlistId = 1;
 
@@ -148,7 +154,10 @@ class RssTest extends TestCase
         $this->assertSame($wishlist, $this->model->getWishlist());
     }
 
-    public function testGetWishlistWithCustomerId()
+    /**
+     * @return void
+     */
+    public function testGetWishlistWithCustomerId(): void
     {
         $customerId = 1;
         $data = $customerId . ',2';
@@ -160,19 +169,14 @@ class RssTest extends TestCase
             ->method('create')
             ->willReturn($wishlist);
 
-        $this->requestMock->expects($this->at(0))
-            ->method('getParam')
-            ->with('wishlist_id', null)
-            ->willReturn('');
-
         $this->urlDecoderMock->expects($this->any())
             ->method('decode')
             ->willReturnArgument(0);
 
-        $this->requestMock->expects($this->at(1))
+        $this->requestMock
             ->method('getParam')
-            ->with('data', null)
-            ->willReturn($data);
+            ->withConsecutive(['wishlist_id', null], ['data', null])
+            ->willReturnOnConsecutiveCalls('', $data);
 
         $this->customerSessionMock->expects($this->once())
             ->method('getCustomerId')
@@ -200,7 +204,10 @@ class RssTest extends TestCase
         $this->assertEquals($wishlist, $this->model->getWishlist());
     }
 
-    public function testGetCustomerWithSession()
+    /**
+     * @return void
+     */
+    public function testGetCustomerWithSession(): void
     {
         $customerId = 1;
         $data = $customerId . ',2';
@@ -239,10 +246,15 @@ class RssTest extends TestCase
      * @param bool $isModuleEnabled
      * @param bool $isWishlistActive
      * @param bool $result
+     *
+     * @return void
      * @dataProvider dataProviderIsRssAllow
      */
-    public function testIsRssAllow($isModuleEnabled, $isWishlistActive, $result)
-    {
+    public function testIsRssAllow(
+        bool $isModuleEnabled,
+        bool $isWishlistActive,
+        bool $result
+    ): void {
         $this->moduleManagerMock->expects($this->once())
             ->method('isEnabled')
             ->with('Magento_Rss')
@@ -259,13 +271,13 @@ class RssTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderIsRssAllow()
+    public function dataProviderIsRssAllow(): array
     {
         return [
             [false, false, false],
             [true, false, false],
             [false, true, false],
-            [true, true, true],
+            [true, true, true]
         ];
     }
 }

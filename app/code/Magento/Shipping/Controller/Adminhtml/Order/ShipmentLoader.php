@@ -18,9 +18,8 @@ use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 
 /**
- * Class ShipmentLoader
+ * Loader for shipment
  *
- * @package Magento\Shipping\Controller\Adminhtml\Order
  * @method ShipmentLoader setOrderId($id)
  * @method ShipmentLoader setShipmentId($id)
  * @method ShipmentLoader setShipment($shipment)
@@ -110,7 +109,12 @@ class ShipmentLoader extends DataObject
         $orderId = $this->getOrderId();
         $shipmentId = $this->getShipmentId();
         if ($shipmentId) {
-            $shipment = $this->shipmentRepository->get($shipmentId);
+            try {
+                $shipment = $this->shipmentRepository->get($shipmentId);
+            } catch (\Exception $e) {
+                $this->messageManager->addErrorMessage(__('This shipment no longer exists.'));
+                return false;
+            }
         } elseif ($orderId) {
             $order = $this->orderRepository->get($orderId);
 

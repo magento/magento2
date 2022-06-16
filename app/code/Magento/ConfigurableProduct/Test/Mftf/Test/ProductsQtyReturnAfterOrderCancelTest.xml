@@ -8,17 +8,21 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ProductsQtyReturnAfterOrderCancelTest">
+    <test name="ProductsQtyReturnAfterOrderCancelTest" deprecated="Use AdminCheckProductQtyAfterOrderCancellingTest instead">
 
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Cancel order"/>
-            <title value="Product quantity return after order cancel"/>
+            <title value="DEPRECATED. Product quantity return after order cancel"/>
             <description value="Check Product quantity return after order cancel"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-97228"/>
             <useCaseId value="MAGETWO-82221"/>
             <group value="ConfigurableProduct"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminCheckProductQtyAfterOrderCancellingTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -35,17 +39,18 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage1"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage1"/>
 
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
             <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="changeProductQuantity"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveChanges"/>
-        <waitForPageLoad stepKey="waitProductGridToBeLoaded"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="changeProductQuantity">
+            <argument name="productQty" value="100"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveChanges"/>
 
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="navigateToProductPage"/>
+        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="4" stepKey="fillQuantity"/>
 
@@ -71,8 +76,7 @@
         </actionGroup>
 
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
-        <waitForPageLoad stepKey="waitForNewInvoicePageLoad"/>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButton"/>
         <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="1" stepKey="ChangeQtyToInvoice"/>
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQuantity"/>
         <waitForPageLoad stepKey="waitPageToBeLoaded"/>
@@ -88,7 +92,7 @@
 
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Canceled 3" stepKey="seeCanceledQuantity"/>
 
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
 
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySku">
             <argument name="sku" value="$$createConfigProduct.sku$$"/>

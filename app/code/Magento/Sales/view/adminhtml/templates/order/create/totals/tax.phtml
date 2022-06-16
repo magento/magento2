@@ -4,56 +4,91 @@
  * See COPYING.txt for license details.
  */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
 // phpcs:disable Squiz.PHP.GlobalKeyword.NotAllowed
+/**
+ * @var \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Tax $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 
-/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Tax $block */
-
+/** @var \Magento\Tax\Helper\Data $taxHelper */
+$taxHelper = $block->getData('taxHelper');
 $taxAmount = $block->getTotal()->getValue();
 ?>
-<?php if (($taxAmount == 0 && $this->helper(\Magento\Tax\Helper\Data::class)->displayZeroTax()) || ($taxAmount > 0)) :
+<?php if (($taxAmount == 0 && $taxHelper->displayZeroTax()) || ($taxAmount > 0)):
     global $taxIter;
     $taxIter++;
     ?>
-    <?php $class = $block->escapeHtmlAttr("{$block->getTotal()->getCode()} " . ($this->helper(\Magento\Tax\Helper\Data::class)->displayFullSummary() ? 'summary-total' : '')); ?>
-    <tr<?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayFullSummary()) : ?>
-        onclick="expandDetails(this, '.summary-details-<?= $block->escapeJs($taxIter) ?>')"
-    <?php endif; ?>
+    <?php $class = $block->escapeHtmlAttr("{$block->getTotal()->getCode()} " . ($taxHelper->displayFullSummary() ?
+        'summary-total' : '')); ?>
+    <tr id="tax-summary-<?= $block->escapeHtmlAttr($taxIter) ?>"
         class="<?= /* @noEscape */ $class ?> row-totals">
-        <td style="<?= $block->escapeHtmlAttr($block->getTotal()->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
-            <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayFullSummary()) : ?>
+        <td class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+            <?php if ($taxHelper->displayFullSummary()): ?>
                 <div class="summary-collapse"><?= $block->escapeHtml($block->getTotal()->getTitle()) ?></div>
-            <?php else : ?>
+            <?php else: ?>
                 <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
             <?php endif;?>
         </td>
-        <td style="<?= $block->escapeHtmlAttr($block->getTotal()->getStyle()) ?>" class="admin__total-amount">
+        <td class="admin__total-amount">
             <?= /* @noEscape */ $block->formatPrice($block->getTotal()->getValue()) ?>
         </td>
     </tr>
-    <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayFullSummary()) : ?>
+    <?php if ($taxHelper->displayFullSummary()): ?>
+        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            "expandDetails(this, '.summary-details-" . $block->escapeJs($taxIter) ."')",
+            'tr#tax-summary-' . $block->escapeHtmlAttr($taxIter)
+        ) ?>
+    <?php endif; ?>
+    <?php if ($block->escapeHtmlAttr($block->getTotal()->getStyle())): ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+            $block->escapeHtmlAttr($block->getTotal()->getStyle()),
+            'tr#tax-summary td.admin__total-mark'
+        ) ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+            $block->escapeHtmlAttr($block->getTotal()->getStyle()),
+            'tr#tax-summary td.admin__total-amount'
+        ) ?>
+    <?php endif; ?>
+    <?php if ($taxHelper->displayFullSummary()): ?>
         <?php $isTop = 1; ?>
-        <?php foreach ($block->getTotal()->getFullInfo() as $info) : ?>
-            <?php if (isset($info['hidden']) && $info['hidden']) :
+        <?php foreach ($block->getTotal()->getFullInfo() as $info): ?>
+            <?php if (isset($info['hidden']) && $info['hidden']):
                 continue;
             endif; ?>
             <?php $percent = $info['percent']; ?>
             <?php $amount = $info['amount']; ?>
             <?php $rates = $info['rates']; ?>
 
-            <?php foreach ($rates as $rate) : ?>
-                <tr class="summary-details-<?= $block->escapeHtmlAttr($taxIter) ?> summary-details<?= ($isTop ? ' summary-details-first' : '') ?>" style="display:none;">
-                    <td class="admin__total-mark" style="<?= $block->escapeHtmlAttr($block->getTotal()->getStyle()) ?>" colspan="<?= (int) $block->getColspan() ?>">
+            <?php foreach ($rates as $rate): ?>
+                <tr id="tax-summary-details-<?= $block->escapeHtmlAttr($taxIter) ?>"
+                    class="summary-details-<?= $block->escapeHtmlAttr($taxIter) ?>
+                     summary-details<?= ($isTop ? ' summary-details-first' : '') ?>">
+                    <td class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
                         <?= $block->escapeHtml($rate['title']) ?>
-                        <?php if ($rate['percent'] !== null) : ?>
+                        <?php if ($rate['percent'] !== null): ?>
                             (<?= (float) $rate['percent'] ?>%)
                         <?php endif; ?>
                         <br />
                     </td>
-                    <td style="<?= $block->escapeHtmlAttr($block->getTotal()->getStyle()) ?>" class="admin__total-amount">
+                    <td class="admin__total-amount">
                         <?= /* @noEscape */ $block->formatPrice(($amount*(float)$rate['percent'])/$percent) ?>
                     </td>
                 </tr>
+                <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                    "display:none;",
+                    'tr#tax-summary-details-' . $block->escapeHtmlAttr($taxIter)
+                ) ?>
+                <?php if ($block->escapeHtmlAttr($block->getTotal()->getStyle())): ?>
+                    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                        $block->escapeHtmlAttr($block->getTotal()->getStyle()),
+                        'tr#tax-summary-details-' . $block->escapeHtmlAttr($taxIter) . ' td.admin__total-mark'
+                    ) ?>
+                    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                        $block->escapeHtmlAttr($block->getTotal()->getStyle()),
+                        'tr#tax-summary-details-' . $block->escapeHtmlAttr($taxIter) . ' td.admin__total-amount'
+                    ) ?>
+                <?php endif; ?>
                 <?php $isTop = 0; ?>
             <?php endforeach; ?>
         <?php endforeach; ?>

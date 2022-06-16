@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryViewDetailsDeleteImageTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/461"/>
+            <title value="Deleting an image from view details panel"/>
+            <stories value="[Story #42] User deletes images"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/4516773"/>
+            <description value="Deleting an image from view details panel"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+                <argument name="name" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
+            <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+                <argument name="name" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolder">
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteCreatedFolder"/>
+        </after>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+            <argument name="image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDetailsActionGroup" stepKey="verifyImageDetails">
+            <argument name="image" value="ImageMetadata"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryAssertImageDoesNotExistActionGroup" stepKey="assertImageDeleted">
+            <argument name="image" value="{{ImageMetadata.title}}"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -10,6 +10,7 @@ use Magento\Framework\Indexer\SaveHandler\IndexerInterface as SaveHandlerInterfa
 
 /**
  * @api Instantiate save handler when implementing custom Indexer\Action
+ * @since 100.0.2
  */
 class SaveHandlerFactory
 {

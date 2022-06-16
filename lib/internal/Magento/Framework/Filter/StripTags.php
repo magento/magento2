@@ -27,7 +27,7 @@ class StripTags implements \Zend_Filter_Interface
 
     /**
      * @param \Magento\Framework\Escaper $escaper
-     * @param null $allowableTags
+     * @param string|null $allowableTags
      * @param bool $escape
      */
     public function __construct(\Magento\Framework\Escaper $escaper, $allowableTags = null, $escape = false)
@@ -45,7 +45,7 @@ class StripTags implements \Zend_Filter_Interface
      */
     public function filter($value)
     {
-        $result = strip_tags($value, $this->allowableTags);
+        $result = strip_tags((string)$value, $this->allowableTags);
         return $this->escape ? $this->escaper->escapeHtml($result, $this->allowableTags) : $result;
     }
 }
