@@ -44,6 +44,8 @@ class Logger extends Monolog
     }
 
     /**
+     * Clear messages
+     *
      * @return void
      */
     public function clearMessages(): void
@@ -52,6 +54,8 @@ class Logger extends Monolog
     }
 
     /**
+     * Get messages
+     *
      * @return array
      */
     public function getMessages(): array
@@ -65,7 +69,7 @@ class Logger extends Monolog
      * @param int $level The logging level
      * @param string $message The log message
      * @param array $context The log context
-     * @param DateTimeImmutable Optional log date to log into the past or future
+     * @param DateTimeImmutable $datetime Optional log date to log into the past or future
      * @return bool Whether the record has been processed
      */
     public function addRecord(
