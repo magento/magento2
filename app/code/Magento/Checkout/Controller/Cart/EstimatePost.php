@@ -63,8 +63,7 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
             ->setCity($city)
             ->setPostcode($postcode)
             ->setRegionId($regionId)
-            ->setRegion($region)
-            ->setCollectShippingRates(true);
+            ->setRegion($region);
         $this->cart->save();
         return $this->_goBack();
     }
