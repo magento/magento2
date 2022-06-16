@@ -499,6 +499,7 @@ class Translit implements \Zend_Filter_Interface
         'ৢ' => 'n',
         'ৣ' => 'nn',
         'ñ' => 'n',
+        'Ñ' => 'n',
     ];
 
     /**
