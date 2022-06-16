@@ -46,7 +46,7 @@ class ExcludeFilter extends \FilterIterator
         }
 
         foreach ($this->_filters as $filter) {
-            $filter = str_replace('\\', '/', $filter);
+            $filter = $filter !== null ? str_replace('\\', '/', $filter) : '';
             if (false !== strpos($current, $filter)) {
                 return false;
             }

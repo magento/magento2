@@ -79,7 +79,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
         Options::NO_HTML_MINIFY => false,
         Options::AREA => ['frontend'],
         Options::EXCLUDE_AREA => ['none'],
-        Options::THEME => ['Magento/zoom1', 'Magento/zoom2', 'Magento/zoom3'],
+        Options::THEME => ['Magento/zoom1', 'Magento/zoom2', 'Magento/zoom3', 'Vendor/parent', 'Vendor/child'],
         Options::EXCLUDE_THEME => ['none'],
         Options::LANGUAGE => ['en_US', 'fr_FR', 'pl_PL'],
         Options::EXCLUDE_LANGUAGE => ['none'],
@@ -147,7 +147,10 @@ class DeployTest extends \PHPUnit\Framework\TestCase
         $this->assertLessPreProcessor($actualFileContent);
         $this->assertCssUrlFixerPostProcessor($actualFileContent);
 
-        foreach (['Magento/zoom1', 'Magento/zoom2', 'Magento/zoom3'] as $theme) {
+        $actualFileContent = $this->staticDir->readFile('frontend/Vendor/child/default/css/styles-m.css');
+        $this->assertCssFromChildTheme($actualFileContent);
+
+        foreach (['Magento/zoom1', 'Magento/zoom2', 'Magento/zoom3', 'Vendor/parent', 'Vendor/child'] as $theme) {
             $this->assertBundleSize($theme);
             $this->assertExcluded($theme, $this->config->getExcludedFiles());
             $this->assertExcluded($theme, $this->config->getExcludedDir());
@@ -162,7 +165,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
      */
     private function assertFileExistsIsGenerated($fileName)
     {
-        foreach (['Magento/zoom1', 'Magento/zoom2', 'Magento/zoom3'] as $theme) {
+        foreach (['Magento/zoom1', 'Magento/zoom2', 'Magento/zoom3', 'Vendor/parent', 'Vendor/child'] as $theme) {
             foreach ($this->options[Options::LANGUAGE] as $locale) {
                 $this->assertFileExists(
                     $this->staticDir->getAbsolutePath(
@@ -211,6 +214,21 @@ class DeployTest extends \PHPUnit\Framework\TestCase
         //_testA is included from Magento/zoom3
         //_testB is included from Magento/zoom2
         $this->assertStringContainsString('color:#111', $actualRootCssContent);
+    }
+
+    /**
+     * Assert CSS from child post-processor
+     *
+     * @param $actualRootCssContent
+     * @return void
+     */
+    private function assertCssFromChildTheme($actualRootCssContent)
+    {
+        //assert CssUrlFixer fix urls
+        $this->assertStringContainsString(
+            'super-test-class-for-easy-find',
+            $actualRootCssContent
+        );
     }
 
     /**

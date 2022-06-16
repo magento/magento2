@@ -27,6 +27,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
                 <argument name="sku" value="{{BaseConfigurableProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute"/>
             <!-- Reindex after deleting product attribute -->
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
@@ -111,7 +112,10 @@
         </assertStringContainsString>
 
         <!-- Create a configurable product to verify the storefront with -->
-        <amOnPage url="{{AdminProductCreatePage.url(BaseConfigurableProduct.attribute_set_id, BaseConfigurableProduct.type_id)}}" stepKey="goToCreateConfigurableProduct"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateConfigurableProduct">
+            <argument name="attributeSetId" value="{{BaseConfigurableProduct.attribute_set_id}}"/>
+            <argument name="productType" value="{{BaseConfigurableProduct.type_id}}"/>
+        </actionGroup>
         <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
