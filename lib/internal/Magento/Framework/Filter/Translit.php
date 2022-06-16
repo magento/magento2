@@ -497,7 +497,8 @@ class Translit implements \Zend_Filter_Interface
         '্' => 'h',
         'ং' => 'ng',
         'ৢ' => 'n',
-        'ৣ' => 'nn'
+        'ৣ' => 'nn',
+        'ñ' => 'n',
     ];
 
     /**
