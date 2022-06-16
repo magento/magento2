@@ -218,7 +218,7 @@ define([
         applyBillingAddress: function () {
             var shippingAddress,
                 isBillingAddressInitialized;
-                  
+
             isBillingAddressInitialized = addressList.some(function (addressFromList) {
             if (addressFromList.isDefaultBilling()) {
                 selectBillingAddress(addressFromList);
