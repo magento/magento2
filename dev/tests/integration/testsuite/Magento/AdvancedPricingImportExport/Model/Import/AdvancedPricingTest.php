@@ -432,8 +432,11 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento\Catalog\Test\Fixture\SelectAttribute as:attr1
      * @magentoDataFixture Magento\Catalog\Test\Fixture\SelectAttribute as:attr2
+     *
+     * phpcs:disable Generic.Files.LineLength.TooLong
      * @magentoDataFixtureDataProvider {"attr1":{"attribute_code":"size","default_frontend_label":"Size","scope":"global","options":[28,29,30,31,32,33,34,36,38]}}
      * @magentoDataFixtureDataProvider {"attr2":{"attribute_code":"colors","default_frontend_label":"Colors","scope":"global","options":["Red","Green","Yellow","Blue","Orange"]}}
+     * phpcs:enable Generic.Files.LineLength.TooLong
      * @magentoAppArea adminhtml
      */
     public function testImportAddUpdateCounts()
