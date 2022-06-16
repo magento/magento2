@@ -8,7 +8,7 @@
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
     <route url="/V1/import/csv" method="POST">
-        <service class="Magento\AsynchronousImportCsvApi\Api\StartImportInterface" method="execute"/>
+        <service class="Magento\ImportCsvApi\Api\StartImportInterface" method="execute"/>
         <resources>
             <resource ref="anonymous"/>
         </resources>

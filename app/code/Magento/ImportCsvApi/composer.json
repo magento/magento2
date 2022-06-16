@@ -1,5 +1,5 @@
 {
-    "name": "magento/module-asynchronous-import-csv-api",
+    "name": "magento/module-import-csv-api",
     "description": "N/A",
     "require": {
         "php": "~7.4.0||~8.1.0",
@@ -15,7 +15,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\AsynchronousImportCsvApi\\": ""
+            "Magento\\ImportCsvApi\\": ""
         }
     }
 }

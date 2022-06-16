@@ -5,12 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AsynchronousImportCsvApi\Api;
+namespace Magento\ImportCsvApi\Api;
 
-use Magento\AsynchronousImportCsvApi\Api\Data\SourceDataInterface;
-use Magento\AsynchronousImportDataConvertingApi\Api\ApplyConvertingRulesException;
-use Magento\AsynchronousImportDataExchangingApi\Api\ImportDataExchangeException;
-use Magento\AsynchronousImportSourceDataRetrievingApi\Api\SourceDataRetrievingException;
+use Magento\ImportCsvApi\Api\Data\SourceDataInterface;
 use Magento\Framework\Validation\ValidationException;
 
 /**
@@ -26,9 +23,6 @@ interface StartImportInterface
      * @param SourceDataInterface $source Describes how to retrieve data from data source
      * @return array
      * @throws ValidationException
-     * @throws SourceDataRetrievingException
-     * @throws ApplyConvertingRulesException
-     * @throws ImportDataExchangeException
      */
     public function execute(
         SourceDataInterface $source

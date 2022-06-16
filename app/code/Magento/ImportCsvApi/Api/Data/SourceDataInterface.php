@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AsynchronousImportCsvApi\Api\Data;
+namespace Magento\ImportCsvApi\Api\Data;
 
 /**
  * Describes how to retrieve data from data source

@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AsynchronousImportCsv\Model;
+namespace Magento\ImportCsv\Model;
 
-use Magento\AsynchronousImportCsvApi\Api\Data\SourceDataInterface;
-use Magento\AsynchronousImportCsvApi\Api\StartImportInterface;
+use Magento\ImportCsvApi\Api\Data\SourceDataInterface;
+use Magento\ImportCsvApi\Api\StartImportInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\ImportExport\Model\Import;
