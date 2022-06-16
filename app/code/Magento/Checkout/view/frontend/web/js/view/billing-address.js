@@ -246,9 +246,7 @@ function (
          * @param {Boolean} force
          */
         updateAddresses: function (force) {
-            if (typeof force === "undefined"){
-                force = false;
-            }
+            force = !(typeof force === 'undefined' || force !== true)
 
             if (force
                 || window.checkoutConfig.reloadOnBillingAddress
