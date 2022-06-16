@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING¸.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontValidateConfigurableProductSwatchOptionToBePreSelectFromCartEditPageTest" extends="StorefrontConfigurableProductSwatchMinimumPriceProductPageTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Edit cart line item configurable product failed to Pre-select Production Option in 2.4.4"/>
+            <title value="Validate configurable product swatch option to be pre-select when user edit from cart edit page."/>
+            <description value="Validate configurable product swatch option to be pre-select when user edit from cart edit page."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value=""/>
+            <useCaseId value="ACP2E-891"/>
+            <group value="Swatches"/>
+        </annotations>
+        <remove keyForRemoval="amOnConfigurableProductPage"/>
+        <remove keyForRemoval="waitForConfigurableProductPage"/>
+        <remove keyForRemoval="assertProductPrice"/>
+        <remove keyForRemoval="assertMinimumPriceForBlackOption"/>
+        <remove keyForRemoval="assertMinimumPriceForWhiteOption"/>
+        <remove keyForRemoval="assertMinimumPriceForBlueOption"/>
+
+        <!-- Go to the edit page for the "color" attribute -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{ProductColorAttribute.attribute_code}}" stepKey="fillFilter"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearch"/>
+        <click selector="{{AdminProductAttributeGridSection.AttributeCode(ProductColorAttribute.attribute_code)}}" stepKey="clickRowToEdit"/>
+
+        <!-- Change to visual swatches -->
+        <selectOption selector="{{AdminNewAttributePanel.inputType}}" userInput="swatch_visual" stepKey="selectVisualSwatch"/>
+
+        <!-- Set swatch #1 using the color picker -->
+        <actionGroup ref="OpenSwatchMenuAndChooseColorByIndexActionGroup" stepKey="clickSwatchAndChooseColor1">
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillHex1">
+            <argument name="nthColorPicker" value="1"/>
+            <argument name="hexColor" value="0a0a0a"/>
+        </actionGroup>
+        <!-- Set swatch #2 using the color picker -->
+        <actionGroup ref="OpenSwatchMenuAndChooseColorByIndexActionGroup" stepKey="clickSwatchAndChooseColor2">
+            <argument name="index" value="2"/>
+        </actionGroup>
+        <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillHex2">
+            <argument name="nthColorPicker" value="2"/>
+            <argument name="hexColor" value="ededf0"/>
+        </actionGroup>
+        <!-- Set swatch #3 using the color picker -->
+        <actionGroup ref="OpenSwatchMenuAndChooseColorByIndexActionGroup" stepKey="clickSwatchAndChooseColor3">
+            <argument name="index" value="3"/>
+        </actionGroup>
+        <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillHex3">
+            <argument name="nthColorPicker" value="3"/>
+            <argument name="hexColor" value="1138c2"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitToClickSave"/>
+
+        <!-- Save -->
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit1"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccess"/>
+
+        <!--Go to product page-->
+        <amOnPage url="{{StorefrontProductPage.url(_defaultProduct.urlKey)}}" stepKey="goToConfigurableProductPage"/>
+        <waitForPageLoad stepKey="waitForLoadConfigurableProductPage"/>
+
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectBlueOption">
+            <argument name="optionName" value="Blue"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAddProductWithSwatchesTextOptionToTheCartActionGroup" stepKey="addConfigurableProductToTheCart">
+            <argument name="productQty" value="1"/>
+            <argument name="product" value="ApiConfigurableProduct"/>
+            <argument name="productOption" value="Medium"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+
+        <actionGroup ref="StorefrontUpdateCartItemEditParametersProductActionGroup" stepKey="updateCartItem">
+            <argument name="rowNumber" value="1"/>
+        </actionGroup>
+
+        <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue('Blue')}}" userInput="Blue" stepKey="seeSwatchColorRemainsSelected"/>
+        <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue('Medium')}}" userInput="Medium" stepKey="seeSwatchSizeRemainsSelected"/>
+    </test>
+</tests>
