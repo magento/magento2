@@ -465,14 +465,19 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
         );
         $pathToFile = __DIR__ . '/_files/import_advanced_pricing_for_additional_attributes_products.csv';
-        $errors = $this->doImport($pathToFile, DirectoryList::ROOT, Import::BEHAVIOR_ADD_UPDATE, true);
+        $errors = $this->doImport($pathToFile, DirectoryList::ROOT, Import::BEHAVIOR_APPEND, true);
         $this->assertEquals(0, $errors->getErrorsCount(), 'Advanced pricing import validation error');
         $this->model->importData();
 
         $this->assertEquals(127, $this->model->getCreatedItemsCount(), 'Advance pricing create count1');
         $this->assertEquals(0, $this->model->getUpdatedItemsCount(), 'Advance pricing update count1');
 
-        $this->doImport($pathToFile, DirectoryList::ROOT, Import::BEHAVIOR_ADD_UPDATE);
+        // Initializing again, since old model object holds old count
+        // Import advance pricing data from CSV file
+        $this->model = $this->objectManager->create(
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
+        );
+        $this->doImport($pathToFile, DirectoryList::ROOT, Import::BEHAVIOR_APPEND);
         $this->assertEquals(0, $this->model->getCreatedItemsCount(), 'Advance pricing create count2');
         $this->assertEquals(127, $this->model->getUpdatedItemsCount(), 'Advance pricing update count2');
     }
