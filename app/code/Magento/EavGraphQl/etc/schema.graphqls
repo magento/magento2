@@ -19,6 +19,7 @@ type Attribute @doc(description: "Contains details about the attribute, includin
 }
 
 type StorefrontProperties @doc(description: "Indicates where an attribute can be displayed.") {
+    label: String @doc(description: "The frontend label of the attribute")
     use_in_product_listing: Boolean @doc(description: "Indicates whether the attribute is displayed in product listings.")
     position: Int @doc(description: "The relative position of the attribute in the layered navigation block.")
     visible_on_catalog_pages: Boolean @doc(description: "Indicates whether the attribute is displayed on product pages.")
