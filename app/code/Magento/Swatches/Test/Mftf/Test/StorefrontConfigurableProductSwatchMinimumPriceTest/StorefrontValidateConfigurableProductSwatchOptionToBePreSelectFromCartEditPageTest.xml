@@ -64,10 +64,6 @@
         <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit1"/>
         <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccess"/>
 
-        <!-- Re-index and cache clear -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
-
         <!--Go to product page-->
         <amOnPage url="{{StorefrontProductPage.url(_defaultProduct.urlKey)}}" stepKey="goToConfigurableProductPage"/>
         <waitForPageLoad stepKey="waitForLoadConfigurableProductPage"/>
@@ -87,6 +83,8 @@
         <actionGroup ref="StorefrontUpdateCartItemEditParametersProductActionGroup" stepKey="updateCartItem">
             <argument name="rowNumber" value="1"/>
         </actionGroup>
+
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.selectedSwatchValue('Blue')}}" time="30" stepKey="waitForElementSwatchColorVisible"/>
 
         <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue('Blue')}}" userInput="Blue" stepKey="seeSwatchColorRemainsSelected"/>
         <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue('Medium')}}" userInput="Medium" stepKey="seeSwatchSizeRemainsSelected"/>
