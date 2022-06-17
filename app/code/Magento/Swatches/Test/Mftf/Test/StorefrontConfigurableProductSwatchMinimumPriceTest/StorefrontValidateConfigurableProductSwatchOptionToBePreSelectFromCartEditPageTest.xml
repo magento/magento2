@@ -64,6 +64,10 @@
         <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit1"/>
         <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccess"/>
 
+        <!-- Re-index and cache clear -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
         <!--Go to product page-->
         <amOnPage url="{{StorefrontProductPage.url(_defaultProduct.urlKey)}}" stepKey="goToConfigurableProductPage"/>
         <waitForPageLoad stepKey="waitForLoadConfigurableProductPage"/>
