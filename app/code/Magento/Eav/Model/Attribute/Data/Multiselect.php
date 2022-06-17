@@ -53,7 +53,7 @@ class Multiselect extends \Magento\Eav\Model\Attribute\Data\Select
     {
         $values = $this->getEntity()->getData($this->getAttribute()->getAttributeCode());
         if (!is_array($values)) {
-            $values = explode(',', $values);
+            $values = $values !== null ? explode(',', $values) : [];
         }
 
         switch ($format) {

@@ -30,7 +30,9 @@ use PHPUnit\Framework\TestCase;
  */
 class SidebarTest extends TestCase
 {
-    /** @var ObjectManager  */
+    /**
+     * @var ObjectManager
+     */
     protected $_objectManager;
 
     /**
@@ -78,6 +80,9 @@ class SidebarTest extends TestCase
      */
     private $serializer;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->_objectManager = new ObjectManager($this);
@@ -123,12 +128,15 @@ class SidebarTest extends TestCase
         );
     }
 
-    public function testGetTotalsHtml()
+    /**
+     * @return void
+     */
+    public function testGetTotalsHtml(): void
     {
         $totalsHtml = "$134.36";
         $totalsBlockMock = $this->getMockBuilder(Price::class)
             ->disableOriginalConstructor()
-            ->setMethods(['toHtml'])
+            ->onlyMethods(['toHtml'])
             ->getMock();
 
         $totalsBlockMock->expects($this->once())
@@ -143,7 +151,10 @@ class SidebarTest extends TestCase
         $this->assertEquals($totalsHtml, $this->model->getTotalsHtml());
     }
 
-    public function testGetConfig()
+    /**
+     * @return void
+     */
+    public function testGetConfig(): void
     {
         $websiteId = 100;
         $storeMock = $this->createMock(Store::class);
@@ -186,26 +197,23 @@ class SidebarTest extends TestCase
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
 
-        $this->scopeConfigMock->expects($this->at(0))
+        $this->scopeConfigMock
             ->method('getValue')
-            ->with(
-                Sidebar::XML_PATH_CHECKOUT_SIDEBAR_COUNT,
-                ScopeInterface::SCOPE_STORE
-            )->willReturn(3);
-
-        $this->scopeConfigMock->expects($this->at(1))
-            ->method('getValue')
-            ->with(
-                'checkout/sidebar/max_items_display_count',
-                ScopeInterface::SCOPE_STORE
-            )->willReturn(8);
+            ->withConsecutive(
+                [Sidebar::XML_PATH_CHECKOUT_SIDEBAR_COUNT, ScopeInterface::SCOPE_STORE],
+                ['checkout/sidebar/max_items_display_count', ScopeInterface::SCOPE_STORE]
+            )
+            ->willReturnOnConsecutiveCalls(3, 8);
 
         $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
 
         $this->assertEquals($expectedResult, $this->model->getConfig());
     }
 
-    public function testGetIsNeedToDisplaySideBar()
+    /**
+     * @return void
+     */
+    public function testGetIsNeedToDisplaySideBar(): void
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
@@ -217,7 +225,10 @@ class SidebarTest extends TestCase
         $this->assertTrue($this->model->getIsNeedToDisplaySideBar());
     }
 
-    public function testGetTotalsCache()
+    /**
+     * @return void
+     */
+    public function testGetTotalsCache(): void
     {
         $quoteMock = $this->createMock(Quote::class);
         $totalsMock = ['totals'];

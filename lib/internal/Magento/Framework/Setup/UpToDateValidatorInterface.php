@@ -17,6 +17,8 @@ namespace Magento\Framework\Setup;
  *  - In Future (maybe): triggers, stored procedures, etc
  *
  * Old way implies, that each module has 2 components: data and schema
+ *
+ * @api
  */
 interface UpToDateValidatorInterface
 {

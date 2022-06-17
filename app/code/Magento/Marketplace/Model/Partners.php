@@ -36,6 +36,11 @@ class Partners
     protected $cache;
 
     /**
+     * @var UrlInterface
+     */
+    private $backendUrl;
+
+    /**
      * @param Curl $curl
      * @param Cache $cache
      * @param UrlInterface $backendUrl

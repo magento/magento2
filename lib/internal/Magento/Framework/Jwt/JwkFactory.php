@@ -753,7 +753,11 @@ class JwkFactory
     public function createNone(): Jwk
     {
         return new Jwk(
-
+            'none',
+            [],
+            null,
+            [Jwk::KEY_OP_SIGN, Jwk::KEY_OP_ENCRYPT],
+            'none'
         );
     }
 
@@ -781,7 +785,7 @@ class JwkFactory
     {
         $resource = openssl_get_privatekey($key, (string)$pass);
         $keyData = openssl_pkey_get_details($resource)['rsa'];
-        openssl_free_key($resource);
+        $this->freeResource($resource);
         $keysMap = [
             'n' => 'n',
             'e' => 'e',
@@ -817,7 +821,7 @@ class JwkFactory
     {
         $resource = openssl_get_publickey($key);
         $keyData = openssl_pkey_get_details($resource)['rsa'];
-        openssl_free_key($resource);
+        $this->freeResource($resource);
         $keysMap = [
             'n' => 'n',
             'e' => 'e'
@@ -853,7 +857,7 @@ class JwkFactory
     ): Jwk {
         $resource = openssl_get_privatekey($key, (string)$pass);
         $keyData = openssl_pkey_get_details($resource)['ec'];
-        openssl_free_key($resource);
+        $this->freeResource($resource);
         if (!array_key_exists($keyData['curve_oid'], self::EC_CURVE_MAP)) {
             throw new \RuntimeException('Unsupported EC curve');
         }
@@ -891,7 +895,7 @@ class JwkFactory
     ): Jwk {
         $resource = openssl_get_publickey($key);
         $keyData = openssl_pkey_get_details($resource)['ec'];
-        openssl_free_key($resource);
+        $this->freeResource($resource);
         if (!array_key_exists($keyData['curve_oid'], self::EC_CURVE_MAP)) {
             throw new \RuntimeException('Unsupported EC curve');
         }
@@ -944,5 +948,17 @@ class JwkFactory
         }
 
         return $value;
+    }
+
+    /**
+     * @param mixed $resource
+     *
+     * @return void
+     */
+    private function freeResource($resource): void
+    {
+        if (\is_resource($resource) && (version_compare(PHP_VERSION, '8.0') < 0)) {
+            openssl_free_key($resource);
+        }
     }
 }

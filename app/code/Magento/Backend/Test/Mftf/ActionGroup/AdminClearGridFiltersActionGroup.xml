@@ -13,7 +13,7 @@
             <description>Click the Clear filters on the grid.</description>
         </annotations>
 
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <waitForPageLoad stepKey="waitForPageLoaded"/>
     </actionGroup>
 </actionGroups>

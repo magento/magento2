@@ -152,7 +152,7 @@ define([
                 if (submitButton.length) {
                     submitButton.first().trigger('click');
                 } else {
-                    this.element.submit();
+                    this.element.trigger('submit');
                 }
             }
         }

@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogUrlRewrite\Plugin\Catalog\Model\Product;
 
 use Magento\Catalog\Model\Product\Action as ProductAction;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogUrlRewrite\Model\Products\AppendUrlRewritesToProducts;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Store\Api\StoreWebsiteRelationInterface;
@@ -27,9 +27,9 @@ class UpdateProductWebsiteUrlRewrites
     private $urlPersist;
 
     /**
-     * @var Collection
+     * @var CollectionFactory
      */
-    private $productCollection;
+    private $productCollectionFactory;
 
     /**
      * @var AppendUrlRewritesToProducts
@@ -43,18 +43,18 @@ class UpdateProductWebsiteUrlRewrites
 
     /**
      * @param UrlPersistInterface $urlPersist
-     * @param Collection $productCollection
+     * @param CollectionFactory $productCollectionFactory
      * @param AppendUrlRewritesToProducts $appendRewrites
      * @param GetStoresListByWebsiteIds $getStoresList
      */
     public function __construct(
         UrlPersistInterface $urlPersist,
-        Collection $productCollection,
+        CollectionFactory $productCollectionFactory,
         AppendUrlRewritesToProducts $appendRewrites,
         GetStoresListByWebsiteIds $getStoresList
     ) {
         $this->urlPersist = $urlPersist;
-        $this->productCollection = $productCollection;
+        $this->productCollectionFactory = $productCollectionFactory;
         $this->appendRewrites = $appendRewrites;
         $this->getStoresList = $getStoresList;
     }
@@ -90,8 +90,9 @@ class UpdateProductWebsiteUrlRewrites
                 ]
             );
         } else {
-            $collection = $this->productCollection->addFieldToFilter('entity_id', ['in' => implode(',', $productIds)]);
-            $this->appendRewrites->execute($collection->getItems(), $storeIds);
+            $productCollection = $this->productCollectionFactory->create();
+            $productCollection->addFieldToFilter('entity_id', ['in' => implode(',', $productIds)]);
+            $this->appendRewrites->execute($productCollection->getItems(), $storeIds);
         }
     }
 }

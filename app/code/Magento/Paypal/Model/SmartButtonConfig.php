@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Paypal\Model\Config as PaypalConfig;
 
 /**
  * Provides configuration values for PayPal in-context checkout
@@ -24,7 +25,7 @@ class SmartButtonConfig
     private $localeResolver;
 
     /**
-     * @var ConfigFactory
+     * @var Config
      */
     private $config;
 
@@ -39,53 +40,38 @@ class SmartButtonConfig
     private $scopeConfig;
 
     /**
-     * Maps the old checkout SDK configuration values to the current ones
-     * @var array
+     * @var SdkUrl
      */
-    private $disallowedFundingMap;
+    private $sdkUrl;
 
     /**
-     * These payment methods will be added as parameters to the SDK url to disable them.
-     * @var array
+     * @var PaypalConfig
      */
-    private $unsupportedPaymentMethods;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * Base url for Paypal SDK
-     */
-    private const BASE_URL = 'https://www.paypal.com/sdk/js?';
+    private $paypalConfig;
 
     /**
      * @param ResolverInterface $localeResolver
      * @param ConfigFactory $configFactory
      * @param ScopeConfigInterface $scopeConfig
-     * @param StoreManagerInterface $storeManager
+     * @param SdkUrl $sdkUrl
+     * @param PaypalConfig $paypalConfig
      * @param array $defaultStyles
-     * @param array $disallowedFundingMap
-     * @param array $unsupportedPaymentMethods
      */
     public function __construct(
         ResolverInterface $localeResolver,
         ConfigFactory $configFactory,
         ScopeConfigInterface $scopeConfig,
-        StoreManagerInterface $storeManager,
-        $defaultStyles = [],
-        $disallowedFundingMap = [],
-        $unsupportedPaymentMethods = []
+        SdkUrl $sdkUrl,
+        PaypalConfig $paypalConfig,
+        $defaultStyles = []
     ) {
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
         $this->config->setMethod(Config::METHOD_EXPRESS);
         $this->scopeConfig = $scopeConfig;
-        $this->storeManager = $storeManager;
         $this->defaultStyles = $defaultStyles;
-        $this->disallowedFundingMap = $disallowedFundingMap;
-        $this->unsupportedPaymentMethods = $unsupportedPaymentMethods;
+        $this->sdkUrl = $sdkUrl;
+        $this->paypalConfig = $paypalConfig;
     }
 
     /**
@@ -100,88 +86,15 @@ class SmartButtonConfig
             Data::XML_PATH_GUEST_CHECKOUT,
             ScopeInterface::SCOPE_STORE
         );
-
         return [
             'styles' => $this->getButtonStyles($page),
             'isVisibleOnProductPage'  => (bool)$this->config->getValue('visible_on_product'),
             'isGuestCheckoutAllowed'  => $isGuestCheckoutAllowed,
-            'sdkUrl' => $this->generatePaypalSdkUrl($page)
+            'sdkUrl' => $this->sdkUrl->getUrl(),
+            'dataAttributes' => [
+                'data-partner-attribution-id' => $this->paypalConfig->getBuildNotationCode()
+            ]
         ];
-    }
-
-    /**
-     * Generate the url to download the Paypal SDK
-     *
-     * @param string $page
-     *
-     * @return string
-     */
-    private function generatePaypalSdkUrl(string $page): string
-    {
-        $clientId = (int)$this->config->getValue('sandbox_flag') ?
-            $this->config->getValue('sandbox_client_id') : $this->config->getValue('client_id');
-        $disallowedFunding = implode(',', $this->getDisallowedFunding());
-
-        $commit = $page === 'checkout' ? 'true' : 'false';
-
-        $params =
-            [
-                'client-id' => $clientId,
-                'commit' => $commit,
-                'merchant-id' => $this->config->getValue('merchant_id'),
-                'locale' => $this->localeResolver->getLocale(),
-                'intent' => $this->getIntent(),
-                'currency' => $this->storeManager->getStore()->getBaseCurrencyCode(),
-            ];
-        if ($disallowedFunding) {
-            $params['disable-funding'] = $disallowedFunding;
-        }
-
-        return self::BASE_URL . http_build_query($params);
-    }
-
-    /**
-     * Return intent value from the configuration payment_action value
-     *
-     * @return string
-     */
-    private function getIntent(): string
-    {
-        $paymentAction = $this->config->getValue('paymentAction');
-        $mappedIntentValues = [
-            Config::PAYMENT_ACTION_AUTH => 'authorize',
-            Config::PAYMENT_ACTION_SALE => 'capture',
-            Config::PAYMENT_ACTION_ORDER => 'order'
-        ];
-        return $mappedIntentValues[$paymentAction];
-    }
-
-    /**
-     * Returns disallowed funding from configuration after updating values
-     *
-     * @return array
-     */
-    private function getDisallowedFunding(): array
-    {
-        $disallowedFunding = $this->config->getValue('disable_funding_options');
-        $result = $disallowedFunding ? explode(',', $disallowedFunding) : [];
-
-        // PayPal Guest Checkout Credit Card Icons only available when Guest Checkout option is enabled
-        if ($this->isPaypalGuestCheckoutAllowed() === false && !in_array('CARD', $result)) {
-            array_push($result, 'CARD');
-        }
-
-        // Map old configuration values to current ones
-        $result = array_map(function ($oldValue) {
-            return $this->disallowedFundingMap[$oldValue] ?? $oldValue;
-        },
-            $result);
-
-        //disable unsupported payment methods
-        $result = array_combine($result, $result);
-        $result = array_merge($result, $this->unsupportedPaymentMethods);
-
-        return $result;
     }
 
     /**
@@ -241,15 +154,5 @@ class SmartButtonConfig
         }
 
         return $styles;
-    }
-
-    /**
-     * Returns if is allowed PayPal Guest Checkout.
-     *
-     * @return bool
-     */
-    private function isPaypalGuestCheckoutAllowed(): bool
-    {
-        return $this->config->getValue('solution_type') === Config::EC_SOLUTION_TYPE_SOLE;
     }
 }

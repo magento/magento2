@@ -39,6 +39,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->auth = $this->objectManager->create(\Magento\Backend\Model\Auth::class);
         $this->authSession = $this->objectManager->create(\Magento\Backend\Model\Auth\Session::class);
+        $this->authSession->setUser($this->objectManager->create(\Magento\User\Model\User::class));
         $this->auth->setAuthStorage($this->authSession);
         $this->auth->logout();
     }

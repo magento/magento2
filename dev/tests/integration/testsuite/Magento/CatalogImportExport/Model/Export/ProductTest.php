@@ -9,7 +9,9 @@ declare(strict_types = 1);
 namespace Magento\CatalogImportExport\Model\Export;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
+use Magento\CatalogImportExport\Model\Export\Product\Type\Simple as SimpleProductType;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 
 /**
@@ -42,8 +44,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
-     * Stock item attributes which must be exported
-     *
      * @var array
      */
     public static $stockItemAttributes = [
@@ -132,7 +132,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $attribute = $eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'text_attribute');
         $attribute->setDefaultValue($attributeData);
         /** @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository */
-        $productAttributeRepository = $objectManager->get(\Magento\Catalog\Api\ProductAttributeRepositoryInterface::class);
+        $productAttributeRepository = $objectManager->get(
+            \Magento\Catalog\Api\ProductAttributeRepositoryInterface::class
+        );
         $productAttributeRepository->save($attribute);
         $product->setCustomAttribute('text_attribute', $attribute->getDefaultValue());
         $productRepository->save($product);
@@ -154,14 +156,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'json' => [
-                '{"type": "basic", "unit": "inch", "sign": "(\")", "size": "1.5\""}',
-                '"text_attribute={""type"": ""basic"", ""unit"": ""inch"", ""sign"": ""(\"")"", ""size"": ""1.5\""""}"'
+                '{"type": "basic", "unit": "inch", "sign": "(")", "size": "1.5""}',
+                '"text_attribute={""type"": ""basic"", ""unit"": ""inch"", ""sign"": ""("")"", ""size"": ""1.5""""}"'
             ],
             'markup' => [
                 '<div data-content>Element type is basic, measured in inches ' .
-                '(marked with sign (\")) with size 1.5\", mid-price range</div>',
+                '(marked with sign (")) with size 1.5", mid-price range</div>',
                 '"text_attribute=<div data-content>Element type is basic, measured in inches ' .
-                '(marked with sign (\"")) with size 1.5\"", mid-price range</div>"'
+                '(marked with sign ("")) with size 1.5"", mid-price range</div>"'
             ],
         ];
     }
@@ -607,7 +609,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $productAction->updateWebsites([$productId], [$secondStore->getWebsiteId()], 'add');
         $product->setStoreId($secondStore->getId());
         $product->setPrice('9.99');
-        $product->getResource()->save($product);
+        $this->productRepository->save($product);
 
         $exportData = $this->model->export();
 
@@ -689,6 +691,44 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * Test that Product Export takes into account filtering by Website
+     *
+     * Fixtures provide two products, one assigned to default website only,
+     * and the other is assigned to to default and custom websites. Only product assigned custom website is exported
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_options.php
+     * @magentoDataFixture Magento/Catalog/_files/product_with_two_websites.php
+     */
+    public function testExportProductWithRestrictedWebsite(): void
+    {
+        $websiteRepository = $this->objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class);
+        $website = $websiteRepository->get('second_website');
+
+        $exportData = $this->doExport(['website_id' => $website->getId()]);
+
+        $this->assertStringContainsString('"Simple Product"', $exportData);
+        $this->assertStringNotContainsString('"Virtual Product With Custom Options"', $exportData);
+    }
+
+    public function testFilterAttributeCollection(): void
+    {
+        $collection = $this->objectManager->create(ProductAttributeCollection::class);
+        $collection = $this->model->filterAttributeCollection($collection);
+        $attributes = [];
+        foreach ($collection->getItems() as $attribute) {
+            $attributes[] = $attribute->getAttributeCode();
+        }
+
+        $simpleProductType = $this->objectManager->create(SimpleProductType::class);
+        $disabledAttributes = $simpleProductType->getDisabledAttrs();
+        $this->assertEmpty(
+            array_intersect($disabledAttributes, $attributes),
+            'Disabled attributes are not filtered.'
+        );
+        $this->assertContains('category_ids', $attributes);
     }
 
     /**

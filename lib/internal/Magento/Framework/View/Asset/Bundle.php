@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\Bundle\Manager;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
@@ -52,6 +52,11 @@ class Bundle
     protected $minification;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param Filesystem $filesystem
      * @param Bundle\ConfigInterface $bundleConfig
      * @param Minification $minification
@@ -67,6 +72,8 @@ class Bundle
     }
 
     /**
+     * Init asset and add into array
+     *
      * @param LocalInterface $asset
      * @return void
      */
@@ -93,6 +100,8 @@ class Bundle
     }
 
     /**
+     * Initialization
+     *
      * @param LocalInterface $asset
      * @return void
      */
@@ -107,6 +116,8 @@ class Bundle
     }
 
     /**
+     * Returns the asset code based on context
+     *
      * @param LocalInterface $asset
      * @return string
      */
@@ -118,6 +129,8 @@ class Bundle
     }
 
     /**
+     * Returns a part index for the asset
+     *
      * @param LocalInterface $asset
      * @return int
      */
@@ -142,7 +155,10 @@ class Bundle
     }
 
     /**
+     * Returns size of the part
+     *
      * @param LocalInterface $asset
+     *
      * @return int
      */
     protected function getMaxPartSize(LocalInterface $asset)
@@ -214,7 +230,7 @@ class Bundle
         if (!isset($this->assetsContent[$assetContextCode][$assetContentType][$assetKey])) {
             $content = $asset->getContent();
             if (mb_detect_encoding($content) !== "UTF-8") {
-                $content = mb_convert_encoding($content, "UTF-8");
+                $content = $content !== null ? mb_convert_encoding($content, "UTF-8") : '';
             }
             $this->assetsContent[$assetContextCode][$assetContentType][$assetKey] = $content;
         }
@@ -223,6 +239,8 @@ class Bundle
     }
 
     /**
+     * Returns require.config init
+     *
      * @return string
      */
     protected function getInitJs()
@@ -243,6 +261,8 @@ class Bundle
     }
 
     /**
+     * Stores bundle types and flush data
+     *
      * @return void
      */
     public function flush()
@@ -256,7 +276,10 @@ class Bundle
     }
 
     /**
+     * Save bundle
+     *
      * @param array $types
+     *
      * @return void
      */
     protected function save($types)
@@ -281,13 +304,16 @@ class Bundle
     }
 
     /**
+     * Set bundle content
+     *
      * @param array $parts
      * @param FallbackContext $context
+     *
      * @return void
      */
     protected function fillContent($parts, $context)
     {
-        $index = count($this->content) > 0 ? count($this->content) - 1 : 0 ;
+        $index = count($this->content) > 0 ? count($this->content) - 1 : 0;
         foreach ($parts as $part) {
             if (!isset($this->content[$index])) {
                 $this->content[$index] = '';

@@ -45,8 +45,6 @@ class CreateHandler implements ExtensionInterface
     protected $attributeRepository;
 
     /**
-     * Resource model
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
      * @since 101.0.0
      */
@@ -174,7 +172,7 @@ class CreateHandler implements ExtensionInterface
                 if (!empty($image['removed'])) {
                     $clearImages[] = $image['file'];
                 } elseif (empty($image['value_id']) || !empty($image['recreate'])) {
-                    $newFile = $this->moveImageFromTmp($image['file']);
+                    $newFile = $this->moveImageFromTmp($image['file'] ?? '');
                     $image['new_file'] = $newFile;
                     $newImages[$image['file']] = $image;
                     $image['file'] = $newFile;
@@ -193,7 +191,7 @@ class CreateHandler implements ExtensionInterface
                 if (empty($image['value_id']) || !empty($image['removed'])) {
                     continue;
                 }
-                $duplicate[$image['value_id']] = $this->copyImage($image['file']);
+                $duplicate[$image['value_id']] = $this->copyImage($image['file'] ?? '');
                 $image['new_file'] = $duplicate[$image['value_id']];
                 $newImages[$image['file']] = $image;
             }
@@ -550,6 +548,7 @@ class CreateHandler implements ExtensionInterface
      * @param array $clearImages
      * @param array $newImages
      * @param array $existImages
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processMediaAttributeLabel(
         Product $product,
@@ -571,6 +570,9 @@ class CreateHandler implements ExtensionInterface
 
         if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
             $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
+            if ($existImages[$attrData]['label'] == null) {
+                $resetLabel = true;
+            }
         }
 
         if ($attrData === 'no_selection' && !empty($product->getData($mediaAttrCode . '_label'))) {

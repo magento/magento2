@@ -25,10 +25,35 @@
                 <value id="paypal_analytics" type="host">t.paypal.com</value>
             </values>
         </policy>
+        <policy id="connect-src">
+            <values>
+                <value id="www_sandbox_paypal" type="host">www.sandbox.paypal.com</value>
+                <value id="paypal_objects" type="host">www.paypalobjects.com</value>
+                <value id="www_paypal" type="host">www.paypal.com</value>
+            </values>
+        </policy>
         <policy id="frame-src">
             <values>
                 <value id="www_paypal" type="host">www.paypal.com</value>
                 <value id="www_sandbox_paypal" type="host">www.sandbox.paypal.com</value>
+                <value id="www_pilot_payflowlink_paypal" type="host">pilot-payflowlink.paypal.com</value>
+                <value id="pilot_payflowlink_paypal_com" type="host">pilot-payflowlink.paypal.com</value>
+            </values>
+        </policy>
+        <policy id="form-action">
+            <values>
+                <value id="www_pilot_payflowlink_paypal" type="host">pilot-payflowlink.paypal.com</value>
+                <value id="www_paypal" type="host">www.paypal.com</value>
+                <value id="www_sandbox_paypal" type="host">www.sandbox.paypal.com</value>
+                <value id="pilot_payflowlink_paypal_com" type="host">pilot-payflowlink.paypal.com</value>
+            </values>
+        </policy>
+        <policy id="connect-src">
+            <values>
+                <value id="www_sandbox_paypal_com" type="host">www.sandbox.paypal.com</value>
+                <value id="www_paypal" type="host">www.paypal.com</value>
+                <value id="www_sandbox_paypal" type="host">www.sandbox.paypal.com</value>
+                <value id="pilot_payflowlink_paypal_com" type="host">pilot-payflowlink.paypal.com</value>
             </values>
         </policy>
     </policies>

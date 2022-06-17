@@ -19,6 +19,7 @@
             <testCaseId value="MC-204"/>
             <group value="catalog"/>
             <group value="productVideo"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <remove keyForRemoval="setYoutubeApiKeyConfig"/>

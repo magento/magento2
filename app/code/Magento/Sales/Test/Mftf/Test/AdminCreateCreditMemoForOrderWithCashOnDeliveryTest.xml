@@ -59,12 +59,14 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
-        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
-        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createCustomerCart.return$)}}" stepKey="grabOrderId"/>
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrdersGridById">
-            <argument name="orderId" value="{$grabOrderId}"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openAdminOrderViewPage">
+            <argument name="entityId" value="$createCustomerCart.return$"/>
         </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onOrderPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clearFilters"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabOrderId"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterOrdersGridById"/>
+
 
         <actionGroup ref="AdminOpenAndFillCreditMemoRefundActionGroup" stepKey="fillCreditMemoRefund">
             <argument name="itemQtyToRefund" value="1"/>
@@ -88,12 +90,13 @@
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontGoToCustomerOrderDetailsPageActionGroup" stepKey="openOrderDetailPage">
+        <actionGroup ref="StorefrontOpenOrderViewPageActionGroup" stepKey="openOrderDetailPage">
             <argument name="orderId" value="$createCustomerCart.return$"/>
-            <argument name="orderNumber" value="{$grabOrderId}"/>
         </actionGroup>
 
         <actionGroup ref="StorefrontClickRefundTabCustomerOrderViewActionGroup" stepKey="clickRefund"/>
-        <see selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" userInput="555.00" stepKey="seeGrandTotal"/>
+        <actionGroup ref="StorefrontCheckRefundGrandTotalActionGroup" stepKey="seeGrandTotal">
+            <argument name="grandTotal" value="555.00"/>
+        </actionGroup>
     </test>
 </tests>

@@ -33,14 +33,20 @@ class EntityDataProviderComposite implements EntityDataProviderInterface
      * @param string $entity_type
      * @param int $id
      * @param ResolveInfo|null $info
+     * @param int|null $storeId
      * @return array
      */
-    public function getData(string $entity_type, int $id, ResolveInfo $info = null): array
-    {
+    public function getData(
+        string $entity_type,
+        int $id,
+        ResolveInfo $info = null,
+        int $storeId = null
+    ): array {
         return $this->dataProviders[strtolower($entity_type)]->getData(
             $entity_type,
             $id,
-            $info
+            $info,
+            $storeId
         );
     }
 }

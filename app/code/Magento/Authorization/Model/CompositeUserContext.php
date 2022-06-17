@@ -60,7 +60,7 @@ class CompositeUserContext implements \Magento\Authorization\Model\UserContextIn
      */
     public function getUserId()
     {
-        return $this->getUserContext() ? $this->getUserContext()->getUserId() : null;
+        return $this->getUserContext() ? ((int) $this->getUserContext()->getUserId()) : null;
     }
 
     /**

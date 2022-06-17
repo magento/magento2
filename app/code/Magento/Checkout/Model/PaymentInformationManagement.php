@@ -11,6 +11,7 @@ use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
 use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Quote\Api\CartRepositoryInterface;
 
 /**
  * Payment information management service.
@@ -51,7 +52,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     private $logger;
 
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var CartRepositoryInterface
      */
     private $cartRepository;
 
@@ -78,6 +79,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
      * @param PaymentProcessingRateLimiterInterface|null $paymentRateLimiter
      * @param PaymentSavingRateLimiterInterface|null $saveRateLimiter
+     * @param CartRepositoryInterface|null $cartRepository
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -87,7 +89,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory,
         \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository,
         ?PaymentProcessingRateLimiterInterface $paymentRateLimiter = null,
-        ?PaymentSavingRateLimiterInterface $saveRateLimiter = null
+        ?PaymentSavingRateLimiterInterface $saveRateLimiter = null,
+        ?CartRepositoryInterface $cartRepository = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -98,6 +101,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             ?? ObjectManager::getInstance()->get(PaymentProcessingRateLimiterInterface::class);
         $this->saveRateLimiter = $saveRateLimiter
             ?? ObjectManager::getInstance()->get(PaymentSavingRateLimiterInterface::class);
+        $this->cartRepository = $cartRepository
+            ?? ObjectManager::getInstance()->get(CartRepositoryInterface::class);
     }
 
     /**
@@ -154,10 +159,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         }
 
         if ($billingAddress) {
-            /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
-            $quoteRepository = $this->getCartRepository();
             /** @var \Magento\Quote\Model\Quote $quote */
-            $quote = $quoteRepository->getActive($cartId);
+            $quote = $this->cartRepository->getActive($cartId);
             $customerId = $quote->getBillingAddress()
                 ->getCustomerId();
             if (!$billingAddress->getCustomerId() && $customerId) {
@@ -203,20 +206,5 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             $this->logger = ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
         }
         return $this->logger;
-    }
-
-    /**
-     * Get Cart repository
-     *
-     * @return \Magento\Quote\Api\CartRepositoryInterface
-     * @deprecated 100.2.0
-     */
-    private function getCartRepository()
-    {
-        if (!$this->cartRepository) {
-            $this->cartRepository = ObjectManager::getInstance()
-                ->get(\Magento\Quote\Api\CartRepositoryInterface::class);
-        }
-        return $this->cartRepository;
     }
 }

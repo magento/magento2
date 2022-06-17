@@ -6,20 +6,23 @@
 
 /**
  * @var \Magento\AdvancedSearch\Block\SearchData $block
+ * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
  */
 ?>
 <?php
 /** @var \Magento\Search\Model\QueryResult[] $data */
 $data = $block->getItems();
-if (count($data)) : ?>
+if (count($data)): ?>
     <dl class="block">
         <dt class="title"><?= $block->escapeHtml(__($block->getTitle())) ?></dt>
-        <?php foreach ($data as $additionalInfo) : ?>
+        <?php foreach ($data as $additionalInfo): ?>
             <dd class="item">
                 <a href="<?= $block->escapeUrl($block->getLink($additionalInfo->getQueryText())) ?>"
                     ><?= $block->escapeHtml($additionalInfo->getQueryText()) ?></a>
-                <?php if ($block->isShowResultsCount()) : ?>
-                    <span class="count"><?= /* @noEscape */ (int)$additionalInfo->getResultsCount() ?></span>
+                <?php if ($block->isShowResultsCount()): ?>
+                    <span class="count">
+                        <?= /* @noEscape */ $localeFormatter->formatNumber((int)$additionalInfo->getResultsCount()) ?>
+                    </span>
                 <?php endif; ?>
             </dd>
         <?php endforeach; ?>

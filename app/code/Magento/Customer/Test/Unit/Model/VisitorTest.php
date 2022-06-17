@@ -9,6 +9,7 @@ namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\ResourceModel\Visitor as VisitorResourceModel;
 use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Visitor;
 use Magento\Customer\Model\Visitor as VisitorModel;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\DataObject;
@@ -74,6 +75,7 @@ class VisitorTest extends TestCase
                 'addCommitCallback',
                 'commit',
                 'clean',
+                'load',
             ])->disableOriginalConstructor()
             ->getMock();
         $this->visitorResourceModelMock->expects($this->any())->method('getIdFieldName')->willReturn('visitor_id');

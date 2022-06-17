@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Checkout\Test\Unit\Controller\Sidebar;
 
 use Magento\Checkout\Controller\Sidebar\UpdateItemQty;
+use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Checkout\Model\Sidebar;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
@@ -20,32 +21,55 @@ use Psr\Log\LoggerInterface;
 
 class UpdateItemQtyTest extends TestCase
 {
-    /** @var UpdateItemQty */
+    /**
+     * @var UpdateItemQty
+     */
     protected $updateItemQty;
 
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $objectManagerHelper;
 
-    /** @var Sidebar|MockObject */
+    /**
+     * @var Sidebar|MockObject
+     */
     protected $sidebarMock;
 
-    /** @var LoggerInterface|MockObject */
+    /**
+     * @var LoggerInterface|MockObject
+     */
     protected $loggerMock;
 
-    /** @var Data|MockObject */
+    /**
+     * @var Data|MockObject
+     */
     protected $jsonHelperMock;
 
-    /** @var RequestInterface|MockObject */
+    /**
+     * @var RequestInterface|MockObject
+     */
     protected $requestMock;
 
-    /** @var ResponseInterface|MockObject */
+    /**
+     * @var ResponseInterface|MockObject
+     */
     protected $responseMock;
 
+    /**
+     * @var RequestQuantityProcessor|MockObject
+     */
+    private $quantityProcessor;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->sidebarMock = $this->createMock(Sidebar::class);
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->jsonHelperMock = $this->createMock(Data::class);
+        $this->quantityProcessor = $this->createMock(RequestQuantityProcessor::class);
         $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->responseMock = $this->getMockForAbstractClass(
             ResponseInterface::class,
@@ -64,22 +88,22 @@ class UpdateItemQtyTest extends TestCase
                 'sidebar' => $this->sidebarMock,
                 'logger' => $this->loggerMock,
                 'jsonHelper' => $this->jsonHelperMock,
+                'quantityProcessor' => $this->quantityProcessor,
                 'request' => $this->requestMock,
-                'response' => $this->responseMock,
+                'response' => $this->responseMock
             ]
         );
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock
             ->method('getParam')
-            ->with('item_id', null)
-            ->willReturn('1');
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('item_qty', null)
-            ->willReturn('2');
+            ->withConsecutive(['item_id', null], ['item_qty', null])
+            ->willReturnOnConsecutiveCalls('1', '2');
 
         $this->sidebarMock->expects($this->once())
             ->method('checkQuoteItem')
@@ -97,8 +121,8 @@ class UpdateItemQtyTest extends TestCase
                     'data' => [
                         'summary_qty' => 2,
                         'summary_text' => __(' items'),
-                        'subtotal' => 12.34,
-                    ],
+                        'subtotal' => 12.34
+                    ]
                 ]
             );
 
@@ -109,11 +133,16 @@ class UpdateItemQtyTest extends TestCase
                     'data' => [
                         'summary_qty' => 2,
                         'summary_text' => __(' items'),
-                        'subtotal' => 12.34,
-                    ],
+                        'subtotal' => 12.34
+                    ]
                 ]
             )
             ->willReturn('json encoded');
+
+        $this->quantityProcessor->expects($this->once())
+            ->method('prepareQuantity')
+            ->with(2)
+            ->willReturn(2);
 
         $this->responseMock->expects($this->once())
             ->method('representJson')
@@ -123,16 +152,15 @@ class UpdateItemQtyTest extends TestCase
         $this->assertEquals('json represented', $this->updateItemQty->execute());
     }
 
-    public function testExecuteWithLocalizedException()
+    /**
+     * @return void
+     */
+    public function testExecuteWithLocalizedException(): void
     {
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock
             ->method('getParam')
-            ->with('item_id', null)
-            ->willReturn('1');
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('item_qty', null)
-            ->willReturn('2');
+            ->withConsecutive(['item_id', null], ['item_qty', null])
+            ->willReturnOnConsecutiveCalls('1', '2');
 
         $this->sidebarMock->expects($this->once())
             ->method('checkQuoteItem')
@@ -145,7 +173,7 @@ class UpdateItemQtyTest extends TestCase
             ->willReturn(
                 [
                     'success' => false,
-                    'error_message' => 'Error!',
+                    'error_message' => 'Error!'
                 ]
             );
 
@@ -154,7 +182,7 @@ class UpdateItemQtyTest extends TestCase
             ->with(
                 [
                     'success' => false,
-                    'error_message' => 'Error!',
+                    'error_message' => 'Error!'
                 ]
             )
             ->willReturn('json encoded');
@@ -167,16 +195,15 @@ class UpdateItemQtyTest extends TestCase
         $this->assertEquals('json represented', $this->updateItemQty->execute());
     }
 
-    public function testExecuteWithException()
+    /**
+     * @return void
+     */
+    public function testExecuteWithException(): void
     {
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock
             ->method('getParam')
-            ->with('item_id', null)
-            ->willReturn('1');
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('item_qty', null)
-            ->willReturn('2');
+            ->withConsecutive(['item_id', null], ['item_qty', null])
+            ->willReturnOnConsecutiveCalls('1', '2');
 
         $exception = new \Exception('Error!');
 
@@ -196,7 +223,7 @@ class UpdateItemQtyTest extends TestCase
             ->willReturn(
                 [
                     'success' => false,
-                    'error_message' => 'Error!',
+                    'error_message' => 'Error!'
                 ]
             );
 
@@ -205,7 +232,50 @@ class UpdateItemQtyTest extends TestCase
             ->with(
                 [
                     'success' => false,
-                    'error_message' => 'Error!',
+                    'error_message' => 'Error!'
+                ]
+            )
+            ->willReturn('json encoded');
+
+        $this->responseMock->expects($this->once())
+            ->method('representJson')
+            ->with('json encoded')
+            ->willReturn('json represented');
+
+        $this->assertEquals('json represented', $this->updateItemQty->execute());
+    }
+
+    /**
+     * @return void
+     */
+    public function testExecuteWithWrongRequestParams(): void
+    {
+        $this->requestMock
+            ->method('getParam')
+            ->withConsecutive(['item_id'], ['item_qty'])
+            ->willReturnOnConsecutiveCalls(0, 'error');
+
+        $this->sidebarMock->expects($this->once())
+            ->method('checkQuoteItem')
+            ->with(0)
+            ->willThrowException(new LocalizedException(__('Error!')));
+
+        $this->sidebarMock->expects($this->once())
+            ->method('getResponseData')
+            ->with('Error!')
+            ->willReturn(
+                [
+                    'success' => false,
+                    'error_message' => 'Error!'
+                ]
+            );
+
+        $this->jsonHelperMock->expects($this->once())
+            ->method('jsonEncode')
+            ->with(
+                [
+                    'success' => false,
+                    'error_message' => 'Error!'
                 ]
             )
             ->willReturn('json encoded');

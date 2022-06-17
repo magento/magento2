@@ -31,7 +31,7 @@ define(
                 function (response) {
                     errorProcessor.process(response, messageContainer);
                 }
-            ).success(
+            ).done(
                 function (response) {
                     var clearData = {
                         'selectedShippingAddress': null,

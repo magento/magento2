@@ -46,8 +46,9 @@
 
         <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="waitForElementToBeVisible"/>
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="uncheckSameBillingAndShippingAddress"/>
+        <waitForPageLoad stepKey="waitForAddressUnchecked"/>
         <conditionalClick selector="{{CheckoutShippingSection.editActiveAddressButton}}" dependentSelector="{{CheckoutShippingSection.editActiveAddressButton}}" visible="true" stepKey="clickEditButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForPageLoad stepKey="waitForLoadingMask"/>
 
         <!-- Fill in New Billing Address -->
         <actionGroup ref="StorefrontFillBillingAddressActionGroup" stepKey="fillBillingAddress">
@@ -58,6 +59,7 @@
 
 
         <!-- Edit Billing Address -->
+        <waitForElementVisible selector="{{CheckoutShippingSection.editAddressButton}}" stepKey="waitForEditBillingAddressButton"/>
         <click selector="{{CheckoutShippingSection.editAddressButton}}" stepKey="clickOnEditButton"/>
         <fillField selector="{{CheckoutPaymentSection.guestFirstName}}" userInput="" stepKey="enterEmptyFirstName"/>
         <fillField selector="{{CheckoutPaymentSection.guestLastName}}" userInput="" stepKey="enterEmptyLastName"/>
@@ -67,8 +69,8 @@
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
 
         <!-- Place order -->
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
+        <comment userInput="BIC workaround" stepKey="waitForPaymentSectionLoaded"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrderButton"/>
         <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
     </test>
 </tests>

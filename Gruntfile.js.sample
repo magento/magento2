@@ -16,10 +16,12 @@ module.exports = function (grunt) {
         tasks = grunt.file.expand('./dev/tools/grunt/tasks/*'),
         themes;
 
-        filesRouter.set('themes', 'dev/tools/grunt/configs/themes');
-        themes = filesRouter.get('themes');
+    filesRouter.set('themes', 'dev/tools/grunt/configs/themes');
+    themes = filesRouter.get('themes');
 
-    tasks = _.map(tasks, function(task){ return task.replace('.js', '') });
+    tasks = _.map(tasks, function (task) {
+        return task.replace('.js', '');
+    });
     tasks.push('time-grunt');
     tasks.forEach(function (task) {
         require(task)(grunt);
@@ -50,10 +52,9 @@ module.exports = function (grunt) {
         prod: function (component) {
             var tasks = [
                 'less',
-                'autoprefixer',
                 'cssmin',
                 'usebanner'
-            ].map(function(task){
+            ].map(function (task) {
                 return task + ':' + component;
             });
 
@@ -72,7 +73,7 @@ module.exports = function (grunt) {
                 'clean',
                 'exec:all'
             ];
-            _.each(themes, function(theme, name) {
+            _.each(themes, function (theme, name) {
                 tasks.push('less:' + name);
             });
             grunt.task.run(tasks);

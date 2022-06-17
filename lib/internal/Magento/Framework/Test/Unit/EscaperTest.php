@@ -137,6 +137,8 @@ class EscaperTest extends TestCase
     {
         return [
             'zero length string' => ['', ''],
+            'null as string' => [null, ''],
+            'Magento\Framework\Phrase as string' => [__('test'), 'test'],
             'only digits' => ['123', '123'],
             '<' => ['<', '\u003C'],
             '>' => ['>', '\\u003E'],
@@ -198,7 +200,6 @@ class EscaperTest extends TestCase
             'state',
             $stateMock
         );
-
 
         $actual = $this->escaper->escapeHtmlAttr($input);
         $this->assertEquals($output, $actual);
@@ -362,6 +363,76 @@ class EscaperTest extends TestCase
     {
         $this->assertEquals($expected, $this->escaper->escapeUrl($data));
         $this->assertEquals($expected, $this->escaper->escapeUrl($expected));
+    }
+
+    /**
+     * @covers \Magento\Framework\Escaper::escapeCss
+     *
+     * @param string $data
+     * @param string $expected
+     * @return void
+     *
+     * @dataProvider escapeCssDataProvider
+     */
+    public function testEscapeCss($data, string $expected): void
+    {
+        $this->assertEquals($expected, $this->escaper->escapeCss($data));
+    }
+
+    /**
+     * @return array
+     */
+    public function escapeCssDataProvider(): array
+    {
+        return [
+            [
+                'data' => 1,
+                'expected' => '1',
+            ],
+            [
+                'data' => '*%string{foo}%::',
+                'expected' => '\2A \25 string\7B foo\7D \25 \3A \3A ',
+            ]
+        ];
+    }
+
+    /**
+     * @covers \Magento\Framework\Escaper::encodeUrlParam
+     *
+     * @param string $data
+     * @param string $expected
+     * @return void
+     *
+     * @dataProvider encodeUrlParamDataProvider
+     */
+    public function testEncodeUrlParam($data, string $expected): void
+    {
+        $this->assertEquals($expected, $this->escaper->encodeUrlParam($data));
+    }
+
+    /**
+     * @return array
+     */
+    public function encodeUrlParamDataProvider(): array
+    {
+        return [
+            [
+                'data' => "a3==",
+                'expected' => "a3%3D%3D",
+            ],
+            [
+                'data' => "example string",
+                'expected' => "example%20string",
+            ],
+            [
+                'data' => 1,
+                'expected' => "1",
+            ],
+            [
+                'data' => null,
+                'expected' => "",
+            ]
+        ];
     }
 
     /**

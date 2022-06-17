@@ -39,6 +39,9 @@ class FileFactoryTest extends TestCase
      */
     protected $dirMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -74,13 +77,19 @@ class FileFactoryTest extends TestCase
         );
     }
 
-    public function testCreateIfContentDoesntHaveRequiredKeys()
+    /**
+     * @return void
+     */
+    public function testCreateIfContentDoesntHaveRequiredKeys(): void
     {
         $this->expectException('InvalidArgumentException');
         $this->getModel()->create('fileName', []);
     }
 
-    public function testCreateIfFileNotExist()
+    /**
+     * @return void
+     */
+    public function testCreateIfFileNotExist(): void
     {
         $this->expectException('Exception');
         $this->expectExceptionMessage('File not found');
@@ -100,7 +109,10 @@ class FileFactoryTest extends TestCase
         $this->getModel()->create('fileName', $content);
     }
 
-    public function testCreateArrayContent()
+    /**
+     * @return void
+     */
+    public function testCreateArrayContent(): void
     {
         $file = 'some_file';
         $content = ['type' => 'filename', 'value' => $file];
@@ -128,12 +140,9 @@ class FileFactoryTest extends TestCase
         $this->dirMock->expects($this->never())
             ->method('delete')
             ->willReturn($streamMock);
-        $streamMock->expects($this->at(1))
+        $streamMock
             ->method('eof')
-            ->willReturn(false);
-        $streamMock->expects($this->at(2))
-            ->method('eof')
-            ->willReturn(true);
+            ->willReturnOnConsecutiveCalls(false, true);
         $streamMock->expects($this->once())
             ->method('read');
         $streamMock->expects($this->once())
@@ -141,7 +150,10 @@ class FileFactoryTest extends TestCase
         $this->getModelMock()->create('fileName', $content);
     }
 
-    public function testCreateArrayContentRm()
+    /**
+     * @return void
+     */
+    public function testCreateArrayContentRm(): void
     {
         $file = 'some_file';
         $content = ['type' => 'filename', 'value' => $file, 'rm' => 1];
@@ -169,12 +181,9 @@ class FileFactoryTest extends TestCase
         $this->dirMock->expects($this->once())
             ->method('delete')
             ->willReturn($streamMock);
-        $streamMock->expects($this->at(1))
+        $streamMock
             ->method('eof')
-            ->willReturn(false);
-        $streamMock->expects($this->at(2))
-            ->method('eof')
-            ->willReturn(true);
+            ->willReturnOnConsecutiveCalls(false, true);
         $streamMock->expects($this->once())
             ->method('read');
         $streamMock->expects($this->once())
@@ -182,7 +191,10 @@ class FileFactoryTest extends TestCase
         $this->getModelMock()->create('fileName', $content);
     }
 
-    public function testCreateStringContent()
+    /**
+     * @return void
+     */
+    public function testCreateStringContent(): void
     {
         $this->dirMock->expects($this->never())
             ->method('isFile')
@@ -215,9 +227,9 @@ class FileFactoryTest extends TestCase
     }
 
     /**
-     * Get model
+     * Get model.
      *
-     * @return FileFactory
+     * @return FileFactory|object
      */
     private function getModel()
     {
@@ -225,24 +237,24 @@ class FileFactoryTest extends TestCase
             FileFactory::class,
             [
                 'response' => $this->responseMock,
-                'filesystem' => $this->fileSystemMock,
+                'filesystem' => $this->fileSystemMock
             ]
         );
     }
 
     /**
-     * Get model mock
+     * Get model mock.
      *
      * @return FileFactory|MockObject
      */
-    private function getModelMock()
+    private function getModelMock(): MockObject
     {
         $modelMock = $this->getMockBuilder(FileFactory::class)
-            ->setMethods(null)
+            ->onlyMethods([])
             ->setConstructorArgs(
                 [
                     'response' => $this->responseMock,
-                    'filesystem' => $this->fileSystemMock,
+                    'filesystem' => $this->fileSystemMock
                 ]
             )
             ->getMock();
