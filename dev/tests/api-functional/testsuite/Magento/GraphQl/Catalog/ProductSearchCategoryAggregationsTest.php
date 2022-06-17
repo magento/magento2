@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
-use Exception;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -26,6 +25,41 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
         $categoryAggregation = $this->aggregationCategoryTesting($filterValue, "true");
         $expectedSubcategorie = $this->getSubcategoriesOfCategoryTwo();
         $this->assertEquals($expectedSubcategorie, $categoryAggregation);
+    }
+
+    /**
+     * Test to check aggregation with the store header
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @magentoApiDataFixture Magento/Store/_files/store_with_second_root_category.php
+     * @magentoApiDataFixture Magento/Store/_files/assign_products_to_categories_and_websites.php
+     * @return void
+     */
+    public function testAggregationWithStoreFiltration()
+    {
+        $query = $this->getAggregationQuery();
+        $result = $this->graphQlQuery($query);
+        $categoryAggregation = $this->getCategoryAggregation($result);
+        $this->assertNotEmpty($categoryAggregation);
+        $result = $this->graphQlQuery($query, [], '', ['store' => 'test_store_1']);
+        $categoryAggregation = $this->getCategoryAggregation($result);
+        $this->assertEmpty($categoryAggregation);
+    }
+
+    /**
+     * Extract category aggregation from the result
+     *
+     * @param array $result
+     * @return array|null
+     */
+    private function getCategoryAggregation(array $result) : ?array
+    {
+        return array_filter(
+            $result['products']['aggregations'],
+            function ($a) {
+                return $a['attribute_code'] == 'category_uid';
+            }
+        );
     }
 
     /**
@@ -55,7 +89,7 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
         $categoryAggregation = array_filter(
             $result['products']['aggregations'],
             function ($a) {
-                return $a['attribute_code'] == 'category_id';
+                return $a['attribute_code'] == 'category_uid';
             }
         );
         $this->assertNotEmpty($categoryAggregation);
@@ -96,6 +130,55 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
             4 => 'Category 1.1',
             13 => 'Category 1.2'
         ];
+    }
+
+    private function getAggregationQuery() : string
+    {
+        return <<<QUERY
+query {
+  products(filter: { category_id: { eq: "3" } }) {
+    total_count
+
+    aggregations {
+      attribute_code
+
+      label
+
+      count
+
+      options {
+        count
+
+        label
+
+        value
+      }
+    }
+
+    items {
+      name
+
+      sku
+
+      price_range {
+        minimum_price {
+          regular_price {
+            value
+
+            currency
+          }
+        }
+      }
+    }
+
+    page_info {
+      page_size
+
+      current_page
+    }
+  }
+}
+QUERY;
     }
 
     /**

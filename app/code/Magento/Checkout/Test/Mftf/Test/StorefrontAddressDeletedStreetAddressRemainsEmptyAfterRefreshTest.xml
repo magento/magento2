@@ -17,6 +17,7 @@
             <severity value="MINOR"/>
             <testCaseId value="MC-43255"/>
             <group value="checkout"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="simpleProductWithoutCategory" stepKey="createSimpleProduct"/>

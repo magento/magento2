@@ -17,9 +17,7 @@
             <severity value="MAJOR"/>
             <useCaseId value="MC-39737"/>
             <testCaseId value="MC-39838"/>
-            <skip>
-                <issueId value="MQE-2288" />
-            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Step1. Login as admin-->
@@ -75,8 +73,8 @@
         <waitForPageLoad stepKey="waitForReviewListPageToLoad"/>
         <!--Step8. Assert product last review date matches latest user review date-->
         <fillField selector="{{AdminReviewGridSection.nickname}}" userInput="{{secondSimpleProductReview.nickname}}" stepKey="fillNickname"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
-        <waitForPageLoad stepKey="waitForGridViewPageToLoad"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickApplyFilters"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForGridViewPageToLoad"/>
         <grabTextFrom selector="{{AdminCreateNewReviewSection.grabLatestUserReviewDate}}" stepKey="grabLatestUserReviewDate"/>
         <assertEquals stepKey="assertReviewDate">
             <actualResult type="string">$grabLastReviewDate</actualResult>

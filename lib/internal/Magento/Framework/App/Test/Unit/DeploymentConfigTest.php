@@ -147,6 +147,16 @@ class DeploymentConfigTest extends TestCase
         $object->get();
     }
 
+    protected function tearDown(): void
+    {
+        foreach (array_keys(getenv()) as $key) {
+            if (false !== \strpos($key, 'MAGENTO_DC')) {
+                putenv($key);
+            }
+        }
+        parent::tearDown();
+    }
+
     /**
      * @return array
      */
@@ -177,5 +187,45 @@ class DeploymentConfigTest extends TestCase
         $this->assertFalse($this->_deploymentConfig->isDbAvailable());
         $this->_deploymentConfig->resetData();
         $this->assertTrue($this->_deploymentConfig->isDbAvailable());
+    }
+
+    public function testNoEnvVariables()
+    {
+        $this->reader->expects($this->once())->method('load')->willReturn(['a'=>'b']);
+        $this->assertSame('b', $this->_deploymentConfig->get('a'));
+    }
+
+    public function testEnvVariables()
+    {
+        $this->reader->expects($this->once())->method('load')->willReturn([]);
+        putenv('MAGENTO_DC__OVERRIDE={"a": "c"}');
+        $this->assertSame('c', $this->_deploymentConfig->get('a'));
+    }
+
+    public function testEnvVariablesWithNoBaseConfig()
+    {
+        $this->reader->expects($this->once())->method('load')->willReturn(['a'=>'b']);
+        putenv('MAGENTO_DC_A=c');
+        putenv('MAGENTO_DC_B__B__B=D');
+        $this->assertSame('c', $this->_deploymentConfig->get('a'));
+        $this->assertSame('D', $this->_deploymentConfig->get('b/b/b'));
+    }
+
+    public function testEnvVariablesSubstitution()
+    {
+        $this->reader->expects($this->once())
+            ->method('load')
+            ->willReturn(
+                [
+                    'a'=>'#env(MAGENTO_DC____A)',
+                    'b'=>'#env(MAGENTO_DC____B, "test")',
+                    'c'=>'#env(MAGENTO_DC____D, "e$%^&")'
+                ]
+            );
+        putenv('MAGENTO_DC____A=c');
+        putenv('MAGENTO_DC____B=D');
+        $this->assertSame('c', $this->_deploymentConfig->get('a'));
+        $this->assertSame('D', $this->_deploymentConfig->get('b'), 'return value from env');
+        $this->assertSame('e$%^&', $this->_deploymentConfig->get('c'), 'return default value');
     }
 }

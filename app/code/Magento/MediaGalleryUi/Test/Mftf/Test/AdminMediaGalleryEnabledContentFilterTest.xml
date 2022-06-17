@@ -17,6 +17,7 @@
             <description value="User filter asset by enabled content"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>

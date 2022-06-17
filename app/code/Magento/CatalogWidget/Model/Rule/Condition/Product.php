@@ -22,7 +22,7 @@ use Magento\Store\Model\Store;
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
     /**
-     * {@inheritdoc}
+     * @var string
      */
     protected $elementName = 'parameters';
 
@@ -32,8 +32,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     protected $joinedAttributes = [];
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
@@ -182,7 +180,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 $linkField = $attribute->getEntity()->getLinkField();
 
                 $collection->getSelect()->join(
-                    [$alias => $collection->getTable('catalog_product_entity_varchar')],
+                    [$alias => $collection->getTable($attribute->getBackendTable())],
                     "($alias.$linkField = e.$linkField) AND ($alias.store_id = $storeId)" .
                     " AND ($alias.attribute_id = {$attribute->getId()})",
                     []

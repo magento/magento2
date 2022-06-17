@@ -15,12 +15,16 @@ $config = $objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class
 $filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
 /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
 $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-$mediaPath = $mediaDirectory->getAbsolutePath();
 $baseTmpMediaPath = $config->getBaseTmpMediaPath();
 $mediaDirectory->create($baseTmpMediaPath);
 
-copy(__DIR__ . '/magento_image_sitemap.png', $mediaPath . '/' . $baseTmpMediaPath . '/magento_image_sitemap.png');
-copy(__DIR__ . '/second_image.png', $mediaPath . '/' . $baseTmpMediaPath . '/second_image.png');
+$imageSitemapPath = $mediaDirectory->getAbsolutePath($baseTmpMediaPath . '/magento_image_sitemap.png');
+$secondImagePath = $mediaDirectory->getAbsolutePath($baseTmpMediaPath . '/second_image.png');
+
+$imageSitemapContent = file_get_contents(__DIR__ . '/magento_image_sitemap.png');
+$secondImageContent = file_get_contents(__DIR__ . '/second_image.png');
+$mediaDirectory->getDriver()->filePutContents($imageSitemapPath, $imageSitemapContent);
+$mediaDirectory->getDriver()->filePutContents($secondImagePath, $secondImageContent);
 
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(
@@ -140,12 +144,12 @@ $product->setTypeId(
 )->setThumbnail(
     '/m/a/magento_image_sitemap.png'
 )->addImageToMediaGallery(
-    $mediaPath . '/' . $baseTmpMediaPath . '/magento_image_sitemap.png',
+    $imageSitemapPath,
     null,
     false,
     false
 )->addImageToMediaGallery(
-    $mediaPath . '/' . $baseTmpMediaPath . '/second_image.png',
+    $secondImagePath,
     null,
     false,
     false

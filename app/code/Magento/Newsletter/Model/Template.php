@@ -41,7 +41,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * Mail object
      *
      * @deprecated 100.3.0 Unused property
-     *
+     * @var string
      */
     protected $_mail;
 
@@ -60,8 +60,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     protected $_request;
 
     /**
-     * Filter factory
-     *
      * @var \Magento\Newsletter\Model\Template\FilterFactory
      */
     protected $_filterFactory;
@@ -203,13 +201,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         $filter = $this->getTemplateFilter();
         $filter->setVariables($variables);
 
-        $previousStrictMode = $filter->setStrictMode(
-            !$this->getData('is_legacy') && is_numeric($this->getTemplateId())
-        );
-        $result = $filter->filter($this->getTemplateSubject());
-        $filter->setStrictMode($previousStrictMode);
-
-        return $result;
+        return $filter->filter($this->getTemplateSubject());
     }
 
     /**
@@ -224,7 +216,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
                 'template_text',
                 __(
                     'Follow this link to unsubscribe <!-- This tag is for unsubscribe link  -->' .
-                    '<a href="{{var subscriber.getUnsubscriptionLink()}}">{{var subscriber.getUnsubscriptionLink()}}' .
+                    '<a href="{{var subscriber_data.unsubscription_link}}">
+                        {{var subscriber_data.unsubscription_link}}' .
                     '</a>'
                 )
             );

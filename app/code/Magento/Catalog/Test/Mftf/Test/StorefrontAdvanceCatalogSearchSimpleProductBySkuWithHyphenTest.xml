@@ -18,6 +18,7 @@
             <testCaseId value="MC-28813"/>
             <group value="Catalog"/>
             <group value="SearchEngineElasticsearch"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="product"/>
