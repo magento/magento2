@@ -44,17 +44,17 @@ class IndexTest extends TestCase
     /**
      * @var ForwardFactory|MockObject
      */
-    protected ForwardFactory|MockObject $forwardFactoryMock;
+    protected $forwardFactoryMock;
 
     /**
      * @var Forward|MockObject
      */
-    protected Forward|MockObject $forwardMock;
+    protected $forwardMock;
 
     /**
      * @var Page|MockObject
      */
-    protected MockObject|Page $resultPageMock;
+    protected $resultPageMock;
 
     /**
      * @inheritdoc
@@ -119,14 +119,14 @@ class IndexTest extends TestCase
             ->method('setStatusHeader')
             ->with(404, '1.1', 'Not Found')
             ->willReturn($this->resultPageMock);
+
         $this->resultPageMock
             ->method('setHeader')
-            ->with('Status', '404 File not found')
-            ->willReturn($this->resultPageMock);
-        $this->resultPageMock
-            ->method('setHeader')
-            ->with('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0', true)
-            ->willReturn($this->resultPageMock);
+            ->withConsecutive(
+                ['Status', '404 File not found'],
+                ['Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0']
+            )->willReturn($this->resultPageMock);
+
         $this->_cmsHelperMock->expects(
             $this->once()
         )->method(
