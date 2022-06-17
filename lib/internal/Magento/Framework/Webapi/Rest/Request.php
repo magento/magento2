@@ -103,7 +103,7 @@ class Request extends \Magento\Framework\Webapi\Request
         $qualityToTypes = [];
         $orderedTypes = [];
 
-        foreach (preg_split('/,\s*/', $this->getHeader('Accept')) as $definition) {
+        foreach (preg_split('/,\s*/', $this->getHeader('Accept') ?? '') as $definition) {
             $typeWithQ = explode(';', $definition);
             $mimeType = trim(array_shift($typeWithQ));
 
