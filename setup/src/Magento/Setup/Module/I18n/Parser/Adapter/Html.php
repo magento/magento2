@@ -22,7 +22,7 @@ class Html extends AbstractAdapter
      * @deprecated Not used anymore because of newly introduced constants
      * @see self::REGEX_I18N_BINDING and self::REGEX_TRANSLATE_TAG_OR_ATTR
      */
-    const HTML_FILTER = "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/";
+    public const HTML_FILTER = "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/";
 
     /**
      * Covers
