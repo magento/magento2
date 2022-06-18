@@ -50,6 +50,14 @@ class Html extends AbstractAdapter
             throw new Exception('Failed to load file from disk.');
         }
 
+        $this->extractPhrasesFromTransDirective($data);
+        $this->extractPhrases(self::REGEX_I18N_BINDING, $data, 2, 1);
+        $this->extractPhrases(self::REGEX_TRANSLATE_TAG_OR_ATTR, $data, 3, 2);
+        $this->extractPhrases(Js::REGEX_TRANSLATE_FUNCTION, $data, 3, 2);
+    }
+
+    private function extractPhrasesFromTransDirective(string $data): void
+    {
         $results = [];
         preg_match_all(Filter::CONSTRUCTION_PATTERN, $data, $results, PREG_SET_ORDER);
         for ($i = 0, $count = count($results); $i < $count; $i++) {
@@ -61,12 +69,11 @@ class Html extends AbstractAdapter
 
                 $quote = $directive[1];
                 $this->_addPhrase($quote . $directive[2] . $quote);
+            } elseif (in_array($results[$i][1], ['depend', 'if'], true) && isset($results[$i][3])) {
+                // make sure to process trans directives nested inside depend / if directives
+                $this->extractPhrasesFromTransDirective($results[$i][3]);
             }
         }
-
-        $this->extractPhrases(self::REGEX_I18N_BINDING, $data, 2, 1);
-        $this->extractPhrases(self::REGEX_TRANSLATE_TAG_OR_ATTR, $data, 3, 2);
-        $this->extractPhrases(Js::REGEX_TRANSLATE_FUNCTION, $data, 3, 2);
     }
 
     /**
