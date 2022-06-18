@@ -56,6 +56,13 @@ class Html extends AbstractAdapter
         $this->extractPhrases(Js::REGEX_TRANSLATE_FUNCTION, $data, 3, 2);
     }
 
+    /**
+     * Extracts all phrases from trans directives in the given string.
+     *
+     * @param string $data
+     *
+     * @return void
+     */
     private function extractPhrasesFromTransDirective(string $data): void
     {
         $results = [];
@@ -77,6 +84,8 @@ class Html extends AbstractAdapter
     }
 
     /**
+     * Extracts all phrases with the given regex in the given string.
+     *
      * @param string $regex
      * @param string $data
      * @param int $expectedGroupsCount
