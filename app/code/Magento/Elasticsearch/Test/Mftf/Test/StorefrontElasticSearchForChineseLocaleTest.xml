@@ -10,10 +10,10 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontElasticSearchForChineseLocaleTest">
         <annotations>
-            <features value="Elasticsearch6"/>
-            <stories value="Elasticsearch6 for Chinese"/>
-            <title value="Elastic search for Chinese locale"/>
-            <description value="Elastic search for Chinese locale"/>
+            <features value="CatalogSearch"/>
+            <stories value="Search for Chinese"/>
+            <title value="Storefront Search for Chinese locale"/>
+            <description value="Storefront Search for Chinese locale"/>
             <severity value="BLOCKER"/>
             <testCaseId value="MC-6310"/>
             <useCaseId value="MAGETWO-91625"/>
