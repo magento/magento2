@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\ImportCsvApi\Api;
 
-use Magento\ImportCsvApi\Api\Data\SourceDataInterface;
 use Magento\Framework\Validation\ValidationException;
 
 /**
@@ -20,11 +19,11 @@ interface StartImportInterface
     /**
      * Start import operation
      *
-     * @param SourceDataInterface $source Describes how to retrieve data from data source
-     * @return array
+     * @param \Magento\ImportCsvApi\Api\Data\SourceDataInterface $source Describes how to retrieve data from data source
+     * @return mixed
      * @throws ValidationException
      */
     public function execute(
-        SourceDataInterface $source
+        \Magento\ImportCsvApi\Api\Data\SourceDataInterface $source
     ): array;
 }

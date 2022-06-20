@@ -11,6 +11,7 @@ namespace Magento\ImportCsvApi\Api\Data;
  * Describes how to retrieve data from data source
  *
  * @api
+ * @since 100.0.2
  */
 interface SourceDataInterface
 {
