@@ -72,8 +72,6 @@
             <argument name="optionName" value="Blue"/>
         </actionGroup>
 
-        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.selectedSwatchValue('Blue')}}" time="30" stepKey="waitForElementSwatchColorVisible"/>
-
         <actionGroup ref="StorefrontAddProductWithSwatchesTextOptionToTheCartActionGroup" stepKey="addConfigurableProductToTheCart">
             <argument name="productQty" value="1"/>
             <argument name="product" value="ApiConfigurableProduct"/>
