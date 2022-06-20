@@ -61,7 +61,9 @@
         <seeInField stepKey="assertDefaultValue" selector="{{AdvancedAttributePropertiesSection.DefaultValueDate}}" userInput="{$generateDateCompressedFormat}"/>
 
         <!--Go to New Product page, add Attribute and check values-->
-        <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateSimpleProductPage">
+            <argument name="attributeSetId" value="4"/>
+        </actionGroup>
         <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addAttributeToProduct">
             <argument name="attributeCode" value="{{dateProductAttribute.attribute_code}}"/>
         </actionGroup>
