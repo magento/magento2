@@ -29,6 +29,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PoisonPillApplyDuringSetupUpgradeTest extends TestCase
 {
