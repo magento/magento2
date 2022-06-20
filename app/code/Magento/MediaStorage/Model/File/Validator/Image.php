@@ -61,7 +61,7 @@ class Image extends \Zend_Validate_Abstract
         if (in_array($fileMimeType, $this->imageMimeTypes)) {
             try {
                 //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                $image = imagecreatefromstring($this->file->fileGetContents($filePath));
+                $image = @imagecreatefromstring($this->file->fileGetContents($filePath));
 
                 $isValid = $image ? true : false;
             } catch (\Exception $e) {
