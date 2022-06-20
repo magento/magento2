@@ -109,7 +109,7 @@ class CustomAttributeMetadata implements ResolverInterface
     private function getStorefrontProperties(AttributeInterface $attribute)
     {
         return [
-            'label' => $attribute->getDefaultFrontendLabel(),
+            'label'=> $attribute->getDefaultFrontendLabel(),
             'position'=> $attribute->getPosition(),
             'visible_on_catalog_pages'=> $attribute->getIsVisibleOnFront(),
             'use_in_search_results_layered_navigation' => $attribute->getIsFilterableInSearch(),
@@ -124,7 +124,8 @@ class CustomAttributeMetadata implements ResolverInterface
      *
      * @return string[]
      */
-    private function getLayeredNavigationPropertiesEnum() {
+    private function getLayeredNavigationPropertiesEnum()
+    {
         return [
             0 => 'NO',
             1 => 'FILTERABLE_WITH_RESULTS',
