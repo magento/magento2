@@ -640,10 +640,7 @@ class EmailNotificationTest extends TestCase
 
         $customerMock->expects($this->never())
             ->method('getWebsiteId');
-
-        $customerMock->expects($this->once())
-            ->method('getStoreId')
-            ->willReturn($customerStoreId);
+        
         $customerMock->expects($this->any())
             ->method('getId')
             ->willReturn(self::STUB_CUSTOMER_ID);
