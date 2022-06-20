@@ -28,8 +28,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class PoisonPillApplyDuringSetupUpgradeTest
- * @package Magento\MessageQueue\Test\Unit\Console
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class PoisonPillApplyDuringSetupUpgradeTest extends TestCase
 {
