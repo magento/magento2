@@ -351,10 +351,11 @@ class EmailNotification implements EmailNotificationInterface
      *
      * @param CustomerInterface $customer
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function passwordResetConfirmation(CustomerInterface $customer): void
     {
-        $storeId = $customer->getStoreId();
+        $storeId = $this->storeManager->getStore()->getId();
         if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
