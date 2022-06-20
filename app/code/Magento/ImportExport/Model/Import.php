@@ -180,11 +180,6 @@ class Import extends AbstractModel
     private $messageManager;
 
     /**
-     * @var Random
-     */
-    private $random;
-
-    /**
      * @var Upload
      */
     private $upload;
@@ -236,7 +231,7 @@ class Import extends AbstractModel
         $this->importHistoryModel = $importHistoryModel;
         $this->localeDate = $localeDate;
         $this->upload = $upload;
-        $this->messageManager = $messageManager ?: ObjectManager::getInstance()
+        $this->messageManager = $messageManager ?: ObjectManagernstance()
             ->get(ManagerInterface::class);
         parent::__construct($logger, $filesystem, $data);
     }
@@ -333,7 +328,7 @@ class Import extends AbstractModel
                 'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
                 $this->getProcessedRowsCount(),
                 $this->getProcessedEntitiesCount(),
-                $validationResult->getInvalidRowsCount(),
+                $validationResult->genvalidRowsCount(),
                 $validationResult->getErrorsCount(
                     [
                         ProcessingError::ERROR_LEVEL_CRITICAL,

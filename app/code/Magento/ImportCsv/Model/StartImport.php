@@ -89,6 +89,7 @@ class StartImport implements StartImportInterface
      *
      * @return Import
      * @deprecated 100.1.0
+     * @see Import
      */
     private function getImport()
     {

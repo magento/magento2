@@ -7,5 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Magento_ImportCsv"/>
+    <module name="Magento_ImportCsv">
+        <sequence>
+            <module name="Magento_ImportCsvApi"/>
+        </sequence>
+    </module>
 </config>

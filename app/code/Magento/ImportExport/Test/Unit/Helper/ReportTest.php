@@ -27,6 +27,7 @@ use Magento\ImportExport\Model\History;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Config;
 use Magento\ImportExport\Model\Import\Entity\Factory;
+use Magento\ImportExport\Model\Source\Upload;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -196,22 +197,21 @@ class ReportTest extends TestCase
             ->willReturn($product);
         $importData = $this->createMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class);
         $csvFactory = $this->createMock(CsvFactory::class);
-        $httpFactory = $this->createMock(FileTransferFactory::class);
         $uploaderFactory = $this->createMock(UploaderFactory::class);
         $behaviorFactory = $this->createMock(\Magento\ImportExport\Model\Source\Import\Behavior\Factory::class);
         $indexerRegistry = $this->createMock(IndexerRegistry::class);
         $importHistoryModel = $this->createMock(History::class);
         $localeDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
+        $upload = $this->createMock(Upload::class);
         $import = new Import(
             $logger,
             $filesystem,
-            $importExportData,
+            $upload,
             $coreConfig,
             $importConfig,
             $entityFactory,
             $importData,
             $csvFactory,
-            $httpFactory,
             $uploaderFactory,
             $behaviorFactory,
             $indexerRegistry,

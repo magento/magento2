@@ -4,7 +4,8 @@
     "require": {
         "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
-        "magento/module-import-csv-api": "*"
+        "magento/module-import-csv-api": "*",
+        "magento/module-import-export": "*"
     },
     "type": "magento2-module",
     "license": [

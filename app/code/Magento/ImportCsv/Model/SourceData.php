@@ -82,6 +82,9 @@ class SourceData implements SourceDataInterface
         return $this->allowedErrorCount;
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
         return [

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
 
 namespace Magento\ImportExport\Model\Source;
 
@@ -30,6 +36,10 @@ class Upload
      */
     protected $_uploaderFactory;
 
+    /**
+     * @var File
+     */
+    private $filesystemIo;
     /**
      * @var Random
      */
@@ -171,7 +181,7 @@ class Upload
         try {
             $source = $import->_getSourceAdapter($sourceFile);
         } catch (\Exception $e) {
-            $import->getVarDirectory()->delete($this->_varDirectory->getRelativePath($sourceFile));
+            $import->getVarDirectory()->delete($import->getVarDirectory()->getRelativePath($sourceFile));
             throw new LocalizedException(__($e->getMessage()));
         }
         return $source;

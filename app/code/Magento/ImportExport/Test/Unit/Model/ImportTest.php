@@ -15,12 +15,10 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\ImportExport\Helper\Data;
 use Magento\ImportExport\Model\Export\Adapter\CsvFactory;
 use Magento\ImportExport\Model\History;
 use Magento\ImportExport\Model\Import;
@@ -30,6 +28,7 @@ use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\Entity\Factory;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\ImportExport\Model\Source\Upload;
 use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -46,11 +45,6 @@ class ImportTest extends AbstractImportTestCase
      * @var AbstractEntity|MockObject
      */
     protected $_entityAdapter;
-
-    /**
-     * @var Data|MockObject
-     */
-    protected $_importExportData = null;
 
     /**
      * @var ConfigInterface|MockObject
@@ -71,11 +65,6 @@ class ImportTest extends AbstractImportTestCase
      * @var CsvFactory|MockObject
      */
     protected $_csvFactory;
-
-    /**
-     * @var FileTransferFactory|MockObject
-     */
-    protected $_httpFactory;
 
     /**
      * @var UploaderFactory|MockObject
@@ -133,6 +122,11 @@ class ImportTest extends AbstractImportTestCase
     private $errorAggregatorMock;
 
     /**
+     * @var Upload
+     */
+    private $upload;
+
+    /**
      * Set up
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -145,9 +139,6 @@ class ImportTest extends AbstractImportTestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->_filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_importExportData = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->_coreConfig = $this->getMockBuilder(ScopeConfigInterface::class)
@@ -190,9 +181,6 @@ class ImportTest extends AbstractImportTestCase
         $this->_csvFactory = $this->getMockBuilder(CsvFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_httpFactory = $this->getMockBuilder(FileTransferFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->_uploaderFactory = $this->getMockBuilder(UploaderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -225,18 +213,18 @@ class ImportTest extends AbstractImportTestCase
             ->expects($this->any())
             ->method('getDriver')
             ->willReturn($this->_driver);
+        $this->upload = $this->createMock(Upload::class);
         $this->import = $this->getMockBuilder(Import::class)
             ->setConstructorArgs(
                 [
                     $logger,
                     $this->_filesystem,
-                    $this->_importExportData,
+                    $this->upload,
                     $this->_coreConfig,
                     $this->_importConfig,
                     $this->_entityFactory,
                     $this->_importData,
                     $this->_csvFactory,
-                    $this->_httpFactory,
                     $this->_uploaderFactory,
                     $this->_behaviorFactory,
                     $this->indexerRegistry,
@@ -544,13 +532,12 @@ class ImportTest extends AbstractImportTestCase
         $import = new Import(
             $logger,
             $this->_filesystem,
-            $this->_importExportData,
+            $this->upload,
             $this->_coreConfig,
             $this->_importConfig,
             $this->_entityFactory,
             $this->_importData,
             $this->_csvFactory,
-            $this->_httpFactory,
             $this->_uploaderFactory,
             $this->_behaviorFactory,
             $this->indexerRegistry,
@@ -577,13 +564,12 @@ class ImportTest extends AbstractImportTestCase
         $import = new Import(
             $logger,
             $this->_filesystem,
-            $this->_importExportData,
+            $this->upload,
             $this->_coreConfig,
             $this->_importConfig,
             $this->_entityFactory,
             $this->_importData,
             $this->_csvFactory,
-            $this->_httpFactory,
             $this->_uploaderFactory,
             $this->_behaviorFactory,
             $this->indexerRegistry,
@@ -607,13 +593,12 @@ class ImportTest extends AbstractImportTestCase
         $import = new Import(
             $logger,
             $this->_filesystem,
-            $this->_importExportData,
+            $this->upload,
             $this->_coreConfig,
             $this->_importConfig,
             $this->_entityFactory,
             $this->_importData,
             $this->_csvFactory,
-            $this->_httpFactory,
             $this->_uploaderFactory,
             $this->_behaviorFactory,
             $this->indexerRegistry,
@@ -643,13 +628,12 @@ class ImportTest extends AbstractImportTestCase
         $import = new Import(
             $logger,
             $this->_filesystem,
-            $this->_importExportData,
+            $this->upload,
             $this->_coreConfig,
             $this->_importConfig,
             $this->_entityFactory,
             $this->_importData,
             $this->_csvFactory,
-            $this->_httpFactory,
             $this->_uploaderFactory,
             $this->_behaviorFactory,
             $this->indexerRegistry,
