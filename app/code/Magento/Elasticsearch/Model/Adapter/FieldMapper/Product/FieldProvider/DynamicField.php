@@ -156,16 +156,6 @@ class DynamicField implements FieldProviderInterface
             ];
         }
 
-        $isOutOfStockAttribute = $this->attributeAdapterProvider->getByAttributeCode('is_out_of_stock');
-        $groupStockItemKey = $this->fieldNameResolver->getFieldName(
-            $isOutOfStockAttribute,
-            $ctx
-        );
-        $allAttributes[$groupStockItemKey] = [
-            'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_INT),
-            'store' => true
-        ];
-
         return $allAttributes;
     }
 }

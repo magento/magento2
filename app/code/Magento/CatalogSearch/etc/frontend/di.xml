@@ -22,6 +22,6 @@
         </arguments>
     </virtualType>
     <type name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection">
-        <plugin name="is_salable_filter" type="Magento\CatalogSearch\Plugin\Model\ResourceModel\Fulltext\CollectionPlugin"/>
+        <plugin name="out_of_stock_sorting" type="Magento\InventoryCatalogSearch\Plugin\Model\ResourceModel\Fulltext\CollectionPlugin"/>
     </type>
 </config>
