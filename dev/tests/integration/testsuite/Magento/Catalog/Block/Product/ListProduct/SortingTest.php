@@ -392,7 +392,7 @@ class SortingTest extends TestCase
     /**
      * Test product list ordered by price with out-of-stock configurable product options with elasticsearch engine
      *
-     * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attributes.php
+     * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_out-of-stock_child.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
      * @magentoConfigFixture default/catalog/search/engine elasticsearch7
@@ -413,7 +413,7 @@ class SortingTest extends TestCase
     /**
      * Test product list ordered by price with out-of-stock configurable product options with mysql search engine
      *
-     * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attributes.php
+     * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_out-of-stock_child.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
      * @magentoConfigFixture default/catalog/search/engine mysql
@@ -447,7 +447,7 @@ class SortingTest extends TestCase
             'default_order_price_desc' => [
                 'sort' => 'price',
                 'direction' => Collection::SORT_ORDER_DESC,
-                'expectation' => ['configurable', 'simple3', 'simple2', 'simple1'],
+                'expectation' => ['simple3', 'simple2', 'simple1', 'configurable'],
             ],
         ];
     }
