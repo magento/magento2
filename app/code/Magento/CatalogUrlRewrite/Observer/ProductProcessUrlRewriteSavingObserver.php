@@ -105,6 +105,7 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
             $isGlobalScope = $product->getStoreId() == Store::DEFAULT_STORE_ID;
             $storesToRemove[] = $isGlobalScope ? $product->getStoreIds() : $product->getStoreId();
         }
+        $storesToRemove = array_filter($storesToRemove);
         if ($storesToRemove) {
             $this->urlPersist->deleteByData(
                 [
@@ -129,7 +130,6 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
 
         return array_diff($oldWebsiteIds, $newWebsiteIds) || array_diff($newWebsiteIds, $oldWebsiteIds);
     }
-
 
     /**
      * Is product rewrites need to be updated
