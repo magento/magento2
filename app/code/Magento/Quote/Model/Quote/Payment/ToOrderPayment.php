@@ -75,6 +75,7 @@ class ToOrderPayment
         // set directly on the model
         $orderPayment->setCcNumber($object->getCcNumber());
         $orderPayment->setCcCid($object->getCcCid());
+        $orderPayment->setQuotePaymentId($object->getId());
 
         return $orderPayment;
     }
