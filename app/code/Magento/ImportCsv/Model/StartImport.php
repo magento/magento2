@@ -101,17 +101,17 @@ class StartImport implements StartImportInterface
     }
 
     /**
-    *
-    * @param array $errors
-    * @return void
-    * @throws \Magento\Framework\Exception\LocalizedException
-    */
+     * Add Message for Valid Result
+     *
+     * @param array $errors
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     private function addMessageForValidResult($errors)
     {
         if (!$this->import->isImportAllowed()) {
             $errors[] =__('The file is valid, but we can\'t import it for some reason.');
         }
-        return $errors;
     }
 
     /**
