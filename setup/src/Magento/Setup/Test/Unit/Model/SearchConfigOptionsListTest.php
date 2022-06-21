@@ -34,9 +34,8 @@ class SearchConfigOptionsListTest extends TestCase
         $this->assertArrayHasKey(0, $optionsList);
         $this->assertInstanceOf(SelectConfigOption::class, $optionsList[0]);
         $this->assertEquals('search-engine', $optionsList[0]->getName());
-        $this->assertCount(3, $optionsList[0]->getSelectOptions());
+        $this->assertCount(2, $optionsList[0]->getSelectOptions());
         $this->assertContains('elasticsearch5', $optionsList[0]->getSelectOptions());
-        $this->assertContains('elasticsearch6', $optionsList[0]->getSelectOptions());
         $this->assertContains('elasticsearch7', $optionsList[0]->getSelectOptions());
 
         $this->assertArrayHasKey(1, $optionsList);

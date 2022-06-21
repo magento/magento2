@@ -560,4 +560,14 @@
         <plugin name="getByIdCustomerGroupExcludedWebsite" type="Magento\Customer\Model\Plugin\GetByIdCustomerGroupExcludedWebsite"/>
         <plugin name="getListCustomerGroupExcludedWebsite" type="Magento\Customer\Model\Plugin\GetListCustomerGroupExcludedWebsite"/>
     </type>
+    <type name="Magento\Customer\Ui\Component\Listing\Columns">
+        <arguments>
+            <argument name="filterConfigProviders" xsi:type="array">
+                <item name="text" xsi:type="object">Magento\Customer\Ui\Component\Listing\Filter\TextFilterConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\EmailNotificationInterface">
+        <plugin name="saveWishlistDataAndAddReferenceKeyToBackUrl" type="Magento\Wishlist\Plugin\SaveWishlistDataAndAddReferenceKeyToBackUrl"/>
+    </type>
 </config>
