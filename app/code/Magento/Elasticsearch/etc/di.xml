@@ -542,6 +542,7 @@
         <arguments>
             <argument name="excludedEngineList" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Elasticsearch 2</item>
+                <item name="elasticsearch6" xsi:type="string">Elasticsearch 6</item>
             </argument>
             <argument name="engineValidators" xsi:type="array">
                 <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Setup\Validator</item>
