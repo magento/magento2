@@ -17,6 +17,9 @@
             <testCaseId value="AC-3591"/>
             <useCaseId value="ACP2E-891"/>
             <group value="Swatches"/>
+            <skip>
+                <issueId value="MAGETWO-71383"></issueId>
+            </skip>
         </annotations>
         <remove keyForRemoval="amOnConfigurableProductPage"/>
         <remove keyForRemoval="waitForConfigurableProductPage"/>
