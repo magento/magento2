@@ -6,8 +6,8 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontValidateConfigurableProductSwatchOptionToBePreSelectFromCartEditPageTest" extends="StorefrontConfigurableProductSwatchMinimumPriceProductPageTest">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontValidateConfigurableProductSwatchOptionToBePreSelectFromCartEditPageTest">
         <annotations>
             <features value="Swatches"/>
             <stories value="Edit cart line item configurable product failed to Pre-select Production Option in 2.4.4"/>
@@ -18,13 +18,62 @@
             <useCaseId value="ACP2E-891"/>
             <group value="Swatches"/>
         </annotations>
-        <remove keyForRemoval="amOnConfigurableProductPage"/> 
-        <remove keyForRemoval="waitForConfigurableProductPage"/>
-        <remove keyForRemoval="assertProductPrice"/>
-        <remove keyForRemoval="assertMinimumPriceForBlackOption"/>
-        <remove keyForRemoval="assertMinimumPriceForWhiteOption"/>
-        <remove keyForRemoval="assertMinimumPriceForBlueOption"/>
-
+        <before>
+            <!-- Create category -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <!-- Delete configurable product and all child products -->
+            <actionGroup ref="DeleteProductsByKeywordActionGroup" stepKey="deleteProductsByKeyword">
+                <argument name="keyword" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategoryAttribute"/>
+            <!-- Delete color attribute -->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteColorAttribute">
+                <argument name="ProductAttribute" value="ProductColorAttribute"/>
+            </actionGroup>
+            <!-- Delete size attribute -->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteSizeAttribute">
+                <argument name="ProductAttribute" value="ProductSizeAttribute"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+        </after>
+        <!--Create text swatch attribute with 3 options:  Black, White and Blue-->
+        <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addColorAttribute">
+            <argument name="attributeName" value="{{ProductColorAttribute.frontend_label}}"/>
+            <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+            <argument name="option1" value="Black"/>
+            <argument name="option2" value="White"/>
+            <argument name="option3" value="Blue"/>
+            <argument name="usedInProductListing" value="Yes"/>
+        </actionGroup>
+        <!--Create text swatch attribute with 3 options:  Small, Medium and Large-->
+        <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addSizeAttribute">
+            <argument name="attributeName" value="{{ProductSizeAttribute.frontend_label}}"/>
+            <argument name="attributeCode" value="{{ProductSizeAttribute.attribute_code}}"/>
+            <argument name="option1" value="Small"/>
+            <argument name="option2" value="Medium"/>
+            <argument name="option3" value="Large"/>
+        </actionGroup>
+        <!--Create configurable product with two attributes: Color and Size-->
+        <actionGroup ref="CreateConfigurableProductWithTwoAttributesActionGroup" stepKey="createProduct">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="attribute1" value="ProductColorAttribute"/>
+            <argument name="attribute2" value="ProductSizeAttribute"/>
+        </actionGroup>
+        <!--Save configurable product-->
+        <actionGroup ref="SaveConfigurableProductActionGroup" stepKey="saveProduct">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
         <!-- Go to the edit page for the "color" attribute -->
         <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{ProductColorAttribute.attribute_code}}" stepKey="fillFilter"/>
@@ -83,6 +132,8 @@
         <actionGroup ref="StorefrontUpdateCartItemEditParametersProductActionGroup" stepKey="updateCartItem">
             <argument name="rowNumber" value="1"/>
         </actionGroup>
+
+        <wait time="60" stepKey="testWait"/>
 
         <waitForElementVisible selector="{{StorefrontProductInfoMainSection.selectedSwatchValue('Blue')}}" time="30" stepKey="waitForElementSwatchColorVisible"/>
 
