@@ -9,8 +9,7 @@ namespace Magento\ImportCsv\Model;
 
 use Magento\ImportCsvApi\Api\Data\SourceDataInterface;
 use Magento\ImportCsvApi\Api\StartImportInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
 use Magento\ImportExport\Model\Import;
 
 /**
@@ -50,6 +49,9 @@ class StartImport implements StartImportInterface
         } catch (\Exception $e) {
             $errors[] ='Sorry, but the data is invalid or the file is not uploaded.';
         }
+        if ($errors) {
+            return $errors;
+        }
         $errorAggregator = $this->import->getErrorAggregator();
         $errorAggregator->initValidationStrategy(
             $this->import->getData(Import::FIELD_NAME_VALIDATION_STRATEGY),
@@ -58,8 +60,7 @@ class StartImport implements StartImportInterface
         try {
             $this->import->importSource();
         } catch (\Exception $e) {
-            $message = $this->exceptionMessageFactory->createMessage($e);
-            $errors[] = $message;
+            $errors[] = $e->getMessage();
         }
         if ($this->import->getErrorAggregator()->hasToBeTerminated()) {
             $errors[] ='Maximum error count has been reached or system error is occurred!';
@@ -87,18 +88,15 @@ class StartImport implements StartImportInterface
                 $this->addMessageForValidResult($errors);
             } else {
                 $errors[] = 'Data validation failed. Please fix the following errors and upload the file again.';
-
                 if ($errorAggregator->getErrorsCount()) {
-                    // $this->addMessageToSkipErrors($resultBlock);
+                    $this->addMessageToSkipErrors($errors);
                 }
             }
-
-            //$this->addErrorMessages($resultBlock, $errorAggregator);
         } else {
             if ($errorAggregator->getErrorsCount()) {
-                //$this->collectErrors($resultBlock);
+                $this->collectErrors($errors);
             } else {
-                //$resultBlock->addError(__('This file is empty. Please try another one.'));
+                $errors[] = (__('This file is empty. Please try another one.'));
             }
         }
     }
@@ -109,11 +107,45 @@ class StartImport implements StartImportInterface
     */
     private function addMessageForValidResult($errors)
     {
-        if ($this->import->isImportAllowed()) {
-            $errors[]=__('File is valid! To start import process press "Import" button');
-        } else {
+        if (!$this->import->isImportAllowed()) {
             $errors[] =__('The file is valid, but we can\'t import it for some reason.');
         }
         return $errors;
+    }
+
+    /**
+     * Collect errors and add error messages to Result block
+     *
+     * Get all errors from Error Aggregator and add appropriated error messages
+     * to Result block.
+     *
+     * @param array $errors
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function collectErrors($errors)
+    {
+        $errors = $this->import->getErrorAggregator()->getAllErrors();
+        foreach ($errors as $error) {
+            $errors[] = $error->getErrorMessage();
+        }
+    }
+
+    /**
+     * Add error message to Result block and allow 'Import' button
+     *
+     * If validation strategy is equal to 'validation-skip-errors' and validation error limit is not exceeded,
+     * then add error message and allow 'Import' button.
+     *
+     * @param array $errors
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function addMessageToSkipErrors($errors)
+    {
+        $import = $this->import;
+        if ($import->getErrorAggregator()->hasFatalExceptions()) {
+            $errors[] =__('Please fix errors and re-upload file');
+        }
     }
 }
