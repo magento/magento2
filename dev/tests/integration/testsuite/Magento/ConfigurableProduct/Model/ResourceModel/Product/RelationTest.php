@@ -6,9 +6,13 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Relation;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -53,16 +57,24 @@ class RelationTest extends TestCase
     /**
      * Tests that getRelationsByChildren will return parent products entity ids of child products entity ids.
      *
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple_10"} as:p1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple_20"} as:p2
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple_30"} as:p3
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple_40"} as:p4
-     * @magentoDataFixture Magento\ConfigurableProduct\Test\Fixture\Attribute as:attr
-     * @magentoDataFixture Magento\ConfigurableProduct\Test\Fixture\Product as:conf1
-     * @magentoDataFixture Magento\ConfigurableProduct\Test\Fixture\Product as:conf2
-     * @magentoDataFixtureDataProvider {"conf1":{"sku":"conf1","_options":["$attr$"],"_links":["$p1$","$p2$"]}}
-     * @magentoDataFixtureDataProvider {"conf2":{"sku":"conf2","_options":["$attr$"],"_links":["$p3$","$p4$"]}}
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple_10'], 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple_20'], 'p2'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple_30'], 'p3'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple_40'], 'p4'),
+        DataFixture(AttributeFixture::class, as: 'attr'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['sku' => 'conf1','_options' => ['$attr$'],'_links' => ['$p1$','$p2$']],
+            'conf1'
+        ),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['sku' => 'conf2','_options' => ['$attr$'],'_links' => ['$p3$','$p4$']],
+            'conf2'
+        ),
+    ]
     public function testGetRelationsByChildren(): void
     {
         $childSkusOfParentSkus = [
