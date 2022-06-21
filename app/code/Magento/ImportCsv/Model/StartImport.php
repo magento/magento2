@@ -9,7 +9,6 @@ namespace Magento\ImportCsv\Model;
 
 use Magento\ImportCsvApi\Api\Data\SourceDataInterface;
 use Magento\ImportCsvApi\Api\StartImportInterface;
-use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
 use Magento\ImportExport\Model\Import;
 
 /**
@@ -100,7 +99,9 @@ class StartImport implements StartImportInterface
             }
         }
     }
+
     /**
+     *
     * @param array $errors
     * @return void
     * @throws \Magento\Framework\Exception\LocalizedException

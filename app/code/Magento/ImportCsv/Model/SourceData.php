@@ -70,7 +70,7 @@ class SourceData extends AbstractSimpleObject implements SourceDataInterface
      */
     public function setEntity($entity)
     {
-        $this->setData(self::ENTITY, $entity);
+        return $this->setData(self::ENTITY, $entity);
     }
 
     /**

@@ -21,24 +21,28 @@ interface SourceDataInterface
     public const ALLOWED_ERROR_COUNT = 'allowed_error_count';
 
     /**
+     * Get Entity
      *
      * @return string
      */
     public function getEntity(): string;
 
     /**
+     * Get Behavior
      *
      * @return string
      */
     public function getBehavior(): string;
 
     /**
+     * Get Validation Strategy
      *
      * @return string
      */
     public function getValidationStrategy(): string;
 
     /**
+     * Get Allowed Error Count
      *
      * @return string
      */
@@ -69,6 +73,8 @@ interface SourceDataInterface
     public function setValidationStrategy($validationStrategy);
 
     /**
+     *  Set Allowed Error Count
+     *
      * @param $allowedErrorCount
      * @return $this
      */
