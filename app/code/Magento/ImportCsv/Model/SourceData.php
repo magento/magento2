@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\ImportCsv\Model;
 
+use Magento\Framework\Api\AbstractSimpleObject;
 use Magento\ImportCsvApi\Api\Data\SourceDataInterface;
 
-class SourceData implements SourceDataInterface
+class SourceData extends AbstractSimpleObject implements SourceDataInterface
 {
 
     /**
@@ -31,24 +32,6 @@ class SourceData implements SourceDataInterface
      * @var string
      */
     private $allowedErrorCount;
-
-    /**
-     * @param string $entity
-     * @param string $behavior
-     * @param string $validationStrategy
-     * @param string $allowedErrorCount
-     */
-    public function __construct(
-        string $entity,
-        string $behavior,
-        string $validationStrategy,
-        string $allowedErrorCount
-    ) {
-        $this->entity = $entity;
-        $this->behavior = $behavior;
-        $this->validationStrategy = $validationStrategy;
-        $this->allowedErrorCount = $allowedErrorCount;
-    }
 
     /**
      * @inheritdoc
@@ -83,15 +66,34 @@ class SourceData implements SourceDataInterface
     }
 
     /**
-     * @return array
+     * @inheritDoc
      */
-    public function toArray()
+    public function setEntity($entity)
     {
-        return [
-            'entity' => $this->entity,
-            'behavior' => $this->behavior,
-            'validation_strategy' => $this->validationStrategy,
-            'allowed_error_count' => $this->allowedErrorCount
-        ];
+        $this->setData(self::ENTITY, $entity);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setBehavior($behavior)
+    {
+        return $this->setData(self::BEHAVIOR, $behavior);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setValidationStrategy($validationStrategy)
+    {
+        return $this->setData(self::VALIDATION_STRATEGY, $validationStrategy);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setAllowedErrorCount($allowedErrorCount)
+    {
+        return $this->setData(self::ALLOWED_ERROR_COUNT, $allowedErrorCount);
     }
 }

@@ -17,8 +17,8 @@ interface SourceDataInterface
 {
     public const ENTITY = 'entity';
     public const BEHAVIOR = 'behavior';
-    public const VALIDATION_STRATEGY = 'validationStrategy';
-    public const ALLOWED_ERROR_COUNT = 'allowedErrorCount';
+    public const VALIDATION_STRATEGY = 'validation_strategy';
+    public const ALLOWED_ERROR_COUNT = 'allowed_error_count';
 
     /**
      *
@@ -44,4 +44,33 @@ interface SourceDataInterface
      */
     public function getAllowedErrorCount(): string;
 
+    /**
+     * Set Entity
+     *
+     * @param string $entity
+     * @return $this
+     */
+    public function setEntity($entity);
+
+    /**
+     * Set Behavior
+     *
+     * @param string $behavior
+     * @return $this
+     */
+    public function setBehavior($behavior);
+
+    /**
+     * Set Validation Strategy
+     *
+     * @param $validationStrategy
+     * @return $this
+     */
+    public function setValidationStrategy($validationStrategy);
+
+    /**
+     * @param $allowedErrorCount
+     * @return $this
+     */
+    public function setAllowedErrorCount($allowedErrorCount);
 }
