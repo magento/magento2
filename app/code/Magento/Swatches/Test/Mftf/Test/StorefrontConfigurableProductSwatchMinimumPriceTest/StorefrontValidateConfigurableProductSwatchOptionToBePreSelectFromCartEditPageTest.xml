@@ -16,9 +16,9 @@
             <severity value="AVERAGE"/>
             <testCaseId value="AC-3591"/>
             <useCaseId value="ACP2E-891"/>
-            <group value="Swatches"/> 
+            <group value="Swatches"/>
         </annotations>
-        <remove keyForRemoval="amOnConfigurableProductPage"/>
+        <remove keyForRemoval="amOnConfigurableProductPage"/> 
         <remove keyForRemoval="waitForConfigurableProductPage"/>
         <remove keyForRemoval="assertProductPrice"/>
         <remove keyForRemoval="assertMinimumPriceForBlackOption"/>
