@@ -5,6 +5,7 @@
  */
 namespace Magento\Elasticsearch\Model\Indexer;
 
+use Magento\AdvancedSearch\Model\Client\ClientInterface;
 use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
@@ -13,7 +14,6 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext as CatalogSearchFulltextIndexer
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Elasticsearch6\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Indexer\Model\Indexer;
@@ -43,7 +43,7 @@ class IndexHandlerTest extends TestCase
     private $productRepository;
 
     /**
-     * @var ElasticsearchClient
+     * @var ClientInterface
      */
     private $client;
 
