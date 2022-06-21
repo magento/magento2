@@ -16,7 +16,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Framework\Math\Random;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\ImportExport\Model\Export\Adapter\CsvFactory;
 use Magento\ImportExport\Model\Import\AbstractEntity as ImportAbstractEntity;
@@ -544,6 +543,8 @@ class Import extends AbstractModel
     }
 
     /**
+     * Get Var Directory instance
+     *
      * @return Filesystem\Directory\WriteInterface
      */
     public function getVarDirectory()
@@ -806,6 +807,8 @@ class Import extends AbstractModel
     }
 
     /**
+     * Get Upload Instance
+     *
      * @return Upload
      */
     public function getUpload()

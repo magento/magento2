@@ -67,7 +67,7 @@ interface SourceDataInterface
     /**
      * Set Validation Strategy
      *
-     * @param $validationStrategy
+     * @param string $validationStrategy
      * @return $this
      */
     public function setValidationStrategy($validationStrategy);
@@ -75,7 +75,7 @@ interface SourceDataInterface
     /**
      *  Set Allowed Error Count
      *
-     * @param $allowedErrorCount
+     * @param string $allowedErrorCount
      * @return $this
      */
     public function setAllowedErrorCount($allowedErrorCount);

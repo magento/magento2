@@ -69,7 +69,7 @@ class Upload
     /**
      * Move uploaded file.
      *
-     * @param Import
+     * @param Import $import
      * @throws LocalizedException
      * @return string Source file path
      */
@@ -138,7 +138,7 @@ class Upload
     /**
      * Move uploaded file and provide source instance.
      *
-     * * @param Import
+     * @param Import $import
      * @return Import\AbstractSource
      * @throws LocalizedException
      * @since 100.2.7

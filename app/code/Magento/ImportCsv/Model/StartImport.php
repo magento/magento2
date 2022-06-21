@@ -101,7 +101,7 @@ class StartImport implements StartImportInterface
     }
 
     /**
-     *
+    *
     * @param array $errors
     * @return void
     * @throws \Magento\Framework\Exception\LocalizedException
@@ -115,10 +115,9 @@ class StartImport implements StartImportInterface
     }
 
     /**
-     * Collect errors and add error messages to Result block
+     * Collect errors and add error messages
      *
      * Get all errors from Error Aggregator and add appropriated error messages
-     * to Result block.
      *
      * @param array $errors
      * @return void
