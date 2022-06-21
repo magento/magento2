@@ -37,7 +37,7 @@
         "laminas/laminas-validator": "^2.17.0",
         "magento/composer-dependency-version-audit-plugin": "~0.1",
         "magento/zendframework1": "~1.15.0",
-        "monolog/monolog": "^2.6",
+        "monolog/monolog": "^2.7",
         "ramsey/uuid": "~4.2.0",
         "symfony/console": "~4.4.0",
         "symfony/process": "~4.4.0",
