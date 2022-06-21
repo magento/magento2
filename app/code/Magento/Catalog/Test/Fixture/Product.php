@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Fixture;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Fixture\Api\DataMerger;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
@@ -137,6 +139,7 @@ class Product implements RevertibleDataFixtureInterface
         }
 
         $data['product_links'] = $this->prepareLinksData($data);
+        $data['options'] = $this->prepareOptions($data);
 
         return $this->dataProcessor->process($this, $data);
     }
@@ -146,6 +149,7 @@ class Product implements RevertibleDataFixtureInterface
      *
      * @param array $data
      * @return array
+     * @throws NoSuchEntityException
      */
     private function prepareLinksData(array $data): array
     {
@@ -180,5 +184,34 @@ class Product implements RevertibleDataFixtureInterface
         }
 
         return $links;
+    }
+
+    /**
+     *
+     * Prepare custom option fixtures
+     *
+     * @param array $data
+     * @return array
+     */
+    private function prepareOptions(array $data): array
+    {
+        $options = [];
+        $default = [
+            'product_sku' => $data['sku'],
+            'title' => 'customoption%uniqid%',
+            'type' => ProductCustomOptionInterface::OPTION_TYPE_FIELD,
+            'is_require' => true,
+            'price' => 10.0,
+            'price_type' => 'fixed',
+            'sku' => 'customoption%uniqid%',
+            'max_characters' => null,
+            'values' => null,
+        ];
+        $sortOrder = 1;
+        foreach ($data['options'] as $item) {
+            $options[] = $item + ['sort_order' => $sortOrder++] + $default;
+        }
+
+        return $options;
     }
 }
