@@ -8,9 +8,14 @@ namespace Magento\CatalogUrlRewrite\Observer;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Test\Fixture\Group as GroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -641,14 +646,12 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         }
     }
 
-    /**
-     * phpcs:disable Generic.Files.LineLength.TooLong
-     * @magentoDataFixture Magento\Store\Test\Fixture\Website as:website
-     * @magentoDataFixture Magento\Store\Test\Fixture\Group with:{"website_id":"$website.id$"} as:store_group
-     * @magentoDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group.id$"} as:store
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple1","website_ids":[1,"$website.id$"]} as:product
-     * @magentoAppIsolation enabled
-     */
+    #[
+        DataFixture(WebsiteFixture::class, as: 'website'),
+        DataFixture(GroupFixture::class, ['website_id' => '$website.id$'], 'store_group'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group.id$'], 'store'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple1', 'website_ids' => [1,'$website.id$'], 'product']),
+    ]
     public function testRemoveProductFromAllWebsites(): void
     {
         $testStore1 = $this->storeManager->getStore('default');
