@@ -8,8 +8,15 @@ declare(strict_types=1);
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Helper\Data;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -337,14 +344,14 @@ class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
         );
     }
 
-    /**
-     * @magentoApiDataFixture Magento\Store\Test\Fixture\Website as:website2
-     * @magentoApiDataFixture Magento\Store\Test\Fixture\Group with:{"website_id":"$website2.id$"} as:store_group2
-     * @magentoApiDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store2
-     * @magentoApiDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store3
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product with:{"website_ids":[1,"$website2.id$"]} as:product
-     * @magentoConfigFixture catalog/price/scope 1
-     */
+    #[
+        Config(Data::XML_PATH_PRICE_SCOPE, Data::PRICE_SCOPE_WEBSITE),
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store3'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1, '$website2.id$' ]], as: 'product'),
+    ]
     public function testUpdatePrice(): void
     {
         $store = $this->objectManager->get(Store::class);
@@ -415,10 +422,10 @@ class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
         );
     }
 
-    /**
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product1
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product2
-     */
+    #[
+        DataFixture(ProductFixture::class, as: 'product1'),
+        DataFixture(ProductFixture::class, as: 'product2'),
+    ]
     public function testPartialUpdateShouldNotOverrideUrlKeyInheritance(): void
     {
         /** @var ProductRepositoryInterface $productRepository */
