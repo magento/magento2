@@ -48,11 +48,11 @@ class SynchronizeFilesTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
         $this->synchronizeFiles = Bootstrap::getObjectManager()->get(SynchronizeFilesInterface::class);
         $this->getAssetsByPath = Bootstrap::getObjectManager()->get(GetAssetsByPathsInterface::class);
         $this->mediaDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->driver = $this->mediaDirectory->getDriver();
     }
 
     /**
@@ -72,9 +72,9 @@ class SynchronizeFilesTest extends TestCase
     ): void {
         $path = realpath(__DIR__ . '/../_files/' . $file);
         $modifiableFilePath = $this->mediaDirectory->getAbsolutePath($file);
-        $this->driver->copy(
-            $path,
-            $modifiableFilePath
+        $this->driver->filePutContents(
+            $modifiableFilePath,
+            file_get_contents($path)
         );
 
         $this->synchronizeFiles->execute([$file]);
@@ -83,7 +83,6 @@ class SynchronizeFilesTest extends TestCase
 
         $this->assertEquals($title, $loadedAsset->getTitle());
         $this->assertEquals($source, $loadedAsset->getSource());
-
         $this->driver->deleteFile($modifiableFilePath);
     }
 

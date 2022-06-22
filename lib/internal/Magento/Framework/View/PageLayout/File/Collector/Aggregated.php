@@ -14,6 +14,8 @@ use Magento\Framework\View\Design\ThemeInterface;
 class Aggregated extends \Magento\Framework\View\Layout\File\Collector\Aggregated
 {
     /**
+     * Get files content
+     *
      * @param ThemeInterface $theme
      * @param string $filePath
      * @return array
@@ -22,7 +24,7 @@ class Aggregated extends \Magento\Framework\View\Layout\File\Collector\Aggregate
     {
         $result = [];
         foreach ($this->getFiles($theme, $filePath) as $file) {
-            $result[$file->getFilename()] = file_get_contents($file->getFilename());
+            $result[$file->getFilename()] = file_get_contents($file->getFilename() ?? '');
         }
 
         return $result;

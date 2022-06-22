@@ -303,6 +303,9 @@ class ImageTest extends TestCase
     {
         $scope = 'test_scope';
         $tmpFilePath = '/media_path/tmp/temporary.png';
+
+        $this->_imageMock->method('getImageType')
+            ->willReturn(0);   // PHP 8.1 compatibility
         $this->_themeMock->method('getPreviewImage')->willReturn('test.png');
         $this->_uploaderMock->expects($this->once())
             ->method('uploadPreviewImage')

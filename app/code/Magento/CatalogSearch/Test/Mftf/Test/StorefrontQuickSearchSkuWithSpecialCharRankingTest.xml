@@ -84,6 +84,9 @@
             </actionGroup>
             <!--Save "Name" attribute-->
             <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveNameAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!--Clear grid filter-->
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
             <!--Logout from admin-->

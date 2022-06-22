@@ -7,7 +7,7 @@
 namespace Magento\Framework\Pricing\Price;
 
 /**
- * Class Pool
+ * The price pool
  *
  * @api
  * @since 100.0.2
@@ -40,6 +40,7 @@ class Pool implements \Iterator, \ArrayAccess
      *
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         return reset($this->prices);
@@ -50,6 +51,7 @@ class Pool implements \Iterator, \ArrayAccess
      *
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return current($this->prices);
@@ -60,6 +62,7 @@ class Pool implements \Iterator, \ArrayAccess
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return key($this->prices);
@@ -70,6 +73,7 @@ class Pool implements \Iterator, \ArrayAccess
      *
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         return next($this->prices);
@@ -80,6 +84,7 @@ class Pool implements \Iterator, \ArrayAccess
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return (bool)$this->key();
@@ -103,6 +108,7 @@ class Pool implements \Iterator, \ArrayAccess
      * @param string $value
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if ($offset === null) {
@@ -118,6 +124,7 @@ class Pool implements \Iterator, \ArrayAccess
      * @param string $offset
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->prices[$offset]);
@@ -129,6 +136,7 @@ class Pool implements \Iterator, \ArrayAccess
      * @param string $offset
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->prices[$offset]);
@@ -140,6 +148,7 @@ class Pool implements \Iterator, \ArrayAccess
      * @param string $offset
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->prices[$offset] ?? null;

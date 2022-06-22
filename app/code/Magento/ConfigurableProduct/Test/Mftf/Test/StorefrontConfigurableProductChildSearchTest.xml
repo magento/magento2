@@ -18,6 +18,7 @@
             <testCaseId value="MC-249"/>
             <group value="ConfigurableProduct"/>
             <group value="SearchEngineElasticsearch"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->

@@ -20,8 +20,6 @@ use Magento\Framework\Phrase;
 class Ftp extends AbstractRollback
 {
     /**
-     * Ftp client
-     *
      * @var \Magento\Framework\System\Ftp
      */
     protected $_ftpClient;
@@ -99,7 +97,7 @@ class Ftp extends AbstractRollback
             );
         }
 
-        $rootDir = $this->_snapshot->getRootDir();
+        $rootDir = $this->_snapshot->getRootDir() ?? '';
         $ftpPath = $this->_snapshot->getFtpPath() . '/' . str_replace($rootDir, '', $validationFilePath);
 
         $fileExistsOnFtp = $this->_ftpClient->fileExists($ftpPath);
@@ -127,6 +125,8 @@ class Ftp extends AbstractRollback
     }
 
     /**
+     * Method to create tmp dir.
+     *
      * @return string
      * @throws LocalizedException
      */
@@ -165,7 +165,8 @@ class Ftp extends AbstractRollback
         );
 
         foreach ($iterator as $item) {
-            $ftpPath = $this->_snapshot->getFtpPath() . '/' . str_replace($rootDir, '', $item->__toString());
+            // @phpstan-ignore-next-line
+            $ftpPath = $this->_snapshot->getFtpPath() . '/' . str_replace($rootDir ?? '', '', $item->__toString());
             $ftpPath = str_replace('\\', '/', $ftpPath);
 
             $this->_ftpClient->delete($ftpPath);
@@ -193,7 +194,8 @@ class Ftp extends AbstractRollback
         );
 
         foreach ($filesystemIterator as $item) {
-            $ftpPath = $this->_snapshot->getFtpPath() . '/' . str_replace($tmpDir, '', $item->__toString());
+            // @phpstan-ignore-next-line
+            $ftpPath = $this->_snapshot->getFtpPath() . '/' . str_replace($tmpDir ?? '', '', $item->__toString());
             $ftpPath = str_replace('\\', '/', $ftpPath);
 
             if ($item->isLink()) {

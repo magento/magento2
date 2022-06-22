@@ -9,6 +9,8 @@ namespace Magento\GraphQl\Model\Query;
 
 /**
  * Provide possibility to add custom parameters to context object
+ *
+ * @api
  */
 interface ContextParametersInterface
 {

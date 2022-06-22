@@ -36,13 +36,16 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundle">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
-            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilters"/>
-            <waitForPageLoad stepKey="waitForClearProductsGridFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
+            <comment userInput="BIC workaround" stepKey="waitForClearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
-        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage">
+            <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+            <argument name="productType" value="{{BundleProduct.type}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
         <click selector="{{AdminProductFormBundleSection.dynamicSkuToggle}}" stepKey="disableDynamicSku"/>
         <click selector="{{AdminProductFormBundleSection.dynamicPrice}}" stepKey="clickDynamicPriceSwitcher"/>
         <fillField selector="{{AdminProductFormBundleSection.priceField}}" userInput="100" stepKey="fillBundlePrice"/>

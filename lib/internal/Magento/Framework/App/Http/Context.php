@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Http;
 
 use Magento\Framework\App\ObjectManager;
@@ -10,6 +12,8 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Context data for requests
+ *
+ * @api
  */
 class Context
 {
