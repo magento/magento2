@@ -22,8 +22,8 @@ class SmtpTransportType implements \Magento\Framework\Data\OptionSourceInterface
     public function toOptionArray(): array
     {
         return [
-            ['value' => 'sendmail', 'label' => 'Sendmail'],
-            ['value' => 'smtp', 'label' => 'SMTP'],
+            ['value' => 'sendmail', 'label' => __('Sendmail')],
+            ['value' => 'smtp', 'label' => __('SMTP')],
         ];
     }
 }

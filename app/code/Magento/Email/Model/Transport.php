@@ -24,6 +24,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class that responsible for filling some message data before transporting it.
  * @see \Laminas\Mail\Transport\Sendmail is used for transport
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Transport implements TransportInterface
 {
@@ -31,12 +32,12 @@ class Transport implements TransportInterface
      * Configuration path to source of Return-Path and whether it should be set at all
      * @see \Magento\Config\Model\Config\Source\Yesnocustom to possible values
      */
-    const XML_PATH_SENDING_SET_RETURN_PATH = 'system/smtp/set_return_path';
+    private const XML_PATH_SENDING_SET_RETURN_PATH = 'system/smtp/set_return_path';
 
     /**
      * Configuration path for custom Return-Path email
      */
-    const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
+    private const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
 
     /**
      * Configuration path for custom Transport
@@ -244,7 +245,7 @@ class Transport implements TransportInterface
         if ($auth && $auth !== 'none') {
             $options['connection_class'] = $auth;
         }
-        
+
         if ($ssl && $ssl !== 'none') {
             $options['connection_config']['ssl'] = $ssl;
         }
@@ -257,7 +258,7 @@ class Transport implements TransportInterface
 
     /**
      * Create a Sendmail Laminas Transport
-     * 
+     *
      * @return Sendmail
      */
     private function createSendmailTransport(): Sendmail

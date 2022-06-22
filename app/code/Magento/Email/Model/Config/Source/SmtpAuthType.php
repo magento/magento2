@@ -21,10 +21,10 @@ class SmtpAuthType implements \Magento\Framework\Data\OptionSourceInterface
     public function toOptionArray(): array
     {
         return [
-            ['value' => 'none', 'label' => 'NONE'],
-            ['value' => 'plain', 'label' => 'PLAIN'],
-            ['value' => 'login', 'label' => 'LOGIN'],
-//            ['value' => 'crammd5', 'label' => 'CRAM-MD5 '],  // Requires laminas/laminas-crypt
+            ['value' => 'none', 'label' => __('NONE')],
+            ['value' => 'plain', 'label' => __('PLAIN')],
+            ['value' => 'login', 'label' => __('LOGIN')],
+//            ['value' => 'crammd5', 'label' => __('CRAM-MD5) '],  // Requires laminas/laminas-crypt
         ];
     }
 }

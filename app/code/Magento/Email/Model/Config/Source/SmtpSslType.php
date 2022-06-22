@@ -21,9 +21,9 @@ class SmtpSslType implements \Magento\Framework\Data\OptionSourceInterface
     public function toOptionArray(): array
     {
         return [
-            ['value' => 'none', 'label' => 'None'],
-            ['value' => 'ssl', 'label' => 'SSL'],
-            ['value' => 'tls', 'label' => 'TLS'],
+            ['value' => 'none', 'label' => __('None')],
+            ['value' => 'ssl', 'label' => __('SSL')],
+            ['value' => 'tls', 'label' => __('TLS')],
         ];
     }
 }
