@@ -21,7 +21,4 @@
             <argument name="catalogLayer" xsi:type="object">Magento\Catalog\Model\Layer\Search</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection">
-        <plugin name="out_of_stock_sorting" type="Magento\InventoryCatalogSearch\Plugin\Model\ResourceModel\Fulltext\CollectionPlugin"/>
-    </type>
 </config>

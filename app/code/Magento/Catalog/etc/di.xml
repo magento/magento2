@@ -1343,5 +1343,4 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Catalog\Model\OutOfStockInterface" type="Magento\Catalog\Model\OutOfStock" />
 </config>
