@@ -15,9 +15,16 @@ use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 class TaxRate implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
-        'code' => '%uniqid%',
-        'rate' => '%uniqid%',
-        'tax_country_id' => '%uniqid%',
+        'code' => 'taxrate%uniqid%',
+        'rate' => 10,
+        'tax_country_id' => 'US',
+        'tax_region_id' => 0,
+        'region_name' => null,
+        'tax_postcode' => '*',
+        'zip_is_range' => null,
+        'zip_from' => null,
+        'zip_to' => null,
+        'titles' => [],
     ];
 
     /**
