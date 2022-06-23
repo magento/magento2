@@ -49,7 +49,7 @@ class AddProductToCart extends \Magento\Quote\Test\Fixture\AddProductToCart
      *    $data = [
      *      'cart_id'           => (int) Cart ID. Required.
      *      'product_id'        => (int) Product ID. Required.
-     *      'child_product_id'  => (int) Product ID. Required.
+     *      'child_product_id'  => (int) Child Product ID. Required.
      *      'qty'               => (int) Quantity. Optional. Default: 1.
      *    ]
      * </pre>
@@ -62,8 +62,8 @@ class AddProductToCart extends \Magento\Quote\Test\Fixture\AddProductToCart
             'super_attribute' => [],
             'qty' => $data['qty'] ?? 1,
         ];
-        foreach ($this->productType->getUsedProductAttributes($configurableProduct) as $attribute) {
-            $buyRequest['super_attribute'][$attribute->getId()] = $childProduct->getData($attribute->getAttributeCode());
+        foreach ($this->productType->getUsedProductAttributes($configurableProduct) as $attr) {
+            $buyRequest['super_attribute'][$attr->getId()] = $childProduct->getData($attr->getAttributeCode());
         }
         return parent::apply(
             [

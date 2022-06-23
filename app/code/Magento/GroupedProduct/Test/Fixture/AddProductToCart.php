@@ -42,10 +42,12 @@ class AddProductToCart extends \Magento\Quote\Test\Fixture\AddProductToCart
         $this->productType = $productType;
     }
 
-
     /**
      * {@inheritdoc}
      * @param array $data Parameters
+     * $data['child_products'] can be supplied in following formats:
+     *      - ["$product1.id$", "$product2.id$"]
+     *      - [{"product_id":"$product1.id$","qty":1}, {"product_id":"$product2.id$","qty":1}]
      * <pre>
      *    $data = [
      *      'cart_id'           => (int) Cart ID. Required.
@@ -54,9 +56,6 @@ class AddProductToCart extends \Magento\Quote\Test\Fixture\AddProductToCart
      *      'qty'               => (int) Quantity. Optional. Default: 1.
      *    ]
      * </pre>
-     * $data['selections'] can be supplied in following formats:
-     *      - ["$product1.id$", "$product2.id$"]
-     *      - [{"product_id":"$product1.id$","qty":1}, {"product_id":"$product2.id$","qty":1}]
      */
     public function apply(array $data = []): ?DataObject
     {
