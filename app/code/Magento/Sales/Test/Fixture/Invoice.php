@@ -110,7 +110,7 @@ class Invoice implements RevertibleDataFixtureInterface
      */
     private function prepareInvoiceItems(array $data): array
     {
-        $items = [];
+        $invoiceItems = [];
         $order = $this->orderRepository->get($data['order_id']);
         $orderItemIdsBySku = [];
         $orderItemIdsByProductIds = [];
@@ -122,32 +122,26 @@ class Invoice implements RevertibleDataFixtureInterface
         }
 
         foreach ($data['items'] as $itemToInvoice) {
-            $qty = 1;
-            $orderItemId = null;
-            $sku = null;
+            $invoiceItem = ['order_item_id' => null, 'qty' => 1];
             if (is_numeric($itemToInvoice)) {
-                $orderItemId = $itemToInvoice;
+                $invoiceItem['order_item_id'] = $itemToInvoice;
             } elseif (is_string($itemToInvoice)) {
-                $sku = $itemToInvoice;
+                $invoiceItem['order_item_id'] = $orderItemIdsBySku[$itemToInvoice];
             } elseif ($itemToInvoice instanceof ProductInterface) {
-                $sku = $itemToInvoice->getSku();
+                $invoiceItem['order_item_id'] = $orderItemIdsBySku[$itemToInvoice->getSku()];
             } else {
-                $qty = $itemToInvoice['qty'] ?? $qty;
-                if (isset($itemToInvoice['order_item_id'])) {
-                    $orderItemId = $itemToInvoice['order_item_id'];
+                $invoiceItem = array_intersect($itemToInvoice, $invoiceItem) + $invoiceItem;
+                if (isset($itemToInvoice['sku'])) {
+                    $invoiceItem['order_item_id'] = $orderItemIdsBySku[$itemToInvoice['sku']];
                 } elseif (isset($itemToInvoice['product_id'])) {
-                    $orderItemId = $orderItemIdsByProductIds[$itemToInvoice['product_id']];
+                    $invoiceItem['order_item_id'] = $orderItemIdsByProductIds[$itemToInvoice['product_id']];
                 } elseif (isset($itemToInvoice['quote_item_id'])) {
-                    $orderItemId = $orderItemIdsByQuoteItemIds[$itemToInvoice['quote_item_id']];
+                    $invoiceItem['order_item_id'] = $orderItemIdsByQuoteItemIds[$itemToInvoice['quote_item_id']];
                 }
-                $sku = $itemToInvoice['sku'] ?? $sku;
             }
-            if (!$orderItemId && $sku) {
-                $orderItemId = $orderItemIdsBySku[$sku];
-            }
-            $items[] = ['order_item_id' => $orderItemId, 'qty' => $qty];
+            $invoiceItems[] = $invoiceItem;
         }
 
-        return $items;
+        return $invoiceItems;
     }
 }

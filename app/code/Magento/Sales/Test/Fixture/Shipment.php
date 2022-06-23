@@ -124,30 +124,24 @@ class Shipment implements RevertibleDataFixtureInterface
         }
 
         foreach ($data['items'] as $itemToShip) {
-            $qty = 1;
-            $orderItemId = null;
-            $sku = null;
+            $shipmentItem = ['order_item_id' => null, 'qty' => 1];
             if (is_numeric($itemToShip)) {
-                $orderItemId = $itemToShip;
+                $shipmentItem['order_item_id'] = $itemToShip;
             } elseif (is_string($itemToShip)) {
-                $sku = $itemToShip;
+                $shipmentItem['order_item_id'] = $orderItemIdsBySku[$itemToShip];
             } elseif ($itemToShip instanceof ProductInterface) {
-                $sku = $itemToShip->getSku();
+                $shipmentItem['order_item_id'] = $orderItemIdsBySku[$itemToShip->getSku()];
             } else {
-                $qty = $itemToShip['qty'] ?? $qty;
-                if (isset($itemToShip['order_item_id'])) {
-                    $orderItemId = $itemToShip['order_item_id'];
+                $shipmentItem = array_intersect($itemToShip, $shipmentItem) + $shipmentItem;
+                if (isset($itemToShip['sku'])) {
+                    $shipmentItem['order_item_id'] = $orderItemIdsBySku[$itemToShip['sku']];
                 } elseif (isset($itemToShip['product_id'])) {
-                    $orderItemId = $orderItemIdsByProductIds[$itemToShip['product_id']];
+                    $shipmentItem['order_item_id'] = $orderItemIdsByProductIds[$itemToShip['product_id']];
                 } elseif (isset($itemToShip['quote_item_id'])) {
-                    $orderItemId = $orderItemIdsByQuoteItemIds[$itemToShip['quote_item_id']];
+                    $shipmentItem['order_item_id'] = $orderItemIdsByQuoteItemIds[$itemToShip['quote_item_id']];
                 }
-                $sku = $itemToShip['sku'] ?? $sku;
             }
-            if (!$orderItemId && $sku) {
-                $orderItemId = $orderItemIdsBySku[$sku];
-            }
-            $shipmentItems[] = ['order_item_id' => $orderItemId, 'qty' => $qty];
+            $shipmentItems[] = $shipmentItem;
         }
 
         return $shipmentItems;

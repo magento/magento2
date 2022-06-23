@@ -103,7 +103,7 @@ class Creditmemo implements RevertibleDataFixtureInterface
     }
 
     /**
-     * Prepare creditmemo items
+     * Prepare creditmemo item
      *
      * @param array $data
      * @return array
@@ -122,30 +122,24 @@ class Creditmemo implements RevertibleDataFixtureInterface
         }
 
         foreach ($data['items'] as $itemToRefund) {
-            $qty = 1;
-            $orderItemId = null;
-            $sku = null;
+            $creditmemoItem = ['order_item_id' => null, 'qty' => 1];
             if (is_numeric($itemToRefund)) {
-                $orderItemId = $itemToRefund;
+                $creditmemoItem['order_item_id'] = $itemToRefund;
             } elseif (is_string($itemToRefund)) {
-                $sku = $itemToRefund;
+                $creditmemoItem['order_item_id'] = $orderItemIdsBySku[$itemToRefund];
             } elseif ($itemToRefund instanceof ProductInterface) {
-                $sku = $itemToRefund->getSku();
+                $creditmemoItem['order_item_id'] = $orderItemIdsBySku[$itemToRefund->getSku()];
             } else {
-                $qty = $itemToRefund['qty'] ?? $qty;
-                if (isset($itemToRefund['order_item_id'])) {
-                    $orderItemId = $itemToRefund['order_item_id'];
+                $creditmemoItem = array_intersect($itemToRefund, $creditmemoItem) + $creditmemoItem;
+                if (isset($itemToRefund['sku'])) {
+                    $creditmemoItem['order_item_id'] = $orderItemIdsBySku[$itemToRefund['sku']];
                 } elseif (isset($itemToRefund['product_id'])) {
-                    $orderItemId = $orderItemIdsByProductIds[$itemToRefund['product_id']];
+                    $creditmemoItem['order_item_id'] = $orderItemIdsByProductIds[$itemToRefund['product_id']];
                 } elseif (isset($itemToRefund['quote_item_id'])) {
-                    $orderItemId = $orderItemIdsByQuoteItemIds[$itemToRefund['quote_item_id']];
+                    $creditmemoItem['order_item_id'] = $orderItemIdsByQuoteItemIds[$itemToRefund['quote_item_id']];
                 }
-                $sku = $itemToRefund['sku'] ?? $sku;
             }
-            if (!$orderItemId && $sku) {
-                $orderItemId = $orderItemIdsBySku[$sku];
-            }
-            $creditmemoItems[] = ['order_item_id' => $orderItemId, 'qty' => $qty];
+            $creditmemoItems[] = $creditmemoItem;
         }
 
         return $creditmemoItems;
