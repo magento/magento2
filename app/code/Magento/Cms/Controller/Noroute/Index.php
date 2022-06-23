@@ -8,15 +8,17 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Controller\Noroute;
 
+use Magento\Framework\Controller\Result\ForwardFactory;
+
 /**
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Magento\Framework\Controller\Result\ForwardFactory
+     * @var ForwardFactory
      */
-    protected \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory;
+    protected ForwardFactory $resultForwardFactory;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
