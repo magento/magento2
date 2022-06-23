@@ -15,8 +15,11 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Math\Random;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\ImportExport\Helper\Data as DataHelper;
 use Magento\ImportExport\Model\Export\Adapter\CsvFactory;
 use Magento\ImportExport\Model\Import\AbstractEntity as ImportAbstractEntity;
 use Magento\ImportExport\Model\Import\AbstractSource;
@@ -119,6 +122,11 @@ class Import extends AbstractModel
     protected $_entityAdapter;
 
     /**
+     * @var DataHelper
+     */
+    protected $_importExportData = null;
+
+    /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $_coreConfig;
@@ -142,6 +150,11 @@ class Import extends AbstractModel
      * @var CsvFactory
      */
     protected $_csvFactory;
+
+    /**
+     * @var FileTransferFactory
+     */
+    protected $_httpFactory;
 
     /**
      * @var UploaderFactory
@@ -179,6 +192,11 @@ class Import extends AbstractModel
     private $messageManager;
 
     /**
+     * @var Random
+     */
+    private $random;
+
+    /**
      * @var Upload
      */
     private $upload;
@@ -186,12 +204,13 @@ class Import extends AbstractModel
     /**
      * @param LoggerInterface $logger
      * @param Filesystem $filesystem
-     * @param Upload $upload
+     * @param DataHelper $importExportData
      * @param ScopeConfigInterface $coreConfig
      * @param Import\ConfigInterface $importConfig
      * @param Import\Entity\Factory $entityFactory
      * @param Data $importData
      * @param Export\Adapter\CsvFactory $csvFactory
+     * @param FileTransferFactory $httpFactory
      * @param UploaderFactory $uploaderFactory
      * @param Source\Import\Behavior\Factory $behaviorFactory
      * @param IndexerRegistry $indexerRegistry
@@ -199,39 +218,49 @@ class Import extends AbstractModel
      * @param DateTime $localeDate
      * @param array $data
      * @param ManagerInterface|null $messageManager
+     * @param Random|null $random
+     * @param Upload|null $upload
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         LoggerInterface $logger,
         Filesystem $filesystem,
-        Upload $upload,
+        DataHelper $importExportData,
         ScopeConfigInterface $coreConfig,
         ConfigInterface $importConfig,
         Factory $entityFactory,
         Data $importData,
         CsvFactory $csvFactory,
+        FileTransferFactory $httpFactory,
         UploaderFactory $uploaderFactory,
         BehaviorFactory $behaviorFactory,
         IndexerRegistry $indexerRegistry,
         History $importHistoryModel,
         DateTime $localeDate,
         array $data = [],
-        ManagerInterface $messageManager = null
+        ManagerInterface $messageManager = null,
+        Random $random = null,
+        Upload $upload = null
     ) {
+        $this->_importExportData = $importExportData;
         $this->_coreConfig = $coreConfig;
         $this->_importConfig = $importConfig;
         $this->_entityFactory = $entityFactory;
         $this->_importData = $importData;
         $this->_csvFactory = $csvFactory;
+        $this->_httpFactory = $httpFactory;
         $this->_uploaderFactory = $uploaderFactory;
         $this->indexerRegistry = $indexerRegistry;
         $this->_behaviorFactory = $behaviorFactory;
         $this->_filesystem = $filesystem;
         $this->importHistoryModel = $importHistoryModel;
         $this->localeDate = $localeDate;
-        $this->upload = $upload;
         $this->messageManager = $messageManager ?: ObjectManager::getInstance()
             ->get(ManagerInterface::class);
+        $this->random = $random ?: ObjectManager::getInstance()
+            ->get(Random::class);
+        $this->upload = $upload ?: ObjectManager::getInstance()
+            ->get(Upload::class);
         parent::__construct($logger, $filesystem, $data);
     }
 
@@ -523,6 +552,17 @@ class Import extends AbstractModel
     }
 
     /**
+     * Move uploaded file.
+     *
+     * @throws LocalizedException
+     * @return string Source file path
+     */
+    public function uploadSource()
+    {
+        return $this->upload->uploadSource($this);
+    }
+
+    /**
      * Move uploaded file and provide source instance.
      *
      * @return Import\AbstractSource
@@ -531,7 +571,7 @@ class Import extends AbstractModel
      */
     public function uploadFileAndGetSource()
     {
-        $sourceFile = $this->upload->uploadSource($this);
+        $sourceFile = $this->uploadSource();
         try {
             $source = $this->_getSourceAdapter($sourceFile);
         } catch (\Exception $e) {

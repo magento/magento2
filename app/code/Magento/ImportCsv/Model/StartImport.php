@@ -51,6 +51,7 @@ class StartImport implements StartImportInterface
         if ($errors) {
             return $errors;
         }
+        $processedEntities = $this->import->getProcessedEntitiesCount();
         $errorAggregator = $this->import->getErrorAggregator();
         $errorAggregator->initValidationStrategy(
             $this->import->getData(Import::FIELD_NAME_VALIDATION_STRATEGY),
@@ -65,6 +66,9 @@ class StartImport implements StartImportInterface
             $errors[] ='Maximum error count has been reached or system error is occurred!';
         } else {
             $this->import->invalidateIndex();
+        }
+        if (!$errors) {
+            return ["Entities Updated: " . $processedEntities];
         }
         return $errors;
     }
