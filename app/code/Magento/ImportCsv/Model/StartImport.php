@@ -68,7 +68,7 @@ class StartImport implements StartImportInterface
             $this->import->invalidateIndex();
         }
         if (!$errors) {
-            return ["Entities Updated: " . $processedEntities];
+            return ["Entities Processed: " . $processedEntities];
         }
         return $errors;
     }

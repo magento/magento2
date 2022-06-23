@@ -15,10 +15,12 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\ImportExport\Helper\Data;
 use Magento\ImportExport\Model\Export\Adapter\CsvFactory;
 use Magento\ImportExport\Model\History;
 use Magento\ImportExport\Model\Import;
@@ -47,6 +49,11 @@ class ImportTest extends AbstractImportTestCase
     protected $_entityAdapter;
 
     /**
+     * @var Data|MockObject
+     */
+    protected $_importExportData = null;
+
+    /**
      * @var ConfigInterface|MockObject
      */
     protected $_importConfig;
@@ -65,6 +72,11 @@ class ImportTest extends AbstractImportTestCase
      * @var CsvFactory|MockObject
      */
     protected $_csvFactory;
+
+    /**
+     * @var FileTransferFactory|MockObject
+     */
+    protected $_httpFactory;
 
     /**
      * @var UploaderFactory|MockObject
@@ -141,6 +153,9 @@ class ImportTest extends AbstractImportTestCase
         $this->_filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->_importExportData = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_coreConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -181,6 +196,9 @@ class ImportTest extends AbstractImportTestCase
         $this->_csvFactory = $this->getMockBuilder(CsvFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->_httpFactory = $this->getMockBuilder(FileTransferFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_uploaderFactory = $this->getMockBuilder(UploaderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -219,17 +237,22 @@ class ImportTest extends AbstractImportTestCase
                 [
                     $logger,
                     $this->_filesystem,
-                    $this->upload,
+                    $this->_importExportData,
                     $this->_coreConfig,
                     $this->_importConfig,
                     $this->_entityFactory,
                     $this->_importData,
                     $this->_csvFactory,
+                    $this->_httpFactory,
                     $this->_uploaderFactory,
                     $this->_behaviorFactory,
                     $this->indexerRegistry,
                     $this->historyModel,
-                    $this->dateTime
+                    $this->dateTime,
+                    [],
+                    null,
+                    null,
+                    $this->upload
                 ]
             )
             ->setMethods(
@@ -532,17 +555,22 @@ class ImportTest extends AbstractImportTestCase
         $import = new Import(
             $logger,
             $this->_filesystem,
-            $this->upload,
+            $this->_importExportData,
             $this->_coreConfig,
             $this->_importConfig,
             $this->_entityFactory,
             $this->_importData,
             $this->_csvFactory,
+            $this->_httpFactory,
             $this->_uploaderFactory,
             $this->_behaviorFactory,
             $this->indexerRegistry,
             $this->historyModel,
-            $this->dateTime
+            $this->dateTime,
+            [],
+            null,
+            null,
+            $this->upload
         );
 
         $import->setEntity('test');
@@ -564,17 +592,22 @@ class ImportTest extends AbstractImportTestCase
         $import = new Import(
             $logger,
             $this->_filesystem,
-            $this->upload,
+            $this->_importExportData,
             $this->_coreConfig,
             $this->_importConfig,
             $this->_entityFactory,
             $this->_importData,
             $this->_csvFactory,
+            $this->_httpFactory,
             $this->_uploaderFactory,
             $this->_behaviorFactory,
             $this->indexerRegistry,
             $this->historyModel,
-            $this->dateTime
+            $this->dateTime,
+            [],
+            null,
+            null,
+            $this->upload
         );
 
         $import->setEntity('test');
@@ -593,17 +626,22 @@ class ImportTest extends AbstractImportTestCase
         $import = new Import(
             $logger,
             $this->_filesystem,
-            $this->upload,
+            $this->_importExportData,
             $this->_coreConfig,
             $this->_importConfig,
             $this->_entityFactory,
             $this->_importData,
             $this->_csvFactory,
+            $this->_httpFactory,
             $this->_uploaderFactory,
             $this->_behaviorFactory,
             $this->indexerRegistry,
             $this->historyModel,
-            $this->dateTime
+            $this->dateTime,
+            [],
+            null,
+            null,
+            $this->upload
         );
 
         $import->setEntity('test');
@@ -628,17 +666,22 @@ class ImportTest extends AbstractImportTestCase
         $import = new Import(
             $logger,
             $this->_filesystem,
-            $this->upload,
+            $this->_importExportData,
             $this->_coreConfig,
             $this->_importConfig,
             $this->_entityFactory,
             $this->_importData,
             $this->_csvFactory,
+            $this->_httpFactory,
             $this->_uploaderFactory,
             $this->_behaviorFactory,
             $this->indexerRegistry,
             $this->historyModel,
-            $this->dateTime
+            $this->dateTime,
+            [],
+            null,
+            null,
+            $this->upload
         );
 
         $import->setEntity($entity);

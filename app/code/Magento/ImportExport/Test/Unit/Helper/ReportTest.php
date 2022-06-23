@@ -175,6 +175,7 @@ class ReportTest extends TestCase
     {
         $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
+        $importExportData = $this->createMock(Data::class);
         $coreConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $importConfig = $this->createPartialMock(Config::class, ['getEntities']);
         $importConfig->expects($this->any())
@@ -196,6 +197,7 @@ class ReportTest extends TestCase
             ->willReturn($product);
         $importData = $this->createMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class);
         $csvFactory = $this->createMock(CsvFactory::class);
+        $httpFactory = $this->createMock(FileTransferFactory::class);
         $uploaderFactory = $this->createMock(UploaderFactory::class);
         $behaviorFactory = $this->createMock(\Magento\ImportExport\Model\Source\Import\Behavior\Factory::class);
         $indexerRegistry = $this->createMock(IndexerRegistry::class);
@@ -205,17 +207,22 @@ class ReportTest extends TestCase
         $import = new Import(
             $logger,
             $filesystem,
-            $upload,
+            $importExportData,
             $coreConfig,
             $importConfig,
             $entityFactory,
             $importData,
             $csvFactory,
+            $httpFactory,
             $uploaderFactory,
             $behaviorFactory,
             $indexerRegistry,
             $importHistoryModel,
-            $localeDate
+            $localeDate,
+            [],
+            null,
+            null,
+            $upload
         );
         $import->setData('entity', 'catalog_product');
         $message = $this->report->getSummaryStats($import);
