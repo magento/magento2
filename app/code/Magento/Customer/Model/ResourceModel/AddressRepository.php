@@ -208,7 +208,6 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * Helper function that adds a FilterGroup to the collection.
      *
      * @deprecated 101.0.0
-     * @see we don't recommend this approach anymore
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -268,7 +267,6 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * Retrieve collection processor
      *
      * @deprecated 101.0.0
-     * @see we don't recommend this approach anymore
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()
