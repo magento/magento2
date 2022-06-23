@@ -13,23 +13,29 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Cache\Manager;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Http;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Registry;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
+use Magento\TestFramework\Fixture\Cache;
 use Magento\TestFramework\Request;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Framework\Logger\Monolog as MagentoMonologLogger;
 use Magento\TestFramework\Response;
 use Magento\TestFramework\TestCase\AbstractController;
 
 /**
  * Integration test for product view front action.
  *
+ * @magentoAppIsolation enabled
  * @magentoAppArea frontend
  * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -65,6 +71,12 @@ class ViewTest extends AbstractController
     /** @var GetAttributeSetByName */
     private $getAttributeSetByName;
 
+    /** @var EncoderInterface */
+    private $urlEncoder;
+
+    /** @var ScopeConfigInterface */
+    private $config;
+
     /**
      * @inheritdoc
      */
@@ -80,6 +92,8 @@ class ViewTest extends AbstractController
         $this->registry = $this->_objectManager->get(Registry::class);
         $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
         $this->getAttributeSetByName = $this->_objectManager->get(GetAttributeSetByName::class);
+        $this->urlEncoder = $this->_objectManager->get(EncoderInterface::class);
+        $this->config = $this->_objectManager->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -273,9 +287,11 @@ class ViewTest extends AbstractController
      * Test that 404 page has product tag if product is not visible
      *
      * @magentoDataFixture Magento/Quote/_files/is_not_salable_product.php
-     * @magentoCache full_page enabled
      * @return void
      */
+    #[
+        Cache('full_page', true)
+    ]
     public function test404NotFoundPageCacheTags(): void
     {
         $cache = $this->_objectManager->get(Manager::class);
@@ -291,6 +307,37 @@ class ViewTest extends AbstractController
             $tags,
             "Failed asserting that X-Magento-Tags: {$hTags->getFieldValue()} contains \"$pTag\""
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function testViewUnexistedProduct(): void
+    {
+        $url = '/catalog/product/view/id/999/';
+        $this->getRequest()->setParams([
+            ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($url),
+        ])->setMethod(HttpRequest::METHOD_POST);
+        $this->dispatch($url);
+        $this->assert404NotFound();
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     *
+     * @return void
+     */
+    public function testViewWithRedirect(): void
+    {
+        $product = $this->productRepository->get('simple2');
+        $url = rtrim($this->config->getValue(Store::XML_PATH_UNSECURE_BASE_LINK_URL), '/');
+        $this->getRequest()
+            ->setParams([
+                ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($url),
+            ])
+            ->setMethod(HttpRequest::METHOD_POST);
+        $this->dispatch(sprintf('/catalog/product/view/id/%s/', $product->getId()));
+        $this->assertRedirect($this->stringContains($url));
     }
 
     /**
@@ -362,7 +409,7 @@ class ViewTest extends AbstractController
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->_objectManager->addSharedInstance($logger, MagentoMonologLogger::class);
+        $this->_objectManager->addSharedInstance($logger, LoggerInterface::class, true);
 
         return $logger;
     }

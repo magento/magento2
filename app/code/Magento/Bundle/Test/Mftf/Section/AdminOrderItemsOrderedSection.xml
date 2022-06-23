@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderItemsOrderedSection">
+        <element name="orderItemOptionLabel" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-product .option-label" parameterized="true"/>
+        <element name="orderItemOptionValue" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-product .option-value" parameterized="true"/>
+        <element name="orderItemOptionPrice" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-product .option-value .price" parameterized="true"/>
+    </section>
+</sections>

@@ -20,44 +20,60 @@
             <group value="sales"/>
         </annotations>
         <before>
-            <!--Create product-->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
-            <!--Create customer-->
+
             <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
-            <!--Login to admin page-->
+
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+
+            <createData entity="CustomerCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+
+            <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
+
+            <createData entity="Invoice" stepKey="invoiceOrderOne">
+              <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <!--Delete simple product-->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <!--Delete customer-->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="CreateOrderActionGroup" stepKey="createOrder">
-            <argument name="product" value="$$createSimpleProduct$$"/>
-            <argument name="customer" value="$$createCustomer$$"/>
-        </actionGroup>
-        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
-        <!--Create invoice-->
-        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startCreateInvoice"/>
-        <!--Submit invoice-->
-        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="createOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabOrderId"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="startCreateInvoice"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="submitInvoice"/>
 
-        <!--Create Credit Memo-->
-        <actionGroup ref="StartToCreateCreditMemoActionGroup" stepKey="startToCreateCreditMemo">
-            <argument name="orderId" value="{$grabOrderId}"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openAdminOrderViewPage">
+            <argument name="entityId" value="$createCustomerCart.return$"/>
         </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onOrderPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clearFilters"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="getOrderId"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterOrdersGridById"/>
+
+        <actionGroup ref="AdminStartToCreateCreditMemoFromOrderPageActionGroup" stepKey="startToCreateCreditMemo"/>
         <fillField selector="{{AdminCreditMemoTotalSection.refundShipping}}" userInput="0" stepKey="setRefundShipping"/>
         <actionGroup ref="UpdateCreditMemoTotalsActionGroup" stepKey="updateCreditMemoTotals"/>
         <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo"/>
 
-        <!--Go to Credit Memo tab-->
         <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemosTab"/>
         <waitForPageLoad stepKey="waitForCreditMemosGridToLoad"/>
 
-        <!--Check refunded total -->
-        <see selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" userInput="$123" stepKey="seeCreditMemoInGrid"/>
+        <waitForText selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" userInput="$123" stepKey="seeCreditMemoInGrid"/>
     </test>
 </tests>

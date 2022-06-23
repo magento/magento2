@@ -45,7 +45,7 @@
     <entity name="tierPriceHighCostSimpleProduct" type="data">
         <data key="website">All Websites [USD]</data>
         <data key="customer_group">ALL GROUPS</data>
-        <data key="price">500,000.00</data>
+        <data key="price">500000.00</data>
         <data key="qty">1</data>
     </entity>
     <entity name="tierProductPrice" type="catalogTierPrice">
@@ -79,5 +79,25 @@
         <data key="customer_group">ALL GROUPS</data>
         <data key="quantity">1</data>
         <var key="sku" entityType="product" entityKey="sku" />
+    </entity>
+     <entity name="tierPrice01PercentDiscount" type="data">
+        <data key="website">All Websites [USD]</data>
+        <data key="customer_group">ALL GROUPS</data>
+        <data key="price">0.1</data>
+        <data key="qty">1</data>
+    </entity>
+    <entity name="tierPriceForAllGroups" type="data">
+        <data key="price">80</data>
+        <data key="price_type">fixed</data>
+        <data key="website_id">0</data>
+        <data key="customer_group">ALL GROUPS</data>
+        <data key="quantity">2</data>
+    </entity>
+    <entity name="tierPriceForGeneralGroup" type="data">
+        <data key="price">70</data>
+        <data key="price_type">fixed</data>
+        <data key="website_id">0</data>
+        <data key="customer_group">General</data>
+        <data key="quantity">3</data>
     </entity>
 </entities>

@@ -43,7 +43,7 @@
             <actionGroup ref="DeleteAllDuplicateProductUsingProductGridActionGroup" stepKey="deleteAllDuplicateProducts">
                 <argument name="product" value="$createProduct$"/>
             </actionGroup>
-            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
@@ -68,13 +68,23 @@
         <seeElement selector="{{AdminProductGridSection.productRowByTypeAndName('Configurable Product',$createProduct.name$)}}" stepKey="seeConfigurableProductInGrid"/>
         <seeElement selector="{{AdminProductGridSection.productRowByTypeAndName('Simple Product',$createProduct.name$-option1)}}" stepKey="seeSimpleProduct1NameInGrid"/>
         <seeElement selector="{{AdminProductGridSection.productRowByTypeAndName('Simple Product',$createProduct.name$-option2)}}" stepKey="seeSimpleProduct2NameInGrid"/>
+
         <!--Assert configurable product on storefront-->
         <comment userInput="Assert configurable product on storefront" stepKey="commentAssertConfigProductOnStorefront"/>
-        <amOnPage url="{{StorefrontProductPage.url($createProduct.name$)}}" stepKey="openProductPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
-        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertInStock"/>
-        <click selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="clickAttributeDropDown"/>
-        <see userInput="option1" stepKey="verifyOption1Exists"/>
-        <see userInput="option2" stepKey="verifyOption2Exists"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontProductPageLoad"/>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="assertInStock">
+            <argument name="productStockStatus" value="In Stock"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickAttributeDropDown"/>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="verifyOption1Exists">
+            <argument name="productAttributeOption" value="option1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="verifyOption2Exists">
+            <argument name="productAttributeOption" value="option2"/>
+        </actionGroup>
+
     </test>
 </tests>

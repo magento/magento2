@@ -89,7 +89,7 @@
             <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
 
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
+                <argument name="indices" value="cataloginventory_stock"/>
             </actionGroup>
         </before>
         <after>
@@ -107,12 +107,13 @@
             <deleteData createDataKey="createDownloadableProduct" stepKey="deleteDownloadableProduct"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
-
-            <!-- Delete customer -->
-            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <comment userInput="BIC workaround" stepKey="deleteCustomer"/>
 
             <!-- Logout customer -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
+
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCreatedCustomer"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
@@ -158,7 +159,7 @@
         <!-- Add Bundle Product to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createFixedBundleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToBundleProductPage"/>
         <waitForPageLoad stepKey="waitForFixedBundleProductPageLoad"/>
-        <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCart"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFixedBundleProductFromStorefrontProductPage">
             <argument name="productName" value="$$createFixedBundleProduct.name$$"/>
         </actionGroup>
@@ -168,9 +169,8 @@
         <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
-
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
         <actionGroup ref="FillCustomerSignInPopupFormActionGroup" stepKey="fillCustomerSignInPopupForm">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
@@ -187,22 +187,26 @@
         <fillField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="fillPhone" />
 
         <!-- Click next button to open payment section -->
-        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNextBtn"/>
-        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNextBtn"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
 
         <!-- Check order summary in checkout -->
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
-        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced" />
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="waitForPaymentSectionLoaded"/>
+        <comment userInput="BIC workaround" stepKey="clickPlaceOrderButton"/>
+        <comment userInput="BIC workaround" stepKey="orderIsSuccessfullyPlaced"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="openOrderViewPage"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
         <!-- Login as admin -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open created order -->
-        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="goToOrders"/>
+        <comment userInput="BIC workaround" stepKey="filterOrderGridById"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openAdminOrderViewPage">
+            <argument name="entityId" value="{$grabOrderId}"/>
         </actionGroup>
 
         <!-- Assert that addresses on order page the same -->

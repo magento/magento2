@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Reports\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Framework\DataObject;
 
 /**
  * Products Report collection.
@@ -63,6 +64,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @var \Magento\Quote\Model\ResourceModel\Quote\Collection
      */
     protected $quoteResource;
+
+    /**
+     * @var DataObject
+     */
+    private $_totals;
 
     /**
      * Collection constructor.
@@ -335,6 +341,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
          * Getting event type id for catalog_product_view event
          */
         $eventTypes = $this->_eventTypeFactory->create()->getCollection();
+        $productViewEvent = null;
         foreach ($eventTypes as $eventType) {
             if ($eventType->getEventName() == 'catalog_product_view') {
                 $productViewEvent = (int)$eventType->getId();

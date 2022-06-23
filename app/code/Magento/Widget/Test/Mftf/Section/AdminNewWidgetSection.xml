@@ -17,6 +17,8 @@
         <element name="widgetStoreIds" type="select" selector="#store_ids"/>
         <element name="widgetSortOrder" type="input" selector="#sort_order"/>
         <element name="addLayoutUpdate" type="button" selector=".action-default.scalable.action-add"/>
+        <element name="layoutUpdate" type="block" selector=".page_group_container"/>
+        <element name="removeLastLayoutUpdate" type="button" selector=".page_group_container:last-child .action-default.scalable.action-delete"/>
         <element name="selectDisplayOn" type="select" selector="#widget_instance[0][page_group]"/>
         <element name="selectContainer" type="select" selector="#all_pages_0>table>tbody>tr>td:nth-child(1)>div>div>select"/>
         <element name="displayOnByIndex" type="select" selector="select[name='widget_instance[{{index}}][page_group]']" parameterized="true"/>
@@ -43,12 +45,18 @@
         <element name="displayMode" type="select" selector="select[id*='display_mode']"/>
         <element name="restrictTypes" type="select" selector="select[id*='types']"/>
         <element name="saveAndContinue" type="button" selector="#save_and_edit_button" timeout="30"/>
+        <element name="specificEntitySelectContainer" type="select" selector="select[name='widget_instance[0][anchor_categories][block]']"/>
+        <element name="specificEntitySelectRadio" type="input" selector="#specific_anchor_categories_0"/>
+        <element name="specificEntityOptionsChooser" type="button" selector="#anchor_categories_ids_0 .widget-option-chooser"/>
         <element name="widgetInstanceType" type="select" selector=".admin__field-control select#instance_code" />
         <!-- Catalog Product List Widget Options -->
         <element name="title" type="input" selector="[name='parameters[title]']"/>
         <element name="displayPageControl" type="select" selector="[name='parameters[show_pager]']"/>
         <element name="numberOfProductsToDisplay" type="input" selector="[name='parameters[products_count]']"/>
+        <element name="template" type="select" selector="[name='parameters[template]']"/>
         <element name="cacheLifetime" type="input" selector="[name='parameters[cache_lifetime]']"/>
+        <element name="deleteWidgetLayoutAction" type="button" selector="#page_group_container > div:first-of-type > div.fieldset-wrapper-title > div > .action-default.action-delete"/> 
+        <element name="CountDeleteButtons" type="button" selector="#page_group_container > .fieldset-wrapper.page_group_container > div.fieldset-wrapper-title > div > .action-default.action-delete"/>
     </section>
 </sections>
 

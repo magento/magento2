@@ -141,6 +141,9 @@
         </resources>
         <data>
             <parameter name="customer.id" force="true">%customer_id%</parameter>
+            <parameter name="customer.group_id" force="true">%customer_group_id%</parameter>
+            <parameter name="customer.website_id" force="true">%customer_website_id%</parameter>
+            <parameter name="customer.store_id" force="true">%customer_store_id%</parameter>
         </data>
     </route>
     <route url="/V1/customers/me" method="GET" soapOperation="getSelf">
@@ -227,7 +230,7 @@
     <route url="/V1/customers/:customerId" method="DELETE">
         <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="deleteById"/>
         <resources>
-            <resource ref="Magento_Customer::manage"/>
+            <resource ref="Magento_Customer::delete"/>
         </resources>
     </route>
     <route url="/V1/customers/isEmailAvailable" method="POST">

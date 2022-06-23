@@ -13,5 +13,6 @@
         <element name="cancelMassActionMode" type="button" selector="#cancel_massaction"/>
         <element name="deleteImages" type="button" selector="#delete_massaction"/>
         <element name="deleteSelected" type="button" selector="#delete_selected_massaction"/>
+        <element name="massActionCheckboxAll" type="checkbox" selector="[data-id='media-gallery-masonry-grid'] .mediagallery-massaction-checkbox input[type='checkbox']"/>
     </section>
 </sections>

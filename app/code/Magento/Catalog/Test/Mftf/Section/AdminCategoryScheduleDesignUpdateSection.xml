@@ -10,5 +10,6 @@
     <section name="AdminCategoryScheduleDesignUpdateSection">
         <element name="sectionHeader" type="button" selector="div[data-index='schedule_design_update'] .fieldset-wrapper-title" timeout="30"/>
         <element name="sectionBody" type="text" selector="div[data-index='schedule_design_update'] .admin__fieldset-wrapper-content"/>
+        <element name="customDesignFrom" type="input" selector="div[data-index='schedule_design_update'] input[name='custom_design_from']"/>
     </section>
 </sections>

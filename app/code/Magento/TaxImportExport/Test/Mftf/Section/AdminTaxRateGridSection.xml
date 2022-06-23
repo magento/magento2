@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminTaxRateGridSection">
+        <element name="exportFileType" type="select" selector="#tax_rate_grid_export"/>
+        <element name="exportFileTypeOption" type="select" parameterized="true" selector="//select[@id='tax_rate_grid_export']//option[.='{{option}}']"/>
+        <element name="exportButton" type="button" selector="#tax_rate_grid [title='Export']"/>
+    </section>
+</sections>

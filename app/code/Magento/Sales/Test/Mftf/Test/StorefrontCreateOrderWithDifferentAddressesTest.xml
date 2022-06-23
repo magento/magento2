@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCreateOrderWithDifferentAddressesTest">
+        <annotations>
+            <stories value="Order billing and shipping addresses should show correctly the entered data"/>
+            <title value="Billing and Shipping addresses should show correct data on Admin Order View"/>
+            <description value="Place order on Store Front with manually filled billing address state and selected shipping address state. Check that billing address show correct state on Admin Order View page"/>
+            <severity value="MINOR"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <createData entity="Customer_UK_US" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCreateCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+        </after>
+
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProductPage">
+            <argument name="productUrlKey" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckout"/>
+        <waitForPageLoad stepKey="waitForPaymentSelectionPageLoad"/>
+
+        <actionGroup ref="LoginAsCustomerOnCheckoutPageActionGroup" stepKey="loginAsCustomer">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="gotoPaymentStep"/>
+
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderNumber"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="getOrderNumber">
+            <actualResult type="const">$getOrderNumber</actualResult>
+        </assertNotEmpty>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$getOrderNumber"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertOrderAddressWithStateInformationActionGroup" stepKey="AssertOrderAddressInformation">
+            <argument name="customer" value=""/>
+            <argument name="shippingAddress" value="US_Address_NY_Default_Shipping"/>
+            <argument name="billingAddress" value="UK_With_State_Default_Billing"/>
+        </actionGroup>
+        <dontSee selector="{{AdminShipmentAddressInformationSection.billingAddress}}" userInput="{{US_Address_NY_Default_Shipping.state}}" stepKey="dontSeeShippingAddressStateAtBillingAddress"/>
+    </test>
+</tests>

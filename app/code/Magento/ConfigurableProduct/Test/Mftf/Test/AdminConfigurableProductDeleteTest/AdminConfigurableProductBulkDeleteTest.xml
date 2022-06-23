@@ -154,21 +154,35 @@
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
 
         <!-- Should not see the records in the admin panel -->
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 3 record(s) have been deleted." stepKey="seeSuccessMsg"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMsg">
+            <argument name="message" value="A total of 3 record(s) have been deleted."/>
+        </actionGroup>
         <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="0" stepKey="seeNoResults"/>
 
         <!-- after delete, assert product pages are 404 -->
-        <amOnPage url="$$createProduct1.sku$$.html" stepKey="gotoStorefront1"/>
-        <waitForPageLoad stepKey="waitForProduct1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops1"/>
-        <dontSee selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct1.name$$" stepKey="dontSeeProduct1"/>
-        <amOnPage url="$$createProduct1.sku$$.html" stepKey="gotoStorefront2"/>
-        <waitForPageLoad stepKey="waitForProduct2"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops2"/>
-        <dontSee selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct1.name$$" stepKey="dontSeeProduct2"/>
-        <amOnPage url="$$createProduct1.sku$$.html" stepKey="gotoStorefront3"/>
-        <waitForPageLoad stepKey="waitForProduct3"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops3"/>
-        <dontSee selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct1.name$$" stepKey="dontSeeProduct3"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="gotoStorefront1">
+            <argument name="product" value="$$createProduct1$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProduct1"/>
+        <actionGroup ref="StorefrontAssertPageNotFoundErrorOnProductDetailPageActionGroup" stepKey="seeWhoops1">
+            <argument name="product" value="$$createProduct1$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="dontSeeProduct1"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="gotoStorefront2">
+            <argument name="product" value="$$createProduct2$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProduct2"/>
+        <actionGroup ref="StorefrontAssertPageNotFoundErrorOnProductDetailPageActionGroup" stepKey="seeWhoops2">
+            <argument name="product" value="$$createProduct2$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="dontSeeProduct2"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="gotoStorefront3">
+            <argument name="product" value="$$createProduct3$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProduct3"/>
+        <actionGroup ref="StorefrontAssertPageNotFoundErrorOnProductDetailPageActionGroup" stepKey="seeWhoops3">
+            <argument name="product" value="$$createProduct3$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="dontSeeProduct3"/>
     </test>
 </tests>

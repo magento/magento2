@@ -26,6 +26,9 @@
 ##
 ## In production mode, you should uncomment the 'expires' directive in the /static/ location block
 
+# Modules can be loaded only at the very beginning of the Nginx config file, please move the line below to the main config file
+# load_module /etc/nginx/modules/ngx_http_image_filter_module.so;
+
 root $MAGE_ROOT/pub;
 
 index index.php;
@@ -105,11 +108,11 @@ location /static/ {
     # expires max;
 
     # Remove signature of the static files that is used to overcome the browser cache
-    location ~ ^/static/version {
-        rewrite ^/static/(version\d*/)?(.*)$ /static/$2 last;
+    location ~ ^/static/version\d*/ {
+        rewrite ^/static/version\d*/(.*)$ /static/$1 last;
     }
 
-    location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2|html|json)$ {
+    location ~* \.(ico|jpg|jpeg|png|gif|svg|svgz|webp|avif|avifs|js|css|eot|ttf|otf|woff|woff2|html|json|webmanifest)$ {
         add_header Cache-Control "public";
         add_header X-Frame-Options "SAMEORIGIN";
         expires +1y;
@@ -134,13 +137,36 @@ location /static/ {
 }
 
 location /media/ {
+
+## The following section allows to offload image resizing from Magento instance to the Nginx.
+## Catalog image URL format should be set accordingly.
+## See https://docs.magento.com/user-guide/configuration/general/web.html#url-options
+#   location ~* ^/media/catalog/.* {
+#
+#       # Replace placeholders and uncomment the line below to serve product images from public S3
+#       # See examples of S3 authentication at https://github.com/anomalizer/ngx_aws_auth
+#       # resolver 8.8.8.8;
+#       # proxy_pass https://<bucket-name>.<region-name>.amazonaws.com;
+#
+#       set $width "-";
+#       set $height "-";
+#       if ($arg_width != '') {
+#           set $width $arg_width;
+#       }
+#       if ($arg_height != '') {
+#           set $height $arg_height;
+#       }
+#       image_filter resize $width $height;
+#       image_filter_jpeg_quality 90;
+#   }
+
     try_files $uri $uri/ /get.php$is_args$args;
 
     location ~ ^/media/theme_customization/.*\.xml {
         deny all;
     }
 
-    location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
+    location ~* \.(ico|jpg|jpeg|png|gif|svg|svgz|webp|avif|avifs|js|css|eot|ttf|otf|woff|woff2)$ {
         add_header Cache-Control "public";
         add_header X-Frame-Options "SAMEORIGIN";
         expires +1y;
@@ -216,6 +242,6 @@ gzip_types
 gzip_vary on;
 
 # Banned locations (only reached if the earlier PHP entry point regexes don't match)
-location ~* (\.php$|\.phtml$|\.htaccess$|\.git) {
+location ~* (\.php$|\.phtml$|\.htaccess$|\.htpasswd$|\.git) {
     deny all;
 }

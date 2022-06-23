@@ -164,3 +164,6 @@ Apply,Apply
 "Apply to Shipping Amount","Apply to Shipping Amount"
 "Discard subsequent rules","Discard subsequent rules"
 "Default Rule Label for All Store Views","Default Rule Label for All Store Views"
+"Rule is not saved with auto generate option enabled. Please save the rule and try again.", "Rule is not saved with auto generate option enabled. Please save the rule and try again."
+"Trigger recollect totals for quotes by rule ID %1","Trigger recollect totals for quotes by rule ID %1"
+"Sorry, something went wrong while triggering recollect totals for affected quotes. Please see log for details.","Sorry, something went wrong while triggering recollect totals for affected quotes. Please see log for details."

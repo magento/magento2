@@ -37,6 +37,9 @@ class DesignLoaderTest extends TestCase
      */
     protected $appState;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->_areaListMock = $this->createMock(AreaList::class);
@@ -49,15 +52,18 @@ class DesignLoaderTest extends TestCase
         );
     }
 
-    public function testLoad()
+    /**
+     * @return void
+     */
+    public function testLoad(): void
     {
         $area = $this->createMock(Area::class);
         $this->appState->expects($this->once())->method('getAreaCode')->willReturn('area');
         $this->_areaListMock->expects($this->once())->method('getArea')->with('area')->willReturn($area);
-        $area->expects($this->at(0))->method('load')
-            ->with(Area::PART_DESIGN)->willReturn($area);
-        $area->expects($this->at(1))->method('load')
-            ->with(Area::PART_TRANSLATE)->willReturn($area);
+        $area
+            ->method('load')
+            ->withConsecutive([Area::PART_DESIGN], [Area::PART_TRANSLATE])
+            ->willReturnOnConsecutiveCalls($area, $area);
         $this->_model->load($this->_requestMock);
     }
 }

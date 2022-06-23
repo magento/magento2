@@ -114,8 +114,8 @@ class Time extends AbstractElement
             'style',
             [],
             <<<style
-                select.select.select80wide {
-                    width: 80px;
+                .select80wide {
+                    width: 80px !important;
                 }
 style
             ,

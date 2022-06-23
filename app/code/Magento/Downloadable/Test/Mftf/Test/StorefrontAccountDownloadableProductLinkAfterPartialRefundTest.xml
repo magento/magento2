@@ -30,9 +30,8 @@
             <createData entity="downloadableLink1" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="createDownloadableProduct"/>
             </createData>
-
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace 'indexer:reindex' command for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
 
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signIn">
@@ -51,8 +50,8 @@
 
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace 'indexer:reindex' command for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
 
         <actionGroup ref="StorefrontAddSimpleProductToShoppingCartActionGroup" stepKey="addSimpleProductToCart">
@@ -67,30 +66,34 @@
         </actionGroup>
 
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
         <waitForElementVisible selector="{{CheckoutShippingSection.shipHereButton(UK_Not_Default_Address.street[0])}}" stepKey="waitForShipHereVisible"/>
         <click selector="{{CheckoutShippingSection.shipHereButton(UK_Not_Default_Address.street[0])}}" stepKey="clickShipHere"/>
-        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
-        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
         <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution"/>
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
-        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="waitForPaymentSectionLoaded"/>
+        <comment userInput="BIC workaround" stepKey="clickPlaceOrderButton"/>
+        <comment userInput="BIC workaround" stepKey="orderIsSuccessfullyPlaced"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchOrder">
-            <argument name="keyword" value="$grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="onOrdersPage"/>
+        <comment userInput="BIC workaround" stepKey="searchOrder"/>
+        <comment userInput="BIC workaround" stepKey="clickOrderRow"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="goToOrderAdmin">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
-        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
 
         <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createCreditMemo"/>
 
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
-            <argument name="orderId" value="{$grabOrderNumber}"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
 
         <actionGroup ref="AdminOpenAndFillCreditMemoRefundActionGroup" stepKey="fillCreditMemoRefund">
@@ -98,8 +101,8 @@
             <argument name="rowNumber" value="1"/>
         </actionGroup>
 
-        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline"/>
-        <waitForPageLoad stepKey="waitForResultPage"/>
+        <actionGroup ref="AdminClickRefundOfflineOnNewMemoPageActionGroup" stepKey="clickRefundOffline"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForResultPage"/>
 
         <actionGroup ref="StorefrontNotAssertDownloadableProductLinkInCustomerAccountActionGroup" stepKey="dontSeeStorefrontMyAccountDownloadableProductsLink">
             <argument name="product" value="$$createDownloadableProduct$$"/>

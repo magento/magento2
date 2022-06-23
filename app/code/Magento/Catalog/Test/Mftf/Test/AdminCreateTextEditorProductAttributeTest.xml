@@ -13,17 +13,17 @@
             <features value="Catalog"/>
             <stories value="Create product Attribute"/>
             <title value="Admin create text editor product attribute test"/>
-            <description value="Create text editor product attribute with TinyMCE4 enabled"/>
+            <description value="Create text editor product attribute with TinyMCE enabled"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-6338"/>
             <group value="catalog"/>
         </annotations>
         <before>
             <!-- Enable WYSIWYG editor -->
-            <magentoCLI command="config:set {{EnableWYSIWYG.path}} {{EnableWYSIWYG.value}}" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
 
-            <!-- Enable TinyMCE 4 -->
-            <magentoCLI command="config:set {{EnableTinyMCE4.path}} {{EnableTinyMCE4.value}}" stepKey="enableTinyMCE4"/>
+            <!-- Enable TinyMCE  -->
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
 
             <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -33,11 +33,15 @@
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="productTextEditorAttribute"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Delete product -->
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="_defaultProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -100,15 +104,15 @@
         <!-- Created product attribute appear on product form -->
         <seeElement selector="{{AdminProductFormSection.attributeLabelByText(productTextEditorAttribute.attribute_code)}}" stepKey="seeAttributeLabelInProductForm"/>
 
-        <!-- TinyMCE 4 is displayed in WYSIWYG content area -->
-        <seeElement selector="{{TinyMCESection.TinyMCE4}}" stepKey="seeTinyMCE4"/>
+        <!-- TinyMCE is displayed in WYSIWYG content area -->
+        <seeElement selector="{{TinyMCESection.TinyMCE}}" stepKey="seeTinyMCE"/>
 
         <!-- Verify toolbar menu -->
         <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyToolbarMenu"/>
 
         <!-- Click Show/Hide button and see Insert Image button -->
         <scrollToTopOfPage stepKey="scrollToTop"/>
-        <click selector="{{ProductAttributeWYSIWYGSection.showHideBtn(productTextEditorAttribute.attribute_code)}}" stepKey="clickShowHideBtn"/>
+        <click selector="{{AdminProductFormSection.divByDataIndex(productTextEditorAttribute.attribute_code)}} {{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
         <waitForElementVisible selector="{{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImageBtn"/>
 
         <!-- Add content into attribute -->

@@ -12,4 +12,7 @@
     <event name="catalogrule_dirty_notice">
         <observer name="catalogrule" instance="Magento\CatalogRule\Observer\AddDirtyRulesNotice" />
     </event>
+    <event name="prepare_catalog_product_collection_prices">
+        <observer name="catalogrule" disabled="true" />
+    </event>
 </config>

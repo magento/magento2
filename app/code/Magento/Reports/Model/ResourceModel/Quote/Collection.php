@@ -144,24 +144,24 @@ class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
             $this->getSelect()->columns(
                 ['subtotal' => '(main_table.base_subtotal_with_discount*main_table.base_to_global_rate)']
             );
-            $this->_joinedFields['subtotal'] =
+            $joinedFields['subtotal'] =
                 '(main_table.base_subtotal_with_discount*main_table.base_to_global_rate)';
         } else {
             $this->getSelect()->columns(['subtotal' => 'main_table.base_subtotal_with_discount']);
-            $this->_joinedFields['subtotal'] = 'main_table.base_subtotal_with_discount';
+            $joinedFields['subtotal'] = 'main_table.base_subtotal_with_discount';
         }
 
         if ($filter && is_array($filter) && isset($filter['subtotal'])) {
             if (isset($filter['subtotal']['from'])) {
                 $this->getSelect()->where(
-                    $this->_joinedFields['subtotal'] . ' >= ?',
+                    $joinedFields['subtotal'] . ' >= ?',
                     $filter['subtotal']['from'],
                     \Zend_Db::FLOAT_TYPE
                 );
             }
             if (isset($filter['subtotal']['to'])) {
                 $this->getSelect()->where(
-                    $this->_joinedFields['subtotal'] . ' <= ?',
+                    $joinedFields['subtotal'] . ' <= ?',
                     $filter['subtotal']['to'],
                     \Zend_Db::FLOAT_TYPE
                 );
@@ -200,9 +200,18 @@ class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
         foreach ($this->getItems() as $item) {
             foreach ($customersData as $customerItemData) {
                 if ($item['customer_id'] == $customerItemData['entity_id']) {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $item->setData(array_merge($item->getData(), $customerItemData));
                 }
             }
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
+    {
+        return $item;
     }
 }

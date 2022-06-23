@@ -21,4 +21,13 @@
     <entity name="DefaultAdminAccountAllowCountry" type="checkoutTotalFlagZero">
         <data key="value">0</data>
     </entity>
+    <entity name="SetAdminAccountAllowCountryToDefaultForDefaultWebsite" type="default_admin_account_country_options_config_for_default_website">
+        <requiredEntity type="checkoutTotalFlagZero">DefaultAdminAccountAllowCountry</requiredEntity>
+    </entity>
+    <entity name="SetAllowedCountryUsConfig">
+        <data key="path">general/country/allow</data>
+        <data key="value">US</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
 </entities>

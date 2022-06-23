@@ -10,5 +10,6 @@
     <consumer name="demoConsumerQueueTwo" queue="queue-updated" connection="db" handler="Magento\TestModuleMysqlMq\Model\Processor::processObjectUpdated"/>
     <consumer name="demoConsumerQueueThree" queue="queue-custom-created" connection="db" handler="Magento\TestModuleMysqlMq\Model\Processor::processCustomObjectCreated"/>
     <consumer name="demoConsumerWithException" queue="queue-exception" connection="db" handler="Magento\TestModuleMysqlMq\Model\Processor::processMessageWithException"/>
+    <consumer name="demoConsumerWithConnectionException" queue="queue-connection-exception" connection="db" handler="Magento\TestModuleMysqlMq\Model\Processor::processMessageWithConnectionException"/>
     <consumer name="delayedOperationConsumer" queue="demo-queue-6" connection="db" handler="Magento\TestModuleMysqlMq\Model\DataObjectRepository::delayedOperation"/>
 </config>

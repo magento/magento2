@@ -6,6 +6,8 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Catalog\Model\Product\Media\Config;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Store;
 
 /**
@@ -31,22 +33,30 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @since 101.0.0
      */
     protected $metadata;
+    /**
+     * @var Config|null
+     */
+    private $mediaConfig;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $connectionName
+     * @param Config|null $mediaConfig
+     * @throws \Exception
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        $connectionName = null
+        $connectionName = null,
+        ?Config $mediaConfig = null
     ) {
         $this->metadata = $metadataPool->getMetadata(
             \Magento\Catalog\Api\Data\ProductInterface::class
         );
 
         parent::__construct($context, $connectionName);
+        $this->mediaConfig = $mediaConfig ?? ObjectManager::getInstance()->get(Config::class);
     }
 
     /**
@@ -443,6 +453,9 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $select = $this->getConnection()->select()->from(
             $this->getTable(self::GALLERY_VALUE_TABLE)
         )->where(
+            $linkField . ' = ?',
+            $originalProductId
+        )->where(
             'value_id IN(?)',
             array_keys($valueIdMap)
         );
@@ -491,7 +504,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             \Zend_Db::INT_TYPE
         )->where(
             'attribute_code IN (?)',
-            ['small_image', 'thumbnail', 'image']
+            $this->mediaConfig->getMediaAttributeCodes()
         );
 
         return $this->getConnection()->fetchAll($select);

@@ -80,12 +80,9 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
         $data['addToCartButton'] = '#product_addtocart_form [type=submit]';
     } else {
         $data['addToCartButton'] = sprintf(
-            'form:has(input[type="hidden"][name="product"][value="%s"]) button[type="submit"]',
-            (int) $productId . ',' .
-            sprintf(
-                '.block.widget .price-box[data-product-id=%s]+.product-item-actions button.tocart',
-                (int)$productId
-            )
+            'form:has(input[type="hidden"][name="product"][value="%1$s"]) button[type="submit"],' .
+            '.block.widget .price-box[data-product-id="%1$s"]+.product-item-actions button.tocart',
+            $productId
         );
     }
     ?>

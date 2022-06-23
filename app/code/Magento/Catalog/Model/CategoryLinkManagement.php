@@ -3,11 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
 /**
- * Class CategoryLinkManagement
+ * Represents Category Product Link Management class
  */
 class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagementInterface
 {
@@ -56,7 +57,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAssignedProducts($categoryId)
     {
@@ -65,6 +66,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $products */
         $products = $category->getProductCollection();
         $products->addFieldToSelect('position');
+        $products->groupByAttribute($products->getProductEntityMetadata()->getIdentifierField());
 
         /** @var \Magento\Catalog\Api\Data\CategoryProductLinkInterface[] $links */
         $links = [];

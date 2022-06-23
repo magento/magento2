@@ -10,11 +10,6 @@ $blockId = $block->getId();
 <div id="product_composite_configure"
      class="product-configure-popup product-configure-popup-<?= $block->escapeHtmlAttr($blockId) ?>">
     <iframe name="product_composite_configure_iframe" id="product_composite_configure_iframe"></iframe>
-    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-        'onload',
-        "window.productConfigure && productConfigure.onLoadIFrame()",
-        'iframe[name=\'product_composite_configure_iframe\']:last-of-type'
-    ) ?>
 
     <form action="" method="post" id="product_composite_configure_form" enctype="multipart/form-data"
           target="product_composite_configure_iframe" class="product_composite_configure_form">
@@ -85,3 +80,8 @@ script;
     ?>
     <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
 </div>
+<?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+    'onload',
+    "window.productConfigure && productConfigure.onLoadIFrame()",
+    'iframe[name=\'product_composite_configure_iframe\']:last-of-type'
+) ?>

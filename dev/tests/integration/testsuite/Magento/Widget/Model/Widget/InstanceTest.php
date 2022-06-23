@@ -173,4 +173,22 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
             ]
         ];
     }
+
+    /**
+     * @param Instance $model
+     * @depends testGetWidgetConfigAsArray
+     */
+    public function testGenerateLayoutUpdateXmlWithInvalidParamName(\Magento\Widget\Model\Widget\Instance $model)
+    {
+        $params = [
+            'block_id' => '2',
+            'block_id</argument><argument name="value" xsi:type="string">2</argument></action></block><block'
+            . ' class="Magento\Cms\Block\Widget\Block" name="dfgdfgdfg" template="widget/static_block/default.phtml">'
+            . '<action method="setData"><argument name="name" xsi:type="string">' => 'some_value',
+        ];
+        $this->expectException('\Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Layout update is invalid');
+        $model->setData('widget_parameters', $params);
+        $model->generateLayoutUpdateXml('content');
+    }
 }

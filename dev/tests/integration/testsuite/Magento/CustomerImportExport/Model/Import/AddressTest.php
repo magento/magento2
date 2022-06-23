@@ -80,7 +80,7 @@ class AddressTest extends TestCase
         'remove' => [ // this data is not set in CSV file
             '19107' => [
                 'city' => 'Philadelphia',
-                'region' => 'Pennsylvania',
+                'region' => null,
             ],
         ],
         'default' => [ // new default billing/shipping addresses
@@ -568,9 +568,10 @@ class AddressTest extends TestCase
         $this->assertEquals($address->getStreet(), $updatedAddress->getStreet());
         $this->assertEquals($address->getCity(), $updatedAddress->getCity());
         $this->assertEquals($address->getCountryId(), $updatedAddress->getCountryId());
-        $this->assertEquals($address->getPostcode(), $updatedAddress->getPostcode());
         $this->assertEquals($address->getTelephone(), $updatedAddress->getTelephone());
         $this->assertEquals($address->getRegionId(), $updatedAddress->getRegionId());
+        //assert empty non-required values changed
+        $this->assertEquals(null, $updatedAddress->getPostcode());
     }
 
     /**

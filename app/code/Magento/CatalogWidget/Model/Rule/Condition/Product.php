@@ -22,7 +22,7 @@ use Magento\Store\Model\Store;
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
     /**
-     * {@inheritdoc}
+     * @var string
      */
     protected $elementName = 'parameters';
 
@@ -32,8 +32,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     protected $joinedAttributes = [];
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
@@ -149,6 +147,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 $attributes[$attributeCode] = true;
                 $this->getRule()->setCollectedAttributes($attributes);
             }
+        } else {
+            $this->joinedAttributes['price'] ='price_index.min_price';
         }
 
         return $this;
@@ -180,7 +180,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 $linkField = $attribute->getEntity()->getLinkField();
 
                 $collection->getSelect()->join(
-                    [$alias => $collection->getTable('catalog_product_entity_varchar')],
+                    [$alias => $collection->getTable($attribute->getBackendTable())],
                     "($alias.$linkField = e.$linkField) AND ($alias.store_id = $storeId)" .
                     " AND ($alias.attribute_id = {$attribute->getId()})",
                     []
@@ -244,8 +244,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $result = parent::getMappedSqlField();
         } elseif (isset($this->joinedAttributes[$this->getAttribute()])) {
             $result = $this->joinedAttributes[$this->getAttribute()];
-        } elseif ($this->getAttribute() === 'price') {
-            $result = 'price_index.min_price';
         } elseif ($this->getAttributeObject()->isStatic()) {
             $result = $this->getAttributeObject()->getAttributeCode();
         } elseif ($this->getValueParsed()) {
@@ -280,5 +278,18 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         } else {
             $this->addNotGlobalAttribute($attribute, $collection);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getBindArgumentValue()
+    {
+        $value = parent::getBindArgumentValue();
+        return is_array($value) && $this->getMappedSqlField() === 'e.entity_id'
+            ? new \Zend_Db_Expr(
+                $this->_productResource->getConnection()->quoteInto('?', $value, \Zend_Db::INT_TYPE)
+            )
+            : $value;
     }
 }

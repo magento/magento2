@@ -96,7 +96,7 @@
 
     <virtualType name="systemConfigQueryLocker" type="Magento\Framework\Cache\LockGuardedCacheLoader">
         <arguments>
-            <argument name="locker" xsi:type="object">Magento\Framework\Lock\Backend\Database</argument>
+            <argument name="locker" xsi:type="object">Magento\Framework\Lock\Proxy</argument>
         </arguments>
     </virtualType>
 
@@ -363,6 +363,11 @@
     <type name="Magento\Config\App\Config\Source\ConfigStructureSource">
         <arguments>
             <argument name="structure" xsi:type="object">adminhtmlConfigStructure</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config">
+        <arguments>
+            <argument name="configStructure" xsi:type="object">\Magento\Config\Model\Config\Structure\Proxy</argument>
         </arguments>
     </type>
 </config>

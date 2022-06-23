@@ -39,7 +39,7 @@
         </actionGroup>
 
         <!--Go to product page-->
-        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.name$$)}}" stepKey="amOnStorefrontProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <!--Add product to cart-->

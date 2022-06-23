@@ -5,10 +5,34 @@
  */
 namespace Magento\Framework\Mview\Config;
 
+use Magento\Framework\Mview\View\AdditionalColumnsProcessor\DefaultProcessor;
+use Magento\Framework\Mview\View\ChangeLogBatchWalker;
 use Magento\Framework\Mview\View\SubscriptionInterface;
 
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
+    /**
+     * @var string
+     */
+    private $defaultProcessor;
+
+    /**
+     * @var string
+     */
+    private $defaultIterator;
+
+    /**
+     * @param string $defaultProcessor
+     * @param string $defaultIterator
+     */
+    public function __construct(
+        string $defaultProcessor = DefaultProcessor::class,
+        string $defaultIterator = ChangeLogBatchWalker::class
+    ) {
+        $this->defaultProcessor = $defaultProcessor;
+        $this->defaultIterator = $defaultIterator;
+    }
+
     /**
      * Convert dom node tree to array
      *
@@ -28,6 +52,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $data['view_id'] = $viewId;
             $data['action_class'] = $this->getAttributeValue($viewNode, 'class');
             $data['group'] = $this->getAttributeValue($viewNode, 'group');
+            $data['walker'] = $this->getAttributeValue($viewNode, 'walker') ?: $this->defaultIterator;
             $data['subscriptions'] = [];
 
             /** @var $childNode \DOMNode */
@@ -76,6 +101,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     $name = $this->getAttributeValue($subscription, 'name');
                     $column = $this->getAttributeValue($subscription, 'entity_column');
                     $subscriptionModel = $this->getAttributeValue($subscription, 'subscription_model');
+
                     if (!empty($subscriptionModel)
                         && !in_array(
                             SubscriptionInterface::class,
@@ -89,11 +115,44 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     $data['subscriptions'][$name] = [
                         'name' => $name,
                         'column' => $column,
-                        'subscription_model' => $subscriptionModel
+                        'subscription_model' => $subscriptionModel,
+                        'additional_columns' => $this->getAdditionalColumns($subscription),
+                        'processor' => $this->getAttributeValue($subscription, 'processor')
+                            ?: $this->defaultProcessor
                     ];
                 }
                 break;
         }
         return $data;
+    }
+
+    /**
+     * Retrieve additional columns of subscription table
+     *
+     * @param \DOMNode $subscription
+     * @return array
+     */
+    private function getAdditionalColumns(\DOMNode $subscription): array
+    {
+        $additionalColumns = [];
+        foreach ($subscription->childNodes as $childNode) {
+            if ($childNode->nodeType != XML_ELEMENT_NODE || $childNode->nodeName != 'additionalColumns') {
+                continue;
+            }
+
+            foreach ($childNode->childNodes as $columnNode) {
+                if ($columnNode->nodeName !== 'column') {
+                    continue;
+                }
+
+                $additionalColumns[$this->getAttributeValue($columnNode, 'name')] = [
+                    'name' => $this->getAttributeValue($columnNode, 'name'),
+                    'cl_name' => $this->getAttributeValue($columnNode, 'cl_name'),
+                    'constant' => $this->getAttributeValue($columnNode, 'constant'),
+                ];
+            }
+        }
+
+        return $additionalColumns;
     }
 }

@@ -30,35 +30,42 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Search default simple product in the grid page -->
-        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
-        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGrid">
-            <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProductGrid"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct">
+            <argument name="product" value="$$initialSimpleProduct$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
-        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilProductIsOpened"/>
 
         <!-- Update simple product by unselecting categories -->
         <scrollTo selector="{{AdminProductFormSection.productStockStatus}}" stepKey="scroll"/>
-        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
-        <click selector="{{AdminProductFormSection.unselectCategories($$initialCategoryEntity.name$$)}}" stepKey="unselectCategories"/>
-        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneAdvancedCategory"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCategoriesDropDown"/>
+        <actionGroup ref="RemoveCategoryFromProductActionGroup" stepKey="unselectCategories">
+            <argument name="categoryName" value="$$initialCategoryEntity.name$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnDoneAdvancedCategory"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
         <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Verify customer see success message -->
-        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeAssertSimpleProductSaveSuccessMessage">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <!--Search default simple product in the grid page -->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="OpenCategoryCatalogPage"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$initialCategoryEntity.name$$)}}" stepKey="selectCategory"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="clickAdminCategoryProductSection"/>
-        <waitForPageLoad stepKey="waitForSectionHeaderToLoad"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCategory">
+            <argument name="category" value="$$initialCategoryEntity$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad"/>
+        <actionGroup ref="AdminCategoryPageOpenProductsInCategorySectionActionGroup" stepKey="clickAdminCategoryProductSection"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSectionHeaderToLoad"/>
         <dontSee selector="{{AdminCategoryProductsGridSection.rowProductName($$initialSimpleProduct.name$$)}}" stepKey="dontSeeProductNameOnCategoryCatalogPage"/>
     </test>
 </tests>

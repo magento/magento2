@@ -137,9 +137,9 @@ class GenerateTest extends TestCase
     }
 
     /**
-     * testExecute
+     * @covers \Magento\SalesRule\Controller\Adminhtml\Promo\Quote::execute
      */
-    public function testExecute()
+    public function testExecuteWithCouponTypeAuto()
     {
         $helperData = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -157,6 +157,8 @@ class GenerateTest extends TestCase
             ->method('isAjax')
             ->willReturn(true);
         $ruleMock = $this->getMockBuilder(Rule::class)
+            ->addMethods(['getCouponType'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->registryMock->expects($this->once())
@@ -164,6 +166,81 @@ class GenerateTest extends TestCase
             ->willReturn($ruleMock);
         $ruleMock->expects($this->once())
             ->method('getId')
+            ->willReturn(1);
+        $ruleMock->expects($this->once())
+            ->method('getCouponType')
+            ->willReturn(\Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO);
+        $this->requestMock->expects($this->once())
+            ->method('getParams')
+            ->willReturn($requestData);
+        $requestData['quantity'] = isset($requestData['qty']) ? $requestData['qty'] : null;
+        $this->couponGenerationSpec->expects($this->once())
+            ->method('create')
+            ->with(['data' => $requestData])
+            ->willReturn(['some_data', 'some_data_2']);
+        $this->messageManager->expects($this->once())
+            ->method('addSuccessMessage');
+        $this->responseMock->expects($this->once())
+            ->method('representJson')
+            ->with();
+        $helperData->expects($this->once())
+            ->method('jsonEncode')
+            ->with([
+                'messages' => __('%1 coupon(s) have been generated.', 2)
+            ]);
+        $layout = $this->getMockBuilder(Layout::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->view->expects($this->any())
+            ->method('getLayout')
+            ->willReturn($layout);
+        $messageBlock = $this->getMockBuilder(Messages::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $layout->expects($this->once())
+            ->method('initMessages');
+        $layout->expects($this->once())
+            ->method('getMessagesBlock')
+            ->willReturn($messageBlock);
+        $messageBlock->expects($this->once())
+            ->method('getGroupedHtml')
+            ->willReturn(__('%1 coupon(s) have been generated.', 2));
+        $this->model->execute();
+    }
+
+    /**
+     * @covers \Magento\SalesRule\Controller\Adminhtml\Promo\Quote::execute
+     */
+    public function testExecuteWithAutoGenerationEnabled()
+    {
+        $helperData = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with(Data::class)
+            ->willReturn($helperData);
+        $requestData = [
+            'qty' => 2,
+            'length' => 10,
+            'rule_id' => 1
+        ];
+        $this->requestMock->expects($this->once())
+            ->method('isAjax')
+            ->willReturn(true);
+        $ruleMock = $this->getMockBuilder(Rule::class)
+            ->addMethods(['getUseAutoGeneration'])
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->registryMock->expects($this->once())
+            ->method('registry')
+            ->willReturn($ruleMock);
+        $ruleMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $ruleMock->expects($this->once())
+            ->method('getUseAutoGeneration')
             ->willReturn(1);
         $this->requestMock->expects($this->once())
             ->method('getParams')
@@ -200,6 +277,50 @@ class GenerateTest extends TestCase
         $messageBlock->expects($this->once())
             ->method('getGroupedHtml')
             ->willReturn(__('%1 coupon(s) have been generated.', 2));
+        $this->model->execute();
+    }
+
+    /**
+     * @covers \Magento\SalesRule\Controller\Adminhtml\Promo\Quote::execute
+     */
+    public function testExecuteWithCouponTypeNotAutoAndAutoGenerationNotEnabled()
+    {
+        $helperData = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with(Data::class)
+        ->willReturn($helperData);
+        $this->requestMock->expects($this->once())
+            ->method('isAjax')
+            ->willReturn(true);
+        $ruleMock = $this->getMockBuilder(Rule::class)
+            ->addMethods(['getUseAutoGeneration', 'getCouponType'])
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->registryMock->expects($this->once())
+            ->method('registry')
+            ->willReturn($ruleMock);
+        $ruleMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $ruleMock->expects($this->once())
+            ->method('getCouponType')
+            ->willReturn(\Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON);
+        $ruleMock->expects($this->once())
+            ->method('getUseAutoGeneration')
+            ->willReturn(0);
+        $this->responseMock->expects($this->once())
+            ->method('representJson')
+            ->with();
+        $helperData->expects($this->once())
+            ->method('jsonEncode')
+            ->with([
+                'error' =>
+                    __('The rule coupon settings changed. Please save the rule before using auto-generation.')
+            ]);
         $this->model->execute();
     }
 }

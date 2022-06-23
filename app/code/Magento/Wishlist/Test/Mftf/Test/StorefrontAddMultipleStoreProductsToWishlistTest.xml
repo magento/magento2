@@ -33,9 +33,12 @@
             <actionGroup ref="CreateCustomStoreViewActionGroup" stepKey="createCustomStoreView">
                 <argument name="storeGroupName" value="$$storeGroup.group[name]$$"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
 
         <after>
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="product" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
@@ -43,21 +46,20 @@
                 <argument name="storeGroupName" value="$$storeGroup.group[name]$$"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearWebsitesGridFilter"/>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <!--Clear products filter-->
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsFilters"/>
             <!--Logout everywhere-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <comment userInput="BIC workaround" stepKey="customerLogout"/>
         </after>
 
         <!-- Change products visibility on store-view level -->
-        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct1">
-            <argument name="product" value="$$product$$"/>
-        </actionGroup>
-        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct1">
-            <argument name="product" value="$$product$$"/>
+        <comment userInput="BIC workaround" stepKey="searchForProduct1"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openEditProduct1">
+            <argument name="productId" value="$$product.id$$"/>
         </actionGroup>
         <scrollToTopOfPage stepKey="scrollToTopToChangeStore"/>
         <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickSwitchStoreMenuForProduct1"/>
@@ -67,12 +69,10 @@
         <click selector="{{AdminProductFormChangeStoreSection.acceptButton}}" stepKey="acceptStoreSwitchingForProduct1"/>
         <click selector="{{AdminProductFormSection.visibilityUseDefault}}" stepKey="uncheckVisibilityUseDefaultValueForProduct1"/>
         <selectOption userInput="Not Visible Individually" selector="{{AdminProductFormSection.visibility}}" stepKey="makeProductNotVisibleOnSecondaryStoreView"/>
-        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveEditedProductForProduct1"/>
-        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct2">
-            <argument name="product" value="$$secondProduct$$"/>
-        </actionGroup>
-        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
-            <argument name="product" value="$$secondProduct$$"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveEditedProductForProduct1"/>
+        <comment userInput="BIC workaround" stepKey="searchForProduct2"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openEditProduct2">
+            <argument name="productId" value="$$secondProduct.id$$"/>
         </actionGroup>
         <scrollToTopOfPage stepKey="scrollToTopToChangeStoreAgain"/>
         <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickSwitchStoreMenuForProduct2"/>
@@ -82,7 +82,7 @@
         <click selector="{{AdminProductFormChangeStoreSection.acceptButton}}" stepKey="acceptStoreSwitchingForProduct2"/>
         <click selector="{{AdminProductFormSection.visibilityUseDefault}}" stepKey="uncheckVisibilityUseDefaultValueForProduct2"/>
         <selectOption userInput="Not Visible Individually" selector="{{AdminProductFormSection.visibility}}" stepKey="makeProductNotVisibleOnDefaultStoreView"/>
-        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveEditedProductForProduct2"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveEditedProductForProduct2"/>
 
         <!-- Sign in as customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
@@ -92,19 +92,31 @@
         <see userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeLastName"/>
         <see userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeEmail"/>
         <!-- Add product visible on default store to wishlist -->
-        <amOnPage url="{{StorefrontProductPage.url($$product.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPageOnDefaultStore"/>
-        <see userInput="$$product.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertFirstProductNameTitle"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="navigateToProductPageOnDefaultStore">
+            <argument name="product" value="$product$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertFirstProductNameTitle">
+            <argument name="value" value="$$product.name$$"/>
+        </actionGroup>
         <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addFirstProductToWishlist"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}" stepKey="seeProduct1InWishlistOnSecondStore"/>
         <!-- Switch to second store and add second product (visible on second store) to wishlist -->
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnDefaultStore"/>
         <click selector="{{StorefrontFooterSection.storeLink($$storeGroup.group[name]$$)}}" stepKey="selectSecondStoreToSwitchOn"/>
         <!-- Verify that both products are visible in wishlist on both stores -->
-        <amOnPage url="{{StorefrontProductPage.url($$secondProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPageOnSecondStore"/>
-        <see userInput="$$secondProduct.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertSecondProductNameTitle"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="navigateToProductPageOnSecondStore">
+            <argument name="product" value="$secondProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertSecondProductNameTitle">
+            <argument name="value" value="$$secondProduct.name$$"/>
+        </actionGroup>
         <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addSecondProductToWishlist"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <see userInput="$$secondProduct.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}" stepKey="seeProduct2InWishlistOnSecondStore"/>
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnSecondStore"/>
         <click selector="{{StorefrontFooterSection.storeLink('Main Website Store')}}" stepKey="selectDefaultStoreToSwitchOn"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
         <see userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}" stepKey="seeProduct1InWishlistOnDefaultStore"/>
     </test>
 </tests>

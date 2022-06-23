@@ -18,6 +18,7 @@
             <testCaseId value="MC-14111"/>
             <group value="Backend"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <after>
             <!-- 4. Restore default configuration settings. -->
@@ -29,7 +30,7 @@
         <!-- 2. Wait for session to expire. -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         <wait time="60" stepKey="waitForSessionLifetime"/>
-        <reloadPage stepKey="reloadPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
 
         <!-- 3. Perform asserts. -->
         <seeElement selector="{{AdminLoginFormSection.loginBlock}}" stepKey="assertAdminLoginPageIsAvailable"/>

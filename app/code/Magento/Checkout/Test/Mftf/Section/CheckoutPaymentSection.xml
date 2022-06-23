@@ -18,7 +18,7 @@
         <element name="addressDropdown" type="select" selector="[name=billing_address_id]"/>
         <element name="addressDropdownSelected" type="select" selector="[name=billing_address_id] option:checked"/>
         <element name="placeOrderDisabled" type="button" selector="#checkout-payment-method-load button.disabled"/>
-        <element name="update" type="button" selector=".payment-method._active .payment-method-billing-address .action.action-update"/>
+        <element name="update" type="button" selector=".payment-method._active .payment-method-billing-address .action.action-update" timeout="30"/>
         <element name="guestFirstName" type="input" selector=".payment-method._active .billing-address-form input[name='firstname']"/>
         <element name="guestLastName" type="input" selector=".payment-method._active .billing-address-form input[name*='lastname']"/>
         <element name="guestStreet" type="input" selector=".payment-method._active .billing-address-form input[name*='street[0]']"/>
@@ -33,13 +33,13 @@
         <element name="cartItemsAreaActive" type="textarea" selector="div.block.items-in-cart.active" timeout="30"/>
         <element name="checkMoneyOrderPayment" type="radio" selector="input#checkmo.radio" timeout="30"/>
         <element name="purchaseOrderPayment" type="radio" selector="input#purchaseorder.radio" timeout="30"/>
-        <element name="placeOrder" type="button" selector=".payment-method._active button.action.primary.checkout" timeout="30"/>
+        <element name="placeOrder" type="button" selector=".payment-method._active button.action.primary.checkout" timeout="60"/>
         <element name="placeOrderWithoutTimeout" type="button" selector=".payment-method._active button.action.primary.checkout"/>
         <element name="paymentSectionTitle" type="text" selector="//*[@id='checkout-payment-method-load']//div[@data-role='title']" />
         <element name="orderSummarySubtotal" type="text" selector="//tr[@class='totals sub']//span[@class='price']" />
         <element name="orderSummaryShippingTotal" type="text" selector="//tr[@class='totals shipping excl']//span[@class='price']" />
         <element name="orderSummaryShippingMethod" type="text" selector="//tr[@class='totals shipping excl']//span[@class='value']" />
-        <element name="orderSummaryTotal" type="text" selector="//tr[@class='grand totals']//span[@class='price']" />
+        <element name="orderSummaryTotal" type="text" selector="tr.grand.totals span.price" />
         <element name="ProductItemByName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']" parameterized="true" />
         <element name="ProductOptionsByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options']" parameterized="true" />
         <element name="ProductOptionsActiveByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options active']" parameterized="true" />

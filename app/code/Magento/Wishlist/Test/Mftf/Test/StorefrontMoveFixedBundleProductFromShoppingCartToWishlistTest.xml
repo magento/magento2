@@ -66,7 +66,7 @@
             <argument name="productUrlKey" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeButton"/>
-        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts($$createBundleOption1_1.title$$)}}" userInput="$$simpleProduct1.sku$$ +$100.00" stepKey="selectOption0Product0"/>
+        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts($$createBundleOption1_1.title$$)}}" userInput="$$simpleProduct1.name$$ +$100.00" stepKey="selectOption0Product0"/>
         <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity($$createBundleOption1_1.title$$)}}" userInput="1" stepKey="fillQuantity00"/>
 
         <!-- Add product to the cart and Assert add product to cart success message-->
@@ -92,7 +92,7 @@
         <actionGroup ref="AssertProductDetailsInWishlistActionGroup" stepKey="assertProductDetails">
             <argument name="productName" value="$$createBundleProduct.name$$"/>
             <argument name="label" value="$$createBundleOption1_1.title$$"/>
-            <argument name="labelValue" value="$$simpleProduct1.sku$$ $100.00"/>
+            <argument name="labelValue" value="$$simpleProduct1.name$$ $100.00"/>
         </actionGroup>
 
         <actionGroup ref="AssertShoppingCartIsEmptyActionGroup" stepKey="assertCartIsEmpty"/>

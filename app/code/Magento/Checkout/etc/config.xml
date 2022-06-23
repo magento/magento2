@@ -41,6 +41,9 @@
                     <sales_rule_coupon_request>
                         <label>Applying coupon code</label>
                     </sales_rule_coupon_request>
+                    <payment_processing_request>
+                        <label>Checkout/Placing Order</label>
+                    </payment_processing_request>
                 </areas>
             </frontend>
         </captcha>
@@ -48,6 +51,7 @@
             <captcha>
                 <shown_to_logged_in_user>
                     <sales_rule_coupon_request>1</sales_rule_coupon_request>
+                    <payment_processing_request>1</payment_processing_request>
                 </shown_to_logged_in_user>
             </captcha>
         </customer>

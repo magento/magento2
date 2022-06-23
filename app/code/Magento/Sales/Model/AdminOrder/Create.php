@@ -7,10 +7,12 @@
 namespace Magento\Sales\Model\AdminOrder;
 
 use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Model\Metadata\Form as CustomerForm;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address\CustomAttributeListInterface;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Model\Order;
@@ -31,7 +33,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     /**
      * Xml default email domain path
      */
-    const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
+    public const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
 
     private const XML_PATH_EMAIL_REQUIRED_CREATE_ORDER = 'customer/create_account/email_required_create_order';
     /**
@@ -98,7 +100,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     protected $_quote;
 
     /**
-     * Core registry
+     * Core registry model to bind rules
      *
      * @var \Magento\Framework\Registry
      */
@@ -251,6 +253,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private $storeManager;
 
     /**
+     * @var CustomAttributeListInterface
+     */
+    private $customAttributeList;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -282,6 +289,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param ExtensibleDataObjectConverter|null $dataObjectConverter
      * @param StoreManagerInterface $storeManager
+     * @param CustomAttributeListInterface|null $customAttributeList
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -315,7 +323,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         array $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         ExtensibleDataObjectConverter $dataObjectConverter = null,
-        StoreManagerInterface $storeManager = null
+        StoreManagerInterface $storeManager = null,
+        CustomAttributeListInterface $customAttributeList = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -350,6 +359,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->dataObjectConverter = $dataObjectConverter ?: ObjectManager::getInstance()
             ->get(ExtensibleDataObjectConverter::class);
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->customAttributeList = $customAttributeList ?: ObjectManager::getInstance()
+            ->get(CustomAttributeListInterface::class);
     }
 
     /**
@@ -550,8 +561,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $quote = $this->getQuote();
         if (!$quote->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
-            $quote->getBillingAddress()->setCustomerAddressId(
-                $quote->getShippingAddress()->getCustomerAddressId()
+            $quote->getShippingAddress()->setCustomerAddressId(
+                $quote->getBillingAddress()->getCustomerAddressId()
             );
             $this->setShippingAsBilling(1);
         }
@@ -668,20 +679,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 $buyRequest->setQty($qty);
             }
             $productOptions = $orderItem->getProductOptions();
-            if ($productOptions !== null && !empty($productOptions['options'])) {
-                $formattedOptions = [];
-                $useFrontendCalendar = $this->useFrontendCalendar();
-                foreach ($productOptions['options'] as $option) {
-                    if (in_array($option['option_type'], ['date', 'date_time']) && $useFrontendCalendar) {
-                        $product->setSkipCheckRequiredOption(false);
-                        break;
-                    }
-                    $formattedOptions[$option['option_id']] = $option['option_value'];
-                }
-                if (!empty($formattedOptions)) {
-                    $buyRequest->setData('options', $formattedOptions);
-                }
-            }
+
+            $this->formattedOptions($product, $buyRequest, $productOptions);
+
             $item = $this->getQuote()->addProduct($product, $buyRequest);
             if (is_string($item)) {
                 return $item;
@@ -822,7 +822,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $item = $this->_getQuoteItem($item);
         if ($item) {
             $removeItem = false;
-            $moveTo = explode('_', $moveTo);
+            $moveTo = explode('_', $moveTo ?: '');
             switch ($moveTo[0]) {
                 case 'order':
                     $info = $item->getBuyRequest();
@@ -982,6 +982,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 );
                 if ($item->getId()) {
                     $this->addProduct($item->getProduct(), $item->getBuyRequest()->toArray());
+                    $this->removeItem($itemId, 'wishlist');
                 }
             }
         }
@@ -1307,7 +1308,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $newInfoOptions = [];
         $optionIds = $item->getOptionByCode('option_ids');
         if ($optionIds) {
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+            foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
                 $option = $item->getProduct()->getOptionById($optionId);
                 $optionValue = $item->getOptionByCode('option_' . $optionId)->getValue();
 
@@ -1365,7 +1366,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             'adminhtml_checkout',
             $this->customerMapper->toFlatArray($customer),
             false,
-            CustomerForm::IGNORE_INVISIBLE
+            CustomerForm::DONT_IGNORE_INVISIBLE
         );
 
         return $customerForm;
@@ -1527,7 +1528,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $billingAddress->setData('save_in_address_book', $saveInAddressBook);
 
         $quote = $this->getQuote();
-        if (!$quote->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
+        $shippingAddress = $this->getShippingAddress();
+        if (!$quote->isVirtual() && $shippingAddress->getSameAsBilling()) {
             $address['save_in_address_book'] = 0;
             $this->setShippingAddress($address);
         }
@@ -1540,7 +1542,34 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         }
         $quote->setBillingAddress($billingAddress);
 
+        if ($shippingAddress->getSameAsBilling()) {
+            $this->synchronizeAddressesFileAttributes();
+        }
+
         return $this;
+    }
+
+    /**
+     * Synchronizes addresses file attributes.
+     *
+     * @return void
+     */
+    private function synchronizeAddressesFileAttributes(): void
+    {
+        $billingAddress = $this->getBillingAddress();
+        $shippingAddress = $this->getShippingAddress();
+
+        /** @var AttributeMetadataInterface[] $customAttributes */
+        $customAttributes = $this->customAttributeList->getAttributes();
+        foreach ($customAttributes as $attribute) {
+            $attributeCode = $attribute->getAttributeCode();
+            if ($attribute->getFrontendInput() === 'file'
+                && !empty($billingAddress->getData($attributeCode))
+                && empty($shippingAddress->getData($attributeCode))
+            ) {
+                $shippingAddress->setData($attributeCode, $billingAddress->getData($attributeCode));
+            }
+        }
     }
 
     /**
@@ -1659,7 +1688,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         // emulate request
         $request = $form->prepareRequest($accountData);
-        $data = $form->extractData($request);
+        $requestScope = $request->getPostValue() ? 'order/account' : null;
+        $data = $form->extractData($request, $requestScope);
         $data = $form->restoreData($data);
         $customer = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
@@ -1712,10 +1742,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         if (isset($data['comment'])) {
             $this->getQuote()->addData($data['comment']);
-            if (empty($data['comment']['customer_note_notify'])) {
-                $this->getQuote()->setCustomerNoteNotify(false);
-            } else {
-                $this->getQuote()->setCustomerNoteNotify(true);
+            if ($this->getIsValidate()) {
+                $notify = !empty($data['comment']['customer_note_notify']);
+                $this->getQuote()->setCustomerNoteNotify($notify);
             }
         }
 
@@ -1804,9 +1833,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function _prepareCustomer()
     {
-        if ($this->getQuote()->getCustomerIsGuest()) {
-            return $this;
-        }
         /** @var $store \Magento\Store\Model\Store */
         $store = $this->getSession()->getStore();
         $customer = $this->getQuote()->getCustomer();
@@ -2131,15 +2157,41 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     }
 
     /**
-     * Use Calendar on frontend or not
+     * Set $buyRequest with formatted product options.
      *
-     * @return bool
+     * @param \Magento\Catalog\Model\Product $product
+     * @param object $buyRequest
+     * @param array $productOptions
+     * @return $this
      */
-    private function useFrontendCalendar(): bool
+    private function formattedOptions(\Magento\Catalog\Model\Product $product, $buyRequest, $productOptions)
     {
-        return (bool)$this->_scopeConfig->getValue(
-            'catalog/custom_options/use_calendar',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        if ($productOptions !== null && !empty($productOptions['options'])) {
+            $formattedOptions = [];
+            foreach ($productOptions['options'] as $option) {
+                if (in_array($option['option_type'], ['date', 'date_time', 'time', 'file'])) {
+                    $product->setSkipCheckRequiredOption(false);
+                    if ($option['option_type'] === 'file') {
+                        try {
+                            $formattedOptions[$option['option_id']] =
+                                $this->serializer->unserialize($option['option_value']);
+                            continue;
+                        } catch (\InvalidArgumentException $exception) {
+                            //log the exception as warning
+                            $this->_logger->warning($exception);
+                        }
+                    }
+                    $formattedOptions[$option['option_id']] =
+                        $buyRequest->getDataByKey('options')[$option['option_id']];
+                    continue;
+                }
+
+                $formattedOptions[$option['option_id']] = $option['option_value'];
+            }
+            if (!empty($formattedOptions)) {
+                $buyRequest->setData('options', $formattedOptions);
+            }
+        }
+        return $this;
     }
 }

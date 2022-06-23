@@ -6,6 +6,7 @@
 namespace Magento\Customer\Model\Config\Backend\Show;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Customer Show Customer Model
@@ -23,6 +24,21 @@ class Customer extends \Magento\Framework\App\Config\Value
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
+
+    /**
+     * @var string
+     */
+    private $telephoneShowDefaultValue = 'req';
+
+    /**
+     * @var array
+     */
+    private $valueConfig = [
+        '' => ['is_required' => 0, 'is_visible' => 0],
+        'opt' => ['is_required' => 0, 'is_visible' => 1],
+        '1' => ['is_required' => 0, 'is_visible' => 1],
+        'req' => ['is_required' => 1, 'is_visible' => 1],
+    ];
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -58,7 +74,7 @@ class Customer extends \Magento\Framework\App\Config\Value
      */
     protected function _getAttributeCode()
     {
-        return str_replace('_show', '', $this->getField());
+        return $this->getField() === null ? '' : str_replace('_show', '', $this->getField());
     }
 
     /**
@@ -80,20 +96,8 @@ class Customer extends \Magento\Framework\App\Config\Value
     {
         $result = parent::afterSave();
 
-        $valueConfig = [
-            '' => ['is_required' => 0, 'is_visible' => 0],
-            'opt' => ['is_required' => 0, 'is_visible' => 1],
-            '1' => ['is_required' => 0, 'is_visible' => 1],
-            'req' => ['is_required' => 1, 'is_visible' => 1],
-        ];
-
         $value = $this->getValue();
-        if (isset($valueConfig[$value])) {
-            $data = $valueConfig[$value];
-        } else {
-            $data = $valueConfig[''];
-        }
-
+        $data = $this->getValueConfig($value);
         if ($this->getScope() == 'websites') {
             $website = $this->storeManager->getWebsite($this->getScopeCode());
             $dataFieldPrefix = 'scope_';
@@ -133,8 +137,31 @@ class Customer extends \Magento\Framework\App\Config\Value
                 $attributeObject->setData('scope_is_visible', null);
                 $attributeObject->save();
             }
+        } elseif ($this->getScope() == ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+            $valueConfig = $this->getValueConfig($this->telephoneShowDefaultValue);
+            foreach ($this->_getAttributeObjects() as $attributeObject) {
+                $attributeObject->setData('is_required', $valueConfig['is_required']);
+                $attributeObject->setData('is_visible', $valueConfig['is_visible']);
+                $attributeObject->save();
+            }
         }
 
         return $result;
+    }
+
+    /**
+     * Get value config
+     *
+     * @param string|int $value
+     * @return array
+     */
+    private function getValueConfig($value): array
+    {
+        if (isset($this->valueConfig[$value])) {
+            $config = $this->valueConfig[$value];
+        } else {
+            $config = $this->valueConfig[''];
+        }
+        return $config;
     }
 }

@@ -5,16 +5,21 @@
  */
 -->
 <div class="shipping-address-item" css="'selected-item' : isSelected() , 'not-selected-item':!isSelected()">
-    <text args="address().prefix"/> <text args="address().firstname"/> <text args="address().middlename"/>
-    <text args="address().lastname"/> <text args="address().suffix"/><br/>
-    <text args="_.values(address().street).join(', ')"/><br/>
-    <text args="address().city "/>, <span text="address().region"></span> <text args="address().postcode"/><br/>
-    <text args="getCountryName(address().countryId)"/><br/>
-    <a if="address().telephone" attr="'href': 'tel:' + address().telephone" text="address().telephone"></a><br/>
-
+    <text args="address().prefix"></text> <text args="address().firstname"></text> <text args="address().middlename"></text>
+    <text args="address().lastname"></text> <text args="address().suffix"></text><br>
+    <if args="address().company">
+        <text args="address().company"></text><br>
+    </if>
+    <text args="_.values(address().street).join(', ')"></text><br>
+    <text args="address().city "></text>, <span text="address().region"></span> <text args="address().postcode"></text><br>
+    <text args="getCountryName(address().countryId)"></text><br>
+    <a if="address().telephone" attr="'href': 'tel:' + address().telephone" text="address().telephone"></a><br>
+    <if args="address().vatId">
+        VAT: <text args="address().vatId"></text><br>
+    </if>
     <each args="data: address().customAttributes, as: 'element'">
-        <text args="$parent.getCustomAttributeLabel(element)"/>
-        <br/>
+        <text args="$parent.getCustomAttributeLabel(element)"></text>
+        <br>
     </each>
 
     <button visible="address().isEditable()" type="button"

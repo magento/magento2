@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Error;
 
+use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Escaper;
 use Magento\Framework\App\ObjectManager;
@@ -150,20 +151,28 @@ class Processor
     private $escaper;
 
     /**
+     * @var DocumentRoot
+     */
+    private $documentRoot;
+
+    /**
      * @param Http $response
      * @param Json $serializer
      * @param Escaper $escaper
+     * @param DocumentRoot|null $documentRoot
      */
     public function __construct(
         Http $response,
         Json $serializer = null,
-        Escaper $escaper = null
+        Escaper $escaper = null,
+        DocumentRoot $documentRoot = null
     ) {
         $this->_response = $response;
         $this->_errorDir  = __DIR__ . '/';
         $this->_reportDir = dirname(dirname($this->_errorDir)) . '/var/report/';
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
+        $this->documentRoot = $documentRoot ?? ObjectManager::getInstance()->get(DocumentRoot::class);
 
         if (!empty($_SERVER['SCRIPT_NAME'])) {
             if (in_array(basename($_SERVER['SCRIPT_NAME'], '.php'), ['404', '503', 'report'])) {
@@ -255,12 +264,13 @@ class Processor
     public function getViewFileUrl()
     {
         //The url needs to be updated base on Document root path.
-        return $this->getBaseUrl() .
-        str_replace(
-            str_replace('\\', '/', $this->_indexDir),
-            '',
-            str_replace('\\', '/', $this->_errorDir)
-        ) . $this->_config->skin . '/';
+        $indexDir = str_replace('\\', '/', $this->_indexDir);
+        $errorDir = str_replace('\\', '/', $this->_errorDir);
+        $errorPathSuffix = $this->documentRoot->isPub() ? 'errors/' : 'pub/errors/';
+        $errorPath = strpos($errorDir, $indexDir) === 0 ?
+            str_replace($indexDir, '', $errorDir) : $errorPathSuffix;
+
+        return $this->getBaseUrl() . $errorPath . $this->_config->skin . '/';
     }
 
     /**

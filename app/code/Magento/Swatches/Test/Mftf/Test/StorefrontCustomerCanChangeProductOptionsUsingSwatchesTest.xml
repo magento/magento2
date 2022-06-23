@@ -22,8 +22,10 @@
             <createData entity="Simple_US_Customer" after="createCategory" stepKey="createCustomer"/>
         </before>
         <after>
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createCustomer" before="goToProductAttributes" stepKey="deleteCustomer"/>
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" after="deleteCustomer" stepKey="logoutFromCustomer"/>
+            <comment userInput="BIC workaround" stepKey="logoutFromCustomer"/>
         </after>
 
         <!-- Remove steps that are not used for this test -->

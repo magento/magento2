@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Customer;
 
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\PaypalGraphQl\PaypalExpressAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -119,9 +120,9 @@ mutation {
 }
 QUERY;
 
-        /** @var \Magento\Integration\Model\Oauth\Token $tokenModel */
-        $tokenModel = $this->objectManager->create(\Magento\Integration\Model\Oauth\Token::class);
-        $customerToken = $tokenModel->createCustomerToken(1)->getToken();
+        /** @var CustomerTokenServiceInterface $tokenService */
+        $tokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
+        $customerToken = $tokenService->createCustomerAccessToken('customer@example.com', 'password');
 
         $requestHeaders = [
             'Content-Type' => 'application/json',
@@ -143,33 +144,24 @@ QUERY;
         $paypalRequest['AMT'] = '30.00';
         $paypalRequest['SHIPPINGAMT'] = '10.00';
 
-        $this->nvpMock
-            ->expects($this->at(0))
-            ->method('call')
-            ->with(Nvp::SET_EXPRESS_CHECKOUT, $paypalRequest)
-            ->willReturn($paypalResponse);
-
         $paypalRequestDetails = [
             'TOKEN' => $token,
         ];
 
         $paypalRequestDetailsResponse = include __DIR__ . '/../../../_files/paypal_set_payer_id_repsonse.php';
-
-        $this->nvpMock
-            ->expects($this->at(1))
-            ->method('call')
-            ->with(Nvp::GET_EXPRESS_CHECKOUT_DETAILS, $paypalRequestDetails)
-            ->willReturn($paypalRequestDetailsResponse);
-
         $paypalRequestPlaceOrder = include __DIR__ . '/../../../_files/paypal_place_order_request.php';
-
         $paypalRequestPlaceOrder['EMAIL'] = 'customer@example.com';
 
         $this->nvpMock
-            ->expects($this->at(2))
             ->method('call')
-            ->with(Nvp::DO_EXPRESS_CHECKOUT_PAYMENT, $paypalRequestPlaceOrder)
-            ->willReturn(
+            ->withConsecutive(
+                [Nvp::SET_EXPRESS_CHECKOUT, $paypalRequest],
+                [Nvp::GET_EXPRESS_CHECKOUT_DETAILS, $paypalRequestDetails],
+                [Nvp::DO_EXPRESS_CHECKOUT_PAYMENT, $paypalRequestPlaceOrder]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $paypalResponse,
+                $paypalRequestDetailsResponse,
                 [
                     'RESULT' => '0',
                     'PNREF' => 'B7PPAC033FF2',
@@ -181,7 +173,7 @@ QUERY;
                     'PPREF' => '7RK43642T8939154L',
                     'CORRELATIONID' => $correlationId,
                     'PAYMENTTYPE' => 'instant',
-                    'PENDINGREASON' => 'authorization',
+                    'PENDINGREASON' => 'authorization'
                 ]
             );
 

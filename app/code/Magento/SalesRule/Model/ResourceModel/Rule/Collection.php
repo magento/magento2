@@ -326,6 +326,20 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                 []
             );
 
+            // exclude websites that are limited for customer group
+            $this->getSelect()->joinLeft(
+                ['cgw' => $this->getTable('customer_group_excluded_website')],
+                'customer_group_ids.' .
+                $entityInfo['entity_id_field'] .
+                ' = cgw.' .
+                $entityInfo['entity_id_field'] . ' AND ' . $websiteId . ' = cgw.website_id',
+                []
+            )->where(
+                'cgw.website_id IS NULL',
+                $websiteId,
+                \Zend_Db::INT_TYPE
+            );
+
             $this->getDateApplier()->applyDate($this->getSelect(), $now);
 
             $this->addIsActiveFilter();

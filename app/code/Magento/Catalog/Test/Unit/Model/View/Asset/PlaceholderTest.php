@@ -141,10 +141,10 @@ class PlaceholderTest extends TestCase
 
         if ($placeholderPath == null) {
             $this->imageContext->expects($this->never())->method('getBaseUrl');
-            $expectedResult = 'http://localhost/pub/media/catalog/product/to_default/placeholder/by_type';
+            $expectedResult = 'http://localhost/media/catalog/product/to_default/placeholder/by_type';
             $this->repository->expects($this->any())->method('getUrl')->willReturn($expectedResult);
         } else {
-            $baseUrl = 'http://localhost/pub/media/catalog/product';
+            $baseUrl = 'http://localhost/media/catalog/product';
             $this->imageContext->expects($this->any())->method('getBaseUrl')->willReturn($baseUrl);
             $expectedResult = $baseUrl
                 . DIRECTORY_SEPARATOR . $imageModel->getModule()

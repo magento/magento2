@@ -224,7 +224,15 @@ class ShippingMethodManagement implements
             $this->quoteAddressResource->delete($shippingAddress);
             throw new StateException(__('The shipping address is missing. Set the address and try again.'));
         }
-        $shippingAddress->setShippingMethod($carrierCode . '_' . $methodCode);
+        $shippingMethod = $carrierCode . '_' . $methodCode;
+        $shippingAddress->setShippingMethod($shippingMethod);
+        $shippingAssignments = $quote->getExtensionAttributes()->getShippingAssignments();
+        if (!empty($shippingAssignments)) {
+            $shippingAssignment = $shippingAssignments[0];
+            $shipping = $shippingAssignment->getShipping();
+            $shipping->setMethod($shippingMethod);
+            $shippingAssignment->setShipping($shipping);
+        }
     }
 
     /**

@@ -112,9 +112,7 @@
             <argument name="categoryName" value="$$secondCategory.name$$"/>
         </actionGroup>
 
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexSearchIndex">
-            <argument name="indices" value="catalogsearch_fulltext"/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexSearchIndex"/>
 
         <!-- Go to storefront to view child product -->
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToSecondCategoryStorefront">

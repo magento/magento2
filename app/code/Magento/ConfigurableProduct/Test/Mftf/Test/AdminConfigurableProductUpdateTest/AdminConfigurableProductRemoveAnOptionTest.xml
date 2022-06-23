@@ -75,10 +75,16 @@
         </after>
 
         <!--check storefront for both options-->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="amOnStorefront1"/>
-        <waitForPageLoad stepKey="wait1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option1" stepKey="seeOption1Storefront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option2" stepKey="seeOption2Storefront"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="amOnStorefront1">
+            <argument name="product" value="$createConfigProduct$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait1"/>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeOption1Storefront">
+            <argument name="productAttributeOption" value="option1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeOption2Storefront">
+            <argument name="productAttributeOption" value="option2"/>
+        </actionGroup>
 
         <!--check admin for both options-->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -86,8 +92,14 @@
             <argument name="productId" value="$$createConfigProduct.id$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="wait2"/>
-        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="$$createConfigChildProduct1.name$$" stepKey="seeOption1Admin"/>
-        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="$$createConfigChildProduct2.name$$" stepKey="seeOption2Admin"/>
+        <actionGroup ref="AssertAdminChildProductDataOnParentProductEditPageActionGroup" stepKey="seeOption1Admin">
+            <argument name="attribute" value="name_container"/>
+            <argument name="value" value="$$createConfigChildProduct1.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminChildProductDataOnParentProductEditPageActionGroup" stepKey="seeOption2Admin">
+            <argument name="attribute" value="name_container"/>
+            <argument name="value" value="$$createConfigChildProduct2.name$$"/>
+        </actionGroup>
 
         <!--remove an option-->
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandActions"/>
@@ -98,9 +110,15 @@
         <dontSee selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="$$createConfigChildProduct1.name$$" stepKey="dontSeeOption1Admin"/>
 
         <!--check storefront for one option-->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="amOnStorefront2"/>
-        <waitForPageLoad stepKey="wait4"/>
-        <dontSee selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option1" stepKey="dontSeeOption1InStorefront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option2" stepKey="seeOption2Again"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="amOnStorefront2">
+            <argument name="product" value="$createConfigProduct$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait4"/>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionNotVisibleActionGroup" stepKey="dontSeeOption1InStorefront">
+            <argument name="productAttributeOption" value="option1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeOption2Again">
+            <argument name="productAttributeOption" value="option2"/>
+        </actionGroup>
     </test>
 </tests>

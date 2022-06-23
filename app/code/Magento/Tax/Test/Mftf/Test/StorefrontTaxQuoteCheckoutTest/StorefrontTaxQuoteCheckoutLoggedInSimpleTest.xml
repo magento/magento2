@@ -87,11 +87,12 @@
         </actionGroup>
 
         <!-- Go to the created product page and add it to the cart -->
-        <amOnPage url="$$simpleProduct1.sku$$.html" stepKey="goToSimpleProductPage"/>
+        <amOnPage url="$$simpleProduct1.custom_attributes[url_key]$$.html" stepKey="goToSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForSimpleProductPage"/>
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
         <click stepKey="addSimpleProductToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForPageLoad stepKey="waitForProductAdded"/>
-        <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You added"/>
+        <see stepKey="seeSuccess" selector="{{StorefrontMessagesSection.success}}" userInput="You added"/>
 
         <!-- Assert that taxes are applied correctly for NY -->
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
@@ -114,9 +115,8 @@
             <argument name="Address" value="US_Address_CA"/>
             <argument name="classPrefix" value="._show"/>
         </actionGroup>
-        <click stepKey="saveAddress" selector="{{CheckoutShippingSection.saveAddress}}"/>
-
-        <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <actionGroup ref="StorefrontCheckoutClickSaveAddressButtonActionGroup" stepKey="saveAddress"/>
+        <comment userInput="Adding the comment to replace waitForAddressSaved action for preserving Backward Compatibility" stepKey="waitForAddressSaved"/>
         <see stepKey="seeAddress2" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{SimpleTaxCA.state}}"/>
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext2"/>
 

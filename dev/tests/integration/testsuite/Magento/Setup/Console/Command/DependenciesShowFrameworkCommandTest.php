@@ -70,11 +70,11 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertStringContainsString('"Dependencies for each module:",' . PHP_EOL, $fileContents);
         $this->assertStringContainsString(
-            '"Magento\A",1' . PHP_EOL . '" -- Magento\Framework",2' . PHP_EOL,
+            'Magento\A,1' . PHP_EOL . '" -- Magento\Framework",2' . PHP_EOL,
             $fileContents
         );
         $this->assertStringContainsString(
-            '"Magento\B",1' . PHP_EOL . '" -- Magento\Framework",2' . PHP_EOL,
+            'Magento\B,1' . PHP_EOL . '" -- Magento\Framework",2' . PHP_EOL,
             $fileContents
         );
     }

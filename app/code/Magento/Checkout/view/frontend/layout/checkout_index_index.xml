@@ -280,6 +280,12 @@
                                                                     </item>
                                                                 </item>
                                                             </item>
+                                                            <item name="place-order-captcha" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/checkout/placeOrderCaptcha</item>
+                                                                <item name="displayArea" xsi:type="string">place-order-captcha</item>
+                                                                <item name="formId" xsi:type="string">payment_processing_request</item>
+                                                                <item name="configSource" xsi:type="string">checkoutConfig</item>
+                                                            </item>
                                                             <item name="beforeMethods" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                                 <item name="displayArea" xsi:type="string">beforeMethods</item>
@@ -439,5 +445,6 @@
             </block>
         </referenceContainer>
         <referenceContainer name="page.messages" remove="true"/>
+        <referenceBlock name="authentication-popup" remove="true"/>
     </body>
 </page>

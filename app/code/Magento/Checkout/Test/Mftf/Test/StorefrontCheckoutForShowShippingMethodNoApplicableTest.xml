@@ -54,10 +54,10 @@
         <!-- Assert shipping price for US > California -->
         <dontSeeElement selector="{{CheckoutShippingMethodsSection.price}}" stepKey="dontSeePrice"/>
         <!-- Assert Next button is available -->
-        <seeElement selector="{{CheckoutShippingMethodsSection.next}}" stepKey="seeNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNextButton"/>
+        <comment userInput="BIC workaround" stepKey="seeNextButton"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNextButton"/>
         <!--  Assert order cannot be placed and error message will shown. -->
         <waitForPageLoad stepKey="waitForError"/>
-        <see stepKey="seeShippingMethodError" userInput="The shipping method is missing. Select the shipping method and try again."/>
+        <seeElementInDOM selector="{{CheckoutHeaderSection.errorMessageContainsText('The shipping method is missing. Select the shipping method and try again')}}" stepKey="seeShippingMethodError"/>
     </test>
 </tests>

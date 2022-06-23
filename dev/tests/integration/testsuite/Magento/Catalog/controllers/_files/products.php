@@ -24,7 +24,7 @@ $mediaDirectory = $objectManager->get(\Magento\Framework\Filesystem::class)
 
 $baseTmpMediaPath = $config->getBaseTmpMediaPath();
 $mediaDirectory->create($baseTmpMediaPath);
-copy(__DIR__ . '/product_image.png', $mediaDirectory->getAbsolutePath($baseTmpMediaPath . '/product_image.png'));
+$mediaDirectory->getDriver()->filePutContents($mediaDirectory->getAbsolutePath($baseTmpMediaPath . '/product_image.png'), file_get_contents(__DIR__ . '/product_image.png'));
 
 /** @var $productOne \Magento\Catalog\Model\Product */
 $productOne = $objectManager->create(\Magento\Catalog\Model\Product::class);

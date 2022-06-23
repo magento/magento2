@@ -11,7 +11,7 @@
     <test name="AdminLoginAsCustomerAutoDetectionTest">
         <annotations>
             <features value="Login as Customer"/>
-            <stories value="Select Store View based on 'Store View To Login In' setting"/>
+            <stories value="Select Store based on 'Store View To Login In' setting"/>
             <title
                 value="Admin user directly login into customer account with store View To Login In = Auto detection"/>
             <description
@@ -28,22 +28,24 @@
             <magentoCLI
                 command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}"
                 stepKey="enableAddStoreCodeToUrls"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView"/>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCustomStoreView">
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
                         stepKey="disableLoginAsCustomer"/>
             <magentoCLI
                 command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}"
                 stepKey="disableAddStoreCodeToUrls"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
         </after>
 
         <!-- Login as Customer from Customer page -->

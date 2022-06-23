@@ -3,16 +3,18 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/module-eav": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-inventory": "*",
+        "magento/module-directory": "*",
         "magento/module-search": "*",
         "magento/module-store": "*",
         "magento/module-eav-graph-ql": "*",
         "magento/module-catalog-search": "*",
         "magento/framework": "*",
-        "magento/module-graph-ql": "*"
+        "magento/module-graph-ql": "*",
+        "magento/module-advanced-search": "*"
     },
     "suggest": {
         "magento/module-graph-ql-cache": "*",
