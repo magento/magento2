@@ -8,7 +8,7 @@ require([
             formSelector: '#product_addtocart_form',
             swatchSelector: '.swatch-opt'
         },
-        swatchWidgetName = 'mage-SwatchRenderer',
+        swatchWidgetName = 'mageSwatchRenderer',
         widgetInitEvent = 'swatch.initialized',
 
     /**
@@ -16,6 +16,8 @@ require([
     */
     updateSwatchOptions = function () {
         var swatchWidget = $(selectors.swatchSelector).data(swatchWidgetName);
+
+        document.body.setAttribute('data-debug', swatchWidget ? 'swatchWidget is not null' : 'swatchWidget is  null')
 
         if (!swatchWidget || !swatchWidget._EmulateSelectedByAttributeId) {
             return;
