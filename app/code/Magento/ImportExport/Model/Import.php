@@ -122,6 +122,7 @@ class Import extends AbstractModel
     protected $_entityAdapter;
 
     /**
+     * @Deprecated Property isn't used
      * @var DataHelper
      */
     protected $_importExportData = null;
@@ -152,6 +153,7 @@ class Import extends AbstractModel
     protected $_csvFactory;
 
     /**
+     * @Deprecated Property isn't used
      * @var FileTransferFactory
      */
     protected $_httpFactory;
@@ -192,6 +194,7 @@ class Import extends AbstractModel
     private $messageManager;
 
     /**
+     * @Deprecated Property isn't used
      * @var Random
      */
     private $random;
