@@ -211,6 +211,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
+     * @see we don't recommend this approach anymore
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
@@ -267,6 +268,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * Retrieve collection processor
      *
      * @deprecated 101.0.0
+     * @see we don't recommend this approach anymore
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()
