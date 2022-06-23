@@ -441,7 +441,7 @@ class Source extends AbstractEav
         $data = [];
         $query = $select->query();
         while ($row = $query->fetch()) {
-            $values = explode(',', $row['value']);
+            $values = explode(',', $row['value'] ?? '');
             foreach ($values as $valueId) {
                 if (isset($options[$row['attribute_id']][$valueId])) {
                     $data[] = [$row['entity_id'], $row['attribute_id'], $row['store_id'], $valueId, $row['source_id']];
