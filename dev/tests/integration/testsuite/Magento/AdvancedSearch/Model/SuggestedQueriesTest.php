@@ -7,7 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\AdvancedSearch\Model;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Search\Model\Query;
+use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Fixture\Config as FixtureConfig;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -24,14 +29,18 @@ class SuggestedQueriesTest extends TestCase
             ->create(SuggestedQueries::class);
     }
 
-    /**
-     * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"name":"fresh arugula salad"}
-     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix suggested_queries_test
-     * @magentoConfigFixture current_store catalog/search/search_suggestion_enabled 1
-     * @magentoConfigFixture current_store catalog/search/search_suggestion_count 8
-     */
+    #[
+        DbIsolation(false),
+        FixtureConfig(
+            'catalog/search/elasticsearch_index_prefix',
+            'suggested_queries_test',
+            ScopeInterface::SCOPE_STORE
+        ),
+        FixtureConfig(SuggestedQueriesInterface::SEARCH_SUGGESTION_ENABLED, 1, ScopeInterface::SCOPE_STORE),
+        FixtureConfig(SuggestedQueriesInterface::SEARCH_SUGGESTION_COUNT, 8, ScopeInterface::SCOPE_STORE),
+        DataFixture(ProductFixture::class, ['name' => 'fresh arugula salad']),
+        DataFixture('Magento/CatalogSearch/_files/full_reindex.php'),
+    ]
     public function testGetItems(): void
     {
         $query = Bootstrap::getObjectManager()
