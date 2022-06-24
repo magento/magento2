@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Test\Annotation;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Annotation\ConfigFixture;
 use Magento\TestFramework\App\MutableScopeConfig;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Util\Test as TestUtil;
 
@@ -29,6 +32,28 @@ class ConfigFixtureTest extends TestCase
      */
     protected function setUp(): void
     {
+        /** @var ObjectManagerInterface|MockObject $objectManager */
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->onlyMethods(['get', 'create'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $objectManager->method('create')
+            ->willReturnCallback(
+                function (string $type) {
+                    return $this->createMock($type);
+                }
+            );
+
+        $objectManager->method('get')
+            ->willReturnCallback(
+                function (string $type) {
+                    return $this->createMock($type);
+                }
+            );
+
+        Bootstrap::setObjectManager($objectManager);
+
         $this->object = $this->createPartialMock(
             ConfigFixture::class,
             [
@@ -56,11 +81,11 @@ class ConfigFixtureTest extends TestCase
         $this->createResolverMock();
         $this->object
             ->method('_getConfigValue')
-            ->withConsecutive(['default/web/unsecure/base_url'])
+            ->withConsecutive(['web/unsecure/base_url'])
             ->willReturnOnConsecutiveCalls('http://localhost/');
         $this->object
             ->method('_setConfigValue')
-            ->withConsecutive(['default/web/unsecure/base_url', 'http://example.com/']);
+            ->withConsecutive(['web/unsecure/base_url', 'http://example.com/']);
 
         $this->object->startTest($this);
 
@@ -69,7 +94,7 @@ class ConfigFixtureTest extends TestCase
         )->method(
             '_setConfigValue'
         )->with(
-            'default/web/unsecure/base_url',
+            'web/unsecure/base_url',
             'http://localhost/'
         );
         $this->object->endTest($this);

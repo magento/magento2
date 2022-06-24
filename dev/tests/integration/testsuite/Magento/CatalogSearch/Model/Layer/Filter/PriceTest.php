@@ -10,7 +10,11 @@ namespace Magento\CatalogSearch\Model\Layer\Filter;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Layer\Category as CategoryLayer;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogSearch\Model\Layer\Filter\Price as PriceFilter;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -115,17 +119,19 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation disabled
-     * @magentoConfigFixture current_store catalog/layered_navigation/price_range_calculation manual
-     * @magentoConfigFixture current_store catalog/layered_navigation/price_range_step 10
-     * @magentoConfigFixture current_store catalog/layered_navigation/price_range_max_intervals 2
      * @magentoDataFixture Magento/Catalog/_files/categories_no_products.php
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":[4], "price":11}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":[4], "price":13}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":[4], "price":22}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":[4], "price":22}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":[4], "price":110}
      */
+    #[
+        DbIsolation(false),
+        Config('catalog/layered_navigation/price_range_calculation', 'manual', 'store'),
+        Config('catalog/layered_navigation/price_range_step', '10', 'store'),
+        Config('catalog/layered_navigation/price_range_max_intervals', '2', 'store'),
+        DataFixture(ProductFixture::class, ['category_ids' => [4], 'price' => 11]),
+        DataFixture(ProductFixture::class, ['category_ids' => [4], 'price' => 13]),
+        DataFixture(ProductFixture::class, ['category_ids' => [4], 'price' => 22]),
+        DataFixture(ProductFixture::class, ['category_ids' => [4], 'price' => 22]),
+        DataFixture(ProductFixture::class, ['category_ids' => [4], 'price' => 110]),
+    ]
     public function testGetItemsWithManualAlgorithm(): void
     {
         $attributeRepository = $this->objectManager->get(ProductAttributeRepositoryInterface::class);
