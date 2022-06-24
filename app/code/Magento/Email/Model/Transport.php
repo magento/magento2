@@ -32,12 +32,12 @@ class Transport implements TransportInterface
      * Configuration path to source of Return-Path and whether it should be set at all
      * @see \Magento\Config\Model\Config\Source\Yesnocustom to possible values
      */
-    private const XML_PATH_SENDING_SET_RETURN_PATH = 'system/smtp/set_return_path';
+    public const XML_PATH_SENDING_SET_RETURN_PATH = 'system/smtp/set_return_path';
 
     /**
      * Configuration path for custom Return-Path email
      */
-    private const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
+    public const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
 
     /**
      * Configuration path for custom Transport
