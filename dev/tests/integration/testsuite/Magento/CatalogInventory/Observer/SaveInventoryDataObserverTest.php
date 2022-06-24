@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Observer;
 
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -21,6 +22,9 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 
 /**
  * Test for SaveInventoryDataObserver
@@ -91,15 +95,15 @@ class SaveInventoryDataObserverTest extends TestCase
          $this->assertFalse($parentProductStockItem->getIsInStock());
     }
 
-    /**
-     * Check that a configurable product will be created with out_of_stock status if no children in stock
-     *
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"stock_item":{"qty": 0}} as:p1
-     * @magentoDataFixture Magento\ConfigurableProduct\Test\Fixture\Attribute as:attr
-     * @magentoDataFixture Magento\ConfigurableProduct\Test\Fixture\Product as:conf1
-     * @magentoDataFixtureDataProvider {"conf1":{"_options":["$attr$"],"_links":["$p1$"]}}
-     * @return void
-     */
+    #[
+        DataFixture(ProductFixture::class, ['stock_item' => ['qty' => 0]], 'p1'),
+        DataFixture(AttributeFixture::class, as: 'attr'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['sku' => 'conf1','_options' => ['$attr$'],'_links' => ['$p1$']],
+            'conf1'
+        )
+    ]
     public function testAutoChangingIsInStockForNewConfigurable(): void
     {
         $sku = $this->fixtures->get('conf1')->getSku();
