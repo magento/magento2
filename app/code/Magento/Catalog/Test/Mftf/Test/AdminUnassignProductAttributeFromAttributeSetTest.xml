@@ -64,8 +64,10 @@
         <!-- Clear cache -->
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="clearPageCacheActionGroup"/>
         <!-- Go to create new product page -->
-        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
-        <waitForPageLoad stepKey="wait2"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct">
+            <argument name="attributeSetId" value="{{AddToDefaultSet.attributeSetId}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait2"/>
         <!-- Assert attribute not present in product creation -->
         <dontSeeElement selector="{{AdminProductFormSection.attributeLabelByText($$attribute.attribute[frontend_labels][0][label]$$)}}" stepKey="seeLabel"/>
         <!-- Assert removed attribute not presence in storefront product additional information -->
