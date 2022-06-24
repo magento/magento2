@@ -1,7 +1,5 @@
 <?php
 /**
- * Customer address entity resource model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -17,15 +15,11 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\InputException;
 
 /**
- * Address repository.
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterface
 {
     /**
-     * Directory data
-     *
      * @var \Magento\Directory\Helper\Data
      */
     protected $directoryData;
@@ -126,7 +120,11 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         } else {
             $addressModel->updateData($address);
         }
-        $addressModel->setStoreId($customerModel->getStoreId());
+        if ($customerModel->getSharingConfig() !== null &&
+            $customerModel->getSharingConfig()->isWebsiteScope()
+        ) {
+            $addressModel->setStoreId($customerModel->getStoreId());
+        }
 
         $errors = $addressModel->validate();
         if ($errors !== true) {
@@ -213,6 +211,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
+     * @see we don't recommend this approach anymore
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
@@ -269,13 +268,14 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * Retrieve collection processor
      *
      * @deprecated 101.0.0
+     * @see we don't recommend this approach anymore
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor'
+                CollectionProcessorInterface::class
             );
         }
         return $this->collectionProcessor;
