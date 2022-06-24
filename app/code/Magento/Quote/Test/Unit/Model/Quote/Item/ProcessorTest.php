@@ -18,6 +18,7 @@ use Magento\Quote\Model\Quote\ItemFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Helper\Data;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -68,6 +69,11 @@ class ProcessorTest extends TestCase
      */
     protected $storeMock;
 
+    /**
+     * @var Data|MockObject
+     */
+    protected $taxHelperMock;
+
     protected function setUp(): void
     {
         $this->quoteItemFactoryMock = $this->createPartialMock(
@@ -77,6 +83,8 @@ class ProcessorTest extends TestCase
 
         $this->itemMock = $this->getMockBuilder(Item::class)
             ->addMethods(['setOriginalCustomPrice'])
+            ->addMethods(['setBasePrice'])
+            ->addMethods(['setBasePriceInclTax'])
             ->onlyMethods([
                 'getId',
                 'setOptions',
@@ -99,17 +107,25 @@ class ProcessorTest extends TestCase
             ->method('getStore')
             ->willReturn($this->storeMock);
 
+        $this->taxHelperMock = $this->getMockBuilder(Data::class)
+            ->onlyMethods([
+                'getTaxPrice',
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->stateMock = $this->createMock(State::class);
 
         $this->processor = new Processor(
             $this->quoteItemFactoryMock,
             $this->storeManagerMock,
-            $this->stateMock
+            $this->stateMock,
+            $this->taxHelperMock
         );
 
         $this->productMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['getParentProductId', 'getCartQty', 'getStickWithinParent'])
-            ->onlyMethods(['getCustomOptions', '__wakeup', 'getFinalPrice'])
+            ->addMethods(['getParentProductId', 'getCartQty', 'getStickWithinParent', 'getValue'])
+            ->onlyMethods(['getCustomOptions', '__wakeup', 'getFinalPrice', 'getPriceInfo', 'getPrice'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectMock = $this->getMockBuilder(DataObject::class)
@@ -252,6 +268,7 @@ class ProcessorTest extends TestCase
         $itemId = 1;
         $requestItemId = 1;
         $finalPrice = 1000000000;
+        $basePrice = 5000000000;
 
         $this->productMock->expects($this->any())
             ->method('getCartQty')
@@ -262,6 +279,16 @@ class ProcessorTest extends TestCase
         $this->productMock->expects($this->once())
             ->method('getFinalPrice')
             ->willReturn($finalPrice);
+        $this->productMock->expects($this->once())
+            ->method('getPriceInfo')
+            ->willReturn($this->productMock);
+        $this->productMock->expects($this->once())
+            ->method('getPrice')
+            ->with('base_price')
+            ->willReturn($this->productMock);
+        $this->productMock->expects($this->once())
+            ->method('getValue')
+            ->willReturn($basePrice);
 
         $this->itemMock->expects($this->once())
             ->method('addQty')
