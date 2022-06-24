@@ -19,6 +19,7 @@ use Magento\Framework\Filter\DirectiveProcessor\TemplateDirective;
 use Magento\Framework\Filter\DirectiveProcessor\VarDirective;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\Filter\Template\SignatureProvider;
+use Magento\Framework\Filter\Template\FilteringDepthMeter;
 
 /**
  * Template filter
@@ -107,26 +108,37 @@ class Template implements \Zend_Filter_Interface
     private $signatureProvider;
 
     /**
+     * @var FilteringDepthMeter|null
+     */
+    private $filteringDepthMeter;
+
+    /**
      * @param StringUtils $string
      * @param array $variables
      * @param DirectiveProcessorInterface[] $directiveProcessors
      * @param VariableResolverInterface|null $variableResolver
      * @param SignatureProvider|null $signatureProvider
+     * @param FilteringDepthMeter|null $filteringDepthMeter
      */
     public function __construct(
         StringUtils $string,
         $variables = [],
         $directiveProcessors = [],
         VariableResolverInterface $variableResolver = null,
-        SignatureProvider $signatureProvider = null
+        SignatureProvider $signatureProvider = null,
+        FilteringDepthMeter $filteringDepthMeter = null
     ) {
         $this->string = $string;
         $this->setVariables($variables);
         $this->directiveProcessors = $directiveProcessors;
         $this->variableResolver = $variableResolver ?? ObjectManager::getInstance()
                 ->get(VariableResolverInterface::class);
+
         $this->signatureProvider = $signatureProvider ?? ObjectManager::getInstance()
                 ->get(SignatureProvider::class);
+
+        $this->filteringDepthMeter = $filteringDepthMeter ?? ObjectManager::getInstance()
+                ->get(FilteringDepthMeter::class);
 
         if (empty($directiveProcessors)) {
             $this->directiveProcessors = [
@@ -190,6 +202,8 @@ class Template implements \Zend_Filter_Interface
             )->render());
         }
 
+        $this->filteringDepthMeter->descend();
+
         // Processing of template directives.
         $templateDirectivesResults = $this->processDirectives($value);
 
@@ -197,34 +211,38 @@ class Template implements \Zend_Filter_Interface
             $value = str_replace($result['directive'], $result['output'], $value);
         }
 
-        // Processing of deferred directives received from child templates.
+        // Processing of deferred directives received from child templates
+        // or nested directives.
         $deferredDirectivesResults = $this->processDirectives($value, true);
 
         foreach ($deferredDirectivesResults as $result) {
             $value = str_replace($result['directive'], $result['output'], $value);
         }
 
-        // Signing own deferred directives (if any).
-        $signature = $this->signatureProvider->get();
+        if ($this->filteringDepthMeter->showMark() > 1) {
+            // Signing own deferred directives (if any).
+            $signature = $this->signatureProvider->get();
 
-        foreach ($templateDirectivesResults as $result) {
-            if ($result['directive'] === $result['output']) {
-                $value = str_replace(
-                    $result['output'],
-                    $signature . $result['output'] . $signature,
-                    $value
-                );
+            foreach ($templateDirectivesResults as $result) {
+                if ($result['directive'] === $result['output']) {
+                    $value = str_replace(
+                        $result['output'],
+                        $signature . $result['output'] . $signature,
+                        $value
+                    );
+                }
             }
         }
 
         $value = $this->afterFilter($value);
 
+        $this->filteringDepthMeter->ascend();
+
         return $value;
     }
 
     /**
-     * Processes template directives and returns an array
-     * that contains results produced by each directive.
+     * Processes template directives and returns an array that contains results produced by each directive.
      *
      * @param string $value
      * @param bool $isSigned
@@ -234,7 +252,7 @@ class Template implements \Zend_Filter_Interface
      * @throws InvalidArgumentException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function processDirectives($value, $isSigned = false)
+    private function processDirectives($value, $isSigned = false): array
     {
         $results = [];
 
