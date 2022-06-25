@@ -1,9 +1,10 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -15,11 +16,15 @@ use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Phrase;
 use Magento\Framework\UrlFactory;
 use Magento\Framework\Exception\StateException;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Customer\Model\Logger as CustomerLogger;
 
 /**
  * Class Confirm
@@ -76,6 +81,11 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
     private $cookieMetadataManager;
 
     /**
+     * @var CustomerLogger
+     */
+    private CustomerLogger $customerLogger;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
@@ -84,6 +94,7 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
      * @param CustomerRepositoryInterface $customerRepository
      * @param Address $addressHelper
      * @param UrlFactory $urlFactory
+     * @param CustomerLogger|null $customerLogger
      */
     public function __construct(
         Context $context,
@@ -93,7 +104,8 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
         Address $addressHelper,
-        UrlFactory $urlFactory
+        UrlFactory $urlFactory,
+        ?CustomerLogger $customerLogger = null
     ) {
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
@@ -102,13 +114,13 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
         $this->customerRepository = $customerRepository;
         $this->addressHelper = $addressHelper;
         $this->urlModel = $urlFactory->create();
+        $this->customerLogger = $customerLogger ?? ObjectManager::getInstance()->get(CustomerLogger::class);
         parent::__construct($context);
     }
 
     /**
      * Retrieve cookie manager
      *
-     * @deprecated 101.0.0
      * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
      */
     private function getCookieManager()
@@ -124,7 +136,6 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated 101.0.0
      * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
     private function getCookieMetadataFactory()
@@ -152,7 +163,7 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
             return $resultRedirect;
         }
 
-        $customerId = $this->getRequest()->getParam('id', false);
+        $customerId = $this->getCustomerId();
         $key = $this->getRequest()->getParam('key', false);
         if (empty($customerId) || empty($key)) {
             $this->messageManager->addErrorMessage(__('Bad request.'));
@@ -164,13 +175,19 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
             // log in and send greeting email
             $customerEmail = $this->customerRepository->getById($customerId)->getEmail();
             $customer = $this->customerAccountManagement->activate($customerEmail, $key);
+            $successMessage = $this->getSuccessMessage();
             $this->session->setCustomerDataAsLoggedIn($customer);
+
             if ($this->getCookieManager()->getCookie('mage-cache-sessid')) {
                 $metadata = $this->getCookieMetadataFactory()->createCookieMetadata();
                 $metadata->setPath('/');
                 $this->getCookieManager()->deleteCookie('mage-cache-sessid', $metadata);
             }
-            $this->messageManager->addSuccess($this->getSuccessMessage());
+
+            if ($successMessage) {
+                $this->messageManager->addSuccess($successMessage);
+            }
+
             $resultRedirect->setUrl($this->getSuccessRedirect());
             return $resultRedirect;
         } catch (StateException $e) {
@@ -184,32 +201,40 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
     }
 
     /**
+     * Returns customer id from request
+     *
+     * @return string|int
+     */
+    private function getCustomerId()
+    {
+        return $this->getRequest()->getParam('id', 0);
+    }
+
+    /**
      * Retrieve success message
      *
-     * @return string
+     * @return Phrase|null
+     * @throws NoSuchEntityException
      */
     protected function getSuccessMessage()
     {
         if ($this->addressHelper->isVatValidationEnabled()) {
-            if ($this->addressHelper->getTaxCalculationAddressType() == Address::TYPE_SHIPPING) {
-                // @codingStandardsIgnoreStart
-                $message = __(
-                    'If you are a registered VAT customer, please click <a href="%1">here</a> to enter your shipping address for proper VAT calculation.',
-                    $this->urlModel->getUrl('customer/address/edit')
-                );
-                // @codingStandardsIgnoreEnd
-            } else {
-                // @codingStandardsIgnoreStart
-                $message = __(
-                    'If you are a registered VAT customer, please click <a href="%1">here</a> to enter your billing address for proper VAT calculation.',
-                    $this->urlModel->getUrl('customer/address/edit')
-                );
-                // @codingStandardsIgnoreEnd
-            }
-        } else {
-            $message = __('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName());
+            return __(
+                $this->addressHelper->getTaxCalculationAddressType() == Address::TYPE_SHIPPING
+                    ? 'If you are a registered VAT customer, please click <a href="%1">here</a> to enter your '
+                    .'shipping address for proper VAT calculation.'
+                    :'If you are a registered VAT customer, please click <a href="%1">here</a> to enter your '
+                    .'billing address for proper VAT calculation.',
+                $this->urlModel->getUrl('customer/address/edit')
+            );
         }
-        return $message;
+
+        $customerId = $this->getCustomerId();
+        if ($customerId && $this->customerLogger->get((int)$customerId)->getLastLoginAt()) {
+            return null;
+        }
+
+        return __('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName());
     }
 
     /**

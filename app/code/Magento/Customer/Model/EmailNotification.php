@@ -9,6 +9,8 @@ namespace Magento\Customer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\MailException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Mail\Template\SenderResolverInterface;
 use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\StoreManagerInterface;
@@ -30,28 +32,28 @@ class EmailNotification implements EmailNotificationInterface
     /**#@+
      * Configuration paths for email templates and identities
      */
-    const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
+    public const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
 
-    const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
+    public const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
 
-    const XML_PATH_CHANGE_EMAIL_TEMPLATE = 'customer/account_information/change_email_template';
+    public const XML_PATH_CHANGE_EMAIL_TEMPLATE = 'customer/account_information/change_email_template';
 
-    const XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE =
+    public const XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE =
         'customer/account_information/change_email_and_password_template';
 
-    const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'customer/password/forgot_email_template';
+    public const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'customer/password/forgot_email_template';
 
-    const XML_PATH_REMIND_EMAIL_TEMPLATE = 'customer/password/remind_email_template';
+    public const XML_PATH_REMIND_EMAIL_TEMPLATE = 'customer/password/remind_email_template';
 
-    const XML_PATH_REGISTER_EMAIL_IDENTITY = 'customer/create_account/email_identity';
+    public const XML_PATH_REGISTER_EMAIL_IDENTITY = 'customer/create_account/email_identity';
 
-    const XML_PATH_REGISTER_EMAIL_TEMPLATE = 'customer/create_account/email_template';
+    public const XML_PATH_REGISTER_EMAIL_TEMPLATE = 'customer/create_account/email_template';
 
-    const XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE = 'customer/create_account/email_no_password_template';
+    public const XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE = 'customer/create_account/email_no_password_template';
 
-    const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
+    public const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
 
-    const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
+    public const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
 
     /**
      * self::NEW_ACCOUNT_EMAIL_REGISTERED               welcome email, when confirmation is disabled
@@ -62,7 +64,7 @@ class EmailNotification implements EmailNotificationInterface
      *                                                  and password is set
      * self::NEW_ACCOUNT_EMAIL_CONFIRMATION             email with confirmation link
      */
-    const TEMPLATE_TYPES = [
+    public const TEMPLATE_TYPES = [
         self::NEW_ACCOUNT_EMAIL_REGISTERED => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,
         self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD => self::XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE,
         self::NEW_ACCOUNT_EMAIL_CONFIRMED => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
@@ -71,7 +73,9 @@ class EmailNotification implements EmailNotificationInterface
 
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var CustomerRegistry
+     */
     private $customerRegistry;
 
     /**
@@ -110,6 +114,11 @@ class EmailNotification implements EmailNotificationInterface
     private $emulation;
 
     /**
+     * @var AccountConfirmation
+     */
+    private AccountConfirmation $accountConfirmation;
+
+    /**
      * @param CustomerRegistry $customerRegistry
      * @param StoreManagerInterface $storeManager
      * @param TransportBuilder $transportBuilder
@@ -118,6 +127,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param SenderResolverInterface|null $senderResolver
      * @param Emulation|null $emulation
+     * @param AccountConfirmation|null $accountConfirmation
      */
     public function __construct(
         CustomerRegistry $customerRegistry,
@@ -127,7 +137,8 @@ class EmailNotification implements EmailNotificationInterface
         DataObjectProcessor $dataProcessor,
         ScopeConfigInterface $scopeConfig,
         SenderResolverInterface $senderResolver = null,
-        Emulation $emulation =null
+        Emulation $emulation = null,
+        ?AccountConfirmation $accountConfirmation = null
     ) {
         $this->customerRegistry = $customerRegistry;
         $this->storeManager = $storeManager;
@@ -137,6 +148,8 @@ class EmailNotification implements EmailNotificationInterface
         $this->scopeConfig = $scopeConfig;
         $this->senderResolver = $senderResolver ?? ObjectManager::getInstance()->get(SenderResolverInterface::class);
         $this->emulation = $emulation ?? ObjectManager::getInstance()->get(Emulation::class);
+        $this->accountConfirmation = $accountConfirmation ?? ObjectManager::getInstance()
+                ->get(AccountConfirmation::class);
     }
 
     /**
@@ -146,6 +159,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param string $origCustomerEmail
      * @param bool $isPasswordChanged
      * @return void
+     * @throws LocalizedException
      */
     public function credentialsChanged(
         CustomerInterface $savedCustomer,
@@ -153,6 +167,7 @@ class EmailNotification implements EmailNotificationInterface
         $isPasswordChanged = false
     ): void {
         if ($origCustomerEmail != $savedCustomer->getEmail()) {
+            $this->emailChangedConfirmation($savedCustomer);
             if ($isPasswordChanged) {
                 $this->emailAndPasswordChanged($savedCustomer, $origCustomerEmail);
                 $this->emailAndPasswordChanged($savedCustomer, $savedCustomer->getEmail());
@@ -175,6 +190,8 @@ class EmailNotification implements EmailNotificationInterface
      * @param CustomerInterface $customer
      * @param string $email
      * @return void
+     * @throws MailException
+     * @throws NoSuchEntityException|LocalizedException
      */
     private function emailAndPasswordChanged(CustomerInterface $customer, $email): void
     {
@@ -201,6 +218,8 @@ class EmailNotification implements EmailNotificationInterface
      * @param CustomerInterface $customer
      * @param string $email
      * @return void
+     * @throws MailException
+     * @throws NoSuchEntityException
      */
     private function emailChanged(CustomerInterface $customer, $email): void
     {
@@ -226,6 +245,8 @@ class EmailNotification implements EmailNotificationInterface
      *
      * @param CustomerInterface $customer
      * @return void
+     * @throws MailException
+     * @throws NoSuchEntityException|LocalizedException
      */
     private function passwordReset(CustomerInterface $customer): void
     {
@@ -255,7 +276,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param int|null $storeId
      * @param string $email
      * @return void
-     * @throws \Magento\Framework\Exception\MailException
+     * @throws MailException|LocalizedException
      */
     private function sendEmailTemplate(
         $customer,
@@ -293,6 +314,7 @@ class EmailNotification implements EmailNotificationInterface
      *
      * @param CustomerInterface $customer
      * @return CustomerSecure
+     * @throws NoSuchEntityException
      */
     private function getFullCustomerObject($customer): CustomerSecure
     {
@@ -312,6 +334,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param CustomerInterface $customer
      * @param int|string|null $defaultStoreId
      * @return int
+     * @throws LocalizedException
      */
     private function getWebsiteStoreId($customer, $defaultStoreId = null): int
     {
@@ -327,6 +350,9 @@ class EmailNotification implements EmailNotificationInterface
      *
      * @param CustomerInterface $customer
      * @return void
+     * @throws LocalizedException
+     * @throws MailException
+     * @throws NoSuchEntityException
      */
     public function passwordReminder(CustomerInterface $customer): void
     {
@@ -351,6 +377,9 @@ class EmailNotification implements EmailNotificationInterface
      *
      * @param CustomerInterface $customer
      * @return void
+     * @throws LocalizedException
+     * @throws MailException
+     * @throws NoSuchEntityException
      */
     public function passwordResetConfirmation(CustomerInterface $customer): void
     {
@@ -411,5 +440,19 @@ class EmailNotification implements EmailNotificationInterface
             ['customer' => $customerEmailData, 'back_url' => $backUrl, 'store' => $store],
             $storeId
         );
+    }
+
+    /**
+     * Sending an email to confirm the email address in case the email address has been changed
+     *
+     * @param CustomerInterface $customer
+     * @throws LocalizedException
+     */
+    private function emailChangedConfirmation(CustomerInterface $customer): void
+    {
+        if (!$this->accountConfirmation->isCustomerEmailChangedConfirmRequired($customer)) {
+            return;
+        }
+        $this->newAccount($customer, self::NEW_ACCOUNT_EMAIL_CONFIRMATION, null, $customer->getStoreId());
     }
 }
