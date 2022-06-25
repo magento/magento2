@@ -10,7 +10,7 @@
     <route url="/V1/import/csv" method="POST">
         <service class="Magento\ImportCsvApi\Api\StartImportInterface" method="execute"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_ImportCsvApi::import_api"/>
         </resources>
     </route>
 </routes>
