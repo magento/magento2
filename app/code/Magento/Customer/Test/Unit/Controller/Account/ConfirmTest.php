@@ -312,7 +312,7 @@ class ConfirmTest extends TestCase
             ->method('getParam')
             ->willReturnMap(
                 [
-                    ['id', false, $customerId],
+                    ['id', 0, $customerId],
                     ['key', false, $key]
                 ]
             );
@@ -476,7 +476,7 @@ class ConfirmTest extends TestCase
             ->method('getParam')
             ->willReturnMap(
                 [
-                    ['id', false, $customerId],
+                    ['id', 0, $customerId],
                     ['key', false, $key],
                     ['back_url', false, $backUrl]
                 ]
