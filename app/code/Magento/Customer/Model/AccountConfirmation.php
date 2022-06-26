@@ -95,7 +95,7 @@ class AccountConfirmation
      * @param string|null $customerEmail
      * @return bool
      */
-    public function isEmailChangedConfirmRequired(?int $websiteId, ?int $customerId, ?string $customerEmail): bool
+    public function isEmailChangedConfirmationRequired(?int $websiteId, ?int $customerId, ?string $customerEmail): bool
     {
         return !$this->canSkipConfirmation($customerId, $customerEmail)
             && $this->scopeConfig->isSetFlag(
@@ -113,7 +113,7 @@ class AccountConfirmation
      */
     private function getEmailChangedConfirmStatus(CustomerInterface $customer): string
     {
-        $isEmailChangedConfirmationRequired = $this->isEmailChangedConfirmRequired(
+        $isEmailChangedConfirmationRequired = $this->isEmailChangedConfirmationRequired(
             (int)$customer->getWebsiteId(),
             (int)$customer->getId(),
             $customer->getEmail()

@@ -240,7 +240,7 @@ class Customer extends AbstractEntity
     {
          return $customer->getId()
              && $customer->dataHasChangedFor('email')
-             && $this->accountConfirmation->isEmailChangedConfirmRequired(
+             && $this->accountConfirmation->isEmailChangedConfirmationRequired(
                  (int)$customer->getWebsiteId(),
                  (int)$customer->getId(),
                  $customer->getEmail()
