@@ -54,7 +54,7 @@ class Multiple implements CustomizableOptionValueInterface
         SelectedOption $selectedOption
     ): array {
         $selectedOptionValueData = [];
-        $optionIds = explode(',', $selectedOption->getValue());
+        $optionIds = explode(',', $selectedOption->getValue() ?? '');
 
         foreach ($optionIds as $optionId) {
             $optionValue = $option->getValueById($optionId);
