@@ -26,6 +26,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="navigateToStores"/>
             <actionGroup ref="AdminDeleteMultipleWebsitesActionGroup" stepKey="deleteWebsites"/>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <!--Delete created data-->

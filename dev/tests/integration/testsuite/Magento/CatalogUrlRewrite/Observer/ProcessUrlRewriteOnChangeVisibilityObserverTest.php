@@ -8,9 +8,16 @@ namespace Magento\CatalogUrlRewrite\Observer;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -67,8 +74,7 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
 
         /** @var StoreManagerInterface $storeManager */
         $storeManager = $this->objectManager->get(StoreManagerInterface::class);
-        $storeManager->setCurrentStore(0);
-
+        $firstStore = current($product->getStoreIds());
         $testStore = $storeManager->getStore('test');
         $productFilter = [
             UrlRewrite::ENTITY_TYPE => 'product',
@@ -80,7 +86,7 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
                 'target_path' => "catalog/product/view/id/" . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
-                'store_id' => '1',
+                'store_id' => $firstStore,
             ],
             [
                 'request_path' => "product-1.html",
@@ -100,12 +106,14 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
             'catalog_product_attribute_update_before',
             [
                 'attributes_data' => [ ProductInterface::VISIBILITY => Visibility::VISIBILITY_NOT_VISIBLE ],
-                'product_ids' => [$product->getId()]
+                'product_ids' => [$product->getId()],
+                'store_id' => $firstStore,
             ]
         );
 
         $actual = $this->getActualResults($productFilter);
-        $this->assertCount(0, $actual);
+        //Initially count was 2, when visibility of 1 store view is set to not visible individually, the new count is 1
+        $this->assertCount(1, $actual);
     }
 
     /**
@@ -163,16 +171,19 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
     /**
      * Test for multistore properties of the product to be respected in generated UrlRewrites
      * during the mass update for visibility change
-     *
-     * phpcs:disable Generic.Files.LineLength.TooLong
-     * @magentoDataFixture Magento\Store\Test\Fixture\Website as:w1
-     * @magentoDataFixture Magento\Store\Test\Fixture\Store as:s1
-     * @magentoDataFixture Magento\Store\Test\Fixture\Group as:g1 with:{"website_id": "$w1.id$", "default_store_id": "$s1.id$"}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Category as:c1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":["$c1.id$"], "visibility": "1", "extension_attributes": {"website_ids": [1, "$w1.id$"]}} as:p1
-     * @magentoAppIsolation enabled
-     * phpcs:enable Generic.Files.LineLength.TooLong
      */
+    #[
+        AppIsolation(true),
+        DataFixture(WebsiteFixture::class, as: 'w1'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$w1.id$'], 'g1'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$g1.id$'], 's1'),
+        DataFixture(CategoryFixture::class, as: 'c1'),
+        DataFixture(
+            ProductFixture::class,
+            ['category_ids' => ['$c1.id$'], 'visibility' => 1, 'website_ids' => [1, '$w1.id$']],
+            'p1'
+        ),
+    ]
     public function testMassActionUrlRewriteForStore()
     {
         $product = $this->fixtures->get('p1');

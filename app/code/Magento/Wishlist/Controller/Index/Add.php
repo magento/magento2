@@ -20,13 +20,16 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Wishlist\Model\DataSerializer;
+use Magento\Framework\Data\Form\FormKey;
 
 /**
  * Wish list Add controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPostActionInterface
+class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var WishlistProviderInterface
@@ -59,6 +62,16 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
     private $urlBuilder;
 
     /**
+     * @var DataSerializer
+     */
+    private $dataSerializer;
+
+    /**
+     * @var FormKey
+     */
+    private $formKey;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param WishlistProviderInterface $wishlistProvider
@@ -66,6 +79,8 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
      * @param Validator $formKeyValidator
      * @param RedirectInterface|null $redirect
      * @param UrlInterface|null $urlBuilder
+     * @param DataSerializer|null $dataSerializer
+     * @param FormKey|null $formKey
      */
     public function __construct(
         Context $context,
@@ -73,8 +88,10 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
         WishlistProviderInterface $wishlistProvider,
         ProductRepositoryInterface $productRepository,
         Validator $formKeyValidator,
-        RedirectInterface $redirect = null,
-        UrlInterface $urlBuilder = null
+        ?RedirectInterface $redirect = null,
+        ?UrlInterface $urlBuilder = null,
+        ?DataSerializer $dataSerializer = null,
+        ?FormKey $formKey = null
     ) {
         $this->_customerSession = $customerSession;
         $this->wishlistProvider = $wishlistProvider;
@@ -82,6 +99,8 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
         $this->formKeyValidator = $formKeyValidator;
         $this->redirect = $redirect ?: ObjectManager::getInstance()->get(RedirectInterface::class);
         $this->urlBuilder = $urlBuilder ?: ObjectManager::getInstance()->get(UrlInterface::class);
+        $this->dataSerializer = $dataSerializer ?: ObjectManager::getInstance()->get(DataSerializer::class);
+        $this->formKey = $formKey ?: ObjectManager::getInstance()->get(FormKey::class);
         parent::__construct($context);
     }
 
@@ -93,11 +112,28 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $session = $this->_customerSession;
+        $requestParams = $this->getRequest()->getParams();
+
+        if ($session->getBeforeWishlistRequest()) {
+            $requestParams = $session->getBeforeWishlistRequest();
+            $session->unsBeforeWishlistRequest();
+            $this->getRequest()->setParam('form_key', $requestParams['form_key']);
+        }
+
+        if (isset($requestParams['token'])) {
+            $wishlistRequestBeforeLogin = $this->dataSerializer->unserialize($requestParams['token']);
+            $requestParams['product'] = isset($wishlistRequestBeforeLogin['product']) ?
+                (int)$wishlistRequestBeforeLogin['product'] : null;
+            $this->getRequest()->setParam('form_key', $this->formKey->getFormKey());
+        }
+
         if (!$this->formKeyValidator->validate($this->getRequest())) {
             return $resultRedirect->setPath('*/');
         }
@@ -105,15 +141,6 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
         $wishlist = $this->wishlistProvider->getWishlist();
         if (!$wishlist) {
             throw new NotFoundException(__('Page not found.'));
-        }
-
-        $session = $this->_customerSession;
-
-        $requestParams = $this->getRequest()->getParams();
-
-        if ($session->getBeforeWishlistRequest()) {
-            $requestParams = $session->getBeforeWishlistRequest();
-            $session->unsBeforeWishlistRequest();
         }
 
         $productId = isset($requestParams['product']) ? (int)$requestParams['product'] : null;
@@ -153,6 +180,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
             if ($referer) {
                 $session->setBeforeWishlistUrl(null);
             } else {
+                // phpcs:ignore
                 $referer = $this->_redirect->getRefererUrl();
             }
 
@@ -178,7 +206,12 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
         }
 
         if ($this->getRequest()->isAjax()) {
-            $url = $this->urlBuilder->getUrl('*', $this->redirect->updatePathParams(['wishlist_id' => $wishlist->getId()]));
+            $url = $this->urlBuilder->getUrl(
+                '*',
+                $this->redirect->updatePathParams(
+                    ['wishlist_id' => $wishlist->getId()]
+                )
+            );
             /** @var Json $resultJson */
             $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
             $resultJson->setData(['backUrl' => $url]);
