@@ -13,12 +13,12 @@
             <description>Filters the Admin Orders grid based on the provided Order Status.</description>
         </annotations>
         <arguments>
-            <argument name="status"/>
+            <argument name="orderStatus"/>
         </arguments>
 
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderGridFilters"/>
-        <selectOption selector="{{AdminDataGridHeaderSection.filterFieldSelect('status')}}" userInput="{{status}}" stepKey="fillOrderStatusFilter"/>
+        <selectOption selector="{{AdminDataGridHeaderSection.filterFieldSelect('status')}}" userInput="{{orderStatus}}" stepKey="fillOrderStatusFilter"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
     </actionGroup>
 </actionGroups>
