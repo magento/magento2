@@ -6,6 +6,7 @@
 namespace Magento\AdvancedPricingImportExport\Model\Import;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\SelectAttribute;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
@@ -430,16 +431,29 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * For checking if correct add and update count are being displayed after importing file having 100+ records
-     *
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\SelectAttribute as:attr1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\SelectAttribute as:attr2
-     *
-     * phpcs:disable Generic.Files.LineLength.TooLong
-     * @magentoDataFixtureDataProvider {"attr1":{"attribute_code":"size","default_frontend_label":"Size","scope":"global","options":[28,29,30,31,32,33,34,36,38]}}
-     * @magentoDataFixtureDataProvider {"attr2":{"attribute_code":"colors","default_frontend_label":"Colors","scope":"global","options":["Red","Green","Yellow","Blue","Orange"]}}
-     * phpcs:enable Generic.Files.LineLength.TooLong
-     * @magentoAppArea adminhtml
      */
+    #[
+        DataFixture(
+            SelectAttribute::class,
+            [
+                'attribute_code' => 'size',
+                'default_frontend_label' => 'Size',
+                'scope'=>'global',
+                'options'=>[28,29,30,31,32,33,34,36,38]
+            ],
+            'attr1'
+        ),
+        DataFixture(
+            SelectAttribute::class,
+            [
+                'attribute_code' => 'colors',
+                'default_frontend_label' => 'Colors',
+                'scope'=>'global',
+                'options'=>["Red","Green","Yellow","Blue","Orange"]
+            ]
+        ),
+        AppArea('adminhtml')
+    ]
     public function testImportAddUpdateCounts()
     {
         $this->model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
@@ -453,7 +467,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             true,
             'catalog_product'
         );
-
+        print_r($errors->getAllErrors());
         $this->assertEquals(0, $errors->getErrorsCount(), 'Product import validation error');
         $this->model->importData();
 
@@ -466,6 +480,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         );
         $pathToFile = __DIR__ . '/_files/import_advanced_pricing_for_additional_attributes_products.csv';
         $errors = $this->doImport($pathToFile, DirectoryList::ROOT, Import::BEHAVIOR_APPEND, true);
+        print_r($errors->getAllErrors());
         $this->assertEquals(0, $errors->getErrorsCount(), 'Advanced pricing import validation error');
         $this->model->importData();
 
