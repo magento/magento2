@@ -349,7 +349,7 @@
                         <field id="transport">smtp</field>
                     </depends>
                 </field>
-                <field id="password" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="password" translate="label comment" type="password" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Password</label>
                     <comment>Username</comment>
                     <depends>
