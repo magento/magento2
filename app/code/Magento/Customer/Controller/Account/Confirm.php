@@ -203,11 +203,11 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
     /**
      * Returns customer id from request
      *
-     * @return string|int
+     * @return int
      */
-    private function getCustomerId()
+    private function getCustomerId(): int
     {
-        return $this->getRequest()->getParam('id', 0);
+        return (int)$this->getRequest()->getParam('id', 0);
     }
 
     /**
@@ -230,7 +230,7 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
         }
 
         $customerId = $this->getCustomerId();
-        if ($customerId && $this->customerLogger->get((int)$customerId)->getLastLoginAt()) {
+        if ($customerId && $this->customerLogger->get($customerId)->getLastLoginAt()) {
             return null;
         }
 

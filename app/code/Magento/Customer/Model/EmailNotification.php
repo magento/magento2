@@ -219,7 +219,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param string $email
      * @return void
      * @throws MailException
-     * @throws NoSuchEntityException
+     * @throws NoSuchEntityException|LocalizedException
      */
     private function emailChanged(CustomerInterface $customer, $email): void
     {
