@@ -16,6 +16,8 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\AppArea;
 
 /**
  * @magentoAppArea adminhtml
@@ -438,8 +440,8 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             [
                 'attribute_code' => 'size',
                 'default_frontend_label' => 'Size',
-                'scope'=>'global',
-                'options'=>[28,29,30,31,32,33,34,36,38]
+                'scope' => 'global',
+                'options' => [28,29,30,31,32,33,34,36,38]
             ],
             'attr1'
         ),
@@ -448,8 +450,8 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             [
                 'attribute_code' => 'colors',
                 'default_frontend_label' => 'Colors',
-                'scope'=>'global',
-                'options'=>["Red","Green","Yellow","Blue","Orange"]
+                'scope' => 'global',
+                'options' => ["Red","Green","Yellow","Blue","Orange"]
             ]
         ),
         AppArea('adminhtml')
