@@ -37,10 +37,6 @@ class Upload
     protected $_uploaderFactory;
 
     /**
-     * @var File
-     */
-    private $filesystemIo;
-    /**
      * @var Random
      */
     private $random;
@@ -49,7 +45,6 @@ class Upload
      * @param FileTransferFactory $httpFactory
      * @param DataHelper $importExportData
      * @param UploaderFactory $uploaderFactory
-     * @param File $filesystemIo
      * @param Random|null $random
      */
     public function __construct(
@@ -62,7 +57,6 @@ class Upload
         $this->_httpFactory = $httpFactory;
         $this->_importExportData = $importExportData;
         $this->_uploaderFactory = $uploaderFactory;
-        $this->filesystemIo = $filesystemIo;
         $this->random = $random ?: ObjectManager::getInstance()
             ->get(Random::class);
     }
@@ -160,7 +154,7 @@ class Upload
 
         $sourceFile .= '.' . $extension;
         $sourceFileRelative = $import->getVarDirectory()->getRelativePath($sourceFile);
-        $this->filesystemIo->cp($sourceFile, $uploadedFile);
+        $import->getVarDirectory()->copyFile($sourceFile, $uploadedFile);
 
         if (strtolower($uploadedFile) != strtolower($sourceFile)) {
             if ($import->getVarDirectory()->isExist($sourceFileRelative)) {
