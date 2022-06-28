@@ -43,6 +43,8 @@ class Config
 
     public const CONFIG_XML_PATH_APPLY_ON = 'tax/calculation/apply_tax_on';
 
+    public const CONFIG_XML_PATH_APPLY_TAX_ROUNDING = 'tax/calculation/apply_tax_rounding';
+
     public const CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT = 'tax/calculation/apply_after_discount';
 
     public const CONFIG_XML_PATH_DISCOUNT_TAX = 'tax/calculation/discount_tax';
@@ -205,6 +207,21 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Get configuration setting "Apply Tax Rounding" value
+     *
+     * @param   null|string|bool|int|Store $store
+     * @return  bool
+     */
+    public function applyTaxRounding($store = null)
+    {
+        return (bool) $this->_scopeConfig->getValue(
+            self::CONFIG_XML_PATH_APPLY_TAX_ROUNDING,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
