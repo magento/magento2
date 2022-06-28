@@ -10,12 +10,13 @@
     <div class="product info detailed">
         <?php $layout = $block->getLayout(); ?>
         <div class="product data items" data-mage-init='{"tabs":{"openedState":"active"}}'>
-            <?php foreach ($detailedInfoGroup as $name):?>
+            <?php $counter=0; foreach ($detailedInfoGroup as $name):?>
                 <?php
                 $html = $layout->renderElement($name);
                 if (!$html || !trim($html)) {
                     continue;
                 }
+                $counter ++;
                 $alias = $layout->getElementAlias($name);
                 $label = $block->getChildData($alias, 'title');
                 ?>
@@ -37,4 +38,12 @@
             <?php endforeach;?>
         </div>
     </div>
-<?php endif; ?>
+    <?php if ($counter > 1) : ?>
+    <script>
+        if ( document.getElementById("reviews") ) {
+            document.getElementById("reviews").style.display="none";
+        }
+    </script>
+    <?php endif;
+ endif; ?>
+
