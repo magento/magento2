@@ -1921,6 +1921,7 @@
             <argument name="blockVariables" xsi:type="array">
                 <item name="secureRenderer" xsi:type="object">Magento\Framework\View\Helper\SecureHtmlRenderer\Proxy</item>
                 <item name="escaper" xsi:type="object">Magento\Framework\Escaper</item>
+                <item name="localeFormatter" xsi:type="object">Magento\Framework\Locale\LocaleFormatter</item>
             </argument>
         </arguments>
     </type>
@@ -1972,4 +1973,5 @@
             <argument name="defaultPageSize" xsi:type="number">20</argument>
         </arguments>
     </type>
+    <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>
 </config>
