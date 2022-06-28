@@ -30,14 +30,14 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     protected $_associatedEntitiesMap;
 
     /**
-     * Event prefix
+     * SaleRule Event prefix
      *
      * @var string
      */
     protected $_eventPrefix = 'salesrule_rule_collection';
 
     /**
-     * Event object
+     * SaleRule Event object
      *
      * @var string
      */
@@ -441,6 +441,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         return $this;
     }
 
+    // phpcs:disable
     /**
      * Getter for _associatedEntitiesMap property
      *
@@ -473,4 +474,5 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
         return $this->dateApplier;
     }
+    // phpcs:enable
 }
