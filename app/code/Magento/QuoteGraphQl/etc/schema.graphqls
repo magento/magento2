@@ -167,7 +167,7 @@ type CartPrices  @doc(description: "Contains details about the final price of it
     discount: CartDiscount @deprecated(reason: "Use discounts instead.")
     subtotal_with_discount_excluding_tax: Money  @doc(description: "The subtotal with any discounts applied, but not taxes.")
     applied_taxes: [CartTaxItem]  @doc(description: "An array containing the names and amounts of taxes applied to each item in the cart.")
-    discounts: [Discount] @doc(description:"An array containing all discounts applied to the cart.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Discounts")
+    discounts: [Discount] @doc(description:"An array containing cart rule discounts, store credit and gift cards applied to the cart.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Discounts")
 }
 
 type CartTaxItem  @doc(description: "Contains tax information about an item in the cart.") {
