@@ -225,9 +225,8 @@ class Product extends AbstractEntity
 
     /**
      * Links attribute name-to-link type ID.
-     *
-     * @deprecated 101.1.0 use DI for LinkProcessor class if you want to add additional types
-     *
+     * @deprecated 101.1.0
+     * @see use DI for LinkProcessor class if you want to add additional types
      * @var array
      */
     protected $_linkNameToId = [
@@ -547,7 +546,8 @@ class Product extends AbstractEntity
 
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory
-     * @deprecated 101.0.0 this variable isn't used anymore.
+     * @deprecated 101.0.0
+     * @see this variable isn't used anymore.
      */
     protected $_stockResItemFac;
 
@@ -613,6 +613,7 @@ class Product extends AbstractEntity
      * @var array
      * @deprecated 100.0.3
      * @since 100.0.3
+     * @see this variable isn't used anymore.
      */
     protected $productUrlKeys = [];
 
@@ -1278,9 +1279,8 @@ class Product extends AbstractEntity
      * Gather and save information about product links.
      *
      * Must be called after ALL products saving done.
-     *
-     * @deprecated 101.1.0 use linkProcessor Directly
-     *
+     * @deprecated 101.1.0
+     * @see \Magento\CatalogImportExport\Model\Import\Product\LinkProcessor::saveLinks
      * @return $this
      */
     protected function _saveLinks()
@@ -1489,6 +1489,7 @@ class Product extends AbstractEntity
      * @return void
      * @since 100.0.4
      * @deprecated 100.2.3
+     * @see \Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor::getExistingImages
      */
     protected function initMediaGalleryResources()
     {
