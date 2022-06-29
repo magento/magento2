@@ -1277,8 +1277,8 @@ class Product extends AbstractEntity
 
     /**
      * Gather and save information about product links.
-     *
      * Must be called after ALL products saving done.
+     *
      * @deprecated 101.1.0
      * @see \Magento\CatalogImportExport\Model\Import\Product\LinkProcessor::saveLinks
      * @return $this
