@@ -134,6 +134,12 @@ class ConfigTest extends TestCase
                 true
             ],
             [
+                'applyTaxRounding',
+                Config::CONFIG_XML_PATH_APPLY_TAX_ROUNDING,
+                true,
+                true
+            ],
+            [
                 'getPriceDisplayType',
                 Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
                 true,
