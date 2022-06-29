@@ -9,7 +9,6 @@
     <head>
         <remove src="extjs/resources/css/ext-all.css"/>
         <remove src="extjs/resources/css/ytheme-magento.css"/>
-        <remove src="css/styles-old.css"/>
         <remove src="css/styles.css"/>
         <remove src="jquery/jstree/themes/default/style.css"/>
     </head>
