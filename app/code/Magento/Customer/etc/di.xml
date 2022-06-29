@@ -570,4 +570,19 @@
     <type name="Magento\Customer\Model\EmailNotificationInterface">
         <plugin name="saveWishlistDataAndAddReferenceKeyToBackUrl" type="Magento\Wishlist\Plugin\SaveWishlistDataAndAddReferenceKeyToBackUrl"/>
     </type>
+    <type name="Magento\Eav\Model\Validator\Attribute\Data">
+        <arguments>
+            <argument name="ignoredAttributesByTypesList" xsi:type="array">
+                <item name="customer" xsi:type="array">
+                    <item name="website_id" xsi:type="string">website_id</item>
+                    <item name="store_id" xsi:type="string">store_id</item>
+                    <item name="group_id" xsi:type="string">group_id</item>
+                    <item name="dob" xsi:type="string">dob</item>
+                </item>
+                <item name="customer_address" xsi:type="array">
+                    <item name="country_id" xsi:type="string">country_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

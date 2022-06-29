@@ -10,7 +10,6 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
-use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Encryption\EncryptorInterface;
@@ -19,10 +18,8 @@ use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\InvoiceOrderInterface;
-use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\Data\AddressInterface;
@@ -60,9 +57,6 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     /** @var AddressInterfaceFactory */
     private $addressFactory;
 
-    /** @var RegionInterfaceFactory */
-    private $regionFactory;
-
     /** @var ExtensibleDataObjectConverter */
     private $converter;
 
@@ -85,7 +79,6 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->orderRepository = $this->objectManager->create(OrderRepositoryInterface::class);
         $this->customerFactory = $this->objectManager->create(CustomerInterfaceFactory::class);
         $this->addressFactory = $this->objectManager->create(AddressInterfaceFactory::class);
-        $this->regionFactory = $this->objectManager->create(RegionInterfaceFactory::class);
         $this->accountManagement = $this->objectManager->create(AccountManagementInterface::class);
         $this->converter = $this->objectManager->create(ExtensibleDataObjectConverter::class);
         $this->dataObjectHelper = $this->objectManager->create(DataObjectHelper::class);
@@ -687,5 +680,21 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         foreach ($customerOrders as $customerOrder) {
             $this->assertEquals('customer@example.com', $customerOrder->getCustomerEmail());
         }
+    }
+
+    public function testSaveCustomerWithInvalidAttrValue(): void
+    {
+        $customerData = [
+            'website_id' => 1,
+            'email' => 'email1@example.com',
+            'firstname' => 'Firstname',
+            'lastname' => 'Lastname',
+            'gender' => 123,
+        ];
+        $customer = $this->customerFactory->create(['data' => $customerData]);
+
+        $this->expectException(ValidatorException::class);
+        $this->expectExceptionMessage('Attribute gender does not contain option with Id 123');
+        $this->customerRepository->save($customer);
     }
 }

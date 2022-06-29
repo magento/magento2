@@ -27,6 +27,7 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
     /**
      * Validate data
+     *
      * Return true or array of errors
      *
      * @param array|string $value
@@ -47,8 +48,11 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
             $errors[] = __('"%1" is a required value.', $label);
         }
 
-        if (!$errors && !$attribute->getIsRequired() && empty($value)) {
-            return true;
+        if (!empty($value)
+            && $attribute->getSourceModel()
+            && !$attribute->getSource()->getOptionText($value)
+        ) {
+            $errors[] = __('Attribute %1 does not contain option with Id %2', $attribute->getAttributeCode(), $value);
         }
 
         if (count($errors) == 0) {
