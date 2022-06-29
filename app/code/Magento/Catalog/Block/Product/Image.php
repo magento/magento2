@@ -20,6 +20,7 @@ namespace Magento\Catalog\Block\Product;
  */
 class Image extends \Magento\Framework\View\Element\Template
 {
+    // phpcs:disable
     /**
      * @deprecated 102.0.5 Property isn't used
      * @var \Magento\Catalog\Helper\Image
@@ -37,7 +38,7 @@ class Image extends \Magento\Framework\View\Element\Template
      * @var array
      */
     protected $attributes = [];
-
+    // phpcs:enable
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param array $data
