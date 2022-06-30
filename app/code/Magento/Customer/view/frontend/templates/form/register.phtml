@@ -255,7 +255,7 @@ $createAccountButtonViewModel = $block->getData('create_account_button_view_mode
                        data-password-min-character-sets="<?=
                         $escaper->escapeHtmlAttr($block->getRequiredCharacterClassesNumber()) ?>"
                        data-validate="{required:true, 'validate-customer-password':true}"
-                       autocomplete="off">
+                       autocomplete="new-password">
                 <div id="password-strength-meter-container" data-role="password-strength-meter" aria-live="polite">
                     <div id="password-strength-meter" class="password-strength-meter">
                         <?= $escaper->escapeHtml(__('Password Strength')) ?>:
@@ -278,7 +278,7 @@ $createAccountButtonViewModel = $block->getData('create_account_button_view_mode
                        id="password-confirmation"
                        class="input-text"
                        data-validate="{required:true, equalTo:'#password'}"
-                       autocomplete="off">
+                       autocomplete="new-password">
             </div>
         </div>
         <div class="field choice" data-bind="scope: 'showPassword'">
