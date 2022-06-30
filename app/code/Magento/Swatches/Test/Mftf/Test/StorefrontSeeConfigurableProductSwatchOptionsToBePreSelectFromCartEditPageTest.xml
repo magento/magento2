@@ -133,7 +133,7 @@
             <argument name="rowNumber" value="1"/>
         </actionGroup>
 
-        <wait time="60" stepKey="testWait"/>
+        <wait time="60" stepKey="waitForDocumentPageLoad"/>
 
         <waitForElementVisible selector="{{StorefrontProductInfoMainSection.selectedSwatchValue('Blue')}}" time="30" stepKey="waitForElementSwatchColorVisible"/>
 
