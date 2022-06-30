@@ -45,9 +45,9 @@ class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractB
         if ($object->hasData($attributeCode)) {
             $data = $object->getData($attributeCode);
             if (is_array($data)) {
-                $object->setData($attributeCode, $this->filter($data));
+                $object->setData($attributeCode, $this->prepare($data));
             } elseif (is_string($data)) {
-                $object->setData($attributeCode, $this->filter(explode(',', $data)));
+                $object->setData($attributeCode, $this->prepare(explode(',', $data)));
             } elseif (empty($data)) {
                 $object->setData($attributeCode, null);
             }
@@ -57,13 +57,13 @@ class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractB
     }
 
     /**
-     * Filter attribute values
+     * Prepare attribute values
      *
      * @param array $data
      * @return string
      */
-    public function filter(array $data): string
+    private function prepare(array $data): string
     {
-        return implode(',', array_filter(array_unique(($data))));
+        return implode(',', array_filter(array_unique($data), 'is_numeric'));
     }
 }
