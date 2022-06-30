@@ -45,12 +45,25 @@ class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractB
         if ($object->hasData($attributeCode)) {
             $data = $object->getData($attributeCode);
             if (is_array($data)) {
-                $object->setData($attributeCode, implode(',', array_filter($data)));
+                $object->setData($attributeCode, $this->filter($data));
+            } elseif (is_string($data)) {
+                $object->setData($attributeCode, $this->filter(explode(',', $data)));
             } elseif (empty($data)) {
                 $object->setData($attributeCode, null);
             }
         }
 
         return parent::validate($object);
+    }
+
+    /**
+     * Filter attribute values
+     *
+     * @param array $data
+     * @return string
+     */
+    public function filter(array $data): string
+    {
+        return implode(',', array_filter(array_unique(($data))));
     }
 }
