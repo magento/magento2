@@ -18,7 +18,7 @@ use Magento\Paypal\Model\Payflow\Service\Response\Transaction;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Sales\Api\PaymentFailuresInterface;
-use Magento\Framework\Session\Generic as Session;
+use Magento\Framework\Session\SessionManager as Session;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
@@ -28,8 +28,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 class Response extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface, HttpPostActionInterface
 {
     /**
-     * Core registry
-     *
      * @var Registry
      */
     private $coreRegistry;

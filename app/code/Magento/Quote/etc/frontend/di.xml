@@ -12,9 +12,6 @@
             <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Store\Model\StoreSwitcherInterface">
-        <plugin name="update_quote_item_store_after_switch_store_view" type="Magento\Quote\Plugin\UpdateQuoteItemStore"/>
-    </type>
     <type name="Magento\Store\Api\StoreCookieManagerInterface">
         <plugin name="update_quote_store_after_switch_store_view" type="Magento\Quote\Plugin\UpdateQuoteStore"/>
     </type>

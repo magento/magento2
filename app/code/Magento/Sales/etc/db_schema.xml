@@ -188,7 +188,7 @@
         <column xsi:type="decimal" name="weight" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Weight"/>
         <column xsi:type="datetime" name="customer_dob" on_update="false" nullable="true" comment="Customer Dob"/>
-        <column xsi:type="varchar" name="increment_id" nullable="true" length="32" comment="Increment ID"/>
+        <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment ID"/>
         <column xsi:type="varchar" name="applied_rule_ids" nullable="true" length="128" comment="Applied Rule Ids"/>
         <column xsi:type="varchar" name="base_currency_code" nullable="true" length="3" comment="Base Currency Code"/>
         <column xsi:type="varchar" name="customer_email" nullable="true" length="128" comment="Customer Email"/>
@@ -208,7 +208,7 @@
         <column xsi:type="varchar" name="hold_before_state" nullable="true" length="32" comment="Hold Before State"/>
         <column xsi:type="varchar" name="hold_before_status" nullable="true" length="32" comment="Hold Before Status"/>
         <column xsi:type="varchar" name="order_currency_code" nullable="true" length="3" comment="Order Currency Code"/>
-        <column xsi:type="varchar" name="original_increment_id" nullable="true" length="32"
+        <column xsi:type="varchar" name="original_increment_id" nullable="true" length="50"
                 comment="Original Increment ID"/>
         <column xsi:type="varchar" name="relation_child_id" nullable="true" length="32" comment="Relation Child ID"/>
         <column xsi:type="varchar" name="relation_child_real_id" nullable="true" length="32"
@@ -769,7 +769,7 @@
         <column xsi:type="varchar" name="order_increment_id" nullable="false" length="32" comment="Order Increment ID"/>
         <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
                 comment="Order ID"/>
-        <column xsi:type="timestamp" name="order_created_at" on_update="true" nullable="false"
+        <column xsi:type="timestamp" name="order_created_at" on_update="false" nullable="false"
                 default="CURRENT_TIMESTAMP" comment="Order Increment ID"/>
         <column xsi:type="varchar" name="customer_name" nullable="false" length="128" comment="Customer Name"/>
         <column xsi:type="decimal" name="total_qty" scale="4" precision="12" unsigned="false" nullable="true"
@@ -824,6 +824,9 @@
         </index>
         <index referenceId="SALES_SHIPMENT_GRID_BILLING_NAME" indexType="btree">
             <column name="billing_name"/>
+        </index>
+        <index referenceId="SALES_SHIPMENT_GRID_ORDER_ID" indexType="btree">
+            <column name="order_id"/>
         </index>
         <index referenceId="FTI_086B40C8955F167B8EA76653437879B4" indexType="fulltext">
             <column name="increment_id"/>

@@ -17,6 +17,7 @@
             <testCaseId value="" />
             <severity value="CRITICAL"/>
             <group value="security"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -46,9 +47,10 @@
         </actionGroup>
         <actionGroup ref="AssertAdminDashboardPageIsVisibleActionGroup" stepKey="seeDashboardPage"/>
         <wait time="120" stepKey="waitForUserToExpire"/>
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="navigateToCustomers"/>
         <!-- Confirm that user is logged out -->
-        <seeInCurrentUrl url="{{AdminLoginPage.url}}" stepKey="seeAdminLoginUrl"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeAdminLoginUrl"/>
+        <seeElement selector="{{AdminLoginFormSection.loginBlock}}" stepKey="assertAdminLoginPageIsAvailable"/>
 
         <!-- Delete created user -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

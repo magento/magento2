@@ -52,7 +52,7 @@ class FaviconTest extends TestCase
     protected $mediaDir;
 
     /**
-     * Initialize testable object
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -92,20 +92,24 @@ class FaviconTest extends TestCase
     }
 
     /**
-     * cover negative case for getFaviconFile
+     * cover negative case for getFaviconFile.
+     *
+     * @return void
      */
-    public function testGetFaviconFileNegative()
+    public function testGetFaviconFileNegative(): void
     {
         $this->assertFalse($this->object->getFaviconFile());
     }
 
     /**
-     * cover positive case for getFaviconFile and checkIsFile
+     * cover positive case for getFaviconFile and checkIsFile.
+     *
+     * @return void
      */
-    public function testGetFaviconFile()
+    public function testGetFaviconFile(): void
     {
         $scopeConfigValue = 'path';
-        $urlToMediaDir = 'http://magento.url/pub/media/';
+        $urlToMediaDir = 'http://magento.url/media/';
         $expectedFile = ImageFavicon::UPLOAD_DIR . '/' . $scopeConfigValue;
         $expectedUrl = $urlToMediaDir . $expectedFile;
 
@@ -123,14 +127,10 @@ class FaviconTest extends TestCase
         $this->fileStorageDatabase->expects($this->once())
             ->method('saveFileToFilesystem')
             ->willReturn(true);
-        $this->mediaDir->expects($this->at(0))
+        $this->mediaDir
             ->method('isFile')
-            ->with($expectedFile)
-            ->willReturn(false);
-        $this->mediaDir->expects($this->at(1))
-            ->method('isFile')
-            ->with($expectedFile)
-            ->willReturn(true);
+            ->withConsecutive([$expectedFile], [$expectedFile])
+            ->willReturnOnConsecutiveCalls(false, true);
 
         $results = $this->object->getFaviconFile();
         $this->assertEquals(
@@ -141,9 +141,11 @@ class FaviconTest extends TestCase
     }
 
     /**
-     * cover getDefaultFavicon
+     * cover getDefaultFavicon.
+     *
+     * @return void
      */
-    public function testGetDefaultFavicon()
+    public function testGetDefaultFavicon(): void
     {
         $this->assertEquals('Magento_Theme::favicon.ico', $this->object->getDefaultFavicon());
     }

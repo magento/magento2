@@ -36,6 +36,7 @@
                 <argument name="StoreGroup" value="NewStoreData"/>
                 <argument name="customStore" value="NewStoreViewData"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <!--Create Product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <createData entity="SubCategory" stepKey="createSubCategory"/>
@@ -65,12 +66,8 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
             </actionGroup>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <deleteData createDataKey="createSubCategory" stepKey="deleteSubCategory"/>
             <deleteData createDataKey="createRootCategory" stepKey="deleteRootCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
@@ -84,8 +81,8 @@
         <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickFirstRow"/>
         <grabValueFrom selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="grabStoreViewCode"/>
         <click selector="{{AdminNewStoreViewActionsSection.backButton}}" stepKey="clickBack"/>
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickResetButton"/>
-        <waitForPageLoad stepKey="waitForStorePageLoad"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickResetButton"/>
+        <comment userInput="BIC workaround" stepKey="waitForStorePageLoad"/>
         <!--Open product page on admin-->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
             <argument name="productId" value="$$createProduct.id$$"/>
@@ -96,13 +93,8 @@
             <argument name="website" value="{{NewWebSiteData.name}}"/>
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2"/>
-        <!--Reindex and flush cache-->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         <!--Switch to 'Default Store View' scope and open product page-->
         <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchDefaultStoreView">
             <argument name="storeViewName" value="'Default Store View'"/>
@@ -184,7 +176,7 @@
         <waitForPageLoad stepKey="waitForImagesLoad3"/>
         <dontSeeElement selector="{{AdminProductImagesSection.imageFile(TestImageNew.fileName)}}" stepKey="seeImageIsDeleted"/>
         <!--Open Storefront on Default store view and assert image existence-->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createSubCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createSubCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad0"/>
         <grabAttributeFrom userInput="src" selector="{{StorefrontCategoryMainSection.mediaDescription($$createProduct.name$$)}}" stepKey="grabAttributeFromImage"/>
         <assertStringContainsString stepKey="assertProductImageAbsence">

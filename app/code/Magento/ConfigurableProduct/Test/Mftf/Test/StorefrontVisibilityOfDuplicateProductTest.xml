@@ -33,7 +33,7 @@
             <actionGroup ref="DeleteAllDuplicateProductUsingProductGridActionGroup" stepKey="deleteDuplicatedProduct">
                 <argument name="product" value="$$createConfigProduct$$"/>
             </actionGroup>
-            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
             <!--Delete product attributes-->
             <comment userInput="Delete product attributes" stepKey="deleteCommentAttributes"/>
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
@@ -44,6 +44,10 @@
                 <argument name="productAttributeLabel" value="{{productAttributeColor.default_label}}"/>
             </actionGroup>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGridSecond"/>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -62,8 +66,9 @@
             <argument name="attributeType" value="{{colorProductAttribute.input_type}}"/>
             <argument name="scope" value="Global"/>
         </actionGroup>
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForProductPageReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForProductPageReload"/>
+
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
         <waitForPageLoad stepKey="waitForFilters"/>
         <actionGroup ref="CreateOptionsForAttributeActionGroup" stepKey="createOptions">
@@ -119,7 +124,9 @@
         <actionGroup ref="AdminFormSaveAndDuplicateActionGroup" stepKey="saveAndDuplicateProductForm"/>
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="clickEnableProduct"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="$$createConfigProduct.name$$-Updated" stepKey="fillProductName"/>
-        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="1" stepKey="selectInStock"/>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="selectInStock">
+             <argument name="stockStatus" value="In Stock"/>
+        </actionGroup>
         <!--Change product image-->
         <comment userInput="Change product image" stepKey="commentChangeProductImage"/>
         <actionGroup ref="RemoveProductImageActionGroup" stepKey="removeProductImage"/>
@@ -142,8 +149,9 @@
             <argument name="attributeType" value="{{productAttributeColor.input_type}}"/>
             <argument name="scope" value="Global"/>
         </actionGroup>
-        <reloadPage stepKey="reloadDuplicatedProductPage"/>
-        <waitForPageLoad stepKey="waitForDuplicatedProductReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadDuplicatedProductPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForDuplicatedProductReload"/>
+
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="createConfigurationsDuplicatedProduct"/>
         <waitForElementVisible selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="waitForCreateConfigurationsPageLoad"/>
         <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
@@ -190,27 +198,27 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateConfigsForDuplicatedProduct"/>
         <waitForPageLoad stepKey="waitForDuplicatedProductPageLoad"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveDuplicatedProduct"/>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         <!--Assert configurable product in category-->
         <comment userInput="Assert configurable product in category" stepKey="commentAssertProductInCategoryPage"/>
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onStorefrontCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createConfigProduct.name$$-Updated)}}" stepKey="assertProductNameInCategoryPage"/>
         <!--Assert product options in Storefront product page-->
         <comment userInput="Assert product options in Storefront product page" stepKey="commentAssertProductOptions"/>
-        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.sku$$-1)}}" stepKey="amOnSimpleProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$-1)}}" stepKey="amOnSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoadOnStorefront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$-Updated"  stepKey="seeConfigurableProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeConfigurableProductName">
+            <argument name="value" value="$$createConfigProduct.name$$-Updated"/>
+        </actionGroup>
         <see userInput="{{productAttributeColor.default_label}}" selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" stepKey="seeColorAttributeName"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="{{colorConfigurableProductAttribute1.name}}" stepKey="selectFirstOption"/>
+        <waitForPageLoad stepKey="waitForFirstOptionLoad"/>
         <see userInput="{{virtualProductWithRequiredFields.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertFirstOptionProductPrice"/>
         <seeElement selector="{{StorefrontProductMediaSection.imageFile(MagentoLogo.filename)}}" stepKey="seeFirstImage"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}"  userInput="{{colorConfigurableProductAttribute1.name}}" stepKey="selectSecondOption"/>
+        <waitForPageLoad stepKey="waitForSecondOptionLoad"/>
         <see userInput="{{virtualProductWithRequiredFields.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeSecondOptionProductPrice"/>
         <seeElement selector="{{StorefrontProductMediaSection.imageFile(MagentoLogo.filename)}}" stepKey="seeSecondImage"/>
     </test>

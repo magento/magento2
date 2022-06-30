@@ -51,65 +51,47 @@ use Magento\Framework\App\ObjectManager;
 class Advanced extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * User friendly search criteria list
-     *
      * @var array
      */
     protected $_searchCriterias = [];
 
     /**
-     * Product collection
-     *
      * @var ProductCollection
      */
     protected $_productCollection;
 
     /**
-     * Initialize dependencies
-     *
      * @deprecated 101.0.2
      * @var Config
      */
     protected $_catalogConfig;
 
     /**
-     * Catalog product visibility
-     *
      * @var Visibility
      */
     protected $_catalogProductVisibility;
 
     /**
-     * Attribute collection factory
-     *
      * @var AttributeCollectionFactory
      */
     protected $_attributeCollectionFactory;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Product factory
-     *
      * @var ProductFactory
      */
     protected $_productFactory;
 
     /**
-     * Currency factory
-     *
      * @var CurrencyFactory
      */
     protected $_currencyFactory;
 
     /**
-     * Advanced Collection Factory
-     *
      * @deprecated
      * @see $collectionProvider
      * @var ProductCollectionFactory
@@ -197,12 +179,15 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             if (!isset($values[$attribute->getAttributeCode()])) {
                 continue;
             }
-            if ($attribute->getFrontendInput() == 'text' || $attribute->getFrontendInput() == 'textarea') {
-                if (!trim($values[$attribute->getAttributeCode()])) {
-                    continue;
-                }
-            }
+
             $value = $values[$attribute->getAttributeCode()];
+
+            if (($attribute->getFrontendInput() == 'text' || $attribute->getFrontendInput() == 'textarea')
+                && (!is_string($value) || !trim($value))
+            ) {
+                continue;
+            }
+
             $preparedSearchValue = $this->getPreparedSearchCriteria($attribute, $value);
             if (false === $preparedSearchValue) {
                 continue;
@@ -210,6 +195,12 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             $this->addSearchCriteria($attribute, $preparedSearchValue);
 
             if ($attribute->getAttributeCode() == 'price') {
+                foreach ($value as $key => $element) {
+                    if (is_array($element)) {
+                        $value[$key] = 0;
+                    }
+                }
+
                 $rate = 1;
                 $store = $this->_storeManager->getStore();
                 $currency = $store->getCurrentCurrencyCode();
@@ -233,6 +224,11 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                     ? date('Y-m-d\TH:i:s\Z', strtotime($value['to']))
                     : '';
             }
+
+            if ($attribute->getAttributeCode() === 'sku') {
+                $value = mb_strtolower($value);
+            }
+
             $condition = $this->_getResource()->prepareCondition(
                 $attribute,
                 $value,
@@ -346,19 +342,30 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Add data about search criteria to object state
      *
-     * @todo: Move this code to block
-     *
      * @param EntityAttribute $attribute
      * @param mixed $value
+     *
      * @return string|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
+     * @todo: Move this code to block
      */
     protected function getPreparedSearchCriteria($attribute, $value)
     {
+        $from = null;
+        $to = null;
         if (is_array($value)) {
+            foreach ($value as $key => $element) {
+                if (is_array($element)) {
+                    $value[$key] = '';
+                }
+            }
             if (isset($value['from']) && isset($value['to'])) {
                 if (!empty($value['from']) || !empty($value['to'])) {
+                    $from = '';
+                    $to = '';
+
                     if (isset($value['currency'])) {
                         /** @var $currencyModel Currency */
                         $currencyModel = $this->_currencyFactory->create()->load($value['currency']);

@@ -3,13 +3,14 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/module-catalog": "*",
         "magento/module-configurable-product": "*",
         "magento/module-graph-ql": "*",
         "magento/module-catalog-graph-ql": "*",
         "magento/module-quote": "*",
         "magento/module-quote-graph-ql": "*",
+        "magento/module-catalog-inventory": "*",
         "magento/framework": "*"
     },
     "license": [

@@ -14,6 +14,15 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\MediaContentSynchronizationApi\Model\SynchronizeIdentitiesPool">
+        <arguments>
+            <argument name="synchronizers" xsi:type="array">
+                <item name="media_content_cms"
+                      xsi:type="object">Magento\MediaContentSynchronizationCms\Model\Synchronizer\SynchronizeIdentities
+                </item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\MediaContentSynchronizationApi\Model\GetEntitiesInterface">
         <arguments>
             <argument name="entities" xsi:type="array">

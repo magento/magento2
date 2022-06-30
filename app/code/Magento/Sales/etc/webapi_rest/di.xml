@@ -19,4 +19,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Service\InvoiceService">
+        <plugin name="addTransactionCommentAfterCapture" type="Magento\Sales\Plugin\Model\Service\Invoice\AddTransactionCommentAfterCapture"/>
+    </type>
 </config>

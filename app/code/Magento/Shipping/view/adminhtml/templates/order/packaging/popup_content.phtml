@@ -5,7 +5,7 @@
  */
 
 /**
- * @var $block \Magento\Shipping\Block\Adminhtml\Order\Packaging
+ * @var \Magento\Shipping\Block\Adminhtml\Order\Packaging $block
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
@@ -22,21 +22,11 @@
                         data-action="package-save-items">
                     <span><?= $block->escapeHtml(__('Add Selected Product(s) to Package')) ?></span>
                 </button>
-                <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                    'onclick',
-                    'packaging.packItems(this);',
-                    "button[data-action='package-save-items']"
-                ) ?>
                 <button type="button"
                         class="action-secondary"
                         data-action="package-add-items">
                     <span><?= $block->escapeHtml(__('Add Products to Package')) ?></span>
                 </button>
-                <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                    'onclick',
-                    'packaging.getItemsForPack(this);',
-                    "button[data-action='package-add-items']"
-                ) ?>
             </div>
         </div>
         <div class="admin__control-table-wrapper admin__page-subsection">
@@ -87,12 +77,6 @@
                                     </option>
                                 <?php endforeach; ?>
                             </select>
-                            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                                'onchange',
-                                "packaging.changeContainerType(this);
-                                packaging.checkSizeAndGirthParameter(this, {$block->escapeJs($girthEnabled)});",
-                                "select[name='package_container']"
-                            ) ?>
                         </td>
                         <?php if ($girthEnabled == 1 && !empty($sizeSource)): ?>
                         <td>
@@ -103,11 +87,6 @@
                                 </option>
                                 <?php endforeach; ?>
                             </select>
-                            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                                'onchange',
-                                "packaging.checkSizeAndGirthParameter(this, {$block->escapeJs($girthEnabled)});",
-                                "select[name='package_size']"
-                            ) ?>
                         </td>
                         <td>
                             <input type="text"
@@ -124,11 +103,6 @@
                                     <?= $block->escapeHtml(__('cm')) ?>
                                 </option>
                             </select>
-                            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                                'onchange',
-                                "packaging.changeMeasures(this);",
-                                "select[name='container_girth_dimension_units']"
-                            ) ?>
                         </td>
                         <?php endif; ?>
                         <?php
@@ -169,11 +143,6 @@
                                             <?= $block->escapeHtml(__('kg')) ?>
                                         </option>
                                     </select>
-                                    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                                        'onchange',
-                                        "packaging.changeMeasures(this);",
-                                        "select[name='container_weight_units']"
-                                    ) ?>
                                 <span class="admin__addon-prefix"></span>
                             </div>
                         </td>
@@ -202,11 +171,6 @@
                                     <?= $block->escapeHtml(__('cm')) ?>
                                 </option>
                             </select>
-                            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                                'onchange',
-                                "packaging.changeMeasures(this);",
-                                "select[name='container_dimension_units']"
-                            ) ?>
                         </td>
                         <?php if ($block->getDeliveryConfirmationTypes()): ?>
                         <td>
@@ -224,11 +188,6 @@
                                     class="action-delete DeletePackageBtn">
                                 <span><?= $block->escapeHtml(__('Delete Package')) ?></span>
                             </button>
-                            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                                'onclick',
-                                'packaging.deletePackage(this);',
-                                "button.action-delete.DeletePackageBtn"
-                            ) ?>
                         </td>
                     </tr>
                 </tbody>
@@ -252,11 +211,6 @@
                                     </option>
                                 <?php endforeach; ?>
                             </select>
-                            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                                'onchange',
-                                "packaging.changeContentTypes(this);",
-                                "select[name='content_type']"
-                            ) ?>
                         </td>
                         <td>
                             <input name="content_type_other"
@@ -273,10 +227,47 @@
             <div class="grid_prepare admin__page-subsection"></div>
         </div>
     </section>
-    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none;", 'div#package_template') ?>
     <div id="packages_content"></div>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', '#package_template') ?>
+    <?php $scriptString = <<<script
+require(['jquery'], function($){
+    $("div#packages_content").on('click', "button[data-action='package-save-items']",
+        function(){packaging.packItems(this)});
+    $("div#packages_content").on('click', "button[data-action='package-add-items']",
+        function(){packaging.getItemsForPack(this)});
+    $("div#packages_content").on('change', "select[name='package_container']",
+        function(){
+            packaging.changeContainerType(this);
+            packaging.checkSizeAndGirthParameter(this, {$block->escapeJs($girthEnabled)})
+        });
+    $("div#packages_content").on('change', "select[name='container_weight_units']",
+        function(){packaging.changeMeasures(this)});
+    $("div#packages_content").on('change', "select[name='container_dimension_units']",
+        function(){packaging.changeMeasures(this)});
+    $("div#packages_content").on('click', "button.action-delete.DeletePackageBtn",
+        function(){packaging.deletePackage(this)});
+script;
+    if ($girthEnabled == 1 && !empty($sizeSource)) {
+        $scriptString .= <<<script
+    $("div#packages_content").on('change', "select[name='package_size']",
+        function(){packaging.checkSizeAndGirthParameter(this, {$block->escapeJs($girthEnabled)})});
+    $("div#packages_content").on('change', "select[name='container_girth_dimension_units']",
+        function(){packaging.changeMeasures(this)});
+script;
+    }
+    if ($block->getContentTypes()) {
+        $scriptString .= <<<script
+    $("div#packages_content").on('change', "select[name='content_type']",
+        function(){packaging.changeContentTypes(this)});
+script;
+    }
+    $scriptString .= <<<script
+})
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 </div>
 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-    "display:none;",
-    'div#packaging_window div.message message-warning'
+    'display:none',
+    'div#packaging_window div.message.message-warning'
 ) ?>

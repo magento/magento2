@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminInvoiceOrderTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Create an Invoice via the Admin"/>
+            <title value="Admin should be able to create an invoice"/>
+            <description value="Admin should be able to create an invoice"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-72096"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProductApi">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="GuestCart" stepKey="createGuestCart"/>
+            <createData entity="SimpleCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createSimpleProductApi"/>
+            </createData>
+            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddress">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </createData>
+            <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </updateData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProductApi" stepKey="deleteSimpleProductApi"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="$createGuestCart.return$"/>
+        </actionGroup>
+
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderId"/>
+
+        <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createInvoice"/>
+
+         <actionGroup ref="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" stepKey="filterInvoiceGridByOrderId">
+            <argument name="orderId" value="$grabOrderId"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="openInvoiceFromGrid"/>
+
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkIfOrderStatusIsProcessing">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+    </test>
+</tests>

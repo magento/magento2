@@ -76,18 +76,16 @@ class UpdateAsset
 
         $updatedAsset = $this->assetFactory->create(
             [
+                'id' => $asset->getId(),
                 'path' => $asset->getPath(),
-                'contentType' => $asset->getContentType(),
+                'title' => $data->getTitle() ?? $asset->getTitle(),
+                'description' => $data->getDescription() ?? $asset->getDescription(),
                 'width' => $asset->getWidth(),
                 'height' => $asset->getHeight(),
                 'size' => $asset->getSize(),
-                'id' => $asset->getId(),
-                'title' => $data->getTitle() ?? $asset->getTitle(),
-                'description' => $data->getDescription() ?? $asset->getDescription(),
-                'source' => $asset->getSource(),
                 'hash' => $asset->getHash(),
-                'created_at' => $asset->getCreatedAt(),
-                'updated_at' => $asset->getUpdatedAt()
+                'contentType' => $asset->getContentType(),
+                'source' => $asset->getSource()
             ]
         );
 

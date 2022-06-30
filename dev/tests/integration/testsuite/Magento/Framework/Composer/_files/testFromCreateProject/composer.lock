@@ -2333,7 +2333,7 @@
                     "blueimp/jquery-file-upload": "lib/web/jquery/fileUploader",
                     "components/jqueryui": "lib/web/jquery/jquery-ui.js",
                     "twbs/bootstrap": "lib/web/jquery/jquery.tabs.js",
-                    "tinymce/tinymce": "lib/web/tiny_mce_4"
+                    "tinymce/tinymce": "lib/web/tiny_mce_5"
                 },
                 "map": [
                     [
@@ -2577,24 +2577,12 @@
                         "lib/internal/LinLibertineFont"
                     ],
                     [
-                        "lib/web/FormData.js",
-                        "lib/web/FormData.js"
-                    ],
-                    [
-                        "lib/web/MutationObserver.js",
-                        "lib/web/MutationObserver.js"
-                    ],
-                    [
                         "lib/web/blank.html",
                         "lib/web/blank.html"
                     ],
                     [
                         "lib/web/css",
                         "lib/web/css"
-                    ],
-                    [
-                        "lib/web/es6-collections.js",
-                        "lib/web/es6-collections.js"
                     ],
                     [
                         "lib/web/extjs",
@@ -2653,10 +2641,6 @@
                         "lib/web/matchMedia.js"
                     ],
                     [
-                        "lib/web/modernizr",
-                        "lib/web/modernizr"
-                    ],
-                    [
                         "lib/web/moment-timezone-with-data.js",
                         "lib/web/moment-timezone-with-data.js"
                     ],
@@ -2681,8 +2665,8 @@
                         "lib/web/spacer.gif"
                     ],
                     [
-                        "lib/web/tiny_mce_4",
-                        "lib/web/tiny_mce_4"
+                        "lib/web/tiny_mce_5",
+                        "lib/web/tiny_mce_5"
                     ],
                     [
                         "lib/web/underscore.js",
@@ -4798,26 +4782,24 @@
             "description": "N/A"
         },
         {
-            "name": "magento/module-elasticsearch-6",
-            "version": "100.3.0",
+            "name": "magento/module-elasticsearch-7",
+            "version": "100.4.3",
             "dist": {
                 "type": "zip",
-                "url": "https://repo.magento.com/archives/magento/module-elasticsearch-6/magento-module-elasticsearch-6-100.3.0.0.zip",
-                "reference": null,
-                "shasum": "a9da3243900390ad163efc7969b07116d2eb793f"
+                "url": "https://repo.magento.com/archives/magento/module-elasticsearch-7/magento-module-elasticsearch-7-100.4.3.0.zip",
+                "shasum": "46f9aa3a5b8b23dfa3c61070a9241c8a251dcdc3"
             },
             "require": {
-                "elasticsearch/elasticsearch": "~7.7.0",
-                "magento/framework": "102.0.*",
-                "magento/module-advanced-search": "100.3.*",
-                "magento/module-catalog-search": "101.0.*",
-                "magento/module-elasticsearch": "100.3.*",
-                "magento/module-search": "101.0.*",
-                "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "elasticsearch/elasticsearch": "~7.11.0",
+                "magento/framework": "103.0.*",
+                "magento/module-advanced-search": "100.4.*",
+                "magento/module-catalog-search": "102.0.*",
+                "magento/module-elasticsearch": "101.0.*",
+                "php": "~7.3.0||~7.4.0"
             },
             "suggest": {
-                "magento/module-config": "101.1.*"
+                "magento/module-config": "101.2.*",
+                "magento/module-search": "101.1.*"
             },
             "type": "magento2-module",
             "autoload": {
@@ -4825,7 +4807,7 @@
                     "registration.php"
                 ],
                 "psr-4": {
-                    "Magento\\Elasticsearch6\\": ""
+                    "Magento\\Elasticsearch7\\": ""
                 }
             },
             "license": [
@@ -9490,7 +9472,7 @@
                 "magento/module-eav": "102.0.1",
                 "magento/module-eav-graph-ql": "100.3.1",
                 "magento/module-elasticsearch": "100.3.1",
-                "magento/module-elasticsearch-6": "100.3.0",
+                "magento/module-elasticsearch-7": "100.4.3",
                 "magento/module-email": "101.0.1",
                 "magento/module-encryption-key": "100.3.1",
                 "magento/module-fedex": "100.3.1",
@@ -10445,7 +10427,7 @@
                     "phpseclib/bootstrap.php"
                 ],
                 "psr-4": {
-                    "phpseclib\\": "phpseclib/"
+                    "phpseclib3\\": "phpseclib/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",

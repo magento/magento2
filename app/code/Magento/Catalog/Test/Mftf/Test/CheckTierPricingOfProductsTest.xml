@@ -55,6 +55,7 @@
         </actionGroup>
         <!--Set Configuration-->
         <createData entity="CatalogPriceScopeWebsite" stepKey="paymentMethodsSettingConfig"/>
+        <magentoCron groups="index" stepKey="reindex"/>
         <!--Set advanced pricing for all 4 products-->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct1">
             <argument name="product" value="$$product1$$"/>
@@ -109,11 +110,7 @@
         </actionGroup>
         <actionGroup ref="ClearProductsFilterActionGroup" stepKey="ClearProductsFilterActionGroup"/>
 
-        <!--Flush cache-->
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
-
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!--Edit customer info-->
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="OpenEditCustomerFrom">
@@ -127,14 +124,12 @@
         <waitForPageLoad stepKey="waitForCustomersPage"/>
         <see userInput="You saved the customer." stepKey="CustomerIsSaved"/>
 
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
-        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="navigateToCustomers"/>
         <click selector="{{AdminCustomerFiltersSection.clearAll}}" stepKey="ClearFilters"/>
         <waitForPageLoad stepKey="waitForFiltersClear"/>
 
         <!--Create Cart Price Rule-->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForPriceList"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <waitForPageLoad stepKey="waitForPageDiscountPageIsLoaded"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="ship" stepKey="fillRuleName"/>
@@ -161,14 +156,14 @@
         <waitForPageLoad stepKey="waitForProductsOpened"/>
         <!--TEST CASE #1-->
         <!--Add 3 products to order with specified quantity-->
-        <click selector="{{OrdersGridSection.selectProduct($$product1.name$$)}}" stepKey="selectProduct1"/>
-        <fillField selector="{{OrdersGridSection.setQuantity($$product1.name$$)}}" userInput="10" stepKey="AddProductQuantity1"/>
+        <click selector="{{OrdersGridSection.selectProduct($$product1.sku$$)}}" stepKey="selectProduct1"/>
+        <fillField selector="{{OrdersGridSection.setQuantity($$product1.sku$$)}}" userInput="10" stepKey="AddProductQuantity1"/>
 
-        <click selector="{{OrdersGridSection.selectProduct($$product2.name$$)}}" stepKey="selectProduct2"/>
-        <fillField selector="{{OrdersGridSection.setQuantity($$product2.name$$)}}" userInput="10" stepKey="AddProductQuantity2"/>
+        <click selector="{{OrdersGridSection.selectProduct($$product2.sku$$)}}" stepKey="selectProduct2"/>
+        <fillField selector="{{OrdersGridSection.setQuantity($$product2.sku$$)}}" userInput="10" stepKey="AddProductQuantity2"/>
 
-        <click selector="{{OrdersGridSection.selectProduct($$product3.name$$)}}" stepKey="selectProduct3"/>
-        <fillField selector="{{OrdersGridSection.setQuantity($$product3.name$$)}}" userInput="10" stepKey="AddProductQuantity3"/>
+        <click selector="{{OrdersGridSection.selectProduct($$product3.sku$$)}}" stepKey="selectProduct3"/>
+        <fillField selector="{{OrdersGridSection.setQuantity($$product3.sku$$)}}" userInput="10" stepKey="AddProductQuantity3"/>
         <click stepKey="addProductsToOrder" selector="{{OrdersGridSection.addProductsToOrder}}"/>
         <waitForLoadingMaskToDisappear stepKey="wait6"/>
         <!--Verify tier price values-->
@@ -226,14 +221,14 @@
         <!--Add 3 products to order with specified quantity-->
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click stepKey="clickToAddProduct1" selector="{{OrdersGridSection.addProducts}}"/>
-        <click selector="{{OrdersGridSection.selectProduct($$product1.name$$)}}" stepKey="selectProduct5"/>
-        <fillField selector="{{OrdersGridSection.setQuantity($$product1.name$$)}}" userInput="10" stepKey="AddProductQuantity5"/>
+        <click selector="{{OrdersGridSection.selectProduct($$product1.sku$$)}}" stepKey="selectProduct5"/>
+        <fillField selector="{{OrdersGridSection.setQuantity($$product1.sku$$)}}" userInput="10" stepKey="AddProductQuantity5"/>
 
-        <click selector="{{OrdersGridSection.selectProduct($$product2.name$$)}}" stepKey="selectProduct6"/>
-        <fillField selector="{{OrdersGridSection.setQuantity($$product2.name$$)}}" userInput="10" stepKey="AddProductQuantity6"/>
+        <click selector="{{OrdersGridSection.selectProduct($$product2.sku$$)}}" stepKey="selectProduct6"/>
+        <fillField selector="{{OrdersGridSection.setQuantity($$product2.sku$$)}}" userInput="10" stepKey="AddProductQuantity6"/>
 
-        <click selector="{{OrdersGridSection.selectProduct($$product3.name$$)}}" stepKey="selectProduct7"/>
-        <fillField selector="{{OrdersGridSection.setQuantity($$product3.name$$)}}" userInput="10" stepKey="AddProductQuantity7"/>
+        <click selector="{{OrdersGridSection.selectProduct($$product3.sku$$)}}" stepKey="selectProduct7"/>
+        <fillField selector="{{OrdersGridSection.setQuantity($$product3.sku$$)}}" userInput="10" stepKey="AddProductQuantity7"/>
         <click stepKey="addProductsToOrder1" selector="{{OrdersGridSection.addProductsToOrder}}"/>
         <waitForLoadingMaskToDisappear stepKey="wait7"/>
         <!--Verify tier price values-->
@@ -259,8 +254,8 @@
         <waitForPageLoad stepKey="waitForPgeLoaded3"/>
         <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickToAddProduct2"/>
         <waitForLoadingMaskToDisappear stepKey="wait8"/>
-        <click selector="{{OrdersGridSection.selectProduct($$product4.name$$)}}" stepKey="selectProduct8"/>
-        <fillField selector="{{OrdersGridSection.setQuantity($$product4.name$$)}}" userInput="10" stepKey="AddProductQuantity9"/>
+        <click selector="{{OrdersGridSection.selectProduct($$product4.sku$$)}}" stepKey="selectProduct8"/>
+        <fillField selector="{{OrdersGridSection.setQuantity($$product4.sku$$)}}" userInput="10" stepKey="AddProductQuantity9"/>
         <click selector="{{OrdersGridSection.addProductsToOrder}}" stepKey="addProductsToOrder2"/>
         <waitForLoadingMaskToDisappear stepKey="wait9"/>
         <grabTextFrom selector="{{OrdersGridSection.productPrice($$product4.name$$)}}" stepKey="checkProductPrice10"/>
@@ -298,8 +293,8 @@
         <waitForPageLoad stepKey="WaitProductsDeleted1"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
         <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickToAddProduct4" />
-        <click selector="{{OrdersGridSection.selectProduct($$product1.name$$)}}" stepKey="selectProduct9"/>
-        <fillField selector="{{OrdersGridSection.setQuantity($$product1.name$$)}}" userInput="10" stepKey="AddProductQuantity10"/>
+        <click selector="{{OrdersGridSection.selectProduct($$product1.sku$$)}}" stepKey="selectProduct9"/>
+        <fillField selector="{{OrdersGridSection.setQuantity($$product1.sku$$)}}" userInput="10" stepKey="AddProductQuantity10"/>
         <click selector="{{OrdersGridSection.addProductsToOrder}}" stepKey="addProductsToOrder3"/>
         <waitForLoadingMaskToDisappear stepKey="wait11"/>
         <fillField selector="{{OrdersGridSection.applyCoupon}}" userInput="ship" stepKey="AddCouponCode"/>
@@ -334,13 +329,8 @@
             <createData entity="CustomerAccountSharingDefault" stepKey="setConfigCustomerAccountDefault"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
-            <!--Do reindex and flush cache-->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
     </test>
 </tests>

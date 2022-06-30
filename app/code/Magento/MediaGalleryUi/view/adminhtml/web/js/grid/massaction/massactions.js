@@ -16,6 +16,8 @@ define([
 
     return Component.extend({
         defaults: {
+            allowedActions: [],
+            deleteButtonSelector: '#delete_selected_massaction',
             deleteImagesSelector: '#delete_massaction',
             mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
             modules: {
@@ -86,6 +88,7 @@ define([
 
                 this.massActionMode(false);
                 this.switchMode();
+                this.imageModel().updateSelected();
             }.bind(this));
         },
 
@@ -104,6 +107,10 @@ define([
          * If images records less than one, disable "delete images" button
          */
         checkButtonVisibility: function () {
+            if (!this.allowedActions.includes('delete_assets')) {
+                return;
+            }
+
             if (this.imageItems.length < 1) {
                 $(this.deleteImagesSelector).addClass('disabled');
             } else {
@@ -124,7 +131,7 @@ define([
          */
         handleDeleteAction: function () {
             if (this.massActionMode()) {
-                $(this.massactionView().deleteButtonSelector).on('massDelete', function () {
+                $(this.deleteButtonSelector).on('massDelete.MediaGallery', function () {
                     if (this.getSelectedCount() < 1) {
                         uiAlert({
                             content: $t('You need to select at least one image')
@@ -139,10 +146,8 @@ define([
                             if (response.status === 'canceled') {
                                 return;
                             }
-                            this.imageModel().selected({});
-                            this.massActionMode(false);
-                            this.switchMode();
-                        }.bind(this));
+                            $(window).trigger('terminateMassAction.MediaGallery');
+                        });
                     }
                 }.bind(this));
             }

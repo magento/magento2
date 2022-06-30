@@ -28,7 +28,7 @@ class Upload extends Action implements HttpPostActionInterface
     /**
      * @see _isAllowed()
      */
-    public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
+    public const ADMIN_RESOURCE = 'Magento_MediaGalleryUiApi::upload_assets';
 
     /**
      * @var UploadImage
@@ -72,13 +72,11 @@ class Upload extends Action implements HttpPostActionInterface
             ];
             $resultJson->setHttpResponseCode(self::HTTP_BAD_REQUEST);
             $resultJson->setData($responseContent);
-
             return $resultJson;
         }
 
         try {
             $this->uploadImage->execute($targetFolder, $type);
-
             $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => true,
@@ -101,7 +99,6 @@ class Upload extends Action implements HttpPostActionInterface
 
         $resultJson->setHttpResponseCode($responseCode);
         $resultJson->setData($responseContent);
-
         return $resultJson;
     }
 }

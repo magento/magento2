@@ -24,7 +24,7 @@
             <argument name="entityType" xsi:type="string">catalog_category</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\MediaGalleryUi\Model\AssetDetailsProvider\UsedIn">
+    <type name="Magento\MediaGalleryUi\Model\GetAssetUsageDetails">
         <arguments>
             <argument name="contentTypes" xsi:type="array">
                 <item name="catalog_category" xsi:type="array">
@@ -35,6 +35,13 @@
                     <item name="name" xsi:type="string">Products</item>
                     <item name="link" xsi:type="string">catalog/product/index</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Columns\Thumbnail">
+        <arguments>
+            <argument name="defaultPlaceholder" xsi:type="array">
+                <item name="image" xsi:type="string">Magento_MediaGalleryCatalogUi::images/category/placeholder/image.jpg</item>
             </argument>
         </arguments>
     </type>

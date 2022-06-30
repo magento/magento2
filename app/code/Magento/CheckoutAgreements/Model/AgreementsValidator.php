@@ -35,12 +35,12 @@ class AgreementsValidator implements AgreementsValidatorInterface
     public function isValid($agreementIds = [])
     {
         $agreementIds = $agreementIds === null ? [] : $agreementIds;
-        $requiredAgreements = [[]];
+        $requiredAgreements = [];
         foreach ($this->agreementsProviders as $agreementsProvider) {
             $requiredAgreements[] = $agreementsProvider->getRequiredAgreementIds();
         }
 
-        $agreementsDiff = array_diff(array_merge(...$requiredAgreements), $agreementIds);
+        $agreementsDiff = array_diff(array_merge([], ...$requiredAgreements), $agreementIds);
 
         return empty($agreementsDiff);
     }

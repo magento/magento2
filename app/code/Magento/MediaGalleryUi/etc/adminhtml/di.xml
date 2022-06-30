@@ -41,30 +41,4 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options\UsedIn">
-        <arguments>
-            <argument name="options" xsi:type="array">
-                <item name="cms_page" xsi:type="array">
-                    <item name="value" xsi:type="string">cms_page</item>
-                    <item name="label" xsi:type="string" translate="true">Pages</item>
-                </item>
-                <item name="catalog_category" xsi:type="array">
-                    <item name="value" xsi:type="string">catalog_category</item>
-                    <item name="label" xsi:type="string" translate="true">Categories</item>
-                </item>
-                <item name="cms_block" xsi:type="array">
-                    <item name="value" xsi:type="string">cms_block</item>
-                    <item name="label" xsi:type="string" translate="true">Blocks</item>
-                </item>
-                <item name="catalog_product" xsi:type="array">
-                    <item name="value" xsi:type="string">catalog_product</item>
-                    <item name="label" xsi:type="string" translate="true">Products</item>
-                </item>
-                <item name="not_used" xsi:type="array">
-                    <item name="value" xsi:type="string">not_used</item>
-                    <item name="label" xsi:type="string" translate="true">Not used anywhere</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
 </config>

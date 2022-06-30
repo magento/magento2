@@ -22,7 +22,7 @@
         <before>
             <!-- Create product attribute and add it to default attribute set />-->
             <comment userInput="Create product attribute and add it to default attribute set" stepKey="createAttrAndAddToDefaultAttrSet"/>
-            <createData entity="productFPTAttribute" stepKey="createProductFPTAttribute"/>
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttribute"/>
             <createData entity="AddToDefaultSet" stepKey="addToDefaultAttributeSet">
                 <requiredEntity createDataKey="createProductFPTAttribute"/>
             </createData>
@@ -51,12 +51,8 @@
             <!--Set catalog price scope to Global-->
             <comment userInput="Set catalog price scope to Global" stepKey="commentSetPriceScope"/>
             <magentoCLI command="config:set catalog/price/scope 0" stepKey="setPriceScopeGlobal"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value="catalog_product_price"/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!--Set catalog price scope to Global-->
@@ -67,9 +63,13 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteCustomWebsite">
                 <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex2"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!-- Go to product edit page and assign it to created website -->
@@ -101,12 +101,8 @@
         <!--Set catalog price scope to Website-->
         <comment userInput="Set catalog price scope to Website" stepKey="commentSetPriceScope"/>
         <magentoCLI command="config:set catalog/price/scope 1" stepKey="setPriceScopeWebsite"/>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value="catalog_product_price"/>
-        </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         <!--See available websites only 'All Websites'-->
         <comment userInput="See available websites 'All Websites', 'Main Website' and Second website" stepKey="commentCheckWebsitesInProductPage"/>
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductPageSecondTime">

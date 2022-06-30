@@ -2,12 +2,12 @@
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ * @deprecated as polyfill isn't used anymore
  */
 
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-?>
 
-<?php $scriptString = <<<script
+$scriptString = <<<script
 
     /*! loadCSS rel=preload polyfill. [c]2017 Filament Group, Inc. MIT License */
     !function(t){"use strict";t.loadCSS||(t.loadCSS=function(){});var e=loadCSS.relpreload={};
@@ -24,5 +24,3 @@
     ("undefined"!=typeof global?global:this);
 
 script;
-?>
-<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

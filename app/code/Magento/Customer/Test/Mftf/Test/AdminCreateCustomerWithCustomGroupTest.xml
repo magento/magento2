@@ -19,6 +19,9 @@
         </annotations>
 
         <before>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="customer_grid"/>
+            </actionGroup>
             <createData entity="CustomCustomerGroup" stepKey="customerGroup" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
@@ -26,6 +29,7 @@
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}" />
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
             <deleteData createDataKey="customerGroup" stepKey="deleteCustomerGroup"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -39,7 +43,7 @@
         <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
         <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
+            <argument name="tags" value="compiled_config"/>
         </actionGroup>
         <reloadPage stepKey="reloadPage"/>
 
@@ -54,8 +58,7 @@
         <see userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertEmail"/>
 
         <!--Assert Customer Form -->
-        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickOnEditButton1"/>
-        <waitForPageLoad stepKey="waitForCustomerEditPageToLoad1"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickOnEditButton1"/>
         <click selector="{{AdminCustomerAccountInformationSection.accountInformationButton}}" stepKey="clickOnAccountInformation"/>
         <waitForPageLoad stepKey="waitForCustomerInformationPageToLoad"/>
         <see selector="{{AdminCustomerAccountInformationSection.groupIdValue}}" userInput="$$customerGroup.code$$" stepKey="seeCustomerGroup1"/>

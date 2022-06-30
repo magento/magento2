@@ -6,12 +6,22 @@
 
 namespace Magento\Catalog\Model\Product\Price;
 
+use Magento\Catalog\Api\Data\SpecialPriceInterface;
+use Magento\Catalog\Api\Data\SpecialPriceInterfaceFactory;
+use Magento\Catalog\Api\SpecialPriceStorageInterface;
+use Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor;
+use Magento\Catalog\Model\Product\Price\Validation\Result;
+use Magento\Catalog\Model\ProductIdLocatorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Helper\Data;
+use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
  * Special price storage presents efficient price API and is used to retrieve, update or delete special prices.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInterface
+class SpecialPriceStorage implements SpecialPriceStorageInterface
 {
     /**
      * @var \Magento\Catalog\Api\SpecialPriceInterface
@@ -19,52 +29,59 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
     private $specialPriceResource;
 
     /**
-     * @var \Magento\Catalog\Api\Data\SpecialPriceInterfaceFactory
+     * @var SpecialPriceInterfaceFactory
      */
     private $specialPriceFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ProductIdLocatorInterface
+     * @var ProductIdLocatorInterface
      */
     private $productIdLocator;
 
     /**
-     * @var \Magento\Store\Api\StoreRepositoryInterface
+     * @var StoreRepositoryInterface
      */
     private $storeRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\Validation\Result
+     * @var Result
      */
     private $validationResult;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
+     * @var InvalidSkuProcessor
      */
     private $invalidSkuProcessor;
 
     /**
      * @var array
      */
-    private $allowedProductTypes = [];
+    private $allowedProductTypes;
+
+    /**
+     * @var Data
+     */
+    private $catalogData;
 
     /**
      * @param \Magento\Catalog\Api\SpecialPriceInterface $specialPriceResource
-     * @param \Magento\Catalog\Api\Data\SpecialPriceInterfaceFactory $specialPriceFactory
-     * @param \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator
-     * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
-     * @param \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult
-     * @param \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor
-     * @param array $allowedProductTypes [optional]
+     * @param SpecialPriceInterfaceFactory $specialPriceFactory
+     * @param ProductIdLocatorInterface $productIdLocator
+     * @param StoreRepositoryInterface $storeRepository
+     * @param Result $validationResult
+     * @param InvalidSkuProcessor $invalidSkuProcessor
+     * @param array $allowedProductTypes
+     * @param Data|null $catalogData
      */
     public function __construct(
         \Magento\Catalog\Api\SpecialPriceInterface $specialPriceResource,
-        \Magento\Catalog\Api\Data\SpecialPriceInterfaceFactory $specialPriceFactory,
-        \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator,
-        \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
-        \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult,
-        \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor,
-        array $allowedProductTypes = []
+        SpecialPriceInterfaceFactory $specialPriceFactory,
+        ProductIdLocatorInterface $productIdLocator,
+        StoreRepositoryInterface $storeRepository,
+        Result $validationResult,
+        InvalidSkuProcessor $invalidSkuProcessor,
+        array $allowedProductTypes = [],
+        ?Data $catalogData = null
     ) {
         $this->specialPriceResource = $specialPriceResource;
         $this->specialPriceFactory = $specialPriceFactory;
@@ -73,10 +90,11 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
         $this->validationResult = $validationResult;
         $this->invalidSkuProcessor = $invalidSkuProcessor;
         $this->allowedProductTypes = $allowedProductTypes;
+        $this->catalogData = $catalogData ?: ObjectManager::getInstance()->get(Data::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get(array $skus)
     {
@@ -85,7 +103,7 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
 
         $prices = [];
         foreach ($rawPrices as $rawPrice) {
-            /** @var \Magento\Catalog\Api\Data\SpecialPriceInterface $price */
+            /** @var SpecialPriceInterface $price */
             $price = $this->specialPriceFactory->create();
             $sku = isset($rawPrice['sku'])
                 ? $rawPrice['sku']
@@ -102,7 +120,7 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function update(array $prices)
     {
@@ -113,7 +131,7 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(array $prices)
     {
@@ -140,52 +158,14 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
 
         foreach ($prices as $key => $price) {
             if (!$price->getSku() || in_array($price->getSku(), $failedSkus)) {
-                $this->validationResult->addFailedItem(
-                    $key,
-                    __(
-                        'The product that was requested doesn\'t exist. Verify the product and try again. '
-                        . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
-                        [
-                            'SKU' => $price->getSku(),
-                            'storeId' => $price->getStoreId(),
-                            'priceFrom' => $price->getPriceFrom(),
-                            'priceTo' => $price->getPriceTo()
-                        ]
-                    ),
-                    [
-                        'SKU' => $price->getSku(),
-                        'storeId' => $price->getStoreId(),
-                        'priceFrom' => $price->getPriceFrom(),
-                        'priceTo' => $price->getPriceTo()
-                    ]
-                );
+                $errorMessage = 'The product that was requested doesn\'t exist. Verify the product and try again. '
+                    . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.';
+                $this->addFailedItemPrice($price, $key, $errorMessage, []);
             }
+            $this->checkStore($price, $key);
             $this->checkPrice($price, $key);
             $this->checkDate($price, $price->getPriceFrom(), 'Price From', $key);
             $this->checkDate($price, $price->getPriceTo(), 'Price To', $key);
-            try {
-                $this->storeRepository->getById($price->getStoreId());
-            } catch (NoSuchEntityException $e) {
-                $this->validationResult->addFailedItem(
-                    $key,
-                    __(
-                        'Requested store is not found. '
-                        . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
-                        [
-                            'SKU' => $price->getSku(),
-                            'storeId' => $price->getStoreId(),
-                            'priceFrom' => $price->getPriceFrom(),
-                            'priceTo' => $price->getPriceTo()
-                        ]
-                    ),
-                    [
-                        'SKU' => $price->getSku(),
-                        'storeId' => $price->getStoreId(),
-                        'priceFrom' => $price->getPriceFrom(),
-                        'priceTo' => $price->getPriceTo()
-                    ]
-                );
-            }
         }
 
         foreach ($this->validationResult->getFailedRowIds() as $id) {
@@ -196,74 +176,92 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
     }
 
     /**
+     * Check that store exists and is global when price scope is global and otherwise add error to aggregator.
+     *
+     * @param SpecialPriceInterface $price
+     * @param int $key
+     * @return void
+     */
+    private function checkStore(SpecialPriceInterface $price, int $key): void
+    {
+        if ($this->catalogData->isPriceGlobal() && $price->getStoreId() !== 0) {
+            $errorMessage = 'Could not change non global Price when price scope is global. '
+                . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.';
+            $this->addFailedItemPrice($price, $key, $errorMessage, []);
+        }
+
+        try {
+            $this->storeRepository->getById($price->getStoreId());
+        } catch (NoSuchEntityException $e) {
+            $errorMessage = 'Requested store is not found. '
+                . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.';
+            $this->addFailedItemPrice($price, $key, $errorMessage, []);
+        }
+    }
+
+    /**
      * Check that date value is correct and add error to aggregator if it contains incorrect data.
      *
-     * @param \Magento\Catalog\Api\Data\SpecialPriceInterface $price
+     * @param SpecialPriceInterface $price
      * @param string $value
      * @param string $label
      * @param int $key
      * @return void
      */
-    private function checkDate(\Magento\Catalog\Api\Data\SpecialPriceInterface $price, $value, $label, $key)
+    private function checkDate(SpecialPriceInterface $price, $value, $label, $key)
     {
         if ($value && !$this->isCorrectDateValue($value)) {
-            $this->validationResult->addFailedItem(
-                $key,
-                __(
-                    'Invalid attribute %label = %priceTo. '
-                    . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
-                    [
-                        'label' => $label,
-                        'SKU' => $price->getSku(),
-                        'storeId' => $price->getStoreId(),
-                        'priceFrom' => $price->getPriceFrom(),
-                        'priceTo' => $price->getPriceTo()
-                    ]
-                ),
-                [
-                    'label' => $label,
-                    'SKU' => $price->getSku(),
-                    'storeId' => $price->getStoreId(),
-                    'priceFrom' => $price->getPriceFrom(),
-                    'priceTo' => $price->getPriceTo()
-                ]
-            );
+            $errorMessage = 'Invalid attribute %label = %priceTo. '
+                . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.';
+            $this->addFailedItemPrice($price, $key, $errorMessage, ['label' => $label]);
         }
     }
 
     /**
-     * Check that provided price value is not empty and not lower then zero and add error to aggregator if price
+     * Check price.
+     *
+     * Verify that provided price value is not empty and not lower then zero and add error to aggregator if price
      * contains not valid data.
      *
-     * @param \Magento\Catalog\Api\Data\SpecialPriceInterface $price
+     * @param SpecialPriceInterface $price
      * @param int $key
      * @return void
      */
-    private function checkPrice(\Magento\Catalog\Api\Data\SpecialPriceInterface $price, $key)
+    private function checkPrice(SpecialPriceInterface $price, int $key): void
     {
         if (null === $price->getPrice() || $price->getPrice() < 0) {
-            $this->validationResult->addFailedItem(
-                $key,
-                __(
-                    'Invalid attribute Price = %price. '
-                    . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
-                    [
-                        'price' => $price->getPrice(),
-                        'SKU' => $price->getSku(),
-                        'storeId' => $price->getStoreId(),
-                        'priceFrom' => $price->getPriceFrom(),
-                        'priceTo' => $price->getPriceTo()
-                    ]
-                ),
-                [
-                    'price' => $price->getPrice(),
-                    'SKU' => $price->getSku(),
-                    'storeId' => $price->getStoreId(),
-                    'priceFrom' => $price->getPriceFrom(),
-                    'priceTo' => $price->getPriceTo()
-                ]
-            );
+            $errorMessage = 'Invalid attribute Price = %price. '
+                . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.';
+            $this->addFailedItemPrice($price, $key, $errorMessage, ['price' => $price->getPrice()]);
         }
+    }
+
+    /**
+     * Adds failed item price to validation result
+     *
+     * @param SpecialPriceInterface $price
+     * @param int $key
+     * @param string $message
+     * @param array $firstParam
+     * @return void
+     */
+    private function addFailedItemPrice(
+        SpecialPriceInterface $price,
+        int $key,
+        string $message,
+        array $firstParam
+    ): void {
+        $additionalInfo = [];
+        if ($firstParam) {
+            $additionalInfo = array_merge($additionalInfo, $firstParam);
+        }
+
+        $additionalInfo['SKU'] = $price->getSku();
+        $additionalInfo['storeId'] = $price->getStoreId();
+        $additionalInfo['priceFrom'] = $price->getPriceFrom();
+        $additionalInfo['priceTo'] = $price->getPriceTo();
+
+        $this->validationResult->addFailedItem($key, __($message, $additionalInfo), $additionalInfo);
     }
 
     /**

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteMultipleWebsitesActionGroup">
+        <annotations>
+            <description>Deletes all specified websites one by one on the 'Stores' page. Defaults to delete all websites
+                except the default 'Main Website'.</description>
+        </annotations>
+        <arguments>
+            <argument name="websitesToDelete" defaultValue="{{AdminStoresMainActionsSection.allNonDefaultWebsites}}" type="string"/>
+            <argument name="expectedRemainingWebsites" defaultValue="1" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="waitForResetFilter"/>
+        <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="clickResetFilter"/>
+        <waitForPageLoad stepKey="waitForGridReset"/>
+        <helper class="Magento\Store\Test\Mftf\Helper\StoreHelpers" method="deleteAllSpecifiedWebsites" stepKey="deleteAllSpecifiedWebsites">
+            <argument name="websitesToDelete">{{websitesToDelete}}</argument>
+            <argument name="deleteButton">{{AdminMainActionsSection.delete}}</argument>
+            <argument name="createDbBackupButton">{{AdminStoresDeleteStoreGroupSection.createDbBackup}}</argument>
+            <argument name="successMessage">You deleted the website.</argument>
+            <argument name="successMessageContainer">{{AdminMessagesSection.success}}</argument>
+        </helper>
+        <waitForPageLoad stepKey="waitForGridLoad"/>
+        <seeNumberOfElements userInput="{{expectedRemainingWebsites}}" selector="{{AdminStoresMainActionsSection.allWebsites}}" stepKey="seeExpectedFinalWebsites"/>
+    </actionGroup>
+</actionGroups>

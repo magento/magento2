@@ -21,8 +21,9 @@
         <click selector="{{AdminOrderDetailsMainActionsSection.loginAsCustomer}}" stepKey="clickLoginAsCustomerLink"/>
         <see selector="{{AdminConfirmationModalSection.title}}" userInput="You are about to Login as Customer"
              stepKey="seeModal"/>
-         <see selector="{{AdminConfirmationModalSection.message}}" userInput="Actions taken while in &quot;Login as Customer&quot; will affect actual customer data." stepKey="seeModalMessage"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Actions taken while in &quot;Login as Customer&quot; will affect actual customer data." stepKey="seeModalMessage"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickLogin"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear" />
         <switchToNextTab stepKey="switchToNewTab"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>

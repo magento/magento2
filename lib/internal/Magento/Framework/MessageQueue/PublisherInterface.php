@@ -18,7 +18,7 @@ interface PublisherInterface
      * Publishes a message to a specific queue or exchange.
      *
      * @param string $topicName
-     * @param array|object $data
+     * @param mixed $data
      * @return null|mixed
      * @throws \InvalidArgumentException If message is not formed properly
      * @since 103.0.0

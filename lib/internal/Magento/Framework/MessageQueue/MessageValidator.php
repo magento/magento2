@@ -119,7 +119,7 @@ class MessageValidator
         $realType = $this->getRealType($message);
         if ($realType == 'array' && count($message) == 0) {
             return;
-        } elseif ($realType == 'array' && count($message) > 0) {
+        } elseif ($realType == 'array' && isset($message[0])) {
             $realType = $this->getRealType($message[0]);
             $compareType = preg_replace('/\[\]/', '', $messageType);
         }
@@ -153,7 +153,7 @@ class MessageValidator
         $realType = $this->getRealType($message);
         if ($realType == 'array' && count($message) == 0) {
             return;
-        } elseif ($realType == 'array' && count($message) > 0) {
+        } elseif ($realType == 'array' && isset($message[0])) {
             $message = $message[0];
             $compareType = preg_replace('/\[\]/', '', $messageType);
         }

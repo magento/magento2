@@ -13,10 +13,14 @@ define([
     return Column.extend({
         defaults: {
             bodyTmpl: 'Magento_MediaGalleryUi/grid/columns/image',
+            messageContentSelector: 'ul.messages',
+            mediaGalleryContainerSelector: '.media-gallery-container',
             deleteImageUrl: 'media_gallery/image/delete',
             addSelectedBtnSelector: '#add_selected',
             deleteSelectedBtnSelector: '#delete_selected',
+            gridSelector: '[data-id="media-gallery-masonry-grid"]',
             selected: null,
+            allowedActions: [],
             fields: {
                 id: 'id',
                 url: 'url',
@@ -39,7 +43,8 @@ define([
                 {
                     component: 'Magento_MediaGalleryUi/js/grid/columns/image/actions',
                     name: '${ $.name }_actions',
-                    imageModelName: '${ $.name }'
+                    imageModelName: '${ $.name }',
+                    allowedActions: '${ $.allowedActions }'
                 }
             ]
         },
@@ -103,6 +108,7 @@ define([
          */
         updateSelected: function () {
             this.selected({});
+            this.hideAddSelectedAndDeleteButon();
         },
 
         /**
@@ -221,8 +227,15 @@ define([
         toggleAddSelectedButton: function () {
             if (this.selected() === null) {
                 this.hideAddSelectedAndDeleteButon();
-            } else {
+
+                return;
+            }
+
+            if (this.allowedActions.includes('insert')) {
                 $(this.addSelectedBtnSelector).removeClass('no-display');
+            }
+
+            if (this.allowedActions.includes('delete')) {
                 $(this.deleteSelectedBtnSelector).removeClass('no-display');
             }
         },
@@ -269,6 +282,8 @@ define([
          */
         addMessage: function (code, message) {
             this.messages().add(code, message);
+            this.closeContextMenu();
+            this.scrollToMessageContent();
             this.messages().scheduleCleanup();
         },
 
@@ -283,6 +298,27 @@ define([
                 !this.massaction().massActionMode()) {
                 this.deselectImage();
             }
+        },
+
+        /**
+         * Action to close the context menu in media gallery.
+         */
+        closeContextMenu: function () {
+            $(this.gridSelector).trigger('click');
+        },
+
+        /**
+         * Scroll to the top of media gallery page
+         */
+        scrollToMessageContent: function () {
+            var scrollTargetElement = $(this.messageContentSelector),
+                scrollTargetContainer = $(this.mediaGalleryContainerSelector);
+
+            scrollTargetContainer.find(scrollTargetElement).get(0).scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'nearest'
+            });
         }
     });
 });

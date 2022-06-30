@@ -84,8 +84,8 @@ class ImageTest extends TestCase
             ],
             [
                 'testimage',
-                'http://www.example.com/pub/media/',
-                'http://www.example.com/pub/media/catalog/category/testimage'
+                'http://www.example.com/media/',
+                'http://www.example.com/media/catalog/category/testimage'
             ],
             [
                 'testimage',
@@ -94,8 +94,8 @@ class ImageTest extends TestCase
             ],
             [
                 '/pub/media/catalog/category/testimage',
-                'http://www.example.com/pub/media/',
-                'http://www.example.com/pub/media/catalog/category/testimage'
+                'http://www.example.com/media/',
+                'http://www.example.com/media/catalog/category/testimage'
             ],
             [
                 '/pub/media/catalog/category/testimage',
@@ -104,8 +104,8 @@ class ImageTest extends TestCase
             ],
             [
                 '/pub/media/posters/testimage',
-                'http://www.example.com/pub/media/',
-                'http://www.example.com/pub/media/posters/testimage'
+                'http://www.example.com/media/',
+                'http://www.example.com/media/posters/testimage'
             ],
             [
                 '/pub/media/posters/testimage',

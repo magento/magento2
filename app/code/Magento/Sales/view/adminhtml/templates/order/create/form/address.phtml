@@ -11,18 +11,27 @@
 
 /**
  * @var \Magento\Customer\Model\ResourceModel\Address\Collection $addressCollection
+ * @var \Magento\Sales\ViewModel\Customer\Address\AddressAttributeFilter $viewModel
  */
+
 $addressCollection = $block->getData('customerAddressCollection');
+$AddressCollectionAttributeFilter = $block->getData('customerAddressCollectionAttributeFilter');
 
 $addressArray = [];
 if ($block->getCustomerId()):
-    $addressArray = $addressCollection->setCustomerFilter([$block->getCustomerId()])->toArray();
+    $addressArray = $AddressCollectionAttributeFilter->setScopeFilter($addressCollection, $block->getStoreId())
+        ->setCustomerFilter([$block->getCustomerId()])->toArray();
 endif;
 
 /**
  * @var \Magento\Sales\ViewModel\Customer\AddressFormatter $customerAddressFormatter
  */
 $customerAddressFormatter = $block->getData('customerAddressFormatter');
+
+/**
+ * @var \Magento\Sales\ViewModel\Customer\Address\Billing\AddressDataProvider $billingAddressDataProvider
+ */
+$billingAddressDataProvider = $block->getData('billingAddressDataProvider');
 
 /**
  * @var \Magento\Sales\Block\Adminhtml\Order\Create\Billing\Address|
@@ -68,14 +77,14 @@ endif; ?>
             <input type="checkbox" id="order-shipping_same_as_billing" name="shipping_same_as_billing"
                    class="admin__control-checkbox"
                    <?php if ($block->getIsAsBilling()): ?>checked<?php endif; ?> />
+            <label for="order-shipping_same_as_billing" class="admin__field-label">
+                <?= $block->escapeHtml(__('Same As Billing Address')) ?>
+            </label>
             <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                 'onclick',
                 "order.setShippingAsBilling(this.checked)",
                 'input#order-shipping_same_as_billing'
             ) ?>
-            <label for="order-shipping_same_as_billing" class="admin__field-label">
-                <?= $block->escapeHtml(__('Same As Billing Address')) ?>
-            </label>
         </div>
     <?php endif; ?>
         <div class="admin__field admin__field-select-from-existing-address">
@@ -114,10 +123,13 @@ endif; ?>
                    type="checkbox"
                    id="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlIdPrefix()) ?>save_in_address_book"
                    value="1"
-                <?php if (!$block->getDontSaveInAddressBook()): ?> checked="checked"<?php endif; ?>
+                <?php if ($billingAddressDataProvider && $billingAddressDataProvider->getSaveInAddressBook() ||
+                    $block->getIsShipping() && !$block->getDontSaveInAddressBook() && !$block->getAddressId()): ?>
+                    checked="checked"
+                <?php endif; ?>
                    class="admin__control-checkbox"/>
             <label for="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlIdPrefix()) ?>save_in_address_book"
-                   class="admin__field-label"><?= $block->escapeHtml(__('Save in address book')) ?></label>
+                   class="admin__field-label"><?= $block->escapeHtml(__('Add to address book')) ?></label>
         </div>
     </div>
     <?php $hideElement = 'address-' . ($block->getIsShipping() ? 'shipping' : 'billing') . '-overlay'; ?>
@@ -134,9 +146,10 @@ endif; ?>
             order.bindAddressFields('{$block->escapeJs($_addressChoiceContainerId)}');
 
 script;
-    if ($block->getIsShipping() && $block->getIsAsBilling()):
-                $scriptString .= <<<script
-            order.disableShippingAddress(true);
+    if ($block->getIsShipping()):
+        $disable = $block->getIsAsBilling() ? 'true' : 'false';
+        $scriptString .= <<<script
+            order.disableShippingAddress({$disable});
 
 script;
             endif;

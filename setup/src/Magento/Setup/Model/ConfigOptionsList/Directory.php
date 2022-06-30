@@ -15,6 +15,7 @@ use Magento\Framework\Setup\Option\SelectConfigOption;
 
 /**
  * Deployment configuration options for the folders.
+ * @deprecared Magento always uses the pub directory
  */
 class Directory implements ConfigOptionsListInterface
 {
@@ -70,7 +71,7 @@ class Directory implements ConfigOptionsListInterface
                 $this->selectOptions,
                 self::CONFIG_PATH_DOCUMENT_ROOT_IS_PUB,
                 'Flag to show is Pub is on root, can be true or false only',
-                false
+                true
             ),
         ];
     }

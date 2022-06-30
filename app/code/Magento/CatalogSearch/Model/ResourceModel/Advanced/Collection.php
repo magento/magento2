@@ -6,27 +6,30 @@
 
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
 
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\CatalogSearch\Model\ResourceModel\Advanced;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyChecker;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyCheckerInterface;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverInterface;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
-use Magento\Framework\Search\EngineResolverInterface;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverFactory;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverInterface;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\DB\Select;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultFactory;
+use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Framework\Search\Request\EmptyRequestDataException;
 use Magento\Framework\Search\Request\NonExistingRequestNameException;
-use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Api\Search\SearchResultInterface;
 
 /**
  * Advanced search collection
@@ -107,6 +110,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $defaultFilterStrategyApplyChecker;
 
     /**
+     * @var Advanced
+     */
+    private $advancedSearchResource;
+
+    /**
      * Collection constructor
      *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -141,6 +149,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param TotalRecordsResolverFactory|null $totalRecordsResolverFactory
      * @param EngineResolverInterface|null $engineResolver
      * @param DefaultFilterStrategyApplyCheckerInterface|null $defaultFilterStrategyApplyChecker
+     * @param Advanced|null $advancedSearchResource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -176,13 +185,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         SearchResultApplierFactory $searchResultApplierFactory = null,
         TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
         EngineResolverInterface $engineResolver = null,
-        DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null
+        DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null,
+        Advanced $advancedSearchResource = null
     ) {
         $this->searchRequestName = $searchRequestName;
-        if ($searchResultFactory === null) {
-            $this->searchResultFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Api\Search\SearchResultFactory::class);
-        }
+        $this->searchResultFactory = $searchResultFactory ?: ObjectManager::getInstance()
+            ->get(SearchResultFactory::class);
         $this->searchCriteriaResolverFactory = $searchCriteriaResolverFactory ?: ObjectManager::getInstance()
             ->get(SearchCriteriaResolverFactory::class);
         $this->searchResultApplierFactory = $searchResultApplierFactory ?: ObjectManager::getInstance()
@@ -193,6 +201,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             ->get(EngineResolverInterface::class);
         $this->defaultFilterStrategyApplyChecker = $defaultFilterStrategyApplyChecker ?: ObjectManager::getInstance()
             ->get(DefaultFilterStrategyApplyChecker::class);
+        $this->advancedSearchResource = $advancedSearchResource ?: ObjectManager::getInstance()
+            ->get(Advanced::class);
         parent::__construct(
             $entityFactory,
             $logger,
@@ -229,7 +239,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function addFieldsToFilter($fields)
     {
         if ($fields) {
-            $this->filters = array_merge($this->filters, $fields);
+            $this->filters = array_replace_recursive($this->filters, $fields);
         }
         return $this;
     }
@@ -258,6 +268,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function addCategoryFilter(\Magento\Catalog\Model\Category $category)
     {
+        $this->setAttributeFilterData(Category::ENTITY, 'category_ids', $category->getId());
         /**
          * This changes need in backward compatible reasons for support dynamic improved algorithm
          * for price aggregation process.
@@ -265,7 +276,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
             parent::addCategoryFilter($category);
         } else {
-            $this->addFieldToFilter('category_ids', $category->getId());
             $this->_productLimitationPrice();
         }
 
@@ -278,14 +288,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function setVisibility($visibility)
     {
+        $this->setAttributeFilterData(Product::ENTITY, 'visibility', $visibility);
         /**
          * This changes need in backward compatible reasons for support dynamic improved algorithm
          * for price aggregation process.
          */
         if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
             parent::setVisibility($visibility);
-        } else {
-            $this->addFieldToFilter('visibility', $visibility);
         }
 
         return $this;
@@ -304,6 +313,25 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $direction = strtoupper($direction) == self::SORT_ORDER_ASC ? self::SORT_ORDER_ASC : self::SORT_ORDER_DESC;
 
         $this->searchOrders[$field] = $direction;
+    }
+
+    /**
+     * Prepare attribute data to filter.
+     *
+     * @param string $entityType
+     * @param string $attributeCode
+     * @param mixed $condition
+     * @return $this
+     */
+    private function setAttributeFilterData(string $entityType, string $attributeCode, $condition): self
+    {
+        /** @var AbstractAttribute $attribute */
+        $attribute = $this->_eavConfig->getAttribute($entityType, $attributeCode);
+        $table = $attribute->getBackend()->getTable();
+        $condition = $this->advancedSearchResource->prepareCondition($attribute, $condition);
+        $this->addFieldsToFilter([$table => [$attributeCode => $condition]]);
+
+        return $this;
     }
 
     /**
@@ -377,7 +405,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $query = $this->getSelect();
             $rows = $this->_fetchAll($query);
         } catch (\Exception $e) {
-            $this->printLogQuery(false, true, $query);
+            $this->printLogQuery(false, true, $query ?? null);
             throw $e;
         }
 

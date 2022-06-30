@@ -8,7 +8,7 @@
     <div class="messages" outereach="messages">
         <div attr="class: 'message message-'+code">
             <div data-ui-id="messages-message-error">
-                <span text="message"></span>
+                <span html="$parent.prepareMessageUnsanitizedHtml(message)"></span>
             </div>
         </div>
     </div>

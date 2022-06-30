@@ -4,15 +4,17 @@
  */
 
 define([
-    'uiElement'
-], function (Element) {
+    'uiElement',
+    'escaper'
+], function (Element, escaper) {
     'use strict';
 
     return Element.extend({
         defaults: {
             template: 'Magento_MediaGalleryUi/grid/messages',
             messageDelay: 5,
-            messages: []
+            messages: [],
+            allowedTags: ['div', 'span', 'b', 'strong', 'i', 'em', 'u', 'a']
         },
 
         /**
@@ -68,10 +70,21 @@ define([
 
             delay = delay || this.messageDelay;
 
+            // eslint-disable-next-line no-unused-vars
             timerId = setTimeout(function () {
                 clearTimeout(timerId);
                 this.clear();
             }.bind(this), Number(delay) * 1000);
+        },
+
+        /**
+         * Prepare the given message to be rendered as HTML
+         *
+         * @param {String} message
+         * @return {String}
+         */
+        prepareMessageUnsanitizedHtml: function (message) {
+            return escaper.escapeHtml(message, this.allowedTags);
         }
     });
 });

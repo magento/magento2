@@ -22,6 +22,7 @@
     <preference for="Magento\Customer\Api\Data\AttributeMetadataInterface"
                 type="Magento\Customer\Model\Data\AttributeMetadata" />
     <preference for="Magento\Customer\Api\Data\GroupInterface" type="Magento\Customer\Model\Data\Group" />
+    <preference for="Magento\Customer\Api\Data\GroupExcludedWebsiteInterface" type="Magento\Customer\Model\Data\GroupExcludedWebsite" />
     <preference for="Magento\Customer\Api\Data\OptionInterface" type="Magento\Customer\Model\Data\Option" />
     <preference for="Magento\Customer\Api\Data\ValidationRuleInterface"
                 type="Magento\Customer\Model\Data\ValidationRule" />
@@ -62,6 +63,18 @@
     <preference for="Magento\Customer\Model\Group\RetrieverInterface"
                 type="Magento\Customer\Model\Group\Retriever"/>
     <preference for="Magento\Customer\Api\SessionCleanerInterface" type="Magento\Customer\Model\Session\SessionCleaner"/>
+    <preference for="Magento\Customer\Api\GroupExcludedWebsiteRepositoryInterface"
+                type="Magento\Customer\Model\ResourceModel\GroupExcludedWebsiteRepository" />
+    <virtualType name="SessionValidator" type="Magento\Framework\Session\CompositeValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="validator" xsi:type="object">Magento\Framework\Session\Validator</item>
+                <item name="cutoff_validator" xsi:type="object">
+                    Magento\Customer\Model\Session\Validators\CutoffValidator
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
@@ -69,6 +82,7 @@
             <argument name="customerResource" xsi:type="object">Magento\Customer\Model\ResourceModel\Customer\Proxy</argument>
             <argument name="storage" xsi:type="object">Magento\Customer\Model\Session\Storage</argument>
             <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
+            <argument name="validator" xsi:type="object">SessionValidator</argument>
         </arguments>
     </type>
     <type name="Magento\Customer\Helper\Address">
@@ -352,9 +366,6 @@
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="transactionWrapper" type="Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper" sortOrder="-1"/>
     </type>
-    <type name="Magento\Directory\Model\AllowedCountries">
-        <plugin name="customerAllowedCountries" type="Magento\Customer\Model\Plugin\AllowedCountries"/>
-    </type>
     <type name="Magento\Framework\App\ActionInterface">
         <plugin name="customerNotification" type="Magento\Customer\Model\Plugin\CustomerNotification"/>
     </type>
@@ -457,6 +468,7 @@
             <argument name="validators" xsi:type="array">
                 <item name="general" xsi:type="object">Magento\Customer\Model\Address\Validator\General</item>
                 <item name="country" xsi:type="object">Magento\Customer\Model\Address\Validator\Country</item>
+                <item name="customer" xsi:type="object">Magento\Customer\Model\Address\Validator\Customer</item>
             </argument>
         </arguments>
     </type>
@@ -474,6 +486,15 @@
             <argument name="eventPrefix" xsi:type="string">customer_address_entity_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">customer_address_entity_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Address</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
+        <arguments>
+            <argument name="paramOverriders" xsi:type="array">
+                <item name="%customer_group_id%" xsi:type="object">Magento\Customer\Model\Webapi\ParamOverriderCustomerGroupId</item>
+                <item name="%customer_website_id%" xsi:type="object">Magento\Customer\Model\Webapi\ParamOverriderCustomerWebsiteId</item>
+                <item name="%customer_store_id%" xsi:type="object">Magento\Customer\Model\Webapi\ParamOverriderCustomerStoreId</item>
+            </argument>
         </arguments>
     </type>
     <preference
@@ -532,5 +553,21 @@
                 </item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Customer\Api\GroupRepositoryInterface">
+        <plugin name="saveCustomerGroupExcludedWebsite" type="Magento\Customer\Model\Plugin\SaveCustomerGroupExcludedWebsite"/>
+        <plugin name="deleteCustomerGroupExcludedWebsite" type="Magento\Customer\Model\Plugin\DeleteCustomerGroupExcludedWebsite"/>
+        <plugin name="getByIdCustomerGroupExcludedWebsite" type="Magento\Customer\Model\Plugin\GetByIdCustomerGroupExcludedWebsite"/>
+        <plugin name="getListCustomerGroupExcludedWebsite" type="Magento\Customer\Model\Plugin\GetListCustomerGroupExcludedWebsite"/>
+    </type>
+    <type name="Magento\Customer\Ui\Component\Listing\Columns">
+        <arguments>
+            <argument name="filterConfigProviders" xsi:type="array">
+                <item name="text" xsi:type="object">Magento\Customer\Ui\Component\Listing\Filter\TextFilterConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\EmailNotificationInterface">
+        <plugin name="saveWishlistDataAndAddReferenceKeyToBackUrl" type="Magento\Wishlist\Plugin\SaveWishlistDataAndAddReferenceKeyToBackUrl"/>
     </type>
 </config>

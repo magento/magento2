@@ -7,6 +7,8 @@
 // phpcs:disable Generic.Files.LineLength.TooLong
 
 /** @var \Magento\Customer\Block\Form\Login $block */
+/** @var \Magento\Customer\ViewModel\LoginButton $loginButtonViewModel */
+$loginButtonViewModel = $block->getData('login_button_view_model');
 ?>
 <div class="block block-customer-login">
     <div class="block-title">
@@ -42,22 +44,33 @@
                                data-validate="{required:true}">
                     </div>
                 </div>
+                <div class="field choice" data-bind="scope: 'showPassword'">
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                </div>
                 <?= $block->getChildHtml('form_additional_info') ?>
                 <div class="actions-toolbar">
-                    <div class="primary"><button type="submit" class="action login primary" name="send" id="send2"><span><?= $block->escapeHtml(__('Sign In')) ?></span></button></div>
+                    <div class="primary"><button type="submit" class="action login primary" name="send" id="send2" <?php if ($loginButtonViewModel->disabled()): ?> disabled="disabled" <?php endif; ?>><span><?= $block->escapeHtml(__('Sign In')) ?></span></button></div>
                     <div class="secondary"><a class="action remind" href="<?= $block->escapeUrl($block->getForgotPasswordUrl()) ?>"><span><?= $block->escapeHtml(__('Forgot Your Password?')) ?></span></a></div>
                 </div>
             </fieldset>
         </form>
     </div>
-</div>
-
-<script type="text/x-magento-init">
-    {
-        "*": {
-            "Magento_Customer/js/block-submit-on-send": {
-                "formId": "login-form"
+    <?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Customer/js/block-submit-on-send": {
+                    "formId": "login-form"
+                },
+                "Magento_Ui/js/core/app": {
+                    "components": {
+                        "showPassword": {
+                            "component": "Magento_Customer/js/show-password",
+                            "passwordSelector": "#pass"
+                        }
+                    }
+                }
             }
         }
-    }
-</script>
+    </script>
+</div>

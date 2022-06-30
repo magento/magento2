@@ -42,9 +42,7 @@
             <!--Set account sharing option - Default value is 'Per Website'-->
             <comment userInput="Set account sharing option - Default value is 'Per Website'" stepKey="setAccountSharingOption"/>
             <createData entity="CustomerAccountSharingDefault" stepKey="setToAccountSharingToDefault"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <!--delete all created data and set main website country options to default-->
@@ -62,12 +60,8 @@
             <actionGroup ref="SetWebsiteCountryOptionsToDefaultActionGroup" stepKey="setCountryOptionsToDefault"/>
             <createData entity="CustomerAccountSharingSystemValue" stepKey="setAccountSharingToSystemValue"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
         <!--Check that all countries are allowed initially and get amount-->
         <comment userInput="Check that all countries are allowed initially and get amount" stepKey="checkAllCountriesAreAllowed"/>
@@ -116,8 +110,7 @@
         <waitForPageLoad stepKey="waitForCustomersPage"/>
         <!--Go to Customers grid and check that filter countries amount is the same as initial allowed countries amount-->
         <comment userInput="Go to Customers grid and check that filter countries amount is the same as initial allowed countries amount" stepKey="compareCountriesAmount"/>
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersGrid"/>
-        <waitForPageLoad stepKey="waitForCustomersGrid"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="goToCustomersGrid"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomersGrid"/>
         <executeJS function="var len = document.querySelectorAll('{{AdminCustomerFiltersSection.countryOptions}}').length; return len-1;" stepKey="countriesAmount2"/>
         <assertEquals stepKey="assertCountryAmounts">

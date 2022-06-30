@@ -26,7 +26,7 @@
             <magentoCLI
                 command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}"
                 stepKey="enableAddStoreCodeToUrls"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createCustomWebsite">
                 <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
@@ -42,30 +42,32 @@
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
             <actionGroup ref="AdminCreateCustomerWithWebSiteAndGroupActionGroup" stepKey="createCustomer">
-                <argument name="customerData" value="Simple_US_Customer"/>
+                <argument name="customerData" value="Simple_US_Customer_Assistance_Allowed"/>
                 <argument name="website" value="{{customWebsite.name}}"/>
                 <argument name="storeView" value="{{customStoreEN.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
-                <argument name="customerEmail" value="Simple_US_Customer.email"/>
+                <argument name="customerEmail" value="Simple_US_Customer_Assistance_Allowed.email"/>
             </actionGroup>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
                         stepKey="disableLoginAsCustomer"/>
             <magentoCLI
                 command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}"
                 stepKey="disableAddStoreCodeToUrls"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
         </after>
 
         <!-- Login as Customer from Customer page -->
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="OpenEditCustomerFrom">
-            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="customer" value="Simple_US_Customer_Assistance_Allowed"/>
         </actionGroup>
         <grabFromCurrentUrl regex="~id/(\d+)/~"  stepKey="customerId" />
         <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"

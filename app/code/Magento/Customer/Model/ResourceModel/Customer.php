@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Model\AccountConfirmation;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Validator\Exception as ValidatorException;
+use Magento\Framework\Encryption\EncryptorInterface;
 
 /**
  * Customer entity resource model
@@ -54,6 +56,11 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     private $notificationStorage;
 
     /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
      * Customer constructor.
      *
      * @param \Magento\Eav\Model\Entity\Context $context
@@ -65,6 +72,8 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      * @param AccountConfirmation $accountConfirmation
+     * @param EncryptorInterface|null $encryptor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -75,7 +84,8 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         $data = [],
-        AccountConfirmation $accountConfirmation = null
+        AccountConfirmation $accountConfirmation = null,
+        EncryptorInterface $encryptor = null
     ) {
         parent::__construct($context, $entitySnapshot, $entityRelationComposite, $data);
 
@@ -85,8 +95,10 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);
         $this->setType('customer');
-        $this->setConnection('customer_read', 'customer_write');
+        $this->setConnection('customer_read');
         $this->storeManager = $storeManager;
+        $this->encryptor = $encryptor ?? ObjectManager::getInstance()
+                ->get(EncryptorInterface::class);
     }
 
     /**
@@ -175,6 +187,11 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             $this->_validate($customer);
         }
 
+        if ($customer->getData('rp_token')) {
+            $rpToken = $customer->getData('rp_token');
+            $customer->setRpToken($this->encryptor->encrypt($rpToken));
+        }
+
         return $this;
     }
 
@@ -223,6 +240,10 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             NotificationStorage::UPDATE_CUSTOMER_SESSION,
             $customer->getId()
         );
+        if ($customer->getData('rp_token')) {
+            $rpToken = $customer->getData('rp_token');
+            $customer->setRpToken($this->encryptor->decrypt($rpToken));
+        }
         return parent::_afterSave($customer);
     }
 
@@ -402,5 +423,58 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             );
         }
         return $this;
+    }
+
+    /**
+     * Gets the session cut off timestamp string for provided customer id.
+     *
+     * @param int $customerId
+     * @return int|null
+     */
+    public function findSessionCutOff(int $customerId): ?int
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
+            ['customer_table' => $this->getTable('customer_entity')],
+            ['session_cutoff' => 'customer_table.session_cutoff']
+        )->where(
+            'entity_id =?',
+            $customerId
+        )->limit(
+            1
+        );
+        $lookup = $connection->fetchRow($select);
+        if (empty($lookup) || $lookup['session_cutoff'] == null) {
+            return null;
+        }
+        return strtotime($lookup['session_cutoff']);
+    }
+
+    /**
+     * Update session cutoff column value for customer
+     *
+     * @param int $customerId
+     * @param int $timestamp
+     * @return void
+     */
+    public function updateSessionCutOff(int $customerId, int $timestamp): void
+    {
+        $this->getConnection()->update(
+            $this->getTable('customer_entity'),
+            ['session_cutoff' => $this->dateTime->formatDate($timestamp)],
+            $this->getConnection()->quoteInto('entity_id = ?', $customerId)
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _afterLoad(\Magento\Framework\DataObject $customer)
+    {
+        if ($customer->getData('rp_token')) {
+            $rpToken = $customer->getData('rp_token');
+            $customer->setRpToken($this->encryptor->decrypt($rpToken));
+        }
+        return parent::_afterLoad($customer); //
     }
 }

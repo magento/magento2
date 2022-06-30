@@ -75,9 +75,7 @@
             </createData>
             <magentoCLI command="config:set customer/online_customers/section_data_lifetime 1"
                         stepKey="setConfigForCartLifetime"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
@@ -94,7 +92,7 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Step 1: Add simple product to shopping cart -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="productCount" value="1"/>
@@ -124,12 +122,12 @@
         <closeTab stepKey="closeTab"/>
         <!-- Check cart -->
         <wait time="60" stepKey="waitForCartToBeUpdated"/>
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForCheckoutPageReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForCheckoutPageReload"/>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickMiniCart"/>
         <dontSeeElement selector="{{StorefrontMinicartSection.quantity}}" stepKey="dontSeeCartItem"/>
         <!-- Add simple product to shopping cart -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct2.name$$)}}" stepKey="amOnSimpleProductPage2"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct2.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage2"/>
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="cartAddSimpleProductToCart2">
             <argument name="product" value="$$createSimpleProduct2$$"/>
             <argument name="productCount" value="1"/>
@@ -151,8 +149,9 @@
         <closeTab stepKey="closeTab2"/>
         <!--Check cart-->
         <wait time="60" stepKey="waitForCartToBeUpdated2"/>
-        <reloadPage stepKey="reloadPage2"/>
-        <waitForPageLoad stepKey="waitForCheckoutPageReload2"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage2"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForCheckoutPageReload2"/>
+
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickMiniCart2"/>
         <dontSeeElement selector="{{StorefrontMinicartSection.quantity}}" stepKey="dontSeeCartItem2"/>
     </test>

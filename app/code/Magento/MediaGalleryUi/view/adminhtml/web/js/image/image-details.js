@@ -136,6 +136,16 @@ define([
         },
 
         /**
+         * Is value not empty
+         *
+         * @param {*} value
+         * @returns {Boolean}
+         */
+        notEmpty: function (value) {
+            return value.length > 0;
+        },
+
+        /**
          * Get name and number text for used in link
          *
          * @param {Object} item
@@ -151,7 +161,7 @@ define([
          * @param {String} link
          */
         getFilterUrl: function (link) {
-            return link + '?filters[asset_id]=' + this.image().id;
+            return link + '?filters[asset_id]=[' + this.image().id + ']';
         },
 
         /**

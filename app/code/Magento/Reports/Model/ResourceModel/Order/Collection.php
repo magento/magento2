@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Reports\Model\ResourceModel\Order;
 
 use Magento\Framework\DB\Select;
@@ -10,7 +11,6 @@ use Magento\Framework\DB\Select;
 /**
  * Reports orders collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -18,14 +18,12 @@ use Magento\Framework\DB\Select;
 class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
 {
     /**
-     * Is live
-     *
      * @var bool
      */
     protected $_isLive = false;
 
     /**
-     * Sales amount expression
+     * The sales amount expression
      *
      * @var string
      */
@@ -159,7 +157,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         if ($this->_isLive) {
             $this->_prepareSummaryLive($range, $customStart, $customEnd, $isFilter);
         } else {
-            $this->_prepareSummaryAggregated($range, $customStart, $customEnd, $isFilter);
+            $this->_prepareSummaryAggregated($range, $customStart, $customEnd);
         }
 
         return $this;
@@ -318,6 +316,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
     protected function _getRangeExpression($range)
     {
         switch ($range) {
+            case 'today':
             case '24h':
                 $expression = $this->getConnection()->getConcatSql(
                     [
@@ -351,7 +350,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
     protected function _getRangeExpressionForAttribute($range, $attribute)
     {
         $expression = $this->_getRangeExpression($range);
-        return str_replace('{{attribute}}', $this->getConnection()->quoteIdentifier($attribute), $expression);
+        return str_replace('{{attribute}}', $this->getConnection()->quoteIdentifier($attribute), (string) $expression);
     }
 
     /**
@@ -368,7 +367,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         return str_replace(
             '{{attribute}}',
             $this->_reportOrderFactory->create()->getStoreTZOffsetQuery($this->getMainTable(), $attribute, $from, $to),
-            $this->_getRangeExpression($range)
+            (string) $this->_getRangeExpression($range)
         );
     }
 
@@ -420,6 +419,9 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         $dateStart->setTime(0, 0, 0);
 
         switch ($range) {
+            case 'today':
+                $dateEnd->modify('now');
+                break;
             case '24h':
                 $dateEnd = new \DateTime();
                 $dateEnd->modify('+1 hour');
@@ -461,7 +463,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                 $startMonth = isset($startMonthDay[0]) ? (int)$startMonthDay[0] : 1;
                 $startDay = isset($startMonthDay[1]) ? (int)$startMonthDay[1] : 1;
                 $dateStart->setDate($dateStart->format('Y'), $startMonth, $startDay);
-                $dateStart->modify('-1 year');
                 if ($range == '2y') {
                     $dateStart->modify('-1 year');
                 }

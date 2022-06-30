@@ -2,11 +2,12 @@
     "name": "magento/module-media-content-synchronization",
     "description": "Magento module provides implementation of the media content data synchronization.",
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
+        "magento/framework-bulk": "*",
         "magento/module-media-content-synchronization-api": "*",
-        "magento/framework-message-queue": "*",
-        "magento/module-media-content-api": "*"
+        "magento/module-media-content-api": "*",
+        "magento/module-asynchronous-operations": "*"
     },
     "suggest": {
         "magento/module-media-gallery-synchronization": "*"

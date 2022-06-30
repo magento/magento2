@@ -16,6 +16,11 @@ use Psr\Log\LoggerInterface;
 class MaxHeapTableSizeProcessorOnFullReindex
 {
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var MaxHeapTableSizeProcessor
      */
     protected $maxHeapTableSizeProcessor;

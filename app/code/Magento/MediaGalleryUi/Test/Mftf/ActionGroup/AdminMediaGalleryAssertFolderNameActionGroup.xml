@@ -12,6 +12,6 @@
         <arguments>
             <argument name="name" type="string" defaultValue="{{AdminMediaGalleryFolderData.name}}"/>
         </arguments>
-        <waitForElementVisible selector="//div[contains(@class, 'media-directory-container')]//a[contains(text(), '{{name}}')]" stepKey="waitForFolder"/>
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.folderInTree(name)}}" stepKey="waitForFolder"/>
     </actionGroup>
 </actionGroups>

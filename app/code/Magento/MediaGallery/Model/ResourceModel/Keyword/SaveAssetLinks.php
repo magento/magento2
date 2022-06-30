@@ -24,6 +24,7 @@ class SaveAssetLinks
     private const TABLE_ASSET_KEYWORD = 'media_gallery_asset_keyword';
     private const FIELD_ASSET_ID = 'asset_id';
     private const FIELD_KEYWORD_ID = 'keyword_id';
+    private const TABLE_MEDIA_ASSET = 'media_gallery_asset';
 
     /**
      * @var ResourceConnection
@@ -73,6 +74,10 @@ class SaveAssetLinks
 
         $this->deleteAssetKeywords($assetId, $obsoleteKeywordIds);
         $this->insertAssetKeywords($assetId, $newKeywordIds);
+
+        if ($obsoleteKeywordIds || $newKeywordIds) {
+            $this->setAssetUpdatedAt($assetId);
+        }
     }
 
     /**
@@ -128,7 +133,7 @@ class SaveAssetLinks
             /** @var Mysql $connection */
             $connection = $this->resourceConnection->getConnection();
             $connection->delete(
-                $connection->getTableName(
+                $this->resourceConnection->getTableName(
                     self::TABLE_ASSET_KEYWORD
                 ),
                 [
@@ -178,5 +183,29 @@ class SaveAssetLinks
             },
             $keywordsData
         );
+    }
+
+    /**
+     * Updates modified date of media asset
+     *
+     * @param int $assetId
+     * @throws CouldNotSaveException
+     */
+    private function setAssetUpdatedAt(int $assetId): void
+    {
+        try {
+            $connection = $this->resourceConnection->getConnection();
+            $connection->update(
+                $this->resourceConnection->getTableName(self::TABLE_MEDIA_ASSET),
+                ['updated_at' => null],
+                ['id =?' => $assetId]
+            );
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
+            throw new CouldNotSaveException(
+                __('Could not update assets modified date'),
+                $exception
+            );
+        }
     }
 }

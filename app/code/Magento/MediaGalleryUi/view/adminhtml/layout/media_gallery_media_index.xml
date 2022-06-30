@@ -10,7 +10,7 @@
     <body>
         <referenceContainer htmlTag="div" htmlClass="media-gallery-container" name="content">
             <uiComponent name="standalone_media_gallery_listing"/>
-	        <block name="image.details" class="Magento\Backend\Block\Template" template="Magento_MediaGalleryUi::image_details_standalone.phtml">
+	        <block name="image.details" class="Magento\MediaGalleryUi\Block\Adminhtml\ImageDetailsStandalone" template="Magento_MediaGalleryUi::image_details_standalone.phtml">
                 <arguments>
                     <argument name="imageDetailsUrl" xsi:type="url" path="media_gallery/image/details"/>
                 </arguments>

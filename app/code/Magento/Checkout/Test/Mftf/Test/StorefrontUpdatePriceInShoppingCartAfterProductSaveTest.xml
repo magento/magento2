@@ -30,9 +30,7 @@
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="SetCustomerDataLifetimeActionGroup" stepKey="setDefaultCustomerDataLifetime"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexCustomerGrid">
-                <argument name="indices" value="customer_grid"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexCustomerGrid"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Go to product page-->
@@ -48,7 +46,11 @@
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping"/>
 
         <!--Check price-->
-        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="openItemProductBlock"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsClickable"/>
+        <waitForElementNotVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" stepKey="waitForCartItemsActive"/>
+        <waitForPageLoad stepKey="waitForOrderSummaryLoad"/>
+        <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="openItemProductBlock"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskForCartItem"/>
         <see userInput="$100.00" selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="checkSummarySubtotal"/>
         <see userInput="$100.00" selector="{{CheckoutPaymentSection.productItemPriceByName($$createSimpleProduct.name$$)}}" stepKey="checkItemPrice"/>
 
@@ -62,9 +64,14 @@
         <closeTab stepKey="closeTab"/>
 
         <!--Check price-->
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForCheckoutPageReload"/>
-        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="openItemProductBlock1"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForCheckoutPageReload"/>
+        <!-- change below waitForElementVisible action to waitForElementClickable to prevent flakiness once MQE-3210 is complete -->
+        <waitForElementVisible selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsVisible1"/>
+        <waitForElementNotVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" stepKey="waitForCartItemsActive1"/>
+        <waitForPageLoad stepKey="waitForOrderSummaryLoad2"/>
+        <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="openItemProductBlock1"/>
+        <waitForPageLoad stepKey="waitForCartItemLoaded"/>
         <see userInput="$120.00" selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="checkSummarySubtotal1"/>
         <see userInput="$120.00" selector="{{CheckoutPaymentSection.productItemPriceByName($$createSimpleProduct.name$$)}}" stepKey="checkItemPrice1"/>
     </test>

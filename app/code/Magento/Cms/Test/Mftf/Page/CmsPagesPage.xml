@@ -10,5 +10,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="CmsPagesPage" url="/cms/page" area="admin" module="Magento_Cms">
         <section name="CmsPagesPageActionsSection"/>
+        <section name="AdminCmsPageGridInlineEditSection"/>
     </page>
 </pages>

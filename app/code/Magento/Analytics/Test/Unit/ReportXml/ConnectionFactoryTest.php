@@ -8,40 +8,29 @@ declare(strict_types=1);
 namespace Magento\Analytics\Test\Unit\ReportXml;
 
 use Magento\Analytics\ReportXml\ConnectionFactory;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ResourceConnection\ConfigInterface as ResourceConfigInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Adapter\Pdo\Mysql as MysqlPdoAdapter;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ConnectionFactoryTest extends TestCase
 {
     /**
-     * @var ResourceConnection|MockObject
+     * @var ResourceConfigInterface|MockObject
      */
-    private $resourceConnectionMock;
+    private $resourceConfigMock;
 
     /**
-     * @var ObjectManagerInterface|MockObject
+     * @var DeploymentConfig|MockObject
      */
-    private $objectManagerMock;
+    private $deploymentConfigMock;
 
     /**
-     * @var ConnectionFactory|MockObject
+     * @var ConnectionFactoryInterface|MockObject
      */
-    private $connectionNewMock;
-
-    /**
-     * @var AdapterInterface|MockObject
-     */
-    private $connectionMock;
-
-    /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManagerHelper;
+    private $connectionFactoryMock;
 
     /**
      * @var ConnectionFactory
@@ -53,47 +42,36 @@ class ConnectionFactoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
+        $this->resourceConfigMock = $this->createMock(ResourceConfigInterface::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $this->connectionFactoryMock = $this->createMock(ConnectionFactoryInterface::class);
 
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-
-        $this->connectionMock = $this->createMock(MysqlPdoAdapter::class);
-
-        $this->connectionNewMock = $this->createMock(MysqlPdoAdapter::class);
-
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-
-        $this->connectionFactory = $this->objectManagerHelper->getObject(
-            ConnectionFactory::class,
-            [
-                'resourceConnection' => $this->resourceConnectionMock,
-                'objectManager' => $this->objectManagerMock,
-            ]
+        $this->connectionFactory = new ConnectionFactory(
+            $this->resourceConfigMock,
+            $this->deploymentConfigMock,
+            $this->connectionFactoryMock
         );
     }
 
     public function testGetConnection()
     {
-        $connectionName = 'read';
+        $resourceName = 'default';
 
-        $this->resourceConnectionMock
-            ->expects($this->once())
-            ->method('getConnection')
-            ->with($connectionName)
-            ->willReturn($this->connectionMock);
-
-        $this->connectionMock
-            ->expects($this->once())
-            ->method('getConfig')
-            ->with()
-            ->willReturn(['persistent' => 1]);
-
-        $this->objectManagerMock
-            ->expects($this->once())
+        $this->resourceConfigMock->expects($this->once())
+            ->method('getConnectionName')
+            ->with($resourceName)
+            ->willReturn('default');
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with('db/connection/default')
+            ->willReturn(['host' => 'localhost', 'port' => 3306, 'persistent' => true]);
+        $connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionFactoryMock->expects($this->once())
             ->method('create')
-            ->with(get_class($this->connectionMock), ['config' => ['use_buffered_query' => false]])
-            ->willReturn($this->connectionNewMock);
+            ->with(['host' => 'localhost', 'port' => 3306, 'use_buffered_query' => false])
+            ->willReturn($connectionMock);
 
-        $this->assertSame($this->connectionNewMock, $this->connectionFactory->getConnection($connectionName));
+        $connection = $this->connectionFactory->getConnection($resourceName);
+        $this->assertSame($connectionMock, $connection);
     }
 }

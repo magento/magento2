@@ -24,61 +24,53 @@ use Magento\Customer\Model\Indexer\Processor;
  */
 class Address extends AbstractCustomer
 {
-    /**#@+
-     * Attribute collection name
+    /**
+     * The customer address attribute collection class name
      */
-    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class;
+    public const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class;
 
-    /**#@-*/
-
-    /**#@+
+    /**
      * Permanent column names
      *
      * Names that begins with underscore is not an attribute.
      * This name convention is for to avoid interference with same attribute name.
      */
-    const COLUMN_EMAIL = '_email';
+    public const COLUMN_EMAIL = '_email';
 
-    const COLUMN_ADDRESS_ID = '_entity_id';
+    public const COLUMN_ADDRESS_ID = '_entity_id';
 
-    /**#@-*/
-
-    /**#@+
+    /**
      * Required column names
      */
-    const COLUMN_REGION = 'region';
+    public const COLUMN_REGION = 'region';
 
-    const COLUMN_COUNTRY_ID = 'country_id';
+    public const COLUMN_COUNTRY_ID = 'country_id';
 
-    const COLUMN_POSTCODE = 'postcode';
+    public const COLUMN_POSTCODE = 'postcode';
 
-    /**#@-*/
+    public const COLUMN_REGION_ID = 'region_id';
 
-    const COLUMN_REGION_ID = 'region_id';
-
-    /**#@+
+    /**
      * Particular columns that contains of customer default addresses
      */
-    const COLUMN_DEFAULT_BILLING = '_address_default_billing_';
+    public const COLUMN_DEFAULT_BILLING = '_address_default_billing_';
 
-    const COLUMN_DEFAULT_SHIPPING = '_address_default_shipping_';
+    public const COLUMN_DEFAULT_SHIPPING = '_address_default_shipping_';
 
-    /**#@-*/
-
-    /**#@+
+    /**
      * Error codes
      */
-    const ERROR_ADDRESS_ID_IS_EMPTY = 'addressIdIsEmpty';
+    public const ERROR_ADDRESS_ID_IS_EMPTY = 'addressIdIsEmpty';
 
-    const ERROR_ADDRESS_NOT_FOUND = 'addressNotFound';
+    public const ERROR_ADDRESS_NOT_FOUND = 'addressNotFound';
 
-    const ERROR_INVALID_REGION = 'invalidRegion';
+    public const ERROR_INVALID_REGION = 'invalidRegion';
 
-    const ERROR_DUPLICATE_PK = 'duplicateAddressId';
+    public const ERROR_DUPLICATE_PK = 'duplicateAddressId';
 
-    /**#@-*/
-
-    /**#@-*/
+    /**
+     * @var string[]
+     */
     protected static $_defaultAddressAttributeMapping = [
         self::COLUMN_DEFAULT_BILLING => 'default_billing',
         self::COLUMN_DEFAULT_SHIPPING => 'default_shipping',
@@ -152,8 +144,6 @@ class Address extends AbstractCustomer
     ];
 
     /**
-     * Customer entity
-     *
      * @var \Magento\Customer\Model\Customer
      */
     protected $_customerEntity;
@@ -216,16 +206,12 @@ class Address extends AbstractCustomer
     protected $dateTime;
 
     /**
-     * Customer attributes
-     *
      * @var string[]
      */
     protected $_customerAttributes = [];
 
     /**
-     * Valid column names
-     *
-     * @array
+     * @var string[]
      */
     protected $validColumnNames = [
         "region_id",
@@ -456,8 +442,8 @@ class Address extends AbstractCustomer
         /** @var $region \Magento\Directory\Model\Region */
         foreach ($this->_regionCollection as $region) {
             $countryNormalized = strtolower($region->getCountryId());
-            $regionCode = strtolower($region->getCode());
-            $regionName = strtolower($region->getDefaultName());
+            $regionCode = $region->getCode() !== null ? strtolower($region->getCode()) : '';
+            $regionName = $region->getDefaultName() !== null ? strtolower($region->getDefaultName()) : '';
             $this->_countryRegions[$countryNormalized][$regionCode] = $region->getId();
             $this->_countryRegions[$countryNormalized][$regionName] = $region->getId();
             $this->_regions[$region->getId()] = $region->getDefaultName();
@@ -525,12 +511,12 @@ class Address extends AbstractCustomer
     protected function _importData()
     {
         //Preparing data for mass validation/import.
-        $rows = [[]];
+        $rows = [];
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $rows[] = $bunch;
         }
 
-        $this->prepareCustomerData(array_merge(...$rows));
+        $this->prepareCustomerData(array_merge([], ...$rows));
         unset($bunch, $rows);
         $this->_dataSourceModel->getIterator()->rewind();
 
@@ -644,8 +630,8 @@ class Address extends AbstractCustomer
 
                 $value = $rowData[$attributeAlias];
 
-                if (!strlen($rowData[$attributeAlias])) {
-                    if (!$newAddress) {
+                if ($rowData[$attributeAlias] === null || !strlen($rowData[$attributeAlias])) {
+                    if ($attributeParams['is_required']) {
                         continue;
                     }
 

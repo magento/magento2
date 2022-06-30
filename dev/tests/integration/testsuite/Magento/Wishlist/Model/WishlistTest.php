@@ -10,6 +10,7 @@ namespace Magento\Wishlist\Model;
 use Magento\Bundle\Model\Product\OptionList;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\CatalogInventory\Model\StockStateException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Exception\LocalizedException;
@@ -203,7 +204,7 @@ class WishlistTest extends TestCase
     {
         $product = $this->productRepository->get('simple_ms_out_of_stock');
         $wishlist = $this->getWishlistByCustomerId->execute(1);
-        $this->expectExceptionObject(new LocalizedException(__('Cannot add product without stock to wishlist.')));
+        $this->expectExceptionObject(new StockStateException(__('Cannot add product without stock to wishlist.')));
         $wishlist->addNewItem($product);
     }
 
@@ -266,6 +267,27 @@ class WishlistTest extends TestCase
         $item->getProduct()->setId(null);
         $this->expectExceptionObject(new LocalizedException(__('The product does not exist.')));
         $wishlist->updateItem($item, []);
+    }
+
+    /**
+     * Test that admin user should be able to update wishlist on second website
+     *
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist_on_second_website.php
+     *
+     * @return void
+     */
+    public function testUpdateWishListItemOnSecondWebsite(): void
+    {
+        $wishlist = $this->getWishlistByCustomerId->execute(1);
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'simple-2');
+        $this->assertNotNull($item);
+        $this->assertEquals(1, $item->getQty());
+        $buyRequest = $this->dataObjectFactory->create(['data' => ['qty' => 2]]);
+        $wishlist->updateItem($item->getId(), $buyRequest);
+        $updatedItem = $this->getWishlistByCustomerId->getItemBySku(1, 'simple-2');
+        $this->assertEquals(2, $updatedItem->getQty());
     }
 
     /**

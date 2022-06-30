@@ -108,6 +108,9 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         if (null === $key) {
+            // md5() here is not for cryptographic use. It used for generate encryption key itself
+            // and do not encrypt any passwords
+            // phpcs:ignore Magento2.Security.InsecureFunction
             $key = md5($this->random->getRandomString(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE));
         }
         $this->encryptor->setNewKey($key);

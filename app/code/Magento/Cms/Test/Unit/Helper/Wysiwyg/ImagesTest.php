@@ -16,7 +16,9 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\EncoderInterface;
@@ -51,6 +53,11 @@ class ImagesTest extends TestCase
      * @var Write|MockObject
      */
     protected $directoryWriteMock;
+
+    /**
+     * @var Read|MockObject
+     */
+    protected $directoryReadMock;
 
     /**
      * @var StoreManagerInterface|MockObject
@@ -101,15 +108,10 @@ class ImagesTest extends TestCase
     {
         $this->path = 'PATH';
         $this->objectManager = new ObjectManager($this);
-
         $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-
         $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-
         $this->urlEncoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
-
         $this->backendDataMock = $this->createMock(Data::class);
-
         $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->any())
             ->method('getEventManager')
@@ -120,26 +122,21 @@ class ImagesTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getUrlEncoder')
             ->willReturn($this->urlEncoderMock);
-
         $this->directoryWriteMock = $this->getMockBuilder(Write::class)
             ->setConstructorArgs(['path' => $this->path])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->directoryWriteMock->expects($this->any())
-            ->method('getAbsolutePath')
-            ->willReturnMap(
-                [
-                    [WysiwygConfig::IMAGE_DIRECTORY, null, $this->getAbsolutePath(WysiwygConfig::IMAGE_DIRECTORY)],
-                    [null, null, $this->getAbsolutePath(null)],
-                    ['', null, $this->getAbsolutePath('')],
-                ]
-            );
-
+        $this->directoryReadMock = $this->getMockBuilder(Read::class)
+            ->setConstructorArgs(['path' => $this->path])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryWrite')
             ->willReturn($this->directoryWriteMock);
-
+        $this->filesystemMock->expects($this->once())
+            ->method('getDirectoryReadByPath')
+            ->willReturn($this->directoryReadMock);
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->setMethods(
                 [
@@ -150,11 +147,8 @@ class ImagesTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->storeMock = $this->createMock(Store::class);
-
         $this->escaperMock = $this->createMock(Escaper::class);
-
         $this->imagesHelper = $this->objectManager->getObject(
             Images::class,
             [
@@ -165,6 +159,44 @@ class ImagesTest extends TestCase
                 'escaper' => $this->escaperMock,
             ]
         );
+        $this->directoryWriteMock->expects($this->any())
+            ->method('getAbsolutePath')
+            ->willReturnMap([
+                    [
+                        WysiwygConfig::IMAGE_DIRECTORY,
+                        null,
+                        $this->getAbsolutePath(WysiwygConfig::IMAGE_DIRECTORY)
+                    ],
+                    [
+                        null,
+                        null,
+                        $this->getAbsolutePath(null)
+                    ],
+                    [
+                        '',
+                        null,
+                        $this->getAbsolutePath('')
+                    ]
+                ]);
+        $this->directoryReadMock->expects($this->any())
+                ->method('getAbsolutePath')
+                ->willReturnMap([
+                        [
+                            $this->path,
+                            null,
+                            $this->path
+                        ],
+                        [
+                            $this->path . '/test_path',
+                            null,
+                            $this->path . '/test_path'
+                        ],
+                        [
+                            $this->path . '/tmp',
+                            null,
+                            $this->path . '/tmp'
+                        ]
+                    ]);
     }
 
     protected function tearDown(): void
@@ -231,6 +263,18 @@ class ImagesTest extends TestCase
         );
     }
 
+    public function testConvertIdToPathInvalid()
+    {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Path is invalid');
+        $this->directoryReadMock->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will(
+                $this->throwException(new ValidatorException(__("Error")))
+            );
+        $this->imagesHelper->convertIdToPath('Ly4uLy4uLy4uLy4uLy4uL3dvcms-');
+    }
+
     /**
      * @param string $path
      * @param string $pathId
@@ -258,13 +302,6 @@ class ImagesTest extends TestCase
     {
         $pathId = Storage::NODE_ROOT;
         $this->assertEquals($this->imagesHelper->getStorageRoot(), $this->imagesHelper->convertIdToPath($pathId));
-    }
-
-    public function testConvertIdToPathInvalid()
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('Path is invalid');
-        $this->imagesHelper->convertIdToPath('Ly4uLy4uLy4uLy4uLy4uL3dvcms-');
     }
 
     /**
@@ -403,7 +440,7 @@ class ImagesTest extends TestCase
     {
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturn('PATH');
+            ->willReturn('L3RtcA');
 
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage(

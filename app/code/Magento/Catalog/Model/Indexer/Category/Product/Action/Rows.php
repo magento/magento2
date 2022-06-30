@@ -13,15 +13,17 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Category;
-use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
+use Magento\Catalog\Model\Indexer\Category\Product as CategoryProductIndexer;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Indexer\Model\WorkingStateProvider;
 
 /**
  * Reindex multiple rows action.
  *
- * @package Magento\Catalog\Model\Indexer\Category\Product\Action
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
@@ -49,14 +51,22 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     private $indexerRegistry;
 
     /**
+     * @var WorkingStateProvider
+     */
+    private $workingStateProvider;
+
+    /**
      * @param ResourceConnection $resource
      * @param StoreManagerInterface $storeManager
      * @param Config $config
      * @param QueryGenerator|null $queryGenerator
      * @param MetadataPool|null $metadataPool
+     * @param TableMaintainer|null $tableMaintainer
      * @param CacheContext|null $cacheContext
      * @param EventManagerInterface|null $eventManager
      * @param IndexerRegistry|null $indexerRegistry
+     * @param WorkingStateProvider|null $workingStateProvider
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList) Preserve compatibility with the parent class
      */
     public function __construct(
         ResourceConnection $resource,
@@ -64,14 +74,18 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         Config $config,
         QueryGenerator $queryGenerator = null,
         MetadataPool $metadataPool = null,
+        ?TableMaintainer $tableMaintainer = null,
         CacheContext $cacheContext = null,
         EventManagerInterface $eventManager = null,
-        IndexerRegistry $indexerRegistry = null
+        IndexerRegistry $indexerRegistry = null,
+        ?WorkingStateProvider $workingStateProvider = null
     ) {
-        parent::__construct($resource, $storeManager, $config, $queryGenerator, $metadataPool);
+        parent::__construct($resource, $storeManager, $config, $queryGenerator, $metadataPool, $tableMaintainer);
         $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(EventManagerInterface::class);
         $this->indexerRegistry = $indexerRegistry ?: ObjectManager::getInstance()->get(IndexerRegistry::class);
+        $this->workingStateProvider = $workingStateProvider ?:
+            ObjectManager::getInstance()->get(WorkingStateProvider::class);
     }
 
     /**
@@ -97,42 +111,62 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         $this->limitationByCategories = array_unique($this->limitationByCategories);
         $this->useTempTable = $useTempTable;
         $indexer = $this->indexerRegistry->get(ProductCategoryIndexer::INDEXER_ID);
-        $workingState = $indexer->isWorking();
+        $workingState = $this->isWorkingState();
 
-        if ($useTempTable && !$workingState && $indexer->isScheduled()) {
-            foreach ($this->storeManager->getStores() as $store) {
-                $this->connection->truncateTable($this->getIndexTable($store->getId()));
+        if (!$indexer->isScheduled()
+            || ($indexer->isScheduled() && !$useTempTable)
+            || ($indexer->isScheduled() && $useTempTable && !$workingState)) {
+            if ($useTempTable && !$workingState && $indexer->isScheduled()) {
+                foreach ($this->storeManager->getStores() as $store) {
+                    $this->connection->truncateTable($this->getIndexTable($store->getId()));
+                }
+            } else {
+                $this->removeEntries();
             }
-        } else {
-            $this->removeEntries();
-        }
 
-        $this->reindex();
+            $this->reindex();
 
-        if ($useTempTable && !$workingState && $indexer->isScheduled()) {
-            foreach ($this->storeManager->getStores() as $store) {
-                $removalCategoryIds = array_diff($this->limitationByCategories, [$this->getRootCategoryId($store)]);
-                $this->connection->delete(
-                    $this->tableMaintainer->getMainTable($store->getId()),
-                    ['category_id IN (?)' => $removalCategoryIds]
-                );
-                $select = $this->connection->select()
-                    ->from($this->tableMaintainer->getMainReplicaTable($store->getId()));
-                $this->connection->query(
-                    $this->connection->insertFromSelect(
-                        $select,
+            // get actual state
+            $workingState = $this->isWorkingState();
+
+            if ($useTempTable && !$workingState && $indexer->isScheduled()) {
+                foreach ($this->storeManager->getStores() as $store) {
+                    $removalCategoryIds = array_diff($this->limitationByCategories, [$this->getRootCategoryId($store)]);
+                    $this->connection->delete(
                         $this->tableMaintainer->getMainTable($store->getId()),
-                        [],
-                        AdapterInterface::INSERT_ON_DUPLICATE
-                    )
-                );
+                        ['category_id IN (?)' => $removalCategoryIds]
+                    );
+                    $select = $this->connection->select()
+                        ->from($this->tableMaintainer->getMainReplicaTable($store->getId()));
+                    $this->connection->query(
+                        $this->connection->insertFromSelect(
+                            $select,
+                            $this->tableMaintainer->getMainTable($store->getId()),
+                            [],
+                            AdapterInterface::INSERT_ON_DUPLICATE
+                        )
+                    );
+                }
             }
-        }
 
-        $this->registerCategories($entityIds);
-        $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
+            $this->registerCategories($entityIds);
+            $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
+        }
 
         return $this;
+    }
+
+    /**
+     * Get state for current and shared indexer
+     *
+     * @return bool
+     */
+    private function isWorkingState() : bool
+    {
+        $indexer = $this->indexerRegistry->get(ProductCategoryIndexer::INDEXER_ID);
+        $sharedIndexer = $this->indexerRegistry->get(CategoryProductIndexer::INDEXER_ID);
+        return $this->workingStateProvider->isWorking($indexer->getId())
+            || $this->workingStateProvider->isWorking($sharedIndexer->getId());
     }
 
     /**

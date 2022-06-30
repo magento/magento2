@@ -26,6 +26,17 @@
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
         </after>
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openCategoryPage"/>
-        <actionGroup ref="AdminAssertCategoryGridPageDetailsActionGroup" stepKey="assertCategoryGridPageRendered"/>
+        <actionGroup ref="AdminSearchCategoryGridPageByCategoryNameActionGroup" stepKey="searchByCategoryName">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCategoryGridPageNumberOfRecordsActionGroup" stepKey="assertOneRecordInGrid">
+            <argument name="numberOfRecords" value="1 records found"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCategoryGridPageImageColumnActionGroup" stepKey="assertCategoryGridPageImageColumn"/>
+        <actionGroup ref="AssertAdminCategoryGridPageDetailsActionGroup" stepKey="assertCategoryGridPageRendered">
+            <argument name="category" value="$$category$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCategoryGridPageProductsInMenuEnabledColumnsActionGroup" stepKey="assertCategoryGridPageProductsInMenuEnabledColumns"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
    </test>
 </tests>

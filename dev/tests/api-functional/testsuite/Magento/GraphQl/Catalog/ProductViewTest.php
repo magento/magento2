@@ -45,11 +45,10 @@ class ProductViewTest extends GraphQlAbstract
     products(filter: {sku: {eq: "{$productSku}"}})
     {
         items {
-            attribute_set_id
             country_of_manufacture
-            created_at
             gift_message_available
             id
+            uid
             categories {
                name
                url_path
@@ -65,6 +64,7 @@ class ProductViewTest extends GraphQlAbstract
                 disabled
                 file
                 id
+                uid
                 label
                 media_type
                 position
@@ -91,6 +91,7 @@ class ProductViewTest extends GraphQlAbstract
             options_container
             ... on CustomizableProductInterface {
               options {
+                uid
                 title
                 required
                 sort_order
@@ -229,7 +230,6 @@ class ProductViewTest extends GraphQlAbstract
             sku
             small_image{ url, label }
             thumbnail { url, label }
-            special_from_date
             special_price
             special_to_date
             swatch_image
@@ -243,11 +243,9 @@ class ProductViewTest extends GraphQlAbstract
                 website_id
             }
             type_id
-            updated_at
             url_key
             url_path
             canonical_url
-            websites { id name code sort_order default_group_id is_default }
             ... on PhysicalProductInterface {
                 weight
             }
@@ -276,8 +274,6 @@ QUERY;
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertEavAttributes($product, $response['products']['items'][0]);
         $this->assertOptions($product, $response['products']['items'][0]);
-        $this->assertArrayHasKey('websites', $response['products']['items'][0]);
-        $this->assertWebsites($product, $response['products']['items'][0]['websites']);
         self::assertEquals(
             'Movable Position 2',
             $responseObject->getData('products/items/0/categories/0/name')
@@ -303,15 +299,15 @@ QUERY;
     products(filter: {sku: {eq: "{$productSku}"}})
     {
         items{
-            attribute_set_id
             categories
             {
                 id
+                uid
             }
             country_of_manufacture
-            created_at
             gift_message_available
             id
+            uid
             image {url, label}
             meta_description
             meta_keyword
@@ -321,6 +317,7 @@ QUERY;
                 disabled
                 file
                 id
+                uid
                 label
                 media_type
                 position
@@ -351,6 +348,7 @@ QUERY;
                 required
                 sort_order
                 option_id
+                uid
                 ... on CustomizableFieldOption {
                   product_sku
                   field_option: value {
@@ -462,7 +460,6 @@ QUERY;
             }
             sku
             small_image { url, label }
-            special_from_date
             special_price
             special_to_date
             swatch_image
@@ -477,10 +474,8 @@ QUERY;
                 website_id
             }
             type_id
-            updated_at
             url_key
             url_path
-            websites { id name code sort_order default_group_id is_default }
             ... on PhysicalProductInterface {
                 weight
             }
@@ -501,8 +496,6 @@ QUERY;
         $this->assertCount(1, $response['products']['items']);
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertMediaGalleryEntries($product, $response['products']['items'][0]);
-        $this->assertArrayHasKey('websites', $response['products']['items'][0]);
-        $this->assertWebsites($product, $response['products']['items'][0]['websites']);
     }
 
     /**
@@ -548,7 +541,6 @@ QUERY;
            products(filter: {sku: {eq: "{$productSku}"}})
            {
                items {
-                   attribute_set_id
                    type_id
                    product_links
                    {
@@ -578,16 +570,15 @@ QUERY;
      */
     public function testProductPrices()
     {
-        $firstProductSku = 'simple-156';
-        $secondProductSku = 'simple-249';
+        $firstProductSku = 'simple-249';
+        $secondProductSku = 'simple-156';
         $query = <<<QUERY
        {
            products(filter: {price: {from: "150.0", to: "250.0"}})
            {
                items {
-                   attribute_set_id
-                   created_at
                    id
+                   uid
                    name
                    price {
                       minimalPrice {
@@ -635,7 +626,6 @@ QUERY;
                     }
                    sku
                    type_id
-                   updated_at
                    ... on PhysicalProductInterface {
                         weight
                    }
@@ -653,8 +643,10 @@ QUERY;
         $secondProduct = $productRepository->get($secondProductSku, false, null, true);
         self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
         self::assertCount(2, $response['products']['items']);
-        $this->assertBaseFields($firstProduct, $response['products']['items'][0]);
-        $this->assertBaseFields($secondProduct, $response['products']['items'][1]);
+
+        // by default sort order is: "newest id first"
+        $this->assertBaseFields($secondProduct, $response['products']['items'][0]);
+        $this->assertBaseFields($firstProduct, $response['products']['items'][1]);
     }
 
     /**
@@ -677,6 +669,7 @@ QUERY;
                 'disabled' => (bool)$mediaGalleryEntry->isDisabled(),
                 'file' => $mediaGalleryEntry->getFile(),
                 'id' => $mediaGalleryEntry->getId(),
+                'uid' => base64_encode($mediaGalleryEntry->getId()),
                 'label' => $mediaGalleryEntry->getLabel(),
                 'media_type' => $mediaGalleryEntry->getMediaType(),
                 'position' => $mediaGalleryEntry->getPosition(),
@@ -742,7 +735,11 @@ QUERY;
                 ['response_field' => 'sort_order', 'expected_value' => $option->getSortOrder()],
                 ['response_field' => 'title', 'expected_value' => $option->getTitle()],
                 ['response_field' => 'required', 'expected_value' => $option->getIsRequire()],
-                ['response_field' => 'option_id', 'expected_value' => $option->getOptionId()]
+                ['response_field' => 'option_id', 'expected_value' => $option->getOptionId()],
+                [
+                    'response_field' => 'uid',
+                    'expected_value' => base64_encode('custom-option/' . $option->getOptionId())
+                ]
             ];
 
             if (!empty($option->getValues())) {
@@ -811,14 +808,11 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
-
         $assertionMap = [
-            ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
-            ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
             ['response_field' => 'id', 'expected_value' => $product->getId()],
+            ['response_field' => 'uid', 'expected_value' => base64_encode($product->getId())],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
-            ['response_field' => 'price', 'expected_value' =>
-                [
+            ['response_field' => 'price', 'expected_value' => [
                     'minimalPrice' => [
                         'amount' => [
                             'value' => $product->getSpecialPrice(),
@@ -844,31 +838,10 @@ QUERY;
             ],
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
-            ['response_field' => 'updated_at', 'expected_value' => $product->getUpdatedAt()],
             ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
         ];
 
         $this->assertResponseFields($actualResponse, $assertionMap);
-    }
-
-    /**
-     * @param ProductInterface $product
-     * @param array $actualResponse
-     */
-    private function assertWebsites($product, $actualResponse)
-    {
-        $assertionMap = [
-            [
-                'id' => current($product->getExtensionAttributes()->getWebsiteIds()),
-                'name' => 'Main Website',
-                'code' => 'base',
-                'sort_order' => 0,
-                'default_group_id' => '1',
-                'is_default' => true,
-            ]
-        ];
-
-        $this->assertEquals($actualResponse, $assertionMap);
     }
 
     /**
@@ -903,10 +876,8 @@ QUERY;
             'meta_title',
             'country_of_manufacture',
             'gift_message_available',
-            'news_from_date',
             'options_container',
             'special_price',
-            'special_from_date',
             'special_to_date',
         ];
         $assertionMap = [];
@@ -926,17 +897,16 @@ QUERY;
      * @param string $eavAttributeCode
      * @return string
      */
-    private function eavAttributesToGraphQlSchemaFieldTranslator(string $eavAttributeCode)
+    private function eavAttributesToGraphQlSchemaFieldTranslator(string $eavAttributeCode): string
     {
         switch ($eavAttributeCode) {
             case 'news_from_date':
-                $eavAttributeCode = 'new_from_date';
-                break;
+                return 'new_from_date';
             case 'news_to_date':
-                $eavAttributeCode = 'new_to_date';
-                break;
+                return 'new_to_date';
+            default:
+                return $eavAttributeCode;
         }
-        return $eavAttributeCode;
     }
 
     /**
@@ -954,6 +924,7 @@ QUERY;
             name
             categories {
             id
+            uid
             name
             is_anchor
             }
@@ -980,6 +951,7 @@ QUERY;
                 [
                     'name' => $category->getName(),
                     'id' => $category->getId(),
+                    'uid' => base64_encode($category->getId()),
                     'is_anchor' => $category->getIsAnchor()
                 ]
             );
@@ -1004,6 +976,7 @@ QUERY;
             name
             categories {
             id
+            uid
             name
             is_anchor
             }
@@ -1035,6 +1008,7 @@ QUERY;
                 [
                     'name' => $category->getName(),
                     'id' => $category->getId(),
+                    'uid' => base64_encode($category->getId()),
                     'is_anchor' => $category->getIsAnchor()
                 ]
             );
@@ -1048,6 +1022,8 @@ QUERY;
      */
     public function testProductInNonAnchoredSubCategories()
     {
+        $this->markTestSkipped('MC-30965: Product contains invalid categories');
+
         $query = <<<QUERY
 {
     products(filter:
@@ -1062,6 +1038,7 @@ QUERY;
             name
             categories {
             id
+            uid
             name
             is_anchor
             }
@@ -1094,6 +1071,7 @@ QUERY;
                 [
                     'name' => $category->getName(),
                     'id' => $category->getId(),
+                    'uid' => base64_encode($category->getId()),
                     'is_anchor' => $category->getIsAnchor()
                 ]
             );

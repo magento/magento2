@@ -6,7 +6,9 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Eav;
 
+use Magento\Catalog\Model\Attribute\Backend\DefaultBackend;
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
+use Magento\Eav\Model\Entity;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
@@ -901,5 +903,18 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     {
         $this->setData(self::IS_FILTERABLE_IN_GRID, $isFilterableInGrid);
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _getDefaultBackendModel()
+    {
+        $backend = parent::_getDefaultBackendModel();
+        if ($backend === Entity::DEFAULT_BACKEND_MODEL) {
+            $backend = DefaultBackend::class;
+        }
+
+        return $backend;
     }
 }

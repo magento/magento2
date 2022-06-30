@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
 use Magento\Backend\Helper\Js;
+use Magento\Catalog\Api\Data\CategoryLinkInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOptionFactory;
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
 use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
@@ -116,6 +117,29 @@ class Helper
     private $dateTimeFilter;
 
     /**
+     * @var CategoryLinkInterfaceFactory
+     */
+    private $categoryLinkFactory;
+
+    /**
+     * @var array
+     */
+    private $productDataKeys = [
+        'weight',
+        'special_price',
+        'cost',
+        'country_of_manufacture',
+        'description',
+        'short_description',
+        'meta_description',
+        'meta_keyword',
+        'meta_title',
+        'page_layout',
+        'custom_design',
+        'gift_wrapping_price'
+    ];
+
+    /**
      * Constructor
      *
      * @param RequestInterface $request
@@ -132,6 +156,7 @@ class Helper
      * @param FormatInterface|null $localeFormat
      * @param ProductAuthorization|null $productAuthorization
      * @param DateTimeFilter|null $dateTimeFilter
+     * @param CategoryLinkInterfaceFactory|null $categoryLinkFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -148,7 +173,8 @@ class Helper
         AttributeFilter $attributeFilter = null,
         FormatInterface $localeFormat = null,
         ?ProductAuthorization $productAuthorization = null,
-        ?DateTimeFilter $dateTimeFilter = null
+        ?DateTimeFilter $dateTimeFilter = null,
+        ?CategoryLinkInterfaceFactory $categoryLinkFactory = null
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -166,6 +192,7 @@ class Helper
         $this->localeFormat = $localeFormat ?: $objectManager->get(FormatInterface::class);
         $this->productAuthorization = $productAuthorization ?? $objectManager->get(ProductAuthorization::class);
         $this->dateTimeFilter = $dateTimeFilter ?? $objectManager->get(DateTimeFilter::class);
+        $this->categoryLinkFactory = $categoryLinkFactory ?? $objectManager->get(CategoryLinkInterfaceFactory::class);
     }
 
     /**
@@ -192,6 +219,12 @@ class Helper
 
         if (!empty($productData['is_downloadable'])) {
             $productData['product_has_weight'] = 0;
+        }
+
+        foreach ($productData as $key => $value) {
+            if (in_array($key, $this->productDataKeys) && $value === '') {
+                $productData[$key] = null;
+            }
         }
 
         foreach (['category_ids', 'website_ids'] as $field) {
@@ -238,6 +271,7 @@ class Helper
 
         $product = $this->setProductLinks($product);
         $product = $this->fillProductOptions($product, $productOptions);
+        $this->setCategoryLinks($product);
 
         $product->setCanSaveCustomOptions(
             !empty($productData['affect_product_custom_options']) && !$product->getOptionsReadonly()
@@ -483,5 +517,31 @@ class Helper
         }
 
         return $product->setOptions($customOptions);
+    }
+
+    /**
+     * Set category links based on initialized category ids
+     *
+     * @param Product $product
+     */
+    private function setCategoryLinks(Product $product): void
+    {
+        $extensionAttributes = $product->getExtensionAttributes();
+        $categoryLinks = [];
+        foreach ((array) $extensionAttributes->getCategoryLinks() as $categoryLink) {
+            $categoryLinks[$categoryLink->getCategoryId()] = $categoryLink;
+        }
+
+        $newCategoryLinks = [];
+        foreach ($product->getCategoryIds() as $categoryId) {
+            $categoryLink = $categoryLinks[$categoryId] ??
+                $this->categoryLinkFactory->create()
+                    ->setCategoryId($categoryId)
+                    ->setPosition(0);
+            $newCategoryLinks[] = $categoryLink;
+        }
+
+        $extensionAttributes->setCategoryLinks(!empty($newCategoryLinks) ? $newCategoryLinks : null);
+        $product->setExtensionAttributes($extensionAttributes);
     }
 }

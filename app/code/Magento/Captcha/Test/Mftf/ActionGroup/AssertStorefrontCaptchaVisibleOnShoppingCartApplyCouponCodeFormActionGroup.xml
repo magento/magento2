@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontCaptchaVisibleOnShoppingCartApplyCouponCodeFormActionGroup">
+        <waitForElement selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" time="30" stepKey="waitForCouponHeader"/>
+        <conditionalClick selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" dependentSelector="{{StorefrontSalesRuleCartCouponSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader"/>
+        <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="waitForCouponField"/>
+        <waitForElementVisible selector="{{StorefrontShoppingCartApplyDiscountCodeSection.captchaField}}" stepKey="waitToSeeCaptchaField"/>
+        <waitForElementVisible selector="{{StorefrontShoppingCartApplyDiscountCodeSection.captchaImg}}" stepKey="waitToSeeCaptchaImage"/>
+        <waitForElementVisible selector="{{StorefrontShoppingCartApplyDiscountCodeSection.captchaReload}}" stepKey="waitToSeeCaptchaReloadButton"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForPageReloaded"/>
+        <waitForElement selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" time="30" stepKey="waitForCouponHeaderAfterReload"/>
+        <conditionalClick selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" dependentSelector="{{StorefrontSalesRuleCartCouponSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeaderAfterReload"/>
+        <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="waitForCouponFieldAfterReload"/>
+        <waitForElementVisible selector="{{StorefrontShoppingCartApplyDiscountCodeSection.captchaField}}" stepKey="waitToSeeCaptchaFieldAfterPageReload"/>
+        <waitForElementVisible selector="{{StorefrontShoppingCartApplyDiscountCodeSection.captchaImg}}" stepKey="waitToSeeCaptchaImageAfterPageReload"/>
+        <waitForElementVisible selector="{{StorefrontShoppingCartApplyDiscountCodeSection.captchaReload}}" stepKey="waitToSeeCaptchaReloadButtonAfterPageReload"/>
+    </actionGroup>
+</actionGroups>

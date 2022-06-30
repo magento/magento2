@@ -4,32 +4,22 @@
  * See COPYING.txt for license details.
  */
 
+// phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
 /** @var $block \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content\Uploader */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 
-$filters = $block->getConfig()->getFilters() ?? [];
-$allowedExtensions = [];
 $blockHtmlId = $block->getHtmlId();
-
-$listExtensions = [[]];
-foreach ($filters as $media_type) {
-    $listExtensions[] = array_map(function ($fileExt) {
-        return ltrim($fileExt, '.*');
-    }, $media_type['files']);
-}
-
-$allowedExtensions = array_merge(...$listExtensions);
-
-$resizeConfig = $block->getImageUploadConfigData()->getIsResizeEnabled()
-    ? "{action: 'resize', maxWidth: "
-        . $block->escapeHtml($block->getImageUploadMaxWidth())
-        . ", maxHeight: "
-        . $block->escapeHtml($block->getImageUploadMaxHeight())
-        . "}"
-    : "{action: 'resize'}";
 ?>
 
-<div id="<?= /* @noEscape */ $blockHtmlId ?>" class="uploader">
+<div id="<?= /* @noEscape */ $blockHtmlId ?>" class="uploader"
+     data-mage-init='{
+        "Magento_Backend/js/media-uploader" : {
+            "maxFileSize": <?= /* @noEscape */ $block->getFileSizeService()->getMaxFileSize() ?>,
+            "maxWidth": <?= /* @noEscape */ $block->getImageUploadMaxWidth() ?>,
+            "maxHeight": <?= /* @noEscape */ $block->getImageUploadMaxHeight() ?>,
+            "isResizeEnabled": <?= /* @noEscape */ $block->getImageUploadConfigData()->getIsResizeEnabled() ?>
+        }
+    }'
+>
     <span class="fileinput-button form-buttons">
         <span><?= $block->escapeHtml(__('Upload Images')) ?></span>
         <input class="fileupload" type="file"
@@ -46,130 +36,4 @@ $resizeConfig = $block->getImageUploadConfigData()->getIsResizeEnabled()
             <div class="clear"></div>
         </div>
     </script>
-    <?php $intMaxSize = $block->getFileSizeService()->getMaxFileSize();
-    $resizeConfig = /* @noEscape */ $resizeConfig;
-    $blockHtmlId = /* @noEscape */ $blockHtmlId;
-    $scriptString = <<<script
-
-require([
-    'jquery',
-    'mage/template',
-    'Magento_Ui/js/lib/validation/validator',
-    'Magento_Ui/js/modal/alert',
-    'jquery/file-uploader',
-    'domReady!',
-    'mage/translate'
-], function ($, mageTemplate, validator, uiAlert) {
-    var maxFileSize = {$block->escapeJs($block->getFileSizeService()->getMaxFileSize())},
-        allowedExtensions = '{$block->escapeJs(implode(' ', $allowedExtensions))}';
-
-    $('#{$blockHtmlId} .fileupload').fileupload({
-        dataType: 'json',
-        formData: {
-            isAjax: 'true',
-            form_key: FORM_KEY
-        },
-        sequentialUploads: true,
-        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-        allowedExtensions: allowedExtensions,
-        maxFileSize: maxFileSize,
-        dropZone: $('#{$blockHtmlId}').closest('[role="dialog"]'),
-        add: function (e, data) {
-            var progressTmpl = mageTemplate('#{$blockHtmlId}-template'),
-                fileSize,
-                tmpl,
-                validationResult;
-
-            data.files = data.files.filter(function (file) {
-                fileSize = typeof file.size == "undefined" ?
-                    $.mage.__('We could not detect a size.') :
-                    byteConvert(file.size);
-
-                if (maxFileSize) {
-                    validationResult = validator('validate-max-size', file.size, maxFileSize);
-
-                    if (!validationResult.passed) {
-                        uiAlert({
-                            content: validationResult.message
-                        });
-
-                        return false;
-                    }
-                }
-
-                if (allowedExtensions) {
-                    validationResult = validator('validate-file-type', file.name, allowedExtensions);
-
-                    if (!validationResult.passed) {
-                        uiAlert({
-                            content: validationResult.message
-                        });
-
-                        return false;
-                    }
-                }
-
-                data.fileId = Math.random().toString(36).substr(2, 9);
-
-                tmpl = progressTmpl({
-                    data: {
-                        name: file.name,
-                        size: fileSize,
-                        id: data.fileId
-                    }
-                });
-
-                $(tmpl).data('image', data).appendTo('#{$blockHtmlId}');
-
-                return true;
-            });
-
-            if (data.files.length) {
-                $(this).fileupload('process', data).done(function () {
-                    data.submit();
-                });
-            }
-        },
-        done: function (e, data) {
-            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-            var tempErrorMessage = document.createElement("div");
-            $(progressSelector).css('width', '100%');
-            $('[data-action="show-error"]').children(".message").remove();
-            if (data.result && !data.result.hasOwnProperty('errorcode')) {
-                $(progressSelector).removeClass('upload-progress').addClass('upload-success');
-            } else {
-                tempErrorMessage.className = "message message-warning warning";
-                tempErrorMessage.innerHTML = data.result.error;
-
-                $('[data-action="show-error"]').append(tempErrorMessage);
-                $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
-            }
-        },
-        progress: function (e, data) {
-            var progress = parseInt(data.loaded / data.total * 100, 10);
-            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-            $(progressSelector).css('width', progress + '%');
-        },
-        fail: function (e, data) {
-            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-            $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
-        }
-    });
-
-    $('#{$blockHtmlId} .fileupload').fileupload('option', {
-        process: [{
-            action: 'load',
-            fileTypes: /^image\/(gif|jpeg|png)$/,
-            maxFileSize: {$intMaxSize} * 10
-        },
-        {$resizeConfig},
-        {
-            action: 'save'
-        }]
-    });
-});
-
-script;
-    ?>
-    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 </div>

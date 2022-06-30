@@ -12,7 +12,7 @@
         <div class="image-details-section">
             <h3 class="image-title" text="image().title"></h3>
             <div class="image-type">
-                <span class="source"><img if="image().source" class="adobe-stock-icon" attr="{ src: image().source }" /></span>
+                <span class="source"><img if="image().source" class="media-gallery-source-icon" attr="{ src: image().source }" /></span>
                 <span class="type" data-ui-id="content-type" text="image().content_type"></span>
             </div>
         </div>
@@ -25,19 +25,18 @@
             <div class="attributes">
                 <each args="image().details">
                     <div class="attribute"  if="value">
-                        <span class="title" translate="title"></span>
-                        <ifnot args="$parent.isArray(value)">
-                            <div class="value" text="value"></div>
-                        </ifnot>
-                        <if args="$parent.isArray(value)">
-                            <each args="{ data: value, as: 'item'}">
-                                <div class="value">
-                                    <a attr="href: $parents[1].getFilterUrl(item.link)"
-                                       text="$parents[1].getUsedInText(item)"></a>
-                                    </br>
-                                </div>
-                            </each>
-                        </if>
+                      <span if="$parent.notEmpty(value)" class="title" translate="title"></span>
+                      <ifnot args="$parent.isArray(value)">
+                        <div class="value" text="value"></div>
+                      </ifnot>
+                      <if args="$parent.isArray(value)">
+                        <each args="{ data: value, as: 'item'}">
+                          <div class="value">
+                            <a attr="href: $parents[1].getFilterUrl(item.link)"
+                               text="$parents[1].getUsedInText(item)"></a><br/>
+                          </div>
+                        </each>
+                      </if>
                     </div>
                 </each>
             </div>
@@ -60,6 +59,6 @@
             </div>
         </div>
 
-        <each args="getRegion('additional_image_details')" render=""/>
+        <each args="getRegion('additional_image_details')" render=""></each>
     </div>
 </div>

@@ -144,7 +144,7 @@ class UpgradeCommand extends AbstractSetupCommand
             $searchConfig->validateSearchEngine();
             $installer->removeUnusedTriggers();
             $installer->installSchema($request);
-            $installer->installDataFixtures($request);
+            $installer->installDataFixtures($request, true);
 
             if ($this->deploymentConfig->isAvailable()) {
                 $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
@@ -163,6 +163,13 @@ class UpgradeCommand extends AbstractSetupCommand
                     '<info>Please re-run Magento compile command. Use the command "setup:di:compile"</info>'
                 );
             }
+            $output->writeln(
+                "<info>Media files stored outside of 'Media Gallery Allowed' folders"
+                . " will not be available to the media gallery.</info>"
+            );
+            $output->writeln(
+                '<info>Please refer to Developer Guide for more details.</info>'
+            );
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             return Cli::RETURN_FAILURE;

@@ -219,10 +219,19 @@ define([
 
             if (key === 'enterKey') {
                 event.preventDefault();
-                modalElement.find('.page-action-buttons button.save').click();
+                modalElement.find('.page-action-buttons button.save').trigger('click');
             }
 
             return true;
+        },
+
+        /**
+         * Remove cached image details in edit form
+         *
+         * @param {String} id
+         */
+        removeCached: function (id) {
+            delete this.images[id];
         }
     });
 });

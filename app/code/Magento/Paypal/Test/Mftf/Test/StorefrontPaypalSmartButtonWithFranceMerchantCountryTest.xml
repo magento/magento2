@@ -17,6 +17,10 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-33274"/>
             <group value="paypalExpress"/>
+            <skip>
+                <issueId value="MC-37236"/>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Set price scope global-->
@@ -26,7 +30,7 @@
             <!--Enable Advanced Setting-->
             <magentoCLI command="config:set {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.value}}" stepKey="enableSkipOrderReview"/>
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>

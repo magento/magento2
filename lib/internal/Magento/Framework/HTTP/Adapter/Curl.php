@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\HTTP\Adapter;
 
 /**
  * Curl http adapter
+ *
+ * @api
  */
 class Curl implements \Zend_Http_Client_Adapter_Interface
 {
@@ -208,6 +211,9 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     public function read()
     {
         $response = curl_exec($this->_getResource());
+        if ($response === false) {
+            return '';
+        }
 
         // Remove 100 and 101 responses headers
         while (\Zend_Http_Response::extractCode($response) == 100

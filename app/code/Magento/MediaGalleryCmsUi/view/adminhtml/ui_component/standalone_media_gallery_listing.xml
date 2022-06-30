@@ -13,7 +13,7 @@
                     name="page_id"
                     provider="${ $.parentName }"
                     sortOrder="120"
-                    component="Magento_Ui/js/form/element/ui-select"
+                    component="Magento_Ui/js/grid/filters/elements/ui-select"
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -26,6 +26,7 @@
                         <item name="emptyOptionsHtml" xsi:type="string" translate="true">Start typing to find pages</item>
                         <item name="filterRateLimit" xsi:type="string" translate="true">1000</item>
                         <item name="filterRateLimitMethod" xsi:type="string">notifyWhenChangesStop</item>
+                        <item name="validationUrl" xsi:type="url" path="media_gallery_cms/page/getSelected"/>
                     </item>
                 </argument>
                 <settings>
@@ -37,7 +38,7 @@
                     name="block_id"
                     provider="${ $.parentName }"
                     sortOrder="130"
-                    component="Magento_Ui/js/form/element/ui-select"
+                    component="Magento_Ui/js/grid/filters/elements/ui-select"
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -50,6 +51,7 @@
                         <item name="emptyOptionsHtml" xsi:type="string" translate="true">Start typing to find blocks</item>
                         <item name="filterRateLimit" xsi:type="string" translate="true">1000</item>
                         <item name="filterRateLimitMethod" xsi:type="string">notifyWhenChangesStop</item>
+                        <item name="validationUrl" xsi:type="url" path="media_gallery_cms/block/getSelected"/>
                     </item>
                 </argument>
                 <settings>

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronizationApi\Model;
 
-use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
+use Magento\MediaContentSynchronizationApi\Api\SynchronizeInterface;
 
 /**
  * A pool that handles content and assets synchronization.
@@ -18,20 +18,20 @@ class SynchronizerPool
     /**
      * Content with assets synchronizers
      *
-     * @var SynchronizerInterface[]
+     * @var SynchronizeInterface[]
      */
     private $synchronizers;
 
     /**
-     * @param SynchronizerInterface[] $synchronizers
+     * @param SynchronizeInterface[] $synchronizers
      */
     public function __construct(
         array $synchronizers = []
     ) {
         foreach ($synchronizers as $synchronizer) {
-            if (!$synchronizer instanceof SynchronizerInterface) {
+            if (!$synchronizer instanceof SynchronizeInterface) {
                 throw new \InvalidArgumentException(
-                    get_class($synchronizer) . ' must implement ' . SynchronizerInterface::class
+                    get_class($synchronizer) . ' must implement ' . SynchronizeInterface::class
                 );
             }
         }
@@ -42,7 +42,7 @@ class SynchronizerPool
     /**
      * Get all synchronizers from the pool
      *
-     * @return SynchronizerInterface[]
+     * @return SynchronizeInterface[]
      */
     public function get(): array
     {

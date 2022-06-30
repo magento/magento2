@@ -20,9 +20,7 @@
 
         <before>
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
@@ -33,7 +31,7 @@
         Step1. Login to admin and go to Customers > All Customers.
         Step2. On *Customers* page choose customer from preconditions and open it to edit
         <!- -->
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPage">
             <argument name="customer" value="Simple_US_Customer_Multiple_Addresses"/>
         </actionGroup>

@@ -22,13 +22,13 @@
             <createData entity="_defaultBlock" stepKey="createPreReqBlock" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
         </before>
         <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage">
             <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
         </actionGroup>
         <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE" />
         <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon1" />
         <wait time="10" stepKey="waitForPageLoad2" />
         <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
@@ -40,15 +40,15 @@
         <waitForElementVisible selector="{{WidgetSection.CMSPage}}" stepKey="waitForPageVisible" />
         <click selector="{{WidgetSection.CMSPage}}" stepKey="selectPreCreateCMS" />
         <waitForElementNotVisible selector="{{WidgetSection.SelectPageTitle}}" stepKey="waitForSlideOutCloses" />
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
-        <waitForElementNotVisible selector="{{WidgetSection.InsertWidgetTitle}}" stepKey="waitForSlideOutCloses1" />
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoading"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSlideOutCloses1"/>
         <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}" stepKey="expandSplitButton"/>
         <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveBlock"/>
         <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
         </actionGroup>
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE1"/>
         <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
         <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon2" />
         <waitForPageLoad stepKey="waitForPageLoad5" />
@@ -62,20 +62,20 @@
         </actionGroup>
         <click selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="selectPreCreateBlock" />
         <wait time="3" stepKey="wait1" />
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidgetBtn" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
-        <waitForPageLoad stepKey="waitForPageLoad6" />
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
-        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
-        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
-        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidgetBtn"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoading2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad6"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandButtonMenu"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSplitButtonMenuVisible"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSavePage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessMessage"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache" />
         <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad7" />
         <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
         <after>
-            <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
-            <waitForPageLoad stepKey="waitForPageLoad2"/>
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="amOnEditPage"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad2"/>
             <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
             <waitForPageLoad stepKey="waitForGridReload"/>
             <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
@@ -85,4 +85,3 @@
         </after>
     </test>
 </tests>
-

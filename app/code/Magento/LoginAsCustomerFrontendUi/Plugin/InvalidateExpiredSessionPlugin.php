@@ -65,15 +65,17 @@ class InvalidateExpiredSessionPlugin
      */
     public function beforeExecute(ActionInterface $subject)
     {
-        if ($this->config->isEnabled()) {
-            $adminId = $this->getLoggedAsCustomerAdminId->execute();
-            $customerId = (int)$this->session->getCustomerId();
-            if ($adminId && $customerId) {
-                if (!$this->isLoginAsCustomerSessionActive->execute($customerId, $adminId)) {
-                    $this->session->clearStorage();
-                    $this->session->expireSessionCookie();
-                    $this->session->regenerateId();
-                }
+        if (!$this->config->isEnabled()) {
+            return;
+        }
+
+        $adminId = $this->getLoggedAsCustomerAdminId->execute();
+        $customerId = (int)$this->session->getCustomerId();
+        if ($adminId && $customerId) {
+            if (!$this->isLoginAsCustomerSessionActive->execute($customerId, $adminId)) {
+                $this->session->clearStorage();
+                $this->session->expireSessionCookie();
+                $this->session->regenerateId();
             }
         }
     }

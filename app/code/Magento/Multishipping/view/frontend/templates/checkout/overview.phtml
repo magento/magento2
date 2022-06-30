@@ -213,6 +213,7 @@ $checkoutHelper = $block->getData('checkoutHelper');
         </div>
         <div class="actions-toolbar" id="review-buttons-container">
             <div class="primary">
+                <?= $block->getChildHtml('captcha') ?>
                 <button type="submit"
                         class="action primary submit"
                         id="review-button"><span><?= $block->escapeHtml(__('Place Order')); ?></span>

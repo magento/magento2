@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+// phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
 /**
  * @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
@@ -268,7 +269,8 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
             </fieldset>
         </div>
     </script>
-    <div id="new_video_<?= /* @noEscape */ $block->getNewVideoBlockName() ?>">
+    <?php $videoBlockId = "new_video_" . $block->getHtmlId() . rand(); ?>
+    <div id="<?= /* @noEscape */ $videoBlockId ?>">
         <?= $block->getFormHtml() ?>
         <div id="video-player-preview-location" class="video-player-sidebar">
             <div class="video-player-container"></div>
@@ -288,7 +290,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
     </div>
     <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
         'display:none',
-        'div#new_video_' . /* @noEscape */ $block->getNewVideoBlockName()
+        'div#' . $videoBlockId
     ) ?>
 
     <?= $block->getChildHtml('new-video') ?>

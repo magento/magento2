@@ -22,10 +22,11 @@
         <element name="clearFilters" type="button" selector=".admin__data-grid-header button[data-action='grid-filter-reset']" timeout="30"/>
         <element name="activeFilters" type="button" selector="//div[@class='admin__data-grid-header']//span[contains(text(), 'Active filters:')]" />
         <element name="spinner" type="input" selector='//div[@data-component="cms_page_listing.cms_page_listing.cms_page_columns"]'/>
-        <element name="firstItemSelectButton" type="button" selector=".data-grid .action-select-wrap button.action-select"/>
-        <element name="firstItemEditButton" type="button" selector=".data-grid .action-select-wrap .action-menu-item[data-action~='item-edit']"/>
+        <element name="firstItemSelectButton" type="button" selector=".data-grid .action-select-wrap button.action-select" timeout="30"/>
+        <element name="firstItemEditButton" type="button" selector=".data-grid .action-select-wrap .action-menu-item[data-action~='item-edit']" timeout="30"/>
         <element name="activeFilter" type="button" selector="(//div[contains(@class, 'admin__data-grid-filters-current') and contains(@class, '_show')])[1]"/>
         <element name="savePageSuccessMessage" type="text" selector=".message-success"/>
+        <element name="savePageWarningMessage" type="text" selector=".message-warning"/>
         <element name="delete" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='Delete']" parameterized="true"/>
         <element name="deleteConfirm" type="button" selector=".action-primary.action-accept" timeout="60"/>
         <element name="pageRowCheckboxByIdentifier" type="checkbox" selector="//table[@data-role='grid']//td[count(../../..//th[./*[.='URL Key']]/preceding-sibling::th) + 1][./*[.='{{identifier}}']]/../td//input[@data-action='select-row']"  parameterized="true" />

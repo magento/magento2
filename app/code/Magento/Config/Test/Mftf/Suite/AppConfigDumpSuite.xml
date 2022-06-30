@@ -8,6 +8,7 @@
 <suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
     <suite name="AppConfigDumpSuite">
         <before>
+            <!-- Command app:config:dump is not reversible and magento instance stays configuration read only after this test. You need to restore etc/env.php manually to make magento configuration writable again.-->
             <magentoCLI command="app:config:dump" stepKey="configDump"/>
         </before>
         <after>

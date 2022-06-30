@@ -97,7 +97,7 @@ class WriteXmp implements WriteMetadataInterface
     }
 
     /**
-     * Insert XMP segment to image png segments (at position 1)
+     * Insert XMP segment to image png segments before IEND chunk
      *
      * @param SegmentInterface[] $segments
      * @param SegmentInterface $xmpSegment
@@ -105,7 +105,12 @@ class WriteXmp implements WriteMetadataInterface
      */
     private function insertPngXmpSegment(array $segments, SegmentInterface $xmpSegment): array
     {
-        return array_merge(array_slice($segments, 0, 2), [$xmpSegment], array_slice($segments, 2));
+        $iendSegmentIndex = count($segments) - 1;
+        return array_merge(
+            array_slice($segments, 0, $iendSegmentIndex),
+            [$xmpSegment],
+            array_slice($segments, $iendSegmentIndex)
+        );
     }
 
     /**
@@ -114,7 +119,7 @@ class WriteXmp implements WriteMetadataInterface
      * @param MetadataInterface $metadata
      * @return SegmentInterface
      */
-    public function createPngXmpSegment(MetadataInterface $metadata): SegmentInterface
+    private function createPngXmpSegment(MetadataInterface $metadata): SegmentInterface
     {
         $xmpData = $this->xmpTemplate->get();
         return $this->segmentFactory->create([
@@ -147,7 +152,7 @@ class WriteXmp implements WriteMetadataInterface
     private function isXmpSegment(SegmentInterface $segment): bool
     {
         return $segment->getName() === self::XMP_SEGMENT_NAME
-            && strpos($segment->getData(), '<x:xmpmeta') !== -1;
+            && strpos($segment->getData(), '<x:xmpmeta') !== false;
     }
 
     /**

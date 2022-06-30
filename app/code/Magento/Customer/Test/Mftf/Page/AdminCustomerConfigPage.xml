@@ -8,5 +8,6 @@
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminCustomerConfigPage" url="admin/system_config/edit/section/customer/{{tabLink}}" area="admin" parameterized="true" module="Magento_Customer">
         <section name="AdminCustomerConfigSection"/>
+        <section name="AdminCustomerConfigAddressTemplateSection"/>
     </page>
 </pages>

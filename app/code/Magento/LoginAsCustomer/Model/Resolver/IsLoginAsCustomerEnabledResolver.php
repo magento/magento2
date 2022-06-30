@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Model\Resolver;
 
-use Magento\LoginAsCustomer\Model\IsLoginAsCustomerEnabledForCustomerResultFactory;
+use Magento\LoginAsCustomerApi\Api\Data\IsLoginAsCustomerEnabledForCustomerResultInterfaceFactory;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerApi\Api\Data\IsLoginAsCustomerEnabledForCustomerResultInterface;
 use Magento\LoginAsCustomerApi\Api\IsLoginAsCustomerEnabledForCustomerInterface;
@@ -23,17 +23,17 @@ class IsLoginAsCustomerEnabledResolver implements IsLoginAsCustomerEnabledForCus
     private $config;
 
     /**
-     * @var IsLoginAsCustomerEnabledForCustomerResultFactory
+     * @var IsLoginAsCustomerEnabledForCustomerResultInterfaceFactory
      */
     private $resultFactory;
 
     /**
      * @param ConfigInterface $config
-     * @param IsLoginAsCustomerEnabledForCustomerResultFactory $resultFactory
+     * @param IsLoginAsCustomerEnabledForCustomerResultInterfaceFactory $resultFactory
      */
     public function __construct(
         ConfigInterface $config,
-        IsLoginAsCustomerEnabledForCustomerResultFactory $resultFactory
+        IsLoginAsCustomerEnabledForCustomerResultInterfaceFactory $resultFactory
     ) {
         $this->config = $config;
         $this->resultFactory = $resultFactory;

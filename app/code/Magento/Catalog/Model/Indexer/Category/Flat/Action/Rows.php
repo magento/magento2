@@ -119,7 +119,8 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
             "path = {$rootIdExpr} OR path = {$rootCatIdExpr} OR path like {$catIdExpr}"
         )->where(
             "entity_id IN (?)",
-            $ids
+            $ids,
+            \Zend_Db::INT_TYPE
         );
 
         $resultIds = [];
@@ -170,27 +171,30 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         foreach ($categoriesIdsChunk as $categoryId) {
             try {
                 $category = $this->categoryRepository->get($categoryId);
-                $categoryData = $category->getData();
-                $linkId = $categoryData[$linkField];
-
-                $categoryAttributesData = [];
-                if (isset($attributesData[$linkId]) && is_array($attributesData[$linkId])) {
-                    $categoryAttributesData = $attributesData[$linkId];
-                }
-                $categoryIndexData = $this->buildCategoryIndexData(
-                    $store,
-                    $categoryData,
-                    $categoryAttributesData
-                );
-                $data[] = $categoryIndexData;
             } catch (NoSuchEntityException $e) {
-                // ignore
+                continue;
             }
+
+            $categoryData = $category->getData();
+            $linkId = $categoryData[$linkField];
+
+            $categoryAttributesData = [];
+            if (isset($attributesData[$linkId]) && is_array($attributesData[$linkId])) {
+                $categoryAttributesData = $attributesData[$linkId];
+            }
+            $categoryIndexData = $this->buildCategoryIndexData(
+                $store,
+                $categoryData,
+                $categoryAttributesData
+            );
+            $data[] = $categoryIndexData;
         }
         return $data;
     }
 
     /**
+     * Prepare Category data
+     *
      * @param Store $store
      * @param array $categoryData
      * @param array $categoryAttributesData
@@ -213,7 +217,8 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * Insert or update index data
      *
      * @param string $tableName
-     * @param $data
+     * @param array $data
+     * @return void
      */
     private function updateIndexData($tableName, $data)
     {

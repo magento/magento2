@@ -158,6 +158,7 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
             ],
             $this->categoryUrlRewriteGenerator->generate($this->category, false, $categoryId)
         );
+        $this->assertEquals(0, $this->category->getStoreId(), 'Store ID should not have been modified');
     }
 
     /**

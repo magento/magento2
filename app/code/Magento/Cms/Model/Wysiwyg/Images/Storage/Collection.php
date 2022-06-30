@@ -7,6 +7,7 @@
 namespace Magento\Cms\Model\Wysiwyg\Images\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Wysiwyg Images storage collection
@@ -30,7 +31,7 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
         \Magento\Framework\Filesystem $filesystem
     ) {
         $this->_filesystem = $filesystem;
-        parent::__construct($entityFactory);
+        parent::__construct($entityFactory, $filesystem);
     }
 
     /**
@@ -41,12 +42,19 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      */
     protected function _generateRow($filename)
     {
-        $filename = preg_replace('~[/\\\]+~', '/', $filename);
+        $filename = $filename !== null ?
+            preg_replace('~[/\\\]+(?<![htps?]://)~', '/', $filename) : '';
         $path = $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        try {
+            $mtime = $path->stat($path->getRelativePath($filename))['mtime'];
+        } catch (FileSystemException $e) {
+            $mtime = 0;
+        }
         return [
-            'filename' => $filename,
+            'filename' => rtrim($filename, '/'),
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             'basename' => basename($filename),
-            'mtime' => $path->stat($path->getRelativePath($filename))['mtime']
+            'mtime' => $mtime
         ];
     }
 }

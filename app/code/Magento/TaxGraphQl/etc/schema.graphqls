@@ -2,5 +2,5 @@
 # See COPYING.txt for license details.
 
 enum PriceAdjustmentCodesEnum {
-    TAX @deprecated(reason: "PriceAdjustmentCodesEnum is deprecated. Tax is included or excluded in price. Tax is not shown separtely in Catalog")
+    TAX @deprecated(reason: "`PriceAdjustmentCodesEnum` is deprecated. Tax is included or excluded in the price. Tax is not shown separately in Catalog.")
 }

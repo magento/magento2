@@ -51,8 +51,7 @@
         </actionGroup>
         <!-- Select Free shipping -->
         <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="selectFreeShippingOption"/>
-        <!--Click *Submit Order* button-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrder" />
         <!-- Create Shipment -->
         <actionGroup ref="AdminCreateShipmentFromOrderPage" stepKey="createNewShipment">
             <argument name="Title" value="Title"/>

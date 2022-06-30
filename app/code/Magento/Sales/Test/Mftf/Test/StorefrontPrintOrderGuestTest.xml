@@ -10,13 +10,15 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontPrintOrderGuestTest">
         <annotations>
+            <features value="Sales"/>
             <stories value="Print Order"/>
             <title value="Print Order from Guest on Frontend"/>
             <description value="Print Order from Guest on Frontend"/>
-            <severity value="BLOCKER"/>
-            <testCaseId value="MC-16225"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-28494"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
@@ -37,7 +39,7 @@
 
             <!-- Check Links can be purchased separately for Downloadable Product -->
             <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToDownloadableProduct">
-                <argument name="product" value="$$downloadableProduct$$"/>
+                <argument name="product" value="$downloadableProduct$"/>
             </actionGroup>
             <waitForPageLoad stepKey="waitForPageLoad"/>
             <scrollTo selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="scrollToDownloadableInformation"/>
@@ -113,11 +115,11 @@
 
             <!-- Grab attribute name for Configurable Product -->
             <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToConfigurableProduct">
-                <argument name="product" value="$$createConfigProduct$$"/>
+                <argument name="product" value="$createConfigProduct$"/>
             </actionGroup>
             <grabTextFrom selector="{{AdminConfigurableProductFormSection.currentAttribute}}" stepKey="grabAttribute"/>
             <assertNotEmpty stepKey="assertNotEmpty">
-    			<actualResult type="const">$grabAttribute</actualResult>
+                <actualResult type="const">$grabAttribute</actualResult>
             </assertNotEmpty>
 
             <!-- Create bundle Product -->
@@ -148,12 +150,14 @@
 
             <!-- Grab bundle option name for Bundle Product -->
             <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToBundleProduct">
-                <argument name="product" value="$$createBundleProduct$$"/>
+                <argument name="product" value="$createBundleProduct$"/>
             </actionGroup>
             <grabTextFrom selector="{{AdminProductFormBundleSection.currentBundleOption}}" stepKey="grabBundleOption"/>
             <assertNotEmpty stepKey="assertBundleOptionNotEmpty">
-        		<actualResult type="const">$grabBundleOption</actualResult>
+                <actualResult type="const">$grabBundleOption</actualResult>
             </assertNotEmpty>
+
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductGridFilters"/>
 
             <!-- Create sales rule -->
             <createData entity="ActiveSalesRuleCoupon50" stepKey="createCartPriceRule"/>
@@ -167,36 +171,34 @@
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
             <!-- Place order with options according to dataset -->
             <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="newOrder">
-                <argument name="customer" value="$$createCustomer$$"/>
+                <argument name="customer" value="$createCustomer$"/>
             </actionGroup>
 
             <actionGroup ref="AdminFilterProductInCreateOrderActionGroup" stepKey="filterConfigProduct">
-                <argument name="productSKU" value="$$createConfigProduct.sku$$"/>
+                <argument name="productSKU" value="$createConfigProduct.sku$"/>
             </actionGroup>
 
             <actionGroup ref="AdminAddToOrderConfigurableProductActionGroup" stepKey="addConfProduct">
                 <argument name="attribute" value="{$grabAttribute}"/>
-                <argument name="option" value="$$getConfigAttributeOption1.label$$"/>
+                <argument name="option" value="$getConfigAttributeOption1.label$"/>
                 <argument name="quantity" value="3"/>
             </actionGroup>
 
             <actionGroup ref="AdminFilterProductInCreateOrderActionGroup" stepKey="filterBundleProduct">
-                <argument name="productSKU" value="$$createBundleProduct.sku$$"/>
+                <argument name="productSKU" value="$createBundleProduct.sku$"/>
             </actionGroup>
             <actionGroup ref="AdminAddToOrderBundleProductActionGroup" stepKey="addBundleProduct">
                 <argument name="option" value="{$grabBundleOption}"/>
-                <argument name="selectedProductName" value="$$simpleProduct1.name$$"/>
+                <argument name="selectedProductName" value="$simpleProduct1.name$"/>
                 <argument name="quantity" value="2"/>
             </actionGroup>
 
             <actionGroup ref="AdminFilterProductInCreateOrderActionGroup" stepKey="filterDownloadableProduct">
-                <argument name="productSKU" value="$$downloadableProduct.sku$$"/>
+                <argument name="productSKU" value="$downloadableProduct.sku$"/>
             </actionGroup>
             <actionGroup ref="AdminAddToOrderDownloadableProductActionGroup" stepKey="addDownloadableProduct">
                 <argument name="link" value="{$grabLink}"/>
@@ -205,15 +207,16 @@
 
             <!-- add Coupon -->
             <actionGroup ref="AdminAddToOrderCouponCodeActionGroup" stepKey="addCoupon">
-                <argument name="couponCode" value="$$createCouponForCartPriceRule.code$$"/>
+                <argument name="couponCode" value="$createCouponForCartPriceRule.code$"/>
             </actionGroup>
 
             <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillOrder">
-                <argument name="customer" value="$$createCustomer$$"/>
+                <argument name="customer" value="$createCustomer$"/>
                 <argument name="address" value="US_Address_TX"/>
             </actionGroup>
 
             <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRate"/>
+            <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectCheckMoneyPayment"/>
         </before>
         <after>
             <magentoCLI command="downloadable:domains:remove" arguments="example.com static.magento.com" stepKey="removeDownloadableDomain"/>
@@ -241,9 +244,11 @@
 
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
 
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
+        <comment userInput="BIC workaround" stepKey="getOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
         <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
-			<actualResult type="const">$getOrderId</actualResult>
+            <actualResult type="const">$orderNumber</actualResult>
         </assertNotEmpty>
 
         <!-- Find the Order on frontend > Navigate to: Orders and Returns -->
@@ -252,8 +257,8 @@
 
         <!-- Fill the form with correspondent Order data -->
         <actionGroup ref="StorefrontFillOrdersAndReturnsFormActionGroup" stepKey="fillOrder">
-            <argument name="orderNumber" value="{$getOrderId}"/>
-            <argument name="customer" value="$$createCustomer$$"/>
+            <argument name="orderNumber" value="{$orderNumber}"/>
+            <argument name="customer" value="$createCustomer$"/>
         </actionGroup>
 
         <!-- Click on the "Continue" button -->
@@ -262,14 +267,22 @@
 
         <!--  Click on the "Print Order" button -->
         <click selector="{{StorefrontGuestOrderViewSection.printOrder}}" stepKey="printOrder"/>
-        <switchToWindow stepKey="switchToWindow"/>
-        <switchToNextTab stepKey="switchToTab"/>
-        <seeInCurrentUrl url="sales/guest/print/order_id/" stepKey="seePrintPage"/>
+        <helper class="Magento\Sales\Test\Mftf\Helper\SalesHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
+            <argument name="expectedUrl">sales/guest/print/order_id/</argument>
+            <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
+        </helper>
+
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintWindowToOpen" />
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToWindow"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintTabToOpen"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToTab"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintPreviewToLoad"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="seePrintPage"/>
 
         <!-- AssertSalesPrintOrderProducts -->
-        <see userInput="$$createBundleProduct.name$$" selector="{{StorefrontOrderDetailsSection.productNameCell}}" stepKey="seeBundleProduct"/>
-        <see userInput="$$downloadableProduct.name$$" selector="{{StorefrontOrderDetailsSection.productNameCell}}" stepKey="seeDownloadableProduct"/>
-        <see userInput="$$createConfigProduct.name$$" selector="{{StorefrontOrderDetailsSection.productNameCell}}" stepKey="seeConfigurableProduct"/>
+        <see userInput="$createBundleProduct.name$" selector="{{StorefrontOrderDetailsSection.productNameCell}}" stepKey="seeBundleProduct"/>
+        <see userInput="$downloadableProduct.name$" selector="{{StorefrontOrderDetailsSection.productNameCell}}" stepKey="seeDownloadableProduct"/>
+        <see userInput="$createConfigProduct.name$" selector="{{StorefrontOrderDetailsSection.productNameCell}}" stepKey="seeConfigurableProduct"/>
 
         <!-- AssertSalesPrintOrderBillingAddress -->
         <scrollTo selector="{{StorefrontOrderDetailsSection.orderDetailsBlock}}" stepKey="scrollToFooter"/>

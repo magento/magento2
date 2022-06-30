@@ -81,17 +81,18 @@ class SaveBaseCategoryImageInformation
      *
      * @param ImageUploader $subject
      * @param string $imagePath
+     * @param string $initialImageName
      * @return string
      * @throws LocalizedException
      */
-    public function afterMoveFileFromTmp(ImageUploader $subject, string $imagePath): string
+    public function afterMoveFileFromTmp(ImageUploader $subject, string $imagePath, string $initialImageName): string
     {
         if (!$this->config->isEnabled()) {
             return $imagePath;
         }
 
         $absolutePath = $this->storage->getCmsWysiwygImages()->getStorageRoot() . $imagePath;
-        $tmpPath = $subject->getBaseTmpPath() . '/' . substr(strrchr($imagePath, '/'), 1);
+        $tmpPath = $subject->getBaseTmpPath() . '/' . $initialImageName;
         $tmpAssets = $this->getAssetsByPaths->execute([$tmpPath]);
 
         if (!empty($tmpAssets)) {

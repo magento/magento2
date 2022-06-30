@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Template\Html;
 
@@ -124,7 +125,8 @@ class Minifier implements MinifierInterface
 
                 return '__MINIFIED_HEREDOC__' .(count($heredocs) - 1);
             },
-            $content
+            // phpstan:ignore
+            ($content ?? '')
         );
         $content = preg_replace(
             '#(?<!]]>)\s+</#',
@@ -140,15 +142,15 @@ class Minifier implements MinifierInterface
                         . '(?:<(?>textarea|pre|script)\b|\z))#',
                         ' ',
                         preg_replace(
-                            '#(?<!:|\\\\|\'|")//(?!\s*\<\!\[)(?!\s*]]\>)[^\n\r]*#',
+                            '#(?<!:|\\\\|\'|"|/)//(?!/)(?!\s*\<\!\[)(?!\s*]]\>)[^\n\r]*#',
                             '',
                             preg_replace(
-                                '#(?<!:|\'|")//[^\n\r]*(\?\>)#',
+                                '#(?<!:|\'|")//[^\n\r<]*(\?\>)#',
                                 ' $1',
                                 preg_replace(
                                     '#(?<!:)//[^\n\r]*(\<\?php)[^\n\r]*(\s\?\>)[^\n\r]*#',
                                     '',
-                                    $content
+                                    ($content ?? '')
                                 )
                             )
                         )
@@ -163,13 +165,16 @@ class Minifier implements MinifierInterface
             function ($match) use ($heredocs) {
                 return $heredocs[(int)$match[1]];
             },
-            $content
+            ($content ?? '')
         );
 
         if (!$this->htmlDirectory->isExist()) {
             $this->htmlDirectory->create();
         }
-        $this->htmlDirectory->writeFile($this->getRelativeGeneratedPath($file), rtrim($content));
+        $this->htmlDirectory->writeFile(
+            $this->getRelativeGeneratedPath($file),
+            $content !== null ? rtrim($content) : ''
+        );
     }
 
     /**

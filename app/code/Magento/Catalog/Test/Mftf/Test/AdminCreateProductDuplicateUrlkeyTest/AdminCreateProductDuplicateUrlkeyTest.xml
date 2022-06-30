@@ -28,15 +28,28 @@
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
-        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
-        <fillField userInput="$$simpleProduct.name$$new" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
-        <fillField userInput="$$simpleProduct.sku$$new" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
-        <fillField userInput="$$simpleProduct.price$$" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
-        <fillField userInput="$$simpleProduct.quantity$$" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickAddProductDropdown"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddSimpleProduct">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductNameOnProductFormActionGroup" stepKey="fillName">
+            <argument name="productName" value="$$simpleProduct.name$$new"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductSkuOnProductFormActionGroup" stepKey="fillSKU">
+            <argument name="productSku" value="$$simpleProduct.sku$$new"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductPriceFieldAndPressEnterOnProductEditPageActionGroup" stepKey="fillPrice">
+            <argument name="price" value="$$simpleProduct.price$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillQuantity">
+            <argument name="productQty" value="$$simpleProduct.quantity$$"/>
+        </actionGroup>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
         <fillField userInput="$$simpleProduct.custom_attributes[url_key]$$" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
-        <see userInput="The value specified in the URL Key field would generate a URL that already exists" selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="assertErrorMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertErrorMessage">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="The value specified in the URL Key field would generate a URL that already exists"/>
+        </actionGroup>
     </test>
 </tests>

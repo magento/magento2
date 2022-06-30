@@ -7,6 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\MediaGalleryUiApi\Api\ConfigInterface" type="Magento\MediaGalleryUi\Model\Config"/>
+    <preference for="Magento\MediaGalleryUiApi\Api\Data\InsertImageDataInterface" type="\Magento\MediaGalleryUi\Model\InsertImageData"/>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
@@ -28,32 +29,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGalleryUi\Model\Directories\FolderTree">
-        <arguments>
-            <argument name="path" xsi:type="string">media</argument>
-        </arguments>
-    </type>
-    <type name="Magento\MediaGalleryUi\Model\AssetDetailsProvider\Type">
-        <arguments>
-            <argument name="types" xsi:type="array">
-                <item name="image" xsi:type="string">Image</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\MediaGallerySynchronizationApi\Model\ImportFilesComposite">
         <plugin name="createMediaGalleryThumbnails" type="Magento\MediaGalleryUi\Plugin\CreateThumbnails"/>
-    </type>
-    <type name="Magento\MediaGalleryUi\Model\AssetDetailsProviderPool">
-        <arguments>
-            <argument name="detailsProviders" xsi:type="array">
-                <item name="10" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\Type</item>
-                <item name="20" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\CreatedAt</item>
-                <item name="30" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\UpdatedAt</item>
-                <item name="40" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\Width</item>
-                <item name="50" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\Height</item>
-                <item name="60" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\Size</item>
-                <item name="70" xsi:type="object">Magento\MediaGalleryUi\Model\AssetDetailsProvider\UsedIn</item>
-            </argument>
-        </arguments>
     </type>
 </config>

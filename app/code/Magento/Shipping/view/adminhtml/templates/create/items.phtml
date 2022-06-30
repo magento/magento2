@@ -77,14 +77,14 @@
                            name="shipment[create_shipping_label]"
                            value="1"
                            type="checkbox"/>
+                    <label class="admin__field-label"
+                           for="create_shipping_label">
+                        <span><?= $block->escapeHtml(__('Create Shipping Label')) ?></span></label>
                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                         'onclick',
                         'toggleCreateLabelCheckbox();',
                         'input#create_shipping_label'
                     ) ?>
-                    <label class="admin__field-label"
-                           for="create_shipping_label">
-                        <span><?= $block->escapeHtml(__('Create Shipping Label')) ?></span></label>
                 </div>
             <?php endif ?>
 

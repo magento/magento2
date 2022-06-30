@@ -91,11 +91,11 @@ class LinksListTest extends TestCase
             ->method('getSelectionsCollection')
             ->with([$optionId], $this->productMock)
             ->willReturn([$this->selectionMock]);
-        $this->productMock->expects($this->exactly(2))->method('getPriceType')->willReturn('price_type');
+        $this->productMock->expects($this->once())->method('getPriceType')->willReturn('price_type');
         $this->selectionMock->expects($this->once())
             ->method('getSelectionPriceType')
             ->willReturn('selection_price_type');
-        $this->selectionMock->expects($this->once())->method('getSelectionPriceValue')->willReturn(12);
+        $this->selectionMock->expects($this->exactly(2))->method('getSelectionPriceValue')->willReturn(12);
         $this->selectionMock->expects($this->once())->method('getData')->willReturn(['some data']);
         $this->selectionMock->expects($this->once())->method('getSelectionId')->willReturn($selectionId);
         $this->selectionMock->expects($this->once())->method('getIsDefault')->willReturn(true);

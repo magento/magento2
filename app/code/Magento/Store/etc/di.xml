@@ -26,6 +26,11 @@
     <preference for="Magento\Framework\App\ScopeTreeProviderInterface" type="Magento\Store\Model\ScopeTreeProvider"/>
     <preference for="Magento\Framework\App\ScopeValidatorInterface" type="Magento\Store\Model\ScopeValidator"/>
     <preference for="Magento\Store\Model\StoreSwitcherInterface" type="Magento\Store\Model\StoreSwitcher" />
+    <preference for="Magento\Store\Model\StoreSwitcher\RedirectDataPreprocessorInterface" type="Magento\Store\Model\StoreSwitcher\RedirectDataPreprocessorComposite" />
+    <preference for="Magento\Store\Model\StoreSwitcher\RedirectDataPostprocessorInterface" type="Magento\Store\Model\StoreSwitcher\RedirectDataPostprocessorComposite" />
+    <preference for="Magento\Store\Model\StoreSwitcher\RedirectDataSerializerInterface" type="Magento\Store\Model\StoreSwitcher\RedirectDataCacheSerializer" />
+    <preference for="Magento\Store\Model\StoreSwitcher\ContextInterface" type="Magento\Store\Model\StoreSwitcher\Context" />
+    <preference for="Magento\Store\Model\StoreSwitcher\RedirectDataInterface" type="Magento\Store\Model\StoreSwitcher\RedirectData" />
     <type name="Magento\Framework\App\Http\Context">
         <arguments>
             <argument name="default" xsi:type="array">
@@ -65,8 +70,6 @@
     <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Store\Model\PathConfig" />
     <type name="Magento\Framework\App\ActionInterface">
         <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck"/>
-        <plugin name="eventDispatch"  type="Magento\Framework\App\Action\Plugin\EventDispatchPlugin"/>
-        <plugin name="actionFlagNoDispatch"  type="Magento\Framework\App\Action\Plugin\ActionFlagNoDispatchPlugin"/>
     </type>
     <type name="Magento\Framework\Url\SecurityInfo">
         <plugin name="storeUrlSecurityInfo" type="Magento\Store\Url\Plugin\SecurityInfo"/>
@@ -169,6 +172,11 @@
     <type name="Magento\Framework\Session\Config">
         <arguments>
         <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Session\SessionMaxSizeConfig">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Session\SidResolver">
@@ -438,6 +446,14 @@
                 <item name="manageStoreCookie" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManageStoreCookie</item>
                 <item name="managePrivateContent" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManagePrivateContent</item>
                 <item name="hashProcessor" xsi:type="object" sortOrder="1000">Magento\Store\Model\StoreSwitcher\HashProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Validation\StoreValidator">
+        <arguments>
+            <argument name="rules" xsi:type="array">
+                <item name="name" xsi:type="object">Magento\Store\Model\Validation\StoreNameValidator</item>
+                <item name="code" xsi:type="object">Magento\Store\Model\Validation\StoreCodeValidator</item>
             </argument>
         </arguments>
     </type>

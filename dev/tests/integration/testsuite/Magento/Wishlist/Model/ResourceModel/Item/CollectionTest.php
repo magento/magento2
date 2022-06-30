@@ -63,6 +63,23 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests collection load.
+     * Tests collection load method when product salable filter flag is setted to true
+     * and few products are present.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
+     * @magentoDbIsolation disabled
+     */
+    public function testLoadWhenFewProductsPresent()
+    {
+        $this->itemCollection->setSalableFilter(true);
+        $this->itemCollection->addCustomerIdFilter(1);
+        $this->itemCollection->load();
+        $this->assertCount(1, $this->itemCollection->getItems());
+    }
+
+    /**
      * @param array $attributes
      */
     private function addAttributesToWishlistConfig($attributes)

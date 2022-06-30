@@ -60,8 +60,6 @@ class ConsumersRunner
     private $logger;
 
     /**
-     * Lock Manager
-     *
      * @var LockManagerInterface
      */
     private $lockManager;
@@ -107,10 +105,13 @@ class ConsumersRunner
 
     /**
      * Runs consumers processes
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function run()
+    public function run(): void
     {
         $runByCron = $this->deploymentConfig->get('cron_consumers_runner/cron_run', true);
+        $multipleProcesses = $this->deploymentConfig->get('cron_consumers_runner/multiple_processes', []);
 
         if (!$runByCron) {
             return;
@@ -125,19 +126,43 @@ class ConsumersRunner
                 continue;
             }
 
-            $arguments = [
-                $consumer->getName(),
-                '--single-thread'
-            ];
+            if (array_key_exists($consumer->getName(), $multipleProcesses)) {
+                $numberOfProcesses = $multipleProcesses[$consumer->getName()];
 
-            if ($maxMessages) {
-                $arguments[] = '--max-messages=' . $maxMessages;
+                for ($i = 1; $i <= $numberOfProcesses; $i++) {
+                    if ($this->lockManager->isLocked(md5($consumer->getName() . '-' . $i))) { //phpcs:ignore
+                        continue;
+                    }
+                    $arguments = [
+                        $consumer->getName(),
+                        '--multi-process=' . $i
+                    ];
+
+                    if ($maxMessages) {
+                        $arguments[] =
+                            '--max-messages=' . min($consumer->getMaxMessages() ?? $maxMessages, $maxMessages);
+                    }
+
+                    $command = $php . ' ' . BP . '/bin/magento queue:consumers:start %s %s'
+                        . ($maxMessages ? ' %s' : '');
+
+                    $this->shellBackground->execute($command, $arguments);
+                }
+            } else if (!$this->lockManager->isLocked(md5($consumer->getName()))) { //phpcs:ignore
+                $arguments = [
+                    $consumer->getName(),
+                    '--single-thread'
+                ];
+
+                if ($maxMessages) {
+                    $arguments[] = '--max-messages=' . min($consumer->getMaxMessages() ?? $maxMessages, $maxMessages);
+                }
+
+                $command = $php . ' ' . BP . '/bin/magento queue:consumers:start %s %s'
+                    . ($maxMessages ? ' %s' : '');
+
+                $this->shellBackground->execute($command, $arguments);
             }
-
-            $command = $php . ' ' . BP . '/bin/magento queue:consumers:start %s %s'
-                . ($maxMessages ? ' %s' : '');
-
-            $this->shellBackground->execute($command, $arguments);
         }
     }
 
@@ -154,10 +179,6 @@ class ConsumersRunner
     {
         $consumerName = $consumerConfig->getName();
         if (!empty($allowedConsumers) && !in_array($consumerName, $allowedConsumers)) {
-            return false;
-        }
-
-        if ($this->lockManager->isLocked(md5($consumerName))) { //phpcs:ignore
             return false;
         }
 

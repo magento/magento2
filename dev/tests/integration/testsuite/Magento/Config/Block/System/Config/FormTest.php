@@ -585,6 +585,13 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown(): void
     {
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setAccessible(true);
+                $property->setValue($this, null);
+            }
+        }
         $this->setEncryptedValue('{ENCRYPTED_VALUE}');
 
         $configResourceModel = Bootstrap::getObjectManager()->get(\Magento\Config\Model\ResourceModel\Config::class);

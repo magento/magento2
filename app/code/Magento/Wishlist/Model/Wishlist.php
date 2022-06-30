@@ -12,9 +12,9 @@ use InvalidArgumentException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\CatalogInventory\Model\Configuration;
+use Magento\CatalogInventory\Model\StockStateException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
@@ -27,7 +27,6 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Wishlist\Helper\Data;
@@ -55,7 +54,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
     /**
      * Wishlist cache tag name
      */
-    const CACHE_TAG = 'wishlist';
+    public const CACHE_TAG = 'wishlist';
 
     /**
      * Prefix of model events names
@@ -86,15 +85,11 @@ class Wishlist extends AbstractModel implements IdentityInterface
     protected $_storeIds;
 
     /**
-     * Wishlist data
-     *
      * @var Data
      */
     protected $_wishlistData;
 
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $_catalogProduct;
@@ -150,14 +145,9 @@ class Wishlist extends AbstractModel implements IdentityInterface
     private $serializer;
 
     /**
-     * @var ScopeConfigInterface
+     * @var StockConfigurationInterface
      */
-    private $scopeConfig;
-
-    /**
-     * @var StockRegistryInterface|null
-     */
-    private $stockRegistry;
+    private $stockConfiguration;
 
     /**
      * Constructor
@@ -181,8 +171,9 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * @param Json|null $serializer
      * @param StockRegistryInterface|null $stockRegistry
      * @param ScopeConfigInterface|null $scopeConfig
-     *
+     * @param StockConfigurationInterface|null $stockConfiguration
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
@@ -203,7 +194,8 @@ class Wishlist extends AbstractModel implements IdentityInterface
         array $data = [],
         Json $serializer = null,
         StockRegistryInterface $stockRegistry = null,
-        ScopeConfigInterface $scopeConfig = null
+        ScopeConfigInterface $scopeConfig = null,
+        ?StockConfigurationInterface $stockConfiguration = null
     ) {
         $this->_useCurrentWebsite = $useCurrentWebsite;
         $this->_catalogProduct = $catalogProduct;
@@ -218,8 +210,8 @@ class Wishlist extends AbstractModel implements IdentityInterface
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->productRepository = $productRepository;
-        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
-        $this->stockRegistry = $stockRegistry ?: ObjectManager::getInstance()->get(StockRegistryInterface::class);
+        $this->stockConfiguration = $stockConfiguration
+            ?: ObjectManager::getInstance()->get(StockConfigurationInterface::class);
     }
 
     /**
@@ -383,7 +375,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
                 $this
             )->addStoreFilter(
                 $this->getSharedStoreIds()
-            )->setVisibilityFilter();
+            )->setVisibilityFilter($this->_useCurrentWebsite);
         }
 
         return $this->_itemCollection;
@@ -437,6 +429,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      *
+     * @throws StockStateException
      * @throws LocalizedException
      * @throws InvalidArgumentException
      */
@@ -467,14 +460,15 @@ class Wishlist extends AbstractModel implements IdentityInterface
             throw new LocalizedException(__('Cannot specify product.'));
         }
 
-        if ($this->isInStock($productId)) {
-            throw new LocalizedException(__('Cannot add product without stock to wishlist.'));
+        if (!$this->stockConfiguration->isShowOutOfStock($storeId) && !$product->getIsSalable()) {
+            throw new StockStateException(__('Cannot add product without stock to wishlist.'));
         }
 
         if ($buyRequest instanceof DataObject) {
             $_buyRequest = $buyRequest;
         } elseif (is_string($buyRequest)) {
             $isInvalidItemConfiguration = false;
+            $buyRequestData = [];
             try {
                 $buyRequestData = $this->serializer->unserialize($buyRequest);
                 if (!is_array($buyRequestData)) {
@@ -515,6 +509,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
 
         $errors = [];
         $items = [];
+        $item = null;
 
         foreach ($cartCandidates as $candidate) {
             if ($candidate->getParentProductId()) {
@@ -668,25 +663,6 @@ class Wishlist extends AbstractModel implements IdentityInterface
             }
         }
         return false;
-    }
-
-    /**
-     * Retrieve if product has stock or config is set for showing out of stock products
-     *
-     * @param int $productId
-     *
-     * @return bool
-     */
-    private function isInStock($productId)
-    {
-        /** @var StockItemInterface $stockItem */
-        $stockItem = $this->stockRegistry->getStockItem($productId);
-        $showOutOfStock = $this->scopeConfig->isSetFlag(
-            Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
-            ScopeInterface::SCOPE_STORE
-        );
-        $isInStock = $stockItem ? $stockItem->getIsInStock() : false;
-        return !$isInStock && !$showOutOfStock;
     }
 
     /**

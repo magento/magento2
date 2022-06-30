@@ -24,6 +24,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         </after>
 
         <!-- Create product -->
@@ -37,6 +38,6 @@
         <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
         <!--See related product in storefront-->
-        <amOnPage url="{{DownloadableProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{DownloadableProduct.urlKey}}.html" stepKey="goToStorefront"/>
     </test>
 </tests>

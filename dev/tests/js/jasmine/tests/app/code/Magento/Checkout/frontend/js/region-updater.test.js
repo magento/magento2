@@ -51,7 +51,8 @@ define([
             '': '',
             'US': 'United States',
             'GB': 'United Kingdom',
-            'DE': 'Germany'
+            'DE': 'Germany',
+            'IT': 'Italy'
         },
         regions = {
             '': 'Please select a region, state or province.'
@@ -158,7 +159,7 @@ define([
         });
         it('Check that region list is not displayed when selected country has no predefined regions', function () {
             init();
-            $(countryEl).val('GB').change();
+            $(countryEl).val('GB').trigger('change');
             expect($(regionInputEl).is(':visible')).toBe(true);
             expect($(regionInputEl).is(':disabled')).toBe(false);
             expect($(regionSelectEl).is(':visible')).toBe(false);
@@ -166,7 +167,7 @@ define([
         });
         it('Check country that has predefined and optional regions', function () {
             init();
-            $(countryEl).val('DE').change();
+            $(countryEl).val('DE').trigger('change');
             expect($(regionSelectEl).is(':visible')).toBe(true);
             expect($(regionSelectEl).is(':disabled')).toBe(false);
             expect($(regionSelectEl).hasClass('required-entry')).toBe(false);
@@ -181,7 +182,7 @@ define([
         });
         it('Check country that has predefined and required regions', function () {
             init();
-            $(countryEl).val('US').change();
+            $(countryEl).val('US').trigger('change');
             expect($(regionSelectEl).is(':visible')).toBe(true);
             expect($(regionSelectEl).is(':disabled')).toBe(false);
             expect($(regionSelectEl).hasClass('required-entry')).toBe(true);
@@ -198,9 +199,45 @@ define([
             init({
                 optionalRegionAllowed: false
             });
-            $(countryEl).val('DE').change();
+            $(countryEl).val('DE').trigger('change');
             expect($(regionSelectEl).is(':visible')).toBe(false);
             expect($(regionInputEl).is(':visible')).toBe(false);
+        });
+        it('Check that initial values are not overwritten - region input', function () {
+            $(countryEl).val('GB');
+            $(regionInputEl).val('Liverpool');
+            $(postalCodeEl).val('L13 0AL');
+            init();
+            expect($(countryEl).val()).toBe('GB');
+            expect($(regionInputEl).val()).toBe('Liverpool');
+            expect($(postalCodeEl).val()).toBe('L13 0AL');
+        });
+        it('Check that initial values are not overwritten - region select', function () {
+            $(countryEl).val('US');
+            $(postalCodeEl).val('99501');
+            init({
+                defaultRegion: '2'
+            });
+            expect($(countryEl).val()).toBe('US');
+            expect($(regionSelectEl).find('option:selected').text()).toBe('Alaska');
+            expect($(postalCodeEl).val()).toBe('99501');
+        });
+        it('Check that region values are cleared out on country change - region input', function () {
+            $(countryEl).val('GB');
+            $(regionInputEl).val('Liverpool');
+            init();
+            $(countryEl).val('IT').trigger('change');
+            expect($(countryEl).val()).toBe('IT');
+            expect($(regionInputEl).val()).toBe('');
+        });
+        it('Check that region values are cleared out on country change - region select', function () {
+            $(countryEl).val('US');
+            init({
+                defaultRegion: '2'
+            });
+            $(countryEl).val('DE').trigger('change');
+            expect($(countryEl).val()).toBe('DE');
+            expect($(regionSelectEl).val()).toBe('');
         });
     });
 });

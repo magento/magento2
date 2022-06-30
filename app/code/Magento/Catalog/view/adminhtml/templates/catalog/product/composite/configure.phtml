@@ -5,14 +5,11 @@
  */
 
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+$blockId = $block->getId();
 ?>
-<div id="product_composite_configure" class="product-configure-popup">
+<div id="product_composite_configure"
+     class="product-configure-popup product-configure-popup-<?= $block->escapeHtmlAttr($blockId) ?>">
     <iframe name="product_composite_configure_iframe" id="product_composite_configure_iframe"></iframe>
-    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-        'onload',
-        "window.productConfigure && productConfigure.onLoadIFrame()",
-        'iframe[name=\'product_composite_configure_iframe\']:last-of-type'
-    ) ?>
 
     <form action="" method="post" id="product_composite_configure_form" enctype="multipart/form-data"
           target="product_composite_configure_iframe" class="product_composite_configure_form">
@@ -31,40 +28,45 @@
     </form>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onsubmit',
-        "productConfigure.onConfirmBtn();event.preventDefault()",
+        'productConfigure.onConfirmBtn();event.preventDefault()',
         '.product_composite_configure_form:last-of-type'
     ) ?>
 
     <div id="product_composite_configure_confirmed" class="product_composite_configure_confirmed"></div>
 
     <?php $scriptString = <<<script
-        prodCompConfIframe = document.querySelector("iframe[name='product_composite_configure_iframe']:last-of-type");
+        prodCompConfIframe = document.querySelector(
+            ".product-configure-popup-$blockId iframe[name='product_composite_configure_iframe']"
+        );
         prodCompConfIframe.style.width = 0;
         prodCompConfIframe.style.height = 0;
         prodCompConfIframe.style.border = "0px solid #fff";
         prodCompConfIframe.style.position = "absolute";
         prodCompConfIframe.style.top = "-1000px";
         prodCompConfIframe.style.left = "-1000px";
-        prodCompConfMessages = document.querySelectorAll(".product_composite_configure_messages");
-        for (var i = 0; i < prodCompConfMessages.length; i++) {
-            prodCompConfMessages[i].style.display = "none";
-        }
-        prodCompConfFormAdd = document.querySelectorAll(".product_composite_configure_form_additional");
-        for (var i = 0; i < prodCompConfFormAdd.length; i++) {
-            prodCompConfFormAdd[i].style.display = "none";
-        }
-        prodCompConfFormConf = document.querySelectorAll(".product_composite_configure_form_confirmed");
-        for (var i = 0; i < prodCompConfFormConf.length; i++) {
-            prodCompConfFormConf[i].style.display = "none";
-        }
-        prodCompConfConf = document.querySelectorAll(".product_composite_configure_confirmed");
-        for (var i = 0; i < prodCompConfConf.length; i++) {
-            prodCompConfConf[i].style.display = "none";
-        }
-        prodConfPopup = document.querySelectorAll(".product-configure-popup");
-        for (var i = 0; i < prodConfPopup.length; i++) {
-            prodConfPopup[i].style.display = "none";
-        }
+
+        prodCompConfMessages = document.querySelector(
+            ".product-configure-popup-$blockId .product_composite_configure_messages"
+        );
+        prodCompConfMessages.style.display = "none";
+
+        prodCompConfFormAdd = document.querySelector(
+            ".product-configure-popup-$blockId .product_composite_configure_form_additional"
+        );
+        prodCompConfFormAdd.style.display = "none";
+
+        prodCompConfFormConf = document.querySelector(
+            ".product-configure-popup-$blockId .product_composite_configure_form_confirmed"
+        );
+        prodCompConfFormConf.style.display = "none";
+
+        prodCompConfConf = document.querySelector(
+            ".product-configure-popup-$blockId .product_composite_configure_confirmed"
+        );
+        prodCompConfConf.style.display = "none";
+
+        prodConfPopup = document.querySelector(".product-configure-popup-$blockId");
+        prodConfPopup.style.display = "none";
 
         require([
             "jquery",
@@ -78,3 +80,8 @@ script;
     ?>
     <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
 </div>
+<?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+    'onload',
+    "window.productConfigure && productConfigure.onLoadIFrame()",
+    'iframe[name=\'product_composite_configure_iframe\']:last-of-type'
+) ?>

@@ -25,6 +25,7 @@
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -56,8 +57,7 @@
         <see userInput="Male" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertGender"/>
 
         <!--Assert Customer Form -->
-        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickOnEditButton1"/>
-        <waitForPageLoad stepKey="waitForCustomerEditPageToLoad1"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickOnEditButton1"/>
         <click selector="{{AdminCustomerAccountInformationSection.accountInformationButton}}" stepKey="clickOnAccountInformation"/>
         <waitForPageLoad stepKey="waitForCustomerInformationPageToLoad"/>
         <seeInField selector="{{AdminCustomerAccountInformationSection.namePrefix}}" userInput="{{CustomerEntityOne.prefix}}" stepKey="seeCustomerNamePrefix"/>
