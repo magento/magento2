@@ -242,7 +242,8 @@ class AddTest extends AbstractController
         $this->customerRepository->save($customer);
         $this->assertEquals(null, $customer->getConfirmation());
         $this->customerSession->setCustomerId((int)$customer->getId());
-        $this->performAddToWishListRequest(['token' => $token]);
+        $this->getRequest()->setParams(['token' => $token])->setMethod(HttpRequest::METHOD_GET);
+        $this->dispatch('wishlist/index/add');
         $this->assertSuccess((int)$customer->getId(), 1, $product->getName());
     }
 
