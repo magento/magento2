@@ -390,9 +390,9 @@ class ProductUrlKeyTest extends ProductTestBase
     }
 
     /**
-     * Validate import file when we have an existing product with UrlKey that consists of an alpha characters and
-     * a number at the end against the same imported UrlKey but without the number at the end,
-     * when Product URL Suffix is set to none in the admin.
+     * Validate import file when we have an existing product with UrlKey that consists of numbers with an alphabetical
+     * characters in the end against the same imported UrlKey but without the character at the end,
+     * when Product URL Suffix is set to be empty in the admin.
      *
      * @throws LocalizedException
      */
