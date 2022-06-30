@@ -85,6 +85,7 @@ class ProductDataMapperTest extends TestCase
                 'store_id' => $defaultStore->getId(),
                 'select_attribute' => (int)$attributeValue,
                 'select_attribute_value' => 'Table_default',
+                'is_out_of_stock' => 1
             ],
         ];
         $secondStoreMap = [
@@ -92,6 +93,7 @@ class ProductDataMapperTest extends TestCase
                 'store_id' => $secondStore->getId(),
                 'select_attribute' => (int)$attributeValue,
                 'select_attribute_value' => 'Table_fixture_second_store',
+                'is_out_of_stock' => 1
             ],
         ];
         $data = [
