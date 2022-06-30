@@ -8,12 +8,16 @@ declare(strict_types=1);
 namespace Magento\CatalogImportExport\Model\Import\ProductTest;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\ProductTestBase;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
@@ -67,7 +71,7 @@ class ProductUrlKeyTest extends ProductTestBase
      * @dataProvider validateUrlKeysDataProvider
      * @param $importFile string
      * @param $expectedErrors array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function testValidateUrlKeys($importFile, $expectedErrors)
     {
@@ -306,7 +310,7 @@ class ProductUrlKeyTest extends ProductTestBase
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_non_latin_url_key.php
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function testImportWithNonLatinUrlKeys()
     {
@@ -352,7 +356,7 @@ class ProductUrlKeyTest extends ProductTestBase
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function testImportWithSpacesInUrlKeys()
     {
@@ -383,5 +387,46 @@ class ProductUrlKeyTest extends ProductTestBase
         foreach ($products as $productSku => $productUrlKey) {
             $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
         }
+    }
+
+    /**
+     * Validate import file when we have an existing product with UrlKey that consists of an alpha characters and
+     * a number at the end against the same imported UrlKey but without the number at the end,
+     * when Product URL Suffix is set to none in the admin.
+     *
+     * @throws LocalizedException
+     */
+    #[
+        Config('catalog/seo/product_url_suffix', null, 'store', 'default'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'url_key' => '1234t',
+                'url_path' => '1234t'
+            ],
+        ),
+    ]
+    public function testValidateMixedCharNumUrlKeysWithNullUrlSuffix()
+    {
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Framework\Filesystem::class
+        );
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/../_files/products_to_check_valid_url_keys_mixed_chars_nums.csv',
+                'directory' => $directory
+            ]
+        );
+
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertEmpty($errors->getAllErrors(), 'Assert that import validation returns no errors');
     }
 }
