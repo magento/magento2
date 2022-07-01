@@ -156,7 +156,6 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
         $element = $this->getElement();
         if ($element->getValue() && is_array($element->getValue())) {
             foreach ($element->getValue() as $rowId => $row) {
-                $row = $this->validateRow($row);
                 $rowColumnValues = [];
                 foreach ($row as $key => $value) {
                     $row[$key] = $value;
@@ -306,24 +305,5 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
     public function getIncrementId()
     {
         return $this->_incrementId;
-    }
-
-    /**
-     * Make sure that the row has the required row data available for rendering.
-     *
-     * @param array<string,string> $row
-     *
-     * @return array<string,string>
-     */
-    private function validateRow(array $row): array
-    {
-        foreach ($this->_columns as $columnId => $column) {
-            // Dropdowns will have a renderer which handles the rendering correctly for any missing column.
-            if (!isset($row[$columnId]) && !$column['renderer']) {
-                $row[$columnId] = '';
-            }
-        }
-
-        return $row;
     }
 }
