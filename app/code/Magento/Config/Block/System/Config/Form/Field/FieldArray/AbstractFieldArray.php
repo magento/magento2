@@ -56,6 +56,13 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
     protected $_template = 'Magento_Config::system/config/form/field/array.phtml';
 
     /**
+     * Increment id for each row of a table
+     *
+     * @var int
+     */
+    protected $_incrementId = 1;
+
+    /**
      * Check if columns are defined, set template
      *
      * @return void
@@ -115,6 +122,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
         $this->setElement($element);
         $html = $this->_toHtml();
         $this->_arrayRowsCache = null;
+        $this->_incrementId = ++$this->_incrementId;
         // doh, the object is used as singleton!
         return $html;
     }
@@ -148,6 +156,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
         $element = $this->getElement();
         if ($element->getValue() && is_array($element->getValue())) {
             foreach ($element->getValue() as $rowId => $row) {
+                $row = $this->validateRow($row);
                 $rowColumnValues = [];
                 foreach ($row as $key => $value) {
                     $row[$key] = $value;
@@ -287,5 +296,34 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
     public function getAddButtonLabel()
     {
         return $this->_addButtonLabel;
+    }
+
+    /**
+     * Return row increment id
+     *
+     * @return int
+     */
+    public function getIncrementId()
+    {
+        return $this->_incrementId;
+    }
+
+    /**
+     * Make sure that the row has the required row data available for rendering.
+     *
+     * @param array<string,string> $row
+     *
+     * @return array<string,string>
+     */
+    private function validateRow(array $row): array
+    {
+        foreach ($this->_columns as $columnId => $column) {
+            // Dropdowns will have a renderer which handles the rendering correctly for any missing column.
+            if (!isset($row[$columnId]) && !$column['renderer']) {
+                $row[$columnId] = '';
+            }
+        }
+
+        return $row;
     }
 }
