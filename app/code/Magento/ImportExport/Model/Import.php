@@ -18,6 +18,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Math\Random;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\ImportExport\Helper\Data as DataHelper;
 use Magento\ImportExport\Model\Export\Adapter\CsvFactory;
@@ -29,7 +30,6 @@ use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\Entity\Factory;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Framework\Message\ManagerInterface;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Magento\ImportExport\Model\Source\Import\AbstractBehavior;
 use Magento\ImportExport\Model\Source\Import\Behavior\Factory as BehaviorFactory;
@@ -619,11 +619,11 @@ class Import extends AbstractModel
      * Before validate data the method requires to initialize error aggregator (ProcessingErrorAggregatorInterface)
      * with 'validation strategy' and 'allowed error count' values to allow using this parameters in validation process.
      *
-     * @param AbstractSource $source
+     * @param AbstractSource|null $source
      * @return bool
      * @throws LocalizedException
      */
-    public function validateSource(AbstractSource $source)
+    public function validateSource(AbstractSource $source = null)
     {
         $this->addLogComment(__('Begin data validation'));
 
@@ -634,8 +634,8 @@ class Import extends AbstractModel
         );
 
         try {
-            $adapter = $this->_getEntityAdapter()->setSource($source);
-            $adapter->validateData();
+            $adapter = $source ? $this->_getEntityAdapter()->setSource($source) : $this->_getEntityAdapter();
+            $adapter->validateData($this);
         } catch (\Exception $e) {
             $errorAggregator->addError(
                 AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,

@@ -96,4 +96,21 @@ class SourceData extends AbstractSimpleObject implements SourceDataInterface
     {
         return $this->setData(self::ALLOWED_ERROR_COUNT, $allowedErrorCount);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function setCsvData($csvData)
+    {
+        return $this->setData(self::PAYLOAD, $csvData);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCsvData()
+    {
+        return $this->csvData;
+    }
+
 }

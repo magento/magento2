@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\ImportExport\Model\Source;
 
 use Magento\Framework\App\ObjectManager;
@@ -51,7 +50,6 @@ class Upload
         FileTransferFactory $httpFactory,
         DataHelper $importExportData,
         UploaderFactory $uploaderFactory,
-        File $filesystemIo,
         Random $random
     ) {
         $this->_httpFactory = $httpFactory;
@@ -154,7 +152,7 @@ class Upload
 
         $sourceFile .= '.' . $extension;
         $sourceFileRelative = $import->getVarDirectory()->getRelativePath($sourceFile);
-        $import->getVarDirectory()->copyFile($sourceFile, $uploadedFile);
+        $import->getVarDirectory()->writeFile($uploadedFile, base64_decode($import->getData('csvData')));
 
         if (strtolower($uploadedFile) != strtolower($sourceFile)) {
             if ($import->getVarDirectory()->isExist($sourceFileRelative)) {

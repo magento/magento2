@@ -23,7 +23,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
@@ -2925,6 +2924,25 @@ class Product extends AbstractEntity
         $this->checkUrlKeyDuplicates();
         $this->getOptionEntity()->validateAmbiguousData();
         return parent::_saveValidatedBunches();
+    }
+
+    /**
+     * @param Import $import
+     * @return void
+     */
+    protected function _saveValidatedBunchesWithoutSource(Import $import)
+    {
+        $rowsData = preg_split("/\r\n|\n|\r/", base64_decode($import->getData('csvData')));
+        $colNames = explode(',', $rowsData[0]);
+        $rowsData = array_splice($rowsData, 1);
+        foreach (array_values($rowsData) as $key => $rowData) {
+            $rowData = array_combine($colNames, str_getcsv($rowData, ',', '"'));
+            $rowData = $this->_customFieldsMapping($rowData);
+            $this->validateRow($rowData, $key);
+        }
+        $this->checkUrlKeyDuplicates();
+        $this->getOptionEntity()->validateAmbiguousData();
+        return parent::_saveValidatedBunchesWithoutSource($import);
     }
 
     /**

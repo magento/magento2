@@ -19,6 +19,7 @@ interface SourceDataInterface
     public const BEHAVIOR = 'behavior';
     public const VALIDATION_STRATEGY = 'validation_strategy';
     public const ALLOWED_ERROR_COUNT = 'allowed_error_count';
+    public const PAYLOAD = 'csvData';
 
     /**
      * Get Entity
@@ -79,4 +80,19 @@ interface SourceDataInterface
      * @return $this
      */
     public function setAllowedErrorCount($allowedErrorCount);
+
+    /**
+     *  Set Allowed Error Count
+     *
+     * @param string $csvData
+     * @return $this
+     */
+    public function setCsvData($csvData);
+
+    /**
+     *  Set Allowed Error Count
+     *
+     * @return string
+     */
+    public function getCsvData();
 }
