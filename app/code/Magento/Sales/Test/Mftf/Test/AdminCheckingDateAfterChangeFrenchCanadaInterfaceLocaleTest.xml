@@ -83,7 +83,7 @@
         <!--Get month name in French-->
        <executeJS function="
        var moment = require('moment');
-       moment.locale('fe-Ca');
+       moment.locale('fr-Ca');
        return (moment('{$grabPurchaseDateInDefaultLocale}').locale('fr-Ca').format('MMM'))" stepKey="getMonthNameInFrench"/>
 
         <!--Checking Date after changing "Interface Locale"-->
