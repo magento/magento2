@@ -22,7 +22,7 @@
         </annotations>
         <before>
             <!--Deploy static content with French(Canada) locale-->
-            <magentoCLI command="setup:static-content:deploy fr_CA" stepKey="deployStaticContentWithFrenchLocale"/>
+           <!-- <magentoCLI command="setup:static-content:deploy fr_CA" stepKey="deployStaticContentWithFrenchLocale"/>-->
             <!--Create entities-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -81,7 +81,10 @@
         <grabTextFrom selector="{{AdminOrdersGridSection.gridCell('1','Purchase Date')}}" stepKey="grabPurchaseDateInFrenchLocale"/>
 
         <!--Get month name in French-->
-       <executeJS function="return (moment('{$grabPurchaseDateInDefaultLocale}').locale('fr-ca').format('MMM'))" stepKey="getMonthNameInFrench"/>
+       <executeJS function="
+       var moment = require('moment');
+       moment.locale('fe-Ca');
+       return (moment('{$grabPurchaseDateInDefaultLocale}').locale('fr-Ca').format('MMM'))" stepKey="getMonthNameInFrench"/>
 
         <!--Checking Date after changing "Interface Locale"-->
         <assertStringContainsString stepKey="checkingDateAfterChangeInterfaceLocale">
