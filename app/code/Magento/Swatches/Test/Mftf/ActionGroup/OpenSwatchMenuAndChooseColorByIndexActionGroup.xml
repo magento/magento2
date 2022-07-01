@@ -18,6 +18,6 @@
 
         <!-- I had to use executeJS to perform the click to get around the use of CSS ::before and ::after -->
         <executeJS function="jQuery('#swatch-visual-options-panel > table > tbody > tr:nth-child({{index}}) > td.swatches-visual-col.col-default input').click()" stepKey="clickSwatch"/>
-        <click selector="{{AdminManageSwatchSection.nthChooseColor(index)}}" stepKey="clickChooseColor2"/>
+        <click selector="{{AdminManageSwatchSection.nthChooseColor(index)}}" stepKey="clickChooseColor"/>
     </actionGroup>
 </actionGroups>

@@ -22,7 +22,7 @@
             <!-- Create category -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <!-- Login as Admin -->
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete configurable product and all child products -->
@@ -132,8 +132,6 @@
         <actionGroup ref="StorefrontUpdateCartItemEditParametersProductActionGroup" stepKey="updateCartItem">
             <argument name="rowNumber" value="1"/>
         </actionGroup>
-
-        <wait time="60" stepKey="waitForDocumentPageLoad"/>
 
         <waitForElementVisible selector="{{StorefrontProductInfoMainSection.selectedSwatchValue('Blue')}}" time="30" stepKey="waitForElementSwatchColorVisible"/>
 
