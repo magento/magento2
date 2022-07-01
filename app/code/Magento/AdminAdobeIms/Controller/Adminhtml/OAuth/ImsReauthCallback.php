@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Controller\Adminhtml\OAuth;
@@ -12,14 +11,15 @@ use Exception;
 use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
 use Magento\AdminAdobeIms\Service\AdminReauthProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdminAdobeIms\Service\ImsOrganizationService;
+use Magento\AdobeImsApi\Api\GetOrganizationsInterface;
+use Magento\AdobeImsApi\Api\GetProfileInterface;
 use Magento\Backend\App\Action\Context;
-use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\Backend\Controller\Adminhtml\Auth;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\AdobeImsApi\Api\GetTokenInterface;
 use Magento\Framework\Exception\AuthenticationException;
 
 class ImsReauthCallback extends Auth implements HttpGetActionInterface
@@ -38,19 +38,14 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
     private const RESPONSE_ERROR_CODE = 'error';
 
     /**
-     * @var ImsConnection
-     */
-    private ImsConnection $adminImsConnection;
-
-    /**
      * @var ImsConfig
      */
     private ImsConfig $adminImsConfig;
 
     /**
-     * @var ImsOrganizationService
+     * @var GetOrganizationsInterface
      */
-    private ImsOrganizationService $adminOrganizationService;
+    private GetOrganizationsInterface $getOrganizations;
 
     /**
      * @var AdminReauthProcessService
@@ -63,27 +58,40 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
     private AdminAdobeImsLogger $logger;
 
     /**
+     * @var GetTokenInterface
+     */
+    private GetTokenInterface $token;
+
+    /**
+     * @var GetProfileInterface
+     */
+    private GetProfileInterface $profile;
+
+    /**
      * @param Context $context
-     * @param ImsConnection $adminImsConnection
+     * @param GetProfileInterface $profile
      * @param ImsConfig $adminImsConfig
-     * @param ImsOrganizationService $adminOrganizationService
+     * @param GetOrganizationsInterface $getOrganizations
      * @param AdminReauthProcessService $adminReauthProcessService
      * @param AdminAdobeImsLogger $logger
+     * @param GetTokenInterface $token
      */
     public function __construct(
         Context $context,
-        ImsConnection $adminImsConnection,
+        GetProfileInterface $profile,
         ImsConfig $adminImsConfig,
-        ImsOrganizationService $adminOrganizationService,
+        GetOrganizationsInterface $getOrganizations,
         AdminReauthProcessService $adminReauthProcessService,
-        AdminAdobeImsLogger $logger
+        AdminAdobeImsLogger $logger,
+        GetTokenInterface $token
     ) {
         parent::__construct($context);
-        $this->adminImsConnection = $adminImsConnection;
+        $this->profile = $profile;
         $this->adminImsConfig = $adminImsConfig;
-        $this->adminOrganizationService = $adminOrganizationService;
+        $this->getOrganizations = $getOrganizations;
         $this->adminReauthProcessService = $adminReauthProcessService;
         $this->logger = $logger;
+        $this->token = $token;
     }
 
     /**
@@ -117,16 +125,16 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
                 throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
             }
 
-            $tokenResponse = $this->adminImsConnection->getTokenResponse($code);
+            $tokenResponse = $this->token->getTokenResponse($code);
             $accessToken = $tokenResponse->getAccessToken();
 
-            $profile = $this->adminImsConnection->getProfile($accessToken);
+            $profile = $this->profile->getProfile($accessToken);
             if (empty($profile['email'])) {
                 throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
             }
 
             //check membership in organization
-            $this->adminOrganizationService->checkOrganizationMembership($accessToken);
+            $this->getOrganizations->checkOrganizationMembership($accessToken);
 
             $this->adminReauthProcessService->execute($tokenResponse);
 

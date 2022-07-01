@@ -3,13 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Console\Command;
 
-use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdobeImsApi\Api\GetAuthorizationUrlInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -41,21 +40,21 @@ class AdminAdobeImsInfoCommand extends Command
     private ImsConfig $adminImsConfig;
 
     /**
-     * @var ImsConnection
+     * @var GetAuthorizationUrlInterface
      */
-    private ImsConnection $adminImsConnection;
+    private GetAuthorizationUrlInterface $authorizationUrl;
 
     /**
      * @param ImsConfig $adminImsConfig
-     * @param ImsConnection $adminImsConnection
+     * @param GetAuthorizationUrlInterface $authorizationUrl
      */
     public function __construct(
         ImsConfig $adminImsConfig,
-        ImsConnection $adminImsConnection
+        GetAuthorizationUrlInterface $authorizationUrl
     ) {
         parent::__construct();
         $this->adminImsConfig = $adminImsConfig;
-        $this->adminImsConnection = $adminImsConnection;
+        $this->authorizationUrl = $authorizationUrl;
 
         $this->setName('admin:adobe-ims:info')
             ->setDescription('Information of Adobe IMS Module configuration');
@@ -69,7 +68,7 @@ class AdminAdobeImsInfoCommand extends Command
         try {
             if ($this->adminImsConfig->enabled()) {
                 $clientId = $this->adminImsConfig->getApiKey();
-                if ($this->adminImsConnection->testAuth($clientId)) {
+                if ($this->authorizationUrl->testAuth($clientId)) {
                     $clientSecret = $this->adminImsConfig->getPrivateKey() ? 'configured' : 'not configured';
                     $output->writeln(self::CLIENT_ID_NAME . ': ' . $clientId);
                     $output->writeln(self::ORGANIZATION_ID_NAME . ': ' . $this->adminImsConfig->getOrganizationId());

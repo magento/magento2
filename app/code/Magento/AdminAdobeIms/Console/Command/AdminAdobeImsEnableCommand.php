@@ -7,11 +7,10 @@
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Console\Command;
-
-use Magento\AdminAdobeIms\Model\ImsConnection;
-use Magento\AdminAdobeIms\Service\UpdateTokensService;
 use Magento\AdminAdobeIms\Service\ImsCommandOptionService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdminAdobeIms\Service\UpdateTokensService;
+use Magento\AdobeImsApi\Api\GetAuthorizationUrlInterface;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\Console\Cli;
@@ -54,11 +53,6 @@ class AdminAdobeImsEnableCommand extends Command
     private ImsConfig $adminImsConfig;
 
     /**
-     * @var ImsConnection
-     */
-    private ImsConnection $adminImsConnection;
-
-    /**
      * @var ImsCommandOptionService
      */
     private ImsCommandOptionService $imsCommandOptionService;
@@ -74,25 +68,30 @@ class AdminAdobeImsEnableCommand extends Command
     private UpdateTokensService $updateTokensService;
 
     /**
+     * @var GetAuthorizationUrlInterface
+     */
+    private GetAuthorizationUrlInterface $authorizationUrl;
+
+    /**
      * @param ImsConfig $adminImsConfig
-     * @param ImsConnection $adminImsConnection
      * @param ImsCommandOptionService $imsCommandOptionService
      * @param TypeListInterface $cacheTypeList
      * @param UpdateTokensService $updateTokensService
+     * @param GetAuthorizationUrlInterface $authorizationUrl
      */
     public function __construct(
         ImsConfig $adminImsConfig,
-        ImsConnection $adminImsConnection,
         ImsCommandOptionService $imsCommandOptionService,
         TypeListInterface $cacheTypeList,
-        UpdateTokensService $updateTokensService
+        UpdateTokensService $updateTokensService,
+        GetAuthorizationUrlInterface $authorizationUrl
     ) {
         parent::__construct();
         $this->adminImsConfig = $adminImsConfig;
-        $this->adminImsConnection = $adminImsConnection;
         $this->imsCommandOptionService = $imsCommandOptionService;
         $this->cacheTypeList = $cacheTypeList;
         $this->updateTokensService = $updateTokensService;
+        $this->authorizationUrl = $authorizationUrl;
 
         $this->setName('admin:adobe-ims:enable')
             ->setDescription('Enable Adobe IMS Module.')
@@ -199,7 +198,7 @@ class AdminAdobeImsEnableCommand extends Command
         string $organizationId,
         bool $isTwoFactorAuthEnabled
     ): bool {
-        $testAuth = $this->adminImsConnection->testAuth($clientId);
+        $testAuth = $this->authorizationUrl->testAuth($clientId);
         if ($testAuth) {
             $this->adminImsConfig->enableModule($clientId, $clientSecret, $organizationId, $isTwoFactorAuthEnabled);
             $this->cacheTypeList->cleanType(Config::TYPE_IDENTIFIER);

@@ -14,6 +14,7 @@ use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Service\UpdateTokensService;
 use Magento\AdminAdobeIms\Service\ImsCommandOptionService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdobeImsApi\Api\GetAuthorizationUrlInterface;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -74,7 +75,7 @@ class AdminAdobeImsEnableCommandTest extends TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
-        $this->adminImsConnectionMock = $this->createMock(ImsConnection::class);
+        $this->adminImsConnectionMock = $this->createMock(GetAuthorizationUrlInterface::class);
         $this->imsCommandOptionService = $this->createMock(ImsCommandOptionService::class);
         $this->typeListInterface = $this->createMock(TypeListInterface::class);
         $this->updateTokensService = $this->createMock(UpdateTokensService::class);

@@ -25,4 +25,13 @@ interface GetTokenInterface
      * @throws AuthorizationException
      */
     public function execute(string $code): TokenResponseInterface;
+
+    /**
+     * Get token response
+     *
+     * @param string $code
+     * @return TokenResponseInterface
+     * @throws AuthorizationException
+     */
+    public function getTokenResponse(string $code): TokenResponseInterface;
 }

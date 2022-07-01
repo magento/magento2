@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Plugin;
 
 use Magento\AdminAdobeIms\Model\Auth;
-use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdobeImsApi\Api\IsTokenValidInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -24,9 +24,9 @@ class ReplaceVerifyIdentityWithImsPlugin
     private ImsConfig $adminImsConfig;
 
     /**
-     * @var ImsConnection
+     * @var IsTokenValidInterface
      */
-    private ImsConnection $adminImsConnection;
+    private IsTokenValidInterface $isTokenValid;
 
     /**
      * @var Auth
@@ -35,16 +35,16 @@ class ReplaceVerifyIdentityWithImsPlugin
 
     /**
      * @param ImsConfig $adminImsConfig
-     * @param ImsConnection $adminImsConnection
+     * @param IsTokenValidInterface $isTokenValid
      * @param Auth $auth
      */
     public function __construct(
         ImsConfig $adminImsConfig,
-        ImsConnection $adminImsConnection,
+        IsTokenValidInterface $isTokenValid,
         Auth $auth
     ) {
         $this->adminImsConfig = $adminImsConfig;
-        $this->adminImsConnection = $adminImsConnection;
+        $this->isTokenValid = $isTokenValid;
         $this->auth = $auth;
     }
 
@@ -105,6 +105,6 @@ class ReplaceVerifyIdentityWithImsPlugin
             );
         }
 
-        return $this->adminImsConnection->validateToken($reAuthToken);
+        return $this->isTokenValid->validateToken($reAuthToken);
     }
 }

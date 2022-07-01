@@ -87,4 +87,18 @@ class GetToken implements GetTokenInterface
 
         return $this->tokenResponseFactory->create(['data' => $response]);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTokenResponse(string $code): TokenResponseInterface
+    {
+        try {
+            return $this->execute($code);
+        } catch (AuthorizationException $exception) {
+            throw new AuthorizationException(
+                __($exception->getMessage())
+            );
+        }
+    }
 }

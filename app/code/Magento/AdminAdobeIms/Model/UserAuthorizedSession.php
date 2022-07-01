@@ -10,6 +10,7 @@ namespace Magento\AdminAdobeIms\Model;
 
 use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\Framework\Exception\AuthorizationException;
+use Magento\AdobeImsApi\Api\IsTokenValidInterface;
 
 /**
  * Represent functionality for getting information from session if user is authorised or not
@@ -22,20 +23,20 @@ class UserAuthorizedSession implements UserAuthorizedInterface
     private Auth $auth;
 
     /**
-     * @var ImsConnection
+     * @var IsTokenValidInterface
      */
-    private ImsConnection $adminImsConnection;
+    private IsTokenValidInterface $isTokenValid;
 
     /**
      * @param Auth $auth
-     * @param ImsConnection $adminImsConnection
+     * @param IsTokenValidInterface $isTokenValid
      */
     public function __construct(
         Auth $auth,
-        ImsConnection $adminImsConnection
+        IsTokenValidInterface $isTokenValid
     ) {
         $this->auth = $auth;
-        $this->adminImsConnection = $adminImsConnection;
+        $this->isTokenValid = $isTokenValid;
     }
 
     /**
@@ -50,7 +51,7 @@ class UserAuthorizedSession implements UserAuthorizedInterface
         }
 
         try {
-            return $this->adminImsConnection->validateToken($token);
+            return $this->isTokenValid->validateToken($token);
         } catch (AuthorizationException $e) {
             return false;
         }
