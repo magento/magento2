@@ -103,6 +103,7 @@
         <actionGroup ref="CheckAdminProductGridColumnOptionActionGroup" stepKey="checkCreatedAttributeColumn">
             <argument name="optionName" value="{{ProductAttributeFrontendLabel.label}}"/>
         </actionGroup>
+        <wait stepKey="waitPostClickingCheck" time="5"/>
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdown"/>
 
         <!-- Asserting the value of the created column -->
@@ -133,7 +134,7 @@
         <!-- Assert that attribute values present in layered navigation -->
         <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeWithOptionInLayeredNavigation">
             <argument name="attributeLabel" value="{{ProductAttributeFrontendLabel.label}}"/>
-            <argument name="attributeOptionLabel" value="value 11"/>
+            <argument name="attributeOptionLabel" value="value 1 1"/>
         </actionGroup>
 
         <!-- Click on the attribute -->

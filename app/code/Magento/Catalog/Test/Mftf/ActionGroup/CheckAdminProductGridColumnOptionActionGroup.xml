@@ -17,6 +17,5 @@
         </arguments>
 
         <checkOption selector="{{AdminProductGridFilterSection.viewColumnOption(optionName)}}" stepKey="checkColumn"/>
-        <wait stepKey="waitPostClickingCheck" time="5"/>
     </actionGroup>
 </actionGroups>
