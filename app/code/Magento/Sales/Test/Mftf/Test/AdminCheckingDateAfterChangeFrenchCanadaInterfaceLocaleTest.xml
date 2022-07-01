@@ -22,7 +22,7 @@
         </annotations>
         <before>
             <!--Deploy static content with French(Canada) locale-->
-           <!-- <magentoCLI command="setup:static-content:deploy fr_CA" stepKey="deployStaticContentWithFrenchLocale"/>-->
+            <magentoCLI command="setup:static-content:deploy fr_CA" stepKey="deployStaticContentWithFrenchLocale"/>
             <!--Create entities-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
