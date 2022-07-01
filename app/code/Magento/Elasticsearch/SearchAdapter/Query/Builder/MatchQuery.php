@@ -120,7 +120,7 @@ class MatchQuery implements QueryInterface
             $fields = [];
             $fields[$resolvedField] = [
                 'query' => $transformedValue,
-                'boost' => $requestQueryBoost + $match['boost'] ?? 1,
+                'boost' => $requestQueryBoost + ($match['boost'] ?? 1),
             ];
 
             if (isset($match['analyzer'])) {
