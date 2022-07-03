@@ -69,7 +69,7 @@ class Tree extends \Magento\Backend\Block\Template
             $data = [
                 'text' => $this->_cmsWysiwygImages->getShortFilename($item->getBasename(), 20),
                 'id' => $this->_cmsWysiwygImages->convertPathToId($item->getFilename()),
-                'path' => substr($item->getFilename(), strlen($storageRoot)),
+                'path' => substr($item->getFilename() ?? '', strlen($storageRoot)),
                 'cls' => 'folder',
             ];
             $hasNestedDirectories = $this->hasNestedDirectories($storageRoot, $item->getFilename());
@@ -115,7 +115,7 @@ class Tree extends \Magento\Backend\Block\Template
 
         $currentTreePath = $this->getRequest()->getParam('current_tree_path');
 
-        if (strlen($currentTreePath)) {
+        if ($currentTreePath !== null && strlen($currentTreePath)) {
             $params['current_tree_path'] = $currentTreePath;
         }
 
@@ -150,7 +150,7 @@ class Tree extends \Magento\Backend\Block\Template
             $path = $this->_coreRegistry->registry('storage')->getSession()->getCurrentPath();
         }
 
-        if (strlen($path)) {
+        if ($path) {
             $path = str_replace($this->_cmsWysiwygImages->getStorageRoot(), '', $path);
             $relative = [];
             foreach (explode('/', $path) as $dirName) {

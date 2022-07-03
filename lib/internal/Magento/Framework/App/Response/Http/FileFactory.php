@@ -11,6 +11,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class FileFactory serves to declare file content in response for download.
+ *
+ * @api
  */
 class FileFactory
 {
@@ -81,7 +83,7 @@ class FileFactory
             ->setHeader('Pragma', 'public', true)
             ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
             ->setHeader('Content-type', $contentType, true)
-            ->setHeader('Content-Length', $contentLength === null ? strlen($fileContent) : $contentLength, true)
+            ->setHeader('Content-Length', $contentLength === null ? strlen((string)$fileContent) : $contentLength, true)
             ->setHeader('Content-Disposition', 'attachment; filename="' . $fileName . '"', true)
             ->setHeader('Last-Modified', date('r'), true);
 

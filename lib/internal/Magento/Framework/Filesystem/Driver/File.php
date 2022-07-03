@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
@@ -175,10 +176,13 @@ class File implements DriverInterface
     public function fileGetContents($path, $flag = null, $context = null)
     {
         $filename = $this->getScheme() . $path;
+
         if (!$this->stateful) {
             clearstatcache(false, $filename);
         }
+        $flag = $flag ?? false;
         $result = @file_get_contents($filename, $flag, $context);
+
         if (false === $result) {
             throw new FileSystemException(
                 new Phrase(
@@ -316,7 +320,7 @@ class File implements DriverInterface
         if (!$this->stateful) {
             clearstatcache();
         }
-        $globPattern = rtrim($path, '/') . '/' . ltrim($pattern, '/');
+        $globPattern = rtrim((string)$path, '/') . '/' . ltrim((string)$pattern, '/');
         $result = Glob::glob($globPattern, Glob::GLOB_BRACE);
         return is_array($result) ? $result : [];
     }
@@ -624,10 +628,13 @@ class File implements DriverInterface
      */
     public function filePutContents($path, $content, $mode = null)
     {
+        $mode = $mode ?? 0;
         $result = @file_put_contents($this->getScheme() . $path, $content, $mode);
+
         if ($this->stateful) {
             clearstatcache(true, $this->getScheme() . $path);
         }
+
         if ($result === false) {
             throw new FileSystemException(
                 new Phrase(
@@ -636,6 +643,7 @@ class File implements DriverInterface
                 )
             );
         }
+
         return $result;
     }
 
@@ -811,6 +819,7 @@ class File implements DriverInterface
      */
     public function fileWrite($resource, $data)
     {
+        $data = $data !== null ? $data : '';
         $lenData = strlen($data);
         for ($result = 0; $result < $lenData; $result += $fwrite) {
             $fwrite = @fwrite($resource, substr($data, $result));
@@ -961,7 +970,7 @@ class File implements DriverInterface
         // basepath. so if the basepath starts at position 0 in the path, we
         // must not concatinate them again because path is already absolute.
         $path = $path !== null ? $path : '';
-        if ('' !== $basePath && strpos($path, $basePath) === 0) {
+        if ('' !== $basePath && strpos($path, (string)$basePath) === 0) {
             return $this->getScheme($scheme) . $path;
         }
 
@@ -978,7 +987,7 @@ class File implements DriverInterface
     public function getRelativePath($basePath, $path = null)
     {
         $path = $path !== null ? $this->fixSeparator($path) : '';
-        if (strpos($path, $basePath) === 0 || $basePath == $path . '/') {
+        if ($basePath === null || strpos($path, $basePath) === 0 || $basePath == $path . '/') {
             $result = substr($path, strlen($basePath));
         } else {
             $result = $path;

@@ -226,7 +226,7 @@ class DeploymentConfig
                 // allow reading values from env variables
                 // value need to be specified in %env(NAME, "default value")% format
                 // like #env(DB_PASSWORD), #env(DB_NAME, "test")
-                if (preg_match(self::ENV_NAME_PATTERN, $param, $matches)) {
+                if ($param !== null && preg_match(self::ENV_NAME_PATTERN, $param, $matches)) {
                     $param = getenv($matches['name']) ?: ($matches['default'] ?? null);
                 }
 

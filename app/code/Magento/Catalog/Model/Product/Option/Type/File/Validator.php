@@ -126,7 +126,9 @@ abstract class Validator
      */
     protected function parseExtensionsString($extensions)
     {
-        if (preg_match_all('/(?<extension>[a-z0-9]+)/si', strtolower($extensions), $matches)) {
+        $extensions = is_string($extensions) ? strtolower($extensions) : '';
+
+        if (preg_match_all('/(?<extension>[a-z0-9]+)/si', $extensions, $matches)) {
             return $matches['extension'] ?: null;
         }
         return null;

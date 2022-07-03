@@ -15,28 +15,25 @@ use Magento\Framework\Code\Generator\DefinedClasses;
 
 class EntityAbstractTest extends TestCase
 {
-    /**#@+
+    /**
      * Source and result class parameters
      */
-    const RESULT_FILE = 'MyResult/MyResult.php';
+    public const RESULT_FILE = 'MyResult/MyResult.php';
 
-    const RESULT_DIRECTORY = 'MyResult';
-
-    /**#@-*/
+    public const RESULT_DIRECTORY = 'MyResult';
 
     /**
      * Basic code generation directory
      */
-    const GENERATION_DIRECTORY = 'generation';
+    public const GENERATION_DIRECTORY = 'generation';
 
-    /**#@+
+    /**
      * Generated code before and after code style fix
      */
-    const SOURCE_CODE = "a = 1; b = array (); {\n\n some source code \n\n}";
+    public const SOURCE_CODE = "a = 1; b = array (); {\n\n some source code \n\n}";
 
-    const RESULT_CODE = "a = 1; b = array(); {\n some generated php code \n}";
+    public const RESULT_CODE = "a = 1; b = array(); {\n some generated php code \n}";
 
-    /**#@-*/
     /**
      * Model under test
      *
@@ -294,7 +291,7 @@ class EntityAbstractTest extends TestCase
 
         $codeGenerator->expects($this->once())
             ->method('generate')
-            ->willReturn($willWriteCode ? self::RESULT_CODE : null);
+            ->willReturn($willWriteCode ? self::RESULT_CODE : '');
 
         // Add configuration for the generation step
         /** @var \PHPUnit\Framework\MockObject\MockObject $ioObject */
