@@ -363,6 +363,14 @@
                     </depends>
                 </field>
             </group>
+            <group id="cache" sortOrder="1500" translate="label" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Cache settings</label>
+                <field id="daily_refresh" sortOrder="10" type="text" translate="label comment" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Refresh invalidated caches schedule</label>
+                    <comment><![CDATA[Please enter a valid cron schedule. For example, <br><q>*/15 * * * *</q> for every 15 minutes; <br><q>17 3 * * *</q> for 03:17am daily. <br>Leave blank to disable.]]></comment>
+                    <config_path>system/cache/refresh_invalidated_schedule</config_path>
+                </field>
+            </group>
         </section>
         <section id="admin" translate="label" type="text" sortOrder="20" showInDefault="1">
             <label>Admin</label>

@@ -13,6 +13,9 @@
             </template>
         </dev>
         <system>
+            <cache>
+                <refresh_invalidated_schedule>17,51 1-5 * * *</refresh_invalidated_schedule>
+            </cache>
             <media_storage_configuration>
                 <allowed_resources>
                     <email_folder>email</email_folder>
