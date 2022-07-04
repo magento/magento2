@@ -12,6 +12,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -84,18 +85,24 @@ class ProductDataMapperTest extends TestCase
             $productId => [
                 'store_id' => $defaultStore->getId(),
                 'select_attribute' => (int)$attributeValue,
-                'select_attribute_value' => 'Table_default',
-                'is_out_of_stock' => 1
+                'select_attribute_value' => 'Table_default'
             ],
         ];
         $secondStoreMap = [
             $productId => [
                 'store_id' => $secondStore->getId(),
                 'select_attribute' => (int)$attributeValue,
-                'select_attribute_value' => 'Table_fixture_second_store',
-                'is_out_of_stock' => 1
+                'select_attribute_value' => 'Table_fixture_second_store'
             ],
         ];
+
+        /** @var Manager $moduleManager */
+        $moduleManager = $this->objectManager->get(Manager::class);
+        if ($moduleManager->isEnabled('Magento_InventoryElasticsearch')) {
+            $defaultStoreMap[$productId] += ['is_out_of_stock' => 1];
+            $secondStoreMap[$productId] += ['is_out_of_stock' => 1];
+        }
+
         $data = [
             $productId => [
                 $attributeId => $attributeValue,
