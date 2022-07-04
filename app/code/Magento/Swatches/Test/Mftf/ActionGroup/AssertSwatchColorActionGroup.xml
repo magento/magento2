@@ -18,8 +18,11 @@
         </arguments>
 
         <grabAttributeFrom selector="{{AdminManageSwatchSection.nthSwatch(nthSwatch)}}" userInput="style" stepKey="grabStyle1"/>
+        <helper class="Magento\Swatches\Test\Mftf\Helper\ColorCode" method="colorCode" stepKey="colorCode">
+            <argument name="colorCode">{$grabStyle1}</argument>
+        </helper>
         <assertEquals stepKey="assertStyle1">
-            <actualResult type="string">{$grabStyle1}</actualResult>
+            <actualResult type="string">{$colorCode}</actualResult>
             <expectedResult type="string">{{expectedStyle}}</expectedResult>
         </assertEquals>
     </actionGroup>
