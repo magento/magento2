@@ -55,9 +55,7 @@ class GetAccessToken implements GetAccessTokenInterface
     {
         try {
             $adminUserId = $adminUserId ?? (int) $this->userContext->getUserId();
-            return $this->encryptor->decrypt(
-                $this->userProfileRepository->getByUserId($adminUserId)->getAccessToken()
-            );
+            return $this->userProfileRepository->getByUserId($adminUserId)->getAccessToken();
         } catch (NoSuchEntityException $exception) {
             return null;
         }
