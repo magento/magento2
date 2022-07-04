@@ -164,6 +164,7 @@ abstract class AbstractAction
      */
     abstract public function execute($ids);
 
+    // phpcs:disable
     /**
      * Synchronize data between index storage and original storage
      *
@@ -195,6 +196,7 @@ abstract class AbstractAction
         return $this;
     }
 
+    // phpcs:enable
     /**
      * Prepare website current dates table
      *
@@ -440,6 +442,7 @@ abstract class AbstractAction
         }
     }
 
+    // phpcs:disable
     /**
      * Copy relations product index from primary index to temporary index table by parent entity
      *
@@ -489,6 +492,7 @@ abstract class AbstractAction
         return $this;
     }
 
+    // phpcs:enable
     /**
      * Retrieve index table by dimension that will be used for write operations.
      *
