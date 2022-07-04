@@ -23,39 +23,22 @@ class Discounts implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (!isset($value['model'])) {
-            throw new LocalizedException(__('"model" value should be specified'));
-        }
-        $quote = $value['model'];
-
-        return $this->getDiscountValues($quote);
+        return $this->getDiscountValues($value['discount']);
     }
 
     /**
      * Get Discount Values
      *
-     * @param Quote $quote
-     * @return array
+     * @param array $discountInfo
+     * @return array|null
      */
-    private function getDiscountValues(Quote $quote)
+    private function getDiscountValues(array $discountInfo = [])
     {
-        $discountValues=[];
-        $address = $quote->getShippingAddress();
-        $totalDiscounts = $address->getExtensionAttributes()->getDiscounts();
-        if ($totalDiscounts && is_array($totalDiscounts)) {
-            foreach ($totalDiscounts as $value) {
-                $discount = [];
-                $amount = [];
-                $discount['label'] = $value->getRuleLabel() ?: __('Discount');
-                /* @var \Magento\SalesRule\Api\Data\DiscountDataInterface $discountData */
-                $discountData = $value->getDiscountData();
-                $amount['value'] = $discountData->getAmount();
-                $amount['currency'] = $quote->getQuoteCurrencyCode();
-                $discount['amount'] = $amount;
-                $discountValues[] = $discount;
-            }
-            return $discountValues;
+        if (!empty($discountInfo)) {
+            $discountInfo['label'] = __(current($discountInfo['label']) ?: 'Discount');
+            return [$discountInfo];
+        } else {
+            return null;
         }
-        return null;
     }
 }
