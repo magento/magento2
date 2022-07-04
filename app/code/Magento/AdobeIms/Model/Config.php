@@ -118,8 +118,8 @@ class Config implements ConfigInterface
     public function getTokenUrl(): string
     {
         return str_replace(
-            ['#{tokenUrl}'],
-            [$this->getImsUrl('imsUrl')],
+            ['#{imsUrl}'],
+            [$this->getImsUrl()],
             $this->scopeConfig->getValue(self::XML_PATH_TOKEN_URL)
         );
     }
@@ -130,9 +130,9 @@ class Config implements ConfigInterface
     public function getAuthUrl(): string
     {
         return str_replace(
-            ['#{authUrl}','#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
+            ['#{imsUrl}','#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
             [
-                $this->getImsUrl('imsUrl'),
+                $this->getImsUrl(),
                 $this->getApiKey(),
                 $this->getCallBackUrl(),
                 $this->getScopes(),
@@ -170,8 +170,8 @@ class Config implements ConfigInterface
             $redirectUrl = 'self';
         }
         return str_replace(
-            ['#{logoutUrl}', '#{access_token}', '#{redirect_uri}'],
-            [$this->getImsUrl('imsUrl'), $accessToken, $redirectUrl],
+            ['#{imsUrl}', '#{access_token}', '#{redirect_uri}'],
+            [$this->getImsUrl(), $accessToken, $redirectUrl],
             $this->scopeConfig->getValue(self::XML_PATH_LOGOUT_URL) ?? ''
         );
     }
@@ -196,8 +196,8 @@ class Config implements ConfigInterface
     public function getProfileUrl(): string
     {
         return str_replace(
-            ['#{client_id}'],
-            [$this->getApiKey()],
+            ['#{imsUrl}', '#{client_id}'],
+            [$this->getImsUrl(), $this->getApiKey()],
             $this->scopeConfig->getValue(self::XML_PATH_PROFILE_URL)
         );
     }
@@ -212,8 +212,8 @@ class Config implements ConfigInterface
     public function getValidateTokenUrl(string $code, string $tokenType): string
     {
         return str_replace(
-            ['#{token}', '#{client_id}', '#{token_type}'],
-            [$code, $this->getApiKey(), $tokenType],
+            ['#{imsUrl}', '#{token}', '#{client_id}', '#{token_type}'],
+            [$this->getImsUrl(), $code, $this->getApiKey(), $tokenType],
             $this->scopeConfig->getValue(self::XML_PATH_VALIDATE_TOKEN_URL)
         );
     }
@@ -231,8 +231,9 @@ class Config implements ConfigInterface
         }
 
         return str_replace(
-            ['#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
+            ['#{imsUrl}', '#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
             [
+                $this->getImsUrl(),
                 $clientId,
                 $this->getAdminAdobeImsCallBackUrl(),
                 $this->getAdminScopes(),
@@ -250,8 +251,9 @@ class Config implements ConfigInterface
     public function getAdminAdobeImsReAuthUrl(): string
     {
         return str_replace(
-            ['#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
+            ['#{imsUrl}', '#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
             [
+                $this->getImsUrl(),
                 $this->getApiKey(),
                 $this->getAdminAdobeImsReAuthCallBackUrl(),
                 $this->getAdminScopes(),
@@ -270,8 +272,8 @@ class Config implements ConfigInterface
     public function getBackendLogoutUrl(string $accessToken) : string
     {
         return str_replace(
-            ['#{logoutUrl}', '#{access_token}', '#{client_secret}', '#{client_id}'],
-            [$this->getImsUrl('imsUrl'), $accessToken, $this->getPrivateKey(), $this->getApiKey()],
+            ['#{imsUrl}', '#{access_token}', '#{client_secret}', '#{client_id}'],
+            [$this->getImsUrl(), $accessToken, $this->getPrivateKey(), $this->getApiKey()],
             $this->scopeConfig->getValue(self::XML_PATH_ADMIN_LOGOUT_URL)
         );
     }
@@ -284,7 +286,11 @@ class Config implements ConfigInterface
      */
     public function getCertificateUrl(string $fileName): string
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_CERTIFICATE_PATH) . $fileName;
+        return str_replace(
+            ['#{certificateUrl}'],
+            [$this->getImsUrl('certificateUrl')],
+            $this->scopeConfig->getValue(self::XML_PATH_CERTIFICATE_PATH) . $fileName
+        );
     }
 
     /**
@@ -296,8 +302,8 @@ class Config implements ConfigInterface
     public function getOrganizationMembershipUrl(string $orgId): string
     {
         return str_replace(
-            ['#{org_id}'],
-            [$orgId],
+            ['#{organizationMembershipUrl}', '#{org_id}'],
+            [$this->getImsUrl('organizationMembershipUrl'), $orgId],
             $this->scopeConfig->getValue(self::XML_PATH_ORGANIZATION_MEMBERSHIP_URL)
         );
     }
@@ -332,7 +338,7 @@ class Config implements ConfigInterface
      * @param string $urlType
      * @return string
      */
-    private function getImsUrl(string $urlType): string
+    private function getImsUrl(string $urlType = 'imsUrl'): string
     {
         return $this->scopeConfig->getValue(self::XML_CONFIG_PATH . $urlType);
     }
