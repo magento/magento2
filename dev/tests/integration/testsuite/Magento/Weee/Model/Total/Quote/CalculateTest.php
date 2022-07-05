@@ -7,17 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\Weee\Model\Total\Quote;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Checkout\Api\Data\TotalsInformationInterface;
 use Magento\Checkout\Model\TotalsInformationManagement;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Multishipping\Test\Fixture\AddAddressToCart as AddAddressToCartFixture;
+use Magento\Multishipping\Test\Fixture\ShippingAssignments as ShippingAssignmentsFixture;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\TotalsInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\AddressFactory;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\ObjectManager;
+use Magento\Weee\Test\Fixture\Attribute as FptAttributeFixture;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -80,19 +88,24 @@ class CalculateTest extends TestCase
         $this->assertEquals(25.4, $items['weee_tax']->getValue());
     }
 
-    /**
-     * @magentoConfigFixture default_store tax/weee/enable 1
-     * @magentoConfigFixture default_store tax/weee/apply_vat 1
-     * @magentoDataFixture Magento\Weee\Test\Fixture\Attribute as:fpt with:{"attribute_code": "fpt_attr"}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product as:p1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product as:p2
-     * @magentoDataFixture Magento\Quote\Test\Fixture\GuestCart as:qt
-     * @magentoDataFixture Magento\Quote\Test\Fixture\AddProductToCart with:{"cart_id":"$qt.id$","product_id":"$p1.id$"}
-     * @magentoDataFixture Magento\Quote\Test\Fixture\AddProductToCart with:{"cart_id":"$qt.id$","product_id":"$p2.id$"}
-     * @magentoDataFixtureDataProvider {"p1":{"fpt_attr":[{"website_id":0,"country":"US","state":0,"price":0.3}]}}
-     * @magentoDataFixtureDataProvider {"p2":{"fpt_attr":[{"website_id":0,"country":"US","state":0,"price":0.8}]}}
-     * @return void
-     */
+    #[
+        Config('tax/weee/enable', '1', 'store', 'default'),
+        Config('tax/weee/apply_vat', '1', 'store', 'default'),
+        DataFixture(FptAttributeFixture::class, ['attribute_code' => 'fpt_attr'], 'fpt'),
+        DataFixture(
+            ProductFixture::class,
+            ['fpt_attr' => [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 0.3]]],
+            'p1'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            ['fpt_attr' => [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 0.8]]],
+            'p2'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'qt'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$qt.id$', 'product_id' => '$p1.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$qt.id$', 'product_id' => '$p2.id$']),
+    ]
     public function testCollectTotalsWithMultipleProducts(): void
     {
         $json = $this->objectManager->get(Json::class);
@@ -112,20 +125,36 @@ class CalculateTest extends TestCase
         $this->assertEquals(0.8, $weeeTaxes[0]['row_amount_incl_tax']);
     }
 
-    /**
-     * @magentoConfigFixture default_store tax/weee/enable 1
-     * @magentoConfigFixture default_store tax/weee/apply_vat 1
-     * @magentoDataFixture Magento\Weee\Test\Fixture\Attribute as:fpt
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product as:p1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product as:p2
-     * @magentoDataFixture Magento\Quote\Test\Fixture\GuestCart as:qt
-     * @magentoDataFixture Magento\Quote\Test\Fixture\AddProductToCart as:qti1
-     * @magentoDataFixture Magento\Quote\Test\Fixture\AddProductToCart as:qti2
-     * @magentoDataFixture Magento\Multishipping\Test\Fixture\AddAddressToCart as:qta1
-     * @magentoDataFixture Magento\Multishipping\Test\Fixture\AddAddressToCart as:qta2
-     * @magentoDataFixture Magento\Multishipping\Test\Fixture\ShippingAssignments as:shippingAssignments
-     * @magentoDataFixtureDataProvider collectTotalsWithMultipleAddressesFixtureDataProvider
-     */
+    #[
+        Config('tax/weee/enable', '1', 'store', 'default'),
+        Config('tax/weee/apply_vat', '1', 'store', 'default'),
+        DataFixture(FptAttributeFixture::class, ['attribute_code' => 'fpt_attr'], 'fpt'),
+        DataFixture(
+            ProductFixture::class,
+            ['fpt_attr' => [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 0.3]]],
+            'p1'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            ['fpt_attr' => [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 0.8]]],
+            'p2'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'qt'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$qt.id$', 'product_id' => '$p1.id$'], 'qti1'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$qt.id$', 'product_id' => '$p2.id$'], 'qti2'),
+        DataFixture(AddAddressToCartFixture::class, ['cart_id' => '$qt.id$'], 'qta1'),
+        DataFixture(AddAddressToCartFixture::class, ['cart_id' => '$qt.id$'], 'qta2'),
+        DataFixture(
+            ShippingAssignmentsFixture::class,
+            [
+                'cart_id' => '$qt.id$',
+                'assignments' => [
+                    ['item_id' => '$qti1.id$', 'address_id' => '$qta1.id$', 'qty' => 1],
+                    ['item_id' => '$qti2.id$', 'address_id' => '$qta2.id$', 'qty' => 1]
+                ]
+            ]
+        ),
+    ]
     public function testCollectTotalsWithMultipleAddresses(): void
     {
         $cart = $this->fixtures->get('qt');
@@ -142,29 +171,6 @@ class CalculateTest extends TestCase
         $totals = $address->getTotals();
         $this->assertArrayHasKey('weee_tax', $totals);
         $this->assertEquals(0.8, $totals['weee_tax']['value']);
-    }
-
-    /**
-     * @return array
-     */
-    public function collectTotalsWithMultipleAddressesFixtureDataProvider(): array
-    {
-        return [
-            'fpt' => ['attribute_code' => 'fpt_attr'],
-            'p1' => ['fpt_attr' => [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 0.3]]],
-            'p2' => ['fpt_attr' => [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 0.8]]],
-            'qti1' => ['cart_id' => '$qt.id$', 'product_id' => '$p1.id$'],
-            'qti2' => ['cart_id' => '$qt.id$', 'product_id' => '$p2.id$'],
-            'qta1' => ['cart_id' => '$qt.id$'],
-            'qta2' => ['cart_id' => '$qt.id$'],
-            'shippingAssignments' => [
-                'cart_id' => '$qt.id$',
-                'assignments' => [
-                    ['item_id' => '$qti1.id$', 'address_id' => '$qta1.id$', 'qty' => 1],
-                    ['item_id' => '$qti2.id$', 'address_id' => '$qta2.id$', 'qty' => 1]
-                ]
-            ],
-        ];
     }
 
     /**
