@@ -77,7 +77,7 @@ class SpecialPriceAttributes implements ModifierInterface
                             ['display' => Zend_Currency::NO_SYMBOL],
                             false
                         );
-                    $item[$priceAttribute] = $numberFormatter->format($item[$priceAttribute] / 100);
+                    $item[$priceAttribute] = $numberFormatter->format((float) $item[$priceAttribute] / 100);
                 }
             }
         }
