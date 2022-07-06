@@ -435,4 +435,15 @@
         <data key="default_billing">true</data>
         <data key="region_qty">66</data>
     </entity>
+    <entity name="France_Address" type="address">
+        <array key="street">
+            <item>1234 Some France address</item>
+            <item>113</item>
+        </array>
+        <data key="city">City</data>
+        <data key="country_id">FR</data>
+        <data key="country">France</data>
+        <data key="postcode">12345</data>
+        <data key="telephone">512-345-6789</data>
+    </entity>
 </entities>
