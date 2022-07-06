@@ -29,7 +29,6 @@
             </createData>
             <!--Create customer-->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <!--<actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomerFromStorefront"/>-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPageForUpdateStoreCreditBalance">
                 <argument name="customerId" value="$createCustomer.id$"/>
@@ -46,8 +45,7 @@
             <!--Delete customer-->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!--Clear filters on orders grid-->
-            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersFilters"/>
-           <!-- <comment userInput="BIC workaround" stepKey="logoutCustomerFromStorefront"/>-->
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersFilters"/>git
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
