@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Model;
 
-use Magento\AdminAdobeIms\Controller\Adminhtml\OAuth\ImsCallback;
-use Magento\AdminAdobeIms\Controller\Adminhtml\OAuth\ImsReauthCallback;
 use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\Backend\Model\UrlInterface as BackendUrlInterface;
 use Magento\Config\Model\Config\Backend\Admin\Custom;
@@ -44,6 +42,11 @@ class Config implements ConfigInterface
     public const XML_PATH_ADMIN_LOGOUT_URL = 'adobe_ims/integration/admin_logout_url';
     private const XML_PATH_CERTIFICATE_PATH = 'adobe_ims/integration/certificate_path';
     private const XML_PATH_ORGANIZATION_MEMBERSHIP_URL = 'adobe_ims/integration/organization_membership_url';
+    /**
+     * AdminAdobeIms callback urls
+     */
+    private const IMS_CALLBACK = 'imscallback';
+    private const IMS_REAUTH_CALLBACK = 'imsreauthcallback';
 
     /**
      * @var ScopeConfigInterface
@@ -411,7 +414,7 @@ class Config implements ConfigInterface
     private function getAdminAdobeImsCallBackUrl(): string
     {
         return $this->backendUrl->getUrl(
-            self::OAUTH_CALLBACK_IMS_URL . ImsCallback::ACTION_NAME
+            self::OAUTH_CALLBACK_IMS_URL . self::IMS_CALLBACK
         );
     }
 
@@ -423,7 +426,7 @@ class Config implements ConfigInterface
     private function getAdminAdobeImsReAuthCallBackUrl(): string
     {
         return $this->backendUrl->getUrl(
-            self::OAUTH_CALLBACK_IMS_URL . ImsReauthCallback::ACTION_NAME
+            self::OAUTH_CALLBACK_IMS_URL . self::IMS_REAUTH_CALLBACK
         );
     }
 

@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdminAdobeIms\Test\Unit\Service;
+namespace Magento\AdobeIms\Test\Unit\Model;
 
 use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\AdobeIms\Model\GetOrganizations;
@@ -14,7 +14,7 @@ use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
 
-class GetOrganisationsTest extends TestCase
+class GetOrganizationsTest extends TestCase
 {
     private const VALID_ORGANIZATION_ID = '12121212ABCD1211AA11ABCD';
     private const INVALID_ORGANIZATION_ID = '12121212ABCD1211AA11XXXX';

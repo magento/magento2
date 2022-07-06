@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigTest extends TestCase
 {
-    private const SCOPES = ['openid', 'creative_sdk', 'email', 'profile'];
+    private const SCOPES = ['creative_sdk', 'openid', 'creative_sdk', 'email', 'profile'];
     private const LOCALE = 'en_US';
     private const REDIRECT_URL_PATTERN = '/redirect_uri=[a-zA-Z0-9\/:._]*\/adobe_ims\/oauth\/callback/';
 

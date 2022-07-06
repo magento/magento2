@@ -10,7 +10,6 @@ namespace Magento\AdminAdobeIms\Test\Unit\Command;
 
 use Exception;
 use Magento\AdminAdobeIms\Console\Command\AdminAdobeImsEnableCommand;
-use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Service\UpdateTokensService;
 use Magento\AdminAdobeIms\Service\ImsCommandOptionService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
@@ -41,9 +40,9 @@ class AdminAdobeImsEnableCommandTest extends TestCase
     private $adminImsConfigMock;
 
     /**
-     * @var ImsConnection
+     * @var GetAuthorizationUrlInterface
      */
-    private $adminImsConnectionMock;
+    private $authorizationUrlMock;
 
     /**
      * @var ImsCommandOptionService
@@ -75,7 +74,7 @@ class AdminAdobeImsEnableCommandTest extends TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
-        $this->adminImsConnectionMock = $this->createMock(GetAuthorizationUrlInterface::class);
+        $this->authorizationUrlMock = $this->createMock(GetAuthorizationUrlInterface::class);
         $this->imsCommandOptionService = $this->createMock(ImsCommandOptionService::class);
         $this->typeListInterface = $this->createMock(TypeListInterface::class);
         $this->updateTokensService = $this->createMock(UpdateTokensService::class);
@@ -88,10 +87,10 @@ class AdminAdobeImsEnableCommandTest extends TestCase
             AdminAdobeImsEnableCommand::class,
             [
                 'adminImsConfig' => $this->adminImsConfigMock,
-                'adminImsConnection' => $this->adminImsConnectionMock,
                 'imsCommandOptionService' => $this->imsCommandOptionService,
                 'cacheTypeList' => $this->typeListInterface,
-                'updateTokenService' => $this->updateTokensService
+                'updateTokenService' => $this->updateTokensService,
+                'authorizationUrl' => $this->authorizationUrlMock
             ]
         );
     }
@@ -128,7 +127,7 @@ class AdminAdobeImsEnableCommandTest extends TestCase
         $this->imsCommandOptionService->method('getClientSecret')->willReturn('clientSecret');
         $this->imsCommandOptionService->method('isTwoFactorAuthEnabled')->willReturn($isTwoFactorAuthEnabled);
 
-        $this->adminImsConnectionMock->method('testAuth')
+        $this->authorizationUrlMock->method('testAuth')
             ->willReturn($testAuthMode);
 
         $this->adminImsConfigMock

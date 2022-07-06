@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdminAdobeIms\Test\Unit\Model;
+namespace Magento\AdobeIms\Test\Unit\Model;
 
 use Magento\AdobeIms\Model\GetAuthorizationUrl;
 use Magento\AdobeImsApi\Api\ConfigInterface;

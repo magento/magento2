@@ -10,10 +10,10 @@ namespace Magento\AdminAdobeIms\Controller\Adminhtml\OAuth;
 
 use Exception;
 use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
-use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdobeImsApi\Api\GetOrganizationsInterface;
 use Magento\AdobeImsApi\Api\GetProfileInterface;
 use Magento\AdobeImsApi\Api\GetTokenInterface;

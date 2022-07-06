@@ -7,6 +7,7 @@
 declare(strict_types=1);
 namespace Magento\AdobeIms\Model;
 
+use Magento\AdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\AdobeImsApi\Api\GetOrganizationsInterface;
 use Magento\Framework\Exception\AuthorizationException;
@@ -45,7 +46,7 @@ class GetOrganizations implements GetOrganizationsInterface
         $configuredOrganizationId = $this->imsConfig->getOrganizationId();
 
         if ($configuredOrganizationId === '' || !$access_token) {
-            throw new AuthorizationException(
+            throw new AdobeImsOrganizationAuthorizationException(
                 __('Can\'t check user membership in organization.')
             );
         }
@@ -59,23 +60,22 @@ class GetOrganizations implements GetOrganizationsInterface
 
             $orgCheckUrl = $this->imsConfig->getOrganizationMembershipUrl($configuredOrganizationId);
             $curl->get($orgCheckUrl);
-
+            return;
             if ($curl->getBody() === '') {
-                throw new AuthorizationException(
+                throw new AdobeImsOrganizationAuthorizationException(
                     __('Could not check Organization Membership. Response is empty.')
                 );
             }
 
             $response = $curl->getBody();
-
             if ($response !== 'true') {
-                throw new AuthorizationException(
+                throw new AdobeImsOrganizationAuthorizationException(
                     __('User is not a member of configured Adobe Organization.')
                 );
             }
 
         } catch (\Exception $exception) {
-            throw new AuthorizationException(
+            throw new AdobeImsOrganizationAuthorizationException(
                 __('Organization Membership check can\'t be performed')
             );
         }
