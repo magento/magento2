@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCancelCreateOrderWithStoreCreditTest">
+        <annotations>
+            <stories value="Credit balance entity"/>
+            <features value="Sales"/>
+            <title value="Customer balance is reverted after order is canceled"/>
+            <description value="Admin can the order placed with store credit and balance is reverted after cancelling the order."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-27369"/>
+            <group value="customerBalance"/>
+            <group value="sales"/>
+        </annotations>
+
+        <before>
+            <!--Set default flat rate shipping method settings-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <!--Create Product-->
+            <createData entity="SimpleProduct2" stepKey="createProduct">
+                <field key="price">5</field>
+            </createData>
+            <!--Create customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--<actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomerFromStorefront"/>-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPageForUpdateStoreCreditBalance">
+                <argument name="customerId" value="$createCustomer.id$"/>
+            </actionGroup>
+            <!-- Update Store Credit -->
+            <actionGroup ref="UpdateCustomerStoreCreditBalanceAdminActionGroup" stepKey="updateStoreCreditThirdCustomerFromAdmin">
+                <argument name="storeCredit" value="5" />
+            </actionGroup>
+        </before>
+
+        <after>
+            <!--Delete product-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!--Delete customer-->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Clear filters on orders grid-->
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersFilters"/>
+           <!-- <comment userInput="BIC workaround" stepKey="logoutCustomerFromStorefront"/>-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
+        <click selector="{{AdminOrderCustomersGridSection.firstRow}}" stepKey="clickOnCustomer"/>
+        <waitForPageLoad stepKey="waitForProductList"/>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addVirtualProductToOrder">
+            <argument name="product" value="$createProduct$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerInfo">
+            <argument name="customer" value="$createCustomer$"/>
+            <argument name="address" value="US_Address_CA"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderCreateUseStoreCreditActionGroup" stepKey="useStoreCredit"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRate"/>
+       <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <!-- Cancel the Order -->
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPageForUpdateStoreCreditBalance">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+        <actionGroup ref="CheckCustomerStoreCreditFromAdminActionGroup" stepKey="checkCustomerInfStoreCreditFromAdmin1">
+            <argument name="storeCreditUsed" value="5"/>
+            <argument name="storeCreditLeft" value="5"/>
+            <argument name="orderNumber" value="$grabOrderId"/>
+        </actionGroup>
+    </test>
+</tests>
