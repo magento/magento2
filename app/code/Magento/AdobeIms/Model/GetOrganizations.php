@@ -60,7 +60,6 @@ class GetOrganizations implements GetOrganizationsInterface
 
             $orgCheckUrl = $this->imsConfig->getOrganizationMembershipUrl($configuredOrganizationId);
             $curl->get($orgCheckUrl);
-            return;
             if ($curl->getBody() === '') {
                 throw new AdobeImsOrganizationAuthorizationException(
                     __('Could not check Organization Membership. Response is empty.')

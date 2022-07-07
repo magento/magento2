@@ -53,6 +53,14 @@ class IsTokenValid implements IsTokenValidInterface
         $this->logger = $logger;
     }
 
+    /**
+     * Validate token
+     *
+     * @param string|null $token
+     * @param string $tokenType
+     * @return bool
+     * @throws AuthorizationException
+     */
     public function validateToken(?string $token, string $tokenType = 'access_token'): bool
     {
         $isTokenValid = false;

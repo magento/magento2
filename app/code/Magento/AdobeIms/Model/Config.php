@@ -338,6 +338,8 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Get ims Urls
+     *
      * @param string $urlType
      * @return string
      */
@@ -478,7 +480,9 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inerhitDoc
+     * Retrieve Organization Id
+     *
+     * @return string
      */
     public function getOrganizationId(): string
     {

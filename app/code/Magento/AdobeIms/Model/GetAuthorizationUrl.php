@@ -40,7 +40,11 @@ class GetAuthorizationUrl implements GetAuthorizationUrlInterface
     }
 
     /**
-     * @inerhitDoc
+     * Get authorization url
+     *
+     * @param string|null $clientId
+     * @return string
+     * @throws InvalidArgumentException
      */
     public function auth(?string $clientId = null): string
     {
@@ -49,7 +53,11 @@ class GetAuthorizationUrl implements GetAuthorizationUrlInterface
     }
 
     /**
-     * @inerhitDoc
+     * Test if given ClientID is valid and is able to return an authorization URL
+     *
+     * @param string $clientId
+     * @return bool
+     * @throws InvalidArgumentException
      */
     public function testAuth(string $clientId): bool
     {

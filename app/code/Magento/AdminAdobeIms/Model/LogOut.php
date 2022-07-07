@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model;
 
-use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
-use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdobeImsApi\Api\ConfigInterface;
+use Magento\AdobeImsApi\Api\GetProfileInterface;
 use Magento\AdminAdobeIms\Api\ImsLogOutInterface;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Psr\Log\LoggerInterface;
@@ -35,14 +36,14 @@ class LogOut implements ImsLogOutInterface
     private CurlFactory $curlFactory;
 
     /**
-     * @var ImsConfig
+     * @var ConfigInterface
      */
-    private ImsConfig $adminImsConfig;
+    private ConfigInterface $imsConfig;
 
     /**
-     * @var ImsConnection
+     * @var GetProfileInterface
      */
-    private ImsConnection $adminImsConnection;
+    private GetProfileInterface $profile;
 
     /**
      * @var Auth
@@ -51,22 +52,22 @@ class LogOut implements ImsLogOutInterface
 
     /**
      * @param LoggerInterface $logger
-     * @param ImsConfig $adminImsConfig
+     * @param ConfigInterface $imsConfig
      * @param CurlFactory $curlFactory
-     * @param ImsConnection $adminImsConnection
+     * @param GetProfileInterface $profile
      * @param Auth $auth
      */
     public function __construct(
         LoggerInterface $logger,
-        ImsConfig $adminImsConfig,
+        ConfigInterface $imsConfig,
         CurlFactory $curlFactory,
-        ImsConnection $adminImsConnection,
+        GetProfileInterface $profile,
         Auth $auth
     ) {
         $this->logger = $logger;
         $this->curlFactory = $curlFactory;
-        $this->adminImsConfig = $adminImsConfig;
-        $this->adminImsConnection = $adminImsConnection;
+        $this->imsConfig = $imsConfig;
+        $this->profile = $profile;
         $this->auth = $auth;
     }
 
@@ -112,7 +113,7 @@ class LogOut implements ImsLogOutInterface
         $curl->addHeader('cache-control', 'no-cache');
 
         $curl->post(
-            $this->adminImsConfig->getBackendLogoutUrl($accessToken),
+            $this->imsConfig->getBackendLogoutUrl($accessToken),
             []
         );
 
@@ -133,11 +134,11 @@ class LogOut implements ImsLogOutInterface
     private function checkUserProfile(string $accessToken): bool
     {
         try {
-            $profile = $this->adminImsConnection->getProfile($accessToken);
+            $profile = $this->profile->getProfile($accessToken);
             if (!empty($profile['email'])) {
                 return true;
             }
-        } catch (AdobeImsAuthorizationException $exception) {
+        } catch (AuthorizationException $exception) {
             return false;
         }
         return false;

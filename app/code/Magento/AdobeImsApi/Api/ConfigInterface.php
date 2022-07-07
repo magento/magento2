@@ -124,8 +124,7 @@ interface ConfigInterface
     public function getOrganizationMembershipUrl(string $orgId): string;
 
     /**
-     * Enable Admin Adobe IMS Module and set Client ID and Client Secret and
-     * Organization ID and Two Factor Enabled
+     * Enable Admin Adobe IMS Module and set Client ID and Client Secret and Organization ID and Two Factor Enabled
      *
      * @param string $clientId
      * @param string $clientSecret
