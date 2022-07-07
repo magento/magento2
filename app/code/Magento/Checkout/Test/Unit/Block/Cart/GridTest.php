@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
+use Magento\Catalog\Model\Product;
 use Magento\Checkout\Block\Cart\Grid;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -17,6 +18,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\ResourceModel\Quote\Item\Collection;
 use Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -48,6 +50,21 @@ class GridTest extends TestCase
      * @var MockObject
      */
     private $scopeConfigMock;
+
+    /**
+     * @var MockObject
+     */
+    private $storeMock;
+
+    /**
+     * @var MockObject
+     */
+    private $storeManagerMock;
+
+    /**
+     * @var MockObject
+     */
+    private $contextMock;
 
     /**
      * @var MockObject
@@ -90,6 +107,18 @@ class GridTest extends TestCase
                 ->getMockForAbstractClass();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
+        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMockForAbstractClass();
+        $this->storeManagerMock->method('getStore')->willReturn($this->storeMock);
+        $this->contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->method('getScopeConfig')
+            ->willReturn($this->scopeConfigMock);
+        $this->contextMock->method('getStoreManager')
+            ->willReturn($this->storeManagerMock);
         $this->checkoutSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -109,6 +138,7 @@ class GridTest extends TestCase
         $this->block = $objectManagerHelper->getObject(
             Grid::class,
             [
+                'context' => $this->contextMock,
                 'itemCollectionFactory' => $this->itemCollectionFactoryMock,
                 'joinAttributeProcessor' => $this->joinAttributeProcessorMock,
                 'scopeConfig' => $this->scopeConfigMock,
@@ -134,6 +164,25 @@ class GridTest extends TestCase
     {
         $this->getMockItemsForGrid();
         $this->assertEquals($this->itemCollectionMock, $this->block->getItemsForGrid());
+    }
+
+    /**
+     * @return void
+     * @cover \Magento\Checkout\Block\Cart\Grid::filterCollection
+     */
+    private function setFilterCollection()
+    {
+        $productMock = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemMock = $this->getMockBuilder(Item::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getParentItemId'])
+            ->onlyMethods(['getProduct'])
+            ->getMock();
+        $itemMock->expects($this->any())->method('getParentItemId')->willReturn(1);
+        $itemMock->expects($this->any())->method('getProduct')->willReturn($productMock);
+        $this->itemCollectionMock->expects($this->any())->method('getItems')->willReturn([$itemMock]);
     }
 
     /**
@@ -171,7 +220,7 @@ class GridTest extends TestCase
         $this->layoutMock->expects($this->once())->method('setChild')->with(null, null, 'pager');
         $this->itemCollectionMock->expects($this->once())->method('load')->willReturnSelf();
         $this->quoteMock->expects($this->never())->method('getAllVisibleItems');
-        $this->itemCollectionMock->expects($this->once())->method('getItems')->willReturn([]);
+        $this->setFilterCollection();
         $this->block->setLayout($this->layoutMock);
     }
 
@@ -197,11 +246,6 @@ class GridTest extends TestCase
             ->willReturn($this->itemCollectionMock);
         $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
         $this->itemCollectionMock->expects($this->once())->method('setQuote')->with($this->quoteMock)->willReturnSelf();
-        $this->itemCollectionMock
-            ->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with('parent_item_id', ['null' => true])
-            ->willReturnSelf();
         $this->joinAttributeProcessorMock->expects($this->once())->method('process')->with($this->itemCollectionMock);
     }
 
