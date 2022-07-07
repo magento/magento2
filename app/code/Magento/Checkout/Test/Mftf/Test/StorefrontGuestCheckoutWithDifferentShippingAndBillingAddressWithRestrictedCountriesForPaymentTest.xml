@@ -52,11 +52,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForBillingAddressFormLoads"/>
 
         <!-- Fill Billing Address -->
-        <actionGroup ref="StorefrontFillBillingAddressActionGroup" stepKey="fillBillingAddress">
-             <argument name="address" value="CustomerUKAddressWithState"/>
-        </actionGroup>
-        <waitForElementVisible selector="{{CheckoutPaymentSection.guestRegion1}}" stepKey="waitForRegionToVisible"/>
-        <fillField selector="{{CheckoutPaymentSection.guestRegion1}}" userInput="{{CustomerUKAddressWithState.state}}" stepKey="selectRegion"/>
+        <actionGroup ref="StorefrontFillBillingAddressActionGroup" stepKey="fillBillingAddress"/>
         <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickOnUpdateButton"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
         <see selector="{{CheckoutPaymentSection.paymentMethodTitle}}" userInput="Check / Money order" stepKey="sdadasdasdsdaasd"/>

@@ -66,6 +66,5 @@
         <element name="discount" type="block" selector="tr.totals.discount"/>
         <element name="discountPrice" type="text" selector=".discount .price"/>
         <element name="billingAddressSameAsShippingCashOnDeliveryCheckbox" type="checkbox" selector="#billing-address-same-as-shipping-cashondelivery"/>
-        <element name="guestRegion1" type="select" selector="//div[@class='field _required']//input[@name='region']"/>
     </section>
 </sections>
