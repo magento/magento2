@@ -267,6 +267,8 @@ type SelectedShippingMethod @doc(description: "Contains details about the select
     method_title: String! @doc(description: "The label for the method code.")
     amount: Money! @doc(description: "The cost of shipping using this shipping method.")
     base_amount: Money @deprecated(reason: "The field should not be used on the storefront.")
+    price_excl_tax: Money! @doc(description: "The cost of shipping using this shipping method, excluding tax.")
+    price_incl_tax: Money! @doc(description: "The cost of shipping using this shipping method, including tax.")
 }
 
 type AvailableShippingMethod @doc(description: "Contains details about the possible shipping methods and carriers.") {
