@@ -10,7 +10,6 @@ namespace Magento\AdminAdobeIms\Authorization;
 
 use Exception;
 use Magento\AdminAdobeIms\Api\ImsWebapiRepositoryInterface;
-use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
@@ -41,6 +40,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     private const SERVICE_VERSION = 'V1';
     private const KEYS_LOCATION = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
     private const TEST_ADOBE_USER_ID = '121B46F2620BF4240A49TEST@AdobeID';
+    private const XML_PATH_ENABLED = 'adobe_ims/integration/admin_enabled';
 
     /**
      * @var JwtManagerInterface
@@ -106,7 +106,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
      */
     public function testUseAdobeAccessTokenModuleDisabled()
     {
-        $this->configWriter->save(ImsConfig::XML_PATH_ENABLED, 0);
+        $this->configWriter->save(self::XML_PATH_ENABLED, 0);
         $this->scopeConfig->clean();
 
         $token = $this->createAccessToken();
@@ -136,7 +136,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     {
         $adminUserNameFromFixture = 'webapi_user';
         $token = $this->createAccessToken();
-        $this->configWriter->save(ImsConfig::XML_PATH_ENABLED, 1);
+        $this->configWriter->save(self::XML_PATH_ENABLED, 1);
         $this->scopeConfig->clean();
         $this->runWebApiCall($token);
         $this->assertAdminUserIdIsSaved($adminUserNameFromFixture, $token);

@@ -20,6 +20,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class AdminTokenPluginTest extends WebapiAbstract
 {
     private const RESOURCE_PATH_ADMIN_TOKEN = "/V1/integration/admin/token";
+    private const XML_PATH_ENABLED = 'adobe_ims/integration/admin_enabled';
 
     /**
      * @var WriterInterface
@@ -51,7 +52,7 @@ class AdminTokenPluginTest extends WebapiAbstract
     {
         $adminUserNameFromFixture = 'webapi_user';
 
-        $this->configWriter->save(ImsConfig::XML_PATH_ENABLED, 1);
+        $this->configWriter->save(self::XML_PATH_ENABLED, 1);
         $this->scopeConfig->clean();
 
         $noExceptionOccurred = false;
@@ -79,7 +80,7 @@ class AdminTokenPluginTest extends WebapiAbstract
             $this->fail("Exception was expected to be thrown when Admin Adobe Ims module is enabled.");
         }
 
-        $this->configWriter->save(ImsConfig::XML_PATH_ENABLED, 0);
+        $this->configWriter->save(self::XML_PATH_ENABLED, 0);
         $this->scopeConfig->clean();
     }
 }
