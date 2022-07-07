@@ -15,10 +15,11 @@
             <description value="Verify checkbox is disabled 'Create Permanent Redirect' set 'No' on category and product edit page."/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-35589"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{DisableCreatePermanentRedirect.path}} {{DisableCreatePermanentRedirect.value}}" stepKey="enableCreatePermanentRedirect"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createDefaultCategory"/>
@@ -29,7 +30,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteDefaultCategory"/>
             <magentoCLI command="config:set {{EnableCreatePermanentRedirect.path}} {{EnableCreatePermanentRedirect.value}}" stepKey="disableCreatePermanentRedirect"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">

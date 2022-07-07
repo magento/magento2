@@ -80,7 +80,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if cookie restriction mode is enabled for this store
      *
      * @return bool
-     * @since 100.2.0
+     * @since 100.1.3
      */
     public function isCookieRestrictionModeEnabled()
     {

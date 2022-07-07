@@ -11,26 +11,50 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
+/**
+ * Multi-select form element widget.
+ */
 class Multiselect extends AbstractElement
 {
+    /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
+     * @var Random
+     */
+    private $random;
+
     /**
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
+     * @param Random|null $random
      */
     public function __construct(
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
         Escaper $escaper,
-        $data = []
+        $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null,
+        ?Random $random = null
     ) {
-        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
+        $secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        $random = $random ?? ObjectManager::getInstance()->get(Random::class);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data, $secureRenderer, $random);
         $this->setType('select');
         $this->setExtType('multiple');
         $this->setSize(10);
+        $this->secureRenderer = $secureRenderer;
+        $this->random = $random;
     }
 
     /**
@@ -71,7 +95,7 @@ class Multiselect extends AbstractElement
 
         $value = $this->getValue();
         if (!is_array($value)) {
-            $value = explode(',', $value);
+            $value = explode(',', $value ?? '');
         }
 
         $values = $this->getValues();
@@ -129,38 +153,49 @@ class Multiselect extends AbstractElement
         $result .= $this->getElementHtml();
 
         if ($this->getSelectAll() && $this->getDeselectAll()) {
-            $result .= '<a href="#" onclick="return ' .
-                $this->getJsObjectName() .
-                '.selectAll()">' .
-                $this->getSelectAll() .
-                '</a> <span class="separator">&nbsp;|&nbsp;</span>';
-            $result .= '<a href="#" onclick="return ' .
-                $this->getJsObjectName() .
-                '.deselectAll()">' .
-                $this->getDeselectAll() .
-                '</a>';
+            $random = $this->random->getRandomString(4);
+            $selectAllId = 'selId' .$random;
+            $deselectAllId = 'deselId' .$random;
+            $result .= '<a href="#" id="' .$selectAllId .'">' .$this->getSelectAll()
+                .'</a> <span class="separator">&nbsp;|&nbsp;</span>';
+            $result .= '<a href="#" id="' .$deselectAllId .'">' .$this->getDeselectAll() .'</a>';
+
+            $result .= $this->secureRenderer->renderEventListenerAsTag(
+                'onclick',
+                "return {$this->getJsObjectName()}.selectAll();\nreturn false;",
+                "#{$selectAllId}"
+            );
+            $result .= $this->secureRenderer->renderEventListenerAsTag(
+                'onclick',
+                "return {$this->getJsObjectName()}.deselectAll();",
+                "#{$deselectAllId}"
+            );
         }
 
         $result .= $this->getNoSpan() === true ? '' : '</span>' . "\n";
 
-        $result .= '<script type="text/javascript">' . "\n";
-        $result .= '   var ' . $this->getJsObjectName() . ' = {' . "\n";
-        $result .= '     selectAll: function() { ' . "\n";
-        $result .= '         var sel = $("' . $this->getHtmlId() . '");' . "\n";
-        $result .= '         for(var i = 0; i < sel.options.length; i ++) { ' . "\n";
-        $result .= '             sel.options[i].selected = true; ' . "\n";
-        $result .= '         } ' . "\n";
-        $result .= '         return false; ' . "\n";
-        $result .= '     },' . "\n";
-        $result .= '     deselectAll: function() {' . "\n";
-        $result .= '         var sel = $("' . $this->getHtmlId() . '");' . "\n";
-        $result .= '         for(var i = 0; i < sel.options.length; i ++) { ' . "\n";
-        $result .= '             sel.options[i].selected = false; ' . "\n";
-        $result .= '         } ' . "\n";
-        $result .= '         return false; ' . "\n";
-        $result .= '     }' . "\n";
-        $result .= '  }' . "\n";
-        $result .= "\n" . '</script>';
+        $script = '   var ' . $this->getJsObjectName() . ' = {' . "\n";
+        $script .= '     selectAll: function() { ' . "\n";
+        $script .= '         var sel = $("' . $this->getHtmlId() . '");' . "\n";
+        $script .= '         for(var i = 0; i < sel.options.length; i ++) { ' . "\n";
+        $script .= '             sel.options[i].selected = true; ' . "\n";
+        $script .= '         } ' . "\n";
+        $script .= '         return false; ' . "\n";
+        $script .= '     },' . "\n";
+        $script .= '     deselectAll: function() {' . "\n";
+        $script .= '         var sel = $("' . $this->getHtmlId() . '");' . "\n";
+        $script .= '         for(var i = 0; i < sel.options.length; i ++) { ' . "\n";
+        $script .= '             sel.options[i].selected = false; ' . "\n";
+        $script .= '         } ' . "\n";
+        $script .= '         return false; ' . "\n";
+        $script .= '     }' . "\n";
+        $script .= '  }' . "\n";
+        $result .= $this->secureRenderer->renderTag(
+            'script',
+            ['type' => 'text/javascript'],
+            $script,
+            false
+        );
 
         return $result;
     }
@@ -176,19 +211,25 @@ class Multiselect extends AbstractElement
     }
 
     /**
+     * Render an option for the select.
+     *
      * @param array $option
-     * @param array $selected
+     * @param string[] $selected
      * @return string
      */
     protected function _optionToHtml($option, $selected)
     {
-        $html = '<option value="' . $this->_escape($option['value']) . '"';
+        $optionId = 'optId' .$this->random->getRandomString(8);
+        $html = '<option value="' . $this->_escape($option['value']) . '" id="' . $optionId . '" ';
         $html .= isset($option['title']) ? 'title="' . $this->_escape($option['title']) . '"' : '';
-        $html .= isset($option['style']) ? 'style="' . $option['style'] . '"' : '';
         if (in_array((string)$option['value'], $selected)) {
             $html .= ' selected="selected"';
         }
         $html .= '>' . $this->_escape($option['label']) . '</option>' . "\n";
+        if (!empty($option['style'])) {
+            $html .= $this->secureRenderer->renderStyleAsTag($option['style'], "#$optionId");
+        }
+
         return $html;
     }
 }

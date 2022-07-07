@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontDropdownAttributeInLayeredNavigationTest">
+        <annotations>
+            <features value="LayeredNavigation"/>
+            <stories value="Product attributes in Layered Navigation"/>
+            <title value="[ES] Search with Layered Navigation and different types of attribute products."/>
+            <description value="Filtering by dropdown attribute in Layered navigation"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-36326"/>
+            <group value="layeredNavigation"/>
+            <group value="catalog"/>
+            <group value="SearchEngineElasticsearch"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="dropdownProductAttribute" stepKey="createDropdownProductAttribute"/>
+            <createData entity="productAttributeOption" stepKey="firstDropdownProductAttributeOption">
+                <requiredEntity createDataKey="createDropdownProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="secondDropdownProductAttributeOption">
+                <requiredEntity createDataKey="createDropdownProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getFirstDropdownProductAttributeOption">
+                <requiredEntity createDataKey="createDropdownProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getSecondDropdownProductAttributeOption">
+                <requiredEntity createDataKey="createDropdownProductAttribute"/>
+            </getData>
+            <createData entity="AddToDefaultSet" stepKey="AddDropdownProductAttributeToAttributeSet">
+                <requiredEntity createDataKey="createDropdownProductAttribute"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createFirstProduct">
+                <requiredEntity createDataKey="createDropdownProductAttribute"/>
+                <requiredEntity createDataKey="getFirstDropdownProductAttributeOption"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createSecondProduct">
+                <requiredEntity createDataKey="createDropdownProductAttribute"/>
+                <requiredEntity createDataKey="getSecondDropdownProductAttributeOption"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createDropdownProductAttribute" stepKey="deleteDropdownProductAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategory">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertFirstAttributeOptionPresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createDropdownProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getFirstDropdownProductAttributeOption.label$"/>
+            <argument name="attributeOptionPosition" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertSecondAttributeOptionPresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createDropdownProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getSecondDropdownProductAttributeOption.label$"/>
+            <argument name="attributeOptionPosition" value="2"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontFilterCategoryPageByAttributeOptionActionGroup" stepKey="filterCategoryByFirstOption">
+            <argument name="attributeLabel" value="$createDropdownProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getFirstDropdownProductAttributeOption.label$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertAppliedFilterActionGroup" stepKey="assertFilterByFirstOption">
+            <argument name="attributeLabel" value="$createDropdownProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getFirstDropdownProductAttributeOption.label$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertFirstProductOnCatalogPage">
+            <argument name="productName" value="$createFirstProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="assertSecondProductIsMissingOnCatalogPage">
+            <argument name="productName" value="$createSecondProduct.name$"/>
+        </actionGroup>
+        <click selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="removeSideBarFilter"/>
+        <actionGroup ref="StorefrontFilterCategoryPageByAttributeOptionActionGroup" stepKey="filterCategoryBySecondOption">
+            <argument name="attributeLabel" value="$createDropdownProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getSecondDropdownProductAttributeOption.label$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertAppliedFilterActionGroup" stepKey="assertFilterBySecondOption">
+            <argument name="attributeLabel" value="$createDropdownProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getSecondDropdownProductAttributeOption.label$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertSecondProductOnCatalogPage">
+            <argument name="productName" value="$createSecondProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="assertFirstProductIsMissingOnCatalogPage">
+            <argument name="productName" value="$createFirstProduct.name$"/>
+        </actionGroup>
+    </test>
+</tests>

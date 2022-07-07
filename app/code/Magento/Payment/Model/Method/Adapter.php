@@ -668,6 +668,7 @@ class Adapter implements MethodInterface, SaleOperationInterface
 
     /**
      * @inheritdoc
+     * @since 100.4.0
      */
     public function canSale(): bool
     {
@@ -676,6 +677,7 @@ class Adapter implements MethodInterface, SaleOperationInterface
 
     /**
      * @inheritdoc
+     * @since 100.4.0
      */
     public function sale(InfoInterface $payment, float $amount)
     {

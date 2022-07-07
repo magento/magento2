@@ -11,6 +11,7 @@ namespace Magento\Framework\Authorization;
  * Should be implemented by application developer that uses \Magento\Framework\Authorization component.
  *
  * @api
+ * @since 100.0.2
  */
 interface RoleLocatorInterface
 {

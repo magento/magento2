@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product;
 
@@ -23,6 +24,8 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Url\Helper\Data;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Helper\Output as OutputHelper;
 
 /**
  * Product list
@@ -75,6 +78,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Data $urlHelper
      * @param array $data
+     * @param OutputHelper|null $outputHelper
      */
     public function __construct(
         Context $context,
@@ -82,12 +86,14 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         Data $urlHelper,
-        array $data = []
+        array $data = [],
+        ?OutputHelper $outputHelper = null
     ) {
         $this->_catalogLayer = $layerResolver->get();
         $this->_postDataHelper = $postDataHelper;
         $this->categoryRepository = $categoryRepository;
         $this->urlHelper = $urlHelper;
+        $data['outputHelper'] = $outputHelper ?? ObjectManager::getInstance()->get(OutputHelper::class);
         parent::__construct(
             $context,
             $data
@@ -136,14 +142,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     public function getLoadedProductCollection()
     {
-        $collection = $this->_getProductCollection();
-
-        $categoryId = $this->getLayer()->getCurrentCategory()->getId();
-        foreach ($collection as $product) {
-            $product->setData('category_id', $categoryId);
-        }
-
-        return $collection;
+        return $this->_getProductCollection();
     }
 
     /**
@@ -198,6 +197,14 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
         if (!$collection->isLoaded()) {
             $collection->load();
+        }
+
+        $categoryId = $this->getLayer()->getCurrentCategory()->getId();
+
+        if ($categoryId) {
+            foreach ($collection as $product) {
+                $product->setData('category_id', $categoryId);
+            }
         }
 
         return parent::_beforeToHtml();
@@ -353,18 +360,16 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
         $category = $this->getLayer()->getCurrentCategory();
         if ($category) {
-            $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $category->getId();
+            $identities[] = [Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $category->getId()];
         }
 
         //Check if category page shows only static block (No products)
-        if ($category->getData('display_mode') == Category::DM_PAGE) {
-            return $identities;
+        if ($category->getData('display_mode') != Category::DM_PAGE) {
+            foreach ($this->_getProductCollection() as $item) {
+                $identities[] = $item->getIdentities();
+            }
         }
-
-        foreach ($this->_getProductCollection() as $item) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $identities = array_merge($identities, $item->getIdentities());
-        }
+        $identities = array_merge([], ...$identities);
 
         return $identities;
     }
@@ -377,7 +382,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     public function getAddToCartPostParams(Product $product)
     {
-        $url = $this->getAddToCartUrl($product);
+        $url = $this->getAddToCartUrl($product, ['_escape' => false]);
         return [
             'action' => $url,
             'data' => [
@@ -458,7 +463,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
             // if the product is associated with any category
             if ($categories->count()) {
                 // show products from this category
-                $this->setCategoryId(current($categories->getIterator())->getId());
+                $this->setCategoryId($categories->getIterator()->current()->getId());
             }
         }
 

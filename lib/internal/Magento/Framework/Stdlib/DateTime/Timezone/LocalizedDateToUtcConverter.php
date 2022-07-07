@@ -7,12 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Stdlib\DateTime\Timezone;
 
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Locale\ResolverInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
- * Class LocalizedDateToUtcConverter
+ * Localized date to UTC converter.
  */
 class LocalizedDateToUtcConverter implements LocalizedDateToUtcConverterInterface
 {
@@ -34,8 +33,6 @@ class LocalizedDateToUtcConverter implements LocalizedDateToUtcConverterInterfac
     private $localeResolver;
 
     /**
-     * LocalizedDateToUtcConverter constructor.
-     *
      * @param TimezoneInterface $timezone
      * @param ResolverInterface $localeResolver
      */
@@ -65,9 +62,7 @@ class LocalizedDateToUtcConverter implements LocalizedDateToUtcConverterInterfac
         $localTimestamp = $formatter->parse($date);
         $gmtTimestamp = $this->timezone->date($localTimestamp)->getTimestamp();
         $formattedUniversalTime = date($this->defaultFormat, $gmtTimestamp);
-
-        $date = new \DateTime($formattedUniversalTime, new \DateTimeZone($configTimezone));
-        $date->setTimezone(new \DateTimeZone('UTC'));
+        $date = new \DateTime($formattedUniversalTime);
 
         return $date->format($this->defaultFormat);
     }

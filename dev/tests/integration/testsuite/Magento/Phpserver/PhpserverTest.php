@@ -5,6 +5,9 @@
  */
 namespace Magento\Phpserver;
 
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\Process;
+
 /**
  * @magentoAppIsolation enabled
  *
@@ -19,47 +22,54 @@ class PhpserverTest extends \PHPUnit\Framework\TestCase
 {
     const BASE_URL = '127.0.0.1:8082';
 
-    private static $serverPid;
+    /**
+     * @var Process
+     */
+    private $serverProcess;
 
     /**
      * @var \Laminas\Http\Client
      */
     private $httpClient;
 
-    /**
-     * Instantiate phpserver in the pub folder
-     */
-    public static function setUpBeforeClass(): void
-    {
-        if (!(defined('TRAVIS') && TRAVIS === true)) {
-            self::markTestSkipped('Travis environment test');
-        }
-        $return = [];
-
-        $baseDir = __DIR__ . '/../../../../../../';
-        $command = sprintf(
-            'cd %s && php -S %s -t ./pub/ ./phpserver/router.php >/dev/null 2>&1 & echo $!',
-            $baseDir,
-            static::BASE_URL
-        );
-        // phpcs:ignore
-        exec($command, $return);
-        static::$serverPid = (int) $return[0];
-    }
-
     private function getUrl($url)
     {
         return sprintf('http://%s/%s', self::BASE_URL, ltrim($url, '/'));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     protected function setUp(): void
     {
         $this->httpClient = new \Laminas\Http\Client(null, ['timeout' => 10]);
+
+        /** @var Process $process */
+        $phpBinaryFinder = new PhpExecutableFinder();
+        $phpBinaryPath = $phpBinaryFinder->find();
+        $command = sprintf(
+            "%s -S %s -t ./pub ./phpserver/router.php",
+            $phpBinaryPath,
+            self::BASE_URL
+        );
+        $this->serverProcess = Process::fromShellCommandline(
+            $command,
+            realpath(__DIR__ . '/../../../../../../')
+        );
+        $this->serverProcess->start();
+        $this->serverProcess->waitUntil(function ($type, $output) {
+            return strpos($output, "Development Server") !== false;
+        });
+    }
+
+    protected function tearDown(): void
+    {
+        $this->serverProcess->stop();
     }
 
     public function testServerHasPid()
     {
-        $this->assertTrue(static::$serverPid > 0);
+        $this->assertTrue($this->serverProcess->getPid() > 0);
     }
 
     public function testServerResponds()
@@ -85,10 +95,5 @@ class PhpserverTest extends \PHPUnit\Framework\TestCase
 
         $this->assertFalse($response->isClientError());
         $this->assertStringStartsWith('image/gif', $response->getHeaders()->get('Content-Type')->getMediaType());
-    }
-
-    public static function tearDownAfterClass(): void
-    {
-        posix_kill(static::$serverPid, SIGKILL);
     }
 }

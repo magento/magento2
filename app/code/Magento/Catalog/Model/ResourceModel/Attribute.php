@@ -5,13 +5,12 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
+use Magento\Catalog\Model\ResourceModel\Attribute\RemoveProductAttributeData;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Catalog attribute resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
 {
@@ -28,9 +27,9 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
     protected $attrLockValidator;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @var RemoveProductAttributeData|null
      */
-    protected $metadataPool;
+    private $removeProductAttributeData;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -38,7 +37,8 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
      * @param \Magento\Eav\Model\ResourceModel\Entity\Type $eavEntityType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param LockValidatorInterface $lockValidator
-     * @param string $connectionName
+     * @param string|null $connectionName
+     * @param RemoveProductAttributeData|null $removeProductAttributeData
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -46,10 +46,14 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
         \Magento\Eav\Model\ResourceModel\Entity\Type $eavEntityType,
         \Magento\Eav\Model\Config $eavConfig,
         LockValidatorInterface $lockValidator,
-        $connectionName = null
+        $connectionName = null,
+        RemoveProductAttributeData $removeProductAttributeData = null
     ) {
         $this->attrLockValidator = $lockValidator;
         $this->_eavConfig = $eavConfig;
+        $this->removeProductAttributeData = $removeProductAttributeData ?? ObjectManager::getInstance()
+            ->get(RemoveProductAttributeData::class);
+
         parent::__construct($context, $storeManager, $eavEntityType, $connectionName);
     }
 
@@ -97,7 +101,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
             $attributeStoreIds = array_keys($this->_storeManager->getStores());
             if (!empty($attributeStoreIds)) {
                 $delCondition = [
-                    'attribute_id = ?' => $object->getId(),
+                    'attribute_id = ?' => (int)$object->getId(),
                     'store_id IN(?)' => $attributeStoreIds,
                 ];
                 $this->getConnection()->delete($object->getBackendTable(), $delCondition);
@@ -135,41 +139,12 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
                 );
             }
 
-            $backendTable = $attribute->getBackend()->getTable();
-            if ($backendTable) {
-                $linkField = $this->getMetadataPool()
-                    ->getMetadata(ProductInterface::class)
-                    ->getLinkField();
-
-                $backendLinkField = $attribute->getBackend()->getEntityIdField();
-
-                $select = $this->getConnection()->select()
-                    ->from(['b' => $backendTable])
-                    ->join(
-                        ['e' => $attribute->getEntity()->getEntityTable()],
-                        "b.$backendLinkField = e.$linkField"
-                    )->where('b.attribute_id = ?', $attribute->getId())
-                    ->where('e.attribute_set_id = ?', $result['attribute_set_id']);
-
-                $this->getConnection()->query($select->deleteFromSelect('b'));
-            }
+            $this->removeProductAttributeData->removeData($object, (int)$result['attribute_set_id']);
         }
 
         $condition = ['entity_attribute_id = ?' => $object->getEntityAttributeId()];
         $this->getConnection()->delete($this->getTable('eav_entity_attribute'), $condition);
 
         return $this;
-    }
-
-    /**
-     * @return \Magento\Framework\EntityManager\MetadataPool
-     */
-    private function getMetadataPool()
-    {
-        if (null === $this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
-        }
-        return $this->metadataPool;
     }
 }

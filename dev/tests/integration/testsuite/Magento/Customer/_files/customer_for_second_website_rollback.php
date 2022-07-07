@@ -21,16 +21,16 @@ $registry = $objectManager->get(Registry::class);
 $customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
 /** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
-$websiteId = $websiteRepository->get('test')->getId();
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 try {
+    $websiteId = $websiteRepository->get('test')->getId();
     $customer = $customerRepository->get('customer@example.com', $websiteId);
     $customerRepository->delete($customer);
 } catch (NoSuchEntityException $e) {
-    //customer already deleted
+    //customer or website already deleted
 }
 
 $registry->unregister('isSecureArea');

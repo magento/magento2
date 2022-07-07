@@ -43,8 +43,11 @@ $link = $product->getExtensionAttributes()->getDownloadableProductLinks()[0];
 
 $orderItem->setProductId(1)
     ->setProductType(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE)
+    ->setName('Downloadable Product')
     ->setProductOptions(['links' => [$link->getId()]])
     ->setBasePrice(100)
+    ->setPrice(10)
+    ->setSku('downloadable-product')
     ->setQtyOrdered(1);
 
 $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);

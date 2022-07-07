@@ -124,6 +124,9 @@ class CustomerRepositoryTest extends TestCase
      */
     private $model;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->customerResourceModel =
@@ -211,9 +214,10 @@ class CustomerRepositoryTest extends TestCase
     }
 
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testSave()
+    public function testSave(): void
     {
         $customerId = 1;
 
@@ -228,10 +232,10 @@ class CustomerRepositoryTest extends TestCase
                 'setFailuresNum',
                 'setFirstFailure',
                 'setLockExpires',
-                'setGroupId'
+                'setGroupId',
             ]
         )
-            ->onlyMethods(['getId', 'setId', 'getAttributeSetId', 'getDataModel', 'save'])
+            ->onlyMethods(['getId', 'setId', 'getAttributeSetId', 'getDataModel', 'save', 'setOrigData'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -250,7 +254,7 @@ class CustomerRepositoryTest extends TestCase
                 'getWebsiteId',
                 'getAddresses',
                 'setAddresses',
-                'getGroupId',
+                'getGroupId'
             ]
         );
         $customerSecureData = $this->getMockBuilder(CustomerSecure::class)
@@ -269,15 +273,15 @@ class CustomerRepositoryTest extends TestCase
         $this->customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
-        $this->customer->expects($this->at(4))
+        $this->customer
             ->method('__toArray')
-            ->willReturn([]);
-        $this->customer->expects($this->at(3))
-            ->method('__toArray')
-            ->willReturn(['group_id' => 1]);
-        $customerModel->expects($this->once())
-            ->method('setGroupId')
-            ->with(1);
+            ->willReturnOnConsecutiveCalls(['firstname' => 'firstname', 'group_id' => 1], []);
+        $customerModel->expects($this->exactly(2))
+            ->method('setOrigData')
+            ->withConsecutive(
+                ['firstname', 'firstname'],
+                ['group_id', 1]
+            );
         $this->customerRegistry->expects($this->atLeastOnce())
             ->method('retrieve')
             ->with($customerId)
@@ -337,7 +341,7 @@ class CustomerRepositoryTest extends TestCase
             ->willReturnMap(
                 [
                     ['rpToken', $customerModel],
-                    [null, $customerModel],
+                    [null, $customerModel]
                 ]
             );
         $customerModel->expects($this->once())
@@ -345,7 +349,7 @@ class CustomerRepositoryTest extends TestCase
             ->willReturnMap(
                 [
                     ['rpTokenCreatedAt', $customerModel],
-                    [null, $customerModel],
+                    [null, $customerModel]
                 ]
             );
 
@@ -386,7 +390,7 @@ class CustomerRepositoryTest extends TestCase
                 [
                     'customer_data_object' => $this->customer,
                     'orig_customer_data_object' => $origCustomer,
-                    'delegate_data' => [],
+                    'delegate_data' => []
                 ]
             );
 
@@ -394,9 +398,10 @@ class CustomerRepositoryTest extends TestCase
     }
 
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testSaveWithPasswordHash()
+    public function testSaveWithPasswordHash(): void
     {
         $customerId = 1;
         $passwordHash = 'ukfa4sdfa56s5df02asdf4rt';
@@ -530,7 +535,7 @@ class CustomerRepositoryTest extends TestCase
                 [
                     'customer_data_object' => $this->customer,
                     'orig_customer_data_object' => $origCustomer,
-                    'delegate_data' => [],
+                    'delegate_data' => []
                 ]
             );
 
@@ -538,9 +543,10 @@ class CustomerRepositoryTest extends TestCase
     }
 
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testGetList()
+    public function testGetList(): void
     {
         $collection = $this->createMock(Collection::class);
         $searchResults = $this->getMockForAbstractClass(
@@ -556,19 +562,23 @@ class CustomerRepositoryTest extends TestCase
             false
         );
         $customerModel = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId',
                     'setId',
+                    'getAttributeSetId',
+                    'getDataModel',
+                    'getCollection'
+                ]
+            )
+            ->addMethods(
+                [
                     'setStoreId',
                     'getStoreId',
-                    'getAttributeSetId',
                     'setAttributeSetId',
                     'setRpToken',
                     'setRpTokenCreatedAt',
-                    'getDataModel',
-                    'setPasswordHash',
-                    'getCollection'
+                    'setPasswordHash'
                 ]
             )
             ->setMockClassName('customerModel')
@@ -607,30 +617,60 @@ class CustomerRepositoryTest extends TestCase
             ->with('attribute-code');
         $collection->expects($this->once())
             ->method('addNameToSelect');
-        $collection->expects($this->at(2))
+        $collection
             ->method('joinAttribute')
-            ->with('billing_postcode', 'customer_address/postcode', 'default_billing', null, 'left')
-            ->willReturnSelf();
-        $collection->expects($this->at(3))
-            ->method('joinAttribute')
-            ->with('billing_city', 'customer_address/city', 'default_billing', null, 'left')
-            ->willReturnSelf();
-        $collection->expects($this->at(4))
-            ->method('joinAttribute')
-            ->with('billing_telephone', 'customer_address/telephone', 'default_billing', null, 'left')
-            ->willReturnSelf();
-        $collection->expects($this->at(5))
-            ->method('joinAttribute')
-            ->with('billing_region', 'customer_address/region', 'default_billing', null, 'left')
-            ->willReturnSelf();
-        $collection->expects($this->at(6))
-            ->method('joinAttribute')
-            ->with('billing_country_id', 'customer_address/country_id', 'default_billing', null, 'left')
-            ->willReturnSelf();
-        $collection->expects($this->at(7))
-            ->method('joinAttribute')
-            ->with('billing_company', 'customer_address/company', 'default_billing', null, 'left')
-            ->willReturnSelf();
+            ->withConsecutive(
+                [
+                    'billing_postcode',
+                    'customer_address/postcode',
+                    'default_billing',
+                    null,
+                    'left'
+                ],
+                [
+                    'billing_city',
+                    'customer_address/city',
+                    'default_billing',
+                    null,
+                    'left'
+                ],
+                [
+                    'billing_telephone',
+                    'customer_address/telephone',
+                    'default_billing',
+                    null,
+                    'left'
+                ],
+                [
+                    'billing_region',
+                    'customer_address/region',
+                    'default_billing',
+                    null,
+                    'left'
+                ],
+                [
+                    'billing_country_id',
+                    'customer_address/country_id',
+                    'default_billing',
+                    null,
+                    'left'
+                ],
+                [
+                    'billing_company',
+                    'customer_address/company',
+                    'default_billing',
+                    null,
+                    'left'
+                ]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $collection,
+                $collection,
+                $collection,
+                $collection,
+                $collection,
+                $collection
+            );
         $this->collectionProcessorMock->expects($this->once())
             ->method('process')
             ->with($searchCriteria, $collection);
@@ -653,7 +693,10 @@ class CustomerRepositoryTest extends TestCase
         $this->assertSame($searchResults, $this->model->getList($searchCriteria));
     }
 
-    public function testDeleteById()
+    /**
+     * @return void
+     */
+    public function testDeleteById(): void
     {
         $customerId = 14;
         $customerModel = $this->createPartialMock(\Magento\Customer\Model\Customer::class, ['delete']);
@@ -671,7 +714,10 @@ class CustomerRepositoryTest extends TestCase
         $this->assertTrue($this->model->deleteById($customerId));
     }
 
-    public function testDelete()
+    /**
+     * @return void
+     */
+    public function testDelete(): void
     {
         $customerId = 14;
         $customerModel = $this->createPartialMock(\Magento\Customer\Model\Customer::class, ['delete']);

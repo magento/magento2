@@ -10,6 +10,7 @@ use Magento\Framework\View\LayoutInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Context
 {

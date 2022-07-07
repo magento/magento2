@@ -6,6 +6,19 @@
 
 namespace Magento\Elasticsearch\Model\Adapter;
 
+use Elasticsearch\Common\Exceptions\Missing404Exception;
+use Magento\AdvancedSearch\Model\Client\ClientInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\StaticField;
+use Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface;
+use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
+use Magento\Elasticsearch\Model\Config;
+use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\ArrayManager;
+use Psr\Log\LoggerInterface;
+
 /**
  * Elasticsearch adapter
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -26,11 +39,13 @@ class Elasticsearch
      */
     private const MAPPING_TOTAL_FIELDS_BUFFER_LIMIT = 1000;
 
-    /**#@-*/
+    /**
+     * @var ConnectionManager
+     */
     protected $connectionManager;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver
+     * @var IndexNameResolver
      */
     protected $indexNameResolver;
 
@@ -40,22 +55,22 @@ class Elasticsearch
     protected $fieldMapper;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Config
+     * @var Config
      */
     protected $clientConfig;
 
     /**
-     * @var \Magento\AdvancedSearch\Model\Client\ClientInterface
+     * @var ClientInterface
      */
     protected $client;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface
+     * @var BuilderInterface
      */
     protected $indexBuilder;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -70,25 +85,57 @@ class Elasticsearch
     private $batchDocumentDataMapper;
 
     /**
-     * @param \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager
+     * @var array
+     */
+    private $mappedAttributes = [];
+
+    /**
+     * @var string[]
+     */
+    private $indexByCode = [];
+
+    /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $productAttributeRepository;
+
+    /**
+     * @var StaticField
+     */
+    private $staticFieldProvider;
+
+    /**
+     * @var ArrayManager
+     */
+    private $arrayManager;
+
+    /**
+     * @param ConnectionManager $connectionManager
      * @param FieldMapperInterface $fieldMapper
-     * @param \Magento\Elasticsearch\Model\Config $clientConfig
+     * @param Config $clientConfig
      * @param Index\BuilderInterface $indexBuilder
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      * @param Index\IndexNameResolver $indexNameResolver
      * @param BatchDataMapperInterface $batchDocumentDataMapper
      * @param array $options
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
+     * @param StaticField|null $staticFieldProvider
+     * @param ArrayManager|null $arrayManager
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager,
+        ConnectionManager $connectionManager,
         FieldMapperInterface $fieldMapper,
-        \Magento\Elasticsearch\Model\Config $clientConfig,
-        \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface $indexBuilder,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver $indexNameResolver,
+        Config $clientConfig,
+        BuilderInterface $indexBuilder,
+        LoggerInterface $logger,
+        IndexNameResolver $indexNameResolver,
         BatchDataMapperInterface $batchDocumentDataMapper,
-        $options = []
+        $options = [],
+        ProductAttributeRepositoryInterface $productAttributeRepository = null,
+        StaticField $staticFieldProvider = null,
+        ArrayManager $arrayManager = null
     ) {
         $this->connectionManager = $connectionManager;
         $this->fieldMapper = $fieldMapper;
@@ -97,12 +144,18 @@ class Elasticsearch
         $this->logger = $logger;
         $this->indexNameResolver = $indexNameResolver;
         $this->batchDocumentDataMapper = $batchDocumentDataMapper;
+        $this->productAttributeRepository = $productAttributeRepository ?:
+            ObjectManager::getInstance()->get(ProductAttributeRepositoryInterface::class);
+        $this->staticFieldProvider = $staticFieldProvider ?:
+            ObjectManager::getInstance()->get(StaticField::class);
+        $this->arrayManager = $arrayManager ?:
+            ObjectManager::getInstance()->get(ArrayManager::class);
 
         try {
             $this->client = $this->connectionManager->getConnection($options);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The search failed because of a search engine misconfiguration.')
             );
         }
@@ -112,14 +165,14 @@ class Elasticsearch
      * Retrieve Elasticsearch server status
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function ping()
     {
         try {
             $response = $this->client->ping();
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('Could not ping search engine: %1', $e->getMessage())
             );
         }
@@ -188,11 +241,26 @@ class Elasticsearch
         // prepare new index name and increase version
         $indexPattern = $this->indexNameResolver->getIndexPattern($storeId, $mappedIndexerId);
         $version = (int)(str_replace($indexPattern, '', $indexName));
-        $newIndexName = $indexPattern . (++$version);
 
-        // remove index if already exists
-        if ($this->client->indexExists($newIndexName)) {
-            $this->client->deleteIndex($newIndexName);
+        // compatibility with snapshotting collision
+        $deleteQueue = [];
+        do {
+            $newIndexName = $indexPattern . (++$version);
+            if ($this->client->indexExists($newIndexName)) {
+                $deleteQueue[]= $newIndexName;
+                $indexExists = true;
+            } else {
+                $indexExists = false;
+            }
+        } while ($indexExists);
+
+        foreach ($deleteQueue as $indexToDelete) {
+            // remove index if already exists, wildcard deletion may cause collisions
+            try {
+                $this->client->deleteIndex($indexToDelete);
+            } catch (\Exception $e) {
+                $this->logger->critical($e);
+            }
         }
 
         // prepare new index
@@ -321,7 +389,88 @@ class Elasticsearch
 
         // remove obsolete index
         if ($oldIndex) {
-            $this->client->deleteIndex($oldIndex);
+            try {
+                $this->client->deleteIndex($oldIndex);
+            } catch (\Exception $e) {
+                $this->logger->critical($e);
+            }
+            unset($this->indexByCode[$mappedIndexerId . '_' . $storeId]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Update Elasticsearch mapping for index.
+     *
+     * @param int $storeId
+     * @param string $mappedIndexerId
+     * @param string $attributeCode
+     * @return $this
+     */
+    public function updateIndexMapping(int $storeId, string $mappedIndexerId, string $attributeCode): self
+    {
+        $indexName = $this->getIndexFromAlias($storeId, $mappedIndexerId);
+        if (empty($indexName)) {
+            return $this;
+        }
+
+        try {
+            $this->updateMapping($attributeCode, $indexName);
+        } catch (Missing404Exception $e) {
+            unset($this->indexByCode[$mappedIndexerId . '_' . $storeId]);
+            $indexName = $this->getIndexFromAlias($storeId, $mappedIndexerId);
+            $this->updateMapping($attributeCode, $indexName);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Retrieve index definition from class.
+     *
+     * @param int $storeId
+     * @param string $mappedIndexerId
+     * @return string
+     */
+    private function getIndexFromAlias(int $storeId, string $mappedIndexerId): string
+    {
+        $indexCode = $mappedIndexerId . '_' . $storeId;
+        if (!isset($this->indexByCode[$indexCode])) {
+            $this->indexByCode[$indexCode] = $this->indexNameResolver->getIndexFromAlias($storeId, $mappedIndexerId);
+        }
+
+        return $this->indexByCode[$indexCode];
+    }
+
+    /**
+     * Retrieve mapped attributes from class.
+     *
+     * @param string $indexName
+     * @return array
+     */
+    private function getMappedAttributes(string $indexName): array
+    {
+        if (empty($this->mappedAttributes[$indexName])) {
+            $mappedAttributes = $this->client->getMapping(['index' => $indexName]);
+            $pathField = $this->arrayManager->findPath('properties', $mappedAttributes);
+            $this->mappedAttributes[$indexName] = $this->arrayManager->get($pathField, $mappedAttributes, []);
+        }
+
+        return $this->mappedAttributes[$indexName];
+    }
+
+    /**
+     * Set mapped attributes to class.
+     *
+     * @param string $indexName
+     * @param array $mappedAttributes
+     * @return $this
+     */
+    private function setMappedAttributes(string $indexName, array $mappedAttributes): self
+    {
+        foreach ($mappedAttributes as $attributeCode => $attributeParams) {
+            $this->mappedAttributes[$indexName][$attributeCode] = $attributeParams;
         }
 
         return $this;
@@ -344,7 +493,10 @@ class Elasticsearch
                 'entityType' => $mappedIndexerId,
                 // Use store id instead of website id from context for save existing fields mapping.
                 // In future websiteId will be eliminated due to index stored per store
-                'websiteId' => $storeId
+                'websiteId' => $storeId,
+                // this parameter is introduced to replace 'websiteId' which name does not reflect
+                // the value assigned to it
+                'storeId' => $storeId
             ]
         );
         $settings['index']['mapping']['total_fields']['limit'] = $this->getMappingTotalFieldsLimit($allAttributeTypes);
@@ -366,6 +518,39 @@ class Elasticsearch
      */
     private function getMappingTotalFieldsLimit(array $allAttributeTypes): int
     {
-        return count($allAttributeTypes) + self::MAPPING_TOTAL_FIELDS_BUFFER_LIMIT;
+        $count = count($allAttributeTypes);
+        foreach ($allAttributeTypes as $attributeType) {
+            if (isset($attributeType['fields'])) {
+                $count += count($attributeType['fields']);
+            }
+        }
+        return $count + self::MAPPING_TOTAL_FIELDS_BUFFER_LIMIT;
+    }
+
+    /**
+     * Perform index mapping update
+     *
+     * @param string $attributeCode
+     * @param string $indexName
+     * @return void
+     */
+    private function updateMapping(string $attributeCode, string $indexName): void
+    {
+        $attribute = $this->productAttributeRepository->get($attributeCode);
+        $newAttributeMapping = $this->staticFieldProvider->getField($attribute);
+        $mappedAttributes = $this->getMappedAttributes($indexName);
+        $attrToUpdate = array_diff_key($newAttributeMapping, $mappedAttributes);
+        if (!empty($attrToUpdate)) {
+            $settings['index']['mapping']['total_fields']['limit'] = $this
+                ->getMappingTotalFieldsLimit(array_merge($mappedAttributes, $attrToUpdate));
+            $this->client->putIndexSettings($indexName, ['settings' => $settings]);
+
+            $this->client->addFieldsMapping(
+                $attrToUpdate,
+                $indexName,
+                $this->clientConfig->getEntityType()
+            );
+            $this->setMappedAttributes($indexName, $attrToUpdate);
+        }
     }
 }

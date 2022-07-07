@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<?php if ($_entity = $block->getEntity()) : ?>
+<?php if ($_entity = $block->getEntity()): ?>
 <div id="comments_block" class="edit-order-comments">
     <div class="order-history-block">
         <div class="admin__field field-row">
@@ -20,7 +22,7 @@
         </div>
         <div class="admin__field">
             <div class="order-history-comments-options">
-                <?php if ($block->canSendCommentEmail()) : ?>
+                <?php if ($block->canSendCommentEmail()): ?>
                     <div class="admin__field admin__field-option">
                         <input name="comment[is_customer_notified]"
                                type="checkbox"
@@ -48,31 +50,41 @@
     </div>
 
     <ul class="note-list">
-        <?php foreach ($_entity->getCommentsCollection(true) as $_comment) : ?>
+        <?php foreach ($_entity->getCommentsCollection(true) as $_comment): ?>
             <li>
-                <span class="note-list-date"><?= /* @noEscape */ $block->formatDate($_comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
-                <span class="note-list-time"><?= /* @noEscape */ $block->formatTime($_comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
+                <span class="note-list-date">
+                    <?= /* @noEscape */ $block->formatDate($_comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?>
+                </span>
+                <span class="note-list-time">
+                    <?= /* @noEscape */ $block->formatTime($_comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?>
+                </span>
                 <span class="note-list-customer">
                     <?= $block->escapeHtml(__('Customer')) ?>
-                    <?php if ($_comment->getIsCustomerNotified()) : ?>
+                    <?php if ($_comment->getIsCustomerNotified()): ?>
                         <span class="note-list-customer-notified"><?= $block->escapeHtml(__('Notified')) ?></span>
-                    <?php else : ?>
-                        <span class="note-list-customer-not-notified"><?= $block->escapeHtml(__('Not Notified')) ?></span>
+                    <?php else: ?>
+                        <span class="note-list-customer-not-notified">
+                            <?= $block->escapeHtml(__('Not Notified')) ?>
+                        </span>
                     <?php endif; ?>
                 </span>
-                <div class="note-list-comment"><?= $block->escapeHtml($_comment->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
+                <div class="note-list-comment">
+                    <?= $block->escapeHtml($_comment->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?>
+                </div>
             </li>
         <?php endforeach; ?>
     </ul>
 </div>
-<script>
+    <?php $scriptString = <<<script
 require(['prototype'], function(){
     submitComment = function() {
-        submitAndReloadArea($('comments_block').parentNode, '<?= $block->escapeUrl($block->getSubmitUrl()) ?>')
+        submitAndReloadArea($('comments_block').parentNode, '{$block->escapeJs($block->getSubmitUrl())}')
     };
     if ($('submit_comment_button')) {
         $('submit_comment_button').observe('click', submitComment);
     }
 });
-</script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php endif; ?>

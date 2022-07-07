@@ -230,6 +230,10 @@ class Form extends \Magento\Backend\Block\Widget
             case 'date':
                 $element->setDateFormat($this->_localeDate->getDateFormatWithLongYear());
                 break;
+            case 'datetime':
+                $element->setDateFormat($this->_localeDate->getDateFormatWithLongYear());
+                $element->setTimeFormat($this->_localeDate->getTimeFormat());
+                break;
             case 'multiline':
                 $element->setLineCount($attribute->getMultilineCount());
                 break;
@@ -246,7 +250,13 @@ class Form extends \Magento\Backend\Block\Widget
      */
     protected function _addElementTypes(\Magento\Framework\Data\Form\AbstractForm $baseElement)
     {
-        $types = $this->_getAdditionalElementTypes();
+        $types = array_merge(
+            [
+                'datetime' => 'date'
+            ],
+            $this->_getAdditionalElementTypes()
+        );
+
         foreach ($types as $code => $className) {
             $baseElement->addType($code, $className);
         }

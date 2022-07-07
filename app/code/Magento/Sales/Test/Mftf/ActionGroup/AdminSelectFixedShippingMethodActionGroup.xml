@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectFixedShippingMethodActionGroup">
+        <annotations>
+            <description>Select Fixed Shipping Method on the admin create order page.</description>
+        </annotations>
+
+        <click selector="{{AdminInvoicePaymentShippingSection.shippingMethod}}" stepKey="chooseShippingMethod"/>
+        <waitForPageLoad stepKey="waitForShippingMethodLoad"/>
+    </actionGroup>
+</actionGroups>

@@ -23,8 +23,8 @@
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -44,6 +44,7 @@
             <argument name="productVar" value="$createProduct$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logout"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogoutBeforeCheck"/>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="navigateToCustomerEditPage">
             <argument name="customer" value="$createCustomer$"/>

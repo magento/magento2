@@ -5,13 +5,16 @@
  */
 namespace Magento\TestModuleMysqlMq\Model;
 
+use LogicException;
+use Magento\Framework\MessageQueue\ConnectionLostException;
+
 /**
  * Test message processor is used by \Magento\MysqlMq\Model\PublisherConsumerTest
  */
 class Processor
 {
     /**
-     * @param \Magento\TestModuleMysqlMq\Model\DataObject $message
+     * @param DataObject $message
      */
     public function processMessage($message)
     {
@@ -23,7 +26,7 @@ class Processor
     }
 
     /**
-     * @param \Magento\TestModuleMysqlMq\Model\DataObject $message
+     * @param DataObject $message
      */
     public function processObjectCreated($message)
     {
@@ -35,7 +38,7 @@ class Processor
     }
 
     /**
-     * @param \Magento\TestModuleMysqlMq\Model\DataObject $message
+     * @param DataObject $message
      */
     public function processCustomObjectCreated($message)
     {
@@ -47,7 +50,7 @@ class Processor
     }
 
     /**
-     * @param \Magento\TestModuleMysqlMq\Model\DataObject $message
+     * @param DataObject $message
      */
     public function processObjectUpdated($message)
     {
@@ -59,13 +62,23 @@ class Processor
     }
 
     /**
-     * @param \Magento\TestModuleMysqlMq\Model\DataObject $message
+     * @param DataObject $message
      */
     public function processMessageWithException($message)
     {
         file_put_contents($message->getOutputPath(), "Exception processing {$message->getEntityId()}");
-        throw new \LogicException(
+        throw new LogicException(
             "Exception during message processing happened. Entity: {{$message->getEntityId()}}"
+        );
+    }
+
+    /**
+     * @throws ConnectionLostException
+     */
+    public function processMessageWithConnectionException()
+    {
+        throw new ConnectionLostException(
+            "Connection exception during message processing happened."
         );
     }
 }

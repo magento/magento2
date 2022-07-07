@@ -59,7 +59,7 @@ class CollectionTimeLabelTest extends TestCase
     protected function setUp(): void
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(['getComment'])
+            ->setMethods(['getComment', 'getElementHtml'])
             ->disableOriginalConstructor()
             ->getMock();
 

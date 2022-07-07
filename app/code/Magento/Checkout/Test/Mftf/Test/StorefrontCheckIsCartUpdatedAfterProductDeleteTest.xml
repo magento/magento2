@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckIsCartUpdatedAfterProductDeleteTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Delete Products from Shopping Cart"/>
+            <title value="Remove product added to shopping cart"/>
+            <description value="The product has to be deleted from shopping cart if it deleted in admin panel"/>
+            <testCaseId value="MC-36299"/>
+            <useCaseId value="MAGETWO-83169"/>
+            <severity value="CRITICAL"/>
+            <group value="checkout"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct2" stepKey="createFirstProduct">
+                <field key="price">10.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createSecondProduct">
+                <field key="price">20.00</field>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addFirstProductToCart">
+            <argument name="product" value="$createFirstProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSecondProductToCart">
+            <argument name="product" value="$createSecondProduct$"/>
+        </actionGroup>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
+        <actionGroup ref="AssertStorefrontShoppingCartSummaryItemsActionGroup" stepKey="assertCartTotals">
+            <argument name="subtotal" value="$30.00"/>
+            <argument name="total" value="$40.00"/>
+        </actionGroup>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstProduct">
+            <argument name="sku" value="$createFirstProduct.sku$"/>
+        </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
+        <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertCartAfterProductDeleted">
+            <argument name="productName" value="$createSecondProduct.name$"/>
+            <argument name="productSku" value="$createSecondProduct.sku$"/>
+            <argument name="productPrice" value="$createSecondProduct.price$"/>
+            <argument name="subtotal" value="$createSecondProduct.price$" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <dontSee selector="{{CheckoutCartProductSection.productName}}" userInput="$createFirstProduct.name$" stepKey="checkFirstProductIsAbsentInCart"/>
+    </test>
+</tests>

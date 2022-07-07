@@ -19,6 +19,7 @@ use Magento\Sales\Model\Order\Invoice;
 /**
  * Class InvoiceService
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InvoiceService implements InvoiceManagementInterface
@@ -194,7 +195,7 @@ class InvoiceService implements InvoiceManagementInterface
     ): array {
         foreach ($order->getAllItems() as $orderItem) {
             if (isset($orderItemsQtyToInvoice[$orderItem->getId()])) {
-                if ($orderItem->isDummy() && $orderItem->getHasChildren()) {
+                if ($orderItem->getHasChildren()) {
                     $orderItemsQtyToInvoice = $this->setChildItemsQtyToInvoice($orderItem, $orderItemsQtyToInvoice);
                 }
             } else {

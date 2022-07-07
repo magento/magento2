@@ -5,19 +5,23 @@
  */
 namespace Magento\Elasticsearch\Model\DataProvider\Base;
 
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Search\Model\QueryInterface;
+use Elasticsearch\Common\Exceptions\BadRequest400Exception;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Search\Model\QueryResultFactory;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Search\Model\QueryInterface;
+use Magento\Search\Model\QueryResultFactory;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
+use Psr\Log\LoggerInterface;
 
 /**
  * Default implementation to provide suggestions mechanism for Elasticsearch
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Suggestions implements SuggestedQueriesInterface
 {
@@ -57,6 +61,16 @@ class Suggestions implements SuggestedQueriesInterface
     private $fieldProvider;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var GetSuggestionFrequencyInterface
+     */
+    private $getSuggestionFrequency;
+
+    /**
      * Suggestions constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
@@ -66,6 +80,8 @@ class Suggestions implements SuggestedQueriesInterface
      * @param SearchIndexNameResolver $searchIndexNameResolver
      * @param StoreManager $storeManager
      * @param FieldProviderInterface $fieldProvider
+     * @param LoggerInterface|null $logger
+     * @param GetSuggestionFrequencyInterface|null $getSuggestionFrequency
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -74,7 +90,9 @@ class Suggestions implements SuggestedQueriesInterface
         ConnectionManager $connectionManager,
         SearchIndexNameResolver $searchIndexNameResolver,
         StoreManager $storeManager,
-        FieldProviderInterface $fieldProvider
+        FieldProviderInterface $fieldProvider,
+        LoggerInterface $logger = null,
+        ?GetSuggestionFrequencyInterface $getSuggestionFrequency = null
     ) {
         $this->queryResultFactory = $queryResultFactory;
         $this->connectionManager = $connectionManager;
@@ -83,6 +101,9 @@ class Suggestions implements SuggestedQueriesInterface
         $this->searchIndexNameResolver = $searchIndexNameResolver;
         $this->storeManager = $storeManager;
         $this->fieldProvider = $fieldProvider;
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->getSuggestionFrequency = $getSuggestionFrequency ?:
+            ObjectManager::getInstance()->get(GetSuggestionFrequencyInterface::class);
     }
 
     /**
@@ -93,11 +114,22 @@ class Suggestions implements SuggestedQueriesInterface
         $result = [];
         if ($this->isSuggestionsAllowed()) {
             $isResultsCountEnabled = $this->isResultsCountEnabled();
+            try {
+                $suggestions = $this->getSuggestions($query);
+            } catch (BadRequest400Exception $e) {
+                $this->logger->critical($e);
+                $suggestions = [];
+            }
 
-            foreach ($this->getSuggestions($query) as $suggestion) {
+            foreach ($suggestions as $suggestion) {
                 $count = null;
                 if ($isResultsCountEnabled) {
-                    $count = isset($suggestion['freq']) ? $suggestion['freq'] : null;
+                    try {
+                        $count = $this->getSuggestionFrequency->execute($suggestion['text']);
+                    } catch (\Exception $e) {
+                        $this->logger->critical($e);
+                    }
+
                 }
                 $result[] = $this->queryResultFactory->create(
                     [
@@ -208,7 +240,6 @@ class Suggestions implements SuggestedQueriesInterface
                         [
                             'field' => $field,
                             'min_word_length' => 3,
-                            'min_doc_freq' => 1,
                         ]
                     ],
                 ],

@@ -105,6 +105,23 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
     /**
      * @inheritdoc
      */
+    public function getCacheKey()
+    {
+        $key = parent::getCacheKey();
+        $configurableAttributes = $this->getLayeredAttributesIfExists(
+            $this->getProduct(),
+            $this->getRequest()->getQuery()->toArray()
+        );
+        if (!empty($configurableAttributes)) {
+            $key .= '-' . sha1(json_encode($configurableAttributes));
+        }
+
+        return $key;
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function getRendererTemplate()
     {
         return $this->_template;
@@ -158,6 +175,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * Composes configuration for js price format
      *
      * @return string
+     * @since 100.2.3
      */
     public function getPriceFormatJson()
     {
@@ -168,6 +186,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * Composes configuration for js price
      *
      * @return string
+     * @since 100.2.3
      */
     public function getPricesJson()
     {

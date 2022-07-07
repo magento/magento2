@@ -36,6 +36,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -82,8 +83,7 @@
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedConfigurableProduct">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProduct"/>
-        <waitForPageLoad stepKey="waitForProductFormPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProduct"/>
 
         <!-- Assert downloadable links in product form -->
         <scrollTo selector="{{AdminProductDownloadableSection.sectionLinkGrid}}" stepKey="scrollToLinks"/>

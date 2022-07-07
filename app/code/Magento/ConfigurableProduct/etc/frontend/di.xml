@@ -9,8 +9,18 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface">
         <plugin name="Magento_ConfigurableProduct_Plugin_Model_ResourceModel_Attribute_InStockOptionSelectBuilder" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\InStockOptionSelectBuilder"/>
+        <plugin name="option_select_website_filter" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\ScopedOptionSelectBuilder"/>
     </type>
     <type name="Magento\ConfigurableProduct\Model\Product\Type\Configurable">
         <plugin name="used_products_cache" type="Magento\ConfigurableProduct\Model\Plugin\Frontend\UsedProductsCache" />
+        <plugin name="used_products_website_filter" type="Magento\ConfigurableProduct\Model\Plugin\Frontend\UsedProductsWebsiteFilter" />
+    </type>
+    <type name="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsCompositeFilter">
+        <arguments>
+            <argument name="configurableOptionsFilters" xsi:type="array">
+                <item name="status" xsi:type="object">Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsStatusFilter</item>
+                <item name="stock_status" xsi:type="object">Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsStockStatusFilter</item>
+            </argument>
+        </arguments>
     </type>
 </config>

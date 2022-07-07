@@ -67,6 +67,9 @@ class ShippingMethodConverterTest extends TestCase
      */
     protected $taxHelper;
 
+    /**
+     * @inheriDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -111,7 +114,10 @@ class ShippingMethodConverterTest extends TestCase
         );
     }
 
-    public function testModelToDataObject()
+    /**
+     * @return void
+     */
+    public function testModelToDataObject(): void
     {
         $customerTaxClassId = 100;
         $shippingPriceExclTax = 1000;
@@ -126,12 +132,10 @@ class ShippingMethodConverterTest extends TestCase
         $this->rateModelMock->expects($this->once())->method('getCarrier')->willReturn('CARRIER_CODE');
         $this->rateModelMock->expects($this->once())->method('getMethod')->willReturn('METHOD_CODE');
         $this->rateModelMock->expects($this->any())->method('getPrice')->willReturn($price);
-        $this->currencyMock->expects($this->at(0))
-            ->method('convert')->with($price, 'USD')->willReturn(100.12);
-        $this->currencyMock->expects($this->at(1))
-            ->method('convert')->with($shippingPriceExclTax, 'USD')->willReturn($shippingPriceExclTax);
-        $this->currencyMock->expects($this->at(2))
-            ->method('convert')->with($shippingPriceInclTax, 'USD')->willReturn($shippingPriceInclTax);
+        $this->currencyMock
+            ->method('convert')
+            ->withConsecutive([$price, 'USD'], [$shippingPriceExclTax, 'USD'], [$shippingPriceInclTax, 'USD'])
+            ->willReturnOnConsecutiveCalls(100.12, $shippingPriceExclTax, $shippingPriceInclTax);
 
         $this->rateModelMock->expects($this->once())
             ->method('getCarrierTitle')->willReturn('CARRIER_TITLE');
@@ -186,15 +190,13 @@ class ShippingMethodConverterTest extends TestCase
             ->with($shippingPriceInclTax)
             ->willReturn($this->shippingMethodMock);
 
-        $this->taxHelper->expects($this->at(0))
+        $this->taxHelper
             ->method('getShippingPrice')
-            ->with($price, false, $addressMock, $customerTaxClassId)
-            ->willReturn($shippingPriceExclTax);
-
-        $this->taxHelper->expects($this->at(1))
-            ->method('getShippingPrice')
-            ->with($price, true, $addressMock, $customerTaxClassId)
-            ->willReturn($shippingPriceInclTax);
+            ->withConsecutive(
+                [$price, false, $addressMock, $customerTaxClassId],
+                [$price, true, $addressMock, $customerTaxClassId]
+            )
+            ->willReturnOnConsecutiveCalls($shippingPriceExclTax, $shippingPriceInclTax);
 
         $this->assertEquals(
             $this->shippingMethodMock,

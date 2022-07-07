@@ -38,8 +38,7 @@
         </actionGroup>
         <!-- Select Edit next to the Default Store View -->
         <comment userInput="Select Edit next to the Default Store View" stepKey="commentEditDefaultView"/>
-        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickToEditDefaultStoreView"/>
-        <waitForPageLoad stepKey="waitForDefaultStorePage"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickToEditDefaultStoreView"/>
         <!-- Expand the Product Image Watermarks section-->
         <comment userInput="Expand the Product Image Watermarks section" stepKey="commentOpenWatermarksSection"/>
         <click selector="{{AdminDesignConfigSection.watermarkSectionHeader}}" stepKey="clickToProductImageWatermarks"/>

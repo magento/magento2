@@ -187,6 +187,55 @@
                 <display_ec>0</display_ec>
                 <verify_peer>1</verify_peer>
             </hosted_pro>
+            <paypal_paylater>
+                <experience_active>0</experience_active>
+                <enabled>0</enabled>
+                <productpage_display>0</productpage_display>
+                <productpage_position>header</productpage_position>
+                <productpage_stylelayout>text</productpage_stylelayout>
+                <productpage_logotype>primary</productpage_logotype>
+                <productpage_logoposition>left</productpage_logoposition>
+                <productpage_textcolor>black</productpage_textcolor>
+                <productpage_textsize>12</productpage_textsize>
+                <productpage_ratio>1x1</productpage_ratio>
+                <productpage_color>blue</productpage_color>
+                <categorypage_display>0</categorypage_display>
+                <categorypage_position>header</categorypage_position>
+                <categorypage_stylelayout>flex</categorypage_stylelayout>
+                <categorypage_color>blue</categorypage_color>
+                <categorypage_ratio>20x1</categorypage_ratio>
+                <categorypage_logotype>primary</categorypage_logotype>
+                <categorypage_logoposition>left</categorypage_logoposition>
+                <categorypage_textcolor>black</categorypage_textcolor>
+                <categorypage_textsize>12</categorypage_textsize>
+                <homepage_display>0</homepage_display>
+                <homepage_position>header</homepage_position>
+                <homepage_stylelayout>flex</homepage_stylelayout>
+                <homepage_ratio>1x1</homepage_ratio>
+                <homepage_color>blue</homepage_color>
+                <homepage_logotype>primary</homepage_logotype>
+                <homepage_logoposition>left</homepage_logoposition>
+                <homepage_textcolor>black</homepage_textcolor>
+                <homepage_textsize>12</homepage_textsize>
+                <checkout_payment_display>0</checkout_payment_display>
+                <checkout_payment_position>header</checkout_payment_position>
+                <checkout_payment_stylelayout>text</checkout_payment_stylelayout>
+                <checkout_payment_logotype>primary</checkout_payment_logotype>
+                <checkout_payment_logoposition>left</checkout_payment_logoposition>
+                <checkout_payment_textcolor>black</checkout_payment_textcolor>
+                <checkout_payment_textsize>12</checkout_payment_textsize>
+                <checkout_payment_ratio>1x1</checkout_payment_ratio>
+                <checkout_payment_color>blue</checkout_payment_color>
+                <cartpage_display>0</cartpage_display>
+                <cartpage_position>header</cartpage_position>
+                <cartpage_stylelayout>text</cartpage_stylelayout>
+                <cartpage_logotype>primary</cartpage_logotype>
+                <cartpage_logoposition>left</cartpage_logoposition>
+                <cartpage_textcolor>black</cartpage_textcolor>
+                <cartpage_textsize>12</cartpage_textsize>
+                <cartpage_ratio>1x1</cartpage_ratio>
+                <cartpage_color>blue</cartpage_color>
+            </paypal_paylater>
         </payment>
     </default>
 </config>

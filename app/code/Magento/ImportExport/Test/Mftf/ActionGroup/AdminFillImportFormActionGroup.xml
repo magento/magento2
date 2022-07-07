@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillImportFormActionGroup">
+        <annotations>
+            <description>Fills the form on the System > Data Transfer > Import page.</description>
+        </annotations>
+        <arguments>
+            <argument name="entityType" defaultValue="Products" type="string"/>
+            <argument name="importBehavior" defaultValue="Add/Update" type="string"/>
+            <argument name="validationStrategy" defaultValue="Stop on Error" type="string"/>
+            <argument name="allowedErrorsCount" defaultValue="10" type="string"/>
+            <argument name="fieldSeparator" defaultValue="," type="string"/>
+            <argument name="multipleValueSeparator" defaultValue="," type="string"/>
+            <argument name="emptyAttributeValueConstant" defaultValue="__EMPTY__VALUE__" type="string"/>
+            <argument name="imagesFileDirectory" defaultValue="" type="string"/>
+            <argument name="importFile" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminImportMainSection.entityType}}" stepKey="waitForEntityType"/>
+        <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="{{entityType}}" stepKey="selectEntityType"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.importBehavior}}" stepKey="waitForImportBehavior"/>
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="{{importBehavior}}" stepKey="selectImportBehaviorOption"/>
+        <selectOption selector="{{AdminImportMainSection.validationStrategy}}" userInput="{{validationStrategy}}" stepKey="selectValidationStrategyOption"/>
+        <fillField selector="{{AdminImportMainSection.allowedErrorsCount}}" userInput="{{allowedErrorsCount}}" stepKey="fillAllowedErrorsCountField"/>
+        <fillField selector="{{AdminImportMainSection.fieldSeparator}}" userInput="{{fieldSeparator}}" stepKey="fillFieldSeparatorField"/>
+        <fillField selector="{{AdminImportMainSection.multipleValueSeparator}}" userInput="{{multipleValueSeparator}}" stepKey="fillMultipleValueSeparatorField"/>
+        <fillField selector="{{AdminImportMainSection.emptyAttributeValueConstant}}" userInput="{{emptyAttributeValueConstant}}" stepKey="fillEmptyAttributeValueConstantField"/>
+        <attachFile selector="{{AdminImportMainSection.selectFileToImport}}" userInput="{{importFile}}" stepKey="attachFileForImport"/>
+        <fillField selector="{{AdminImportMainSection.imagesFileDirectory}}" userInput="{{imagesFileDirectory}}" stepKey="fillImagesFileDirectoryField"/>
+    </actionGroup>
+</actionGroups>

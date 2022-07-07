@@ -8,6 +8,8 @@ namespace Magento\Customer\Helper;
 use Magento\Customer\Api\CustomerNameGenerationInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
 
 /**
  * Customer helper for view.
@@ -20,21 +22,29 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper implements Custo
     protected $_customerMetadataService;
 
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param CustomerMetadataInterface $customerMetadataService
+     * @param Escaper|null $escaper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        CustomerMetadataInterface $customerMetadataService
+        CustomerMetadataInterface $customerMetadataService,
+        Escaper $escaper = null
     ) {
         $this->_customerMetadataService = $customerMetadataService;
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(Escaper::class);
         parent::__construct($context);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCustomerName(CustomerInterface $customerData)
     {
@@ -57,6 +67,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper implements Custo
         if ($suffixMetadata->isVisible() && $customerData->getSuffix()) {
             $name .= ' ' . $customerData->getSuffix();
         }
-        return $name;
+
+        return $this->escaper->escapeHtml($name);
     }
 }

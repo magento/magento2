@@ -122,9 +122,7 @@
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductFilterLoad"/>
-
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage"/>
 
         <!-- change the option on the first attribute -->
         <selectOption stepKey="clickFirstAttribute" selector="{{ModifyAttributes.nthExistingAttribute($$createModifiableProductAttribute.default_frontend_label$$)}}" userInput="option1"/>

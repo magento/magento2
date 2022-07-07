@@ -12,10 +12,13 @@
         <element name="widgetType" type="select" selector="#code"/>
         <element name="widgetDesignTheme" type="select" selector="#theme_id"/>
         <element name="continue" type="button" timeout="30" selector="#continue_button"/>
+        <element name="resetBtn" type="button" selector=".page-actions-buttons button#reset" timeout="30"/>
         <element name="widgetTitle" type="input" selector="#title"/>
         <element name="widgetStoreIds" type="select" selector="#store_ids"/>
         <element name="widgetSortOrder" type="input" selector="#sort_order"/>
         <element name="addLayoutUpdate" type="button" selector=".action-default.scalable.action-add"/>
+        <element name="layoutUpdate" type="block" selector=".page_group_container"/>
+        <element name="removeLastLayoutUpdate" type="button" selector=".page_group_container:last-child .action-default.scalable.action-delete"/>
         <element name="selectDisplayOn" type="select" selector="#widget_instance[0][page_group]"/>
         <element name="selectContainer" type="select" selector="#all_pages_0>table>tbody>tr>td:nth-child(1)>div>div>select"/>
         <element name="displayOnByIndex" type="select" selector="select[name='widget_instance[{{index}}][page_group]']" parameterized="true"/>
@@ -26,6 +29,8 @@
         <element name="widgetOptions" type="select" selector="#widget_instace_tabs_properties_section"/>
         <element name="addNewCondition" type="select" selector=".rule-param.rule-param-new-child"/>
         <element name="selectCondition" type="input" selector="#conditions__1__new_child"/>
+        <element name="conditionOperator" type="button" selector="#conditions__1__children>li:nth-child(1)>span:nth-child(3) a"/>
+        <element name="selectOperator" type="select" selector="#conditions__1__children>li:nth-child(1)>span:nth-child(3) select"/>
         <element name="ruleParameter" type="select" selector="#conditions__1__children>li:nth-child(1)>span:nth-child(4)>a"/>
         <element name="setRuleParameter" type="input" selector="#conditions__1--1__value"/>
         <element name="applyParameter" type="button" selector=".rule-param-apply"/>
@@ -36,9 +41,22 @@
         <element name="searchBlock" type="button" selector="//div[@class='admin__filter-actions']/button[@title='Search']"/>
         <element name="blockStatus" type="select" selector="//select[@name='chooser_is_active']"/>
         <element name="searchedBlock" type="button" selector="//*[@class='magento-message']//tbody/tr/td[1]"/>
-        <element name="saveWidget" type="select" selector="#save"/>
+        <element name="saveWidget" type="button" selector="#save" timeout="30"/>
         <element name="displayMode" type="select" selector="select[id*='display_mode']"/>
         <element name="restrictTypes" type="select" selector="select[id*='types']"/>
         <element name="saveAndContinue" type="button" selector="#save_and_edit_button" timeout="30"/>
+        <element name="specificEntitySelectContainer" type="select" selector="select[name='widget_instance[0][anchor_categories][block]']"/>
+        <element name="specificEntitySelectRadio" type="input" selector="#specific_anchor_categories_0"/>
+        <element name="specificEntityOptionsChooser" type="button" selector="#anchor_categories_ids_0 .widget-option-chooser"/>
+        <element name="widgetInstanceType" type="select" selector=".admin__field-control select#instance_code" />
+        <!-- Catalog Product List Widget Options -->
+        <element name="title" type="input" selector="[name='parameters[title]']"/>
+        <element name="displayPageControl" type="select" selector="[name='parameters[show_pager]']"/>
+        <element name="numberOfProductsToDisplay" type="input" selector="[name='parameters[products_count]']"/>
+        <element name="template" type="select" selector="[name='parameters[template]']"/>
+        <element name="cacheLifetime" type="input" selector="[name='parameters[cache_lifetime]']"/>
+        <element name="deleteWidgetLayoutAction" type="button" selector="#page_group_container > div:first-of-type > div.fieldset-wrapper-title > div > .action-default.action-delete"/> 
+        <element name="CountDeleteButtons" type="button" selector="#page_group_container > .fieldset-wrapper.page_group_container > div.fieldset-wrapper-title > div > .action-default.action-delete"/>
     </section>
 </sections>
+

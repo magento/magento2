@@ -48,7 +48,10 @@ class CsvTest extends TestCase
      */
     public function testDestruct(string $destination, bool $shouldBeDeleted): void
     {
-        $csv = $this->objectManager->create(Csv::class, ['destination' => $destination]);
+        $csv = $this->objectManager->create(Csv::class, [
+            'destination' => $destination,
+            'destinationDirectoryCode' => DirectoryList::VAR_DIR
+        ]);
         /** @var Filesystem $fileSystem */
         $fileSystem = $this->objectManager->get(Filesystem::class);
         $directoryHandle = $fileSystem->getDirectoryRead(DirectoryList::VAR_DIR);

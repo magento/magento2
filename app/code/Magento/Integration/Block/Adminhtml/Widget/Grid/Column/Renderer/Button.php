@@ -6,8 +6,12 @@
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer;
 
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Integration\Model\Integration;
+use Magento\Backend\Block\Context;
 
 /**
  * Render HTML <button> tag.
@@ -16,19 +20,75 @@ use Magento\Integration\Model\Integration;
 class Button extends AbstractRenderer
 {
     /**
-     * {@inheritdoc}
+     * @var SecureHtmlRenderer
      */
-    public function render(\Magento\Framework\DataObject $row)
+    private $secureRenderer;
+
+    /**
+     * @var Random
+     */
+    private $random;
+
+    /**
+     * Button constructor.
+     * @param Context $context
+     * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
+     * @param Random|null $random
+     */
+    public function __construct(
+        Context $context,
+        array $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null,
+        ?Random $random = null
+    ) {
+        parent::__construct($context, $data);
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        $this->random = $random ?? ObjectManager::getInstance()->get(Random::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function render(DataObject $row)
     {
-        /** @var array $attributes */
-        $attributes = $this->_prepareAttributes($row);
-        return sprintf('<button %s>%s</button>', $this->_getAttributesStr($attributes), $this->_getValue($row));
+        $attributes = $this->extractAttributes($row);
+        $attributes['button-renderer-hook-id'] = 'hook' .$this->random->getRandomString(10);
+
+        return sprintf('<button %s>%s</button>', $this->renderAttributes($attributes), $this->_getValue($row))
+            .$this->renderSpecialAttributes($attributes);
+    }
+
+    /**
+     * Extract attributes to render.
+     *
+     * @param DataObject $row
+     * @return string[]
+     */
+    private function extractAttributes(DataObject $row): array
+    {
+        $attributes = [];
+        foreach ($this->_getValidAttributes() as $attributeName) {
+            $methodName = sprintf('_get%sAttribute', ucfirst($attributeName));
+            $rowMethodName = sprintf('get%s', ucfirst($attributeName));
+            $attributeValue = method_exists(
+                $this,
+                $methodName
+            ) ? $this->{$methodName}(
+                $row
+            ) : $this->getColumn()->{$rowMethodName}();
+            if ($attributeValue) {
+                $attributes[$attributeName] = $attributeValue;
+            }
+        }
+
+        return $attributes;
     }
 
     /**
      * Determine whether current integration came from config file
      *
-     * @param \Magento\Framework\DataObject $row
+     * @param DataObject $row
      * @return bool
      */
     protected function _isConfigBasedIntegration(DataObject $row)
@@ -43,7 +103,7 @@ class Button extends AbstractRenderer
     /**
      * Whether current item is disabled.
      *
-     * @param \Magento\Framework\DataObject $row
+     * @param DataObject $row
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -53,7 +113,9 @@ class Button extends AbstractRenderer
     }
 
     /**
-     * @param \Magento\Framework\DataObject $row
+     * Retrieve "disabled" attribute value for the row.
+     *
+     * @param DataObject $row
      * @return string
      */
     protected function _getDisabledAttribute(DataObject $row)
@@ -68,31 +130,45 @@ class Button extends AbstractRenderer
      * - Then it tries to get it from the button's column layout description.
      * If received attribute value is empty - attribute is not added to final HTML.
      *
-     * @param \Magento\Framework\DataObject $row
+     * @param DataObject $row
      * @return array
      */
     protected function _prepareAttributes(DataObject $row)
     {
-        $attributes = [];
-        foreach ($this->_getValidAttributes() as $attributeName) {
-            $methodName = sprintf('_get%sAttribute', ucfirst($attributeName));
-            $rowMethodName = sprintf('get%s', ucfirst($attributeName));
-            $attributeValue = method_exists(
-                $this,
-                $methodName
-            ) ? $this->{$methodName}(
-                $row
-            ) : $this->getColumn()->{$rowMethodName}();
-
-            if ($attributeValue) {
-                $attributes[] = sprintf(
-                    '%s="%s"',
-                    $attributeName,
-                    $this->escapeHtmlAttr($attributeValue, false)
-                );
+        $attributes = $this->extractAttributes($row);
+        foreach ($attributes as $attributeName => $attributeValue) {
+            if ($attributeName === 'style' || mb_strpos($attributeName, 'on') === 0) {
+                //Will render event handlers and style as separate tags
+                continue;
             }
+            $attributes[] = sprintf(
+                '%s="%s"',
+                $attributeName,
+                $this->escapeHtmlAttr($attributeValue, false)
+            );
         }
+
         return $attributes;
+    }
+
+    /**
+     * Render HTML attributes.
+     *
+     * @param array $attributes
+     * @return string
+     */
+    private function renderAttributes(array $attributes): string
+    {
+        $html = '';
+        foreach ($attributes as $attributeName => $attributeValue) {
+            if ($attributeName === 'style' || mb_strpos($attributeName, 'on') === 0) {
+                //Will render event handlers and style as separate tags
+                continue;
+            }
+            $html .= ($html ? ' ' : '') ."{$attributeName}=\"{$this->escapeHtmlAttr($attributeValue)}\"";
+        }
+
+        return $html;
     }
 
     /**
@@ -139,5 +215,37 @@ class Button extends AbstractRenderer
     protected function _getAttributesStr($attributes)
     {
         return join(' ', $attributes);
+    }
+
+    /**
+     * Render special attributes as separate tags.
+     *
+     * @param string[] $attributes
+     * @return string
+     */
+    private function renderSpecialAttributes(array $attributes): string
+    {
+        if (!$hookId = $attributes['button-renderer-hook-id']) {
+            return '';
+        }
+
+        $html = '';
+        if (!empty($attributes['style'])) {
+            $html .= $this->secureRenderer->renderStyleAsTag(
+                $attributes['style'],
+                "[button-renderer-hook-id='$hookId']"
+            );
+        }
+        foreach ($this->_getValidAttributes() as $attr) {
+            if (!empty($attributes[$attr]) && mb_strpos($attr, 'on') === 0) {
+                $html .= $this->secureRenderer->renderEventListenerAsTag(
+                    $attr,
+                    $attributes[$attr],
+                    "*[button-renderer-hook-id='$hookId']"
+                );
+            }
+        }
+
+        return $html;
     }
 }

@@ -6,7 +6,9 @@
 
 namespace Magento\Framework\Stdlib\DateTime;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -20,42 +22,29 @@ class DateTimeFormatter implements DateTimeFormatterInterface
     protected $useIntlFormatObject;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface
+     * @var ResolverInterface
      */
     private $localeResolver;
 
     /**
      * @param bool|null $useIntlFormatObject
+     * @param ResolverInterface|null $localeResolver
      */
     public function __construct(
-        $useIntlFormatObject = null
+        $useIntlFormatObject = null,
+        ResolverInterface $localeResolver = null
     ) {
-        $this->useIntlFormatObject = (null === $useIntlFormatObject)
-            ? !defined('HHVM_VERSION')
-            : $useIntlFormatObject;
+        $this->useIntlFormatObject = $useIntlFormatObject ?? !\defined('HHVM_VERSION');
+        $this->localeResolver = $localeResolver
+            ?? ObjectManager::getInstance()->get(ResolverInterface::class);
     }
 
     /**
-     * Get locale resolver
-     *
-     * @return \Magento\Framework\Locale\ResolverInterface|mixed
-     */
-    private function getLocaleResolver()
-    {
-        if ($this->localeResolver === null) {
-            $this->localeResolver = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Locale\ResolverInterface::class
-            );
-        }
-        return $this->localeResolver;
-    }
-
-    /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function formatObject($object, $format = null, $locale = null)
     {
-        $locale = (null === $locale) ? $this->getLocaleResolver()->getLocale() : $locale;
+        $locale = $locale ?? $this->localeResolver->getLocale();
         if ($this->useIntlFormatObject) {
             return \IntlDateFormatter::formatObject($object, $format, $locale);
         }
@@ -73,13 +62,14 @@ class DateTimeFormatter implements DateTimeFormatterInterface
      */
     protected function doFormatObject($object, $format = null, $locale = null)
     {
-        $pattern = $dateFormat = $timeFormat = $calendar = null;
+        $pattern = $calendar = null;
 
         if (is_array($format)) {
             list($dateFormat, $timeFormat) = $format;
         } elseif (is_numeric($format)) {
             $dateFormat = $format;
-        } elseif (is_string($format) || null == $format) {
+            $timeFormat = \IntlDateFormatter::FULL;
+        } elseif (is_string($format) || null === $format) {
             $dateFormat = $timeFormat = \IntlDateFormatter::MEDIUM;
             $pattern = $format;
         } else {

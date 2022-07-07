@@ -5,8 +5,9 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
+        "magento/module-captcha": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-config": "*",
@@ -19,12 +20,13 @@
         "magento/module-quote": "*",
         "magento/module-sales": "*",
         "magento/module-sales-rule": "*",
+        "magento/module-security": "*",
         "magento/module-shipping": "*",
         "magento/module-store": "*",
         "magento/module-tax": "*",
         "magento/module-theme": "*",
         "magento/module-ui": "*",
-        "magento/module-captcha": "*"
+        "magento/module-authorization": "*"
     },
     "suggest": {
         "magento/module-cookie": "*"

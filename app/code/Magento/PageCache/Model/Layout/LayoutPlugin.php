@@ -84,18 +84,19 @@ class LayoutPlugin
     public function afterGetOutput(Layout $subject, $result)
     {
         if ($subject->isCacheable() && $this->config->isEnabled()) {
-            $tags = [[]];
+            $tags = [];
+            $isVarnish = $this->config->getType() === Config::VARNISH;
+
             foreach ($subject->getAllBlocks() as $block) {
                 if ($block instanceof IdentityInterface) {
                     $isEsiBlock = $block->getTtl() > 0;
-                    $isVarnish = $this->config->getType() == Config::VARNISH;
                     if ($isVarnish && $isEsiBlock) {
                         continue;
                     }
                     $tags[] = $block->getIdentities();
                 }
             }
-            $tags = array_unique(array_merge(...$tags));
+            $tags = array_unique(array_merge([], ...$tags));
             $tags = $this->pageCacheTagsPreprocessor->process($tags);
             $this->response->setHeader('X-Magento-Tags', implode(',', $tags));
         }

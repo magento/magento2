@@ -11,6 +11,10 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\View;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Shipping\Helper\Data as ShippingHelper;
+use Magento\Tax\Helper\Data as TaxHelper;
+
 /**
  * @api
  * @since 100.0.2
@@ -28,15 +32,21 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * @param \Magento\Sales\Helper\Admin $adminHelper
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param array $data
+     * @param ShippingHelper|null $shippingHelper
+     * @param TaxHelper|null $taxHelper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Sales\Helper\Admin $adminHelper,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
-        array $data = []
+        array $data = [],
+        ?ShippingHelper $shippingHelper = null,
+        ?TaxHelper $taxHelper = null
     ) {
         $this->_carrierFactory = $carrierFactory;
+        $data['shippingHelper'] = $shippingHelper ?? ObjectManager::getInstance()->get(ShippingHelper::class);
+        $data['taxHelper'] = $taxHelper ?? ObjectManager::getInstance()->get(TaxHelper::class);
         parent::__construct($context, $registry, $adminHelper, $data);
     }
 

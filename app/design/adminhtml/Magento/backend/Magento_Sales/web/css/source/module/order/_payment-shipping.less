@@ -9,13 +9,15 @@
 
 .admin__payment-method-wrapper {
     margin: 0;
-    width: calc(50% - @indent__l);
+    width: ~'calc(50% - @{indent__l})';
+
     .admin__field {
         margin-left: 0;
         &:first-child {
             margin-top: 1.5rem;
         }
     }
+
     .admin__payment-methods {
         margin: 0;
     }
@@ -62,6 +64,7 @@
     position: absolute;
     right: 0;
     top: 0;
+
     span {
         background-color: @color-white;
         display: block;
@@ -71,6 +74,7 @@
         position: absolute;
         top: 43px;
     }
+
     .order-shipping-address & {
         span {
             top: 0;
@@ -102,6 +106,7 @@
     + .order-payment-currency {
         margin-top: @indent__s;
     }
+    
     .admin__table-secondary {
         margin-top: @indent__s;
         &:extend(.abs-admin__table-secondary-edit-order all);

@@ -62,7 +62,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * The getter function to get the new ConfigParser dependency.
      *
      * @return \Magento\Framework\Communication\Config\ConfigParser
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getConfigParser()
     {

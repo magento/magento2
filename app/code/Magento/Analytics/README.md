@@ -1,6 +1,6 @@
 # Magento_Analytics module
 
-The Magento_Analytics module integrates your Magento instance with the [Magento Business Intelligence (MBI)](https://magento.com/products/business-intelligence) to use [Advanced Reporting](https://devdocs.magento.com/guides/v2.3/advanced-reporting/modules.html) functionality.
+The Magento_Analytics module integrates your Magento instance with the [Magento Business Intelligence (MBI)](https://business.adobe.com/products/magento/business-intelligence.html) to use [Advanced Reporting](https://devdocs.magento.com/guides/v2.4/advanced-reporting/modules.html) functionality.
 
 The module implements the following functionality:
 
@@ -9,13 +9,14 @@ The module implements the following functionality:
 - Collecting the Magento instance data as reports for MBI
 - Introducing API that provides the collected data
 - Extending Magento configuration with the module parameters:
-    - Subscription status (enabled/disabled)
-    - Industry (a business area in which the instance website works)
-    - Time of data collection (time of the day when the module collects data)
+  - Subscription status (enabled/disabled)
+  - Industry (a business area in which the instance website works)
+  - Time of data collection (time of the day when the module collects data)
 
 ## Installation details
 
 Before disabling or uninstalling this module, note that the following modules depends on this module:
+
 - Magento_CatalogAnalytics
 - Magento_CustomerAnalytics
 - Magento_QuoteAnalytics
@@ -25,8 +26,8 @@ Before disabling or uninstalling this module, note that the following modules de
 
 ## Structure
 
-Beyond the [usual module file structure](https://devdocs.magento.com/guides/v2.3/architecture/archi_perspectives/components/modules/mod_intro.html) the module contains a directory `ReportXml`.
-[Report XML](https://devdocs.magento.com/guides/v2.3/advanced-reporting/report-xml.html) is a markup language used to build reports for Advanced Reporting.
+Beyond the [usual module file structure](https://devdocs.magento.com/guides/v2.4/architecture/archi_perspectives/components/modules/mod_intro.html) the module contains a directory `ReportXml`.
+[Report XML](https://devdocs.magento.com/guides/v2.4/advanced-reporting/report-xml.html) is a markup language used to build reports for Advanced Reporting.
 The language declares SQL queries using XML declaration.
 
 ## Subscription Process
@@ -38,12 +39,13 @@ The subscription to the MBI service is enabled during the installation process o
 Configuration settings for the Analytics module can be modified in the Admin Panel on the Stores > Configuration page under the General > Advanced Reporting tab.
 
 The following options can be adjusted:
+
 - Advanced Reporting Service (Enabled/Disabled)
-    - Alters the status of the Advanced Reporting subscription
+  - Alters the status of the Advanced Reporting subscription
 - Time of day to send data (Hour/Minute/Second in the store's time zone)
-    - Defines when the data collection process for the Advanced Reporting service occurs
+  - Defines when the data collection process for the Advanced Reporting service occurs
 - Industry
-    - Defines the industry of the store in order to create a personalized Advanced Reporting experience
+  - Defines the industry of the store in order to create a personalized Advanced Reporting experience
 
 ## Extensibility
 

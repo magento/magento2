@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <group value="Catalog"/>
             <group value="SearchEngineElasticsearch"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -114,8 +115,10 @@
             </createData>
 
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
-            <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="performReindex"/>
-            <magentoCLI command="cache:clean" arguments="full_page" stepKey="cleanFullPageCache"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="performReindex"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
         </before>
 
         <after>

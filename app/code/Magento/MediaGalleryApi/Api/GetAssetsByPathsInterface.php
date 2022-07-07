@@ -10,6 +10,7 @@ namespace Magento\MediaGalleryApi\Api;
 /**
  * Get media gallery assets by paths in media storage
  * @api
+ * @since 101.0.0
  */
 interface GetAssetsByPathsInterface
 {
@@ -19,6 +20,7 @@ interface GetAssetsByPathsInterface
      * @param string[] $paths
      * @return \Magento\MediaGalleryApi\Api\Data\AssetInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 101.0.0
      */
     public function execute(array $paths): array;
 }

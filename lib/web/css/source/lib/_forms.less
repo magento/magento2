@@ -271,7 +271,7 @@
     input[type="tel"],
     input[type="search"],
     input[type="number"],
-    input[type="datetime"],
+    input[type*="date"],
     input[type="email"] {
         .lib-form-element-input(@_type: input-text);
     }
@@ -314,7 +314,7 @@
         .lib-form-validation();
     }
 
-    div.mage-error[generated] {
+    div.mage-error {
         .lib-form-validation-note();
     }
 

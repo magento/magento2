@@ -213,6 +213,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $customerId
      * @return $this
+     * @since 100.4.0
      */
     public function addCustomerFilter(int $customerId): Collection
     {
@@ -224,7 +225,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             )->join(
                 ['subscriber' => $this->getTable('newsletter_subscriber')],
                 'link.subscriber_id=subscriber.subscriber_id',
-                ['subscriber_store_id' => 'subscriber.store_id']
+                [
+                    'subscriber_store_id' => 'subscriber.store_id',
+                    'subscriber_id' => 'subscriber.subscriber_id',
+                ]
             )->where(
                 'subscriber.customer_id = ?',
                 $customerId

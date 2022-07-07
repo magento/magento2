@@ -199,9 +199,6 @@ class WishlistTest extends TestCase
         $this->catalogImageHelperMock->expects($this->any())
             ->method('getFrame')
             ->willReturn(true);
-        $this->catalogImageHelperMock->expects($this->once())
-            ->method('getResizedImageInfo')
-            ->willReturn([]);
 
         $this->wishlistHelperMock->expects($this->once())
             ->method('getProductUrl')
@@ -400,9 +397,6 @@ class WishlistTest extends TestCase
         $this->catalogImageHelperMock->expects($this->any())
             ->method('getFrame')
             ->willReturn(true);
-        $this->catalogImageHelperMock->expects($this->exactly(2))
-            ->method('getResizedImageInfo')
-            ->willReturn([]);
 
         $this->wishlistHelperMock->expects($this->exactly(2))
             ->method('getProductUrl')

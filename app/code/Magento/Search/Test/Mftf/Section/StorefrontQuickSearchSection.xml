@@ -14,5 +14,6 @@
         <element name="searchMiniForm" type="input" selector="#search_mini_form"/>
         <element name="searchDropDownSuggestion" type="text" selector="//div[@id='search_autocomplete']/ul/li/span"/>
         <element name="searchDropDownName" type="text" selector="//div[@id='search_autocomplete']//span[contains(., '{{searchQuery}}')]" parameterized="true"/>
+        <element name="searchMagnifierIcon" type="text" selector="//*[@id='search_mini_form']//label[@data-role='minisearch-label']"/>
     </section>
 </sections>

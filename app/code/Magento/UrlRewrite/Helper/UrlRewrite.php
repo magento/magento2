@@ -5,17 +5,36 @@
  */
 namespace Magento\UrlRewrite\Helper;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Backend\Model\Validator\UrlKey\CompositeUrlKey;
+use Magento\Framework\Exception\LocalizedException;
+
 class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Validation error constants
      */
-    const VERR_MANYSLASHES = 1;
+    public const VERR_MANYSLASHES = 1;
 
     // Too many slashes in a row of request path, e.g. '///foo//'
-    const VERR_ANCHOR = 2;
+    public const VERR_ANCHOR = 2;
 
     // Anchor is not supported in request path, e.g. 'foo#bar'
+
+    /**
+     * @var CompositeUrlKey
+     */
+    private $compositeUrlValidator;
+
+    /**
+     * @param CompositeUrlKey|null $compositeUrlValidator
+     */
+    public function __construct(
+        CompositeUrlKey $compositeUrlValidator = null
+    ) {
+        $this->compositeUrlValidator = $compositeUrlValidator
+            ?? ObjectManager::getInstance()->get(CompositeUrlKey::class);
+    }
 
     /**
      * Core func to validate request path
@@ -28,6 +47,7 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _validateRequestPath($requestPath)
     {
+        $requestPath = $requestPath !== null ? $requestPath : '';
         if (strpos($requestPath, '//') !== false) {
             throw new \Exception(
                 __('Do not use two or more consecutive slashes in the request path.'),
@@ -37,11 +57,19 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
         if (strpos($requestPath, '#') !== false) {
             throw new \Exception(__('Anchor symbol (#) is not supported in request path.'), self::VERR_ANCHOR);
         }
+        $requestPathArray = explode('/', $requestPath);
+        foreach ($requestPathArray as $requestPathPart) {
+            $errors = $this->compositeUrlValidator->validate($requestPathPart);
+            if (!empty($errors)) {
+                throw new LocalizedException($errors[0]);
+            }
+        }
         return true;
     }
 
     /**
      * Validates request path
+     *
      * Either returns TRUE (success) or throws error (validation failed)
      *
      * @param string $requestPath
@@ -53,14 +81,14 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
         try {
             $this->_validateRequestPath($requestPath);
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
+            throw new LocalizedException(__($e->getMessage()));
         }
         return true;
     }
 
     /**
-     * Validates suffix for url rewrites to inform user about errors in it
-     * Either returns TRUE (success) or throws error (validation failed)
+     * Validates suffix for url rewrites to inform user about errors in it either returns TRUE
+     * (success) or throws error (validation failed)
      *
      * @param string $suffix
      * @throws \Magento\Framework\Exception\LocalizedException

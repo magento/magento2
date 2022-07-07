@@ -76,7 +76,8 @@ class Builder
      * Init data for builder
      *
      * @param array $data
-     * @return $this;
+     * @return $this
+     * @since 100.1.0
      * @since 100.1.0
      */
     public function setData(array $data)

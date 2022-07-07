@@ -10,6 +10,7 @@ namespace Magento\MediaGalleryApi\Api;
 /**
  * Get a media gallery asset keywords related to media gallery asset ids provided
  * @api
+ * @since 101.0.0
  */
 interface GetAssetsKeywordsInterface
 {
@@ -18,6 +19,7 @@ interface GetAssetsKeywordsInterface
      *
      * @param int[] $assetIds
      * @return \Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterface[]
+     * @since 101.0.0
      */
     public function execute(array $assetIds): array;
 }

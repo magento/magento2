@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FillOutCustomCMSPageContentActionGroup">
+        <annotations>
+            <description>DEPRECATED. Use AdminCmsPageFillOutBasicFieldsActionGroup and other AGs from CMS module. Fills out the Page details (Page Title, Content and URL Key)</description>
+        </annotations>
+
+        <arguments>
+            <argument name="title" type="string"/>
+            <argument name="content" type="string"/>
+            <argument name="identifier" type="string"/>
+        </arguments>
+
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{title}}" stepKey="fillFieldTitle"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContentTabForPage"/>
+        <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{content}}" stepKey="fillFieldContentHeading"/>
+        <scrollTo selector="{{CmsNewPagePageContentSection.content}}" stepKey="scrollToPageContent"/>
+        <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{content}}" stepKey="fillFieldContent"/>
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{identifier}}" stepKey="fillFieldUrlKey"/>
+    </actionGroup>
+</actionGroups>

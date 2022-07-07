@@ -6,6 +6,7 @@
 namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Mview\View;
 
 /**
  * Test Class for \Magento\Framework\Mview\View\Changelog
@@ -121,6 +122,54 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $this->model->getVersion());
         $this->model->clear(1);
         $this->assertEquals(1, $this->model->getVersion()); //the same that a table is empty
+    }
+
+    /**
+     * Create entity table for MView
+     *
+     * @param string $tableName
+     * @return void
+     */
+    private function createEntityTable(string $tableName)
+    {
+        $table = $this->resource->getConnection()->newTable(
+            $tableName
+        )->addColumn(
+            'entity_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+            'Version ID'
+        )->addColumn(
+            'additional_column',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            'Entity ID'
+        );
+        $this->resource->getConnection()->createTable($table);
+    }
+
+    public function testAdditionalColumns()
+    {
+        $tableName = 'test_mview_table';
+        $this->createEntityTable($tableName);
+        $view = $this->objectManager->create(View::class);
+        $view->load('test_view_with_additional_columns');
+        $view->subscribe();
+        $this->connection->insert($tableName, ['entity_id' => 12, 'additional_column' => 13]);
+        $select = $this->connection->select()
+            ->from($view->getChangelog()->getName(), ['entity_id', 'test_additional_column']);
+        $actual = $this->connection->fetchAll($select);
+        $this->assertEquals(
+            [
+                'entity_id' => "12",
+                'test_additional_column' => "13"
+            ],
+            reset($actual)
+        );
+        $this->connection->dropTable($tableName);
+        $this->connection->dropTable($view->getChangelog()->getName());
     }
 
     /**

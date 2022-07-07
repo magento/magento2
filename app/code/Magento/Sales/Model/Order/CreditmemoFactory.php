@@ -14,6 +14,7 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 /**
  * Factory class for @see \Magento\Sales\Model\Order\Creditmemo
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreditmemoFactory
@@ -32,7 +33,7 @@ class CreditmemoFactory
 
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $unserialize;
 

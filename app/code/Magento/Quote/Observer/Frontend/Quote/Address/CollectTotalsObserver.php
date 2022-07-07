@@ -5,7 +5,16 @@
  */
 namespace Magento\Quote\Observer\Frontend\Quote\Address;
 
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Helper\Address;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Vat;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Model\Quote;
 
 /**
  * Handle customer VAT number on collect_totals_before event of quote address.
@@ -15,22 +24,22 @@ use Magento\Framework\Event\ObserverInterface;
 class CollectTotalsObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Customer\Api\AddressRepositoryInterface
+     * @var AddressRepositoryInterface
      */
     private $addressRepository;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     private $customerSession;
 
     /**
-     * @var \Magento\Customer\Helper\Address
+     * @var Address
      */
     protected $customerAddressHelper;
 
     /**
-     * @var \Magento\Customer\Model\Vat
+     * @var Vat
      */
     protected $customerVat;
 
@@ -40,36 +49,36 @@ class CollectTotalsObserver implements ObserverInterface
     protected $vatValidator;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
+     * @var CustomerInterfaceFactory
      */
     protected $customerDataFactory;
 
     /**
      * Group Management
      *
-     * @var \Magento\Customer\Api\GroupManagementInterface
+     * @var GroupManagementInterface
      */
     protected $groupManagement;
 
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Customer\Helper\Address $customerAddressHelper
-     * @param \Magento\Customer\Model\Vat $customerVat
+     * @param Address $customerAddressHelper
+     * @param Vat $customerVat
      * @param VatValidator $vatValidator
-     * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory
-     * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
-     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param CustomerInterfaceFactory $customerDataFactory
+     * @param GroupManagementInterface $groupManagement
+     * @param AddressRepositoryInterface $addressRepository
+     * @param Session $customerSession
      */
     public function __construct(
-        \Magento\Customer\Helper\Address $customerAddressHelper,
-        \Magento\Customer\Model\Vat $customerVat,
+        Address $customerAddressHelper,
+        Vat $customerVat,
         VatValidator $vatValidator,
-        \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory,
-        \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        \Magento\Customer\Model\Session $customerSession
+        CustomerInterfaceFactory $customerDataFactory,
+        GroupManagementInterface $groupManagement,
+        AddressRepositoryInterface $addressRepository,
+        Session $customerSession
     ) {
         $this->customerVat = $customerVat;
         $this->customerAddressHelper = $customerAddressHelper;
@@ -83,25 +92,23 @@ class CollectTotalsObserver implements ObserverInterface
     /**
      * Handle customer VAT number if needed on collect_totals_before event of quote address
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
-        /** @var \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment */
+        /** @var ShippingAssignmentInterface $shippingAssignment */
         $shippingAssignment = $observer->getShippingAssignment();
-        /** @var \Magento\Quote\Model\Quote $quote */
+        /** @var Quote $quote */
         $quote = $observer->getQuote();
-        /** @var \Magento\Quote\Model\Quote\Address $address */
+        /** @var Quote\Address $address */
         $address = $shippingAssignment->getShipping()->getAddress();
 
         $customer = $quote->getCustomer();
         $storeId = $customer->getStoreId();
 
-        if ($customer->getDisableAutoGroupChange()
-            || false == $this->vatValidator->isEnabled($address, $storeId)
-        ) {
+        if ($customer->getDisableAutoGroupChange() || !$this->vatValidator->isEnabled($address, $storeId)) {
             return;
         }
         $customerCountryCode = $address->getCountryId();
@@ -119,9 +126,8 @@ class CollectTotalsObserver implements ObserverInterface
 
         $groupId = null;
         if (empty($customerVatNumber) || false == $this->customerVat->isCountryInEU($customerCountryCode)) {
-            $groupId = $customer->getId() ? $this->groupManagement->getDefaultGroup(
-                $storeId
-            )->getId() : $this->groupManagement->getNotLoggedInGroup()->getId();
+            $groupId = $customer->getId() ? $quote->getCustomerGroupId() :
+                $this->groupManagement->getNotLoggedInGroup()->getId();
         } else {
             // Magento always has to emulate group even if customer uses default billing/shipping address
             $groupId = $this->customerVat->getCustomerGroupIdBasedOnVatNumber(
@@ -136,6 +142,7 @@ class CollectTotalsObserver implements ObserverInterface
             $quote->setCustomerGroupId($groupId);
             $this->customerSession->setCustomerGroupId($groupId);
             $customer->setGroupId($groupId);
+            $customer->setEmail($customer->getEmail() ?: $quote->getCustomerEmail());
             $quote->setCustomer($customer);
         }
     }

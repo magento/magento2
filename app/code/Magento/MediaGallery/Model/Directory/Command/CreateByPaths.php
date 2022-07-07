@@ -60,6 +60,7 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
                 continue;
             }
             try {
+                $path = $path !== null ? $path : '';
                 //phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $name = basename($path);
                 //phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -78,7 +79,7 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
         if (!empty($failedPaths)) {
             throw new CouldNotSaveException(
                 __(
-                    'Could not save directories: %paths',
+                    'Could not create directories: %paths',
                     [
                         'paths' => implode(' ,', $failedPaths)
                     ]

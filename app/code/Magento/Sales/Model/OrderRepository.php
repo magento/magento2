@@ -157,6 +157,9 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     private function setOrderTaxDetails(OrderInterface $order)
     {
         $extensionAttributes = $order->getExtensionAttributes();
+        if ($extensionAttributes === null) {
+            $extensionAttributes = $this->orderExtensionFactory->create();
+        }
         $orderTaxDetails = $this->orderTaxManagement->getOrderTaxDetails($order->getEntityId());
         $appliedTaxes = $orderTaxDetails->getAppliedTaxes();
 
@@ -180,7 +183,16 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     private function setPaymentAdditionalInfo(OrderInterface $order): void
     {
         $extensionAttributes = $order->getExtensionAttributes();
-        $paymentAdditionalInformation = $order->getPayment()->getAdditionalInformation();
+        if ($extensionAttributes === null) {
+            $extensionAttributes = $this->orderExtensionFactory->create();
+        }
+
+        $paymentAdditionalInformation = [];
+        $payment = $order->getPayment();
+
+        if ($payment) {
+            $paymentAdditionalInformation = $payment->getAdditionalInformation();
+        }
 
         $objects = [];
         foreach ($paymentAdditionalInformation as $key => $value) {
@@ -317,7 +329,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult
      * @return void
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(

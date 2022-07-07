@@ -16,6 +16,7 @@ use Magento\Store\Model\Store;
  * Create Quote for instance purchase.
  *
  * @api May be used for pluginization.
+ * @since 100.2.0
  */
 class QuoteCreation
 {
@@ -43,6 +44,7 @@ class QuoteCreation
      * @param Address $billingAddress
      * @return Quote
      * @throws LocalizedException if quote can not be created.
+     * @since 100.2.0
      */
     public function createQuote(
         Store $store,

@@ -102,4 +102,53 @@ class TemplateTest extends TestCase
         $this->_model->setPath('template/new');
         $this->assertEquals($expectedResult, $this->_model->toOptionArray());
     }
+
+    public function testToOptionArrayWithoutPath()
+    {
+        $collection = $this->createMock(Collection::class);
+        $collection->expects(
+            $this->once()
+        )->method(
+            'toOptionArray'
+        )->willReturn(
+            [
+                ['value' => 'template_one', 'label' => 'Template One'],
+                ['value' => 'template_two', 'label' => 'Template Two'],
+            ]
+        );
+
+        $this->_coreRegistry->expects(
+            $this->once()
+        )->method(
+            'registry'
+        )->with(
+            'config_system_email_template'
+        )->willReturn(
+            $collection
+        );
+
+        $this->_emailConfig->expects(
+            $this->never()
+        )->method(
+            'getTemplateLabel'
+        )->with(
+            ''
+        )
+        ->willThrowException(
+            new \UnexpectedValueException("Email template '' is not defined.")
+        );
+
+        $expectedResult = [
+            [
+                'value' => 'template_one',
+                'label' => 'Template One',
+            ],
+            [
+                'value' => 'template_two',
+                'label' => 'Template Two',
+            ],
+        ];
+
+        $this->assertEquals($expectedResult, $this->_model->toOptionArray());
+    }
 }

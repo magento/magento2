@@ -12,4 +12,7 @@
     <event name="payment_method_assign_data_payflow_advanced">
         <observer name="payflow_advanced_data_assigner" instance="Magento\PaypalGraphQl\Observer\PayflowLinkSetAdditionalData"/>
     </event>
+    <event name="payment_method_assign_data_payflowpro">
+        <observer name="payflowpro_cc_data_assigner" instance="Magento\PaypalGraphQl\Observer\PayflowProSetCcData" />
+    </event>
 </config>

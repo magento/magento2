@@ -15,7 +15,6 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\Patch\PatchApplier;
 use Magento\Framework\Setup\UninstallInterface;
 use Magento\Setup\Model\ModuleContext;
-use Magento\Setup\Model\ModuleRegistryUninstaller;
 use Magento\Setup\Model\ModuleUninstaller;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\UninstallCollector;
@@ -61,18 +60,12 @@ class ModuleUninstallerTest extends TestCase
     private $output;
 
     /**
-     * @var MockObject|ModuleRegistryUninstaller
-     */
-    private $moduleRegistryUninstaller;
-
-    /**
      * @var PatchApplier|MockObject
      */
     private $patchApplierMock;
 
     protected function setUp(): void
     {
-        $this->moduleRegistryUninstaller = $this->createMock(ModuleRegistryUninstaller::class);
         $this->objectManager = $this->getMockForAbstractClass(
             ObjectManagerInterface::class,
             [],
@@ -94,8 +87,7 @@ class ModuleUninstallerTest extends TestCase
             $objectManagerProvider,
             $this->remove,
             $this->collector,
-            $setupFactory,
-            $this->moduleRegistryUninstaller
+            $setupFactory
         );
 
         $this->output = $this->getMockForAbstractClass(OutputInterface::class);
@@ -103,7 +95,6 @@ class ModuleUninstallerTest extends TestCase
 
     public function testUninstallRemoveData()
     {
-        $this->moduleRegistryUninstaller->expects($this->never())->method($this->anything());
         $uninstall = $this->getMockForAbstractClass(UninstallInterface::class, [], '', false);
         $uninstall->expects($this->atLeastOnce())
             ->method('uninstall')
@@ -136,7 +127,6 @@ class ModuleUninstallerTest extends TestCase
 
     public function testUninstallRemoveCode()
     {
-        $this->moduleRegistryUninstaller->expects($this->never())->method($this->anything());
         $this->output->expects($this->once())->method('writeln');
         $packageInfoFactory = $this->createMock(PackageInfoFactory::class);
         $packageInfo = $this->createMock(PackageInfo::class);

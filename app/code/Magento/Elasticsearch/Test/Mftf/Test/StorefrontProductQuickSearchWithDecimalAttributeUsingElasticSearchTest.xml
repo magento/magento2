@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-31239"/>
             <group value="SearchEngineElasticsearch" />
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Create product attribute with 3 options -->
@@ -54,9 +55,12 @@
             <deleteData createDataKey="newCategory" stepKey="deleteCategory"/>
             <!--Delete attribute-->
             <deleteData createDataKey="customAttribute" stepKey="deleteCustomAttribute"/>
-            <!--Reindex and clear cache-->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:clean" stepKey="cleanCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!--Navigate to backend and update value for custom attribute -->
@@ -76,9 +80,10 @@
             <argument name="product" value="$$product2.sku$$"/>
         </actionGroup>
 
-        <!--Reindex and clear cache-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:clean" stepKey="cleanCache"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
 
         <!-- Navigate to Storefront and search -->

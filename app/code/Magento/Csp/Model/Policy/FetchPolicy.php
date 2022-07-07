@@ -116,12 +116,12 @@ class FetchPolicy implements SimplePolicyInterface
     ) {
         $this->id = $id;
         $this->noneAllowed = $noneAllowed;
-        $this->hostSources = array_unique($hostSources);
-        $this->schemeSources = array_unique($schemeSources);
+        $this->hostSources = array_values(array_unique($hostSources));
+        $this->schemeSources = array_values(array_unique($schemeSources));
         $this->selfAllowed = $selfAllowed;
         $this->inlineAllowed = $inlineAllowed;
         $this->evalAllowed = $evalAllowed;
-        $this->nonceValues = array_unique($nonceValues);
+        $this->nonceValues = array_values(array_unique($nonceValues));
         $this->hashes = $hashValues;
         $this->dynamicAllowed = $dynamicAllowed;
         $this->eventHandlersAllowed = $eventHandlersAllowed;
@@ -226,11 +226,13 @@ class FetchPolicy implements SimplePolicyInterface
             if ($this->areEventHandlersAllowed()) {
                 $sources[] = '\'unsafe-hashes\'';
             }
-            foreach ($this->getNonceValues() as $nonce) {
-                $sources[] = '\'nonce-' .base64_encode($nonce) .'\'';
-            }
-            foreach ($this->getHashes() as $hash => $algorithm) {
-                $sources[]= "'$algorithm-$hash'";
+            if (!$this->isInlineAllowed()) {
+                foreach ($this->getNonceValues() as $nonce) {
+                    $sources[] = '\'nonce-' . base64_encode($nonce) . '\'';
+                }
+                foreach ($this->getHashes() as $hash => $algorithm) {
+                    $sources[] = "'$algorithm-$hash'";
+                }
             }
 
             return implode(' ', $sources);

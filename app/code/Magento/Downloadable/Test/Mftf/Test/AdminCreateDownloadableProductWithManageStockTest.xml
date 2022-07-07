@@ -36,6 +36,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -92,8 +93,7 @@
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedConfigurableProduct">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProduct"/>
-        <waitForPageLoad stepKey="waitForProductFormPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProduct"/>
 
         <!-- Assert downloadable links in product form -->
         <scrollTo selector="{{AdminProductDownloadableSection.sectionLinkGrid}}" stepKey="scrollToLinks"/>
@@ -103,7 +103,9 @@
         <!-- Assert product is out of stock in store front -->
         <amOnPage url="{{DownloadableProduct.urlKey}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{DownloadableProduct.name}}" stepKey="seeProductNameInStoreFront"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductNameInStoreFront">
+            <argument name="value" value="{{DownloadableProduct.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="OUT OF STOCK" stepKey="seeProductStatusInStoreFront"/>
     </test>
 </tests>

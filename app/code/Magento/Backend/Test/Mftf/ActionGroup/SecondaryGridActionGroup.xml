@@ -29,6 +29,6 @@
         <!-- delete the rule -->
         <click stepKey="clickDelete" selector="{{AdminStoresMainActionsSection.deleteButton}}"/>
         <click stepKey="clickOk" selector="{{AdminConfirmationModalSection.ok}}"/>
-        <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="deleted"/>
+        <see stepKey="seeSuccess" selector="{{AdminMessagesSection.success}}" userInput="deleted"/>
     </actionGroup>
 </actionGroups>

@@ -10,6 +10,7 @@ namespace Magento\Framework;
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 class DataObject implements \ArrayAccess
 {
@@ -50,6 +51,11 @@ class DataObject implements \ArrayAccess
      */
     public function addData(array $arr)
     {
+        if ($this->_data === []) {
+            $this->setData($arr);
+            return $this;
+        }
+
         foreach ($arr as $index => $value) {
             $this->setData($index, $value);
         }
@@ -122,7 +128,7 @@ class DataObject implements \ArrayAccess
         }
 
         /* process a/b/c key as ['a']['b']['c'] */
-        if (strpos($key, '/') !== false) {
+        if (strpos((string)$key, '/') !== false) {
             $data = $this->getDataByPath($key);
         } else {
             $data = $this->_getData($key);
@@ -153,7 +159,7 @@ class DataObject implements \ArrayAccess
      */
     public function getDataByPath($path)
     {
-        $keys = explode('/', $path);
+        $keys = explode('/', (string)$path);
 
         $data = $this->_data;
         foreach ($keys as $key) {
@@ -202,7 +208,7 @@ class DataObject implements \ArrayAccess
      */
     public function setDataUsingMethod($key, $args = [])
     {
-        $method = 'set' . str_replace('_', '', ucwords($key, '_'));
+        $method = 'set' . ($key !== null ? str_replace('_', '', ucwords($key, '_')) : '');
         $this->{$method}($args);
         return $this;
     }
@@ -216,7 +222,7 @@ class DataObject implements \ArrayAccess
      */
     public function getDataUsingMethod($key, $args = null)
     {
-        $method = 'get' . str_replace('_', '', ucwords($key, '_'));
+        $method = 'get' . ($key !== null ? str_replace('_', '', ucwords($key, '_')) : '');
         return $this->{$method}($args);
     }
 
@@ -287,11 +293,11 @@ class DataObject implements \ArrayAccess
             if ($addCdata === true) {
                 $fieldValue = "<![CDATA[{$fieldValue}]]>";
             } else {
-                $fieldValue = str_replace(
+                $fieldValue = $fieldValue !== null ? str_replace(
                     ['&', '"', "'", '<', '>'],
                     ['&amp;', '&quot;', '&apos;', '&lt;', '&gt;'],
                     $fieldValue
-                );
+                ) : '';
             }
             $xml .= "<{$fieldName}>{$fieldValue}</{$fieldName}>\n";
         }
@@ -362,7 +368,8 @@ class DataObject implements \ArrayAccess
         } else {
             preg_match_all('/\{\{([a-z0-9_]+)\}\}/is', $format, $matches);
             foreach ($matches[1] as $var) {
-                $format = str_replace('{{' . $var . '}}', $this->getData($var), $format);
+                $data = $this->getData($var) ?? '';
+                $format = str_replace('{{' . $var . '}}', $data, $format);
             }
             $result = $format;
         }
@@ -372,14 +379,14 @@ class DataObject implements \ArrayAccess
     /**
      * Set/Get attribute wrapper
      *
-     * @param   string $method
-     * @param   array $args
-     * @return  mixed
+     * @param string $method
+     * @param array $args
+     * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __call($method, $args)
     {
-        switch (substr($method, 0, 3)) {
+        switch (substr((string)$method, 0, 3)) {
             case 'get':
                 $key = $this->_underscore(substr($method, 3));
                 $index = isset($args[0]) ? $args[0] : null;
@@ -463,7 +470,7 @@ class DataObject implements \ArrayAccess
      * Present object data as string in debug mode
      *
      * @param mixed $data
-     * @param array &$objects
+     * @param array $objects
      * @return array
      */
     public function debug($data = null, &$objects = [])
@@ -497,6 +504,7 @@ class DataObject implements \ArrayAccess
      * @return void
      * @link http://www.php.net/manual/en/arrayaccess.offsetset.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->_data[$offset] = $value;
@@ -509,6 +517,7 @@ class DataObject implements \ArrayAccess
      * @return bool
      * @link http://www.php.net/manual/en/arrayaccess.offsetexists.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->_data[$offset]) || array_key_exists($offset, $this->_data);
@@ -521,6 +530,7 @@ class DataObject implements \ArrayAccess
      * @return void
      * @link http://www.php.net/manual/en/arrayaccess.offsetunset.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->_data[$offset]);
@@ -533,6 +543,7 @@ class DataObject implements \ArrayAccess
      * @return mixed
      * @link http://www.php.net/manual/en/arrayaccess.offsetget.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (isset($this->_data[$offset])) {

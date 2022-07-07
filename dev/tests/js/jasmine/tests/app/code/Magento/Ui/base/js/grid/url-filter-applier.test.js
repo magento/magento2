@@ -12,7 +12,8 @@ define([
     describe('Magento_Ui/js/grid/url-filter-applier', function () {
         var urlFilterApplierObj,
             filterComponentMock = {
-                setData: jasmine.createSpy(),
+                set: jasmine.createSpy(),
+                get: jasmine.createSpy(),
                 apply: jasmine.createSpy()
             };
 
@@ -45,6 +46,14 @@ define([
                     'qty': '1'
                 });
             });
+            it('return object from url with multiple filters parameter and filter value as array', function () {
+                var urlSearch = '?filters[name]=[27,23]&filters[qty]=1&anotherparam=1';
+
+                expect(urlFilterApplierObj.getFilterParam(urlSearch)).toEqual({
+                    'name': ['27', '23'],
+                    'qty': '1'
+                });
+            });
             it('return object from url with another parameter', function () {
                 var urlSearch = '?anotherparam=1';
 
@@ -56,11 +65,14 @@ define([
             it('applies url filter on filter component', function () {
                 urlFilterApplierObj.searchString = '?filters[name]=test&filters[qty]=1';
                 urlFilterApplierObj.apply();
-                expect(urlFilterApplierObj.filterComponent().setData).toHaveBeenCalledWith({
-                    'name': 'test',
-                    'qty': '1'
-                }, false);
-                expect(urlFilterApplierObj.filterComponent().apply).toHaveBeenCalled();
+                expect(urlFilterApplierObj.filterComponent().get).toHaveBeenCalled();
+                expect(urlFilterApplierObj.filterComponent().set).toHaveBeenCalledWith(
+                    'applied',
+                    {
+                        'name': 'test',
+                        'qty': '1'
+                    }
+                );
             });
         });
     });

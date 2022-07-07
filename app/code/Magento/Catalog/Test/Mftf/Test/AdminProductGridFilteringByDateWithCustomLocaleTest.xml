@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductGridFilteringByDateWithCustomLocaleTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Filter products"/>
+            <title value="Product grid date filters does not work for en_GB locale"/>
+            <description value="Product grid date filters does not work for en_GB locale"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-40644"/>
+            <useCaseId value="MC-40240"/>
+            <group value="catalog"/>
+        </annotations>
+
+        <before>
+            <!-- Deploy static content with United Kingdom locale-->
+            <magentoCLI command="setup:static-content:deploy en_GB" stepKey="deployStaticContentWithUnitedKingdomLocale"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create new User -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminCreateUserWithRoleAndLocaleActionGroup" stepKey="createAdminUser">
+                <argument name="user" value="activeAdmin"/>
+                <argument name="role" value="roleDefaultAdministrator"/>
+                <argument name="interfaceLocale" value="en_GB"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
+                <argument name="ProductAttribute" value="dateProductAttribute"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetGridFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Generate date for use as default value, needs to be MM/d/YYYY and mm/d/yy -->
+        <generateDate date="now" format="m/j/Y" stepKey="generateDefaultDate"/>
+        <generateDate date="now" format="j/m/Y" stepKey="generateDefaultDateGB"/>
+
+        <!-- Navigate to Stores > Attributes > Product. -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+
+        <!-- Create new Product Attribute as TextField, with code and default value. -->
+        <actionGroup ref="CreateProductAttributeWithDateFieldActionGroup" stepKey="createAttribute">
+            <argument name="attribute" value="dateProductAttribute"/>
+            <argument name="date" value="{$generateDefaultDate}"/>
+        </actionGroup>
+
+        <!-- Go to default attribute set edit page -->
+        <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
+        <!-- Assert created attribute in unassigned section -->
+        <see userInput="{{dateProductAttribute.attribute_code}}" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassigned"/>
+        <!-- Assign attribute to a group -->
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="{{dateProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <!-- Assert attribute in a group -->
+        <see userInput="{{dateProductAttribute.attribute_code}}" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
+        <!-- Save attribute set -->
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
+
+        <!-- Open Product Edit Page and set custom attribute value -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductFormSection.newAddedAttributeInput(dateProductAttribute.attribute_code)}}" userInput="{$generateDefaultDate}" stepKey="fillCustomDateValue"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <!-- Logout master admin and Login as new User -->
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMasterAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToNewAdmin">
+            <argument name="username" value="{{activeAdmin.username}}"/>
+            <argument name="password" value="{{activeAdmin.password}}"/>
+        </actionGroup>
+
+        <!-- Open Product Index Page and filter the product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex2"/>
+        <actionGroup ref="FilterProductGridByCustomDateRangeActionGroup" stepKey="filterProductGridByCustomDateRange">
+            <argument name="code" value="{{dateProductAttribute.attribute_code}}"/>
+            <argument name="date" value="{$generateDefaultDateGB}"/>
+        </actionGroup>
+        <!-- Check products filtering -->
+        <see selector="{{AdminProductGridSection.productGridNameProduct($createProduct.name$)}}" userInput="$createProduct.name$" stepKey="seeProductName"/>
+    </test>
+</tests>

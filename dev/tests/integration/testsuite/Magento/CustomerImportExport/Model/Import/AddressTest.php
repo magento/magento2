@@ -80,7 +80,7 @@ class AddressTest extends TestCase
         'remove' => [ // this data is not set in CSV file
             '19107' => [
                 'city' => 'Philadelphia',
-                'region' => 'Pennsylvania',
+                'region' => null,
             ],
         ],
         'default' => [ // new default billing/shipping addresses
@@ -329,13 +329,13 @@ class AddressTest extends TestCase
 
         // form attribute list
         $keyAttribute = 'postcode';
-        $requiredAttributes[] = $keyAttribute;
+        $requiredAttributes[] = [$keyAttribute];
         foreach (['update', 'remove'] as $action) {
             foreach ($this->_updateData[$action] as $attributes) {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $requiredAttributes = array_merge($requiredAttributes, array_keys($attributes));
+                $requiredAttributes[] = array_keys($attributes);
             }
         }
+        $requiredAttributes = array_merge([], ...$requiredAttributes);
 
         // get addresses
         $addressCollection = Bootstrap::getObjectManager()->create(
@@ -568,9 +568,10 @@ class AddressTest extends TestCase
         $this->assertEquals($address->getStreet(), $updatedAddress->getStreet());
         $this->assertEquals($address->getCity(), $updatedAddress->getCity());
         $this->assertEquals($address->getCountryId(), $updatedAddress->getCountryId());
-        $this->assertEquals($address->getPostcode(), $updatedAddress->getPostcode());
         $this->assertEquals($address->getTelephone(), $updatedAddress->getTelephone());
         $this->assertEquals($address->getRegionId(), $updatedAddress->getRegionId());
+        //assert empty non-required values changed
+        $this->assertEquals(null, $updatedAddress->getPostcode());
     }
 
     /**

@@ -34,12 +34,11 @@
             </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="createPreReqProduct" stepKey="deletePreReqProduct"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create the rule... -->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{SimpleSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
@@ -65,7 +64,7 @@
         <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
         <!-- Add 1 product to the cart -->
-        <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="goToProductPage"/>
+        <amOnPage url="$$createPreReqProduct.custom_attributes[url_key]$$.html" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="1" stepKey="fillQuantity"/>
         <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
@@ -76,7 +75,7 @@
         <dontSeeElement selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="dontSeeDiscount"/>
 
         <!-- Add the same product to the cart again (2 total) -->
-        <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="goToProductPage2"/>
+        <amOnPage url="$$createPreReqProduct.custom_attributes[url_key]$$.html" stepKey="goToProductPage2"/>
         <waitForPageLoad stepKey="waitForProductPageLoad2"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="1" stepKey="fillQuantity2"/>
         <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage2"/>
@@ -84,7 +83,9 @@
         <!-- Now we should see the discount because we have more than 1 item -->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage2"/>
         <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$246.00" stepKey="seeSubtotal2"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$1.00" stepKey="seeDiscountTotal"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForDiscountElement"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
+            <argument name="discount" value="1.00"/>
+        </actionGroup>
     </test>
 </tests>

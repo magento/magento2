@@ -16,7 +16,7 @@
         <!-- It sometimes is loading too long for default 10s -->
         <waitForPageLoad time="60" stepKey="waitForPageFullyLoaded"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
-        <helper class="\Magento\Rule\Test\Mftf\Helper\RuleHelper" method="deleteAllRulesOneByOne" stepKey="deleteAllRulesOneByOne">
+        <helper class="Magento\Rule\Test\Mftf\Helper\RuleHelper" method="deleteAllRulesOneByOne" stepKey="deleteAllRulesOneByOne">
             <argument name="firstNotEmptyRow">{{AdminDataGridTableSection.firstNotEmptyRow}}</argument>
             <argument name="modalAcceptButton">{{AdminConfirmationModalSection.ok}}</argument>
             <argument name="deleteButton">{{AdminMainActionsSection.delete}}</argument>

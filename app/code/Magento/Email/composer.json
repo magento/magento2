@@ -5,7 +5,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-cms": "*",
@@ -14,7 +14,8 @@
         "magento/module-theme": "*",
         "magento/module-require-js": "*",
         "magento/module-media-storage": "*",
-        "magento/module-variable": "*"
+        "magento/module-variable": "*",
+        "magento/module-ui": "*"
     },
     "suggest": {
         "magento/module-theme": "*"

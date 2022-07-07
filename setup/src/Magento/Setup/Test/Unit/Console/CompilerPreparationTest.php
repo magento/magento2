@@ -139,7 +139,25 @@ class CompilerPreparationTest extends TestCase
                 'commandName' => 'not:a:compiler',
                 'isCompileCommand' => false,
                 'isHelpOption' => false,
-            ]
+            ],
+            'ST compiler, directory exists, abbreviation 1' => [
+                'commandName' => 's:d:c',
+                'isCompileCommand' => true,
+                'isHelpOption' => false,
+                'dirExists' => true
+            ],
+            'ST compiler, directory exists, abbreviation 2' => [
+                'commandName' => 'se:di:co',
+                'isCompileCommand' => true,
+                'isHelpOption' => false,
+                'dirExists' => true
+            ],
+            'ST compiler, directory exists, abbreviation ambiguous' => [
+                'commandName' => 'se:di',
+                'isCompileCommand' => false,
+                'isHelpOption' => false,
+                'dirExists' => true
+            ],
         ];
     }
 

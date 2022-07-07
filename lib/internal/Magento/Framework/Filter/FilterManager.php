@@ -26,6 +26,7 @@ namespace Magento\Framework\Filter;
  * @method string decrypt(string $value, $params = array())
  * @method string translit(string $value)
  * @method string translitUrl(string $value)
+ * @since 100.0.2
  */
 class FilterManager
 {

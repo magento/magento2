@@ -316,6 +316,7 @@ class Cart extends Extended
 
     /**
      * @inheritDoc
+     * @since 103.0.0
      */
     public function getMainButtonsHtml()
     {

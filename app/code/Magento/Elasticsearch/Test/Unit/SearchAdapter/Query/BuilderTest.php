@@ -10,6 +10,7 @@ namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation as AggregationBuilder;
+use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
@@ -66,17 +67,17 @@ class BuilderTest extends TestCase
     protected function setUp(): void
     {
         $this->clientConfig = $this->getMockBuilder(Config::class)
-            ->setMethods(['getEntityType'])
+            ->onlyMethods(['getEntityType'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->searchIndexNameResolver = $this
             ->getMockBuilder(SearchIndexNameResolver::class)
-            ->setMethods(['getIndexName'])
+            ->onlyMethods(['getIndexName'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->aggregationBuilder = $this
             ->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation::class)
-            ->setMethods(['build'])
+            ->onlyMethods(['build'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->request = $this->getMockBuilder(RequestInterface::class)
@@ -94,16 +95,19 @@ class BuilderTest extends TestCase
             '',
             false
         );
+        $sortBuilder = $this->getMockForAbstractClass(
+            Sort::class,
+            [],
+            '',
+            false
+        );
 
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->model = $objectManagerHelper->getObject(
-            Builder::class,
-            [
-                'clientConfig' => $this->clientConfig,
-                'searchIndexNameResolver' => $this->searchIndexNameResolver,
-                'aggregationBuilder' => $this->aggregationBuilder,
-                'scopeResolver' => $this->scopeResolver
-            ]
+        $this->model = new Builder(
+            $this->clientConfig,
+            $this->searchIndexNameResolver,
+            $this->aggregationBuilder,
+            $this->scopeResolver,
+            $sortBuilder,
         );
     }
 
@@ -114,7 +118,7 @@ class BuilderTest extends TestCase
     {
         $dimensionValue = 1;
         $dimension = $this->getMockBuilder(Dimension::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -146,6 +150,48 @@ class BuilderTest extends TestCase
             ->method('getEntityType')
             ->willReturn('document');
         $this->model->initQuery($this->request);
+    }
+
+    /**
+     * Test initQuery() method with update from value
+     */
+    public function testInitQueryLimitFrom()
+    {
+        $dimensionValue = 1;
+        $dimension = $this->getMockBuilder(Dimension::class)
+            ->onlyMethods(['getValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->request->expects($this->once())
+            ->method('getDimensions')
+            ->willReturn([$dimension]);
+        $dimension->expects($this->once())
+            ->method('getValue')
+            ->willReturn($dimensionValue);
+        $this->scopeResolver->expects($this->once())
+            ->method('getScope')
+            ->willReturn($this->scopeInterface);
+        $this->scopeInterface->expects($this->once())
+            ->method('getId')
+            ->willReturn($dimensionValue);
+        $this->request->expects($this->once())
+            ->method('getFrom')
+            ->willReturn(PHP_INT_MAX);
+        $this->request->expects($this->once())
+            ->method('getSize')
+            ->willReturn(10);
+        $this->request->expects($this->once())
+            ->method('getIndex')
+            ->willReturn('catalogsearch_fulltext');
+        $this->searchIndexNameResolver->expects($this->once())
+            ->method('getIndexName')
+            ->willReturn('indexName');
+        $this->clientConfig->expects($this->once())
+            ->method('getEntityType')
+            ->willReturn('document');
+        $query = $this->model->initQuery($this->request);
+        $this->assertLessThanOrEqual(2147483647, $query['body']['from']);
     }
 
     /**

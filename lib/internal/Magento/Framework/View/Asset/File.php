@@ -12,6 +12,7 @@ namespace Magento\Framework\View\Asset;
  * This class is a value object with lazy loading of some of its data (content, physical file path)
  *
  * @api
+ * @since 100.0.2
  */
 class File implements MergeableInterface
 {
@@ -80,7 +81,7 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUrl()
     {
@@ -88,7 +89,7 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSourceUrl()
     {
@@ -96,7 +97,7 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContentType()
     {
@@ -104,7 +105,7 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPath()
     {
@@ -117,7 +118,7 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRelativeSourceFilePath()
     {
@@ -126,7 +127,7 @@ class File implements MergeableInterface
         if ($sourcePath) {
             $origExt = pathinfo($path, PATHINFO_EXTENSION);
             $ext = pathinfo($sourcePath, PATHINFO_EXTENSION);
-            $path = str_replace('.' . $origExt, '.' . $ext, $this->filePath);
+            $path = $this->filePath !== null ? str_replace('.' . $origExt, '.' . $ext, $this->filePath) : '';
         }
         $result = '';
         $result = $this->join($result, $this->context->getPath());
@@ -148,7 +149,8 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @throws File\NotFoundException if file cannot be resolved
      */
     public function getSourceFile()
@@ -166,7 +168,7 @@ class File implements MergeableInterface
      * Get source content type
      *
      * @return string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getSourceContentType()
     {
@@ -177,7 +179,7 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContent()
     {
@@ -189,7 +191,7 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFilePath()
     {
@@ -197,7 +199,8 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @return File\Context
      */
     public function getContext()
@@ -206,7 +209,7 @@ class File implements MergeableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getModule()
     {

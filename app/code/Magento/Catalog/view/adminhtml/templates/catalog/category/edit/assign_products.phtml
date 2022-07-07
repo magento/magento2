@@ -5,8 +5,9 @@
  */
 
 /** @var \Magento\Catalog\Block\Adminhtml\Category\AssignProducts $block */
-
 /** @var \Magento\Catalog\Block\Adminhtml\Category\Tab\Product $blockGrid */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
 $blockGrid = $block->getBlockGrid();
 $gridJsObjectName = $blockGrid->getJsObjectName();
 ?>
@@ -23,6 +24,4 @@ $gridJsObjectName = $blockGrid->getJsObjectName();
     }
 </script>
 <!-- @todo remove when "UI components" will support such initialization -->
-<script>
-    require('mage/apply/main').apply();
-</script>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], "require('mage/apply/main').apply();", false) ?>

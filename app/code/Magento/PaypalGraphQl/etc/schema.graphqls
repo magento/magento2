@@ -2,142 +2,152 @@
 # See COPYING.txt for license details.
 
 type Query {
-    getPayflowLinkToken(input: PayflowLinkTokenInput!): PayflowLinkToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowLinkToken") @doc(description: "Retrieve payment credentials for transaction. Use this query for Payflow Link and Payments Advanced payment methods.")
-    getHostedProUrl(input: HostedProUrlInput!): HostedProUrl @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\HostedProUrl") @doc(description: "Retrieve secure PayPal url for Payments Pro Hosted Solution transaction.")
+    getPayflowLinkToken(input: PayflowLinkTokenInput! @doc(description: "An input object that defines the requirements to receive a payment token.")): PayflowLinkToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowLinkToken") @doc(description: "Retrieve payment credentials for a transaction. Use this query for Payflow Link and Payments Advanced payment methods.")
+    getHostedProUrl(input: HostedProUrlInput! @doc(description: "An input object that specifies the cart ID.")): HostedProUrl @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\HostedProUrl") @doc(description: "Retrieve the secure PayPal URL for a Payments Pro Hosted Solution transaction.")
 }
 
 type Mutation {
-    createPaypalExpressToken(input: PaypalExpressTokenInput!): PaypalExpressTokenOutput @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PaypalExpressToken") @doc(description:"Initiates an Express Checkout transaction and receives a token. Use this mutation for Express Checkout and Payments Standard payment methods.")
-    createPayflowProToken(input: PayflowProTokenInput!): CreatePayflowProTokenOutput @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowProToken") @doc(description: "Initiates a transaction and receives a token. Use this mutation for Payflow Pro and Payments Pro payment methods")
-    handlePayflowProResponse(input: PayflowProResponseInput!): PayflowProResponseOutput @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowProResponse") @doc(description: "Handles payment response and saves payment in Quote. Use this mutations for Payflow Pro and Payments Pro payment methods.")
+    createPaypalExpressToken(input: PaypalExpressTokenInput! @doc(description: "An input object that defines the requirements to receive a payment token.")): PaypalExpressTokenOutput @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PaypalExpressToken") @doc(description:"Initiate an Express Checkout transaction and receive a token. Use this mutation for Express Checkout and Payments Standard payment methods.")
+    createPayflowProToken(input: PayflowProTokenInput! @doc(description: "An input object that defines the requirements to fetch payment token information.")): CreatePayflowProTokenOutput @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowProToken") @doc(description: "Initiate a transaction and receive a token. Use this mutation for Payflow Pro and Payments Pro payment methods")
+    handlePayflowProResponse(input: PayflowProResponseInput! @doc(description: "An input object that includes the payload returned by PayPal and the cart ID.")): PayflowProResponseOutput @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowProResponse") @doc(description: "Handle a payment response and save the payment in Quote. Use this mutation for Payflow Pro and Payments Pro payment methods.")
 }
 
 input PaypalExpressTokenInput @doc(description: "Defines the attributes required to receive a payment token for Express Checkout and Payments Standard payment methods.") {
-    cart_id: String! @doc(description:"The unique ID that identifies the customer's cart")
-    code: String! @doc(description:"Payment method code")
-    urls: PaypalExpressUrlsInput! @doc(description:"A set of relative URLs that PayPal uses in response to various actions during the authorization process")
-    use_paypal_credit: Boolean @doc(description: "Indicates whether the buyer clicked the PayPal credit button. The default value is false")
-    express_button: Boolean @doc(description: "Indicates whether the buyer selected the quick checkout button. The default value is false")
+    cart_id: String! @doc(description:"The unique ID that identifies the customer's cart.")
+    code: String! @doc(description:"The payment method code.")
+    urls: PaypalExpressUrlsInput! @doc(description:"A set of relative URLs that PayPal uses in response to various actions during the authorization process.")
+    use_paypal_credit: Boolean @doc(description: "Indicates whether the buyer clicked the PayPal credit button. The default value is false.")
+    express_button: Boolean @doc(description: "Indicates whether the buyer selected the quick checkout button. The default value is false.")
 }
 
-type PaypalExpressToken @doc(description: "Deprecated: use type `PaypalExpressTokenOutput` instead") {
-    token: String @deprecated(reason: "Use field `token` of type `PaypalExpressTokenOutput` instead") @doc(description:"The token returned by PayPal")
-    paypal_urls: PaypalExpressUrlList @deprecated(reason: "Use field `paypal_urls` of type `PaypalExpressTokenOutput` instead") @doc(description:"A set of URLs that allow the buyer to authorize payment and adjust checkout details")
+type PaypalExpressToken @doc(description: "Deprecated. Use `PaypalExpressTokenOutput` instead.") {
+    token: String @deprecated(reason: "Use `PaypalExpressTokenOutput.token` instead.") @doc(description:"The token returned by PayPal.")
+    paypal_urls: PaypalExpressUrlList @deprecated(reason: "Use `PaypalExpressTokenOutput.paypal_urls` instead.") @doc(description:"A set of URLs that allow the buyer to authorize payment and adjust checkout details.")
 }
 
 type PaypalExpressTokenOutput @doc(description: "Contains the token returned by PayPal and a set of URLs that allow the buyer to authorize payment and adjust checkout details. Applies to Express Checkout and Payments Standard payment methods.") {
-    token: String @doc(description:"The token returned by PayPal")
-    paypal_urls: PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer to authorize payment and adjust checkout details")
+    token: String @doc(description:"The token returned by PayPal.")
+    paypal_urls: PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer to authorize payment and adjust checkout details.")
 }
 
 type PayflowLinkToken @doc(description:"Contains information used to generate PayPal iframe for transaction. Applies to Payflow Link and Payments Advanced payment methods.") {
-    secure_token: String @doc(description:"Secure token generated by PayPal")
-    secure_token_id: String @doc(description:"Secure token ID generated by PayPal")
-    mode: PayflowLinkMode @doc(description:"Mode for Payflow transaction")
-    paypal_url: String @doc(description:"PayPal URL used for requesting Payflow form")
+    secure_token: String @doc(description:"The secure token generated by PayPal.")
+    secure_token_id: String @doc(description:"The secure token ID generated by PayPal.")
+    mode: PayflowLinkMode @doc(description:"The mode for the Payflow transaction.")
+    paypal_url: String @doc(description:"The PayPal URL used for requesting a Payflow form.")
 }
 
-type HostedProUrl @doc(desription:"Contains secure URL used for Payments Pro Hosted Solution payment method.") {
-    secure_form_url: String @doc(description:"Secure Url generated by PayPal")
+type HostedProUrl @doc(description:"Contains the secure URL used for the Payments Pro Hosted Solution payment method.") {
+    secure_form_url: String @doc(description:"The secure URL generated by PayPal.")
 }
 
-input HostedProUrlInput @doc(description:"The required input to request the secure URL for Payments Pro Hosted Solution payment."){
-    cart_id: String! @doc(description:"The unique ID that identifies the customer's cart")
+input HostedProUrlInput @doc(description:"Contains the required input to request the secure URL for Payments Pro Hosted Solution payment."){
+    cart_id: String! @doc(description:"The unique ID that identifies the shopper's cart.")
 }
 
 input PaymentMethodInput {
-    paypal_express: PaypalExpressInput @doc(description:"Required input for Express Checkout and Payments Standard payments")
-    payflow_express: PayflowExpressInput @doc(description:"Required input for Payflow Express Checkout payments")
-    payflow_link: PayflowLinkInput @doc(description:"Required input for PayPal Payflow Link and Payments Advanced payments")
-    payflowpro: PayflowProInput @doc(description: "Required input type for PayPal Payflow Pro and Payment Pro payments")
-    hosted_pro: HostedProInput @doc(description:"Required input for PayPal Hosted pro payments")
+    paypal_express: PaypalExpressInput @doc(description:"Required input for Express Checkout and Payments Standard payments.")
+    payflow_express: PayflowExpressInput @doc(description:"Required input for Payflow Express Checkout payments.")
+    payflow_link: PayflowLinkInput @doc(description:"Required input for PayPal Payflow Link and Payments Advanced payments.")
+    payflowpro: PayflowProInput @doc(description: "Required input for PayPal Payflow Pro and Payment Pro payments.")
+    hosted_pro: HostedProInput @doc(description:"Required input for PayPal Hosted pro payments.")
+    payflowpro_cc_vault: VaultTokenInput @doc(description:"Required input for PayPal Payflow Pro vault payments.")
 }
 
-input HostedProInput @doc(description:"A set of relative URLs that PayPal will use in response to various actions during the authorization process. Magento prepends the base URL to this value to create a full URL. For example, if the full URL is https://www.example.com/path/to/page.html, the relative URL is path/to/page.html. Use this input for Payments Pro Hosted Solution payment method.") {
-    return_url: String! @doc(description:"The relative URL of the final confirmation page that PayPal will redirect to upon payment success. If the full URL to this page is https://www.example.com/paypal/action/return.html, the relative URL is paypal/action/return.html.")
-    cancel_url: String! @doc(description:"The relative URL of the page that PayPal will redirect to when the buyer cancels the transaction in order to choose a different payment method. If the full URL to this page is https://www.example.com/paypal/action/cancel.html, the relative URL is paypal/action/cancel.html.")
+input HostedProInput @doc(description:"Contains a set of relative URLs that PayPal uses in response to various actions during the authorization process. Magento prepends the base URL to this value to create a full URL. For example, if the full URL is https://www.example.com/path/to/page.html, the relative URL is path/to/page.html. Use this input for Payments Pro Hosted Solution payment method.") {
+    return_url: String! @doc(description:"The relative URL of the final confirmation page that PayPal redirects to upon payment success. For example, if the full URL to this page is https://www.example.com/paypal/action/return.html, the relative URL is paypal/action/return.html.")
+    cancel_url: String! @doc(description:"The relative URL of the page that PayPal redirects to when the buyer cancels the transaction in order to choose a different payment method. For example, if the full URL to this page is https://www.example.com/paypal/action/cancel.html, the relative URL is paypal/action/cancel.html.")
 }
 
-input PaypalExpressInput @doc(description:"Required input for Express Checkout and Payments Standard payments") {
-    payer_id: String! @doc(description:"The unique ID of the PayPal user")
-    token: String! @doc(description:"The token returned by the createPaypalExpressToken mutation")
+input PaypalExpressInput @doc(description:"Contains required input for Express Checkout and Payments Standard payments.") {
+    payer_id: String! @doc(description:"The unique ID of the PayPal user.")
+    token: String! @doc(description:"The token returned by the `createPaypalExpressToken` mutation.")
 }
 
-input PayflowExpressInput @doc(description:"Required input for Payflow Express Checkout payments") {
-    payer_id: String! @doc(description:"The unique ID of the PayPal user")
-    token: String! @doc(description:"The token returned by the createPaypalExpressToken mutation")
+input PayflowExpressInput @doc(description:"Contains required input for Payflow Express Checkout payments.") {
+    payer_id: String! @doc(description:"The unique ID of the PayPal user.")
+    token: String! @doc(description:"The token returned by the createPaypalExpressToken mutation.")
 }
 
-input PaypalExpressUrlsInput @doc(description:"A set of relative URLs that PayPal will use in response to various actions during the authorization process. Magento prepends the base URL to this value to create a full URL. For example, if the full URL is https://www.example.com/path/to/page.html, the relative URL is path/to/page.html. Use this input for Express Checkout and Payments Standard payment methods.") {
-    return_url: String! @doc(description:"The relative URL of the final confirmation page that PayPal will redirect to upon payment success. If the full URL to this page is https://www.example.com/paypal/action/return.html, the relative URL is paypal/action/return.html.")
-    cancel_url: String! @doc(description:"The relative URL of the page that PayPal will redirect to when the buyer cancels the transaction in order to choose a different payment method. If the full URL to this page is https://www.example.com/paypal/action/cancel.html, the relative URL is paypal/action/cancel.html.")
-    success_url: String @doc(description:"The relative URL of the order confirmation page that PayPal will redirect to when the payment is successful and additional confirmation is not needed. Not applicable to most PayPal solutions. If the full URL to this page is https://www.example.com/paypal/action/success.html, the relative URL is paypal/action/success.html.")
-    pending_url: String @doc(description:"The relative URL of the page that PayPal will redirect to when the payment has been put on hold for additional review. This condition mostly applies to ACH transactions, and is not applicable to most PayPal solutions. If the full URL to this page is https://www.example.com/paypal/action/success_pending.html, the relative URL is paypal/action/success_pending.html. ")
+input PaypalExpressUrlsInput @doc(description:"Contains a set of relative URLs that PayPal uses in response to various actions during the authorization process. Magento prepends the base URL to this value to create a full URL. For example, if the full URL is https://www.example.com/path/to/page.html, the relative URL is path/to/page.html. Use this input for Express Checkout and Payments Standard payment methods.") {
+    return_url: String! @doc(description:"The relative URL of the final confirmation page that PayPal redirects to upon payment success. If the full URL to this page is https://www.example.com/paypal/action/return.html, the relative URL is paypal/action/return.html.")
+    cancel_url: String! @doc(description:"The relative URL of the page that PayPal redirects to when the buyer cancels the transaction in order to choose a different payment method. If the full URL to this page is https://www.example.com/paypal/action/cancel.html, the relative URL is paypal/action/cancel.html.")
+    success_url: String @doc(description:"The relative URL of the order confirmation page that PayPal redirects to when the payment is successful and additional confirmation is not needed. Not applicable to most PayPal solutions. If the full URL to this page is https://www.example.com/paypal/action/success.html, the relative URL is paypal/action/success.html.")
+    pending_url: String @doc(description:"The relative URL of the page that PayPal redirects to when the payment has been put on hold for additional review. This condition mostly applies to ACH transactions, and is not applicable to most PayPal solutions. If the full URL to this page is https://www.example.com/paypal/action/success_pending.html, the relative URL is paypal/action/success_pending.html.")
 }
 
-type PaypalExpressUrlList @doc(description:"A set of URLs that allow the buyer to authorize payment and adjust checkout details for Express Checkout and Payments Standard transactions.") {
-    start: String @doc(description:"The URL to the PayPal login page")
-    edit: String @doc(description:"The PayPal URL that allows the buyer to edit their checkout details")
+type PaypalExpressUrlList @doc(description:"Contains a set of URLs that allow the buyer to authorize payment and adjust checkout details for Express Checkout and Payments Standard transactions.") {
+    start: String @doc(description:"The URL to the PayPal login page.")
+    edit: String @doc(description:"The PayPal URL that allows the buyer to edit their checkout details.")
 }
 
-input PayflowLinkInput @doc(description:"A set of relative URLs that PayPal will use in response to various actions during the authorization process. Magento prepends the base URL to this value to create a full URL. For example, if the full URL is https://www.example.com/path/to/page.html, the relative URL is path/to/page.html. Use this input for Payflow Link and Payments Advanced payment methods.") {
-    return_url: String! @doc(description:"The relative URL of the order confirmation page that PayPal will redirect to when the payment is successful and additional confirmation is not needed. If the full URL to this page is https://www.example.com/paypal/action/return.html, the relative URL is paypal/action/return.html.")
-    cancel_url: String! @doc(description:"The relative URL of the page that PayPal will redirect to when the buyer cancels the transaction in order to choose a different payment method. If the full URL to this page is https://www.example.com/paypal/action/cancel.html, the relative URL is paypal/action/cancel.html.")
-    error_url: String! @doc(description:"The relative URL of the transaction error page that PayPal will redirect to upon payment error. If the full URL to this page is https://www.example.com/paypal/action/error.html, the relative URL is paypal/action/error.html.")
+input PayflowLinkInput @doc(description:"A set of relative URLs that PayPal uses in response to various actions during the authorization process. Adobe Commerce prepends the base URL to this value to create a full URL. For example, if the full URL is https://www.example.com/path/to/page.html, the relative URL is path/to/page.html. Use this input for Payflow Link and Payments Advanced payment methods.") {
+    return_url: String! @doc(description:"The relative URL of the order confirmation page that PayPal redirects to when the payment is successful and additional confirmation is not needed. If the full URL to this page is https://www.example.com/paypal/action/return.html, the relative URL is paypal/action/return.html.")
+    cancel_url: String! @doc(description:"The relative URL of the page that PayPal redirects to when the buyer cancels the transaction in order to choose a different payment method. If the full URL to this page is https://www.example.com/paypal/action/cancel.html, the relative URL is paypal/action/cancel.html.")
+    error_url: String! @doc(description:"The relative URL of the transaction error page that PayPal redirects to upon payment error. If the full URL to this page is https://www.example.com/paypal/action/error.html, the relative URL is paypal/action/error.html.")
 }
 
-input PayflowLinkTokenInput @doc(description:"Input required to fetch payment token information for Payflow Link and Payments Advanced payment methods.") {
-    cart_id: String! @doc(description:"The unique ID that identifies the customer's cart")
+input PayflowLinkTokenInput @doc(description:"Contains information required to fetch payment token information for the Payflow Link and Payments Advanced payment methods.") {
+    cart_id: String! @doc(description:"The unique ID that identifies the customer's cart.")
 }
 
-enum PayflowLinkMode @doc(description:"Mode for payment: TEST or LIVE. Applies to Payflow Link and Payments Advanced payment methods.") {
+enum PayflowLinkMode @doc(description:"Indicates the mode for payment. Applies to the Payflow Link and Payments Advanced payment methods.") {
     TEST
     LIVE
 }
 
-input PayflowProTokenInput @doc(description:"Input required to fetch payment token information for Payflow Pro and Payments Pro payment methods."){
-     cart_id: String! @doc(description:"The unique ID that identifies the customer's cart")
+input PayflowProTokenInput @doc(description:"Contains input required to fetch payment token information for the Payflow Pro and Payments Pro payment methods."){
+     cart_id: String! @doc(description:"The unique ID that identifies the shopper's cart.")
      urls: PayflowProUrlInput! @doc(description:"A set of relative URLs that PayPal uses for callback.")
 }
 
-input PayflowProInput @doc(description:"Required input for Payflow Pro and Payments Pro payment methods.") {
-    cc_details: CreditCardDetailsInput! @doc(description: "Required input for credit card related information")
+input PayflowProInput @doc(description:"Contains input for the Payflow Pro and Payments Pro payment methods.") {
+    cc_details: CreditCardDetailsInput! @doc(description: "Required input for credit card related information.")
+    is_active_payment_token_enabler: Boolean @doc(description:"Indicates whether details about the shopper's credit/debit card should be tokenized for later usage. Required only if Vault is enabled for the PayPal Payflow Pro payment integration.")
 }
 
-input CreditCardDetailsInput @doc(description:"Required fields for Payflow Pro and Payments Pro credit card payments") {
-    cc_type: String! @doc(description: "Credit card type")
-    cc_exp_year: Int! @doc(description: "Credit card expiration year")
-    cc_exp_month: Int! @doc(description: "Credit card expiration month")
-    cc_last_4: Int! @doc(description: "Last 4 digits of the credit card")
+input CreditCardDetailsInput @doc(description:"Required fields for Payflow Pro and Payments Pro credit card payments.") {
+    cc_type: String! @doc(description: "The credit card type.")
+    cc_exp_year: Int! @doc(description: "The credit card expiration year.")
+    cc_exp_month: Int! @doc(description: "The credit card expiration month.")
+    cc_last_4: Int! @doc(description: "The last 4 digits of the credit card.")
 }
 
-input PayflowProUrlInput @doc(description:"A set of relative URLs that PayPal will use in response to various actions during the authorization process. Magento prepends the base URL to this value to create a full URL. For example, if the full URL is https://www.example.com/path/to/page.html, the relative URL is path/to/page.html. Use this input for Payflow Pro and Payment Pro payment methods.") {
-    return_url: String! @doc(description:"The relative URL of the final confirmation page that PayPal will redirect to upon payment success. If the full URL to this page is https://www.example.com/paypal/action/return.html, the relative URL is paypal/action/return.html.")
-    cancel_url: String! @doc(description:"The relative URL of the page that PayPal will redirect to when the buyer cancels the transaction in order to choose a different payment method. If the full URL to this page is https://www.example.com/paypal/action/cancel.html, the relative URL is paypal/action/cancel.html.")
-    error_url: String! @doc(description:"The relative URL of the transaction error page that PayPal will redirect to upon payment error. If the full URL to this page is https://www.example.com/paypal/action/error.html, the relative URL is paypal/action/error.html.")
+input PayflowProUrlInput @doc(description:"Contains a set of relative URLs that PayPal uses in response to various actions during the authorization process. Magento prepends the base URL to this value to create a full URL. For example, if the full URL is https://www.example.com/path/to/page.html, the relative URL is path/to/page.html. Use this input for the Payflow Pro and Payment Pro payment methods.") {
+    return_url: String! @doc(description:"The relative URL of the final confirmation page that PayPal redirects to upon payment success. If the full URL to this page is https://www.example.com/paypal/action/return.html, the relative URL is paypal/action/return.html.")
+    cancel_url: String! @doc(description:"The relative URL of the page that PayPal redirects to when the buyer cancels the transaction in order to choose a different payment method. If the full URL to this page is https://www.example.com/paypal/action/cancel.html, the relative URL is paypal/action/cancel.html.")
+    error_url: String! @doc(description:"The relative URL of the transaction error page that PayPal redirects to upon payment error. If the full URL to this page is https://www.example.com/paypal/action/error.html, the relative URL is paypal/action/error.html.")
 }
 
-type PayflowProToken @deprecated(reason: "Use CreatePayflowProTokenOutput instead.") @doc(description: "Contains the secure information used to authorize transaction. Applies to Payflow Pro and Payments Pro payment methods.") {
-    secure_token: String!
-    secure_token_id: String!
-    response_message: String!
-    result: Int!
-    result_code: Int!
+type PayflowProToken @deprecated(reason: "Use `CreatePayflowProTokenOutput` instead.") @doc(description: "Contains the secure information used to authorize transaction. Applies to Payflow Pro and Payments Pro payment methods.") {
+    secure_token: String! @doc(description: "A secure token generated by PayPal.")
+    secure_token_id: String! @doc(description: "A secure token ID generated by PayPal.")
+    response_message: String! @doc(description: "The RESPMSG returned by PayPal. If the `result` is `0`, then `response_message` is `Approved`.")
+    result: Int! @doc(description:"A non-zero value if any errors occurred.")
+    result_code: Int! @doc(description: "The RESULT returned by PayPal. A value of `0` indicates the transaction was approved.")
 }
 
 type CreatePayflowProTokenOutput @doc(description: "Contains the secure information used to authorize transaction. Applies to Payflow Pro and Payments Pro payment methods.") {
-    secure_token: String!
-    secure_token_id: String!
-    response_message: String!
-    result: Int!
-    result_code: Int!
+    secure_token: String! @doc(description: "A secure token generated by PayPal.")
+    secure_token_id: String! @doc(description: "A secure token ID generated by PayPal.")
+    response_message: String! @doc(description: "The RESPMSG returned by PayPal. If the `result` is `0`, then `response_message` is `Approved`.")
+    result: Int! @doc(description: "A non-zero value if any errors occurred.")
+    result_code: Int! @doc(description: "The RESULT returned by PayPal. A value of `0` indicates the transaction was approved.")
 }
 
 input PayflowProResponseInput @doc(description:"Input required to complete payment. Applies to Payflow Pro and Payments Pro payment methods.") {
-    cart_id: String!
-    paypal_payload: String!
+    cart_id: String! @doc(description: "The unique ID that identifies the shopper's cart.")
+    paypal_payload: String! @doc(description: "The payload returned from PayPal.")
 }
 
 type PayflowProResponseOutput {
-    cart: Cart!
+    cart: Cart! @doc(description: "The cart with the updated selected payment method.")
+}
+
+type StoreConfig {
+    payment_payflowpro_cc_vault_active: String @doc(description: "Payflow Pro vault status.")
+}
+
+input VaultTokenInput @doc(description:"Contains required input for payment methods with Vault support.") {
+    public_hash: String! @doc(description: "The public hash of the payment token.")
 }

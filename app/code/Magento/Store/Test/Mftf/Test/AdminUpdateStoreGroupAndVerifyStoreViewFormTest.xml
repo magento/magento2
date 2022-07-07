@@ -26,6 +26,7 @@
                 <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
                 <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStoreGroup">
@@ -34,6 +35,7 @@
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteUpdatedStoreGroup">
                 <argument name="storeGroupName" value="SecondStoreGroupUnique.name"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -41,14 +43,15 @@
         <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="openCreatedStoreGroupInGrid">
             <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
         </actionGroup>
-        <click selector="{{AdminStoresGridSection.firstRow}}" stepKey="clickFirstRow"/>
-        <waitForPageLoad stepKey="AdminSystemStoreGroupPageToOpen"/>
+        <actionGroup ref="AdminOpenFirstRowInStoresGridActionGroup" stepKey="clickFirstRow"/>
+
         <!--Update created Store group as per requirement-->
         <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createNewCustomStoreGroup">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
             <argument name="store" value="{{customStoreGroup.name}}"/>
             <argument name="rootCategory" value="Default Category"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Search updated store group(from above step) in grid and verify AssertStoreGroupInGrid-->
         <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="seeUpdatedStoreGroupInGrid">

@@ -9,41 +9,48 @@
  */
 namespace Magento\Wishlist\Block\Rss;
 
+use Magento\Framework\App\Rss\UrlBuilderInterface;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Wishlist\Helper\Data;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Link extends \Magento\Framework\View\Element\Template
+class Link extends Template
 {
     /**
-     * @var \Magento\Wishlist\Helper\Data
+     * @var Data
      */
-    protected $wishlistHelper;
+    protected Data $wishlistHelper;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface
+     * @var UrlBuilderInterface
      */
-    protected $rssUrlBuilder;
+    protected UrlBuilderInterface $rssUrlBuilder;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface
+     * @var EncoderInterface
      */
-    protected $urlEncoder;
+    protected EncoderInterface $urlEncoder;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
-     * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
-     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
+     * @param Context $context
+     * @param Data $wishlistHelper
+     * @param UrlBuilderInterface $rssUrlBuilder
+     * @param EncoderInterface $urlEncoder
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Wishlist\Helper\Data $wishlistHelper,
-        \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder,
-        \Magento\Framework\Url\EncoderInterface $urlEncoder,
+        Context $context,
+        Data $wishlistHelper,
+        UrlBuilderInterface $rssUrlBuilder,
+        EncoderInterface $urlEncoder,
         array $data = []
     ) {
+        $data['wishlistHelper'] = $wishlistHelper;
         parent::__construct($context, $data);
         $this->wishlistHelper = $wishlistHelper;
         $this->rssUrlBuilder = $rssUrlBuilder;
@@ -51,6 +58,8 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return link.
+     *
      * @return string
      */
     public function getLink()
@@ -72,6 +81,8 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return link params.
+     *
      * @return array
      */
     protected function getLinkParams()

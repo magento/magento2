@@ -16,12 +16,12 @@
                 <field id="customer" translate="label comment" type="text" sortOrder="30" showInDefault="1" canRestore="1">
                     <label>Customer Token Lifetime (hours)</label>
                     <comment>We will disable this feature if the value is empty.</comment>
-                    <validate>required-entry validate-zero-or-greater validate-number</validate>
+                    <validate>validate-zero-or-greater validate-number</validate>
                 </field>
                 <field id="admin" translate="label comment" type="text" sortOrder="60" showInDefault="1" canRestore="1">
                     <label>Admin Token Lifetime (hours)</label>
                     <comment>We will disable this feature if the value is empty.</comment>
-                    <validate>required-entry validate-zero-or-greater validate-number</validate>
+                    <validate>validate-zero-or-greater validate-number</validate>
                 </field>
             </group>
             <group id="cleanup" translate="label" type="text" sortOrder="300" showInDefault="1">
@@ -53,6 +53,10 @@
                     <label>OAuth consumer credentials HTTP Post timeout</label>
                     <comment>Timeout for OAuth consumer credentials Post request within X seconds.</comment>
                     <validate>required-entry validate-zero-or-greater validate-number</validate>
+                </field>
+                <field id="enable_integration_as_bearer" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Allow OAuth Access Tokens to be used as standalone Bearer tokens</label>
                 </field>
             </group>
             <group id="authentication_lock" translate="label" type="text" sortOrder="400" showInDefault="1">

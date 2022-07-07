@@ -12,7 +12,6 @@ use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\DataObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 class BillingTest extends TestCase
 {
@@ -23,10 +22,7 @@ class BillingTest extends TestCase
 
     protected function setUp(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
-        /** @var LoggerInterface $logger */
-        $this->testable = new Billing($logger);
+        $this->testable = new Billing();
     }
 
     public function testBeforeSave()

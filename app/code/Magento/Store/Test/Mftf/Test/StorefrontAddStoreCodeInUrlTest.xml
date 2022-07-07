@@ -18,12 +18,19 @@
             <severity value="CRITICAL"/>
             <group value="store"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushPageCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushPageCacheAfter">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
         </after>
 
         <actionGroup ref="StorefrontClickOnHeaderLogoActionGroup" stepKey="clickOnStorefrontHeaderLogo"/>

@@ -36,9 +36,9 @@
     <type name="Magento\Cms\Model\Config\Source\Wysiwyg\Editor">
         <arguments>
             <argument name="adapterOptions" xsi:type="array">
-                <item name="tinymce4" xsi:type="array">
-                    <item name="value" xsi:type="string">mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter</item>
-                    <item name="label" xsi:type="string" translatable="true">TinyMCE 4</item>
+                <item name="tinymce" xsi:type="array">
+                    <item name="value" xsi:type="string">mage/adminhtml/wysiwyg/tiny_mce/tinymce5Adapter</item>
+                    <item name="label" xsi:type="string" translatable="true">TinyMCE 5</item>
                 </item>
             </argument>
         </arguments>
@@ -57,4 +57,9 @@
             <argument name="path" xsi:type="string">web/default_layouts/default_cms_layout</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Cms\Model\Wysiwyg\Config">
+        <arguments>
+            <argument name="variableConfig" xsi:type="object">Magento\Variable\Model\Variable\Config\Proxy</argument>
+        </arguments>
+    </type>
 </config>

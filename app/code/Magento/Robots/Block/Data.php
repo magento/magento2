@@ -19,7 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * Prepares base content for robots.txt and implements Page Cache functionality.
  *
  * @api
- * @since 100.2.0
+ * @since 100.1.0
  */
 class Data extends AbstractBlock implements IdentityInterface
 {
@@ -60,7 +60,7 @@ class Data extends AbstractBlock implements IdentityInterface
      * Retrieve base content for robots.txt file
      *
      * @return string
-     * @since 100.2.0
+     * @since 100.1.0
      */
     protected function _toHtml()
     {
@@ -71,7 +71,7 @@ class Data extends AbstractBlock implements IdentityInterface
      * Get unique page cache identities
      *
      * @return array
-     * @since 100.2.0
+     * @since 100.1.0
      */
     public function getIdentities()
     {

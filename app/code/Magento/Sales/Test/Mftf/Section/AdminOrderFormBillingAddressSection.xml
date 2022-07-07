@@ -20,7 +20,9 @@
         <element name="StreetLine2" type="input" selector="#order-billing_address_street1" timeout="30"/>
         <element name="City" type="input" selector="#order-billing_address_city" timeout="30"/>
         <element name="Country" type="select" selector="#order-billing_address_country_id" timeout="30"/>
+        <element name="countrySelectedOption" type="select" selector="#order-billing_address_country_id option:checked"/>
         <element name="State" type="select" selector="#order-billing_address_region_id" timeout="30"/>
+        <element name="stateSelectedOption" type="select" selector="#order-billing_address_region_id option:checked"/>
         <element name="Province" type="input" selector="#order-billing_address_region" timeout="30"/>
         <element name="PostalCode" type="input" selector="#order-billing_address_postcode" timeout="30"/>
         <element name="Phone" type="input" selector="#order-billing_address_telephone" timeout="30"/>

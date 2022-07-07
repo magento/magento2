@@ -4,13 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @deprecated
-// phpcs:disable Magento2.Files.LineLength
-
+use Magento\CheckoutAgreements\Model\AgreementModeOptions;
 ?>
 <?php
 /**
  * @var $block \Magento\CheckoutAgreements\Block\Agreements
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 <?php if (!$block->getAgreements()) {
@@ -18,17 +17,24 @@
 } ?>
 <ol id="checkout-agreements" class="agreements checkout items">
     <?php /** @var \Magento\CheckoutAgreements\Api\Data\AgreementInterface $agreement */ ?>
-    <?php foreach ($block->getAgreements() as $agreement) :?>
+    <?php foreach ($block->getAgreements() as $agreement):?>
         <li class="item">
-            <div class="checkout-agreement-item-content"<?= $block->escapeHtmlAttr($agreement->getContentHeight() ? ' style="height:' . $agreement->getContentHeight() . '"' : '') ?>>
-                <?php if ($agreement->getIsHtml()) :?>
+            <div class="checkout-agreement-item-content" id="<?= /* @noEscape */ $agreement->getAgreementId() ?>"
+                <?php if ($agreement->getIsHtml()):?>
                     <?= /* @noEscape */ $agreement->getContent() ?>
-                <?php else :?>
+                <?php else:?>
                     <?= $block->escapeHtml(nl2br($agreement->getContent())) ?>
                 <?php endif; ?>
             </div>
-            <?php if ($agreement->getMode() == \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_MANUAL) :?>
-            <div id="checkout-agreements-form-<?= (int) $agreement->getAgreementId() ?>" class="field choice agree required">
+                <?php if ($agreement->getContentHeight()): ?>
+                    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                        'height:' . $agreement->getContentHeight(),
+                        '#' . $agreement->getAgreementId()
+                    ) ?>
+                <?php endif; ?>
+            <?php if ($agreement->getMode() == AgreementModeOptions::MODE_MANUAL):?>
+            <div id="checkout-agreements-form-<?= (int) $agreement->getAgreementId() ?>"
+                 class="field choice agree required">
                 <input type="checkbox"
                        id="agreement-<?= (int) $agreement->getAgreementId() ?>"
                        name="agreement[<?= (int) $agreement->getAgreementId() ?>]"
@@ -38,20 +44,20 @@
                        data-validate="{required:true}"/>
                 <label class="label" for="agreement-<?= (int) $agreement->getAgreementId() ?>">
                     <span>
-                        <?php if ($agreement->getIsHtml()) :?>
+                        <?php if ($agreement->getIsHtml()):?>
                             <?= /* @noEscape */ $agreement->getCheckboxText() ?>
-                        <?php else :?>
+                        <?php else:?>
                             <?= $block->escapeHtml($agreement->getCheckboxText()) ?>
                         <?php endif; ?>
                     </span>
                 </label>
             </div>
-            <?php elseif ($agreement->getMode() == \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_AUTO) :?>
+            <?php elseif ($agreement->getMode() == AgreementModeOptions::MODE_AUTO):?>
             <div id="checkout-agreements-form-<?= (int) $agreement->getAgreementId() ?>" class="field choice agree">
                 <span>
-                    <?php if ($agreement->getIsHtml()) :?>
+                    <?php if ($agreement->getIsHtml()):?>
                         <?= /* @noEscape */ $agreement->getCheckboxText() ?>
-                    <?php else :?>
+                    <?php else:?>
                         <?= $block->escapeHtml($agreement->getCheckboxText()) ?>
                     <?php endif; ?>
                 </span>

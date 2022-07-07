@@ -10,17 +10,15 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminProductCategoryIndexerInUpdateOnScheduleModeTest">
         <annotations>
+            <features value="Catalog"/>
             <stories value="Product Categories Indexer"/>
             <title value="Product Categories Indexer in Update on Schedule mode"/>
             <description value="The test verifies that in Update on Schedule mode if displaying of category products on Storefront changes due to product properties change,
             the changes are NOT applied immediately, but applied only after cron runs (twice)."/>
-            <severity value="BLOCKER"/>
-            <testCaseId value="MC-11146"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-26119"/>
             <group value="catalog"/>
             <group value="indexer"/>
-            <skip>
-                <issueId value="MC-20392"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
@@ -96,10 +94,11 @@
 
         <!-- 4. Run cron to reindex -->
         <wait time="60" stepKey="waitForChanges"/>
-        <magentoCLI command="cron:run" stepKey="runCron"/>
+        <magentoCLI command="cron:run --group index" stepKey="runCron"/>
+        <magentoCLI command="cron:run --group index" stepKey="runCronTwice"/>
 
         <!-- 5. Open category A on Storefront again -->
-        <reloadPage stepKey="reloadCategoryA"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadCategoryA"/>
 
         <!-- Category A displays product A1 now -->
         <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeTitleCategoryA1"/>
@@ -125,10 +124,11 @@
 
         <!-- 8. Run cron reindex (Ensure that at least one minute passed since last cron run) -->
         <wait time="60" stepKey="waitOneMinute"/>
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
+        <magentoCLI command="cron:run --group index" stepKey="runCron1"/>
+        <magentoCLI command="cron:run --group index" stepKey="runCronTwice1"/>
 
         <!-- 9. Open category A on Storefront again -->
-        <reloadPage stepKey="refreshCategoryAPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshCategoryAPage"/>
 
         <!-- Category A is empty now -->
         <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeOnPageCategoryAName"/>
@@ -180,7 +180,8 @@
 
         <!-- 14. Run cron to reindex  (Ensure that at least one minute passed since last cron run) -->
         <wait time="60" stepKey="waitMinute"/>
-        <magentoCLI command="cron:run" stepKey="runCron2"/>
+        <magentoCLI command="cron:run --group index" stepKey="runCron2"/>
+        <magentoCLI command="cron:run --group index" stepKey="runCronTwice2"/>
 
         <!--  15. Open category B on Storefront  -->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="onPageCategoryB">
@@ -239,7 +240,8 @@
 
         <!-- 17.14. Run cron to reindex  (Ensure that at least one minute passed since last cron run) -->
         <wait time="60" stepKey="waitForOneMinute"/>
-        <magentoCLI command="cron:run" stepKey="runCron3"/>
+        <magentoCLI command="cron:run --group index" stepKey="runCron3"/>
+        <magentoCLI command="cron:run --group index" stepKey="runCronTwice3"/>
 
         <!--  17.15. Open category B on Storefront  -->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openPageCategoryB">
@@ -300,7 +302,8 @@
 
         <!-- 18.14. Run cron to reindex  (Ensure that at least one minute passed since last cron run) -->
         <wait time="60" stepKey="waitExtraMinute"/>
-        <magentoCLI command="cron:run" stepKey="runCron4"/>
+        <magentoCLI command="cron:run --group index" stepKey="runCron4"/>
+        <magentoCLI command="cron:run --group index" stepKey="runCronTwice4"/>
 
         <!--  18.15. Open category B on Storefront  -->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="navigateToPageCategoryB">

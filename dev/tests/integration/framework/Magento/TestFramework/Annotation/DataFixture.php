@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Annotation;
 
 use Magento\TestFramework\Event\Param\Transaction;
+use Magento\TestFramework\Fixture\Parser\DataFixtureAttributesParser;
+use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,7 +34,7 @@ class DataFixture extends AbstractDataFixture
             if ($this->getDbIsolationState($test) !== ['disabled']) {
                 $param->requestTransactionStart();
             } else {
-                $this->_applyFixtures($fixtures);
+                $this->_applyFixtures($fixtures, $test);
             }
         }
     }
@@ -51,7 +53,7 @@ class DataFixture extends AbstractDataFixture
             if ($this->getDbIsolationState($test) !== ['disabled']) {
                 $param->requestTransactionRollback();
             } else {
-                $this->_revertFixtures();
+                $this->_revertFixtures($test);
             }
         }
     }
@@ -64,12 +66,13 @@ class DataFixture extends AbstractDataFixture
      */
     public function startTransaction(TestCase $test): void
     {
-        $this->_applyFixtures($this->_getFixtures($test));
+        $this->_applyFixtures($this->_getFixtures($test), $test);
     }
 
     /**
      * Handler for 'rollbackTransaction' event
      *
+     * @param TestCase $test
      * @return void
      */
     public function rollbackTransaction(): void
@@ -83,5 +86,20 @@ class DataFixture extends AbstractDataFixture
     protected function getAnnotation(): string
     {
         return self::ANNOTATION;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getParsers(): array
+    {
+        $parsers = [];
+        $parsers[] = Bootstrap::getObjectManager()->get(
+            \Magento\TestFramework\Fixture\Parser\DataFixture::class
+        );
+        return array_merge(
+            parent::getParsers(),
+            $parsers
+        );
     }
 }

@@ -20,15 +20,11 @@ use PHPUnit\Framework\TestCase;
 class ValidatorResultMergerTest extends TestCase
 {
     /**
-     * Testable Object
-     *
      * @var ValidatorResultMerger
      */
     private $validatorResultMerger;
 
     /**
-     * Object Manager
-     *
      * @var ObjectManager
      */
     private $objectManager;
@@ -46,13 +42,14 @@ class ValidatorResultMergerTest extends TestCase
     protected function setUp(): void
     {
         $this->validatorResultFactoryMock = $this->getMockBuilder(ValidatorResultInterfaceFactory::class)
-            ->setMethods(['create'])->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
         $this->objectManager = new ObjectManager($this);
         $this->validatorResultMerger = $this->objectManager->getObject(
             ValidatorResultMerger::class,
             [
-                'validatorResultInterfaceFactory' => $this->validatorResultFactoryMock,
+                'validatorResultInterfaceFactory' => $this->validatorResultFactoryMock
             ]
         );
     }
@@ -62,7 +59,7 @@ class ValidatorResultMergerTest extends TestCase
      *
      * @return void
      */
-    public function testMerge()
+    public function testMerge(): void
     {
         $validatorResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
         $orderValidationResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
@@ -73,12 +70,9 @@ class ValidatorResultMergerTest extends TestCase
         $orderValidationResultMock->expects($this->once())->method('getMessages')->willReturn(['test01', 'test02']);
         $creditmemoValidationResultMock->expects($this->once())->method('getMessages')->willReturn(['test03']);
 
-        $validatorResultMock->expects($this->at(0))->method('addMessage')->with('test01');
-        $validatorResultMock->expects($this->at(1))->method('addMessage')->with('test02');
-        $validatorResultMock->expects($this->at(2))->method('addMessage')->with('test03');
-        $validatorResultMock->expects($this->at(3))->method('addMessage')->with('test04');
-        $validatorResultMock->expects($this->at(4))->method('addMessage')->with('test05');
-        $validatorResultMock->expects($this->at(5))->method('addMessage')->with('test06');
+        $validatorResultMock
+            ->method('addMessage')
+            ->withConsecutive(['test01'], ['test02'], ['test03'], ['test04'], ['test05'], ['test06']);
         $expected = $validatorResultMock;
         $actual = $this->validatorResultMerger->merge(
             $orderValidationResultMock,

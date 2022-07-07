@@ -9,17 +9,15 @@
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontUpdateCustomerDefaultShippingAddressFromBlockTest">
         <annotations>
-            <features value="Customer address"/>
-            <stories value="Implement handling of large number of addresses on storefront Address book"/>
-            <title value="Add default customer address via the Storefront611"/>
-            <description value="Storefront user should be able to create a new default address via the storefront"/>
+            <features value="Customer"/>
+            <stories value="Update Customer Address"/>
+            <title value="Update customer default shipping address via the Storefront"/>
+            <description value="Customer should be able to update a default shipping address via the Storefront"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-97501"/>
+            <testCaseId value="MC-40247"/>
+            <useCaseId value="MAGETWO-97504"/>
             <group value="customer"/>
             <group value="update"/>
-            <skip>
-                <issueId value="MAGETWO-97504"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer_With_Different_Billing_Shipping_Addresses" stepKey="createCustomer"/>
@@ -30,16 +28,18 @@
 
         <!--Log in to Storefront as Customer 1 -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
-            <argument name="Customer" value="$$createCustomer$$"/>
+            <argument name="Customer" value="$createCustomer$"/>
         </actionGroup>
-        <amOnPage url="customer/address/" stepKey="OpenCustomerAddNewAddress"/>
-        <click stepKey="ClickEditDefaultShippingAddress" selector="{{StorefrontCustomerAddressesSection.editDefaultShippingAddress}}"/>
-        <fillField stepKey="fillFirstName" userInput="EditedFirstNameShipping" selector="{{StorefrontCustomerAddressFormSection.firstName}}"/>
-        <fillField stepKey="fillLastName" userInput="EditedLastNameShipping" selector="{{StorefrontCustomerAddressFormSection.lastName}}"/>
-        <click stepKey="saveCustomerAddress" selector="{{StorefrontCustomerAddressFormSection.saveAddress}}"/>
-        <see userInput="You saved the address." stepKey="verifyAddressAdded"/>
+        <amOnPage url="{{StorefrontCustomerAddressesPage.url}}" stepKey="OpenCustomerAddNewAddress"/>
+        <waitForElementVisible selector="{{StorefrontCustomerAddressesSection.editDefaultShippingAddress}}" stepKey="waitForChangeShippingAddressLinkVisible"/>
+        <click selector="{{StorefrontCustomerAddressesSection.editDefaultShippingAddress}}" stepKey="ClickEditDefaultShippingAddress"/>
+        <fillField userInput="EditedFirstNameShipping" selector="{{StorefrontCustomerAddressFormSection.firstName}}" stepKey="fillFirstName"/>
+        <fillField userInput="EditedLastNameShipping" selector="{{StorefrontCustomerAddressFormSection.lastName}}" stepKey="fillLastName"/>
+        <click selector="{{StorefrontCustomerAddressFormSection.saveAddress}}" stepKey="saveCustomerAddress"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessageVisible"/>
+        <see userInput="You saved the address." selector="{{StorefrontMessagesSection.success}}" stepKey="verifyAddressAdded"/>
         <see userInput="EditedFirstNameShipping" selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" stepKey="checkNewAddressesFirstNameOnDefaultShipping"/>
-        <see userInput="EditedLastNameShipping" selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesLastNameOnDefaultShipping"/>
+        <see userInput="EditedLastNameShipping" selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" stepKey="checkNewAddressesLastNameOnDefaultShipping"/>
         <see userInput="{{US_Address_TX_Default_Billing.firstname}}" selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesFirstNameOnDefaultBilling"/>
         <see userInput="{{US_Address_TX_Default_Billing.lastname}}" selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesLastNameOnDefaultBilling"/>
     </test>

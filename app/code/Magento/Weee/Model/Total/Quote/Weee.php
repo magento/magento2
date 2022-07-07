@@ -306,13 +306,12 @@ class Weee extends AbstractTotal
      */
     protected function recalculateParent(AbstractItem $item)
     {
-        $associatedTaxables = [[]];
+        $associatedTaxables = [];
         foreach ($item->getChildren() as $child) {
             $associatedTaxables[] = $child->getAssociatedTaxables();
         }
-        $item->setAssociatedTaxables(
-            array_unique(array_merge(...$associatedTaxables))
-        );
+        $associatedTaxables = array_merge([], ...$associatedTaxables);
+        $item->setAssociatedTaxables($associatedTaxables);
     }
 
     /**
