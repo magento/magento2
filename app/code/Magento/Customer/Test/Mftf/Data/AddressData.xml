@@ -446,4 +446,18 @@
         <data key="postcode">12345</data>
         <data key="telephone">512-345-6789</data>
     </entity>
+    <entity name="CustomerUKAddressWithState" type="address">
+        <data key="firstname">Jane</data>
+        <data key="lastname">Miller</data>
+        <data key="company">Magento</data>
+        <data key="telephone">44 20 7123 1234</data>
+        <array key="street">
+            <item>1 London Bridge Street</item>
+        </array>
+        <data key="country_id">GB</data>
+        <data key="country">United Kingdom</data>
+        <data key="city">London</data>
+        <data key="state">London</data>
+        <data key="postcode">SE12 9GF</data>
+    </entity>
 </entities>
