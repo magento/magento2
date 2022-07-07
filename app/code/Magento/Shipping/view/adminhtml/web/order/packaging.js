@@ -666,22 +666,6 @@ define(['prototype'], function () {
             if (!currentNode) {
                 return;
             }
-
-            $(currentNode).select(
-                'input[name=container_length],input[name=container_width],input[name=container_height],select[name=container_dimension_units]'
-            ).each(function (inputElement) {
-                if (disable) {
-                    Form.Element.disable(inputElement);
-                    inputElement.addClassName('_disabled');
-
-                    if (inputElement.nodeName == 'INPUT') {
-                        $(inputElement).value = '';
-                    }
-                } else {
-                    Form.Element.enable(inputElement);
-                    inputElement.removeClassName('_disabled');
-                }
-            });
         },
 
         changeContentTypes: function (obj) {
