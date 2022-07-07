@@ -140,7 +140,7 @@ class BundleSelectionPrice extends AbstractPrice
         if (!$this->useRegularPrice) {
             $value = $this->discountCalculator->calculateDiscount($this->bundleProduct, $value);
         }
-        $this->value = $this->priceCurrency->roundPrice($value, 4);
+        $this->value = $value;
         $product->setData($bundleSelectionKey, $this->value);
 
         return $this->value;

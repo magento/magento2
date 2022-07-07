@@ -83,15 +83,6 @@ interface PriceCurrencyInterface
     public function round($price);
 
     /**
-     * Round price with precision
-     *
-     * @param float $price
-     * @param int $precision
-     * @return float
-     */
-    public function roundPrice($price, $precision = self::DEFAULT_PRECISION);
-
-    /**
      * Get currency model
      *
      * @param null|string|bool|int|\Magento\Framework\App\ScopeInterface $scope
