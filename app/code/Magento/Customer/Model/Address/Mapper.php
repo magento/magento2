@@ -32,10 +32,9 @@ class Mapper
      *
      * @param AddressInterface $addressDataObject
      * @return array
-     * TODO:: Add concrete type of AddressInterface for $addressDataObject parameter once
      * all references have been refactored.
      */
-    public function toFlatArray($addressDataObject)
+    public function toFlatArray(AddressInterface $addressDataObject)
     {
         $flatAddressArray = $this->extensibleDataObjectConverter->toFlatArray(
             $addressDataObject,
