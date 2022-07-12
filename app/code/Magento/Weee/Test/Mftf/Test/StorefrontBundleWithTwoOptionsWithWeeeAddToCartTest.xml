@@ -82,8 +82,11 @@
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct2"/>
 
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
-        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage">
+            <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+            <argument name="productType" value="{{BundleProduct.type}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
 
         <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainProductFields">
             <argument name="product" value="BundleProduct"/>
