@@ -23,7 +23,7 @@ use Magento\Store\Model\ScopeInterface;
 class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
 {
     /**
-     * Name prefix of events that are dispatched by model 
+     * Name prefix of events that are dispatched by model
      *
      * @var string
      */
