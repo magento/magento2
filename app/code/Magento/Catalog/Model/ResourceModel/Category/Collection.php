@@ -23,7 +23,7 @@ use Magento\Store\Model\ScopeInterface;
 class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
 {
     /**
-     * Event prefix
+     * Name prefix of events that are dispatched by model 
      *
      * @var string
      */
@@ -155,11 +155,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $condition = $categoryIds;
         } elseif (is_string($categoryIds)) {
             $ids = explode(',', $categoryIds);
-            if (empty($ids)) {
-                $condition = $categoryIds;
-            } else {
-                $condition = ['in' => $ids];
-            }
+            $condition = ['in' => $ids];
         }
         $this->addFieldToFilter('entity_id', $condition);
         return $this;
@@ -327,7 +323,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $countSelect = $this->getProductsCountQuery($categoryIds, (bool)$websiteId);
             $categoryProductsCount = $this->_conn->fetchPairs($countSelect);
             foreach ($anchor as $item) {
-                $productsCount = isset($categoriesProductsCount[$item->getId()])
+                $productsCount = isset($categoryProductsCount[$item->getId()])
                     ? (int)$categoryProductsCount[$item->getId()]
                     : $this->getProductsCountFromCategoryTable($item, $websiteId);
                 $item->setProductCount($productsCount);
