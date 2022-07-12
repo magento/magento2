@@ -8,6 +8,7 @@ namespace Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Model\Metadata\ElementFactory;
 use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\Api\ArrayObjectSearch;
 use Magento\Framework\Locale\ResolverInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface as MagentoTimezone;
@@ -23,6 +24,11 @@ class Postcode extends AbstractData
     protected $directoryHelper;
 
     /**
+     * @var \Magento\Framework\Stdlib\StringUtils
+     */
+    protected $_string;
+
+    /**
      * @param MagentoTimezone $localeDate
      * @param PsrLogger $logger
      * @param AttributeMetadataInterface $attribute
@@ -31,6 +37,7 @@ class Postcode extends AbstractData
      * @param string $entityTypeCode
      * @param bool $isAjax
      * @param DirectoryHelper $directoryHelper
+     * @param \Magento\Framework\Stdlib\StringUtils $stringHelper
      */
     public function __construct(
         MagentoTimezone $localeDate,
@@ -40,9 +47,11 @@ class Postcode extends AbstractData
         $value,
         $entityTypeCode,
         $isAjax,
-        DirectoryHelper $directoryHelper
+        DirectoryHelper $directoryHelper,
+        \Magento\Framework\Stdlib\StringUtils $stringHelper
     ) {
         $this->directoryHelper = $directoryHelper;
+        $this->_string = $stringHelper;
         parent::__construct(
             $localeDate,
             $logger,
@@ -75,6 +84,14 @@ class Postcode extends AbstractData
         if (empty($value) && $value !== '0') {
             $errors[] = __('"%1" is a required value.', $label);
         }
+
+        $errors = $this->validateLength($value, $attribute, $errors);
+
+        $result = $this->_validateInputRule($value);
+        if ($result !== true) {
+            $errors = array_merge($errors, $result);
+        }
+
         if (count($errors) == 0) {
             return true;
         }
@@ -111,5 +128,43 @@ class Postcode extends AbstractData
     public function outputValue($format = ElementFactory::OUTPUT_FORMAT_TEXT)
     {
         return $this->_applyOutputFilter($this->_value);
+    }
+
+    /**
+     * Length validation
+     *
+     * @param mixed $value
+     * @param AttributeMetadataInterface $attribute
+     * @param array $errors
+     * @return array
+     */
+    private function validateLength($value, AttributeMetadataInterface $attribute, array $errors): array
+    {
+        // validate length
+        $label = __($attribute->getStoreLabel());
+
+        $length = $value ? $this->_string->strlen(trim($value)) : 0;
+
+        $validateRules = $attribute->getValidationRules();
+
+        if (!empty(ArrayObjectSearch::getArrayElementByName($validateRules, 'input_validation'))) {
+            $minTextLength = ArrayObjectSearch::getArrayElementByName(
+                $validateRules,
+                'min_text_length'
+            );
+            if ($minTextLength !== null && $length < $minTextLength) {
+                $errors[] = __('"%1" length must be equal or greater than %2 characters.', $label, $minTextLength);
+            }
+
+            $maxTextLength = ArrayObjectSearch::getArrayElementByName(
+                $validateRules,
+                'max_text_length'
+            );
+            if ($maxTextLength !== null && $length > $maxTextLength) {
+                $errors[] = __('"%1" length must be equal or less than %2 characters.', $label, $maxTextLength);
+            }
+        }
+
+        return $errors;
     }
 }

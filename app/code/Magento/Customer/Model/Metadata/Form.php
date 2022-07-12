@@ -367,7 +367,7 @@ class Form
             foreach ($validator->getMessages() as $errorMessages) {
                 $messages[] = (array)$errorMessages;
             }
-            return array_merge([], ...$messages);
+            return $messages;
         }
         return true;
     }
