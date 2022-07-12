@@ -7,7 +7,9 @@
  */
 namespace Magento\Framework\App\Action;
 
+use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\ResponseInterface;
 
 /**
@@ -15,7 +17,7 @@ use Magento\Framework\App\ResponseInterface;
  *
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
-class Forward extends AbstractAction
+class Forward extends AbstractAction implements CsrfAwareActionInterface
 {
     /**
      * @param RequestInterface $request
@@ -34,5 +36,22 @@ class Forward extends AbstractAction
     {
         $this->_request->setDispatched(false);
         return $this->_response;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return new InvalidRequestException($this->_response);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        // This exists so that we can forward to the noroute action in the admin
+        return true;
     }
 }
