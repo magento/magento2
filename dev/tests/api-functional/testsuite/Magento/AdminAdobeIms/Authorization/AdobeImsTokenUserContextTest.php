@@ -138,7 +138,6 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
         $token = $this->createAccessToken();
         $this->configWriter->save(self::XML_PATH_ENABLED, 1);
         $this->scopeConfig->clean();
-        $this->runWebApiCall($token);
         $this->assertAdminUserIdIsSaved($adminUserNameFromFixture, $token);
     }
 
@@ -186,9 +185,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
                 'SoapFault does not contain expected message.'
             );
         } catch (Exception $exception) {
-            $exceptionData = $this->processRestExceptionResult($exception);
-            $expectedExceptionData = ['message' => $expectedMessage];
-            $this->assertEquals($expectedExceptionData, $exceptionData);
+            $this->assertUnauthorizedAccessException($exception);
         }
         if ($noExceptionOccurred) {
             $this->fail("Exception was expected to be thrown when provided token is expired.");

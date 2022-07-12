@@ -13,7 +13,6 @@ use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
 
@@ -46,10 +45,7 @@ class GetAuthorizationUrlTest extends TestCase
         $imsConfigMock
             ->method('getAuthUrl')
             ->willReturn(self::AUTH_URL);
-
         $this->curlFactory = $this->createMock(CurlFactory::class);
-
-        $json = $this->createMock(Json::class);
 
         $this->authorizationUrl = $objectManagerHelper->getObject(
             GetAuthorizationUrl::class,
