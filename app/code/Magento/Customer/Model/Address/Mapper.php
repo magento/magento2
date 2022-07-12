@@ -15,7 +15,7 @@ use Magento\Framework\Api\ExtensibleDataObjectConverter;
 class Mapper
 {
     /**
-     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     * @var ExtensibleDataObjectConverter
      */
     private $extensibleDataObjectConverter;
 
@@ -32,14 +32,13 @@ class Mapper
      *
      * @param AddressInterface $addressDataObject
      * @return array
-     * all references have been refactored.
      */
-    public function toFlatArray(AddressInterface $addressDataObject)
+    public function toFlatArray(AddressInterface $addressDataObject): array
     {
         $flatAddressArray = $this->extensibleDataObjectConverter->toFlatArray(
             $addressDataObject,
             [],
-            \Magento\Customer\Api\Data\AddressInterface::class
+            AddressInterface::class
         );
         //preserve street
         $street = $addressDataObject->getStreet();
