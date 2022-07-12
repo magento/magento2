@@ -116,9 +116,7 @@ class Validate extends Action implements HttpPostActionInterface, HttpGetActionI
         if ($errors !== true) {
             $messages = $response->hasMessages() ? $response->getMessages() : [];
             foreach ($errors as $error) {
-                foreach ($error as $message) {
-                    $messages[] = $message;
-                }
+                $messages[] = $error;
             }
             $response->setMessages($messages);
             $response->setError(true);

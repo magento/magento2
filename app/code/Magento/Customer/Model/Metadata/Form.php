@@ -365,7 +365,7 @@ class Form
         if (!$validator->isValid(false)) {
             $messages = [];
             foreach ($validator->getMessages() as $errorMessages) {
-                $messages[] = (array)$errorMessages;
+                $messages = array_merge($messages, array_values((array)$errorMessages));
             }
             return $messages;
         }
