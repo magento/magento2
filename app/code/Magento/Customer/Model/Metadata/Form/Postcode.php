@@ -9,6 +9,7 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Model\Metadata\ElementFactory;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Api\ArrayObjectSearch;
+use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\Locale\ResolverInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface as MagentoTimezone;
@@ -24,7 +25,7 @@ class Postcode extends AbstractData
     protected $directoryHelper;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     protected $_string;
 
@@ -37,7 +38,7 @@ class Postcode extends AbstractData
      * @param string $entityTypeCode
      * @param bool $isAjax
      * @param DirectoryHelper $directoryHelper
-     * @param \Magento\Framework\Stdlib\StringUtils $stringHelper
+     * @param StringUtils|null $stringHelper
      */
     public function __construct(
         MagentoTimezone $localeDate,
@@ -48,9 +49,12 @@ class Postcode extends AbstractData
         $entityTypeCode,
         $isAjax,
         DirectoryHelper $directoryHelper,
-        \Magento\Framework\Stdlib\StringUtils $stringHelper
+        StringUtils $stringHelper = null
     ) {
         $this->directoryHelper = $directoryHelper;
+        if (is_null($stringHelper)) {
+            $stringHelper = \Magento\Framework\App\ObjectManager::getInstance()->get(StringUtils::class);
+        }
         $this->_string = $stringHelper;
         parent::__construct(
             $localeDate,
@@ -65,6 +69,7 @@ class Postcode extends AbstractData
 
     /**
      * Validate postal/zip code
+     *
      * Return true and skip validation if country zip code is optional
      *
      * @param array|null|string $value
@@ -99,7 +104,7 @@ class Postcode extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function extractValue(\Magento\Framework\App\RequestInterface $request)
     {
@@ -107,7 +112,7 @@ class Postcode extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function compactValue($value)
     {
@@ -115,7 +120,7 @@ class Postcode extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function restoreValue($value)
     {
@@ -123,7 +128,7 @@ class Postcode extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function outputValue($format = ElementFactory::OUTPUT_FORMAT_TEXT)
     {
