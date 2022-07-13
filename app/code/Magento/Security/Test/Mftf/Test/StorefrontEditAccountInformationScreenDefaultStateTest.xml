@@ -12,8 +12,8 @@
         <annotations>
             <features value="Security"/>
             <stories value="Account Information screen has default state"/>
-            <title value="First/Last Names fields are availabe by default and check boxes for Change Email and Change Password are unchecked"/>
-            <description value="First/Last Names fields are availabe by default and check boxes for Change Email and Change Password are unchecked"/>
+            <title value="First/Last Names fields are available by default and check boxes for Change Email and Change Password are unchecked"/>
+            <description value="First/Last Names fields are available by default and check boxes for Change Email and Change Password are unchecked"/>
             <testCaseId value="MC-27360"/>
             <severity value="MAJOR"/>
             <group value="security"/>
