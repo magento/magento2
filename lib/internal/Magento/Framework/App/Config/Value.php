@@ -57,7 +57,7 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     /**
      * @var array
      */
-    protected $scopeConfig;
+    protected $scopeConfigFromCache;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -99,7 +99,7 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      */
     public function getOldValue()
     {
-        $value = $this->scopeConfig[$this->getPath()];
+        $value = $this->scopeConfigFromCache[$this->getPath()];
         if (!empty($value)) {
             while (is_array($value)) {
                 $value = end($value);
@@ -134,7 +134,7 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      */
     public function setConfigFromCache(string $path, array $config = [])
     {
-        isset($this->scopeConfig[$path]) ?: $this->scopeConfig[$path] = $config;
+        isset($this->scopeConfigFromCache[$path]) ?: $this->scopeConfigFromCache[$path] = $config;
     }
 
     /**
