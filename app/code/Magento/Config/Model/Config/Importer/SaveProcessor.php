@@ -55,16 +55,17 @@ class SaveProcessor
      * Emulates saving of data array.
      *
      * @param array $data The data to be saved
+     * @param array $cachedData The data before changes
      * @return void
      */
-    public function process(array $data)
+    public function process(array $data, array $cachedData = [])
     {
         foreach ($data as $scope => $scopeData) {
             if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-                $this->invokeSave($scopeData, $scope);
+                $this->invokeSave($scopeData, $scope, null, $cachedData);
             } else {
                 foreach ($scopeData as $scopeCode => $scopeCodeData) {
-                    $this->invokeSave($scopeCodeData, $scope, $scopeCode);
+                    $this->invokeSave($scopeCodeData, $scope, $scopeCode, $cachedData);
                 }
             }
         }
@@ -90,19 +91,19 @@ class SaveProcessor
      * @param array $scopeData The data for specific scope
      * @param string $scope The configuration scope (default, website, or store)
      * @param string $scopeCode The scope code
+     * @param array $cachedData The data before changes
      * @return void
      * @throws \Magento\Framework\Exception\RuntimeException
      */
-    private function invokeSave(array $scopeData, $scope, $scopeCode = null)
+    private function invokeSave(array $scopeData, $scope, $scopeCode = null, array $cachedData = [])
     {
         $scopeData = array_keys($this->arrayUtils->flatten($scopeData));
-
         foreach ($scopeData as $path) {
             $value = $this->scopeConfig->getValue($path, $scope, $scopeCode);
             if ($value !== null) {
                 $backendModel = $this->valueFactory->create($path, $value, $scope, $scopeCode);
-
                 if ($backendModel instanceof Value) {
+                    $backendModel->setConfigFromCache($path, $cachedData);
                     $backendModel->beforeSave();
                     $backendModel->afterSave();
                 }

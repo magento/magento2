@@ -55,6 +55,11 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     protected $cacheTypeList;
 
     /**
+     * @var array
+     */
+    protected $scopeConfig;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param ScopeConfigInterface $config
@@ -94,11 +99,18 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      */
     public function getOldValue()
     {
-        return (string)$this->_config->getValue(
-            $this->getPath(),
-            $this->getScope() ?: ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            $this->getScopeCode()
-        );
+        $value = $this->scopeConfig[$this->getPath()];
+        if (!empty($value)) {
+            while (is_array($value)) {
+                $value = end($value);
+            }
+        } else {
+            $value = $this->_config->getValue(
+                $this->getPath(),
+                $this->getScope() ?: ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                $this->getScopeCode());
+        }
+        return (string) $value;
     }
 
     /**
@@ -111,6 +123,18 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     {
         $data = $this->_getData('fieldset_data');
         return is_array($data) && isset($data[$key]) ? $data[$key] : null;
+    }
+
+    /**
+     * Set scope configuration that was before changes
+     *
+     * @param string $path
+     * @param array $config
+     * @return void
+     */
+    public function setConfigFromCache(string $path, array $config = [])
+    {
+        isset($this->scopeConfig[$path]) ?: $this->scopeConfig[$path] = $config;
     }
 
     /**
