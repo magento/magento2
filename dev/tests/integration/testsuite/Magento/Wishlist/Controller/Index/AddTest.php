@@ -10,8 +10,10 @@ namespace Magento\Wishlist\Controller\Index;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Message\MessageInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\TestFramework\Wishlist\Model\GetWishlistByCustomerId;
 use Laminas\Stdlib\Parameters;
@@ -27,6 +29,7 @@ use Magento\Framework\UrlInterface;
  * @magentoDbIsolation disabled
  * @magentoAppArea frontend
  * @magentoDataFixture Magento/Customer/_files/customer.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddTest extends AbstractController
 {
@@ -245,6 +248,41 @@ class AddTest extends AbstractController
         $this->getRequest()->setParams(['token' => $token])->setMethod(HttpRequest::METHOD_GET);
         $this->dispatch('wishlist/index/add');
         $this->assertSuccess((int)$customer->getId(), 1, $product->getName());
+    }
+
+    /**
+     * @magentoConfigFixture current_store customer/captcha/enable 0
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testAddToWishlistBeforeLogin(): void
+    {
+        $this->prepareReferer();
+        $product = $this->productRepository->get('simple');
+        $this->performAddToWishListRequest(['product' => $product->getId()]);
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You must login or register to add items to your wishlist.')]),
+            MessageInterface::TYPE_ERROR
+        );
+
+        // re-initialize the application to make a second request
+        Bootstrap::getInstance()->getBootstrap()->getApplication()->reinitialize();
+        $this->_objectManager = Bootstrap::getObjectManager();
+        $this->customerSession = $this->_objectManager->get(Session::class);
+        $this->_request = null;
+        $this->_response = null;
+
+        // login
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue([
+            'login' => [
+                'username' => 'customer@example.com',
+                'password' => 'password',
+            ],
+        ]);
+        $this->dispatch('customer/account/loginPost');
+        $this->assertTrue($this->customerSession->isLoggedIn());
+        $this->assertSuccess(1, 1, $product->getName());
     }
 
     /**

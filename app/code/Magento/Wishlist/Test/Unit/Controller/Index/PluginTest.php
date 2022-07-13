@@ -15,6 +15,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Store\App\Response\Redirect;
 use Magento\Store\Model\ScopeInterface;
@@ -74,6 +75,11 @@ class PluginTest extends TestCase
     private $formKey;
 
     /**
+     * @var Validator|MockObject
+     */
+    private $formKeyValidator;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -101,6 +107,7 @@ class PluginTest extends TestCase
         $this->request = $this->createMock(Http::class);
         $this->dataSerializer = $this->createMock(DataSerializer::class);
         $this->formKey = $this->createMock(FormKey::class);
+        $this->formKeyValidator = $this->createMock(Validator::class);
     }
 
     /**
@@ -115,7 +122,8 @@ class PluginTest extends TestCase
             $this->redirector,
             $this->messageManager,
             $this->dataSerializer,
-            $this->formKey
+            $this->formKey,
+            $this->formKeyValidator
         );
     }
 
@@ -156,6 +164,11 @@ class PluginTest extends TestCase
             ->expects($this->once())
             ->method('getParams')
             ->willReturn($params);
+
+        $this->request
+            ->expects($this->exactly(2))
+            ->method('getActionName')
+            ->willReturn('add');
 
         $this->customerSession->expects($this->once())
             ->method('authenticate')
