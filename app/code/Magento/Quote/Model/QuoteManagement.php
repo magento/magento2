@@ -419,7 +419,7 @@ class QuoteManagement implements CartManagementInterface
             ) {
                 $quote->setCustomerFirstname($billingAddress->getFirstname());
                 $quote->setCustomerLastname($billingAddress->getLastname());
-                if ($billingAddress->getMiddlename() === null) {
+                if ($billingAddress->getMiddlename() !== null) {
                     $quote->setCustomerMiddlename($billingAddress->getMiddlename());
                 }
             }
