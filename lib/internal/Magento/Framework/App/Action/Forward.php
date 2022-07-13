@@ -1,7 +1,5 @@
 <?php
 /**
- * Forward action class
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -20,8 +18,7 @@ use Magento\Framework\App\ResponseInterface;
 class Forward extends AbstractAction implements CsrfAwareActionInterface
 {
     /**
-     * @param RequestInterface $request
-     * @return ResponseInterface
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function dispatch(RequestInterface $request)
