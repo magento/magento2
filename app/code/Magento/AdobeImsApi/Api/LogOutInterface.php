@@ -18,7 +18,8 @@ interface LogOutInterface
     /**
      * LogOut User from Adobe Account
      *
+     * @param string|null $accessToken
      * @return bool
      */
-    public function execute() : bool;
+    public function execute(string $accessToken = null) : bool;
 }

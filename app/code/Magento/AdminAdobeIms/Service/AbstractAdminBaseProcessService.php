@@ -12,7 +12,7 @@ namespace Magento\AdminAdobeIms\Service;
 use Exception;
 use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Model\Auth;
-use Magento\AdminAdobeIms\Model\LogOut;
+use Magento\AdobeImsApi\Api\LogOutInterface;
 use Magento\AdminAdobeIms\Model\User;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
@@ -35,20 +35,20 @@ abstract class AbstractAdminBaseProcessService
     protected DateTime $dateTime;
 
     /**
-     * @var LogOut
+     * @var LogOutInterface
      */
-    private LogOut $logOut;
+    private LogOutInterface $logOut;
 
     /**
      * @param User $adminUser
      * @param Auth $auth
-     * @param LogOut $logOut
+     * @param LogOutInterface $logOut
      * @param DateTime $dateTime
      */
     public function __construct(
         User $adminUser,
         Auth $auth,
-        LogOut $logOut,
+        LogOutInterface $logOut,
         DateTime $dateTime
     ) {
         $this->adminUser = $adminUser;
