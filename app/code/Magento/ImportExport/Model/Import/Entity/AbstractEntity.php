@@ -515,7 +515,7 @@ abstract class AbstractEntity
             // merge global entity index value attributes
             $indexValAttrs = array_merge($indexValAttrs, $this->_indexValueAttributes);
 
-            // should attribute has index (option value) instead of a label?
+            // should attribute have index (option value) instead of a label?
             $index = in_array($attribute->getAttributeCode(), $indexValAttrs) ? 'value' : 'label';
 
             // only default (admin) store values used
