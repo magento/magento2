@@ -29,6 +29,9 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\TestModuleOverrideConfig\Inheritance\Fixtures\FixturesInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CartTotalRepositoryTest extends WebapiAbstract
 {
     /**
