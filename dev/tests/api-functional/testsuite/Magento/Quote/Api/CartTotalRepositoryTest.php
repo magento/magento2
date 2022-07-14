@@ -22,6 +22,7 @@ use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Tax\Test\Fixture\TaxRule as TaxRule;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Quote\Model\Quote;
@@ -60,6 +61,10 @@ class CartTotalRepositoryTest extends WebapiAbstract
             \Magento\Framework\Api\FilterBuilder::class
         );
         $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
+        $this->_object = $this->createPartialMock(
+            Config::class,
+            ['_getConfigValue', '_setConfigValue']
+        );
     }
 
     /**
@@ -92,15 +97,14 @@ class CartTotalRepositoryTest extends WebapiAbstract
         $this->assertEquals($data, $actual);
     }
 
-    /**
-     * @magentoConfigFixture default_store tax/defaults/region 43
-     * @magentoConfigFixture default_store tax/defaults/postcode 10036
-     * @magentoConfigFixture default_store shipping/origin/region_id 43
-     * @magentoConfigFixture default_store shipping/origin/postcode 10011
-     */
     #[
+        Config('tax/defaults/region_id', '43'),
+        Config('tax/defaults/postcode', '10036'),
+        Config('shipping/origin/region_id', '43'),
+        Config('tax/defaults/postcode', '10011'),
         DataFixture(
-            TaxRule::class, [
+            TaxRule::class,
+            [
                 'tax_rate_ids' => [2],
                 'product_tax_class_ids' => [2],
                 'customer_tax_class_ids' => [3]
@@ -108,8 +112,9 @@ class CartTotalRepositoryTest extends WebapiAbstract
             'tax_rule'
         ),
         DataFixture(
-            ProductFixture::class, [
-                'price'=>5
+            ProductFixture::class,
+            [
+                'price' => 5
             ],
             'product'
         ),
@@ -117,13 +122,15 @@ class CartTotalRepositoryTest extends WebapiAbstract
             GuestCartFixture::class, as: 'cart'
         ),
         DataFixture(
-            AddProductToCartFixture::class, [
+            AddProductToCartFixture::class,
+            [
                 'cart_id' => '$cart.id$',
                 'product_id' => '$product.id$'
             ]
         ),
         DataFixture(
-            SetBillingAddressFixture::class, [
+            SetBillingAddressFixture::class,
+            [
                 'cart_id' => '$cart.id$',
                 'address' => [
                     AddressInterface::KEY_POSTCODE => 10036,
@@ -133,7 +140,8 @@ class CartTotalRepositoryTest extends WebapiAbstract
             ]
         ),
         DataFixture(
-            SetShippingAddressFixture::class, [
+            SetShippingAddressFixture::class,
+            [
                 'cart_id' => '$cart.id$',
                 'address' => [
                     AddressInterface::KEY_POSTCODE => 10036,
@@ -143,17 +151,20 @@ class CartTotalRepositoryTest extends WebapiAbstract
             ]
         ),
         DataFixture(
-            SetGuestEmailFixture::class, [
+            SetGuestEmailFixture::class,
+            [
                 'cart_id' => '$cart.id$'
             ]
         ),
         DataFixture(
-            SetDeliveryMethodFixture::class, [
+            SetDeliveryMethodFixture::class,
+            [
                 'cart_id' => '$cart.id$'
             ]
         ),
         DataFixture(
-            SetPaymentMethodFixture::class, [
+            SetPaymentMethodFixture::class,
+            [
                 'cart_id' => '$cart.id$'
             ]
         ),
