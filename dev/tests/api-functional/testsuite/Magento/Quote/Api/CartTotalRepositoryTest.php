@@ -22,7 +22,7 @@ use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Tax\Test\Fixture\TaxRule as TaxRule;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
-use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\Config as Config;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Quote\Model\Quote;
@@ -54,6 +54,13 @@ class CartTotalRepositoryTest extends WebapiAbstract
      */
     private $fixtures;
 
+    /**
+     * @var Config
+     */
+    private $object;
+
+
+
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -64,7 +71,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
             \Magento\Framework\Api\FilterBuilder::class
         );
         $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
-        $this->_object = $this->createPartialMock(
+        $this->object = $this->createPartialMock(
             Config::class,
             ['_getConfigValue', '_setConfigValue']
         );
@@ -122,7 +129,8 @@ class CartTotalRepositoryTest extends WebapiAbstract
             'product'
         ),
         DataFixture(
-            GuestCartFixture::class, as: 'cart'
+            GuestCartFixture::class,
+            as: 'cart'
         ),
         DataFixture(
             AddProductToCartFixture::class,
