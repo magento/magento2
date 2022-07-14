@@ -6,7 +6,6 @@
  */
 namespace Magento\Quote\Api;
 
-use Magento\Catalog\Model\Indexer\Product\Category\Processor;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
 use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
@@ -27,6 +26,7 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
+use Magento\TestModuleOverrideConfig\Inheritance\Fixtures\FixturesInterface;
 
 class CartTotalRepositoryTest extends WebapiAbstract
 {
@@ -34,11 +34,6 @@ class CartTotalRepositoryTest extends WebapiAbstract
      * @var ObjectManager
      */
     private $objectManager;
-
-    /**
-     * @var Processor
-     */
-    private $indexer;
 
     /**
      * @var SearchCriteriaBuilder
@@ -49,6 +44,11 @@ class CartTotalRepositoryTest extends WebapiAbstract
      * @var FilterBuilder
      */
     private $filterBuilder;
+
+    /**
+     * @var FixturesInterface
+     */
+    private $fixtures;
 
     protected function setUp(): void
     {
@@ -99,15 +99,64 @@ class CartTotalRepositoryTest extends WebapiAbstract
      * @magentoConfigFixture default_store shipping/origin/postcode 10011
      */
     #[
-        DataFixture(TaxRule::class, ['tax_rate_ids' => [2], 'product_tax_class_ids' => [2], 'customer_tax_class_ids' => [3], 'code' => 'TaxRule1'], 'tax_rule'),
-        DataFixture(ProductFixture::class, ['price'=>5], 'product'),
-        DataFixture(GuestCartFixture::class, as: 'cart'),
-        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
-        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$', 'address' => [AddressInterface::KEY_POSTCODE => 10036, AddressInterface::KEY_CITY => 'New York', AddressInterface::KEY_REGION_ID => 43] ]),
-        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$', 'address' => [AddressInterface::KEY_POSTCODE => 10036, AddressInterface::KEY_CITY => 'New York', AddressInterface::KEY_REGION_ID => 43] ]),
-        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(
+            TaxRule::class, [
+                'tax_rate_ids' => [2],
+                'product_tax_class_ids' => [2],
+                'customer_tax_class_ids' => [3]
+            ],
+            'tax_rule'
+        ),
+        DataFixture(
+            ProductFixture::class, [
+                'price'=>5
+            ],
+            'product'
+        ),
+        DataFixture(
+            GuestCartFixture::class, as: 'cart'
+        ),
+        DataFixture(
+            AddProductToCartFixture::class, [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$product.id$'
+            ]
+        ),
+        DataFixture(
+            SetBillingAddressFixture::class, [
+                'cart_id' => '$cart.id$',
+                'address' => [
+                    AddressInterface::KEY_POSTCODE => 10036,
+                    AddressInterface::KEY_CITY => 'New York',
+                    AddressInterface::KEY_REGION_ID => 43
+                ]
+            ]
+        ),
+        DataFixture(
+            SetShippingAddressFixture::class, [
+                'cart_id' => '$cart.id$',
+                'address' => [
+                    AddressInterface::KEY_POSTCODE => 10036,
+                    AddressInterface::KEY_CITY => 'New York',
+                    AddressInterface::KEY_REGION_ID => 43
+                ]
+            ]
+        ),
+        DataFixture(
+            SetGuestEmailFixture::class, [
+                'cart_id' => '$cart.id$'
+            ]
+        ),
+        DataFixture(
+            SetDeliveryMethodFixture::class, [
+                'cart_id' => '$cart.id$'
+            ]
+        ),
+        DataFixture(
+            SetPaymentMethodFixture::class, [
+                'cart_id' => '$cart.id$'
+            ]
+        ),
     ]
     public function testGetGrandTotalsWithIncludedTaxAndSameCurrency()
     {
