@@ -9,13 +9,13 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Model;
 
 use Exception;
+use Magento\AdobeIms\Model\GetProfile;
 use Magento\AdobeIms\Model\LogOut;
+use Magento\Backend\Model\Auth\StorageInterface;
 use Magento\AdobeImsApi\Api\ConfigInterface;
-use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
 use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
-use Magento\Authorization\Model\UserContextInterface;
+use Magento\Backend\Model\Auth;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -61,6 +61,16 @@ class LogOutTest extends TestCase
     private $model;
 
     /**
+     * @var Auth|MockObject
+     */
+    private $auth;
+
+    /**
+     * @var GetProfile|MockObject
+     */
+    private $profile;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -70,12 +80,16 @@ class LogOutTest extends TestCase
         $this->loggerInterfaceMock = $this->createMock(LoggerInterface::class);
         $this->getToken = $this->createMock(GetAccessTokenInterface::class);
         $this->flushTokens = $this->createMock(FlushUserTokensInterface::class);
+        $this->profile = $this->createMock(GetProfile::class);
+        $this->auth = $this->createMock(Auth::class);
         $this->model = new LogOut(
             $this->loggerInterfaceMock,
             $this->configInterfaceMock,
             $this->curlFactoryMock,
             $this->getToken,
-            $this->flushTokens
+            $this->flushTokens,
+            $this->profile,
+            $this->auth
         );
     }
 
@@ -104,7 +118,15 @@ class LogOutTest extends TestCase
 
         $this->flushTokens->expects($this->once())
             ->method('execute');
-
+        $session = $this->getMockBuilder(StorageInterface::class)
+            ->addMethods(['getAdobeAccessToken'])
+            ->getMockForAbstractClass();
+        $session->expects($this->once())
+            ->method('getAdobeAccessToken')
+            ->willReturn(null);
+        $this->auth->expects($this->once())
+            ->method('getAuthStorage')
+            ->willReturn($session);
         $this->assertEquals(true, $this->model->execute());
     }
 
@@ -135,7 +157,15 @@ class LogOutTest extends TestCase
 
         $this->flushTokens->expects($this->never())
             ->method('execute');
-
+        $session = $this->getMockBuilder(StorageInterface::class)
+            ->addMethods(['getAdobeAccessToken'])
+            ->getMockForAbstractClass();
+        $session->expects($this->once())
+            ->method('getAdobeAccessToken')
+            ->willReturn(null);
+        $this->auth->expects($this->once())
+            ->method('getAuthStorage')
+            ->willReturn($session);
         $this->assertEquals(false, $this->model->execute());
     }
 
@@ -161,7 +191,15 @@ class LogOutTest extends TestCase
         $curl->expects($this->once())
             ->method('getStatus')
             ->willReturn(self::HTTP_FOUND);
-
+        $session = $this->getMockBuilder(StorageInterface::class)
+            ->addMethods(['getAdobeAccessToken'])
+            ->getMockForAbstractClass();
+        $session->expects($this->once())
+            ->method('getAdobeAccessToken')
+            ->willReturn(null);
+        $this->auth->expects($this->once())
+            ->method('getAuthStorage')
+            ->willReturn($session);
         $this->flushTokens->expects($this->once())
             ->method('execute')
             ->willThrowException(new Exception('Could not save user profile.'));

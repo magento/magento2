@@ -107,7 +107,7 @@ class LogOut implements LogOutInterface
                 $accessToken = $session->getAdobeAccessToken();
             }
             if (!empty($accessToken)) {
-                return $this->adminLogoutFromIms($accessToken);
+                return $this->logoutAdminFromIms($accessToken);
             }
             $accessToken = $accessToken ?? $this->getAccessToken->execute();
             if (empty($accessToken)) {
@@ -149,7 +149,7 @@ class LogOut implements LogOutInterface
      * @return bool
      * @throws LocalizedException
      */
-    private function adminLogoutFromIms(string $accessToken): bool
+    private function logoutAdminFromIms(string $accessToken): bool
     {
         if (!$this->checkUserProfile($accessToken)) {
             throw new LocalizedException(
