@@ -187,9 +187,19 @@ class PostcodeTest extends AbstractFormTestCase
             'thousand' => ['10000', true],
             'L6' => ['666666', true],
             'L7' => ['6666666', '"" length must be equal or less than 6 characters.'],
-            'S1' => ['s', ['"" length must be equal or greater than 5 characters.', "notDigits" => '"" contains non-numeric characters.']],
+            'S1' => ['s',
+                [
+                    '"" length must be equal or greater than 5 characters.',
+                    "notDigits" => '"" contains non-numeric characters.'
+                ]
+            ],
             'S6' => ['string', ["notDigits" => '"" contains non-numeric characters.']],
-            'S7' => ['strings', ['"" length must be equal or less than 6 characters.', "notDigits" => '"" contains non-numeric characters.']],
+            'S7' => ['strings',
+                [
+                    '"" length must be equal or less than 6 characters.',
+                    "notDigits" => '"" contains non-numeric characters.'
+                ]
+            ],
             'L6s' => ['66666s', ["notDigits" => '"" contains non-numeric characters.']],
         ];
     }
