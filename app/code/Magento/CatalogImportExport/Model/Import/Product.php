@@ -2927,25 +2927,6 @@ class Product extends AbstractEntity
     }
 
     /**
-     * @param Import $import
-     * @return void
-     */
-    protected function _saveValidatedBunchesWithoutSource(Import $import)
-    {
-        $rowsData = preg_split("/\r\n|\n|\r/", base64_decode($import->getData('csvData')));
-        $colNames = explode(',', $rowsData[0]);
-        $rowsData = array_splice($rowsData, 1);
-        foreach (array_values($rowsData) as $key => $rowData) {
-            $rowData = array_combine($colNames, str_getcsv($rowData, ',', '"'));
-            $rowData = $this->_customFieldsMapping($rowData);
-            $this->validateRow($rowData, $key);
-        }
-        $this->checkUrlKeyDuplicates();
-        $this->getOptionEntity()->validateAmbiguousData();
-        return parent::_saveValidatedBunchesWithoutSource($import);
-    }
-
-    /**
      * Check that url_keys are not assigned to other products in DB
      *
      * @return void

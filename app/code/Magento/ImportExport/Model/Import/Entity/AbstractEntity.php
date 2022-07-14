@@ -9,7 +9,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import as ImportExport;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
@@ -383,6 +382,8 @@ abstract class AbstractEntity
         $bunchRows = [];
         $startNewBunch = false;
         $nextRowBackup = [];
+        $maxDataSize = $this->_resourceHelper->getMaxDataSize();
+        $bunchSize = $this->_importExportData->getBunchSize();
         $skuSet = [];
 
         $source->rewind();
@@ -410,84 +411,25 @@ abstract class AbstractEntity
                     continue;
                 }
 
-                $this->saveBunch($source->key(), $startNewBunch, $nextRowBackup, $currentDataSize, $bunchRows, $rowData);
+                $this->_processedRowsCount++;
+
+                if ($this->validateRow($rowData, $source->key())) {
+                    // add row to bunch for save
+                    $rowData = $this->_prepareRowForDb($rowData);
+                    $rowSize = strlen($this->jsonHelper->jsonEncode($rowData) ?? '');
+
+                    $isBunchSizeExceeded = $bunchSize > 0 && count($bunchRows) >= $bunchSize;
+
+                    if ($currentDataSize + $rowSize >= $maxDataSize || $isBunchSizeExceeded) {
+                        $startNewBunch = true;
+                        $nextRowBackup = [$source->key() => $rowData];
+                    } else {
+                        $bunchRows[$source->key()] = $rowData;
+                        $currentDataSize += $rowSize;
+                    }
+                }
                 $source->next();
             }
-        }
-        $this->_processedEntitiesCount = (count($skuSet)) ?: $this->_processedRowsCount;
-
-        return $this;
-    }
-
-    private function saveBunch($key, &$startNewBunch, &$nextRowBackup, &$currentDataSize, &$bunchRows, $rowData)
-    {
-        $this->_processedRowsCount++;
-        $maxDataSize = $this->_resourceHelper->getMaxDataSize();
-        $bunchSize = $this->_importExportData->getBunchSize();
-        if ($this->validateRow($rowData, $key)) {
-            // add row to bunch for save
-            $rowData = $this->_prepareRowForDb($rowData);
-            $rowSize = strlen($this->jsonHelper->jsonEncode($rowData) ?? '');
-
-            $isBunchSizeExceeded = $bunchSize > 0 && count($bunchRows) >= $bunchSize;
-
-            if ($currentDataSize + $rowSize >= $maxDataSize || $isBunchSizeExceeded) {
-                $startNewBunch = true;
-                $nextRowBackup = [$key => $rowData];
-            } else {
-                $bunchRows[$key] = $rowData;
-                $currentDataSize += $rowSize;
-            }
-        }
-    }
-
-    /**
-     * Save DataSourceModel
-     *
-     * @param ImportExport $import
-     * @return void
-     */
-    protected function _saveValidatedBunchesWithoutSource(Import $import)
-    {
-        $currentDataSize = 0;
-        $bunchRows = [];
-        $startNewBunch = false;
-        $nextRowBackup = [];
-        $skuSet = [];
-        $this->_dataSourceModel->cleanBunches();
-        $rowsData = preg_split("/\r\n|\n|\r/", base64_decode($import->getData('csvData')));
-        $colNames = explode(',', $rowsData[0]);
-        $rowsData = array_splice($rowsData, 1);
-        $flag = false;
-        $count = count($rowsData);
-        foreach (array_values($rowsData) as $key => $rowData) {
-            $rowData = array_combine($colNames, str_getcsv($rowData, ',', '"'));
-            if (($startNewBunch && $bunchRows) || $flag) {
-                $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
-
-                $bunchRows = $nextRowBackup;
-                $currentDataSize = strlen($this->getSerializer()->serialize($bunchRows));
-                $startNewBunch = false;
-                $nextRowBackup = [];
-            } else {
-                try {
-                    if (array_key_exists('sku', $rowData)) {
-                        $skuSet[$rowData['sku']] = true;
-                    }
-                } catch (\InvalidArgumentException $e) {
-                    $this->addRowError($e->getMessage(), $this->_processedRowsCount);
-                    $this->_processedRowsCount++;
-                    continue;
-                }
-
-                $this->saveBunch($key, $startNewBunch, $nextRowBackup, $currentDataSize, $bunchRows, $rowData);
-                if ($count===$key+1) {
-                    $flag = true;
-                }
-            }
-        }
-        if ($flag) {
-            $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
         }
         $this->_processedEntitiesCount = (count($skuSet)) ?: $this->_processedRowsCount;
 
@@ -840,31 +782,25 @@ abstract class AbstractEntity
     /**
      * Validate data.
      *
-     * @param Import $import
      * @return ProcessingErrorAggregatorInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function validateData(Import $import)
+    public function validateData()
     {
         if (!$this->_dataValidated) {
             $this->getErrorAggregator()->clear();
             // do all permanent columns exist?
-            if ($this->_source) {
-                $colNames = $this->getSource()->getColNames();
-            } else {
-                $colNames = explode(',', preg_split("/\r\n|\n|\r/", base64_decode($import->getData('csvData')))[0]);
-            }
-            $absentColumns = array_diff($this->_permanentAttributes, $colNames);
+            $absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames());
             $this->addErrors(self::ERROR_CODE_COLUMN_NOT_FOUND, $absentColumns);
 
-            if (Import::BEHAVIOR_DELETE != $this->getBehavior()) {
+            if (ImportExport::BEHAVIOR_DELETE != $this->getBehavior()) {
                 // check attribute columns names validity
                 $columnNumber = 0;
                 $emptyHeaderColumns = [];
                 $invalidColumns = [];
                 $invalidAttributes = [];
-                foreach ($colNames as $columnName) {
+                foreach ($this->getSource()->getColNames() as $columnName) {
                     $columnNumber++;
                     if (!$this->isAttributeParticular($columnName)) {
                         if (trim($columnName ?? '') == '') {
@@ -882,11 +818,7 @@ abstract class AbstractEntity
             }
 
             if (!$this->getErrorAggregator()->getErrorsCount()) {
-                if ($this->_source) {
-                    $this->_saveValidatedBunches();
-                } else {
-                    $this->_saveValidatedBunchesWithoutSource($import);
-                }
+                $this->_saveValidatedBunches();
                 $this->_dataValidated = true;
             }
         }

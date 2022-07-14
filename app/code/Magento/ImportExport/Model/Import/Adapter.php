@@ -63,4 +63,16 @@ class Adapter
     {
         return self::factory(pathinfo($source, PATHINFO_EXTENSION), $directory, $source, $options);
     }
+
+    /**
+     * Create adapter instance for specified source.
+     *
+     * @param string $source Source
+     * @param mixed $options OPTIONAL Adapter constructor options
+     * @return AbstractSource
+     */
+    public static function findAdapterForData($source, $options = null)
+    {
+        return self::factory('Data', null, $source, $options);
+    }
 }

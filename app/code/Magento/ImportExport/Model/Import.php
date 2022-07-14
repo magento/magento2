@@ -329,6 +329,21 @@ class Import extends AbstractModel
     }
 
     /**
+     * Returns source adapter object.
+     *
+     * @param string $sourceFile Full path to source file
+     * @return AbstractSource
+     * @throws FileSystemException
+     */
+    public function _getSourceAdapterForApi($sourceData)
+    {
+        return Adapter::findAdapterForData(
+            $sourceData,
+            $this->getData(self::FIELD_FIELD_SEPARATOR)
+        );
+    }
+
+    /**
      * Return operation result messages
      *
      * @param ProcessingErrorAggregatorInterface $validationResult
@@ -619,11 +634,11 @@ class Import extends AbstractModel
      * Before validate data the method requires to initialize error aggregator (ProcessingErrorAggregatorInterface)
      * with 'validation strategy' and 'allowed error count' values to allow using this parameters in validation process.
      *
-     * @param AbstractSource|null $source
+     * @param AbstractSource $source
      * @return bool
      * @throws LocalizedException
      */
-    public function validateSource(AbstractSource $source = null)
+    public function validateSource(AbstractSource $source)
     {
         $this->addLogComment(__('Begin data validation'));
 
@@ -634,8 +649,8 @@ class Import extends AbstractModel
         );
 
         try {
-            $adapter = $source ? $this->_getEntityAdapter()->setSource($source) : $this->_getEntityAdapter();
-            $adapter->validateData($this);
+            $adapter = $this->_getEntityAdapter()->setSource($source);
+            $adapter->validateData();
         } catch (\Exception $e) {
             $errorAggregator->addError(
                 AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,

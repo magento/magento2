@@ -137,41 +137,8 @@ class Upload
      */
     public function uploadFileAndGetSourceForRest(Import $import)
     {
-        $entity = $import->getEntity();
-        /** @var $uploader Uploader */
-        $fileName = $this->random->getRandomString(32) . '.' . 'csv';
-        $uploadedFile = '';
-        $extension = 'csv';
-        $uploadedFile = $import->getWorkingDir() . $fileName;
-
-        if (!$extension) {
-            $import->getVarDirectory()->delete($uploadedFile);
-            throw new LocalizedException(__('The file you uploaded has no extension.'));
-        }
-        $sourceFile = $import->getWorkingDir() . $entity;
-
-        $sourceFile .= '.' . $extension;
-        $sourceFileRelative = $import->getVarDirectory()->getRelativePath($sourceFile);
-        $import->getVarDirectory()->writeFile($uploadedFile, base64_decode($import->getData('csvData')));
-
-        if (strtolower($uploadedFile) != strtolower($sourceFile)) {
-            if ($import->getVarDirectory()->isExist($sourceFileRelative)) {
-                $import->getVarDirectory()->delete($sourceFileRelative);
-            }
-
-            try {
-                $import->getVarDirectory()->renameFile(
-                    $import->getVarDirectory()->getRelativePath($uploadedFile),
-                    $sourceFileRelative
-                );
-            } catch (FileSystemException $e) {
-                throw new LocalizedException(__('The source file moving process failed.'));
-            }
-        }
-        $import->_removeBom($sourceFile);
-        $import->createHistoryReport($sourceFileRelative, $entity, $extension, ['name'=> $entity . 'csv']);
         try {
-            $source = $import->_getSourceAdapter($sourceFile);
+            $source = $import->_getSourceAdapterForApi(base64_decode($import->getData('csvData')));
         } catch (\Exception $e) {
             $import->getVarDirectory()->delete($import->getVarDirectory()->getRelativePath($sourceFile));
             throw new LocalizedException(__($e->getMessage()));
