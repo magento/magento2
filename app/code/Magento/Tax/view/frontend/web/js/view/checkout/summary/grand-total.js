@@ -60,13 +60,20 @@ define([
          * @return {*}
          */
         getGrandTotalExclTax: function () {
-            var total = this.totals();
+            var total = this.totals(),
+                amount;
 
             if (!total) {
                 return 0;
             }
 
-            return this.getFormattedPrice(total['grand_total']);
+            amount = this.getFormattedPrice(total['grand_total'] - total['tax_amount']);
+
+            if (amount < 0) {
+                return 0;
+            }
+
+            return amount;
         },
 
         /**
