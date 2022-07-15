@@ -78,7 +78,6 @@ class SourceData extends AbstractSimpleObject implements SourceDataInterface
         return $this->csvData;
     }
 
-
     /**
      * @inheritDoc
      */
