@@ -126,23 +126,4 @@ class Upload
         $import->createHistoryReport($sourceFileRelative, $entity, $extension, $result);
         return $sourceFile;
     }
-
-    /**
-     * Move uploaded file and provide source instance.
-     *
-     * @param Import $import
-     * @return Import\AbstractSource
-     * @throws LocalizedException
-     * @since 100.2.7
-     */
-    public function uploadFileAndGetSourceForRest(Import $import)
-    {
-        try {
-            $source = $import->_getSourceAdapterForApi(base64_decode($import->getData('csvData')));
-        } catch (\Exception $e) {
-            $import->getVarDirectory()->delete($import->getVarDirectory()->getRelativePath($sourceFile));
-            throw new LocalizedException(__($e->getMessage()));
-        }
-        return $source;
-    }
 }

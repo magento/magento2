@@ -23,7 +23,7 @@ class Adapter
      * @param mixed $options OPTIONAL Adapter constructor options
      *
      * @return AbstractSource
-     *
+     * phpcs:disable Magento2.Functions.StaticFunction
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public static function factory($type, $directory, $source, $options = null)
@@ -56,12 +56,12 @@ class Adapter
      * @param string $source Source file path.
      * @param Write $directory
      * @param mixed $options OPTIONAL Adapter constructor options
-     *
+     * phpcs:disable Magento2.Functions.StaticFunction
      * @return AbstractSource
      */
     public static function findAdapterFor($source, $directory, $options = null)
     {
-        return self::factory(pathinfo($source, PATHINFO_EXTENSION), $directory, $source, $options);
+        return self::factory(pathinfo($source, PATHINFO_EXTENSION), $directory, $source, $options); // phpcs:ignore
     }
 
     /**
@@ -69,6 +69,7 @@ class Adapter
      *
      * @param string $source Source
      * @param mixed $options OPTIONAL Adapter constructor options
+     * phpcs:disable Magento2.Functions.StaticFunction
      * @return AbstractSource
      */
     public static function findAdapterForData($source, $options = null)

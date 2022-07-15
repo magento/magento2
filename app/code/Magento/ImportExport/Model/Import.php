@@ -319,7 +319,7 @@ class Import extends AbstractModel
      * @return AbstractSource
      * @throws FileSystemException
      */
-    public function _getSourceAdapter($sourceFile)
+    protected function _getSourceAdapter($sourceFile)
     {
         return Adapter::findAdapterFor(
             $sourceFile,
@@ -329,16 +329,14 @@ class Import extends AbstractModel
     }
 
     /**
-     * Returns source adapter object.
+     * Returns source adapter object for Api Data.
      *
-     * @param string $sourceFile Full path to source file
      * @return AbstractSource
-     * @throws FileSystemException
      */
-    public function _getSourceAdapterForApi($sourceData)
+    protected function _getSourceAdapterForApi()
     {
         return Adapter::findAdapterForData(
-            $sourceData,
+            base64_decode($this->getData('csvData')),
             $this->getData(self::FIELD_FIELD_SEPARATOR)
         );
     }
@@ -598,6 +596,14 @@ class Import extends AbstractModel
         }
 
         return $source;
+    }
+
+    /**
+     * @return AbstractSource
+     */
+    public function getSourceForApiData()
+    {
+        return $this->_getSourceAdapterForApi();
     }
 
     /**

@@ -41,7 +41,7 @@ class StartImport implements StartImportInterface
         $import = $this->import->setData($source);
         $errors = [];
         try {
-            $source = $this->import->getUpload()->uploadFileAndGetSourceForRest($import);
+            $source = $import->getSourceForApiData();
             $this->processValidationResult($import->validateSource($source), $errors);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $errors[] = $e->getMessage();
