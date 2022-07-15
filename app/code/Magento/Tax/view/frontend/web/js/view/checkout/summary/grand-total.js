@@ -69,11 +69,7 @@ define([
 
             amount = this.getFormattedPrice(total['grand_total'] - total['tax_amount']);
 
-            if (amount < 0) {
-                return 0;
-            }
-
-            return amount;
+            return amount < 0 ? 0 : amount;
         },
 
         /**
