@@ -63,7 +63,7 @@ class Upload
      *
      * @param Import $import
      * @throws LocalizedException
-     * @return string Source file path
+     * @return array
      */
     public function uploadSource(Import $import)
     {
@@ -122,8 +122,6 @@ class Upload
                 throw new LocalizedException(__('The source file moving process failed.'));
             }
         }
-        $import->_removeBom($sourceFile);
-        $import->createHistoryReport($sourceFileRelative, $entity, $extension, $result);
-        return $sourceFile;
+        return $result;
     }
 }
