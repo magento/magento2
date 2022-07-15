@@ -336,6 +336,7 @@ class Import extends AbstractModel
     protected function _getSourceAdapterForApi()
     {
         return Adapter::findAdapterForData(
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             base64_decode($this->getData('csvData')),
             $this->getData(self::FIELD_FIELD_SEPARATOR)
         );
@@ -599,6 +600,8 @@ class Import extends AbstractModel
     }
 
     /**
+     * Get Source adapter object
+     *
      * @return AbstractSource
      */
     public function getSourceForApiData()

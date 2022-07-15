@@ -19,10 +19,17 @@ class Data extends AbstractSource
     protected $_delimiter = ',';
 
     /**
+     * Field Enclosure character
+     *
      * @var string
      */
     protected $_enclosure = '';
 
+    /**
+     * Read Data and detect column names
+     *
+     * @param string $data
+     */
     public function __construct(string $data)
     {
         $rowsData = preg_split("/\r\n|\n|\r/", $data);
