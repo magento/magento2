@@ -5,6 +5,7 @@
  */
 namespace Magento\Eav\Model\Entity;
 
+use Magento\Eav\Model\ReservedAttributeCheckerInterface;
 use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\ObjectManager;
@@ -29,17 +30,17 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * The value is defined as 60 because in the flat mode attribute code will be transformed into column name.
      * MySQL allows only 64 symbols in column name.
      */
-    const ATTRIBUTE_CODE_MAX_LENGTH = 60;
+    public const ATTRIBUTE_CODE_MAX_LENGTH = 60;
 
     /**
      * Min accepted length of an attribute code.
      */
-    const ATTRIBUTE_CODE_MIN_LENGTH = 1;
+    public const ATTRIBUTE_CODE_MIN_LENGTH = 1;
 
     /**
      * Tag to use for attributes caching.
      */
-    const CACHE_TAG = 'EAV_ATTRIBUTE';
+    public const CACHE_TAG = 'EAV_ATTRIBUTE';
 
     /**
      * Prefix of model events names
@@ -69,6 +70,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
     /**
      * @var \Magento\Catalog\Model\Product\ReservedAttributeList
+     *
+     * @deprecated Incorrect direct dependency on Product attribute.
+     * @see \Magento\Eav\Model\Entity\Attribute::$reservedAttributeChecker
      */
     protected $reservedAttributeList;
 
@@ -86,6 +90,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @var AttributeCodeValidator|null
      */
     private $attributeCodeValidator;
+
+    /**
+     * @var ReservedAttributeCheckerInterface|null
+     */
+    private $reservedAttributeChecker;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -108,6 +117,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param AttributeCodeValidator|null $attributeCodeValidator
+     * @param ReservedAttributeCheckerInterface|null $reservedAttributeChecker
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @codeCoverageIgnore
      */
@@ -131,7 +141,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        AttributeCodeValidator $attributeCodeValidator = null
+        AttributeCodeValidator $attributeCodeValidator = null,
+        ?ReservedAttributeCheckerInterface $reservedAttributeChecker = null
     ) {
         parent::__construct(
             $context,
@@ -156,6 +167,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         $this->dateTimeFormatter = $dateTimeFormatter;
         $this->attributeCodeValidator = $attributeCodeValidator ?: ObjectManager::getInstance()->get(
             AttributeCodeValidator::class
+        );
+        $this->reservedAttributeChecker = $reservedAttributeChecker ?: ObjectManager::getInstance()->get(
+            ReservedAttributeCheckerInterface::class
         );
     }
 
@@ -251,7 +265,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         }
 
         // prevent overriding product data
-        if (isset($this->_data['attribute_code']) && $this->reservedAttributeList->isReservedAttribute($this)) {
+        if (isset($this->_data['attribute_code']) && $this->reservedAttributeChecker->isReservedAttribute($this)) {
             throw new LocalizedException(
                 __(
                     'The attribute code \'%1\' is reserved by system. Please try another attribute code',
@@ -535,6 +549,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         $this->_localeDate = $objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $this->_localeResolver = $objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
         $this->reservedAttributeList = $objectManager->get(\Magento\Catalog\Model\Product\ReservedAttributeList::class);
+        $this->reservedAttributeChecker = $objectManager->get(ReservedAttributeCheckerInterface::class);
         $this->dateTimeFormatter = $objectManager->get(DateTimeFormatterInterface::class);
     }
 
