@@ -11,6 +11,7 @@ namespace Magento\CatalogInventory\Model;
  * Search Result Applier getters and setters
  *
  * @deprecated - as the implementation has been reverted during the fix of ACP2E-748
+ * @see \Magento\InventoryCatalog\Plugin\Catalog\Model\ResourceModel\Product\CollectionPlugin
  */
 class StockStatusApplier implements StockStatusApplierInterface
 {
@@ -26,6 +27,7 @@ class StockStatusApplier implements StockStatusApplierInterface
      *
      * @param bool $status
      * @deprecated
+     * @see \Magento\InventoryCatalog\Plugin\Catalog\Model\ResourceModel\Product\CollectionPlugin::beforeSetOrder
      */
     public function setSearchResultApplier(bool $status): void
     {
@@ -37,6 +39,7 @@ class StockStatusApplier implements StockStatusApplierInterface
      *
      * @return bool
      * @deprecated
+     * @see \Magento\InventoryCatalog\Plugin\Catalog\Model\ResourceModel\Product\CollectionPlugin::beforeSetOrder
      */
     public function hasSearchResultApplier() : bool
     {

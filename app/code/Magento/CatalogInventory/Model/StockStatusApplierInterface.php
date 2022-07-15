@@ -11,6 +11,7 @@ namespace Magento\CatalogInventory\Model;
  * Search Result Applier interface.
  *
  * @deprecated - as the implementation has been reverted during the fix of ACP2E-748
+ * @see \Magento\InventoryCatalog\Plugin\Catalog\Model\ResourceModel\Product\CollectionPlugin
  */
 interface StockStatusApplierInterface
 {
@@ -20,6 +21,7 @@ interface StockStatusApplierInterface
      *
      * @param bool $status
      * @deprecated
+     * @see \Magento\InventoryCatalog\Plugin\Catalog\Model\ResourceModel\Product\CollectionPlugin::beforeSetOrder
      */
     public function setSearchResultApplier(bool $status): void;
 
@@ -28,6 +30,7 @@ interface StockStatusApplierInterface
      *
      * @return bool
      * @deprecated
+     * @see \Magento\InventoryCatalog\Plugin\Catalog\Model\ResourceModel\Product\CollectionPlugin::beforeSetOrder
      */
     public function hasSearchResultApplier() : bool;
 }
