@@ -266,10 +266,7 @@ class Template implements \Zend_Filter_Interface
             $pattern = $directiveProcessor->getRegularExpression();
 
             if ($isSigned) {
-                $signature = $this->signatureProvider->get();
-
-                $pattern = substr_replace($pattern, $signature, strpos($pattern, '/') + 1, 0);
-                $pattern = substr_replace($pattern, $signature, strrpos($pattern, '/'), 0);
+                $pattern = $this->embedSignatureIntoPattern($pattern);
             }
 
             if (preg_match_all($pattern, $value, $constructions, PREG_SET_ORDER)) {
@@ -285,6 +282,38 @@ class Template implements \Zend_Filter_Interface
         }
 
         return $results;
+    }
+
+    /**
+     * Modifies given regular expression pattern to be able to recognize signed directives.
+     *
+     * @param string $pattern
+     *
+     * @return string
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function embedSignatureIntoPattern(string $pattern): string
+    {
+        $signature = $this->signatureProvider->get();
+
+        $closingDelimiters = [
+            '(' => ')',
+            '{' => '}',
+            '[' => ']',
+            '<' => '>'
+        ];
+
+        $closingDelimiter = $openingDelimiter = substr(trim($pattern), 0, 1);
+
+        if (array_key_exists($openingDelimiter, $closingDelimiters)) {
+            $closingDelimiter = $closingDelimiters[$openingDelimiter];
+        }
+
+        $pattern = substr_replace($pattern, $signature, strpos($pattern, $openingDelimiter) + 1, 0);
+        $pattern = substr_replace($pattern, $signature, strrpos($pattern, $closingDelimiter), 0);
+
+        return $pattern;
     }
 
     /**
