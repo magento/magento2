@@ -23,6 +23,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
@@ -226,6 +227,7 @@ class Product extends AbstractEntity
      * Links attribute name-to-link type ID.
      *
      * @deprecated 101.1.0 use DI for LinkProcessor class if you want to add additional types
+     *
      * @var array
      */
     protected $_linkNameToId = [
