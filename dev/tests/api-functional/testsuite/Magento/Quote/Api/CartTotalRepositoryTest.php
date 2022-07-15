@@ -58,9 +58,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
      * @var Config
      */
     private $object;
-
-
-
+    
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
