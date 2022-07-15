@@ -21,7 +21,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
      * @var TimezoneInterface
      */
     private $timezone;
-    
+
     /**
      * @var DataPersistorInterface
      */
@@ -62,6 +62,9 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
+        if ($data['simple_free_shipping']==="") {
+            $data['simple_free_shipping']=null;
+        }
         if ($data) {
             try {
                 /** @var $model \Magento\SalesRule\Model\Rule */
