@@ -64,7 +64,7 @@ class StockDataFilter
             $stockData['min_qty'] = 0;
         }
 
-        if (!isset($stockData['is_decimal_divided']) || $stockData['is_qty_decimal'] == 0) {
+        if (!isset($stockData['is_decimal_divided'])) {
             $stockData['is_decimal_divided'] = 0;
         }
 
