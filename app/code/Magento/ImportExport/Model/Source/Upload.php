@@ -55,8 +55,7 @@ class Upload
         $this->_httpFactory = $httpFactory;
         $this->_importExportData = $importExportData;
         $this->_uploaderFactory = $uploaderFactory;
-        $this->random = $random ?: ObjectManager::getInstance()
-            ->get(Random::class);
+        $this->random = $random;
     }
     /**
      * Move uploaded file.
