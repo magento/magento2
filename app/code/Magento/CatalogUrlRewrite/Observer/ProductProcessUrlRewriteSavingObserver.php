@@ -144,6 +144,7 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
             }
             $storesToRemove = array_unique($storesToRemove);
         }
+        $storesToRemove = array_filter($storesToRemove);
         if ($storesToRemove) {
             $this->urlPersist->deleteByData(
                 [

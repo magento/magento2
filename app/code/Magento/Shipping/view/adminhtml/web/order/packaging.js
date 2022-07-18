@@ -262,6 +262,14 @@ define(['prototype'], function () {
             }
             dimensionElements.each(callback);
 
+            const allowedPackageTypes = ["N","D"];
+
+            if (Object.values(this.customizableContainers).some(packageType => allowedPackageTypes.includes(packageType))) {
+                dimensionElements.each(function(element) {
+                    $(element).addClassName('required-entry');
+                });
+            }
+
             return result = $$('[id^="package_block_"] input').collect(function (element) {
                 return this.validateElement(element);
             }, this).all();
@@ -666,6 +674,22 @@ define(['prototype'], function () {
             if (!currentNode) {
                 return;
             }
+
+            $(currentNode).select(
+                'input[name=container_length],input[name=container_width],input[name=container_height],select[name=container_dimension_units]'
+            ).each(function (inputElement) {
+                if (disable) {
+                    Form.Element.disable(inputElement);
+                    inputElement.addClassName('_disabled');
+
+                    if (inputElement.nodeName == 'INPUT') {
+                        $(inputElement).value = '';
+                    }
+                } else {
+                    Form.Element.enable(inputElement);
+                    inputElement.removeClassName('_disabled');
+                }
+            });
         },
 
         changeContentTypes: function (obj) {

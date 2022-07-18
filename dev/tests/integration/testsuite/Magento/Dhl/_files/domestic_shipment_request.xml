@@ -40,7 +40,7 @@
         </Contact>
     </Consignee>
     <Commodity xmlns="">
-        <CommodityCode>11</CommodityCode>
+        <CommodityCode>01</CommodityCode>
     </Commodity>
     <Reference xmlns="">
         <ReferenceID>shipment reference</ReferenceID>

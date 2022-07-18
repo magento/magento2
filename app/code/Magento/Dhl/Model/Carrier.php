@@ -57,7 +57,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @var string[]
      */
-    protected $_customizableContainerTypes = [self::DHL_CONTENT_TYPE_NON_DOC];
+    protected $_customizableContainerTypes = [self::DHL_CONTENT_TYPE_NON_DOC, self::DHL_CONTENT_TYPE_DOC];
 
     /**
      * Code of the carrier

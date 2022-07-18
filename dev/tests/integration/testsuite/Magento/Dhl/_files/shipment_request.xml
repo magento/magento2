@@ -41,7 +41,7 @@
         </Contact>
     </Consignee>
     <Commodity xmlns="">
-        <CommodityCode>11</CommodityCode>
+        <CommodityCode>01</CommodityCode>
     </Commodity>
     <Dutiable xmlns="">
         <DeclaredValue>10.00</DeclaredValue>
