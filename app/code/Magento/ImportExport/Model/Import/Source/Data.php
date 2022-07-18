@@ -11,9 +11,6 @@ use Magento\ImportExport\Model\Import\AbstractSource;
 
 class Data extends AbstractSource
 {
-    /**
-     * @var array
-     */
     private $rows;
 
     /**
@@ -22,17 +19,10 @@ class Data extends AbstractSource
     protected $_delimiter = ',';
 
     /**
-     * Field Enclosure character
-     *
      * @var string
      */
     protected $_enclosure = '';
 
-    /**
-     * Read Data and detect column names
-     *
-     * @param string $data
-     */
     public function __construct(string $data)
     {
         $rowsData = preg_split("/\r\n|\n|\r/", $data);
@@ -41,11 +31,6 @@ class Data extends AbstractSource
         parent::__construct($colNames);
     }
 
-    /**
-     * Read next line from CSV data
-     *
-     * @return array
-     */
     protected function _getNextRow()
     {
         if ($this->_key===count($this->rows)) {
