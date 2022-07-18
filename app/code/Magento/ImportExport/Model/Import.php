@@ -337,7 +337,7 @@ class Import extends AbstractModel
     {
         return Adapter::findAdapterForData(
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            base64_decode($this->getData('csvData')),
+            trim(base64_decode($this->getData('csvData'))),
             $this->getData(self::FIELD_FIELD_SEPARATOR)
         );
     }
