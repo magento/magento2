@@ -55,7 +55,7 @@ class ChartTest extends TestCase
     {
         return [
             [
-                2,
+                1,
                 '24h',
                 'quantity'
             ],
@@ -70,12 +70,12 @@ class ChartTest extends TestCase
                 'quantity'
             ],
             [
-                5,
+                4,
                 '1y',
                 'quantity'
             ],
             [
-                6,
+                5,
                 '2y',
                 'quantity'
             ]
