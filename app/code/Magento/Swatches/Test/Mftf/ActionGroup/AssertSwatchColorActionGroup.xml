@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertSwatchColorActionGroup">
         <annotations>
             <description>Validates that the provided Color Picker contains the provided Style.</description>
@@ -18,12 +18,10 @@
         </arguments>
 
         <grabAttributeFrom selector="{{AdminManageSwatchSection.nthSwatch(nthSwatch)}}" userInput="style" stepKey="grabStyle1"/>
-        <helper class="Magento\Swatches\Test\Mftf\Helper\ColorCode" method="colorCode" stepKey="colorCode">
-            <argument name="colorCode">{$grabStyle1}</argument>
-        </helper>
         <assertEquals stepKey="assertStyle1">
-            <actualResult type="string">{$colorCode}</actualResult>
+            <actualResult type="string">{$grabStyle1}</actualResult>
             <expectedResult type="string">{{expectedStyle}}</expectedResult>
         </assertEquals>
     </actionGroup>
 </actionGroups>
+
