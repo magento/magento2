@@ -1635,7 +1635,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
          * value should lie in between 1 to 9999.This field is mandatory.
          */
         $nodeCommodity = $xml->addChild('Commodity', '', '');
-        $nodeCommodity->addChild('CommodityCode', substr('11', 0, 18));
+        $nodeCommodity->addChild('CommodityCode', substr('01', 0, 18));
 
         /** Dutiable */
         if ($this->isDutiable(
