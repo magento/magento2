@@ -576,8 +576,8 @@ class Import extends AbstractModel
      */
     public function uploadSource()
     {
-        $result = $this->upload->uploadSource($this);
         $entity = $this->getEntity();
+        $result = $this->upload->uploadSource($entity);
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
         $sourceFile = $this->getWorkingDir() . $entity . '.' . $extension;
