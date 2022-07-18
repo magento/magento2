@@ -29,7 +29,7 @@ class Uploader extends \Magento\Framework\File\Uploader
     protected $_skipDbProcessing = false;
 
     /**
-     * Core file storage
+     *  File storage
      *
      * @var \Magento\MediaStorage\Helper\File\Storage
      */
@@ -152,6 +152,9 @@ class Uploader extends \Magento\Framework\File\Uploader
     }
 
     /**
+     * Rename Uploaded File
+     *
+     * @param string $entity
      * @return void
      * @throws LocalizedException
      */
