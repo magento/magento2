@@ -12,6 +12,8 @@ use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\AsyncClient\HttpException;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
+use Magento\Framework\Measure\Length;
+use Magento\Framework\Measure\Weight;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
@@ -1523,12 +1525,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $packageParams = $request->getPackageParams();
 
         $packageWeight = $request->getPackageWeight();
-        if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
+        if ($packageParams->getWeightUnits() != Weight::OUNCE) {
             $packageWeight = round(
                 (float) $this->_carrierHelper->convertMeasureWeight(
                     (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
-                    \Zend_Measure_Weight::OUNCE
+                    Weight::OUNCE
                 )
             );
         }
@@ -1617,12 +1619,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
         $packageParams = $request->getPackageParams();
         $packageWeight = $request->getPackageWeight();
-        if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
+        if ($packageParams->getWeightUnits() != Weight::OUNCE) {
             $packageWeight = round(
                 (float) $this->_carrierHelper->convertMeasureWeight(
                     (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
-                    \Zend_Measure_Weight::OUNCE
+                    Weight::OUNCE
                 )
             );
         }
@@ -1703,42 +1705,42 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $length = $packageParams->getLength();
         $girth = $packageParams->getGirth();
         $packageWeight = $request->getPackageWeight();
-        if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::POUND) {
+        if ($packageParams->getWeightUnits() != Weight::POUND) {
             $packageWeight = $this->_carrierHelper->convertMeasureWeight(
                 (float)$request->getPackageWeight(),
                 $packageParams->getWeightUnits(),
-                \Zend_Measure_Weight::POUND
+                Weight::POUND
             );
         }
-        if ($packageParams->getDimensionUnits() != \Zend_Measure_Length::INCH) {
+        if ($packageParams->getDimensionUnits() != Length::INCH) {
             $length = round(
                 (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getLength(),
                     $packageParams->getDimensionUnits(),
-                    \Zend_Measure_Length::INCH
+                    Length::INCH
                 )
             );
             $width = round(
                 (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getWidth(),
                     $packageParams->getDimensionUnits(),
-                    \Zend_Measure_Length::INCH
+                    Length::INCH
                 )
             );
             $height = round(
                 (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getHeight(),
                     $packageParams->getDimensionUnits(),
-                    \Zend_Measure_Length::INCH
+                    Length::INCH
                 )
             );
         }
-        if ($packageParams->getGirthDimensionUnits() != \Zend_Measure_Length::INCH) {
+        if ($packageParams->getGirthDimensionUnits() != Length::INCH) {
             $girth = round(
                 (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getGirth(),
                     $packageParams->getGirthDimensionUnits(),
-                    \Zend_Measure_Length::INCH
+                    Length::INCH
                 )
             );
         }
@@ -1871,11 +1873,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $item->setData($itemShipment);
 
             $itemWeight = $item->getWeight() * $item->getQty();
-            if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::POUND) {
+            if ($packageParams->getWeightUnits() != Weight::POUND) {
                 $itemWeight = $this->_carrierHelper->convertMeasureWeight(
                     $itemWeight,
                     $packageParams->getWeightUnits(),
-                    \Zend_Measure_Weight::POUND
+                    Weight::POUND
                 );
             }
             if (!empty($countriesOfManufacture[$item->getProductId()])) {
