@@ -16,6 +16,7 @@
         <arguments>
             <argument name="defaultLabelAttribute" type="string" defaultValue="{{colorProductAttribute.default_label}}"/>
         </arguments>
+
         <switchToIFrame stepKey="switchOutOfIFrame"/>
         <waitForPageLoad stepKey="waitForFilters"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickOnFilters"/>
