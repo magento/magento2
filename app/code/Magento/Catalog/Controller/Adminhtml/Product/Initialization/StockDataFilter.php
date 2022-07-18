@@ -9,14 +9,14 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Class StockDataFilter
+ * Class StockDataFilter to Filter stock data
  */
 class StockDataFilter
 {
     /**
      * The greatest value which could be stored in CatalogInventory Qty field
      */
-    const MAX_QTY_VALUE = 99999999;
+    public const MAX_QTY_VALUE = 99999999;
 
     /**
      * @var ScopeConfigInterface

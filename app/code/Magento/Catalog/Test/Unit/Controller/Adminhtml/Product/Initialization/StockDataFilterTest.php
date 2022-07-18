@@ -108,14 +108,13 @@ class StockDataFilterTest extends TestCase
                 ],
             ],
             'case6' => [
-        'inputStockData' => ['is_qty_decimal' => 0,
-            'is_decimal_divided' => 1],
-        'outputStockData' => [
-            'is_qty_decimal' => 0,
-            'is_decimal_divided' => 1,
-            'use_config_manage_stock' => 0,
-                    ],
-                ]
+                'inputStockData' => ['is_qty_decimal' => 0, 'is_decimal_divided' => 1],
+                'outputStockData' => [
+                    'is_qty_decimal' => 0,
+                    'is_decimal_divided' => 1,
+                    'use_config_manage_stock' => 0,
+                ],
+            ]
         ];
     }
 }
