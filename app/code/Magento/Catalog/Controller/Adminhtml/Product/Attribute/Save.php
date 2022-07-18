@@ -327,6 +327,9 @@ class Save extends Attribute implements HttpPostActionInterface
                 return $this->returnResult('catalog/*/', [], ['error' => false]);
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
+                if ($attributeId === null) {
+                    unset($data['frontend_input']);
+                }
                 $this->_session->setAttributeData($data);
                 return $this->returnResult(
                     'catalog/*/edit',
