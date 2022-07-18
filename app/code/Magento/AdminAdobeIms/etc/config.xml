@@ -11,8 +11,8 @@
             <integration>
                 <admin_enabled>0</admin_enabled>
                 <admin>
-                    <auth_url_pattern><![CDATA[#{imsUrl}/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code]]></auth_url_pattern>
-                    <reauth_url_pattern><![CDATA[#{imsUrl}/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code&reauth=check]]></reauth_url_pattern>
+                    <auth_url_pattern><![CDATA[https://ims-na1.adobelogin.com/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code]]></auth_url_pattern>
+                    <reauth_url_pattern><![CDATA[https://ims-na1.adobelogin.com/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code&reauth=check]]></reauth_url_pattern>
                     <scopes>
                         <AdobeID>AdobeID</AdobeID>
                         <openid>openid</openid>
@@ -21,14 +21,15 @@
                         <org.read>org.read</org.read>
                     </scopes>
                 </admin>
+                <logging_enabled>0</logging_enabled>
                 <organization_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
-                <profile_url><![CDATA[#{imsUrl}/ims/profile/v1?client_id=#{client_id}]]></profile_url>
-                <organization_membership_url><![CDATA[#{organizationMembershipUrl}/#{org_id}@AdobeOrg/membership]]></organization_membership_url>
-                <admin_logout_url><![CDATA[#{imsUrl}/ims/logout/v1?access_token=#{access_token}&client_id=#{client_id}&client_secret=#{client_secret}]]></admin_logout_url>
-                <certificate_path><![CDATA[#{certificateUrl}/keys/prod/]]></certificate_path>
-                <validate_token_url><![CDATA[#{imsUrl}/ims/validate_token/v1?token=#{token}&client_id=#{client_id}&type=#{token_type}]]></validate_token_url>
-                <organizationMembershipUrl>https://graph.identity.adobe.com</organizationMembershipUrl>
-                <certificateUrl>https://static.adobelogin.com</certificateUrl>
+                <auth_url_pattern><![CDATA[https://ims-na1.adobelogin.com/ims/authorize/v2?client_id=#{client_id}&amp;redirect_uri=#{redirect_uri}&amp;locale=#{locale}&amp;scope=openid,creative_sdk,email,profile&amp;response_type=code]]></auth_url_pattern>
+                <token_url>https://ims-na1.adobelogin.com/ims/token</token_url>
+                <profile_url><![CDATA[https://ims-na1.adobelogin.com/ims/profile/v1?client_id=#{client_id}]]></profile_url>
+                <organization_membership_url><![CDATA[https://graph.identity.adobe.com/#{org_id}@AdobeOrg/membership]]></organization_membership_url>
+                <logout_url><![CDATA[https://ims-na1.adobelogin.com/ims/logout/v1?access_token=#{access_token}&amp;client_id=#{client_id}&amp;client_secret=#{client_secret}]]></logout_url>
+                <certificate_path><![CDATA[https://static.adobelogin.com/keys/prod/]]></certificate_path>
+                <validate_token_url><![CDATA[https://ims-na1.adobelogin.com/ims/validate_token/v1?token=#{token}&client_id=#{client_id}&type=#{token_type}]]></validate_token_url>
             </integration>
             <email>
                 <header_template>admin_adobe_ims_email_header_template</header_template>
