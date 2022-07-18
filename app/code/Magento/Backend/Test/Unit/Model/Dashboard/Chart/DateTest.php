@@ -11,6 +11,7 @@ use Magento\Backend\Model\Dashboard\Chart\Date;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Helper;
 use Magento\Framework\DB\Select;
@@ -26,6 +27,7 @@ use Magento\Sales\Model\Order\Config;
 use Magento\Sales\Model\ResourceModel\Report\OrderFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -42,6 +44,76 @@ class DateTest extends TestCase
     protected $collection;
 
     /**
+     * @var EntityFactory|MockObject
+     */
+    protected $entityFactoryMock;
+
+    /**
+     * @var LoggerInterface|MockObject
+     */
+    protected $loggerMock;
+
+    /**
+     * @var FetchStrategyInterface|MockObject
+     */
+    protected $fetchStrategyMock;
+
+    /**
+     * @var ManagerInterface|MockObject
+     */
+    protected $managerMock;
+
+    /**
+     * @var \Magento\Sales\Model\ResourceModel\EntitySnapshot|MockObject
+     */
+    protected $entitySnapshotMock;
+
+    /**
+     * @var Helper|MockObject
+     */
+    protected $helperMock;
+
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    protected $scopeConfigMock;
+
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    protected $storeManagerMock;
+
+    /**
+     * @var TimezoneInterface|MockObject
+     */
+    protected $timezoneMock;
+
+    /**
+     * @var Config|MockObject
+     */
+    protected $configMock;
+
+    /**
+     * @var OrderFactory|MockObject
+     */
+    protected $orderFactoryMock;
+
+    /**
+     * @var AdapterInterface|MockObject
+     */
+    protected $connectionMock;
+
+    /**
+     * @var Select|MockObject
+     */
+    protected $selectMock;
+
+    /**
+     * @var AbstractDb|MockObject
+     */
+    protected $resourceMock;
+
+    /**
      * @var CollectionFactory
      */
     private $collectionFactoryMock;
@@ -55,6 +127,66 @@ class DateTest extends TestCase
      * @inheritDoc
      */
     protected function setUp(): void
+    {
+        $this->collection = $this->getCollectionObject();
+        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->collectionFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn($this->collection);
+        $this->objectManagerHelper = new ObjectManager($this);
+        $this->model = $this->objectManagerHelper->getObject(
+            Date::class,
+            [
+                'collectionFactory' => $this->collectionFactoryMock,
+                'localeDate' => $this->timezoneMock
+            ]
+        );
+    }
+
+    /**
+     * @param string $period
+     * @param string $config
+     * @param int $expectedYear
+     *
+     * @return void
+     * @dataProvider getByPeriodDataProvider
+     */
+    public function testGetByPeriod($period, $config, $expectedYear): void
+    {
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->with(
+                $config,
+                ScopeInterface::SCOPE_STORE
+            )
+            ->willReturn(1);
+        $dates = $this->model->getByPeriod($period);
+        $this->assertEquals($expectedYear, substr($dates[0], 0, 4));
+    }
+
+    /**
+     * @return array
+     */
+    public function getByPeriodDataProvider(): array
+    {
+        $dateStart = new \DateTime();
+        $expectedYear = $dateStart->format('Y');
+        $expected2YTDYear = $expectedYear - 1;
+
+        return [
+            [Period::PERIOD_1_YEAR, 'reports/dashboard/ytd_start', $expectedYear],
+            [Period::PERIOD_2_YEARS, 'reports/dashboard/ytd_start', $expected2YTDYear]
+        ];
+    }
+
+    /**
+     * @return Collection
+     */
+    private function getCollectionObject()
     {
         $this->entityFactoryMock = $this->getMockBuilder(EntityFactory::class)
             ->disableOriginalConstructor()
@@ -83,7 +215,6 @@ class DateTest extends TestCase
             ->expects($this->any())
             ->method('getConfigTimezone')
             ->willReturn('America/Chicago');
-
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -122,7 +253,6 @@ class DateTest extends TestCase
             ->expects($this->any())
             ->method('select')
             ->willReturn($this->selectMock);
-
         $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -130,8 +260,7 @@ class DateTest extends TestCase
             ->expects($this->once())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
-
-        $this->collection = new Collection(
+        return new Collection(
             $this->entityFactoryMock,
             $this->loggerMock,
             $this->fetchStrategyMock,
@@ -146,60 +275,5 @@ class DateTest extends TestCase
             null,
             $this->resourceMock
         );
-
-        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->collectionFactoryMock
-            ->expects($this->any())
-            ->method('create')
-            ->willReturn($this->collection);
-
-        $this->objectManagerHelper = new ObjectManager($this);
-
-        $this->model = $this->objectManagerHelper->getObject(
-            Date::class,
-            [
-                'collectionFactory' => $this->collectionFactoryMock,
-                'localeDate' => $this->timezoneMock
-            ]
-        );
-    }
-
-    /**
-     * @param string $period
-     * @param string $config
-     * @param int $expectedYear
-     *
-     * @return void
-     * @dataProvider getByPeriodDataProvider
-     */
-    public function testGetByPeriod($period, $config, $expectedYear): void
-    {
-        $this->scopeConfigMock
-            ->expects($this->once())
-            ->method('getValue')
-            ->with(
-                $config,
-                ScopeInterface::SCOPE_STORE
-            )
-            ->willReturn(1);
-        $dates = $this->model->getByPeriod($period);
-        $this->assertEquals($expectedYear, substr($dates[0],0,4));
-    }
-
-    /**
-     * @return array
-     */
-    public function getByPeriodDataProvider(): array
-    {
-        $dateStart = new \DateTime();
-        $expectedYear = $dateStart->format('Y');
-        $expected2YTDYear = $expectedYear - 1;
-
-        return [
-            [Period::PERIOD_1_YEAR, 'reports/dashboard/ytd_start', $expectedYear],
-            [Period::PERIOD_2_YEARS, 'reports/dashboard/ytd_start', $expected2YTDYear]
-        ];
     }
 }
