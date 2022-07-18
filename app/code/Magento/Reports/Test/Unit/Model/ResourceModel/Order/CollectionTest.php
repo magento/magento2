@@ -138,6 +138,11 @@ class CollectionTest extends TestCase
             ->getMock();
         $this->timezoneMock = $this->getMockBuilder(TimezoneInterface::class)
             ->getMock();
+        $this->timezoneMock
+            ->expects($this->any())
+            ->method('getConfigTimezone')
+            ->willReturn('America/Chicago');
+
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
