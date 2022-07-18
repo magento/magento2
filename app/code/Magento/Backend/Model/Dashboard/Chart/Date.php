@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Backend\Model\Dashboard\Chart;
 
-use DateTimeZone;
 use Magento\Backend\Model\Dashboard\Period;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Reports\Model\ResourceModel\Order\CollectionFactory;
