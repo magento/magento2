@@ -70,14 +70,8 @@
 
             <!--Create credit memo-->
             <actionGroup ref="AdminStartCreateCreditMemoFromOrderPageActionGroup" stepKey="startToCreateCreditMemo"/>
-            <!--Submit credit memo with full refund to store credit-->
-            <waitForElementVisible selector="{{AdminCreditMemoTotalSection.refundStoreCredit}}" stepKey="waitForRefundStoreCreditElement"/>
-            <checkOption selector="{{AdminCreditMemoTotalSection.refundStoreCredit}}" stepKey="selectRefundToCredit"/>
-            <fillField selector="{{AdminCreditMemoTotalSection.refundStoreCreditAmount}}" userInput="1" stepKey="fillRefundStoreCreditAmount"/>
-            <seeInField selector="{{AdminCreditMemoTotalSection.refundStoreCreditAmount}}" userInput="1" stepKey="seeCorrectPrefillInRefundStoreCreditAmount"/>
-            <actionGroup ref="UpdateCreditMemoTotalsActionGroup" stepKey="updateCreditMemoTotals"/>
             <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo"/>
-            <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Complete" stepKey="seeOrderClosed"/>
+            <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Closed" stepKey="seeOrderClosed"/>
             <!--Credit memo action is not available after full refund-->
             <dontSeeElement selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="creditMemoActionNotAvailable"/>
         </before>
