@@ -336,6 +336,7 @@ class Import extends AbstractModel
     protected function _getSourceAdapterForApi()
     {
         return Adapter::findAdapterForData(
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             base64_decode($this->getData('csvData')),
             $this->getData(self::FIELD_FIELD_SEPARATOR)
         );
@@ -575,7 +576,15 @@ class Import extends AbstractModel
      */
     public function uploadSource()
     {
-        return $this->upload->uploadSource($this);
+        $entity = $this->getEntity();
+        $result = $this->upload->uploadSource($entity);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
+        $sourceFile = $this->getWorkingDir() . $entity . '.' . $extension;
+        $sourceFileRelative = $this->getVarDirectory()->getRelativePath($sourceFile);
+        $this->_removeBom($sourceFile);
+        $this->createHistoryReport($sourceFileRelative, $entity, $extension, $result);
+        return $sourceFile;
     }
 
     /**
@@ -599,6 +608,8 @@ class Import extends AbstractModel
     }
 
     /**
+     * Get Source adapter object
+     *
      * @return AbstractSource
      */
     public function getSourceForApiData()
@@ -623,7 +634,7 @@ class Import extends AbstractModel
      * @return $this
      * @throws FileSystemException
      */
-    public function _removeBom($sourceFile)
+    protected function _removeBom($sourceFile)
     {
         $driver = $this->_varDirectory->getDriver();
         $string = $driver->fileGetContents($this->_varDirectory->getAbsolutePath($sourceFile));
@@ -806,7 +817,7 @@ class Import extends AbstractModel
      * @return $this
      * @throws LocalizedException
      */
-    public function createHistoryReport($sourceFileRelative, $entity, $extension = null, $result = null)
+    protected function createHistoryReport($sourceFileRelative, $entity, $extension = null, $result = null)
     {
         if ($this->isReportEntityType($entity)) {
             if (is_array($sourceFileRelative)) {

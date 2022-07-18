@@ -34,6 +34,11 @@ class SourceData extends AbstractSimpleObject implements SourceDataInterface
     private $allowedErrorCount;
 
     /**
+     * @var string
+     */
+    private $csvData;
+
+    /**
      * @inheritdoc
      */
     public function getEntity(): string
@@ -63,6 +68,14 @@ class SourceData extends AbstractSimpleObject implements SourceDataInterface
     public function getAllowedErrorCount(): string
     {
         return $this->allowedErrorCount;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCsvData()
+    {
+        return $this->csvData;
     }
 
     /**
@@ -104,13 +117,4 @@ class SourceData extends AbstractSimpleObject implements SourceDataInterface
     {
         return $this->setData(self::PAYLOAD, $csvData);
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function getCsvData()
-    {
-        return $this->csvData;
-    }
-
 }
