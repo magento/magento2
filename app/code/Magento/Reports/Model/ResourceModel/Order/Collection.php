@@ -410,8 +410,10 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      */
     public function getDateRange($range, $customStart, $customEnd, $returnObjects = false)
     {
-        $dateEnd = new \DateTime();
-        $dateStart = new \DateTime();
+        $timezoneLocal = $this->_localeDate->getConfigTimezone();
+
+        $dateEnd = new \DateTime('now', new \DateTimeZone($timezoneLocal));
+        $dateStart = new \DateTime('now', new \DateTimeZone($timezoneLocal));
 
         // go to the end of a day
         $dateEnd->setTime(23, 59, 59);
@@ -423,7 +425,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                 $dateEnd->modify('now');
                 break;
             case '24h':
-                $dateEnd = new \DateTime();
                 $dateEnd->modify('+1 hour');
                 $dateStart = clone $dateEnd;
                 $dateStart->modify('-1 day');
