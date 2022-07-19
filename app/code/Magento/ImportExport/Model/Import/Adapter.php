@@ -6,10 +6,12 @@
 namespace Magento\ImportExport\Model\Import;
 
 use Magento\Framework\Filesystem\Directory\Write;
+use Magento\ImportExport\Model\Import\Source\Factory;
 
 /**
  * Import adapter model
- *
+ * @Deprecated
+ * @see \Magento\ImportExport\Model\Import\Source\Factory
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Adapter
@@ -62,18 +64,5 @@ class Adapter
     public static function findAdapterFor($source, $directory, $options = null)
     {
         return self::factory(pathinfo($source, PATHINFO_EXTENSION), $directory, $source, $options); // phpcs:ignore
-    }
-
-    /**
-     * Create adapter instance for specified source.
-     *
-     * @param string $source Source
-     * @param mixed $options OPTIONAL Adapter constructor options
-     * phpcs:disable Magento2.Functions.StaticFunction
-     * @return AbstractSource
-     */
-    public static function findAdapterForData($source, $options = null)
-    {
-        return self::factory('Base64EncodedCsvData', null, $source, $options);
     }
 }

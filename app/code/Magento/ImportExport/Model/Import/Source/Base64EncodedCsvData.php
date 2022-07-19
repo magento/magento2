@@ -31,11 +31,12 @@ class Base64EncodedCsvData extends AbstractSource
     /**
      * Read Data and detect column names
      *
-     * @param string $data
+     * @param string $source
      */
-    public function __construct(string $data)
+    public function __construct(string $source)
     {
-        $rowsData = preg_split("/\r\n|\n|\r/", $data);
+        $source = trim(base64_decode($source));
+        $rowsData = preg_split("/\r\n|\n|\r/", $source);
         $colNames = explode(',', $rowsData[0]);
         $this->rows = array_splice($rowsData, 1);
         parent::__construct($colNames);

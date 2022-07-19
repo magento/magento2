@@ -10,6 +10,7 @@ namespace Magento\ImportCsv\Model;
 use Magento\ImportCsvApi\Api\Data\SourceDataInterface;
 use Magento\ImportCsvApi\Api\StartImportInterface;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Source\Factory as SourceFactory;
 
 /**
  * @inheritdoc
@@ -23,12 +24,20 @@ class StartImport implements StartImportInterface
     private $import;
 
     /**
+     * @var SourceFactory
+     */
+    private $sourceFactory;
+
+    /**
      * @param Import $import
+     * @param SourceFactory $sourceFactory
      */
     public function __construct(
-        Import $import
+        Import $import,
+        SourceFactory $sourceFactory
     ) {
         $this->import = $import;
+        $this->sourceFactory = $sourceFactory;
     }
 
     /**
@@ -41,7 +50,7 @@ class StartImport implements StartImportInterface
         $import = $this->import->setData($source);
         $errors = [];
         try {
-            $source = $import->getSourceForApiData();
+            $source = $this->sourceFactory->create($import->getData('csvData'));
             $this->processValidationResult($import->validateSource($source), $errors);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $errors[] = $e->getMessage();
