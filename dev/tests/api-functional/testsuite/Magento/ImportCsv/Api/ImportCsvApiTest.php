@@ -61,18 +61,6 @@ class ImportCsvApiTest extends WebapiAbstract
                 ]],
                 ['requestData' => [
                     'source' => [
-                        'entity' => 'customer',
-                        'behavior' => 'add_update',
-                        'validationStrategy' => 'validation-stop-on-errors',
-                        'allowedErrorCount' => '10',
-                        'csvData' => __DIR__ . '/_files/customers.csv'
-                    ]
-                ],
-                'expectedResponse' => [
-                    0 => 'Entities Processed: 3'
-                ]],
-                ['requestData' => [
-                    'source' => [
                         'entity' => 'advanced_pricing',
                         'behavior' => 'append',
                         'validationStrategy' => 'validation-stop-on-errors',
