@@ -194,12 +194,6 @@ class Import extends AbstractModel
     private $messageManager;
 
     /**
-     * @Deprecated Property isn't used
-     * @var Random
-     */
-    private $random;
-
-    /**
      * @var Upload
      */
     private $upload;
@@ -221,7 +215,6 @@ class Import extends AbstractModel
      * @param DateTime $localeDate
      * @param array $data
      * @param ManagerInterface|null $messageManager
-     * @param Random|null $random
      * @param Upload|null $upload
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -242,7 +235,6 @@ class Import extends AbstractModel
         DateTime $localeDate,
         array $data = [],
         ManagerInterface $messageManager = null,
-        Random $random = null,
         Upload $upload = null
     ) {
         $this->_importExportData = $importExportData;
@@ -260,8 +252,6 @@ class Import extends AbstractModel
         $this->localeDate = $localeDate;
         $this->messageManager = $messageManager ?: ObjectManager::getInstance()
             ->get(ManagerInterface::class);
-        $this->random = $random ?: ObjectManager::getInstance()
-            ->get(Random::class);
         $this->upload = $upload ?: ObjectManager::getInstance()
             ->get(Upload::class);
         parent::__construct($logger, $filesystem, $data);

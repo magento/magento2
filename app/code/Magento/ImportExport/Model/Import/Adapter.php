@@ -74,6 +74,6 @@ class Adapter
      */
     public static function findAdapterForData($source, $options = null)
     {
-        return self::factory('Data', null, $source, $options);
+        return self::factory('Base64EncodedCsvData', null, $source, $options);
     }
 }

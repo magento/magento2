@@ -9,7 +9,7 @@ namespace Magento\ImportExport\Model\Import\Source;
 
 use Magento\ImportExport\Model\Import\AbstractSource;
 
-class Data extends AbstractSource
+class Base64EncodedCsvData extends AbstractSource
 {
     /**
      * @var array
