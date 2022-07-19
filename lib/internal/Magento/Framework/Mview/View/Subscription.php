@@ -83,6 +83,11 @@ class Subscription implements SubscriptionInterface
     private $mviewConfig;
 
     /**
+     * @var Trigger[]
+     */
+    private $triggers = [];
+
+    /**
      * @param ResourceConnection $resource
      * @param TriggerFactory $triggerFactory
      * @param CollectionInterface $viewCollection
@@ -121,7 +126,7 @@ class Subscription implements SubscriptionInterface
      *
      * @return SubscriptionInterface
      */
-    public function create()
+    public function create(bool $save = true)
     {
         foreach (Trigger::getListOfEvents() as $event) {
             $triggerName = $this->getAfterEventTriggerName($event);
@@ -139,12 +144,37 @@ class Subscription implements SubscriptionInterface
                 /** @var ViewInterface $view */
                 $trigger->addStatement($this->buildStatement($event, $view));
             }
+            $this->triggers[] = $trigger;
 
-            $this->connection->dropTrigger($trigger->getName());
-            $this->connection->createTrigger($trigger);
+            if ($save) {
+                $this->saveTrigger($trigger);
+            }
         }
 
         return $this;
+    }
+
+    /**
+     * Get all triggers for the subscription
+     *
+     * @return Trigger[]
+     */
+    public function getTriggers(): array
+    {
+        return $this->triggers;
+    }
+
+    /**
+     * Save a trigger to the DB
+     *
+     * @param Trigger $trigger
+     * @return void
+     * @throws \Zend_Db_Exception
+     */
+    public function saveTrigger(Trigger $trigger): void
+    {
+        $this->connection->dropTrigger($trigger->getName());
+        $this->connection->createTrigger($trigger);
     }
 
     /**

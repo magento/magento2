@@ -465,7 +465,7 @@ class View extends DataObject implements ViewInterface
      * @param array $subscriptionConfig
      * @return SubscriptionInterface
      */
-    private function initSubscriptionInstance(array $subscriptionConfig): SubscriptionInterface
+    public function initSubscriptionInstance(array $subscriptionConfig): SubscriptionInterface
     {
         return $this->subscriptionFactory->create(
             [
