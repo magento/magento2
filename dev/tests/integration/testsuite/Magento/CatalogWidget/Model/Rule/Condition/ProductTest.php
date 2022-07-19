@@ -43,7 +43,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey(ProductInterface::SKU, $options);
         $this->assertArrayHasKey(ProductInterface::ATTRIBUTE_SET_ID, $options);
         $this->assertArrayHasKey('category_ids', $options);
-        $this->assertArrayNotHasKey(ProductInterface::STATUS, $options);
+        $this->assertArrayHasKey(ProductInterface::STATUS, $options);
         foreach ($options as $code => $label) {
             $this->assertNotEmpty($label);
             $this->assertNotEmpty($code);
