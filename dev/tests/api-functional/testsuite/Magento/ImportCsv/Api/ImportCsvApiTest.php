@@ -1,4 +1,10 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
 
 namespace Magento\ImportCsv\Api;
 
@@ -6,7 +12,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class ImportCsvApiTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/import/csv';
+    private const RESOURCE_PATH = '/V1/import/csv';
+    private const SERVICE_NAME = 'importCsvV1';
+    private const SERVICE_VERSION = 'V1';
 
     /**
      * Test Rest API Import
@@ -21,6 +29,11 @@ class ImportCsvApiTest extends WebapiAbstract
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
             ]
         ];
         $requestData['source']['csvData'] = base64_encode(file_get_contents($requestData['source']['csvData']));
