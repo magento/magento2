@@ -38,7 +38,7 @@ class ImportCsvApiTest extends WebapiAbstract
         ];
         $requestData['source']['csvData'] = base64_encode(file_get_contents($requestData['source']['csvData']));
         $response = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals($expectedResponse, $response);
+        $this->assertEquals($expectedResponse, array_values($response));
     }
 
     /**
