@@ -8,18 +8,22 @@ declare(strict_types=1);
 
 namespace Magento\ImportExport\Model\Import\Source;
 
+use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\ImportExport\Model\Import\AbstractSource;
 
 class Factory
 {
     /**
-     * Object Manager
+     * Object Manager Instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
+    /**
+     * @param ObjectManagerInterface $objectManager
+     */
     public function __construct(
         ObjectManagerInterface $objectManager
     ) {
@@ -27,10 +31,13 @@ class Factory
     }
 
     /**
-     * @param $source
-     * @param $directory
-     * @param $options
+     * Create class instance with specified parameters
+     *
+     * @param string $source
+     * @param Write $directory
+     * @param mixed $options
      * @return AbstractSource
+     * @phpcs:disable Magento2.Functions.DiscouragedFunction
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function create($source, $directory = null, $options = null): AbstractSource

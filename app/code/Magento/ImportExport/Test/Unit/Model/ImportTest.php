@@ -231,7 +231,6 @@ class ImportTest extends AbstractImportTestCase
             ->expects($this->any())
             ->method('getDriver')
             ->willReturn($this->_driver);
-        $sourceFactoryMock = $this->createMock(\Magento\ImportExport\Model\Import\Source\Factory::class);
         $this->upload = $this->createMock(Upload::class);
         $this->import = $this->getMockBuilder(Import::class)
             ->setConstructorArgs(
@@ -252,7 +251,6 @@ class ImportTest extends AbstractImportTestCase
                     $this->dateTime,
                     [],
                     null,
-                    $sourceFactoryMock,
                     $this->upload
                 ]
             )
