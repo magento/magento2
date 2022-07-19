@@ -17,7 +17,7 @@ use Magento\Framework\Stdlib\StringUtils;
 class PostcodeTest extends AbstractFormTestCase
 {
     /** @var StringUtils */
-    protected StringUtils $stringHelper;
+    private StringUtils $stringHelper;
 
     /**
      * @var DirectoryHelper|MockObject

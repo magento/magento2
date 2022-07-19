@@ -23,11 +23,6 @@ class Postcode extends Text
     protected DirectoryHelper $directoryHelper;
 
     /**
-     * @var StringUtils
-     */
-    protected $_string;
-
-    /**
      * @param MagentoTimezone $localeDate
      * @param PsrLogger $logger
      * @param AttributeMetadataInterface $attribute
@@ -50,10 +45,7 @@ class Postcode extends Text
         StringUtils $stringHelper = null
     ) {
         $this->directoryHelper = $directoryHelper;
-        if ($stringHelper === null) {
-            $stringHelper = \Magento\Framework\App\ObjectManager::getInstance()->get(StringUtils::class);
-        }
-        $this->_string = $stringHelper;
+        $stringHelper = $stringHelper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(StringUtils::class);
         parent::__construct(
             $localeDate,
             $logger,
