@@ -13,7 +13,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class ImportCsvApiTest extends WebapiAbstract
 {
     private const RESOURCE_PATH = '/V1/import/csv';
-    private const SERVICE_NAME = 'importCsvV1';
+    private const SERVICE_NAME = 'importCsvApiStartImportV1';
     private const SERVICE_VERSION = 'V1';
 
     /**
@@ -33,7 +33,7 @@ class ImportCsvApiTest extends WebapiAbstract
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Save',
+                'operation' => self::SERVICE_NAME . 'Execute'
             ]
         ];
         $requestData['source']['csvData'] = base64_encode(file_get_contents($requestData['source']['csvData']));
