@@ -44,77 +44,77 @@ class DateTest extends TestCase
     /**
      * @var Collection
      */
-    protected $collection;
+    private $collection;
 
     /**
      * @var EntityFactory|MockObject
      */
-    protected $entityFactoryMock;
+    private $entityFactoryMock;
 
     /**
      * @var LoggerInterface|MockObject
      */
-    protected $loggerMock;
+    private $loggerMock;
 
     /**
      * @var FetchStrategyInterface|MockObject
      */
-    protected $fetchStrategyMock;
+    private $fetchStrategyMock;
 
     /**
      * @var ManagerInterface|MockObject
      */
-    protected $managerMock;
+    private $managerMock;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\EntitySnapshot|MockObject
      */
-    protected $entitySnapshotMock;
+    private $entitySnapshotMock;
 
     /**
      * @var Helper|MockObject
      */
-    protected $helperMock;
+    private $helperMock;
 
     /**
      * @var ScopeConfigInterface|MockObject
      */
-    protected $scopeConfigMock;
+    private $scopeConfigMock;
 
     /**
      * @var StoreManagerInterface|MockObject
      */
-    protected $storeManagerMock;
+    private $storeManagerMock;
 
     /**
      * @var TimezoneInterface|MockObject
      */
-    protected $timezoneMock;
+    private $timezoneMock;
 
     /**
      * @var Config|MockObject
      */
-    protected $configMock;
+    private $configMock;
 
     /**
      * @var OrderFactory|MockObject
      */
-    protected $orderFactoryMock;
+    private $orderFactoryMock;
 
     /**
      * @var AdapterInterface|MockObject
      */
-    protected $connectionMock;
+    private $connectionMock;
 
     /**
      * @var Select|MockObject
      */
-    protected $selectMock;
+    private $selectMock;
 
     /**
      * @var AbstractDb|MockObject
      */
-    protected $resourceMock;
+    private $resourceMock;
 
     /**
      * @var CollectionFactory
