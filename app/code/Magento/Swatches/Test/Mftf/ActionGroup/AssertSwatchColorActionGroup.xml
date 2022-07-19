@@ -17,9 +17,9 @@
         </arguments>
 
         <executeJS function="return document.evaluate(&quot;//tbody[@data-role='swatch-visual-options-container']//tr[{{nthSwatch}}]//td[@class='swatches-visual-col col-default ']//div[@class='swatch_window']&quot;,
-document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.style.cssText" stepKey="returnRGB" />
+document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.style.cssText" stepKey="grabStyle1" />
         <assertEquals stepKey="assertStyle1">
-            <actualResult type="string">{$returnRGB}</actualResult>
+            <actualResult type="string">{$grabStyle1}</actualResult>
             <expectedResult type="string">{{expectedStyle}}</expectedResult>
         </assertEquals>
     </actionGroup>
