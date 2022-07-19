@@ -42,14 +42,14 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      *
      * There must be column names in the first line
      *
-     * @param string $source
+     * @param string $file
      * @param Read $directory
      * @param string $delimiter
      * @param string $enclosure
      * @throws \LogicException
      */
     public function __construct(
-        $source,
+        $file,
         Read $directory,
         $delimiter = ',',
         $enclosure = '"'
@@ -57,12 +57,12 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         register_shutdown_function([$this, 'destruct']);
         try {
-            $this->filePath = $directory->getRelativePath($source);
+            $this->filePath = $directory->getRelativePath($file);
             $this->_file = $directory->openFile($this->filePath, 'r');
             $this->_file->seek(0);
             self::$openFiles[$this->filePath] = true;
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
-            throw new \LogicException("Unable to open file: '{$source}'");
+            throw new \LogicException("Unable to open file: '{$file}'");
         }
         if ($delimiter) {
             $this->_delimiter = $delimiter;

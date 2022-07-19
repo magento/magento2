@@ -55,7 +55,7 @@ class Factory
         return $this->objectManager->create(
             $adapterClass,
             [
-                'source' => $source,
+                'file' => $source,
                 'directory' => $directory,
                 'options' => $options
             ]

@@ -14,7 +14,7 @@ use Magento\Framework\Exception\ValidatorException;
 class Zip extends Csv
 {
     /**
-     * @param string $source
+     * @param string $file
      * @param \Magento\Framework\Filesystem\Directory\Write $directory
      * @param string $options
      * @param \Magento\Framework\Archive\Zip|null $zipArchive
@@ -22,20 +22,20 @@ class Zip extends Csv
      * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function __construct(
-        $source,
+        $file,
         \Magento\Framework\Filesystem\Directory\Write $directory,
         $options,
         \Magento\Framework\Archive\Zip $zipArchive = null
     ) {
         $zip = $zipArchive ?? ObjectManager::getInstance()->get(\Magento\Framework\Archive\Zip::class);
         $csvFile = $zip->unpack(
-            $source,
-            preg_replace('/\.zip$/i', '.csv', $source)
+            $file,
+            preg_replace('/\.zip$/i', '.csv', $file)
         );
         if (!$csvFile) {
             throw new ValidatorException(__('Sorry, but the data is invalid or the file is not uploaded.'));
         }
-        $directory->delete($directory->getRelativePath($source));
+        $directory->delete($directory->getRelativePath($file));
 
         try {
             parent::__construct($csvFile, $directory, $options);

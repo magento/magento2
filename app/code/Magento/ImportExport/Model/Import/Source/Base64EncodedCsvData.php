@@ -31,12 +31,12 @@ class Base64EncodedCsvData extends AbstractSource
     /**
      * Read Data and detect column names
      *
-     * @param string $source
+     * @param string $file
      */
-    public function __construct(string $source)
+    public function __construct(string $file)
     {
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $source = trim(base64_decode($source));
+        $source = trim(base64_decode($file));
         $rowsData = preg_split("/\r\n|\n|\r/", $source);
         $colNames = explode(',', $rowsData[0]);
         $this->rows = array_splice($rowsData, 1);
