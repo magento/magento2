@@ -220,7 +220,6 @@ class Import extends AbstractModel
      * @param DateTime $localeDate
      * @param array $data
      * @param ManagerInterface|null $messageManager
-     * @param SourceFactory $sourceFactory
      * @param Upload|null $upload
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -241,7 +240,6 @@ class Import extends AbstractModel
         DateTime $localeDate,
         array $data = [],
         ManagerInterface $messageManager = null,
-        SourceFactory $sourceFactory = null,
         Upload $upload = null
     ) {
         $this->_importExportData = $importExportData;
@@ -259,8 +257,6 @@ class Import extends AbstractModel
         $this->localeDate = $localeDate;
         $this->messageManager = $messageManager ?: ObjectManager::getInstance()
             ->get(ManagerInterface::class);
-        $this->sourceFactory = $sourceFactory?? ObjectManager::getInstance()
-            ->get(SourceFactory::class);
         $this->upload = $upload ?: ObjectManager::getInstance()
             ->get(Upload::class);
         parent::__construct($logger, $filesystem, $data);
@@ -313,8 +309,7 @@ class Import extends AbstractModel
 
     /**
      * Returns source adapter object.
-     * @Deprecated
-     * @see \Magento\ImportExport\Model\Import\Source\Factory::create()
+     *
      * @param string $sourceFile Full path to source file
      * @return AbstractSource
      * @throws FileSystemException
@@ -584,11 +579,7 @@ class Import extends AbstractModel
     {
         $sourceFile = $this->uploadSource();
         try {
-            $source = $this->sourceFactory->create(
-                $sourceFile,
-                $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT),
-                $this->getData(self::FIELD_FIELD_SEPARATOR)
-            );
+            $source = $this->_getSourceAdapter($sourceFile);
         } catch (\Exception $e) {
             $this->_varDirectory->delete($this->_varDirectory->getRelativePath($sourceFile));
             throw new LocalizedException(__($e->getMessage()));

@@ -35,6 +35,7 @@ class Base64EncodedCsvData extends AbstractSource
      */
     public function __construct(string $source)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $source = trim(base64_decode($source));
         $rowsData = preg_split("/\r\n|\n|\r/", $source);
         $colNames = explode(',', $rowsData[0]);

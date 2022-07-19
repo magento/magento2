@@ -204,7 +204,6 @@ class ReportTest extends TestCase
         $importHistoryModel = $this->createMock(History::class);
         $localeDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
         $upload = $this->createMock(Upload::class);
-        $sourceFactoryMock = $this->createMock(\Magento\ImportExport\Model\Import\Source\Factory::class);
         $import = new Import(
             $logger,
             $filesystem,
@@ -222,7 +221,6 @@ class ReportTest extends TestCase
             $localeDate,
             [],
             null,
-            $sourceFactoryMock,
             $upload
         );
         $import->setData('entity', 'catalog_product');
