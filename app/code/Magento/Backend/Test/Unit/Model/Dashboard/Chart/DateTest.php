@@ -21,7 +21,6 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Reports\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Backend\Model\Dashboard\Period;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Model\ResourceModel\Order\Collection;
 use Magento\Sales\Model\Order\Config;
 use Magento\Sales\Model\ResourceModel\Report\OrderFactory;
@@ -123,11 +122,6 @@ class DateTest extends TestCase
     private $collectionFactoryMock;
 
     /**
-     * @var ObjectManager
-     */
-    private $objectManagerHelper;
-
-    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -140,14 +134,7 @@ class DateTest extends TestCase
             ->expects($this->any())
             ->method('create')
             ->willReturn($this->collection);
-        $this->objectManagerHelper = new ObjectManager($this);
-        $this->model = $this->objectManagerHelper->getObject(
-            Date::class,
-            [
-                'collectionFactory' => $this->collectionFactoryMock,
-                'localeDate' => $this->timezoneMock
-            ]
-        );
+        $this->model = new Date($this->collectionFactoryMock, $this->timezoneMock);
     }
 
     /**
