@@ -34,6 +34,16 @@ class TriggerCleaner
     private $viewFactory;
 
     /**
+     * @var array
+     */
+    private $processedTriggers = [];
+
+    /**
+     * @var array
+     */
+    private $DbTriggers = [];
+
+    /**
      * @param CollectionFactory $viewCollectionFactory
      * @param ResourceConnection $resource
      * @param ViewFactory $viewFactory
@@ -56,9 +66,7 @@ class TriggerCleaner
      */
     public function removeTriggers(): bool
     {
-        //Get all existing triggers from the DB
-        $triggers = $this->getAllTriggers();
-        $processedTriggers = [];
+        $this->getDbTriggers();
 
         // Get list of views that are enabled
         $viewCollection = $this->viewCollectionFactory->create();
@@ -71,26 +79,12 @@ class TriggerCleaner
                 /* @var $subscription Subscription */
                 $subscription = $view->initSubscriptionInstance($subscriptionConfig);
                 $viewTriggers = $subscription->create(false)->getTriggers();
-                foreach ($viewTriggers as $viewTrigger) {
-                    if (array_key_exists($viewTrigger->getName(), $triggers)) {
-                        foreach ($this->getStatementsFromViewTrigger($viewTrigger) as $statement) {
-                            if (!empty($statement) &&
-                                !str_contains($triggers[$viewTrigger->getName()]['ACTION_STATEMENT'],$statement)
-                            ) {
-                                $subscription->saveTrigger($viewTrigger);
-                                break;
-                            }
-                        }
-                    } else {
-                        $subscription->saveTrigger($viewTrigger);
-                    }
-                    $processedTriggers[$viewTrigger->getName()] = true;
-                }
+                $this->processViewTriggers($viewTriggers, $subscription);
             }
         }
 
         // Remove any remaining triggers from db that are not linked to a view
-        $remainingTriggers = array_diff_key($triggers, $processedTriggers);
+        $remainingTriggers = array_diff_key($this->DbTriggers, $this->processedTriggers);
         foreach ($remainingTriggers as $trigger) {
             $view = $this->createViewByTableName($trigger['EVENT_OBJECT_TABLE']);
             $view->unsubscribe();
@@ -100,12 +94,31 @@ class TriggerCleaner
         return true;
     }
 
+    private function processViewTriggers(array $viewTriggers, Subscription $subscription): void
+    {
+        foreach ($viewTriggers as $viewTrigger) {
+            if (array_key_exists($viewTrigger->getName(), $this->DbTriggers)) {
+                foreach ($this->getStatementsFromViewTrigger($viewTrigger) as $statement) {
+                    if (!empty($statement) &&
+                        !str_contains($this->DbTriggers[$viewTrigger->getName()]['ACTION_STATEMENT'], $statement)
+                    ) {
+                        $subscription->saveTrigger($viewTrigger);
+                        break;
+                    }
+                }
+            } else {
+                $subscription->saveTrigger($viewTrigger);
+            }
+            $this->processedTriggers[$viewTrigger->getName()] = true;
+        }
+    }
+
     /**
-     * Retrieve list of table names that have triggers
+     * Retrieve list of all triggers from DB
      *
-     * @return array
+     * @return void
      */
-    private function getAllTriggers(): array
+    private function getDbTriggers(): void
     {
         $connection = $this->resource->getConnection();
         $dbName = $this->resource->getSchemaName(ResourceConnection::DEFAULT_CONNECTION);
@@ -115,7 +128,7 @@ class TriggerCleaner
                 ['TRIGGER_NAME', 'ACTION_STATEMENT', 'EVENT_OBJECT_TABLE']
             )
             ->where('TRIGGER_SCHEMA = ?', $dbName);
-        return $connection->fetchAssoc($sql);
+        $this->DbTriggers = $connection->fetchAssoc($sql);
     }
 
     /**

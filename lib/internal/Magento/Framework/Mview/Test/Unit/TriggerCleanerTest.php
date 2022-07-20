@@ -21,7 +21,10 @@ use Magento\Framework\Mview\TriggerCleaner;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/** test Mview TriggerCleaner functionality
+/**
+ * test Mview TriggerCleaner functionality
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TriggerCleanerTest extends TestCase
 {
@@ -137,30 +140,5 @@ class TriggerCleanerTest extends TestCase
             ->willReturn($selectMock);
 
         return $connectionMock;
-    }
-
-    private function getViewListMock()
-    {
-        $triggerMock = $this->getMockForAbstractClass(Trigger::class);
-        $triggerMock->expects($this->once())
-            ->method('getName')
-            ->willReturn('trg_catalog_category_entity_int_after_insert');
-        $triggerMock->expects($this->once())->method('getStatements')->willReturn(['statement;']);
-
-        $subscriptionMock = $this->getMockForAbstractClass(SubscriptionInterface::class);
-        $subscriptionMock->expects($this->once())->method('create')->willReturn($subscriptionMock);
-        $subscriptionMock->expects($this->once())->method('getTriggers')->willReturn([$triggerMock]);
-
-        $viewMock = $this->getMockForAbstractClass(ViewInterface::class);
-        $viewMock->expects($this->once())
-            ->method('getSubscriptions')
-            ->willReturn(['subscriptionConfig' => []]);
-        $viewMock->expects($this->once())->method('initSubscriptionInstance')->willReturn($subscriptionMock);
-
-        $viewCollectionMock = $this->getMockForAbstractClass(CollectionInterface::class);
-        $viewCollectionMock->expects($this->once())->method('getViewsByStateMode')->willReturn([$viewMock]);
-
-        $viewCollectionFactoryMock = $this->getMockForAbstractClass(CollectionFactory::class);
-        $viewCollectionFactoryMock->expects($this->once())->method('create')->willReturn($viewCollectionMock);
     }
 }

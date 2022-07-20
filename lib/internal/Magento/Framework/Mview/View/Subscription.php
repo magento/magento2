@@ -11,6 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Trigger;
 use Magento\Framework\DB\Ddl\TriggerFactory;
+use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Mview\Config;
 use Magento\Framework\Mview\ViewInterface;
 
@@ -71,6 +72,8 @@ class Subscription implements SubscriptionInterface
     /**
      * List of columns that can be updated in a specific subscribed table
      * for a specific view without creating a new change log entry
+     *
+     * @var array
      */
     private $ignoredUpdateColumnsBySubscription = [];
 
@@ -126,6 +129,7 @@ class Subscription implements SubscriptionInterface
     /**
      * Create subscription
      *
+     * @param bool $save
      * @return SubscriptionInterface
      */
     public function create(bool $save = true)
@@ -252,7 +256,8 @@ class Subscription implements SubscriptionInterface
     {
         $changelog = $view->getChangelog();
         $prefix = $event === Trigger::EVENT_DELETE ? 'OLD.' : 'NEW.';
-        $subscriptionData = $this->mviewConfig->getView($changelog->getViewId())['subscriptions'][$this->getTableName()];
+        $subscriptionData = $this->mviewConfig
+            ->getView($changelog->getViewId())['subscriptions'][$this->getTableName()];
         $columns = [
             'column_names' => [
                 'entity_id' => $this->connection->quoteIdentifier($changelog->getColumnName())
@@ -332,7 +337,7 @@ class Subscription implements SubscriptionInterface
      * Instantiate and retrieve additional columns processor
      *
      * @return AdditionalColumnProcessorInterface
-     * @throws \Exception
+     * @throws ConfigurationMismatchException
      */
     private function getProcessor(): AdditionalColumnProcessorInterface
     {
@@ -341,8 +346,8 @@ class Subscription implements SubscriptionInterface
         $processor = ObjectManager::getInstance()->get($processorClass);
 
         if (!$processor instanceof AdditionalColumnProcessorInterface) {
-            throw new \Exception(
-                'Processor should implements ' . AdditionalColumnProcessorInterface::class
+            throw new ConfigurationMismatchException(
+                'Processor should implement ' . AdditionalColumnProcessorInterface::class
             );
         }
 
@@ -350,6 +355,8 @@ class Subscription implements SubscriptionInterface
     }
 
     /**
+     * Get subscription column for a view
+     *
      * @param string $prefix
      * @param ViewInterface $view
      * @return string
