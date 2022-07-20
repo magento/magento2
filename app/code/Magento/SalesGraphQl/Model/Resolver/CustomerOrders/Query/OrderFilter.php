@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query;
 
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Api\Search\FilterGroup;
 
 /**
  * Order filter allows to filter collection using 'increment_id' as order number, from the search criteria.
@@ -63,11 +63,13 @@ class OrderFilter
      * @param int $userId
      * @param int $storeId
      * @return FilterGroup[]
+     * @throws InputException
      */
     public function createFilterGroups(
         array $args,
         int $userId,
-        int $storeId
+        int $storeId,
+        array $storeIds
     ): array {
         $filterGroups = [];
         $this->filterGroupBuilder->setFilters(
@@ -75,8 +77,9 @@ class OrderFilter
         );
         $filterGroups[] = $this->filterGroupBuilder->create();
 
+        $storeIds[] = $storeId;
         $this->filterGroupBuilder->setFilters(
-            [$this->filterBuilder->setField('store_id')->setValue($storeId)->setConditionType('eq')->create()]
+            [$this->filterBuilder->setField('store_id')->setValue($storeIds)->setConditionType('in')->create()]
         );
         $filterGroups[] = $this->filterGroupBuilder->create();
 

@@ -25,6 +25,7 @@ type Customer {
         filter: CustomerOrdersFilterInput @doc(description: "Defines the filter to use for searching customer orders."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. The default value is 20."),
+        scope: String @doc(description: "Specifies the scope of the orders (global, website, store)"),
     ): CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CustomerOrders") @cache(cacheable: false)
 }
 
