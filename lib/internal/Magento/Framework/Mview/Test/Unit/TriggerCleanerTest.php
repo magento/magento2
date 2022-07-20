@@ -68,7 +68,7 @@ class TriggerCleanerTest extends TestCase
      *
      * @return void
      */
-    public function testRemoveTriggersNoChanges()
+    public function testRemoveTriggersNoChanges(): void
     {
         $DBTriggers = [
             'trg_catalog_category_entity_int_after_insert' => [
