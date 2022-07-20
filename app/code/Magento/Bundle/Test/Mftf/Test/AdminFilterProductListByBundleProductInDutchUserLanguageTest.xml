@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminFilterProductListByBundleProductInDutchUserLanguageTest">
+        <test name="AdminFilterProductListByBundleProductInDutchUserLanguageTest">
         <annotations>
             <features value="Bundle"/>
             <stories value="Admin list bundle products when user language is set as Dutch"/>
@@ -16,8 +16,6 @@
             <description value="Admin should be able to filter product list by type = Bundle Product
             wherein the tier price for the bundle product should be set and user language set as Dutch"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="AC-3769"/>
-            <group value="Bundle"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createProductForBundleItem1">
@@ -26,6 +24,8 @@
             <createData entity="SimpleProduct2" stepKey="createProductForBundleItem2">
                 <field key="price">100.00</field>
             </createData>
+            <!-- Enable Changing Locale to Dutch -->
+            <magentoCLI command="setup:static-content:deploy" arguments="-f nl_NL" stepKey="staticDeployAfterChangeLocaleToNL"/>
             <magentoCron groups="index" stepKey="runCronIndex"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
