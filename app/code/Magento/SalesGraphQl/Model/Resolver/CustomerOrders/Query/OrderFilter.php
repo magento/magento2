@@ -62,6 +62,7 @@ class OrderFilter
      * @param array $args
      * @param int $userId
      * @param int $storeId
+     * @param array $storeIds
      * @return FilterGroup[]
      * @throws InputException
      */

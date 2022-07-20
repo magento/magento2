@@ -128,7 +128,7 @@ class CustomerOrders implements ResolverInterface
      * @param array $args
      * @param int $userId
      * @param int $storeId
-     * @param array $scope
+     * @param array $storeIds
      * @return OrderSearchResultInterface
      * @throws InputException
      */
@@ -148,9 +148,9 @@ class CustomerOrders implements ResolverInterface
     /**
      * @param string $scope
      * @param StoreInterface $store
-     * @return void
+     * @return array
      */
-    private function getStoresByScope(string $scope, StoreInterface $store)
+    private function getStoresByScope(string $scope, StoreInterface $store): array
     {
         $storeIds = [];
         switch ($scope) {
