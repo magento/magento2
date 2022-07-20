@@ -126,7 +126,8 @@ class Css implements ProcessorInterface
      * @param string $path
      * @return bool
      */
-    private function isLocal(string $path): bool {
+    private function isLocal(string $path): bool
+    {
         $pattern = '{^(file://(?!//)|/(?!/)|/?[a-z]:[\\\\/]|\.\.[\\\\/]|[a-z0-9_.-]+[\\\\/])}i';
         $result = preg_match($pattern, $path);
 
@@ -152,7 +153,9 @@ class Css implements ProcessorInterface
 
             $callback = function ($matchContent) use ($packagePath, $filePath, &$imports) {
                 if ($this->isLocal($matchContent['path'])) {
-                    $importRelPath = $this->normalize(pathinfo($filePath, PATHINFO_DIRNAME) . '/' . $matchContent['path']);
+                    $importRelPath = $this->normalize(
+                        pathinfo($filePath, PATHINFO_DIRNAME) . '/' . $matchContent['path']
+                    );
                     $imports[$importRelPath] = $this->normalize(
                         $packagePath . '/' . pathinfo($filePath, PATHINFO_DIRNAME) . '/' . $matchContent['path']
                     );
