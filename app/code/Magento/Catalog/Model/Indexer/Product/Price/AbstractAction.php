@@ -170,7 +170,8 @@ abstract class AbstractAction
      * @param array $processIds
      * @return AbstractAction
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated 102.0.6 Used only for backward compatibility for indexer, which not support indexation by dimensions
+     * @deprecated 102.0.6
+     * @see Used only for backward compatibility for indexer, which not support indexation by dimensions
      */
     protected function _syncData(array $processIds = [])
     {
@@ -386,10 +387,6 @@ abstract class AbstractAction
         $changedIds = array_unique(array_merge($changedIds, ...array_values($parentProductsTypes)));
         $productsTypes = array_merge_recursive($productsTypes, $parentProductsTypes);
 
-        if ($changedIds) {
-            $this->deleteIndexData($changedIds);
-        }
-
         $typeIndexers = $this->getTypeIndexers();
         foreach ($typeIndexers as $productType => $indexer) {
             $entityIds = $productsTypes[$productType] ?? [];
@@ -403,14 +400,13 @@ abstract class AbstractAction
                     $temporaryTable = $this->tableMaintainer->getMainTmpTable($dimensions);
                     $this->_emptyTable($temporaryTable);
                     $indexer->executeByDimensions($dimensions, \SplFixedArray::fromArray($entityIds, false));
-                    // copy to index
-                    $this->_insertFromTable(
-                        $temporaryTable,
-                        $this->tableMaintainer->getMainTableByDimensions($dimensions)
-                    );
+                    $mainTable = $this->tableMaintainer->getMainTableByDimensions($dimensions);
+                    $this->_insertFromTable($temporaryTable, $mainTable);
+                    $this->deleteOutdatedData($entityIds, $temporaryTable, $mainTable);
                 }
             } else {
                 // handle 3d-party indexers for backward compatibility
+                $this->deleteIndexData($changedIds);
                 $this->_emptyTable($this->_defaultIndexerResource->getIdxTable());
                 $this->_copyRelationIndexData($entityIds);
                 $indexer->reindexEntity($entityIds);
@@ -419,6 +415,30 @@ abstract class AbstractAction
         }
 
         return $changedIds;
+    }
+
+    /**
+     * Delete records that do not exist anymore
+     *
+     * @param array $entityIds
+     * @param string $temporaryTable
+     * @param string $mainTable
+     * @return void
+     */
+    private function deleteOutdatedData(array $entityIds, string $temporaryTable, string $mainTable): void
+    {
+        $joinCondition = [
+            'tmp_table.entity_id = main_table.entity_id',
+            'tmp_table.customer_group_id = main_table.customer_group_id',
+            'tmp_table.website_id = main_table.website_id',
+        ];
+        $select = $this->getConnection()->select()
+            ->from(['main_table' => $mainTable], null)
+            ->joinLeft(['tmp_table' => $temporaryTable], implode(' AND ', $joinCondition), null)
+            ->where('tmp_table.entity_id IS NULL')
+            ->where('main_table.entity_id IN (?)', $entityIds, \Zend_Db::INT_TYPE);
+        $query = $select->deleteFromSelect('main_table');
+        $this->getConnection()->query($query);
     }
 
     /**
@@ -445,7 +465,8 @@ abstract class AbstractAction
      * @param null|array $parentIds
      * @param array $excludeIds
      * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
-     * @deprecated 102.0.6 Used only for backward compatibility for do not broke custom indexer implementation
+     * @deprecated 102.0.6
+     * @see Used only for backward compatibility for do not broke custom indexer implementation
      * which do not work by dimensions.
      * For indexers, which support dimensions all composite products read data directly from main price indexer table
      * or replica table for partial or full reindex correspondingly.
