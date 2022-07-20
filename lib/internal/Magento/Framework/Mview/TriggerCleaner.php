@@ -94,6 +94,13 @@ class TriggerCleaner
         return true;
     }
 
+    /**
+     * Process and update View Triggers if changes were made
+     *
+     * @param array $viewTriggers
+     * @param Subscription $subscription
+     * @return void
+     */
     private function processViewTriggers(array $viewTriggers, Subscription $subscription): void
     {
         foreach ($viewTriggers as $viewTrigger) {
