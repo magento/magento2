@@ -98,7 +98,7 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
      *
      * @param string $indexerTitle
      * @param string $previousMode
-     * @param string $command
+     * @param array $command
      * @param string $consoleOutput
      * @dataProvider dimensionModesDataProvider
      * @return void
