@@ -16,6 +16,8 @@ use Magento\Framework\Mview\ViewInterface;
 
 /**
  * Mview subscription.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Subscription implements SubscriptionInterface
 {
