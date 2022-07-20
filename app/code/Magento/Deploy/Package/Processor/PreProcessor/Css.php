@@ -131,7 +131,7 @@ class Css implements ProcessorInterface
         $pattern = '{^(file://(?!//)|/(?!/)|/?[a-z]:[\\\\/]|\.\.[\\\\/]|[a-z0-9_.-]+[\\\\/])}i';
         $result = preg_match($pattern, $path);
 
-        return (bool) $result;
+        return is_int($result) ? (bool) $result : true;
     }
 
     /**
