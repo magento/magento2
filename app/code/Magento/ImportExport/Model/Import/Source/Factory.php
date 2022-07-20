@@ -59,17 +59,13 @@ class Factory
                 __('\'%1\' file extension is not supported', $type)
             );
         }
-        $data = [];
-        $data['file'] = $source;
-        $data['directory'] = $directory;
-        if ($type === 'Csv') {
-            $data['delimiter'] = $options;
-        } else {
-            $data['options'] = $options;
-        }
         return $this->objectManager->create(
             $adapterClass,
-            $data
+            [
+                'file' => $source,
+                'directory' => $directory,
+                'options' => $options
+            ]
         );
     }
 }
