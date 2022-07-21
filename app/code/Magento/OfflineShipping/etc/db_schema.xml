@@ -38,8 +38,8 @@
         </constraint>
     </table>
     <table name="salesrule" resource="default" comment="Salesrule">
-        <column xsi:type="smallint" name="simple_free_shipping" unsigned="true" nullable="true"
-                identity="false" default="0" comment="Simple Free Shipping"/>
+        <column xsi:type="varchar" name="simple_free_shipping" unsigned="true" nullable="true"
+                identity="false" default="NULL" comment="Simple Free Shipping"/>
     </table>
     <table name="sales_order_item" resource="sales" comment="Sales Flat Order Item">
         <column xsi:type="smallint" name="free_shipping" unsigned="true" nullable="false" identity="false"
