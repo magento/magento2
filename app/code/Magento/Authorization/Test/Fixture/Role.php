@@ -9,14 +9,12 @@ namespace Magento\Authorization\Test\Fixture;
 
 use Magento\Authorization\Model\Acl\Role\Group;
 use Magento\Authorization\Model\ResourceModel\Role as RoleResource;
-use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\DataObject;
-use Magento\SharedCatalog\Model\SharedCatalogFactory;
-use Magento\TestFramework\Fixture\Data\ProcessorInterface;
-use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\RulesFactory;
-use Magento\User\Model\UserFactory;
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\DataObject;
+use Magento\TestFramework\Fixture\Data\ProcessorInterface;
+use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
 /**
  * Creating a new admin role
