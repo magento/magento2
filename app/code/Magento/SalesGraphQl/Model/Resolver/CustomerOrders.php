@@ -24,6 +24,8 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Orders data resolver
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerOrders implements ResolverInterface
 {
@@ -64,13 +66,13 @@ class CustomerOrders implements ResolverInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderFilter $orderFilter,
         OrderFormatter $orderFormatter,
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderFilter = $orderFilter;
         $this->orderFormatter = $orderFormatter;
-        $this->storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class) ?? null;
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -146,6 +148,8 @@ class CustomerOrders implements ResolverInterface
     }
 
     /**
+     * Get eligible store to filter by based on scope
+     *
      * @param string $scope
      * @param StoreInterface $store
      * @return array
@@ -172,6 +176,8 @@ class CustomerOrders implements ResolverInterface
     }
 
     /**
+     * Filter store ids based on selected scope
+     *
      * @param int|null $websiteId
      * @param int|null $storeGroupId
      * @return array
