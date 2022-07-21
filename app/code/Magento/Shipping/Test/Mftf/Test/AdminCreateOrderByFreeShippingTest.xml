@@ -84,7 +84,6 @@
         <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$100.00" stepKey="seeGrandTotal"/>
         <see selector="{{AdminOrderTotalSection.subTotal}}" userInput="$100.00" stepKey="seeSubTotal"/>
         <see selector="{{AdminOrderTotalSection.shippingAndHandling}}" userInput="$0.00" stepKey="seeShippingAndHandlingTotal"/>
-        >
 
     </test>
 </tests>
