@@ -251,7 +251,7 @@ enum CheckoutUserInputErrorCodes {
 }
 
 enum ScopeTypeEnum @doc(description: "This enumeration defines the scope type for customer orders.") {
-    global
-    website
-    store
+    GLOBAL
+    WEBSITE
+    STORE
 }
