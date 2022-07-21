@@ -195,4 +195,63 @@ class RowsTest extends TestCase
 
         $this->actionRows->execute($ids);
     }
+
+    public function testDeletedProductsBatchProcessing()
+    {
+        $ids = [1, 2, 3, 4];
+
+        $select = $this->createMock(Select::class);
+        $select->method('from')->willReturnSelf();
+        $select->method('joinLeft')->willReturnSelf();
+        $select->method('where')->willReturnSelf();
+        $select->method('join')->willReturnSelf();
+        $adapter = $this->createMock(AdapterInterface::class);
+        $adapter->method('select')->willReturn($select);
+        $adapter->method('describeTable')->willReturn([]);
+        $this->defaultIndexerResource->method('getConnection')->willReturn($adapter);
+        $adapter->method('fetchAll')->with($select)->willReturn([]);
+
+        $adapter->expects($this->exactly(4))
+            ->method('fetchPairs')
+            ->with($select)
+            ->willReturnOnConsecutiveCalls([], [], [], []);
+        $multiDimensionProvider = $this->createMock(MultiDimensionProvider::class);
+        $this->dimensionCollectionFactory->expects($this->exactly(2))
+            ->method('create')
+            ->willReturn($multiDimensionProvider);
+        $dimension = $this->createMock(Dimension::class);
+        $dimension->method('getName')->willReturn('default');
+        $dimension->method('getValue')->willReturn('0');
+        $iterator = new \ArrayIterator([[$dimension]]);
+        $multiDimensionProvider->expects($this->exactly(2))
+            ->method('getIterator')
+            ->willReturn($iterator);
+        $this->catalogProductType->expects($this->once())
+            ->method('getTypesByPriority')
+            ->willReturn(
+                [
+                    'virtual' => ['price_indexer' => '\Price\Indexer'],
+                    'simple' => ['price_indexer' => '\Price\Indexer'],
+                ]
+            );
+        $priceIndexer = $this->createMock(DimensionalIndexerInterface::class);
+        $this->indexerPriceFactory->expects($this->exactly(2))
+            ->method('create')
+            ->with('\Price\Indexer', ['fullReindexAction' => false])
+            ->willReturn($priceIndexer);
+        $priceIndexer->expects($this->never())
+            ->method('executeByDimensions');
+        $select->expects($this->exactly(2))
+            ->method('deleteFromSelect')
+            ->with('index_price')
+            ->willReturn('');
+        $adapter->expects($this->exactly(2))
+            ->method('getIndexList')
+            ->willReturn(['entity_id'=>['COLUMNS_LIST'=>['test']]]);
+        $adapter->expects($this->exactly(2))
+            ->method('getPrimaryKeyName')
+            ->willReturn('entity_id');
+
+        $this->actionRows->execute($ids);
+    }
 }
