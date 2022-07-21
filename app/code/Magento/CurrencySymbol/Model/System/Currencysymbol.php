@@ -243,7 +243,8 @@ class Currencysymbol
     {
         $customSymbols = $this->_unserializeStoreConfig(self::XML_PATH_CUSTOM_CURRENCY_SYMBOL);
         if (array_key_exists($code, $customSymbols)) {
-            return $customSymbols[$code];
+            // remove non-breaking space from custom currency symbol and allow custom NBSP in currency symbol
+            return preg_replace('/(&nbsp;|&nbsp|\xc2\xa0)*/iu', '', $customSymbols[$code]);
         }
 
         return false;
