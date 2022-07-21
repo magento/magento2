@@ -28,6 +28,6 @@ class Group extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
         '">' .
         $this->escapeHtml($row->getData($this->getColumn()->getIndex())) .
         '</a><br />'
-        . '(' . __('Code') . ': ' . $row->getGroupCode() . ')';
+        . '(' . __('Code') . ': ' . $this->escapeHtml($row->getGroupCode()) . ')';
     }
 }

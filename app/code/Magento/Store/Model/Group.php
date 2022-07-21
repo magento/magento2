@@ -9,6 +9,8 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Class Group
  *
@@ -106,6 +108,11 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     private $pillPut;
 
     /**
+     * @var \Magento\Store\Model\Validation\StoreValidator
+     */
+    private $modelValidator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -118,6 +125,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param array $data
      * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
      * @param \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface|null $pillPut
+     * @param \Magento\Store\Model\Validation\StoreValidator|null $modelValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -132,7 +140,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         \Magento\Framework\Event\ManagerInterface $eventManager = null,
-        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
+        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null,
+        \Magento\Store\Model\Validation\StoreValidator $modelValidator = null
     ) {
         $this->_configDataResource = $configDataResource;
         $this->_storeListFactory = $storeListFactory;
@@ -141,6 +150,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
             ->get(\Magento\Framework\Event\ManagerInterface::class);
         $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class);
+        $this->modelValidator = $modelValidator ?: ObjectManager::getInstance()
+            ->get(\Magento\Store\Model\Validation\StoreValidator::class);
         parent::__construct(
             $context,
             $registry,
@@ -160,6 +171,17 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     protected function _construct()
     {
         $this->_init(\Magento\Store\Model\ResourceModel\Group::class);
+    }
+
+    /**
+     * Validation rules for store
+     *
+     * @return \Zend_Validate_Interface|null
+     * @throws \Zend_Validate_Exception
+     */
+    protected function _getValidationRulesBeforeSave()
+    {
+        return $this->modelValidator;
     }
 
     /**
