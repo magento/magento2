@@ -6,14 +6,14 @@
 
 namespace Magento\Directory\Model;
 
+use Magento\Directory\Model\Currency\Filter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
-use Magento\Directory\Model\Currency\Filter;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\Currency as LocaleCurrency;
 use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
 use Magento\Framework\NumberFormatterFactory;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Currency model
@@ -432,6 +432,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
             $this->getCode() ?? $this->numberFormatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)
         );
 
+        if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_SYMBOL, $options)
+            && !array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)) {
+            // remove only one non-breaking space from custom currency symbol to allow custom NBSP in currency symbol
+            $formattedCurrency = preg_replace('/ /u', '', $formattedCurrency, 1);
+        }
         if ((array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
             && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
             $formattedCurrency = str_replace(' ', '', $formattedCurrency);
@@ -586,7 +591,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     private function trimUnicodeDirectionMark($string)
     {
         if (preg_match('/^(\x{200E}|\x{200F})/u', $string, $match)) {
-            $string = preg_replace('/^'.$match[1].'/u', '', $string);
+            $string = preg_replace('/^' . $match[1] . '/u', '', $string);
         }
         return $string;
     }

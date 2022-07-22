@@ -27,15 +27,11 @@ class Currencysymbol
     protected $_symbolsData = [];
 
     /**
-     * Store id
-     *
      * @var string|null
      */
     protected $_storeId;
 
     /**
-     * Website id
-     *
      * @var string|null
      */
     protected $_websiteId;
@@ -55,19 +51,19 @@ class Currencysymbol
     /**
      * Config path to custom currency symbol value
      */
-    const XML_PATH_CUSTOM_CURRENCY_SYMBOL = 'currency/options/customsymbol';
+    public const XML_PATH_CUSTOM_CURRENCY_SYMBOL = 'currency/options/customsymbol';
 
-    const XML_PATH_ALLOWED_CURRENCIES = \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW;
+    public const XML_PATH_ALLOWED_CURRENCIES = \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW;
 
     /*
      * Separator used in config in allowed currencies list
      */
-    const ALLOWED_CURRENCIES_CONFIG_SEPARATOR = ',';
+    public const ALLOWED_CURRENCIES_CONFIG_SEPARATOR = ',';
 
     /**
      * Config currency section
      */
-    const CONFIG_SECTION = 'currency';
+    public const CONFIG_SECTION = 'currency';
 
     /**
      * Core event manager proxy
