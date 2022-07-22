@@ -5,17 +5,20 @@
  */
 namespace Magento\Backend\Block\System\Store\Grid\Render;
 
+use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
+use Magento\Framework\DataObject;
+
 /**
  * Store render group
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Group extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Group extends AbstractRenderer
 {
     /**
      * {@inheritdoc}
      */
-    public function render(\Magento\Framework\DataObject $row)
+    public function render(DataObject $row): ?string
     {
         if (!$row->getData($this->getColumn()->getIndex())) {
             return null;
