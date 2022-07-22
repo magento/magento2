@@ -19,6 +19,7 @@ if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 70400) {
         echo 'Magento supports PHP 7.4.0 or later. ' .
             'Please read https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html';
     } else {
+        http_response_code(503);
         echo <<<HTML
 <div style="font:12px/1.35em arial, helvetica, sans-serif;">
     <p>Magento supports PHP 7.4.0 or later. Please read
