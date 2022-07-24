@@ -20,17 +20,17 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const XML_PATH_ENABLED = 'persistent/options/enabled';
+    public const XML_PATH_ENABLED = 'persistent/options/enabled';
 
-    const XML_PATH_LIFE_TIME = 'persistent/options/lifetime';
+    public const XML_PATH_LIFE_TIME = 'persistent/options/lifetime';
 
-    const XML_PATH_LOGOUT_CLEAR = 'persistent/options/logout_clear';
+    public const XML_PATH_LOGOUT_CLEAR = 'persistent/options/logout_clear';
 
-    const XML_PATH_REMEMBER_ME_ENABLED = 'persistent/options/remember_enabled';
+    public const XML_PATH_REMEMBER_ME_ENABLED = 'persistent/options/remember_enabled';
 
-    const XML_PATH_REMEMBER_ME_DEFAULT = 'persistent/options/remember_default';
+    public const XML_PATH_REMEMBER_ME_DEFAULT = 'persistent/options/remember_default';
 
-    const XML_PATH_PERSIST_SHOPPING_CART = 'persistent/options/shopping_cart';
+    public const XML_PATH_PERSIST_SHOPPING_CART = 'persistent/options/shopping_cart';
 
     /**
      * Name of config file
@@ -50,20 +50,27 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_modulesReader;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Module\Dir\Reader $modulesReader
      * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Module\Dir\Reader $modulesReader,
-        \Magento\Framework\Escaper $escaper
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         $this->_modulesReader = $modulesReader;
         $this->_escaper = $escaper;
-        parent::__construct(
-            $context
-        );
+        $this->storeManager = $storeManager ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Store\Model\StoreManagerInterface::class);
+        parent::__construct($context);
     }
 
     /**
@@ -193,6 +200,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function canProcess($observer)
     {
-        return true;
+        return $this->isEnabled($this->storeManager->getStore()->getCode());
     }
 }
