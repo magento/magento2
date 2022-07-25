@@ -181,7 +181,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @return \Zend_Validate_Interface|null
      * @throws \Zend_Validate_Exception
      */
-    protected function _getValidationRulesBeforeSave(): ?Object
+    protected function _getValidationRulesBeforeSave(): ?\Zend_Validate_Interface
     {
         return $this->modelValidator;
     }
