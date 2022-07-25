@@ -23,17 +23,17 @@ class Upload
     /**
      * @var FileTransferFactory
      */
-    protected $_httpFactory;
+    private $httpFactory;
 
     /**
      * @var DataHelper
      */
-    protected $_importExportData = null;
+    private $importExportData = null;
 
     /**
      * @var UploaderFactory
      */
-    protected $_uploaderFactory;
+    private $uploaderFactory;
 
     /**
      * @var Random
@@ -59,11 +59,11 @@ class Upload
         Random $random,
         Filesystem $filesystem
     ) {
-        $this->_httpFactory = $httpFactory;
-        $this->_importExportData = $importExportData;
-        $this->_uploaderFactory = $uploaderFactory;
+        $this->httpFactory = $httpFactory;
+        $this->importExportData = $importExportData;
+        $this->uploaderFactory = $uploaderFactory;
         $this->random = $random;
-        $this->_varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
+        $this->varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
     }
     /**
      * Move uploaded file.
@@ -75,11 +75,11 @@ class Upload
     public function uploadSource(string $entity)
     {
         /** @var $adapter \Zend_File_Transfer_Adapter_Http */
-        $adapter = $this->_httpFactory->create();
+        $adapter = $this->httpFactory->create();
         if (!$adapter->isValid(Import::FIELD_NAME_SOURCE_FILE)) {
             $errors = $adapter->getErrors();
             if ($errors[0] == \Zend_Validate_File_Upload::INI_SIZE) {
-                $errorMessage = $this->_importExportData->getMaxUploadSizeMessage();
+                $errorMessage = $this->importExportData->getMaxUploadSizeMessage();
             } else {
                 $errorMessage = __('The file was not uploaded.');
             }
@@ -87,12 +87,12 @@ class Upload
         }
 
         /** @var $uploader Uploader */
-        $uploader = $this->_uploaderFactory->create(['fileId' => Import::FIELD_NAME_SOURCE_FILE]);
+        $uploader = $this->uploaderFactory->create(['fileId' => Import::FIELD_NAME_SOURCE_FILE]);
         $uploader->setAllowedExtensions(['csv', 'zip']);
         $uploader->skipDbProcessing(true);
         $fileName = $this->random->getRandomString(32) . '.' . $uploader->getFileExtension();
         try {
-            $result = $uploader->save($this->_varDirectory->getAbsolutePath('importexport/'), $fileName);
+            $result = $uploader->save($this->varDirectory->getAbsolutePath('importexport/'), $fileName);
         } catch (\Exception $e) {
             throw new LocalizedException(__('The file cannot be uploaded.'));
         }

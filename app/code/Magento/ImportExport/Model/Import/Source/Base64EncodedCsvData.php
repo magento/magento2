@@ -19,14 +19,14 @@ class Base64EncodedCsvData extends AbstractSource
     /**
      * @var string
      */
-    protected $_delimiter = ',';
+    private $delimiter = ',';
 
     /**
      * Field Enclosure character
      *
      * @var string
      */
-    protected $_enclosure = '';
+    private $enclosure = '';
 
     /**
      * Read Data and detect column names
@@ -38,7 +38,7 @@ class Base64EncodedCsvData extends AbstractSource
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $source = trim(base64_decode($file));
         $rowsData = preg_split("/\r\n|\n|\r/", $source);
-        $colNames = explode(',', $rowsData[0]);
+        $colNames = explode($this->delimiter, $rowsData[0]);
         $this->rows = array_splice($rowsData, 1);
         parent::__construct($colNames);
     }

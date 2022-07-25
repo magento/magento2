@@ -17,6 +17,7 @@ use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Math\Random;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\ImportExport\Helper\Data as DataHelper;
@@ -29,7 +30,6 @@ use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\Entity\Factory;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\ImportExport\Model\Import\Source\Factory as SourceFactory;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Magento\ImportExport\Model\Source\Import\AbstractBehavior;
 use Magento\ImportExport\Model\Source\Import\Behavior\Factory as BehaviorFactory;
@@ -194,6 +194,12 @@ class Import extends AbstractModel
     private $messageManager;
 
     /**
+     * @Deprecated Property isn't used
+     * @var Random
+     */
+    private $random;
+
+    /**
      * @var Upload
      */
     private $upload;
@@ -215,6 +221,7 @@ class Import extends AbstractModel
      * @param DateTime $localeDate
      * @param array $data
      * @param ManagerInterface|null $messageManager
+     * @param Random|null $random
      * @param Upload|null $upload
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -235,6 +242,7 @@ class Import extends AbstractModel
         DateTime $localeDate,
         array $data = [],
         ManagerInterface $messageManager = null,
+        Random $random = null,
         Upload $upload = null
     ) {
         $this->_importExportData = $importExportData;
@@ -252,6 +260,8 @@ class Import extends AbstractModel
         $this->localeDate = $localeDate;
         $this->messageManager = $messageManager ?: ObjectManager::getInstance()
             ->get(ManagerInterface::class);
+        $this->random = $random ?: ObjectManager::getInstance()
+            ->get(Random::class);
         $this->upload = $upload ?: ObjectManager::getInstance()
             ->get(Upload::class);
         parent::__construct($logger, $filesystem, $data);
@@ -559,7 +569,7 @@ class Import extends AbstractModel
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
         $sourceFile = $this->getWorkingDir() . $entity . '.' . $extension;
-        $sourceFileRelative = $this->getVarDirectory()->getRelativePath($sourceFile);
+        $sourceFileRelative = $this->_varDirectory->getRelativePath($sourceFile);
         $this->_removeBom($sourceFile);
         $this->createHistoryReport($sourceFileRelative, $entity, $extension, $result);
         return $sourceFile;
@@ -583,16 +593,6 @@ class Import extends AbstractModel
         }
 
         return $source;
-    }
-
-    /**
-     * Get Var Directory instance
-     *
-     * @return Filesystem\Directory\WriteInterface
-     */
-    public function getVarDirectory()
-    {
-        return $this->_varDirectory;
     }
 
     /**
@@ -847,15 +847,5 @@ class Import extends AbstractModel
     public function getDeletedItemsCount()
     {
         return $this->_getEntityAdapter()->getDeletedItemsCount();
-    }
-
-    /**
-     * Get Upload Instance
-     *
-     * @return Upload
-     */
-    public function getUpload()
-    {
-        return $this->upload;
     }
 }

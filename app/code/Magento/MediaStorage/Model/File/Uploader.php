@@ -10,6 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Validation\ValidationException;
 use Magento\MediaStorage\Model\File\Validator\Image;
 
@@ -55,26 +56,28 @@ class Uploader extends \Magento\Framework\File\Uploader
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
-    protected $_varDirectory;
+    private $varDirectory;
 
     /**
      * @param string $fileId
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\MediaStorage\Helper\File\Storage $coreFileStorage
      * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem|null $filesystem
      */
     public function __construct(
         $fileId,
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\MediaStorage\Helper\File\Storage $coreFileStorage,
         \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem = null
     ) {
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_coreFileStorage = $coreFileStorage;
         $this->_validator = $validator;
-        $this->_varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
+        $filesystem = $filesystem ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Filesystem::class);
+        $this->varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
         parent::__construct($fileId);
     }
 
@@ -169,22 +172,22 @@ class Uploader extends \Magento\Framework\File\Uploader
         }
 
         if (!$extension) {
-            $this->_varDirectory->delete($uploadedFile);
+            $this->varDirectory->delete($uploadedFile);
             throw new LocalizedException(__('The file you uploaded has no extension.'));
         }
-        $sourceFile = $this->_varDirectory->getAbsolutePath('importexport/') . $entity;
+        $sourceFile = $this->varDirectory->getAbsolutePath('importexport/') . $entity;
 
         $sourceFile .= '.' . $extension;
-        $sourceFileRelative = $this->_varDirectory->getRelativePath($sourceFile);
+        $sourceFileRelative = $this->varDirectory->getRelativePath($sourceFile);
 
         if (strtolower($uploadedFile) != strtolower($sourceFile)) {
-            if ($this->_varDirectory->isExist($sourceFileRelative)) {
-                $this->_varDirectory->delete($sourceFileRelative);
+            if ($this->varDirectory->isExist($sourceFileRelative)) {
+                $this->varDirectory->delete($sourceFileRelative);
             }
 
             try {
-                $this->_varDirectory->renameFile(
-                    $this->_varDirectory->getRelativePath($uploadedFile),
+                $this->varDirectory->renameFile(
+                    $this->varDirectory->getRelativePath($uploadedFile),
                     $sourceFileRelative
                 );
             } catch (FileSystemException $e) {

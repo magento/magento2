@@ -251,6 +251,7 @@ class ImportTest extends AbstractImportTestCase
                     $this->dateTime,
                     [],
                     null,
+                    null,
                     $this->upload
                 ]
             )
@@ -568,6 +569,7 @@ class ImportTest extends AbstractImportTestCase
             $this->dateTime,
             [],
             null,
+            null,
             $this->upload
         );
 
@@ -604,6 +606,7 @@ class ImportTest extends AbstractImportTestCase
             $this->dateTime,
             [],
             null,
+            null,
             $this->upload
         );
 
@@ -636,6 +639,7 @@ class ImportTest extends AbstractImportTestCase
             $this->historyModel,
             $this->dateTime,
             [],
+            null,
             null,
             $this->upload
         );
@@ -675,6 +679,7 @@ class ImportTest extends AbstractImportTestCase
             $this->historyModel,
             $this->dateTime,
             [],
+            null,
             null,
             $this->upload
         );

@@ -221,6 +221,7 @@ class ReportTest extends TestCase
             $localeDate,
             [],
             null,
+            null,
             $upload
         );
         $import->setData('entity', 'catalog_product');
