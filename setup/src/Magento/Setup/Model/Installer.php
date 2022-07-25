@@ -1296,6 +1296,29 @@ class Installer
             ];
             $dbConnection->insert($setup->getTable('eav_entity_store'), $rowData);
         }
+
+        // Get meta id for adding in profile table for order prefix
+        $selectMeta = $dbConnection->select()
+            ->from($setup->getTable('sales_sequence_meta'), 'meta_id')
+            ->where('entity_type = \'order\'')
+            ->where('store_id = \'' . Store::DISTRO_STORE_ID . '\'');
+        $metaId = $dbConnection->fetchOne($selectMeta);
+
+        // See if row already exists
+        $incrementRow = $dbConnection->fetchRow(
+            'SELECT * FROM ' . $setup->getTable('sales_sequence_profile') . ' WHERE meta_id = ?',
+            [$metaId]
+        );
+
+        if (!empty($incrementRow)) {
+            // Row exists, update it
+            $profileId = $incrementRow['profile_id'];
+            $dbConnection->update(
+                $setup->getTable('sales_sequence_profile'),
+                ['prefix' => $orderIncrementPrefix, 'is_active' => '1'],
+                'profile_id = ' . $profileId
+            );
+        }
     }
 
     /**
