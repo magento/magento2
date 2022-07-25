@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
-use Exception;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
