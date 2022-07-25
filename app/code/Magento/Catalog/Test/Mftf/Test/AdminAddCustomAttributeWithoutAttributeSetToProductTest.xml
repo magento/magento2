@@ -13,7 +13,7 @@
             <stories value="Add Custom Attribute Without Attribute Set To Product"/>
             <title value="Admin should be able to create a attribute without attribute set"/>
             <description value="Admin should be able to create a attribute without attribute set"/>
-            <severity value="BLOCKER"/>
+            <severity value="MAJOR"/>
             <testCaseId value="MC-27235"/>
         </annotations>
 
