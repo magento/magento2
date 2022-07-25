@@ -5,7 +5,6 @@
  */
 namespace Magento\Backend\Block\System\Store\Grid\Render;
 
-
 /**
  * Store render group
  *

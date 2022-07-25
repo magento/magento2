@@ -561,7 +561,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @inheritdoc
      */
     public function setExtensionAttributes(
-        GroupExtensionInterface $extensionAttributes
+        \Magento\Store\Api\Data\GroupExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
