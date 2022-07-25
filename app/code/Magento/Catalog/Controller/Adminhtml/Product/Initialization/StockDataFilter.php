@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
+use Exception;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
@@ -45,6 +46,7 @@ class StockDataFilter
      *
      * @param array $stockData
      * @return array
+     * @throws Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function filter(array $stockData)
@@ -64,7 +66,10 @@ class StockDataFilter
             $stockData['min_qty'] = 0;
         }
 
-        if (!isset($stockData['is_decimal_divided'])) {
+        if($stockData['is_qty_decimal'] == 0 && $stockData['is_decimal_divided'] == 1){
+            throw new Exception(__('Please select Advanced Inventory -> Qty Uses Decimals as YES.'));
+        }
+        else if (!isset($stockData['is_decimal_divided']) || $stockData['is_qty_decimal'] == 0) {
             $stockData['is_decimal_divided'] = 0;
         }
 
