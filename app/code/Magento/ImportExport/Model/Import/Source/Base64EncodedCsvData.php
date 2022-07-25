@@ -22,13 +22,6 @@ class Base64EncodedCsvData extends AbstractSource
     private $delimiter = ',';
 
     /**
-     * Field Enclosure character
-     *
-     * @var string
-     */
-    private $enclosure = '';
-
-    /**
      * Read Data and detect column names
      *
      * @param string $file
@@ -48,7 +41,7 @@ class Base64EncodedCsvData extends AbstractSource
      *
      * @return array
      */
-    protected function _getNextRow()
+    public function _getNextRow()
     {
         if ($this->_key===count($this->rows)) {
             return [];

@@ -43,7 +43,7 @@ class Upload
     /**
      * @var WriteInterface
      */
-    protected $_varDirectory;
+    private $varDirectory;
 
     /**
      * @param FileTransferFactory $httpFactory
