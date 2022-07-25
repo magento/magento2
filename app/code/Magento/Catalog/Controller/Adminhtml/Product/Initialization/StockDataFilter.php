@@ -68,9 +68,6 @@ class StockDataFilter
         if((isset($stockData['is_decimal_divided']) && isset($stockData['is_qty_decimal'])) && $stockData['is_qty_decimal'] == 0 && $stockData['is_decimal_divided'] == 1){
             throw new Exception(__('Please select Advanced Inventory -> Qty Uses Decimals as YES.'));
         }
-        else if (!isset($stockData['is_decimal_divided']) || $stockData['is_qty_decimal'] == 0) {
-            $stockData['is_decimal_divided'] = 0;
-        }
 
         return $stockData;
     }
