@@ -9,24 +9,8 @@
  */
 namespace Magento\Store\Model;
 
-use Magento\Config\Model\ResourceModel\Config\Data as ConfigData;
-use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\ScopeInterface as AppScopeInterface;
-use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
-use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\Framework\Model\Context;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\Registry;
-use Magento\Store\Api\Data\GroupExtensionInterface;
-use Magento\Store\Api\Data\GroupInterface;
-use Magento\Store\Model\ResourceModel\Store\Collection;
-use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
-use Magento\Store\Model\ResourceModel\Group as ResourceModelGroup;
 use Magento\Store\Model\Validation\StoreValidator;
 
 /**
@@ -36,10 +20,10 @@ use Magento\Store\Model\Validation\StoreValidator;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Group extends AbstractExtensibleModel implements
-    IdentityInterface,
-    GroupInterface,
-    AppScopeInterface
+class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    \Magento\Framework\DataObject\IdentityInterface,
+    \Magento\Store\Api\Data\GroupInterface,
+    \Magento\Framework\App\ScopeInterface
 {
     const ENTITY = 'store_group';
 
@@ -63,7 +47,7 @@ class Group extends AbstractExtensibleModel implements
     /**
      * Group Store collection array
      *
-     * @var Collection[]
+     * @var \Magento\Store\Model\ResourceModel\Store\Collection[]
      */
     protected $_stores;
 
@@ -91,7 +75,7 @@ class Group extends AbstractExtensibleModel implements
     /**
      * Group default store
      *
-     * @var Store
+     * @var \Magento\Store\Model\Store
      */
     protected $_defaultStore;
 
@@ -101,22 +85,22 @@ class Group extends AbstractExtensibleModel implements
     private $_isReadOnly = false;
 
     /**
-     * @var ConfigData
+     * @var \Magento\Config\Model\ResourceModel\Config\Data
      */
     protected $_configDataResource;
 
     /**
-     * @var Store
+     * @var \Magento\Store\Model\Store
      */
     protected $_storeListFactory;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     private $eventManager;
 
@@ -131,42 +115,42 @@ class Group extends AbstractExtensibleModel implements
     private $modelValidator;
 
     /**
-     * @param Context $context
-     * @param Registry $registry
-     * @param ExtensionAttributesFactory $extensionFactory
-     * @param AttributeValueFactory $customAttributeFactory
-     * @param ConfigData $configDataResource
-     * @param CollectionFactory $storeListFactory
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
+     * @param \Magento\Config\Model\ResourceModel\Config\Data $configDataResource
+     * @param ResourceModel\Store\CollectionFactory $storeListFactory
      * @param StoreManagerInterface $storeManager
-     * @param AbstractResource|null $resource
-     * @param AbstractDb|null $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @param ManagerInterface|null $eventManager
+     * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
      * @param PoisonPillPutInterface|null $pillPut
      * @param StoreValidator|null $modelValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        Context $context,
-        Registry $registry,
-        ExtensionAttributesFactory $extensionFactory,
-        AttributeValueFactory $customAttributeFactory,
-        ConfigData $configDataResource,
-        CollectionFactory $storeListFactory,
-        StoreManagerInterface $storeManager,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
+        \Magento\Config\Model\ResourceModel\Config\Data $configDataResource,
+        \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeListFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        ManagerInterface $eventManager = null,
+        \Magento\Framework\Event\ManagerInterface $eventManager = null,
         PoisonPillPutInterface $pillPut = null,
         StoreValidator $modelValidator = null
     ) {
         $this->_configDataResource = $configDataResource;
         $this->_storeListFactory = $storeListFactory;
         $this->_storeManager = $storeManager;
-        $this->eventManager = $eventManager ?: ObjectManager::getInstance()
-            ->get(ManagerInterface::class);
-        $this->pillPut = $pillPut ?: ObjectManager::getInstance()
+        $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Event\ManagerInterface::class);
+        $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(PoisonPillPutInterface::class);
         $this->modelValidator = $modelValidator ?: ObjectManager::getInstance()
             ->get(StoreValidator::class);
@@ -188,7 +172,7 @@ class Group extends AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init(ResourceModelGroup::class);
+        $this->_init(\Magento\Store\Model\ResourceModel\Group::class);
     }
 
     /**
@@ -197,7 +181,7 @@ class Group extends AbstractExtensibleModel implements
      * @return \Zend_Validate_Interface|null
      * @throws \Zend_Validate_Exception
      */
-    protected function _getValidationRulesBeforeSave()
+    protected function _getValidationRulesBeforeSave(): ?Object
     {
         return $this->modelValidator;
     }
@@ -207,7 +191,7 @@ class Group extends AbstractExtensibleModel implements
      *
      * @return void
      */
-    protected function _loadStores(): void
+    protected function _loadStores()
     {
         $this->_stores = [];
         $this->_storesCount = 0;
@@ -225,10 +209,10 @@ class Group extends AbstractExtensibleModel implements
     /**
      * Set website stores
      *
-     * @param Store[] $stores
+     * @param \Magento\Store\Model\Store[] $stores
      * @return void
      */
-    public function setStores($stores): void
+    public function setStores($stores)
     {
         $this->_stores = [];
         $this->_storesCount = 0;
@@ -246,9 +230,9 @@ class Group extends AbstractExtensibleModel implements
     /**
      * Retrieve new (not loaded) Store collection object with group filter
      *
-     * @return Collection
+     * @return \Magento\Store\Model\ResourceModel\Store\Collection
      */
-    public function getStoreCollection(): Collection
+    public function getStoreCollection()
     {
         return $this->_storeListFactory->create()->addGroupFilter($this->getId());
     }
@@ -256,9 +240,9 @@ class Group extends AbstractExtensibleModel implements
     /**
      * Retrieve website store objects
      *
-     * @return Collection[]
+     * @return \Magento\Store\Model\ResourceModel\Store\Collection[]
      */
-    public function getStores(): array
+    public function getStores()
     {
         if ($this->_stores === null) {
             $this->_loadStores();
@@ -271,7 +255,7 @@ class Group extends AbstractExtensibleModel implements
      *
      * @return int[]
      */
-    public function getStoreIds(): array
+    public function getStoreIds()
     {
         if ($this->_stores === null) {
             $this->_loadStores();
@@ -284,7 +268,7 @@ class Group extends AbstractExtensibleModel implements
      *
      * @return array
      */
-    public function getStoreCodes(): array
+    public function getStoreCodes()
     {
         if ($this->_stores === null) {
             $this->_loadStores();
@@ -297,7 +281,7 @@ class Group extends AbstractExtensibleModel implements
      *
      * @return int
      */
-    public function getStoresCount(): int
+    public function getStoresCount()
     {
         if ($this->_stores === null) {
             $this->_loadStores();
@@ -308,7 +292,7 @@ class Group extends AbstractExtensibleModel implements
     /**
      * Retrieve default store model
      *
-     * @return Store|bool
+     * @return \Magento\Store\Model\Store
      */
     public function getDefaultStore()
     {
@@ -327,7 +311,7 @@ class Group extends AbstractExtensibleModel implements
      * If group has no stores - null is returned
      *
      * @param string $locale
-     * @return Store|null
+     * @return \Magento\Store\Model\Store|null
      */
     public function getDefaultStoreByLocale($locale)
     {
@@ -347,13 +331,13 @@ class Group extends AbstractExtensibleModel implements
      * Retrieve list of stores with given locale
      *
      * @param string $locale
-     * @return Store[]
+     * @return \Magento\Store\Model\Store[]
      */
-    public function getStoresByLocale($locale): array
+    public function getStoresByLocale($locale)
     {
         $stores = [];
         foreach ($this->getStores() as $store) {
-            /* @var Store $store */
+            /* @var $store \Magento\Store\Model\Store */
             if ($store->getLocaleCode() == $locale) {
                 $stores[] = $store;
             }
@@ -367,7 +351,7 @@ class Group extends AbstractExtensibleModel implements
      * @param Website $website
      * @return void
      */
-    public function setWebsite(Website $website): void
+    public function setWebsite(Website $website)
     {
         $this->setWebsiteId($website->getId());
     }
@@ -390,7 +374,7 @@ class Group extends AbstractExtensibleModel implements
      *
      * @return bool
      */
-    public function isCanDelete(): bool
+    public function isCanDelete()
     {
         if (!$this->getId()) {
             return false;
@@ -459,7 +443,7 @@ class Group extends AbstractExtensibleModel implements
     public function beforeDelete()
     {
         $this->_configDataResource->clearScopeData(
-            ScopeInterface::SCOPE_STORES,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
             $this->getStoreIds()
         );
         return parent::beforeDelete();
@@ -513,7 +497,7 @@ class Group extends AbstractExtensibleModel implements
      * @param bool $value
      * @return bool
      */
-    public function isReadOnly($value = null): bool
+    public function isReadOnly($value = null)
     {
         if (null !== $value) {
             $this->_isReadOnly = (bool)$value;
@@ -526,7 +510,7 @@ class Group extends AbstractExtensibleModel implements
      *
      * @return array
      */
-    public function getIdentities(): array
+    public function getIdentities()
     {
         return [self::CACHE_TAG];
     }
