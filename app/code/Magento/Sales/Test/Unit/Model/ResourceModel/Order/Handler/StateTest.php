@@ -331,7 +331,7 @@ class StateTest extends TestCase
                 'can_unhold' => false,
                 'is_not_virtual' => false
             ],
-            'closed(virtual product)' => [
+            'complete - !canCreditmemo, !canShip - closed(virtual product)' => [
                 'can_credit_memo' => false,
                 'can_credit_memo_invoke_count' => 1,
                 'can_ship' => false,
