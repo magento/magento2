@@ -6,7 +6,7 @@
 
 namespace Magento\Config\Model\Config;
 
-use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Config\App\Config\Source\RuntimeConfigSource;
 use Magento\Framework\Exception\ValidatorException;
 
 /**
@@ -17,22 +17,23 @@ use Magento\Framework\Exception\ValidatorException;
 class PathValidator
 {
     /**
-     * The config structure.
+     * Source of configurations.
      *
-     * @var Structure
+     * @var RuntimeConfigSource
      */
-    private $structure;
+    private $configSource;
 
     /**
-     * @param Structure $structure The config structure
+     * @param RuntimeConfigSource $configSource Source of configurations
      */
-    public function __construct(Structure $structure)
-    {
-        $this->structure = $structure;
+    public function __construct(
+        RuntimeConfigSource $configSource
+    ) {
+        $this->configSource = $configSource;
     }
 
     /**
-     * Checks whether the config path present in configuration structure.
+     * Checks whether the config path present in configuration.
      *
      * @param string $path The config path
      * @return true The result of validation
@@ -41,14 +42,7 @@ class PathValidator
      */
     public function validate($path)
     {
-        $element = $this->structure->getElementByConfigPath($path);
-        if ($element instanceof Field && $element->getConfigPath()) {
-            $path = $element->getConfigPath();
-        }
-
-        $allPaths = $this->structure->getFieldPaths();
-
-        if (!array_key_exists($path, $allPaths)) {
+        if (is_null($this->configSource->get($path))) {
             throw new ValidatorException(__('The "%1" path doesn\'t exist. Verify and try again.', $path));
         }
 

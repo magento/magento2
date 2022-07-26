@@ -172,13 +172,11 @@ class ConfigShowCommand extends Command
 
             $configValue = $this->emulatedAreaProcessor->process(function () {
                 $this->scopeValidator->isValid($this->scope, $this->scopeCode);
+                $configPath = $this->pathResolver->resolve($this->inputPath, $this->scope, $this->scopeCode);
                 if ($this->inputPath) {
                     $pathValidator = $this->pathValidatorFactory->create();
-                    $pathValidator->validate($this->inputPath);
+                    $pathValidator->validate($configPath);
                 }
-
-                $configPath = $this->pathResolver->resolve($this->inputPath, $this->scope, $this->scopeCode);
-
                 return $this->configSource->get($configPath);
             });
 
