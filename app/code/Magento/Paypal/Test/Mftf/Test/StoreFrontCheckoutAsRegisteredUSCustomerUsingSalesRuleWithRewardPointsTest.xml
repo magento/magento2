@@ -15,7 +15,8 @@
             <title value="Checkout as registered US customer using PayPal express and sales rule with reward points test"/>
             <description value="Checkout as registered US customer using PayPal express and sales rule with reward points"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-xxxxx"/>
+            <testCaseId value="AC-6036"/>
+            <useCaseId value="ACP2E-1029"/>
             <group value="reward"/>
             <group value="paypal"/>
             <group value="paypalExpress"/>
