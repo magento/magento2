@@ -8,12 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Fixture;
 
-use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -90,14 +89,9 @@ class Customer implements RevertibleDataFixtureInterface
     private $customerFactory;
 
     /**
-     * @var AddressRepositoryInterface
+     * @var CustomerRegistry
      */
-    private $addressRepository;
-
-    /**
-     * @var AddressInterfaceFactory
-     */
-    private $addressDataFactory;
+    private $customerRegistry;
 
     /**
      * @var ProcessorInterface
@@ -118,8 +112,7 @@ class Customer implements RevertibleDataFixtureInterface
      * @param ServiceFactory $serviceFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param CustomerFactory $customerFactory
-     * @param AddressRepositoryInterface $addressRepository
-     * @param AddressInterfaceFactory $addressDataFactory
+     * @param CustomerRegistry $customerRegistry
      * @param ProcessorInterface $dataProcessor
      * @param DataMerger $dataMerger
      */
@@ -127,16 +120,14 @@ class Customer implements RevertibleDataFixtureInterface
         ServiceFactory $serviceFactory,
         CustomerRepositoryInterface $customerRepository,
         CustomerFactory $customerFactory,
-        AddressRepositoryInterface $addressRepository,
-        AddressInterfaceFactory $addressDataFactory,
+        CustomerRegistry $customerRegistry,
         ProcessorInterface $dataProcessor,
         DataMerger $dataMerger,
     ) {
         $this->serviceFactory = $serviceFactory;
         $this->customerRepository = $customerRepository;
         $this->customerFactory = $customerFactory;
-        $this->addressRepository = $addressRepository;
-        $this->addressDataFactory = $addressDataFactory;
+        $this->customerRegistry = $customerRegistry;
         $this->dataProcessor = $dataProcessor;
         $this->dataMerger = $dataMerger;
         $this->customer = null;
@@ -157,9 +148,13 @@ class Customer implements RevertibleDataFixtureInterface
             $addresses = $this->prepareCustomerAddress($data[CustomerInterface::KEY_ADDRESSES]);
             $data[CustomerInterface::KEY_ADDRESSES] = $addresses;
         }
-        return $customerSaveService->execute(
-            ['customer' => $data, 'passwordHash' => $this->customer->getPasswordHash()]
+        $customerSaveService->execute(
+            [
+                'customer' => $data,
+                'passwordHash' => $this->customer->getPasswordHash()
+            ]
         );
+        return $this->customerRegistry->retrieveByEmail($data['email'], $data['website_id']);
     }
 
     /**
@@ -167,10 +162,11 @@ class Customer implements RevertibleDataFixtureInterface
      */
     public function revert(DataObject $data): void
     {
+        $data->setCustomerId($data->getId());
         $service = $this->serviceFactory->create(CustomerRepositoryInterface::class, 'deleteById');
         $service->execute(
             [
-                'id' => $data->getId()
+                'customerId' => $data->getId()
             ]
         );
     }
@@ -185,7 +181,7 @@ class Customer implements RevertibleDataFixtureInterface
     {
         $data = $this->dataMerger->merge(self::DEFAULT_DATA, $data, false);
 
-        $this->customer = $this->customerFactory->create()->setData($data);
+        $this->customer = $this->customerFactory->create(['data' => $data]);
         $this->customer->setPassword($data['password']);
         if (isset($data['password'])) {
             unset($data['password']);
