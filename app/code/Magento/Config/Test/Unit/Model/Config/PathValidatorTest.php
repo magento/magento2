@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Config\Test\Unit\Model\Config;
 
 use Magento\Config\Model\Config\PathValidator;
-use Magento\Config\Model\Config\Structure;
+use Magento\Config\App\Config\Source\RuntimeConfigSource;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
 use PHPUnit\Framework\TestCase;
 
@@ -25,33 +25,29 @@ class PathValidatorTest extends TestCase
     private $model;
 
     /**
-     * @var Structure|Mock
+     * @var RuntimeConfigSource|Mock
      */
-    private $structureMock;
+    private $configMock;
 
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->structureMock = $this->getMockBuilder(Structure::class)
+        $this->configMock = $this->getMockBuilder(RuntimeConfigSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = new PathValidator(
-            $this->structureMock
+            $this->configMock
         );
     }
 
     public function testValidate()
     {
-        $this->structureMock->expects($this->once())
-            ->method('getFieldPaths')
-            ->willReturn([
-                'test/test/test' => [
-                    'test/test/test'
-                ]
-            ]);
+        $this->configMock->expects($this->once())
+            ->method('get')
+            ->willReturn('test');
 
         $this->assertTrue($this->model->validate('test/test/test'));
     }
@@ -60,9 +56,9 @@ class PathValidatorTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\ValidatorException');
         $this->expectExceptionMessage('The "test/test/test" path doesn\'t exist. Verify and try again.');
-        $this->structureMock->expects($this->once())
-            ->method('getFieldPaths')
-            ->willReturn([]);
+        $this->configMock->expects($this->once())
+            ->method('get')
+            ->willReturn(null);
 
         $this->assertTrue($this->model->validate('test/test/test'));
     }
