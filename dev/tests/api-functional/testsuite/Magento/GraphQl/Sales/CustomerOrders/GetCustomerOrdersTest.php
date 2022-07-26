@@ -13,8 +13,11 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Quote\Test\Fixture\AddProductToCart;
+use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\Store\Test\Fixture\Website as WebsiteFixture;
@@ -97,7 +100,9 @@ class GetCustomerOrdersTest extends GraphQlAbstract
                 ]
             ],
             as: 'customer'
-        )
+        ),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'quote'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$quote.id$', 'product_id' => '$product.id$', 'qty' => 1])
     ]
     public function testGetCustomerOrders()
     {
@@ -135,5 +140,17 @@ QUERY;
         $this->assertEquals('John', $response['customer']['firstname']);
         $this->assertEquals('Smith', $response['customer']['lastname']);
         $this->assertEquals($currentEmail, $response['customer']['email']);
+    }
+
+    /**
+     * @param string $email
+     * @param string $password
+     * @return array
+     * @throws AuthenticationException
+     */
+    private function getCustomerAuthHeaders(string $email, string $password): array
+    {
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
+        return ['Authorization' => 'Bearer ' . $customerToken];
     }
 }
