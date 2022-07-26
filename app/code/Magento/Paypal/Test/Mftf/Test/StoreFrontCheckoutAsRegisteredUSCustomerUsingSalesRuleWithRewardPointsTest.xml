@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontCheckoutAsRegisteredUSCustomerUsingSalesRuleWithRewardPointsTest" extends="OnePageCheckoutAsRegisteredUSCustomerUsingSalesRuleWithRewardPointsTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Checkout as registered US customer using PayPal express and sales rule with reward points test"/>
+            <description value="Checkout as registered US customer using PayPal express and sales rule with reward points"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-xxxxx"/>
+            <group value="reward"/>
+            <group value="paypal"/>
+            <group value="paypalExpress"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
+                <argument name="credentials" value="SamplePaypalExpressConfig"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Disabled payment method -->
+            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
+        </after>
+    </test>
+</tests>
