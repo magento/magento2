@@ -89,5 +89,4 @@ class StockDataFilter
         }
         return $stockData;
     }
-
 }
