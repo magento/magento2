@@ -47,6 +47,7 @@ class StockDataFilter
      * @param array $stockData
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws Exception
      */
     public function filter(array $stockData)
     {
@@ -65,6 +66,10 @@ class StockDataFilter
             $stockData['min_qty'] = 0;
         }
         $this->allowMultipleBoxesForShippingCheck($stockData);
+
+        if (!isset($stockData['is_decimal_divided']) || $stockData['is_qty_decimal'] == 0) {
+            $stockData['is_decimal_divided'] = 0;
+        }
         return $stockData;
     }
 
@@ -81,8 +86,6 @@ class StockDataFilter
             && $stockData['is_qty_decimal'] == 0 && $stockData['is_decimal_divided'] == 1) {
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new Exception(__('Please select Advanced Inventory -> Qty Uses Decimals as YES.'));
-        } else if (!isset($stockData['is_decimal_divided']) || $stockData['is_qty_decimal'] == 0) {
-            $stockData['is_decimal_divided'] = 0;
         }
         return $stockData;
     }
