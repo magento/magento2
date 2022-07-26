@@ -93,8 +93,17 @@ class CustomerCart implements RevertibleDataFixtureInterface
     {
         $data = $this->prepareData($data);
         $customerId = $data['customer_id'] ?? null;
-        $cartService = $this->serviceFactory->create(CartManagementInterface::class, 'createEmptyCartForCustomer');
+        $storeId = $data['store_id'] ?? null;
+        if ($storeId) {
+            $cartService = $this->serviceFactory->create(CartManagementInterface::class, 'createEmptyCart');
+        } else {
+            $cartService = $this->serviceFactory->create(CartManagementInterface::class, 'createEmptyCartForCustomer');
+        }
         $cartId = $cartService->execute(['customerId' => $customerId]);
+        if ($storeId) {
+            $cartService = $this->serviceFactory->create(CartManagementInterface::class, 'assignCustomer');
+            $cartService->execute(['cartId' => $cartId, 'customerId' => $customerId, 'storeId' => $storeId]);
+        }
         $cartRepositoryService = $this->serviceFactory->create(CartRepositoryInterface::class, 'get');
         return $cartRepositoryService->execute(['cartId' => $cartId]);
     }

@@ -101,7 +101,7 @@ class GetCustomerOrdersTest extends GraphQlAbstract
             ],
             as: 'customer'
         ),
-        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'quote'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$', 'store_id' => '$store2.id$'], as: 'quote'),
         DataFixture(AddProductToCart::class, ['cart_id' => '$quote.id$', 'product_id' => '$product.id$', 'qty' => 1])
     ]
     public function testGetCustomerOrders()
