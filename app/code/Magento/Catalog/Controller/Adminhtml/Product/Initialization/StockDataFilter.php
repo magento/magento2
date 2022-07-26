@@ -46,7 +46,6 @@ class StockDataFilter
      *
      * @param array $stockData
      * @return array
-     * @throws Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function filter(array $stockData)
@@ -65,7 +64,19 @@ class StockDataFilter
         if (isset($stockData['min_qty']) && (int)$stockData['min_qty'] < 0) {
             $stockData['min_qty'] = 0;
         }
+        $this->allowMultipleBoxesForShippingCheck($stockData);
+        return $stockData;
+    }
 
+    /**
+     * Allow Multiple Boxes For Shipping Check
+     *
+     * @param array $stockData
+     * @return array
+     * @throws Exception
+     */
+    public function allowMultipleBoxesForShippingCheck(array $stockData): array
+    {
         if ((isset($stockData['is_decimal_divided']) && isset($stockData['is_qty_decimal']))
             && $stockData['is_qty_decimal'] == 0 && $stockData['is_decimal_divided'] == 1) {
             // phpcs:ignore Magento2.Exceptions.DirectThrow
@@ -73,7 +84,7 @@ class StockDataFilter
         } else if (!isset($stockData['is_decimal_divided']) || $stockData['is_qty_decimal'] == 0) {
             $stockData['is_decimal_divided'] = 0;
         }
-
         return $stockData;
     }
+
 }
