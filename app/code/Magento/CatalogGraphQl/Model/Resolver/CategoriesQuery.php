@@ -10,12 +10,15 @@ namespace Magento\CatalogGraphQl\Model\Resolver;
 use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
+use Magento\Framework\Api\Search\SearchCriteriaFactory;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Categories resolver, used for GraphQL category data request processing.
@@ -43,21 +46,29 @@ class CategoriesQuery implements ResolverInterface
     private $argsSelection;
 
     /**
+     * @var SearchCriteriaFactory
+     */
+    private $searchCriteriaFactory;
+
+    /**
      * @param CategoryTree $categoryTree
      * @param ExtractDataFromCategoryTree $extractDataFromCategoryTree
      * @param CategoryFilter $categoryFilter
      * @param ArgumentsProcessorInterface $argsSelection
+     * @param SearchCriteriaFactory $searchCriteriaFactory
      */
     public function __construct(
         CategoryTree $categoryTree,
         ExtractDataFromCategoryTree $extractDataFromCategoryTree,
         CategoryFilter $categoryFilter,
-        ArgumentsProcessorInterface $argsSelection
+        ArgumentsProcessorInterface $argsSelection,
+        SearchCriteriaFactory $searchCriteriaFactory
     ) {
         $this->categoryTree = $categoryTree;
         $this->extractDataFromCategoryTree = $extractDataFromCategoryTree;
         $this->categoryFilter = $categoryFilter;
         $this->argsSelection = $argsSelection;
+        $this->searchCriteriaFactory = $searchCriteriaFactory;
     }
 
     /**
@@ -87,7 +98,7 @@ class CategoriesQuery implements ResolverInterface
 
         $rootCategoryIds = $filterResult['category_ids'] ?? [];
 
-        $filterResult['items'] = $this->fetchCategories($rootCategoryIds, $info, (int) $store->getId());
+        $filterResult['items'] = $this->fetchCategories($rootCategoryIds, $info, $store, $context);
         return $filterResult;
     }
 
@@ -96,17 +107,28 @@ class CategoriesQuery implements ResolverInterface
      *
      * @param array $categoryIds
      * @param ResolveInfo $info
-     * @param int $storeId
+     * @param StoreInterface $store
+     * @param ContextInterface $context
      * @return array
      */
-    private function fetchCategories(array $categoryIds, ResolveInfo $info, int $storeId)
-    {
+    private function fetchCategories(
+        array $categoryIds,
+        ResolveInfo $info,
+        StoreInterface $store,
+        ContextInterface $context
+    ) {
         $fetchedCategories = [];
         foreach ($categoryIds as $categoryId) {
-            $categoryTree = $this->categoryTree->getTree($info, $categoryId, $storeId);
-            if (empty($categoryTree)) {
-                continue;
-            }
+            /* Search Criteria is created for compatibility */
+            $searchCriteria = $this->searchCriteriaFactory->create();
+            $categoryTree = $this->categoryTree->getFilteredTree(
+                $info,
+                $categoryId,
+                $searchCriteria,
+                $store,
+                [],
+                $context
+            );
             $fetchedCategories[] = current($this->extractDataFromCategoryTree->execute($categoryTree));
         }
 

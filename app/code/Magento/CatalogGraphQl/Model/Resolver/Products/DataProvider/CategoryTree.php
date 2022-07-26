@@ -9,7 +9,6 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
 use GraphQL\Language\AST\FieldNode;
 use GraphQL\Language\AST\NodeKind;
-
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category;
@@ -20,7 +19,7 @@ use Magento\CatalogGraphQl\Model\AttributesJoiner;
 use Magento\CatalogGraphQl\Model\Category\DepthCalculator;
 use Magento\CatalogGraphQl\Model\Category\LevelCalculator;
 use Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessorInterface;
-use Magento\CatalogGraphQl\Model\Category\Filter\SearchCriteria;
+use Magento\Framework\Api\Search\SearchCriteria;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Exception\LocalizedException;
@@ -29,13 +28,15 @@ use \Iterator;
 
 /**
  * Category tree data provider
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryTree
 {
     /**
      * In depth we need to calculate only children nodes, so the first wrapped node should be ignored
      */
-    const DEPTH_OFFSET = 1;
+    public const DEPTH_OFFSET = 1;
 
     /**
      * @var CollectionFactory
@@ -68,18 +69,12 @@ class CategoryTree
     private $collectionProcessor;
 
     /**
-     * @var SearchCriteria
-     */
-    private $searchCriteria;
-
-    /**
      * @param CollectionFactory $collectionFactory
      * @param AttributesJoiner $attributesJoiner
      * @param DepthCalculator $depthCalculator
      * @param LevelCalculator $levelCalculator
      * @param MetadataPool $metadata
      * @param CollectionProcessorInterface $collectionProcessor
-     * @param SearchCriteria $searchCriteria
      */
     public function __construct(
         CollectionFactory $collectionFactory,
@@ -88,7 +83,6 @@ class CategoryTree
         LevelCalculator $levelCalculator,
         MetadataPool $metadata,
         CollectionProcessorInterface $collectionProcessor,
-        SearchCriteria $searchCriteria
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->attributesJoiner = $attributesJoiner;
@@ -96,7 +90,6 @@ class CategoryTree
         $this->levelCalculator = $levelCalculator;
         $this->metadata = $metadata;
         $this->collectionProcessor = $collectionProcessor;
-        $this->searchCriteria = $searchCriteria;
     }
 
     /**
@@ -125,7 +118,8 @@ class CategoryTree
      * @throws LocalizedException
      * @throws Exception
      */
-    private function getCollection(ResolveInfo $resolveInfo, int $rootCategoryId) : Collection {
+    private function getCollection(ResolveInfo $resolveInfo, int $rootCategoryId) : Collection
+    {
         $categoryQuery = $resolveInfo->fieldNodes[0];
         $collection = $this->collectionFactory->create();
         $this->joinAttributesRecursively($collection, $categoryQuery, $resolveInfo);
@@ -196,23 +190,23 @@ class CategoryTree
      *
      * @param ResolveInfo $resolveInfo
      * @param int $rootCategoryId
-     * @param array $criteria
+     * @param SearchCriteria $searchCriteria
      * @param StoreInterface $store
      * @param array $attributeNames
      * @param ContextInterface $context
      * @return Iterator
      * @throws LocalizedException
      * @throws Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFilteredTree(
         ResolveInfo $resolveInfo,
         int $rootCategoryId,
-        array $criteria,
+        SearchCriteria $searchCriteria,
         StoreInterface $store,
         array $attributeNames,
         ContextInterface $context
     ): Iterator {
-        $searchCriteria = $this->searchCriteria->buildCriteria($criteria, $store);
         $collection = $this->getCollection($resolveInfo, $rootCategoryId);
         $this->collectionProcessor->process($collection, $searchCriteria, $attributeNames, $context);
         return $collection->getIterator();

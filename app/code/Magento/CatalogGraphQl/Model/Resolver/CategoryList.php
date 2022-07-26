@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\CatalogGraphQl\Model\Category\Filter\SearchCriteria;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
@@ -46,21 +47,29 @@ class CategoryList implements ResolverInterface
     private $argsSelection;
 
     /**
+     * @var SearchCriteria
+     */
+    private $searchCriteria;
+
+    /**
      * @param CategoryTree $categoryTree
      * @param ExtractDataFromCategoryTree $extractDataFromCategoryTree
      * @param CategoryFilter $categoryFilter
      * @param ArgumentsProcessorInterface $argsSelection
+     * @param SearchCriteria $searchCriteria
      */
     public function __construct(
         CategoryTree $categoryTree,
         ExtractDataFromCategoryTree $extractDataFromCategoryTree,
         CategoryFilter $categoryFilter,
-        ArgumentsProcessorInterface $argsSelection
+        ArgumentsProcessorInterface $argsSelection,
+        SearchCriteria $searchCriteria
     ) {
         $this->categoryTree = $categoryTree;
         $this->extractDataFromCategoryTree = $extractDataFromCategoryTree;
         $this->categoryFilter = $categoryFilter;
         $this->argsSelection = $argsSelection;
+        $this->searchCriteria = $searchCriteria;
     }
 
     /**
@@ -105,21 +114,19 @@ class CategoryList implements ResolverInterface
         array $criteria,
         StoreInterface $store,
         array $attributeNames,
-        $context
+        ContextInterface $context
     ) : array {
         $fetchedCategories = [];
         foreach ($categoryIds as $categoryId) {
+            $searchCriteria = $this->searchCriteria->buildCriteria($criteria, $store);
             $categoryTree = $this->categoryTree->getFilteredTree(
                 $info,
                 $categoryId,
-                $criteria,
+                $searchCriteria,
                 $store,
                 $attributeNames,
                 $context
             );
-            if (empty($categoryTree)) {
-                continue;
-            }
             $fetchedCategories[] = current($this->extractDataFromCategoryTree->execute($categoryTree));
         }
 
