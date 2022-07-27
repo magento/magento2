@@ -118,10 +118,11 @@ class DisabledProductOptionPriceModifier implements PriceModifierInterface
             ['product_in_websites' => $this->resourceConnection->getTableName('catalog_product_website')],
             ['website_id']
         )->where('product_in_websites.product_id = ?', $entityId);
+        $this->websiteIdsOfProduct[$entityId] = [];
         foreach ($connection->fetchCol($select) as $websiteId) {
             $this->websiteIdsOfProduct[$entityId][] = (int)$websiteId;
         }
-        return $this->websiteIdsOfProduct[$entityId] ?? [];
+        return $this->websiteIdsOfProduct[$entityId];
     }
 
     /**
