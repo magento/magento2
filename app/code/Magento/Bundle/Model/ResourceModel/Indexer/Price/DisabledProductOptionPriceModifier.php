@@ -121,7 +121,7 @@ class DisabledProductOptionPriceModifier implements PriceModifierInterface
         foreach ($connection->fetchCol($select) as $websiteId) {
             $this->websiteIdsOfProduct[$entityId][] = (int)$websiteId;
         }
-        return $this->websiteIdsOfProduct[$entityId];
+        return $this->websiteIdsOfProduct[$entityId] ?? [];
     }
 
     /**
