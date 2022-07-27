@@ -262,6 +262,14 @@ define(['prototype'], function () {
             }
             dimensionElements.each(callback);
 
+            const allowedPackageTypes = ["N","D"];
+
+            if (Object.values(this.customizableContainers).some(packageType => allowedPackageTypes.includes(packageType))) {
+                dimensionElements.each(function(element) {
+                    $(element).addClassName('required-entry');
+                });
+            }
+
             return result = $$('[id^="package_block_"] input').collect(function (element) {
                 return this.validateElement(element);
             }, this).all();
