@@ -23,7 +23,7 @@ use Magento\Framework\Mview\View\SubscriptionInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class View extends DataObject implements ViewInterface
+class View extends DataObject implements ViewExtendedInterface
 {
     /**
      * Default batch size for partial reindex
