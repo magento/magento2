@@ -432,11 +432,16 @@ class Currency extends \Magento\Framework\Model\AbstractModel
             $this->getCode() ?? $this->numberFormatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)
         );
 
-        if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_SYMBOL, $options)
-            && !array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)) {
-            // remove only one non-breaking space from custom currency symbol to allow custom NBSP in currency symbol
-            $formattedCurrency = preg_replace('/ /u', '', $formattedCurrency, 1);
+        if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_SYMBOL, $options)) {
+            // remove non-breaking space from custom currency code and allow custom NBSP in currency code
+            $formattedCurrency = preg_replace('/(&nbsp;|&nbsp|\xc2\xa0)*/iu', '', $formattedCurrency);
+
+            if (!array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)) {
+                // remove any space from intl supported custom currency symbol in formatted currency
+                $formattedCurrency = str_replace(' ', '', $formattedCurrency);
+            }
         }
+
         if ((array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
             && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
             $formattedCurrency = str_replace(' ', '', $formattedCurrency);
