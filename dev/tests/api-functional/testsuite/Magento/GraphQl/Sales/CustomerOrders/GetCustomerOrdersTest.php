@@ -9,11 +9,15 @@ namespace Magento\GraphQl\Sales;
 
 use Magento\Catalog\Helper\Data;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrderFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart;
@@ -102,12 +106,29 @@ class GetCustomerOrdersTest extends GraphQlAbstract
             as: 'customer'
         ),
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$', 'store_id' => '$store2.id$'], as: 'quote'),
-        DataFixture(AddProductToCart::class, ['cart_id' => '$quote.id$', 'product_id' => '$product.id$', 'qty' => 1])
+        DataFixture(AddProductToCart::class, ['cart_id' => '$quote.id$', 'product_id' => '$product.id$', 'qty' => 1]),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote.id$'], 'order')
     ]
     public function testGetCustomerOrders()
     {
-        $currentEmail = 'customer_graphql@mail.com';
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $store2 = $fixtures->get('store2');
+        $customer = $fixtures->get('customer');
+        $currentEmail = $customer->getEmail();
         $currentPassword = 'password';
+
+        $generateToken = $this->generateCustomerToken($currentEmail, $currentPassword);
+        $tokenResponse = $this->graphQlMutationWithResponseHeaders(
+            $generateToken,
+            [],
+            '',
+            ['Store' => $store2->getCode()]
+        );
+        $customerToken = $tokenResponse['body']['generateCustomerToken']['token'];
 
         $query = <<<QUERY
 query {
@@ -127,13 +148,13 @@ query {
 			}
 		}
 	}
-} 
+}
 QUERY;
         $response = $this->graphQlQuery(
             $query,
             [],
             '',
-            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+            $this->getCustomerAuthHeaders($customerToken)
         );
 
         $this->assertNull($response['customer']['id']);
@@ -143,14 +164,31 @@ QUERY;
     }
 
     /**
+     * @param string $token
+     *
+     * @return array
+     */
+    private function getCustomerAuthHeaders(string $token): array
+    {
+        return ['Authorization' => 'Bearer ' . $token];
+    }
+
+    /**
      * @param string $email
      * @param string $password
-     * @return array
-     * @throws AuthenticationException
+     * @return string
      */
-    private function getCustomerAuthHeaders(string $email, string $password): array
+    private function generateCustomerToken(string $email, string $password) : string
     {
-        $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
-        return ['Authorization' => 'Bearer ' . $customerToken];
+        return <<<MUTATION
+mutation {
+	generateCustomerToken(
+        email: "{$email}"
+        password: "{$password}"
+    ) {
+        token
+    }
+}
+MUTATION;
     }
 }
