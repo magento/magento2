@@ -27,11 +27,15 @@ class Currencysymbol
     protected $_symbolsData = [];
 
     /**
+     * Store id
+     *
      * @var string|null
      */
     protected $_storeId;
 
     /**
+     * Website id
+     *
      * @var string|null
      */
     protected $_websiteId;
@@ -51,19 +55,19 @@ class Currencysymbol
     /**
      * Config path to custom currency symbol value
      */
-    public const XML_PATH_CUSTOM_CURRENCY_SYMBOL = 'currency/options/customsymbol';
+    const XML_PATH_CUSTOM_CURRENCY_SYMBOL = 'currency/options/customsymbol';
 
-    public const XML_PATH_ALLOWED_CURRENCIES = \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW;
+    const XML_PATH_ALLOWED_CURRENCIES = \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW;
 
     /*
      * Separator used in config in allowed currencies list
      */
-    public const ALLOWED_CURRENCIES_CONFIG_SEPARATOR = ',';
+    const ALLOWED_CURRENCIES_CONFIG_SEPARATOR = ',';
 
     /**
      * Config currency section
      */
-    public const CONFIG_SECTION = 'currency';
+    const CONFIG_SECTION = 'currency';
 
     /**
      * Core event manager proxy
@@ -288,7 +292,7 @@ class Currencysymbol
      */
     protected function getAllowedCurrencies()
     {
-        $allowedCurrencies = [];
+        $allowedCurrencies = [[]];
         $allowedCurrencies[] = explode(
             self::ALLOWED_CURRENCIES_CONFIG_SEPARATOR,
             $this->_scopeConfig->getValue(
@@ -326,6 +330,6 @@ class Currencysymbol
                 }
             }
         }
-        return array_unique(array_merge([], ...$allowedCurrencies));
+        return array_unique(array_merge(...$allowedCurrencies));
     }
 }
