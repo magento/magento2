@@ -49,6 +49,7 @@ class Store implements RevertibleDataFixtureInterface
      * @param StoreResource $storeResource
      * @param StoreManagerInterface $storeManager
      * @param ProcessorInterface $dataProcessor
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         StoreInterfaceFactory $storeFactory,
@@ -84,6 +85,10 @@ class Store implements RevertibleDataFixtureInterface
         $store->setData($this->prepareData($data));
         $this->storeResource->save($store);
         $this->storeManager->reinitStores();
+
+        $sequence = \Magento\Framework\App\ObjectManager::getInstance()->create(\Magento\TestFramework\Db\Sequence::class);
+        $n = $store->getId() + 1;
+        $sequence->generateSequences($n);
 
         return $store;
     }

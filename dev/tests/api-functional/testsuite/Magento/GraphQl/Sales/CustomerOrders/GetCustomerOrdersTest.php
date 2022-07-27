@@ -154,10 +154,10 @@ QUERY;
             $query,
             [],
             '',
-            $this->getCustomerAuthHeaders($customerToken)
+            $this->getCustomerHeaders($customerToken, $store2->getCode())
         );
 
-        $this->assertNull($response['customer']['id']);
+        $this->assertNotNull($response['customer']['orders']);
         $this->assertEquals('John', $response['customer']['firstname']);
         $this->assertEquals('Smith', $response['customer']['lastname']);
         $this->assertEquals($currentEmail, $response['customer']['email']);
@@ -165,12 +165,13 @@ QUERY;
 
     /**
      * @param string $token
+     * @param string $storeCode
      *
      * @return array
      */
-    private function getCustomerAuthHeaders(string $token): array
+    private function getCustomerHeaders(string $token, string $storeCode): array
     {
-        return ['Authorization' => 'Bearer ' . $token];
+        return ['Authorization' => 'Bearer ' . $token, 'Store' => $storeCode];
     }
 
     /**

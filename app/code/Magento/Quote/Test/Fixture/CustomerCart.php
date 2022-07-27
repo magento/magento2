@@ -12,6 +12,7 @@ use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Fixture\Api\DataMerger;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
@@ -19,7 +20,6 @@ use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
 class CustomerCart implements RevertibleDataFixtureInterface
 {
-
     private const DEFAULT_DATA = [
         'customer_id' => null
     ];
@@ -60,7 +60,13 @@ class CustomerCart implements RevertibleDataFixtureInterface
     private $dataMerger;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param ServiceFactory $serviceFactory
+     * @param StoreManagerInterface $storeManager
      * @param CartRepositoryInterface $cartRepository
      * @param CartManagementInterface $cartManagement
      * @param QuoteResource $quoteResource
@@ -70,6 +76,7 @@ class CustomerCart implements RevertibleDataFixtureInterface
      */
     public function __construct(
         ServiceFactory $serviceFactory,
+        StoreManagerInterface $storeManager,
         CartRepositoryInterface $cartRepository,
         CartManagementInterface $cartManagement,
         QuoteResource $quoteResource,
@@ -78,6 +85,7 @@ class CustomerCart implements RevertibleDataFixtureInterface
         DataMerger $dataMerger,
     ) {
         $this->serviceFactory = $serviceFactory;
+        $this->storeManager = $storeManager;
         $this->cartRepository = $cartRepository;
         $this->cartManagement = $cartManagement;
         $this->quoteResource = $quoteResource;
@@ -95,17 +103,14 @@ class CustomerCart implements RevertibleDataFixtureInterface
         $customerId = $data['customer_id'] ?? null;
         $storeId = $data['store_id'] ?? null;
         if ($storeId) {
-            $cartService = $this->serviceFactory->create(CartManagementInterface::class, 'createEmptyCart');
-        } else {
-            $cartService = $this->serviceFactory->create(CartManagementInterface::class, 'createEmptyCartForCustomer');
+            $setCurrentStoreService = $this->serviceFactory->create(StoreManagerInterface::class, 'setCurrentStore');
+            $setCurrentStoreService->execute(['store' => $storeId]);
         }
+        $cartService = $this->serviceFactory->create(CartManagementInterface::class, 'createEmptyCartForCustomer');
         $cartId = $cartService->execute(['customerId' => $customerId]);
-        if ($storeId) {
-            $cartService = $this->serviceFactory->create(CartManagementInterface::class, 'assignCustomer');
-            $cartService->execute(['cartId' => $cartId, 'customerId' => $customerId, 'storeId' => $storeId]);
-        }
         $cartRepositoryService = $this->serviceFactory->create(CartRepositoryInterface::class, 'get');
-        return $cartRepositoryService->execute(['cartId' => $cartId]);
+        $cart = $cartRepositoryService->execute(['cartId' => $cartId]);
+        return $cart;
     }
 
     /**
