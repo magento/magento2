@@ -1,28 +1,27 @@
 {
     "name": "magento/module-asynchronous-operations",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "magento/framework": "*",
+        "magento/framework-message-queue": "*",
+        "magento/framework-bulk": "*",
+        "magento/module-authorization": "*",
+        "magento/module-backend": "*",
+        "magento/module-ui": "*",
+        "php": "~7.4.0||~8.1.0"
+    },
+    "suggest": {
+        "magento/module-admin-notification": "*",
+        "magento/module-logging": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "config": {
-        "sort-packages": true
-    },
-    "version": "100.4.4",
-    "require": {
-        "magento/framework": "103.0.*",
-        "magento/framework-message-queue": "100.4.*",
-        "magento/framework-bulk": "101.0.*",
-        "magento/module-authorization": "100.4.*",
-        "magento/module-backend": "102.0.*",
-        "magento/module-ui": "101.2.*",
-        "php": "~7.4.0||~8.1.0"
-    },
-    "suggest": {
-        "magento/module-admin-notification": "100.4.*",
-        "magento/module-logging": "*"
-    },
     "autoload": {
         "files": [
             "registration.php"
@@ -32,4 +31,3 @@
         }
     }
 }
-

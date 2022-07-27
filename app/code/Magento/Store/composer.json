@@ -1,30 +1,29 @@
 {
     "name": "magento/module-store",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "*",
+        "magento/module-catalog": "*",
+        "magento/module-config": "*",
+        "magento/module-directory": "*",
+        "magento/module-media-storage": "*",
+        "magento/module-ui": "*",
+        "magento/module-customer": "*",
+        "magento/module-authorization": "*",
+        "magento/module-backend": "*"
+    },
+    "suggest": {
+        "magento/module-deploy": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "config": {
-        "sort-packages": true
-    },
-    "version": "101.1.4",
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/framework": "103.0.*",
-        "magento/module-catalog": "104.0.*",
-        "magento/module-config": "101.2.*",
-        "magento/module-directory": "100.4.*",
-        "magento/module-media-storage": "100.4.*",
-        "magento/module-ui": "101.2.*",
-        "magento/module-customer": "103.0.*",
-        "magento/module-authorization": "100.4.*",
-        "magento/module-backend": "102.0.*"
-    },
-    "suggest": {
-        "magento/module-deploy": "100.4.*"
-    },
     "autoload": {
         "files": [
             "registration.php"
@@ -34,4 +33,3 @@
         }
     }
 }
-

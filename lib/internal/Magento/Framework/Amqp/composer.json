@@ -1,27 +1,25 @@
 {
     "name": "magento/framework-amqp",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "type": "magento2-library",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "config": {
-        "sort-packages": true
-    },
-    "version": "100.4.2",
     "require": {
-        "magento/framework": "103.0.*",
+        "magento/framework": "*",
         "php": "~7.4.0||~8.1.0",
         "php-amqplib/php-amqplib": "~3.2.0"
     },
     "autoload": {
-        "files": [
-            "registration.php"
-        ],
         "psr-4": {
             "Magento\\Framework\\Amqp\\": ""
-        }
+        },
+        "files": [
+            "registration.php"
+        ]
     }
 }
-

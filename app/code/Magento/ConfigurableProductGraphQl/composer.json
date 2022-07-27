@@ -2,22 +2,21 @@
     "name": "magento/module-configurable-product-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/module-catalog": "*",
+        "magento/module-configurable-product": "*",
+        "magento/module-graph-ql": "*",
+        "magento/module-catalog-graph-ql": "*",
+        "magento/module-quote": "*",
+        "magento/module-quote-graph-ql": "*",
+        "magento/module-catalog-inventory": "*",
+        "magento/framework": "*"
+    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "version": "100.4.4",
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/module-catalog": "104.0.*",
-        "magento/module-configurable-product": "100.4.*",
-        "magento/module-graph-ql": "100.4.*",
-        "magento/module-catalog-graph-ql": "100.4.*",
-        "magento/module-quote": "101.2.*",
-        "magento/module-quote-graph-ql": "100.4.*",
-        "magento/module-catalog-inventory": "100.4.*",
-        "magento/framework": "103.0.*"
-    },
     "autoload": {
         "files": [
             "registration.php"
@@ -27,4 +26,3 @@
         }
     }
 }
-

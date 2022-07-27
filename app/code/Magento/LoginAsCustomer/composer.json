@@ -1,22 +1,21 @@
 {
     "name": "magento/module-login-as-customer",
     "description": "Allow for admin to enter a customer account",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-customer": "*",
+        "magento/module-login-as-customer-api": "*"
+    },
+    "suggest": {
+        "magento/module-backend": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "version": "100.4.4",
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/framework": "103.0.*",
-        "magento/module-backend": "102.0.*",
-        "magento/module-customer": "103.0.*",
-        "magento/module-login-as-customer-api": "100.4.*"
-    },
-    "suggest": {
-        "magento/module-backend": "102.0.*"
-    },
     "autoload": {
         "files": [
             "registration.php"
@@ -26,4 +25,3 @@
         }
     }
 }
-
