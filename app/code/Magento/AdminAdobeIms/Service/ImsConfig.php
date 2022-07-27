@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Service;
@@ -14,7 +13,6 @@ use Magento\Framework\UrlInterface;
 
 class ImsConfig extends Config
 {
-    private const XML_PATH_ENABLED = 'adobe_ims/integration/admin_enabled';
     private const XML_PATH_ORGANIZATION_ID = 'adobe_ims/integration/organization_id';
     private const XML_PATH_LOGGING_ENABLED = 'adobe_ims/integration/logging_enabled';
     private const XML_PATH_NEW_ADMIN_EMAIL_TEMPLATE = 'adobe_ims/email/content_template';

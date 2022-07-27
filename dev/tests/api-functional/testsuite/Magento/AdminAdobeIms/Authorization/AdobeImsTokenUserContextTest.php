@@ -28,6 +28,7 @@ use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\User\Model\User;
+use Magento\AdobeIms\Model\Config;
 
 /**
  * Runs the storeConfigs api to check provided token
@@ -40,7 +41,6 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     private const SERVICE_VERSION = 'V1';
     private const KEYS_LOCATION = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
     private const TEST_ADOBE_USER_ID = '121B46F2620BF4240A49TEST@AdobeID';
-    private const XML_PATH_ENABLED = 'adobe_ims/integration/admin_enabled';
 
     /**
      * @var JwtManagerInterface
@@ -106,7 +106,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
      */
     public function testUseAdobeAccessTokenModuleDisabled()
     {
-        $this->configWriter->save(self::XML_PATH_ENABLED, 0);
+        $this->configWriter->save(Config::XML_PATH_ENABLED, 0);
         $this->scopeConfig->clean();
 
         $token = $this->createAccessToken();
@@ -136,7 +136,7 @@ class AdobeImsTokenUserContextTest extends WebapiAbstract
     {
         $adminUserNameFromFixture = 'webapi_user';
         $token = $this->createAccessToken();
-        $this->configWriter->save(self::XML_PATH_ENABLED, 1);
+        $this->configWriter->save(Config::XML_PATH_ENABLED, 1);
         $this->scopeConfig->clean();
         $this->assertAdminUserIdIsSaved($adminUserNameFromFixture, $token);
     }

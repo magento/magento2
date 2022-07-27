@@ -11,7 +11,7 @@ use Exception;
 use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
 use Magento\AdminAdobeIms\Service\AdminReauthProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdobeImsApi\Api\GetOrganizationsInterface;
+use Magento\AdobeImsApi\Api\OrganizationMembershipInterface;
 use Magento\AdobeImsApi\Api\GetProfileInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Controller\Adminhtml\Auth;
@@ -43,9 +43,9 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
     private ImsConfig $adminImsConfig;
 
     /**
-     * @var GetOrganizationsInterface
+     * @var OrganizationMembershipInterface
      */
-    private GetOrganizationsInterface $getOrganizations;
+    private OrganizationMembershipInterface $organizationMembership;
 
     /**
      * @var AdminReauthProcessService
@@ -71,24 +71,24 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
      * @param Context $context
      * @param GetProfileInterface $profile
      * @param ImsConfig $adminImsConfig
-     * @param GetOrganizationsInterface $getOrganizations
+     * @param OrganizationMembershipInterface $organizationMembership
      * @param AdminReauthProcessService $adminReauthProcessService
      * @param AdminAdobeImsLogger $logger
      * @param GetTokenInterface $token
      */
     public function __construct(
-        Context $context,
-        GetProfileInterface $profile,
-        ImsConfig $adminImsConfig,
-        GetOrganizationsInterface $getOrganizations,
-        AdminReauthProcessService $adminReauthProcessService,
-        AdminAdobeImsLogger $logger,
-        GetTokenInterface $token
+        Context                         $context,
+        GetProfileInterface             $profile,
+        ImsConfig                       $adminImsConfig,
+        OrganizationMembershipInterface $organizationMembership,
+        AdminReauthProcessService       $adminReauthProcessService,
+        AdminAdobeImsLogger             $logger,
+        GetTokenInterface               $token
     ) {
         parent::__construct($context);
         $this->profile = $profile;
         $this->adminImsConfig = $adminImsConfig;
-        $this->getOrganizations = $getOrganizations;
+        $this->organizationMembership = $organizationMembership;
         $this->adminReauthProcessService = $adminReauthProcessService;
         $this->logger = $logger;
         $this->token = $token;
@@ -134,7 +134,7 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
             }
 
             //check membership in organization
-            $this->getOrganizations->checkOrganizationMembership($accessToken);
+            $this->organizationMembership->checkOrganizationMembership($accessToken);
 
             $this->adminReauthProcessService->execute($tokenResponse);
 

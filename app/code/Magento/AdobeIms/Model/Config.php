@@ -23,7 +23,7 @@ use Magento\Framework\UrlInterface;
 class Config implements ConfigInterface
 {
     private const XML_CONFIG_PATH = 'adobe_ims/integration/';
-    private const XML_PATH_ENABLED = 'adobe_ims/integration/admin_enabled';
+    public const XML_PATH_ENABLED = 'adobe_ims/integration/admin_enabled';
     private const XML_PATH_ORGANIZATION_ID = 'adobe_ims/integration/organization_id';
     private const XML_PATH_API_KEY = 'adobe_ims/integration/api_key';
     private const XML_PATH_PRIVATE_KEY = 'adobe_ims/integration/private_key';

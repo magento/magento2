@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Controller\Adminhtml\OAuth;
@@ -14,9 +13,9 @@ use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
-use Magento\AdobeImsApi\Api\GetOrganizationsInterface;
 use Magento\AdobeImsApi\Api\GetProfileInterface;
 use Magento\AdobeImsApi\Api\GetTokenInterface;
+use Magento\AdobeImsApi\Api\OrganizationMembershipInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Controller\Adminhtml\Auth;
 use Magento\Backend\Model\View\Result\Redirect;
@@ -33,9 +32,9 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     private ImsConfig $adminImsConfig;
 
     /**
-     * @var GetOrganizationsInterface
+     * @var OrganizationMembershipInterface
      */
-    private GetOrganizationsInterface $organizations;
+    private OrganizationMembershipInterface $organizationMembership;
 
     /**
      * @var AdminLoginProcessService
@@ -60,7 +59,7 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     /**
      * @param Context $context
      * @param ImsConfig $adminImsConfig
-     * @param GetOrganizationsInterface $organizations
+     * @param OrganizationMembershipInterface $organizationMembership
      * @param AdminLoginProcessService $adminLoginProcessService
      * @param AdminAdobeImsLogger $logger
      * @param GetTokenInterface $token
@@ -69,7 +68,7 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     public function __construct(
         Context $context,
         ImsConfig $adminImsConfig,
-        GetOrganizationsInterface $organizations,
+        OrganizationMembershipInterface $organizationMembership,
         AdminLoginProcessService $adminLoginProcessService,
         AdminAdobeImsLogger $logger,
         GetTokenInterface $token,
@@ -77,7 +76,7 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     ) {
         parent::__construct($context);
         $this->adminImsConfig = $adminImsConfig;
-        $this->organizations = $organizations;
+        $this->organizationMembership = $organizationMembership;
         $this->adminLoginProcessService = $adminLoginProcessService;
         $this->logger = $logger;
         $this->token = $token;
@@ -118,7 +117,7 @@ class ImsCallback extends Auth implements HttpGetActionInterface
             }
 
             //check membership in organization
-            $this->organizations->checkOrganizationMembership($accessToken);
+            $this->organizationMembership->checkOrganizationMembership($accessToken);
 
             $this->adminLoginProcessService->execute($tokenResponse, $profile);
         } catch (AdobeImsAuthorizationException $e) {

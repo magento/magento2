@@ -3,17 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
+
 namespace Magento\AdobeIms\Model;
 
 use Magento\AdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdobeImsApi\Api\ConfigInterface;
-use Magento\AdobeImsApi\Api\GetOrganizationsInterface;
+use Magento\AdobeImsApi\Api\OrganizationMembershipInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\HTTP\Client\CurlFactory;
 
-class GetOrganizations implements GetOrganizationsInterface
+class OrganizationMembership implements OrganizationMembershipInterface
 {
 
     /**
