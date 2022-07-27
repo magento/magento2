@@ -71,14 +71,22 @@ class DisabledProductOptionPriceModifierTest extends TestCase
     public function testGetWebsiteIdsOfProduct(): void
     {
         $selectMock = $this->createMock(Select::class);
+        $statementMock = $this->createMock(\Zend_Db_Statement_Pdo::class);
+        $statementMock->method('fetchColumn')->willReturn(1);
         $selectMock->method('from')->willReturnSelf();
         $selectMock->method('where')->willReturnSelf();
-        $selectMock->method('query')->willReturnSelf();
+        $selectMock->method('query')->willReturn($statementMock);
+
         $this->connectionMock->method('select')
             ->willReturn($selectMock);
 
+        $this->connectionMock->expects($this->once())
+            ->method('fetchCol')
+            ->with($selectMock)
+            ->willReturn([]);
+
         /** @var IndexTableStructure|MockObject $indexTableStructure */
         $indexTableStructure = $this->createMock(IndexTableStructure::class);
-        $this->priceModifier->modifyPrice($indexTableStructure, []);
+        $this->assertEmpty($this->priceModifier->modifyPrice($indexTableStructure, [1]));
     }
 }
