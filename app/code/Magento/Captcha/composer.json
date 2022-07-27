@@ -1,9 +1,15 @@
 {
     "name": "magento/module-captcha",
     "description": "N/A",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "config": {
         "sort-packages": true
     },
+    "version": "100.4.4",
     "require": {
         "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
@@ -16,11 +22,6 @@
         "laminas/laminas-captcha": "^2.12",
         "laminas/laminas-db": "^2.13.4"
     },
-    "type": "magento2-module",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "files": [
             "registration.php"
@@ -30,3 +31,4 @@
         }
     }
 }
+
