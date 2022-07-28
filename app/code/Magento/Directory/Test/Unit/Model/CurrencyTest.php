@@ -235,6 +235,13 @@ class CurrencyTest extends TestCase
                 ['precision' => 2, 'symbol' => '#', 'display' => Currency::NO_SYMBOL],
                 '9,999.99'
             ],
+            [
+                'en_US',
+                'IDR',
+                '9999',
+                ['display' => Currency::USE_SYMBOL, 'precision' => 2, 'symbol' => 'IDRx&nbsp;NBSP'],
+                'IDRxNBSP 9,999.00'
+            ],
         ];
     }
 
