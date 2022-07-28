@@ -42,6 +42,7 @@
 
         <!-- Set Update Product Preview Image to Yes-->
         <selectOption selector="{{AttributePropertiesSection.UpdateProductPreviewImage}}" userInput="Yes" stepKey="setUpdateProductPreviewImage"/>
+        <scrollTo selector="{{AdminManageSwatchSection.manageSwatchSection}}" stepKey="scrollToAddSwatchSection"/>
 
         <!-- This hack is because the same <input type="file"> is re-purposed used for all uploads. -->
         <executeJS function="HTMLInputElement.prototype.click = function() { if(this.type !== 'file') HTMLElement.prototype.click.call(this); };" stepKey="disableClick"/>
