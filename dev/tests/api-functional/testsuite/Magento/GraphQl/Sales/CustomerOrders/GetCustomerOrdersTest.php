@@ -105,18 +105,26 @@ class GetCustomerOrdersTest extends GraphQlAbstract
             ],
             as: 'customer'
         ),
-        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$', 'store_id' => '$store2.id$'], as: 'quote'),
-        DataFixture(AddProductToCart::class, ['cart_id' => '$quote.id$', 'product_id' => '$product.id$', 'qty' => 1]),
-        DataFixture(SetBillingAddress::class, ['cart_id' => '$quote.id$']),
-        DataFixture(SetShippingAddress::class, ['cart_id' => '$quote.id$']),
-        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$quote.id$']),
-        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote.id$']),
-        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote.id$'], 'order')
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$', 'store_id' => '$store2.id$'], as: 'quote1'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$quote1.id$', 'product_id' => '$product.id$', 'qty' => 1]),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$quote1.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$quote1.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$quote1.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote1.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote1.id$'], 'order1'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$', 'store_id' => '$store3.id$'], as: 'quote2'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$quote2.id$', 'product_id' => '$product.id$', 'qty' => 1]),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$quote2.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$quote2.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$quote2.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote2.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote2.id$'], 'order2')
     ]
     public function testGetCustomerOrders()
     {
         $fixtures = DataFixtureStorageManager::getStorage();
         $store2 = $fixtures->get('store2');
+        $store3 = $fixtures->get('store3');
         $customer = $fixtures->get('customer');
         $currentEmail = $customer->getEmail();
         $currentPassword = 'password';
@@ -130,12 +138,60 @@ class GetCustomerOrdersTest extends GraphQlAbstract
         );
         $customerToken = $tokenResponse['body']['generateCustomerToken']['token'];
 
+        $query = $this->getCustomerOrdersQuery('STORE');
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerHeaders($customerToken, $store2->getCode())
+        );
+
+        $this->assertNotNull($response['customer']['orders']);
+
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerHeaders($customerToken, $store3->getCode())
+        );
+
+        $this->assertNotNull($response['customer']['orders']);
+
+        $query = $this->getCustomerOrdersQuery();
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerHeaders($customerToken, null)
+        );
+
+        $this->assertNotNull($response['customer']['orders']);
+    }
+
+    /**
+     * @param string $token
+     * @param string|null $storeCode
+     *
+     * @return array
+     */
+    private function getCustomerHeaders(string $token, ?string $storeCode): array
+    {
+        return ['Authorization' => 'Bearer ' . $token, 'Store' => $storeCode ?? 'default'];
+    }
+
+    /**
+     * @param string|null $scope
+     *
+     * @return array|string
+     */
+    private function getCustomerOrdersQuery(?string $scope = null): array|string
+    {
         $query = <<<QUERY
 query {
 	customer {
 		orders(
 			pageSize: 20,
-            scope: STORE
+            {{scope}}
 		) {
 			items {
 				id
@@ -150,28 +206,8 @@ query {
 	}
 }
 QUERY;
-        $response = $this->graphQlQuery(
-            $query,
-            [],
-            '',
-            $this->getCustomerHeaders($customerToken, $store2->getCode())
-        );
-
-        $this->assertNotNull($response['customer']['orders']);
-        $this->assertEquals('John', $response['customer']['firstname']);
-        $this->assertEquals('Smith', $response['customer']['lastname']);
-        $this->assertEquals($currentEmail, $response['customer']['email']);
-    }
-
-    /**
-     * @param string $token
-     * @param string $storeCode
-     *
-     * @return array
-     */
-    private function getCustomerHeaders(string $token, string $storeCode): array
-    {
-        return ['Authorization' => 'Bearer ' . $token, 'Store' => $storeCode];
+        $query = str_replace("{{scope}}", isset($scope) ? "scope: $scope" : '', $query);
+        return $query;
     }
 
     /**

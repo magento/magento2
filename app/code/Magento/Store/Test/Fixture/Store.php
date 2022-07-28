@@ -9,11 +9,12 @@ namespace Magento\Store\Test\Fixture;
 
 use Magento\Framework\DataObject;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\TestFramework\Fixture\Data\ProcessorInterface;
-use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 use Magento\Store\Api\Data\StoreInterfaceFactory;
 use Magento\Store\Model\ResourceModel\Store as StoreResource;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Db\Sequence;
+use Magento\TestFramework\Fixture\Data\ProcessorInterface;
+use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
 class Store implements RevertibleDataFixtureInterface
 {
@@ -45,22 +46,29 @@ class Store implements RevertibleDataFixtureInterface
     private $dataProcessor;
 
     /**
+     * @var Sequence
+     */
+    private $sequence;
+
+    /**
      * @param StoreInterfaceFactory $storeFactory
      * @param StoreResource $storeResource
      * @param StoreManagerInterface $storeManager
      * @param ProcessorInterface $dataProcessor
-     * @param ManagerInterface $eventManager
+     * @param Sequence $sequence
      */
     public function __construct(
         StoreInterfaceFactory $storeFactory,
         StoreResource $storeResource,
         StoreManagerInterface $storeManager,
-        ProcessorInterface $dataProcessor
+        ProcessorInterface $dataProcessor,
+        Sequence $sequence
     ) {
         $this->storeFactory = $storeFactory;
         $this->storeResource = $storeResource;
         $this->storeManager = $storeManager;
         $this->dataProcessor = $dataProcessor;
+        $this->sequence = $sequence;
     }
 
     /**
@@ -85,11 +93,7 @@ class Store implements RevertibleDataFixtureInterface
         $store->setData($this->prepareData($data));
         $this->storeResource->save($store);
         $this->storeManager->reinitStores();
-
-        $sequence = \Magento\Framework\App\ObjectManager::getInstance()->create(\Magento\TestFramework\Db\Sequence::class);
-        $n = $store->getId() + 1;
-        $sequence->generateSequences($n);
-
+        $this->regenerateSequenceTables($store->getId());
         return $store;
     }
 
@@ -129,5 +133,18 @@ class Store implements RevertibleDataFixtureInterface
         $data['group_id'] = $data['store_group_id'];
 
         return $this->dataProcessor->process($this, $data);
+    }
+
+    /**
+     * @param int $storeId
+     *
+     * @return void
+     */
+    private function regenerateSequenceTables(int $storeId): void
+    {
+        if ($storeId >= 10) {
+            $n = $storeId + 1;
+            $this->sequence->generateSequences($n);
+        }
     }
 }

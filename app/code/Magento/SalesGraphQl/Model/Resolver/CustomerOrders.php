@@ -158,14 +158,14 @@ class CustomerOrders implements ResolverInterface
     {
         $storeIds = [];
         switch ($scope) {
-            case 'global':
+            case 'GLOBAL':
                 $storeIds = $this->getStoresByFilter(null, null);
                 break;
-            case 'website':
+            case 'WEBSITE':
                     $websiteId = $store->getWebsiteId();
                     $storeIds = $this->getStoresByFilter((int)$websiteId, null);
                 break;
-            case 'store':
+            case 'STORE':
                     $storeGroupId = $store->getStoreGroupId();
                     $storeIds = $this->getStoresByFilter(null, (int)$storeGroupId);
                 break;
@@ -182,7 +182,7 @@ class CustomerOrders implements ResolverInterface
      * @param int|null $storeGroupId
      * @return array
      */
-    private function getStoresByFilter(?int $websiteId, ?int $storeGroupId)
+    private function getStoresByFilter(?int $websiteId, ?int $storeGroupId): array
     {
         $stores = $this->storeManager->getStores(true, true);
         $storeIds = [];
