@@ -97,6 +97,8 @@
         </assertStringContainsString>
         <!--Remove the category from the product and assert that it removed-->
         <comment userInput="Remove the category from the product and assert that it removed" stepKey="assertCategoryRemoved"/>
+        <scrollTo selector='//label/span[contains(text(),"Quantity")]' stepKey="scrollToCategorySection"/>
+
         <actionGroup ref="RemoveCategoryFromProductActionGroup" stepKey="removeCategoryFromProduct">
             <argument name="categoryName" value="$$createCategory.name$$"/>
         </actionGroup>
