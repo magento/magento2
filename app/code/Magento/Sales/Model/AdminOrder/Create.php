@@ -2010,7 +2010,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $this->orderManagement->cancel($oldOrder->getEntityId());
             $order->save();
         }
-        if ($this->getSendConfirmation() && !$order->getEmailSent()) {
+        if ($this->getSendConfirmation() && !$this->getEmailSent()) {
             $this->emailSender->send($order);
         }
 
