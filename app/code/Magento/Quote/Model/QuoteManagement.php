@@ -32,8 +32,8 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address\ToOrder as ToOrderConverter;
 use Magento\Quote\Model\Quote\Address\ToOrderAddress as ToOrderAddressConverter;
-use Magento\Quote\Model\Quote\AddressFactory;
 use Magento\Quote\Model\Quote as QuoteEntity;
+use Magento\Quote\Model\Quote\AddressFactory;
 use Magento\Quote\Model\Quote\Item\ToOrderItem as ToOrderItemConverter;
 use Magento\Quote\Model\Quote\Payment\ToOrderPayment as ToOrderPaymentConverter;
 use Magento\Quote\Model\ResourceModel\Quote\Item;
@@ -324,7 +324,7 @@ class QuoteManagement implements CartManagementInterface
             $customerActiveQuote->setIsActive(0);
             $this->quoteRepository->save($customerActiveQuote);
 
-            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (NoSuchEntityException $e) {
         }
 
@@ -645,7 +645,7 @@ class QuoteManagement implements CartManagementInterface
                 if ($defaultShipping) {
                     try {
                         $shippingAddress = $this->addressRepository->getById($defaultShipping);
-                        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                     } catch (LocalizedException $e) {
                         // no address
                     }
@@ -679,7 +679,7 @@ class QuoteManagement implements CartManagementInterface
                 if ($defaultBilling) {
                     try {
                         $billingAddress = $this->addressRepository->getById($defaultBilling);
-                        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                     } catch (LocalizedException $e) {
                         // no address
                     }
