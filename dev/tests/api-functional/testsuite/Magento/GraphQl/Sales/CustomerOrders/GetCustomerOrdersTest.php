@@ -18,6 +18,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart;
@@ -76,6 +77,11 @@ class GetCustomerOrdersTest extends GraphQlAbstract
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
     }
 
+    /**
+     * Test graphql customer orders
+     *
+     * @throws LocalizedException
+     */
     #[
         Config(Data::XML_PATH_PRICE_SCOPE, Data::PRICE_SCOPE_WEBSITE),
         DataFixture(WebsiteFixture::class, as: 'website2'),
@@ -146,7 +152,7 @@ class GetCustomerOrdersTest extends GraphQlAbstract
             $this->getCustomerHeaders($customerToken, $store2->getCode())
         );
 
-        $this->assertNotNull($response['customer']['orders']);
+        $this->assertEquals(2, count($response['customer']['orders']['items']));
 
         $response = $this->graphQlQuery(
             $query,
@@ -155,7 +161,27 @@ class GetCustomerOrdersTest extends GraphQlAbstract
             $this->getCustomerHeaders($customerToken, $store3->getCode())
         );
 
-        $this->assertNotNull($response['customer']['orders']);
+        $this->assertEquals(2, count($response['customer']['orders']['items']));
+
+        $query = $this->getCustomerOrdersQuery('WEBSITE');
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerHeaders($customerToken, $store2->getCode())
+        );
+
+        $this->assertEquals(2, count($response['customer']['orders']['items']));
+
+        $query = $this->getCustomerOrdersQuery('GLOBAL');
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerHeaders($customerToken, null)
+        );
+
+        $this->assertEquals(2, count($response['customer']['orders']['items']));
 
         $query = $this->getCustomerOrdersQuery();
         $response = $this->graphQlQuery(
@@ -165,10 +191,12 @@ class GetCustomerOrdersTest extends GraphQlAbstract
             $this->getCustomerHeaders($customerToken, null)
         );
 
-        $this->assertNotNull($response['customer']['orders']);
+        $this->assertEquals(0, count($response['customer']['orders']['items']));
     }
 
     /**
+     * Generate graphql query headers for customer orders
+     *
      * @param string $token
      * @param string|null $storeCode
      *
@@ -180,6 +208,8 @@ class GetCustomerOrdersTest extends GraphQlAbstract
     }
 
     /**
+     * Generate graphql query body for customer orders
+     *
      * @param string|null $scope
      *
      * @return array|string
@@ -211,6 +241,8 @@ QUERY;
     }
 
     /**
+     * Get customer login token
+     *
      * @param string $email
      * @param string $password
      * @return string

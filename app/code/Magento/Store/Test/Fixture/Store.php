@@ -93,7 +93,7 @@ class Store implements RevertibleDataFixtureInterface
         $store->setData($this->prepareData($data));
         $this->storeResource->save($store);
         $this->storeManager->reinitStores();
-        $this->regenerateSequenceTables($store->getId());
+        $this->regenerateSequenceTables((int)$store->getId());
         return $store;
     }
 
@@ -136,6 +136,8 @@ class Store implements RevertibleDataFixtureInterface
     }
 
     /**
+     * Generate missing sequence tables
+     *
      * @param int $storeId
      *
      * @return void
