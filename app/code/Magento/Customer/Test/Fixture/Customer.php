@@ -11,6 +11,7 @@ namespace Magento\Customer\Test\Fixture;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\DataObject;
@@ -104,7 +105,7 @@ class Customer implements RevertibleDataFixtureInterface
     private $dataMerger;
 
     /**
-     * @var null
+     * @var CustomerModel|null
      */
     private $customer;
 
