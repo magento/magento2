@@ -55,23 +55,23 @@ class Customer implements RevertibleDataFixtureInterface
     private const DEFAULT_DATA_ADDRESS = [
         AddressInterface::ID => null,
         AddressInterface::CUSTOMER_ID => null,
-        AddressInterface::REGION => null,
-        AddressInterface::REGION_ID => null,
-        AddressInterface::COUNTRY_ID => null,
-        AddressInterface::STREET => null,
+        AddressInterface::REGION => 'Massachusetts',
+        AddressInterface::REGION_ID => '32',
+        AddressInterface::COUNTRY_ID => 'US',
+        AddressInterface::STREET => '123 Test Street',
         AddressInterface::COMPANY => null,
-        AddressInterface::TELEPHONE => null,
+        AddressInterface::TELEPHONE => '1234567890',
         AddressInterface::FAX => null,
-        AddressInterface::POSTCODE => null,
-        AddressInterface::CITY => null,
+        AddressInterface::POSTCODE => '02108',
+        AddressInterface::CITY => 'Boston',
         AddressInterface::FIRSTNAME => 'Firstname %uniqid%',
         AddressInterface::LASTNAME => 'Lastname %uniqid%',
         AddressInterface::MIDDLENAME => null,
         AddressInterface::PREFIX => null,
         AddressInterface::SUFFIX => null,
         AddressInterface::VAT_ID => null,
-        AddressInterface::DEFAULT_BILLING => null,
-        AddressInterface::DEFAULT_SHIPPING => null
+        AddressInterface::DEFAULT_BILLING => true,
+        AddressInterface::DEFAULT_SHIPPING => true
     ];
 
     /**
