@@ -12,6 +12,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 
@@ -36,6 +37,11 @@ class PriceAttributes implements ModifierInterface
     private $localeCurrency;
 
     /**
+     * @var ContextInterface
+     */
+    private ContextInterface $context;
+
+    /**
      * PriceAttributes constructor.
      *
      * @param ContextInterface $context
@@ -57,6 +63,8 @@ class PriceAttributes implements ModifierInterface
 
     /**
      * @inheritdoc
+     * @throws NoSuchEntityException
+     * @throws \Zend_Currency_Exception
      */
     public function modifyData(array $data): array
     {
@@ -67,11 +75,7 @@ class PriceAttributes implements ModifierInterface
         foreach ($data['items'] as &$item) {
             foreach ($this->priceAttributeList as $priceAttribute) {
                 if (isset($item[$priceAttribute])) {
-                    $store = $this->storeManager->getStore(
-                        $this->context->getFilterParam('store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
-                    );
-                    $currency = $this->localeCurrency->getCurrency($store->getBaseCurrencyCode());
-                    $item[$priceAttribute] = $currency->toCurrency(sprintf("%f", $item[$priceAttribute]));
+                    $item[$priceAttribute] = $this->getCurrency()->toCurrency(sprintf("%f", $item[$priceAttribute]));
                 }
             }
         }
@@ -95,7 +99,9 @@ class PriceAttributes implements ModifierInterface
      */
     private function getStore(): StoreInterface
     {
-        return $this->storeManager->getStore();
+        return $this->storeManager->getStore(
+            $this->context->getFilterParam('store_id', Store::DEFAULT_STORE_ID)
+        );
     }
 
     /**
