@@ -89,7 +89,7 @@ class AdminAdobeImsEnableCommandTest extends TestCase
                 'imsCommandOptionService' => $this->imsCommandOptionService,
                 'cacheTypeList' => $this->typeListInterface,
                 'updateTokenService' => $this->updateTokensService,
-                'authorizationUrl' => $this->authorizationUrlMock
+                'authorization' => $this->authorizationUrlMock
             ]
         );
     }
