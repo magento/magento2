@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Model;
 
 use Magento\AdobeImsApi\Api\ConfigInterface;
-use Magento\AdobeImsApi\Api\GetAuthorizationUrlInterface;
+use Magento\AdobeImsApi\Api\AuthorizationInterface;
 use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 
-class GetAuthorizationUrl implements GetAuthorizationUrlInterface
+class Authorization implements AuthorizationInterface
 {
     private const HTTP_REDIRECT_CODE = 302;
 
@@ -46,7 +46,7 @@ class GetAuthorizationUrl implements GetAuthorizationUrlInterface
      * @return string
      * @throws InvalidArgumentException
      */
-    public function auth(?string $clientId = null): string
+    public function getAuthUrl(?string $clientId = null): string
     {
         $authUrl = $this->imsConfig->getAdminAdobeImsAuthUrl($clientId);
         return $this->getAuthorizationLocation($authUrl);
@@ -61,7 +61,7 @@ class GetAuthorizationUrl implements GetAuthorizationUrlInterface
      */
     public function testAuth(string $clientId): bool
     {
-        $location = $this->auth($clientId);
+        $location = $this->getAuthUrl($clientId);
         return $location !== '';
     }
 

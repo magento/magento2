@@ -14,7 +14,7 @@ use Magento\Framework\Exception\InvalidArgumentException;
  *
  * @api
  */
-interface GetAuthorizationUrlInterface
+interface AuthorizationInterface
 {
     /**
      * Get authorization url
@@ -23,7 +23,7 @@ interface GetAuthorizationUrlInterface
      * @return string
      * @throws InvalidArgumentException
      */
-    public function auth(?string $clientId = null): string;
+    public function getAuthUrl(?string $clientId = null): string;
 
     /**
      * Test if given ClientID is valid and is able to return an authorization URL

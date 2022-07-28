@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Console\Command;
 
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdobeImsApi\Api\GetAuthorizationUrlInterface;
+use Magento\AdobeImsApi\Api\AuthorizationInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -40,21 +40,21 @@ class AdminAdobeImsInfoCommand extends Command
     private ImsConfig $adminImsConfig;
 
     /**
-     * @var GetAuthorizationUrlInterface
+     * @var AuthorizationInterface
      */
-    private GetAuthorizationUrlInterface $authorizationUrl;
+    private AuthorizationInterface $authorization;
 
     /**
      * @param ImsConfig $adminImsConfig
-     * @param GetAuthorizationUrlInterface $authorizationUrl
+     * @param AuthorizationInterface $authorization
      */
     public function __construct(
         ImsConfig $adminImsConfig,
-        GetAuthorizationUrlInterface $authorizationUrl
+        AuthorizationInterface $authorization
     ) {
         parent::__construct();
         $this->adminImsConfig = $adminImsConfig;
-        $this->authorizationUrl = $authorizationUrl;
+        $this->authorization = $authorization;
 
         $this->setName('admin:adobe-ims:info')
             ->setDescription('Information of Adobe IMS Module configuration');
@@ -68,7 +68,7 @@ class AdminAdobeImsInfoCommand extends Command
         try {
             if ($this->adminImsConfig->enabled()) {
                 $clientId = $this->adminImsConfig->getApiKey();
-                if ($this->authorizationUrl->testAuth($clientId)) {
+                if ($this->authorization->testAuth($clientId)) {
                     $clientSecret = $this->adminImsConfig->getPrivateKey() ? 'configured' : 'not configured';
                     $output->writeln(self::CLIENT_ID_NAME . ': ' . $clientId);
                     $output->writeln(self::ORGANIZATION_ID_NAME . ': ' . $this->adminImsConfig->getOrganizationId());

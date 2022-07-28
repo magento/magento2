@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\ViewModel;
 
-use Magento\AdobeImsApi\Api\GetAuthorizationUrlInterface;
+use Magento\AdobeImsApi\Api\AuthorizationInterface;
 use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -31,12 +31,12 @@ class LinkViewModel implements ArgumentInterface
     private MessageManagerInterface $messageManager;
 
     /**
-     * @param GetAuthorizationUrlInterface $authorization
+     * @param AuthorizationInterface $authorization
      * @param LoggerInterface $logger
      * @param MessageManagerInterface $messageManager
      */
     public function __construct(
-        GetAuthorizationUrlInterface $authorization,
+        AuthorizationInterface  $authorization,
         LoggerInterface $logger,
         MessageManagerInterface $messageManager
     ) {
@@ -44,7 +44,7 @@ class LinkViewModel implements ArgumentInterface
         $this->messageManager = $messageManager;
 
         try {
-            $this->authUrl = $authorization->auth();
+            $this->authUrl = $authorization->getAuthUrl();
         } catch (InvalidArgumentException $e) {
             $this->logger->error($e->getMessage());
             $this->authUrl = null;

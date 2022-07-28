@@ -10,7 +10,7 @@ namespace Magento\AdminAdobeIms\Console\Command;
 use Magento\AdminAdobeIms\Service\ImsCommandOptionService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdminAdobeIms\Service\UpdateTokensService;
-use Magento\AdobeImsApi\Api\GetAuthorizationUrlInterface;
+use Magento\AdobeImsApi\Api\AuthorizationInterface;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\Console\Cli;
@@ -68,30 +68,30 @@ class AdminAdobeImsEnableCommand extends Command
     private UpdateTokensService $updateTokensService;
 
     /**
-     * @var GetAuthorizationUrlInterface
+     * @var AuthorizationInterface
      */
-    private GetAuthorizationUrlInterface $authorizationUrl;
+    private AuthorizationInterface $authorization;
 
     /**
      * @param ImsConfig $adminImsConfig
      * @param ImsCommandOptionService $imsCommandOptionService
      * @param TypeListInterface $cacheTypeList
      * @param UpdateTokensService $updateTokensService
-     * @param GetAuthorizationUrlInterface $authorizationUrl
+     * @param AuthorizationInterface $authorization
      */
     public function __construct(
         ImsConfig $adminImsConfig,
         ImsCommandOptionService $imsCommandOptionService,
         TypeListInterface $cacheTypeList,
         UpdateTokensService $updateTokensService,
-        GetAuthorizationUrlInterface $authorizationUrl
+        AuthorizationInterface $authorization
     ) {
         parent::__construct();
         $this->adminImsConfig = $adminImsConfig;
         $this->imsCommandOptionService = $imsCommandOptionService;
         $this->cacheTypeList = $cacheTypeList;
         $this->updateTokensService = $updateTokensService;
-        $this->authorizationUrl = $authorizationUrl;
+        $this->authorization = $authorization;
 
         $this->setName('admin:adobe-ims:enable')
             ->setDescription('Enable Adobe IMS Module.')
@@ -198,7 +198,7 @@ class AdminAdobeImsEnableCommand extends Command
         string $organizationId,
         bool $isTwoFactorAuthEnabled
     ): bool {
-        $testAuth = $this->authorizationUrl->testAuth($clientId);
+        $testAuth = $this->authorization->testAuth($clientId);
         if ($testAuth) {
             $this->adminImsConfig->enableModule($clientId, $clientSecret, $organizationId, $isTwoFactorAuthEnabled);
             $this->cacheTypeList->cleanType(Config::TYPE_IDENTIFIER);

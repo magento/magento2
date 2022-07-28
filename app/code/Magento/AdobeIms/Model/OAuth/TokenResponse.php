@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdobeIms\Model\Auth;
+namespace Magento\AdobeIms\Model\OAuth;
 
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\Framework\DataObject;

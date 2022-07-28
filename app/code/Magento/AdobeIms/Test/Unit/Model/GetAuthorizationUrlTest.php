@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Test\Unit\Model;
 
-use Magento\AdobeIms\Model\GetAuthorizationUrl;
+use Magento\AdobeIms\Model\Authorization;
 use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\HTTP\Client\Curl;
@@ -32,7 +32,7 @@ class GetAuthorizationUrlTest extends TestCase
     private $curlFactory;
 
     /**
-     * @var GetAuthorizationUrl
+     * @var Authorization
      */
     private $authorizationUrl;
 
@@ -47,7 +47,7 @@ class GetAuthorizationUrlTest extends TestCase
         $this->curlFactory = $this->createMock(CurlFactory::class);
 
         $this->authorizationUrl = $objectManagerHelper->getObject(
-            GetAuthorizationUrl::class,
+            Authorization::class,
             [
                 'curlFactory' => $this->curlFactory,
                 'imsConfig' => $imsConfigMock
@@ -68,7 +68,7 @@ class GetAuthorizationUrlTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Could not get a valid response from Adobe IMS Service.');
-        $this->authorizationUrl->auth();
+        $this->authorizationUrl->getAuthUrl();
     }
 
     public function testAuthThrowsExceptionWhenResponseContainsError(): void
@@ -84,6 +84,6 @@ class GetAuthorizationUrlTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Could not connect to Adobe IMS Service: invalid_scope.');
-        $this->authorizationUrl->auth();
+        $this->authorizationUrl->getAuthUrl();
     }
 }

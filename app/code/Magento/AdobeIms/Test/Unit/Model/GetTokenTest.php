@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Unit\Model;
 
 use Magento\AdobeIms\Model\GetToken;
-use Magento\AdobeIms\Model\Auth\TokenResponse;
+use Magento\AdobeIms\Model\OAuth\TokenResponse;
 use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterfaceFactory;
 use Magento\Framework\HTTP\Client\Curl;
