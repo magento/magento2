@@ -437,7 +437,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
             $formattedCurrency = preg_replace('/(&nbsp;|&nbsp|\xc2\xa0)*/iu', '', $formattedCurrency);
 
             if (!array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)) {
-                // remove non-breaking space from intl supported custom currency symbols in formatted currency
+                // remove non-breaking space when `display` is not set explicitly
                 $formattedCurrency = str_replace(' ', '', $formattedCurrency);
             }
         }
