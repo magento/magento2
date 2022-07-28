@@ -10,6 +10,7 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Modifier;
 use Magento\Framework\Currency;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\CurrencyInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
@@ -37,11 +38,13 @@ class PriceAttributes implements ModifierInterface
     /**
      * PriceAttributes constructor.
      *
+     * @param ContextInterface $context
      * @param StoreManagerInterface $storeManager
      * @param CurrencyInterface $localeCurrency
      * @param array $priceAttributeList
      */
     public function __construct(
+        ContextInterface $context,
         StoreManagerInterface $storeManager,
         CurrencyInterface $localeCurrency,
         array $priceAttributeList = []
@@ -49,6 +52,7 @@ class PriceAttributes implements ModifierInterface
         $this->storeManager = $storeManager;
         $this->localeCurrency = $localeCurrency;
         $this->priceAttributeList = $priceAttributeList;
+        $this->context = $context;
     }
 
     /**
@@ -63,7 +67,11 @@ class PriceAttributes implements ModifierInterface
         foreach ($data['items'] as &$item) {
             foreach ($this->priceAttributeList as $priceAttribute) {
                 if (isset($item[$priceAttribute])) {
-                    $item[$priceAttribute] = $this->getCurrency()->toCurrency(sprintf("%f", $item[$priceAttribute]));
+                    $store = $this->storeManager->getStore(
+                        $this->context->getFilterParam('store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
+                    );
+                    $currency = $this->localeCurrency->getCurrency($store->getBaseCurrencyCode());
+                    $item[$priceAttribute] = $currency->toCurrency(sprintf("%f", $item[$priceAttribute]));
                 }
             }
         }
