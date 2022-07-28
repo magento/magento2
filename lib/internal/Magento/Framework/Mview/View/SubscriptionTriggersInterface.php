@@ -12,7 +12,7 @@ use Magento\Framework\DB\Ddl\Trigger;
 /**
  * Extended Interface of \Magento\Framework\Mview\View\SubscriptionInterface
  */
-interface SubscriptionExtendedInterface extends SubscriptionInterface
+interface SubscriptionTriggersInterface
 {
     /**
      * Get all triggers for the subscription

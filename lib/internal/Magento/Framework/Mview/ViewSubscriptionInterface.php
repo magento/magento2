@@ -10,7 +10,7 @@ namespace Magento\Framework\Mview;
 /**
  * Extended Interface of \Magento\Framework\Mview\ViewInterface
  */
-interface ViewExtendedInterface extends ViewInterface
+interface ViewSubscriptionInterface
 {
     /**
      * Initializes Subscription instance

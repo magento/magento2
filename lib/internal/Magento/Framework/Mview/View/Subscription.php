@@ -20,7 +20,7 @@ use Magento\Framework\Mview\ViewInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Subscription implements SubscriptionExtendedInterface
+class Subscription implements SubscriptionInterface, SubscriptionTriggersInterface
 {
     /**
      * Database connection
