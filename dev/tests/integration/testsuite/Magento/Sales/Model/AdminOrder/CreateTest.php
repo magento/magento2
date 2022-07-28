@@ -17,8 +17,10 @@ use Magento\Sales\Api\Data\OrderAddressExtensionInterface;
 use Magento\Sales\Api\Data\OrderAddressExtensionInterfaceFactory;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\AdminOrder\EmailSender;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,6 +40,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     private $messageManager;
 
     /**
+     * @var EmailSender|MockObject
+     */
+    private $emailSenderMock;
+
+    /**
      * @var ObjectManager
      */
     private $objectManager;
@@ -46,7 +53,13 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->messageManager = $this->objectManager->get(ManagerInterface::class);
-        $this->model =$this->objectManager->create(Create::class, ['messageManager' => $this->messageManager]);
+        $this->emailSenderMock = $this->getMockBuilder(EmailSender::class)
+        ->disableOriginalConstructor()
+        ->getMock();
+        $this->model =$this->objectManager->create(
+            Create::class,
+            ['messageManager' => $this->messageManager, 'emailSender' => $this->emailSenderMock]
+        );
     }
 
     /**
@@ -599,8 +612,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
+     * @dataProvider emailCheckProvider
+     * @param bool $sendConfirmation
+     * @param bool $emailSent
      */
-    public function testCreateOrderExistingCustomer()
+    public function testCreateOrderExistingCustomer($sendConfirmation, $emailSent)
     {
         $productIdFromFixture = 1;
         $customerIdFromFixture = 1;
@@ -613,7 +629,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             'billing_address' => array_merge($this->getValidAddressData(), ['save_in_address_book' => '1']),
             'shipping_method' => $shippingMethod,
             'comment' => ['customer_note' => ''],
-            'send_confirmation' => false,
+            'send_confirmation' => $sendConfirmation,
         ];
         $paymentData = ['method' => $paymentMethod];
 
@@ -628,10 +644,30 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             $customerIdFromFixture
         );
         $customerMock = $this->getMockedCustomer();
+        if ($customerIdFromFixture && !$emailSent) {
+            $this->emailSenderMock->expects($this->once())
+                ->method('send')
+                ->willReturn(true);
+        } else {
+            $this->emailSenderMock->expects($this->never())->method('send');
+        }
 
         $this->model->getQuote()->setCustomer($customerMock);
         $order = $this->model->createOrder();
         $this->verifyCreatedOrder($order, $shippingMethod);
+    }
+
+    /**
+     * Data provider for testApplySelectionOnTargetProvider.
+     *
+     * @return array
+     */
+    public function emailCheckProvider(): array
+    {
+        return [
+            [false, true],
+            [true, false]
+        ];
     }
 
     /**
