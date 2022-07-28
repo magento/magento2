@@ -28,6 +28,7 @@ use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\Store\Test\Fixture\Website as WebsiteFixture;
 use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -35,7 +36,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 /**
  * GraphQl tests for @see \Magento\SalesGraphQl\Model\Resolver\CustomerOrders.
  */
-class GetCustomerOrdersTest extends GraphQlAbstract
+class CustomerOrdersTest extends GraphQlAbstract
 {
     /**
      * @var CustomerTokenServiceInterface
@@ -63,7 +64,13 @@ class GetCustomerOrdersTest extends GraphQlAbstract
     private $objectManager;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheridoc
+     * @throws LocalizedException
      */
     protected function setUp(): void
     {
@@ -128,10 +135,9 @@ class GetCustomerOrdersTest extends GraphQlAbstract
     ]
     public function testGetCustomerOrders()
     {
-        $fixtures = DataFixtureStorageManager::getStorage();
-        $store2 = $fixtures->get('store2');
-        $store3 = $fixtures->get('store3');
-        $customer = $fixtures->get('customer');
+        $store2 = $this->fixtures->get('store2');
+        $store3 = $this->fixtures->get('store3');
+        $customer = $this->fixtures->get('customer');
         $currentEmail = $customer->getEmail();
         $currentPassword = 'password';
 
