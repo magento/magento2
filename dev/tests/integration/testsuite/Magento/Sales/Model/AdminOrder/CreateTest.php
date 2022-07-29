@@ -826,7 +826,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     {
         /** Selectively check order data */
         $orderData = $order->getData();
-        if ($this->getSendConfirmation() && !$order->getEmailSent()) {
+        if ($this->model->getSendConfirmation() && !$order->getEmailSent()) {
             $this->emailSenderMock->expects($this->once())
                 ->method('send')
                 ->willReturn(true);
