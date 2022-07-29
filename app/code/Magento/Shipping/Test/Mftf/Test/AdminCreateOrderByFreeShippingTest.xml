@@ -67,8 +67,6 @@
 
      <!--Check and Click on Free Shipping Method-->
       <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="orderSelectFreeShippingMethod"/>
-      <!--  <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus"/>
-        <waitForPageLoad stepKey="waitForJavascriptToFinish"/> -->
 
         <!--Click *Get shipping methods and rates* and see that Free Shipping is absent-->
         <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickGetShippingMehods"/>
