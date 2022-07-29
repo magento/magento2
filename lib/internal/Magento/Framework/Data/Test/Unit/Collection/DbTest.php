@@ -581,11 +581,11 @@ class DbTest extends TestCase
 
         $objectMock = $this->getMockBuilder(DataObject::class)
             ->addMethods(['setIdFieldName'])
-            ->onlyMethods(['addData', 'getData'])
+            ->onlyMethods(['setData', 'getData'])
             ->disableOriginalConstructor()
             ->getMock();
         $objectMock->expects($this->once())
-            ->method('addData')
+            ->method('setData')
             ->with($data);
         $objectMock->expects($this->any())
             ->method('getData')

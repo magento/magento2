@@ -151,9 +151,9 @@ class CollectionTest extends TestCase
             ->with($this->selectMock, [])
             ->willReturn([$data]);
 
-        $objectMock = $this->createPartialMock(DataObject::class, ['addData']);
+        $objectMock = $this->createPartialMock(DataObject::class, ['setData']);
         $objectMock->expects($this->once())
-            ->method('addData')
+            ->method('setData')
             ->with($data);
         $this->entityFactoryMock->expects($this->once())
             ->method('create')
