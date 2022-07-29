@@ -227,20 +227,13 @@ class CurrencyTest extends TestCase
             ],
             ['en_US', 'USD', ' 9999', ['display' => Currency::NO_SYMBOL], '9,999.00'],
             ['en_US', 'USD', '9999', ['precision' => 1], '$9,999.0'],
-            ['en_US', 'USD', '9999', ['precision' => 2, 'symbol' => '#'], '#9,999.00'],
+            ['en_US', 'USD', '9999', ['precision' => 2, 'symbol' => '#'], '# 9,999.00'],
             [
                 'en_US',
                 'USD',
                 '9999.99',
                 ['precision' => 2, 'symbol' => '#', 'display' => Currency::NO_SYMBOL],
                 '9,999.99'
-            ],
-            [
-                'en_US',
-                'IDR',
-                '9999',
-                ['display' => Currency::USE_SYMBOL, 'precision' => 2, 'symbol' => 'IDRx&nbsp;NBSP'],
-                'IDRxNBSP 9,999.00'
             ],
         ];
     }
