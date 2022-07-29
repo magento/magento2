@@ -32,11 +32,14 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProduct">
                 <argument name="sku" value="{{BundleProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
         <!--Go to bundle product creation page-->
-        <actionGroup ref="AdminOpenCreateBundleProductPageActionGroup" stepKey="goToBundleProductCreationPage"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage">
+            <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+            <argument name="productType" value="{{BundleProduct.type}}"/>
+        </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
 
         <!--Categories-->
@@ -72,7 +75,7 @@
             <argument name="productIndex" value="1"/>
             <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
         </actionGroup>
-        
+
         <actionGroup ref="AncillaryPrepBundleProductActionGroup" stepKey="createBundledProductForTwoSimpleProducts"/>
 
         <!--Save the product-->

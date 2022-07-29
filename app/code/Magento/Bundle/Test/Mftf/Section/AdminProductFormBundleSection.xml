@@ -111,5 +111,7 @@
         <element name="selectCategory" type="multiselect" selector="//div[@class='action-menu _active']//label[@class='admin__action-multiselect-label']" timeout="30"/>
         <element name="categoriesLabel" type="text" selector="//div[@class='action-menu _active']//button[@data-action='close-advanced-select']"/>
         <element name="userDefinedQuantity" type="checkbox" selector="[name='bundle_options[bundle_options][{{option}}][bundle_selections][{{product}}][selection_can_change_qty]'][type='checkbox']" parameterized="true"/>
+        <element name="bundleItemsOptionTableRows" type="button" selector=".admin__dynamic-rows[data-index='bundle_selections'] tr.data-row" timeout="30"/>
+        <element name="isDefault" type="button" selector="//table[@class='admin__dynamic-rows admin__control-table']//span[contains(text(),'{{var1}}')]/../../../../..//input[@type='radio']" parameterized="true"/>
     </section>
 </sections>

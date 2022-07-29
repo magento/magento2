@@ -56,6 +56,9 @@
         <after>
             <!-- Delete FPT attribute -->
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!-- Return Tax configuration including FPT to default status -->
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
             <createData entity="WeeeConfigDisable" stepKey="useSystemValueFTP"/>
@@ -93,7 +96,10 @@
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="clickCheckMoneyOrderPayment"/>
 
         <!-- Open summary section for product -->
-        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="clickItemInCart"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsClickable"/>
+        <waitForElementNotVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" stepKey="waitForCartItemsActive"/>
+        <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="clickItemInCart"/>
+        <waitForPageLoad stepKey="waitForCartItemLoaded"/>
         <grabTextFrom selector="{{StorefrontCheckoutCartItemWeeeSection.productWeeeSubtotalIncludingTax}}" stepKey="grabProductSubtotalWithFPT"/>
         <grabTextFrom selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="grabCartSubtotal"/>
 

@@ -23,6 +23,7 @@ use Magento\Framework\Url\EncoderInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
+use Magento\TestFramework\Fixture\Cache;
 use Magento\TestFramework\Request;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
@@ -286,9 +287,11 @@ class ViewTest extends AbstractController
      * Test that 404 page has product tag if product is not visible
      *
      * @magentoDataFixture Magento/Quote/_files/is_not_salable_product.php
-     * @magentoCache full_page enabled
      * @return void
      */
+    #[
+        Cache('full_page', true)
+    ]
     public function test404NotFoundPageCacheTags(): void
     {
         $cache = $this->_objectManager->get(Manager::class);
