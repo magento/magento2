@@ -644,6 +644,13 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $this->model->getQuote()->setCustomer($customerMock);
         $order = $this->model->createOrder();
+        if ($this->model->getSendConfirmation() && !$order->getEmailSent()) {
+            $this->emailSenderMock->expects($this->once())
+                ->method('send')
+                ->willReturn(true);
+        } else {
+            $this->emailSenderMock->expects($this->never())->method('send');
+        }
         $this->verifyCreatedOrder($order, $shippingMethod);
     }
 
@@ -826,13 +833,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     {
         /** Selectively check order data */
         $orderData = $order->getData();
-        if ($this->model->getSendConfirmation() && !$order->getEmailSent()) {
-            $this->emailSenderMock->expects($this->once())
-                ->method('send')
-                ->willReturn(true);
-        } else {
-            $this->emailSenderMock->expects($this->never())->method('send');
-        }
         self::assertNotEmpty($orderData['increment_id'], 'Order increment ID is empty.');
         self::assertEquals($this->model->getQuote()->getId(), $orderData['quote_id'], 'Quote ID is invalid.');
         self::assertEquals(
