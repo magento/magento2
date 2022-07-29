@@ -84,7 +84,6 @@
         <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
 
         <!-- Check Ship to Multiple Address Page is opened-->
-        <!-- <seeLink stepKey="assertLinkToShoppingCart" url="{{_ENV.MAGENTO_BASE_URL}}/multishipping/checkout/addresses" userInput="checkout/addresses"/> -->
         <wait time="10" stepKey="10"/>
         <seeInCurrentUrl url="{{MultishippingCheckoutAddressesPage.url}}" stepKey="seeShiptoMultipleAddressesPageIsOpened"/>
 
