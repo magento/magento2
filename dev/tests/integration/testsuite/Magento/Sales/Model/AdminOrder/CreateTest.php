@@ -54,8 +54,8 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->messageManager = $this->objectManager->get(ManagerInterface::class);
         $this->emailSenderMock = $this->getMockBuilder(EmailSender::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model =$this->objectManager->create(
             Create::class,
             ['messageManager' => $this->messageManager, 'emailSender' => $this->emailSenderMock]
@@ -612,11 +612,8 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @dataProvider emailCheckProvider
-     * @param bool $sendConfirmation
-     * @param bool $emailSent
      */
-    public function testCreateOrderExistingCustomer($sendConfirmation, $emailSent)
+    public function testCreateOrderExistingCustomer()
     {
         $productIdFromFixture = 1;
         $customerIdFromFixture = 1;
@@ -629,8 +626,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             'billing_address' => array_merge($this->getValidAddressData(), ['save_in_address_book' => '1']),
             'shipping_method' => $shippingMethod,
             'comment' => ['customer_note' => ''],
-            'send_confirmation' => $sendConfirmation,
-            'email_sent' => $emailSent,
+            'send_confirmation' => false,
         ];
         $paymentData = ['method' => $paymentMethod];
 
@@ -645,30 +641,10 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             $customerIdFromFixture
         );
         $customerMock = $this->getMockedCustomer();
-        if ($customerIdFromFixture && !$emailSent) {
-            $this->emailSenderMock->expects($this->once())
-                ->method('send')
-                ->willReturn(true);
-        } else {
-            $this->emailSenderMock->expects($this->never())->method('send');
-        }
 
         $this->model->getQuote()->setCustomer($customerMock);
         $order = $this->model->createOrder();
         $this->verifyCreatedOrder($order, $shippingMethod);
-    }
-
-    /**
-     * Data provider for testApplySelectionOnTargetProvider.
-     *
-     * @return array
-     */
-    public function emailCheckProvider(): array
-    {
-        return [
-            [false, true],
-            [true, false]
-        ];
     }
 
     /**
@@ -850,6 +826,13 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     {
         /** Selectively check order data */
         $orderData = $order->getData();
+        if (!$order->getEmailSent()) {
+            $this->emailSenderMock->expects($this->once())
+                ->method('send')
+                ->willReturn(true);
+        } else {
+            $this->emailSenderMock->expects($this->never())->method('send');
+        }
         self::assertNotEmpty($orderData['increment_id'], 'Order increment ID is empty.');
         self::assertEquals($this->model->getQuote()->getId(), $orderData['quote_id'], 'Quote ID is invalid.');
         self::assertEquals(
