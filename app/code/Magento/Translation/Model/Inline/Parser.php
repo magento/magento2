@@ -424,7 +424,7 @@ class Parser implements ParserInterface
                 [
                     'shown' => htmlspecialchars_decode($matches[1][0]),
                     'translated' => htmlspecialchars_decode($matches[2][0]),
-                    'original' => htmlspecialchars_decode($matches[3][0]),
+                    'original' => htmlspecialchars_decode($matches[4][0]),
                     'location' => htmlspecialchars_decode($locationCallback($matches, $options)),
                 ]
             );
@@ -691,9 +691,9 @@ class Parser implements ParserInterface
                 [
                     'shown' => $matches[1][0],
                     'translated' => $matches[2][0],
-                    'original' => $matches[3][0],
+                    'original' => $matches[4][0],
                     'location' => 'Text',
-                    'scope' => $matches[4][0],
+                    'scope' => $matches[5][0],
                 ],
                 JSON_HEX_QUOT
             );

@@ -16,7 +16,7 @@ interface ParserInterface
     /**
      * Regular Expression for detected and replace translate
      */
-    const REGEXP_TOKEN = '\{\{\{(.*?)\}\}\{\{(.*?)\}\}\{\{(.*?)\}\}\{\{(.*?)\}\}\}';
+    const REGEXP_TOKEN = '\{\{\{(.*?)\}\}\{\{(.*?)\}\}\{\{(.*?)\}\}\{\{(.*?)\}\}\{\{(.*?)\}\}\}';
 
     /**
      * Parse and save edited translation
