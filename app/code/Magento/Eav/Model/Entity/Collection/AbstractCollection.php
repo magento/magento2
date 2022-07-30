@@ -1682,7 +1682,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Wrapper for compatibility with \Magento\Framework\Data\Collection\AbstractDb
      *
-     * @param string $field
+     * @param array|string|integer|\Magento\Framework\App\Config\Element $field
      * @param string $alias
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return $this|\Magento\Framework\Data\Collection\AbstractDb

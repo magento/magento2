@@ -724,7 +724,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Get item option by code
      *
      * @param   string $code
-     * @return  \Magento\Quote\Model\Quote\Item\Option || null
+     * @return  \Magento\Quote\Model\Quote\Item\Option|null
      */
     public function getOptionByCode($code)
     {

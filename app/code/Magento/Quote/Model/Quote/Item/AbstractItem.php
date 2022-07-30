@@ -202,7 +202,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Get parent item
      *
-     * @return Item
+     * @return Item|null
      */
     public function getParentItem()
     {

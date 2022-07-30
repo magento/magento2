@@ -245,7 +245,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Retrieve parent block
      *
-     * @return \Magento\Framework\View\Element\AbstractBlock|bool
+     * @return \Magento\Framework\View\Element\AbstractBlock|false
      */
     public function getParentBlock()
     {
@@ -471,7 +471,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Retrieve child block by name
      *
      * @param string $alias
-     * @return \Magento\Framework\View\Element\AbstractBlock|bool
+     * @return \Magento\Framework\View\Element\AbstractBlock|false
      */
     public function getChildBlock($alias)
     {
@@ -569,7 +569,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string|int|null $siblingName
      * @param bool $after
      * @param string $alias
-     * @return $this|bool
+     * @return $this|false
      */
     public function insert($element, $siblingName = 0, $after = true, $alias = '')
     {
@@ -1063,7 +1063,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Get block cache life time
      *
-     * @return int|bool|null
+     * @return int|null
      */
     protected function getCacheLifetime()
     {
