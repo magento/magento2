@@ -34,7 +34,8 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-           <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+      <!--     <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+      -->
         </after>
 
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdown"/>
