@@ -488,6 +488,7 @@ define([
 
                 this.selected(newSelections);
             }
+            this.onFilter();
         },
 
         /**
@@ -497,6 +498,7 @@ define([
             if (!this.preserveSelectionsOnFilter) {
                 this.deselectAll();
             }
+            this.updateState();
         },
 
         /**
