@@ -6,6 +6,7 @@
 namespace Magento\Checkout\Model;
 
 use Magento\Checkout\Api\Data\TotalsInformationInterface;
+use Magento\Sales\Model\Order;
 
 /**
  * Class for management of totals information.
@@ -54,7 +55,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
             $quote->setShippingAddress($addressInformation->getAddress());
             if ($addressInformation->getShippingCarrierCode() && $addressInformation->getShippingMethodCode()) {
                 $shippingMethod = implode(
-                    '_',
+                    Order::DELIMITER_SHIPPING_METHOD,
                     [$addressInformation->getShippingCarrierCode(), $addressInformation->getShippingMethodCode()]
                 );
                 $quoteShippingAddress = $quote->getShippingAddress();

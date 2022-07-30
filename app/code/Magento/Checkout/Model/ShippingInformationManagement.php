@@ -27,6 +27,7 @@ use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Quote\Model\ShippingAssignmentFactory;
 use Magento\Quote\Model\ShippingFactory;
+use Magento\Sales\Model\Order;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -184,7 +185,7 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
             $carrierCode = $addressInformation->getShippingCarrierCode();
             $address->setLimitCarrier($carrierCode);
             $methodCode = $addressInformation->getShippingMethodCode();
-            $quote = $this->prepareShippingAssignment($quote, $address, $carrierCode . '_' . $methodCode);
+            $quote = $this->prepareShippingAssignment($quote, $address, $carrierCode . Order::DELIMITER_SHIPPING_METHOD . $methodCode);
 
             $quote->setIsMultiShipping(false);
 

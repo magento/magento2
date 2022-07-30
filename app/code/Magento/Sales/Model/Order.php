@@ -118,6 +118,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public const REPORT_DATE_TYPE_CREATED = 'created';
 
     public const REPORT_DATE_TYPE_UPDATED = 'updated';
+    
+    /**
+     * Delimiters
+     */
+    public const DELIMITER_SHIPPING_METHOD = '::';
 
     /**
      * @var string
@@ -1372,7 +1377,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         if (!$asObject || !$shippingMethod) {
             return $shippingMethod;
         } else {
-            list($carrierCode, $method) = explode('_', $shippingMethod, 2);
+            list($carrierCode, $method) = preg_split("/".self::DELIMITER_SHIPPING_METHOD."/", $shippingMethod, 2);
             return new \Magento\Framework\DataObject(['carrier_code' => $carrierCode, 'method' => $method]);
         }
     }

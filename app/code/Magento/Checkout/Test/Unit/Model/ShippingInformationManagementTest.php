@@ -31,6 +31,7 @@ use Magento\Quote\Model\Shipping;
 use Magento\Quote\Model\ShippingAssignment;
 use Magento\Quote\Model\ShippingAssignmentFactory;
 use Magento\Quote\Model\ShippingFactory;
+use Magento\Sales\Model\Order;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
@@ -359,7 +360,7 @@ class ShippingInformationManagementTest extends TestCase
             ->method('getCountryId')
             ->willReturn('USA');
 
-        $this->setShippingAssignmentsMocks($carrierCode . '_' . $shippingMethod);
+        $this->setShippingAssignmentsMocks($carrierCode . Order::DELIMITER_SHIPPING_METHOD . $shippingMethod);
 
         $this->quoteMock->expects($this->once())
             ->method('getItemsCount')
@@ -425,7 +426,7 @@ class ShippingInformationManagementTest extends TestCase
             ->method('getCountryId')
             ->willReturn('USA');
 
-        $this->setShippingAssignmentsMocks($carrierCode . '_' . $shippingMethod);
+        $this->setShippingAssignmentsMocks($carrierCode . Order::DELIMITER_SHIPPING_METHOD . $shippingMethod);
 
         $this->quoteMock->expects($this->once())
             ->method('getItemsCount')
@@ -488,7 +489,7 @@ class ShippingInformationManagementTest extends TestCase
             ->method('getCountryId')
             ->willReturn('USA');
 
-        $this->setShippingAssignmentsMocks($carrierCode . '_' . $shippingMethod);
+        $this->setShippingAssignmentsMocks($carrierCode . Order::DELIMITER_SHIPPING_METHOD . $shippingMethod);
 
         $this->quoteMock->expects($this->once())
             ->method('getItemsCount')
@@ -563,7 +564,7 @@ class ShippingInformationManagementTest extends TestCase
             ->method('getCountryId')
             ->willReturn('USA');
 
-        $this->setShippingAssignmentsMocks($carrierCode . '_' . $shippingMethod);
+        $this->setShippingAssignmentsMocks($carrierCode . Order::DELIMITER_SHIPPING_METHOD . $shippingMethod);
 
         $this->quoteMock->expects($this->once())
             ->method('getItemsCount')

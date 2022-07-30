@@ -25,6 +25,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
+use Magento\Sales\Model\Order;
 
 /**
  * Shipping method read service
@@ -224,7 +225,7 @@ class ShippingMethodManagement implements
             $this->quoteAddressResource->delete($shippingAddress);
             throw new StateException(__('The shipping address is missing. Set the address and try again.'));
         }
-        $shippingMethod = $carrierCode . '_' . $methodCode;
+        $shippingMethod = $carrierCode . Order::DELIMITER_SHIPPING_METHOD . $methodCode;
         $shippingAddress->setShippingMethod($shippingMethod);
         $shippingAssignments = $quote->getExtensionAttributes()->getShippingAssignments();
         if (!empty($shippingAssignments)) {

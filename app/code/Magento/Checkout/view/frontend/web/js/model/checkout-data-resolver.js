@@ -137,7 +137,7 @@ define([
 
             if (!availableRate && selectedShippingRate) {
                 availableRate = _.find(ratesData, function (rate) {
-                    return rate['carrier_code'] + '_' + rate['method_code'] === selectedShippingRate;
+                    return rate['carrier_code'] + '::' + rate['method_code'] === selectedShippingRate;
                 });
             }
 

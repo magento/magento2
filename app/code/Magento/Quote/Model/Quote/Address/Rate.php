@@ -6,6 +6,7 @@
 namespace Magento\Quote\Model\Quote\Address;
 
 use Magento\Framework\Model\AbstractModel;
+use Magento\Sales\Model\Order;
 
 /**
  * @api
@@ -98,7 +99,7 @@ class Rate extends AbstractModel
             );
         } elseif ($rate instanceof \Magento\Quote\Model\Quote\Address\RateResult\Method) {
             $this->setCode(
-                $rate->getCarrier() . '_' . $rate->getMethod()
+                $rate->getCarrier() . Order::DELIMITER_SHIPPING_METHOD . $rate->getMethod()
             )->setCarrier(
                 $rate->getCarrier()
             )->setCarrierTitle(

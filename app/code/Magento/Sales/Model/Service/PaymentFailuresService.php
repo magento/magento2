@@ -16,6 +16,7 @@ use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface as Quote;
 use Magento\Sales\Api\PaymentFailuresInterface;
+use Magento\Sales\Model\Order;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
@@ -215,7 +216,7 @@ class PaymentFailuresService implements PaymentFailuresInterface
         $shippingInfo = $quote->getShippingAddress()->getShippingMethod();
 
         if ($shippingInfo) {
-            $data = explode('_', $shippingInfo);
+            $data = preg_split("/".Order::DELIMITER_SHIPPING_METHOD."/", $shippingInfo);
             $shippingMethod = $data[0];
         }
 

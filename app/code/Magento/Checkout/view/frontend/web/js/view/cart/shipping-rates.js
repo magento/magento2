@@ -25,7 +25,7 @@ define([
         shippingRateGroups: ko.observableArray([]),
         selectedShippingMethod: ko.computed(function () {
             return quote.shippingMethod() ?
-                quote.shippingMethod()['carrier_code'] + '_' + quote.shippingMethod()['method_code'] :
+                quote.shippingMethod()['carrier_code'] + '::' + quote.shippingMethod()['method_code'] :
                 null;
         }),
 
@@ -76,7 +76,7 @@ define([
          */
         selectShippingMethod: function (methodData) {
             selectShippingMethodAction(methodData);
-            checkoutData.setSelectedShippingRate(methodData['carrier_code'] + '_' + methodData['method_code']);
+            checkoutData.setSelectedShippingRate(methodData['carrier_code'] + '::' + methodData['method_code']);
 
             return true;
         }
