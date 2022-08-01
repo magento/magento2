@@ -103,6 +103,6 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
      */
     public function getTemporaryDirectory()
     {
-        return $this->mediaDirectory->getRelativePath('/theme/origin');
+        return $this->mediaDirectory->getAbsolutePath('theme/origin');
     }
 }

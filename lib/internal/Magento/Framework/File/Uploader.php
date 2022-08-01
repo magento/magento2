@@ -491,7 +491,7 @@ class Uploader
      */
     public static function getCorrectFileName($fileName)
     {
-        $fileName = preg_replace('/[^a-z0-9_\\-\\.]+/i', '_', $fileName);
+        $fileName = preg_replace('/[^a-z0-9_\\-\\.]+/i', '_', ltrim($fileName, '.'));
         $fileInfo = pathinfo($fileName);
         $fileInfo['extension'] = $fileInfo['extension'] ?? '';
 
@@ -640,6 +640,11 @@ class Uploader
      */
     public function checkAllowedExtension($extension)
     {
+        //File extensions should only be allowed to contain alphanumeric characters
+        if (preg_match('/[^a-z0-9]/i', $extension)) {
+            return false;
+        }
+
         if (!is_array($this->_allowedExtensions) || empty($this->_allowedExtensions)) {
             return true;
         }
@@ -806,7 +811,8 @@ class Uploader
         $fileInfo = pathinfo($destinationFile);
         $index = 1;
         while ($fileExists($fileInfo['dirname'] . '/' . $fileInfo['basename'])) {
-            $fileInfo['basename'] = $fileInfo['filename'] . '_' . $index++ . '.' . $fileInfo['extension'];
+            $fileInfo['basename'] = $fileInfo['filename'] . '_' . ($index++);
+            $fileInfo['basename'] .= isset($fileInfo['extension']) ? '.' . $fileInfo['extension'] : '';
         }
 
         return $fileInfo['basename'];

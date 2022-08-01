@@ -65,6 +65,7 @@
         </actionGroup>
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
         <actionGroup ref="AdminAssertMediaGalleryButtonNotDisabledOnPageActionGroup" stepKey="assertCreateButtonEnabledAllOthersDisabled">
             <argument name="buttonName" value="Create Folder"/>
         </actionGroup>

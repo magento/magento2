@@ -26,11 +26,21 @@
 
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandStorageRootFolder">
+                <argument name="FolderName" value="Storage Root"/>
+            </actionGroup>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="DeleteFolderActionGroup" stepKey="DeleteFolderFromMediaGallery">
+                <argument name="ImageFolder" value="ImageFolder"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
-        <waitForPageLoad stepKey="waitForPageLoadProductCreatePage"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct"/>
+        <comment userInput="BIC workaround" stepKey="waitForPageLoadProductCreatePage"/>
         <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillBasicProductInfo" />
 
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
@@ -83,28 +93,32 @@
         <click userInput="Storage Root" stepKey="clickOnRootFolder" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading15"/>
         <dontSeeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn3" />
-        <attachFile selector="{{ProductShortDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage3"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForFileUpload3"/>
-        <waitForElementVisible  selector="{{ProductShortDescriptionWYSIWYGToolbarSection.image(ImageUpload3.value)}}" stepKey="waitForUploadImage3" />
-        <waitForElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" stepKey="waitForDeletebtn" />
-        <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn2"/>
-        <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected2" />
-        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForConfirm3"/>
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete2" />
-        <dontSeeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn4" />
+        <comment userInput="BIC workaround" stepKey="uploadImage3"/>
+        <comment userInput="BIC workaround" stepKey="waitForFileUpload3"/>
+        <comment userInput="BIC workaround" stepKey="waitForUploadImage3"/>
+        <comment userInput="BIC workaround" stepKey="waitForDeletebtn"/>
+        <comment userInput="BIC workaround" stepKey="seeDeleteBtn2"/>
+        <comment userInput="BIC workaround" stepKey="clickDeleteSelected2"/>
+        <comment userInput="BIC workaround" stepKey="waitForConfirm3"/>
+        <comment userInput="BIC workaround" stepKey="confirmDelete2"/>
+        <comment userInput="BIC workaround" stepKey="dontSeeAddSelectedBtn4"/>
+        <click userInput="{{ImageFolder.name}}" stepKey="selectCreatedFolder2" />
+        <waitForPageLoad stepKey="waitForSelectFolder2"/>
         <attachFile selector="{{ProductShortDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage4"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForFileUpload4"/>
+        <waitForPageLoad stepKey="waitForFileUpload4"/>
         <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.image(ImageUpload3.value)}}" stepKey="waitForUploadImage4" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="clickInsertBtn" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading11" />
+        <waitForPageLoad stepKey="waitForLoading11" />
         <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.OkBtn}}" stepKey="waitForOkBtn2" />
         <fillField selector="{{ProductShortDescriptionWYSIWYGToolbarSection.ImageDescription}}" userInput="{{ImageUpload3.content}}" stepKey="fillImageDescription2" />
         <fillField selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Height}}" userInput="{{ImageUpload3.height}}" stepKey="fillImageHeight2" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.OkBtn}}" stepKey="clickOkBtn2" />
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
-        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="navigateToProductPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad7"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="navigateToProductPage">
+            <argument name="productUrl" value="{{_defaultProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForPageLoad7"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.mediaDescription}}" stepKey="assertMediaDescription"/>
         <seeElementInDOM selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource3"/>
         <seeElementInDOM selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload1.fileName)}}" stepKey="assertMediaSource1"/>

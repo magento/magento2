@@ -1,19 +1,20 @@
 {
     "name": "magento/module-jwt-framework-adapter",
     "description": "JWT Manager implementation based on jwt-framework",
-    "config": {
-        "sort-packages": true
-    },
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "web-token/jwt-framework": "^v2.2.7"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.4.0",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "103.0.*",
+        "web-token/jwt-framework": "^v2.2.7"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -23,3 +24,4 @@
         }
     }
 }
+

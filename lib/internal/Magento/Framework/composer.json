@@ -9,6 +9,7 @@
     "config": {
         "sort-packages": true
     },
+    "version": "103.0.3-p3",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "ext-bcmath": "*",
@@ -55,11 +56,12 @@
         "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"
     },
     "autoload": {
-        "psr-4": {
-            "Magento\\Framework\\": ""
-        },
         "files": [
             "registration.php"
-        ]
+        ],
+        "psr-4": {
+            "Magento\\Framework\\": ""
+        }
     }
 }
+

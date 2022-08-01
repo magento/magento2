@@ -125,19 +125,19 @@
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteFileIfExists" stepKey="deleteLocalImage1">
             <argument name="filePath">pub/media/catalog/product/{$firstCharacterImage1FileName}/{$secondCharacterImage1FileName}/$createProductImage1.entry[content][name]$</argument>
         </helper>
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertPathDoesNotExist" stepKey="assertLocalImage1IsDeleted">
-            <argument name="path">pub/media/catalog/product/{$firstCharacterImage1FileName}/{$secondCharacterImage1FileName}/$createProductImage1.entry[content][name]$</argument>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileDoesNotExist" stepKey="assertLocalImage1IsDeleted">
+            <argument name="filePath">pub/media/catalog/product/{$firstCharacterImage1FileName}/{$secondCharacterImage1FileName}/$createProductImage1.entry[content][name]$</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteFileIfExists" stepKey="deleteLocalImage2">
             <argument name="filePath">pub/media/catalog/product/{$firstCharacterImage2FileName}/{$secondCharacterImage2FileName}/$createProductImage2.entry[content][name]$</argument>
         </helper>
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertPathDoesNotExist" stepKey="assertLocalImage2IsDeleted">
-            <argument name="path">pub/media/catalog/product/{$firstCharacterImage2FileName}/{$secondCharacterImage2FileName}/$createProductImage2.entry[content][name]$</argument>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileDoesNotExist" stepKey="assertLocalImage2IsDeleted">
+            <argument name="filePath">pub/media/catalog/product/{$firstCharacterImage2FileName}/{$secondCharacterImage2FileName}/$createProductImage2.entry[content][name]$</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteLocalCacheDirectory">
             <argument name="path">pub/media/catalog/product/cache/</argument>
         </helper>
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertPathDoesNotExist" stepKey="assertLocalCacheDirectoryDeleted">
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertDirectoryDoesNotExist" stepKey="assertLocalCacheDirectoryDeleted">
             <argument name="path">pub/media/catalog/product/cache/</argument>
         </helper>
 
@@ -152,13 +152,13 @@
         </actionGroup>
 
         <!-- Assert Local File System Images & Cached Images Are Still Non-Existent -->
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertPathDoesNotExist" stepKey="assertLocalImage1IsDeleted2">
-            <argument name="path">pub/media/catalog/product/{$firstCharacterImage1FileName}/{$secondCharacterImage1FileName}/$createProductImage1.entry[content][name]$</argument>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileDoesNotExist" stepKey="assertLocalImage1IsDeleted2">
+            <argument name="filePath">pub/media/catalog/product/{$firstCharacterImage1FileName}/{$secondCharacterImage1FileName}/$createProductImage1.entry[content][name]$</argument>
         </helper>
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertPathDoesNotExist" stepKey="assertLocalImage2IsDeleted2">
-            <argument name="path">pub/media/catalog/product/{$firstCharacterImage2FileName}/{$secondCharacterImage2FileName}/$createProductImage2.entry[content][name]$</argument>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileDoesNotExist" stepKey="assertLocalImage2IsDeleted2">
+            <argument name="filePath">pub/media/catalog/product/{$firstCharacterImage2FileName}/{$secondCharacterImage2FileName}/$createProductImage2.entry[content][name]$</argument>
         </helper>
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertPathDoesNotExist" stepKey="assertLocalCacheDirectoryDeleted2">
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertDirectoryDoesNotExist" stepKey="assertLocalCacheDirectoryDeleted2">
             <argument name="path">pub/media/catalog/product/cache/</argument>
         </helper>
 
@@ -175,13 +175,13 @@
         <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertDirectoryNotEmpty" stepKey="assertS3CacheDirectoryNotEmpty2">
             <argument name="path">media/catalog/product/cache/</argument>
         </helper>
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertPathDoesNotExist" stepKey="assertLocalImage1IsDeleted3">
-            <argument name="path">pub/media/catalog/product/{$firstCharacterImage1FileName}/{$secondCharacterImage1FileName}/$createProductImage1.entry[content][name]$</argument>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileDoesNotExist" stepKey="assertLocalImage1IsDeleted3">
+            <argument name="filePath">pub/media/catalog/product/{$firstCharacterImage1FileName}/{$secondCharacterImage1FileName}/$createProductImage1.entry[content][name]$</argument>
         </helper>
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertPathDoesNotExist" stepKey="assertLocalImage2IsDeleted3">
-            <argument name="path">pub/media/catalog/product/{$firstCharacterImage2FileName}/{$secondCharacterImage2FileName}/$createProductImage2.entry[content][name]$</argument>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileDoesNotExist" stepKey="assertLocalImage2IsDeleted3">
+            <argument name="filePath">pub/media/catalog/product/{$firstCharacterImage2FileName}/{$secondCharacterImage2FileName}/$createProductImage2.entry[content][name]$</argument>
         </helper>
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertPathDoesNotExist" stepKey="assertLocalCacheDirectoryGone">
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertDirectoryDoesNotExist" stepKey="assertLocalCacheDirectoryGone">
             <argument name="path">pub/media/catalog/product/cache/</argument>
         </helper>
 
@@ -206,7 +206,7 @@
         <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage"/>
         <actionGroup ref="AdminGoToCacheManagementPageActionGroup" stepKey="goToCacheManagementPage3"/>
         <actionGroup ref="AdminClickFlushCatalogImagesCacheActionGroup" stepKey="clearCatalogImageCache3"/>
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertPathDoesNotExist" stepKey="assertLocalCacheDirectoryEmpty2">
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertDirectoryDoesNotExist" stepKey="assertLocalCacheDirectoryEmpty2">
             <argument name="path">pub/media/catalog/product/cache/</argument>
         </helper>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushPageCache3">

@@ -134,7 +134,8 @@ class TokenTest extends TestCase
                     'selectTokenByConsumerIdAndUserType',
                     'selectTokenByAdminId',
                     'selectTokenByCustomerId',
-                    'load'
+                    'load',
+                    'afterLoad'
                 ]
             )
             ->disableOriginalConstructor()

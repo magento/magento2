@@ -3,23 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Webapi\Controller\Soap\Request;
 
+use InvalidArgumentException;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\MetadataObjectInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Webapi\ServiceInputProcessor;
-use Magento\Framework\Webapi\Request as SoapRequest;
+use Magento\Framework\Webapi\Request as WebapiRequest;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Model\Soap\Config as SoapConfig;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Webapi\Model\ServiceMetadata;
+use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 
 /**
  * Handler of requests to SOAP server.
@@ -30,45 +35,45 @@ use Magento\Webapi\Model\ServiceMetadata;
  */
 class Handler
 {
-    const RESULT_NODE_NAME = 'result';
+    public const RESULT_NODE_NAME = 'result';
 
     /**
-     * @var \Magento\Framework\Webapi\Request
+     * @var WebapiRequest
      */
     protected $_request;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Webapi\Model\Soap\Config
+     * @var SoapConfig
      */
     protected $_apiConfig;
 
     /**
-     * @var \Magento\Framework\Webapi\Authorization
+     * @var Authorization
      */
     protected $authorization;
 
     /**
-     * @var \Magento\Framework\Api\SimpleDataObjectConverter
+     * @var SimpleDataObjectConverter
      */
     protected $_dataObjectConverter;
 
     /**
-     * @var \Magento\Framework\Webapi\ServiceInputProcessor
+     * @var ServiceInputProcessor
      */
     protected $serviceInputProcessor;
 
     /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor
+     * @var DataObjectProcessor
      */
     protected $_dataObjectProcessor;
 
     /**
-     * @var \Magento\Framework\Reflection\MethodsMap
+     * @var MethodsMap
      */
     protected $methodsMapProcessor;
 
@@ -78,10 +83,15 @@ class Handler
     private $paramsOverrider;
 
     /**
+     * @var InputArraySizeLimitValue
+     */
+    private $inputArraySizeLimitValue;
+
+    /**
      * Initialize dependencies.
      *
-     * @param SoapRequest $request
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param WebapiRequest $request
+     * @param ObjectManagerInterface $objectManager
      * @param SoapConfig $apiConfig
      * @param Authorization $authorization
      * @param SimpleDataObjectConverter $dataObjectConverter
@@ -89,17 +99,20 @@ class Handler
      * @param DataObjectProcessor $dataObjectProcessor
      * @param MethodsMap $methodsMapProcessor
      * @param ParamsOverrider|null $paramsOverrider
+     * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        SoapRequest $request,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        WebapiRequest $request,
+        ObjectManagerInterface $objectManager,
         SoapConfig $apiConfig,
         Authorization $authorization,
         SimpleDataObjectConverter $dataObjectConverter,
         ServiceInputProcessor $serviceInputProcessor,
         DataObjectProcessor $dataObjectProcessor,
         MethodsMap $methodsMapProcessor,
-        ?ParamsOverrider $paramsOverrider = null
+        ?ParamsOverrider $paramsOverrider = null,
+        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
     ) {
         $this->_request = $request;
         $this->_objectManager = $objectManager;
@@ -110,6 +123,8 @@ class Handler
         $this->_dataObjectProcessor = $dataObjectProcessor;
         $this->methodsMapProcessor = $methodsMapProcessor;
         $this->paramsOverrider = $paramsOverrider ?? ObjectManager::getInstance()->get(ParamsOverrider::class);
+        $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
+                ->get(InputArraySizeLimitValue::class);
     }
 
     /**
@@ -144,8 +159,23 @@ class Handler
         }
         $service = $this->_objectManager->get($serviceClass);
         $inputData = $this->prepareOperationInput($serviceClass, $serviceMethodInfo, $arguments);
-        $outputData = call_user_func_array([$service, $serviceMethod], $inputData);
+        $outputData = $this->runServiceMethod($service, $serviceMethod, $inputData);
+
         return $this->_prepareResponseData($outputData, $serviceClass, $serviceMethod);
+    }
+
+    /**
+     * Runs service method
+     *
+     * @param object $service
+     * @param string $serviceMethod
+     * @param array $inputData
+     * @return false|mixed
+     */
+    private function runServiceMethod($service, $serviceMethod, $inputData)
+    {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return call_user_func_array([$service, $serviceMethod], $inputData);
     }
 
     /**
@@ -156,7 +186,6 @@ class Handler
      * @param array $arguments
      * @return array
      * @throws WebapiException
-     * @throws \Magento\Framework\Exception\InputException
      */
     private function prepareOperationInput(string $serviceClass, array $methodMetadata, array $arguments): array
     {
@@ -164,6 +193,7 @@ class Handler
         $arguments = reset($arguments);
         $arguments = $this->_dataObjectConverter->convertStdObjectToArray($arguments, true);
         $arguments = $this->paramsOverrider->override($arguments, $methodMetadata[ServiceMetadata::KEY_ROUTE_PARAMS]);
+        $this->inputArraySizeLimitValue->set($methodMetadata[ServiceMetadata::KEY_INPUT_ARRAY_SIZE_LIMIT]);
 
         return $this->serviceInputProcessor->process(
             $serviceClass,
@@ -179,6 +209,7 @@ class Handler
      * @param string $serviceMethod
      * @param array $arguments
      * @return array
+     * @throws WebapiException
      * @deprecated 100.3.2
      * @see Handler::prepareOperationInput()
      */
@@ -198,11 +229,10 @@ class Handler
      * @param string $serviceClassName
      * @param string $serviceMethodName
      * @return array
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function _prepareResponseData($data, $serviceClassName, $serviceMethodName)
     {
-        /** @var string $dataType */
         $dataType = $this->methodsMapProcessor->getMethodReturnType($serviceClassName, $serviceMethodName);
         $result = null;
         if (is_object($data)) {
@@ -225,7 +255,7 @@ class Handler
         } elseif (is_scalar($data) || $data === null) {
             $result = $data;
         } else {
-            throw new \InvalidArgumentException("Service returned result in invalid format.");
+            throw new InvalidArgumentException("Service returned result in invalid format.");
         }
         return [self::RESULT_NODE_NAME => $result];
     }

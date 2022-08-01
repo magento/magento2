@@ -9,12 +9,23 @@ namespace Magento\Framework\File\Test\Unit;
 
 use Magento\Framework\File\Uploader;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Unit Test class for \Magento\Framework\File\Uploader
  */
 class UploaderTest extends TestCase
 {
+    /**
+     * @var Uploader
+     */
+    private $uploader;
+
+    protected function setUp(): void
+    {
+        $this->uploader= ObjectManager::getInstance()->get(Uploader::class);
+    }
+
     /**
      * @param string $fileName
      * @param string|bool $expectedCorrectedFileName
@@ -64,6 +75,49 @@ class UploaderTest extends TestCase
             [
                 'a.' . str_repeat('b', 89),
                 true
+            ]
+        ];
+    }
+
+    /**
+     * @param string $extension
+     * @param bool $isValid
+     *
+     * @dataProvider checkAllowedExtensionProvider
+     */
+    public function testCheckAllowedExtension(bool $isValid, string $extension)
+    {
+        $this->assertEquals(
+            $isValid,
+            $this->uploader->checkAllowedExtension($extension)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function checkAllowedExtensionProvider(): array
+    {
+        return [
+            [
+                true,
+                'jpeg'
+            ],
+            [
+                false,
+                '$#@$#@$3'
+            ],
+            [
+                true,
+                '4324324324jpeg'
+            ],
+            [
+                false,
+                '$#$#$jpeg..$#2$#@$#@$'
+            ],
+            [
+                false,
+                '../../jpeg'
             ]
         ];
     }

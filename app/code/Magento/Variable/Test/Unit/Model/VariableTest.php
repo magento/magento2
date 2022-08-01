@@ -12,8 +12,10 @@ use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Variable\Model\ResourceModel\Variable;
 use Magento\Variable\Model\ResourceModel\Variable\Collection;
+use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Validation\ValidationException;
 
 class VariableTest extends TestCase
 {
@@ -49,6 +51,7 @@ class VariableTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->wysiwygValidator = $this->createMock(WYSIWYGValidatorInterface::class);
         $this->objectManager = new ObjectManager($this);
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
@@ -65,6 +68,7 @@ class VariableTest extends TestCase
                 'escaper' => $this->escaperMock,
                 'resource' => $this->resourceMock,
                 'resourceCollection' => $this->resourceCollectionMock,
+                'wysiwygValidator' => $this->wysiwygValidator
             ]
         );
         $this->validationFailedPhrase = __('Validation has failed.');
@@ -194,5 +198,59 @@ class VariableTest extends TestCase
             'Missing code' => ['', 'some-name'],
             'Missing name' => ['some-code', ''],
         ];
+    }
+
+    /**
+     * Test Variable validation.
+     *
+     * @param string $value
+     * @param bool $isChanged
+     * @param bool $isValidated
+     * @param bool $exceptionThrown
+     * @dataProvider getWysiwygValidationCases
+     */
+    public function testBeforeSave(string $value,bool $isChanged,bool $isValidated, bool $exceptionThrown): void
+    {
+        $actuallyThrown = false;
+
+        if (!$isValidated) {
+            $this->wysiwygValidator->expects($this->any())
+                ->method('validate')
+                ->willThrowException(new ValidationException(__('HTML is invalid')));
+        } else {
+            $this->wysiwygValidator->expects($this->any())->method('validate');
+        }
+
+        $this->model->setData('html_value', $value);
+
+        if (!$isChanged) {
+            $this->model->setOrigData('html_value', $value);
+        } else {
+            $this->model->setOrigData('html_value', $value . '-OLD');
+        }
+
+        try {
+            $this->model->beforeSave();
+        } catch (\Throwable $exception) {
+            $actuallyThrown = true;
+        }
+
+        $this->assertEquals($exceptionThrown, $actuallyThrown);
+    }
+
+    /**
+     * Validation cases.
+     *
+     * @return array
+     */
+    public function getWysiwygValidationCases(): array
+    {
+        return
+            [
+                'changed-html-value-without-exception' => ['<b>Test Html</b>',true,true,false],
+                'changed-html-value-with-exception' => ['<b>Test Html</b>',true,false,true],
+                'no-changed-html-value-without-exception' => ['<b>Test Html</b>',false,false,false],
+                'no-html-value-with-exception' => ['',true,false,false]
+            ];
     }
 }

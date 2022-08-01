@@ -49,17 +49,17 @@
         <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seePrice">
             <argument name="row" value="1"/>
             <argument name="column" value="Price"/>
-            <argument name="value" value="${{SimpleOutOfStockProduct.price}}"/>
+            <argument name="value" value="{{SimpleOutOfStockProduct.price}}"/>
         </actionGroup>
         <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeCorrectSpecialPrice">
             <argument name="row" value="1"/>
             <argument name="column" value="Special Price"/>
-            <argument name="value" value="${{ApiProductSpecialPrice.value}}"/>
+            <argument name="value" value="{{ApiProductSpecialPrice.value}}"/>
         </actionGroup>
         <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeCorrectCost">
             <argument name="row" value="1"/>
             <argument name="column" value="Cost"/>
-            <argument name="value" value="${{ApiProductCost.value}}"/>
+            <argument name="value" value="{{ApiProductCost.value}}"/>
         </actionGroup>
     </test>
 </tests>

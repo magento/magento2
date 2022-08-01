@@ -151,7 +151,7 @@
         <!-- Assert product is present in wishlist -->
         <actionGroup ref="AssertProductIsPresentInWishListActionGroup" stepKey="assertProductPresent">
             <argument name="productName" value="$$createConfigProduct.name$$"/>
-            <argument name="productPrice" value="$20.00"/>
+            <argument name="productPrice" value="20.00"/>
         </actionGroup>
 
         <!-- Assert product details in Wishlist -->

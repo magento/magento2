@@ -3,32 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Webapi\Model\Config;
+
+use DOMElement;
+use DOMNodeList;
+use Magento\Framework\Config\ConverterInterface;
 
 /**
  * Converter of webapi.xml content into array format.
  */
-class Converter implements \Magento\Framework\Config\ConverterInterface
+class Converter implements ConverterInterface
 {
     /**#@+
      * Array keys for config internal representation.
      */
-    const KEY_SERVICE_CLASS = 'class';
-    const KEY_URL = 'url';
-    const KEY_SERVICE_METHOD = 'method';
-    const KEY_SECURE = 'secure';
-    const KEY_ROUTES = 'routes';
-    const KEY_ACL_RESOURCES = 'resources';
-    const KEY_SERVICE = 'service';
-    const KEY_SERVICES = 'services';
-    const KEY_FORCE = 'force';
-    const KEY_VALUE = 'value';
-    const KEY_DATA_PARAMETERS = 'parameters';
-    const KEY_SOURCE = 'source';
-    const KEY_METHOD = 'method';
-    const KEY_METHODS = 'methods';
-    const KEY_DESCRIPTION = 'description';
-    const KEY_REAL_SERVICE_METHOD = 'realMethod';
+    public const KEY_SERVICE_CLASS = 'class';
+    public const KEY_URL = 'url';
+    public const KEY_SERVICE_METHOD = 'method';
+    public const KEY_SECURE = 'secure';
+    public const KEY_ROUTES = 'routes';
+    public const KEY_ACL_RESOURCES = 'resources';
+    public const KEY_SERVICE = 'service';
+    public const KEY_SERVICES = 'services';
+    public const KEY_FORCE = 'force';
+    public const KEY_VALUE = 'value';
+    public const KEY_DATA_PARAMETERS = 'parameters';
+    public const KEY_SOURCE = 'source';
+    public const KEY_METHOD = 'method';
+    public const KEY_METHODS = 'methods';
+    public const KEY_DESCRIPTION = 'description';
+    public const KEY_REAL_SERVICE_METHOD = 'realMethod';
+    public const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
     /**#@-*/
 
     /**
@@ -39,14 +46,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     public function convert($source)
     {
         $result = [];
-        /** @var \DOMNodeList $routes */
         $routes = $source->getElementsByTagName('route');
-        /** @var \DOMElement $route */
+        /** @var DOMElement $route */
         foreach ($routes as $route) {
             if ($route->nodeType != XML_ELEMENT_NODE) {
                 continue;
             }
-            /** @var \DOMElement $service */
+            /** @var DOMElement $service */
             $service = $route->getElementsByTagName('service')->item(0);
             $serviceClass = $service->attributes->getNamedItem('class')->nodeValue;
             $serviceMethod = $service->attributes->getNamedItem('method')->nodeValue;
@@ -65,7 +71,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $resources = $route->getElementsByTagName('resource');
             $resourceReferences = [];
             $resourcePermissionSet = [];
-            /** @var \DOMElement $resource */
+            /** @var DOMElement $resource */
             foreach ($resources as $resource) {
                 if ($resource->nodeType != XML_ELEMENT_NODE) {
                     continue;
@@ -94,6 +100,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $method = $route->attributes->getNamedItem('method')->nodeValue;
             $secureNode = $route->attributes->getNamedItem('secure');
             $secure = $secureNode ? (bool)trim($secureNode->nodeValue) : false;
+            $arraySizeLimit = $this->getInputArraySizeLimit($route);
 
             // We could handle merging here by checking if the route already exists
             $result[self::KEY_ROUTES][$url][$method] = [
@@ -104,6 +111,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 ],
                 self::KEY_ACL_RESOURCES => $resourceReferences,
                 self::KEY_DATA_PARAMETERS => $data,
+                self::KEY_INPUT_ARRAY_SIZE_LIMIT => $arraySizeLimit,
             ];
 
             $serviceSecure = false;
@@ -112,6 +120,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
             if (!isset($serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_REAL_SERVICE_METHOD])) {
                 $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_REAL_SERVICE_METHOD] = $serviceMethod;
+            }
+            if (!isset($serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_INPUT_ARRAY_SIZE_LIMIT])) {
+                $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_INPUT_ARRAY_SIZE_LIMIT] = $arraySizeLimit;
             }
             $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_SECURE] = $serviceSecure || $secure;
             $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_DATA_PARAMETERS] = $serviceData;
@@ -124,14 +135,14 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Parses the method parameters into a string array.
      *
-     * @param \DOMNodeList $parameters
+     * @param DOMNodeList $parameters
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function convertMethodParameters($parameters)
     {
         $data = [];
-        /** @var \DOMElement $parameter */
+        /** @var DOMElement $parameter */
         foreach ($parameters as $parameter) {
             if ($parameter->nodeType != XML_ELEMENT_NODE) {
                 continue;
@@ -167,5 +178,27 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     protected function convertVersion($url)
     {
         return substr($url, 1, strpos($url, '/', 1)-1);
+    }
+
+    /**
+     * Returns array size limit of input data
+     *
+     * @param DOMElement $routeDOMElement
+     * @return int|null
+     */
+    private function getInputArraySizeLimit(DOMElement $routeDOMElement): ?int
+    {
+        /** @var DOMElement $dataDOMElement */
+        foreach ($routeDOMElement->getElementsByTagName('data') as $dataDOMElement) {
+            if ($dataDOMElement->nodeType === XML_ELEMENT_NODE) {
+                $inputArraySizeLimitDOMNode = $dataDOMElement->attributes
+                    ->getNamedItem(self::KEY_INPUT_ARRAY_SIZE_LIMIT);
+                return ($inputArraySizeLimitDOMNode instanceof \DOMNode)
+                    ? (int)$inputArraySizeLimitDOMNode->nodeValue
+                    : null;
+            }
+        }
+
+        return null;
     }
 }

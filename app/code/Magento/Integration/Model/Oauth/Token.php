@@ -318,6 +318,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
     {
         $tokenData = $this->getResource()->selectTokenByConsumerIdAndUserType($consumerId, $userType);
         $this->setData($tokenData ? $tokenData : []);
+        $this->getResource()->afterLoad($this);
         return $this;
     }
 
