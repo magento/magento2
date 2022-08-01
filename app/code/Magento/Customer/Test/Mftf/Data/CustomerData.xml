@@ -460,4 +460,19 @@
     <entity name="Simple_US_Customer_US_UK_Addresses" type="customer" extends="Simple_US_Customer_ArmedForcesEurope">
         <requiredEntity type="address">UK_Not_Default_Address</requiredEntity>
     </entity>
+    <entity name="Simple_US_Customer_With_Unique_Taxvat" type="customer">
+        <data key="group_id">1</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <data key="group">General</data>
+        <data key="taxvat" unique="prefix">taxValue</data>
+        <requiredEntity type="address">US_Address_TX</requiredEntity>
+    </entity>
 </entities>
