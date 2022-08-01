@@ -1,15 +1,16 @@
 {
     "name": "magento/module-adobe-ims-api",
     "description": "Implementation of Magento module responsible for authentication to Adobe services",
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/framework": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "2.1.2",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "103.0.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -19,3 +20,4 @@
         }
     }
 }
+
