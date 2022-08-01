@@ -842,22 +842,20 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
             ->willReturnMap(
-
+                [
                     [
-                        [
-                            AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH,
-                            'default',
-                            null,
-                            $minPasswordLength,
-                        ],
-                        [
-                            AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER,
-                            'default',
-                            null,
-                            $minCharacterSetsNum,
-                        ],
-                    ]
-
+                        AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH,
+                        'default',
+                        null,
+                        $minPasswordLength,
+                    ],
+                    [
+                        AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER,
+                        'default',
+                        null,
+                        $minCharacterSetsNum,
+                    ],
+                ]
             );
 
         $this->string->expects($this->any())
@@ -1615,7 +1613,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Magento\Framework\Exception\InputException::class);
         $this->expectExceptionMessage('"resetPasswordLinkToken" is required. Enter and try again.');
 
-        $this->accountManagement->validateResetPasswordLinkToken(22, null);
+        $this->accountManagement->validateResetPasswordLinkToken(22, '');
     }
 
     /**

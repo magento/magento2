@@ -1,23 +1,24 @@
 {
     "name": "magento/module-elasticsearch-7",
     "description": "N/A",
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-advanced-search": "*",
-        "magento/module-catalog-search": "*",
-        "magento/module-search": "*",
-        "magento/module-elasticsearch": "*",
-        "elasticsearch/elasticsearch": "~2.0||~5.1||~6.1||~7.6 "
-    },
-    "suggest": {
-        "magento/module-config": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.3.2",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "102.0.*",
+        "magento/module-advanced-search": "100.3.*",
+        "magento/module-catalog-search": "101.0.*",
+        "magento/module-search": "101.0.*",
+        "magento/module-elasticsearch": "100.3.*",
+        "elasticsearch/elasticsearch": "~2.0||~5.1||~6.1||~7.6 "
+    },
+    "suggest": {
+        "magento/module-config": "101.1.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -27,3 +28,4 @@
         }
     }
 }
+

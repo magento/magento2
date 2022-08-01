@@ -75,8 +75,12 @@
         <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn2" />
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.CreateFolder}}" stepKey="waitForCreateFolderBtn2"/>
         <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn2" />
-        <see selector="{{ProductDescriptionWYSIWYGToolbarSection.FolderContainer}}" userInput="Storage Root" stepKey="seeFolderContainer" />
-        <click userInput="Storage Root" stepKey="clickOnRootFolder" />
+        <comment userInput="BIC workaround" stepKey="seeFolderContainer"/>
+        <comment userInput="BIC workaround" stepKey="clickOnRootFolder"/>
+        <conditionalClick selector="{{ProductDescriptionWYSIWYGToolbarSection.StorageRootArrow}}" dependentSelector="{{ProductDescriptionWYSIWYGToolbarSection.checkIfArrowExpand}}" stepKey="clickStorageRootArrowIfClosed2" visible="true"/>
+        <conditionalClick selector="{{ProductDescriptionWYSIWYGToolbarSection.WysiwygArrow}}" dependentSelector="{{ProductDescriptionWYSIWYGToolbarSection.checkIfWysiwygArrowExpand}}" stepKey="clickWysiwygArrowIfClosed2" visible="true"/>
+        <waitForText userInput="{{ImageFolder.name}}" stepKey="waitForNewFolder2" />
+        <click userInput="{{ImageFolder.name}}" stepKey="clickOnCreatedFolder2" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading15"/>
         <dontSeeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertFile}}" stepKey="dontSeeAddSelectedBtn3" />
         <attachFile selector="{{ProductShortDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage3"/>

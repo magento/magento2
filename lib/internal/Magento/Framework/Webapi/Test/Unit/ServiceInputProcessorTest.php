@@ -11,17 +11,23 @@ use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\ServiceTypeToEntityTypeMap;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleConstructor;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\WebapiBuilderFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes;
 use Magento\Webapi\Test\Unit\Service\Entity\DataArrayData;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Nested;
 use Magento\Webapi\Test\Unit\Service\Entity\NestedData;
+use Magento\Framework\Webapi\Validator\EntityArrayValidator;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray;
 use Magento\Webapi\Test\Unit\Service\Entity\SimpleArrayData;
 use Magento\Webapi\Test\Unit\Service\Entity\SimpleData;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Webapi\Validator\IOLimit\DefaultPageSizeSetter;
+use Magento\Framework\Webapi\Validator\IOLimit\IOLimitConfigProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -51,8 +57,33 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $serviceTypeToEntityTypeMap;
 
+    /**
+     * @var SearchCriteriaInterface|MockObject
+     */
+    private $searchCriteria;
+
+    /**
+     * @var IOLimitConfigProvider|MockObject
+     */
+    private $inputLimitConfig;
+
+    /**
+     * @var DefaultPageSizeSetter|MockObject
+     */
+    private $defaultPageSizeSetter;
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp(): void
     {
+        $this->searchCriteria  = self::getMockBuilder(SearchCriteriaInterface::class)
+            ->getMock();
+
+        $objectManagerStatic = [
+            SearchCriteriaInterface::class => $this->searchCriteria
+        ];
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
@@ -60,7 +91,11 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->any())
             ->method('create')
             ->willReturnCallback(
-                function ($className, $arguments = []) use ($objectManager) {
+                function ($className, $arguments = []) use ($objectManager, $objectManagerStatic) {
+                    if (isset($objectManagerStatic[$className])) {
+                        return $objectManagerStatic[$className];
+                    }
+
                     return $objectManager->getObject($className, $arguments);
                 }
             );
@@ -118,6 +153,14 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->inputLimitConfig = self::getMockBuilder(IOLimitConfigProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->defaultPageSizeSetter = self::getMockBuilder(DefaultPageSizeSetter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->serviceInputProcessor = $objectManager->getObject(
             \Magento\Framework\Webapi\ServiceInputProcessor::class,
             [
@@ -126,7 +169,10 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
                 'customAttributeTypeLocator' => $this->customAttributeTypeLocator,
                 'attributeValueFactory' => $this->attributeValueFactoryMock,
                 'methodsMap' => $this->methodsMap,
-                'serviceTypeToEntityTypeMap' => $this->serviceTypeToEntityTypeMap
+                'serviceTypeToEntityTypeMap' => $this->serviceTypeToEntityTypeMap,
+                'serviceInputValidator' => new EntityArrayValidator(50, $this->inputLimitConfig),
+                'defaultPageSizeSetter' => $this->defaultPageSizeSetter,
+                'defaultPageSize' => 123
             ]
         );
 
@@ -320,6 +366,47 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($second instanceof Simple);
         $this->assertEquals(15, $second->getEntityId());
         $this->assertEquals('Second', $second->getName());
+    }
+
+    public function testArrayOfDataObjectPropertiesIsValidated()
+    {
+        $this->expectException(LocalizedException::class);
+        $this->expectErrorMessage(
+            'Maximum items of type "\\' . Simple::class . '" is 50'
+        );
+        $this->inputLimitConfig->method('isInputLimitingEnabled')
+            ->willReturn(true);
+        $objects = [];
+        for ($i = 0; $i < 51; $i++) {
+            $objects[] = ['entityId' => $i + 1, 'name' => 'Item' . $i];
+        }
+        $data = [
+            'dataObjects' => $objects,
+        ];
+        $this->serviceInputProcessor->process(
+            TestService::class,
+            'dataArray',
+            $data
+        );
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testDefaultPageSizeSetterIsInvoked()
+    {
+        $this->defaultPageSizeSetter->expects(self::once())
+            ->method('processSearchCriteria')
+            ->with($this->searchCriteria);
+
+        $data = [
+            'searchCriteria' => []
+        ];
+        $this->serviceInputProcessor->process(
+            TestService::class,
+            'search',
+            $data
+        );
     }
 
     public function testNestedSimpleArrayProperties()

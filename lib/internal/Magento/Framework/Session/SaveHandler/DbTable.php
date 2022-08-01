@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Session\SaveHandler;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Phrase;
 
@@ -29,15 +32,27 @@ class DbTable extends \SessionHandler
     protected $connection;
 
     /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
      * Constructor
      *
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ResourceConnection $resource
+     * @param EncryptorInterface|null $encryptor
+     * @throws SessionException
      */
-    public function __construct(\Magento\Framework\App\ResourceConnection $resource)
-    {
+    public function __construct(
+        ResourceConnection $resource,
+        EncryptorInterface $encryptor = null
+    ) {
         $this->_sessionTable = $resource->getTableName('session');
         $this->connection = $resource->getConnection();
         $this->checkConnection();
+        $this->encryptor = $encryptor ?: ObjectManager::getInstance()->get(
+            EncryptorInterface::class
+        );
     }
 
     /**
@@ -98,7 +113,7 @@ class DbTable extends \SessionHandler
         )->where(
             'session_id = :session_id'
         );
-        $bind = ['session_id' => $sessionId];
+        $bind = ['session_id' => $this->encryptor->hash($sessionId)];
         $data = $this->connection->fetchOne($select, $bind);
 
         // check if session data is a base64 encoded string
@@ -118,8 +133,9 @@ class DbTable extends \SessionHandler
      */
     public function write($sessionId, $sessionData)
     {
+        $hashedSessionId = $this->encryptor->hash($sessionId);
         // need to use write connection to get the most fresh DB sessions
-        $bindValues = ['session_id' => $sessionId];
+        $bindValues = ['session_id' => $hashedSessionId];
         $select = $this->connection->select()->from($this->_sessionTable)->where('session_id = :session_id');
         $exists = $this->connection->fetchOne($select, $bindValues);
 
@@ -128,9 +144,9 @@ class DbTable extends \SessionHandler
         $bind = ['session_expires' => time(), 'session_data' => $sessionData];
 
         if ($exists) {
-            $this->connection->update($this->_sessionTable, $bind, ['session_id=?' => $sessionId]);
+            $this->connection->update($this->_sessionTable, $bind, ['session_id=?' => $hashedSessionId]);
         } else {
-            $bind['session_id'] = $sessionId;
+            $bind['session_id'] = $hashedSessionId;
             $this->connection->insert($this->_sessionTable, $bind);
         }
         return true;
@@ -144,7 +160,7 @@ class DbTable extends \SessionHandler
      */
     public function destroy($sessionId)
     {
-        $where = ['session_id = ?' => $sessionId];
+        $where = ['session_id = ?' => $this->encryptor->hash($sessionId)];
         $this->connection->delete($this->_sessionTable, $where);
         return true;
     }

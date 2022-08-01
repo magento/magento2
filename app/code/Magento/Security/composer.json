@@ -1,24 +1,26 @@
 {
     "name": "magento/module-security",
     "description": "Security management module",
-    "config": {
-        "sort-packages": true
-    },
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-backend": "*",
-        "magento/module-store": "*",
-        "magento/module-user": "*"
-    },
-    "suggest": {
-        "magento/module-customer": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.3.6-p3",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "102.0.*",
+        "magento/module-config": "101.1.*",
+        "magento/module-backend": "101.0.*",
+        "magento/module-store": "101.0.*",
+        "magento/module-user": "101.1.*"
+    },
+    "suggest": {
+        "magento/module-customer": "102.0.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -28,3 +30,4 @@
         }
     }
 }
+

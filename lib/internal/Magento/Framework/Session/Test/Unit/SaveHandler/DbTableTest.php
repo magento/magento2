@@ -153,11 +153,15 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
      */
     protected function _prepareResourceMock($connection)
     {
+
+        $encryptor = $this->createMock(\Magento\Framework\Encryption\EncryptorInterface::class);
+        $encryptor->expects($this->any())->method('hash')->willReturnArgument(0);
+
         $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $resource->expects($this->once())->method('getTableName')->willReturn(self::SESSION_TABLE);
         $resource->expects($this->once())->method('getConnection')->willReturn($connection);
 
-        $this->_model = new \Magento\Framework\Session\SaveHandler\DbTable($resource);
+        $this->_model = new \Magento\Framework\Session\SaveHandler\DbTable($resource, $encryptor);
     }
 
     /**
@@ -182,9 +186,7 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
         )->with(
             self::SESSION_TABLE,
             [self::COLUMN_SESSION_DATA]
-        )->willReturnSelf(
-            
-        );
+        )->willReturnSelf();
         $connection->expects(
             $this->once()
         )->method(
@@ -250,7 +252,10 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
         );
         $connection->expects($this->once())->method('isTableExists')->willReturn(true);
         $connection->expects($this->once())->method('select')->willReturnSelf();
-        $connection->expects($this->once())->method('from')->with(self::SESSION_TABLE)->willReturnSelf();
+        $connection->expects($this->once())
+            ->method('from')
+            ->with(self::SESSION_TABLE)
+            ->willReturnSelf();
         $connection->expects(
             $this->once()
         )->method(

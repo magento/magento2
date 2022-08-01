@@ -115,6 +115,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customer->save();
 
         $this->getRequest()->setParam('token', $token);
+        $this->getRequest()->setParam('id', $customer->getId());
 
         $this->dispatch('customer/account/createPassword');
 
@@ -184,7 +185,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         // should be redirected to forgotpassword page
         $response = $this->getResponse();
         $this->assertEquals(302, $response->getHttpResponseCode());
-        $this->assertStringContainsString('customer/account/forgotpassword', $response->getHeader('Location')->getFieldValue());
+        $this->assertStringContainsString(
+            'customer/account/forgotpassword',
+            $response->getHeader('Location')->getFieldValue()
+        );
         $this->assertCustomerConfirmationEquals(1, 'confirmation');
     }
 
@@ -281,7 +285,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/resetPasswordPost');
         $this->assertRedirect($this->stringContains('customer/account/'));
         $this->assertSessionMessages(
-            $this->equalTo(['Something went wrong while saving the new password.']),
+            $this->equalTo(['&quot;email&quot; is required. Enter and try again.']),
             MessageInterface::TYPE_ERROR
         );
     }
@@ -623,7 +627,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customerRegistry = $this->_objectManager->get(CustomerRegistry::class);
         $customerData = $customerRegistry->retrieveByEmail($email);
         $token = $customerData->getRpToken();
-        $this->assertForgotPasswordEmailContent($token);
+        $customerId = $customerData->getId();
+        $this->assertForgotPasswordEmailContent($token, $customerId);
 
         /* Set new email */
         /** @var CustomerRepositoryInterface $customerRepository */
@@ -699,12 +704,14 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      * Check that 'Forgot password' email contains correct data.
      *
      * @param string $token
+     * @param int $customerId
      * @return void
      */
-    private function assertForgotPasswordEmailContent(string $token): void
+    private function assertForgotPasswordEmailContent(string $token, int $customerId): void
     {
         $message = $this->transportBuilderMock->getSentMessage();
-        $pattern = "/<a.+customer\/account\/createPassword\/\?token={$token}.+Set\s+a\s+New\s+Password<\/a\>/";
+        //phpcs:ignore
+        $pattern = "/<a.+customer\/account\/createPassword\/\?id={$customerId}&amp;token={$token}.+Set\s+a\s+New\s+Password<\/a\>/";
         $rawMessage = $message->getBody()->getParts()[0]->getRawContent();
         $messageConstraint = $this->logicalAnd(
             new StringContains('There was recently a request to change the password for your account.'),

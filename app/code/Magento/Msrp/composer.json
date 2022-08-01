@@ -1,27 +1,28 @@
 {
     "name": "magento/module-msrp",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-catalog": "*",
-        "magento/module-downloadable": "*",
-        "magento/module-eav": "*",
-        "magento/module-store": "*",
-        "magento/module-tax": "*"
-    },
-    "suggest": {
-        "magento/module-bundle": "*",
-        "magento/module-msrp-sample-data": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.3.6",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "102.0.*",
+        "magento/module-catalog": "103.0.*",
+        "magento/module-downloadable": "100.3.*",
+        "magento/module-eav": "102.0.*",
+        "magento/module-store": "101.0.*",
+        "magento/module-tax": "100.3.*"
+    },
+    "suggest": {
+        "magento/module-bundle": "100.3.*",
+        "magento/module-msrp-sample-data": "Sample Data version: 100.3.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -31,3 +32,4 @@
         }
     }
 }
+

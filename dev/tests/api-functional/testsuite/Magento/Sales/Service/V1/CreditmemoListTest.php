@@ -10,22 +10,22 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class CreditmemoListTest
+ * Class CreditmemoListTest for Magento sales webapi
  */
 class CreditmemoListTest extends WebapiAbstract
 {
     /**
-     * Resource path
+     * Resource path constant
      */
     const RESOURCE_PATH = '/V1/creditmemos';
 
     /**
-     * Service read name
+     * Service read name constant
      */
     const SERVICE_READ_NAME = 'salesCreditmemoRepositoryV1';
 
     /**
-     * Service version
+     * Service version constant
      */
     const SERVICE_VERSION = 'V1';
 
@@ -84,7 +84,7 @@ class CreditmemoListTest extends WebapiAbstract
         $searchCriteriaBuilder->addFilters([$stateFilter]);
         $searchCriteriaBuilder->addFilters([$incrementFilter, $zeroStatusFilter]);
         $searchCriteriaBuilder->addSortOrder($sortOrder);
-
+        $searchCriteriaBuilder->setPageSize(20);
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
         $requestData = ['searchCriteria' => $searchData];

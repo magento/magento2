@@ -3,11 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Controller\Sidebar;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Class used to execute test cases for update item quantity
+ */
 class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Checkout\Controller\Sidebar\UpdateItemQty */
@@ -206,5 +211,37 @@ class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
             ->willReturn('json represented');
 
         $this->assertEquals('json represented', $this->updateItemQty->execute());
+    }
+
+    /**
+     * @return void
+     */
+    public function testExecuteWithInvalidItemQty(): void
+    {
+        $error = [
+            'success' => false,
+            'error_message' => 'Invalid Item Quantity Requested.'
+        ];
+        $jsonResult = json_encode($error);
+        $this->requestMock
+            ->method('getParam')
+            ->withConsecutive(['item_id', null], ['item_qty', null])
+            ->willReturnOnConsecutiveCalls('1', '{{7+2}}');
+
+        $this->sidebarMock->expects($this->once())
+            ->method('getResponseData')
+            ->with('Invalid Item Quantity Requested.')
+            ->willReturn($error);
+
+        $this->jsonHelperMock->expects($this->once())
+            ->method('jsonEncode')
+            ->with($error)
+            ->willReturn($jsonResult);
+
+        $this->responseMock->expects($this->once())
+            ->method('representJson')
+            ->willReturn($jsonResult);
+
+        $this->assertEquals($jsonResult, $this->updateItemQty->execute());
     }
 }

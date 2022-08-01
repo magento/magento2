@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Controller\Sidebar;
 
 use Magento\Checkout\Model\Sidebar;
@@ -12,8 +14,12 @@ use Magento\Framework\App\Response\Http;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class UpdateItemQty extends Action
+/**
+ * Class used to update item quantity.
+ */
+class UpdateItemQty extends Action implements HttpPostActionInterface
 {
     /**
      * @var Sidebar
@@ -50,12 +56,18 @@ class UpdateItemQty extends Action
     }
 
     /**
+     * Action for Quantity update
+     *
      * @return $this
      */
     public function execute()
     {
         $itemId = (int)$this->getRequest()->getParam('item_id');
-        $itemQty = $this->getRequest()->getParam('item_qty') * 1;
+        $itemQty = (int)$this->getRequest()->getParam('item_qty');
+
+        if ($itemQty <= 0) {
+            return  $this->jsonResponse(__('Invalid Item Quantity Requested.'));
+        }
 
         try {
             $this->sidebar->checkQuoteItem($itemId);

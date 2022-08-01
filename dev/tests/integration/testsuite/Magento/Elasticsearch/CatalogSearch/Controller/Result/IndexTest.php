@@ -20,6 +20,19 @@ use Magento\Framework\Search\EngineResolverInterface;
 class IndexTest extends CatalogSearchIndexTest
 {
     /**
+     * Elasticsearch7 engine configuration is also compatible with OpenSearch 1
+     */
+    private const ENGINE_SUPPORTED_VERSIONS = [
+        7 => 'elasticsearch7',
+        1 => 'elasticsearch7',
+    ];
+
+    /**
+     * @var string
+     */
+    private $searchEngine;
+
+    /**
      * Quick search test by difference product attributes.
      *
      * @magentoAppArea frontend
@@ -33,11 +46,25 @@ class IndexTest extends CatalogSearchIndexTest
      */
     public function testExecute(string $searchString): void
     {
-        // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
-        $version = $this->_objectManager->get(ElasticsearchVersionChecker::class)->getVersion();
-        $searchEngine = 'elasticsearch' . $version;
+        $searchEngine = $this->getInstalledSearchEngine();
         $currentEngine = $this->_objectManager->get(EngineResolverInterface::class)->getCurrentSearchEngine();
         $this->assertEquals($searchEngine, $currentEngine);
         parent::testExecute($searchString);
+    }
+
+    /**
+     * Returns installed on server search service.
+     *
+     * @return string
+     */
+    private function getInstalledSearchEngine(): string
+    {
+        if (!$this->searchEngine) {
+            // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
+            $version = $this->_objectManager->get(ElasticsearchVersionChecker::class)->getVersion();
+            $this->searchEngine = self::ENGINE_SUPPORTED_VERSIONS[$version] ?? 'elasticsearch' . $version;
+        }
+
+        return $this->searchEngine;
     }
 }

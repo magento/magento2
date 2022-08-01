@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Security\Model;
 
@@ -14,6 +15,7 @@ use \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
  *
  * @api
  * @since 100.1.0
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AdminSessionsManager
 {
@@ -114,7 +116,7 @@ class AdminSessionsManager
             $result = $this->createAdminSessionInfoCollection()->updateActiveSessionsStatus(
                 AdminSessionInfo::LOGGED_OUT_BY_LOGIN,
                 $this->getCurrentSession()->getUserId(),
-                $this->getCurrentSession()->getSessionId(),
+                $this->getCurrentSession()->getId(),
                 $olderThen
             );
             if ($result) {
@@ -174,7 +176,7 @@ class AdminSessionsManager
     {
         if (!$this->currentSession) {
             $this->currentSession = $this->adminSessionInfoFactory->create();
-            $this->currentSession->load($this->authSession->getSessionId(), 'session_id');
+            $this->currentSession->load($this->authSession->getAdminSessionInfoId(), 'id');
         }
 
         return $this->currentSession;
@@ -256,7 +258,7 @@ class AdminSessionsManager
             ->filterByUser(
                 $this->authSession->getUser()->getId(),
                 \Magento\Security\Model\AdminSessionInfo::LOGGED_IN,
-                $this->authSession->getSessionId()
+                $this->authSession->getAdminSessionInfoId()
             )
             ->filterExpiredSessions($this->securityConfig->getAdminSessionLifetime())
             ->loadData();
@@ -290,22 +292,26 @@ class AdminSessionsManager
      */
     protected function createNewSession()
     {
-        $this->adminSessionInfoFactory
+        $adminSessionInfo = $this->adminSessionInfoFactory
             ->create()
             ->setData(
                 [
-                    'session_id' => $this->authSession->getSessionId(),
                     'user_id' => $this->authSession->getUser()->getId(),
                     'ip' => $this->remoteAddress->getRemoteAddress(),
                     'status' => AdminSessionInfo::LOGGED_IN
                 ]
             )->save();
 
+        $this->authSession->setAdminSessionInfoId($adminSessionInfo->getId());
+
         return $this;
     }
 
     /**
+     * Creates admin session information collection
+     *
      * @return \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection
+     *
      * @since 100.1.0
      */
     protected function createAdminSessionInfoCollection()
@@ -314,11 +320,8 @@ class AdminSessionsManager
     }
 
     /**
-     * Calculates diff between now and last session updated_at
-     * and decides whether new prolong must be triggered or not
-     *
-     * This is done to limit amount of session prolongs and updates to database
-     * within some period of time - X
+     * Calculates diff between now and last session updated_at and decides whether new prolong must be triggered or not
+     * This is done to limit amount of session prolongs and updates to database within some period of time - X
      * X - is calculated in getIntervalBetweenConsecutiveProlongs()
      *
      * @see getIntervalBetweenConsecutiveProlongs()

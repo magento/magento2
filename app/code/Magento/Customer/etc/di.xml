@@ -62,6 +62,16 @@
     <preference for="Magento\Customer\Model\Group\RetrieverInterface"
                 type="Magento\Customer\Model\Group\Retriever"/>
     <preference for="Magento\Customer\Api\SessionCleanerInterface" type="Magento\Customer\Model\Session\SessionCleaner"/>
+    <virtualType name="SessionValidator" type="Magento\Framework\Session\CompositeValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="validator" xsi:type="object">Magento\Framework\Session\Validator</item>
+                <item name="cutoff_validator" xsi:type="object">
+                    Magento\Customer\Model\Session\Validators\CutoffValidator
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
@@ -69,6 +79,7 @@
             <argument name="customerResource" xsi:type="object">Magento\Customer\Model\ResourceModel\Customer\Proxy</argument>
             <argument name="storage" xsi:type="object">Magento\Customer\Model\Session\Storage</argument>
             <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
+            <argument name="validator" xsi:type="object">SessionValidator</argument>
         </arguments>
     </type>
     <type name="Magento\Customer\Helper\Address">

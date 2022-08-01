@@ -23,6 +23,8 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <doubleClick selector="{{StorefrontBundleProductActionSection.quantityField}}" stepKey="doubleClickOnQtyInput"/>
+        <pressKey selector="{{StorefrontBundleProductActionSection.quantityField}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::DELETE]" stepKey="clearQty"/>
         <fillField selector="{{StorefrontBundleProductActionSection.quantityField}}" userInput="{{quantity}}" stepKey="fillBundleProductQuantity"/>
         <click selector="{{StorefrontBundleProductActionSection.addToCartButton}}" stepKey="clickAddBundleProductToCart"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>

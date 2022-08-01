@@ -5,6 +5,9 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -79,6 +82,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
             'setBackorders',
             '__wakeup',
         ];
+
         $this->optionMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item\Option::class, $optionMethods);
 
         $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId', '__wakeup']);
@@ -206,6 +210,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $this->optionMock->expects($this->once())->method('setBackorders')->with('backorders');
 
         $this->stockItemMock->expects($this->once())->method('unsIsChildItem');
+        $this->resultMock->expects($this->once())->method('getItemQty')->willReturn($qty);
         $this->validator->initialize($this->optionMock, $this->quoteItemMock, $qty);
     }
 

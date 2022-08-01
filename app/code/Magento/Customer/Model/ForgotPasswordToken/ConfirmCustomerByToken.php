@@ -45,11 +45,29 @@ class ConfirmCustomerByToken
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @deprecated rp tokens cannot be looked up directly from db
      */
     public function execute(string $resetPasswordToken): void
     {
         $customer = $this->getByToken->execute($resetPasswordToken);
         if ($customer->getConfirmation()) {
+            $this->customerRepository->save(
+                $customer->setConfirmation(null)
+            );
+        }
+    }
+
+    /**
+     * Check if customer confirmation needs to be reset
+     *
+     * @param int $customerId
+     * @return void
+     */
+    public function resetCustomerConfirmation(int $customerId): void
+    {
+        $customer = $this->customerRepository->getById($customerId);
+
+        if ($customer && $customer->getConfirmation()) {
             $this->customerRepository->save(
                 $customer->setConfirmation(null)
             );

@@ -23,15 +23,25 @@ use Magento\Framework\Search\EngineResolverInterface;
  */
 class QuickSearchTest extends ConfigurableProductQuickSearchTest
 {
+    /**
+     * Elasticsearch7 engine configuration is also compatible with OpenSearch 1
+     */
+    private const ENGINE_SUPPORTED_VERSIONS = [
+        7 => 'elasticsearch7',
+        1 => 'elasticsearch7',
+    ];
+
+    /**
+     * @var string
+     */
+    private $searchEngine;
 
     /**
      * @inheritdoc
      */
     protected function assertPreConditions(): void
     {
-        // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
-        $version = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class)->getVersion();
-        $searchEngine = 'elasticsearch' . $version;
+        $searchEngine = $this->getInstalledSearchEngine();
         $currentEngine = Bootstrap::getObjectManager()->get(EngineResolverInterface::class)->getCurrentSearchEngine();
         $this->assertEquals($searchEngine, $currentEngine);
     }
@@ -76,5 +86,21 @@ class QuickSearchTest extends ConfigurableProductQuickSearchTest
     public function testSearchByOptionValue(): void
     {
         parent::testSearchByOptionValue();
+    }
+
+    /**
+     * Returns installed on server search service.
+     *
+     * @return string
+     */
+    private function getInstalledSearchEngine(): string
+    {
+        if (!$this->searchEngine) {
+            // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
+            $version = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class)->getVersion();
+            $this->searchEngine = self::ENGINE_SUPPORTED_VERSIONS[$version] ?? 'elasticsearch' . $version;
+        }
+
+        return $this->searchEngine;
     }
 }

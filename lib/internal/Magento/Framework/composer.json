@@ -9,6 +9,7 @@
     "config": {
         "sort-packages": true
     },
+    "version": "102.0.7-p3",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "ext-bcmath": "*",
@@ -26,6 +27,7 @@
         "composer/composer": "^1.9 || ^2.0",
         "guzzlehttp/guzzle": "^6.3.3",
         "laminas/laminas-code": "~3.4.1",
+        "laminas/laminas-escaper": "2.7.0",
         "laminas/laminas-crypt": "^2.6.0",
         "laminas/laminas-http": "^2.6.0",
         "laminas/laminas-mail": "^2.9.0",
@@ -52,11 +54,12 @@
         "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"
     },
     "autoload": {
-        "psr-4": {
-            "Magento\\Framework\\": ""
-        },
         "files": [
             "registration.php"
-        ]
+        ],
+        "psr-4": {
+            "Magento\\Framework\\": ""
+        }
     }
 }
+

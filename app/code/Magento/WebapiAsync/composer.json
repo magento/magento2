@@ -1,24 +1,25 @@
 {
     "name": "magento/module-webapi-async",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-webapi": "*",
-        "magento/module-asynchronous-operations": "*"
-    },
-    "suggest": {
-        "magento/module-user": "*",
-        "magento/module-customer": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.3.7",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "102.0.*",
+        "magento/module-webapi": "100.3.*",
+        "magento/module-asynchronous-operations": "100.3.*"
+    },
+    "suggest": {
+        "magento/module-user": "101.1.*",
+        "magento/module-customer": "102.0.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -28,3 +29,4 @@
         }
     }
 }
+

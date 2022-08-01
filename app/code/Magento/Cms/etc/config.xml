@@ -30,7 +30,9 @@
         <system>
             <media_storage_configuration>
                 <allowed_resources>
-                    <wysiwyg_image_folder>wysiwyg</wysiwyg_image_folder>
+                    <media_gallery_image_folders>
+                        <wysiwyg_image_folder>wysiwyg</wysiwyg_image_folder>
+                    </media_gallery_image_folders>
                 </allowed_resources>
             </media_storage_configuration>
         </system>

@@ -12,6 +12,8 @@ use Magento\Ui\Component\Form\Element\Select as ElementSelect;
 use Magento\Ui\Component\Filters\FilterModifier;
 
 /**
+ * Class Select for Filters types
+ *
  * @api
  * @since 100.0.2
  */
@@ -79,7 +81,8 @@ class Select extends AbstractFilter
             'config',
             array_replace_recursive(
                 (array)$this->wrappedComponent->getData('config'),
-                (array)$this->getData('config')
+                (array)$this->getData('config'),
+                ['__disableTmpl' => ['label' => true]]
             )
         );
 

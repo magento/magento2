@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "59fe6c18be4dc5e34be8c682e91f903b",
+    "content-hash": "027c857a7c93c3b61d5a516b4e1fe679",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -8479,16 +8479,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.7.0",
+            "version": "2.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "690619fee29238cc87dca7a81413ce2fa7ecd161"
+                "reference": "63a8e2f172faefb074894b6851758bfc9a962b98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/690619fee29238cc87dca7a81413ce2fa7ecd161",
-                "reference": "690619fee29238cc87dca7a81413ce2fa7ecd161",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/63a8e2f172faefb074894b6851758bfc9a962b98",
+                "reference": "63a8e2f172faefb074894b6851758bfc9a962b98",
                 "shasum": ""
             },
             "require": {
@@ -8552,8 +8552,8 @@
                     "src/Magento/FunctionalTestingFramework/_bootstrap.php"
                 ],
                 "psr-4": {
-                    "Magento\\FunctionalTestingFramework\\": "src/Magento/FunctionalTestingFramework",
-                    "MFTF\\": "dev/tests/functional/tests/MFTF"
+                    "MFTF\\": "dev/tests/functional/tests/MFTF",
+                    "Magento\\FunctionalTestingFramework\\": "src/Magento/FunctionalTestingFramework"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -8569,9 +8569,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/2.7.0"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/2.7.3"
             },
-            "time": "2021-02-24T20:38:08+00:00"
+            "time": "2022-02-17T21:22:55+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -12107,5 +12107,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.2.0"
 }

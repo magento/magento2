@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Model;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
@@ -25,6 +27,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
+use Magento\Customer\Model\Data\Address as CustomerAddress;
 
 /**
  * Shipping method read service
@@ -38,7 +41,7 @@ class ShippingMethodManagement implements
     ShipmentEstimationInterface
 {
     /**
-     * Quote repository.
+     * Quote repository model.
      *
      * @var CartRepositoryInterface
      */
@@ -260,6 +263,8 @@ class ShippingMethodManagement implements
 
     /**
      * @inheritDoc
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function estimateByAddressId($cartId, $addressId)
     {
@@ -270,7 +275,7 @@ class ShippingMethodManagement implements
         if ($quote->isVirtual() || 0 == $quote->getItemsCount()) {
             return [];
         }
-        $address = $this->addressRepository->getById($addressId);
+        $address = $this->getAddress($addressId, $quote);
 
         return $this->getShippingMethods($quote, $address);
     }
@@ -374,5 +379,25 @@ class ShippingMethodManagement implements
                 ->get(DataObjectProcessor::class);
         }
         return $this->dataProcessor;
+    }
+
+    /**
+     * Gets the address if exists for customer
+     *
+     * @param int $addressId
+     * @param Quote $quote
+     * @return CustomerAddress
+     * @throws InputException The shipping address is incorrect.
+     */
+    private function getAddress(int $addressId, Quote $quote): CustomerAddress
+    {
+        $addresses = $quote->getCustomer()->getAddresses();
+        foreach ($addresses as $address) {
+            if ($addressId === (int)$address->getId()) {
+                return $address;
+            }
+        }
+
+        throw new InputException(__('The shipping address is missing. Set the address and try again.'));
     }
 }

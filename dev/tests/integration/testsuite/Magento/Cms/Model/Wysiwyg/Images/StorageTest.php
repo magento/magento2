@@ -6,7 +6,13 @@
  */
 namespace Magento\Cms\Model\Wysiwyg\Images;
 
+use Magento\Cms\Model\Wysiwyg\Images\Storage\Collection;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\DataObject;
+use Magento\Framework\Filesystem;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Test methods of class Storage
@@ -18,10 +24,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class StorageTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var string
-     */
-    protected static $_baseDir;
+    private const MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH
+        = 'system/media_storage_configuration/allowed_resources/media_gallery_image_folders';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -29,52 +33,73 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
     private $filesystem;
 
     /**
-     * @var \Magento\Cms\Model\Wysiwyg\Images\Storage
+     * @var Storage
      */
     private $storage;
 
     /**
-     * @inheritdoc
+     * @var DriverInterface
      */
-    // phpcs:disable
-    public static function setUpBeforeClass(): void
-    {
-        self::$_baseDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Cms\Helper\Wysiwyg\Images::class
-        )->getCurrentPath() . 'MagentoCmsModelWysiwygImagesStorageTest';
-        if (!file_exists(self::$_baseDir)) {
-            mkdir(self::$_baseDir);
-        }
-        touch(self::$_baseDir . '/1.swf');
-    }
-    // phpcs:enable
+    private $driver;
+
+    /**
+     * @var array
+     */
+    private $origConfigValue;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
+    private $mediaDirectory;
+
+    /**
+     * @var string
+     */
+    private $fullDirectoryPath;
+
+    /**
+     * @var \Magento\Cms\Helper\Wysiwyg\Images
+     */
+    private $imagesHelper;
 
     /**
      * @inheritdoc
      */
-    // phpcs:ignore
-    public static function tearDownAfterClass(): void
+    protected function setUp(): void
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Filesystem\Driver\File::class
-        )->deleteDirectory(
-            self::$_baseDir
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->filesystem = $this->objectManager->get(Filesystem::class);
+        $this->imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
+        $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot() . '/MagentoCmsModelWysiwygImagesStorageTest';
+        $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
+        $config = $this->objectManager->get(ScopeConfigInterface::class);
+        $this->origConfigValue = $config->getValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            'default'
         );
+        $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
+        $scopeConfig->setValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            array_merge($this->origConfigValue, ['MagentoCmsModelWysiwygImagesStorageTest']),
+        );
+        $this->storage = $this->objectManager->create(Storage::class);
+        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function setUp(): void
+    protected function tearDown(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
-        $this->storage = $this->objectManager->create(\Magento\Cms\Model\Wysiwyg\Images\Storage::class);
+        $this->mediaDirectory->delete($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
+        $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
+        $scopeConfig->setValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            $this->origConfigValue
+        );
     }
 
     /**
@@ -83,16 +108,32 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFilesCollection(): void
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()
+        Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $collection = $this->storage->getFilesCollection(self::$_baseDir, 'media');
-        $this->assertInstanceOf(\Magento\Cms\Model\Wysiwyg\Images\Storage\Collection::class, $collection);
+        $fileName = 'magento_image.jpg';
+        $imagePath = realpath(__DIR__ . '/../../../../Catalog/_files/' . $fileName);
+        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $modifiableFilePath = $mediaDirectory->getAbsolutePath('MagentoCmsModelWysiwygImagesStorageTest/' . $fileName);
+        $this->driver->copy(
+            $imagePath,
+            $modifiableFilePath
+        );
+        $this->storage->resizeFile($modifiableFilePath);
+        $collection = $this->storage->getFilesCollection($this->fullDirectoryPath, '/image');
+        $this->assertInstanceOf(Collection::class, $collection);
         foreach ($collection as $item) {
-            $this->assertInstanceOf(\Magento\Framework\DataObject::class, $item);
-            $this->assertStringEndsWith('/1.swf', $item->getUrl());
-            $this->assertStringMatchesFormat(
-                'http://%s/static/%s/adminhtml/%s/%s/Magento_Cms/images/placeholder_thumbnail.jpg',
-                $item->getThumbUrl()
+            $thumbUrl = parse_url($item->getThumbUrl(), PHP_URL_PATH);
+            $this->assertInstanceOf(DataObject::class, $item);
+            $this->assertStringEndsWith('/' . $fileName, $item->getUrl());
+            $this->assertEquals(
+                '/pub/media/.thumbsMagentoCmsModelWysiwygImagesStorageTest/magento_image.jpg',
+                $thumbUrl,
+                "Check if Thumbnail URL is equal to the generated URL"
+            );
+            $this->assertEquals(
+                'image/jpeg',
+                $item->getMimeType(),
+                "Check if Mime Type is equal to the image in the file system"
             );
             return;
         }
@@ -116,9 +157,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     public function testDeleteDirectory(): void
     {
         $path = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath();
-        $dir = 'testDeleteDirectory';
+        $dir = 'MagentoCmsModelWysiwygImagesStorageTest/testDeleteDirectory';
         $fullPath = $path . $dir;
-        $this->storage->createDirectory($dir, $path);
+        $this->storage->createDirectory('testDeleteDirectory', $path . '/MagentoCmsModelWysiwygImagesStorageTest');
         $this->assertFileExists($fullPath);
         $this->storage->deleteDirectory($fullPath);
         $this->assertFileDoesNotExist($fullPath);
@@ -126,12 +167,12 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     *
      */
     public function testDeleteDirectoryWithExcludedDirPath(): void
     {
-        $this->expectExceptionMessage("We cannot delete directory /downloadable.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('We cannot delete the selected directory.');
+
         $dir = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath() . 'downloadable';
         $this->storage->deleteDirectory($dir);
     }
@@ -142,7 +183,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     public function testUploadFile(): void
     {
         $fileName = 'magento_small_image.jpg';
-        $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
+        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
         // phpcs:disable
         $fixtureDir = realpath(__DIR__ . '/../../../../Catalog/_files');
@@ -156,23 +197,23 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'size' => 12500,
         ];
 
-        $this->storage->uploadFile(self::$_baseDir);
-        $this->assertTrue(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        $this->storage->uploadFile($this->fullDirectoryPath);
+        $this->assertTrue(is_file($this->fullDirectoryPath . DIRECTORY_SEPARATOR . $fileName));
         // phpcs:enable
     }
 
     /**
      * @return void
-     *
      */
     public function testUploadFileWithExcludedDirPath(): void
     {
-        $this->expectExceptionMessage(
-            "We can't upload the file to current folder right now. Please try another folder."
-        );
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage(
+            'We can\'t upload the file to the current folder right now. Please try another folder.'
+        );
+
         $fileName = 'magento_small_image.jpg';
-        $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
+        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
         // phpcs:disable
         $fixtureDir = realpath(__DIR__ . '/../../../../Catalog/_files');
@@ -198,13 +239,13 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      * @dataProvider testUploadFileWithWrongExtensionDataProvider
-     *
      */
     public function testUploadFileWithWrongExtension(string $fileName, string $fileType, ?string $storageType): void
     {
-        $this->expectExceptionMessage("File validation failed.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
+        $this->expectExceptionMessage('File validation failed.');
+
+        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
         // phpcs:disable
         $fixtureDir = realpath(__DIR__ . '/../../../_files');
@@ -218,8 +259,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'size' => 12500,
         ];
 
-        $this->storage->uploadFile(self::$_baseDir, $storageType);
-        $this->assertFalse(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        $this->storage->uploadFile($this->fullDirectoryPath, $storageType);
+        $this->assertFalse(is_file($this->fullDirectoryPath . DIRECTORY_SEPARATOR . $fileName));
         // phpcs:enable
     }
 
@@ -247,10 +288,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testUploadFileWithWrongFile(): void
     {
-        $this->expectExceptionMessage("File validation failed.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('File validation failed.');
+
         $fileName = 'file.gif';
-        $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
+        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
         // phpcs:disable
         $file = fopen($filePath, "wb");
@@ -264,8 +306,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'size' => 12500,
         ];
 
-        $this->storage->uploadFile(self::$_baseDir);
-        $this->assertFalse(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        $this->storage->uploadFile($this->fullDirectoryPath);
+        $this->assertFalse(is_file($this->fullDirectoryPath . DIRECTORY_SEPARATOR . $fileName));
         // phpcs:enable
     }
 
@@ -293,7 +335,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             $paths[] = parse_url($item->getThumbUrl(), PHP_URL_PATH);
         }
         $this->assertEquals([$expectedUrl], $paths);
-        $this->storage->deleteFile($path);
+        $this->mediaDirectory->delete($path);
     }
 
     /**

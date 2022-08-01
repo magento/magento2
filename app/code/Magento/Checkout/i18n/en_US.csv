@@ -183,3 +183,4 @@ Payment,Payment
 "Close","Close"
 "Show Cross-sell Items in the Shopping Cart","Show Cross-sell Items in the Shopping Cart"
 "You added %1 to your <a href=""%2"">shopping cart</a>.","You added %1 to your <a href=""%2"">shopping cart</a>."
+"Invalid Item Quantity Requested.","Invalid Item Quantity Requested."

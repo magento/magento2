@@ -1,21 +1,22 @@
 {
     "name": "magento/module-backup",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-backend": "*",
-        "magento/module-cron": "*",
-        "magento/module-store": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.3.6-p2",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "102.0.*",
+        "magento/module-backend": "101.0.*",
+        "magento/module-cron": "100.3.*",
+        "magento/module-store": "101.0.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -25,3 +26,4 @@
         }
     }
 }
+

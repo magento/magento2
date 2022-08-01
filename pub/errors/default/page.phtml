@@ -7,8 +7,8 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
-    <title><?= $this->pageTitle ?></title>
-    <base href="<?= $this->getViewFileUrl() ?>" />
+    <title><?= $this->escaper->escapeHtml($this->pageTitle) ?></title>
+    <base href="<?= $this->escaper->escapeUrl($this->getViewFileUrl()) ?>" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="robots" content="*"/>
     <link rel="stylesheet" href="css/styles.css" type="text/css" />

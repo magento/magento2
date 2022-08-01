@@ -2,18 +2,19 @@
     "name": "magento/module-url-rewrite-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-url-rewrite": "*"
-    },
-    "suggest": {
-        "magento/module-graph-ql": "*"
-    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.3.7",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "102.0.*",
+        "magento/module-url-rewrite": "101.1.*"
+    },
+    "suggest": {
+        "magento/module-graph-ql": "100.3.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -23,3 +24,4 @@
         }
     }
 }
+

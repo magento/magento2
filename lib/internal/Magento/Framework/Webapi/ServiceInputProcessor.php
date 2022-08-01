@@ -11,7 +11,9 @@ namespace Magento\Framework\Webapi;
 
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\ObjectManager\ConfigInterface;
@@ -21,12 +23,15 @@ use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
+use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
 use Zend\Code\Reflection\ClassReflection;
+use Magento\Framework\Webapi\Validator\IOLimit\DefaultPageSizeSetter;
 
 /**
  * Deserialize arguments from API requests.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @api
  * @since 100.0.2
  */
@@ -85,6 +90,21 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $attributesPreprocessorsMap = [];
 
     /**
+     * @var ServiceInputValidatorInterface
+     */
+    private $serviceInputValidator;
+
+    /**
+     * @var int
+     */
+    private $defaultPageSize;
+
+    /**
+     * @var DefaultPageSizeSetter|null
+     */
+    private $defaultPageSizeSetter;
+
+    /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
@@ -92,9 +112,13 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param AttributeValueFactory $attributeValueFactory
      * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      * @param MethodsMap $methodsMap
-     * @param ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap
-     * @param ConfigInterface $config
+     * @param ServiceTypeToEntityTypeMap|null $serviceTypeToEntityTypeMap
+     * @param ConfigInterface|null $config
      * @param array $customAttributePreprocessors
+     * @param ServiceInputValidatorInterface|null $serviceInputValidator
+     * @param int $defaultPageSize
+     * @param DefaultPageSizeSetter|null $defaultPageSizeSetter
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         TypeProcessor $typeProcessor,
@@ -104,7 +128,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         MethodsMap $methodsMap,
         ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
         ConfigInterface $config = null,
-        array $customAttributePreprocessors = []
+        array $customAttributePreprocessors = [],
+        ServiceInputValidatorInterface $serviceInputValidator = null,
+        int $defaultPageSize = 20,
+        ?DefaultPageSizeSetter $defaultPageSizeSetter = null
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectManager = $objectManager;
@@ -112,10 +139,15 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $this->customAttributeTypeLocator = $customAttributeTypeLocator;
         $this->methodsMap = $methodsMap;
         $this->serviceTypeToEntityTypeMap = $serviceTypeToEntityTypeMap
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ServiceTypeToEntityTypeMap::class);
+            ?: ObjectManager::getInstance()->get(ServiceTypeToEntityTypeMap::class);
         $this->config = $config
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ConfigInterface::class);
+            ?: ObjectManager::getInstance()->get(ConfigInterface::class);
         $this->customAttributePreprocessors = $customAttributePreprocessors;
+        $this->serviceInputValidator = $serviceInputValidator
+            ?: ObjectManager::getInstance()->get(ServiceInputValidatorInterface::class);
+        $this->defaultPageSize = $defaultPageSize >= 10 ? $defaultPageSize : 10;
+        $this->defaultPageSizeSetter = $defaultPageSizeSetter ?? ObjectManager::getInstance()
+                ->get(DefaultPageSizeSetter::class);
     }
 
     /**
@@ -128,7 +160,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private function getNameFinder()
     {
         if ($this->nameFinder === null) {
-            $this->nameFinder = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->nameFinder = ObjectManager::getInstance()
                 ->get(\Magento\Framework\Reflection\NameFinder::class);
         }
         return $this->nameFinder;
@@ -232,6 +264,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @throws \Exception
      * @throws SerializationException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _createFromArray($className, $data)
     {
@@ -284,9 +317,15 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                         )
                     );
                 }
+                $this->serviceInputValidator->validateEntityValue($object, $propertyName, $setterValue);
                 $object->{$setterName}($setterValue);
             }
         }
+
+        if ($object instanceof SearchCriteriaInterface) {
+            $this->defaultPageSizeSetter->processSearchCriteria($object, $this->defaultPageSize);
+        }
+
         return $object;
     }
 
@@ -470,6 +509,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 $result = is_array($data) ? [] : null;
                 $itemType = $this->typeProcessor->getArrayItemType($type);
                 if (is_array($data)) {
+                    $this->serviceInputValidator->validateComplexArrayType($itemType, $data);
                     foreach ($data as $key => $item) {
                         $result[$key] = $this->_createFromArray($itemType, $item);
                     }

@@ -13,4 +13,7 @@
         <plugin name="accessControl" type="Magento\Quote\Model\QuoteRepository\Plugin\AccessChangeQuoteControl" />
         <plugin name="authorization" type="Magento\Quote\Model\QuoteRepository\Plugin\Authorization" />
     </type>
+    <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
+        <plugin name="validateQuoteData" type="Magento\Quote\Plugin\Webapi\Controller\Rest\ValidateQuoteData" sortOrder="1" disabled="false" />
+    </type>
 </config>
