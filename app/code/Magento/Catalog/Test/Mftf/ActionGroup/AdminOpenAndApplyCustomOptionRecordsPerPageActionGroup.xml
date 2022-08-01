@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenAndApplyCustomOptionValuesPerPageActionGroup">
+    <actionGroup name="AdminOpenAndApplyCustomOptionRecordsPerPageActionGroup">
         <annotations>
             <description>Open the custom option drop down section and assign the user defined custom value</description>
         </annotations>
@@ -16,10 +16,10 @@
             <argument name="perPageInputValue" type="string" defaultValue="1"/>
         </arguments>
 
-        <click selector="{{AdminProductGridPaginationSection.perPageDropdown}}" stepKey="clickProductPerPageDropdown"/>
-        <click selector="{{AdminProductGridPaginationSection.perPageOption('Custom')}}" stepKey="selectCustomPerPage"/>
-        <fillField selector="{{AdminProductGridPaginationSection.perPageInput}}" userInput="{{perPageInputValue}}" stepKey="fillCustomPerPage"/>
-        <click selector="{{AdminProductGridPaginationSection.perPageApplyInput}}" stepKey="applyCustomPerPage"/>
+        <click selector="{{AdminProductCustomOptionsPaginationSection.perPageDropdown}}" stepKey="clickProductPerPageDropdown"/>
+        <click selector="{{AdminProductCustomOptionsPaginationSection.perPageOption('Custom')}}" stepKey="selectCustomPerPage"/>
+        <fillField selector="{{AdminProductCustomOptionsPaginationSection.perPageInput}}" userInput="{{perPageInputValue}}" stepKey="fillCustomPerPage"/>
+        <click selector="{{AdminProductCustomOptionsPaginationSection.perPageApplyInput}}" stepKey="applyCustomPerPage"/>
         <waitForPageLoad stepKey="waitForPageRefreshCustomPerPage"/>
     </actionGroup>
 </actionGroups>

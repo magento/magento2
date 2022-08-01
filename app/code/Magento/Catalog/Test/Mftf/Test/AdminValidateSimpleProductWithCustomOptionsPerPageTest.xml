@@ -50,12 +50,12 @@
             <argument name="secondOption" value="ProductOptionValueDropdown2"/>
         </actionGroup>
 
-        <!-- Validate custom option values dynamic rows per page -->
-        <actionGroup ref="AdminOpenAndApplyCustomOptionValuesPerPageActionGroup" stepKey="openAndApplyPerPageDropdown">
+        <!-- Validate custom options dynamic rows per page -->
+        <actionGroup ref="AdminOpenAndApplyCustomOptionsPerPageActionGroup" stepKey="openAndApplyPerPageDropdown">
             <argument name="perPageInputValue" value="1"/>
         </actionGroup>
-        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.customOptionValuesTableRows}}" stepKey="waitForRowsToBeVisible"/>
-        <seeNumberOfElements selector="{{AdminProductCustomizableOptionsSection.customOptionValuesTableRows}}" userInput="1" stepKey="see4RowsOfOptions"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.customOptionTableRows}}" stepKey="waitForRowsToBeVisible"/>
+        <seeNumberOfElements selector="{{AdminProductCustomizableOptionsSection.customOptionTableRows}}" userInput="1" stepKey="see4RowsOfOptions"/>
 
         <!-- Create a second custom option with 2 values -->
         <actionGroup ref="AdminCreateCustomDropDownOptionsActionGroup" stepKey="createSecondCustomOption">
@@ -64,8 +64,9 @@
             <argument name="secondOption" value="ProductOptionValueDropdown2"/>
         </actionGroup>
 
-        <!-- Validate custom options per page -->
-        <actionGroup ref="AdminOpenAndApplyCustomOptionsPerPageActionGroup" stepKey="openAndApplyCustomOptionsPerPageDropdown">
+        <!-- Validate custom options records per page -->
+        <scrollToTopOfPage stepKey="scrollToPerPageDropdown"/>
+        <actionGroup ref="AdminOpenAndApplyCustomOptionRecordsPerPageActionGroup" stepKey="openAndApplyCustomOptionsPerPageDropdown">
             <argument name="perPageInputValue" value="1"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.customOptionsTableRecords}}" stepKey="waitForCustomOptionsToBeVisible"/>

@@ -16,10 +16,10 @@
             <argument name="perPageInputValue" type="string" defaultValue="1"/>
         </arguments>
 
-        <click selector="{{AdminProductCustomOptionsPaginationSection.perPageDropdown}}" stepKey="clickCustomOptionsPerPageDropdown"/>
-        <click selector="{{AdminProductCustomOptionsPaginationSection.perPageOption('Custom')}}" stepKey="selectCustomOptionsPerPage"/>
-        <fillField selector="{{AdminProductCustomOptionsPaginationSection.perPageInput}}" userInput="{{perPageInputValue}}" stepKey="fillCustomOptionsPerPage"/>
-        <click selector="{{AdminProductCustomOptionsPaginationSection.perPageApplyInput}}" stepKey="applyCustomOptionsPerPage"/>
-        <waitForPageLoad stepKey="waitForPageRefreshCustomOptionsPerPage"/>
+        <click selector="{{AdminProductGridPaginationSection.perPageDropdown}}" stepKey="clickProductPerPageDropdown"/>
+        <click selector="{{AdminProductGridPaginationSection.perPageOption('Custom')}}" stepKey="selectCustomPerPage"/>
+        <fillField selector="{{AdminProductGridPaginationSection.perPageInput}}" userInput="{{perPageInputValue}}" stepKey="fillCustomPerPage"/>
+        <click selector="{{AdminProductGridPaginationSection.perPageApplyInput}}" stepKey="applyCustomPerPage"/>
+        <waitForPageLoad stepKey="waitForPageRefreshCustomPerPage"/>
     </actionGroup>
 </actionGroups>
