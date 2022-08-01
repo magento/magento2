@@ -1,29 +1,30 @@
 {
     "name": "magento/module-remote-storage",
     "description": "N/A",
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/framework": "*"
-    },
-    "suggest": {
-        "magento/module-backend": "*",
-        "magento/module-sitemap": "*",
-        "magento/module-cms": "*",
-        "magento/module-downloadable": "*",
-        "magento/module-catalog": "*",
-        "magento/module-media-storage": "*",
-        "magento/module-media-gallery-metadata": "*",
-        "magento/module-media-gallery-synchronization": "*",
-        "magento/module-import-export": "*",
-        "magento/module-catalog-import-export": "*",
-        "magento/module-downloadable-import-export": "*",
-        "predis/predis": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.4.2",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "103.0.*"
+    },
+    "suggest": {
+        "magento/module-backend": "102.0.*",
+        "magento/module-sitemap": "100.4.*",
+        "magento/module-cms": "104.0.*",
+        "magento/module-downloadable": "100.4.*",
+        "magento/module-catalog": "104.0.*",
+        "magento/module-media-storage": "100.4.*",
+        "magento/module-media-gallery-metadata": "100.4.*",
+        "magento/module-media-gallery-synchronization": "100.4.*",
+        "magento/module-import-export": "101.0.*",
+        "magento/module-catalog-import-export": "101.1.*",
+        "magento/module-downloadable-import-export": "100.4.*",
+        "predis/predis": "*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -33,3 +34,4 @@
         }
     }
 }
+

@@ -1,35 +1,36 @@
 {
     "name": "magento/module-quote",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/framework": "*",
-        "magento/module-authorization": "*",
-        "magento/module-backend": "*",
-        "magento/module-catalog": "*",
-        "magento/module-catalog-inventory": "*",
-        "magento/module-checkout": "*",
-        "magento/module-customer": "*",
-        "magento/module-directory": "*",
-        "magento/module-eav": "*",
-        "magento/module-payment": "*",
-        "magento/module-sales": "*",
-        "magento/module-sales-sequence": "*",
-        "magento/module-shipping": "*",
-        "magento/module-store": "*",
-        "magento/module-tax": "*"
-    },
-    "suggest": {
-        "magento/module-webapi": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "101.2.4-p1",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "103.0.*",
+        "magento/module-authorization": "100.4.*",
+        "magento/module-backend": "102.0.*",
+        "magento/module-catalog": "104.0.*",
+        "magento/module-catalog-inventory": "100.4.*",
+        "magento/module-checkout": "100.4.*",
+        "magento/module-customer": "103.0.*",
+        "magento/module-directory": "100.4.*",
+        "magento/module-eav": "102.1.*",
+        "magento/module-payment": "100.4.*",
+        "magento/module-sales": "103.0.*",
+        "magento/module-sales-sequence": "100.4.*",
+        "magento/module-shipping": "100.4.*",
+        "magento/module-store": "101.1.*",
+        "magento/module-tax": "100.4.*"
+    },
+    "suggest": {
+        "magento/module-webapi": "100.4.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -39,3 +40,4 @@
         }
     }
 }
+
