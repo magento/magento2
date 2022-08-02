@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontWidgetsSection">
+        <element name="RecentOrderedProductCount" type="block" selector="#cart-sidebar-reorder li"/>
         <element name="widgetRecentlyViewedProductsGrid" type="block" selector=".block.widget.block-viewed-products-grid"/>
         <element name="widgetRecentlyComparedProductsGrid" type="block" selector=".block.widget.block-compared-products-grid"/>
         <element name="widgetRecentlyOrderedProductsGrid" type="block" selector=".block.block-reorder"/>
