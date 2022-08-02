@@ -126,7 +126,7 @@ define([
                 $table = $(elem).parents('table').eq(0),
                 $tableWrapper = $table.parent(),
                 outerHight =
-                $table.children('thead').outerHeight() === undefined ? 0 : $table.children('thead').outerHeight();
+                    $table.children('thead').outerHeight() === undefined ? 0 : $table.children('thead').outerHeight();
 
             this.disableScroll();
             $(recordNode).addClass(this.draggableElementClass);
