@@ -67,7 +67,7 @@ class StockDataFilter
         if (!isset($stockData['is_decimal_divided']) || $stockData['is_qty_decimal'] == 0) {
             $stockData['is_decimal_divided'] = 0;
         }
-        
+
         return $stockData;
     }
 }
