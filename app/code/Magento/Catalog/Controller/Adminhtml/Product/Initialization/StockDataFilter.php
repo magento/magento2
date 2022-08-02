@@ -5,19 +5,18 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
-use Exception;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Class StockDataFilter to Filter stock data
+ * Class StockDataFilter
  */
 class StockDataFilter
 {
     /**
      * The greatest value which could be stored in CatalogInventory Qty field
      */
-    public const MAX_QTY_VALUE = 99999999;
+    const MAX_QTY_VALUE = 99999999;
 
     /**
      * @var ScopeConfigInterface
@@ -47,7 +46,6 @@ class StockDataFilter
      * @param array $stockData
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @throws Exception
      */
     public function filter(array $stockData)
     {
@@ -65,27 +63,9 @@ class StockDataFilter
         if (isset($stockData['min_qty']) && (int)$stockData['min_qty'] < 0) {
             $stockData['min_qty'] = 0;
         }
-        $this->allowMultipleBoxesForShippingCheck($stockData);
 
         if (!isset($stockData['is_decimal_divided']) || $stockData['is_qty_decimal'] == 0) {
             $stockData['is_decimal_divided'] = 0;
-        }
-        return $stockData;
-    }
-
-    /**
-     * Allow Multiple Boxes For Shipping Check
-     *
-     * @param array $stockData
-     * @return array
-     * @throws Exception
-     */
-    public function allowMultipleBoxesForShippingCheck(array $stockData): array
-    {
-        if ((isset($stockData['is_decimal_divided']) && isset($stockData['is_qty_decimal']))
-            && $stockData['is_qty_decimal'] == 0 && $stockData['is_decimal_divided'] == 1) {
-            // phpcs:ignore Magento2.Exceptions.DirectThrow
-            throw new Exception(__('Please select Advanced Inventory -> Qty Uses Decimals as YES.'));
         }
         return $stockData;
     }
