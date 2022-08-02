@@ -56,20 +56,5 @@
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.customOptionTableRows}}" stepKey="waitForRowsToBeVisible"/>
         <seeNumberOfElements selector="{{AdminProductCustomizableOptionsSection.customOptionTableRows}}" userInput="1" stepKey="see4RowsOfOptions"/>
-
-        <!-- Create a second custom option with 2 values -->
-        <actionGroup ref="AdminCreateCustomDropDownOptionsActionGroup" stepKey="createSecondCustomOption">
-            <argument name="customOptionName" value="{{ProductOptionDropDown.title}}2"/>
-            <argument name="firstOption" value="ProductOptionValueDropdown1"/>
-            <argument name="secondOption" value="ProductOptionValueDropdown2"/>
-        </actionGroup>
-
-        <!-- Validate custom options records per page -->
-        <scrollToTopOfPage stepKey="scrollToPerPageDropdown"/>
-        <actionGroup ref="AdminOpenAndApplyCustomOptionRecordsPerPageActionGroup" stepKey="openAndApplyCustomOptionsPerPageDropdown">
-            <argument name="perPageInputValue" value="1"/>
-        </actionGroup>
-        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.customOptionsTableRecords}}" stepKey="waitForCustomOptionsToBeVisible"/>
-        <seeNumberOfElements selector="{{AdminProductCustomizableOptionsSection.customOptionsTableRecords}}" userInput="1" stepKey="see1CustomOptionRecord"/>
     </test>
 </tests>

@@ -57,7 +57,13 @@
         <element name="optionSku" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr//*[@name='product[options][{{index}}][sku]']" parameterized="true"/>
         <element name="optionFileExtensions" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr//*[@name='product[options][{{index}}][file_extension]']" parameterized="true"/>
         <element name="importOptions" type="button" selector="//button[@data-index='button_import']" timeout="30"/>
+
+        <!-- Records/Rows Pagination -->
         <element name="customOptionTableRows" type="button" selector=".admin__dynamic-rows[data-index='values'] tr.data-row" timeout="30"/>
         <element name="customOptionsTableRecords" type="button" selector=".admin__dynamic-rows[data-index='options']>tbody>tr.data-row" timeout="30"/>
+
+        <!-- Elements to test drag&drop -->
+        <element name="dragCustomOptionRecord" type="block" selector="(//tr[{{dragIndex}}]//div[contains(@class, 'draggable-handle')])[1]" timeout="30" parameterized="true"/>
+        <element name="customOptionRecordTitle" type="button" selector="//table[@data-index='options']//tr[{{index}}]//div[contains(@class, 'admin__collapsible-title')]//span" timeout="30" parameterized="true"/>
     </section>
 </sections>
