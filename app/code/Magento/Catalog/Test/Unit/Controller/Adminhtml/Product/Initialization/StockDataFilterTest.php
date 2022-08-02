@@ -66,16 +66,6 @@ class StockDataFilterTest extends TestCase
     }
 
     /**
-     * Verify update handle with exception.
-     */
-    public function testExecuteWithException(): void
-    {
-        $this->expectException('\Exception');
-        $this->expectExceptionMessage('Please select Advanced Inventory -> Qty Uses Decimals as YES.');
-        $this->stockDataFilter->filter(['is_qty_decimal' => 0, 'is_decimal_divided' => 1]);
-    }
-
-    /**
      * Data provider for testFilter
      *
      * @return array
