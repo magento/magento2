@@ -480,6 +480,15 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
+            <group id="grid" translate="label" type="text" sortOrder="45" showInDefault="1">
+                <label>Admin Grids</label>
+                <field id="show_approximate_total_number_of_products" translate="label comment"
+                       type="select" sortOrder="1" showInDefault="1" canRestore="1">
+                    <label>Show approximate total number of products</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Show approximate total number of products in products grid header.</comment>
+                </field>
+            </group>
         </section>
         <section id="web" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Web</label>
