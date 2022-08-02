@@ -13,9 +13,10 @@ namespace Magento\Backend\Block\System\Store\Grid\Render;
 class Group extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @return string|null
      */
-    public function render(\Magento\Framework\DataObject $row)
+    public function render(\Magento\Framework\DataObject $row): ?string
     {
         if (!$row->getData($this->getColumn()->getIndex())) {
             return null;

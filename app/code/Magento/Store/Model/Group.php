@@ -14,7 +14,7 @@ use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
 use Magento\Store\Model\Validation\StoreValidator;
 
 /**
- * Class Group
+ * Store Group model class used to retrieve and format group information
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -25,9 +25,9 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Store\Api\Data\GroupInterface,
     \Magento\Framework\App\ScopeInterface
 {
-    const ENTITY = 'store_group';
+    public const ENTITY = 'store_group';
 
-    const CACHE_TAG = 'store_group';
+    public const CACHE_TAG = 'store_group';
 
     /**
      * @var bool
