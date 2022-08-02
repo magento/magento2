@@ -17,6 +17,7 @@ use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\GraphQl\Query\Uid;
 
 /**
  * Category layer builder
@@ -73,7 +74,10 @@ class Category implements LayerBuilderInterface
     /**
      * @var Aggregations\Category\IncludeDirectChildrenOnly
      */
-    private Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly;
+     private Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly;
+
+     /** @var Uid */
+     private Uid $uidEncoder;
 
     /**
      * @param CategoryAttributeQuery $categoryAttributeQuery
@@ -91,7 +95,8 @@ class Category implements LayerBuilderInterface
         ResourceConnection $resourceConnection,
         LayerFormatter $layerFormatter,
         Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly,
-        CollectionFactory $categoryCollectionFactory
+        CollectionFactory $categoryCollectionFactory,
+        Uid $uidEncoder
     ) {
         $this->categoryAttributeQuery = $categoryAttributeQuery;
         $this->attributesMapper = $attributesMapper;
@@ -100,6 +105,7 @@ class Category implements LayerBuilderInterface
         $this->layerFormatter = $layerFormatter;
         $this->includeDirectChildrenOnly = $includeDirectChildrenOnly;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
+        $this->uidEncoder = $uidEncoder;
     }
 
     /**
@@ -155,7 +161,7 @@ class Category implements LayerBuilderInterface
             }
             $result['options'][] = $this->layerFormatter->buildItem(
                 $categoryLabels[$categoryId] ?? $categoryId,
-                $categoryId,
+                $this->uidEncoder->encode((string) $categoryId),
                 $value->getMetrics()['count']
             );
         }
