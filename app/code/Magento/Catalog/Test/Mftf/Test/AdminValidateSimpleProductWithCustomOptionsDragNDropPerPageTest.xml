@@ -27,12 +27,12 @@
         </actionGroup>
 
         <!-- Validate drag&drop -->
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToCustomOptionsSection"/>
         <dragAndDrop selector1="{{AdminProductCustomizableOptionsSection.dragCustomOptionRecord('2')}}" selector2="{{AdminProductCustomizableOptionsSection.dragCustomOptionRecord('1')}}" stepKey="moveCustomOptionRecord"/>
         <waitForPageLoad stepKey="waitForDragAndDrop"/>
         <see userInput="{{ProductOptionDropDown.title}}2" selector="{{AdminProductCustomizableOptionsSection.customOptionRecordTitle('1')}}" stepKey="seeCustomOptionRecord"/>
 
         <!-- Validate custom options records per page -->
-        <scrollToTopOfPage stepKey="scrollToPerPageDropdown"/>
         <actionGroup ref="AdminOpenAndApplyCustomOptionRecordsPerPageActionGroup" stepKey="openAndApplyCustomOptionsPerPageDropdown">
             <argument name="perPageInputValue" value="1"/>
         </actionGroup>
