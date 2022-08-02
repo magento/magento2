@@ -427,39 +427,39 @@ class RendererTest extends TestCase
             [
                 ['type' => 'css', 'attributes' => '', 'condition' => null],
                 ['type' => 'js', 'attributes' => 'attr="value"', 'condition' => null],
-                '<link  rel="stylesheet" type="text/css"  media="all" href="url" />' . "\n"
-                    . '<link  rel="stylesheet" type="text/css"  media="all" href="url" />' . "\n"
-                    . '<script  type="text/javascript"  attr="value" src="no_route_url"></script>' . "\n"
+                '<link rel="stylesheet" type="text/css" media="all" href="url" />' . "\n"
+                    . '<link rel="stylesheet" type="text/css" media="all" href="url" />' . "\n"
+                    . '<script type="text/javascript" attr="value" src="no_route_url"></script>' . "\n"
             ],
             [
                 ['type' => 'js', 'attributes' => ['attr' => 'value'], 'condition' => 'lt IE 7'],
                 ['type' => 'css', 'attributes' => 'attr="value"', 'condition' => null],
-                '<link  rel="stylesheet" type="text/css"  attr="value" href="no_route_url" />' . "\n"
+                '<link rel="stylesheet" type="text/css" attr="value" href="no_route_url" />' . "\n"
                     . '<!--[if lt IE 7]>' . "\n"
-                    . '<script  type="text/javascript"  attr="value" src="url"></script>' . "\n"
-                    . '<script  type="text/javascript"  attr="value" src="url"></script>' . "\n"
+                    . '<script type="text/javascript" attr="value" src="url"></script>' . "\n"
+                    . '<script type="text/javascript" attr="value" src="url"></script>' . "\n"
                     . '<![endif]-->' . "\n"
             ],
             [
                 ['type' => 'ico', 'attributes' => 'attr="value"', 'condition' => null],
                 ['type' => 'css', 'attributes' => '', 'condition' => null],
-                '<link  rel="stylesheet" type="text/css"  media="all" href="no_route_url" />' . "\n"
-                    . '<link  attr="value" href="url" />' . "\n"
-                    . '<link  attr="value" href="url" />' . "\n"
+                '<link rel="stylesheet" type="text/css" media="all" href="no_route_url" />' . "\n"
+                    . '<link attr="value" href="url" />' . "\n"
+                    . '<link attr="value" href="url" />' . "\n"
             ],
             [
                 ['type' => 'js', 'attributes' => '', 'condition' => null],
                 ['type' => 'ico', 'attributes' => ['attr' => 'value'], 'condition' => null],
-                '<link  attr="value" href="no_route_url" />' . "\n"
-                    . '<script  type="text/javascript"  src="url"></script>' . "\n"
-                    . '<script  type="text/javascript"  src="url"></script>' . "\n"
+                '<link attr="value" href="no_route_url" />' . "\n"
+                    . '<script type="text/javascript" src="url"></script>' . "\n"
+                    . '<script type="text/javascript" src="url"></script>' . "\n"
             ],
             [
                 ['type' => 'non', 'attributes' => ['attr' => 'value'], 'condition' => null],
                 ['type' => 'ico', 'attributes' => '', 'condition' => null],
-                '<link  href="no_route_url" />' . "\n"
-                    . '<link  attr="value" href="url" />' . "\n"
-                    . '<link  attr="value" href="url" />' . "\n"
+                '<link href="no_route_url" />' . "\n"
+                    . '<link attr="value" href="url" />' . "\n"
+                    . '<link attr="value" href="url" />' . "\n"
             ]
         ];
     }
@@ -506,7 +506,7 @@ class RendererTest extends TestCase
             ->willReturn([$groupMockOne]);
 
         $this->assertEquals(
-            '<link  rel="some-rel" href="url" />' . "\n",
+            '<link rel="some-rel" href="url" />' . "\n",
             $this->renderer->renderAssets($this->renderer->getAvailableResultGroups())
         );
     }
