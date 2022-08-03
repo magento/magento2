@@ -5,8 +5,6 @@
  */
 declare(strict_types=1);
 
-declare(strict_types=1);
-
 namespace Magento\Framework\App;
 
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
@@ -20,13 +18,13 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 class Area implements \Magento\Framework\App\AreaInterface
 {
     const AREA_GLOBAL = 'global';
-    const AREA_FRONTEND = 'frontend';
-    const AREA_ADMINHTML = 'adminhtml';
+    public const AREA_FRONTEND = 'frontend';
+    public const AREA_ADMINHTML = 'adminhtml';
     const AREA_DOC = 'doc';
-    const AREA_CRONTAB = 'crontab';
-    const AREA_WEBAPI_REST = 'webapi_rest';
-    const AREA_WEBAPI_SOAP = 'webapi_soap';
-    const AREA_GRAPHQL = 'graphql';
+    public const AREA_CRONTAB = 'crontab';
+    public const AREA_WEBAPI_REST = 'webapi_rest';
+    public const AREA_WEBAPI_SOAP = 'webapi_soap';
+    public const AREA_GRAPHQL = 'graphql';
 
     /**
      * @deprecated
@@ -36,7 +34,7 @@ class Area implements \Magento\Framework\App\AreaInterface
     /**
      * Area parameter.
      */
-    const PARAM_AREA = 'area';
+    public const PARAM_AREA = 'area';
 
     /**
      * Array of area loaded parts
