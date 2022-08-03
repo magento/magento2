@@ -41,35 +41,35 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     protected $_allowUsedFlat = true;
 
     /**
-     * Customer id
+     * Customer id for Compare Helper
      *
      * @var null|int
      */
     protected $_customerId = null;
 
     /**
-     * Catalog session
+     * Catalog session for Compare Helper
      *
      * @var \Magento\Catalog\Model\Session
      */
     protected $_catalogSession;
 
     /**
-     * Customer session
+     * Customer session for Compare Helper
      *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
 
     /**
-     * Customer visitor
+     * Customer visitor for Compare Helper
      *
      * @var \Magento\Customer\Model\Visitor
      */
     protected $_customerVisitor;
 
     /**
-     * Catalog product visibility
+     * Catalog product visibility for Compare Helper
      *
      * @var \Magento\Catalog\Model\Product\Visibility
      */
