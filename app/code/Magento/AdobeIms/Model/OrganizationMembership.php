@@ -10,12 +10,13 @@ namespace Magento\AdobeIms\Model;
 use Magento\AdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\AdobeImsApi\Api\OrganizationMembershipInterface;
-use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\HTTP\Client\CurlFactory;
 
+/**
+ * Check if user is a member of Adobe Organization
+ */
 class OrganizationMembership implements OrganizationMembershipInterface
 {
-
     /**
      * @var ConfigInterface
      */

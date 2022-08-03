@@ -92,12 +92,6 @@ class GetToken implements GetTokenInterface
      */
     public function getTokenResponse(string $code): TokenResponseInterface
     {
-        try {
-            return $this->execute($code);
-        } catch (AuthorizationException $exception) {
-            throw new AuthorizationException(
-                __($exception->getMessage())
-            );
-        }
+        return $this->execute($code);
     }
 }

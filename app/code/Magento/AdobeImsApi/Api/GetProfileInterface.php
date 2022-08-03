@@ -19,7 +19,7 @@ interface GetProfileInterface
      * Get profile url
      *
      * @param string $code
-     * @return array|bool|float|int|mixed|string|null
+     * @return mixed
      * @throws AuthorizationException
      */
     public function getProfile(string $code);

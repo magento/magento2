@@ -13,6 +13,9 @@ use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 
+/**
+ * Provide auth url and validate authorization
+ */
 class Authorization implements AuthorizationInterface
 {
     private const HTTP_REDIRECT_CODE = 302;

@@ -23,7 +23,6 @@ use Psr\Log\LoggerInterface;
  */
 class LogOut implements LogOutInterface
 {
-
     /**
      * Successful result code.
      */
@@ -175,7 +174,7 @@ class LogOut implements LogOutInterface
     }
 
     /**
-     * Checks whether user profile could be got by the access token
+     * Check whether user profile could be retrieved by the access token
      *  - If the token is invalidated, profile information won't be returned
      *
      * @param string $accessToken

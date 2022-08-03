@@ -13,9 +13,11 @@ use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Provide IMS user profile
+ */
 class GetProfile implements GetProfileInterface
 {
-
     /**
      * @var ConfigInterface
      */

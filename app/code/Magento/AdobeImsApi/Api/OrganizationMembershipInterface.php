@@ -10,7 +10,7 @@ namespace Magento\AdobeImsApi\Api;
 use Magento\Framework\Exception\AuthorizationException;
 
 /**
- * Provide user profile organizations for checking allocation
+ * Check if user is a member of Adobe Organization
  *
  * @api
  */

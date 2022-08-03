@@ -13,7 +13,6 @@ use Magento\Framework\UrlInterface;
 
 class ImsConfig extends Config
 {
-    private const XML_PATH_ORGANIZATION_ID = 'adobe_ims/integration/organization_id';
     private const XML_PATH_LOGGING_ENABLED = 'adobe_ims/integration/logging_enabled';
     private const XML_PATH_NEW_ADMIN_EMAIL_TEMPLATE = 'adobe_ims/email/content_template';
 
@@ -68,15 +67,5 @@ class ImsConfig extends Config
         return (string) $this->scopeConfig->getValue(
             self::XML_PATH_NEW_ADMIN_EMAIL_TEMPLATE
         );
-    }
-
-    /**
-     * Retrieve Organization Id
-     *
-     * @return string
-     */
-    public function getOrganizationId(): string
-    {
-        return $this->scopeConfig->getValue(self::XML_PATH_ORGANIZATION_ID);
     }
 }

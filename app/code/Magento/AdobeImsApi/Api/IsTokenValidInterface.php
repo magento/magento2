@@ -10,7 +10,7 @@ namespace Magento\AdobeImsApi\Api;
 use Magento\Framework\Exception\AuthorizationException;
 
 /**
- * Declare functionality for user login from the Adobe account
+ * Validate ims token
  *
  * @api
  */
