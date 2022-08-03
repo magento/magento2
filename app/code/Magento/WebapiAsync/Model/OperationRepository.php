@@ -80,6 +80,7 @@ class OperationRepository implements OperationRepositoryInterface
 
     /**
      * @inheritDoc
+     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function create($topicName, $entityParams, $groupId, $operationId): OperationInterface
     {
