@@ -8,87 +8,124 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AddToCartCrossSellTest">
+    <test name="ChangeScopeForProductStatusAttributeTest">
         <annotations>
+            <stories value="Admin Change Scope For Products Status For Attribute"/>
             <features value="Catalog"/>
-            <stories value="Promote Products as Cross-Sells"/>
-            <title value="Admin should be able to add cross-sell to products."/>
-            <description value="Create products, add products to cross sells, and check that they appear in the Shopping Cart page."/>
-            <severity value="BLOCKER"/>
-            <testCaseId value="MC-9143"/>
-            <group value="Catalog"/>
+            <title value="Admin Change Scope For Products Status For Attribute"/>
+            <description value="Admin Change Scope For Products Status For Attribute"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-27249"/>
+            <group value="catalog"/>
         </annotations>
         <before>
-            <createData entity="SimpleSubCategory" stepKey="category1"/>
-            <createData entity="_defaultProduct" stepKey="simpleProduct1">
-                <requiredEntity createDataKey="category1"/>
-            </createData>
-            <createData entity="_defaultProduct" stepKey="simpleProduct2">
-                <requiredEntity createDataKey="category1"/>
-            </createData>
-            <createData entity="_defaultProduct" stepKey="simpleProduct3">
-                <requiredEntity createDataKey="category1"/>
+            <!-- create category, simple product -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
             </createData>
 
-            <actionGroup ref="AdminLoginActionGroup" stepKey="logInAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+
+            <!--Create First website,store and 2 store views-->
+            <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="goToAdminSystemStorePage"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="adminCreateNewWebsite">
+                <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
+                <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="adminCreateNewStore">
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeGroupName" value="{{NewStoreData.name}}"/>
+                <argument name="storeGroupCode" value="{{NewStoreData.code}}"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFirstStoreView">
+                <argument name="StoreGroup" value="NewStoreData"/>
+                <argument name="customStore" value="storeViewData1"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+                <argument name="StoreGroup" value="NewStoreData"/>
+                <argument name="customStore" value="storeViewData2"/>
+            </actionGroup>
+
+            <magentoCron groups="index" stepKey="reindex"/>
+
+            <!--Create Second website,store and 2 store views-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite" >
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createStore" >
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFirstStoreView1">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="storeViewData3"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView2">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="storeViewData4"/>
+            </actionGroup>
         </before>
-        <after>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
 
-            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimp1"/>
-            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimp2"/>
-            <deleteData createDataKey="simpleProduct3" stepKey="deleteSimp3"/>
-            <deleteData createDataKey="category1" stepKey="deleteCategory"/>
+        <after>
+            <!-- Delete First Website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite1">
+                <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+            </actionGroup>
+            <!-- Delete Second Website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite2">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!-- Delete category, simple product -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
         </after>
 
-        <!-- Go to simpleProduct1, add simpleProduct2 and simpleProduct3 as cross-sell-->
-        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct1">
-            <argument name="productId" value="$simpleProduct1.id$"/>
-        </actionGroup>
-        <click stepKey="openHeader1" selector="{{AdminProductFormRelatedUpSellCrossSellSection.sectionHeader}}"/>
-
-        <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addProduct2ToSimp1">
-            <argument name="sku" value="$simpleProduct2.sku$"/>
-        </actionGroup>
-        <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addProduct3ToSimp1">
-            <argument name="sku" value="$simpleProduct3.sku$"/>
-        </actionGroup>
-        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
-
-        <!-- Go to simpleProduct3, add simpleProduct1 and simpleProduct2 as cross-sell-->
-        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct3">
-            <argument name="productId" value="$simpleProduct3.id$"/>
-        </actionGroup>
-        <click stepKey="openHeader2" selector="{{AdminProductFormRelatedUpSellCrossSellSection.sectionHeader}}"/>
-
-        <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addProduct1ToSimp3">
-            <argument name="sku" value="$simpleProduct1.sku$"/>
-        </actionGroup>
-        <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addProduct2ToSimp3">
-            <argument name="sku" value="$simpleProduct2.sku$"/>
-        </actionGroup>
-        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave2"/>
-
-        <!-- Go to frontend, add simpleProduct1 to cart-->
-        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimp1ToCart">
-            <argument name="product" value="$simpleProduct1$"/>
+        <!-- Go to product page -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="visitAdminProductPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
         </actionGroup>
 
-        <!-- Check that cart page contains cross-sell to simpleProduct2 and simpleProduct3-->
-        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart1"/>
-        <waitForElementVisible selector="{{CheckoutCartCrossSellSection.products}}" stepKey="waitForCrossSellLoading"/>
-        <see stepKey="seeProduct2InCrossSell" selector="{{CheckoutCartCrossSellSection.products}}" userInput="$simpleProduct2.name$"/>
-        <see stepKey="seeProduct3InCrossSell" selector="{{CheckoutCartCrossSellSection.products}}" userInput="$simpleProduct3.name$"/>
+        <!--Assign product to custom website and save-->
+        <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="selectProductInWebsites">
+            <argument name="website" value="{{NewWebSiteData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
 
-        <!-- Add simpleProduct3 to cart, check cross-sell contains product2 but not product3-->
-        <click stepKey="addSimp3ToCart" selector="{{CheckoutCartCrossSellSection.productRowByName($simpleProduct3.name$)}}{{CheckoutCartCrossSellSection.addToCart}}"/>
-        <waitForPageLoad stepKey="waitForCartToLoad2"/>
-        <see stepKey="seeProduct2StillInCrossSell" selector="{{CheckoutCartCrossSellSection.products}}" userInput="$simpleProduct2.name$"/>
-        <dontSee stepKey="dontSeeProduct3InCrossSell" selector="{{CheckoutCartCrossSellSection.products}}" userInput="$simpleProduct3.name$"/>
+        <!--Switch to Store view 1-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchNewStoreView1">
+            <argument name="storeViewName" value="{{storeViewData1.name}}"/>
+        </actionGroup>
 
-        <!-- Add simpleProduct2 to cart, check cross-sell doesn't contain product 2 anymore.-->
-        <click stepKey="addSimp2ToCart" selector="{{CheckoutCartCrossSellSection.productRowByName($simpleProduct2.name$)}}{{CheckoutCartCrossSellSection.addToCart}}"/>
-        <waitForPageLoad stepKey="waitForCartToLoad3"/>
-        <dontSee stepKey="dontSeeProduct2InCrossSell" selector="{{CheckoutCartCrossSellSection.products}}" userInput="$simpleProduct2.name$"/>
+        <!-- uncheck the product status use default -->
+        <waitForElementVisible selector="{{AdminProductFormSection.productStatusUseDefault}}" stepKey="waitForDefaultValueCheckBox"/>
+        <click selector="{{AdminProductFormSection.productStatusUseDefault}}" stepKey="unCheckUseDefaultValueCheckBox"/>
+
+        <!-- Change status of product to "Disable" and save it -->
+        <actionGroup ref="AdminSetProductDisabledActionGroup" stepKey="disableProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct1"/>
+
+        <!--Switch to Store view 2 -->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchNewStoreView2">
+            <argument name="storeViewName" value="{{storeViewData2.name}}"/>
+        </actionGroup>
+
+        <!-- Enable the product for the second storeview -->
+        <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSlider"/>
+        <actionGroup ref="ToggleProductEnabledActionGroup" stepKey="enableProduct"/>
+        <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="seeThatProductIsEnabled"/>
+        <seeElement selector="{{AdminProductFormSection.productStatusValue('1')}}" stepKey="assertThatProductSetToEnabled"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProductAgain"/>
+
+        <!--Switch to Store view 1 Again -->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchToStoreView1Again">
+            <argument name="storeViewName" value="{{storeViewData1.name}}"/>
+        </actionGroup>
+
+        <!-- Verify that product is enable -->
+        <seeElement selector="{{AdminProductFormSection.productStatusValue('1')}}" stepKey="assertThatProductSetToEnabled2"/>
     </test>
 </tests>
