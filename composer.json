@@ -190,8 +190,6 @@
         "magento/module-grouped-catalog-inventory": "*",
         "magento/module-grouped-product-graph-ql": "*",
         "magento/module-import-export": "*",
-        "magento/module-import-csv": "*",
-        "magento/module-import-csv-api": "*",
         "magento/module-indexer": "*",
         "magento/module-instant-purchase": "*",
         "magento/module-integration": "*",
