@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Theme\Model;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Area;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 
@@ -267,7 +268,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     public function getArea()
     {
-        return $this->getData('area');
+        return $this->getData(Area::PARAM_AREA);
     }
 
     /**
@@ -278,7 +279,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     public function setArea($area)
     {
-        return $this->setData('area', $area);
+        return $this->setData(Area::PARAM_AREA, $area);
     }
 
     /**
