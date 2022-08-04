@@ -2336,6 +2336,7 @@ class Product extends AbstractEntity
                     $stockItem = $this->getRowExistingStockItem($rowData);
                     $existingStockItemData = $stockItem->getData();
                     $row = $this->formatStockDataForRow($rowData);
+                    $row['explicit_qty'] = array_key_exists('qty', $rowData);
                     $productIdsToReindex[] = $row['product_id'];
                     $storeId = $this->getRowStoreId($rowData);
                     if (!empty(array_diff_assoc($row, $existingStockItemData))
