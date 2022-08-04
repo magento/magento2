@@ -17,10 +17,10 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
  */
 class Area implements \Magento\Framework\App\AreaInterface
 {
-    const AREA_GLOBAL = 'global';
+    public const AREA_GLOBAL = 'global';
     public const AREA_FRONTEND = 'frontend';
     public const AREA_ADMINHTML = 'adminhtml';
-    const AREA_DOC = 'doc';
+    public const AREA_DOC = 'doc';
     public const AREA_CRONTAB = 'crontab';
     public const AREA_WEBAPI_REST = 'webapi_rest';
     public const AREA_WEBAPI_SOAP = 'webapi_soap';
@@ -29,7 +29,7 @@ class Area implements \Magento\Framework\App\AreaInterface
     /**
      * @deprecated
      */
-    const AREA_ADMIN    = 'admin';
+    public const AREA_ADMIN    = 'admin';
 
     /**
      * Area parameter.
