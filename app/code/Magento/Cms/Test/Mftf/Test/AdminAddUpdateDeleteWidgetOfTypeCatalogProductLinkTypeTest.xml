@@ -27,7 +27,6 @@
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-
         </before>
 
         <!--Main test-->
@@ -72,7 +71,7 @@
             <argument name="productName" value="$createPreReqProduct2.name$"/>
         </actionGroup>
 
-        <amOnPage url="admin" stepKey="openAdminPanelPage2" />
+        <amOnPage url="admin" stepKey="openAdminPanelPage2"/>
         <actionGroup ref="AdminMassDeleteWidgetActionGroup" stepKey="massWidgetDelete">
             <argument name="row" value="1"/>
         </actionGroup>
@@ -85,9 +84,9 @@
 
         <after>
 
-            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
-            <deleteData createDataKey="createPreReqProduct1" stepKey="deletePreReqProduct" />
-            <deleteData createDataKey="createPreReqProduct2" stepKey="deletePreReqProduct2" />
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog"/>
+            <deleteData createDataKey="createPreReqProduct1" stepKey="deletePreReqProduct"/>
+            <deleteData createDataKey="createPreReqProduct2" stepKey="deletePreReqProduct2"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
