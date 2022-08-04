@@ -21,6 +21,8 @@ use Zend_Currency_Exception;
  */
 class SpecialPriceAttributes implements ModifierInterface
 {
+    public const LOCALE_USING_DECIMAL_COMMA = ['nl_BE', 'nl_NL'];
+
     /**
      * @var ResolverInterface
      */
@@ -77,6 +79,9 @@ class SpecialPriceAttributes implements ModifierInterface
                             ['display' => Zend_Currency::NO_SYMBOL],
                             false
                         );
+                    if (in_array($this->localeResolver->getLocale(), self::LOCALE_USING_DECIMAL_COMMA)) {
+                        $item[$priceAttribute] = str_replace(['.',','], ['','.'], $item[$priceAttribute]);
+                    }
                     $item[$priceAttribute] = $numberFormatter->format($item[$priceAttribute] / 100);
                 }
             }
