@@ -24,25 +24,25 @@
         <amOnPage url="{{CmsNewWidgetsPage.url}}" stepKey="navigateToCreateWidgetsPage"/>
         <waitForPageLoad stepKey="wait1"/>
 
-        <selectOption selector="{{CmsNewWidgetsSettingSection.WidgetType}}" userInput="{{WidgetType}}" stepKey="selectCMSStaticBlock" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear1" />
-        <selectOption selector="{{CmsNewWidgetsSettingSection.WidgetTheme}}" userInput="{{WidgetTheme}}" stepKey="selectTemplate" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear2" />
-        <click selector="{{CmsNewWidgetsSettingSection.ContinueButton}}" stepKey="clickContinueButton" />
+        <selectOption selector="{{CmsNewWidgetsSettingSection.WidgetType}}" userInput="{{WidgetType}}" stepKey="selectCMSStaticBlock"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear1"/>
+        <selectOption selector="{{CmsNewWidgetsSettingSection.WidgetTheme}}" userInput="{{WidgetTheme}}" stepKey="selectTemplate"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear2"/>
+        <click selector="{{CmsNewWidgetsSettingSection.ContinueButton}}" stepKey="clickContinueButton"/>
         <waitForPageLoad stepKey="wait2"/>
 
         <fillField selector="{{CmsNewWidgetStoreforntPropertiesSection.WidgetTitle}}" userInput="{{WidgetTitle}}" stepKey="fillFieldTitle"/>
-        <selectOption selector="{{CmsNewWidgetStoreforntPropertiesSection.AssigntoStoreViews}}" userInput="{{AssigntoStoreViews}}" stepKey="selectView" />
-        <click selector="{{CmsNewWidgetStoreforntPropertiesSection.AddLayout}}" stepKey="clickAddLayoutButton" />
-        <scrollTo selector="{{CmsNewWidgetStoreforntPropertiesSection.AddLayout}}" stepKey="scrollToAddLayoutTab" />
+        <selectOption selector="{{CmsNewWidgetStoreforntPropertiesSection.AssigntoStoreViews}}" userInput="{{AssigntoStoreViews}}" stepKey="selectView"/>
+        <click selector="{{CmsNewWidgetStoreforntPropertiesSection.AddLayout}}" stepKey="clickAddLayoutButton"/>
+        <scrollTo selector="{{CmsNewWidgetStoreforntPropertiesSection.AddLayout}}" stepKey="scrollToAddLayoutTab"/>
         <waitForPageLoad stepKey="wait3"/>
 
-        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.DisplayOn}}" userInput="{{WidgetDisplayOn}}" stepKey="selectDispaly" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3" />
-        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.Container}}" userInput="{{Container}}" stepKey="selectContainer" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear4" />
-        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.Template}}" userInput="{{Template}}" stepKey="selectTemplate2" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear5" />
+        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.DisplayOn}}" userInput="{{WidgetDisplayOn}}" stepKey="selectDispaly"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3"/>
+        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.Container}}" userInput="{{Container}}" stepKey="selectContainer"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear4"/>
+        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.Template}}" userInput="{{Template}}" stepKey="selectTemplate2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear5"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
         <waitForPageLoad stepKey="wait4"/>
 
