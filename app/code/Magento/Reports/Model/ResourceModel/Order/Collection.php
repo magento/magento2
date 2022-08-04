@@ -425,6 +425,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                 $dateEnd->modify('now');
                 break;
             case '24h':
+                $dateEnd = new \DateTime('now', new \DateTimeZone($timezoneLocal));
                 $dateEnd->modify('+1 hour');
                 $dateStart = clone $dateEnd;
                 $dateStart->modify('-1 day');
