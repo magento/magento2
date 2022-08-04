@@ -15,6 +15,11 @@ use Magento\Framework\DB\Select;
 class ProductCollection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
+     * Limit to display/hide total number of products in grid
+     */
+    private const RECORDS_LIMIT = 20000;
+
+    /**
      * Disables using of price index for grid rendering
      *
      * Admin area shouldn't use price index and should rely on actual product data instead.
@@ -35,7 +40,26 @@ class ProductCollection extends \Magento\Catalog\Model\ResourceModel\Product\Col
     {
         if ($this->_scopeConfig->getValue('admin/grid/show_approximate_total_number_of_products')) {
             $sql = $this->getSelectCountSql();
-            return $this->analyzeCount($sql);
+            $estimatedCount = $this->analyzeCount($sql);
+
+            if ($estimatedCount < self::RECORDS_LIMIT) {
+                $columns = $sql->getPart(Select::COLUMNS);
+                $sql->reset(Select::COLUMNS);
+
+                foreach ($columns as &$column) {
+                    if ($column[1] instanceof \Zend_Db_Expr && $column[1] == "COUNT(DISTINCT e.entity_id)") {
+                        $column[1] = new \Zend_Db_Expr('DISTINCT e.entity_id');
+                    }
+                }
+                $sql->setPart(Select::COLUMNS, $columns);
+                $sql->limit(self::RECORDS_LIMIT);
+
+                $query = new \Zend_Db_Expr('SELECT COUNT(*) FROM (' . $sql->assemble() . ') AS c');
+
+                return $this->getConnection()->query($query)->fetchColumn();
+            } else {
+                return self::RECORDS_LIMIT;
+            }
         }
 
         return parent::getSize();
