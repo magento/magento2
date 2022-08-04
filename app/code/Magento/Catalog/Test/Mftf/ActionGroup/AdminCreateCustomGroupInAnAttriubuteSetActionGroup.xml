@@ -8,8 +8,6 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- ActionGroup will add a single custom option to a product
-         You must already be on the product creation page -->
     <actionGroup name="AdminCreateCustomGroupInAnAttributeSetActionGroup">
         <annotations>
             <description> Admin Create Custom Group In An Attribute Set</description>
@@ -24,14 +22,17 @@
         <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="{{name}}" stepKey="filterByName"/>
         <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickSearch"/>
         <click selector="{{AdminProductAttributeSetGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForPageLoad stepKey="waitForClickNewButton"/>
         <click selector="{{AdminProductAttributeSetEditSection.AddNewGroup}}" stepKey="clickAddNew"/>
-        <wait stepKey="k1" time="20"/>
+        <waitForPageLoad stepKey="waitForFillname"/>
         <fillField userInput="" selector="{{AdminProductAttributeSetEditSection.newGroupName}}" stepKey="fillName"/>
-        <wait stepKey="k2" time="20"/>
+        <waitForPageLoad stepKey="waitForClickOk"/>
         <click selector="{{AdminProductAttributeSetEditSection.buttonOk}}" stepKey="clickOk"/>
         <see userInput="This is a required field." selector="{{AdminProductAttributeSetEditSection.errorLabel}}" stepKey="seeErrorMessage"/>
         <fillField userInput="{{customGroupName}}" selector="{{AdminProductAttributeSetEditSection.newGroupName}}" stepKey="fillCustomGroupName"/>
         <click selector="{{AdminProductAttributeSetEditSection.buttonOk}}" stepKey="clickButtonOk"/>
+        <click selector="{{AdminProductAttributeSetActionSection.save}}" stepKey="clickSave"/>
+        <see userInput="You saved the attribute set" selector="{{AdminMessagesSection.success}}" stepKey="successMessage"/>
+
     </actionGroup>
 </actionGroups>
