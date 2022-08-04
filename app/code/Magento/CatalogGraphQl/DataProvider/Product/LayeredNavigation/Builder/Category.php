@@ -74,10 +74,10 @@ class Category implements LayerBuilderInterface
     /**
      * @var Aggregations\Category\IncludeDirectChildrenOnly
      */
-     private Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly;
+    private Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly;
 
-     /** @var Uid */
-     private Uid $uidEncoder;
+    /** @var Uid */
+    private Uid $uidEncoder;
 
     /**
      * @param CategoryAttributeQuery $categoryAttributeQuery
@@ -87,6 +87,7 @@ class Category implements LayerBuilderInterface
      * @param LayerFormatter $layerFormatter
      * @param Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly
      * @param CollectionFactory $categoryCollectionFactory
+     * @param Uid $uidEncoder
      */
     public function __construct(
         CategoryAttributeQuery $categoryAttributeQuery,
