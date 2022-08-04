@@ -11,8 +11,6 @@ use Magento\Framework\Exception\AuthorizationException;
 
 /**
  * Check if user is a member of Adobe Organization
- *
- * @api
  */
 interface OrganizationMembershipInterface
 {

@@ -11,8 +11,6 @@ use Magento\Framework\Exception\InvalidArgumentException;
 
 /**
  * Provide Authorization
- *
- * @api
  */
 interface AuthorizationInterface
 {

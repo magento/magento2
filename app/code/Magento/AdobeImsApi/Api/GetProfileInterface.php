@@ -10,8 +10,6 @@ use Magento\Framework\Exception\AuthorizationException;
 
 /**
  * Declare functionality to get profile
- *
- * @api
  */
 interface GetProfileInterface
 {

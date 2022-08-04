@@ -11,8 +11,6 @@ use Magento\Framework\Exception\AuthorizationException;
 
 /**
  * Validate ims token
- *
- * @api
  */
 interface IsTokenValidInterface
 {
