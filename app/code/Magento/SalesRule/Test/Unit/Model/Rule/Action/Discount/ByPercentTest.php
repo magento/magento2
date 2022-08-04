@@ -173,7 +173,7 @@ class ByPercentTest extends TestCase
         )->willReturn(
             $itemData['baseDiscountAmount']
         );
-        if (!$ruleData['discountQty'] || $ruleData['discountQty'] > $qty) {
+        if (!$ruleData['discountQty'] || $ruleData['discountQty'] >= $qty) {
             $item->expects(
                 $this->atLeastOnce()
             )->method(

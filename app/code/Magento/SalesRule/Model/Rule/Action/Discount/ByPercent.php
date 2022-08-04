@@ -61,7 +61,7 @@ class ByPercent extends AbstractDiscount
             ($qty * $baseItemOriginalPrice - $item->getBaseDiscountAmount()) * $_rulePct
         );
 
-        if (!$rule->getDiscountQty() || $rule->getDiscountQty() > $qty) {
+        if (!$rule->getDiscountQty() || $rule->getDiscountQty() >= $qty) {
             $discountPercent = min(100, $item->getDiscountPercent() + $rulePercent);
             $item->setDiscountPercent($discountPercent);
         }
