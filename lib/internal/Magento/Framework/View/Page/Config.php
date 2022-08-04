@@ -193,10 +193,11 @@ class Config
         $this->title = $title;
         $this->localeResolver = $localeResolver;
         $this->isIncludesAvailable = $isIncludesAvailable;
+        $locale = $this->localeResolver->getLocale();
         $this->setElementAttribute(
             self::ELEMENT_TYPE_HTML,
             self::HTML_ATTRIBUTE_LANG,
-            strstr($this->localeResolver->getLocale(), '_', true)
+            $locale !== null ? strstr($locale, '_', true) : false
         );
         $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
             Escaper::class
@@ -544,7 +545,7 @@ class Config
      */
     public function addBodyClass($className)
     {
-        $className = preg_replace('#[^a-z0-9-_]+#', '-', strtolower($className));
+        $className = preg_replace('#[^a-z0-9-_]+#', '-', strtolower((string)$className));
         $bodyClasses = $this->getElementAttribute(self::ELEMENT_TYPE_BODY, self::BODY_ATTRIBUTE_CLASS);
         $bodyClasses = $bodyClasses ? explode(' ', $bodyClasses) : [];
         $bodyClasses[] = $className;

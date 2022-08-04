@@ -122,6 +122,24 @@ class Helper
     private $categoryLinkFactory;
 
     /**
+     * @var array
+     */
+    private $productDataKeys = [
+        'weight',
+        'special_price',
+        'cost',
+        'country_of_manufacture',
+        'description',
+        'short_description',
+        'meta_description',
+        'meta_keyword',
+        'meta_title',
+        'page_layout',
+        'custom_design',
+        'gift_wrapping_price'
+    ];
+
+    /**
      * Constructor
      *
      * @param RequestInterface $request
@@ -201,6 +219,12 @@ class Helper
 
         if (!empty($productData['is_downloadable'])) {
             $productData['product_has_weight'] = 0;
+        }
+
+        foreach ($productData as $key => $value) {
+            if (in_array($key, $this->productDataKeys) && $value === '') {
+                $productData[$key] = null;
+            }
         }
 
         foreach (['category_ids', 'website_ids'] as $field) {

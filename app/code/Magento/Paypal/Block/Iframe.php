@@ -28,8 +28,6 @@ class Iframe extends \Magento\Payment\Block\Form
     protected $_order;
 
     /**
-     * Payment method code
-     *
      * @var string
      */
     protected $_paymentMethodCode;
@@ -109,7 +107,7 @@ class Iframe extends \Magento\Payment\Block\Form
         $paymentCode = $this->_getCheckout()->getQuote()->getPayment()->getMethod();
         if (in_array($paymentCode, $this->_hssHelper->getHssMethods())) {
             $this->_paymentMethodCode = $paymentCode;
-            $templatePath = str_replace('_', '', $paymentCode);
+            $templatePath = $paymentCode !== null ? str_replace('_', '', $paymentCode) : '';
             $templateFile = "Magento_Paypal::{$templatePath}/iframe.phtml";
             $directory = $this->readFactory->create($this->reader->getModuleDir('', 'Magento_Paypal'));
             $file = $this->resolver->getTemplateFileName($templateFile, ['module' => 'Magento_Paypal']);
@@ -134,7 +132,7 @@ class Iframe extends \Magento\Payment\Block\Form
                 'Magento\\Paypal\\Block\\' . str_replace(
                     ' ',
                     '\\',
-                    ucwords(str_replace('_', ' ', $this->_paymentMethodCode))
+                    $this->_paymentMethodCode !== null ? ucwords(str_replace('_', ' ', $this->_paymentMethodCode)) : ''
                 ) . '\\Iframe'
             );
             if (!$this->_block instanceof \Magento\Paypal\Block\Iframe) {

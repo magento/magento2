@@ -9,7 +9,9 @@ declare(strict_types = 1);
 namespace Magento\CatalogImportExport\Model\Export;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
+use Magento\CatalogImportExport\Model\Export\Product\Type\Simple as SimpleProductType;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 
 /**
@@ -709,6 +711,24 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $this->assertStringContainsString('"Simple Product"', $exportData);
         $this->assertStringNotContainsString('"Virtual Product With Custom Options"', $exportData);
+    }
+
+    public function testFilterAttributeCollection(): void
+    {
+        $collection = $this->objectManager->create(ProductAttributeCollection::class);
+        $collection = $this->model->filterAttributeCollection($collection);
+        $attributes = [];
+        foreach ($collection->getItems() as $attribute) {
+            $attributes[] = $attribute->getAttributeCode();
+        }
+
+        $simpleProductType = $this->objectManager->create(SimpleProductType::class);
+        $disabledAttributes = $simpleProductType->getDisabledAttrs();
+        $this->assertEmpty(
+            array_intersect($disabledAttributes, $attributes),
+            'Disabled attributes are not filtered.'
+        );
+        $this->assertContains('category_ids', $attributes);
     }
 
     /**

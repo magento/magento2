@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontFPTProductSubtotalOrderTest">
+        <annotations>
+            <features value="Tax"/>
+            <stories value="Order taxes"/>
+            <title value="Correct subtotal including FPT in product information section of order summary"/>
+            <description value="Tax information is calculated properly in product information section when order contains multiple amount of the product"/>
+            <severity value="CRITICAL"/>
+            <useCaseId value="ACP2E-350"/>
+            <testCaseId value="AC-2110"/>
+            <group value="checkout"/>
+            <group value="tax"/>
+            <group value="weee"/>
+        </annotations>
+
+        <before>
+            <!-- Preconditions -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Store -> Configuration -> Sales -> Tax FPT Enable -->
+            <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
+            <!-- Setting up FPT display settings as needed for test -->
+            <magentoCLI command="config:set tax/weee/display_sales 2" stepKey="displayPricesInSalesExcludingIncluding"/>
+            <magentoCLI command="config:set tax/weee/include_in_subtotal 1" stepKey="enableIncludeInSubtotal"/>
+
+            <!-- Fixed Product Tax attribute is created and added to default attribute set -->
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttribute"/>
+            <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet">
+                <requiredEntity createDataKey="createProductFPTAttribute"/>
+            </createData>
+
+            <!-- Simple product is created with Price = 100 and FPT = 2 for Germany -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+                <argument name="productId" value="$createSimpleProduct.id$"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValue">
+                <argument name="FPTAttributeCode" value="$createProductFPTAttribute.attribute_code$"/>
+                <argument name="countryForFPT" value="Germany"/>
+                <argument name="stateForFPT" value="*"/>
+                <argument name="valueForFPT" value="2"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        </before>
+
+        <after>
+            <!-- Delete FPT attribute -->
+            <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!-- Return Tax configuration including FPT to default status -->
+            <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
+            <createData entity="WeeeConfigDisable" stepKey="useSystemValueFTP"/>
+            <!-- Delete product and clear products filter -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <!-- Logout Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Test Steps -->
+
+        <!-- Add simple product with qty 100 to shopping cart -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="cartAddSimpleProductToCart">
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+            <argument name="productQty" value="100"/>
+        </actionGroup>
+
+        <!-- Open Checkout page -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+
+        <!-- Fill shipping information for guest with Germany address -->
+        <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="customerAddress" value="DE_Address_Berlin_Not_Default_Address"/>
+        </actionGroup>
+
+        <!-- Select shipping and payment methods -->
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="clickNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="clickCheckMoneyOrderPayment"/>
+
+        <!-- Open summary section for product -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsClickable"/>
+        <waitForElementNotVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" stepKey="waitForCartItemsActive"/>
+        <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="clickItemInCart"/>
+        <waitForPageLoad stepKey="waitForCartItemLoaded"/>
+        <grabTextFrom selector="{{StorefrontCheckoutCartItemWeeeSection.productWeeeSubtotalIncludingTax}}" stepKey="grabProductSubtotalWithFPT"/>
+        <grabTextFrom selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="grabCartSubtotal"/>
+
+        <!-- Check that product total is correct -->
+        <assertStringContainsString stepKey="assertCartTaxTotalContainsCorrectFPT">
+            <actualResult type="const">$grabProductSubtotalWithFPT</actualResult>
+            <expectedResult type="const">"$10,200.00"</expectedResult>
+        </assertStringContainsString>
+
+         <!-- Check that product total is equal to cart subtotal (as we have only one product in the cart) -->
+        <assertStringContainsString stepKey="assertCartTaxTotalEqualToSubtotal">
+            <actualResult type="const">$grabProductSubtotalWithFPT</actualResult>
+            <expectedResult type="const">$grabCartSubtotal</expectedResult>
+        </assertStringContainsString>
+    </test>
+</tests>
