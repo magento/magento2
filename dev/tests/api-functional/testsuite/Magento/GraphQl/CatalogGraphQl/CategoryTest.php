@@ -24,7 +24,7 @@ class CategoryTest extends GraphQlAbstract
         $query = $this->getSearchQueryWithSCategoryUID();
         $response = $this->graphQlQuery($query);
         $this->assertNotEmpty($response['products']);
-        $this->assertEquals(2, count($response['products']['aggregations']));
+        $this->assertEquals(1, count($response['products']['aggregations']));
         $this->assertNotEmpty($response['products']['aggregations']);
         $this->assertEquals('price', $response['products']['aggregations'][0]['attribute_code']);
     }
