@@ -270,7 +270,7 @@ class AfterImportDataObserver implements ObserverInterface
         }
         foreach ($products as $productsByStore) {
             foreach ($productsByStore as $storeId => $product) {
-                if (null === $product->getData('url_key')) {  // TODO: If New products...
+                if (null === $product->getData('url_key')) {
                     $productIdsMissingUrlKeyByStore[$storeId][] = $product->getId();
                 }
             }
