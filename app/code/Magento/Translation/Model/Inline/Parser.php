@@ -420,12 +420,13 @@ class Parser implements ParserInterface
         $trArr = [];
         $next = 0;
         while (preg_match($regexp, $text, $matches, PREG_OFFSET_CAPTURE, $next)) {
+
             $trArr[] = json_encode(
                 [
-                    'shown' => htmlspecialchars_decode($matches[1][0]),
-                    'translated' => htmlspecialchars_decode($matches[2][0]),
-                    'original' => htmlspecialchars_decode($matches[3][0]),
-                    'location' => htmlspecialchars_decode($locationCallback($matches, $options)),
+                    'shown' => $this->unescape((string)$matches[1][0], $options),
+                    'translated' => $this->unescape((string)$matches[2][0], $options),
+                    'original' => $this->unescape((string)$matches[3][0], $options),
+                    'location' => $this->unescape((string) $locationCallback($matches, $options), $options),
                 ]
             );
 
@@ -437,6 +438,27 @@ class Parser implements ParserInterface
             $next = $matches[0][1];
         }
         return $trArr;
+    }
+
+    /**
+     * Unescape string based on the context
+     *
+     * Unescape special characters and unicode characters to prevent double escaping
+     *
+     * @param string $string
+     * @param array $options
+     * @return string
+     */
+    private function unescape(string $string, array $options): string
+    {
+        if ($string && !ctype_digit($string) && isset($options['tagName']) && $options['tagName'] === 'script') {
+            $decodedString = json_decode('["' . $string . '"]', true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $string = implode($decodedString);
+            }
+        }
+
+        return htmlspecialchars_decode($string);
     }
 
     /**
