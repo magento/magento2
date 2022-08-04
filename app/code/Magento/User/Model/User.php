@@ -648,6 +648,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     {
         if ($this->authenticate($username, $password)) {
             $this->getResource()->recordLogin($this);
+            $this->reload();
         }
         return $this;
     }
