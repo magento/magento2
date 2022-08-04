@@ -15,7 +15,7 @@
             <title value="Admin should be able to create  widget type of Catalog product link"/>
             <description value="Admin should be able to create widget type of Catalog product link and shown on storefront"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-26616"/>
+            <testCaseId value="MC-12209"/>
         </annotations>
 
         <before>
