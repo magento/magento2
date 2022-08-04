@@ -106,12 +106,15 @@
 
         <!-- Change status of product to "Disable" and save it -->
         <actionGroup ref="AdminSetProductDisabledActionGroup" stepKey="disableProduct"/>
-        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct1"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
 
         <!--Switch to Store view 2 -->
         <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchNewStoreView2">
             <argument name="storeViewName" value="{{storeViewData2.name}}"/>
         </actionGroup>
+
+        <!-- Verify that product is disable -->
+        <seeElement selector="{{AdminProductFormSection.productStatusValue('0')}}" stepKey="assertThatProductSetToDisabled"/>
 
         <!-- Enable the product for the second storeview -->
         <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSlider"/>
@@ -126,6 +129,6 @@
         </actionGroup>
 
         <!-- Verify that product is enable -->
-        <seeElement selector="{{AdminProductFormSection.productStatusValue('1')}}" stepKey="assertThatProductSetToEnabled2"/>
+        <seeElement selector="{{AdminProductFormSection.productStatusValue('1')}}" stepKey="assertThatProductSetToEnabledAgain"/>
     </test>
 </tests>
