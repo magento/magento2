@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductGridCustomViewColumnDisplayTest">
+        <annotations>
+            <stories value="The list of the visible columns didn't save for custom view when column position is changed"/>
+            <title value="The list of the visible columns didn't save for custom view"/>
+            <description value="Login as Admin, go to Product grid and move column position"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="ACP2E-1073"/>
+            <useCaseId value="ACP2E-1073"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!--Create Simple Product and Category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <!-- Log in as admin-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!-- Navigate to products list page and select created products -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <!-- Open the column dropdown to add the special price from the catalog product grid -->
+        <dragAndDrop selector1="{{AdminProductGridSection.columnHeader('SKU')}}" selector2="{{AdminProductGridSection.columnHeader('Name')}}" stepKey="moveCustomOptionRecord"/>
+        <waitForPageLoad stepKey="waitForDragAndDrop"/>
+        <!--Remove Price column-->
+        <seeElement selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="seeProductPriceColumn"/>
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdownPrice"/>
+        <waitForElementVisible selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="waitForViewBookmarks"/>
+
+        <uncheckOption selector="{{AdminProductGridFilterSection.viewColumnOptionName('Price')}}" stepKey="hidePriceColumn"/>
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownPrice"/>
+        <dontSeeElement selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="dontSeeProductPriceColumn"/>
+        <!--Add Weight column-->
+        <dontSeeElement selector="{{AdminProductGridSection.columnHeader('Weight')}}" stepKey="dontSeeWeightColumn"/>
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdownWeight"/>
+        <checkOption selector="{{AdminProductGridFilterSection.viewColumnOptionName('Weight')}}" stepKey="showWeightColumn"/>
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownWeight"/>
+        <seeElement selector="{{AdminProductGridSection.columnHeader('Weight')}}" stepKey="seeWeightColumn"/>
+        <after>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="beginWithLogout"/>
+        </after>
+
+    </test>
+</tests>
