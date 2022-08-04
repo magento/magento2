@@ -11,7 +11,7 @@
     <test name="AdminAddUpdateDeleteWidgetOfTypeCatalogProductLinkTypeTest">
         <annotations>
             <features value="Cms"/>
-            <stories value="MC-26616- New Widgets Creation"/>
+            <stories value="MC-12209- New Widgets Creation"/>
             <title value="Admin should be able to create  widget type of Catalog product link"/>
             <description value="Admin should be able to create widget type of Catalog product link and shown on storefront"/>
             <severity value="MAJOR"/>
