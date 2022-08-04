@@ -4,13 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare */
+/**
+ * @var $block Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <a href="#"
    class="action tocompare"
-   title="<?= $block->escapeHtml(__('Add to Compare')) ?>"
-   aria-label="<?= $block->escapeHtml(__('Add to Compare')) ?>"
+   title="<?= $escaper->escapeHtml(__('Add to Compare')) ?>"
+   aria-label="<?= $escaper->escapeHtml(__('Add to Compare')) ?>"
    data-post='<?= /* @noEscape */ $block->getCompareHelper()->getPostDataParams($block->getProduct()) ?>'
    role="button">
-    <span><?= $block->escapeHtml(__('Add to Compare')) ?></span>
+    <span><?= $escaper->escapeHtml(__('Add to Compare')) ?></span>
 </a>

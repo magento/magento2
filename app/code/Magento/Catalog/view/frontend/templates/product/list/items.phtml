@@ -7,8 +7,11 @@
 use Magento\Catalog\ViewModel\Product\Listing\PreparePostData;
 use Magento\Framework\App\ActionInterface;
 
-/* @var $block \Magento\Catalog\Block\Product\AbstractProduct */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var $block \Magento\Catalog\Block\Product\AbstractProduct
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 
 <?php
@@ -162,34 +165,34 @@ $_item = null;
 
     <?php if ($type == 'related' || $type == 'upsell'):?>
         <?php if ($type == 'related'):?>
-<div class="block <?= $block->escapeHtmlAttr($class) ?>"
+<div class="block <?= $escaper->escapeHtmlAttr($class) ?>"
      data-mage-init='{"relatedProducts":{"relatedCheckbox":".related.checkbox"}}'
-     data-limit="<?= $block->escapeHtmlAttr($limit) ?>"
+     data-limit="<?= $escaper->escapeHtmlAttr($limit) ?>"
      data-shuffle="<?= /* @noEscape */ $shuffle ?>"
      data-shuffle-weighted="<?= /* @noEscape */ $isWeightedRandom ?>">
     <?php else:?>
-    <div class="block <?= $block->escapeHtmlAttr($class) ?>"
+    <div class="block <?= $escaper->escapeHtmlAttr($class) ?>"
          data-mage-init='{"upsellProducts":{}}'
-         data-limit="<?= $block->escapeHtmlAttr($limit) ?>"
+         data-limit="<?= $escaper->escapeHtmlAttr($limit) ?>"
          data-shuffle="<?= /* @noEscape */ $shuffle ?>"
          data-shuffle-weighted="<?= /* @noEscape */ $isWeightedRandom ?>">
         <?php endif; ?>
         <?php else:?>
-        <div class="block <?= $block->escapeHtmlAttr($class) ?>">
+        <div class="block <?= $escaper->escapeHtmlAttr($class) ?>">
             <?php endif; ?>
             <div class="block-title title">
-                <strong id="block-<?= $block->escapeHtmlAttr($class) ?>-heading" role="heading"
-                        aria-level="2"><?= $block->escapeHtml($title) ?></strong>
+                <strong id="block-<?= $escaper->escapeHtmlAttr($class) ?>-heading" role="heading"
+                        aria-level="2"><?= $escaper->escapeHtml($title) ?></strong>
             </div>
-            <div class="block-content content" aria-labelledby="block-<?= $block->escapeHtmlAttr($class) ?>-heading">
+            <div class="block-content content" aria-labelledby="block-<?= $escaper->escapeHtmlAttr($class) ?>-heading">
                 <?php if ($type == 'related' && $canItemsAddToCart):?>
                     <div class="block-actions">
-                        <?= $block->escapeHtml(__('Check items to add to the cart or')) ?>
+                        <?= $escaper->escapeHtml(__('Check items to add to the cart or')) ?>
                         <button type="button" class="action select"
-                                data-role="select-all"><span><?= $block->escapeHtml(__('select all')) ?></span></button>
+                                data-role="select-all"><span><?= $escaper->escapeHtml(__('select all')) ?></span></button>
                     </div>
                 <?php endif; ?>
-                <div class="products wrapper grid products-grid products-<?= $block->escapeHtmlAttr($type) ?>">
+                <div class="products wrapper grid products-grid products-<?= $escaper->escapeHtmlAttr($type) ?>">
                     <ol class="products list items product-items">
                         <?php foreach ($items as $_item):?>
                             <?php $available = ''; ?>
@@ -201,7 +204,7 @@ $_item = null;
                             <?php if ($type == 'related' || $type == 'upsell'):?>
                                 <li class="item product product-item"
                                 id="product-item_<?= /* @noEscape */ $_item->getId() ?>"
-                                data-shuffle-group="<?= $block->escapeHtmlAttr($_item->getPriority()) ?>" >
+                                data-shuffle-group="<?= $escaper->escapeHtmlAttr($_item->getPriority()) ?>" >
                                 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                                     'display:none;',
                                     'li#product-item_' . $_item->getId()
@@ -211,16 +214,16 @@ $_item = null;
                             <?php endif; ?>
                             <div class="product-item-info <?= /* @noEscape */ $available ?>">
                                 <?= /* @noEscape */ '<!-- ' . $image . '-->' ?>
-                                <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>"
+                                <a href="<?= $escaper->escapeUrl($block->getProductUrl($_item)) ?>"
                                    class="product photo product-item-photo">
                                     <?= $block->getImage($_item, $image)->toHtml() ?>
                                 </a>
                                 <div class="product details product-item-details">
                                     <strong class="product name product-item-name"><a
                                                 class="product-item-link"
-                                                title="<?= $block->escapeHtmlAttr($_item->getName()) ?>"
-                                                href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>">
-                                            <?= $block->escapeHtml($_item->getName()) ?></a>
+                                                title="<?= $escaper->escapeHtmlAttr($_item->getName()) ?>"
+                                                href="<?= $escaper->escapeUrl($block->getProductUrl($_item)) ?>">
+                                            <?= $escaper->escapeHtml($_item->getName()) ?></a>
                                     </strong>
 
                                     <?= /* @noEscape */ $block->getProductPrice($_item) ?>
@@ -236,12 +239,12 @@ $_item = null;
                                                 <input
                                                     type="checkbox"
                                                     class="checkbox related"
-                                                    id="related-checkbox<?= $block->escapeHtmlAttr($_item->getId()) ?>"
+                                                    id="related-checkbox<?= $escaper->escapeHtmlAttr($_item->getId()) ?>"
                                                     name="related_products[]"
-                                                    value="<?= $block->escapeHtmlAttr($_item->getId()) ?>" />
+                                                    value="<?= $escaper->escapeHtmlAttr($_item->getId()) ?>" />
                                                 <label class="label"
-                                                       for="related-checkbox<?= $block->escapeHtmlAttr($_item->getId())
-                                                        ?>"><span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                                       for="related-checkbox<?= $escaper->escapeHtmlAttr($_item->getId())
+                                                        ?>"><span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
                                                 </label>
                                             </div>
                                         <?php endif; ?>
@@ -256,22 +259,22 @@ $_item = null;
                                                     <?php if (!$_item->getTypeInstance()->isPossibleBuyFromList($_item)):?>
                                                         <button
                                                                 class="action tocart primary"
-                                                                data-mage-init='{"redirectUrl": {"url": "<?= $block->escapeUrl($block->getAddToCartUrl($_item)) ?>"}}' type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
-                                                            <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                                                data-mage-init='{"redirectUrl": {"url": "<?= $escaper->escapeUrl($block->getAddToCartUrl($_item)) ?>"}}' type="button" title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>">
+                                                            <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
                                                         </button>
                                                     <?php else :?>
                                                         <?php
                                                         /** @var $viewModel PreparePostData */
                                                         $viewModel = $block->getViewModel();
                                                         $postArray = $viewModel->getPostData(
-                                                            $block->escapeUrl($block->getAddToCartUrl($_item)),
+                                                            $escaper->escapeUrl($block->getAddToCartUrl($_item)),
                                                             ['product' => $_item->getEntityId()]
                                                         );
                                                         $value = $postArray['data'][ActionInterface::PARAM_NAME_URL_ENCODED];
                                                         ?>
                                                         <form data-role="tocart-form"
-                                                              data-product-sku="<?= $block->escapeHtmlAttr($_item->getSku()) ?>"
-                                                              action="<?= $block->escapeUrl($block->getAddToCartUrl($_item)) ?>"
+                                                              data-product-sku="<?= $escaper->escapeHtmlAttr($_item->getSku()) ?>"
+                                                              action="<?= $escaper->escapeUrl($block->getAddToCartUrl($_item)) ?>"
                                                               method="post">
                                                             <input type="hidden" name="product"
                                                                    value="<?= /* @noEscape */ (int)$_item->getEntityId() ?>">
@@ -280,20 +283,20 @@ $_item = null;
                                                                    value="<?= /* @noEscape */ $value ?>">
                                                             <?= $block->getBlockHtml('formkey') ?>
                                                             <button type="submit"
-                                                                    title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
+                                                                    title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
                                                                     class="action tocart primary">
-                                                                <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                                                <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
                                                             </button>
                                                         </form>
                                                     <?php endif; ?>
                                                 <?php else:?>
                                                     <?php if ($_item->isAvailable()):?>
                                                         <div class="stock available">
-                                                            <span><?= $block->escapeHtml(__('In stock')) ?></span>
+                                                            <span><?= $escaper->escapeHtml(__('In stock')) ?></span>
                                                         </div>
                                                     <?php else:?>
                                                         <div class="stock unavailable">
-                                                            <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
+                                                            <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span>
                                                         </div>
                                                     <?php endif; ?>
                                                 <?php endif; ?>
@@ -324,7 +327,7 @@ $_item = null;
             {
                 "[data-role=tocart-form], .form.map.checkout": {
                     "catalogAddToCart": {
-                        "product_sku": "<?= $block->escapeJs($_item->getSku()) ?>"
+                        "product_sku": "<?= $escaper->escapeJs($_item->getSku()) ?>"
                     }
                 }
             }

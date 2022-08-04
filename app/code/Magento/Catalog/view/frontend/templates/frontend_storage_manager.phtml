@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block Magento\Catalog\Block\FrontendStorageManager */
+/**
+ * @var $block Magento\Catalog\Block\FrontendStorageManager
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <script type="text/x-magento-init">
         {
@@ -13,7 +16,7 @@
                     "components": {
                         "storage-manager": {
                             "component": "Magento_Catalog/js/storage-manager",
-                            "appendTo": "<?= $block->escapeJs($block->getParentComponentName()) ?>",
+                            "appendTo": "<?= $escaper->escapeJs($block->getParentComponentName()) ?>",
                             "storagesConfiguration" : <?= /* @noEscape */ $block->getConfigurationJson() ?>
                         }
                     }

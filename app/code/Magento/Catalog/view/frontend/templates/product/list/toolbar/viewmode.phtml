@@ -9,29 +9,30 @@
  * Product list toolbar
  *
  * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 <?php if ($block->isEnabledViewSwitcher()) :?>
     <div class="modes">
         <?php $_modes = $block->getModes(); ?>
         <?php if ($_modes && count($_modes) > 1) :?>
-            <strong class="modes-label" id="modes-label"><?= $block->escapeHtml(__('View as')) ?></strong>
+            <strong class="modes-label" id="modes-label"><?= $escaper->escapeHtml(__('View as')) ?></strong>
             <?php foreach ($block->getModes() as $_code => $_label) :?>
                 <?php if ($block->isModeActive($_code)) :?>
-                    <strong title="<?= $block->escapeHtmlAttr($_label) ?>"
-                            class="modes-mode active mode-<?= $block->escapeHtmlAttr(strtolower($_code)) ?>"
-                            data-value="<?= $block->escapeHtmlAttr(strtolower($_code)) ?>">
-                        <span><?= $block->escapeHtml($_label) ?></span>
+                    <strong title="<?= $escaper->escapeHtmlAttr($_label) ?>"
+                            class="modes-mode active mode-<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>"
+                            data-value="<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>">
+                        <span><?= $escaper->escapeHtml($_label) ?></span>
                     </strong>
                 <?php else :?>
-                    <a class="modes-mode mode-<?= $block->escapeHtmlAttr(strtolower($_code)) ?>"
-                       title="<?= $block->escapeHtmlAttr($_label) ?>"
+                    <a class="modes-mode mode-<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>"
+                       title="<?= $escaper->escapeHtmlAttr($_label) ?>"
                        href="#"
                        data-role="mode-switcher"
-                       data-value="<?= $block->escapeHtmlAttr(strtolower($_code)) ?>"
-                       id="mode-<?= $block->escapeHtmlAttr(strtolower($_code)) ?>"
-                       aria-labelledby="modes-label mode-<?= $block->escapeHtmlAttr(strtolower($_code)) ?>">
-                        <span><?= $block->escapeHtml($_label) ?></span>
+                       data-value="<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>"
+                       id="mode-<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>"
+                       aria-labelledby="modes-label mode-<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>">
+                        <span><?= $escaper->escapeHtml($_label) ?></span>
                     </a>
                 <?php endif; ?>
             <?php endforeach; ?>

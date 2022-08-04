@@ -4,6 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-/** @var Magento\Catalog\Block\Widget\Link $block */
+/**
+ * @var Magento\Catalog\Block\Widget\Link $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
-<?= $block->escapeHtml($block->getHref()) ?>
+<?= $escaper->escapeHtml($block->getHref()) ?>

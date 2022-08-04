@@ -9,6 +9,7 @@
  *
  * @var \Magento\Catalog\Block\Navigation $block
  * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 <?php if (!$block->getCategory()) {
@@ -19,25 +20,25 @@
 <?php if ($_count):?>
     <div class="block filter">
         <div class="title">
-            <strong><?= $block->escapeHtml(__('Shop By')) ?></strong>
+            <strong><?= $escaper->escapeHtml(__('Shop By')) ?></strong>
         </div>
         <div class="content">
-            <strong class="subtitle"><?= $block->escapeHtml(__('Shopping Options')) ?></strong>
+            <strong class="subtitle"><?= $escaper->escapeHtml(__('Shopping Options')) ?></strong>
             <dl class="options" id="narrow-by-list2">
-                <dt><?= $block->escapeHtml(__('Category')) ?></dt>
+                <dt><?= $escaper->escapeHtml(__('Category')) ?></dt>
                 <dd>
                     <ol class="items">
                         <?php /** @var \Magento\Catalog\Model\Category $_category */ ?>
                         <?php foreach ($_categories as $_category):?>
                             <?php if ($_category->getIsActive()):?>
                                 <li class="item">
-                                    <a href="<?= $block->escapeUrl($block->getCategoryUrl($_category)) ?>"
+                                    <a href="<?= $escaper->escapeUrl($block->getCategoryUrl($_category)) ?>"
                                         <?php if ($block->isCategoryActive($_category)):?>
                                             class="current"
                                         <?php endif; ?>
-                                    ><?= $block->escapeHtml($_category->getName()) ?></a>
+                                    ><?= $escaper->escapeHtml($_category->getName()) ?></a>
                                     <span class="count">
-                                        <?= $block->escapeHtml(
+                                        <?= $escaper->escapeHtml(
                                             $localeFormatter->formatNumber($_category->getProductCount())
                                         ) ?>
                                     </span>

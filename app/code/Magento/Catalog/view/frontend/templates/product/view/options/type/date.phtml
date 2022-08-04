@@ -4,15 +4,20 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /* @var $block \Magento\Catalog\Block\Product\View\Options\Type\Date */ ?>
+<?php
+/**
+ * @var $block \Magento\Catalog\Block\Product\View\Options\Type\Date
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
 <?php $_option = $block->getOption() ?>
-<?php $_optionId = $block->escapeHtmlAttr($_option->getId()) ?>
+<?php $_optionId = $escaper->escapeHtmlAttr($_option->getId()) ?>
 <?php $class = ($_option->getIsRequire()) ? ' required' : ''; ?>
 <div class="field date<?= /* @noEscape */ $class ?>"
     data-mage-init='{"priceOptionDate":{"fromSelector":"#product_addtocart_form"}}'>
     <fieldset class="fieldset fieldset-product-options-inner<?= /* @noEscape */ $class ?>">
         <legend class="legend">
-            <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+            <span><?= $escaper->escapeHtml($_option->getTitle()) ?></span>
             <?= /* @noEscape */ $block->getFormattedPrice() ?>
         </legend>
         <div class="control">
