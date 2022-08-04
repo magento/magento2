@@ -91,6 +91,8 @@ class Installer
 
     public const INFO_MESSAGE = 'message';
 
+    public const ENTITY_TYPE_ORDER = 'order';
+
     /**
      * The lowest supported MySQL verion
      */
@@ -1270,14 +1272,15 @@ class Installer
         // get entity_type_id for order
         $select = $dbConnection->select()
             ->from($setup->getTable('eav_entity_type'), 'entity_type_id')
-            ->where('entity_type_code = \'order\'');
+            ->where('entity_type_code = ?', self::ENTITY_TYPE_ORDER);
         $entityTypeId = $dbConnection->fetchOne($select);
 
         // See if row already exists
-        $incrementRow = $dbConnection->fetchRow(
-            'SELECT * FROM ' . $setup->getTable('eav_entity_store') . ' WHERE entity_type_id = ? AND store_id = ?',
-            [$entityTypeId, Store::DISTRO_STORE_ID]
-        );
+        $eavEntityStore = $dbConnection->select()
+            ->from($setup->getTable('eav_entity_store'))
+            ->where('entity_type_id = ?', $entityTypeId)
+            ->where('store_id = ?', Store::DISTRO_STORE_ID);
+        $incrementRow = $dbConnection->fetchRow($eavEntityStore);
 
         if (!empty($incrementRow)) {
             // row exists, update it
@@ -1300,23 +1303,22 @@ class Installer
         // Get meta id for adding in profile table for order prefix
         $selectMeta = $dbConnection->select()
             ->from($setup->getTable('sales_sequence_meta'), 'meta_id')
-            ->where('entity_type = \'order\'')
-            ->where('store_id = \'' . Store::DISTRO_STORE_ID . '\'');
+            ->where('entity_type = ?', self::ENTITY_TYPE_ORDER)
+            ->where('store_id = ?', Store::DISTRO_STORE_ID);
         $metaId = $dbConnection->fetchOne($selectMeta);
 
         // See if row already exists
-        $incrementRow = $dbConnection->fetchRow(
-            'SELECT * FROM ' . $setup->getTable('sales_sequence_profile') . ' WHERE meta_id = ?',
-            [$metaId]
-        );
+        $profile = $dbConnection->select()
+            ->from($setup->getTable('sales_sequence_profile'))
+            ->where('meta_id = ?', $metaId);
+        $incrementRow = $dbConnection->fetchRow($profile);
 
         if (!empty($incrementRow)) {
             // Row exists, update it
-            $profileId = $incrementRow['profile_id'];
             $dbConnection->update(
                 $setup->getTable('sales_sequence_profile'),
                 ['prefix' => $orderIncrementPrefix, 'is_active' => '1'],
-                'profile_id = ' . $profileId
+                'profile_id = ' . $incrementRow['profile_id']
             );
         }
     }
