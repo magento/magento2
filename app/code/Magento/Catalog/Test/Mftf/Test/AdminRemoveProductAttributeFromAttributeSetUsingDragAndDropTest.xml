@@ -28,61 +28,48 @@
                 <argument name="attribute" value="$$createProductAttribute.attribute_code$$"/>
             </actionGroup>
             <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
-
         </before>
         <after>
-         <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-
         <!-- Navigate to Stores > Attributes > Attribute Set -->
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-
         <!-- Search and open Attribute Set from preconditions -->
         <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="searchAttribute">
             <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
-
         <!-- Move system product attribute from assigned to unassigned -->
         <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.assignedAttribute('sku')}}" selector2="{{AdminProductAttributeSetEditSection.xThLineItemUnassignedAttribute('1')}}" stepKey="dragAndDrop"/>
-        <wait stepKey="k1" time="10"/>
+        <waitForPageLoad stepKey="waitForDragAndDrop"/>
         <see userInput="You can't remove attributes from this attribute set." stepKey="seeErrorMessage"/>
         <click selector="{{AdminProductAttributeSetEditSection.buttonOk}}" stepKey="clickOk"/>
-        <wait stepKey="k2" time="10"/>
-
+        <waitForPageLoad stepKey="waitForPopUpDisappear"/>
         <!-- Move Custom Product attribute from assigned to unassigned -->
         <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.assignedAttribute('$$createProductAttribute.attribute_code$$')}}" selector2="{{AdminProductAttributeSetEditSection.xThLineItemUnassignedAttribute('1')}}" stepKey="dragAndDrop1"/>
-
         <!-- Click 'Save' -->
         <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttribute"/>
-
         <!-- Again open same attribute set -->
         <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="searchAttribute1">
             <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
-        <wait stepKey="k3" time="10"/>
-
+        <waitForPageLoad stepKey="waitForAttributeOpen"/>
         <!-- Custom product attribute absent in assigned attribute tree -->
         <dontSeeElement selector="{{AdminProductAttributeSetEditSection.assignedAttribute('$$createProductAttribute.attribute_code$$')}}"  stepKey="assertProductAttributeIsNotPresent"/>
-
         <!-- Navigate to Catalog > Products -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductPage"/>
-
         <!-- Start to create a new simple product with the custom attribute set from the preconditions -->
         <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddProduct"/>
         <waitForPageLoad stepKey="waitForNewProductPage"/>
         <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttribute">
             <argument name="attributeSetName" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
-
         <!-- Custom Product attribute is absent in attribute set -->
         <dontSeeElement selector="{{AdminProductAttributeSection.customAttribute('$$createProductAttribute.attribute_code$$')}}"  stepKey="assertProductAttributeIsNotPresent1"/>
-
         <!-- System Product attribute is present in attribute set -->
         <seeElement selector="{{AdminProductAttributeSection.textAttributeByCode('sku')}}" stepKey="seeAttributePresent"/>
-
     </test>
 </tests>
