@@ -442,7 +442,7 @@ abstract class AbstractEntity
      * Workaround. Only way to implement dependency and not to break inherited child classes
      *
      * @return Json
-     * @deprecated 100.2.0
+     * @deprecated 100.2.0 It's just a workaround. It was never intended to be used.
      */
     private function getSerializer()
     {

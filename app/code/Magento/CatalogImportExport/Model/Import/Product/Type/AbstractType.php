@@ -267,6 +267,10 @@ abstract class AbstractType
     /**
      * Initialize attributes parameters for all attributes' sets.
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
      * @return $this
      */
     protected function _initAttributes()
@@ -311,16 +315,16 @@ abstract class AbstractType
         $addedAttributes = array_merge(...$addedAttributes);
         $attributesToLoadFromTable = [];
         foreach ($addedAttributes as $addedAttribute) {
-           if (isset($addedAttribute['options_use_table'])) {
+            if (isset($addedAttribute['options_use_table'])) {
                 $attributesToLoadFromTable[] = $addedAttribute['id'];
-               unset(self::$commonAttributesCache[$addedAttribute['id']]['options_use_table']);
+                unset(self::$commonAttributesCache[$addedAttribute['id']]['options_use_table']);
             }
         }
         if (!empty($attributesToLoadFromTable)) {
             $collection = $this->attributeOptionCollectionFactory->create();
             $collection->setAttributeFilter(['in' => $attributesToLoadFromTable]);
             $collection->setStoreFilter(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
-            foreach($collection as $option) {
+            foreach ($collection as $option) {
                 $attributeId = $option->getAttributeId();
                 $value = strtolower($option->getValue());
                 self::$commonAttributesCache[$attributeId]['options'][$value] = $option->getOptionId();
@@ -369,7 +373,7 @@ abstract class AbstractType
                 ['in' => $this->_forcedAttributesCodes]
             ]
         ) as $attribute) {
-           $this->attachAttribute($attributeSetName, $attribute);
+            $this->attachAttribute($attributeSetName, $attribute);
         }
     }
 
@@ -417,13 +421,14 @@ abstract class AbstractType
     }
 
     /**
-     * Attach Attributes By Id
+     * Attach Attribute to self::$commonAttributesCache or self::$invAttributesCache
      *
      * @param string $attributeSetName
      * @param ProductAttributeInterface $attribute
      * @return array|null
      */
-    private function attachAttribute(string $attributeSetName, ProductAttributeInterface $attribute) {
+    private function attachAttribute(string $attributeSetName, ProductAttributeInterface $attribute)
+    {
         $cachedAttribute = null;
         $attributeCode = $attribute->getAttributeCode();
         $attributeId = $attribute->getId();
