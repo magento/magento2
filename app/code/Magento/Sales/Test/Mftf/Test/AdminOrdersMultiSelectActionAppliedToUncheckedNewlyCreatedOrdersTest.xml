@@ -32,6 +32,8 @@
         </before>
 
         <after>
+            <!--Remove default flat rate shipping method settings-->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <!--Delete product-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!--Delete customer-->
@@ -84,6 +86,7 @@
         <click selector="{{AdminOrdersGridSection.orderActions}}" stepKey="clickOnActionsDropdown"/>
         <click selector="//div[contains(concat(' ',normalize-space(@class),' '),' row-gutter ')]//span[text()='Cancel']" stepKey="clickStatus"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersFilters1"/>
         <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
             <argument name="orderId" value="$orderNumber"/>
             <argument name="status" value="Canceled"/>
