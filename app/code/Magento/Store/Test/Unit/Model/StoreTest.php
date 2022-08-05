@@ -165,6 +165,25 @@ class StoreTest extends TestCase
     /**
      * @return void
      */
+    public function testGetId()
+    {
+        $testId = 1;
+        $websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
+            ->getMockForAbstractClass();
+
+        /** @var Store $model */
+        $model = $this->objectManagerHelper->getObject(
+            Store::class,
+            ['websiteRepository' => $websiteRepository]
+        );
+
+        $model->setData(Store::STORE_ID, $testId);
+        $this->assertEquals($testId, $model->getId());
+    }
+
+    /**
+     * @return void
+     */
     public function testGetWebsite()
     {
         $websiteId = 2;
