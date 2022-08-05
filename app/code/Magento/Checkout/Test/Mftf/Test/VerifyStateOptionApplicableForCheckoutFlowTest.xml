@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyStateOptionApplicableForCheckoutFlowTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Option State_is_Required_for is applicable for checkout flow"/>
+            <title value="Verify that option State_is_Required_for is applicable for checkout flow"/>
+            <description value="Verify that option State_is_Required_for is applicable for checkout flow"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-27422"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <!-- Create category and product -->
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!--Unselect France from State is Required for listing & allow to choose State if it is optional for Country-->
+            <actionGroup ref="SelectCountriesWithRequiredRegionActionGroup" stepKey="setCustomCountryWithRequiredRegion">
+                <argument name="countries" value="CustomCountryWithRequiredRegion"/>
+            </actionGroup>
+        </before>
+
+        <!--Goto storefront add the product into cart -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForOpenStorefront"/>
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
+        <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
+        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" />
+
+        <!--Fill shipping details of France-->
+        <selectOption stepKey="selectCounty" selector="{{CheckoutShippingSection.country}}" userInput="{{France_Address.country_id}}"/>
+        <waitForPageLoad stepKey="waitFormToReload"/>
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
+        <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{France_Address.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{France_Address.city}}" stepKey="enterCity"/>
+        <seeElement selector="{{CheckoutShippingSection.stateProvince}}" stepKey="validateStateProvince"/>
+        <seeElement selector="{{CheckoutShippingSection.stateProvinceWithoutAsterisk}}" stepKey="validateStateProvinceWithoutAsteriskIsDisplayed"/>
+        <dontSeeElement selector="{{CheckoutShippingSection.stateProvinceWithAsterisk}}" stepKey="validateStateProvinceWithAsteriskIsNotDisplayed"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{France_Address.postcode}}" stepKey="enterPostcode"/>
+        <waitForPageLoad time="30" stepKey="waitForReload"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{France_Address.telephone}}" stepKey="enterTelephone"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+
+        <!--Do the payment and place the order-->
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="seeOrderNumber"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="seeEmailYou"/>
+
+        <!-- order number is captured for future validation -->
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="getOrderNumber"/>
+
+        <!--Delete created category and product-->
+        <after>
+            <actionGroup ref="SelectCountriesWithRequiredRegionActionGroup" stepKey="setDefaultCountriesWithRequiredRegion">
+                <argument name="countries" value="DefaultCountriesWithRequiredRegions"/>
+            </actionGroup>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+    </test>
+</tests>

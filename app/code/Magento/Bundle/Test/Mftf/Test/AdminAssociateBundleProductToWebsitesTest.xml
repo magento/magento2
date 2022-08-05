@@ -63,6 +63,7 @@
                 <argument name="StoreGroup" value="SecondStoreGroupUnique"/>
                 <argument name="customStore" value="SecondStoreUnique"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex2"/>
         </before>
         <after>
             <!-- Disabled Store URLs -->
@@ -77,6 +78,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridFilter"/>
 

@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
@@ -36,6 +37,7 @@ use Magento\Catalog\Api\Data\EavAttributeInterface;
 /**
  * @inheritdoc
  *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -280,7 +282,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function get($sku, $editMode = false, $storeId = null, $forceReload = false)
     {
-        $cacheKey = $this->getCacheKey([$editMode, $storeId]);
+        $cacheKey = $this->getCacheKey([$editMode, $storeId === null ? $storeId : (int) $storeId]);
         $cachedProduct = $this->getProductFromLocalCache($sku, $cacheKey);
         if ($cachedProduct === null || $forceReload) {
             $product = $this->productFactory->create();
@@ -295,7 +297,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setData('_edit_mode', true);
             }
             if ($storeId !== null) {
-                $product->setData('store_id', $storeId);
+                $product->setData('store_id', (int) $storeId);
             }
             $product->load($productId);
             $this->cacheProduct($cacheKey, $product);
@@ -522,6 +524,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function save(ProductInterface $product, $saveOptions = false)
     {
@@ -605,7 +608,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                     if ($existingProduct->getData($attributeCode) === $value
                         && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
                         && !is_array($value)
-                        && $attribute->getData('frontend_input') !== 'media_image'
                         && !$attribute->isStatic()
                         && !array_key_exists($attributeCode, $productDataToChange)
                         && $value !== null
@@ -616,7 +618,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                             $product->getStoreId()
                         )
                     ) {
-                        $product->setData($attributeCode);
+                        $product->setData(
+                            $attributeCode,
+                            $attributeCode === ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY ? false : null
+                        );
                         $hasDataChanged = true;
                     }
                 }
@@ -931,7 +936,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === 'category_id') {
                     $filterValue = $filter->getValue();
-                    $categoryIds[] = is_array($filterValue) ? $filterValue : explode(',', $filterValue);
+                    $categoryIds[] = is_array($filterValue) ? $filterValue : explode(',', $filterValue ?? '');
                 }
             }
         }

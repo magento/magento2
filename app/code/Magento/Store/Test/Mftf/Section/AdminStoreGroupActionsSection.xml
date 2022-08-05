@@ -7,7 +7,7 @@
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminStoreGroupActionsSection">
-        <element name="saveButton" type="button" selector="#save" timeout="60" />
+        <element name="saveButton" type="button" selector="#save" timeout="120" />
         <element name="okButton" type="button" selector="//footer[@class='modal-footer']//button[@class='action-primary action-accept']/span" timeout="30"/>
     </section>
 </sections>
