@@ -6,12 +6,12 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType as AbstractType;
 use Magento\CatalogImportExport\Model\Import\Product\Type\Simple;
-use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Attribute\Set;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
@@ -87,7 +87,7 @@ class AbstractTypeTest extends TestCase
             ]
         );
         $attribute = $this->getMockBuilder(Attribute::class)
-            ->addMethods(['getIsVisible', 'getIsGlobal', 'getFrontendLabel', 'getApplyTo'])
+            ->addMethods(['getFrontendLabel'])
             ->onlyMethods(
                 [
                     'getAttributeCode',
@@ -97,7 +97,10 @@ class AbstractTypeTest extends TestCase
                     'isStatic',
                     'getDefaultValue',
                     'usesSource',
-                    'getFrontendInput'
+                    'getFrontendInput',
+                    'getIsVisible',
+                    'getApplyTo',
+                    'getIsGlobal',
                 ]
             )
             ->disableOriginalConstructor()
@@ -118,21 +121,23 @@ class AbstractTypeTest extends TestCase
             ->willReturn('default_value');
         $attribute->method('usesSource')
             ->willReturn(true);
-
         $entityAttributes = [
             [
-                'attribute_id' => 'attribute_id',
+                'attribute_id' => '1',
                 'attribute_set_name' => 'attributeSetName',
             ],
             [
-                'attribute_id' => 'boolean_attribute',
+                'attribute_id' => '2',
                 'attribute_set_name' => 'attributeSetName'
-            ]
+            ],
+            [
+                'attribute_id' => '3',
+                'attribute_set_name' => 'attributeSetName'
+            ],
         ];
         $attribute1 = clone $attribute;
         $attribute2 = clone $attribute;
         $attribute3 = clone $attribute;
-
         $attribute1->method('getId')
             ->willReturn('1');
         $attribute1->method('getAttributeCode')
@@ -141,7 +146,6 @@ class AbstractTypeTest extends TestCase
             ->willReturn('multiselect');
         $attribute1->method('isStatic')
             ->willReturn(true);
-
         $attribute2->method('getId')
             ->willReturn('2');
         $attribute2->method('getAttributeCode')
@@ -150,7 +154,6 @@ class AbstractTypeTest extends TestCase
             ->willReturn('boolean');
         $attribute2->method('isStatic')
             ->willReturn(false);
-
         $attribute3->method('getId')
             ->willReturn('3');
         $attribute3->method('getAttributeCode')
@@ -159,7 +162,6 @@ class AbstractTypeTest extends TestCase
             ->willReturn('text');
         $attribute3->method('isStatic')
             ->willReturn(false);
-
         $this->entityModel->method('getEntityTypeId')
             ->willReturn(3);
         $this->entityModel->method('getAttributeOptions')
@@ -179,32 +181,34 @@ class AbstractTypeTest extends TestCase
             ->willReturn(1);
         $attributeSet->method('getAttributeSetName')
             ->willReturn('attribute_set_name');
-
         $attrCollection->method('addFieldToFilter')
-            ->with(
-                ['main_table.attribute_id', 'main_table.attribute_code'],
+            ->withConsecutive(
                 [
+                    ['main_table.attribute_id'],
                     [
-                        'in' => [
-                            'attribute_id',
-                            'boolean_attribute',
+                        [
+                            'in' => ['1', '2', '3'],
                         ],
-                    ],
+                    ]
+                ],
+                [
+                    ['main_table.attribute_code'],
                     [
-                        'in' => [
-                            'related_tgtr_position_behavior',
-                            'related_tgtr_position_limit',
-                            'upsell_tgtr_position_behavior',
-                            'upsell_tgtr_position_limit',
-                            'thumbnail_label',
-                            'small_image_label',
-                            'image_label',
+                        [
+                            'in' => [
+                                'related_tgtr_position_behavior',
+                                'related_tgtr_position_limit',
+                                'upsell_tgtr_position_behavior',
+                                'upsell_tgtr_position_limit',
+                                'thumbnail_label',
+                                'small_image_label',
+                                'image_label',
+                            ],
                         ],
-                    ],
-                ]
+                    ]
+                ],
             )
-            ->willReturn([$attribute1, $attribute2, $attribute3]);
-
+            ->willReturnOnConsecutiveCalls([$attribute1, $attribute2, $attribute3], []);
         $this->connection = $this->getMockBuilder(Mysql::class)
             ->addMethods(['joinLeft'])
             ->onlyMethods(['select', 'fetchAll', 'fetchPairs', 'insertOnDuplicate', 'delete', 'quoteInto'])
@@ -240,7 +244,6 @@ class AbstractTypeTest extends TestCase
             ->willReturn('');
         $this->connection->method('fetchAll')
             ->willReturn($entityAttributes);
-
         $this->resource = $this->createPartialMock(
             ResourceConnection::class,
             [
@@ -252,7 +255,6 @@ class AbstractTypeTest extends TestCase
             ->willReturn($this->connection);
         $this->resource->method('getTableName')
             ->willReturn('tableName');
-
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->simpleType = $this->objectManagerHelper->getObject(
             Simple::class,
@@ -263,10 +265,22 @@ class AbstractTypeTest extends TestCase
                 'resource' => $this->resource,
             ]
         );
-
         $this->abstractType = $this->getMockBuilder(AbstractType::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+    }
+
+    /**
+     * Because AbstractType has static member variables,  we must clean them in between tests.
+     * Luckily they are publicly accessible.
+     * 
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        AbstractType::$commonAttributesCache = [];
+        AbstractType::$invAttributesCache = [];
+        AbstractType::$attributeCodeToId = [];
     }
 
     /**
@@ -428,7 +442,6 @@ class AbstractTypeTest extends TestCase
             '_attribute_set' => 'attributeSetName',
             'boolean_attribute' => 'Yes',
         ];
-
         $expected = [
             'boolean_attribute' => 1,
             'text_attribute' => 'default_value'

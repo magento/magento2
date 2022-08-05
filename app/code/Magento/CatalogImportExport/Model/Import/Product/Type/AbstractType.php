@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as AttributeOptionCollectionFactory;
@@ -369,10 +369,7 @@ abstract class AbstractType
     {
         foreach ($this->_prodAttrColFac->create()->addFieldToFilter(
             ['main_table.attribute_id', 'main_table.attribute_code'],
-            [
-                ['in' => $attributeIds],
-                ['in' => $this->_forcedAttributesCodes]
-            ]
+            [['in' => $attributeIds], ['in' => $this->_forcedAttributesCodes]]
         ) as $attribute) {
             $this->attachAttribute($attribute);
         }
@@ -388,7 +385,7 @@ abstract class AbstractType
     {
         $addedAttributes = [];
         foreach ($this->_prodAttrColFac->create()->addFieldToFilter(
-            ['main_table.attribute_id', 'main_table.attribute_code'],
+            ['main_table.attribute_id'],
             [['in' => $attributeIds]]
         ) as $attribute) {
             $cachedAttribute = $this->attachAttribute($attribute);
@@ -422,10 +419,10 @@ abstract class AbstractType
     /**
      * Attach Attribute to self::$commonAttributesCache or self::$invAttributesCache
      *
-     * @param ProductAttributeInterface $attribute
+     * @param Attribute $attribute
      * @return array|null
      */
-    private function attachAttribute(ProductAttributeInterface $attribute)
+    private function attachAttribute(Attribute $attribute)
     {
         $cachedAttribute = null;
         $attributeCode = $attribute->getAttributeCode();
@@ -629,7 +626,6 @@ abstract class AbstractType
     public function prepareAttributesWithDefaultValueForSave(array $rowData, $withDefaultValue = true)
     {
         $resultAttrs = [];
-
         foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
             if ($attrParams['is_static']) {
                 continue;
@@ -653,7 +649,6 @@ abstract class AbstractType
                 $resultAttrs[$attrCode] = $attrParams['default_value'];
             }
         }
-
         return $resultAttrs;
     }
 
