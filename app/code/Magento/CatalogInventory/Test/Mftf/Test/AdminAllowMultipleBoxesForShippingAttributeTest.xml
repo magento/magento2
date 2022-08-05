@@ -47,7 +47,7 @@
         <click selector="{{AdminProductFormAdvancedInventorySection.allowMultipleBoxesForShippingOptions('1')}}" stepKey="chooseYesOnAllowMultipleBoxesForShippingDropBox"/>
         <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton"/>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
-        <!--Step5. Open *Advanced Inventory* pop-up (Click on *Advanced Inventory* link). Verify *Qty Uses Decimals* is *Yes*. and *Allow Multiple Boxes For Shipping* is *Yes* -->
+        <!--Step3. Open *Advanced Inventory* pop-up (Click on *Advanced Inventory* link). Verify *Qty Uses Decimals* is *Yes*. and *Allow Multiple Boxes For Shipping* is *Yes* -->
         <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLinkToOpen"/>
         <scrollTo selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" stepKey="scrollToQtyUsesDecimalsDropBoxToVerify"/>
         <see selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" userInput="Yes" stepKey="seeQtyUsesDecimals"/>
