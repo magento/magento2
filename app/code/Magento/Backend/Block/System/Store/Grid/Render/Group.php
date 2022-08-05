@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Block\System\Store\Grid\Render;
 
+use Magento\Framework\DataObject;
+
 /**
  * Store render group
  *
@@ -14,8 +16,9 @@ class Group extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
 {
     /**
      * {@inheritdoc} Render action
+     * @param DataObject $row
      */
-    public function render(\Magento\Framework\DataObject $row): ?string
+    public function render(DataObject $row): ?string
     {
         if (!$row->getData($this->getColumn()->getIndex())) {
             return null;
