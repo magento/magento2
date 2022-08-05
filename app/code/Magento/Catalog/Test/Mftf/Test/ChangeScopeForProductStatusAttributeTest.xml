@@ -109,12 +109,12 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
 
         <!--Switch to Store view 2 -->
-        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchNewStoreView2">
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchNewStoreView2AndAssertTheProductStatus">
             <argument name="storeViewName" value="{{storeViewData2.name}}"/>
         </actionGroup>
 
         <!-- Verify that product is disable -->
-        <seeElement selector="{{AdminProductFormSection.productStatusValue('0')}}" stepKey="assertThatProductSetToDisabled"/>
+        <seeElement selector="{{AdminProductFormSection.productStatusValue('2')}}" stepKey="assertThatProductSetToDisabled"/>
 
         <!-- Enable the product for the second storeview -->
         <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSlider"/>
