@@ -15,8 +15,7 @@ use Magento\Framework\DataObject;
 class Group extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * {@inheritdoc} Render action
-     * @param DataObject $row
+     * @inheritDoc
      */
     public function render(DataObject $row): ?string
     {
