@@ -41,19 +41,16 @@
         <!--Step2. Open *Advanced Inventory* pop-up (Click on *Advanced Inventory* link). Set *Qty Uses Decimals* to *Yes*. Click on button *Done*  -->
         <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
         <scrollTo selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" stepKey="scrollToQtyUsesDecimalsDropBox"/>
-        <dontSeeElement selector="{{AdminProductFormAdvancedInventorySection.allowMultipleBoxesForShipping}}" stepKey="dontSeeAllowMultipleBoxesForShippin"/>
+        <dontSeeElement selector="{{AdminProductFormAdvancedInventorySection.allowMultipleBoxesForShipping}}" stepKey="dontSeeAllowMultipleBoxesForShipping"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimalsOptions('1')}}" stepKey="chooseYesOnQtyUsesDecimalsDropBox"/>
-        <seeElement selector="{{AdminProductFormAdvancedInventorySection.allowMultipleBoxesForShipping}}" stepKey="seeAllowMultipleBoxesForShippin"/>
+        <seeElement selector="{{AdminProductFormAdvancedInventorySection.allowMultipleBoxesForShipping}}" stepKey="seeElementOfAllowMultipleBoxesForShipping"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.allowMultipleBoxesForShippingOptions('1')}}" stepKey="chooseYesOnAllowMultipleBoxesForShippingDropBox"/>
         <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton"/>
-        <!--Step3. Open *Advanced Pricing* pop-up (Click on *Advanced Pricing* link). Click on *Add* button. Fill *0.5* in *Quantity*-->
-        <scrollTo selector="{{AdminProductFormSection.productName}}" stepKey="scrollToProductName"/>
-        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingLink1"/>
-        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForAddButton"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="clickOnCustomerGroupPriceAddButton"/>
-        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" userInput="0.5" stepKey="fillProductTierPriceQty"/>
-        <!--Step4. Close *Advanced Pricing* (Click on button *Done*). Save *prod1* (Click on button *Save*)-->
-        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickOnDoneButton2"/>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
+        <!--Step5. Open *Advanced Inventory* pop-up (Click on *Advanced Inventory* link). Verify *Qty Uses Decimals* is *Yes*. and *Allow Multiple Boxes For Shipping* is *Yes* -->
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLinkToOpen"/>
+        <scrollTo selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" stepKey="scrollToQtyUsesDecimalsDropBoxToVerify"/>
+        <see selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" userInput="Yes" stepKey="seeQtyUsesDecimals"/>
+        <see selector="{{AdminProductFormAdvancedInventorySection.allowMultipleBoxesForShipping}}" userInput="Yes" stepKey="seeAllowMultipleBoxesForShipping"/>
     </test>
 </tests>
