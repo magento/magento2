@@ -766,9 +766,9 @@ class Store extends AbstractExtensibleModel implements
      *
      * @return  int
      */
-    public function getId()
+    public function getId() :int
     {
-        return $this->_getData(self::STORE_ID);
+        return (int) $this->_getData(self::STORE_ID);
     }
 
     /**
