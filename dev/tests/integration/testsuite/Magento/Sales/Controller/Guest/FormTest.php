@@ -28,7 +28,7 @@ class FormTest extends AbstractController
         $this->prepareRequestData();
         $this->dispatch('sales/guest/view/');
         $content = $this->getResponse()->getBody();
-        $this->assertContains('Order # 100000001', $content);
+        $this->assertStringContainsString('Order # 100000001', $content);
     }
 
     /**
@@ -55,7 +55,7 @@ class FormTest extends AbstractController
     {
         $this->login(1);
         $this->dispatch('sales/guest/form/');
-        $this->assertRedirect($this->stringContains('customer/account'));
+        $this->assertRedirect($this->stringContains('sales/order/history'));
     }
 
     /**
@@ -91,7 +91,7 @@ class FormTest extends AbstractController
     private function prepareRequestData($invalidData = false)
     {
         $orderId = 100000001;
-        $email = $invalidData ? 'wrong@example.com' : 'customer@null.com';
+        $email = $invalidData ? 'wrong@example.com' : 'customer@example.com';
 
         /** @var FormKey $formKey */
         $formKey = $this->_objectManager->get(FormKey::class);

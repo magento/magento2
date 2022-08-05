@@ -3,13 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Code\Generator;
 
-use Zend\Code\Generator\MethodGenerator;
-use Zend\Code\Generator\PropertyGenerator;
+use InvalidArgumentException;
+use Laminas\Code\Generator\MethodGenerator;
+use Laminas\Code\Generator\PropertyGenerator;
 
-class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
-    \Magento\Framework\Code\Generator\CodeGeneratorInterface
+/**
+ * Class code generator
+ */
+class ClassGenerator extends \Laminas\Code\Generator\ClassGenerator implements
+    CodeGeneratorInterface
 {
     /**
      * Possible doc block options
@@ -64,6 +69,8 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
     ];
 
     /**
+     * Set data to object
+     *
      * @param object $object
      * @param array $data
      * @param array $map
@@ -86,7 +93,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
      */
     public function setClassDocBlock(array $docBlock)
     {
-        $docBlockObject = new \Zend\Code\Generator\DocBlockGenerator();
+        $docBlockObject = new \Laminas\Code\Generator\DocBlockGenerator();
         $docBlockObject->setWordWrap(false);
         $this->_setDataToObject($docBlockObject, $docBlock, $this->_docBlockOptions);
 
@@ -94,7 +101,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
     }
 
     /**
-     * addMethods()
+     * Add methods
      *
      * @param array $methods
      * @return $this
@@ -114,9 +121,10 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
             ) > 0
             ) {
                 $parametersArray = [];
-                foreach ($methodOptions['parameters'] as $parameterOptions) {
-                    $parameterObject = new \Zend\Code\Generator\ParameterGenerator();
+                foreach ($methodOptions['parameters'] as $position => $parameterOptions) {
+                    $parameterObject = new \Laminas\Code\Generator\ParameterGenerator();
                     $this->_setDataToObject($parameterObject, $parameterOptions, $this->_parameterOptions);
+                    $parameterObject->setPosition((int) $position);
                     $parametersArray[] = $parameterObject;
                 }
 
@@ -124,7 +132,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
             }
 
             if (isset($methodOptions['docblock']) && is_array($methodOptions['docblock'])) {
-                $docBlockObject = new \Zend\Code\Generator\DocBlockGenerator();
+                $docBlockObject = new \Laminas\Code\Generator\DocBlockGenerator();
                 $docBlockObject->setWordWrap(false);
                 $this->_setDataToObject($docBlockObject, $methodOptions['docblock'], $this->_docBlockOptions);
 
@@ -145,23 +153,23 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
      *
      * @param  MethodGenerator $method
      * @return $this
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function addMethodFromGenerator(MethodGenerator $method)
     {
-        if (!is_string($method->getName())) {
-            throw new \InvalidArgumentException('addMethodFromGenerator() expects string for name');
+        if (empty($method->getName()) || !is_string($method->getName())) {
+            throw new InvalidArgumentException('addMethodFromGenerator() expects non-empty string for name');
         }
 
         return parent::addMethodFromGenerator($method);
     }
 
     /**
-     * addProperties()
+     * Add properties
      *
      * @param array $properties
      * @return $this
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function addProperties(array $properties)
     {
@@ -172,7 +180,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
             if (isset($propertyOptions['docblock'])) {
                 $docBlock = $propertyOptions['docblock'];
                 if (is_array($docBlock)) {
-                    $docBlockObject = new \Zend\Code\Generator\DocBlockGenerator();
+                    $docBlockObject = new \Laminas\Code\Generator\DocBlockGenerator();
                     $docBlockObject->setWordWrap(false);
                     $this->_setDataToObject($docBlockObject, $docBlock, $this->_docBlockOptions);
                     $propertyObject->setDocBlock($docBlockObject);
@@ -190,12 +198,12 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
      *
      * @param  PropertyGenerator $property
      * @return $this
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function addPropertyFromGenerator(PropertyGenerator $property)
     {
-        if (!is_string($property->getName())) {
-            throw new \InvalidArgumentException('addPropertyFromGenerator() expects string for name');
+        if (empty($property->getName()) || !is_string($property->getName())) {
+            throw new InvalidArgumentException('addPropertyFromGenerator() expects non-empty string for name');
         }
 
         return parent::addPropertyFromGenerator($property);
@@ -212,10 +220,16 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
     }
 
     /**
+     * Get namespace name
+     *
      * @return string|null
      */
     public function getNamespaceName()
     {
-        return ltrim(parent::getNamespaceName(), '\\') ?: null;
+        $namespaceName = parent::getNamespaceName();
+        if ($namespaceName !== null) {
+            $namespaceName = ltrim($namespaceName, '\\') ?: null;
+        }
+        return $namespaceName;
     }
 }

@@ -20,7 +20,7 @@
             <group value="Product Attributes"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createProductOne">
                 <requiredEntity createDataKey="createCategory"/>
@@ -30,27 +30,37 @@
             </createData>
         </before>
         <after>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
 
-        <!-- Search and select products -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
-        <actionGroup ref="searchProductGridByKeyword2" stepKey="searchByKeyword">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+        <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="selectNumberOfProductsPerPage">
+            <argument name="perPage" value="100"/>
+        </actionGroup>
+        <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">
             <argument name="keyword" value="api-simple-product"/>
         </actionGroup>
-        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox1"/>
-        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckbox2"/>
-        <!-- Mass update attributes -->
-        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
-        <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickOption"/>
-        <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
-        <seeInCurrentUrl stepKey="seeInUrl" url="catalog/product_action_attribute/edit/"/>
-        <click selector="{{AdminEditProductAttributesSection.ChangeAttributeNameToggle}}" stepKey="toggleToChangeName"/>
-        <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
+
+        <actionGroup ref="AdminCheckProductOnProductGridActionGroup" stepKey="clickCheckbox1">
+            <argument name="product" value="$$createProductOne$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminCheckProductOnProductGridActionGroup" stepKey="clickCheckbox2">
+            <argument name="product" value="$$createProductTwo$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminClickMassUpdateProductAttributesActionGroup" stepKey="clickDropdown"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOption"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBulkUpdatePage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeInUrl"/>
+
+        <actionGroup ref="AdminCheckNameToggleOnProductsMassAttributesUpdateActionGroup" stepKey="toggleToChangeName"/>
+
+        <actionGroup ref="AdminClickSaveOnProductsMassAttributesUpdateActionGroup" stepKey="save"/>
         <see stepKey="seeError" selector="{{AdminEditProductAttributesSection.NameError}}" userInput="This is a required field"/>
     </test>
 </tests>

@@ -9,6 +9,11 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminEditCustomerNewsletterSection">
-        <element name="subscribedToNewsletter" type="checkbox" selector="//div[@class='admin__field-control control']/input[@name='subscription']"/>
+        <element name="subscribedStatus" type="checkbox" selector="//div[@class='admin__field-control control']//input[@name='subscription_status[{{websiteId}}]']" parameterized="true"/>
+        <element name="subscribedStore" type="select" selector="//div[@class='admin__field-control control']//select[@name='subscription_store[{{websiteId}}]']" parameterized="true"/>
+        <element name="subscribedLastUpdatedDate" type="text" selector="//div[@class='admin__field-control control']//div[@class='field-change_status_date_{{websiteId}}']//div[@class='control-value']" parameterized="true"/>
+        <element name="checkboxIsVisbale" type="checkbox" selector="//input[@id='_newslettersubscription_status_1' and @value='1']"/>
+        <element name="subscribeToNewsletterAgain" type="text" selector="//a[@class='admin__page-nav-link' and @id='tab_newsletter_content']"/>
+        <element name="checkboxIsVisibility" type="checkbox" selector="//input[@id='_newslettersubscription_status_1' and @value='']"/>
     </section>
 </sections>

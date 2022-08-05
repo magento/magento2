@@ -19,9 +19,10 @@
             <testCaseId value="MC-20374"/>
             <group value="developer_mode_only"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!-- Go to the general configuration and make sure the locale dropdown is available and enabled -->

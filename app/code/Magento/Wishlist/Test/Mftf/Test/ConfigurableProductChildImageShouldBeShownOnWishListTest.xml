@@ -21,53 +21,91 @@
         <before>
             <magentoCLI command="config:set checkout/cart/configurable_product_image 0" stepKey="setProductImageSettingUnderCofigurationSalesCheckout"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
-            <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>
             <createData entity="Simple_US_Customer" stepKey="customer"/>
         </before>
         <after>
+            <actionGroup ref="AdminOpenSalesCheckoutConfigPageActionGroup" stepKey="openSalesCheckoutCartConfig1">
+                <argument name="tabGroupAnchor" value="#checkout_cart-link"/>
+            </actionGroup>
+            <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForAllowedCurrency">
+                <argument name="rowId" value="row_checkout_cart_configurable_product_image"/>
+            </actionGroup>
+            <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveStoreConfiguration"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersConfigurable"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterConfigurable">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterFillSelectFieldActionGroup" stepKey="addTypeFilterConfigurable">
+                <argument name="filterName" value="type_id"/>
+                <argument name="filterValue" value="Configurable Product"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterConfigurable"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteConfigurableProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersVirtual"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterVirtual">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterVirtual"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetFiltersIfPresent"/>
-        <actionGroup ref="searchProductGridByKeyword" stepKey="searchProductGrid">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfPresent"/>
+        <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchProductGrid">
             <argument name="keyword" value="_defaultProduct.name"/>
         </actionGroup>
         <click selector="{{AdminProductGridSection.selectRowBasedOnName(_defaultProduct.name)}}" stepKey="selectProductToAddImage"/>
         <waitForPageLoad stepKey="waitForProductEditPageLoad"/>
-        <actionGroup ref="addProductImage" stepKey="addImageForParentProduct">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForParentProduct">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad1"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex1"/>
         <click selector="{{AdminProductGridSection.selectRowBasedOnName(colorProductAttribute1.name)}}" stepKey="selectProductToAddImage1"/>
         <waitForPageLoad stepKey="waitForProductEditPageLoad1"/>
-        <actionGroup ref="addProductImage" stepKey="addImageForChildProduct">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForChildProduct">
             <argument name="image" value="TestImageNew"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
 
          <!--Sign in as customer -->
-        <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
-        <fillField userInput="$$customer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}" stepKey="fillEmail"/>
-        <fillField userInput="$$customer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}" stepKey="fillPassword"/>
-        <waitForElementVisible selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" stepKey="waitForButton"/>
-        <click selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" stepKey="clickSignInAccountButton"/>
+        <actionGroup ref="StorefrontOpenCustomerLoginPageActionGroup" stepKey="goToSignInPage"/>
+        <actionGroup ref="StorefrontFillCustomerLoginFormActionGroup" stepKey="fillLoginFormWithCorrectCredentials">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButton" />
         <see userInput="$$customer.firstname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeFirstName"/>
         <see userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeLastName"/>
         <see userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeEmail"/>
         <waitForPageLoad stepKey="waitForLogin"/>
         <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnConfigurableProductPage"/>
         <waitForPageLoad stepKey="wait3"/>
-        <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
         <selectOption userInput="{{colorProductAttribute1.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption1"/>
         <waitForElementVisible selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="waitForAddToCartVisible"/>
         <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addFirstProductToWishlist"/>

@@ -6,7 +6,9 @@
 //
 //  Variables
 //  ---------------------------------------------
-
+/**
+ * @codingStandardsIgnoreStart
+ */
 @control-table__dragging__outline-color: @color-blue-pure;
 
 @control-table-row__dragging__background-color: @color-light-gray0;
@@ -24,7 +26,6 @@
 .admin__control-table-wrapper {
     max-width: 100%;
     overflow-x: auto;
-    overflow-y: hidden;
 }
 
 .admin__control-table {
@@ -236,4 +237,23 @@
     .admin__data-grid-pager {
         float: right;
     }
+}
+
+.product_form_product_form_advanced_pricing_modal .admin__fieldset > .admin__field > .admin__field-label,
+.product_form_product_form_advanced_pricing_modal [class*='admin__control-grouped'] > .admin__field:first-child > .admin__field-label {
+    margin-left: 0;
+}
+
+.product_form_product_form_advanced_pricing_modal .admin__control-table td,
+.product_form_product_form_advanced_pricing_modal .admin__control-table th {
+    overflow-y: visible;
+}
+
+.product_form_product_form_advanced_pricing_modal .admin__fieldset {
+    margin-left: -30px;
+}
+
+.product_form_product_form_advanced_pricing_modal .admin__control-table-wrapper {
+    overflow-x: visible;
+    overflow-y: visible;
 }

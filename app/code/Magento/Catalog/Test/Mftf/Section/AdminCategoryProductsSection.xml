@@ -9,8 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCategoryProductsSection">
-        <element name="sectionHeader" type="button" selector="div[data-index='assign_products']" timeout="30"/>
-        <element name="addProducts" type="button" selector="#catalog_category_add_product_tabs" timeout="30"/>
-        <element name="addProductsDisabled" type="button" selector="#catalog_category_add_product_tabs[disabled]" timeout="30"/>
+        <element name="sectionHeader" type="button" selector="div[data-index='assign_products'] .fieldset-wrapper-title" timeout="30"/>
+        <element name="sectionBody" type="button" selector="div[data-index='assign_products'] .admin__fieldset-wrapper-content" timeout="30"/>
     </section>
 </sections>

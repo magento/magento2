@@ -37,7 +37,7 @@ class ConfigurablePrice extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -45,7 +45,7 @@ class ConfigurablePrice extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -82,6 +82,7 @@ class ConfigurablePrice extends AbstractModifier
                         'imports' => [
                             'visible' => 'ns = ${ $.ns }, index = '
                                 . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                            '__disableTmpl' => ['visible' => false],
                         ]
                     ];
                 $config = $visibilityConfig;

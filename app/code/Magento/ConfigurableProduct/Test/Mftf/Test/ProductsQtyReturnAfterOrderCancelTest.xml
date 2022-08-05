@@ -8,17 +8,21 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ProductsQtyReturnAfterOrderCancel">
+    <test name="ProductsQtyReturnAfterOrderCancelTest" deprecated="Use AdminCheckProductQtyAfterOrderCancellingTest instead">
 
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Cancel order"/>
-            <title value="Product qunatity return after order cancel"/>
-            <description value="Check Product qunatity return after order cancel"/>
+            <title value="DEPRECATED. Product quantity return after order cancel"/>
+            <description value="Check Product quantity return after order cancel"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-97228"/>
             <useCaseId value="MAGETWO-82221"/>
             <group value="ConfigurableProduct"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminCheckProductQtyAfterOrderCancellingTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -26,30 +30,31 @@
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
-            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage1"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage1"/>
 
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
             <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="changeProductQuantity"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveChanges"/>
-        <waitForPageLoad stepKey="waitProductGridToBeLoaded"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="changeProductQuantity">
+            <argument name="productQty" value="100"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveChanges"/>
 
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="navigateToProductPage"/>
+        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="4" stepKey="fillQuantity"/>
 
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>
 
@@ -66,35 +71,37 @@
 
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
 
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
-        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
-        <waitForPageLoad stepKey="waitForNewInvoicePageLoad"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButton"/>
         <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="1" stepKey="ChangeQtyToInvoice"/>
-        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQunatity"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQuantity"/>
         <waitForPageLoad stepKey="waitPageToBeLoaded"/>
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <waitForPageLoad stepKey="waitOrderDetailToLoad"/>
         <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="1" stepKey="changeItemQtyToShip"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
         <waitForPageLoad stepKey="waitShipmentSectionToLoad"/>
-        <actionGroup ref="cancelPendingOrder" stepKey="cancelPendingOption">
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOption">
             <argument name="orderStatus" value="Complete"/>
         </actionGroup>
 
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Canceled 3" stepKey="seeCanceledQuantity"/>
 
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
 
-        <actionGroup ref="filterProductGridBySku2" stepKey="filterProductGridBySku">
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySku">
             <argument name="sku" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Quantity')}}" userInput="99" stepKey="seeProductSkuInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductSkuInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Quantity"/>
+            <argument name="value" value="99"/>
+        </actionGroup>
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
     </test>

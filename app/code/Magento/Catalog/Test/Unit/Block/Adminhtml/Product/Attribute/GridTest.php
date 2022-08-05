@@ -3,38 +3,48 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Attribute;
 
-class GridTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Block\Template\Context;
+use Magento\Catalog\Block\Adminhtml\Product\Attribute\Grid;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Framework\Filesystem;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\TestCase;
+
+class GridTest extends TestCase
 {
     public function testGetRowUrl()
     {
-        $attribute = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
-        $attribute->expects($this->once())->method('getAttributeId')->will($this->returnValue(2));
+        $attribute = $this->createMock(Attribute::class);
+        $attribute->expects($this->once())->method('getAttributeId')->willReturn(2);
 
-        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $filesystem = $this->createMock(Filesystem::class);
 
-        $urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
         $urlBuilder->expects(
             $this->once()
         )->method(
             'getUrl'
         )->with(
-            $this->equalTo('catalog/*/edit'),
-            $this->equalTo(['attribute_id' => 2])
-        )->will(
-            $this->returnValue('catalog/product_attribute/edit/id/2')
+            'catalog/*/edit',
+            ['attribute_id' => 2]
+        )->willReturn(
+            'catalog/product_attribute/edit/id/2'
         );
 
-        $context = $this->createMock(\Magento\Backend\Block\Template\Context::class);
-        $context->expects($this->once())->method('getUrlBuilder')->will($this->returnValue($urlBuilder));
-        $context->expects($this->any())->method('getFilesystem')->will($this->returnValue($filesystem));
+        $context = $this->createMock(Context::class);
+        $context->expects($this->once())->method('getUrlBuilder')->willReturn($urlBuilder);
+        $context->expects($this->any())->method('getFilesystem')->willReturn($filesystem);
 
         $data = ['context' => $context];
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Catalog\Block\Adminhtml\Product\Attribute\Grid $block */
-        $block = $helper->getObject(\Magento\Catalog\Block\Adminhtml\Product\Attribute\Grid::class, $data);
+        $helper = new ObjectManager($this);
+        /** @var Grid $block */
+        $block = $helper->getObject(Grid::class, $data);
 
         $this->assertEquals('catalog/product_attribute/edit/id/2', $block->getRowUrl($attribute));
     }

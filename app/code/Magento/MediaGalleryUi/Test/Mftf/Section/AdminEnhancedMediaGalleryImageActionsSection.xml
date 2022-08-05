@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminEnhancedMediaGalleryImageActionsSection">
+        <element name="openContextMenu" type="button" selector=".three-dots"/>
+        <element name="openContextMenuByImage" type="button" parameterized="true" selector="//img[contains(@src,'{{image}}')]/ancestor::*[contains(@class,'media-gallery-wrap')]//*[contains(@class,'three-dots')]"/>
+        <element name="contextMenuItem" type="block" selector="//div[@class='media-gallery-image']//ul[@class='action-menu _active']//li//a[@class='action-menu-item']"/>
+        <element name="viewDetails" type="button" selector="//ul[@class='action-menu _active']//a[text()='View Details']" timeout="30"/>
+        <element name="delete" type="button" selector="//ul[@class='action-menu _active']//a[text()='Delete']"/>
+        <element name="edit" type="button" selector="//ul[@class='action-menu _active']//a[text()='Edit']"/>
+        <element name="imageInGrid" type="button" selector="//li[@data-ui-id='title'and text()='{{imageTitle}}']/parent::*/parent::*/parent::div//img[@class='media-gallery-image-column']" parameterized="true"/>
+        <element name="imagesGrid" type="block" selector="//div[@class='masonry-image-grid']"/>
+    </section>
+</sections>

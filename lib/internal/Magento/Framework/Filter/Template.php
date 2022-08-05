@@ -9,6 +9,7 @@
  */
 namespace Magento\Framework\Filter;
 
+use InvalidArgumentException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
 use Magento\Framework\Filter\DirectiveProcessor\ForDirective;
@@ -23,6 +24,7 @@ use Magento\Framework\Stdlib\StringUtils;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Template implements \Zend_Filter_Interface
 {
@@ -31,37 +33,39 @@ class Template implements \Zend_Filter_Interface
      *
      * @deprecated Use the new Directive processors
      */
-    const CONSTRUCTION_PATTERN = '/{{([a-z]{0,10})(.*?)}}(?:(.*?)(?:{{\/(?:\\1)}}))?/si';
+    public const CONSTRUCTION_PATTERN = '/{{([a-z]{0,10})(.*?)}}(?:(.*?)(?:{{\/(?:\\1)}}))?/si';
 
     /**
      * Construction `depend` regular expression
      *
      * @deprecated Use the new Directive processors
      */
-    const CONSTRUCTION_DEPEND_PATTERN = '/{{depend\s*(.*?)}}(.*?){{\\/depend\s*}}/si';
+    public const CONSTRUCTION_DEPEND_PATTERN = '/{{depend\s*(.*?)}}(.*?){{\\/depend\s*}}/si';
 
     /**
      * Construction `if` regular expression
      *
      * @deprecated Use the new Directive processors
      */
-    const CONSTRUCTION_IF_PATTERN = '/{{if\s*(.*?)}}(.*?)({{else}}(.*?))?{{\\/if\s*}}/si';
+    public const CONSTRUCTION_IF_PATTERN = '/{{if\s*(.*?)}}(.*?)({{else}}(.*?))?{{\\/if\s*}}/si';
 
     /**
      * Construction `template` regular expression
      *
      * @deprecated Use the new Directive processors
      */
-    const CONSTRUCTION_TEMPLATE_PATTERN = '/{{(template)(.*?)}}/si';
+    public const CONSTRUCTION_TEMPLATE_PATTERN = '/{{(template)(.*?)}}/si';
 
     /**
      * Construction `for` regular expression
      *
      * @deprecated Use the new Directive processors
      */
-    const LOOP_PATTERN = '/{{for(?P<loopItem>.*? )(in)(?P<loopData>.*?)}}(?P<loopBody>.*?){{\/for}}/si';
+    public const LOOP_PATTERN = '/{{for(?P<loopItem>.*? )(in)(?P<loopData>.*?)}}(?P<loopBody>.*?){{\/for}}/si';
 
-    /**#@-*/
+    /**
+     * @var array
+     */
     private $afterFilterCallbacks = [];
 
     /**
@@ -72,8 +76,6 @@ class Template implements \Zend_Filter_Interface
     protected $templateVars = [];
 
     /**
-     * Template processor
-     *
      * @var callable|null
      */
     protected $templateProcessor = null;
@@ -91,7 +93,7 @@ class Template implements \Zend_Filter_Interface
     /**
      * @var bool
      */
-    private $strictMode = false;
+    private $strictMode = true;
 
     /**
      * @var VariableResolverInterface|null
@@ -171,9 +173,16 @@ class Template implements \Zend_Filter_Interface
      */
     public function filter($value)
     {
+        if (!is_string($value)) {
+            throw new InvalidArgumentException(__(
+                'Argument \'value\' must be type of string, %1 given.',
+                gettype($value)
+            )->render());
+        }
+
         foreach ($this->directiveProcessors as $directiveProcessor) {
             if (!$directiveProcessor instanceof DirectiveProcessorInterface) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'Directive processors must implement ' . DirectiveProcessorInterface::class
                 );
             }
@@ -181,15 +190,12 @@ class Template implements \Zend_Filter_Interface
             if (preg_match_all($directiveProcessor->getRegularExpression(), $value, $constructions, PREG_SET_ORDER)) {
                 foreach ($constructions as $construction) {
                     $replacedValue = $directiveProcessor->process($construction, $this, $this->templateVars);
-
                     $value = str_replace($construction[0], $replacedValue, $value);
                 }
             }
         }
 
-        $value = $this->afterFilter($value);
-
-        return $value;
+        return $this->afterFilter($value);
     }
 
     /**
@@ -244,7 +250,7 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string[] $construction
      * @return string
-     * @deprecated Use the directive interfaces instead
+     * @deprecated 102.0.4 Use the directive interfaces instead
      */
     public function varDirective($construction)
     {
@@ -259,14 +265,15 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string[] $construction
      * @return string
-     * @deprecated Use the directive interfaces instead
+     * @deprecated 102.0.4 Use the directive interfaces instead
+     * @since 102.0.4
      */
     public function forDirective($construction)
     {
         $directive = $this->directiveProcessors['for'] ?? ObjectManager::getInstance()
             ->get(ForDirective::class);
 
-        preg_match($directive->getRegularExpression(), $construction[0], $specificConstruction);
+        preg_match($directive->getRegularExpression(), $construction[0] ?? '', $specificConstruction);
 
         return $directive->process($specificConstruction, $this, $this->templateVars);
     }
@@ -283,7 +290,7 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string[] $construction
      * @return mixed
-     * @deprecated Use the directive interfaces instead
+     * @deprecated 102.0.4 Use the directive interfaces instead
      */
     public function templateDirective($construction)
     {
@@ -298,14 +305,14 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string[] $construction
      * @return string
-     * @deprecated Use the directive interfaces instead
+     * @deprecated 102.0.4 Use the directive interfaces instead
      */
     public function dependDirective($construction)
     {
         $directive = $this->directiveProcessors['depend'] ?? ObjectManager::getInstance()
             ->get(DependDirective::class);
 
-        preg_match($directive->getRegularExpression(), $construction[0], $specificConstruction);
+        preg_match($directive->getRegularExpression(), $construction[0] ?? '', $specificConstruction);
 
         return $directive->process($specificConstruction, $this, $this->templateVars);
     }
@@ -315,14 +322,14 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string[] $construction
      * @return string
-     * @deprecated Use the directive interfaces instead
+     * @deprecated 102.0.4 Use the directive interfaces instead
      */
     public function ifDirective($construction)
     {
         $directive = $this->directiveProcessors['if'] ?? ObjectManager::getInstance()
             ->get(IfDirective::class);
 
-        preg_match($directive->getRegularExpression(), $construction[0], $specificConstruction);
+        preg_match($directive->getRegularExpression(), $construction[0] ?? '', $specificConstruction);
 
         return $directive->process($specificConstruction, $this, $this->templateVars);
     }
@@ -332,7 +339,7 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string $value raw parameters
      * @return array
-     * @deprecated Use the directive interfaces instead
+     * @deprecated 102.0.4 Use the directive interfaces instead
      */
     protected function getParameters($value)
     {
@@ -340,7 +347,7 @@ class Template implements \Zend_Filter_Interface
         $tokenizer->setString($value);
         $params = $tokenizer->tokenize();
         foreach ($params as $key => $value) {
-            if (substr($value, 0, 1) === '$') {
+            if ($value !== null && substr($value, 0, 1) === '$') {
                 $params[$key] = $this->getVariable(substr($value, 1), null);
             }
         }
@@ -353,7 +360,7 @@ class Template implements \Zend_Filter_Interface
      * @param string $value raw parameters
      * @param string $default default value
      * @return string
-     * @deprecated Use \Magento\Framework\Filter\VariableResolverInterface instead
+     * @deprecated 102.0.4 Use \Magento\Framework\Filter\VariableResolverInterface instead
      */
     protected function getVariable($value, $default = '{no_value_defined}')
     {
@@ -369,14 +376,14 @@ class Template implements \Zend_Filter_Interface
      *
      * @param array $stack
      * @return array
-     * @deprecated Use new directive processor interfaces
+     * @deprecated 102.0.4 Use new directive processor interfaces
      */
     protected function getStackArgs($stack)
     {
         foreach ($stack as $i => $value) {
             if (is_array($value)) {
                 $stack[$i] = $this->getStackArgs($value);
-            } elseif (substr($value, 0, 1) === '$') {
+            } elseif ($value !== null && substr($value, 0, 1) === '$') {
                 $stack[$i] = $this->getVariable(substr($value, 1), null);
             }
         }
@@ -396,6 +403,8 @@ class Template implements \Zend_Filter_Interface
      *
      * @param bool $strictMode Enable strict parsing of directives
      * @return bool The previous mode from before the change
+     * @since 102.0.4
+     * @deprecated The method is not in use anymore.
      */
     public function setStrictMode(bool $strictMode): bool
     {
@@ -409,6 +418,8 @@ class Template implements \Zend_Filter_Interface
      * Return if the template is rendered with strict directive processing
      *
      * @return bool
+     * @since 102.0.4
+     * @deprecated The method is not in use anymore.
      */
     public function isStrictMode(): bool
     {

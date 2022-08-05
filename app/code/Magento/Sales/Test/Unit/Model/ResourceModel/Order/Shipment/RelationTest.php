@@ -16,11 +16,9 @@ use Magento\Sales\Model\ResourceModel\Order\Shipment\Item;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Relation;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Track;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class RelationTest
- */
-class RelationTest extends \PHPUnit\Framework\TestCase
+class RelationTest extends TestCase
 {
     /**
      * @var Relation

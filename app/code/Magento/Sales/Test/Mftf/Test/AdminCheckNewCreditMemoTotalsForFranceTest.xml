@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckNewCreditMemoTotalsForFranceTest" extends="AdminCreateCreditMemoForOrderWithCashOnDeliveryTest">
+        <annotations>
+            <stories value="Credit memo entity for France locale"/>
+            <title value="Credit memo entity for France locale"/>
+            <description value="Create Credit Memo with cash on delivery payment and assert 0 shipping refund for France locale"/>
+            <severity value="MAJOR"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <magentoCLI command="setup:static-content:deploy fr_FR" stepKey="deployStaticContentWithFrenchLocale" before="LoginAsAdmin"/>
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToFrance" after="LoginAsAdmin">
+                <argument name="InterfaceLocaleByValue" value="fr_FR"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToDefaultValue" before="logout">
+                <argument name="InterfaceLocaleByValue" value="en_US"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="AdminOpenAndFillCreditMemoRefundActionGroup" stepKey="fillCreditMemoRefund">
+            <argument name="itemQtyToRefund" value="1"/>
+            <argument name="shippingRefund" value="0"/>
+            <argument name="adjustmentRefund" value="5,31"/>
+            <argument name="adjustmentFee" value="10,31"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertAdminCreditMemoNewPageTotalsActionGroup" stepKey="assertCreditMemoRefundTotals" after="fillCreditMemoRefund">
+            <argument name="refundShipping" value="0,00"/>
+            <argument name="adjustmentRefund" value="5,31"/>
+            <argument name="adjustmentFee" value="10,31"/>
+            <argument name="subtotalRow" value="560,00"/>
+            <argument name="grandTotal" value="555,00"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertAdminCreditMemoViewPageTotalsActionGroup" stepKey="assertCreditMemoViewPageTotals">
+            <argument name="subtotal" value="560,00"/>
+            <argument name="adjustmentRefund" value="5,31"/>
+            <argument name="adjustmentFee" value="10,31"/>
+            <argument name="grandTotal" value="555,00"/>
+        </actionGroup>
+    </test>
+</tests>

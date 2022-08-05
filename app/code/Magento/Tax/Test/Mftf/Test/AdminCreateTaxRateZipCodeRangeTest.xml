@@ -19,20 +19,19 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRateIndex"/>
-            <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
-            <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillNameFilter"/>
-            <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch"/>
-            <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow1"/>
-            <click selector="{{AdminTaxRateFormSection.deleteRate}}" stepKey="clickDeleteRate"/>
-            <click selector="{{AdminTaxRateFormSection.ok}}" stepKey="clickOk"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickClearFilters"/>
+            <actionGroup ref="AdminFilterTaxRateByCodeActionGroup" stepKey="filterByCode">
+                <argument name="taxRateCode" value="{{SimpleTaxRate.code}}" />
+            </actionGroup>
+            <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="clickFirstRow"/>
+            <actionGroup ref="AdminDeleteTaxRateActionGroup" stepKey="deleteTaxRate"/>
         </after>
 
-        <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRateIndex1"/>
-        <waitForPageLoad stepKey="waitForTaxRateIndex1"/>
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex1"/>
         <!-- Create a tax rate with range from 90001-96162 for zipCodes -->
         <click selector="{{AdminTaxRateGridSection.add}}" stepKey="clickAddNewTaxRateButton"/>
         <fillField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillRuleName"/>
@@ -45,11 +44,12 @@
         <click selector="{{AdminTaxRateFormSection.save}}" stepKey="clickSave"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the tax rate." stepKey="seeSuccess"/>
 
-        <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRateIndex2"/>
-        <waitForPageLoad stepKey="waitForTaxRateIndex3"/>
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex2"/>
         <!-- Create a tax rate for zipCodeRange and verify we see expected values on the tax rate grid page -->
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
-        <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillTaxIdentifierField2"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters2"/>
+        <actionGroup ref="AdminFillTaxIdentifierFilterOnTaxRateGridActionGroup" stepKey="fillTaxIdentifierField2">
+            <argument name="taxRateCode" value="{{SimpleTaxRate.code}}"/>
+        </actionGroup> 
         <selectOption selector="{{AdminTaxRateGridSection.filterByCountry}}" userInput="United States" stepKey="selectCountry2" />
         <fillField selector="{{AdminTaxRateGridSection.filterByPostCode}}" userInput="90001-96162" stepKey="seeTaxPostCode1"/>
         <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch2"/>
@@ -63,9 +63,8 @@
         <seeOptionIsSelected selector="{{AdminTaxRateFormSection.country}}" userInput="United States" stepKey="seeCountry2"/>
 
         <!-- Verify we see expected values on the tax rule form page -->
-        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>
-        <waitForPageLoad stepKey="waitForTaxRateIndex4"/>
-        <click selector="{{AdminTaxRuleGridSection.add}}" stepKey="clickAdd"/>
+        <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex1"/>
+        <actionGroup ref="AdminClickAddTaxRuleButtonActionGroup" stepKey="clickAdd"/>
         <see selector="{{AdminTaxRulesSection.taxRateMultiSelectItems}}" userInput="{{SimpleTaxRate.code}}" stepKey="seeTaxRateOnNewTaxRulePage"/>
     </test>
 </tests>

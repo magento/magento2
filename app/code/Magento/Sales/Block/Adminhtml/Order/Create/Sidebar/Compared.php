@@ -46,23 +46,15 @@ class Compared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
         $collection = $this->getData('item_collection');
         if ($collection === null) {
             if ($collection = $this->getCreateOrderModel()->getCustomerCompareList()) {
-                $collection = $collection->getItemCollection()->useProductItem(
-                    true
-                )->setStoreId(
-                    $this->getQuote()->getStoreId()
-                )->addStoreFilter(
-                    $this->getQuote()->getStoreId()
-                )->setCustomerId(
-                    $this->getCustomerId()
-                )->addAttributeToSelect(
-                    'name'
-                )->addAttributeToSelect(
-                    'price'
-                )->addAttributeToSelect(
-                    'image'
-                )->addAttributeToSelect(
-                    'status'
-                )->load();
+                $collection = $collection->getItemCollection()
+                    ->useProductItem()
+                    ->setStoreId($this->getQuote()->getStoreId())
+                    ->addStoreFilter($this->getQuote()->getStoreId())
+                    ->setCustomerId($this->getCustomerId())
+                    ->addAttributeToSelect('name')
+                    ->addAttributeToSelect('price')->addAttributeToSelect('image')
+                    ->addAttributeToSelect('status')
+                    ->load();
             }
             $this->setData('item_collection', $collection);
         }

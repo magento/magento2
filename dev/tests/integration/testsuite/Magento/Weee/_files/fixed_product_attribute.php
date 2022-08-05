@@ -6,6 +6,9 @@
 
 declare(strict_types=1);
 
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+Resolver::getInstance()->requireDataFixture('Magento/Weee/_files/fixed_product_attribute_rollback.php');
+
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Eav\Model\Entity\Attribute\Set $attributeSet */
@@ -25,6 +28,9 @@ $attributeData = [
     'is_static' => 1,
     'attribute_set_id' => $defaultSetId,
     'attribute_group_id' => $attributeGroupId,
+    'frontend_input' => 'weee',
+    'frontend_label' => 'fixed product tax',
+    'is_used_in_grid' => '1',
 ];
 
 /** @var \Magento\Catalog\Model\Entity\Attribute $attribute */

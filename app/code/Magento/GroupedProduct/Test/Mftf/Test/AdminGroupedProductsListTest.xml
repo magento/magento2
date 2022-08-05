@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminGroupedProductsAreListedWhenOutOfStock">
+    <test name="AdminGroupedProductsAreListedWhenOutOfStockTest">
         <annotations>
             <features value="GroupedProduct"/>
             <stories value="MAGETWO-93181: Grouped product doesn't take care about his Linked Products when SalableQuantity &lt; ProductLink.ExtensionAttributes.Qty after Source Deduction"/>
@@ -27,22 +27,21 @@
             <createData entity="SimpleProduct4" stepKey="simpleProduct2">
                 <requiredEntity createDataKey="category1"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="category1" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="adminProductIndexPageAdd"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
-        <actionGroup ref="fillGroupedProductForm" stepKey="fillMainProductForm">
+        <actionGroup ref="FillGroupedProductFormActionGroup" stepKey="fillMainProductForm">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
         <!-- Add two simple products to grouped product -->
@@ -50,11 +49,11 @@
         <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductSection"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForFilter"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku1">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku1">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkOption1"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku2">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku2">
             <argument name="product" value="$$simpleProduct2$$"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkOption2"/>
@@ -62,7 +61,7 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
 
         <!-- Save product -->
-        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
 
         <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="scrollToProducts"/>

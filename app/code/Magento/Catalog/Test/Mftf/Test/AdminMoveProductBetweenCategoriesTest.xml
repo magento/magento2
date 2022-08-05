@@ -19,14 +19,13 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
             <createData entity="_defaultCategory" stepKey="createAnchoredCategory1"/>
             <createData entity="_defaultCategory" stepKey="createSecondCategory"/>
 
             <!-- Switch "Category Product" and "Product Category" indexers to "Update by Schedule" mode -->
-            <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="onIndexManagement"/>
-            <waitForPageLoad stepKey="waitForManagementPage"/>
+            <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="onIndexManagement"/>
 
             <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchCategoryProduct">
                 <argument name="indexerValue" value="catalog_category_product"/>
@@ -34,12 +33,14 @@
             <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchProductCategory">
                 <argument name="indexerValue" value="catalog_product_category"/>
             </actionGroup>
+            <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchCatalogSearch">
+                <argument name="indexerValue" value="catalogsearch_fulltext"/>
+            </actionGroup>
         </before>
 
         <after>
             <!-- Switch "Category Product" and "Product Category" indexers to "Update by Save" mode -->
-            <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="onIndexManagement"/>
-            <waitForPageLoad stepKey="waitForManagementPage"/>
+            <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="onIndexManagement"/>
 
             <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchCategoryProduct">
                 <argument name="indexerValue" value="catalog_category_product"/>
@@ -53,7 +54,7 @@
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSecondCategory" stepKey="deleteSecondCategory"/>
             <deleteData createDataKey="createAnchoredCategory1" stepKey="deleteAnchoredCategory1"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create the anchored category <Cat1_anchored> -->
         <actionGroup ref="AdminAnchorCategoryActionGroup" stepKey="anchorCategory">
@@ -63,21 +64,20 @@
         <!-- Create subcategory <Sub1> of the anchored category -->
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="addSubCategoryName"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory1"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory1"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSaveSuccessMessage"/>
 
         <!-- Assign <product1> to the <Sub1> -->
-        <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="goToProduct"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct">
+            <argument name="productId" value="$$simpleProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="activateDropDownCategory"/>
         <fillField userInput="{{SimpleSubCategory.name}}" selector="{{AdminProductFormSection.searchCategory}}" stepKey="fillSearch"/>
         <waitForPageLoad stepKey="waitForSubCategory"/>
         <click selector="{{AdminProductFormSection.selectCategory(SimpleSubCategory.name)}}" stepKey="selectSub1Category"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickDone"/>
-        <waitForPageLoad stepKey="waitForApplyCategory"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSave"/>
-        <waitForPageLoad stepKey="waitForSavingChanges"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickDone"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSave"/>
 
         <!-- Enable `Use Categories Path for Product URLs` on Stores -> Configuration -> Catalog -> Catalog -> Search Engine Optimization -->
         <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="onConfigPage"/>
@@ -90,11 +90,10 @@
         <see selector="{{AdminIndexManagementSection.successMessage}}"  userInput="You saved the configuration." stepKey="seeMessage"/>
 
         <!-- Navigate to the Catalog > Products -->
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="onCatalogProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPage"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="onCatalogProductPage"/>
 
         <!-- Click on <product1>: Product page opens-->
-        <actionGroup ref="filterProductGridByName" stepKey="filterProduct">
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterProduct">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
         <click selector="{{AdminProductGridSection.productGridNameProduct($$simpleProduct.name$$)}}" stepKey="clickProduct1"/>
@@ -105,16 +104,14 @@
         <click selector="{{AdminProductFormSection.unselectCategories(SimpleSubCategory.name)}}" stepKey="removeCategory"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="openDropDown"/>
         <checkOption selector="{{AdminProductFormSection.selectCategory($$createSecondCategory.name$$)}}" stepKey="selectCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="pressButtonDone"/>
-        <waitForPageLoad stepKey="waitForApplyCategory2"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="pushButtonSave"/>
-        <waitForPageLoad stepKey="waitForSavingProduct"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="pressButtonDone"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="pushButtonSave"/>
 
         <!--Product is saved -->
         <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSuccessMessage"/>
 
         <!-- Run cron -->
-        <magentoCLI command="cron:run" stepKey="runCron"/>
+        <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
 
         <!-- Clear invalidated cache on System>Tools>Cache Management page  -->
         <amOnPage url="{{AdminCacheManagementPage.url}}" stepKey="onCachePage"/>
@@ -129,11 +126,10 @@
         <waitForPageLoad stepKey="waitForRefresh"/>
 
         <see userInput="2 cache type(s) refreshed." stepKey="seeCacheRefreshedMessage"/>
-        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
         <!-- Open frontend -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="onFrontend"/>
-        <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="onFrontend"/>
 
         <!-- Open <Cat2> from navigation menu -->
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSecondCategory.name$$)}}" stepKey="openCat2"/>
@@ -144,11 +140,13 @@
         <see userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProduct"/>
 
         <!-- Open <product1>  -->
-        <click selector="{{StorefrontCategoryMainSection.productLinkByHref($$simpleProduct.urlKey$$)}}" stepKey="openProduct"/>
+        <click selector="{{StorefrontCategoryMainSection.productLinkByHref($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="openProduct"/>
         <waitForPageLoad stepKey="waitForProductPageLoading"/>
 
         <!-- # Product page should open successfully # Breadcrumb for product should be like <Cat 2> -->
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="$$simpleProduct.name$$"/>
+        </actionGroup>
         <see userInput="$$createSecondCategory.name$$" selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}" stepKey="seeCategoryInBreadcrumbs"/>
 
         <!-- Open <Cat1_anchored> category -->
@@ -157,18 +155,17 @@
 
         <!-- # Category should open successfully # <product1> should be absent on the page -->
         <see userInput="$$createAnchoredCategory1.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategory1Name"/>
-        <see userInput="We can't find products matching the selection." stepKey="seeEmptyNotice"/>
+        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeEmptyNotice"/>
         <dontSee userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProduct"/>
-      
+
         <!-- Log in to the backend: Admin user is logged in-->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAdmin"/>
-        
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
+
         <!-- Navigate to the Catalog > Products: Navigate to the Catalog>Products -->
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="amOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductsPage"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="amOnProductPage"/>
 
         <!-- Click on <product1> -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="openSimpleProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openSimpleProduct">
             <argument name="productSku" value="$$simpleProduct.sku$$"/>
         </actionGroup>
 
@@ -178,20 +175,17 @@
         <fillField userInput="{$grabNameSubCategory}" selector="{{AdminProductFormSection.searchCategory}}" stepKey="fillSearchField"/>
         <waitForPageLoad stepKey="waitForSearchSubCategory"/>
         <click selector="{{AdminProductFormSection.selectCategory({$grabNameSubCategory})}}" stepKey="selectSubCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickButtonDone"/>
-        <waitForPageLoad stepKey="waitForCategoryApply"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickButtonSave"/>
-        <waitForPageLoad stepKey="waitForSaveChanges"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickButtonDone"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickButtonSave"/>
 
         <!-- Product is saved successfully -->
         <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSaveMessage"/>
 
         <!-- Run cron -->
-        <magentoCLI command="cron:run" stepKey="runCron2"/>
+        <magentoCLI command="cron:run --group=index" stepKey="runCron2"/>
 
         <!-- Open frontend -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="onFrontendPage"/>
-        <waitForPageLoad stepKey="waitForFrontPageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="onFrontendPage"/>
 
         <!-- Open <Cat2> from navigation menu -->
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSecondCategory.name$$)}}" stepKey="openSecondCategory"/>

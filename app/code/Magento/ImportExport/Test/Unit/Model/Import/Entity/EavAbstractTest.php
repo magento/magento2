@@ -3,77 +3,88 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\ImportExport\Model\Import\Entity\AbstractEav
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\Entity;
 
-class EavAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
+use Magento\Eav\Model\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\ImportExport\Model\Export\Factory;
+use Magento\ImportExport\Model\Import\Entity\AbstractEav;
+use Magento\ImportExport\Model\ImportFactory;
+use Magento\ImportExport\Model\ResourceModel\Helper;
+use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+
+class EavAbstractTest extends AbstractImportTestCase
 {
-    /**
-     * Entity type id
-     */
-    const ENTITY_TYPE_ID = 1;
+    private const ENTITY_TYPE_ID = 1;
 
     /**
      * Abstract import entity eav model
      *
-     * @var \Magento\ImportExport\Model\Import\Entity\AbstractEav
+     * @var AbstractEav
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var StringUtils|MockObject
      */
     protected $_string;
 
     /**
-     * @var \Magento\ImportExport\Model\ImportFactory
+     * @var ImportFactory
      */
     protected $_importFactory;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     protected $_resource;
 
     /**
-     * @var \Magento\ImportExport\Model\ResourceModel\Helper
+     * @var Helper
      */
     protected $_resourceHelper;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\ImportExport\Model\Export\Factory
+     * @var Factory
      */
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
     protected $_eavConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->_string = new \Magento\Framework\Stdlib\StringUtils();
-        $scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_string = new StringUtils();
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
-        $this->_importFactory = $this->createMock(\Magento\ImportExport\Model\ImportFactory::class);
-        $this->_resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->_resourceHelper = $this->createMock(\Magento\ImportExport\Model\ResourceModel\Helper::class);
-        $this->_storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
-        $this->_collectionFactory = $this->createMock(\Magento\ImportExport\Model\Export\Factory::class);
-        $this->_eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
+        $this->_importFactory = $this->createMock(ImportFactory::class);
+        $this->_resource = $this->createMock(ResourceConnection::class);
+        $this->_resourceHelper = $this->createMock(Helper::class);
+        $this->_storeManager = $this->createMock(StoreManager::class);
+        $this->_collectionFactory = $this->createMock(Factory::class);
+        $this->_eavConfig = $this->createMock(Config::class);
 
         $this->_model = $this->getMockForAbstractClass(
-            \Magento\ImportExport\Model\Import\Entity\AbstractEav::class,
+            AbstractEav::class,
             [
                 $this->_string,
                 $scopeConfig,
@@ -89,7 +100,7 @@ class EavAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstr
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }

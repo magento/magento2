@@ -9,7 +9,7 @@
     <system>
         <section id="checkout">
             <group id="options">
-                <field id="enable_agreements" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enable_agreements" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable Terms and Conditions</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>

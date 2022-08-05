@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCreditmemoWithBundleProductTest">
+        <annotations>
+            <title value="Create Creditmemo in Admin with bundle product"/>
+            <stories value="Github issue: #23440 fix Refund for bundle product without receiving product back"/>
+            <description value="Create Creditmemo for bundle product with without receiving product back(all child item qty = 0)"/>
+            <features value="Sales"/>
+            <severity value="AVERAGE"/>
+            <group value="Sales"/>
+        </annotations>
+
+        <before>
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
+            <createData entity="ApiBundleProduct" stepKey="product"/>
+            <createData entity="CheckboxOption" stepKey="checkboxBundleOption">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink1">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="checkboxBundleOption"/>
+                <requiredEntity createDataKey="simple1"/>
+                <field key="qty">2</field>
+                <field key="is_default">1</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink2">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="checkboxBundleOption"/>
+                <requiredEntity createDataKey="simple2"/>
+                <field key="qty">2</field>
+                <field key="is_default">1</field>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="dropDownBundleOption">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink3">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="dropDownBundleOption"/>
+                <requiredEntity createDataKey="simple1"/>
+                <field key="qty">2</field>
+                <field key="is_default">1</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink4">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="dropDownBundleOption"/>
+                <requiredEntity createDataKey="simple2"/>
+                <field key="qty">2</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="product" stepKey="delete"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
+        </after>
+
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="AddBundleProductToOrderAndCheckPriceInGridActionGroup" stepKey="addBundleProductToOrder">
+            <argument name="product" value="$$product$$"/>
+            <argument name="quantity" value="1"/>
+            <argument name="price" value="$738.00"/>
+        </actionGroup>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$grabOrderId}"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenAndFillCreditMemoRefundBundleWithQtyActionGroup" stepKey="fillCreditMemoRefund">
+            <argument name="itemQtyToRefund" value="0"/>
+            <argument name="rowNumberItemOne" value="3"/>
+            <argument name="rowNumberItemTwo" value="5"/>
+            <argument name="rowNumberItemThree" value="6"/>
+            <argument name="adjustmentRefund" value="10"/>
+        </actionGroup>
+        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo" />
+
+        <actionGroup ref="AdminOpenCreditMemoFromOrderPageActionGroup" stepKey="openCreditMemo" />
+        <scrollTo selector="{{AdminCreditMemoViewTotalSection.subtotal}}" stepKey="scrollToTotal"/>
+        <actionGroup ref="AssertAdminCreditMemoViewPageTotalsActionGroup" stepKey="assertCreditMemoViewPageTotals">
+            <argument name="subtotal" value="$0.00"/>
+            <argument name="adjustmentRefund" value="$10.00"/>
+            <argument name="adjustmentFee" value="$0.00"/>
+            <argument name="grandTotal" value="$10.00"/>
+        </actionGroup>
+    </test>
+</tests>

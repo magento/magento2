@@ -37,7 +37,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Add product to cart -->
@@ -58,12 +58,17 @@
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 
+        <!-- Select Free Shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFreeShipping">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+
         <!-- Assert Free Shipping checkbox -->
         <seeCheckboxIsChecked selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="freeShippingMethodCheckboxIsChecked"/>
 
         <!-- Click Next button -->
-        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
-        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
 
         <!-- Payment step is opened -->
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
@@ -75,7 +80,7 @@
 
         <!-- Open new browser's window and login as Admin -->
         <openNewTab stepKey="openNewTab"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Go to Store > Configuration > Sales > Shipping Methods -->
         <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
@@ -83,13 +88,12 @@
         <!-- Enable "Flat Rate" -->
         <actionGroup ref="AdminChangeFlatRateShippingMethodStatusActionGroup" stepKey="enableFlatRateShippingStatus"/>
 
-        <!-- Flush cache -->
-        <magentoCLI command="cache:flush" stepKey="cacheFlush"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Back to the Checkout and refresh the page -->
         <switchToPreviousTab stepKey="switchToPreviousTab"/>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitPageReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitPageReload"/>
 
         <!-- Payment step is opened after refreshing -->
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSection"/>

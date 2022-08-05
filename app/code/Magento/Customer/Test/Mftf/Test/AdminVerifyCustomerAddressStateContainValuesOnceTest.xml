@@ -21,7 +21,8 @@
         </annotations>
         <before>
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="firstCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="firstCustomer" stepKey="deleteFirstCustomer"/>
@@ -29,11 +30,9 @@
                 <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-
-        <!-- Go to Customers > All Customers.-->
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
 
         <!--Select created customer, Click Edit mode-->
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPageWithAddresses">
@@ -52,7 +51,7 @@
         <seeNumberOfElements userInput="1" selector="{{AdminCustomerAddressesSection.regionId(US_Address_NY.state)}}" stepKey="seeOnlyOneRegionInSelectStateForFirstCustomer"/>
 
         <!--Go to Customers > All customers, Click Add new Customers, fill all necessary fields, Save-->
-        <actionGroup ref="AdminCreateCustomerWithWebSiteAndGroup" stepKey="createSimpleUSCustomerWithoutAddress"/>
+        <actionGroup ref="AdminCreateCustomerWithWebSiteAndGroupActionGroup" stepKey="createSimpleUSCustomerWithoutAddress"/>
 
         <!--Select new created customer, Click Edit mode-->
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPageWithoutAddresses">

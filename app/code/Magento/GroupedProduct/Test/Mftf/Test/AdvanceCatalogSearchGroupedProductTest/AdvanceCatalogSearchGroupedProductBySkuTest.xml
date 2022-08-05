@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdvanceCatalogSearchGroupedProductBySkuTest" extends="AdvanceCatalogSearchSimpleProductBySkuTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search Grouped product with product sku"/>
+            <description value="Guest customer should be able to advance search Grouped product with product sku"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-146"/>
+            <group value="GroupedProduct"/>
+        </annotations>
+        <before>
+            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
+            <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
+            <createData entity="ApiGroupedProductAndUnderscoredSku" stepKey="product"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple1"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductTwo">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple2"/>
+            </updateData>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
+        </after>
+    </test>
+</tests>

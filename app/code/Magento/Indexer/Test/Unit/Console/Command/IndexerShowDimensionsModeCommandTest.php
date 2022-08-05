@@ -7,47 +7,60 @@ declare(strict_types=1);
 
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
-use Magento\Indexer\Console\Command\IndexerShowDimensionsModeCommand;
-use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Indexer\Console\Command\IndexerShowDimensionsModeCommand;
+use Magento\Indexer\Model\Indexer;
+use Magento\Indexer\Model\ModeSwitcherInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonSetup
 {
     /**
      * Command being tested
      *
-     * @var IndexerShowDimensionsModeCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerShowDimensionsModeCommand|MockObject
      */
     private $command;
 
     /**
      * ScopeConfigInterface
      *
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var \Magento\Indexer\Model\ModeSwitcherInterface[]
+     * @var ModeSwitcherInterface[]
      */
     private $indexers;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Indexer|MockObject
      */
     private $indexerMock;
 
     /**
+     * @var string[]
+     */
+    private $optionalIndexers;
+
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
+
+    /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->configReaderMock = $this->createMock(ScopeConfigInterface::class);
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->configReaderMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->indexers = ['indexer_1' => 'indexer_1', 'indexer_2' => 'indexer_2'];
-        $this->command = $objectManagerHelper->getObject(
+        $this->command = $this->objectManagerHelper->getObject(
             IndexerShowDimensionsModeCommand::class,
             [
                 'objectManagerFactory' => $this->objectManagerFactory,
@@ -65,8 +78,8 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     protected function getObjectManagerReturnValueMap(): array
     {
         $result = parent::getObjectManagerReturnValueMap();
-        $this->indexerMock = $this->createMock(\Magento\Indexer\Model\Indexer::class);
-        $result[] = [\Magento\Indexer\Model\Indexer::class, $this->indexerMock];
+        $this->indexerMock = $this->createMock(Indexer::class);
+        $result[] = [Indexer::class, $this->indexerMock];
 
         return $result;
     }
@@ -74,7 +87,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     /**
      * Tests method \Magento\Indexer\Console\Command\IndexerDimensionsModeCommand::execute
      *
-     * @param string $command
+     * @param array $command
      * @param string $consoleOutput
      * @dataProvider dimensionModesDataProvider
      */
@@ -95,6 +108,29 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
         );
     }
 
+    public function testExecuteWithOptionalIndexers()
+    {
+        $this->optionalIndexers = ['indexer_3'];
+        $this->indexers = ['indexer_3'=> 'indexer_3'];
+        $this->command = $this->objectManagerHelper->getObject(
+            IndexerShowDimensionsModeCommand::class,
+            [
+                'objectManagerFactory' => $this->objectManagerFactory,
+                'configReader'         => $this->configReaderMock,
+                'indexers'             => $this->indexers,
+                'optionalIndexers'     => $this->optionalIndexers
+            ]
+        );
+        $command = ['indexer' => ['indexer_3']];
+        $this->configureAdminArea();
+        /** @var CommandTester $commandTester */
+        $commandTester = new CommandTester($this->command);
+        $this->indexerMock->method('load')->willThrowException(new \InvalidArgumentException());
+        $commandTester->execute($command);
+        $actualValue = $commandTester->getDisplay();
+        $this->assertEquals('', $actualValue);
+    }
+
     /**
      * @return array
      */
@@ -103,11 +139,10 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
         return [
             'get_all'                => [
                 'command' => [],
-                'output'  =>
-                    sprintf(
-                        '%-50s ',
-                        'indexer_title1' . ':'
-                    ) . 'none' . PHP_EOL .
+                'output'  => sprintf(
+                    '%-50s ',
+                    'indexer_title1' . ':'
+                ) . 'none' . PHP_EOL .
                     sprintf(
                         '%-50s ',
                         'indexer_title2' . ':'
@@ -118,22 +153,20 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
                 'command' => [
                     'indexer' => ['indexer_1'],
                 ],
-                'output'  =>
-                    sprintf(
-                        '%-50s ',
-                        'indexer_title1' . ':'
-                    ) . 'none' . PHP_EOL
+                'output'  => sprintf(
+                    '%-50s ',
+                    'indexer_title1' . ':'
+                ) . 'none' . PHP_EOL
                 ,
             ],
             'get_by_several_indexes' => [
                 'command' => [
                     'indexer' => ['indexer_1', 'indexer_2'],
                 ],
-                'output'  =>
-                    sprintf(
-                        '%-50s ',
-                        'indexer_title1' . ':'
-                    ) . 'none' . PHP_EOL .
+                'output'  => sprintf(
+                    '%-50s ',
+                    'indexer_title1' . ':'
+                ) . 'none' . PHP_EOL .
                     sprintf(
                         '%-50s ',
                         'indexer_title2' . ':'

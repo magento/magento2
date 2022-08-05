@@ -20,7 +20,7 @@
             <group value="paypal"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Set PayPal Payments Standard Configs-->
             <comment userInput="Set PayPal Payments Standard Configs" stepKey="commentsetConfigs"/>
             <magentoCLI command="config:set paypal/wpp/api_authentication 0" stepKey="setApiAuthentication"/>
@@ -32,20 +32,20 @@
             <magentoCLI command="config:set payment/wps_express/active 1" stepKey="enableWPSExpress"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set payment/wps_express/active 0" stepKey="disableWPSExpress"/>
             <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disableExpressCheckout"/>
         </after>
         <!--Try to enable express checkout Solution-->
         <comment userInput="Try to enable express checkout Solution" stepKey="commentTryEnableExpressCheckout"/>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
-        <actionGroup ref="EnablePayPalSolutionWithoutSave" stepKey="enableExpressCheckout">
+        <actionGroup ref="EnablePayPalSolutionWithoutSaveActionGroup" stepKey="enableExpressCheckout">
             <argument name="payPalConfigType" value="WPSExpressConfigSection"/>
             <argument name="countryCode" value="us"/>
         </actionGroup>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <actionGroup ref="EnablePayPalSolutionWithoutSave" stepKey="enableExpressCheckout2">
+        <actionGroup ref="EnablePayPalSolutionWithoutSaveActionGroup" stepKey="enableExpressCheckout2">
             <argument name="payPalConfigType" value="PayPalExpressCheckoutConfigSection"/>
             <argument name="countryCode" value="us"/>
         </actionGroup>

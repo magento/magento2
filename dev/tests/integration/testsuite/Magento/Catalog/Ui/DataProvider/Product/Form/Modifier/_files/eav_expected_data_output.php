@@ -9,13 +9,13 @@ return [
         "product" => [
             "name" => "Simple Product",
             "sku" => "simple",
-            "price" => "10.0000",
+            "price" => "10.00",
             "tax_class_id" => "0",
             "quantity_and_stock_status" => [
                 "is_in_stock" => true,
                 "qty" => 100.0
             ],
-            "weight" => "1.0000",
+            "weight" => "1.000000",
             "visibility" => "4",
             "category_ids" => [
                 "2"
@@ -36,27 +36,27 @@ return [
                     "website_id" => "0",
                     "all_groups" => "1",
                     "cust_group" => 32000,
-                    "price" => "8.0000",
+                    "price" => "8.000000",
                     "price_qty" => "2.0000",
-                    "website_price" => "8.0000",
+                    "website_price" => "8.000000",
                     "price_id" => "__placeholder__"
                 ],
                 [
                     "website_id" => "0",
                     "all_groups" => "0",
                     "cust_group" => "0",
-                    "price" => "5.0000",
+                    "price" => "5.000000",
                     "price_qty" => "3.0000",
-                    "website_price" => "5.0000",
+                    "website_price" => "5.000000",
                     "price_id" => "__placeholder__"
                 ],
                 [
                     "website_id" => "0",
                     "all_groups" => "1",
                     "cust_group" => 32000,
-                    "price" => "5.0000",
+                    "price" => "5.000000",
                     "price_qty" => "5.0000",
-                    "website_price" => "5.0000",
+                    "website_price" => "5.000000",
                     "price_id" => "__placeholder__"
                 ]
             ],

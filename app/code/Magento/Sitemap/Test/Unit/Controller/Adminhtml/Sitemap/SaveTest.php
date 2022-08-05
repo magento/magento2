@@ -3,111 +3,129 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sitemap\Test\Unit\Controller\Adminhtml\Sitemap;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Filesystem;
+use Magento\Framework\HTTP\PhpEnvironment\Request;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Validator\StringLength;
+use Magento\MediaStorage\Model\File\Validator\AvailablePath;
 use Magento\Sitemap\Controller\Adminhtml\Sitemap\Save;
+use Magento\Sitemap\Helper\Data;
+use Magento\Sitemap\Model\SitemapFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveTest extends \PHPUnit\Framework\TestCase
+class SaveTest extends TestCase
 {
     /**
-     * @var \Magento\Sitemap\Controller\Adminhtml\Sitemap\Save
+     * @var Save
      */
     private $saveController;
 
     /**
-     * @var \Magento\Backend\App\Action\Context
+     * @var Context
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Framework\HTTP\PhpEnvironment\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var Request|MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|MockObject
      */
     private $resultRedirectMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     private $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\Validator\StringLength|\PHPUnit_Framework_MockObject_MockObject
+     * @var StringLength|MockObject
      */
     private $lengthValidator;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Validator\AvailablePath|\PHPUnit_Framework_MockObject_MockObject
+     * @var AvailablePath|MockObject
      */
     private $pathValidator;
 
     /**
-     * @var \Magento\Sitemap\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     private $helper;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     private $fileSystem;
 
     /**
-     * @var \Magento\Sitemap\Model\SitemapFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var SitemapFactory|MockObject
      */
     private $siteMapFactory;
 
     /**
-     * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
     private $session;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPostValue'])
+            ->addMethods(['getPostValue'])
             ->getMockForAbstractClass();
-        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
+        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
-        $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMock();
-        $this->helper = $this->getMockBuilder(\Magento\Sitemap\Helper\Data::class)
+        $this->helper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->resultRedirectMock);
-        $this->session = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
+        $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setFormData'])
+            ->addMethods(['setFormData'])
             ->getMock();
 
         $this->contextMock->expects($this->once())
@@ -123,15 +141,15 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('getSession')
             ->willReturn($this->session);
 
-        $this->lengthValidator = $this->getMockBuilder(\Magento\Framework\Validator\StringLength::class)
+        $this->lengthValidator = $this->getMockBuilder(StringLength::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->pathValidator =
-            $this->getMockBuilder(\Magento\MediaStorage\Model\File\Validator\AvailablePath::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->fileSystem = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->siteMapFactory = $this->createMock(\Magento\Sitemap\Model\SitemapFactory::class);
+            $this->getMockBuilder(AvailablePath::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+        $this->fileSystem = $this->createMock(Filesystem::class);
+        $this->siteMapFactory = $this->createMock(SitemapFactory::class);
 
         $this->saveController = new Save(
             $this->contextMock,
@@ -143,7 +161,10 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testSaveEmptyDataShouldRedirectToDefault()
+    /**
+     * @return void
+     */
+    public function testSaveEmptyDataShouldRedirectToDefault(): void
     {
         $this->requestMock->expects($this->once())
             ->method('getPostValue')
@@ -156,7 +177,10 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->resultRedirectMock, $this->saveController->execute());
     }
 
-    public function testTryToSaveInvalidDataShouldFailWithErrors()
+    /**
+     * @return void
+     */
+    public function testTryToSaveInvalidDataShouldFailWithErrors(): void
     {
         $validPaths = [];
         $messages = ['message1', 'message2'];
@@ -192,13 +216,9 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with($data)
             ->willReturnSelf();
 
-        $this->messageManagerMock->expects($this->at(0))
+        $this->messageManagerMock
             ->method('addErrorMessage')
-            ->withConsecutive(
-                [$messages[0]],
-                [$messages[1]]
-            )
-            ->willReturnSelf();
+            ->willReturn($this->messageManagerMock);
 
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
@@ -208,7 +228,10 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->resultRedirectMock, $this->saveController->execute());
     }
 
-    public function testTryToSaveInvalidFileNameShouldFailWithErrors()
+    /**
+     * @return void
+     */
+    public function testTryToSaveInvalidFileNameShouldFailWithErrors(): void
     {
         $validPaths = [];
         $messages = ['message1', 'message2'];
@@ -249,13 +272,9 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with($data)
             ->willReturnSelf();
 
-        $this->messageManagerMock->expects($this->at(0))
+        $this->messageManagerMock
             ->method('addErrorMessage')
-            ->withConsecutive(
-                [$messages[0]],
-                [$messages[1]]
-            )
-            ->willReturnSelf();
+            ->willReturn($this->messageManagerMock);
 
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')

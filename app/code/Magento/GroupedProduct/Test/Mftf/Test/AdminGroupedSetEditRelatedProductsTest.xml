@@ -17,24 +17,28 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-3755"/>
             <group value="GroupedProduct"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before></before>
         <after>
             <!-- Delete grouped product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="GroupedProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters" after="deleteProduct"/>
         </after>
 
         <!-- Create product -->
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
-        <actionGroup ref="fillGroupedProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillGroupedProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
 
+        <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+
         <!--See related product in storefront-->
-        <amOnPage url="{{GroupedProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{GroupedProduct.urlKey}}.html" stepKey="goToStorefront"/>
     </test>
 </tests>

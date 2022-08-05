@@ -3,18 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Config\Test\Unit\Dom;
 
-use \Magento\Framework\Config\Dom\NodePathMatcher;
+use Magento\Framework\Config\Dom\NodePathMatcher;
+use PHPUnit\Framework\TestCase;
 
-class NodePathMatcherTest extends \PHPUnit\Framework\TestCase
+class NodePathMatcherTest extends TestCase
 {
     /**
      * @var NodePathMatcher
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new NodePathMatcher();
     }

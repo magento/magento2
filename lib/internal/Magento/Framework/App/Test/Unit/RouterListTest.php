@@ -5,17 +5,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit;
 
-class RouterListTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\RouterList;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RouterListTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\RouterList
+     * @var RouterList
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManagerMock;
 
@@ -24,44 +31,56 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
      */
     protected $routerList;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $this->routerList = [
             'adminRouter' => ['class' => 'AdminClass', 'disable' => true, 'sortOrder' => 10],
             'frontendRouter' => ['class' => 'FrontClass', 'disable' => false, 'sortOrder' => 10],
             'default' => ['class' => 'DefaultClass', 'disable' => false, 'sortOrder' => 5],
             'someRouter' => ['class' => 'SomeClass', 'disable' => false, 'sortOrder' => 10],
-            'anotherRouter' => ['class' => 'AnotherClass', 'disable' => false, 'sortOrder' => 15],
+            'anotherRouter' => ['class' => 'AnotherClass', 'disable' => false, 'sortOrder' => 15]
         ];
 
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->model = new \Magento\Framework\App\RouterList($this->objectManagerMock, $this->routerList);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->model = new RouterList($this->objectManagerMock, $this->routerList);
     }
 
-    public function testCurrent()
+    /**
+     * @return void
+     */
+    public function testCurrent(): void
     {
         $expectedClass = new DefaultClass();
-        $this->objectManagerMock->expects($this->at(0))
+        $this->objectManagerMock
             ->method('create')
             ->with('DefaultClass')
-            ->will($this->returnValue($expectedClass));
+            ->willReturn($expectedClass);
 
         $this->assertEquals($expectedClass, $this->model->current());
     }
 
-    public function testNext()
+    /**
+     * @return void
+     */
+    public function testNext(): void
     {
         $expectedClass = new FrontClass();
-        $this->objectManagerMock->expects($this->at(0))
+        $this->objectManagerMock
             ->method('create')
             ->with('FrontClass')
-            ->will($this->returnValue($expectedClass));
+            ->willReturn($expectedClass);
 
         $this->model->next();
         $this->assertEquals($expectedClass, $this->model->current());
     }
 
-    public function testValid()
+    /**
+     * @return void
+     */
+    public function testValid(): void
     {
         $this->assertTrue($this->model->valid());
         $this->model->next();
@@ -74,20 +93,18 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->model->valid());
     }
 
-    public function testRewind()
+    /**
+     * @return void
+     */
+    public function testRewind(): void
     {
         $frontClass = new FrontClass();
         $defaultClass = new DefaultClass();
 
-        $this->objectManagerMock->expects($this->at(0))
+        $this->objectManagerMock
             ->method('create')
-            ->with('DefaultClass')
-            ->will($this->returnValue($defaultClass));
-
-        $this->objectManagerMock->expects($this->at(1))
-            ->method('create')
-            ->with('FrontClass')
-            ->will($this->returnValue($frontClass));
+            ->withConsecutive(['DefaultClass'], ['FrontClass'])
+            ->willReturnOnConsecutiveCalls($defaultClass, $frontClass);
 
         $this->assertEquals($defaultClass, $this->model->current());
         $this->model->next();

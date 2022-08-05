@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Translate;
 
 class InlineTest extends \PHPUnit\Framework\TestCase
@@ -22,7 +23,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
      */
     protected $state;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
             ->setAreaCode('frontend');
@@ -33,7 +34,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Translate\Inline::class
@@ -116,10 +117,6 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         $originalText = file_get_contents(__DIR__ . '/_files/_inline_page_original.html');
         $expectedText = file_get_contents(__DIR__ . '/_files/_inline_page_expected.html');
 
-        $package = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\View\DesignInterface::class
-        )->getDesignTheme()->getPackageCode();
-        $expectedText = str_replace('{{design_package}}', $package, $expectedText);
         return [
             'plain text' => ['text with no translations and tags', 'text with no translations and tags'],
             'html string' => [$originalText, $expectedText],

@@ -9,15 +9,15 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="report_compared_product_index" resource="default" engine="innodb"
            comment="Reports Compared Product Index Table">
-        <column xsi:type="bigint" name="index_id" padding="20" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="bigint" name="index_id" unsigned="true" nullable="false" identity="true"
                 comment="Index ID"/>
-        <column xsi:type="int" name="visitor_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="visitor_id" unsigned="true" nullable="true" identity="false"
                 comment="Visitor ID"/>
-        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="true" identity="false"
                 comment="Customer ID"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
                 comment="Product ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="timestamp" name="added_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Added At"/>
@@ -53,15 +53,15 @@
     </table>
     <table name="report_viewed_product_index" resource="default" engine="innodb"
            comment="Reports Viewed Product Index Table">
-        <column xsi:type="bigint" name="index_id" padding="20" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="bigint" name="index_id" unsigned="true" nullable="false" identity="true"
                 comment="Index ID"/>
-        <column xsi:type="int" name="visitor_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="visitor_id" unsigned="true" nullable="true" identity="false"
                 comment="Visitor ID"/>
-        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="true" identity="false"
                 comment="Customer ID"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
                 comment="Product ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
         <column xsi:type="timestamp" name="added_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Added At"/>
@@ -96,29 +96,29 @@
         </index>
     </table>
     <table name="report_event_types" resource="default" engine="innodb" comment="Reports Event Type Table">
-        <column xsi:type="smallint" name="event_type_id" padding="5" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="smallint" name="event_type_id" unsigned="true" nullable="false" identity="true"
                 comment="Event Type ID"/>
         <column xsi:type="varchar" name="event_name" nullable="false" length="64" comment="Event Name"/>
-        <column xsi:type="smallint" name="customer_login" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="customer_login" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Customer Login"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="event_type_id"/>
         </constraint>
     </table>
     <table name="report_event" resource="default" engine="innodb" comment="Reports Event Table">
-        <column xsi:type="bigint" name="event_id" padding="20" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="bigint" name="event_id" unsigned="true" nullable="false" identity="true"
                 comment="Event ID"/>
         <column xsi:type="timestamp" name="logged_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Logged At"/>
-        <column xsi:type="smallint" name="event_type_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="event_type_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Event Type ID"/>
-        <column xsi:type="int" name="object_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="object_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Object ID"/>
-        <column xsi:type="int" name="subject_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="subject_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Subject ID"/>
-        <column xsi:type="smallint" name="subtype" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="subtype" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Subtype"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" identity="false"
                 comment="Store ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="event_id"/>
@@ -146,18 +146,18 @@
     </table>
     <table name="report_viewed_product_aggregated_daily" resource="default" engine="innodb"
            comment="Most Viewed Products Aggregated Daily">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="true" identity="false"
                 comment="Product ID"/>
         <column xsi:type="varchar" name="product_name" nullable="true" length="255" comment="Product Name"/>
         <column xsi:type="decimal" name="product_price" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Product Price"/>
-        <column xsi:type="int" name="views_num" padding="11" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="int" name="views_num" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Number of Views"/>
-        <column xsi:type="smallint" name="rating_pos" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="rating_pos" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Rating Pos"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
@@ -182,18 +182,18 @@
     </table>
     <table name="report_viewed_product_aggregated_monthly" resource="default" engine="innodb"
            comment="Most Viewed Products Aggregated Monthly">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="true" identity="false"
                 comment="Product ID"/>
         <column xsi:type="varchar" name="product_name" nullable="true" length="255" comment="Product Name"/>
         <column xsi:type="decimal" name="product_price" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Product Price"/>
-        <column xsi:type="int" name="views_num" padding="11" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="int" name="views_num" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Number of Views"/>
-        <column xsi:type="smallint" name="rating_pos" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="rating_pos" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Rating Pos"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
@@ -218,18 +218,18 @@
     </table>
     <table name="report_viewed_product_aggregated_yearly" resource="default" engine="innodb"
            comment="Most Viewed Products Aggregated Yearly">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" comment="Period"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="true" identity="false"
                 comment="Product ID"/>
         <column xsi:type="varchar" name="product_name" nullable="true" length="255" comment="Product Name"/>
         <column xsi:type="decimal" name="product_price" scale="4" precision="12" unsigned="false" nullable="false"
                 default="0" comment="Product Price"/>
-        <column xsi:type="int" name="views_num" padding="11" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="int" name="views_num" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Number of Views"/>
-        <column xsi:type="smallint" name="rating_pos" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="rating_pos" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Rating Pos"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>

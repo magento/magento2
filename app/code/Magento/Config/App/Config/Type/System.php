@@ -20,6 +20,8 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Store\Model\ScopeInterface as StoreScope;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\Cache\Type\Config;
 
 /**
  * System configuration type
@@ -98,6 +100,12 @@ class System implements ConfigTypeInterface
     private $lockQuery;
 
     /**
+     * @var StateInterface
+     */
+    private $cacheState;
+
+    /**
+     * System constructor.
      * @param ConfigSourceInterface $source
      * @param PostProcessorInterface $postProcessor
      * @param Fallback $fallback
@@ -110,6 +118,7 @@ class System implements ConfigTypeInterface
      * @param Encryptor|null $encryptor
      * @param LockManagerInterface|null $locker
      * @param LockGuardedCacheLoader|null $lockQuery
+     * @param StateInterface|null $cacheState
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -125,7 +134,8 @@ class System implements ConfigTypeInterface
         Reader $reader = null,
         Encryptor $encryptor = null,
         LockManagerInterface $locker = null,
-        LockGuardedCacheLoader $lockQuery = null
+        LockGuardedCacheLoader $lockQuery = null,
+        StateInterface $cacheState = null
     ) {
         $this->postProcessor = $postProcessor;
         $this->cache = $cache;
@@ -136,6 +146,8 @@ class System implements ConfigTypeInterface
             ?: ObjectManager::getInstance()->get(Encryptor::class);
         $this->lockQuery = $lockQuery
             ?: ObjectManager::getInstance()->get(LockGuardedCacheLoader::class);
+        $this->cacheState = $cacheState
+            ?: ObjectManager::getInstance()->get(StateInterface::class);
     }
 
     /**
@@ -220,6 +232,10 @@ class System implements ConfigTypeInterface
      */
     private function loadAllData()
     {
+        if (!$this->cacheState->isEnabled(Config::TYPE_IDENTIFIER)) {
+            return $this->readData();
+        }
+
         $loadAction = function () {
             $cachedData = $this->cache->load($this->configType);
             $data = false;
@@ -245,6 +261,10 @@ class System implements ConfigTypeInterface
      */
     private function loadDefaultScopeData($scopeType)
     {
+        if (!$this->cacheState->isEnabled(Config::TYPE_IDENTIFIER)) {
+            return $this->readData();
+        }
+
         $loadAction = function () use ($scopeType) {
             $cachedData = $this->cache->load($this->configType . '_' . $scopeType);
             $scopeData = false;
@@ -271,6 +291,10 @@ class System implements ConfigTypeInterface
      */
     private function loadScopeData($scopeType, $scopeId)
     {
+        if (!$this->cacheState->isEnabled(Config::TYPE_IDENTIFIER)) {
+            return $this->readData();
+        }
+
         $loadAction = function () use ($scopeType, $scopeId) {
             $cachedData = $this->cache->load($this->configType . '_' . $scopeType . '_' . $scopeId);
             $scopeData = false;
@@ -392,6 +416,10 @@ class System implements ConfigTypeInterface
         $cleanAction = function () {
             $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
         };
+
+        if (!$this->cacheState->isEnabled(Config::TYPE_IDENTIFIER)) {
+            return $cleanAction();
+        }
 
         $this->lockQuery->lockedCleanData(
             self::$lockName,

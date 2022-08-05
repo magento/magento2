@@ -3,31 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Cache;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Controller\Adminhtml\Cache\CleanMedia;
+use Magento\Backend\Helper\Data;
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Response\Http;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Message\ExceptionMessageLookupFactory;
+use Magento\Framework\Message\Manager;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Session\SessionManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Asset\MergeService;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CleanMediaTest extends \PHPUnit\Framework\TestCase
+class CleanMediaTest extends TestCase
 {
     public function testExecute()
     {
         // Wire object with mocks
-        $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $response = $this->createMock(Http::class);
         $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
 
-        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $backendHelper = $this->createMock(\Magento\Backend\Helper\Data::class);
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $backendHelper = $this->createMock(Data::class);
+        $helper = new ObjectManager($this);
 
-        $session = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
+        $session = $this->getMockBuilder(Session::class)
             ->setMethods(['setIsUrlNotice'])
-            ->setConstructorArgs($helper->getConstructArguments(\Magento\Backend\Model\Session::class))
+            ->setConstructorArgs($helper->getConstructArguments(Session::class))
             ->getMock();
 
         $exceptionMessageFactory = $this->getMockBuilder(
-            \Magento\Framework\Message\ExceptionMessageLookupFactory::class
+            ExceptionMessageLookupFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(
@@ -35,15 +51,15 @@ class CleanMediaTest extends \PHPUnit\Framework\TestCase
             )
             ->getMock();
 
-        $messageManagerParams = $helper->getConstructArguments(\Magento\Framework\Message\Manager::class);
+        $messageManagerParams = $helper->getConstructArguments(Manager::class);
         $messageManagerParams['exceptionMessageFactory'] = $exceptionMessageFactory;
-        $messageManager = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
+        $messageManager = $this->getMockBuilder(Manager::class)
             ->setMethods(['addSuccessMessage'])
             ->setConstructorArgs($messageManagerParams)
             ->getMock();
 
         $args = $helper->getConstructArguments(
-            \Magento\Backend\App\Action\Context::class,
+            Context::class,
             [
                 'session' => $session,
                 'response' => $response,
@@ -53,20 +69,20 @@ class CleanMediaTest extends \PHPUnit\Framework\TestCase
                 'messageManager' => $messageManager
             ]
         );
-        $context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $context = $this->getMockBuilder(Context::class)
             ->setMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession', 'getResultFactory'])
             ->setConstructorArgs($args)
             ->getMock();
-        $resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
+        $resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        $resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultFactory->expects($this->atLeastOnce())
             ->method('create')
-            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
+            ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
         $context->expects($this->once())->method('getRequest')->willReturn($request);
         $context->expects($this->once())->method('getResponse')->willReturn($response);
@@ -75,14 +91,14 @@ class CleanMediaTest extends \PHPUnit\Framework\TestCase
         $context->expects($this->once())->method('getResultFactory')->willReturn($resultFactory);
 
         $controller = $helper->getObject(
-            \Magento\Backend\Controller\Adminhtml\Cache\CleanMedia::class,
+            CleanMedia::class,
             [
                 'context' => $context
             ]
         );
 
         // Setup expectations
-        $mergeService = $this->createMock(\Magento\Framework\View\Asset\MergeService::class);
+        $mergeService = $this->createMock(MergeService::class);
         $mergeService->expects($this->once())->method('cleanMergedJsCss');
 
         $messageManager->expects($this->once())
@@ -90,10 +106,10 @@ class CleanMediaTest extends \PHPUnit\Framework\TestCase
             ->with('The JavaScript/CSS cache has been cleaned.');
 
         $valueMap = [
-            [\Magento\Framework\View\Asset\MergeService::class, $mergeService],
-            [\Magento\Framework\Session\SessionManager::class, $session],
+            [MergeService::class, $mergeService],
+            [SessionManager::class, $session],
         ];
-        $objectManager->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
+        $objectManager->expects($this->any())->method('get')->willReturnMap($valueMap);
 
         $resultRedirect->expects($this->once())
             ->method('setPath')

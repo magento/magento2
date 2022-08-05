@@ -10,47 +10,47 @@
         <section id="carriers" type="text" sortOrder="320" showInDefault="1" showInWebsite="1" showInStore="1">
             <group id="flatrate" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Flat Rate</label>
-                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="name" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Method Name</label>
                 </field>
-                <field id="price" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="price" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Price</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                 </field>
-                <field id="handling_type" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="handling_type" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Calculate Handling Fee</label>
                     <source_model>Magento\Shipping\Model\Source\HandlingType</source_model>
                 </field>
-                <field id="handling_fee" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0" >
+                <field id="handling_fee" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" >
                     <label>Handling Fee</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                 </field>
-                <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1">
                     <label>Sort Order</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="title" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Title</label>
                 </field>
-                <field id="type" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="type" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Type</label>
                     <source_model>Magento\OfflineShipping\Model\Config\Source\Flatrate</source_model>
                 </field>
-                <field id="sallowspecific" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="sallowspecific" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Ship to Applicable Countries</label>
                     <frontend_class>shipping-applicable-country</frontend_class>
                     <source_model>Magento\Shipping\Model\Config\Source\Allspecificcountries</source_model>
                 </field>
-                <field id="specificcountry" translate="label" type="multiselect" sortOrder="91" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="specificcountry" translate="label" type="multiselect" sortOrder="91" showInDefault="1" showInWebsite="1">
                     <label>Ship to Specific Countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <can_be_empty>1</can_be_empty>
                 </field>
-                <field id="showmethod" translate="label" type="select" sortOrder="92" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="showmethod" translate="label" type="select" sortOrder="92" showInDefault="1" showInWebsite="1">
                     <label>Show Method if Not Applicable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <frontend_class>shipping-skip-hide</frontend_class>
@@ -61,54 +61,54 @@
             </group>
             <group id="tablerate" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Table Rates</label>
-                <field id="handling_type" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="handling_type" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Calculate Handling Fee</label>
                     <source_model>Magento\Shipping\Model\Source\HandlingType</source_model>
                 </field>
-                <field id="handling_fee" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="handling_fee" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1">
                     <label>Handling Fee</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                 </field>
-                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="condition_name" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="condition_name" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Condition</label>
                     <source_model>Magento\OfflineShipping\Model\Config\Source\Tablerate</source_model>
                 </field>
-                <field id="include_virtual_price" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="include_virtual_price" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Include Virtual Products in Price Calculation</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="export" translate="label" type="Magento\OfflineShipping\Block\Adminhtml\Form\Field\Export" sortOrder="5" showInDefault="0" showInWebsite="1" showInStore="0">
+                <field id="export" translate="label" type="Magento\OfflineShipping\Block\Adminhtml\Form\Field\Export" sortOrder="5" showInWebsite="1">
                     <label>Export</label>
                 </field>
-                <field id="import" translate="label" type="Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import" sortOrder="6" showInDefault="0" showInWebsite="1" showInStore="0">
+                <field id="import" translate="label" type="Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import" sortOrder="6" showInWebsite="1">
                     <label>Import</label>
                     <backend_model>Magento\OfflineShipping\Model\Config\Backend\Tablerate</backend_model>
                 </field>
                 <field id="name" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Method Name</label>
                 </field>
-                <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1">
                     <label>Sort Order</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="title" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Title</label>
                 </field>
-                <field id="sallowspecific" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="sallowspecific" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Ship to Applicable Countries</label>
                     <frontend_class>shipping-applicable-country</frontend_class>
                     <source_model>Magento\Shipping\Model\Config\Source\Allspecificcountries</source_model>
                 </field>
-                <field id="specificcountry" translate="label" type="multiselect" sortOrder="91" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="specificcountry" translate="label" type="multiselect" sortOrder="91" showInDefault="1" showInWebsite="1">
                     <label>Ship to Specific Countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <can_be_empty>1</can_be_empty>
                 </field>
-                <field id="showmethod" translate="label" type="select" sortOrder="92" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="showmethod" translate="label" type="select" sortOrder="92" showInDefault="1" showInWebsite="1">
                     <label>Show Method if Not Applicable</label>
                     <frontend_class>shipping-skip-hide</frontend_class>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -119,35 +119,39 @@
             </group>
             <group id="freeshipping" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Free Shipping</label>
-                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="free_shipping_subtotal" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="free_shipping_subtotal" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1">
                     <label>Minimum Order Amount</label>
                     <validate>validate-number validate-zero-or-greater</validate>
+                </field>
+                <field id="tax_including" translate="label" sortOrder="5" type="select" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Include Tax to Amount</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="name" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Method Name</label>
                 </field>
-                <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1">
                     <label>Sort Order</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="title" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Title</label>
                 </field>
-                <field id="sallowspecific" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="sallowspecific" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Ship to Applicable Countries</label>
                     <frontend_class>shipping-applicable-country</frontend_class>
                     <source_model>Magento\Shipping\Model\Config\Source\Allspecificcountries</source_model>
                 </field>
-                <field id="specificcountry" translate="label" type="multiselect" sortOrder="91" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="specificcountry" translate="label" type="multiselect" sortOrder="91" showInDefault="1" showInWebsite="1">
                     <label>Ship to Specific Countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <can_be_empty>1</can_be_empty>
                 </field>
-                <field id="showmethod" translate="label" type="select" sortOrder="92" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="showmethod" translate="label" type="select" sortOrder="92" showInDefault="1" showInWebsite="1">
                     <label>Show Method if Not Applicable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <frontend_class>shipping-skip-hide</frontend_class>

@@ -9,113 +9,67 @@
     <system>
         <section id="catalog">
             <group id="search">
-                <!-- Elasticsearch 2.0+ -->
-                <field id="elasticsearch_server_hostname" translate="label" type="text" sortOrder="61" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Elasticsearch Server Hostname</label>
-                    <depends>
-                        <field id="engine">elasticsearch</field>
-                    </depends>
-                </field>
-                <field id="elasticsearch_server_port" translate="label" type="text" sortOrder="62" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Elasticsearch Server Port</label>
-                    <depends>
-                        <field id="engine">elasticsearch</field>
-                    </depends>
-                </field>
-                <field id="elasticsearch_index_prefix" translate="label" type="text" sortOrder="63" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Elasticsearch Index Prefix</label>
-                    <depends>
-                        <field id="engine">elasticsearch</field>
-                    </depends>
-                </field>
-                <field id="elasticsearch_enable_auth" translate="label" type="select" sortOrder="64" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Enable Elasticsearch HTTP Auth</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <depends>
-                        <field id="engine">elasticsearch</field>
-                    </depends>
-                </field>
-                <field id="elasticsearch_username" translate="label" type="text" sortOrder="65" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Elasticsearch HTTP Username</label>
-                    <depends>
-                        <field id="engine">elasticsearch</field>
-                        <field id="elasticsearch_enable_auth">1</field>
-                    </depends>
-                </field>
-                <field id="elasticsearch_password" translate="label" type="text" sortOrder="66" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Elasticsearch HTTP Password</label>
-                    <depends>
-                        <field id="engine">elasticsearch</field>
-                        <field id="elasticsearch_enable_auth">1</field>
-                    </depends>
-                </field>
-                <field id="elasticsearch_server_timeout" translate="label" type="text" sortOrder="67" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Elasticsearch Server Timeout</label>
-                    <depends>
-                        <field id="engine">elasticsearch</field>
-                    </depends>
-                </field>
-                <field id="elasticsearch_test_connect_wizard" translate="button_label" sortOrder="68" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label/>
-                    <button_label>Test Connection</button_label>
-                    <frontend_model>Magento\Elasticsearch\Block\Adminhtml\System\Config\TestConnection</frontend_model>
-                    <depends>
-                        <field id="engine">elasticsearch</field>
-                    </depends>
-                </field>
-                <!-- Elasticsearch 5.0+ -->
-                <field id="elasticsearch5_server_hostname" translate="label" type="text" sortOrder="61" showInDefault="1" showInWebsite="0" showInStore="0">
+                <!-- Elasticsearch 5.x -->
+                <field id="elasticsearch5_server_hostname" translate="label" type="text" sortOrder="61" showInDefault="1">
                     <label>Elasticsearch Server Hostname</label>
                     <depends>
                         <field id="engine">elasticsearch5</field>
                     </depends>
                 </field>
-                <field id="elasticsearch5_server_port" translate="label" type="text" sortOrder="62" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="elasticsearch5_server_port" translate="label" type="text" sortOrder="62" showInDefault="1">
                     <label>Elasticsearch Server Port</label>
                     <depends>
                         <field id="engine">elasticsearch5</field>
                     </depends>
                 </field>
-                <field id="elasticsearch5_index_prefix" translate="label" type="text" sortOrder="63" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="elasticsearch5_index_prefix" translate="label" type="text" sortOrder="63" showInDefault="1">
                     <label>Elasticsearch Index Prefix</label>
                     <depends>
                         <field id="engine">elasticsearch5</field>
                     </depends>
                 </field>
-                <field id="elasticsearch5_enable_auth" translate="label" type="select" sortOrder="64" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="elasticsearch5_enable_auth" translate="label" type="select" sortOrder="64" showInDefault="1">
                     <label>Enable Elasticsearch HTTP Auth</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <depends>
                         <field id="engine">elasticsearch5</field>
                     </depends>
                 </field>
-                <field id="elasticsearch5_username" translate="label" type="text" sortOrder="65" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="elasticsearch5_username" translate="label" type="text" sortOrder="65" showInDefault="1">
                     <label>Elasticsearch HTTP Username</label>
                     <depends>
                         <field id="engine">elasticsearch5</field>
                         <field id="elasticsearch5_enable_auth">1</field>
                     </depends>
                 </field>
-                <field id="elasticsearch5_password" translate="label" type="text" sortOrder="66" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="elasticsearch5_password" translate="label" type="text" sortOrder="66" showInDefault="1">
                     <label>Elasticsearch HTTP Password</label>
                     <depends>
                         <field id="engine">elasticsearch5</field>
                         <field id="elasticsearch5_enable_auth">1</field>
                     </depends>
                 </field>
-                <field id="elasticsearch5_server_timeout" translate="label" type="text" sortOrder="67" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="elasticsearch5_server_timeout" translate="label" type="text" sortOrder="67" showInDefault="1">
                     <label>Elasticsearch Server Timeout</label>
                     <depends>
                         <field id="engine">elasticsearch5</field>
                     </depends>
                 </field>
-                <field id="elasticsearch5_test_connect_wizard" translate="button_label" sortOrder="68" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="elasticsearch5_test_connect_wizard" translate="button_label" sortOrder="68" showInDefault="1">
                     <label/>
                     <button_label>Test Connection</button_label>
                     <frontend_model>Magento\Elasticsearch\Block\Adminhtml\System\Config\Elasticsearch5\TestConnection</frontend_model>
                     <depends>
                         <field id="engine">elasticsearch5</field>
                     </depends>
+                </field>
+                <field id="elasticsearch5_minimum_should_match" translate="label" type="text" sortOrder="93" showInDefault="1">
+                    <label>Minimum Terms to Match</label>
+                    <depends>
+                        <field id="engine">elasticsearch5</field>
+                    </depends>
+                    <comment><![CDATA[<a href="https://docs.magento.com/user-guide/catalog/search-elasticsearch.html">Learn more</a> about valid syntax.]]></comment>
+                    <backend_model>Magento\Elasticsearch\Model\Config\Backend\MinimumShouldMatch</backend_model>
                 </field>
             </group>
         </section>

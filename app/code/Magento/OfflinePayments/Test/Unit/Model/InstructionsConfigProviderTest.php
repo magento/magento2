@@ -3,40 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\OfflinePayments\Test\Unit\Model;
 
 use Magento\Framework\Escaper;
 use Magento\OfflinePayments\Model\Banktransfer;
 use Magento\OfflinePayments\Model\Cashondelivery;
 use Magento\OfflinePayments\Model\InstructionsConfigProvider;
+use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Payment\Model\Method\AbstractMethod;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InstructionsConfigProviderTest extends \PHPUnit\Framework\TestCase
+class InstructionsConfigProviderTest extends TestCase
 {
-    /** @var InstructionsConfigProvider */
-    protected $model;
+    /**
+     * @var InstructionsConfigProvider
+     */
+    private $model;
 
-    /** @var AbstractMethod|\PHPUnit_Framework_MockObject_MockObject */
-    protected $methodOneMock;
+    /**
+     * @var AbstractMethod|MockObject
+     */
+    private $methodOneMock;
 
-    /** @var AbstractMethod|\PHPUnit_Framework_MockObject_MockObject */
-    protected $methodTwoMock;
+    /**
+     * @var AbstractMethod|MockObject
+     */
+    private $methodTwoMock;
 
-    /** @var Escaper|\PHPUnit_Framework_MockObject_MockObject */
-    protected $escaperMock;
+    /**
+     * @var Escaper|MockObject
+     */
+    private $escaperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->methodOneMock = $this->createPartialMock(
-            \Magento\Payment\Model\Method\AbstractMethod::class,
-            ['isAvailable', 'getInstructions']
-        );
-        $this->methodTwoMock = $this->createPartialMock(
-            \Magento\Payment\Model\Method\AbstractMethod::class,
-            ['isAvailable', 'getInstructions']
-        );
+        $this->methodOneMock = $this->getMockBuilder(AbstractMethod::class)
+            ->addMethods(['getInstructions'])
+            ->onlyMethods(['isAvailable'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->methodTwoMock = $this->getMockBuilder(AbstractMethod::class)
+            ->addMethods(['getInstructions'])
+            ->onlyMethods(['isAvailable'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
-        $paymentHelperMock = $this->createMock(\Magento\Payment\Helper\Data::class);
+        /** @var PaymentHelper|MockObject $paymentHelperMock */
+        $paymentHelperMock = $this->createMock(PaymentHelper::class);
         $paymentHelperMock->expects($this->exactly(2))
             ->method('getMethodInstance')
             ->willReturnMap([
@@ -44,7 +60,7 @@ class InstructionsConfigProviderTest extends \PHPUnit\Framework\TestCase
                 [Cashondelivery::PAYMENT_METHOD_CASHONDELIVERY_CODE, $this->methodTwoMock],
             ]);
 
-        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
         $this->escaperMock->expects($this->any())
             ->method('escapeHtml')
             ->willReturnArgument(0);

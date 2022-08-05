@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Payment\Block\Transparent\Redirect $block */
+$params = $block->getPostParams();
+$redirectUrl = $block->getRedirectUrl();
+?>
+<html>
+<head></head>
+<body onload="document.forms['proxy_form'].submit()">
+<form id="proxy_form" action="<?= $block->escapeUrl($redirectUrl) ?>"
+      method="POST" hidden enctype="application/x-www-form-urlencoded" class="no-display">
+    <?php foreach ($params as $name => $value):?>
+        <input value="<?= $block->escapeHtmlAttr($value) ?>" name="<?= $block->escapeHtmlAttr($name) ?>" type="hidden"/>
+    <?php endforeach?>
+</form>
+</body>
+</html>

@@ -3,39 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Payment\Test\Unit\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Config\DataInterface;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Payment\Model\Config;
+use Magento\Payment\Model\Method\Factory;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ConfigTest
- */
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
-    /** @var \Magento\Payment\Model\Config */
+    /** @var Config */
     protected $config;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ScopeConfigInterface|MockObject */
     protected $scopeConfig;
 
-    /** @var \Magento\Payment\Model\Method\Factory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Factory|MockObject */
     protected $paymentMethodFactory;
 
-    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResolverInterface|MockObject */
     protected $localeResolver;
 
-    /** @var \Magento\Framework\Config\DataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataInterface|MockObject */
     protected $dataStorage;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|MockObject
      */
     protected $date;
 
@@ -95,17 +100,17 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     const CURRENT_YEAR = '2250';
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->paymentMethodFactory = $this->createMock(\Magento\Payment\Model\Method\Factory::class);
-        $this->localeResolver = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
-        $this->dataStorage = $this->createMock(\Magento\Framework\Config\DataInterface::class);
-        $this->date = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->paymentMethodFactory = $this->createMock(Factory::class);
+        $this->localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->dataStorage = $this->getMockForAbstractClass(DataInterface::class);
+        $this->date = $this->createMock(DateTime::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->config = $this->objectManagerHelper->getObject(
-            \Magento\Payment\Model\Config::class,
+            Config::class,
             [
                 'scopeConfig' => $this->scopeConfig,
                 'paymentMethodFactory' => $this->paymentMethodFactory,
@@ -123,7 +128,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetActiveMethods($isActive)
     {
-        $adapter = $this->createMock(MethodInterface::class);
+        $adapter = $this->getMockForAbstractClass(MethodInterface::class);
         $this->scopeConfig->expects(static::once())
             ->method('getValue')
             ->with('payment', ScopeInterface::SCOPE_STORE, null)
@@ -153,8 +158,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetCcTypes()
     {
         $expected = [];
-        $this->dataStorage->expects($this->once())->method('get')->with('credit_cards')->will(
-            $this->returnValue($expected)
+        $this->dataStorage->expects($this->once())->method('get')->with('credit_cards')->willReturn(
+            $expected
         );
         $this->assertEquals($expected, $this->config->getCcTypes());
     }
@@ -162,8 +167,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetMethodsInfo()
     {
         $expected = [];
-        $this->dataStorage->expects($this->once())->method('get')->with('methods')->will(
-            $this->returnValue($expected)
+        $this->dataStorage->expects($this->once())->method('get')->with('methods')->willReturn(
+            $expected
         );
         $this->assertEquals($expected, $this->config->getMethodsInfo());
     }
@@ -171,8 +176,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetGroups()
     {
         $expected = [];
-        $this->dataStorage->expects($this->once())->method('get')->with('groups')->will(
-            $this->returnValue($expected)
+        $this->dataStorage->expects($this->once())->method('get')->with('groups')->willReturn(
+            $expected
         );
         $this->assertEquals($expected, $this->config->getGroups());
     }
@@ -185,7 +190,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetYears()
     {
-        $this->date->expects($this->once())->method('date')->with('Y')->will($this->returnValue(self::CURRENT_YEAR));
+        $this->date->expects($this->once())->method('date')->with('Y')->willReturn(self::CURRENT_YEAR);
         $this->assertEquals($this->_getPreparedYearsList(), $this->config->getYears());
     }
 

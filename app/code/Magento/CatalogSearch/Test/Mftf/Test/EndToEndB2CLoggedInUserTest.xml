@@ -22,21 +22,28 @@
         <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="searchClickAdvancedSearchSubmitButton" after="searchAdvancedFillPriceTo"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSearchProductsloaded" after="searchClickAdvancedSearchSubmitButton"/>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="searchCheckAdvancedSearchResult" after="waitForSearchProductsloaded"/>
+        <!-- Results returned will be different with ES vs MySQL -->
         <see userInput="1" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productCount}} span" stepKey="searchAdvancedAssertProductCount" after="searchCheckAdvancedSearchResult"/>
-        <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="searchAssertSimpleProduct1" after="searchAdvancedAssertProductCount">
+        <actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="searchAssertSimpleProduct1" after="searchAdvancedAssertProductCount">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="searchAdvancedGrabSimpleProduct1ImageSrc" after="searchAssertSimpleProduct1"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$searchAdvancedGrabSimpleProduct1ImageSrc" stepKey="searchAdvancedAssertSimpleProduct1ImageNotDefault" after="searchAdvancedGrabSimpleProduct1ImageSrc"/>
+        <assertNotRegExp stepKey="searchAdvancedAssertSimpleProduct1ImageNotDefault" after="searchAdvancedGrabSimpleProduct1ImageSrc">
+			<actualResult type="const">$searchAdvancedGrabSimpleProduct1ImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="searchClickSimpleProduct1View" after="searchAdvancedAssertSimpleProduct1ImageNotDefault"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSearchSimpleProduct1Viewloaded" after="searchClickSimpleProduct1View"/>
-        <actionGroup ref="StorefrontCheckSimpleProduct" stepKey="searchAssertSimpleProduct1Page" after="waitForSearchSimpleProduct1Viewloaded">
+        <actionGroup ref="StorefrontCheckSimpleProductActionGroup" stepKey="searchAssertSimpleProduct1Page" after="waitForSearchSimpleProduct1Viewloaded">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="searchAdvancedGrabSimpleProduct1PageImageSrc" after="searchAssertSimpleProduct1Page"/>
-        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$searchAdvancedGrabSimpleProduct1PageImageSrc" stepKey="searchAdvancedAssertSimpleProduct1PageImageNotDefault" after="searchAdvancedGrabSimpleProduct1PageImageSrc"/>
+        <assertNotRegExp stepKey="searchAdvancedAssertSimpleProduct1PageImageNotDefault" after="searchAdvancedGrabSimpleProduct1PageImageSrc">
+			<actualResult type="const">$searchAdvancedGrabSimpleProduct1PageImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/image\.jpg/'</expectedResult>
+        </assertNotRegExp>
 
         <!-- Quick Search with common part of product names -->
         <comment userInput="Quick search" stepKey="commentQuickSearch" after="searchAdvancedAssertSimpleProduct1PageImageNotDefault"/>
@@ -51,19 +58,25 @@
 
         <!-- Search simple product 1 -->
         <comment userInput="Search simple product 1" stepKey="commentSearchSimpleProduct1" after="searchAssertFilterCategoryProductCountCommonPart"/>
-        <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="searchAssertFilterCategorySimpleProduct1" after="commentSearchSimpleProduct1">
+        <actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="searchAssertFilterCategorySimpleProduct1" after="commentSearchSimpleProduct1">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="searchGrabSimpleProduct1ImageSrc" after="searchAssertFilterCategorySimpleProduct1"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$searchGrabSimpleProduct1ImageSrc" stepKey="searchAssertSimpleProduct1ImageNotDefault" after="searchGrabSimpleProduct1ImageSrc"/>
+        <assertNotRegExp stepKey="searchAssertSimpleProduct1ImageNotDefault" after="searchGrabSimpleProduct1ImageSrc">
+			<actualResult type="const">$searchGrabSimpleProduct1ImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <!-- Search simple product2 -->
-        <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="searchAssertFilterCategorySimpleProduct2" after="searchAssertSimpleProduct1ImageNotDefault">
+        <actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="searchAssertFilterCategorySimpleProduct2" after="searchAssertSimpleProduct1ImageNotDefault">
             <argument name="product" value="$$createSimpleProduct2$$"/>
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="searchGrabSimpleProduct2ImageSrc" after="searchAssertFilterCategorySimpleProduct2"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$searchGrabSimpleProduct2ImageSrc" stepKey="searchAssertSimpleProduct2ImageNotDefault" after="searchGrabSimpleProduct2ImageSrc"/>
+        <assertNotRegExp stepKey="searchAssertSimpleProduct2ImageNotDefault" after="searchGrabSimpleProduct2ImageSrc">
+			<actualResult type="const">$searchGrabSimpleProduct2ImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
 
         <!-- Quick Search with non-existent product name -->
         <comment userInput="Quick Search with non-existent product name" stepKey="commentQuickSearchWithNonExistentProductName" after="searchAssertSimpleProduct2ImageNotDefault" />

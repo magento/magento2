@@ -74,8 +74,6 @@ class Config extends \Magento\Framework\DataObject
     protected $_objectFactory;
 
     /**
-     * TransactionFactory
-     *
      * @var \Magento\Framework\DB\TransactionFactory
      */
     protected $_transactionFactory;
@@ -207,9 +205,9 @@ class Config extends \Magento\Framework\DataObject
                 $deleteTransaction
             );
 
-            $groupChangedPaths = $this->getChangedPaths($sectionId, $groupId, $groupData, $oldConfig, $extraOldGroups);
-            $changedPaths = \array_merge($changedPaths, $groupChangedPaths);
+            $changedPaths[] = $this->getChangedPaths($sectionId, $groupId, $groupData, $oldConfig, $extraOldGroups);
         }
+        $changedPaths = array_merge([], ...$changedPaths);
 
         try {
             $deleteTransaction->delete();
@@ -355,7 +353,7 @@ class Config extends \Magento\Framework\DataObject
                 $field = $this->getField($sectionId, $groupId, $fieldId);
                 $path = $this->getFieldPath($field, $fieldId, $oldConfig, $extraOldGroups);
                 if ($this->isValueChanged($oldConfig, $path, $fieldData)) {
-                    $changedPaths[] = $path;
+                    $changedPaths[] = [$path];
                 }
             }
         }
@@ -370,11 +368,11 @@ class Config extends \Magento\Framework\DataObject
                     $oldConfig,
                     $extraOldGroups
                 );
-                $changedPaths = \array_merge($changedPaths, $subGroupChangedPaths);
+                $changedPaths[] = $subGroupChangedPaths;
             }
         }
 
-        return $changedPaths;
+        return \array_merge([], ...$changedPaths);
     }
 
     /**
@@ -435,11 +433,11 @@ class Config extends \Magento\Framework\DataObject
                 if (!isset($fieldData['value'])) {
                     $fieldData['value'] = null;
                 }
-                
+
                 if ($field->getType() == 'multiline' && is_array($fieldData['value'])) {
                     $fieldData['value'] = trim(implode(PHP_EOL, $fieldData['value']));
                 }
-                
+
                 $data = [
                     'field' => $fieldId,
                     'groups' => $groups,
@@ -453,7 +451,7 @@ class Config extends \Magento\Framework\DataObject
                 $backendModel->addData($data);
                 $this->_checkSingleStoreMode($field, $backendModel);
 
-                $path = $this->getFieldPath($field, $fieldId, $extraOldGroups, $oldConfig);
+                $path = $this->getFieldPath($field, $fieldId, $oldConfig, $extraOldGroups);
                 $backendModel->setPath($path)->setValue($fieldData['value']);
 
                 $inherit = !empty($fieldData['inherit']);
@@ -532,7 +530,7 @@ class Config extends \Magento\Framework\DataObject
      */
     public function setDataByPath($path, $value)
     {
-        $path = trim($path);
+        $path = $path !== null ? trim($path) : '';
         if ($path === '') {
             throw new \UnexpectedValueException('Path must not be empty');
         }

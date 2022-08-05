@@ -32,10 +32,10 @@
         </before>
         <after>
             <deleteData createDataKey="subcategory1" stepKey="deleteCategory1"/>
-            <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!-- Login as admin and open page for creation new Price Rule -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{PriceRuleNewPage.url}}" stepKey="openCatalogPriceRulePage"/>
         <waitForPageLoad stepKey="waitCatalogPriceRulePageLoad"/>
         <!-- Open Conditions section and select Categories condition -->
@@ -62,5 +62,7 @@
         <waitForAjaxLoad stepKey="ajaxLoad4"/>
         <waitForElement selector="{{PriceRuleConditionsSection.subcategory4level}}" stepKey="wait4"/>
         <click selector="{{PriceRuleConditionsSection.subcategory4level}}" stepKey="openLatestTreeNode4"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <dontSee stepKey="dontSeeErrorMessage" userInput="A technical problem with the server created an error. Try again to continue what you were doing. If the problem persists, try again later."/>
     </test>
 </tests>

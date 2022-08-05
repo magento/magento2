@@ -29,7 +29,7 @@ class View extends \Magento\Framework\View\Element\Template
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected $httpContext;
 

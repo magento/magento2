@@ -6,43 +6,37 @@
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type\Pool;
+use Magento\Catalog\Model\Product\Type\Price;
+use Magento\Catalog\Model\Product\Type\Price\Factory as PriceFactory;
+use Magento\Catalog\Model\Product\Type\Simple;
+use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\Pricing\PriceInfo\Factory as PriceInfoFactory;
 
 /**
  * Product type model
+ *
  *
  * @api
  * @since 100.0.2
  */
 class Type implements OptionSourceInterface
 {
-    /**#@+
-     * Available product types
-     */
     const TYPE_SIMPLE = 'simple';
 
     const TYPE_BUNDLE = 'bundle';
 
     const TYPE_VIRTUAL = 'virtual';
-    /**#@-*/
 
-    /**
-     * Default product type
-     */
     const DEFAULT_TYPE = 'simple';
 
-    /**
-     * Default product type model
-     */
-    const DEFAULT_TYPE_MODEL = \Magento\Catalog\Model\Product\Type\Simple::class;
+    const DEFAULT_TYPE_MODEL = Simple::class;
+
+    const DEFAULT_PRICE_MODEL = Price::class;
 
     /**
-     * Default price model
-     */
-    const DEFAULT_PRICE_MODEL = \Magento\Catalog\Model\Product\Type\Price::class;
-
-    /**
-     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
+     * @var ConfigInterface
      */
     protected $_config;
 
@@ -77,35 +71,35 @@ class Type implements OptionSourceInterface
     /**
      * Product type factory
      *
-     * @var \Magento\Catalog\Model\Product\Type\Pool
+     * @var Pool
      */
     protected $_productTypePool;
 
     /**
      * Price model factory
      *
-     * @var \Magento\Catalog\Model\Product\Type\Price\Factory
+     * @var PriceFactory
      */
     protected $_priceFactory;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfo\Factory
+     * @var PriceInfoFactory
      */
     protected $_priceInfoFactory;
 
     /**
      * Construct
      *
-     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
-     * @param \Magento\Catalog\Model\Product\Type\Pool $productTypePool
-     * @param \Magento\Catalog\Model\Product\Type\Price\Factory $priceFactory
-     * @param \Magento\Framework\Pricing\PriceInfo\Factory $priceInfoFactory
+     * @param ConfigInterface $config
+     * @param Pool $productTypePool
+     * @param PriceFactory $priceFactory
+     * @param PriceInfoFactory $priceInfoFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
-        \Magento\Catalog\Model\Product\Type\Pool $productTypePool,
-        \Magento\Catalog\Model\Product\Type\Price\Factory $priceFactory,
-        \Magento\Framework\Pricing\PriceInfo\Factory $priceInfoFactory
+        ConfigInterface $config,
+        Pool $productTypePool,
+        PriceFactory $priceFactory,
+        PriceInfoFactory $priceInfoFactory
     ) {
         $this->_config = $config;
         $this->_productTypePool = $productTypePool;
@@ -116,8 +110,8 @@ class Type implements OptionSourceInterface
     /**
      * Factory to product singleton product type instances
      *
-     * @param   \Magento\Catalog\Model\Product $product
-     * @return  \Magento\Catalog\Model\Product\Type\AbstractType
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @return \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function factory($product)
     {
@@ -133,14 +127,16 @@ class Type implements OptionSourceInterface
 
         $typeModel = $this->_productTypePool->get($typeModelName);
         $typeModel->setConfig($types[$typeId]);
+        $typeModel->setTypeId($typeId);
+
         return $typeModel;
     }
 
     /**
      * Product type price model factory
      *
-     * @param   string $productType
-     * @return  \Magento\Catalog\Model\Product\Type\Price
+     * @param string $productType
+     * @return \Magento\Catalog\Model\Product\Type\Price
      */
     public function priceFactory($productType)
     {

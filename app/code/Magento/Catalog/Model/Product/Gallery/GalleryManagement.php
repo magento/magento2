@@ -61,6 +61,10 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $existingMediaGalleryEntries = $product->getMediaGalleryEntries();
         $existingEntryIds = [];
         if ($existingMediaGalleryEntries == null) {
+            // set all media types if not specified
+            if ($entry->getTypes() == null) {
+                $entry->setTypes(array_keys($product->getMediaAttributes()));
+            }
             $existingMediaGalleryEntries = [$entry];
         } else {
             foreach ($existingMediaGalleryEntries as $existingEntries) {

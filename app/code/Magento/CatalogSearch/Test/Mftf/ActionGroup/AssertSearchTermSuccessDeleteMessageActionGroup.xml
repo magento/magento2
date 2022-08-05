@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertSearchTermSuccessDeleteMessageActionGroup">
+        <annotations>
+            <description>Goes to the Catalog Search Term grid page. Deletes the provided Search Term. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="searchQuery" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openCatalogSearchIndexPage"/>
+        <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
+        <click selector="{{AdminCatalogSearchTermIndexSection.resetFilterButton}}" stepKey="clickOnResetButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminCatalogSearchTermIndexSection.searchQuery}}" userInput="{{searchQuery}}" stepKey="fillSearchQuery"/>
+        <click selector="{{AdminCatalogSearchTermIndexSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForSearchResultLoad"/>
+        <click selector="{{AdminCatalogSearchTermIndexSection.nthRow('1')}}" stepKey="checkFirstRow"/>
+        <selectOption selector="{{AdminCatalogSearchTermIndexSection.massActions}}" userInput="delete" stepKey="selectDeleteOption"/>
+        <click selector="{{AdminCatalogSearchTermIndexSection.submit}}" stepKey="clickSubmitButton"/>
+        <click selector="{{AdminCatalogSearchTermIndexSection.okButton}}" stepKey="clickOkButton"/>
+        <see selector="{{AdminCatalogSearchTermMessagesSection.successMessage}}" userInput="Total of 1 record(s) were deleted." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

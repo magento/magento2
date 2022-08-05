@@ -3,19 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Mail;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Phrase;
-use Zend\Mail\Message as ZendMessage;
-use Zend\Mail\Transport\Sendmail;
+use Laminas\Mail\Message as LaminasMessage;
+use Laminas\Mail\Transport\Sendmail;
+use Psr\Log\LoggerInterface;
 
-class Transport implements \Magento\Framework\Mail\TransportInterface
+/**
+ * Mail transport
+ */
+class Transport implements TransportInterface
 {
     /**
      * @var Sendmail
      */
-    private $zendTransport;
+    private $laminasTransport;
 
     /**
      * @var MessageInterface
@@ -23,13 +30,20 @@ class Transport implements \Magento\Framework\Mail\TransportInterface
     private $message;
 
     /**
+     * @var LoggerInterface|null
+     */
+    private $logger;
+
+    /**
      * @param MessageInterface $message
      * @param null|string|array|\Traversable $parameters
+     * @param LoggerInterface|null $logger
      */
-    public function __construct(MessageInterface $message, $parameters = null)
+    public function __construct(MessageInterface $message, $parameters = null, LoggerInterface $logger = null)
     {
-        $this->zendTransport = new Sendmail($parameters);
+        $this->laminasTransport = new Sendmail($parameters);
         $this->message = $message;
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -38,11 +52,12 @@ class Transport implements \Magento\Framework\Mail\TransportInterface
     public function sendMessage()
     {
         try {
-            $this->zendTransport->send(
-                ZendMessage::fromString($this->message->getRawMessage())
+            $this->laminasTransport->send(
+                LaminasMessage::fromString($this->message->getRawMessage())
             );
         } catch (\Exception $e) {
-            throw new MailException(new Phrase($e->getMessage()), $e);
+            $this->logger->error($e);
+            throw new MailException(new Phrase('Unable to send mail. Please try again later.'));
         }
     }
 

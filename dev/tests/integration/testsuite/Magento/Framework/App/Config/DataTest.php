@@ -19,7 +19,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\App\Config\Storage\WriterInterface::class
@@ -30,7 +30,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         self::_refreshConfiguration();
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\App\Config\Storage\WriterInterface::class
@@ -52,7 +52,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $appConfig->clean();
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\App\Config\Value::class

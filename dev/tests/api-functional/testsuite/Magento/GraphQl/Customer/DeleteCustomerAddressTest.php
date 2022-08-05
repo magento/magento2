@@ -67,15 +67,16 @@ mutation {
 MUTATION;
         $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('deleteCustomerAddress', $response);
-        $this->assertEquals(true, $response['deleteCustomerAddress']);
+        $this->assertTrue($response['deleteCustomerAddress']);
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testDeleteCustomerAddressIfUserIsNotAuthorized()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $addressId = 1;
         $mutation
             = <<<MUTATION
@@ -90,11 +91,12 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Customer Address 2 is set as default shipping address and can not be deleted
      */
     public function testDeleteDefaultShippingCustomerAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Customer Address 2 is set as default shipping address and can not be deleted');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $addressId = 2;
@@ -116,11 +118,12 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Customer Address 2 is set as default billing address and can not be deleted
      */
     public function testDeleteDefaultBillingCustomerAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Customer Address 2 is set as default billing address and can not be deleted');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $addressId = 2;
@@ -141,11 +144,12 @@ MUTATION;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Could not find a address with ID "9999"
      */
     public function testDeleteNonExistCustomerAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a address with ID "9999"');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $mutation
@@ -161,12 +165,13 @@ MUTATION;
      * Delete address with missing ID input.
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Syntax Error: Expected Name, found )
      * @throws Exception
      */
     public function testDeleteCustomerAddressWithMissingData()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Syntax Error: Expected Name, found )');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $mutation
@@ -182,12 +187,13 @@ MUTATION;
      * Delete address with incorrect ID input type.
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Expected type Int!, found "".
      * @throws Exception
      */
     public function testDeleteCustomerAddressWithIncorrectIdType()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Expected type Int!, found "".');
+
         $this->markTestSkipped(
             'Type validation returns wrong message https://github.com/magento/graphql-ce/issues/735'
         );
@@ -206,11 +212,12 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Current customer does not have permission to address with ID "2"
      */
     public function testDeleteAnotherCustomerAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Current customer does not have permission to address with ID "2"');
+
         $userName = 'customer_two@example.com';
         $password = 'password';
         $addressId = 2;
@@ -228,11 +235,12 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage The account is locked
      */
     public function testDeleteCustomerAddressIfAccountIsLocked()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The account is locked');
+
         $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/750');
 
         $userName = 'customer@example.com';

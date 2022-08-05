@@ -39,7 +39,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      *
      * @throws \Magento\Framework\Exception\AuthenticationException
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -55,7 +55,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->getRequest()->setParam('block', ',');
         $this->getRequest()->setParam('json', 1);
         $this->dispatch('backend/sales/order_create/loadBlock');
-        $this->assertContains('"message":""}', $this->getResponse()->getBody());
+        $this->assertStringContainsString('"message":""}', $this->getResponse()->getBody());
     }
 
     /**
@@ -74,10 +74,10 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->getRequest()->setParam('json', 1);
         $this->dispatch('backend/sales/order_create/loadBlock');
         $html = $this->getResponse()->getBody();
-        $this->assertContains('<div id=\"sales_order_create_search_grid\"', $html);
-        $this->assertContains('<div id=\"order-billing_method_form\"', $html);
-        $this->assertContains('id=\"shipping-method-overlay\"', $html);
-        $this->assertContains('id=\"coupons:code\"', $html);
+        $this->assertStringContainsString('<div id=\"sales_order_create_search_grid\"', $html);
+        $this->assertStringContainsString('<div id=\"order-billing_method_form\"', $html);
+        $this->assertStringContainsString('id=\"shipping-method-overlay\"', $html);
+        $this->assertStringContainsString('id=\"coupons:code\"', $html);
     }
 
     /**
@@ -126,7 +126,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $body = $this->getResponse()->getBody();
         $expectedTableRatePrice = '<span class=\"price\">$20.00<\/span>';
 
-        $this->assertContains($expectedTableRatePrice, $body, '');
+        $this->assertStringContainsString($expectedTableRatePrice, $body, '');
     }
 
     /**
@@ -144,7 +144,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->getRequest()->setParam('json', 1);
         $this->dispatch('backend/sales/order_create/loadBlock');
         $html = $this->getResponse()->getBody();
-        $this->assertContains($expected, $html);
+        $this->assertStringContainsString($expected, $html);
     }
 
     /**
@@ -179,7 +179,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->getRequest()->setParam('json', 1);
         $this->dispatch('backend/sales/order_create/loadBlock');
         $html = $this->getResponse()->getBody();
-        $this->assertContains('id=\"coupons:code\"', $html);
+        $this->assertStringContainsString('id=\"coupons:code\"', $html);
     }
 
     /**
@@ -296,10 +296,10 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $body = $this->getResponse()->getBody();
 
         $this->assertNotEmpty($body);
-        $this->assertContains('><span>Quantity</span></label>', $body);
-        $this->assertContains('>Test Configurable</label>', $body);
-        $this->assertContains('"code":"test_configurable","label":"Test Configurable"', $body);
-        $this->assertContains(sprintf('"productId":"%s"', $product->getEntityId()), $body);
+        $this->assertStringContainsString('><span>Quantity</span></label>', $body);
+        $this->assertStringContainsString('>Test Configurable</label>', $body);
+        $this->assertStringContainsString('"code":"test_configurable","label":"Test Configurable"', $body);
+        $this->assertStringContainsString(sprintf('"productId":"%s"', $product->getEntityId()), $body);
     }
 
     /**

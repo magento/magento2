@@ -3,27 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Edit\Tab;
 
-class AlertsTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AlertsTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts
+     * @var Alerts
      */
     protected $alerts;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $helper = new ObjectManager($this);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->alerts = $helper->getObject(
-            \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts::class,
+            Alerts::class,
             ['scopeConfig' => $this->scopeConfigMock]
         );
     }
@@ -40,18 +49,18 @@ class AlertsTest extends \PHPUnit\Framework\TestCase
         $valueMap = [
             [
                 'catalog/productalert/allow_price',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 null,
                 $priceAllow,
             ],
             [
                 'catalog/productalert/allow_stock',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 null,
                 $stockAllow
             ],
         ];
-        $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValueMap($valueMap));
+        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturnMap($valueMap);
         $this->assertEquals($canShowTab, $this->alerts->canShowTab());
     }
 

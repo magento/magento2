@@ -6,8 +6,8 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
-use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
 use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
@@ -18,6 +18,8 @@ use Magento\Store\Model\ScopeInterface;
  */
 class ReindexRuleProduct
 {
+    private const ADMIN_WEBSITE_ID = 0;
+
     /**
      * @var ResourceConnection
      */
@@ -39,21 +41,29 @@ class ReindexRuleProduct
     private $localeDate;
 
     /**
+     * @var bool
+     */
+    private $useWebsiteTimezone;
+
+    /**
      * @param ResourceConnection $resource
      * @param ActiveTableSwitcher $activeTableSwitcher
      * @param TableSwapper $tableSwapper
      * @param TimezoneInterface $localeDate
+     * @param bool $useWebsiteTimezone
      */
     public function __construct(
         ResourceConnection $resource,
         ActiveTableSwitcher $activeTableSwitcher,
         TableSwapper $tableSwapper,
-        TimezoneInterface $localeDate
+        TimezoneInterface $localeDate,
+        bool $useWebsiteTimezone = true
     ) {
         $this->resource = $resource;
         $this->activeTableSwitcher = $activeTableSwitcher;
         $this->tableSwapper = $tableSwapper;
         $this->localeDate = $localeDate;
+        $this->useWebsiteTimezone = $useWebsiteTimezone;
     }
 
     /**
@@ -95,41 +105,50 @@ class ReindexRuleProduct
         $actionOperator = $rule->getSimpleAction();
         $actionAmount = $rule->getDiscountAmount();
         $actionStop = $rule->getStopRulesProcessing();
+        $fromTimeInAdminTz = $this->parseDateByWebsiteTz((string)$rule->getFromDate(), self::ADMIN_WEBSITE_ID);
+        $toTimeInAdminTz = $this->parseDateByWebsiteTz((string)$rule->getToDate(), self::ADMIN_WEBSITE_ID);
+        $excludedWebsites = [];
+        $ruleExtensionAttributes = $rule->getExtensionAttributes();
+        if ($ruleExtensionAttributes && $ruleExtensionAttributes->getExcludeWebsiteIds()) {
+            $excludedWebsites = $ruleExtensionAttributes->getExcludeWebsiteIds();
+        }
 
         $rows = [];
         foreach ($websiteIds as $websiteId) {
-            $scopeTz = new \DateTimeZone(
-                $this->localeDate->getConfigTimezone(ScopeInterface::SCOPE_WEBSITE, $websiteId)
-            );
-            $fromTime = $rule->getFromDate()
-                ? (new \DateTime($rule->getFromDate(), $scopeTz))->getTimestamp()
-                : 0;
-            $toTime = $rule->getToDate()
-                ? (new \DateTime($rule->getToDate(), $scopeTz))->getTimestamp() + IndexBuilder::SECONDS_IN_DAY - 1
-                : 0;
+            $fromTime = $this->useWebsiteTimezone
+                ? $this->parseDateByWebsiteTz((string)$rule->getFromDate(), (int)$websiteId)
+                : $fromTimeInAdminTz;
+            $toTime = $this->useWebsiteTimezone
+                ? $this->parseDateByWebsiteTz((string)$rule->getToDate(), (int)$websiteId)
+                    + ($rule->getToDate() ? IndexBuilder::SECONDS_IN_DAY - 1 : 0)
+                : $toTimeInAdminTz;
 
             foreach ($productIds as $productId => $validationByWebsite) {
-                if (empty($validationByWebsite[$websiteId])) {
+                if (!isset($validationByWebsite[$websiteId]) || $validationByWebsite[$websiteId] === null) {
                     continue;
                 }
 
                 foreach ($customerGroupIds as $customerGroupId) {
-                    $rows[] = [
-                        'rule_id' => $ruleId,
-                        'from_time' => $fromTime,
-                        'to_time' => $toTime,
-                        'website_id' => $websiteId,
-                        'customer_group_id' => $customerGroupId,
-                        'product_id' => $productId,
-                        'action_operator' => $actionOperator,
-                        'action_amount' => $actionAmount,
-                        'action_stop' => $actionStop,
-                        'sort_order' => $sortOrder,
-                    ];
+                    if (!array_key_exists($customerGroupId, $excludedWebsites)
+                        || !in_array((int)$websiteId, array_values($excludedWebsites[$customerGroupId]), true)
+                    ) {
+                        $rows[] = [
+                            'rule_id' => $ruleId,
+                            'from_time' => $fromTime,
+                            'to_time' => $toTime,
+                            'website_id' => $websiteId,
+                            'customer_group_id' => $customerGroupId,
+                            'product_id' => $productId,
+                            'action_operator' => $actionOperator,
+                            'action_amount' => $actionAmount,
+                            'action_stop' => $actionStop,
+                            'sort_order' => $sortOrder,
+                        ];
 
-                    if (count($rows) == $batchCount) {
-                        $connection->insertMultiple($indexTable, $rows);
-                        $rows = [];
+                        if (count($rows) === $batchCount) {
+                            $connection->insertMultiple($indexTable, $rows);
+                            $rows = [];
+                        }
                     }
                 }
             }
@@ -139,5 +158,24 @@ class ReindexRuleProduct
         }
 
         return true;
+    }
+
+    /**
+     * Parse date value by the timezone of the website
+     *
+     * @param string $date
+     * @param int $websiteId
+     * @return int
+     */
+    private function parseDateByWebsiteTz(string $date, int $websiteId): int
+    {
+        if (empty($date)) {
+            return 0;
+        }
+
+        $websiteTz = $this->localeDate->getConfigTimezone(ScopeInterface::SCOPE_WEBSITE, $websiteId);
+        $dateTime = new \DateTime($date, new \DateTimeZone($websiteTz));
+
+        return $dateTime->getTimestamp();
     }
 }

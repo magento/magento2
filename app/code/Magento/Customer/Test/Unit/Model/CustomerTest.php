@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Unit test for customer service layer \Magento\Customer\Model\Customer
  *
@@ -11,121 +11,142 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
-use Magento\Customer\Model\Customer;
-use Magento\Customer\Model\AccountConfirmation;
-use Magento\Customer\Model\ResourceModel\Address\CollectionFactory as AddressCollectionFactory;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Model\AccountConfirmation;
+use Magento\Customer\Model\Address as AddressModel;
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\ResourceModel\Address\Collection as AddressCollection;
+use Magento\Customer\Model\ResourceModel\Address\CollectionFactory as AddressCollectionFactory;
+use Magento\Customer\Model\ResourceModel\Customer as CustomerResourceModel;
+use Magento\Eav\Model\Attribute;
+use Magento\Eav\Model\Config;
+use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Math\Random;
+use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class CustomerTest extends \PHPUnit\Framework\TestCase
+class CustomerTest extends TestCase
 {
     /** @var Customer */
     protected $_model;
 
-    /** @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Website|MockObject */
     protected $_website;
 
-    /** @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreManager|MockObject */
     protected $_storeManager;
 
-    /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Config|MockObject */
     protected $_config;
 
-    /** @var \Magento\Eav\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Attribute|MockObject */
     protected $_attribute;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ScopeConfigInterface|MockObject */
     protected $_scopeConfigMock;
 
-    /** @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var TransportBuilder|MockObject */
     protected $_transportBuilderMock;
 
-    /** @var \Magento\Framework\Mail\TransportInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var TransportInterface|MockObject */
     protected $_transportMock;
 
-    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EncryptorInterface|MockObject */
     protected $_encryptor;
 
-    /** @var \Magento\Customer\Model\AttributeFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\AttributeFactory|MockObject */
     protected $attributeFactoryMock;
 
-    /** @var  \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Customer\Model\Attribute|MockObject */
     protected $attributeCustomerMock;
 
-    /** @var  \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Registry|MockObject */
     protected $registryMock;
 
-    /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerResourceModel|MockObject */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObjectProcessor|MockObject
      */
     private $dataObjectProcessor;
 
     /**
-     * @var AccountConfirmation|\PHPUnit_Framework_MockObject_MockObject
+     * @var AccountConfirmation|MockObject
      */
     private $accountConfirmation;
 
     /**
-     * @var AddressCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressCollectionFactory|MockObject
      */
     private $addressesFactory;
 
     /**
-     * @var CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerInterfaceFactory|MockObject
      */
     private $customerDataFactory;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObjectHelper|MockObject
      */
     private $dataObjectHelper;
 
     /**
-     * @var Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var Random|MockObject
      */
     private $mathRandom;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_website = $this->createMock(\Magento\Store\Model\Website::class);
-        $this->_config = $this->createMock(\Magento\Eav\Model\Config::class);
-        $this->_attribute = $this->createMock(\Magento\Eav\Model\Attribute::class);
-        $this->_storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
-        $this->_storetMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->_scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->_transportBuilderMock = $this->createMock(\Magento\Framework\Mail\Template\TransportBuilder::class);
-        $this->_transportMock = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
+        $this->_website = $this->createMock(Website::class);
+        $this->_config = $this->createMock(Config::class);
+        $this->_attribute = $this->createMock(Attribute::class);
+        $this->_storeManager = $this->createMock(StoreManager::class);
+        $this->_scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_transportBuilderMock = $this->createMock(TransportBuilder::class);
+        $this->_transportMock = $this->getMockForAbstractClass(TransportInterface::class);
         $this->attributeFactoryMock = $this->createPartialMock(
             \Magento\Customer\Model\AttributeFactory::class,
             ['create']
         );
         $this->attributeCustomerMock = $this->createMock(\Magento\Customer\Model\Attribute::class);
         $this->resourceMock = $this->createPartialMock(
-            \Magento\Customer\Model\ResourceModel\Customer::class, // \Magento\Framework\DataObject::class,
+            CustomerResourceModel::class, // \Magento\Framework\DataObject::class,
             ['getIdFieldName']
         );
 
         $this->dataObjectProcessor = $this->createPartialMock(
-            \Magento\Framework\Reflection\DataObjectProcessor::class,
+            DataObjectProcessor::class,
             ['buildOutputDataArray']
         );
 
         $this->resourceMock->expects($this->any())
             ->method('getIdFieldName')
-            ->will($this->returnValue('id'));
-        $this->registryMock = $this->createPartialMock(\Magento\Framework\Registry::class, ['registry']);
-        $this->_encryptor = $this->createMock(\Magento\Framework\Encryption\EncryptorInterface::class);
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+            ->willReturn('id');
+        $this->registryMock = $this->createPartialMock(Registry::class, ['registry']);
+        $this->_encryptor = $this->getMockForAbstractClass(EncryptorInterface::class);
+        $helper = new ObjectManager($this);
         $this->accountConfirmation = $this->createMock(AccountConfirmation::class);
         $this->addressesFactory = $this->getMockBuilder(AddressCollectionFactory::class)
             ->disableOriginalConstructor()
@@ -135,7 +156,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->dataObjectHelper = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
+        $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->setMethods(['populateWithArray'])
             ->getMock();
@@ -171,44 +192,43 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         )->with(
             'password',
             'salt'
-        )->will(
-            $this->returnValue('hash')
+        )->willReturn(
+            'hash'
         );
         $this->assertEquals('hash', $this->_model->hashPassword('password', 'salt'));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The transactional account email type is incorrect. Verify and try again.
-     */
     public function testSendNewAccountEmailException()
     {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('The transactional account email type is incorrect. Verify and try again.');
+
         $this->_model->sendNewAccountEmail('test');
     }
 
     public function testSendNewAccountEmailWithoutStoreId()
     {
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $website = $this->createMock(\Magento\Store\Model\Website::class);
+        $store = $this->createMock(Store::class);
+        $website = $this->createMock(Website::class);
         $website->expects($this->once())
             ->method('getStoreIds')
-            ->will($this->returnValue([1, 2, 3, 4]));
+            ->willReturn([1, 2, 3, 4]);
         $this->_storeManager->expects($this->once())
             ->method('getWebsite')
             ->with(1)
-            ->will($this->returnValue($website));
+            ->willReturn($website);
         $this->_storeManager->expects($this->once())
             ->method('getStore')
             ->with(1)
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $this->_config->expects($this->exactly(3))
             ->method('getAttribute')
-            ->will($this->returnValue($this->_attribute));
+            ->willReturn($this->_attribute);
 
         $this->_attribute->expects($this->exactly(3))
             ->method('getIsVisible')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $methods = [
             'setTemplateIdentifier',
@@ -220,15 +240,15 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         foreach ($methods as $method) {
             $this->_transportBuilderMock->expects($this->once())
                 ->method($method)
-                ->will($this->returnSelf());
+                ->willReturnSelf();
         }
-        $transportMock = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
+        $transportMock = $this->getMockForAbstractClass(TransportInterface::class);
         $transportMock->expects($this->once())
             ->method('sendMessage')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->_transportBuilderMock->expects($this->once())
             ->method('getTransport')
-            ->will($this->returnValue($transportMock));
+            ->willReturn($transportMock);
 
         $this->_model->setData(
             [
@@ -322,7 +342,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         );
 
         $attribute = $this->createPartialMock(
-            \Magento\Framework\Api\AttributeValue::class,
+            AttributeValue::class,
             [
                 'getAttributeCode',
                 'getValue',
@@ -332,7 +352,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->dataObjectProcessor->expects($this->once())
             ->method('buildOutputDataArray')
             ->withConsecutive(
-                [$customer, \Magento\Customer\Api\Data\CustomerInterface::class]
+                [$customer, CustomerInterface::class]
             )->willReturn($customerDataAttributes);
 
         $attribute->expects($this->exactly(3))
@@ -366,14 +386,14 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $customerId = 1;
         $this->_model->setEntityId($customerId);
         $this->_model->setId($customerId);
-        $addressDataModel = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\AddressInterface::class);
-        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
+        $addressDataModel = $this->getMockForAbstractClass(AddressInterface::class);
+        $address = $this->getMockBuilder(AddressModel::class)
             ->disableOriginalConstructor()
             ->setMethods(['setCustomer', 'getDataModel'])
             ->getMock();
         $address->expects($this->atLeastOnce())->method('getDataModel')->willReturn($addressDataModel);
         $addresses = new \ArrayIterator([$address, $address]);
-        $addressCollection = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Address\Collection::class)
+        $addressCollection = $this->getMockBuilder(AddressCollection::class)
             ->disableOriginalConstructor()
             ->setMethods(['setCustomerFilter', 'addAttributeToSelect', 'getIterator', 'getItems'])
             ->getMock();
@@ -384,10 +404,10 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $addressCollection->expects($this->atLeastOnce())->method('getItems')
             ->willReturn($addresses);
         $this->addressesFactory->expects($this->atLeastOnce())->method('create')->willReturn($addressCollection);
-        $customerDataObject = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $customerDataObject = $this->getMockForAbstractClass(CustomerInterface::class);
         $this->customerDataFactory->expects($this->atLeastOnce())->method('create')->willReturn($customerDataObject);
         $this->dataObjectHelper->expects($this->atLeastOnce())->method('populateWithArray')
-            ->with($customerDataObject, $this->_model->getData(), \Magento\Customer\Api\Data\CustomerInterface::class)
+            ->with($customerDataObject, $this->_model->getData(), CustomerInterface::class)
             ->willReturnSelf();
         $customerDataObject->expects($this->atLeastOnce())->method('setAddresses')
             ->with([$addressDataModel, $addressDataModel])

@@ -117,7 +117,7 @@
                 <visible>false</visible>
             </settings>
         </field>
-        <field name="website_id" component="Magento_Ui/js/form/element/website" formElement="select">
+        <field name="website_id" component="Magento_Customer/js/form/element/website" formElement="select">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">customer</item>
@@ -129,13 +129,20 @@
                 </validation>
                 <dataType>number</dataType>
                 <tooltip>
-                    <link>https://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
+                    <link>https://docs.magento.com/user-guide/configuration/scope.html</link>
                     <description translate="true">If your Magento installation has multiple websites, you can edit the scope to associate the customer with a specific site.</description>
                 </tooltip>
                 <imports>
                     <link name="customerId">${ $.provider }:data.customer.entity_id</link>
                 </imports>
             </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Customer\ViewModel\Customer\Website"/>
+                    </settings>
+                </select>
+            </formElements>
         </field>
         <field name="prefix" formElement="input">
             <argument name="data" xsi:type="array">
@@ -301,7 +308,7 @@
                 <visible>true</visible>
             </settings>
         </field>
-        <field name="sendemail_store_id" formElement="select">
+        <field name="sendemail_store_id" component="Magento_Ui/js/form/element/select" formElement="select">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">customer</item>
@@ -317,7 +324,11 @@
             <formElements>
                 <select>
                     <settings>
-                        <options class="Magento\Store\Model\System\Store"/>
+                        <options class="Magento\Customer\ViewModel\Customer\Store"/>
+                        <filterBy>
+                            <field>website_id</field>
+                            <target>${ $.provider }:${ $.parentScope }.website_id</target>
+                        </filterBy>
                     </settings>
                 </select>
             </formElements>
@@ -337,6 +348,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="defaultAddressClass" xsi:type="string">billing-address</item>
+                        <item name="defaultAddressId" xsi:type="string">billing-address-caption</item>
                         <item name="title" translate="true" xsi:type="string">Default Billing Address</item>
                         <item name="contentClass" xsi:type="string">customer-default-billing-address-content</item>
                         <item name="notExistsMessage" xsi:type="string" translate="true">The customer does not have default billing address</item>
@@ -355,6 +367,8 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="buttonClasses" xsi:type="string">edit-default-billing-address-button</item>
+                        <item name="buttonTextId" xsi:type="string">edit-billing-address</item>
+                        <item name="ariLabelledby" xsi:type="string">billing-address-caption edit-billing-address</item>
                         <item name="actions" xsi:type="array">
                             <item name="0" xsi:type="array">
                                 <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal.update_customer_address_form_loader</item>
@@ -387,6 +401,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="defaultAddressClass" xsi:type="string">shipping-address</item>
+                        <item name="defaultAddressId" xsi:type="string">shipping-address-caption</item>
                         <item name="title" xsi:type="string" translate="true">Default Shipping Address</item>
                         <item name="contentClass" xsi:type="string">customer-default-shipping-address-content</item>
                         <item name="notExistsMessage" xsi:type="string" translate="true">The customer does not have default shipping address</item>
@@ -405,6 +420,8 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="buttonClasses" xsi:type="string">edit-default-shipping-address-button</item>
+                        <item name="buttonTextId" xsi:type="string">edit-shipping-address</item>
+                        <item name="ariLabelledby" xsi:type="string">shipping-address-caption edit-shipping-address</item>
                         <item name="actions" xsi:type="array">
                             <item name="0" xsi:type="array">
                                 <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal.update_customer_address_form_loader</item>
@@ -463,7 +480,7 @@
         <modal name="customer_address_update_modal">
             <settings>
                 <options>
-                    <option name="title" xsi:type="string">Add/Update Address</option>
+                    <option name="title" xsi:type="string" translate="true">Add/Update Address</option>
                 </options>
             </settings>
             <insertForm name="update_customer_address_form_loader" component="Magento_Customer/js/form/components/insert-form">
@@ -500,7 +517,7 @@
                     <imports>true</imports>
                 </dataLinks>
                 <externalProvider>customer_address_listing.customer_address_listing_data_source</externalProvider>
-                <selectionsProvider>customer_address_listing.customer_address_listing.customer_address_listing_columns.ids</selectionsProvider>
+                <selectionsProvider>customer_address_listing.customer_address_listing.customer_address_columns.ids</selectionsProvider>
                 <autoRender>true</autoRender>
                 <dataScope>customer_address_listing</dataScope>
                 <ns>customer_address_listing</ns>

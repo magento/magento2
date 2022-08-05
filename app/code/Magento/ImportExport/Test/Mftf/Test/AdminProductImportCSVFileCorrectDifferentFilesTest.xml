@@ -14,18 +14,19 @@
             <features value="Import/Export"/>
             <stories value="Product Import"/>
             <title value="Product import from CSV file correct from different files."/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-17104"/>
             <useCaseId value="MAGETWO-70803"/>
             <group value="importExport"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Login as Admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Logout from Admin-->
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Check data products with add/update behavior-->
         <actionGroup ref="AdminCheckDataForImportProductActionGroup" stepKey="adminImportProducts">

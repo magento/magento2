@@ -45,7 +45,12 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private static $moduleNameBlacklist;
 
-    public static function setUpBeforeClass()
+    /**
+     * @var string
+     */
+    private static $magentoFrameworkLibraryName = 'magento/framework';
+
+    public static function setUpBeforeClass(): void
     {
         self::$root = BP;
         self::$rootJson = json_decode(file_get_contents(self::$root . '/composer.json'), true);
@@ -68,9 +73,9 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     {
         $blacklist = [];
         foreach (glob($pattern) as $list) {
-            $blacklist = array_merge($blacklist, file($list, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+            $blacklist[] = file($list, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         }
-        return $blacklist;
+        return array_merge([], ...$blacklist);
     }
 
     public function testValidComposerJson()
@@ -144,8 +149,16 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertCodingStyle($contents)
     {
-        $this->assertNotRegExp('/" :\s*["{]/', $contents, 'Coding style: there should be no space before colon.');
-        $this->assertNotRegExp('/":["{]/', $contents, 'Coding style: a space is necessary after colon.');
+        $this->assertDoesNotMatchRegularExpression(
+            '/" :\s*["{]/',
+            $contents,
+            'Coding style: there should be no space before colon.'
+        );
+        $this->assertDoesNotMatchRegularExpression(
+            '/":["{]/',
+            $contents,
+            'Coding style: a space is necessary after colon.'
+        );
     }
 
     /**
@@ -182,13 +195,19 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 $this->assertNoVersionSpecified($json);
                 break;
             case 'magento2-language':
-                $this->assertRegExp('/^magento\/language\-[a-z]{2}_([a-z]{4}_)?[a-z]{2}$/', $json->name);
+                $this->assertMatchesRegularExpression(
+                    '/^magento\/language\-[a-z]{2}_([a-z]{4}_)?[a-z]{2}$/',
+                    $json->name
+                );
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
                 $this->assertNoVersionSpecified($json);
                 break;
             case 'magento2-theme':
-                $this->assertRegExp('/^magento\/theme-(?:adminhtml|frontend)(\-[a-z0-9_]+)+$/', $json->name);
+                $this->assertMatchesRegularExpression(
+                    '/^magento\/theme-(?:adminhtml|frontend)(\-[a-z0-9_]+)+$/',
+                    $json->name
+                );
                 $this->assertDependsOnPhp($json->require);
                 $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertDependsOnFramework($json->require);
@@ -197,7 +216,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 break;
             case 'magento2-library':
                 $this->assertDependsOnPhp($json->require);
-                $this->assertRegExp('/^magento\/framework*/', $json->name);
+                $this->assertMatchesRegularExpression('/^magento\/framework*/', $json->name);
                 $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertRequireInSync($json);
                 $this->assertAutoload($json);
@@ -247,8 +266,10 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertNoVersionSpecified(\StdClass $json)
     {
-        $errorMessage = 'Version must not be specified in the root and package composer JSON files in Git';
-        $this->assertObjectNotHasAttribute('version', $json, $errorMessage);
+        if (!in_array($json->name, self::$rootComposerModuleBlacklist)) {
+            $errorMessage = 'Version must not be specified in the root and package composer JSON files in Git';
+            $this->assertObjectNotHasAttribute('version', $json, $errorMessage);
+        }
     }
 
     /**
@@ -311,9 +332,9 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private function assertDependsOnFramework(\StdClass $json)
     {
         $this->assertObjectHasAttribute(
-            'magento/framework',
+            self::$magentoFrameworkLibraryName,
             $json,
-            'This component is expected to depend on magento/framework'
+            'This component is expected to depend on ' . self::$magentoFrameworkLibraryName
         );
     }
 
@@ -495,5 +516,43 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 . join(', ', $nonexistentDependencies)
             );
         }
+    }
+
+    /**
+     * Check the correspondence between the root composer file and magento/framework composer file.
+     */
+    public function testConsistencyOfDeclarationsInComposerFiles()
+    {
+        if (strpos(self::$rootJson['name'], 'magento/project-') !== false) {
+            // The Dependency test is skipped for vendor/magento build
+            self::markTestSkipped(
+                'The build is running for composer installation. Consistency test for composer files is skipped.'
+            );
+        }
+
+        $componentRegistrar = new ComponentRegistrar();
+        $magentoFrameworkLibraryDir =
+            $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, self::$magentoFrameworkLibraryName);
+        $magentoFrameworkComposerFile =
+            json_decode(
+                file_get_contents($magentoFrameworkLibraryDir . DIRECTORY_SEPARATOR . 'composer.json'),
+                true
+            );
+
+        $inconsistentDependencies = [];
+        foreach ($magentoFrameworkComposerFile['require'] as $dependency => $constraint) {
+            if (isset(self::$rootJson['require'][$dependency])
+                && self::$rootJson['require'][$dependency] !== $constraint
+            ) {
+                $inconsistentDependencies[] = $dependency;
+            }
+        }
+
+        $this->assertEmpty(
+            $inconsistentDependencies,
+            'There is a discrepancy between the declared versions of the following modules in "'
+            . self::$magentoFrameworkLibraryName . '" and the root composer.json: '
+            . implode(', ', $inconsistentDependencies)
+        );
     }
 }

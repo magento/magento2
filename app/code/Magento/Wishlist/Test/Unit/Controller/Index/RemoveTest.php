@@ -3,78 +3,101 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\Manager;
+use Magento\Framework\Url;
+use Magento\Store\App\Response\Redirect;
+use Magento\Wishlist\Controller\Index\Remove;
+use Magento\Wishlist\Controller\WishlistProvider;
+use Magento\Wishlist\Helper\Data;
+use Magento\Wishlist\Model\Item;
+use Magento\Wishlist\Model\Wishlist;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
+use Magento\Framework\Event\Manager as EventManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RemoveTest extends \PHPUnit\Framework\TestCase
+class RemoveTest extends TestCase
 {
     /**
-     * @var \Magento\Wishlist\Controller\WishlistProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var WishlistProvider|MockObject
      */
     protected $wishlistProvider;
 
     /**
-     * @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Store\App\Response\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|MockObject
      */
     protected $redirect;
 
     /**
-     * @var \Magento\Framework\App\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManager|MockObject
      */
     protected $om;
 
     /**
-     * @var \Magento\Framework\Message\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|MockObject
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var Url|MockObject
      */
     protected $url;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|MockObject
      */
     protected $resultFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultRedirect|MockObject
      */
     protected $resultRedirectMock;
 
     /**
-     * @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator|MockObject
      */
     protected $formKeyValidator;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->context = $this->createMock(\Magento\Framework\App\Action\Context::class);
-        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->wishlistProvider = $this->createMock(\Magento\Wishlist\Controller\WishlistProvider::class);
-        $this->redirect = $this->createMock(\Magento\Store\App\Response\Redirect::class);
-        $this->om = $this->createMock(\Magento\Framework\App\ObjectManager::class);
-        $this->messageManager = $this->createMock(\Magento\Framework\Message\Manager::class);
-        $this->url = $this->createMock(\Magento\Framework\Url::class);
-        $this->resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
+        $this->context = $this->createMock(Context::class);
+        $this->request = $this->createMock(Http::class);
+        $this->wishlistProvider = $this->createMock(WishlistProvider::class);
+        $this->redirect = $this->createMock(Redirect::class);
+        $this->om = $this->createMock(ObjectManager::class);
+        $this->messageManager = $this->createMock(Manager::class);
+        $this->url = $this->createMock(Url::class);
+        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
+        $this->resultRedirectMock = $this->getMockBuilder(ResultRedirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -83,12 +106,15 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->with(ResultFactory::TYPE_REDIRECT, [])
             ->willReturn($this->resultRedirectMock);
 
-        $this->formKeyValidator = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
+        $this->formKeyValidator = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    public function tearDown()
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
     {
         unset(
             $this->context,
@@ -101,10 +127,13 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function prepareContext()
+    /**
+     * @return void
+     */
+    protected function prepareContext(): void
     {
-        $eventManager = $this->createMock(\Magento\Framework\Event\Manager::class);
-        $actionFlag = $this->createMock(\Magento\Framework\App\ActionFlag::class);
+        $eventManager = $this->createMock(EventManager::class);
+        $actionFlag = $this->createMock(ActionFlag::class);
 
         $this->context
             ->expects($this->any())
@@ -140,9 +169,9 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Wishlist\Controller\Index\Remove
+     * @return Remove
      */
-    public function getController()
+    public function getController(): Remove
     {
         $this->prepareContext();
 
@@ -151,14 +180,17 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->with($this->request)
             ->willReturn(true);
 
-        return new \Magento\Wishlist\Controller\Index\Remove(
+        return new Remove(
             $this->context,
             $this->wishlistProvider,
             $this->formKeyValidator
         );
     }
 
-    public function testExecuteWithInvalidFormKey()
+    /**
+     * @return void
+     */
+    public function testExecuteWithInvalidFormKey(): void
     {
         $this->prepareContext();
 
@@ -172,7 +204,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $controller = new \Magento\Wishlist\Controller\Index\Remove(
+        $controller = new Remove(
             $this->context,
             $this->wishlistProvider,
             $this->formKeyValidator
@@ -182,11 +214,12 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
+     * @return void
      */
-    public function testExecuteWithoutItem()
+    public function testExecuteWithoutItem(): void
     {
-        $item = $this->createMock(\Magento\Wishlist\Model\Item::class);
+        $this->expectException('Magento\Framework\Exception\NotFoundException');
+        $item = $this->createMock(Item::class);
         $item
             ->expects($this->once())
             ->method('getId')
@@ -206,18 +239,19 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
         $this->om
             ->expects($this->once())
             ->method('create')
-            ->with(\Magento\Wishlist\Model\Item::class)
+            ->with(Item::class)
             ->willReturn($item);
 
         $this->getController()->execute();
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
+     * @return void
      */
-    public function testExecuteWithoutWishlist()
+    public function testExecuteWithoutWishlist(): void
     {
-        $item = $this->createMock(\Magento\Wishlist\Model\Item::class);
+        $this->expectException('Magento\Framework\Exception\NotFoundException');
+        $item = $this->createMock(Item::class);
         $item
             ->expects($this->once())
             ->method('load')
@@ -234,7 +268,6 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->willReturn(2);
 
         $this->request
-            ->expects($this->at(0))
             ->method('getParam')
             ->with('item')
             ->willReturn(1);
@@ -242,7 +275,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
         $this->om
             ->expects($this->once())
             ->method('create')
-            ->with(\Magento\Wishlist\Model\Item::class)
+            ->with(Item::class)
             ->willReturn($item);
 
         $this->wishlistProvider
@@ -254,12 +287,15 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
         $this->getController()->execute();
     }
 
-    public function testExecuteCanNotSaveWishlist()
+    /**
+     * @return void
+     */
+    public function testExecuteCanNotSaveWishlist(): void
     {
         $referer = 'http://referer-url.com';
 
-        $exception = new \Magento\Framework\Exception\LocalizedException(__('Message'));
-        $wishlist = $this->createMock(\Magento\Wishlist\Model\Wishlist::class);
+        $exception = new LocalizedException(__('Message'));
+        $wishlist = $this->createMock(Wishlist::class);
         $wishlist
             ->expects($this->once())
             ->method('save')
@@ -277,7 +313,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->with('We can\'t delete the item from Wish List right now because of an error: Message.')
             ->willReturn(true);
 
-        $wishlistHelper = $this->createMock(\Magento\Wishlist\Helper\Data::class);
+        $wishlistHelper = $this->createMock(Data::class);
         $wishlistHelper
             ->expects($this->once())
             ->method('calculate')
@@ -286,10 +322,10 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
         $this->om
             ->expects($this->once())
             ->method('get')
-            ->with(\Magento\Wishlist\Helper\Data::class)
-            ->will($this->returnValue($wishlistHelper));
+            ->with(Data::class)
+            ->willReturn($wishlistHelper);
 
-        $item = $this->createMock(\Magento\Wishlist\Model\Item::class);
+        $item = $this->createMock(Item::class);
         $item
             ->expects($this->once())
             ->method('load')
@@ -312,7 +348,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
         $this->om
             ->expects($this->once())
             ->method('create')
-            ->with(\Magento\Wishlist\Model\Item::class)
+            ->with(Item::class)
             ->willReturn($item);
 
         $this->redirect
@@ -337,12 +373,15 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
 
-    public function testExecuteCanNotSaveWishlistAndWithRedirect()
+    /**
+     * @return void
+     */
+    public function testExecuteCanNotSaveWishlistAndWithRedirect(): void
     {
         $referer = 'http://referer-url.com';
 
         $exception = new \Exception('Message');
-        $wishlist = $this->createMock(\Magento\Wishlist\Model\Wishlist::class);
+        $wishlist = $this->createMock(Wishlist::class);
         $wishlist
             ->expects($this->once())
             ->method('save')
@@ -360,7 +399,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->with('We can\'t delete the item from the Wish List right now.')
             ->willReturn(true);
 
-        $wishlistHelper = $this->createMock(\Magento\Wishlist\Helper\Data::class);
+        $wishlistHelper = $this->createMock(Data::class);
         $wishlistHelper
             ->expects($this->once())
             ->method('calculate')
@@ -369,10 +408,10 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
         $this->om
             ->expects($this->once())
             ->method('get')
-            ->with(\Magento\Wishlist\Helper\Data::class)
-            ->will($this->returnValue($wishlistHelper));
+            ->with(Data::class)
+            ->willReturn($wishlistHelper);
 
-        $item = $this->createMock(\Magento\Wishlist\Model\Item::class);
+        $item = $this->createMock(Item::class);
         $item
             ->expects($this->once())
             ->method('load')
@@ -395,7 +434,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
         $this->om
             ->expects($this->once())
             ->method('create')
-            ->with(\Magento\Wishlist\Model\Item::class)
+            ->with(Item::class)
             ->willReturn($item);
 
         $this->request

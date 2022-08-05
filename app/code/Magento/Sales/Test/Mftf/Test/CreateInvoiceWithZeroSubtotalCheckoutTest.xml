@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
             <!-- Create customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -58,16 +58,16 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create order -->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="goToCreateOrderPage">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
 
         <!-- Add product to order -->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
 
@@ -77,26 +77,28 @@
         </actionGroup>
 
         <!-- Select Free shipping -->
-        <actionGroup ref="orderSelectFreeShipping" stepKey="selectFreeShippingOption"/>
+        <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="selectFreeShippingOption"/>
 
         <!-- Submit order -->
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
 
         <!-- Grab order id -->
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
+        <comment userInput="BIC workaround" stepKey="getOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <!-- Open created order -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage"/>
-        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrdersGridById">
-            <argument name="orderId" value="$getOrderId"/>
+        <comment userInput="BIC workaround" stepKey="goToOrdersPage"/>
+        <comment userInput="BIC workaround" stepKey="filterOrdersGridById"/>
+        <comment userInput="BIC workaround" stepKey="clickCreatedOrderInGrid"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
-        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickCreatedOrderInGrid"/>
 
         <!-- Go to invoice tab and fill data -->
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction"/>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceAction"/>
         <fillField selector="{{AdminInvoiceTotalSection.invoiceComment}}" userInput="comment" stepKey="writeComment"/>
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
 
         <!-- Assert invoice with shipment success message -->
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
@@ -108,8 +110,7 @@
         <waitForPageLoad stepKey="waitForCustomerLogin"/>
 
         <!-- Open My Account > My Orders -->
-        <amOnPage stepKey="goToMyAccountPage" url="{{StorefrontCustomerDashboardPage.url}}"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu">
             <argument name="menu" value="My Orders"/>
         </actionGroup>

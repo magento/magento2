@@ -14,7 +14,9 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Customer\Block\Account\Dashboard\Info" name="customer_account_dashboard_info" as="info" template="Magento_Customer::account/dashboard/info.phtml" cacheable="false"/>
+            <block class="Magento\Customer\Block\Account\Dashboard\Info" name="customer_account_dashboard_info" as="info" template="Magento_Customer::account/dashboard/info.phtml" cacheable="false">
+                <container name="customer.account.dashboard.info.blocks" as="additional_blocks"/>
+            </block>
             <block class="Magento\Customer\Block\Account\Dashboard\Address" name="customer_account_dashboard_address" as="address" template="Magento_Customer::account/dashboard/address.phtml" cacheable="false"/>
         </referenceContainer>
     </body>

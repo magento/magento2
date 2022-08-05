@@ -11,6 +11,7 @@ use Magento\Framework\Registry;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
 $objectManager = Bootstrap::getObjectManager();
+/** @var Registry $registry */
 $registry = $objectManager->get(Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
@@ -18,7 +19,7 @@ $registry->register('isSecureArea', true);
 $attributeRepository = $objectManager->create(ProductAttributeRepositoryInterface::class);
 
 try {
-    $attributeRepository->deleteById('text_swatch_attribute');
+    $attributeRepository->deleteById('visual_swatch_attribute');
 } catch (NoSuchEntityException $e) {
 }
 $registry->unregister('isSecureArea');

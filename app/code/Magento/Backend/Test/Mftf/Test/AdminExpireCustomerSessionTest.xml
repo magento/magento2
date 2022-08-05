@@ -22,12 +22,14 @@
         <after>
             <!-- 6. Restore default configuration settings. -->
             <magentoCLI command="config:set {{DefaultWebCookieLifetimeConfigData.path}} {{DefaultWebCookieLifetimeConfigData.value}}" stepKey="setDefaultCookieLifetime"/>
+            <!-- Customer Log Out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <!-- Delete data -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- 1. Login to Admin. -->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
         <!-- 2. Create customer if needed. -->
         <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -40,7 +42,7 @@
             <argument name="Customer" value="$$createCustomer$$" />
         </actionGroup>
         <wait time="60" stepKey="waitForCookieLifetime"/>
-        <reloadPage stepKey="reloadPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
 
         <!-- 5. Perform asserts. -->
         <seeElement selector="{{StorefrontPanelHeaderSection.customerLoginLink}}" stepKey="assertAuthorizationLinkIsVisibleOnStoreFront"/>

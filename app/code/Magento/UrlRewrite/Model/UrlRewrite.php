@@ -3,12 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\UrlRewrite\Model;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\EntityManager\EventManager;
+use Magento\Framework\Indexer\CacheContext;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
 
 /**
+ * UrlRewrite model class
+ *
  * @method int getEntityId()
  * @method string getEntityType()
  * @method int getRedirectType()
@@ -22,8 +36,11 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @method UrlRewrite setRedirectType($value)
  * @method UrlRewrite setStoreId($value)
  * @method UrlRewrite setDescription($value)
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
-class UrlRewrite extends \Magento\Framework\Model\AbstractModel
+class UrlRewrite extends AbstractModel
 {
     /**
      * @var Json
@@ -31,23 +48,56 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
     private $serializer;
 
     /**
+     * @var CacheContext|mixed|null
+     */
+    private $cacheContext;
+
+    /**
+     * @var EventManager|mixed|null
+     */
+    private $eventManager;
+
+    /**
+     * @var array
+     */
+    private $entityToCacheTagMap;
+
+    /**
+     * @var UrlFinderInterface
+     */
+    private $urlFinder;
+
+    /**
      * UrlRewrite constructor.
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     *
+     * @param Context $context
+     * @param Registry $registry
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
-     * @param Json $serializer
+     * @param Json|null $serializer
+     * @param CacheContext|null $cacheContext
+     * @param EventManager|null $eventManager
+     * @param UrlFinderInterface|null $urlFinder
+     * @param array $entityToCacheTagMap
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = [],
-        Json $serializer = null
+        Json $serializer = null,
+        CacheContext $cacheContext = null,
+        EventManager $eventManager = null,
+        UrlFinderInterface $urlFinder = null,
+        array $entityToCacheTagMap = []
     ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
+        $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(EventManager::class);
+        $this->urlFinder = $urlFinder ?: ObjectManager::getInstance()->get(UrlFinderInterface::class);
+        $this->entityToCacheTagMap = $entityToCacheTagMap;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -58,13 +108,14 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init(\Magento\UrlRewrite\Model\ResourceModel\UrlRewrite::class);
-        $this->_collectionName = \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection::class;
+        $this->_init(ResourceModel\UrlRewrite::class);
+        $this->_collectionName = UrlRewriteCollection::class;
     }
 
     /**
+     * Get metadata
+     *
      * @return array
-     * @api
      */
     public function getMetadata()
     {
@@ -76,7 +127,6 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
      * Overwrite Metadata in the object.
      *
      * @param array|string $metadata
-     *
      * @return $this
      */
     public function setMetadata($metadata)
@@ -85,5 +135,104 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
             $metadata = $this->serializer->serialize($metadata);
         }
         return $this->setData(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::METADATA, $metadata);
+    }
+
+    /**
+     * Gets final target UrlRewrite for custom rewrite record
+     *
+     * @param string $path
+     * @param int $storeId
+     * @return UrlRewriteService|null
+     */
+    private function getFinalTargetUrlRewrite(string $path, int $storeId): ?UrlRewriteService
+    {
+        $urlRewriteTarget = $this->urlFinder->findOneByData(
+            [
+                'request_path' => $path,
+                'store_id' => $storeId
+            ]
+        );
+
+        while ($urlRewriteTarget &&
+            $urlRewriteTarget->getTargetPath() !== $urlRewriteTarget->getRequestPath() &&
+            $urlRewriteTarget->getRedirectType() > 0
+        ) {
+            $urlRewriteTarget = $this->urlFinder->findOneByData(
+                [
+                    'request_path' => $urlRewriteTarget->getTargetPath(),
+                    'store_id' => $urlRewriteTarget->getStoreId()
+                ]
+            );
+        }
+
+        return $urlRewriteTarget;
+    }
+
+    /**
+     * Clean the cache for entities affected by current rewrite
+     */
+    public function cleanEntitiesCache()
+    {
+        if (!$this->isEmpty()) {
+            if ($this->getEntityType() === Rewrite::ENTITY_TYPE_CUSTOM) {
+                $urlRewrite = $this->getFinalTargetUrlRewrite(
+                    $this->getTargetPath(),
+                    (int)$this->getStoreId()
+                );
+
+                if ($urlRewrite) {
+                    $this->cleanCacheForEntity($urlRewrite->getEntityType(), (int) $urlRewrite->getEntityId());
+                }
+
+                if ($this->getOrigData() && $this->getOrigData('target_path') !== $this->getTargetPath()) {
+                    $origUrlRewrite = $this->getFinalTargetUrlRewrite(
+                        $this->getOrigData('target_path'),
+                        (int)$this->getOrigData('store_id')
+                    );
+
+                    if ($origUrlRewrite) {
+                        $this->cleanCacheForEntity(
+                            $origUrlRewrite->getEntityType(),
+                            (int) $origUrlRewrite->getEntityId()
+                        );
+                    }
+                }
+            } else {
+                $this->cleanCacheForEntity($this->getEntityType(), (int) $this->getEntityId());
+            }
+        }
+    }
+
+    /**
+     * Clean cache for specified entity type by id
+     *
+     * @param string $entityType
+     * @param int $entityId
+     */
+    private function cleanCacheForEntity(string $entityType, int $entityId)
+    {
+        if (array_key_exists($entityType, $this->entityToCacheTagMap)) {
+            $cacheKey = $this->entityToCacheTagMap[$entityType];
+            $this->cacheContext->registerEntities($cacheKey, [$entityId]);
+            $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterDelete()
+    {
+        $this->_getResource()->addCommitCallback([$this, 'cleanEntitiesCache']);
+        return parent::afterDelete();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterSave()
+    {
+        $this->_getResource()->addCommitCallback([$this, 'cleanEntitiesCache']);
+        return parent::afterSave();
     }
 }

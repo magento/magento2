@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEnhancedMediaGalleryDeleteImagesInBulkTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1488"/>
+            <title value="User deletes images with less clicks"/>
+            <stories value="[Story #42] User deletes images in bulk"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/4753539"/>
+            <description value="User deletes images with less clicks"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+            <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
+                <argument name="category" value="$$category$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCategoryFolder">
+                <argument name="name" value="category"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
+            <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandCategoryFolder">
+                <argument name="FolderName" value="category"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolder">
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteCreatedFolder"/>
+        </after>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+            <argument name="image" value="ImageUpload"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadSecondImage">
+            <argument name="image" value="ImageUpload_1"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToVerifyMode"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryAssertMassActionModeDetailsActionGroup" stepKey="assertMassActionModeAvailable">
+            <argument name="imageName" value="{{ImageUpload.fileName}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryDisableMassactionModeActionGroup" stepKey="disableMassActionMode"/>
+
+        <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectFirstImageToDelete">
+            <argument name="imageName" value="{{ImageUpload.fileName}}"/>
+         </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectSecondImageToDelete">
+            <argument name="imageName" value="{{ImageUpload_1.fileName}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryAssertImagesDeletedInBulkActionGroup" stepKey="assertImagesDeleted">
+            <argument name="numberOfAssetsDeleted" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryAssertMassActionModeNotActiveActionGroup" stepKey="assertMassectionModeDisabled"/>
+    </test>
+</tests>

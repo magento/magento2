@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="MediaGallerySection">
+        <element name="Browse" type="button" selector=".tox-browse-url"/>
+        <element name="browseForImage" type="button" selector="#srcbrowser"/>
+        <element name="BrowseUploadImage" type="file" selector=".fileupload"/>
+        <element name="image" type="text" selector="//small[text()='{{var1}}']" parameterized="true"/>
+        <element name="imageOrImageCopy" type="text" selector="//div[contains(@class,'media-gallery-modal')]//img[contains(@alt, '{{arg1}}.{{arg2}}')]|//img[contains(@alt,'{{arg1}}_') and contains(@alt,'.{{arg2}}')]" parameterized="true"/>
+        <element name="lastImageOrImageCopy" type="text" selector="(//div[contains(@class,'media-gallery-modal')]//img[contains(@alt, '{{arg1}}.{{arg2}}')]|//img[contains(@alt,'{{arg1}}_') and contains(@alt,'.{{arg2}}')])[last()]" parameterized="true"/>
+        <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
+        <element name="ImageSource" type="input" selector=".mce-combobox.mce-abs-layout-item.mce-last.mce-has-open"/>
+        <element name="ImageDescription" type="input" selector="//label[text()='Alternative description']/parent::div//input"/>
+        <element name="ImageDescriptionTinyMCE" type="input" selector="#alt" />
+        <element name="Height" type="input" selector="//label[text()='Height']/parent::div//input"/>
+        <element name="UploadImage" type="file" selector=".fileupload"/>
+        <element name="OkBtn" type="button" selector=".tox-dialog__footer button[title='Save']"/>
+        <element name="insertBtn" type="button" selector="#insert"/>
+        <element name="InsertFile" type="text" selector="#insert_files" timeout="30"/>
+        <element name="CreateFolder" type="button" selector="#new_folder" timeout="30"/>
+        <element name="DeleteFolder" type="button" selector="#delete_folder"/>
+        <element name="DeleteSelectedBtn" type="button" selector="#delete_files" timeout="30"/>
+        <element name="CancelBtn" type="button" selector="#cancel"/>
+        <element name="FolderName" type="button" selector="input[data-role='promptField']"/>
+        <element name="FolderContainer" type="button" selector="div[data-role='tree']"/>
+        <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept"/>
+        <element name="StorageRootArrow" type="button" selector="#root &gt; .jstree-icon"/>
+        <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]"/>
+        <element name="WysiwygArrow" type="button" selector="#d3lzaXd5Zw-- &gt; .jstree-icon"/>
+        <element name="checkIfWysiwygArrowExpand" type="button" selector="//li[@id='d3lzaXd5Zw--' and contains(@class,'jstree-closed')]"/>
+        <element name="confirmDelete" type="button" selector=".action-primary.action-accept"/>
+        <element name="imageBlockByName" type="block" selector="//div[@data-row='file'][contains(., '{{imageName}}')]" parameterized="true"/>
+        <element name="insertEditImageModalWindow" type="block" selector=".mce-floatpanel.mce-window[aria-label='Insert/edit image']"/>
+        <element name="mediaGalleryFolderTreeIconCollapsed" type="button" parameterized="true" selector="//li[a[text()='{{folderName}}' and @aria-expanded='false']]/i"/>
+        <element name="mediaGalleryFolderTreeIconExpanded" type="button" parameterized="true" selector="//li[a[text()='{{folderName}}' and @aria-expanded='true']]/i"/>
+        <element name="mediaGalleryModal" type="block" selector="//aside[contains(@class,'_show')]//div[@class='media-gallery-container' or @class='media-gallery-modal']"/>
+    </section>
+</sections>

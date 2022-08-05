@@ -3,27 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Validation;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
+use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Creditmemo\Validation\QuantityValidator;
+use Magento\Sales\Model\Order\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class QuantityValidatorTest
- */
-class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
+class QuantityValidatorTest extends TestCase
 {
     /**
-     * @var OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRepositoryInterface|MockObject
      */
     private $orderRepositoryMock;
 
     /**
-     * @var InvoiceRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceRepositoryInterface|MockObject
      */
     private $invoiceRepositoryMock;
 
@@ -40,7 +43,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
@@ -114,7 +117,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $creditmemoMock->expects($this->exactly(2))->method('getOrderId')
             ->willReturn($orderId);
         $creditmemoItemMock = $this->getMockBuilder(
-            \Magento\Sales\Api\Data\CreditmemoItemInterface::class
+            CreditmemoItemInterface::class
         )->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $creditmemoItemMock->expects($this->once())->method('getOrderItemId')
@@ -144,7 +147,6 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
                     'The creditmemo contains product SKU "%1" that is not part of the original order.',
                     $creditmemoItemSku
                 ),
-                __('You can\'t create a creditmemo without products.')
             ],
             $this->validator->validate($creditmemoMock)
         );
@@ -156,11 +158,21 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
      * @param int $qtyToRequest
      * @param int $qtyToRefund
      * @param string $sku
+     * @param int $total
      * @param array $expected
+     * @param bool $isQtyDecimalAllowed
      * @dataProvider dataProviderForValidateQty
      */
-    public function testValidate($orderId, $orderItemId, $qtyToRequest, $qtyToRefund, $sku, $total, array $expected)
-    {
+    public function testValidate(
+        $orderId,
+        $orderItemId,
+        $qtyToRequest,
+        $qtyToRefund,
+        $sku,
+        $total,
+        array $expected,
+        bool $isQtyDecimalAllowed
+    ) {
         $creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -169,7 +181,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $creditmemoMock->expects($this->once())->method('getGrandTotal')
             ->willReturn($total);
         $creditmemoItemMock = $this->getMockBuilder(
-            \Magento\Sales\Api\Data\CreditmemoItemInterface::class
+            CreditmemoItemInterface::class
         )->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $creditmemoItemMock->expects($this->exactly(2))->method('getOrderItemId')
@@ -184,10 +196,12 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $orderItemMock->expects($this->exactly(2))->method('getQtyToRefund')
+        $orderItemMock->expects($this->any())->method('getIsQtyDecimal')
+            ->willReturn($isQtyDecimalAllowed);
+        $orderItemMock->expects($this->any())->method('getQtyToRefund')
             ->willReturn($qtyToRefund);
         $creditmemoItemMock->expects($this->any())->method('getQty')
             ->willReturn($qtyToRequest);
@@ -224,7 +238,33 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
                 'qtyToRefund' => 1,
                 'sku',
                 'total' => 15,
-                'expected' => []
+                'expected' => [],
+                'isQtyDecimalAllowed' => false
+            ],
+            [
+                'orderId' => 1,
+                'orderItemId' => 1,
+                'qtyToRequest' => 0,
+                'qtyToRefund' => 0,
+                'sku',
+                'total' => 15,
+                'expected' => [],
+                'isQtyDecimalAllowed' => false
+            ],
+            [
+                'orderId' => 1,
+                'orderItemId' => 1,
+                'qtyToRequest' => 1.5,
+                'qtyToRefund' => 3,
+                'sku',
+                'total' => 5,
+                'expected' => [
+                    __(
+                        'We found an invalid quantity to refund item "%1".',
+                        $sku
+                    )
+                ],
+                'isQtyDecimalAllowed' => false
             ],
             [
                 'orderId' => 1,
@@ -240,7 +280,8 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
                         $sku
                     ),
                     __('The credit memo\'s total must be positive.')
-                ]
+                ],
+                'isQtyDecimalAllowed' => false
             ],
         ];
     }

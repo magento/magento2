@@ -349,7 +349,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
             if ($user) {
                 $user->setHasAvailableResources(false);
             }
-            $action = '*/*/denied';
+            $action = '*/denied';
         }
         return $action;
     }
@@ -372,6 +372,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      *
      * @param mixed $scopeId
      * @return \Magento\Framework\UrlInterface
+     * @since 101.0.3
      */
     public function setScope($scopeId)
     {

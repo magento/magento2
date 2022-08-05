@@ -14,36 +14,35 @@
             <stories value="Create Admin User"/>
             <title value="Admin user should be able to create active admin user"/>
             <description value="Admin user should be able to create active admin user"/>
-            <testCaseId value=""/>
+            <testCaseId value="MC-33044"/>
             <severity value="CRITICAL"/>
             <group value="user"/>
             <group value="mtf_migrated"/>
+            <group value="cloud_smoke"/>
         </annotations>
-        <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
-        </before>
         <after>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
             <actionGroup ref="AdminDeleteUserActionGroup" stepKey="deleteUser">
                 <argument name="user" value="activeAdmin"/>
             </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
+        <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
         <actionGroup ref="AdminCreateUserWithRoleAndIsActiveActionGroup" stepKey="createAdminUser">
-            <argument name="role" value="genericAdminRole"/>
+            <argument name="user" value="activeAdmin"/>
+            <argument name="role" value="roleDefaultAdministrator"/>
+        </actionGroup>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMainAdmin"/>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToNewAdmin">
+            <argument name="username" value="{{activeAdmin.username}}"/>
+            <argument name="password" value="{{activeAdmin.password}}"/>
+        </actionGroup>
+        <amOnPage url="{{AdminUsersPage.url}}" stepKey="navigateToAdminUsersGrid"/>
+        <actionGroup ref="AssertAdminUserIsInGridActionGroup" stepKey="assertAdminIsInGrid">
             <argument name="user" value="activeAdmin"/>
         </actionGroup>
-        <actionGroup ref="logout" stepKey="logoutMasterAdmin"/>
-        <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
-        <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{activeAdmin.username}}" stepKey="fillUsername"/>
-        <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{activeAdmin.password}}" stepKey="fillPassword"/>
-        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
-        <closeAdminNotification stepKey="closeAdminNotification"/>
-        <amOnPage url="{{AdminUsersPage.url}}" stepKey="navigateToAdminUsersGrid"/>
-        <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{activeAdmin.username}}" stepKey="fillUsernameSearch"/>
-        <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearchButton"/>
-        <waitForPageLoad time="10" stepKey="wait1"/>
-        <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{activeAdmin.username}}" stepKey="seeFoundUsername"/>
-        <actionGroup ref="logout" stepKey="logoutCreatedUser"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutCreatedUser"/>
     </test>
 </tests>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Search/etc/search_request_merged.xsd">
+    <request query="filter_by_configurable_product_options" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="filter_by_configurable_product_options" boost="1">
+                <queryReference clause="must" ref="category"/>
+                <queryReference clause="must" ref="test_configurable"/>
+                <queryReference clause="must" ref="test_configurable_2"/>
+            </query>
+            <query xsi:type="filteredQuery" name="category">
+                <filterReference clause="must" ref="category_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="test_configurable">
+                <filterReference clause="must" ref="test_configurable_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="test_configurable_2">
+                <filterReference clause="must" ref="test_configurable_2_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="termFilter" name="category_filter" field="category_ids" value="$category_ids$"/>
+            <filter xsi:type="termFilter" name="test_configurable_filter" field="test_configurable" value="$test_configurable$"/>
+            <filter xsi:type="termFilter" name="test_configurable_2_filter" field="test_configurable_2" value="$test_configurable_2$"/>
+        </filters>
+        <aggregations/>
+        <from>0</from>
+        <size>10</size>
+    </request>
+</requests>

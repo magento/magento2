@@ -18,12 +18,13 @@
             <testCaseId value="MC-6416"/>
             <useCaseId value="MAGETWO-91569"/>
             <group value="importExport"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <actionGroup ref="AdminCheckDataForImportProductActionGroup" stepKey="adminImportProducts">
             <argument name="behavior" value="Add/Update"/>

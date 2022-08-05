@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSimpleProductZeroPriceTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create a Simple Product via Admin"/>
+            <title value="Admin should be able to create a product with zero price"/>
+            <description value="Admin should be able to create a product with zero price"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-89910"/>
+            <group value="product"/>
+        </annotations>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait1"/>
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillName">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductPriceFieldAndPressEnterOnProductEditPageActionGroup" stepKey="fillPrice">
+            <argument name="price" value="0"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="viewProduct">
+            <argument name="productUrl" value="{{SimpleProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait2"/>
+        <actionGroup ref="StorefrontAssertUpdatedProductPriceInStorefrontProductPageActionGroup" stepKey="seeZeroPrice">
+            <argument name="productName" value="{{SimpleProduct.name}}"/>
+            <argument name="expectedPrice" value="$0.00"/>
+        </actionGroup>
+    </test>
+</tests>

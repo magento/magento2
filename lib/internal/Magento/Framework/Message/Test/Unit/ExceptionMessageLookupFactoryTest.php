@@ -3,42 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Message\Test\Unit;
 
+use Magento\Framework\Message\Error;
+use Magento\Framework\Message\ExceptionMessageFactoryInterface;
+use Magento\Framework\Message\ExceptionMessageFactoryPool;
+use Magento\Framework\Message\ExceptionMessageLookupFactory;
+use Magento\Framework\Message\Factory;
 use Magento\Framework\Message\MessageInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ExceptionMessageLookupFactoryTest extends \PHPUnit\Framework\TestCase
+class ExceptionMessageLookupFactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Message\ExceptionMessageFactoryPool | \PHPUnit_Framework_MockObject_MockObject
+     * @var ExceptionMessageFactoryPool|MockObject
      */
     private $exceptionMessageFactoryPool;
 
     /**
-     * @var \Magento\Framework\Message\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|MockObject
      */
     private $messageFactory;
 
     /**
-     * @var \Magento\Framework\Message\ExceptionMessageLookupFactory
+     * @var ExceptionMessageLookupFactory
      */
     private $exceptionMessageLookupFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->exceptionMessageFactoryPool = $this->createPartialMock(
-            \Magento\Framework\Message\ExceptionMessageFactoryPool::class,
+            ExceptionMessageFactoryPool::class,
             ['getMessageFactory']
         );
 
         $this->messageFactory = $this->getMockBuilder(
-            \Magento\Framework\Message\Factory::class
+            Factory::class
         )
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->exceptionMessageLookupFactory = new \Magento\Framework\Message\ExceptionMessageLookupFactory(
+        $this->exceptionMessageLookupFactory = new ExceptionMessageLookupFactory(
             $this->exceptionMessageFactoryPool
         );
     }
@@ -49,7 +57,7 @@ class ExceptionMessageLookupFactoryTest extends \PHPUnit\Framework\TestCase
         $exception = new \Exception($exceptionMessage);
 
         $exceptionMessageFactory = $this->createMock(
-            \Magento\Framework\Message\ExceptionMessageFactoryInterface::class
+            ExceptionMessageFactoryInterface::class
         );
 
         $this->exceptionMessageFactoryPool->expects(
@@ -58,12 +66,12 @@ class ExceptionMessageLookupFactoryTest extends \PHPUnit\Framework\TestCase
             'getMessageFactory'
         )->with(
             $exception
-        )->will(
-            $this->returnValue($exceptionMessageFactory)
+        )->willReturn(
+            $exceptionMessageFactory
         );
 
         $messageError = $this->getMockBuilder(
-            \Magento\Framework\Message\Error::class
+            Error::class
         )->getMock();
 
         $this->messageFactory->expects($this->never())
@@ -72,7 +80,7 @@ class ExceptionMessageLookupFactoryTest extends \PHPUnit\Framework\TestCase
         $exceptionMessageFactory->expects($this->once())
             ->method('createMessage')
             ->with($exception, MessageInterface::TYPE_ERROR)
-            ->will($this->returnValue($messageError));
+            ->willReturn($messageError);
 
         $this->assertEquals($messageError, $this->exceptionMessageLookupFactory->createMessage($exception));
     }

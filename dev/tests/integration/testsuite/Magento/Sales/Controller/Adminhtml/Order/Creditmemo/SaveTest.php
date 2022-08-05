@@ -34,7 +34,7 @@ class SaveTest extends AbstractCreditmemoControllerTest
     public function testSendEmailOnCreditmemoSave(): void
     {
         $order = $this->prepareRequest(['creditmemo' => ['send_email' => true]]);
-        $this->dispatch('backend/sales/order_creditmemo/save');
+        $this->dispatch($this->uri);
 
         $this->assertSessionMessages(
             $this->equalTo([(string)__('You created the credit memo.')]),
@@ -69,7 +69,7 @@ class SaveTest extends AbstractCreditmemoControllerTest
         /** @var Order $existingOrder */
         $existingOrder = $this->_objectManager->create(Order::class)->loadByIncrementId('100000001');
         $items = $this->getOrderItems($existingOrder, 1);
-        $requestParams = [
+        $postParams = [
             'creditmemo' => [
                 'items' => $items,
                 'do_offline' => '1',
@@ -80,9 +80,9 @@ class SaveTest extends AbstractCreditmemoControllerTest
             ],
             'order_id' => $existingOrder->getId(),
         ];
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->getRequest()->setParams($requestParams);
-        $this->dispatch('backend/sales/order_creditmemo/save');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST)
+            ->setPostValue($postParams);
+        $this->dispatch($this->uri);
 
         /** @var Order $updatedOrder */
         $updatedOrder = $this->_objectManager->create(Order::class)
@@ -101,7 +101,7 @@ class SaveTest extends AbstractCreditmemoControllerTest
     {
         /** @var Order $existingOrder */
         $existingOrder = $this->_objectManager->create(Order::class)->loadByIncrementId('100000001');
-        $requestParams = [
+        $postParams = [
             'creditmemo' => [
                 'items' => $this->getOrderItems($existingOrder),
                 'do_offline' => '1',
@@ -112,9 +112,9 @@ class SaveTest extends AbstractCreditmemoControllerTest
             ],
             'order_id' => $existingOrder->getId(),
         ];
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->getRequest()->setParams($requestParams);
-        $this->dispatch('backend/sales/order_creditmemo/save');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST)
+            ->setPostValue($postParams);
+        $this->dispatch($this->uri);
 
         /** @var Order $updatedOrder */
         $updatedOrder = $this->_objectManager->create(Order::class)

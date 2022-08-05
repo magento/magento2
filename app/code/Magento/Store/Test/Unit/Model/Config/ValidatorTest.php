@@ -3,17 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model\Config;
 
 use Magento\Store\Model\Config\Validator;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Validator
  *
  * @see Validator
  */
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+class ValidatorTest extends TestCase
 {
     /**
      * @param array $data

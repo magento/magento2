@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateProductAttributeWithTextFieldActionGroup" extends="CreateProductAttributeActionGroup" insertAfter="checkRequired">
+        <annotations>
+            <description>EXTENDS: createProductAttribute. Fills in the Attribute Code and Default Value (Attribute Type: Text Field).</description>
+        </annotations>
+
+        <click stepKey="openAdvancedProperties" selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}"/>
+        <fillField stepKey="fillCode" selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{attribute.attribute_code}}"/>
+        <fillField stepKey="fillDefaultValue" selector="{{AdvancedAttributePropertiesSection.DefaultValueText}}" userInput="{{attribute.default_value}}"/>
+    </actionGroup>
+</actionGroups>

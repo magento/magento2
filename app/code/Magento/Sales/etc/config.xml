@@ -8,6 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <sales>
+            <general>
+                <hide_customer_ip>0</hide_customer_ip>
+            </general>
             <totals_sort>
                 <discount>20</discount>
                 <grand_total>100</grand_total>
@@ -111,5 +114,18 @@
                 <async_indexing>0</async_indexing>
             </grid>
         </dev>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <sales_logo_folder>sales/store/logo</sales_logo_folder>
+                    <sales_logo_html_folder>sales/store/logo_html</sales_logo_html_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
+        <customer>
+          <create_account>
+              <email_required_create_order>1</email_required_create_order>
+          </create_account>
+        </customer>
     </default>
 </config>

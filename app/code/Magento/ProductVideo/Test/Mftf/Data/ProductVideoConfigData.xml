@@ -13,7 +13,7 @@
         <requiredEntity type="youtube_api_key_config">YouTubeApiKey</requiredEntity>
     </entity>
     <entity name="YouTubeApiKey" type="youtube_api_key_config">
-        <data key="value">AIzaSyDwqDWuw1lra-LnpJL2Mr02DYuFmkuRSns</data>
+        <data key="value">AIzaSyAzWKu17L5BcpPwtcHMdVDLma2hHoJQb5w</data>
     </entity>
 
     <!-- default configuration used to restore Magento config -->

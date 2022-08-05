@@ -7,23 +7,33 @@ declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Block\Adminhtml\Sales\Coupons;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid;
+use Magento\Reports\Model\Item;
+use Magento\Reports\Model\ResourceModel\Report\Collection\Factory;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Test for class \Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid
  */
-class GridTest extends \PHPUnit\Framework\TestCase
+class GridTest extends TestCase
 {
     /**
-     * @var \Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid
+     * @var Grid
      */
     private $model;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Reports\Model\ResourceModel\Report\Collection\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|MockObject
      */
     private $resourceFactoryMock;
 
@@ -34,17 +44,17 @@ class GridTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMock();
         $this->resourceFactoryMock = $this
-            ->getMockBuilder(\Magento\Reports\Model\ResourceModel\Report\Collection\Factory::class)
+            ->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $aggregatedColumns = [1 => 'SUM(value)'];
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid::class,
+            Grid::class,
             [
                 '_storeManager' => $this->storeManagerMock,
                 '_aggregatedColumns' => $aggregatedColumns,
@@ -68,7 +78,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         int $collectionSize,
         bool $expectedCountTotals
     ): void {
-        $filterData = new \Magento\Framework\DataObject();
+        $filterData = new DataObject();
         $filterData->setData('report_type', $reportType);
         $filterData->setData('period_type', 'day');
         $filterData->setData('from', '2000-01-01');
@@ -84,7 +94,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $resourceCollectionName = $this->model->getResourceCollectionName();
         $collectionMock = $this->buildBaseCollectionMock($filterData, $resourceCollectionName, $collectionSize);
 
-        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $store = $this->getMockBuilder(StoreInterface::class)
             ->getMock();
         $this->storeManagerMock->method('getStores')
             ->willReturn([1 => $store]);
@@ -112,13 +122,13 @@ class GridTest extends \PHPUnit\Framework\TestCase
      * @param \Magento\Framework\DataObject $filterData
      * @param string $resourceCollectionName
      * @param int $collectionSize
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function buildBaseCollectionMock(
-        \Magento\Framework\DataObject $filterData,
+        DataObject $filterData,
         string $resourceCollectionName,
         int $collectionSize
-    ): \PHPUnit_Framework_MockObject_MockObject {
+    ): MockObject {
         $collectionMock = $this->getMockBuilder($resourceCollectionName)
             ->disableOriginalConstructor()
             ->getMock();
@@ -160,7 +170,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->method('getSize')
             ->willReturn($collectionSize);
         if ($collectionSize) {
-            $itemMock = $this->getMockBuilder(\Magento\Reports\Model\Item::class)
+            $itemMock = $this->getMockBuilder(Item::class)
                 ->disableOriginalConstructor()
                 ->getMock();
             $collectionMock->expects($this->once())

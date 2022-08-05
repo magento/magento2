@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSetNotifyBelowQtyValueActionGroup">
+        <annotations>
+            <description>Fills in the "Notify for Quantity Below" option in 'Advanced Inventory' panel on the Admin Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="qty" type="string"/>
+        </arguments>
+        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.notifyBelowQtyConfigSetting}}"
+                       stepKey="uncheckNotifyBelowQtyCheckBox"/>
+        <fillField selector="{{AdminProductFormAdvancedInventorySection.notifyBelowQty}}" userInput="{{qty}}"
+                   stepKey="fillNotifyBelowQty"/>
+    </actionGroup>
+</actionGroups>

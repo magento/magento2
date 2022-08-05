@@ -3,20 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Locks;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Customer\Controller\Adminhtml\Locks\Unlock;
 use Magento\Customer\Model\AuthenticationInterface;
+use Magento\Customer\Model\Data\Customer;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Customer\Controller\Adminhtml\Locks\Unlock testing
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UnlockTest extends \PHPUnit\Framework\TestCase
+class UnlockTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\App\Action\Context
+     * @var Context
      */
     protected $contextMock;
 
@@ -28,37 +39,37 @@ class UnlockTest extends \PHPUnit\Framework\TestCase
     protected $authenticationMock;
 
     /**
-     * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var  ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory
+     * @var ResultFactory
      */
     protected $resultFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect
+     * @var Redirect
      */
     protected $redirectMock;
 
     /**
-     * @var \Magento\Customer\Model\Data\Customer
+     * @var Customer
      */
     protected $customerDataMock;
 
     /**
-     * @var  \Magento\Customer\Controller\Adminhtml\Locks\Unlock
+     * @var  Unlock
      */
     protected $controller;
 
@@ -66,27 +77,27 @@ class UnlockTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->authenticationMock = $this->getMockBuilder(AuthenticationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getParam'])
             ->getMockForAbstractClass();
-        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->resultFactoryMock = $this->createPartialMock(
-            \Magento\Framework\Controller\ResultFactory::class,
+            ResultFactory::class,
             ['create']
         );
-        $this->redirectMock = $this->createPartialMock(\Magento\Backend\Model\View\Result\Redirect::class, ['setPath']);
-        $this->customerDataMock = $this->createMock(\Magento\Customer\Model\Data\Customer::class);
-        $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $this->redirectMock = $this->createPartialMock(Redirect::class, ['setPath']);
+        $this->customerDataMock = $this->createMock(Customer::class);
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->setMethods(['getObjectManager', 'getResultFactory', 'getMessageManager', 'getRequest'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -99,7 +110,7 @@ class UnlockTest extends \PHPUnit\Framework\TestCase
         $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($this->redirectMock);
 
         $this->controller = $this->objectManager->getObject(
-            \Magento\Customer\Controller\Adminhtml\Locks\Unlock::class,
+            Unlock::class,
             [
                 'context' => $this->contextMock,
                 'authentication' => $this->authenticationMock,
@@ -116,14 +127,14 @@ class UnlockTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with($this->equalTo('customer_id'))
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
         $this->authenticationMock->expects($this->once())->method('unlock')->with($customerId);
         $this->messageManagerMock->expects($this->once())->method('addSuccessMessage');
         $this->redirectMock->expects($this->once())
             ->method('setPath')
             ->with($this->equalTo('customer/index/edit'))
             ->willReturnSelf();
-        $this->assertInstanceOf(\Magento\Backend\Model\View\Result\Redirect::class, $this->controller->execute());
+        $this->assertInstanceOf(Redirect::class, $this->controller->execute());
     }
 
     /**
@@ -132,15 +143,15 @@ class UnlockTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithException()
     {
         $customerId = 1;
-        $phrase = new \Magento\Framework\Phrase('some error');
+        $phrase = new Phrase('some error');
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with($this->equalTo('customer_id'))
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
         $this->authenticationMock->expects($this->once())
             ->method('unlock')
             ->with($customerId)
-            ->willThrowException(new \Exception($phrase));
+            ->willThrowException(new \Exception((string)$phrase));
         $this->messageManagerMock->expects($this->once())->method('addErrorMessage');
         $this->controller->execute();
     }

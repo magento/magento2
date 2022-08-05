@@ -20,7 +20,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
             <!--Create product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
@@ -38,11 +38,14 @@
             </actionGroup>
 
             <!--Delete Attribute-->
-            <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="productDropDownAttribute"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create 2 store views-->
@@ -52,10 +55,13 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
             <argument name="customStore" value="customStoreFR"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Go to created product page and create new attribute-->
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="openAdminEditPage"/>
-        <actionGroup ref="AdminCreateAttributeWithValueWithTwoStoreViesFromProductPage" stepKey="createAttribute">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminEditPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateAttributeWithValueWithTwoStoreViesFromProductPageActionGroup" stepKey="createAttribute">
             <argument name="attributeName" value="{{productDropDownAttribute.attribute_code}}"/>
             <argument name="attributeType" value="Dropdown"/>
             <argument name="firstStoreViewName" value="{{customStoreEN.name}}"/>

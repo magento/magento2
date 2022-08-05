@@ -8,7 +8,10 @@ namespace Magento\Ui\DataProvider;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
+// phpcs:disable Magento2.Classes.AbstractApi
 /**
+ * @inheritdoc
+ *
  * @api
  * @since 100.0.2
  */
@@ -74,6 +77,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
+     * Return collection
+     *
      * @return AbstractCollection
      */
     public function getCollection()
@@ -112,6 +117,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
+     * Return Meta
+     *
      * @return array
      */
     public function getMeta()
@@ -127,28 +134,30 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
      */
     public function getFieldSetMetaInfo($fieldSetName)
     {
-        return isset($this->meta[$fieldSetName]) ? $this->meta[$fieldSetName] : [];
+        return $this->meta[$fieldSetName] ?? [];
     }
 
     /**
+     * Return fields meta info
+     *
      * @param string $fieldSetName
      * @return array
      */
     public function getFieldsMetaInfo($fieldSetName)
     {
-        return isset($this->meta[$fieldSetName]['children']) ? $this->meta[$fieldSetName]['children'] : [];
+        return $this->meta[$fieldSetName]['children'] ?? [];
     }
 
     /**
+     * Return field meta info
+     *
      * @param string $fieldSetName
      * @param string $fieldName
      * @return array
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
     {
-        return isset($this->meta[$fieldSetName]['children'][$fieldName])
-            ? $this->meta[$fieldSetName]['children'][$fieldName]
-            : [];
+        return $this->meta[$fieldSetName]['children'][$fieldName] ?? [];
     }
 
     /**
@@ -156,6 +165,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
+        // @phpstan-ignore-next-line as adding return statement cause of backward compatibility issue
         $this->getCollection()->addFieldToFilter(
             $filter->getField(),
             [$filter->getConditionType() => $filter->getValue()]
@@ -197,7 +207,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
-     * self::setOrder() alias
+     * Alias for self::setOrder()
      *
      * @param string $field
      * @param string $direction
@@ -258,6 +268,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->getCollection()->count();
@@ -270,7 +281,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
      */
     public function getConfigData()
     {
-        return isset($this->data['config']) ? $this->data['config'] : [];
+        return $this->data['config'] ?? [];
     }
 
     /**
@@ -288,7 +299,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
      * Retrieve all ids from collection
      *
      * @return int[]
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getAllIds()
     {

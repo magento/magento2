@@ -5,17 +5,22 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Model\File\Validator;
 
+use PHPUnit\Framework\TestCase;
+use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Phrase;
 
-class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
+class NotProtectedExtensionTest extends TestCase
 {
     /**
-     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
+     * @var NotProtectedExtension
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $_scopeConfig;
 
@@ -24,23 +29,21 @@ class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_protectedList = 'exe,php,jar';
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->_scopeConfig->expects(
             $this->atLeastOnce()
         )->method(
             'getValue'
         )->with(
-            $this->equalTo(
-                \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::XML_PATH_PROTECTED_FILE_EXTENSIONS
-            ),
-            $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-            $this->equalTo(null)
-        )->will(
-            $this->returnValue($this->_protectedList)
+            NotProtectedExtension::XML_PATH_PROTECTED_FILE_EXTENSIONS,
+            ScopeInterface::SCOPE_STORE,
+            null
+        )->willReturn(
+            $this->_protectedList
         );
-        $this->_model = new \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension($this->_scopeConfig);
+        $this->_model = new NotProtectedExtension($this->_scopeConfig);
     }
 
     public function testGetProtectedFileExtensions()
@@ -51,7 +54,7 @@ class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
     public function testInitialization()
     {
         $property = new \ReflectionProperty(
-            \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::class,
+            NotProtectedExtension::class,
             '_messageTemplates'
         );
         $property->setAccessible(true);
@@ -61,7 +64,7 @@ class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($defaultMess, $property->getValue($this->_model));
 
         $property = new \ReflectionProperty(
-            \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::class,
+            NotProtectedExtension::class,
             '_protectedFileExtensions'
         );
         $property->setAccessible(true);

@@ -75,7 +75,14 @@ $product->setTypeId(Type::TYPE_SIMPLE)
         ]
     )->setCanSaveCustomOptions(true)
     ->setHasOptions(true)
-    ->setCustomAttribute('test_configurable', 42);
+    ->setCustomAttribute(
+        'test_configurable',
+        Bootstrap::getObjectManager()
+            ->create(\Magento\Eav\Api\AttributeRepositoryInterface::class)
+            ->get('catalog_product', 'test_configurable')
+            ->getOptions()[1]
+            ->getValue()
+    );
 
 $oldOptions = [
     [

@@ -8,12 +8,12 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="persistent_session" resource="default" engine="innodb" comment="Persistent Session">
-        <column xsi:type="int" name="persistent_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="persistent_id" unsigned="true" nullable="false" identity="true"
                 comment="Session ID"/>
         <column xsi:type="varchar" name="key" nullable="false" length="50" comment="Unique cookie key"/>
-        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="true" identity="false"
                 comment="Customer ID"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Website ID"/>
         <column xsi:type="text" name="info" nullable="true" comment="Session Data"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
@@ -38,7 +38,7 @@
         </index>
     </table>
     <table name="quote" resource="checkout" comment="Sales Flat Quote">
-        <column xsi:type="smallint" name="is_persistent" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="is_persistent" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Is Quote Persistent"/>
     </table>
 </schema>

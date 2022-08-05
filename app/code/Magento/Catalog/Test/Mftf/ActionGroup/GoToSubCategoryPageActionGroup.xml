@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="GoToSubCategoryPageActionGroup">
+        <annotations>
+            <description>Goes to the Storefront page. Open the Parent Category menu in the Top Nav Menu. Click on a Subcategory. Validate that the Subcategory is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="parentCategory"/>
+            <argument name="subCategory"/>
+            <argument name="urlPath" type="string"/>
+        </arguments>
+
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName(parentCategory.name)}}" stepKey="moveMouseOnMainCategory"/>
+        <waitForElementVisible selector="{{StorefrontHeaderSection.NavigationCategoryByName(subCategory.name)}}" stepKey="waitForSubCategoryVisible"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(subCategory.name)}}" stepKey="goToCategory"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeInCurrentUrl url="{{urlPath}}.html" stepKey="checkUrl"/>
+        <seeInTitle userInput="{{subCategory.name}}" stepKey="assertCategoryNameInTitle"/>
+        <see userInput="{{subCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
+    </actionGroup>
+</actionGroups>

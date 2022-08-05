@@ -17,10 +17,15 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-63898"/>
             <group value="analytics"/>
+            <group value="pr_exclude"/>
         </annotations>
-
-        <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
-        <amOnPage url="{{AdminConfigGeneralAnalyticsPage.url}}" stepKey="amOnAdminConfig"/>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+        <actionGroup ref="AdminOpenConfigGeneralAnalyticsPageActionGroup" stepKey="amOnAdminConfig"/>
         <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Enable" stepKey="selectAdvancedReportingServiceEnabled"/>
         <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustryLabel}}" userInput="Industry" stepKey="seeAdvancedReportingIndustryLabel"/>
         <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustry}}" userInput="Apps and Games" stepKey="selectAdvancedReportingIndustry"/>

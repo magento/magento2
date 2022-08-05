@@ -14,7 +14,7 @@
             <stories value="Categories"/>
             <title value="Check that parent categories are showing products after enabling subcategories after fully reindex"/>
             <description value="Check that parent categories are showing products after enabling subcategories after fully reindex"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-97370"/>
             <useCaseId value="MAGETWO-96846"/>
             <group value="Catalog"/>
@@ -29,32 +29,36 @@
                 <requiredEntity createDataKey="simpleSubCategory"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryStorefront2"/>
-        <waitForPageLoad stepKey="waitForCategoryStorefront"/>
-        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct.name$$)}}" stepKey="dontSeeCreatedProduct"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="onCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoadAddProducts"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandAll"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$simpleSubCategory.name$$)}}" stepKey="clickOnCreatedSimpleSubCategoryBeforeDelete"/>
-        <waitForPageLoad stepKey="AdminCategoryEditPageLoad"/>
-        <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="EnableCategory"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryWithProducts"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <see userInput="You saved the category." stepKey="seeSuccessMessage"/>
+        <actionGroup ref="AssertStorefrontProductAbsentOnCategoryPageActionGroup" stepKey="doNotSeeProductOnCategoryPage">
+            <argument name="categoryUrlKey" value="$$createCategory.name$$"/>
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="openCreatedSubCategory">
+            <argument name="Category" value="$$simpleSubCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnableCategoryActionGroup" stepKey="enableCategory"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSuccessMessage"/>
 
         <!--Run re-index task-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value="catalog_product_price"/>
+        </actionGroup>
 
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryStorefront"/>
-        <waitForPageLoad stepKey="waitForCategoryStorefrontPage"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct.name$$)}}" stepKey="seeCreatedProduct"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openEnabledCategory">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeCreatedProduct">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
     </test>
 </tests>

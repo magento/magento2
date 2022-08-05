@@ -21,43 +21,46 @@
         <before>
             <!-- Create a Website -->
             <createData entity="customWebsite" stepKey="createWebsite"/>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <!-- Create Simple Product -->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete grouped product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="GroupedProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Delete Website -->
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteCreatedWebsite">
                 <argument name="websiteName" value="$createWebsite.website[name]$"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <!-- Delete simple product -->
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create new grouped product -->
-        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createGroupedProduct">
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createGroupedProduct">
             <argument name="productType" value="grouped"/>
         </actionGroup>
 
         <!-- Fill all main fields -->
-        <actionGroup ref="fillGroupedProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillGroupedProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
 
         <!-- Add simple product to the Group -->
-        <actionGroup ref="AdminAssignProductToGroup" stepKey="addFirstSimpleToGroup">
+        <actionGroup ref="AdminAssignProductToGroupActionGroup" stepKey="addFirstSimpleToGroup">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
@@ -70,7 +73,7 @@
         <actionGroup ref="AdminSetProductDesignSettingsActionGroup" stepKey="setProductDesignSettings"/>
 
         <!-- Save grouped product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Open created simple product -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
@@ -86,11 +89,11 @@
         </actionGroup>
 
         <!-- Save simple product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveBtn"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveBtn"/>
 
         <!-- Open grouped product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
-            <argument name="productUrl" value="{{GroupedProduct.sku}}"/>
+            <argument name="productUrl" value="{{GroupedProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert product design settings "left bar is present at product page with 2 columns" -->
@@ -100,7 +103,7 @@
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{ApiSimpleSingleQty.quantity}}" stepKey="fillFieldQtyInput"/>
 
         <!-- Assert Gift Option product settings is present -->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage6">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage6">
             <argument name="productName" value="GroupedProduct.name"/>
         </actionGroup>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart"/>
@@ -120,7 +123,7 @@
         </actionGroup>
 
         <!-- Assert product is assigned to websites -->
-        <actionGroup ref="AssertProductIsAssignedToWebsite" stepKey="seeCustomWebsiteIsChecked">
+        <actionGroup ref="AssertProductIsAssignedToWebsiteActionGroup" stepKey="seeCustomWebsiteIsChecked">
             <argument name="website" value="$createWebsite.website[name]$"/>
         </actionGroup>
 
@@ -135,7 +138,7 @@
         </actionGroup>
 
         <!-- Save grouped product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- Open created simple product -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct">
@@ -149,11 +152,11 @@
         <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="disableGiftMessageSettings"/>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveSimpleProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveSimpleProduct"/>
 
         <!-- Verify Url Key after changing -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
-            <argument name="productUrl" value="{{ApiGroupedProduct.name}}"/>
+            <argument name="productUrl" value="{{ApiGroupedProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert product design settings "right bar is present at the  product page with 2 columns" -->

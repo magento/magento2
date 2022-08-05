@@ -17,7 +17,8 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-249"/>
             <group value="ConfigurableProduct"/>
-            <group value="SearchEngineMysql"/>
+            <group value="SearchEngineElasticsearch"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
@@ -114,25 +115,24 @@
                 <requiredEntity createDataKey="createConfigProductAttributeSelect"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
             <!-- Go to the product page for the first product -->
-            <amOnPage stepKey="goToProductGrid" url="{{ProductCatalogPage.url}}"/>
-            <waitForPageLoad stepKey="waitForProductGridLoad"/>
-            <actionGroup stepKey="searchForSimpleProduct" ref="filterProductGridBySku2">
+            <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductGrid"/>
+            <actionGroup stepKey="searchForSimpleProduct" ref="FilterProductGridBySku2ActionGroup">
                 <argument name="sku" value="$$createConfigChildProduct1.sku$$"/>
             </actionGroup>
-            <actionGroup stepKey="openProductEditPage" ref="openProducForEditByClickingRowXColumnYInProductGrid"/>
+            <actionGroup stepKey="openProductEditPage" ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup"/>
 
             <!-- Edit the attribute for the first simple product -->
             <selectOption stepKey="editSelectAttribute" selector="{{ModifyAttributes.nthExistingAttribute($$createConfigProductAttributeSelect.default_frontend_label$$)}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$"/>
             <scrollToTopOfPage stepKey="scrollToTop"/>
-            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+            <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
             <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
@@ -140,11 +140,16 @@
             <deleteData createDataKey="createConfigProductAttributeMultiSelect" stepKey="deleteConfigProductAttributeMultiSelect"/>
             <deleteData createDataKey="createConfigProductAttributeSelect" stepKey="deleteConfigProductAttributeSelect"/>
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexAll"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+
         <!-- Quick search the storefront for the first attribute option -->
-        <amOnPage stepKey="goToStoreFront" url="{{StorefrontHomePage.url}}"/>
-        <waitForPageLoad stepKey="waitForStorefront"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
         <submitForm selector="#search_mini_form" parameterArray="['q' => $$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$]" stepKey="searchStorefront1" />
         <seeElement stepKey="seeProduct1" selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}"/>
 

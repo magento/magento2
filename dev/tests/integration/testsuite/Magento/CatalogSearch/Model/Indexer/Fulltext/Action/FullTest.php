@@ -7,7 +7,7 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\CatalogSearch\Model\ResourceModel\Engine;
+use Magento\CatalogSearch\Model\ResourceModel\EngineInterface as Engine;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Store\Model\Store;
@@ -20,13 +20,16 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class FullTest extends \PHPUnit\Framework\TestCase
 {
+    protected function setUp(): void
+    {
+        $this->markTestSkipped("MC-18332: Mysql Search Engine is deprecated and will be removed");
+    }
     /**
      * Testing fulltext index rebuild
      *
      * @magentoDataFixture Magento/CatalogSearch/_files/products_for_index.php
      * @magentoDataFixture Magento/CatalogSearch/_files/product_configurable_not_available.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable.php
-     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testGetIndexData()
     {
@@ -51,8 +54,8 @@ class FullTest extends \PHPUnit\Framework\TestCase
         $productsIds = array_keys($result);
         foreach ($productsIds as $productId) {
             $product = $productRepository->getById($productId);
-            $this->assertContains($product->getVisibility(), $allowedVisibility);
-            $this->assertContains($product->getStatus(), $allowedStatuses);
+            $this->assertContainsEquals($product->getVisibility(), $allowedVisibility);
+            $this->assertContainsEquals($product->getStatus(), $allowedStatuses);
         }
 
         $expectedData = $this->getExpectedIndexData();

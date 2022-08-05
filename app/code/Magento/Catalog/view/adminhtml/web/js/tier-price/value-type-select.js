@@ -19,8 +19,9 @@ define([
          * {@inheritdoc}
          */
         initialize: function () {
-            this._super()
-                .prepareForm();
+            this._super();
+            delete this.prices.__disableTmpl;
+            this.prepareForm();
         },
 
         /**

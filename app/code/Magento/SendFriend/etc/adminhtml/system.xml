@@ -16,7 +16,7 @@
                 <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enabled</label>
                     <comment>
-                        <![CDATA[We strongly recommend to enable a <a href="https://devdocs.magento.com/guides/v2.3/security/google-recaptcha.html" target="_blank">CAPTCHA solution</a> alongside enabling "Email to a Friend" to ensure abuse of this feature does not occur.]]>
+                        <![CDATA[We strongly recommend to enable a <a href="https://devdocs.magento.com/guides/v2.4/security/google-recaptcha.html" target="_blank">CAPTCHA solution</a> alongside enabling "Email to a Friend" to ensure abuse of this feature does not occur.]]>
                     </comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
@@ -24,22 +24,37 @@
                     <label>Select Email Template</label>
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
                 </field>
                 <field id="allow_guest" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Allow for Guests</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
                 </field>
                 <field id="max_recipients" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Max Recipients</label>
                     <frontend_class>validate-digits</frontend_class>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
                 </field>
                 <field id="max_per_hour" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Max Products Sent in 1 Hour</label>
                     <frontend_class>validate-digits</frontend_class>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
                 </field>
                 <field id="check_by" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Limit Sending By</label>
                     <source_model>Magento\SendFriend\Model\Source\Checktype</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
                 </field>
             </group>
         </section>

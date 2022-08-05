@@ -11,11 +11,6 @@ namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Setup;
 use Magento\CatalogSearch\Model\ResourceModel\Setup\PropertyMapper;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class PropertyMapperTest
- *
- * @package Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Setup
- */
 class PropertyMapperTest extends TestCase
 {
     /**

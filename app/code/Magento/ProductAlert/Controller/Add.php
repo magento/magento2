@@ -10,6 +10,9 @@ use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Abstract controller for notifying.
+ */
 abstract class Add extends Action
 {
     /**
@@ -39,8 +42,8 @@ abstract class Add extends Action
     {
         if (!$this->customerSession->authenticate()) {
             $this->_actionFlag->set('', 'no-dispatch', true);
-            if (!$this->customerSession->getBeforeUrl()) {
-                $this->customerSession->setBeforeUrl($this->_redirect->getRefererUrl());
+            if (!$this->customerSession->getBeforeAuthUrl()) {
+                $this->customerSession->setBeforeAuthUrl($this->_redirect->getRefererUrl());
             }
         }
         return parent::dispatch($request);

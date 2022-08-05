@@ -45,7 +45,7 @@ class SimplePolicyHeaderRenderer implements PolicyRendererInterface
             $header = 'Content-Security-Policy';
         }
         $value = $policy->getId() .' ' .$policy->getValue() .';';
-        if ($config->getReportUri()) {
+        if ($config->getReportUri() && !$response->getHeader('Report-To')) {
             $reportToData = [
                 'group' => 'report-endpoint',
                 'max_age' => 10886400,
@@ -57,7 +57,10 @@ class SimplePolicyHeaderRenderer implements PolicyRendererInterface
             $value .= ' report-to '. $reportToData['group'] .';';
             $response->setHeader('Report-To', json_encode($reportToData), true);
         }
-        $response->setHeader($header, $value, false);
+        if ($existing = $response->getHeader($header)) {
+            $value = $value .' ' .$existing->getFieldValue();
+        }
+        $response->setHeader($header, $value, true);
     }
 
     /**

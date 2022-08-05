@@ -12,14 +12,15 @@
             <stories value="MAGETWO-91649: #13513: Magento ignore store-level url_key of child category in URL rewrite process for global scope"/>
             <description value="Rewriting Store-level URL key of child category"/>
             <features value="CatalogUrlRewrite"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-94934"/>
             <group value="CatalogUrlRewrite"/>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <createData entity="_defaultCategory" stepKey="defaultCategory"/>
             <createData entity="SubCategoryWithParent" stepKey="subCategory">
@@ -27,30 +28,29 @@
             </createData>
         </before>
 
-        <actionGroup ref="navigateToCreatedCategory" stepKey="navigateToCreatedSubCategory">
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="navigateToCreatedSubCategory">
             <argument name="Category" value="$$subCategory$$"/>
         </actionGroup>
 
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchStoreViewForSubCategory"/>
 
-        <actionGroup ref="ChangeSeoUrlKeyForSubCategory" stepKey="changeSeoUrlKeyForSubCategory">
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyForSubCategory">
             <argument name="value" value="bags-second"/>
         </actionGroup>
 
-        <actionGroup ref="navigateToCreatedCategory" stepKey="navigateToCreatedDefaultCategory">
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="navigateToCreatedDefaultCategory">
             <argument name="Category" value="$$defaultCategory$$"/>
         </actionGroup>
 
-        <actionGroup ref="ChangeSeoUrlKey" stepKey="changeSeoUrlKeyForDefaultCategory">
+        <actionGroup ref="ChangeSeoUrlKeyActionGroup" stepKey="changeSeoUrlKeyForDefaultCategory">
             <argument name="value" value="gear-global"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
 
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="storefrontSwitchStoreView"/>
 
-        <actionGroup ref="GoToSubCategoryPage" stepKey="goToSubCategoryPage">
+        <actionGroup ref="GoToSubCategoryPageActionGroup" stepKey="goToSubCategoryPage">
             <argument name="parentCategory" value="$$defaultCategory$$"/>
             <argument name="subCategory" value="$$subCategory$$"/>
             <argument name="urlPath" value="gear-global/bags-second"/>
@@ -58,7 +58,8 @@
 
         <after>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <deleteData createDataKey="subCategory" stepKey="deleteSubCategory"/>
             <deleteData createDataKey="defaultCategory" stepKey="deleteNewRootCategory"/>

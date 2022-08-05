@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat\Plugin;
 
 use Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Indexer\Model\Config\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IndexerConfigDataTest extends \PHPUnit\Framework\TestCase
+class IndexerConfigDataTest extends TestCase
 {
     /**
      * @var IndexerConfigData
@@ -18,16 +22,16 @@ class IndexerConfigDataTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     protected $stateMock;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stateMock = $this->createPartialMock(State::class, ['isFlatEnabled']);
         $this->subjectMock = $this->createMock(Data::class);
@@ -44,7 +48,7 @@ class IndexerConfigDataTest extends \PHPUnit\Framework\TestCase
      */
     public function testAroundGet($isFlat, $path, $default, $inputData, $outputData)
     {
-        $this->stateMock->expects($this->once())->method('isFlatEnabled')->will($this->returnValue($isFlat));
+        $this->stateMock->expects($this->once())->method('isFlatEnabled')->willReturn($isFlat);
         $this->assertEquals($outputData, $this->model->afterGet($this->subjectMock, $inputData, $path, $default));
     }
 

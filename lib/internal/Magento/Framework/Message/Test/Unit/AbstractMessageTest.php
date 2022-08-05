@@ -3,19 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Message\Test\Unit;
+
+use Magento\Framework\Message\AbstractMessage;
+use Magento\Framework\Phrase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * \Magento\Framework\Message\AbstractMessage test case
  */
-class AbstractMessageTest extends \PHPUnit\Framework\TestCase
+class AbstractMessageTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Message\AbstractMessage
+     * @var AbstractMessage
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new TestingMessage();
     }
@@ -36,7 +42,7 @@ class AbstractMessageTest extends \PHPUnit\Framework\TestCase
      */
     public function setTextGetTextProvider()
     {
-        return [['', ''], ['some text', 'some text'], [new \Magento\Framework\Phrase('some text'), 'some text']];
+        return [['', ''], ['some text', 'some text'], [new Phrase('some text'), 'some text']];
     }
 
     /**

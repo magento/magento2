@@ -27,7 +27,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_customerSession = $this->objectManager->get(\Magento\Customer\Model\Session::class);
@@ -40,7 +40,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->get(\Magento\Framework\App\ViewInterface::class)->setIsLayoutLoaded(true);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_customerSession->unsCustomerId();
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */

@@ -48,7 +48,9 @@ class BoldMixin implements DescriptionMixinInterface
 
         return $this->wordWrapper->wrapWords(
             $text,
-            $this->randomWordSelector->getRandomWords($rawText, random_int(5, 8)),
+            // mt_rand() here is not for cryptographic use.
+            // phpcs:ignore Magento2.Security.InsecureFunction
+            $this->randomWordSelector->getRandomWords($rawText, mt_rand(5, 8)),
             '<b>%s</b>'
         );
     }

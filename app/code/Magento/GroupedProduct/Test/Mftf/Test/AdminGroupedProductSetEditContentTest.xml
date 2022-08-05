@@ -21,20 +21,21 @@
         </annotations>
         <after>
             <!-- Delete grouped product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="GroupedProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         </after>
 
         <!-- Create product -->
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
-        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
 
         <!--Checking content storefront-->
-        <amOnPage url="{{GroupedProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{GroupedProduct.urlKey}}.html" stepKey="goToStorefront"/>
     </test>
 </tests>

@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -28,25 +28,27 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteSimpleProductFilteredBySkuAndName">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteSimpleProductFilteredBySkuAndName">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="deleteMessage"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         <!--Verify product on product page -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeWhoops">
+            <argument name="value" value="Whoops, our bad..."/>
+        </actionGroup>
         <!-- Search for the product by sku -->
-        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createSimpleProduct.sku$$" stepKey="fillSearchBarByProductSku"/>
-        <waitForPageLoad stepKey="waitForSearchButton"/>
-        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
-        <waitForPageLoad stepKey="waitForSearchResults"/>
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchByCreatedTerm">
+            <argument name="query" value="$$createSimpleProduct.sku$$"/>
+        </actionGroup>
         <!-- Should not see any search results -->
         <dontSee userInput="$$createSimpleProduct.sku$$" selector="{{StorefrontCatalogSearchMainSection.searchResults}}" stepKey="dontSeeProduct"/>
         <see selector="{{StorefrontCatalogSearchMainSection.message}}" userInput="Your search returned no results." stepKey="seeCantFindProductOneMessage"/>
         <!-- Go to the category page that we created in the before block -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
         <!-- Should not see the product -->
         <dontSee userInput="$$createSimpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeProductInCategory"/>
         <see selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" userInput="We can't find products matching the selection." stepKey="seeEmptyProductMessage"/>

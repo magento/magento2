@@ -161,7 +161,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Get rating summary
      *
-     * @deprecated
+     * @deprecated 100.3.3
      * @return array
      */
     public function getRatingSummary()

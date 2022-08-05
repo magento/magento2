@@ -18,24 +18,25 @@
             <testCaseId value="MC-17031"/>
             <useCaseId value="MAGETWO-45666"/>
             <group value="catalog"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Create category, flush cache and log in -->
             <comment userInput="Create category, flush cache and log in" stepKey="createCategoryAndLogIn"/>
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="logInAsAdmin"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logInAsAdmin"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Delete category and log out -->
             <comment userInput="Delete category and log out" stepKey="deleteCategoryAndLogOut"/>
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logOutFromAdmin"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOutFromAdmin"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
         <!-- Navigate to category details page -->
         <comment userInput="Navigate to category details page" stepKey="navigateToAdminCategoryPage"/>
-        <actionGroup ref="goToAdminCategoryPageById" stepKey="goToAdminCategoryPage">
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPage">
             <argument name="id" value="$$simpleCategory.id$$"/>
         </actionGroup>
         <!-- Open design tab and set layout -->

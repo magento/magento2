@@ -14,30 +14,30 @@
             <stories value="Create simple product with two custom options" />
             <title value="Admin should be able to create simple product with two custom options"/>
             <description value="Admin should be able to create simple product with two custom options"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-248"/>
             <group value="Catalog"/>
         </annotations>
         <before>
             <!-- log in as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create product-->
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-            <waitForPageLoad stepKey="waitForProductIndexPage"/>
-            <actionGroup ref="goToCreateProductPage" stepKey="goToCreateSimpleProduct">
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateSimpleProduct">
                 <argument name="product" value="SimpleProduct3"/>
             </actionGroup>
-            <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillSimpleProductMain">
+            <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillSimpleProductMain">
                 <argument name="product" value="SimpleProduct3"/>
             </actionGroup>
         </before>
         <after>
             <!-- Delete the created product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="SimpleProduct3"/>
             </actionGroup>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- opens the custom option panel and clicks add options -->
@@ -45,27 +45,29 @@
         <waitForPageLoad stepKey="waitForCustomOptionsOpen"/>
 
         <!-- Create a custom option with 2 values -->
-        <actionGroup ref="CreateCustomRadioOptions" stepKey="createCustomOption1">
+        <actionGroup ref="CreateCustomRadioOptionsActionGroup" stepKey="createCustomOption1">
             <argument name="customOptionName" value="ProductOptionRadiobutton.title"/>
             <argument name="productOption" value="ProductOptionField"/>
             <argument name="productOption2" value="ProductOptionField2"/>
         </actionGroup>
 
         <!-- Create another custom option with 2 values -->
-        <actionGroup ref="CreateCustomRadioOptions" stepKey="createCustomOption2">
+        <actionGroup ref="CreateCustomRadioOptionsActionGroup" stepKey="createCustomOption2">
             <argument name="customOptionName" value="ProductOptionRadiobutton.title"/>
             <argument name="productOption" value="ProductOptionField"/>
             <argument name="productOption2" value="ProductOptionField2"/>
         </actionGroup>
 
         <!-- Save the product -->
-        <click stepKey="saveProduct" selector="{{AdminProductFormActionSection.saveButton}}"/>
-        <waitForPageLoad stepKey="waitForProductSaved"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+        <comment userInput="BIC workaround" stepKey="waitForProductSaved"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccess"/>
 
         <!-- navigate to the created product page -->
-        <amOnPage url="/{{SimpleProduct3.name}}.html" stepKey="goToCreatedProduct"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToCreatedProduct">
+            <argument name="productUrl" value="{{SimpleProduct3.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForProductPageLoad"/>
 
         <!-- Check to make sure all of the created names are there -->
         <see stepKey="assertNameInFirstOption" selector="{{StorefrontProductInfoMainSection.nthCustomOption('1')}}" userInput="{{ProductOptionField.title}}"/>

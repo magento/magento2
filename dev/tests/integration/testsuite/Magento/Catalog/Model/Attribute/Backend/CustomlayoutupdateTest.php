@@ -49,7 +49,7 @@ class CustomlayoutupdateTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->categoryFactory = Bootstrap::getObjectManager()->get(CategoryFactory::class);
         $this->recreateCategory();

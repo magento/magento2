@@ -6,11 +6,9 @@
 /**
  * @api
  */
-/* global WeakMap */
 define([
     'jquery',
-    'underscore',
-    'es6-collections'
+    'underscore'
 ], function ($, _) {
     'use strict';
 

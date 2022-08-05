@@ -12,9 +12,8 @@ namespace Magento\Framework\Mail\Template;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
-use Magento\Framework\Mail\EmailMessageInterface;
-use Magento\Framework\Mail\EmailMessageInterfaceFactory;
 use Magento\Framework\Mail\AddressConverter;
+use Magento\Framework\Mail\EmailMessageInterfaceFactory;
 use Magento\Framework\Mail\Exception\InvalidArgumentException;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\MessageInterfaceFactory;
@@ -28,10 +27,11 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
 /**
- * TransportBuilder
+ * TransportBuilder for Mail Templates
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class TransportBuilder
 {
@@ -243,7 +243,7 @@ class TransportBuilder
      * @throws InvalidArgumentException
      * @see setFromByScope()
      *
-     * @deprecated This function sets the from address but does not provide
+     * @deprecated 102.0.1 This function sets the from address but does not provide
      * a way of setting the correct from addresses based on the scope.
      */
     public function setFrom($from)
@@ -260,6 +260,7 @@ class TransportBuilder
      * @return $this
      * @throws InvalidArgumentException
      * @throws MailException
+     * @since 102.0.1
      */
     public function setFromByScope($from, $scopeId = null)
     {
@@ -380,11 +381,11 @@ class TransportBuilder
 
         switch ($template->getType()) {
             case TemplateTypesInterface::TYPE_TEXT:
-                $part['type'] = MimeInterface::TYPE_TEXT;
+                $partType = MimeInterface::TYPE_TEXT;
                 break;
 
             case TemplateTypesInterface::TYPE_HTML:
-                $part['type'] = MimeInterface::TYPE_HTML;
+                $partType = MimeInterface::TYPE_HTML;
                 break;
 
             default:
@@ -394,7 +395,12 @@ class TransportBuilder
         }
 
         /** @var \Magento\Framework\Mail\MimePartInterface $mimePart */
-        $mimePart = $this->mimePartInterfaceFactory->create(['content' => $content]);
+        $mimePart = $this->mimePartInterfaceFactory->create(
+            [
+                'content' => $content,
+                'type' => $partType
+            ]
+        );
         $this->messageData['encoding'] = $mimePart->getCharset();
         $this->messageData['body'] = $this->mimeMessageInterfaceFactory->create(
             ['parts' => [$mimePart]]

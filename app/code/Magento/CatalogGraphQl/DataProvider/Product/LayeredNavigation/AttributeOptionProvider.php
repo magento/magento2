@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
+use Magento\Store\Model\Store;
 
 /**
  * Fetch product attribute option data including attribute info
@@ -41,16 +43,18 @@ class AttributeOptionProvider
      * Get option data. Return list of attributes with option data
      *
      * @param array $optionIds
+     * @param int|null $storeId
      * @param array $attributeCodes
      * @return array
      * @throws \Zend_Db_Statement_Exception
      */
-    public function getOptions(array $optionIds, array $attributeCodes = []): array
+    public function getOptions(array $optionIds, ?int $storeId, array $attributeCodes = []): array
     {
         if (!$optionIds) {
             return [];
         }
 
+        $storeId = $storeId ?: Store::DEFAULT_STORE_ID;
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
             ->from(
@@ -59,7 +63,20 @@ class AttributeOptionProvider
                     'attribute_id' => 'a.attribute_id',
                     'attribute_code' => 'a.attribute_code',
                     'attribute_label' => 'a.frontend_label',
+                    'position' => 'attribute_configuration.position'
                 ]
+            )
+            ->joinLeft(
+                ['attribute_label' => $this->resourceConnection->getTableName('eav_attribute_label')],
+                "a.attribute_id = attribute_label.attribute_id AND attribute_label.store_id = {$storeId}",
+                [
+                    'attribute_store_label' => 'attribute_label.value',
+                ]
+            )
+            ->joinLeft(
+                ['attribute_configuration' => $this->resourceConnection->getTableName('catalog_eav_attribute')],
+                'a.attribute_id = attribute_configuration.attribute_id',
+                []
             )
             ->joinLeft(
                 ['options' => $this->resourceConnection->getTableName('eav_attribute_option')],
@@ -70,9 +87,23 @@ class AttributeOptionProvider
                 ['option_value' => $this->resourceConnection->getTableName('eav_attribute_option_value')],
                 'options.option_id = option_value.option_id',
                 [
-                    'option_label' => 'option_value.value',
                     'option_id' => 'option_value.option_id',
                 ]
+            )->joinLeft(
+                ['option_value_store' => $this->resourceConnection->getTableName('eav_attribute_option_value')],
+                "options.option_id = option_value_store.option_id AND option_value_store.store_id = {$storeId}",
+                [
+                    'option_label' => $connection->getCheckSql(
+                        'option_value_store.value_id > 0',
+                        'option_value_store.value',
+                        'option_value.value'
+                    )
+                ]
+            )->where(
+                'a.attribute_id = options.attribute_id AND option_value.store_id = ?',
+                Store::DEFAULT_STORE_ID
+            )->order(
+                'options.sort_order ' . Select::SQL_ASC
             );
 
         $select->where('option_value.option_id IN (?)', $optionIds);
@@ -90,11 +121,11 @@ class AttributeOptionProvider
     /**
      * Format result
      *
-     * @param \Magento\Framework\DB\Select $select
+     * @param Select $select
      * @return array
      * @throws \Zend_Db_Statement_Exception
      */
-    private function formatResult(\Magento\Framework\DB\Select $select): array
+    private function formatResult(Select $select): array
     {
         $statement = $this->resourceConnection->getConnection()->query($select);
 
@@ -104,11 +135,15 @@ class AttributeOptionProvider
                 $result[$option['attribute_code']] = [
                     'attribute_id' => $option['attribute_id'],
                     'attribute_code' => $option['attribute_code'],
-                    'attribute_label' => $option['attribute_label'],
+                    'attribute_label' => $option['attribute_store_label']
+                        ? $option['attribute_store_label'] : $option['attribute_label'],
+                    'position' => $option['position'],
                     'options' => [],
                 ];
             }
-            $result[$option['attribute_code']]['options'][$option['option_id']] = $option['option_label'];
+            if (!empty($option['option_id'])) {
+                $result[$option['attribute_code']]['options'][$option['option_id']] = $option['option_label'];
+            }
         }
 
         return $result;

@@ -13,8 +13,11 @@ use Magento\Authorization\Model\Acl\Role\User as RoleUser;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Acl\Data\CacheInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\User\Model\Backend\Config\ObserverConfig;
 use Magento\User\Model\User as ModelUser;
+use Magento\Framework\Encryption\EncryptorInterface;
 
 /**
  * ACL user resource
@@ -48,6 +51,11 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $observerConfig;
 
     /**
+     * @var EncryptorInterface|null
+     */
+    private $encryptor;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -56,6 +64,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $connectionName
      * @param CacheInterface $aclDataCache
      * @param ObserverConfig|null $observerConfig
+     * @param EncryptorInterface|null $encryptor
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -63,13 +72,15 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null,
         CacheInterface $aclDataCache = null,
-        ObserverConfig $observerConfig = null
+        ObserverConfig $observerConfig = null,
+        EncryptorInterface $encryptor = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_roleFactory = $roleFactory;
         $this->dateTime = $dateTime;
         $this->aclDataCache = $aclDataCache ?: ObjectManager::getInstance()->get(CacheInterface::class);
         $this->observerConfig = $observerConfig ?: ObjectManager::getInstance()->get(ObserverConfig::class);
+        $this->encryptor = $encryptor ?? ObjectManager::getInstance()->get(EncryptorInterface::class);
     }
 
     /**
@@ -145,7 +156,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         if (is_numeric($user)) {
             $userId = $user;
-        } elseif ($user instanceof \Magento\Framework\Model\AbstractModel) {
+        } elseif ($user instanceof AbstractModel) {
             $userId = $user->getUserId();
         } else {
             return null;
@@ -171,17 +182,37 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * @inheritDoc
+     */
+    protected function _beforeSave(AbstractModel $user)
+    {
+        if ($user->hasRoleId()) {
+            $user->setReloadAclFlag(1);
+        }
+        if ($user->getData('rp_token')) {
+            $rpToken = $user->getData('rp_token');
+            $user->setRpToken($this->encryptor->encrypt($rpToken));
+        }
+
+        return parent::_beforeSave($user);
+    }
+
+    /**
      * Unserialize user extra data after user save
      *
-     * @param \Magento\Framework\Model\AbstractModel $user
+     * @param AbstractModel $user
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $user)
+    protected function _afterSave(AbstractModel $user)
     {
         $user->setExtra($this->getSerializer()->unserialize($user->getExtra()));
         if ($user->hasRoleId()) {
             $this->_clearUserRoles($user);
             $this->_createUserRole($user->getRoleId(), $user);
+        }
+        if ($user->getData('rp_token')) {
+            $rpToken = $user->getData('rp_token');
+            $user->setRpToken($this->encryptor->decrypt($rpToken));
         }
         return $this;
     }
@@ -233,13 +264,17 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Unserialize user extra data after user load
      *
-     * @param \Magento\Framework\Model\AbstractModel $user
+     * @param AbstractModel $user
      * @return $this
      */
-    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $user)
+    protected function _afterLoad(AbstractModel $user)
     {
         if (is_string($user->getExtra())) {
             $user->setExtra($this->getSerializer()->unserialize($user->getExtra()));
+        }
+        if ($user->getData('rp_token')) {
+            $rpToken = $user->getData('rp_token');
+            $user->setRpToken($this->encryptor->decrypt($rpToken));
         }
         return parent::_afterLoad($user);
     }
@@ -247,16 +282,19 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Delete user role record with user
      *
-     * @param \Magento\Framework\Model\AbstractModel $user
+     * @param AbstractModel $user
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    public function delete(\Magento\Framework\Model\AbstractModel $user)
+    public function delete(AbstractModel $user)
     {
+        $uid = $user->getId();
+        if (!$uid) {
+            return false;
+        }
+
         $this->_beforeDelete($user);
         $connection = $this->getConnection();
-
-        $uid = $user->getId();
         $connection->beginTransaction();
         try {
             $connection->delete($this->getMainTable(), ['user_id = ?' => $uid]);
@@ -264,22 +302,25 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $this->getTable('authorization_role'),
                 ['user_id = ?' => $uid, 'user_type = ?' => UserContextInterface::USER_TYPE_ADMIN]
             );
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $connection->rollBack();
+
             return false;
         }
+
         $connection->commit();
         $this->_afterDelete($user);
+
         return true;
     }
 
     /**
      * Get user roles
      *
-     * @param \Magento\Framework\Model\AbstractModel $user
+     * @param AbstractModel $user
      * @return array
      */
-    public function getRoles(\Magento\Framework\Model\AbstractModel $user)
+    public function getRoles(AbstractModel $user)
     {
         if (!$user->getId()) {
             return [];
@@ -317,10 +358,10 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Delete user role
      *
-     * @param \Magento\Framework\Model\AbstractModel $user
+     * @param AbstractModel $user
      * @return $this
      */
-    public function deleteFromRole(\Magento\Framework\Model\AbstractModel $user)
+    public function deleteFromRole(AbstractModel $user)
     {
         if ($user->getUserId() <= 0) {
             return $this;
@@ -344,10 +385,10 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Check if role user exists
      *
-     * @param \Magento\Framework\Model\AbstractModel $user
+     * @param AbstractModel $user
      * @return array
      */
-    public function roleUserExists(\Magento\Framework\Model\AbstractModel $user)
+    public function roleUserExists(AbstractModel $user)
     {
         if ($user->getUserId() > 0) {
             $roleTable = $this->getTable('authorization_role');
@@ -374,10 +415,10 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Check if user exists
      *
-     * @param \Magento\Framework\Model\AbstractModel $user
+     * @param AbstractModel $user
      * @return array
      */
-    public function userExists(\Magento\Framework\Model\AbstractModel $user)
+    public function userExists(AbstractModel $user)
     {
         $connection = $this->getConnection();
         $select = $connection->select();
@@ -402,10 +443,10 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Whether a user's identity is confirmed
      *
-     * @param \Magento\Framework\Model\AbstractModel $user
+     * @param AbstractModel $user
      * @return bool
      */
-    public function isUserUnique(\Magento\Framework\Model\AbstractModel $user)
+    public function isUserUnique(AbstractModel $user)
     {
         return !$this->userExists($user);
     }
@@ -413,7 +454,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Save user extra data
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @param string $data
      * @return $this
      */

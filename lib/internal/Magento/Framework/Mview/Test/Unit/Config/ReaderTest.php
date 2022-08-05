@@ -3,44 +3,57 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Mview\Test\Unit\Config;
 
-class ReaderTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\FileResolver;
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Config\ValidationStateInterface;
+use Magento\Framework\Mview\Config\Converter;
+use Magento\Framework\Mview\Config\Reader;
+use Magento\Framework\Mview\Config\SchemaLocator;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ReaderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Mview\Config\Reader
+     * @var Reader
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Mview\Config\Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Converter|MockObject
      */
     protected $_converter;
 
     /**
-     * @var \Magento\Framework\App\Config\FileResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileResolver|MockObject
      */
     protected $_fileResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_fileResolverMock = $this->createPartialMock(\Magento\Framework\App\Config\FileResolver::class, ['get']);
+        $this->_fileResolverMock = $this->createPartialMock(FileResolver::class, ['get']);
 
-        $this->_converter = $this->createPartialMock(\Magento\Framework\Mview\Config\Converter::class, ['convert']);
+        $this->_converter = $this->createPartialMock(Converter::class, ['convert']);
 
-        $urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
+        $urnResolverMock = $this->createMock(UrnResolver::class);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
             ->with('urn:magento:framework:Mview/etc/mview.xsd')
             ->willReturn('test_folder');
-        $schemaLocator = new \Magento\Framework\Mview\Config\SchemaLocator($urnResolverMock);
+        $schemaLocator = new SchemaLocator($urnResolverMock);
 
-        $validationState = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationState = $this->getMockForAbstractClass(ValidationStateInterface::class);
         $validationState->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(false);
 
-        $this->_model = new \Magento\Framework\Mview\Config\Reader(
+        $this->_model = new Reader(
             $this->_fileResolverMock,
             $this->_converter,
             $schemaLocator,
@@ -60,16 +73,16 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         )->with(
             'mview.xml',
             'scope'
-        )->will(
-            $this->returnValue($files)
+        )->willReturn(
+            $files
         );
 
         $constraint = function (\DOMDocument $actual) use ($expectedFile) {
             try {
                 $expected = file_get_contents(__DIR__ . '/../_files/' . $expectedFile);
-                \PHPUnit\Framework\Assert::assertXmlStringEqualsXmlString($expected, $actual->saveXML());
+                Assert::assertXmlStringEqualsXmlString($expected, $actual->saveXML());
                 return true;
-            } catch (\PHPUnit\Framework\AssertionFailedError $e) {
+            } catch (AssertionFailedError $e) {
                 return false;
             }
         };
@@ -80,8 +93,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             'convert'
         )->with(
             $this->callback($constraint)
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         $this->assertSame($expectedResult, $this->_model->read('scope'));

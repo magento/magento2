@@ -10,29 +10,34 @@
         <section id="web">
             <group id="cookie" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Default Cookie Settings</label>
-                <field id="cookie_lifetime" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="cookie_lifetime" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Cookie Lifetime</label>
                     <backend_model>Magento\Cookie\Model\Config\Backend\Lifetime</backend_model>
+                    <comment>Enter the Cookie Lifetime in seconds.</comment>
+                    <validate>validate-number</validate>
                 </field>
-                <field id="cookie_path" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="cookie_path" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Cookie Path</label>
                     <backend_model>Magento\Cookie\Model\Config\Backend\Path</backend_model>
+                    <comment>Enter a valid cookie path. e.g. /</comment>
                 </field>
-                <field id="cookie_domain" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="cookie_domain" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Cookie Domain</label>
                     <backend_model>Magento\Cookie\Model\Config\Backend\Domain</backend_model>
+                    <comment>Enter a valid domain name. e.g. "subdomain.yourdomain.com", ".yourdomain.com"</comment>
                 </field>
                 <field id="cookie_httponly" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Use HTTP Only</label>
                     <comment>
-                        <![CDATA[<strong style="color:red">Warning</strong>:  Do not set to "No". User security could be compromised.]]>
+                        <![CDATA[<strong class="colorRed">Warning</strong>:  Do not set to "No". User security could be compromised.]]>
                     </comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="cookie_restriction" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="cookie_restriction" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Cookie Restriction Mode</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Cookie\Model\Config\Backend\Cookie</backend_model>
+                    <comment>When Cookie Restriction Mode is enabled, visitors to your store are notified that cookies are required for full-featured operations.</comment>
                 </field>
             </group>
         </section>

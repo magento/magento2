@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductImportOptionsSection">
+        <element name="selectProductTitle" type="text" selector="//aside[contains(@class, 'product_form_product_form_import_options_modal')]//h1[contains(text(), 'Select Product')]" timeout="30"/>
+        <element name="filterButton" type="button" selector="aside.product_form_product_form_import_options_modal button[data-action='grid-filter-expand']" timeout="30"/>
+        <element name="nameField" type="input" selector="aside.product_form_product_form_import_options_modal input[name='name']" timeout="30"/>
+        <element name="applyFiltersButton" type="button" selector="aside.product_form_product_form_import_options_modal button[data-action='grid-filter-apply']" timeout="30"/>
+        <element name="resetFiltersButton" type="button" selector="aside.product_form_product_form_import_options_modal button[data-action='grid-filter-reset']" timeout="30"/>
+        <element name="firstRowItemCheckbox" type="input" selector="aside.product_form_product_form_import_options_modal input[data-action='select-row']" timeout="30"/>
+        <element name="importButton" type="button" selector="//aside[contains(@class, 'product_form_product_form_import_options_modal')]//button[contains(@class, 'action-primary')]/span[contains(text(), 'Import')]" timeout="30"/>
+    </section>
+</sections>

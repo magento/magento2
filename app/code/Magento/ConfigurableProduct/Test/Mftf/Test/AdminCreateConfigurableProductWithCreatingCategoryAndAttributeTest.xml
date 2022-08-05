@@ -19,43 +19,47 @@
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete configurable product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="ApiConfigurableProduct"/>
             </actionGroup>
 
             <!-- Delete children products -->
-            <actionGroup ref="deleteProductBySku" stepKey="deleteFirstChildProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstChildProduct">
                 <argument name="sku" value="{{colorConfigurableProductAttribute1.sku}}"/>
             </actionGroup>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteSecondChildProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondChildProduct">
                 <argument name="sku" value="{{colorConfigurableProductAttribute2.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Delete product attribute -->
-            <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteProductAttribute">
-                <argument name="ProductAttribute" value="colorProductAttribute"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>
+            <comment userInput="BIC workaround" stepKey="reindex"/>
 
-            <!-- Delete attribute set -->
-            <actionGroup ref="deleteAttributeSetByLabel" stepKey="deleteAttributeSet">
+            <!-- Delete attribute set  & reindex-->
+            <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteAttributeSet">
                 <argument name="label" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex2">
+                <argument name="indices" value=""/>
             </actionGroup>
 
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create configurable product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="createConfigurableProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
@@ -72,42 +76,39 @@
         <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
 
         <!--Create new attribute with two option -->
-        <actionGroup ref="addNewProductConfigurationAttribute" stepKey="createProductConfigurationAttribute">
+        <actionGroup ref="AddNewProductConfigurationAttributeActionGroup" stepKey="createProductConfigurationAttribute">
             <argument name="attribute" value="colorProductAttribute"/>
             <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
             <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
         </actionGroup>
 
         <!-- Change product configurations in grid -->
-        <actionGroup ref="changeProductConfigurationsInGrid" stepKey="changeProductConfigurationsInGrid">
+        <actionGroup ref="ChangeProductConfigurationsInGridActionGroup" stepKey="changeProductConfigurationsInGrid">
             <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
             <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
         </actionGroup>
 
         <!-- Save configurable product; add product to new attribute set -->
-        <actionGroup ref="saveConfigurableProductWithNewAttributeSet" stepKey="saveConfigurableProduct"/>
+        <actionGroup ref="SaveConfigurableProductWithNewAttributeSetActionGroup" stepKey="saveConfigurableProduct"/>
 
         <!-- Find configurable product in grid -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
-        <waitForPageLoad stepKey="waitForAdminProductPageLoad"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedConfigurableProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
         <!-- Assert configurable product on admin product page -->
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <actionGroup ref="assertConfigurableProductOnAdminProductPage" stepKey="assertConfigurableProductOnAdminProductPage">
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage"/>
+        <actionGroup ref="AssertConfigurableProductOnAdminProductPageActionGroup" stepKey="assertConfigurableProductOnAdminProductPage">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
-        <!-- Flash cache -->
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!--Assert configurable product in category -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <actionGroup ref="StorefrontCheckCategoryConfigurableProduct" stepKey="assertConfigurableProductInCategory">
+        <actionGroup ref="StorefrontCheckCategoryConfigurableProductActionGroup" stepKey="assertConfigurableProductInCategory">
             <argument name="product" value="ApiConfigurableProduct"/>
             <argument name="optionProduct" value="colorConfigurableProductAttribute1"/>
         </actionGroup>
@@ -115,7 +116,7 @@
         <!--Assert configurable product on product page -->
         <amOnPage url="{{ApiConfigurableProduct.urlKey}}.html" stepKey="amOnProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <actionGroup ref="storefrontCheckConfigurableProductOptions" stepKey="checkConfigurableProductOptions">
+        <actionGroup ref="StorefrontCheckConfigurableProductOptionsActionGroup" stepKey="checkConfigurableProductOptions">
             <argument name="product" value="ApiConfigurableProduct"/>
             <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
             <argument name="secondOption" value="colorConfigurableProductAttribute2"/>

@@ -65,18 +65,18 @@ class CustomerGroupConfigTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
         } catch (\Exception $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception does not contain expected message."
             );
-            $this->assertContains((string)$customerGroupId, $e->getMessage());
+            $this->assertStringContainsString((string)$customerGroupId, $e->getMessage());
         }
     }
 }

@@ -17,16 +17,17 @@
             <severity value="MAJOR"/>
             <group value="customer"/>
             <group value="create"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set customer/create_account/viv_disable_auto_group_assign_default 1" stepKey="setConfigDefaultIsYes"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         </before>
         <after>
             <magentoCLI command="config:set customer/create_account/viv_disable_auto_group_assign_default 0" stepKey="setConfigDefaultIsNo"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <actionGroup ref="AdminNavigateNewCustomerActionGroup" stepKey="navigateToNewCustomer"/>

@@ -15,23 +15,39 @@
             <description value="Testing for a required tracking number when adding new shipping information"/>
             <severity value="CRITICAL"/>
             <group value="shipping"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
+            <createData entity="Shipment" stepKey="shipOrder">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="CreateOrderActionGroup" stepKey="goToCreateOrderPage">
-            <argument name="customer" value="$$createCustomer$$"/>
-            <argument name="product" value="$$createSimpleProduct$$"/>
-        </actionGroup>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
-        <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="createShipmentForOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToCreateOrderPage"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="openOrdersGrid"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createCustomerCart.return$)}}" stepKey="orderId"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="createShipmentForOrder"/>
         <actionGroup ref="FilterShipmentGridByOrderIdActionGroup" stepKey="filterForNewlyCreatedShipment">
             <argument name="orderId" value="$orderId"/>
         </actionGroup>

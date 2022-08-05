@@ -21,7 +21,7 @@
             <!--Set Display out of stock product-->
             <magentoCLI stepKey="setDisplayOutOfStockProduct" command="config:set cataloginventory/options/show_out_of_stock 1" />
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!--Create Category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <!--Create Simple Product-->
@@ -33,45 +33,54 @@
             <!-- Delete created entity -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI stepKey="setDisplayOutOfStockProduct" command="config:set cataloginventory/options/show_out_of_stock 0" />
         </after>
         <!--Open Product Index Page and filter the product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct">
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
         <!-- Update product Advanced Inventory Setting -->
-        <click stepKey="openSelectedProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
-        <waitForPageLoad stepKey="waitForProductToLoad"/>
-        <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="clickOnAdvancedInventoryLink"/>
-        <waitForPageLoad stepKey="waitForAdvancedInventoryPageToLoad"/>
-        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="uncheckConfigSetting"/>
-        <selectOption selector="{{AdminProductFormAdvancedInventorySection.manageStock}}"  userInput="Yes" stepKey="clickOnManageStock"/>
-        <fillField selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryQty}}" userInput="5" stepKey="fillProductQty"/>
-        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.miniQtyConfigSetting}}" stepKey="uncheckMiniQtyCheckBox"/>
-        <fillField selector="{{AdminProductFormAdvancedInventorySection.miniQtyAllowedInCart}}" userInput="1" stepKey="fillMiniAllowedQty"/>
-        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.maxiQtyConfigSetting}}" stepKey="uncheckMaxQtyCheckBox"/>
-        <fillField selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCart}}" userInput="10000" stepKey="fillMaxAllowedQty"/>
-        <selectOption selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" userInput="Yes" stepKey="selectQuantityUsesDecimal"/>
-        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.notifyBelowQtyConfigSetting}}" stepKey="uncheckNotifyBelowQtyCheckBox"/>
-        <fillField selector="{{AdminProductFormAdvancedInventorySection.notifyBelowQty}}" userInput="1" stepKey="fillNotifyBelowQty"/>
-        <selectOption selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryStockStatus}}" userInput="Out of Stock" stepKey="selectOutOfStock"/>
-        <click stepKey="clickOnDoneButton" selector="{{AdminProductFormAdvancedInventorySection.doneButton}}"/>
-        <waitForPageLoad stepKey="waitForProductPageToLoad"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="clickOnSaveButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
-
-        <!--Run re-index task -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProduct"/>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
+        <actionGroup ref="AdminSetManageStockConfigActionGroup" stepKey="setManageStockConfig">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillAdvancedInventoryQtyActionGroup" stepKey="fillProductQty">
+            <argument name="qty" value="5"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetMinAllowedQtyForProductActionGroup" stepKey="fillMiniAllowedQty">
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetMaxAllowedQtyForProductActionGroup" stepKey="fillMaxAllowedQty">
+            <argument name="qty" value="1000"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetQtyUsesDecimalsConfigActionGroup" stepKey="setQtyUsesDecimalsConfig">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetNotifyBelowQtyValueActionGroup" stepKey="fillNotifyBelowQty">
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetStockStatusConfigActionGroup" stepKey="selectOutOfStock">
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickDoneButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!--Verify product is visible in category front page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="openCategoryStoreFrontPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="seeCategoryInFrontPage"/>
-        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="clickOnCategory"/>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductNameInCategoryPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCatergoryNameInStoreFront">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="selectCategory">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductName">
+            <argument name="productName" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
     </test>
 </tests>

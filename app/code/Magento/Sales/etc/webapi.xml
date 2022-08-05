@@ -253,7 +253,7 @@
             <resource ref="Magento_Sales::ship" />
         </resources>
     </route>
-    <route url="/V1/orders/" method="POST">
+    <route url="/V1/orders" method="POST">
         <service class="Magento\Sales\Api\OrderRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Sales::create" />

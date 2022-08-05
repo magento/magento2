@@ -6,6 +6,7 @@
 declare(strict_types=1);
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var \Magento\Framework\Registry $registry */
@@ -22,7 +23,7 @@ if ($attribute->getId()) {
     $attribute->delete();
 }
 
-require __DIR__ . '/product_with_fpt_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Weee/_files/product_with_fpt_rollback.php');
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

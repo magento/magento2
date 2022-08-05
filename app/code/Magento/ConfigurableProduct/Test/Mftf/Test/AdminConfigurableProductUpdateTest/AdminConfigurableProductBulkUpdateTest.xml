@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductBulkUpdateTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create, Read, Update, Delete"/>
+            <title value="admin should be able to bulk update attributes of configurable products"/>
+            <description value="admin should be able to bulk update attributes of configurable products"/>
+            <testCaseId value="MC-88"/>
+            <group value="ConfigurableProduct"/>
+            <severity value="BLOCKER"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiConfigurableProduct" stepKey="createProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiConfigurableProduct" stepKey="createProduct3">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct1" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createProduct3" stepKey="deleteThirdProduct"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Search for prefix of the 3 products we created via api -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clearAll"/>
+        <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchForProduct">
+            <argument name="keyword" value="ApiConfigurableProduct.name"/>
+        </actionGroup>
+
+        <!-- Select all, then start the bulk update attributes flow -->
+        <click selector="{{AdminProductGridSection.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
+        <click selector="{{AdminProductGridSection.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGrid"/>
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickBulkUpdate"/>
+        <waitForPageLoad stepKey="wait2"/>
+
+        <!-- Update the description -->
+        <click selector="{{AdminUpdateAttributesSection.toggleDescription}}" stepKey="clickToggleDescription"/>
+        <fillField selector="{{AdminUpdateAttributesSection.description}}" userInput="MFTF automation!" stepKey="fillDescription"/>
+        <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="clickSave"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" time="60" stepKey="waitForSuccessMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeAttributeUpdateSuccessMsg">
+            <argument name="message" value="Message is added to queue"/>
+        </actionGroup>
+
+        <!-- Apply changes -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminProductAttributeUpdateMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminProductAttributeUpdateMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
+
+        <!-- Check storefront for description -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToFirstProductPageOnStorefront">
+            <argument name="product" value="$createProduct1$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForFirstProductPageLoad"/>
+        <actionGroup ref="AssertStorefrontProductDescriptionActionGroup" stepKey="seeFirstDescription">
+            <argument name="productDescription" value="MFTF automation!"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToSecondProductPageOnStorefront">
+            <argument name="product" value="$createProduct2$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSecondProductPageLoad"/>
+        <actionGroup ref="AssertStorefrontProductDescriptionActionGroup" stepKey="seeSecondDescription">
+            <argument name="productDescription" value="MFTF automation!"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToThirdProductPageOnStorefront">
+            <argument name="product" value="$createProduct3$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForThirdProductPageLoad"/>
+        <actionGroup ref="AssertStorefrontProductDescriptionActionGroup" stepKey="seeThirdDescription">
+            <argument name="productDescription" value="MFTF automation!"/>
+        </actionGroup>
+    </test>
+</tests>

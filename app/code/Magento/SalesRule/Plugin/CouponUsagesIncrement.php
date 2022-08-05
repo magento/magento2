@@ -7,11 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Plugin;
 
-use Magento\Sales\Model\Order;
-use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteManagement;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\SalesRule\Model\Coupon\Quote\UpdateCouponUsages;
 
 /**
- * Increments number of coupon usages after placing order.
+ * Increments number of coupon usages before placing order
  */
 class CouponUsagesIncrement
 {
@@ -23,24 +26,35 @@ class CouponUsagesIncrement
     /**
      * @param UpdateCouponUsages $updateCouponUsages
      */
-    public function __construct(
-        UpdateCouponUsages $updateCouponUsages
-    ) {
+    public function __construct(UpdateCouponUsages $updateCouponUsages)
+    {
         $this->updateCouponUsages = $updateCouponUsages;
     }
 
     /**
-     * Increments number of coupon usages after placing order.
+     * Increments number of coupon usages before placing order
      *
-     * @param Order $subject
-     * @param Order $result
-     * @return Order
+     * @param QuoteManagement $subject
+     * @param \Closure $proceed
+     * @param Quote $quote
+     * @param array $orderData
+     * @return OrderInterface|null
+     * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterPlace(Order $subject, Order $result): Order
+    public function aroundSubmit(QuoteManagement $subject, \Closure $proceed, Quote $quote, $orderData = [])
     {
-        $this->updateCouponUsages->execute($subject, true);
+        /* if coupon code has been canceled then need to notify the customer */
+        if (!$quote->getCouponCode() && $quote->dataHasChangedFor('coupon_code')) {
+            throw new NoSuchEntityException(__("The coupon code isn't valid. Verify the code and try again."));
+        }
 
-        return $subject;
+        $this->updateCouponUsages->execute($quote, true);
+        try {
+            return $proceed($quote, $orderData);
+        } catch (\Throwable $e) {
+            $this->updateCouponUsages->execute($quote, false);
+            throw $e;
+        }
     }
 }

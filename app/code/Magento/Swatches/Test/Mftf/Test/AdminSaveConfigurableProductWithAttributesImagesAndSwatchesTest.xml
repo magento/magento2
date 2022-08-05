@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create a new product attribute -->
             <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="openProductAttributePage"/>
@@ -33,18 +33,18 @@
             <!-- Add a few Swatches and add images to Manage Swatch (Values of Your Attribute)
              1. Set swatch #1 using the color picker -->
             <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddFirstSwatch"/>
-            <actionGroup ref="openSwatchMenuByIndex" stepKey="clickFirstSwatch">
+            <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickFirstSwatch">
                 <argument name="index" value="0"/>
             </actionGroup>
             <click selector="{{AdminManageSwatchSection.nthChooseColor('1')}}" stepKey="clickChooseColor"/>
-            <actionGroup ref="setColorPickerByHex" stepKey="fillFirstHex">
+            <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillFirstHex">
                 <argument name="nthColorPicker" value="1"/>
                 <argument name="hexColor" value="e74c3c"/>
             </actionGroup>
             <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}" userInput="red" stepKey="fillFirstAdminField"/>
             <!-- Set swatch #2 using upload file -->
             <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSecondSwatch"/>
-            <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch2">
+            <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch2">
                 <argument name="index" value="1"/>
             </actionGroup>
             <click selector="{{AdminManageSwatchSection.nthUploadFile('2')}}" stepKey="clickUploadFile2"/>
@@ -59,37 +59,44 @@
         </before>
         <after>
             <!-- Delete product attribute and clear grid filter -->
-            <actionGroup ref="deleteProductAttributeByAttributeCode" stepKey="deleteProductAttribute">
-                <argument name="ProductAttributeCode" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
+                <argument name="productAttributeCode" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
             </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeByAttributeCode">
+                <argument name="productAttributeCode" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearAttributesGridFilter"/>
             <!--Clear products grid filter-->
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearProductsGridFilter"/>
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Add created product attribute to the Default set -->
         <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
         <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
-        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
             <argument name="group" value="Product Details"/>
             <argument name="attribute" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
         </actionGroup>
-        <actionGroup ref="SaveAttributeSet" stepKey="saveAttributeSet"/>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
 
         <!-- Create configurable product -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
         <!-- Fill all the necessary information such as weight, name, SKU etc -->
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
         <!-- Click "Create Configurations" button, select created product attribute using the same Quantity for all products. Click "Generate products" button -->
-        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="addAttributeToProduct">
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="addAttributeToProduct">
             <argument name="attributeCode" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
         </actionGroup>
         <!-- Using this action to concatenate 2 strings to have unique identifier for grid -->
@@ -100,11 +107,12 @@
         <attachFile selector="{{AdminDataGridTableSection.rowTemplate({$attributeCodeAdobeSmall})}}{{AdminProductFormConfigurationsSection.fileUploaderInput}}" userInput="{{TestImageAdobe.file}}" stepKey="uploadImageForSecondProduct"/>
 
         <!-- Click "Save" button -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Delete all created product -->
-        <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProducts">
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProducts">
             <argument name="sku" value="{{ApiConfigurableProduct.sku}}"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

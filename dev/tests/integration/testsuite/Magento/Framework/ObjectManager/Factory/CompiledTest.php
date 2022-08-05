@@ -14,6 +14,9 @@ use Magento\Framework\ObjectManager\TestAsset\HasOptionalParameters;
 use Magento\Framework\ObjectManager\TestAsset\InterfaceImplementation;
 use Magento\Framework\ObjectManager\TestAsset\TestAssetInterface;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class CompiledTest extends AbstractFactoryRuntimeDefinitionsTestCases
 {
     /**

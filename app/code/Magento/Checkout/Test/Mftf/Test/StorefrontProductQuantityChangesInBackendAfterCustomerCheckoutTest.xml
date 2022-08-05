@@ -18,7 +18,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <magentoCLI command="config:set {{EnablePaymentBankTransferConfigData.path}} {{EnablePaymentBankTransferConfigData.value}}" stepKey="enableBankTransferPayment"/>
             <magentoCLI command="config:set {{EnableCatalogInventoryConfigData.path}} {{EnableCatalogInventoryConfigData.value}}" stepKey="enableCatalogInventoryStock"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct">
@@ -28,11 +28,11 @@
         <after>
             <magentoCLI command="config:set {{DisablePaymentBankTransferConfigData.path}} {{DisablePaymentBankTransferConfigData.value}}" stepKey="enableGuestCheckout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Product page in StoreFront and assert product and price range -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 
@@ -42,20 +42,18 @@
         </actionGroup>
 
         <!--Open View and edit -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickMiniCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
 
         <!-- Fill the Estimate Shipping and Tax section -->
         <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
         <!-- Fill Customer Sign In Information -->
         <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillGuestForm">
             <argument name="customer" value="UKCustomer"/>
             <argument name="customerAddress" value="updateCustomerUKAddress"/>
         </actionGroup>
-        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="selectBankTransfer"/>
 
@@ -63,15 +61,14 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
 
         <!-- Assert empty Mini Cart -->
-        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <seeElement selector="{{StorefrontMinicartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
 
         <!-- Open Order Index Page -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
 
         <!-- Filter Order using orderId and assert order-->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$orderId"/>
         </actionGroup>
         <click selector="{{AdminOrdersGridSection.viewLink('$orderId')}}" stepKey="clickOnViewLink"/>
@@ -88,7 +85,7 @@
         <actionGroup ref="AdminAssertOrderAvailableButtonsActionGroup" stepKey="assertOrderButtons"/>
 
         <!-- Assert Product Quantity in backend reduced after order processed -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct">
             <argument name="productSku" value="$$simpleProduct.sku$$"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad"/>
@@ -97,7 +94,7 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="seeProductStockStatus"/>
 
         <!-- Assert Product is Out of Stock in frontend -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="assertProductInStorefront">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="assertProductInStorefront">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="Out Of Stock" stepKey="seeProductDisplayedAsOutOfStock"/>

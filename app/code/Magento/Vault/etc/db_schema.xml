@@ -8,9 +8,9 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="vault_payment_token" resource="default" engine="innodb" comment="Vault tokens of payment">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="true" identity="false"
                 comment="Customer ID"/>
         <column xsi:type="varchar" name="public_hash" nullable="false" length="128"
                 comment="Hash code for using on frontend"/>
@@ -41,9 +41,9 @@
     </table>
     <table name="vault_payment_token_order_payment_link" resource="default" engine="innodb"
            comment="Order payments to vault token">
-        <column xsi:type="int" name="order_payment_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="order_payment_id" unsigned="true" nullable="false" identity="false"
                 comment="Order payment ID"/>
-        <column xsi:type="int" name="payment_token_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="payment_token_id" unsigned="true" nullable="false" identity="false"
                 comment="Payment token ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="order_payment_id"/>

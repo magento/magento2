@@ -21,7 +21,10 @@ class ApplyCouponsToCartTest extends GraphQlAbstract
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -36,23 +39,29 @@ class ApplyCouponsToCartTest extends GraphQlAbstract
     public function testApplyCouponsToCart()
     {
         $couponCode = '2?ds5!2d';
+        $expectedGrandTotal = 15.00;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
         $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('applyCouponToCart', $response);
         self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupons'][0]['code']);
+        self::assertEquals(
+            $expectedGrandTotal,
+            $response['applyCouponToCart']['cart']['prices']['grand_total']['value']
+        );
     }
 
     /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Cart does not contain products.
      */
     public function testApplyCouponsToCartWithoutItems()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Cart does not contain products.');
+
         $couponCode = '2?ds5!2d';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
@@ -65,10 +74,11 @@ class ApplyCouponsToCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @expectedException \Exception
      */
     public function testApplyCouponsToCustomerCart()
     {
+        $this->expectException(\Exception::class);
+
         $couponCode = '2?ds5!2d';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
@@ -81,11 +91,12 @@ class ApplyCouponsToCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The coupon code isn't valid. Verify the code and try again.
      */
     public function testApplyNonExistentCouponToCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The coupon code isn\'t valid. Verify the code and try again.');
+
         $couponCode = 'non_existent_coupon_code';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
@@ -95,10 +106,11 @@ class ApplyCouponsToCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
-     * @expectedException \Exception
      */
     public function testApplyCouponsToNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+
         $couponCode = '2?ds5!2d';
         $maskedQuoteId = 'non_existent_masked_id';
         $query = $this->getQuery($maskedQuoteId, $couponCode);
@@ -115,59 +127,17 @@ class ApplyCouponsToCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/restrict_coupon_usage_for_simple_product.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The coupon code isn't valid. Verify the code and try again.
      */
     public function testApplyCouponsWhichIsNotApplicable()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The coupon code isn\'t valid. Verify the code and try again.');
+
         $couponCode = '2?ds5!2d';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId, $couponCode);
 
         $this->graphQlMutation($query);
-    }
-
-    /**
-     * @param string $input
-     * @param string $message
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
-     * @expectedException \Exception
-     */
-    public function testApplyCouponsWithMissedRequiredParameters(string $input, string $message)
-    {
-        $query = <<<QUERY
-mutation {
-  applyCouponToCart(input: {{$input}}) {
-    cart {
-      applied_coupons {
-        code
-      }
-    }
-  }
-}
-QUERY;
-
-        $this->expectExceptionMessage($message);
-        $this->graphQlMutation($query);
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderUpdateWithMissedRequiredParameters(): array
-    {
-        return [
-            'missed_cart_id' => [
-                'coupon_code: "test"',
-                'Field ApplyCouponToCartInput.cart_id of required type String! was not provided.'
-            ],
-            'missed_coupon_code' => [
-                'cart_id: "test_quote"',
-                'Field ApplyCouponToCartInput.coupon_code of required type String! was not provided.'
-            ],
-        ];
     }
 
     /**
@@ -183,6 +153,11 @@ mutation {
     cart {
       applied_coupons {
         code
+      }
+      prices {
+        grand_total {
+          value
+        }
       }
     }
   }

@@ -20,7 +20,7 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
      */
     protected $_restResourcePath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_version = 'V1';
         $this->_restResourcePath = "/{$this->_version}/TestModule5/";
@@ -44,7 +44,7 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             $this->_webApiCall($serviceInfo, RestClient::EMPTY_REQUEST_BODY);
         } catch (\Exception $e) {
             $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Response does not contain expected message."
@@ -71,7 +71,7 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             $this->_webApiCall($serviceInfo, RestClient::EMPTY_REQUEST_BODY);
         } catch (\Exception $e) {
             $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Response does not contain expected message."

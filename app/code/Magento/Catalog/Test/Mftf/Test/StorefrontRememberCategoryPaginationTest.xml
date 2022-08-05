@@ -32,22 +32,22 @@
             <createData entity="RememberPaginationCatalogStorefrontConfig" stepKey="setRememberPaginationCatalogStorefrontConfig"/>
         </before>
 
-        <actionGroup ref="GoToStorefrontCategoryPageByParameters" stepKey="GoToStorefrontCategory1Page">
+        <actionGroup ref="GoToStorefrontCategoryPageByParametersActionGroup" stepKey="GoToStorefrontCategory1Page">
             <argument name="category" value="$$defaultCategory1.custom_attributes[url_key]$$"/>
             <argument name="mode" value="grid"/>
             <argument name="numOfProductsPerPage" value="12"/>
         </actionGroup>
 
-        <actionGroup ref="VerifyCategoryPageParameters" stepKey="verifyCategory1PageParameters">
+        <actionGroup ref="VerifyCategoryPageParametersActionGroup" stepKey="verifyCategory1PageParameters">
             <argument name="category" value="$$defaultCategory1$$"/>
             <argument name="mode" value="grid"/>
             <argument name="numOfProductsPerPage" value="12"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontCategoryPage.url($$defaultCategory2.name$$)}}" stepKey="navigateToCategory2Page"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$defaultCategory2.custom_attributes[url_key]$$)}}" stepKey="navigateToCategory2Page"/>
         <waitForPageLoad stepKey="waitForCategory2PageToLoad"/>
 
-        <actionGroup ref="VerifyCategoryPageParameters" stepKey="verifyCategory2PageParameters">
+        <actionGroup ref="VerifyCategoryPageParametersActionGroup" stepKey="verifyCategory2PageParameters">
             <argument name="category" value="$$defaultCategory2$$"/>
             <argument name="mode" value="grid"/>
             <argument name="numOfProductsPerPage" value="12"/>
@@ -61,8 +61,7 @@
             <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="defaultCategory2" stepKey="deleteCategory2"/>
 
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
-
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
     </test>
 </tests>

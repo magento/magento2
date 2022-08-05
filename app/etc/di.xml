@@ -7,16 +7,13 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="DateTimeInterface" type="DateTime" />
-    <preference for="Psr\Log\LoggerInterface" type="Magento\Framework\Logger\Monolog" />
+    <preference for="Psr\Log\LoggerInterface" type="Magento\Framework\Logger\LoggerProxy" />
     <preference for="Magento\Framework\EntityManager\EntityMetadataInterface" type="Magento\Framework\EntityManager\EntityMetadata" />
     <preference for="Magento\Framework\EntityManager\HydratorInterface" type="Magento\Framework\EntityManager\Hydrator" />
     <preference for="Magento\Framework\View\Template\Html\MinifierInterface" type="Magento\Framework\View\Template\Html\Minifier" />
     <preference for="Magento\Framework\Model\Entity\ScopeInterface" type="Magento\Framework\Model\Entity\Scope" />
     <preference for="Magento\Framework\ObjectManager\FactoryInterface" type="Magento\Framework\ObjectManager\Factory\Dynamic\Developer" />
-    <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\Framework\Search\Adapter\Mysql\Filter\Preprocessor" />
-    <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Resolver" />
     <preference for="Magento\Framework\Search\Request\Aggregation\StatusInterface" type="Magento\Framework\Search\Request\Aggregation\Status" />
-    <preference for="Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Field"/>
     <preference for="Magento\Framework\Search\Adapter\Aggregation\AggregationResolverInterface" type="Magento\Framework\Search\Adapter\Aggregation\AggregationResolver"/>
     <preference for="Magento\Framework\App\RequestInterface" type="Magento\Framework\App\Request\Http" />
     <preference for="Magento\Framework\App\PlainTextRequestInterface" type="Magento\Framework\App\Request\Http" />
@@ -167,6 +164,7 @@
     <preference for="Magento\Framework\EntityManager\MapperInterface" type="Magento\Framework\EntityManager\CompositeMapper"/>
     <preference for="Magento\Framework\Console\CommandListInterface" type="Magento\Framework\Console\CommandList"/>
     <preference for="Magento\Framework\DataObject\IdentityGeneratorInterface" type="Magento\Framework\DataObject\IdentityService" />
+    <preference for="Magento\Framework\DataObject\IdentityValidatorInterface" type="Magento\Framework\DataObject\IdentityValidator" />
     <preference for="Magento\Framework\Serialize\SerializerInterface" type="Magento\Framework\Serialize\Serializer\Json" />
     <preference for="Magento\Framework\App\Scope\ValidatorInterface" type="Magento\Framework\App\Scope\Validator"/>
     <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Framework\App\ScopeResolver" />
@@ -187,6 +185,7 @@
     <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaWriter" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface" type="Magento\Framework\Setup\Declaration\Schema\SchemaConfig" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\DataSavior\DumpAccessorInterface" type="Magento\Framework\Setup\Declaration\Schema\FileSystem\Csv" />
+    <preference for="Magento\Framework\MessageQueue\ConfigInterface" type="Magento\Framework\MessageQueue\Config\Proxy" />
     <preference for="Magento\Framework\MessageQueue\PublisherInterface" type="Magento\Framework\MessageQueue\PublisherPool" />
     <preference for="Magento\Framework\MessageQueue\BulkPublisherInterface" type="Magento\Framework\MessageQueue\Bulk\PublisherPool" />
     <preference for="Magento\Framework\MessageQueue\MessageIdGeneratorInterface" type="Magento\Framework\MessageQueue\MessageIdGenerator" />
@@ -211,6 +210,8 @@
     <preference for="Magento\Framework\MessageQueue\QueueFactoryInterface" type="Magento\Framework\MessageQueue\QueueFactory" />
     <preference for="Magento\Framework\Search\Request\IndexScopeResolverInterface" type="Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver"/>
     <preference for="Magento\Framework\HTTP\ClientInterface" type="Magento\Framework\HTTP\Client\Curl" />
+    <preference for="Magento\Framework\Interception\ConfigLoaderInterface" type="Magento\Framework\Interception\PluginListGenerator" />
+    <preference for="Magento\Framework\Interception\ConfigWriterInterface" type="Magento\Framework\Interception\PluginListGenerator" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -228,6 +229,17 @@
         </arguments>
     </type>
     <preference for="Magento\AsynchronousOperations\Model\ConfigInterface" type="Magento\WebapiAsync\Model\Config\Proxy" />
+    <virtualType name="Magento\Framework\Communication\Config\Reader\XmlReader" type="Magento\Framework\Config\Reader\Filesystem">
+        <arguments>
+            <argument name="converter" xsi:type="object">Magento\Framework\Communication\Config\Reader\XmlReader\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Framework\Communication\Config\Reader\XmlReader\SchemaLocator</argument>
+            <argument name="fileName" xsi:type="string">communication.xml</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/config/topic" xsi:type="string">name</item>
+                <item name="/config/topic/handler" xsi:type="string">name</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Framework\Communication\Config\CompositeReader">
         <arguments>
             <argument name="readers" xsi:type="array">
@@ -284,6 +296,7 @@
     <type name="Magento\Framework\App\Request\Http">
         <arguments>
             <argument name="pathInfoProcessor" xsi:type="object">Magento\Backend\App\Request\PathInfoProcessor\Proxy</argument>
+            <argument name="routeConfig" xsi:type="object">Magento\Framework\App\Route\ConfigInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Response\Http">
@@ -316,6 +329,11 @@
     <virtualType name="interceptionConfigScope" type="Magento\Framework\Config\Scope">
         <arguments>
             <argument name="defaultScope" xsi:type="string">global</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="adminhtmlConfigScope" type="Magento\Framework\Config\Scope">
+        <arguments>
+            <argument name="defaultScope" xsi:type="string">adminhtml</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\App\State">
@@ -427,6 +445,17 @@
             <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
             <argument name="cacheId" xsi:type="string">plugin-list</argument>
             <argument name="scopePriorityScheme" xsi:type="array">
+                <item name="primary" xsi:type="string">primary</item>
+                <item name="first" xsi:type="string">global</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Interception\PluginListGenerator">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
+            <argument name="logger" xsi:type="object">\Psr\Log\LoggerInterface\Proxy</argument>
+            <argument name="scopePriorityScheme" xsi:type="array">
+                <item name="primary" xsi:type="string">primary</item>
                 <item name="first" xsi:type="string">global</item>
             </argument>
         </arguments>
@@ -669,6 +698,9 @@
                 <item name="0" xsi:type="string">Magento\Framework\Data\OptionSourceInterface</item>
                 <item name="1" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface</item>
             </argument>
+            <argument name="deniedClassList" xsi:type="array">
+                <item name="0" xsi:type="string">Magento\Framework\Model\ResourceModel\AbstractResource</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Mview\View">
@@ -798,15 +830,6 @@
     </type>
     <type name="Magento\Framework\View\Layout\ScheduledStructure" shared="false" />
     <type name="Magento\Framework\View\Page\Config\Structure" shared="false" />
-    <type name="Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container">
-        <arguments>
-            <argument name="buckets" xsi:type="array">
-                <item name="termBucket" xsi:type="object">Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Term</item>
-                <item name="rangeBucket" xsi:type="object">Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Range</item>
-                <item name="dynamicBucket" xsi:type="object">Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Dynamic</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Search\Dynamic\Algorithm\Repository">
         <arguments>
             <argument name="algorithms" xsi:type="array">
@@ -1444,6 +1467,7 @@
                 <item name="mediumtext" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\MediumText</item>
                 <item name="text" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Text</item>
                 <item name="varchar" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\StringBinary</item>
+                <item name="char" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\StringBinary</item>
                 <item name="varbinary" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\StringBinary</item>
                 <item name="blob" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Blob</item>
                 <item name="mediumblob" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\MediumBlob</item>
@@ -1453,6 +1477,7 @@
                 <item name="primary" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Primary</item>
                 <item name="foreign" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Foreign</item>
                 <item name="index" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Index</item>
+                <item name="json" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Json</item>
             </argument>
         </arguments>
     </type>
@@ -1480,6 +1505,7 @@
                 <item name="varchar" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\StringBinary</item>
                 <item name="binary" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\StringBinary</item>
                 <item name="varbinary" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\StringBinary</item>
+                <item name="json" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Json</item>
                 <item name="index" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Index</item>
                 <item name="unique" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Constraints\Internal</item>
                 <item name="primary" xsi:type="object">\Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Constraints\Internal</item>
@@ -1586,13 +1612,15 @@
                 <item name="longtext" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
                 <item name="blob" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
                 <item name="mediumblob" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
-                <item name="longblog" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
+                <item name="longblob" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
                 <item name="varbinary" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
                 <item name="varchar" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TextBlobDefinition</item>
+                <item name="char" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\CharDefinition</item>
                 <item name="timestamp" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TimestampDefinition</item>
                 <item name="datetime" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\TimestampDefinition</item>
                 <item name="date" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\DateDefinition</item>
                 <item name="boolean" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\BooleanDefinition</item>
+                <item name="json" xsi:type="object">Magento\Framework\Setup\SchemaListenerDefinition\JsonDefinition</item>
             </argument>
         </arguments>
     </type>
@@ -1716,7 +1744,7 @@
         <arguments>
             <argument name="connectionToExchangeMap" xsi:type="array">
                 <item name="amqp" xsi:type="string">magento</item>
-                <item name="db" xsi:type="string">magento-db</item>
+                <item name="db" xsi:type="string">magento</item>
             </argument>
         </arguments>
     </type>
@@ -1724,7 +1752,7 @@
         <arguments>
             <argument name="publisherNameToConnectionMap" xsi:type="array">
                 <item name="amqp-magento" xsi:type="string">amqp</item>
-                <item name="db-magento-db" xsi:type="string">db</item>
+                <item name="db-magento" xsi:type="string">db</item>
             </argument>
         </arguments>
     </type>
@@ -1738,6 +1766,11 @@
     <!-- \Magento\Framework\MessageQueue\Bulk\PublisherPool is @api -->
     <virtualType name="Magento\Framework\MessageQueue\Bulk\PublisherPool" type="Magento\Framework\MessageQueue\PublisherPool" />
     <type name="Magento\Framework\Session\Config">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Session\SessionMaxSizeConfig">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
         </arguments>
@@ -1779,9 +1812,14 @@
     </type>
     <type name="Magento\Framework\Cache\LockGuardedCacheLoader">
         <arguments>
-            <argument name="locker" xsi:type="object">Magento\Framework\Lock\Backend\Cache</argument>
-            <argument name="lockTimeout" xsi:type="number">10000</argument>
-            <argument name="delayTimeout" xsi:type="number">20</argument>
+            <argument name="locker" xsi:type="object">Magento\Framework\Lock\Backend\Database</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Cache\CompositeStaleCacheNotifier">
+        <arguments>
+            <argument name="notifiers" xsi:type="array">
+                <item name="runtime_cache_modifier" xsi:type="object">Magento\Framework\App\Cache\RuntimeStaleCacheStateModifier</item>
+            </argument>
         </arguments>
     </type>
     <preference for="Magento\Framework\HTTP\AsyncClientInterface" type="Magento\Framework\HTTP\AsyncClient\GuzzleAsyncClient" />
@@ -1799,5 +1837,141 @@
         <plugin name="execute_commit_callbacks" type="Magento\Framework\Model\ExecuteCommitCallbacks" />
     </type>
     <preference for="Magento\Framework\GraphQl\Query\ErrorHandlerInterface" type="Magento\Framework\GraphQl\Query\ErrorHandler"/>
-    <preference for="Magento\Framework\Filter\VariableResolverInterface" type="Magento\Framework\Filter\VariableResolver\StrategyResolver"/>
+    <preference for="Magento\Framework\Filter\VariableResolverInterface" type="Magento\Framework\Filter\VariableResolver\StrictResolver"/>
+    <virtualType name="configured_block_cache" type="Magento\Framework\App\Cache">
+        <arguments>
+            <argument name="cacheIdentifier" xsi:type="string">block_html</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\Context">
+        <arguments>
+            <argument name="cache" xsi:type="object">configured_block_cache</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\DB\Adapter\SqlVersionProvider">
+        <arguments>
+            <argument name="supportedVersionPatterns" xsi:type="array">
+                <item name="MySQL-8" xsi:type="string">^8\.0\.</item>
+                <item name="MySQL-5.7" xsi:type="string">^5\.7\.</item>
+                <item name="MariaDB-(10.2-10.4)" xsi:type="string">^10\.[2-4]\.</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="DefaultWYSIWYGValidator" type="Magento\Framework\Validator\HTML\ConfigurableWYSIWYGValidator">
+        <arguments>
+            <argument name="allowedTags" xsi:type="array">
+                <item name="div" xsi:type="string">div</item>
+                <item name="a" xsi:type="string">a</item>
+                <item name="p" xsi:type="string">p</item>
+                <item name="span" xsi:type="string">span</item>
+                <item name="em" xsi:type="string">em</item>
+                <item name="strong" xsi:type="string">strong</item>
+                <item name="ul" xsi:type="string">ul</item>
+                <item name="li" xsi:type="string">li</item>
+                <item name="ol" xsi:type="string">ol</item>
+                <item name="h5" xsi:type="string">h5</item>
+                <item name="h4" xsi:type="string">h4</item>
+                <item name="h3" xsi:type="string">h3</item>
+                <item name="h2" xsi:type="string">h2</item>
+                <item name="h1" xsi:type="string">h1</item>
+                <item name="table" xsi:type="string">table</item>
+                <item name="tbody" xsi:type="string">tbody</item>
+                <item name="tr" xsi:type="string">tr</item>
+                <item name="td" xsi:type="string">td</item>
+                <item name="th" xsi:type="string">th</item>
+                <item name="tfoot" xsi:type="string">tfoot</item>
+                <item name="img" xsi:type="string">img</item>
+                <item name="hr" xsi:type="string">hr</item>
+                <item name="figure" xsi:type="string">figure</item>
+                <item name="button" xsi:type="string">button</item>
+                <item name="i" xsi:type="string">i</item>
+                <item name="u" xsi:type="string">u</item>
+                <item name="br" xsi:type="string">br</item>
+                <item name="b" xsi:type="string">b</item>
+            </argument>
+            <argument name="allowedAttributes" xsi:type="array">
+                <item name="class" xsi:type="string">class</item>
+                <item name="width" xsi:type="string">width</item>
+                <item name="height" xsi:type="string">height</item>
+                <item name="style" xsi:type="string">style</item>
+                <item name="alt" xsi:type="string">alt</item>
+                <item name="title" xsi:type="string">title</item>
+                <item name="border" xsi:type="string">border</item>
+                <item name="id" xsi:type="string">id</item>
+            </argument>
+            <argument name="attributesAllowedByTags" xsi:type="array">
+                <item name="a" xsi:type="array">
+                    <item name="href" xsi:type="string">href</item>
+                </item>
+                <item name="img" xsi:type="array">
+                    <item name="src" xsi:type="string">src</item>
+                </item>
+                <item name="button" xsi:type="array">
+                    <item name="type" xsi:type="string">type</item>
+                </item>
+            </argument>
+            <argument name="attributeValidators" xsi:type="array">
+                <item name="style" xsi:type="object">Magento\Framework\Validator\HTML\StyleAttributeValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <preference for="Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface" type="DefaultWYSIWYGValidator" />
+    <type name="Magento\Framework\View\TemplateEngine\Php">
+        <arguments>
+            <argument name="blockVariables" xsi:type="array">
+                <item name="secureRenderer" xsi:type="object">Magento\Framework\View\Helper\SecureHtmlRenderer\Proxy</item>
+                <item name="escaper" xsi:type="object">Magento\Framework\Escaper</item>
+                <item name="localeFormatter" xsi:type="object">Magento\Framework\Locale\LocaleFormatter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Validator\UrlKey">
+        <arguments>
+            <argument name="restrictedValues" xsi:type="array">
+                <item name="0" xsi:type="string">admin</item>
+                <item name="1" xsi:type="string">soap</item>
+                <item name="2" xsi:type="string">rest</item>
+                <item name="3" xsi:type="string">graphql</item>
+                <item name="4" xsi:type="string">standard</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface" type="Magento\Framework\Webapi\Validator\CompositeServiceInputValidator"/>
+    <type name="Magento\Framework\Webapi\Validator\CompositeServiceInputValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="entityArrayValidator" xsi:type="object">Magento\Framework\Webapi\Validator\EntityArrayValidator</item>
+                <item name="searchCriteriaValidator" xsi:type="object">Magento\Framework\Webapi\Validator\SearchCriteriaValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Webapi\Validator\EntityArrayValidator">
+        <arguments>
+            <argument name="complexArrayItemLimit" xsi:type="number">20</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Webapi\Validator\SearchCriteriaValidator">
+        <arguments>
+            <argument name="maximumPageSize" xsi:type="number">300</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\GraphQl\Query\Resolver\Argument\ValidatorInterface" type="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator"/>
+    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="searchCriteriaValidator" xsi:type="object">Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator">
+        <arguments>
+            <argument name="maxPageSize" xsi:type="number">300</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Webapi\ServiceInputProcessor">
+        <arguments>
+            <argument name="defaultPageSize" xsi:type="number">20</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>
 </config>

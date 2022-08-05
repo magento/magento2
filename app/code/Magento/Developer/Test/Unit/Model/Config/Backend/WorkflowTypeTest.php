@@ -1,18 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Model\Config\Backend;
 
-use Magento\Framework\App\State;
-use Magento\Framework\Model\Context;
 use Magento\Developer\Model\Config\Backend\WorkflowType;
-use Magento\Framework\App\State\CleanupFiles;
 use Magento\Developer\Model\Config\Source\WorkflowType as SourceWorkflowType;
+use Magento\Framework\App\State;
+use Magento\Framework\App\State\CleanupFiles;
+use Magento\Framework\Model\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
+class WorkflowTypeTest extends TestCase
 {
     /**
      * @var WorkflowType
@@ -20,12 +22,12 @@ class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     private $appStateMock;
 
     /**
-     * @var CleanupFiles|\PHPUnit_Framework_MockObject_MockObject
+     * @var CleanupFiles|MockObject
      */
     private $cleanerMock;
 
@@ -34,7 +36,7 @@ class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->appStateMock = $this->createMock(State::class);
         $this->objectManagerHelper = new ObjectManager($this);
@@ -56,12 +58,10 @@ class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Client side compilation doesn't work in production mode
-     */
     public function testBeforeSaveSwitchedToClientSideInProductionShouldThrowException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Client side compilation doesn\'t work in production mode');
         $this->appStateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_PRODUCTION);

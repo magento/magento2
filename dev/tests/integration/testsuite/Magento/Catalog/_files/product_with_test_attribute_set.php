@@ -5,8 +5,6 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/attribute_set_based_on_default_with_custom_group.php';
-
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
@@ -14,7 +12,11 @@ use Magento\Catalog\Model\ProductFactory;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Catalog/_files/attribute_set_based_on_default_with_custom_group.php'
+);
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);

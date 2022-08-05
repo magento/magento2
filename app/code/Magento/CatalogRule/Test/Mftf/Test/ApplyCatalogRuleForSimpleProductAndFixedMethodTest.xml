@@ -7,23 +7,24 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ApplyCatalogRuleForSimpleProductAndFixedMethodTest">
+    <test name="ApplyCatalogRuleForSimpleProductAndFixedMethodTest" deprecated="Use StorefrontApplyCatalogRuleForSimpleProductWithSelectFixedMethodTest instead">
         <annotations>
             <features value="CatalogRule"/>
             <stories value="Apply catalog price rule"/>
-            <title value="Admin should be able to apply the catalog price rule for simple product with custom options"/>
+            <title value="DEPRECATED. Admin should be able to apply the catalog price rule for simple product with custom options"/>
             <description value="Admin should be able to apply the catalog price rule for simple product with custom options"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14771"/>
             <group value="CatalogRule"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-17140"/>
+                <issueId value="DEPRECATED">Use StorefrontApplyCatalogRuleForSimpleProductWithSelectFixedMethodTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -36,6 +37,7 @@
 
             <!-- Update all products to have custom options -->
             <updateData createDataKey="createProduct1" entity="productWithFixedOptions" stepKey="updateProductWithOptions1"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <!-- Delete products and category -->
@@ -43,32 +45,32 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Delete the catalog price rule -->
-            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
             <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
                 <argument name="name" value="{{CatalogRuleByFixed.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
 
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- 1. Begin creating a new catalog price rule -->
-        <actionGroup ref="newCatalogPriceRuleByUIWithConditionIsCategory" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
+        <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
             <argument name ="categoryId" value="$createCategory.id$"/>
             <argument name ="catalogRule" value="CatalogRuleByFixed"/>
         </actionGroup>
 
         <!-- Select not logged in customer group -->
-        <actionGroup ref="selectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
 
         <!-- Save and apply the new catalog price rule -->
         <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
-        
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+
         <!-- Navigate to category on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>
-        
+        <amOnPage url="{{StorefrontProductPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
+
         <!-- Check product 1 name on store front category page -->
         <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1Name">
             <argument name="productInfo" value="$createProduct1.name$"/>
@@ -88,7 +90,7 @@
         </actionGroup>
 
         <!-- Navigate to product 1 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct1.name$)}}" stepKey="goToProductPage1"/>
+        <amOnPage url="{{StorefrontProductPage.url($createProduct1.custom_attributes[url_key]$)}}" stepKey="goToProductPage1"/>
 
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
         <actionGroup ref="StorefrontSelectCustomOptionRadioAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices1">

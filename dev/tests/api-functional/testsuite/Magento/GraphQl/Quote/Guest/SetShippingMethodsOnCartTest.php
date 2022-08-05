@@ -25,7 +25,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -89,11 +89,12 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_virtual_product.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSetShippingMethodOnCartWithSimpleProductAndWithoutAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The shipping address is missing. Set the address and try again.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $carrierCode = 'flatrate';
         $methodCode = 'flatrate';
@@ -186,27 +187,9 @@ QUERY;
     public function dataProviderSetShippingMethodWithWrongParameters(): array
     {
         return [
-            'missed_cart_id' => [
-                'shipping_methods: [{
-                    carrier_code: "flatrate"
-                    method_code: "flatrate"
-                }]',
-                'Field SetShippingMethodsOnCartInput.cart_id of required type String! was not provided.'
-            ],
-            'missed_shipping_methods' => [
-                'cart_id: "cart_id_value"',
-                'Field SetShippingMethodsOnCartInput.shipping_methods of required type [ShippingMethodInput]!'
-                . ' was not provided.'
-            ],
             'shipping_methods_are_empty' => [
                 'cart_id: "cart_id_value" shipping_methods: []',
                 'Required parameter "shipping_methods" is missing'
-            ],
-            'missed_carrier_code' => [
-                'cart_id: "cart_id_value", shipping_methods: [{
-                    method_code: "flatrate"
-                }]',
-                'Field ShippingMethodInput.carrier_code of required type String! was not provided.'
             ],
             'empty_carrier_code' => [
                 'cart_id: "cart_id_value", shipping_methods: [{
@@ -221,12 +204,6 @@ QUERY;
                     method_code: "flatrate"
                 }]',
                 'Carrier with such method not found: wrong-carrier-code, flatrate'
-            ],
-            'missed_method_code' => [
-                'cart_id: "cart_id_value", shipping_methods: [{
-                    carrier_code: "flatrate"
-                }]',
-                'Field ShippingMethodInput.method_code of required type String! was not provided.'
             ],
             'empty_method_code' => [
                 'cart_id: "cart_id_value", shipping_methods: [{
@@ -267,11 +244,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @expectedException Exception
-     * @expectedExceptionMessage You cannot specify multiple shipping methods.
      */
     public function testSetMultipleShippingMethods()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('You cannot specify multiple shipping methods.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
@@ -310,10 +288,11 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      *
-     * @expectedException Exception
      */
     public function testSetShippingMethodToCustomerCart()
     {
+        $this->expectException(\Exception::class);
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $carrierCode = 'flatrate';
         $methodCode = 'flatrate';
@@ -334,11 +313,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/quote_with_address.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage The shipping method can't be set for an empty cart. Add an item to cart and try again.
      */
     public function testSetShippingMethodOnAnEmptyCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The shipping method can\'t be set for an empty cart. Add an item to cart and try again.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $carrierCode = 'flatrate';
         $methodCode = 'flatrate';

@@ -17,7 +17,7 @@ class DiscountTest extends TestCase
      */
     private $discount;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->discount = new Discount();
     }

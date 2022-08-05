@@ -51,7 +51,7 @@
             <createData entity="PaginationProduct" stepKey="simpleProduct28"/>
             <createData entity="PaginationProduct" stepKey="simpleProduct29"/>
             <createData entity="PaginationProduct" stepKey="simpleProduct30"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0" />
@@ -87,7 +87,7 @@
             <deleteData createDataKey="simpleProduct28" stepKey="deleteSimpleProduct28"/>
             <deleteData createDataKey="simpleProduct29" stepKey="deleteSimpleProduct29"/>
             <deleteData createDataKey="simpleProduct30" stepKey="deleteSimpleProduct30"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
        <!--Verify default number of products displayed in the grid view-->
         <comment userInput="Verify default number of products displayed in the grid view" stepKey="commentVerifyDefaultValues"/>
@@ -99,10 +99,8 @@
         <seeInField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageDefaultValue}}" userInput="12" stepKey="seeDefaultValueProductPerPage"/>
         <!--Open Category Page and select created category-->
         <comment userInput="Open Category Page and select created category" stepKey="commentOpenCategoryPage"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
-        <waitForPageLoad stepKey="waitForPageToLoad0"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoaded2"/>
         <!--Select Products-->
@@ -115,19 +113,18 @@
         <click selector="{{CatalogProductsSection.resetFilter}}" stepKey="clickOnResetFilter"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
         <selectOption selector="{{AdminProductGridFilterSection.productPerPage}}" userInput="30" stepKey="selectPagePerView"/>
-        <wait stepKey="waitFroPageToLoad1" time="30"/>
+        <waitForPageLoad stepKey="waitForPageToLoadProductPerPage" time="30"/>
         <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="pagi"  stepKey="selectProduct1"/>
         <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
         <waitForPageLoad stepKey="waitFroPageToLoad2"/>
         <see selector="{{AdminProductGridFilterSection.productCount}}" userInput="30" stepKey="seeNumberOfProductsFound"/>
         <click selector="{{AdminCategoryProductsGridSection.productSelectAll}}" stepKey="selectSelectAll"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
         <!--Open Category Store Front Page-->
         <comment userInput="Open Category Store Front Page" stepKey="commentOpenCategoryOnStorefront"/>
-        <amOnPage url="{{_defaultCategory.name}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{_defaultCategory.urlKey}}.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCategoryOnNavigation"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="selectCategory"/>

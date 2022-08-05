@@ -3,17 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Observer\Frontend;
 
+use Magento\Customer\Helper\Address;
+use Magento\Customer\Model\Address\AbstractAddress;
+use Magento\Framework\Event\Observer;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Observer\Frontend\AddVatRequestParamsOrderComment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Magento\Sales\Observer\Frontend\AddVatRequestParamsOrderComment
  */
-class AddVatRequestParamsOrderCommentTest extends \PHPUnit\Framework\TestCase
+class AddVatRequestParamsOrderCommentTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Helper\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var Address|MockObject
      */
     protected $customerAddressHelperMock;
 
@@ -22,9 +30,9 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit\Framework\TestCase
      */
     protected $observer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->customerAddressHelperMock = $this->getMockBuilder(\Magento\Customer\Helper\Address::class)
+        $this->customerAddressHelperMock = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -48,26 +56,26 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->customerAddressHelperMock->expects($this->once())
             ->method('getTaxCalculationAddressType')
-            ->will($this->returnValue($configAddressType));
+            ->willReturn($configAddressType);
 
         $orderAddressMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Address::class,
-            ['getVatRequestId', 'getVatRequestDate', '__wakeup']
+            ['getVatRequestId', 'getVatRequestDate']
         );
         $orderAddressMock->expects($this->any())
             ->method('getVatRequestId')
-            ->will($this->returnValue($vatRequestId));
+            ->willReturn($vatRequestId);
         $orderAddressMock->expects($this->any())
             ->method('getVatRequestDate')
-            ->will($this->returnValue($vatRequestDate));
+            ->willReturn($vatRequestDate);
 
-        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getShippingAddress', '__wakeup', 'addStatusHistoryComment', 'getBillingAddress'])
+            ->setMethods(['getShippingAddress', 'addStatusHistoryComment', 'getBillingAddress'])
             ->getMock();
         $orderMock->expects($this->any())
             ->method('getShippingAddress')
-            ->will($this->returnValue($orderAddressMock));
+            ->willReturn($orderAddressMock);
         if ($orderHistoryComment === null) {
             $orderMock->expects($this->never())
                 ->method('addStatusHistoryComment');
@@ -76,10 +84,13 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit\Framework\TestCase
                 ->method('addStatusHistoryComment')
                 ->with($orderHistoryComment, false);
         }
-        $observer = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getOrder']);
+        $observer = $this->getMockBuilder(Observer::class)
+            ->addMethods(['getOrder'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $observer->expects($this->once())
             ->method('getOrder')
-            ->will($this->returnValue($orderMock));
+            ->willReturn($orderMock);
 
         $this->assertNull($this->observer->execute($observer));
     }
@@ -91,19 +102,19 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                \Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING,
+                AbstractAddress::TYPE_SHIPPING,
                 'vatRequestId',
                 'vatRequestDate',
                 'VAT Request Identifier: vatRequestId<br />VAT Request Date: vatRequestDate',
             ],
             [
-                \Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING,
+                AbstractAddress::TYPE_SHIPPING,
                 1,
                 'vatRequestDate',
                 null,
             ],
             [
-                \Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING,
+                AbstractAddress::TYPE_SHIPPING,
                 'vatRequestId',
                 1,
                 null,
@@ -115,7 +126,7 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit\Framework\TestCase
                 null,
             ],
             [
-                \Magento\Customer\Model\Address\AbstractAddress::TYPE_BILLING,
+                AbstractAddress::TYPE_BILLING,
                 'vatRequestId',
                 'vatRequestDate',
                 null,

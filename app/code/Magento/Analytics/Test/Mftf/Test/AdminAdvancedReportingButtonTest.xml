@@ -9,30 +9,28 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdvancedReportingButtonTest">
         <annotations>
-            <stories value="AdvancedReporting"/>
-            <title value="AdvancedReportingButtonTest"/>
-            <description value="Test log in to AdvancedReporting and tests AdvancedReportingButtonTest"/>
-            <testCaseId value="MC-14800"/>
-            <skip>
-                <issueId value="MC-14800" />
-            </skip>
+            <features value="Analytics"/>
+            <stories value="Advanced Reporting"/>
+            <title value="Assert the Advanced Reporting page is opened by dashboard link"/>
+            <description value="Check the ability to navigate to the Advanced Reporting page through the Advanced Reporting button on the dashboard"/>
             <severity value="CRITICAL"/>
+            <testCaseId value="MC-28376"/>
             <group value="analytics"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Navigate through Advanced Reporting button on dashboard to Sign Up page-->
         <amOnPage url="{{AdminDashboardPage.url}}" stepKey="amOnDashboardPage"/>
         <waitForPageLoad stepKey="waitForDashboardPageLoad"/>
         <click selector="{{AdminAdvancedReportingSection.goToAdvancedReporting}}" stepKey="clickGoToAdvancedReporting"/>
-        <switchToNextTab stepKey="switchToNewTab"/>
-        <seeInCurrentUrl url="advancedreporting.rjmetrics.com/report" stepKey="seeAssertAdvancedReportingPageUrl"/>
+        <actionGroup ref="AssertAdminAdvancedReportingPageUrlActionGroup" stepKey="assertAdvancedReportingPageUrl"/>
     </test>
 </tests>

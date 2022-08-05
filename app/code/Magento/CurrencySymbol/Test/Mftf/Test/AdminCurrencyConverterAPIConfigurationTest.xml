@@ -8,31 +8,32 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCurrencyConverterAPIConfigurationTest">
+    <test name="AdminCurrencyConverterAPIConfigurationTest" deprecated="Use AdminCheckCurrencyConverterApiConfigurationTest instead">
         <annotations>
             <features value="CurrencySymbol"/>
             <stories value="Currency Rates"/>
-            <title value="Currency Converter API configuration"/>
-            <description value="Currency Converter API configuration"/>
+            <title value="DEPRECATED. Currency Converter API configuration"/>
+            <description value="DEPRECATED. Currency Converter API configuration"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-19272"/>
             <useCaseId value="MAGETWO-94919"/>
             <group value="currency"/>
             <skip>
-                <issueId value="MQE-1578"/>
+                <issueId value="DEPRECATED">Use AdminCheckCurrencyConverterApiConfigurationTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Set currency allow config-->
             <magentoCLI command="config:set currency/options/allow RHD,CHW,CHE,AMD,EUR,USD" stepKey="setCurrencyAllow"/>
             <!--TODO: Add Api key-->
-            <magentoCLI command="cache:flush" stepKey="clearCache"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <!--Create product-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Set currency allow previous config-->
@@ -40,23 +41,23 @@
             <!--Delete created data-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Import rates from Currency Converter API-->
-        <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="onCurrencyRatePage"/>
+        <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="onCurrencyRatePage"/>
         <actionGroup ref="AdminImportCurrencyRatesActionGroup" stepKey="importCurrencyRates">
             <argument name="rateService" value="Currency Converter API"/>
         </actionGroup>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput='Click "Save" to apply the rates we found.' stepKey="seeImportMessage"/>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput="We can't retrieve a rate from https://free.currconv.com for CHE." stepKey="seeWarningMessageForCHE"/>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput="We can't retrieve a rate from https://free.currconv.com for RHD." stepKey="seeWarningMessageForRHD"/>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput="We can't retrieve a rate from https://free.currconv.com for CHW." stepKey="seeWarningMessageForCHW"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput='Click "Save" to apply the rates we found.' stepKey="seeImportMessage"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput="We can't retrieve a rate from https://free.currconv.com for CHE." stepKey="seeWarningMessageForCHE"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput="We can't retrieve a rate from https://free.currconv.com for RHD." stepKey="seeWarningMessageForRHD"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput="We can't retrieve a rate from https://free.currconv.com for CHW." stepKey="seeWarningMessageForCHW"/>
         <actionGroup ref="AdminSaveCurrencyRatesActionGroup" stepKey="saveCurrencyRates"/>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput='Please correct the input data for "USD => CHE" rate' stepKey="seeCHEMessageAfterSave"/>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput='Please correct the input data for "USD => RHD" rate' stepKey="seeRHDMessageAfterSave"/>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput='Please correct the input data for "USD => CHW" rate' stepKey="seeCHWMessageAfterSave"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput='Please correct the input data for "USD => CHE" rate' stepKey="seeCHEMessageAfterSave"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput='Please correct the input data for "USD => RHD" rate' stepKey="seeRHDMessageAfterSave"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput='Please correct the input data for "USD => CHW" rate' stepKey="seeCHWMessageAfterSave"/>
         <!--Go to the Storefront and check currency rates-->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchAMDCurrency">
             <argument name="currency" value="AMD"/>
@@ -68,12 +69,12 @@
         <see selector="{{StorefrontCategoryMainSection.productPrice}}" userInput="€" stepKey="seeEURInPrice"/>
         <!--Set allowed currencies greater then 10-->
         <magentoCLI command="config:set currency/options/allow RHD,CHW,YER,ZMK,CHE,EUR,USD,AMD,RUB,DZD,ARS,AWG" stepKey="setCurrencyAllow"/>
-        <magentoCLI command="cache:flush" stepKey="clearCache"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         <!--Import rates from Currency Converter API with currencies greater then 10-->
-        <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="onCurrencyRatePageSecondTime"/>
+        <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="onCurrencyRatePageSecondTime"/>
         <actionGroup ref="AdminImportCurrencyRatesActionGroup" stepKey="importCurrencyRatesGreaterThen10">
             <argument name="rateService" value="Currency Converter API"/>
         </actionGroup>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput="Too many pairs. Maximum of 10 is supported for the free version." stepKey="seeTooManyPairsMessage"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput="Too many pairs. Maximum of 10 is supported for the free version." stepKey="seeTooManyPairsMessage"/>
     </test>
 </tests>

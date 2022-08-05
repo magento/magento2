@@ -29,7 +29,7 @@
             <getData entity="productTaxClass" stepKey="productTaxClass">
                 <requiredEntity createDataKey="createProductTaxClass"/>
             </getData>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
@@ -40,10 +40,8 @@
             <deleteData stepKey="deleteProductTaxClass" createDataKey="createProductTaxClass"/>
         </after>
 
-        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>
-        <waitForPageLoad stepKey="waitForTaxRuleIndex1"/>
-        <click selector="{{AdminTaxRuleGridSection.add}}" stepKey="clickAddNewTaxRuleButton"/>
-        <waitForPageLoad stepKey="waitForTaxRuleIndex2"/>
+        <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex1"/>
+        <actionGroup ref="AdminClickAddTaxRuleButtonActionGroup" stepKey="clickAddNewTaxRuleButton"/>
 
         <!-- Create a tax rule with new and existing tax rate, customer tax class, product tax class -->
         <fillField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode1"/>
@@ -65,7 +63,7 @@
         <see selector="{{AdminTaxRuleGridSection.successMessage}}" userInput="You saved the tax rule." stepKey="seeAssertTaxRuleSuccessMessage"/>
 
         <!-- Verify we see created tax rule with new and existing tax rate, customer tax class, product tax class(from the above step) on the tax rule grid page -->
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters2"/>
         <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode2"/>
         <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch2"/>
         <waitForPageLoad stepKey="waitForTaxRuleSearch"/>

@@ -3,180 +3,318 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Url;
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\Option;
+use Magento\CatalogImportExport\Model\Import\Product\SkuProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
+use Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
+use Magento\CatalogImportExport\Model\Import\Product\Type\Factory;
+use Magento\CatalogImportExport\Model\Import\Product\Validator;
+use Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel;
+use Magento\CatalogImportExport\Model\Import\Uploader;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Set;
+use Magento\Eav\Model\Entity\Type;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Driver\File as DriverFile;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
+use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\ResourceModel\Helper;
+use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class ProductTest
- * @package Magento\CatalogImportExport\Test\Unit\Model\Import
+ * Test import entity product model
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
+class ProductTest extends AbstractImportTestCase
 {
-    const MEDIA_DIRECTORY = 'media/import';
+    private const MEDIA_DIRECTORY = 'media/import';
 
-    const ENTITY_TYPE_ID = 1;
+    private const ENTITY_TYPE_ID = 1;
 
-    const ENTITY_TYPE_CODE = 'catalog_product';
+    private const ENTITY_TYPE_CODE = 'catalog_product';
 
-    const ENTITY_ID = 13;
+    private const ENTITY_ID = 13;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface| MockObject */
+    /**
+     * @var AdapterInterface|MockObject
+     */
     protected $_connection;
 
-    /** @var \Magento\Framework\Json\Helper\Data| MockObject */
+    /**
+     * @var \Magento\Framework\Json\Helper\Data|MockObject
+     */
     protected $jsonHelper;
 
-    /** @var \Magento\ImportExport\Model\ResourceModel\Import\Data| MockObject */
+    /**
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data|MockObject
+     */
     protected $_dataSourceModel;
 
-    /** @var \Magento\Framework\App\ResourceConnection| MockObject */
+    /**
+     * @var ResourceConnection|MockObject
+     */
     protected $resource;
 
-    /** @var \Magento\ImportExport\Model\ResourceModel\Helper| MockObject */
+    /**
+     * @var Helper|MockObject
+     */
     protected $_resourceHelper;
 
-    /** @var \Magento\Framework\Stdlib\StringUtils|MockObject */
+    /**
+     * @var StringUtils|MockObject
+     */
     protected $string;
 
-    /** @var \Magento\Framework\Event\ManagerInterface|MockObject */
+    /**
+     * @var ManagerInterface|MockObject
+     */
     protected $_eventManager;
 
-    /** @var \Magento\CatalogInventory\Api\StockRegistryInterface|MockObject */
+    /**
+     * @var StockRegistryInterface|MockObject
+     */
     protected $stockRegistry;
 
-    /** @var \Magento\CatalogImportExport\Model\Import\Product\OptionFactory|MockObject */
+    /**
+     * @var \Magento\CatalogImportExport\Model\Import\Product\OptionFactory|MockObject
+     */
     protected $optionFactory;
 
-    /** @var \Magento\CatalogInventory\Api\StockConfigurationInterface|MockObject */
+    /**
+     * @var StockConfigurationInterface|MockObject
+     */
     protected $stockConfiguration;
 
-    /** @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface|MockObject */
+    /**
+     * @var StockStateProviderInterface|MockObject
+     */
     protected $stockStateProvider;
 
-    /** @var \Magento\CatalogImportExport\Model\Import\Product\Option|MockObject */
+    /**
+     * @var Option|MockObject
+     */
     protected $optionEntity;
 
-    /** @var \Magento\Framework\Stdlib\DateTime|MockObject */
+    /**
+     * @var DateTime|MockObject
+     */
     protected $dateTime;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $data;
 
-    /** @var \Magento\ImportExport\Helper\Data|MockObject */
+    /**
+     * @var \Magento\ImportExport\Helper\Data|MockObject
+     */
     protected $importExportData;
 
-    /** @var \Magento\ImportExport\Model\ResourceModel\Import\Data|MockObject */
+    /**
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data|MockObject
+     */
     protected $importData;
 
-    /** @var \Magento\Eav\Model\Config|MockObject */
+    /**
+     * @var Config|MockObject
+     */
     protected $config;
 
-    /** @var \Magento\ImportExport\Model\ResourceModel\Helper|MockObject */
+    /**
+     * @var Helper|MockObject
+     */
     protected $resourceHelper;
 
-    /** @var \Magento\Catalog\Helper\Data|MockObject */
+    /**
+     * @var \Magento\Catalog\Helper\Data|MockObject
+     */
     protected $_catalogData;
 
-    /** @var \Magento\ImportExport\Model\Import\Config|MockObject */
+    /**
+     * @var \Magento\ImportExport\Model\Import\Config|MockObject
+     */
     protected $_importConfig;
 
-    /** @var MockObject */
+    /**
+     * @var MockObject
+     */
     protected $_resourceFactory;
 
-    // @codingStandardsIgnoreStart
-    /** @var  \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory|MockObject */
+    /**
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory|MockObject
+     */
     protected $_setColFactory;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\Product\Type\Factory|MockObject */
+    /**
+     * @var Factory|MockObject
+     */
     protected $_productTypeFactory;
 
-    /** @var  \Magento\Catalog\Model\ResourceModel\Product\LinkFactory|MockObject */
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\LinkFactory|MockObject
+     */
     protected $_linkFactory;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory|MockObject */
+    /**
+     * @var \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory|MockObject
+     */
     protected $_proxyProdFactory;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\UploaderFactory|MockObject */
+    /**
+     * @var \Magento\CatalogImportExport\Model\Import\UploaderFactory|MockObject
+     */
     protected $_uploaderFactory;
 
-    /** @var  \Magento\Framework\Filesystem|MockObject */
+    /**
+     * @var Filesystem|MockObject
+     */
     protected $_filesystem;
 
-    /** @var  \Magento\Framework\Filesystem\Directory\WriteInterface|MockObject */
+    /**
+     * @var WriteInterface|MockObject
+     */
     protected $_mediaDirectory;
 
-    /** @var  \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory|MockObject */
+    /**
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory|MockObject
+     */
     protected $_stockResItemFac;
 
-    /** @var  \Magento\Framework\Stdlib\DateTime\TimezoneInterface|MockObject */
+    /**
+     * @var TimezoneInterface|MockObject
+     */
     protected $_localeDate;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry|MockObject */
+    /**
+     * @var IndexerRegistry|MockObject
+     */
     protected $indexerRegistry;
 
-    /** @var \Psr\Log\LoggerInterface|MockObject */
+    /**
+     * @var LoggerInterface|MockObject
+     */
     protected $_logger;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|MockObject */
+    /**
+     * @var StoreResolver|MockObject
+     */
     protected $storeResolver;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\Product\SkuProcessor|MockObject */
+    /**
+     * @var SkuProcessor|MockObject
+     */
     protected $skuProcessor;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor|MockObject */
+    /**
+     * @var CategoryProcessor|MockObject
+     */
     protected $categoryProcessor;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\Product\Validator|MockObject */
+    /**
+     * @var Validator|MockObject
+     */
     protected $validator;
 
-    /** @var  \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor|MockObject */
+    /**
+     * @var ObjectRelationProcessor|MockObject
+     */
     protected $objectRelationProcessor;
 
-    /** @var  \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface|MockObject */
+    /**
+     * @var TransactionManagerInterface|MockObject
+     */
     protected $transactionManager;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor|MockObject */
-    // @codingStandardsIgnoreEnd
+    /**
+     * @var \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor|MockObject
+     */
     protected $taxClassProcessor;
 
-    /** @var  Product */
+    /**
+     * @var Product
+     */
     protected $importProduct;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     * @var ProcessingErrorAggregatorInterface
      */
     protected $errorAggregator;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|MockObject */
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
     protected $scopeConfig;
 
-    /** @var \Magento\Catalog\Model\Product\Url|MockObject */
+    /**
+     * @var Url|MockObject
+     */
     protected $productUrl;
 
-    /** @var  ImageTypeProcessor|MockObject */
+    /**
+     * @var ImageTypeProcessor|MockObject
+     */
     protected $imageTypeProcessor;
 
     /**
+     * @var DriverFile|MockObject
+     */
+    private $driverFile;
+
+    /** @var Select|MockObject */
+    protected $select;
+
+    /**
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
-        $entityMetadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
+        $metadataPoolMock = $this->createMock(MetadataPool::class);
+        $entityMetadataMock = $this->createMock(EntityMetadata::class);
         $metadataPoolMock->expects($this->any())
             ->method('getMetadata')
-            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->with(ProductInterface::class)
             ->willReturn($entityMetadataMock);
         $entityMetadataMock->expects($this->any())
             ->method('getLinkField')
@@ -184,7 +322,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
         /* For parent object construct */
         $this->jsonHelper =
-            $this->getMockBuilder(\Magento\Framework\Json\Helper\Data::class)
+            $this->getMockBuilder(Data::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->importExportData =
@@ -196,34 +334,34 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->config =
-            $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+            $this->getMockBuilder(Config::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->resource =
-            $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+            $this->getMockBuilder(ResourceConnection::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->resourceHelper =
-            $this->getMockBuilder(\Magento\ImportExport\Model\ResourceModel\Helper::class)
+            $this->getMockBuilder(Helper::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->string =
-            $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
+            $this->getMockBuilder(StringUtils::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 
         /* For object construct */
         $this->_eventManager =
-            $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+            $this->getMockBuilder(ManagerInterface::class)
                 ->getMock();
         $this->stockRegistry =
-            $this->getMockBuilder(\Magento\CatalogInventory\Api\StockRegistryInterface::class)
+            $this->getMockBuilder(StockRegistryInterface::class)
                 ->getMock();
         $this->stockConfiguration =
-            $this->getMockBuilder(\Magento\CatalogInventory\Api\StockConfigurationInterface::class)
+            $this->getMockBuilder(StockConfigurationInterface::class)
                 ->getMock();
         $this->stockStateProvider =
-            $this->getMockBuilder(\Magento\CatalogInventory\Model\Spi\StockStateProviderInterface::class)
+            $this->getMockBuilder(StockStateProviderInterface::class)
                 ->getMock();
         $this->_catalogData =
             $this->getMockBuilder(\Magento\Catalog\Helper\Data::class)
@@ -242,7 +380,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ['create']
         );
         $this->_productTypeFactory = $this->createPartialMock(
-            \Magento\CatalogImportExport\Model\Import\Product\Type\Factory::class,
+            Factory::class,
             ['create']
         );
         $this->_linkFactory = $this->createPartialMock(
@@ -258,79 +396,79 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ['create']
         );
         $this->_filesystem =
-            $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+            $this->getMockBuilder(Filesystem::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->_mediaDirectory =
-            $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
+            $this->getMockBuilder(WriteInterface::class)
                 ->getMock();
         $this->_stockResItemFac = $this->createPartialMock(
             \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory::class,
             ['create']
         );
         $this->_localeDate =
-            $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
+            $this->getMockBuilder(TimezoneInterface::class)
                 ->getMock();
         $this->dateTime =
-            $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime::class)
+            $this->getMockBuilder(DateTime::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->indexerRegistry =
-            $this->getMockBuilder(\Magento\Framework\Indexer\IndexerRegistry::class)
+            $this->getMockBuilder(IndexerRegistry::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->_logger =
-            $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            $this->getMockBuilder(LoggerInterface::class)
                 ->getMock();
         $this->storeResolver =
-            $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\StoreResolver::class)
-                ->setMethods(
-                    [
-                        'getStoreCodeToId',
-                    ]
-                )
+            $this->getMockBuilder(StoreResolver::class)
+                ->onlyMethods(['getStoreCodeToId'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->skuProcessor =
-            $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\SkuProcessor::class)
+            $this->getMockBuilder(SkuProcessor::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $reflection = new \ReflectionClass(\Magento\CatalogImportExport\Model\Import\Product\SkuProcessor::class);
+        $reflection = new \ReflectionClass(SkuProcessor::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->skuProcessor, $metadataPoolMock);
 
         $this->categoryProcessor =
-            $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor::class)
+            $this->getMockBuilder(CategoryProcessor::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->validator =
-            $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Validator::class)
-                ->setMethods(['isAttributeValid', 'getMessages', 'isValid', 'init'])
+            $this->getMockBuilder(Validator::class)
+                ->onlyMethods(['isAttributeValid', 'getMessages', 'isValid', 'init'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->objectRelationProcessor =
-            $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class)
+            $this->getMockBuilder(ObjectRelationProcessor::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->transactionManager =
-            $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface::class)
+            $this->getMockBuilder(TransactionManagerInterface::class)
                 ->getMock();
 
         $this->taxClassProcessor =
-            $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor::class)
+            $this->getMockBuilder(TaxClassProcessor::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->productUrl = $this->getMockBuilder(\Magento\Catalog\Model\Product\Url::class)
+        $this->productUrl = $this->getMockBuilder(Url::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->errorAggregator = $this->getErrorAggregatorObject();
+
+        $this->driverFile = $this->getMockBuilder(DriverFile::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->data = [];
 
@@ -345,7 +483,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->_initSkus()
             ->_initImagesArrayKeys();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->importProduct = $objectManager->getObject(
             Product::class,
@@ -405,8 +543,9 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             \Magento\CatalogImportExport\Model\Import\Product\OptionFactory::class,
             ['create']
         );
-        $this->optionEntity = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Option::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->optionEntity = $this->getMockBuilder(Option::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->optionFactory->expects($this->once())->method('create')->willReturn($this->optionEntity);
 
         $this->_filesystem->expects($this->once())
@@ -423,11 +562,20 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      */
     protected function _parentObjectConstructor()
     {
-        $type = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)->disableOriginalConstructor()->getMock();
-        $type->expects($this->any())->method('getEntityTypeId')->will($this->returnValue(self::ENTITY_TYPE_ID));
+        $type = $this->getMockBuilder(Type::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $type->expects($this->any())->method('getEntityTypeId')->willReturn(self::ENTITY_TYPE_ID);
         $this->config->expects($this->any())->method('getEntityType')->with(self::ENTITY_TYPE_CODE)->willReturn($type);
 
-        $this->_connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->_connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->select = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['from', 'where'])
+            ->getMock();
+        $this->select->expects($this->any())->method('from')->willReturnSelf();
+        //$this->select->expects($this->any())->method('where')->willReturnSelf();
+        $this->_connection->expects($this->any())->method('select')->willReturn($this->select);
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->_connection);
         return $this;
     }
@@ -437,7 +585,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      */
     protected function _initAttributeSets()
     {
-        $attributeSetOne = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Set::class)
+        $attributeSetOne = $this->getMockBuilder(Set::class)
             ->disableOriginalConstructor()
             ->getMock();
         $attributeSetOne->expects($this->any())
@@ -446,7 +594,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $attributeSetOne->expects($this->any())
             ->method('getId')
             ->willReturn('1');
-        $attributeSetTwo = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Set::class)
+        $attributeSetTwo = $this->getMockBuilder(Set::class)
             ->disableOriginalConstructor()
             ->getMock();
         $attributeSetTwo->expects($this->any())
@@ -456,7 +604,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->method('getId')
             ->willReturn('2');
         $attributeSetCol = [$attributeSetOne, $attributeSetTwo];
-        $collection = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::class)
+        $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->once())
@@ -477,11 +625,12 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $entityTypes = [
             'simple' => [
                 'model' => 'simple_product',
-                'params' => [],
+                'params' => []
             ]];
         $productTypeInstance =
-            $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class)
-                ->disableOriginalConstructor()->getMock();
+            $this->getMockBuilder(AbstractType::class)
+                ->disableOriginalConstructor()
+                ->getMock();
         $productTypeInstance->expects($this->once())
             ->method('isSuitable')
             ->willReturn(true);
@@ -521,7 +670,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         return $this;
     }
 
-    public function testSaveProductAttributes()
+    /**
+     * @return void
+     */
+    public function testSaveProductAttributes(): void
     {
         $testTable = 'test_table';
         $attributeId = 'test_attribute_id';
@@ -547,19 +699,32 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->_connection->expects($this->once())
             ->method('insertOnDuplicate')
             ->with($testTable, $tableData, ['value']);
+        $attribute = $this->getMockBuilder(AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getId'])
+            ->getMockForAbstractClass();
+        $attribute->expects($this->once())->method('getId')->willReturn(1);
+        $resource = $this->getMockBuilder(ResourceModel::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getAttribute'])
+            ->getMock();
+        $resource->expects($this->once())->method('getAttribute')->willReturn($attribute);
+        $this->_resourceFactory->expects($this->once())->method('create')->willReturn($resource);
         $this->setPropertyValue($this->importProduct, '_oldSku', [$testSku => ['entity_id' => self::ENTITY_ID]]);
         $object = $this->invokeMethod($this->importProduct, '_saveProductAttributes', [$attributesData]);
         $this->assertEquals($this->importProduct, $object);
     }
 
     /**
+     * @return void
      * @dataProvider isAttributeValidAssertAttrValidDataProvider
      */
-    public function testIsAttributeValidAssertAttrValid($attrParams, $rowData)
+    public function testIsAttributeValidAssertAttrValid($attrParams, $rowData): void
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)->setMethods(null)->getMock();
+        $string = $this->getMockBuilder(StringUtils::class)
+            ->setMethods(null)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(true);
@@ -569,13 +734,15 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     }
 
     /**
+     * @return void
      * @dataProvider isAttributeValidAssertAttrInvalidDataProvider
      */
-    public function testIsAttributeValidAssertAttrInvalid($attrParams, $rowData)
+    public function testIsAttributeValidAssertAttrInvalid($attrParams, $rowData): void
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)->setMethods(null)->getMock();
+        $string = $this->getMockBuilder(StringUtils::class)
+            ->setMethods(null)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(false);
@@ -586,7 +753,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->assertFalse($result);
     }
 
-    public function testGetMultipleValueSeparatorDefault()
+    /**
+     * @return void
+     */
+    public function testGetMultipleValueSeparatorDefault(): void
     {
         $this->setPropertyValue($this->importProduct, '_parameters', null);
         $this->assertEquals(
@@ -595,14 +765,17 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         );
     }
 
-    public function testGetMultipleValueSeparatorFromParameters()
+    /**
+     * @return void
+     */
+    public function testGetMultipleValueSeparatorFromParameters(): void
     {
         $expectedSeparator = 'value';
         $this->setPropertyValue(
             $this->importProduct,
             '_parameters',
             [
-                \Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR => $expectedSeparator,
+                Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR => $expectedSeparator,
             ]
         );
 
@@ -612,7 +785,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         );
     }
 
-    public function testGetEmptyAttributeValueConstantDefault()
+    /**
+     * @return void
+     */
+    public function testGetEmptyAttributeValueConstantDefault(): void
     {
         $this->setPropertyValue($this->importProduct, '_parameters', null);
         $this->assertEquals(
@@ -621,14 +797,17 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         );
     }
 
-    public function testGetEmptyAttributeValueConstantFromParameters()
+    /**
+     * @return void
+     */
+    public function testGetEmptyAttributeValueConstantFromParameters(): void
     {
         $expectedSeparator = '__EMPTY__VALUE__TEST__';
         $this->setPropertyValue(
             $this->importProduct,
             '_parameters',
             [
-                \Magento\ImportExport\Model\Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT => $expectedSeparator,
+                Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT => $expectedSeparator
             ]
         );
 
@@ -638,21 +817,19 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         );
     }
 
-    public function testDeleteProductsForReplacement()
+    /**
+     * @return void
+     */
+    public function testDeleteProductsForReplacement(): void
     {
         $importProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'setParameters',
-                    '_deleteProducts'
-                ]
-            )
+            ->onlyMethods(['setParameters', '_deleteProducts'])
             ->getMock();
 
         $importProduct->expects($this->once())->method('setParameters')->with(
             [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
+                'behavior' => Import::BEHAVIOR_DELETE,
             ]
         );
         $importProduct->expects($this->once())->method('_deleteProducts');
@@ -662,20 +839,22 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->assertEquals($importProduct, $result);
     }
 
-    public function testGetMediaGalleryAttributeIdIfNotSetYet()
+    /**
+     * @return void
+     */
+    public function testGetMediaGalleryAttributeIdIfNotSetYet(): void
     {
         // reset possible existing id
         $this->setPropertyValue($this->importProduct, '_mediaGalleryAttributeId', null);
 
         $expectedId = '100';
-        $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+        $attribute = $this->getMockBuilder(AbstractAttribute::class)->disableOriginalConstructor()
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
         $attribute->expects($this->once())->method('getId')->willReturn($expectedId);
-        $resource = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel::class)
+        $resource = $this->getMockBuilder(ResourceModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttribute'])
+            ->onlyMethods(['getAttribute'])
             ->getMock();
         $resource->expects($this->once())->method('getAttribute')->willReturn($attribute);
         $this->_resourceFactory->expects($this->once())->method('create')->willReturn($resource);
@@ -685,18 +864,20 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     }
 
     /**
+     * @return void
      * @dataProvider getRowScopeDataProvider
      */
-    public function testGetRowScope($rowData, $expectedResult)
+    public function testGetRowScope($rowData, $expectedResult): void
     {
         $result = $this->importProduct->getRowScope($rowData);
         $this->assertEquals($expectedResult, $result);
     }
 
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testValidateRowIsAlreadyValidated()
+    public function testValidateRowIsAlreadyValidated(): void
     {
         $rowNum = 0;
         $this->setPropertyValue($this->importProduct, '_validatedRows', [$rowNum => true]);
@@ -705,13 +886,13 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     }
 
     /**
+     * @return void
      * @dataProvider validateRowDataProvider
      */
-    public function testValidateRow($rowScope, $oldSku, $expectedResult, $behaviour = Import::BEHAVIOR_DELETE)
+    public function testValidateRow($rowScope, $oldSku, $expectedResult, $behaviour = Import::BEHAVIOR_DELETE): void
     {
-        $importProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getBehavior', 'getRowScope', 'getErrorAggregator'])
+        $importProduct = $this->getMockBuilder(Product::class)->disableOriginalConstructor()
+            ->onlyMethods(['getBehavior', 'getRowScope', 'getErrorAggregator'])
             ->getMock();
         $importProduct
             ->expects($this->any())
@@ -731,15 +912,18 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testValidateRowDeleteBehaviourAddRowErrorCall()
+    /**
+     * @return void
+     */
+    public function testValidateRowDeleteBehaviourAddRowErrorCall(): void
     {
         $importProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBehavior', 'getRowScope', 'addRowError', 'getErrorAggregator'])
+            ->onlyMethods(['getBehavior', 'getRowScope', 'addRowError', 'getErrorAggregator'])
             ->getMock();
 
         $importProduct->expects($this->exactly(2))->method('getBehavior')
-            ->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE);
+            ->willReturn(Import::BEHAVIOR_DELETE);
         $importProduct->expects($this->once())->method('getRowScope')
             ->willReturn(Product::SCOPE_DEFAULT);
         $importProduct->expects($this->once())->method('addRowError');
@@ -754,7 +938,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $importProduct->validateRow($rowData, 0);
     }
 
-    public function testValidateRowValidatorCheck()
+    /**
+     * @return void
+     */
+    public function testValidateRowValidatorCheck(): void
     {
         $messages = ['validator message'];
         $this->validator->expects($this->once())->method('getMessages')->willReturn($messages);
@@ -767,8 +954,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
     /**
      * Cover getProductWebsites().
+     *
+     * @return void
      */
-    public function testGetProductWebsites()
+    public function testGetProductWebsites(): void
     {
         $productSku = 'productSku';
         $productValue = [
@@ -792,8 +981,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
     /**
      * Cover getProductCategories().
+     *
+     * @return void
      */
-    public function testGetProductCategories()
+    public function testGetProductCategories(): void
     {
         $productSku = 'productSku';
         $productValue = [
@@ -818,9 +1009,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     /**
      * Cover getStoreIdByCode().
      *
+     * @return void
      * @dataProvider getStoreIdByCodeDataProvider
      */
-    public function testGetStoreIdByCode($storeCode, $expectedResult)
+    public function testGetStoreIdByCode($storeCode, $expectedResult): void
     {
         $this->storeResolver
             ->expects($this->any())
@@ -833,8 +1025,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
     /**
      * Cover getNewSku().
+     *
+     * @return void
      */
-    public function testGetNewSku()
+    public function testGetNewSku(): void
     {
         $expectedSku = 'value';
         $expectedResult = 'result value';
@@ -851,8 +1045,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
     /**
      * Cover getCategoryProcessor().
+     *
+     * @return void
      */
-    public function testGetCategoryProcessor()
+    public function testGetCategoryProcessor(): void
     {
         $expectedResult = 'value';
         $this->setPropertyValue($this->importProduct, 'categoryProcessor', $expectedResult);
@@ -864,24 +1060,25 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     /**
      * @return array
      */
-    public function getStoreIdByCodeDataProvider()
+    public function getStoreIdByCodeDataProvider(): array
     {
         return [
             [
                 '$storeCode' => null,
-                '$expectedResult' => Product::SCOPE_DEFAULT,
+                '$expectedResult' => Product::SCOPE_DEFAULT
             ],
             [
                 '$storeCode' => 'value',
-                '$expectedResult' => 'getStoreCodeToId value',
-            ],
+                '$expectedResult' => 'getStoreCodeToId value'
+            ]
         ];
     }
 
     /**
+     * @return void
      * @dataProvider validateRowCheckSpecifiedSkuDataProvider
      */
-    public function testValidateRowCheckSpecifiedSku($sku, $expectedError)
+    public function testValidateRowCheckSpecifiedSku($sku, $expectedError): void
     {
         $importProduct = $this->createModelMockWithErrorAggregator(
             ['addRowError', 'getOptionEntity', 'getRowScope'],
@@ -891,7 +1088,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $rowNum = 0;
         $rowData = [
             Product::COL_SKU => $sku,
-            Product::COL_STORE => '',
+            Product::COL_STORE => ''
         ];
 
         $this->storeResolver->method('getStoreCodeToId')->willReturn(null);
@@ -904,12 +1101,18 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->expects($this->once())
             ->method('getRowScope')
             ->willReturn(Product::SCOPE_STORE);
-        $importProduct->expects($this->at(1))->method('addRowError')->with($expectedError, $rowNum)->willReturn(null);
+        $importProduct
+            ->method('addRowError')
+            ->withConsecutive([$expectedError, $rowNum])
+            ->willReturnOnConsecutiveCalls(null);
 
         $importProduct->validateRow($rowData, $rowNum);
     }
 
-    public function testValidateRowProcessEntityIncrement()
+    /**
+     * @return void
+     */
+    public function testValidateRowProcessEntityIncrement(): void
     {
         $count = 0;
         $rowNum = 0;
@@ -924,7 +1127,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->assertEquals(++$count, $this->importProduct->getProcessedEntitiesCount());
     }
 
-    public function testValidateRowValidateExistingProductTypeAddNewSku()
+    /**
+     * @return void
+     */
+    public function testValidateRowValidateExistingProductTypeAddNewSku(): void
     {
         $importProduct = $this->createModelMockWithErrorAggregator(
             ['addRowError', 'getOptionEntity'],
@@ -940,12 +1146,12 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             $sku => [
                 'entity_id' => 'entity_id_val',
                 'type_id' => 'type_id_val',
-                'attr_set_id' => 'attr_set_id_val',
-            ],
+                'attr_set_id' => 'attr_set_id_val'
+            ]
         ];
 
         $_productTypeModels = [
-            $oldSku[$sku]['type_id'] => 'type_id_val_val',
+            $oldSku[$sku]['type_id'] => 'type_id_val_val'
         ];
         $this->setPropertyValue($importProduct, '_productTypeModels', $_productTypeModels);
 
@@ -970,7 +1176,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $importProduct->validateRow($rowData, $rowNum);
     }
 
-    public function testValidateRowValidateExistingProductTypeAddErrorRowCall()
+    /**
+     * @return void
+     */
+    public function testValidateRowValidateExistingProductTypeAddErrorRowCall(): void
     {
         $sku = 'sku';
         $rowNum = 0;
@@ -979,7 +1188,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         ];
         $oldSku = [
             $sku => [
-                'type_id' => 'type_id_val',
+                'type_id' => 'type_id_val'
             ],
         ];
         $importProduct = $this->createModelMockWithErrorAggregator(
@@ -989,7 +1198,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
         $importProduct->expects($this->once())->method('addRowError')->with(
-            \Magento\CatalogImportExport\Model\Import\Product\Validator::ERROR_TYPE_UNSUPPORTED,
+            Validator::ERROR_TYPE_UNSUPPORTED,
             $rowNum
         );
 
@@ -999,12 +1208,14 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     }
 
     /**
-     * @dataProvider validateRowValidateNewProductTypeAddRowErrorCallDataProvider
      * @param string $colType
      * @param string $productTypeModelsColType
      * @param string $colAttrSet
      * @param string $attrSetNameToIdColAttrSet
      * @param string $error
+     *
+     * @return void
+     * @dataProvider validateRowValidateNewProductTypeAddRowErrorCallDataProvider
      */
     public function testValidateRowValidateNewProductTypeAddRowErrorCall(
         $colType,
@@ -1012,22 +1223,22 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $colAttrSet,
         $attrSetNameToIdColAttrSet,
         $error
-    ) {
+    ): void {
         $sku = 'sku';
         $rowNum = 0;
         $rowData = [
             Product::COL_SKU => $sku,
             Product::COL_TYPE => $colType,
-            Product::COL_ATTR_SET => $colAttrSet,
+            Product::COL_ATTR_SET => $colAttrSet
         ];
         $_attrSetNameToId = [
-            $rowData[Product::COL_ATTR_SET] => $attrSetNameToIdColAttrSet,
+            $rowData[Product::COL_ATTR_SET] => $attrSetNameToIdColAttrSet
         ];
         $_productTypeModels = [
-            $rowData[Product::COL_TYPE] => $productTypeModelsColType,
+            $rowData[Product::COL_TYPE] => $productTypeModelsColType
         ];
         $oldSku = [
-            $sku => null,
+            $sku => null
         ];
         $importProduct = $this->createModelMockWithErrorAggregator(
             ['addRowError', 'getOptionEntity'],
@@ -1047,20 +1258,23 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $importProduct->validateRow($rowData, $rowNum);
     }
 
-    public function testValidateRowValidateNewProductTypeGetNewSkuCall()
+    /**
+     * @return void
+     */
+    public function testValidateRowValidateNewProductTypeGetNewSkuCall(): void
     {
         $sku = 'sku';
         $rowNum = 0;
         $rowData = [
             Product::COL_SKU => $sku,
             Product::COL_TYPE => 'value',
-            Product::COL_ATTR_SET => 'value',
+            Product::COL_ATTR_SET => 'value'
         ];
         $_productTypeModels = [
-            $rowData[Product::COL_TYPE] => 'value',
+            $rowData[Product::COL_TYPE] => 'value'
         ];
         $oldSku = [
-            $sku => null,
+            $sku => null
         ];
         $_attrSetNameToId = [
             $rowData[Product::COL_ATTR_SET] => 'attr_set_code_val'
@@ -1091,7 +1305,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $importProduct->validateRow($rowData, $rowNum);
     }
 
-    public function testValidateDefaultScopeNotValidAttributesResetSku()
+    /**
+     * @return void
+     */
+    public function testValidateDefaultScopeNotValidAttributesResetSku(): void
     {
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(false);
         $messages = ['validator message'];
@@ -1101,27 +1318,30 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->assertFalse($result);
     }
 
-    public function testValidateRowSetAttributeSetCodeIntoRowData()
+    /**
+     * @return void
+     */
+    public function testValidateRowSetAttributeSetCodeIntoRowData(): void
     {
         $sku = 'sku';
         $rowNum = 0;
         $rowData = [
             Product::COL_SKU => $sku,
-            Product::COL_ATTR_SET => 'col_attr_set_val',
+            Product::COL_ATTR_SET => 'col_attr_set_val'
         ];
         $expectedAttrSetCode = 'new_attr_set_code';
         $newSku = [
             'attr_set_code' => $expectedAttrSetCode,
-            'type_id' => 'new_type_id_val',
+            'type_id' => 'new_type_id_val'
         ];
         $expectedRowData = [
             Product::COL_SKU => $sku,
-            Product::COL_ATTR_SET => $newSku['attr_set_code'],
+            Product::COL_ATTR_SET => $newSku['attr_set_code']
         ];
         $oldSku = [
             $sku => [
-                'type_id' => 'type_id_val',
-            ],
+                'type_id' => 'type_id_val'
+            ]
         ];
         $importProduct = $this->createModelMockWithErrorAggregator(['getOptionEntity']);
 
@@ -1129,7 +1349,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->skuProcessor->expects($this->any())->method('getNewSku')->willReturn($newSku);
         $this->setPropertyValue($importProduct, 'skuProcessor', $this->skuProcessor);
 
-        $productType = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class)
+        $productType = $this->getMockBuilder(AbstractType::class)
             ->disableOriginalConstructor()
             ->getMock();
         $productType->expects($this->once())->method('isRowValid')->with($expectedRowData);
@@ -1149,18 +1369,21 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $importProduct->validateRow($rowData, $rowNum);
     }
 
-    public function testValidateValidateOptionEntity()
+    /**
+     * @return void
+     */
+    public function testValidateValidateOptionEntity(): void
     {
         $sku = 'sku';
         $rowNum = 0;
         $rowData = [
             Product::COL_SKU => $sku,
-            Product::COL_ATTR_SET => 'col_attr_set_val',
+            Product::COL_ATTR_SET => 'col_attr_set_val'
         ];
         $oldSku = [
             $sku => [
-                'type_id' => 'type_id_val',
-            ],
+                'type_id' => 'type_id_val'
+            ]
         ];
         $importProduct = $this->createModelMockWithErrorAggregator(
             ['addRowError', 'getOptionEntity'],
@@ -1172,7 +1395,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         //suppress validator
         $this->_setValidatorMockInImportProduct($importProduct);
 
-        $option = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Option::class)
+        $option = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
             ->getMock();
         $option->expects($this->once())->method('validateRow')->with($rowData, $rowNum);
@@ -1182,9 +1405,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     }
 
     /**
+     * @return void
      * @dataProvider getImagesFromRowDataProvider
      */
-    public function testGetImagesFromRow($rowData, $expectedResult)
+    public function testGetImagesFromRow($rowData, $expectedResult): void
     {
         $this->assertEquals(
             $this->importProduct->getImagesFromRow($rowData),
@@ -1192,7 +1416,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         );
     }
 
-    public function testParseAttributesWithoutWrappedValuesWillReturnsLowercasedAttributeCodes()
+    /**
+     * @return void
+     */
+    public function testParseAttributesWithoutWrappedValuesWillReturnsLowercasedAttributeCodes(): void
     {
         $attributesData = 'PARAM1=value1,param2=value2';
         $preparedAttributes = $this->invokeMethod(
@@ -1210,20 +1437,21 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->assertArrayNotHasKey('PARAM1', $preparedAttributes);
     }
 
-    public function testParseAttributesWithWrappedValuesWillReturnsLowercasedAttributeCodes()
+    /**
+     * @return void
+     */
+    public function testParseAttributesWithWrappedValuesWillReturnsLowercasedAttributeCodes(): void
     {
-        $attribute1 = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getFrontendInput'])
+        $attribute1 = $this->getMockBuilder(AbstractAttribute::class)->disableOriginalConstructor()
+            ->onlyMethods(['getFrontendInput'])
             ->getMockForAbstractClass();
 
         $attribute1->expects($this->once())
             ->method('getFrontendInput')
             ->willReturn('text');
 
-        $attribute2 = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getFrontendInput'])
+        $attribute2 = $this->getMockBuilder(AbstractAttribute::class)->disableOriginalConstructor()
+            ->onlyMethods(['getFrontendInput'])
             ->getMockForAbstractClass();
 
         $attribute2->expects($this->once())
@@ -1232,7 +1460,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
         $attributeCache = [
             'param1' => $attribute1,
-            'param2' => $attribute2,
+            'param2' => $attribute2
         ];
 
         $this->setPropertyValue($this->importProduct, '_attributeCache', $attributeCache);
@@ -1258,12 +1486,21 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      * @param bool $isRead
      * @param bool $isWrite
      * @param string $message
+     *
+     * @return void
      * @dataProvider fillUploaderObjectDataProvider
      */
-    public function testFillUploaderObject($isRead, $isWrite, $message)
+    public function testFillUploaderObject($isRead, $isWrite, $message): void
     {
+        $dir = $this->createMock(WriteInterface::class);
+        $dir->method('getAbsolutePath')
+            ->willReturn('pub/media');
+        $this->_filesystem->method('getDirectoryRead')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn($dir);
+
         $fileUploaderMock = $this
-            ->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Uploader::class)
+            ->getMockBuilder(Uploader::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -1278,11 +1515,16 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->willReturn($isWrite);
 
         $this->_mediaDirectory
+            ->method('getDriver')
+            ->willReturn($this->driverFile);
+
+        $this->_mediaDirectory
             ->method('getRelativePath')
             ->willReturnMap(
                 [
                     ['import', 'import'],
                     ['catalog/product', 'catalog/product'],
+                    ['pub/media', 'pub/media']
                 ]
             );
 
@@ -1298,7 +1540,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         try {
             $this->importProduct->getUploader();
             $this->assertNotNull($this->getPropertyValue($this->importProduct, '_fileUploader'));
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->assertNull($this->getPropertyValue($this->importProduct, '_fileUploader'));
             $this->assertEquals($message, $e->getMessage());
         }
@@ -1309,9 +1551,11 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      *
      * @param string $fileName
      * @param bool $throwException
+     *
+     * @return void
      * @dataProvider uploadMediaFilesDataProvider
      */
-    public function testUploadMediaFiles(string $fileName, bool $throwException)
+    public function testUploadMediaFiles(string $fileName, bool $throwException): void
     {
         $exception = new \Exception();
         $expectedFileName = $fileName;
@@ -1320,7 +1564,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             $this->_logger->expects($this->once())->method('critical')->with($exception);
         }
         $fileUploaderMock = $this
-            ->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Uploader::class)
+            ->getMockBuilder(Uploader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $fileUploaderMock
@@ -1351,11 +1595,69 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     }
 
     /**
+     * Check that getProductCategoriesDataSave method will return array with product-category-position relations
+     * where new products positioned before existing
+     *
+     * @param array $categoriesData
+     * @param string $tableName
+     * @param array $result
+     * @dataProvider productCategoriesDataProvider
+     */
+    public function testGetProductCategoriesDataSave(array $categoriesData, string $tableName, array $result)
+    {
+        $this->_connection->method('fetchOne')->willReturnOnConsecutiveCalls('0', '-2');
+        $this->skuProcessor->method('getNewSku')
+            ->willReturnOnConsecutiveCalls(
+                ['entity_id' => 2],
+                ['entity_id' => 5]
+            );
+        $actualResult = $this->invokeMethod(
+            $this->importProduct,
+            'getProductCategoriesDataSave',
+            [$categoriesData, $tableName]
+        );
+        $this->assertEquals($result, $actualResult);
+    }
+
+    /**
+     * Data provider for testGetProductCategoriesDataSave.
+     *
+     * @return array
+     */
+    public function productCategoriesDataProvider()
+    {
+        return [
+            [
+                [
+                    'simple_2' => [3 => true],
+                    'simple_5' => [5 => true]
+                ],
+                'catalog_category_product',
+                [
+                   [2, 5],
+                    [
+                        [
+                            'product_id' => 2,
+                            'category_id' => 3,
+                            'position' => -1
+                        ],
+                        [
+                            'product_id' => 5,
+                            'category_id' => 5,
+                            'position' => -3
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
      * Data provider for testFillUploaderObject.
      *
      * @return array
      */
-    public function fillUploaderObjectDataProvider()
+    public function fillUploaderObjectDataProvider(): array
     {
         return [
             [false, true, 'File directory \'pub/media/import\' is not readable.'],
@@ -1369,18 +1671,18 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      *
      * @return array
      */
-    public function uploadMediaFilesDataProvider()
+    public function uploadMediaFilesDataProvider(): array
     {
         return [
             ['test1.jpg', false],
-            ['test2.jpg', true],
+            ['test2.jpg', true]
         ];
     }
 
     /**
      * @return array
      */
-    public function getImagesFromRowDataProvider()
+    public function getImagesFromRowDataProvider(): array
     {
         return [
             [
@@ -1400,7 +1702,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                     ],
                     [
                         '_media_image' => ['label1', 'label2']
-                    ],
+                    ]
                 ]
             ]
         ];
@@ -1409,7 +1711,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     /**
      * @return array
      */
-    public function validateRowValidateNewProductTypeAddRowErrorCallDataProvider()
+    public function validateRowValidateNewProductTypeAddRowErrorCallDataProvider(): array
     {
         return [
             [
@@ -1417,92 +1719,92 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 '$productTypeModelsColType' => 'value',
                 '$colAttrSet' => null,
                 '$attrSetNameToIdColAttrSet' => null,
-                '$error' => \Magento\CatalogImportExport\Model\Import\Product\Validator::ERROR_INVALID_TYPE
+                '$error' => Validator::ERROR_INVALID_TYPE
             ],
             [
                 '$colType' => 'value',
                 '$productTypeModelsColType' => null,
                 '$colAttrSet' => null,
                 '$attrSetNameToIdColAttrSet' => null,
-                '$error' => \Magento\CatalogImportExport\Model\Import\Product\Validator::ERROR_INVALID_TYPE,
+                '$error' => Validator::ERROR_INVALID_TYPE
             ],
             [
                 '$colType' => 'value',
                 '$productTypeModelsColType' => 'value',
                 '$colAttrSet' => null,
                 '$attrSetNameToIdColAttrSet' => 'value',
-                '$error' => \Magento\CatalogImportExport\Model\Import\Product\Validator::ERROR_INVALID_ATTR_SET,
+                '$error' => Validator::ERROR_INVALID_ATTR_SET
             ],
             [
                 '$colType' => 'value',
                 '$productTypeModelsColType' => 'value',
                 '$colAttrSet' => 'value',
                 '$attrSetNameToIdColAttrSet' => null,
-                '$error' => \Magento\CatalogImportExport\Model\Import\Product\Validator::ERROR_INVALID_ATTR_SET,
-            ],
+                '$error' => Validator::ERROR_INVALID_ATTR_SET
+            ]
         ];
     }
 
     /**
      * @return array
      */
-    public function validateRowCheckSpecifiedSkuDataProvider()
+    public function validateRowCheckSpecifiedSkuDataProvider(): array
     {
         return [
             [
                 '$sku' => null,
-                '$expectedError' => \Magento\CatalogImportExport\Model\Import\Product\Validator::ERROR_SKU_IS_EMPTY,
+                '$expectedError' => Validator::ERROR_SKU_IS_EMPTY
             ],
             [
                 '$sku' => false,
-                '$expectedError' => \Magento\CatalogImportExport\Model\Import\Product\Validator::ERROR_ROW_IS_ORPHAN,
+                '$expectedError' => Validator::ERROR_ROW_IS_ORPHAN
             ],
             [
                 '$sku' => 'sku',
-                '$expectedError' => \Magento\CatalogImportExport\Model\Import\Product\Validator::ERROR_INVALID_STORE,
-            ],
+                '$expectedError' => Validator::ERROR_INVALID_STORE
+            ]
         ];
     }
 
     /**
      * @return array
      */
-    public function validateRowDataProvider()
+    public function validateRowDataProvider(): array
     {
         return [
             [
                 '$rowScope' => Product::SCOPE_DEFAULT,
                 '$oldSku' => null,
-                '$expectedResult' => false,
+                '$expectedResult' => false
             ],
             [
                 '$rowScope' => null,
                 '$oldSku' => null,
-                '$expectedResult' => true,
+                '$expectedResult' => true
             ],
             [
                 '$rowScope' => null,
                 '$oldSku' => true,
-                '$expectedResult' => true,
+                '$expectedResult' => true
             ],
             [
                 '$rowScope' => Product::SCOPE_DEFAULT,
                 '$oldSku' => true,
-                '$expectedResult' => true,
+                '$expectedResult' => true
             ],
             [
                 '$rowScope' => Product::SCOPE_DEFAULT,
                 '$oldSku' => null,
                 '$expectedResult' => false,
                 '$behaviour' => Import::BEHAVIOR_REPLACE
-            ],
+            ]
         ];
     }
 
     /**
      * @return array
      */
-    public function isAttributeValidAssertAttrValidDataProvider()
+    public function isAttributeValidAssertAttrValidDataProvider(): array
     {
         return [
             [
@@ -1518,11 +1820,11 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ],
             [
                 '$attrParams' => [
-                    'type' => 'decimal',
+                    'type' => 'decimal'
                 ],
                 '$rowData' => [
-                    'code' => 10,
-                ],
+                    'code' => 10
+                ]
             ],
             [
                 '$attrParams' => [
@@ -1530,8 +1832,8 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                     'options' => ['code' => 1]
                 ],
                 '$rowData' => [
-                    'code' => 'code',
-                ],
+                    'code' => 'code'
+                ]
             ],
             [
                 '$attrParams' => [
@@ -1539,116 +1841,116 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                     'options' => ['code' => 1]
                 ],
                 '$rowData' => [
-                    'code' => 'code',
-                ],
+                    'code' => 'code'
+                ]
             ],
             [
                 '$attrParams' => [
-                    'type' => 'int',
+                    'type' => 'int'
                 ],
                 '$rowData' => [
-                    'code' => 1000,
-                ],
+                    'code' => 1000
+                ]
             ],
             [
                 '$attrParams' => [
-                    'type' => 'datetime',
+                    'type' => 'datetime'
                 ],
                 '$rowData' => [
-                    'code' => "5 September 2015",
-                ],
+                    'code' => "5 September 2015"
+                ]
             ],
             [
                 '$attrParams' => [
-                    'type' => 'text',
+                    'type' => 'text'
                 ],
                 '$rowData' => [
                     'code' => str_repeat(
                         'a',
                         Product::DB_MAX_TEXT_LENGTH - 1
-                    ),
-                ],
-            ],
+                    )
+                ]
+            ]
         ];
     }
 
     /**
      * @return array
      */
-    public function isAttributeValidAssertAttrInvalidDataProvider()
+    public function isAttributeValidAssertAttrInvalidDataProvider(): array
     {
         return [
             [
                 '$attrParams' => [
-                    'type' => 'varchar',
+                    'type' => 'varchar'
                 ],
                 '$rowData' => [
                     'code' => str_repeat(
                         'a',
                         Product::DB_MAX_VARCHAR_LENGTH + 1
-                    ),
-                ],
+                    )
+                ]
             ],
             [
                 '$attrParams' => [
-                    'type' => 'decimal',
+                    'type' => 'decimal'
                 ],
                 '$rowData' => [
-                    'code' => 'incorrect',
-                ],
+                    'code' => 'incorrect'
+                ]
             ],
             [
                 '$attrParams' => [
                     'type' => 'select',
-                    'not options' => null,
+                    'not options' => null
                 ],
                 '$rowData' => [
-                    'code' => 'code',
-                ],
+                    'code' => 'code'
+                ]
             ],
             [
                 '$attrParams' => [
                     'type' => 'multiselect',
-                    'not options' => null,
+                    'not options' => null
                 ],
                 '$rowData' => [
-                    'code' => 'code',
-                ],
+                    'code' => 'code'
+                ]
             ],
             [
                 '$attrParams' => [
-                    'type' => 'int',
+                    'type' => 'int'
                 ],
                 '$rowData' => [
-                    'code' => 'not int',
-                ],
+                    'code' => 'not int'
+                ]
             ],
             [
                 '$attrParams' => [
-                    'type' => 'datetime',
+                    'type' => 'datetime'
                 ],
                 '$rowData' => [
-                    'code' => "incorrect datetime",
-                ],
+                    'code' => "incorrect datetime"
+                ]
             ],
             [
                 '$attrParams' => [
-                    'type' => 'text',
+                    'type' => 'text'
                 ],
                 '$rowData' => [
                     'code' => str_repeat(
                         'a',
                         Product::DB_MAX_TEXT_LENGTH + 1
-                    ),
-                ],
-            ],
+                    )
+                ]
+            ]
         ];
     }
 
     /**
      * @return array
      */
-    public function getRowScopeDataProvider()
+    public function getRowScopeDataProvider(): array
     {
         $colSku = Product::COL_SKU;
         $colStore = Product::COL_STORE;
@@ -1657,21 +1959,21 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             [
                 '$rowData' => [
                     $colSku => null,
-                    $colStore => 'store',
+                    $colStore => 'store'
                 ],
                 '$expectedResult' => Product::SCOPE_STORE
             ],
             [
                 '$rowData' => [
                     $colSku => 'sku',
-                    $colStore => null,
+                    $colStore => null
                 ],
                 '$expectedResult' => Product::SCOPE_DEFAULT
             ],
             [
                 '$rowData' => [
                     $colSku => 'sku',
-                    $colStore => 'store',
+                    $colStore => 'store'
                 ],
                 '$expectedResult' => Product::SCOPE_STORE
             ],
@@ -1750,11 +2052,11 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      *
      * @see _rewriteGetOptionEntityInImportProduct()
      * @see _setValidatorMockInImportProduct()
-     * @param Product
-     *  Param should go with rewritten getOptionEntity method.
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Option|MockObject
+     * @param Product  Param should go with rewritten getOptionEntity method.
+     *
+     * @return Option|MockObject
      */
-    private function _suppressValidateRowOptionValidatorInvalidRows($importProduct)
+    private function _suppressValidateRowOptionValidatorInvalidRows($importProduct): MockObject
     {
         //suppress option validation
         $this->_rewriteGetOptionEntityInImportProduct($importProduct);
@@ -1769,7 +2071,8 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      * Set validator mock in importProduct, return true for isValid method.
      *
      * @param Product
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Validator|MockObject
+     *
+     * @return Validator|MockObject
      */
     private function _setValidatorMockInImportProduct($importProduct)
     {
@@ -1783,13 +2086,13 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      * Used in group of validateRow method's tests.
      * Make getOptionEntity return option mock.
      *
-     * @param Product
-     *  Param should go with rewritten getOptionEntity method.
-     * @return \Magento\CatalogImportExport\Model\Import\Product\Option|MockObject
+     * @param Product  Param should go with rewritten getOptionEntity method.
+     *
+     * @return Option|MockObject
      */
-    private function _rewriteGetOptionEntityInImportProduct($importProduct)
+    private function _rewriteGetOptionEntityInImportProduct($importProduct): MockObject
     {
-        $option = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Option::class)
+        $option = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
             ->getMock();
         $importProduct->expects($this->once())->method('getOptionEntity')->willReturn($option);
@@ -1800,10 +2103,13 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     /**
      * @param array $methods
      * @param array $errorAggregatorMethods
+     *
      * @return MockObject
      */
-    protected function createModelMockWithErrorAggregator(array $methods = [], array $errorAggregatorMethods = [])
-    {
+    protected function createModelMockWithErrorAggregator(
+        array $methods = [],
+        array $errorAggregatorMethods = []
+    ): MockObject {
         $methods[] = 'getErrorAggregator';
         $importProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()

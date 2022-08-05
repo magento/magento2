@@ -3,35 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
 
-class AbstractStorageTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
+use Magento\UrlRewrite\Model\Storage\AbstractStorage;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AbstractStorageTest extends TestCase
 {
     /**
-     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlRewriteFactory|MockObject
      */
     protected $urlRewriteFactory;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObjectHelper|MockObject
      */
     protected $dataObjectHelper;
 
     /**
-     * @var \Magento\UrlRewrite\Model\Storage\AbstractStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractStorage|MockObject
      */
     protected $storage;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->urlRewriteFactory = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
-        $this->dataObjectHelper = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->storage = $this->getMockForAbstractClass(
-            \Magento\UrlRewrite\Model\Storage\AbstractStorage::class,
+            AbstractStorage::class,
             [$this->urlRewriteFactory, $this->dataObjectHelper],
             '',
             true,
@@ -40,7 +55,10 @@ class AbstractStorageTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testFindAllByData()
+    /**
+     * @return void
+     */
+    public function testFindAllByData(): void
     {
         $data = [['field1' => 'value1']];
         $rows = [['row1'], ['row2']];
@@ -49,42 +67,42 @@ class AbstractStorageTest extends \PHPUnit\Framework\TestCase
         $this->storage->expects($this->once())
             ->method('doFindAllByData')
             ->with($data)
-            ->will($this->returnValue($rows));
+            ->willReturn($rows);
 
-        $this->dataObjectHelper->expects($this->at(0))
+        $this->dataObjectHelper
             ->method('populateWithArray')
-            ->with($urlRewrites[0], $rows[0], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->withConsecutive(
+                [$urlRewrites[0], $rows[0], UrlRewrite::class],
+                [$urlRewrites[1], $rows[1], UrlRewrite::class]
+            )
+            ->willReturnOnConsecutiveCalls($this->dataObjectHelper, $this->dataObjectHelper);
 
-        $this->urlRewriteFactory->expects($this->at(0))
+        $this->urlRewriteFactory
             ->method('create')
-            ->will($this->returnValue($urlRewrites[0]));
-
-        $this->dataObjectHelper->expects($this->at(1))
-            ->method('populateWithArray')
-            ->with($urlRewrites[1], $rows[1], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
-            ->will($this->returnSelf());
-
-        $this->urlRewriteFactory->expects($this->at(1))
-            ->method('create')
-            ->will($this->returnValue($urlRewrites[1]));
+            ->willReturnOnConsecutiveCalls($urlRewrites[0], $urlRewrites[1]);
 
         $this->assertEquals($urlRewrites, $this->storage->findAllByData($data));
     }
 
-    public function testFindOneByDataIfNotFound()
+    /**
+     * @return void
+     */
+    public function testFindOneByDataIfNotFound(): void
     {
         $data = [['field1' => 'value1']];
 
         $this->storage->expects($this->once())
             ->method('doFindOneByData')
             ->with($data)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->assertNull($this->storage->findOneByData($data));
     }
 
-    public function testFindOneByDataIfFound()
+    /**
+     * @return void
+     */
+    public function testFindOneByDataIfFound(): void
     {
         $data = [['field1' => 'value1']];
         $row = ['row1'];
@@ -93,21 +111,23 @@ class AbstractStorageTest extends \PHPUnit\Framework\TestCase
         $this->storage->expects($this->once())
             ->method('doFindOneByData')
             ->with($data)
-            ->will($this->returnValue($row));
+            ->willReturn($row);
 
         $this->dataObjectHelper->expects($this->once())
             ->method('populateWithArray')
-            ->with($urlRewrite, $row, \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->with($urlRewrite, $row, UrlRewrite::class)->willReturnSelf();
 
         $this->urlRewriteFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($urlRewrite));
+            ->willReturn($urlRewrite);
 
         $this->assertEquals($urlRewrite, $this->storage->findOneByData($data));
     }
 
-    public function testReplaceIfUrlsAreEmpty()
+    /**
+     * @return void
+     */
+    public function testReplaceIfUrlsAreEmpty(): void
     {
         $this->storage->expects($this->never())->method('doReplace');
 
@@ -115,38 +135,39 @@ class AbstractStorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
-     * @expectedExceptionMessage Custom storage message
+     * @return void
      */
-    public function testReplaceIfThrewDuplicateEntryExceptionWithCustomMessage()
+    public function testReplaceIfThrewDuplicateEntryExceptionWithCustomMessage(): void
     {
+        $this->expectException('Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException');
+        $this->expectExceptionMessage('Custom storage message');
         $this->storage
             ->expects($this->once())
             ->method('doReplace')
-            ->will($this->throwException(
-                new \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException(__('Custom storage message'))
-            ));
+            ->willThrowException(new UrlAlreadyExistsException(__('Custom storage message')));
 
         $this->storage->replace([['UrlRewrite1']]);
     }
 
     /**
-     * @expectedException \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
-     * @expectedExceptionMessage URL key for specified store already exists
+     * @return void
      */
-    public function testReplaceIfThrewDuplicateEntryExceptionDefaultMessage()
+    public function testReplaceIfThrewDuplicateEntryExceptionDefaultMessage(): void
     {
+        $this->expectException('Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException');
+        $this->expectExceptionMessage('URL key for specified store already exists');
         $this->storage
             ->expects($this->once())
             ->method('doReplace')
-            ->will($this->throwException(
-                new \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException()
-            ));
+            ->willThrowException(new UrlAlreadyExistsException());
 
         $this->storage->replace([['UrlRewrite1']]);
     }
 
-    public function testReplace()
+    /**
+     * @return void
+     */
+    public function testReplace(): void
     {
         $urls = [['UrlRewrite1'], ['UrlRewrite2']];
 

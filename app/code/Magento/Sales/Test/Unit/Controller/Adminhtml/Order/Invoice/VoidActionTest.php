@@ -3,80 +3,95 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Helper\Data;
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\View\Result\Forward;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\DB\Transaction;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\Manager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\InvoiceManagementInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
+use Magento\Sales\Controller\Adminhtml\Order\Invoice\UpdateQty;
+use Magento\Sales\Controller\Adminhtml\Order\Invoice\VoidAction;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class VoidActionTest
- * @package Magento\Sales\Controller\Adminhtml\Order\Invoice
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class VoidActionTest extends \PHPUnit\Framework\TestCase
+class VoidActionTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $titleMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $messageManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $actionFlagMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \Magento\Sales\Controller\Adminhtml\Order\Invoice\UpdateQty
+     * @var UpdateQty
      */
     protected $controller;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectFactory|MockObject
      */
     protected $resultRedirectFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ForwardFactory|MockObject
      */
     protected $resultForwardFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $invoiceManagement;
 
     /**
-     * @var InvoiceRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceRepositoryInterface|MockObject
      */
     protected $invoiceRepository;
 
@@ -84,74 +99,60 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $this->titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
+        $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
-        $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->actionFlagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->helperMock = $this->getMockBuilder(\Magento\Backend\Helper\Data::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->sessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-
-        $this->resultForwardFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\ForwardFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-
-        $this->invoiceManagement = $this->getMockBuilder(\Magento\Sales\Api\InvoiceManagementInterface::class)
+        $this->messageManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->helperMock = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->sessionMock = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
+
+        $this->resultForwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
+
+        $this->invoiceManagement = $this->getMockBuilder(InvoiceManagementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->objectManagerMock->expects($this->any())
             ->method('get')
-            ->with(\Magento\Sales\Api\InvoiceManagementInterface::class)
+            ->with(InvoiceManagementInterface::class)
             ->willReturn($this->invoiceManagement);
 
-        $contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getRequest',
                     'getResponse',
                     'getObjectManager',
-                    'getTitle',
                     'getSession',
                     'getHelper',
                     'getActionFlag',
@@ -164,7 +165,6 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
         $contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManagerMock);
-        $contextMock->expects($this->any())->method('getTitle')->willReturn($this->titleMock);
         $contextMock->expects($this->any())->method('getActionFlag')->willReturn($this->actionFlagMock);
         $contextMock->expects($this->any())->method('getSession')->willReturn($this->sessionMock);
         $contextMock->expects($this->any())->method('getHelper')->willReturn($this->helperMock);
@@ -177,7 +177,7 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $this->controller = $objectManager->getObject(
-            \Magento\Sales\Controller\Adminhtml\Order\Invoice\VoidAction::class,
+            VoidAction::class,
             [
                 'context' => $contextMock,
                 'resultForwardFactory' => $this->resultForwardFactoryMock
@@ -194,18 +194,18 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $invoiceId = 2;
 
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
-        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setIsInProcess', '__wakeup'])
+            ->addMethods(['setIsInProcess'])
             ->getMock();
 
         $this->invoiceManagement->expects($this->once())
@@ -213,55 +213,47 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
             ->with($invoiceId)
             ->willReturn(true);
 
-        $invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
+        $invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $invoiceMock->expects($this->any())
             ->method('getEntityId')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
         $invoiceMock->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($orderMock));
+            ->willReturn($orderMock);
         $invoiceMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
-        $transactionMock = $this->getMockBuilder(\Magento\Framework\DB\Transaction::class)
+        $transactionMock = $this->getMockBuilder(Transaction::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $transactionMock->expects($this->at(0))
-            ->method('addObject')
-            ->with($invoiceMock)
-            ->will($this->returnSelf());
-        $transactionMock->expects($this->at(1))
-            ->method('addObject')
-            ->with($orderMock)
-            ->will($this->returnSelf());
-        $transactionMock->expects($this->at(2))
-            ->method('save');
+        $transactionMock->method('addObject')
+            ->withConsecutive([$invoiceMock], [$orderMock])
+            ->willReturnOnConsecutiveCalls($transactionMock, $transactionMock);
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')
             ->willReturn($invoiceMock);
 
-        $this->objectManagerMock->expects($this->at(1))
+        $this->objectManagerMock
             ->method('create')
-            ->with(\Magento\Framework\DB\Transaction::class)
-            ->will($this->returnValue($transactionMock));
+            ->with(Transaction::class)
+            ->willReturn($transactionMock);
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccessMessage')
             ->with('The invoice has been voided.');
 
-        $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        $resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $resultRedirect->expects($this->once())->method('setPath')->with('sales/*/view', ['invoice_id' => $invoiceId]);
 
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultRedirect));
+            ->willReturn($resultRedirect);
 
         $this->assertSame($resultRedirect, $this->controller->execute());
     }
@@ -269,14 +261,14 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testExecuteNoInvoice()
+    public function testExecuteNoInvoice(): void
     {
         $invoiceId = 2;
 
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')
@@ -287,15 +279,14 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
         $this->messageManagerMock->expects($this->never())
             ->method('addSuccessMessage');
 
-        $resultForward = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Forward::class)
+        $resultForward = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
-        $resultForward->expects($this->once())->method('forward')->with(('noroute'))->will($this->returnSelf());
+        $resultForward->expects($this->once())->method('forward')->with(('noroute'))->willReturnSelf();
 
         $this->resultForwardFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultForward));
+            ->willReturn($resultForward);
 
         $this->assertSame($resultForward, $this->controller->execute());
     }
@@ -303,31 +294,31 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testExecuteModelException()
+    public function testExecuteModelException(): void
     {
         $invoiceId = 2;
         $message = 'test message';
-        $e = new \Magento\Framework\Exception\LocalizedException(__($message));
+        $e = new LocalizedException(__($message));
 
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $this->invoiceManagement->expects($this->once())
             ->method('setVoid')
             ->with($invoiceId)
-            ->will($this->throwException($e));
+            ->willThrowException($e);
 
-        $invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
+        $invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $invoiceMock->expects($this->once())
             ->method('getEntityId')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
         $invoiceMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')
@@ -336,15 +327,14 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
         $this->messageManagerMock->expects($this->once())
             ->method('addErrorMessage');
 
-        $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        $resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $resultRedirect->expects($this->once())->method('setPath')->with('sales/*/view', ['invoice_id' => $invoiceId]);
 
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultRedirect));
+            ->willReturn($resultRedirect);
 
         $this->assertSame($resultRedirect, $this->controller->execute());
     }

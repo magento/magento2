@@ -18,21 +18,19 @@
             <features value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
         </before>
         <after>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteDefaultCategory"/>
             <deleteData  createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Category Page-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoaded"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
-        <waitForPageLoad stepKey="waitForCategoryToLoad"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
 
@@ -40,8 +38,8 @@
         <scrollTo selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" x="0" y="-80" stepKey="scrollToDisplaySetting"/>
         <click selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" stepKey="selectDisplaySetting"/>
         <checkOption selector="{{CategoryDisplaySettingsSection.anchor}}" stepKey="enableAnchor"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>
+
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
 
         <!--Enable Anchor for FirstLevelSubCat Category-->
@@ -50,8 +48,7 @@
         <scrollTo selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" x="0" y="-80" stepKey="scrollToDisplaySetting1"/>
         <click selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" stepKey="selectDisplaySetting1"/>
         <checkOption selector="{{CategoryDisplaySettingsSection.anchor}}" stepKey="enableAnchor1"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory1"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave1"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory1"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage1"/>
 
         <!--Enable Anchor for SimpleSubCategory Category and add products to the Category-->
@@ -65,16 +62,14 @@
         <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="$$simpleProduct.name$$" stepKey="selectProduct"/>
         <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
         <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory2"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave2"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory2"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage2"/>
 
-        <!-- TODO: REMOVE AFTER FIX MC-21717 -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!--Open Category in store front page-->
-        <amOnPage url="/$$createDefaultCategory.name$$/{{FirstLevelSubCat.name}}/{{SimpleSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
+        <amOnPage url="/$$createDefaultCategory.custom_attributes[url_key]$$/{{FirstLevelSubCat.urlKey}}/{{SimpleSubCategory.urlKey}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
         <waitForPageLoad  stepKey="waitForStoreFrontPageLoad"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeDefaultCategoryOnStoreNavigationBar"/>
         <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="dontSeeSubCategoryOnStoreNavigationBar"/>
@@ -89,13 +84,13 @@
         <!--Verify Product displayed in category store front page-->
         <click selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="openSearchedProduct"/>
         <waitForPageLoad  stepKey="waitForProductToLoad1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="assertProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertProductName">
+            <argument name="value" value="{{defaultSimpleProduct.name}}"/>
+        </actionGroup>
 
         <!--Open Category Page-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage1"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree2"/>
-        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree2"/>
 
         <!--Move SubCategory under Default Category-->
         <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" selector2="{{AdminCategorySidebarTreeSection.categoryInTree('Default Category')}}" stepKey="moveCategory"/>
@@ -103,7 +98,7 @@
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkButtonOnWarningPopup"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You moved the category." stepKey="seeSuccessMoveMessage"/>
-        <amOnPage url="/{{SimpleSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFrontPage1"/>
+        <amOnPage url="/{{SimpleSubCategory.urlKey}}.html" stepKey="seeTheCategoryInStoreFrontPage1"/>
         <waitForPageLoad  stepKey="waitForStoreFrontPageLoad1"/>
 
         <!--Verify breadcrumbs in store front page after the move-->
@@ -114,7 +109,7 @@
         </assertEquals>
 
         <!--Open Category in store front-->
-        <amOnPage url="{{StorefrontCategoryPage.url(SimpleSubCategory.name)}}"  stepKey="amOnCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url(SimpleSubCategory.urlKey)}}"  stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
         <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(SimpleSubCategory.name)}}" stepKey="seeCategoryInTitle"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="seeCategoryOnStoreNavigationBarAfterMove"/>
@@ -122,6 +117,8 @@
         <waitForPageLoad  stepKey="waitForProductToLoad2"/>
 
         <!--Verify product name on Store Front-->
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="assertProductNameAfterMove"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertProductNameAfterMove">
+            <argument name="value" value="{{defaultSimpleProduct.name}}"/>
+        </actionGroup>
     </test>
 </tests>

@@ -33,7 +33,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -41,7 +41,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -204,6 +204,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                             'visible' => 'ns = ${ $.ns }, index = affectedAttributeSetNew:checked',
                             'disabled' =>
                                 '!ns = ${ $.ns }, index = affectedAttributeSetNew:checked',
+                            '__disableTmpl' => ['disabled' => false, 'visible' => false],
                         ]
                     ],
                 ],
@@ -243,6 +244,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                     'visible' => 'ns = ${ $.ns }, index = affectedAttributeSetExisting:checked',
                                     'disabled' =>
                                         '!ns = ${ $.ns }, index = affectedAttributeSetExisting:checked',
+                                    '__disableTmpl' => ['disabled' => false, 'value' => false, 'visible' => false],
                                 ],
                             ],
                         ],

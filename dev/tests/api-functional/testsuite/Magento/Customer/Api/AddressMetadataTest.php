@@ -14,7 +14,7 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class AddressMetadataTest
+ * Customer Address Metadata API test
  */
 class AddressMetadataTest extends WebapiAbstract
 {
@@ -35,7 +35,7 @@ class AddressMetadataTest extends WebapiAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -217,7 +217,7 @@ class AddressMetadataTest extends WebapiAbstract
         $postcode = $this->getAttributeMetadataDataProvider()[Address::POSTCODE][2];
         $validationResult = $this->checkMultipleAttributesValidationRules($postcode, $attributeMetadata);
         list($postcode, $attributeMetadata) = $validationResult;
-        $this->assertContains($postcode, $attributeMetadata);
+        $this->assertContainsEquals($postcode, $attributeMetadata);
     }
 
     /**
@@ -375,7 +375,7 @@ class AddressMetadataTest extends WebapiAbstract
     /**
      * Remove test attribute
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
         /** @var \Magento\Customer\Model\Attribute $attribute */

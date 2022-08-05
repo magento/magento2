@@ -15,7 +15,7 @@
             <group value="Cms"/>
             <title value="Admin should be able to create a CMS page with widget type: Catalog product link"/>
             <description value="Admin should be able to create a CMS page with widget type: Catalog product link"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-83788"/>
         </annotations>
         <before>
@@ -23,16 +23,15 @@
             <createData entity="_defaultProduct" stepKey="createPreReqProduct">
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
         </before>
         <!--Main test-->
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE"/>
         <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
         <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
         <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
@@ -49,23 +48,24 @@
         <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetEnabled" />
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="Product Link Block Template" stepKey="selectTemplate" />
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
-        <waitForLoadingMaskToDisappear stepKey="wait4"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandRootCategory}}" stepKey="expandRootCategory" />
+        <waitForPageLoad stepKey="wait4"/>
+        <waitForElementVisible selector="{{AdminCategorySidebarTreeSection.expandCategoryByName('Default Category')}}" stepKey="waitForDefaultCategory"/>
+        <conditionalClick selector="{{AdminCategorySidebarTreeSection.expandCategoryByName('Default Category')}}" dependentSelector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" visible="false" stepKey="expandRootCategory"/>
         <waitForElementVisible selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="expandWait" />
         <click selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="selectPreCategory" />
         <waitForLoadingMaskToDisappear stepKey="waitLoadingMask" />
         <click selector="{{WidgetSection.PreCreateProduct('$$createPreReqProduct.name$$')}}" stepKey="selectPreProduct" />
         <waitForElementNotVisible selector="{{WidgetSection.SelectProductTitle}}" stepKey="waitForSlideOutCloses" />
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-        <waitForLoadingMaskToDisappear stepKey="waitLoadingMask1" />
-        <waitForPageLoad stepKey="wait6" />
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitLoadingMask1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait6"/>
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
-        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
-        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
-        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandButtonMenu"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSplitButtonMenuVisible"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSavePage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessMessage"/>
         <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
         <waitForPageLoad stepKey="wait7" />
         <!--see widget on Storefront-->
@@ -76,15 +76,16 @@
         <waitForPageLoad stepKey="wait8" />
         <!--see widget on Storefront-->
         <grabAttributeFrom selector=".widget a" userInput="href" stepKey="dataHref" />
-        <assertRegExp expected="|$$createPreReqCategory.name$$/$$createPreReqProduct.name$$.html|i"
-                      expectedType="string" actual="$dataHref" actualType="variable"
-                      stepKey="seeProductLinkInCategory"/>
+        <assertRegExp stepKey="seeProductLinkInCategory">
+			<actualResult type="variable">$dataHref</actualResult>
+			<expectedResult type="string">|$$createPreReqCategory.name$$/$$createPreReqProduct.name$$.html|i</expectedResult>
+        </assertRegExp>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
             <deleteData createDataKey="createPreReqProduct" stepKey="deletePreReqProduct" />
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

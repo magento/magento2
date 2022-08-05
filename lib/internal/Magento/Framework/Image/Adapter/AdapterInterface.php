@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Image\Adapter;
 
 /**
  * Interface \Magento\Framework\Image\Adapter\AdapterInterface
  *
+ * @api
  */
 interface AdapterInterface
 {
@@ -28,6 +31,8 @@ interface AdapterInterface
     public function getColorAt($x, $y);
 
     /**
+     * Render image and return its binary contents
+     *
      * @see \Magento\Framework\Image\Adapter\AbstractAdapter::getImage
      * @return string
      */
@@ -99,6 +104,7 @@ interface AdapterInterface
 
     /**
      * Save image to specific path.
+     *
      * If some folders of path does not exist they will be created
      *
      * @param null|string $destination

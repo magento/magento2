@@ -13,6 +13,8 @@
         <click stepKey="navigateToShipmentsTab" selector="{{AdminOrderDetailsOrderViewSection.shipments}}"/>
         <waitForPageLoad stepKey="waitForTabLoad"/>
         <grabTextFrom selector="{{AdminShipmentsGridSection.shipmentId}}" stepKey="grabShipmentId"/>
-        <assertNotEmpty actual="$grabShipmentId" stepKey="assertShipmentIdIsNotEmpty" after="grabShipmentId"/>
+        <assertNotEmpty stepKey="assertShipmentIdIsNotEmpty" after="grabShipmentId">
+			<actualResult type="const">$grabShipmentId</actualResult>
+        </assertNotEmpty>
     </actionGroup>
 </actionGroups>

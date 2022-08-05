@@ -33,5 +33,15 @@
         "constraint": {
             "PRIMARY": true
         }
+    },
+    "admin_user_expiration": {
+        "column": {
+            "user_id": true,
+            "expires_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ADMIN_USER_EXPIRATION_USER_ID_ADMIN_USER_USER_ID": true
+        }
     }
 }

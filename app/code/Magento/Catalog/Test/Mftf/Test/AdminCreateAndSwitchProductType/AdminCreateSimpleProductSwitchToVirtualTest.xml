@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSimpleProductSwitchToVirtualTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Type Switching"/>
+            <title value="Admin should be able to switch a new product from simple to virtual"/>
+            <description value="After selecting a simple product when adding Admin should be switch to virtual implicitly"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-10925"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteSimpleProduct">
+                <argument name="product" value="_defaultProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetSearch"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+        </after>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        <!-- Open Dropdown and select simple product option -->
+        <comment stepKey="beforeOpenProductFillForm" userInput="Selecting Product from the Add Product Dropdown"/>
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
+
+        <!-- Fill form for Virtual Product Type -->
+        <comment stepKey="beforeFillProductForm" userInput="Filling Product Form"/>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <actionGroup ref="SetProductUrlKeyActionGroup" stepKey="setProductUrl">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+        <!-- Check that product was added with implicit type change -->
+        <comment stepKey="beforeVerify" userInput="Verify Product Type Assigned Correctly"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetSearch"/>
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="searchForProduct">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductTypeInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Virtual Product"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+    </test>
+</tests>

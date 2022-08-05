@@ -5,6 +5,11 @@
  */
 declare(strict_types=1);
 
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_rollback.php');
+
 /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -21,5 +26,5 @@ $wishlist->delete();
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_rollback.php';
-require __DIR__ . '/../../../Magento/Customer/_files/customer_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_rollback.php');

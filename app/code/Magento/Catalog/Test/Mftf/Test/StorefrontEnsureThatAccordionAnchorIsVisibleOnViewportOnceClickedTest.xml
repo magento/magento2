@@ -52,7 +52,7 @@
             </createData>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete reviews -->
@@ -63,12 +63,18 @@
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
 
             <deleteData createDataKey="createFirstAttribute" stepKey="deleteFirstAttribute"/>
             <deleteData createDataKey="createSecondAttribute" stepKey="deleteSecondAttribute"/>
             <deleteData createDataKey="createThirdAttribute" stepKey="deleteThirdAttribute"/>
             <deleteData createDataKey="createFourthAttribute" stepKey="deleteFourthAttribute"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Edit the product and set those attributes values -->
@@ -84,11 +90,17 @@
         <selectOption selector="{{AdminProductFormSection.customSelectField($$createFourthAttribute.attribute[attribute_code]$$)}}" userInput="$$createSecondOption.option[store_labels][0][label]$$" stepKey="setFourthAttributeValue"/>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
 
         <!-- Go to frontend and make a user account and login with it -->
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
-            <argument name="Customer" value="CustomerEntityOne"/>
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="Thank you for registering with Main Website Store."/>
         </actionGroup>
 
         <!-- Go to the product view page -->
@@ -102,7 +114,7 @@
 
         <!-- Go to Pending reviews page and clear filters -->
         <actionGroup ref="AdminOpenPendingReviewsPageActionGroup" stepKey="openReviewsPage"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
 
         <!-- Moderate first product reviews: change review status from pending to approved, save -->
         <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openFirstCustomerReviews"/>
@@ -110,7 +122,7 @@
         <actionGroup ref="AdminSaveReviewActionGroup" stepKey="saveModeratedFirstReview"/>
 
         <!-- Moderate second product reviews: change review status from pending to approved, save -->
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilter"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
         <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openSecondCustomerReviews"/>
         <actionGroup ref="AdminChangeReviewStatusActionGroup" stepKey="changeSecondReviewStatus"/>
         <actionGroup ref="AdminSaveReviewActionGroup" stepKey="saveModeratedSecondReview"/>
@@ -133,19 +145,19 @@
         </actionGroup>
 
         <!-- Assert that product page has all product attributes in More Info tab -->
-        <actionGroup ref="checkAttributeInMoreInformationTab" stepKey="checkFirstAttributeInMoreInformationTab">
+        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkFirstAttributeInMoreInformationTab">
             <argument name="attributeLabel" value="$$createFirstAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="attributeValue" value="$$createOption.option[store_labels][0][label]$$"/>
         </actionGroup>
-        <actionGroup ref="checkAttributeInMoreInformationTab" stepKey="checkSecondAttributeInMoreInformationTab">
+        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkSecondAttributeInMoreInformationTab">
             <argument name="attributeLabel" value="$$createSecondAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="attributeValue" value="{{ProductAttributeOption8.value}}"/>
         </actionGroup>
-        <actionGroup ref="checkAttributeInMoreInformationTab" stepKey="checkThirdAttributeInMoreInformationTab">
+        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkThirdAttributeInMoreInformationTab">
             <argument name="attributeLabel" value="$$createThirdAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="attributeValue" value="{{ProductAttributeOption8.value}}"/>
         </actionGroup>
-        <actionGroup ref="checkAttributeInMoreInformationTab" stepKey="checkFourthAttributeInMoreInformationTab">
+        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkFourthAttributeInMoreInformationTab">
             <argument name="attributeLabel" value="$$createFourthAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="attributeValue" value="$$createSecondOption.option[store_labels][0][label]$$"/>
         </actionGroup>

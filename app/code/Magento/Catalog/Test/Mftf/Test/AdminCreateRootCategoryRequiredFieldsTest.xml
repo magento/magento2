@@ -18,24 +18,24 @@
             <severity value="CRITICAL"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="LoginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginToAdminPanel"/>
         </before>
         <after>
-            <actionGroup ref="DeleteCategory" stepKey="deleteCategory">
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
                 <argument name="categoryEntity" value="_defaultCategory" />
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout" />
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout" />
         </after>
 
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="OpenAdminCatergoryIndexPage"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="OpenAdminCatergoryIndexPage"/>
         <click selector="{{AdminCategorySidebarActionSection.AddRootCategoryButton}}" stepKey="ClickOnAddRootButton"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="FillCategoryField"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="EnableCheckOption"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="ClickSaveButton"/>
-        <waitForPageLoad stepKey="WaitForCategorySaved"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="AssertSuccessMessage"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="ClickSaveButton"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="AssertSuccessMessage"/>
         <seeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}"  stepKey="SeeCheckBoxisSelected"/>
         <seeInField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="SeedFieldInput"/>
     </test>

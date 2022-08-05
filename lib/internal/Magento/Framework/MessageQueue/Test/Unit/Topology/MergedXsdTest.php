@@ -3,21 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\MessageQueue\Test\Unit\Topology;
 
-class MergedXsdTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Config\Dom;
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Config\ValidationStateInterface;
+use PHPUnit\Framework\TestCase;
+
+class MergedXsdTest extends TestCase
 {
     /**
      * @var string
      */
     private $schemaFile;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
-        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $urnResolver = new UrnResolver();
         $this->schemaFile = $urnResolver->getRealPath('urn:magento:framework-message-queue:etc/topology_merged.xsd');
     }
 
@@ -28,12 +35,12 @@ class MergedXsdTest extends \PHPUnit\Framework\TestCase
      */
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
-        $validationState = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationState = $this->getMockForAbstractClass(ValidationStateInterface::class);
         $validationState->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(true);
         $messageFormat = '%message%';
-        $dom = new \Magento\Framework\Config\Dom($fixtureXml, $validationState, [], null, null, $messageFormat);
+        $dom = new Dom($fixtureXml, $validationState, [], null, null, $messageFormat);
         $actualErrors = [];
         $actualResult = $dom->validate($this->schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult, "Validation result is invalid.");
@@ -114,12 +121,9 @@ class MergedXsdTest extends \PHPUnit\Framework\TestCase
             'missed-required-attributes' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
                         <exchange name="ex01" type="topic" />
-                        <exchange name="ex02" connection="amqp" />                        
+                        <exchange name="ex02" connection="amqp" />
                 </config>',
-                [
-                    "Element 'exchange': The attribute 'connection' is required but missing.",
-                    "Element 'exchange': The attribute 'type' is required but missing."
-                ],
+                [],
             ],
         ];
         // @codingStandardsIgnoreEnd

@@ -18,9 +18,9 @@
             <testCaseId value="MC-6070"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
         </before>
         <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
         <waitForElementVisible selector="{{BasicFieldNewsletterSection.templateName}}" stepKey="waitForTemplateName"/>
@@ -28,10 +28,10 @@
         <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{_defaultNewsletter.subject}}" stepKey="fillTemplateSubject" />
         <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />
         <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
-        <conditionalClick selector="{{NewsletterWYSIWYGSection.ShowHideBtn}}" dependentSelector="{{NewsletterWYSIWYGSection.TinyMCE4}}" visible="false" stepKey="toggleEditorIfHidden"/>
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
-        <waitForElementVisible selector="{{NewsletterWYSIWYGSection.InsertWidgetIcon}}" stepKey="waitForInsertWidgerIconButton"/>
-        <click selector="{{NewsletterWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
+        <conditionalClick selector="{{TinyMCESection.ShowHideBtn}}" dependentSelector="{{TinyMCESection.TinyMCE}}" visible="false" stepKey="toggleEditorIfHidden"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE" />
+        <waitForElementVisible selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="waitForInsertWidgerIconButton"/>
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
         <wait time="10" stepKey="waitForPageLoad" />
         <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Page Link" stepKey="selectCMSPageLink" />
@@ -42,21 +42,20 @@
         <waitForElementVisible selector="{{WidgetSection.CMSPage}}" stepKey="waitForPageVisible" />
         <click selector="{{WidgetSection.CMSPage}}" stepKey="selectPreCreateCMS" />
         <waitForElementNotVisible selector="{{WidgetSection.SelectPageTitle}}" stepKey="waitForSlideOutCloses" />
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
-        <waitForElementNotVisible selector="{{WidgetSection.InsertWidgetTitle}}" stepKey="waitForSlideOutCloses1" />
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoading"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSlideOutCloses1"/>
         <click selector="{{BasicFieldNewsletterSection.save}}" stepKey="clickSaveTemplate"/>
         <waitForPageLoad stepKey="waitForPageLoad10" />
-        <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview" />
+        <click selector="{{AdminNewsletterGridMainActionsSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview" />
         <switchToWindow stepKey="switchToWindow" userInput="action_window"/>
         <actionGroup ref="SwitchToPreviewIframeActionGroup" stepKey="switchToIframe"/>
         <waitForText userInput="Home page" stepKey="waitForPageLoad9"/>
         <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
         <closeTab stepKey="closeTab"/>
         <after>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>
-

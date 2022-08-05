@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create root category-->
             <createData entity="NewRootCategory" stepKey="rootCategory"/>
             <createData entity="SimpleRootSubCategory" stepKey="category">
@@ -31,28 +31,30 @@
                 <argument name="websiteCode" value="{{customWebsite.code}}"/>
             </actionGroup>
             <!--Create custom store group-->
-            <actionGroup ref="CreateCustomStore" stepKey="createCustomStoreGroup">
+            <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStoreGroup">
                 <argument name="website" value="{{_defaultWebsite.name}}"/>
                 <argument name="store" value="{{staticStoreGroup.name}}"/>
                 <argument name="rootCategory" value="Default Category"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <!--Delete website-->
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <!--Delete root category-->
             <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open created Store group in grid-->
         <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="openCreatedStoreGroupInGrid">
             <argument name="storeGroupName" value="{{staticStoreGroup.name}}"/>
         </actionGroup>
-        <click selector="{{AdminStoresGridSection.firstRow}}" stepKey="clickFirstRow"/>
-        <waitForPageLoad stepKey="AdminSystemStoreGroupPageToOpen"/>
+        <actionGroup ref="AdminOpenFirstRowInStoresGridActionGroup" stepKey="clickFirstRow"/>
+
         <!--Update created Store group as per requirement and accept alert message-->
         <actionGroup ref="EditCustomStoreGroupAcceptWarningMessageActionGroup" stepKey="updateCustomStoreGroup">
             <argument name="website" value="{{customWebsite.name}}"/>

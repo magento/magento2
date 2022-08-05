@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="initialCategoryEntity"/>
             <createData entity="defaultVirtualProduct" stepKey="initialVirtualProduct">
                 <requiredEntity createDataKey="initialCategoryEntity"/>
@@ -30,16 +30,14 @@
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
             <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Search default virtual product in the grid page -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage1"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage1"/>
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAllFilter" />
-        <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="$$initialVirtualProduct.name$$" stepKey="fillVirtualProductNameInKeywordSearch"/>
-        <click selector="{{AdminProductGridFilterSection.keywordSearchButton}}" stepKey="clickKeywordSearchButton"/>
-        <waitForPageLoad stepKey="waitForProductSearch"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage1"/>
+        <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchProductGrid">
+            <argument name="keyword" value="$$$initialVirtualProduct.name$$"/>
+        </actionGroup>
         <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyCreatedVirtualProduct"/>
         <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
 
@@ -48,7 +46,9 @@
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{updateVirtualProductRegularPriceInStock.sku}}" stepKey="fillProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{updateVirtualProductRegularPriceInStock.price}}" stepKey="fillProductPrice"/>
         <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{updateVirtualProductRegularPriceInStock.productTaxClass}}" stepKey="selectProductTaxClass"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{updateVirtualProductRegularPriceInStock.quantity}}" stepKey="fillProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQuantity">
+            <argument name="productQty" value="{{updateVirtualProductRegularPriceInStock.quantity}}"/>
+        </actionGroup>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{updateVirtualProductRegularPriceInStock.status}}" stepKey="selectStockStatusInStock"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory" />
@@ -57,7 +57,7 @@
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
         <waitForPageLoad stepKey="waitForCategory2"/>
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductRegularPriceInStock.visibility}}" stepKey="selectVisibility"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductRegularPriceInStock.urlKey}}" stepKey="fillUrlKey"/>
@@ -120,14 +120,13 @@
         <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_price_type}}" stepKey="selectOptionPriceTypeForFourthDataSetSecondRow"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_sku}}" stepKey="fillOptionSkuForFourthDataSetSecondRow"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSaveSuccessMessage"/>
 
         <!-- Search updated virtual product(from above step) in the grid page -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPageToSearchUpdatedVirtualProduct"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPageToSearchUpdatedVirtualProduct"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
         <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{updateVirtualProductRegularPriceInStock.name}}" stepKey="fillVirtualProductNameInNameFilter"/>
@@ -149,7 +148,7 @@
             <actualResult type="variable">selectedCategories</actualResult>
             <expectedResult type="array">[$$categoryEntity.name$$]</expectedResult>
         </assertEquals>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneOnCategorySelect"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneOnCategorySelect"/>
         <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductRegularPriceInStock.visibility}}" stepKey="seeVisibility"/>
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
@@ -210,16 +209,20 @@
         <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_sku}}" stepKey="seeOptionSkuForFourthDataSetSecondRow"/>
 
         <!--Verify customer don't see updated virtual product link on category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.custom_attributes[url_key]$$)}}" stepKey="openCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <dontSee selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{updateVirtualProductRegularPriceInStock.name}}" stepKey="dontSeeVirtualProductNameOnCategoryPage"/>
 
         <!-- Verify customer see updated virtual product (from the above step) on the storefront page -->
         <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductRegularPriceInStock.urlKey)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{updateVirtualProductRegularPriceInStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeVirtualProductNameOnStoreFrontPage">
+            <argument name="value" value="{{updateVirtualProductRegularPriceInStock.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{updateVirtualProductRegularPriceInStock.price}}" stepKey="seeVirtualProductPriceOnStoreFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{updateVirtualProductRegularPriceInStock.sku}}" stepKey="seeVirtualProductSku"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeVirtualProductSku">
+            <argument name="productSku" value="{{updateVirtualProductRegularPriceInStock.sku}}"/>
+        </actionGroup>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
         <assertEquals stepKey="assertStockAvailableOnProductPage">
             <expectedResult type="string">{{updateVirtualProductRegularPriceInStock.storefrontStatus}}</expectedResult>

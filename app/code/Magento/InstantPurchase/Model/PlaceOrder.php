@@ -21,6 +21,7 @@ use \Throwable;
  * Place an order using instant purchase option.
  *
  * @api
+ * @since 100.2.0
  */
 class PlaceOrder
 {
@@ -90,6 +91,7 @@ class PlaceOrder
      * @return int order identifier
      * @throws LocalizedException if order can not be placed.
      * @throws Throwable if unpredictable error occurred.
+     * @since 100.2.0
      */
     public function placeOrder(
         Store $store,

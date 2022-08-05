@@ -5,6 +5,10 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Grid checkbox column renderer
  *
@@ -30,17 +34,33 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     protected $_converter;
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
+     * @var Random
+     */
+    private $random;
+
+    /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter $converter
+     * @param Options\Converter $converter
      * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
+     * @param Random|null $random
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter $converter,
-        array $data = []
+        array $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null,
+        ?Random $random = null
     ) {
         parent::__construct($context, $data);
         $this->_converter = $converter;
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        $this->random = $random ?? ObjectManager::getInstance()->get(Random::class);
     }
 
     /**
@@ -112,6 +132,8 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     }
 
     /**
+     * Render checkbox HTML.
+     *
      * @param string $value   Value of the element
      * @param bool   $checked Whether it is checked
      * @return string
@@ -154,11 +176,18 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
         if ($this->getColumn()->getDisabled()) {
             $disabled = ' disabled="disabled"';
         }
+        $id = 'id' .$this->random->getRandomString(10);
         $html = '<th class="data-grid-th data-grid-actions-cell"><input type="checkbox" ';
+        $html .= 'id="' .$id .'" ';
         $html .= 'name="' . $this->getColumn()->getFieldName() . '" ';
-        $html .= 'onclick="' . $this->getColumn()->getGrid()->getJsObjectName() . '.checkCheckboxes(this)" ';
         $html .= 'class="admin__control-checkbox"' . $checked . $disabled . ' ';
         $html .= 'title="' . __('Select All') . '"/><label></label></th>';
+        $html .= $this->secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            $this->getColumn()->getGrid()->getJsObjectName() . '.checkCheckboxes(this)',
+            "#$id"
+        );
+
         return $html;
     }
 }

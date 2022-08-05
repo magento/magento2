@@ -54,7 +54,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->_model = $this->objectManager->create(Customer::class);
@@ -68,6 +68,20 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      * @return void
      */
     public function testExport()
+    {
+        $this->processCustomerAttribute();
+        $expectedAttributes = $this->getExpectedAttributes();
+        $lines = $this->export($expectedAttributes);
+        $this->checkExportData($lines, $expectedAttributes);
+    }
+
+    /**
+     * Export with Multi Websites "Customer Main File".
+     *
+     * @magentoDataFixture Magento/Customer/_files/import_export/customers_with_websites.php
+     * @return void
+     */
+    public function testExportWithMultiWebsites(): void
     {
         $this->processCustomerAttribute();
         $expectedAttributes = $this->getExpectedAttributes();

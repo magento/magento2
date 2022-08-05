@@ -3,16 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Model\Config;
 
-use Magento\Paypal\Model\Config\StructurePlugin as ConfigStructurePlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Config\Model\Config\ScopeDefiner as ConfigScopeDefiner;
-use Magento\Paypal\Helper\Backend as BackendHelper;
 use Magento\Config\Model\Config\Structure as ConfigStructure;
 use Magento\Config\Model\Config\Structure\ElementInterface as ElementConfigStructure;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Paypal\Helper\Backend as BackendHelper;
+use Magento\Paypal\Model\Config\StructurePlugin as ConfigStructurePlugin;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StructurePluginTest extends \PHPUnit\Framework\TestCase
+class StructurePluginTest extends TestCase
 {
     /**
      * @var ConfigStructurePlugin
@@ -25,26 +29,26 @@ class StructurePluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ConfigScopeDefiner|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigScopeDefiner|MockObject
      */
     private $configScopeDefinerMock;
 
     /**
-     * @var BackendHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var BackendHelper|MockObject
      */
     private $backendHelperMock;
 
     /**
-     * @var ConfigStructure|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigStructure|MockObject
      */
     private $configStructureMock;
 
     /**
-     * @var ElementConfigStructure|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementConfigStructure|MockObject
      */
     private $elementConfigStructureMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configScopeDefinerMock = $this->getMockBuilder(ConfigScopeDefiner::class)
             ->disableOriginalConstructor()
@@ -132,8 +136,7 @@ class StructurePluginTest extends \PHPUnit\Framework\TestCase
             ->method('getConfigurationCountryCode')
             ->willReturn($countryCode);
 
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->plugin->aroundGetElementByPathParts($this->configStructureMock, $proceed, $pathParts)
         );
     }

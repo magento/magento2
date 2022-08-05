@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddOptionsToAttributeWithDefaultLayeredNavigationActionGroup">
+        <annotations>
+            <description>Adds 3 provided Options to a new Attribute on the Configurable Product creation/edit page. Selected default first option. Set "Use in Layered Navigation" to "Yes".</description>
+        </annotations>
+        <arguments>
+            <argument name="label"   defaultValue="colorProductAttribute" />
+            <argument name="option1" defaultValue="colorProductAttribute1"/>
+            <argument name="option2" defaultValue="colorProductAttribute2"/>
+            <argument name="option3" defaultValue="colorProductAttribute3"/>
+        </arguments>
+
+        <scrollTo selector="//div/strong[@class='admin__collapsible-title']/span[contains(text(),'Configurations')]" stepKey="scrollToConfigurableProductButton"/>
+        <waitForElementVisible selector="button[data-index='create_configurable_products_button']" time="30" stepKey="waitForELementVisible"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnNewAttribute"/>
+        <waitForPageLoad stepKey="waitForIFrame"/>
+        <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
+        <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{label.default_label}}" stepKey="fillDefaultLabel"/>
+
+        <!--Add option 1 to attribute-->
+        <click selector="{{AdminNewAttributePanel.addOption}}" stepKey="clickAddOption1"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.isDefault('1')}}" time="30" stepKey="waitForOptionRow1" after="clickAddOption1"/>
+        <fillField selector="{{AdminNewAttributePanel.optionAdminValue('0')}}" userInput="{{option1.name}}" stepKey="fillAdminLabel1" after="waitForOptionRow1"/>
+        <click selector="{{AdminNewAttributePanel.isDefault('1')}}" stepKey="selectDefault" after="fillAdminLabel1"/>
+
+        <!--Add option 2 to attribute-->
+        <click selector="{{AdminNewAttributePanel.addOption}}" stepKey="clickAddOption2" after="selectDefault"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.isDefault('2')}}" time="30" stepKey="waitForOptionRow2" after="clickAddOption2"/>
+        <fillField selector="{{AdminNewAttributePanel.optionAdminValue('1')}}" userInput="{{option2.name}}" stepKey="fillAdminLabel2" after="waitForOptionRow2"/>
+
+        <!--Add option 3 to attribute-->
+        <click selector="{{AdminNewAttributePanel.addOption}}" stepKey="clickAddOption3" after="fillAdminLabel2"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.isDefault('3')}}" time="30" stepKey="waitForOptionRow3" after="clickAddOption3"/>
+        <fillField selector="{{AdminNewAttributePanel.optionAdminValue('2')}}" userInput="{{option3.name}}" stepKey="fillAdminLabel3" after="waitForOptionRow3"/>
+
+        <!-- Set Use In Layered Navigation -->
+        <click selector="{{AdminNewAttributePanel.storefrontPropertiesTab}}" stepKey="goToStorefrontPropertiesTab" after="fillAdminLabel3"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.storefrontPropertiesTitle}}" stepKey="waitTabLoad" after="goToStorefrontPropertiesTab"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInLayeredNavigation}}" stepKey="selectUseInLayer" userInput="Filterable (with results)" after="waitTabLoad"/>
+
+        <!--Save attribute-->
+        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickSaveAttribute"/>
+        <waitForPageLoad stepKey="waitForSavingAttribute"/>
+    </actionGroup>
+</actionGroups>

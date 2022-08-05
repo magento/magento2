@@ -6,12 +6,32 @@
 namespace Magento\Catalog\Model\ResourceModel\Product\Link\Product;
 
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Indexer\Product\Flat\State;
 use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Link as LinkModel;
+use Magento\Catalog\Model\Product\OptionFactory;
 use Magento\Catalog\Model\ResourceModel\Category;
+use Magento\Catalog\Model\ResourceModel\Helper;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Catalog\Model\ResourceModel\Url;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Model\Session;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\EntityFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Module\Manager;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Validator\UniversalFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Catalog product linked products collection
@@ -26,14 +46,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Store product model
      *
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $_product;
 
     /**
      * Store product link model
      *
-     * @var \Magento\Catalog\Model\Product\Link
+     * @var LinkModel
      */
     protected $_linkModel;
 
@@ -71,25 +91,25 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Collection constructor.
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
-     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Url $catalogUrl
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param Config $eavConfig
+     * @param ResourceConnection $resource
+     * @param EntityFactory $eavEntityFactory
+     * @param Helper $resourceHelper
+     * @param UniversalFactory $universalFactory
+     * @param StoreManagerInterface $storeManager
+     * @param Manager $moduleManager
+     * @param State $catalogProductFlatState
+     * @param ScopeConfigInterface $scopeConfig
+     * @param OptionFactory $productOptionFactory
+     * @param Url $catalogUrl
+     * @param TimezoneInterface $localeDate
+     * @param Session $customerSession
+     * @param DateTime $dateTime
      * @param GroupManagementInterface $groupManagement
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     * @param AdapterInterface|null $connection
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
      * @param TableMaintainer|null $tableMaintainer
@@ -101,25 +121,25 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
-        \Magento\Catalog\Model\ResourceModel\Url $catalogUrl,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        Config $eavConfig,
+        ResourceConnection $resource,
+        EntityFactory $eavEntityFactory,
+        Helper $resourceHelper,
+        UniversalFactory $universalFactory,
+        StoreManagerInterface $storeManager,
+        Manager $moduleManager,
+        State $catalogProductFlatState,
+        ScopeConfigInterface $scopeConfig,
+        OptionFactory $productOptionFactory,
+        Url $catalogUrl,
+        TimezoneInterface $localeDate,
+        Session $customerSession,
+        DateTime $dateTime,
         GroupManagementInterface $groupManagement,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        AdapterInterface $connection = null,
         ProductLimitationFactory $productLimitationFactory = null,
         MetadataPool $metadataPool = null,
         TableMaintainer $tableMaintainer = null,
@@ -166,10 +186,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Declare link model and initialize type attributes join
      *
-     * @param \Magento\Catalog\Model\Product\Link $linkModel
+     * @param LinkModel $linkModel
      * @return $this
      */
-    public function setLinkModel(\Magento\Catalog\Model\Product\Link $linkModel)
+    public function setLinkModel(LinkModel $linkModel)
     {
         $this->_linkModel = $linkModel;
         if ($linkModel->getLinkTypeId()) {
@@ -202,10 +222,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Initialize collection parent product and add limitation join
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return $this
      */
-    public function setProduct(\Magento\Catalog\Model\Product $product)
+    public function setProduct(Product $product)
     {
         $this->_product = $product;
         if ($product && $product->getId()) {
@@ -239,7 +259,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 $products = [$products];
             }
             $this->_hasLinkFilter = true;
-            $this->getSelect()->where('links.linked_product_id NOT IN (?)', $products);
+            $this->getSelect()->where(
+                'links.linked_product_id NOT IN (?)',
+                $products,
+                \Zend_Db::INT_TYPE
+            );
         }
         return $this;
     }
@@ -257,7 +281,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 $products = [$products];
             }
             $identifierField = $this->getLinkField();
-            $this->getSelect()->where("product_entity_table.$identifierField IN (?)", $products);
+            $this->getSelect()->where(
+                "product_entity_table.$identifierField IN (?)",
+                $products,
+                \Zend_Db::INT_TYPE
+            );
             $this->_hasLinkFilter = true;
         }
 
@@ -319,10 +347,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $linkField = $this->getLinkField();
         if ($this->productIds) {
             if ($this->_isStrongMode) {
-                $this->getSelect()->where('links.product_id in (?)', $this->productIds);
+                $this->getSelect()->where(
+                    'links.product_id in (?)',
+                    $this->productIds,
+                    \Zend_Db::INT_TYPE
+                );
             } else {
                 $joinType = 'joinLeft';
-                $joinCondition[] = $connection->quoteInto('links.product_id in (?)', $this->productIds);
+                $joinCondition[] = $connection->quoteInto(
+                    'links.product_id in (?)',
+                    $this->productIds,
+                    \Zend_Db::INT_TYPE
+                );
             }
             if (count($this->productIds) === 1) {
                 $this->addFieldToFilter(

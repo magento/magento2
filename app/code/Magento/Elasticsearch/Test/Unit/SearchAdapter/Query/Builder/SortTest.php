@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder;
 
@@ -10,15 +11,13 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
     as FieldNameResolver;
+use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class SortTest
- */
-class SortTest extends \PHPUnit\Framework\TestCase
+class SortTest extends TestCase
 {
     /**
      * @var AttributeProvider
@@ -38,7 +37,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeAdapterProvider = $this->getMockBuilder(AttributeProvider::class)
             ->disableOriginalConstructor()
@@ -60,6 +59,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @dataProvider getSortProvider
      * @param array $sortItems
      * @param $isSortable
@@ -73,6 +73,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
         $isSortable,
         $isFloatType,
         $isIntegerType,
+        $isComplexType,
         $fieldName,
         array $expected
     ) {
@@ -86,7 +87,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
             ->willReturn($sortItems);
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isSortable', 'isFloatType', 'isIntegerType'])
+            ->setMethods(['isSortable', 'isFloatType', 'isIntegerType', 'isComplexType'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('isSortable')
@@ -97,6 +98,9 @@ class SortTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->any())
             ->method('isIntegerType')
             ->willReturn($isIntegerType);
+        $attributeMock->expects($this->any())
+            ->method('isComplexType')
+            ->willReturn($isComplexType);
         $this->attributeAdapterProvider->expects($this->any())
             ->method('getByAttributeCode')
             ->with($this->anything())
@@ -104,7 +108,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
         $this->fieldNameResolver->expects($this->any())
             ->method('getFieldName')
             ->with($this->anything())
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($attribute, $context) use ($fieldName) {
                     if (empty($context)) {
                         return $fieldName;
@@ -112,7 +116,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
                         return 'sort_' . $fieldName;
                     }
                 }
-            ));
+            );
 
         $this->assertEquals(
             $expected,
@@ -134,9 +138,10 @@ class SortTest extends \PHPUnit\Framework\TestCase
                         'direction' => 'DESC'
                     ]
                 ],
-                null,
-                null,
-                null,
+                false,
+                false,
+                false,
+                false,
                 null,
                 []
             ],
@@ -151,6 +156,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
                         'direction' => 'DESC'
                     ],
                 ],
+                false,
                 false,
                 false,
                 false,
@@ -177,6 +183,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
                 true,
                 true,
                 true,
+                false,
                 'price',
                 [
                     [
@@ -198,6 +205,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 true,
+                false,
                 false,
                 false,
                 'name',
@@ -223,10 +231,35 @@ class SortTest extends \PHPUnit\Framework\TestCase
                 false,
                 false,
                 false,
+                false,
                 'not_eav_attribute',
                 [
                     [
                         'not_eav_attribute' => [
+                            'order' => 'desc'
+                        ]
+                    ]
+                ]
+            ],
+            [
+                [
+                    [
+                        'field' => 'entity_id',
+                        'direction' => 'DESC'
+                    ],
+                    [
+                        'field' => 'color',
+                        'direction' => 'DESC'
+                    ],
+                ],
+                true,
+                false,
+                false,
+                true,
+                'color',
+                [
+                    [
+                        'color_value.sort_color' => [
                             'order' => 'desc'
                         ]
                     ]

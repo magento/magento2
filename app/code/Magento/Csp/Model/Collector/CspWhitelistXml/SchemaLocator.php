@@ -22,7 +22,7 @@ class SchemaLocator implements SchemaLocatorInterface
      *
      * @var string
      */
-    private $schema ;
+    private $schema;
 
     /**
      * @param Reader $moduleReader

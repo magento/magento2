@@ -105,6 +105,7 @@
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="no-marginal-whitespace" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>text</dataType>
                 <label translate="true">Identifier</label>
@@ -124,7 +125,7 @@
                 </validation>
                 <dataType>int</dataType>
                 <tooltip>
-                    <link>https://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
+                    <link>https://docs.magento.com/user-guide/configuration/scope.html</link>
                     <description>What is this?</description>
                 </tooltip>
                 <label translate="true">Store View</label>

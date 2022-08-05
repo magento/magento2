@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -16,31 +18,34 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
+class StatusBaseSelectProcessorTest extends TestCase
 {
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $eavConfig;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|MockObject
      */
     private $metadataPool;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|MockObject
      */
     private $select;
 
@@ -49,28 +54,41 @@ class StatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $statusBaseSelectProcessor;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->eavConfig = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
-        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)->disableOriginalConstructor()->getMock();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
-        $this->select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
+        $this->eavConfig = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMock();
+        $this->select = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->statusBaseSelectProcessor =  (new ObjectManager($this))->getObject(StatusBaseSelectProcessor::class, [
             'eavConfig' => $this->eavConfig,
             'metadataPool' => $this->metadataPool,
-            'storeManager' => $this->storeManager,
+            'storeManager' => $this->storeManager
         ]);
     }
 
-    public function testProcess()
+    /**
+     * @return void
+     */
+    public function testProcess(): void
     {
         $linkField = 'link_field';
         $backendTable = 'backend_table';
         $attributeId = 2;
         $currentStoreId = 1;
 
-        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $metadata->expects($this->once())
             ->method('getLinkField')
             ->willReturn($linkField);
@@ -79,10 +97,10 @@ class StatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
             ->with(ProductInterface::class)
             ->willReturn($metadata);
 
-        /** @var AttributeInterface|\PHPUnit_Framework_MockObject_MockObject $statusAttribute */
+        /** @var AttributeInterface|MockObject $statusAttribute */
         $statusAttribute = $this->getMockBuilder(AttributeInterface::class)
-            ->setMethods(['getBackendTable', 'getAttributeId'])
-            ->getMock();
+            ->addMethods(['getBackendTable', 'getAttributeId'])
+            ->getMockForAbstractClass();
         $statusAttribute->expects($this->atLeastOnce())
             ->method('getBackendTable')
             ->willReturn($backendTable);
@@ -94,7 +112,8 @@ class StatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
             ->with(Product::ENTITY, ProductInterface::STATUS)
             ->willReturn($statusAttribute);
 
-        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMock();
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->getMock();
 
         $this->storeManager->expects($this->once())
             ->method('getStore')
@@ -104,28 +123,27 @@ class StatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn($currentStoreId);
 
-        $this->select->expects($this->at(0))
+        $this->select
             ->method('joinLeft')
-            ->with(
-                ['status_global_attr' => $backendTable],
-                "status_global_attr.{$linkField} = "
-                . BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . ".{$linkField}"
-                . " AND status_global_attr.attribute_id = {$attributeId}"
-                . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID,
-                []
+            ->withConsecutive(
+                [
+                    ['status_global_attr' => $backendTable],
+                    "status_global_attr.{$linkField} = "
+                    . BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . ".{$linkField}"
+                    . " AND status_global_attr.attribute_id = {$attributeId}"
+                    . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID,
+                    []
+                ],
+                [
+                    ['status_attr' => $backendTable],
+                    "status_attr.{$linkField} = " . BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . ".{$linkField}"
+                    . " AND status_attr.attribute_id = {$attributeId}"
+                    . " AND status_attr.store_id = {$currentStoreId}",
+                    []
+                ]
             )
-            ->willReturnSelf();
-        $this->select->expects($this->at(1))
-            ->method('joinLeft')
-            ->with(
-                ['status_attr' => $backendTable],
-                "status_attr.{$linkField} = " . BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . ".{$linkField}"
-                . " AND status_attr.attribute_id = {$attributeId}"
-                . " AND status_attr.store_id = {$currentStoreId}",
-                []
-            )
-            ->willReturnSelf();
-        $this->select->expects($this->at(2))
+            ->willReturnOnConsecutiveCalls($this->select, $this->select);
+        $this->select
             ->method('where')
             ->with('IFNULL(status_attr.value, status_global_attr.value) = ?', Status::STATUS_ENABLED)
             ->willReturnSelf();

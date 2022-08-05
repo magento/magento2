@@ -3,34 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\OfflinePayments\Test\Unit\Model;
 
-use Magento\OfflinePayments\Model\CheckmoConfigProvider;
-use Magento\OfflinePayments\Model\Checkmo;
 use Magento\Framework\Escaper;
+use Magento\OfflinePayments\Model\Checkmo;
+use Magento\OfflinePayments\Model\CheckmoConfigProvider;
+use Magento\Payment\Helper\Data as PaymentHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CheckmoConfigProviderTest extends \PHPUnit\Framework\TestCase
+class CheckmoConfigProviderTest extends TestCase
 {
-    /** @var CheckmoConfigProvider */
-    protected $model;
+    /**
+     * @var CheckmoConfigProvider
+     */
+    private $model;
 
-    /** @var Checkmo|\PHPUnit_Framework_MockObject_MockObject */
-    protected $methodMock;
+    /**
+     * @var Checkmo|MockObject
+     */
+    private $methodMock;
 
-    /** @var Escaper|\PHPUnit_Framework_MockObject_MockObject */
-    protected $escaperMock;
+    /**
+     * @var Escaper|MockObject
+     */
+    private $escaperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->methodMock = $this->createMock(\Magento\OfflinePayments\Model\Checkmo::class);
+        $this->methodMock = $this->createMock(Checkmo::class);
 
-        $paymentHelperMock = $this->createMock(\Magento\Payment\Helper\Data::class);
+        /** @var PaymentHelper|MockObject $paymentHelperMock */
+        $paymentHelperMock = $this->createMock(PaymentHelper::class);
         $paymentHelperMock->expects($this->once())
             ->method('getMethodInstance')
             ->with(Checkmo::PAYMENT_METHOD_CHECKMO_CODE)
             ->willReturn($this->methodMock);
 
-        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
         $this->escaperMock->expects($this->any())
             ->method('escapeHtml')
             ->willReturnArgument(0);

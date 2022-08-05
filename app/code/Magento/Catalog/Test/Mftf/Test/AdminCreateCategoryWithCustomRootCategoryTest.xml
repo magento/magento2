@@ -18,59 +18,51 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
-            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoresIndex"/>
-            <waitForPageLoad stepKey="waitStoreIndexPageLoad" />
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStore">
-                <argument name="storeGroupName" value="customStore.name"/>
+                <argument name="storeGroupName" value="customStoreGroup.name"/>
             </actionGroup>
-            <actionGroup ref="DeleteCategory" stepKey="deleteCreatedNewRootCategory">
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCreatedNewRootCategory">
                 <argument name="categoryEntity" value="NewRootCategory"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForCategoryIndexPageToBeLoaded"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <!--Create Root Category-->
         <actionGroup ref="AdminCreateRootCategory" stepKey="createNewRootCategory">
             <argument name="categoryEntity" value="NewRootCategory"/>
         </actionGroup>
         <!--Create subcategory-->
-        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(NewRootCategory.name)}}" stepKey="clickOnCreatedNewRootCategory"/>
-        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
-        <actionGroup ref="CreateCategory" stepKey="createSubcategory">
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="openCreatedCategory">
+            <argument name="Category" value="NewRootCategory"/>
+        </actionGroup>
+
+        <actionGroup ref="CreateCategoryActionGroup" stepKey="createSubcategory">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>
         <!--Create a Store-->
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
-        <waitForPageLoad stepKey="waitForSystemStorePage"/>
-        <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="selectCreateStore"/>
-        <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="fillStoreName"/>
-        <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" stepKey="fillStoreCode"/>
-        <selectOption userInput="{{NewRootCategory.name}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectStoreStatus"/>
-        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
+        <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStore">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+            <argument name="store" value="{{customStoreGroup.name}}"/>
+            <argument name="rootCategory" value="{{NewRootCategory.name}}"/>
+        </actionGroup>
         <!--Create a Store View-->
-        <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="selectCreateStoreView"/>
-        <click selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="clickDropDown"/>
-        <selectOption userInput="{{customStore.name}}" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreViewStatus"/>
-        <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
-        <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
-        <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="Enabled" stepKey="enableStatus"/>
-        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickSaveStoreViewButton"/>
-        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal" />
-        <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarning" />
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="dismissModal" />
-        <waitForElementNotVisible selector="{{AdminNewStoreViewActionsSection.loadingMask}}" stepKey="waitForElementVisible"/>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+            <argument name="StoreGroup" value="customStoreGroup"/>
+            <argument name="customStore" value="customStore"/>
+        </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
         <!--Go to store front page-->
-        <amOnPage url="/{{NewRootCategory.name}}/{{SimpleSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
-        <waitForPageLoad time="60" stepKey="waitForStoreFrontPageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomepage"/>
         <!--Verify subcategory displayed in store front page-->
-        <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="selectMainWebsite"/>
-        <click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}"  stepKey="selectCustomStore"/>
-        <waitForPageLoad stepKey="waitForCategoryToLoad"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="seeSubCategoryInStoreFrontPage"/>
+        <actionGroup ref="StorefrontSwitchStoreActionGroup" stepKey="switchToCustomStore">
+            <argument name="storeName" value="{{customStoreGroup.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCatergoryNameInStoreFront">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
     </test>
 </tests>

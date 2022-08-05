@@ -51,7 +51,7 @@ class CheckoutEndToEndTest extends GraphQlAbstract
      */
     private $orderRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -396,7 +396,7 @@ QUERY;
         self::assertNotEmpty($response['placeOrder']['order']['order_number']);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->deleteQuote();
         $this->deleteOrder();

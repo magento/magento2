@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter;
 
-use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\AdvancedSearch\Model\Client\ClientFactoryInterface;
+use Magento\AdvancedSearch\Model\Client\ClientInterface;
+use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class ConnectionManagerTest
+ *  Test for Magento\Elasticsearch\SearchAdapter\ConnectionManager
  */
-class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
+class ConnectionManagerTest extends TestCase
 {
     /**
      * @var ConnectionManager
@@ -22,17 +27,17 @@ class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $logger;
 
     /**
-     * @var ClientFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientFactoryInterface|MockObject
      */
     private $clientFactory;
 
     /**
-     * @var ClientOptionsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientOptionsInterface|MockObject
      */
     private $clientConfig;
 
@@ -41,18 +46,18 @@ class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->clientFactory = $this->getMockBuilder(\Magento\AdvancedSearch\Model\Client\ClientFactoryInterface::class)
+            ->getMockForAbstractClass();
+        $this->clientFactory = $this->getMockBuilder(ClientFactoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->clientConfig = $this->getMockBuilder(ClientOptionsInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->clientConfig->expects($this->any())
             ->method('prepareClientOptions')
@@ -67,7 +72,7 @@ class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Elasticsearch\SearchAdapter\ConnectionManager::class,
+            ConnectionManager::class,
             [
                 'clientFactory' => $this->clientFactory,
                 'clientConfig' => $this->clientConfig,
@@ -81,9 +86,9 @@ class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetConnectionSuccessfull()
     {
-        $client = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
+        $client = $this->getMockBuilder(ClientInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->clientFactory->expects($this->once())
             ->method('create')
             ->willReturn($client);
@@ -93,10 +98,11 @@ class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test getConnection() method with errors
-     * @expectedException \RuntimeException
      */
     public function testGetConnectionFailure()
     {
+        $this->expectException(\RuntimeException::class);
+
         $this->clientFactory->expects($this->any())
             ->method('create')
             ->willThrowException(new \Exception('Something went wrong'));

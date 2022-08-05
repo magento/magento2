@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Add Configurable Product with Swatch attribute to the cart -->
+    <actionGroup name="StorefrontAddProductWithSwatchesTextOptionToTheCartActionGroup">
+        <annotations>
+            <description>Select Product product option. Fills in the provided Product Quantity. Clicks on Add To Cart. Validates that the Success Message is present.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+            <argument name="productOption" type="string"/>
+            <argument name="productQty" type="string" />
+        </arguments>
+
+        <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel(productOption)}}" stepKey="clickSwatchOption"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{productQty}}" stepKey="fillProduct1Quantity"/>
+        <waitForElementClickable selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="waitForAddToCart"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="clickOnAddToCartButton"/>
+        <waitForPageLoad stepKey="waitForProductToAddInCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <seeElement selector="{{StorefrontProductPageSection.successMsg}}" stepKey="seeSuccessSaveMessage"/>
+
+    </actionGroup>
+</actionGroups>

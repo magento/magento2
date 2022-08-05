@@ -1,7 +1,5 @@
 <?php
 /**
- * Encapsulates directories structure of a Magento module
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +8,11 @@ namespace Magento\Framework\Module;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 
+/**
+ * Encapsulates directories structure of a Magento module
+ *
+ * @api
+ */
 class Dir
 {
     /**#@+
@@ -21,6 +24,14 @@ class Dir
     const MODULE_CONTROLLER_DIR = 'Controller';
     const MODULE_SETUP_DIR = 'Setup';
     /**#@-*/
+
+    private const ALLOWED_DIR_TYPES = [
+        self::MODULE_ETC_DIR => true,
+        self::MODULE_I18N_DIR => true,
+        self::MODULE_VIEW_DIR => true,
+        self::MODULE_CONTROLLER_DIR => true,
+        self::MODULE_SETUP_DIR => true
+    ];
 
     /**#@-*/
     private $componentRegistrar;
@@ -52,13 +63,7 @@ class Dir
         }
 
         if ($type) {
-            if (!in_array($type, [
-                self::MODULE_ETC_DIR,
-                self::MODULE_I18N_DIR,
-                self::MODULE_VIEW_DIR,
-                self::MODULE_CONTROLLER_DIR,
-                self::MODULE_SETUP_DIR
-            ])) {
+            if (!isset(self::ALLOWED_DIR_TYPES[$type])) {
                 throw new \InvalidArgumentException("Directory type '{$type}' is not recognized.");
             }
             $path .= '/' . $type;

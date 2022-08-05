@@ -14,13 +14,13 @@
             <stories value="Special price"/>
             <title value="Check that special price displayed when 'default config' scope timezone does not match 'website' scope timezone"/>
             <description value="Check that special price displayed when 'default config' scope timezone does not match 'website' scope timezone"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-97508"/>
             <useCaseId value="MAGETWO-96847"/>
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
             <!--Create product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
@@ -33,20 +33,18 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Set timezone for default config-->
-        <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToGeneralConfig"/>
-        <waitForPageLoad stepKey="waitForConfigPage"/>
+        <actionGroup ref="AdminOpenGeneralConfigurationPageActionGroup" stepKey="goToGeneralConfig"/>
         <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSection"/>
         <grabValueFrom selector="{{LocaleOptionsSection.timezone}}" stepKey="originalTimezone"/>
         <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="Central European Standard Time (Europe/Paris)" stepKey="setTimezone"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
 
         <!--Set timezone for Main Website-->
-        <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToGeneralConfig1"/>
-        <waitForPageLoad stepKey="waitForConfigPage1"/>
+        <actionGroup ref="AdminOpenGeneralConfigurationPageActionGroup" stepKey="goToGeneralConfig1"/>
         <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreViewActionGroup">
             <argument name="website" value="_defaultWebsite"/>
         </actionGroup>
@@ -57,11 +55,13 @@
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig1"/>
 
         <!--Set special price to created product-->
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="openAdminEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminEditPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="setSpecialPriceToCreatedProduct">
             <argument name="price" value="15"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
 
         <!--Login to storefront from customer and check price-->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="logInFromCustomer">
@@ -69,21 +69,22 @@
         </actionGroup>
 
         <!--Go to the product page and check special price-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.specialPriceValue}}" stepKey="grabSpecialPrice"/>
-        <assertEquals expected='$15.00' expectedType="string" actual="$grabSpecialPrice" stepKey="assertSpecialPrice"/>
+        <assertEquals stepKey="assertSpecialPrice">
+			<actualResult type="const">$grabSpecialPrice</actualResult>
+			<expectedResult type="string">$15.00</expectedResult>
+        </assertEquals>
 
         <!--Reset timezone-->
-        <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToGeneralConfigReset"/>
-        <waitForPageLoad stepKey="waitForConfigPageReset"/>
+        <actionGroup ref="AdminOpenGeneralConfigurationPageActionGroup" stepKey="goToGeneralConfigReset"/>
         <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSectionReset"/>
         <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="$originalTimezone" stepKey="resetTimezone"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigReset"/>
 
         <!--Reset timezone-->
-        <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToGeneralConfigReset1"/>
-        <waitForPageLoad stepKey="waitForConfigPageReset1"/>
+        <actionGroup ref="AdminOpenGeneralConfigurationPageActionGroup" stepKey="goToGeneralConfigReset1"/>
         <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreViewActionGroup1">
             <argument name="website" value="_defaultWebsite"/>
         </actionGroup>

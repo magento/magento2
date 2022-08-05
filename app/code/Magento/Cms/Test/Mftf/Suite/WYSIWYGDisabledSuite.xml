@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
+    <suite name="WYSIWYGDisabledSuite">
+        <before>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSYWYG" />
+        </before>
+        <include>
+            <group name="WYSIWYGDisabled"/>
+        </include>
+        <exclude>
+            <group name="skip"/>
+        </exclude>
+        <after>
+            <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="disableWYSYWYG" />
+        </after>
+    </suite>
+</suites>

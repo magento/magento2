@@ -12,27 +12,28 @@
             <title value="Admin delete customer addresses from the grid"/>
             <description value="Admin delete customer addresses from the grid"/>
             <features value="Module/ Customer"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-94850"/>
             <stories value="MAGETWO-94346: Implement handling of large number of addresses on admin edit customer page"/>
             <group value="customer"/>
+            <group value="cloud_smoke"/>
         </annotations>
 
         <before>
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- -
         Step1. Login to admin and go to Customers > All Customerts.
         Step2. On *Customers* page choose customer from preconditions and open it to edit
         Step3. On edit customer page open *Addresses* tab and find a grid with the additional addresses
         <!- -->
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPage">
             <argument name="customer" value="Simple_US_Customer_Multiple_Addresses"/>
         </actionGroup>

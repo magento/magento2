@@ -5,6 +5,8 @@
  */
 namespace Magento\Ui\Component;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\ObserverInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -12,6 +14,8 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Listing\Columns\ColumnInterface;
 
 /**
+ * Grid filters UI component
+ *
  * @api
  * @since 100.0.2
  */
@@ -36,6 +40,7 @@ class Filters extends AbstractComponent implements ObserverInterface
         'textRange' => 'filterRange',
         'select' => 'filterSelect',
         'dateRange' => 'filterDate',
+        'datetimeRange' => 'filterDate',
     ];
 
     /**
@@ -44,16 +49,42 @@ class Filters extends AbstractComponent implements ObserverInterface
     protected $uiComponentFactory;
 
     /**
-     * @inheritDoc
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
+     * Filters constructor.
+     *
+     * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param array $components
+     * @param array $data
+     * @param TimezoneInterface|null $localeDate
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         array $components = [],
-        array $data = []
+        array $data = [],
+        ?TimezoneInterface $localeDate = null
     ) {
         parent::__construct($context, $components, $data);
         $this->uiComponentFactory = $uiComponentFactory;
+        $this->localeDate = $localeDate ?? ObjectManager::getInstance()->get(TimezoneInterface::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function prepare()
+    {
+        $config = $this->getData('config');
+        // Set date format pattern by current locale
+        $localeDateFormat = $this->localeDate->getDateFormat();
+        $config['options']['dateFormat'] = $localeDateFormat;
+        $this->setData('config', $config);
+        parent::prepare();
     }
 
     /**

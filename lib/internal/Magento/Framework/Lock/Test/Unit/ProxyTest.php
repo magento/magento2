@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Lock\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Lock\Proxy;
 use Magento\Framework\Lock\LockBackendFactory;
 use Magento\Framework\Lock\LockManagerInterface;
+use Magento\Framework\Lock\Proxy;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @inheritdoc
@@ -36,7 +36,7 @@ class ProxyTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->factoryMock = $this->createMock(LockBackendFactory::class);
         $this->lockerMock = $this->getMockForAbstractClass(LockManagerInterface::class);

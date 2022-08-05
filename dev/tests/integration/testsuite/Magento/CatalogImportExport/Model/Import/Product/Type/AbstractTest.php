@@ -24,7 +24,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
      * On product import abstract class methods level it doesn't matter what product type is using.
      * That is why current tests are using simple product entity type by default
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $params = [$this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class), 'simple'];
@@ -190,8 +190,6 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Test cleaning imported attribute data from empty values (note '0' is not empty).
      *
-     * @magentoDbIsolation  enabled
-     * @magentoAppIsolation enabled
      * @magentoDataFixture  Magento/CatalogImportExport/Model/Import/_files/custom_attributes.php
      * @dataProvider        clearEmptyDataDataProvider
      * @param array $rowData

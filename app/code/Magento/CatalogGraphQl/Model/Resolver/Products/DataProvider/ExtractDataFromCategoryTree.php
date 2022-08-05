@@ -10,9 +10,6 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 use Magento\CatalogGraphQl\Model\Category\Hydrator;
 use Magento\Catalog\Api\Data\CategoryInterface;
 
-/**
- * Extract data from category tree
- */
 class ExtractDataFromCategoryTree
 {
     /**
@@ -55,7 +52,8 @@ class ExtractDataFromCategoryTree
             $currentCategory = $iterator->current();
             $iterator->next();
             if ($this->areParentsActive($currentCategory, $rootCategory, (array)$iterator)) {
-                $pathElements = explode("/", $currentCategory->getPath());
+                $pathElements = $currentCategory->getPath() !== null ?
+                    explode("/", $currentCategory->getPath()) : [''];
                 if (empty($tree)) {
                     $this->startCategoryFetchLevel = count($pathElements) - 1;
                 }
@@ -64,10 +62,11 @@ class ExtractDataFromCategoryTree
                 if (empty($tree)) {
                     $tree = $currentLevelTree;
                 }
-                $tree = $this->mergeCategoriesTrees($currentLevelTree, $tree);
+                $tree = $this->mergeCategoriesTrees($tree, $currentLevelTree);
             }
         }
-        return $tree;
+
+        return $this->sortTree($tree);
     }
 
     /**
@@ -139,6 +138,31 @@ class ExtractDataFromCategoryTree
         if (isset($pathElements[$index])) {
             $tree[$pathElements[$currentIndex]]['children'] = $this->explodePathToArray($pathElements, $index);
         }
+        return $tree;
+    }
+
+    /**
+     * Recursive method to sort tree
+     *
+     * @param array $tree
+     * @return array
+     */
+    private function sortTree(array $tree): array
+    {
+        foreach ($tree as &$node) {
+            if ($node['children']) {
+                uasort($node['children'], function ($element1, $element2) {
+                    return ($element1['position'] <=> $element2['position']);
+                });
+                $node['children'] = $this->sortTree($node['children']);
+                if (isset($node['children_count'])) {
+                    $node['children_count'] = count($node['children']);
+                }
+            } elseif (isset($node['children_count'])) {
+                $node['children_count'] = 0;
+            }
+        }
+
         return $tree;
     }
 }

@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 use Magento\SalesRule\Model\Coupon;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $couponCodes = [
     'one_usage',
@@ -18,5 +19,4 @@ foreach ($couponCodes as $couponCode) {
     $coupon->delete();
 }
 
-// phpcs:ignore Magento2.Security.IncludeFile
-require 'rules_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/SalesRule/_files/rules_rollback.php');

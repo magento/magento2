@@ -3,15 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product;
 
-use Magento\Framework\DB\Select;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\LinkedProductSelectBuilder;
+use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LinkedProductSelectBuilderTest extends \PHPUnit\Framework\TestCase
+class LinkedProductSelectBuilderTest extends TestCase
 {
     /**
      * @var LinkedProductSelectBuilder
@@ -19,16 +23,16 @@ class LinkedProductSelectBuilderTest extends \PHPUnit\Framework\TestCase
     private $subject;
 
     /**
-     * @var BaseSelectProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BaseSelectProcessorInterface|MockObject
      */
     private $baseSelectProcessorMock;
 
     /**
-     * @var LinkedProductSelectBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LinkedProductSelectBuilderInterface|MockObject
      */
     private $linkedProductSelectBuilderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->baseSelectProcessorMock = $this->getMockBuilder(BaseSelectProcessorInterface::class)
             ->disableOriginalConstructor()
@@ -50,8 +54,9 @@ class LinkedProductSelectBuilderTest extends \PHPUnit\Framework\TestCase
     public function testBuild()
     {
         $productId = 42;
+        $storeId = 1;
 
-        /** @var Select|\PHPUnit_Framework_MockObject_MockObject $selectMock */
+        /** @var Select|MockObject $selectMock */
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -67,6 +72,6 @@ class LinkedProductSelectBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('process')
             ->with($selectMock);
 
-        $this->assertEquals($expectedResult, $this->subject->build($productId));
+        $this->assertEquals($expectedResult, $this->subject->build($productId, $storeId));
     }
 }

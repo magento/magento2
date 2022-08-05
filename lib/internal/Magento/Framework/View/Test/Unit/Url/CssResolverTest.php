@@ -3,18 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Url;
 
-use \Magento\Framework\View\Url\CssResolver;
+use Magento\Framework\View\Url\CssResolver;
+use PHPUnit\Framework\TestCase;
 
-class CssResolverTest extends \PHPUnit\Framework\TestCase
+class CssResolverTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Url\CssResolver
+     * @var CssResolver
      */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new CssResolver();
     }

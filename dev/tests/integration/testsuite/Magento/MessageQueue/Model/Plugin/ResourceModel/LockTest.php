@@ -30,7 +30,7 @@ class LockTest extends \PHPUnit\Framework\TestCase
      */
     protected $reader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -48,6 +48,8 @@ class LockTest extends \PHPUnit\Framework\TestCase
     {
         /** @var $maintenanceMode \Magento\Framework\App\MaintenanceMode */
         $maintenanceMode = $this->objectManager->get(\Magento\Framework\App\MaintenanceMode::class);
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $code = md5('consumer.name-1');
         $this->lock->setMessageCode($code);
         $this->writer->saveLock($this->lock);

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductQuickSearchWithDecimalAttributeUsingElasticSearchTest">
+        <annotations>
+            <features value="Search"/>
+            <stories value="Elasticsearch 7.x.x Upgrade"/>
+            <title value="Search decimal attribute with ElasticSearch"/>
+            <description value="User should be able to search decimal attribute using ElasticSearch"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-31239"/>
+            <group value="SearchEngineElasticsearch" />
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Create product attribute with 3 options -->
+            <createData entity="multipleSelectProductAttribute" stepKey="customAttribute"/>
+            <createData entity="ProductAttributeOption10" stepKey="option1">
+                <requiredEntity createDataKey="customAttribute"/>
+            </createData>
+            <createData entity="ProductAttributeOption11" stepKey="option2">
+                <requiredEntity createDataKey="customAttribute"/>
+            </createData>
+            <createData entity="ProductAttributeOption12" stepKey="option3">
+                <requiredEntity createDataKey="customAttribute"/>
+            </createData>
+
+            <!-- Add custom attribute to Default Set -->
+            <createData entity="AddToDefaultSet" stepKey="addToDefaultAttributeSet">
+                <requiredEntity createDataKey="customAttribute"/>
+            </createData>
+
+            <!-- Create subcategory -->
+            <createData entity="SimpleSubCategory" stepKey="newCategory"/>
+            <createData entity="SimpleProduct" stepKey="product1">
+                <requiredEntity createDataKey="newCategory"/>
+                <requiredEntity createDataKey="customAttribute"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product2">
+                <requiredEntity createDataKey="newCategory"/>
+                <requiredEntity createDataKey="customAttribute"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="newCategory" stepKey="deleteCategory"/>
+            <!--Delete attribute-->
+            <deleteData createDataKey="customAttribute" stepKey="deleteCustomAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+        <!--Navigate to backend and update value for custom attribute -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
+            <argument name="product" value="$$product1$$"/>
+        </actionGroup>
+        <actionGroup ref="ModifyCustomAttributeValueActionGroup" stepKey="ModifyCustomAttributeValueProduct1">
+            <argument name="attributeValue" value="3.5"/>
+            <argument name="product" value="$$product1.sku$$"/>
+        </actionGroup>
+
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForApiSimpleProduct">
+            <argument name="product" value="$$product2$$"/>
+        </actionGroup>
+        <actionGroup ref="ModifyCustomAttributeValueActionGroup" stepKey="ModifyCustomAttributeValueProduct2">
+            <argument name="attributeValue" value="10.12"/>
+            <argument name="product" value="$$product2.sku$$"/>
+        </actionGroup>
+
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+
+        <!-- Navigate to Storefront and search -->
+        <actionGroup ref="AssertSearchResultActionGroup" stepKey="assertSearchResult0">
+            <argument name="keyword" value="$$product1.name$$"/>
+            <argument name="product" value="$$product1.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertSearchResultActionGroup" stepKey="assertSearchResult1">
+            <argument name="keyword" value="3.5"/>
+            <argument name="product" value="$$product1.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertSearchResultActionGroup" stepKey="assertSearchResult2">
+            <argument name="keyword" value="10.12"/>
+            <argument name="product" value="$$product2.name$$"/>
+        </actionGroup>
+        </test>
+</tests>

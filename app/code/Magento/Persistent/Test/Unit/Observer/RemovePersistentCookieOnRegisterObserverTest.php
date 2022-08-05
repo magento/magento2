@@ -4,12 +4,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use \Magento\Persistent\Observer\RemovePersistentCookieOnRegisterObserver;
+use Magento\Framework\Event\Observer;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Model\QuoteManager;
+use Magento\Persistent\Observer\RemovePersistentCookieOnRegisterObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RemovePersistentCookieOnRegisterObserverTest extends \PHPUnit\Framework\TestCase
+class RemovePersistentCookieOnRegisterObserverTest extends TestCase
 {
     /**
      * @var RemovePersistentCookieOnRegisterObserver
@@ -17,43 +24,43 @@ class RemovePersistentCookieOnRegisterObserverTest extends \PHPUnit\Framework\Te
     protected $model;
 
     /**
-     * @var \Magento\Persistent\Helper\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
     protected $persistentSessionMock;
 
     /**
-     * @var \Magento\Persistent\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     protected $persistentDataMock;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \Magento\Persistent\Model\QuoteManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteManager|MockObject
      */
     protected $quoteManagerMock;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \Magento\Persistent\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Model\Session|MockObject
      */
     protected $sessionModelMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->persistentSessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
+        $this->persistentSessionMock = $this->createMock(Session::class);
         $this->sessionModelMock = $this->createMock(\Magento\Persistent\Model\Session::class);
-        $this->persistentDataMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
+        $this->persistentDataMock = $this->createMock(Data::class);
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->quoteManagerMock = $this->createMock(\Magento\Persistent\Model\QuoteManager::class);
-        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->quoteManagerMock = $this->createMock(QuoteManager::class);
+        $this->observerMock = $this->createMock(Observer::class);
 
         $this->model = new RemovePersistentCookieOnRegisterObserver(
             $this->persistentSessionMock,
@@ -66,7 +73,7 @@ class RemovePersistentCookieOnRegisterObserverTest extends \PHPUnit\Framework\Te
     public function testExecuteWithPersistentDataThatCanNotBeProcess()
     {
         $this->persistentDataMock->expects($this->once())
-            ->method('canProcess')->with($this->observerMock)->will($this->returnValue(false));
+            ->method('canProcess')->with($this->observerMock)->willReturn(false);
         $this->persistentSessionMock->expects($this->never())->method('getSession');
 
         $this->model->execute($this->observerMock);
@@ -75,8 +82,8 @@ class RemovePersistentCookieOnRegisterObserverTest extends \PHPUnit\Framework\Te
     public function testExecuteWhenSessionIsNotPersistent()
     {
         $this->persistentDataMock->expects($this->once())
-            ->method('canProcess')->with($this->observerMock)->will($this->returnValue(true));
-        $this->persistentSessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(false));
+            ->method('canProcess')->with($this->observerMock)->willReturn(true);
+        $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(false);
 
         $this->persistentSessionMock->expects($this->never())->method('getSession');
 
@@ -86,16 +93,16 @@ class RemovePersistentCookieOnRegisterObserverTest extends \PHPUnit\Framework\Te
     public function testExecuteWithNotLoggedInCustomer()
     {
         $this->persistentDataMock->expects($this->once())
-            ->method('canProcess')->with($this->observerMock)->will($this->returnValue(true));
-        $this->persistentSessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
+            ->method('canProcess')->with($this->observerMock)->willReturn(true);
+        $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->persistentSessionMock->expects($this->once())
-            ->method('getSession')->will($this->returnValue($this->sessionModelMock));
-        $this->sessionModelMock->expects($this->once())->method('removePersistentCookie')->will($this->returnSelf());
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
+            ->method('getSession')->willReturn($this->sessionModelMock);
+        $this->sessionModelMock->expects($this->once())->method('removePersistentCookie')->willReturnSelf();
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->customerSessionMock->expects($this->once())
-            ->method('setCustomerId')->with(null)->will($this->returnSelf());
+            ->method('setCustomerId')->with(null)->willReturnSelf();
         $this->customerSessionMock->expects($this->once())
-            ->method('setCustomerGroupId')->with(null)->will($this->returnSelf());
+            ->method('setCustomerGroupId')->with(null)->willReturnSelf();
         $this->quoteManagerMock->expects($this->once())->method('setGuest');
 
         $this->model->execute($this->observerMock);
@@ -104,12 +111,12 @@ class RemovePersistentCookieOnRegisterObserverTest extends \PHPUnit\Framework\Te
     public function testExecute()
     {
         $this->persistentDataMock->expects($this->once())
-            ->method('canProcess')->with($this->observerMock)->will($this->returnValue(true));
-        $this->persistentSessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
+            ->method('canProcess')->with($this->observerMock)->willReturn(true);
+        $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->persistentSessionMock->expects($this->once())
-            ->method('getSession')->will($this->returnValue($this->sessionModelMock));
-        $this->sessionModelMock->expects($this->once())->method('removePersistentCookie')->will($this->returnSelf());
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(true));
+            ->method('getSession')->willReturn($this->sessionModelMock);
+        $this->sessionModelMock->expects($this->once())->method('removePersistentCookie')->willReturnSelf();
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(true);
         $this->customerSessionMock->expects($this->never())->method('setCustomerId');
         $this->customerSessionMock->expects($this->never())->method('setCustomerGroupId');
         $this->quoteManagerMock->expects($this->once())->method('setGuest');

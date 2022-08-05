@@ -3,40 +3,67 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Source;
 
+use Magento\CatalogInventory\Model\Source\Stock;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class StockTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogInventory\Model\Source\Stock
+     * @var Stock
      */
     private $model;
 
-    protected function setUp()
+    /**
+     * @var MetadataPool|MockObject
+     */
+    private $metadataPool;
+
+    protected function setUp(): void
     {
-        $this->model = new \Magento\CatalogInventory\Model\Source\Stock();
+        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->model = new Stock($this->metadataPool);
     }
 
     public function testAddValueSortToCollection()
     {
-        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
-        $collectionMock = $this->createMock(\Magento\Eav\Model\Entity\Collection\AbstractCollection::class);
+        $entityMetadata = $this->getMockBuilder(EntityMetadata::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $entityMetadata->expects($this->once())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
+        $this->metadataPool->expects($this->once())
+            ->method('getMetadata')
+            ->willReturn($entityMetadata);
+
+        $selectMock = $this->createMock(Select::class);
+        $collectionMock = $this->createMock(AbstractCollection::class);
         $collectionMock->expects($this->atLeastOnce())->method('getSelect')->willReturn($selectMock);
+        $collectionMock->expects($this->atLeastOnce())->method('getTable')->willReturn('cataloginventory_stock_item');
+        $collectionMock->expects($this->exactly(3))->method('joinField')
+            ->withConsecutive(['child_id'], ['child_stock'], ['parent_stock'])
+            ->willReturnSelf();
 
         $selectMock->expects($this->once())
-            ->method('joinLeft')
-            ->with(
-                ['stock_item_table' => 'cataloginventory_stock_item'],
-                "e.entity_id=stock_item_table.product_id",
-                []
-            )
+            ->method('group')
+            ->with('e.entity_id')
             ->willReturnSelf();
         $selectMock->expects($this->once())
             ->method('order')
-            ->with("stock_item_table.qty DESC")
+            ->with('stock DESC')
             ->willReturnSelf();
 
         $this->model->addValueSortToCollection($collectionMock);

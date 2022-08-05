@@ -15,6 +15,9 @@
     <type name="Magento\Backend\Controller\Adminhtml\Auth\Login">
         <plugin name="security_login_form" type="Magento\Security\Model\Plugin\LoginController" />
     </type>
+    <type name="Magento\User\Model\UserValidationRules">
+        <plugin name="user_expiration_validator" type="Magento\Security\Model\Plugin\UserValidationRules" />
+    </type>
     <type name="Magento\Security\Model\Plugin\AccountManagement">
         <arguments>
             <argument name="passwordRequestEvent" xsi:type="const">Magento\Security\Model\PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST</argument>
@@ -27,5 +30,8 @@
                 <item name="quantity" xsi:type="object">Magento\Security\Model\SecurityChecker\Quantity</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\User\Block\User\Edit\Tab\Main">
+        <plugin name="user_expiration_user_form_field" type="Magento\Security\Model\Plugin\AdminUserForm"/>
     </type>
 </config>

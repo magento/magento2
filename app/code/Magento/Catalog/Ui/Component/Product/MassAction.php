@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\AbstractComponent;
 
 /**
- * Class MassAction
+ * Class MassAction for Component Product
  */
 class MassAction extends AbstractComponent
 {
@@ -53,7 +53,7 @@ class MassAction extends AbstractComponent
             $actionType = $actionComponent->getConfiguration()['type'];
             if ($this->isActionAllowed($actionType)) {
                 // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $config['actions'][] = array_merge($actionComponent->getConfiguration(), ['__disableTmpl' => true]);
+                $config['actions'][] = array_merge($actionComponent->getConfiguration());
             }
         }
         $origConfig = $this->getConfiguration();

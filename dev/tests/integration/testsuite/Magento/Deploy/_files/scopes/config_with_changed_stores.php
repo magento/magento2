@@ -14,9 +14,9 @@ return [
                 'default_group_id' => '0',
                 'is_default' => '0',
             ],
-            'base' => [
+            'base_code_changed' => [
                 'website_id' => '1',
-                'code' => 'base',
+                'code' => 'base_code_changed',
                 'name' => 'Main Website',
                 'sort_order' => '0',
                 'default_group_id' => '1',

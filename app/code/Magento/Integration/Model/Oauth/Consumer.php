@@ -13,15 +13,15 @@ use Magento\Framework\Oauth\ConsumerInterface;
  * @api
  * @author Magento Core Team <core@magentocommerce.com>
  * @method string getName()
- * @method Consumer setName() setName(string $name)
- * @method Consumer setKey() setKey(string $key)
- * @method Consumer setSecret() setSecret(string $secret)
- * @method Consumer setCallbackUrl() setCallbackUrl(string $url)
- * @method Consumer setCreatedAt() setCreatedAt(string $date)
+ * @method Consumer setName(string $name)
+ * @method Consumer setKey(string $key)
+ * @method Consumer setSecret(string $secret)
+ * @method Consumer setCallbackUrl(string $url)
+ * @method Consumer setCreatedAt(string $date)
  * @method string getUpdatedAt()
- * @method Consumer setUpdatedAt() setUpdatedAt(string $date)
+ * @method Consumer setUpdatedAt(string $date)
  * @method string getRejectedCallbackUrl()
- * @method Consumer setRejectedCallbackUrl() setRejectedCallbackUrl(string $rejectedCallbackUrl)
+ * @method Consumer setRejectedCallbackUrl(string $rejectedCallbackUrl)
  * @since 100.0.2
  */
 class Consumer extends \Magento\Framework\Model\AbstractModel implements ConsumerInterface
@@ -112,13 +112,17 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate()
     {
         if ($this->getCallbackUrl() || $this->getRejectedCallbackUrl()) {
-            $this->setCallbackUrl(trim($this->getCallbackUrl()));
-            $this->setRejectedCallbackUrl(trim($this->getRejectedCallbackUrl()));
+            $this->setCallbackUrl($this->getCallbackUrl() !== null ? trim($this->getCallbackUrl()) : '');
+            $this->setRejectedCallbackUrl(
+                $this->getRejectedCallbackUrl() !== null ? trim($this->getRejectedCallbackUrl()) : ''
+            );
 
             if ($this->getCallbackUrl() && !$this->urlValidator->isValid($this->getCallbackUrl())) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Invalid Callback URL'));
@@ -158,7 +162,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getKey()
     {
@@ -166,7 +170,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getSecret()
     {
@@ -174,7 +178,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCallbackUrl()
     {
@@ -182,7 +186,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCreatedAt()
     {
@@ -190,7 +194,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function isValidForTokenExchange()
     {

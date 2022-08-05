@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Swatches\Test\Unit\Model;
 
 use Magento\Eav\Model\Entity\Attribute;
@@ -12,8 +14,10 @@ use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Swatches\Model\SwatchAttributeCodes;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
+class SwatchAttributeCodesTest extends TestCase
 {
     const ATTRIBUTE_TABLE = 'eav_attribute';
     const ATTRIBUTE_OPTION_TABLE = 'eav_attribute_option';
@@ -26,12 +30,12 @@ class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
     private $swatchAttributeCodesModel;
 
     /**
-     * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|MockObject
      */
     private $cache;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnection;
 
@@ -43,15 +47,15 @@ class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
         11 => 'image_swatch',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cache = $this->createPartialMock(CacheInterface::class, [
-                'getFrontend',
-                'load',
-                'save',
-                'remove',
-                'clean'
-            ]);
+            'getFrontend',
+            'load',
+            'save',
+            'remove',
+            'clean'
+        ]);
 
         $this->resourceConnection = $this->createPartialMock(
             ResourceConnection::class,
@@ -86,17 +90,12 @@ class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
             ->withConsecutive(
                 [
                     self::identicalTo(
-                        ['a' => self::ATTRIBUTE_TABLE],
-                        [
-                            'attribute_id' => 'a.attribute_id',
-                            'attribute_code' => 'a.attribute_code',
-                        ]
+                        ['a' => self::ATTRIBUTE_TABLE]
                     )
                 ],
                 [
                     self::identicalTo(
-                        ['o' => self::ATTRIBUTE_OPTION_TABLE],
-                        ['attribute_id' => 'o.attribute_id']
+                        ['o' => self::ATTRIBUTE_OPTION_TABLE]
                     )
                 ]
             )

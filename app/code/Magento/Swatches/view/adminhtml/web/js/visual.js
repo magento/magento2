@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-/* global $break $ $$ FORM_KEY */
+/* global FORM_KEY */
 
 /**
  * @api
@@ -14,7 +14,8 @@ define([
     'uiRegistry',
     'jquery/colorpicker/js/colorpicker',
     'prototype',
-    'jquery/ui'
+    'jquery/ui',
+    'validation'
 ], function (jQuery, mageTemplate, rg) {
     'use strict';
 
@@ -317,12 +318,12 @@ define([
                         display: 'none'
                     }).appendTo($('body'));
 
-                    this.iframe = $('<iframe />', {
+                    this.iframe = $('<iframe></iframe>', {
                         id:  'upload_iframe',
                         name: 'upload_iframe'
                     }).appendTo(this.wrapper);
 
-                    this.form = $('<form />', {
+                    this.form = $('<form></form>', {
                         id: 'swatch_form_image_upload',
                         name: 'swatch_form_image_upload',
                         target: 'upload_iframe',
@@ -383,7 +384,7 @@ define([
              */
             $(document).on('click', '.btn_choose_file_upload', function () {
                 swatchComponents.inputFile.attr('data-called-by', $(this).attr('id'));
-                swatchComponents.inputFile.click();
+                swatchComponents.inputFile.trigger('click');
             });
 
             /**
@@ -403,8 +404,11 @@ define([
             /**
              * Toggle color upload chooser
              */
-            $(document).on('click', '.swatch_window', function () {
-                $(this).next('div').toggle();
+            $(document).on('click', '.swatches-visual-col', function () {
+                var currentElement = $(this).find('.swatch_sub-menu_container');
+
+                jQuery('.swatch_sub-menu_container').not(currentElement).hide();
+                currentElement.toggle();
             });
         });
     };

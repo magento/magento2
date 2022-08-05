@@ -21,7 +21,85 @@ define([
      * @returns {Array}
      */
     function compact(container) {
-        return container.filter(utils.isObject);
+        return _.values(container).filter(utils.isObject);
+    }
+
+    /**
+     * Defines index of an item in a specified container.
+     *
+     * @param {*} item - Item whose index should be defined.
+     * @param {Array} container - Container upon which to perform search.
+     * @returns {Number}
+     */
+    function _findIndex(item, container) {
+        var index = _.findKey(container, function (value) {
+            return value === item;
+        });
+
+        if (typeof index === 'undefined') {
+            index = _.findKey(container, function (value) {
+                return value && value.name === item;
+            });
+        }
+
+        return typeof index === 'undefined' ? -1 : index;
+    }
+
+    /**
+     * Inserts specified item into container at a specified position.
+     *
+     * @param {*} item - Item to be inserted into container.
+     * @param {Array} container - Container of items.
+     * @param {*} [position=-1] - Position at which item should be inserted.
+     *      Position can represent:
+     *          - specific index in container
+     *          - item which might already be present in container
+     *          - structure with one of these properties: after, before
+     * @returns {Boolean|*}
+     *      - true if element has changed its' position
+     *      - false if nothing has changed
+     *      - inserted value if it wasn't present in container
+     */
+    function _insertAt(item, container, position) {
+        var currentIndex = _findIndex(item, container),
+            newIndex,
+            target;
+
+        if (typeof position === 'undefined') {
+            position = -1;
+        } else if (typeof position === 'string') {
+            position = isNaN(+position) ? position : +position;
+        }
+
+        newIndex = position;
+
+        if (~currentIndex) {
+            target = container.splice(currentIndex, 1)[0];
+
+            if (typeof item === 'string') {
+                item = target;
+            }
+        }
+
+        if (typeof position !== 'number') {
+            target = position.after || position.before || position;
+
+            newIndex = _findIndex(target, container);
+
+            if (~newIndex && (position.after || newIndex >= currentIndex)) {
+                newIndex++;
+            }
+        }
+
+        if (newIndex < 0) {
+            newIndex += container.length + 1;
+        }
+
+        container[newIndex] ?
+            container.splice(newIndex, 0, item) :
+            container[newIndex] = item;
+
+        return !~currentIndex ? item : currentIndex !== newIndex;
     }
 
     return Element.extend({
@@ -90,8 +168,8 @@ define([
 
             elems.map(function (item) {
                 return item.elem ?
-                    utils.insert(item.elem, container, item.position) :
-                    utils.insert(item, container, position);
+                    _insertAt(item.elem, container, item.position) :
+                    _insertAt(item, container, position);
             }).forEach(function (item) {
                 if (item === true) {
                     update = true;
@@ -215,6 +293,19 @@ define([
         },
 
         /**
+         * Checks if the specified region has any elements
+         * associated with it.
+         *
+         * @param {String} name
+         * @returns {Boolean}
+         */
+        regionHasElements: function (name) {
+            var region = this.getRegion(name);
+
+            return region().length > 0;
+        },
+
+        /**
          * Replaces specified regions' data with a provided one.
          * Creates region if it was not created yet.
          *
@@ -244,9 +335,11 @@ define([
          * @param {Object} elem - Element to insert.
          */
         _insert: function (elem) {
-            var index = this._elems.indexOf(elem.name);
+            var index = _.findKey(this._elems, function (value) {
+                return value === elem.name;
+            });
 
-            if (~index) {
+            if (typeof index !== 'undefined') {
                 this._elems[index] = elem;
             }
 

@@ -82,7 +82,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
         'kellynilson@magento.com' => ['addresses' => []],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_entityAdapter = $this->_objectManager->create(

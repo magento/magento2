@@ -25,59 +25,8 @@
         <fillField selector="{{AdminNewWebsiteSection.name}}" userInput="{{newWebsiteName}}" stepKey="enterWebsiteName"/>
         <fillField selector="{{AdminNewWebsiteSection.code}}" userInput="{{websiteCode}}" stepKey="enterWebsiteCode"/>
         <click selector="{{AdminNewWebsiteActionsSection.saveWebsite}}" stepKey="clickSaveWebsite"/>
+        <waitForPageLoad stepKey="waitForSuccess"/>
         <waitForElementVisible selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="waitForStoreGridToReload"/>
         <see userInput="You saved the website." stepKey="seeSavedMessage"/>
-    </actionGroup>
-
-    <actionGroup name="AdminGetWebsiteIdActionGroup">
-        <!--Get Website_id-->
-        <annotations>
-            <description>Goes to the Admin Stores grid page. Filters the grid for the provided Website. Grabs the Website ID from the URL.</description>
-        </annotations>
-        <arguments>
-            <argument name="website"/>
-        </arguments>
-
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnTheStorePage"/>
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters"/>
-        <fillField selector="{{AdminStoresGridSection.websiteFilterTextField}}" userInput="{{website.name}}" stepKey="fillSearchWebsiteField"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
-        <see selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" userInput="{{website.name}}" stepKey="verifyThatCorrectWebsiteFound"/>
-        <click selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="clickEditExistingWebsite"/>
-        <grabFromCurrentUrl regex="~(\d+)/~" stepKey="grabFromCurrentUrl"/>
-    </actionGroup>
-
-    <actionGroup name="AssertWebsiteInGrid">
-        <annotations>
-            <description>Goes to the Admin Stores grid page. Searches the grid for the provided Website Name. Validates that the Website appears in the grid.</description>
-        </annotations>
-        <arguments>
-            <argument name="websiteName" type="string"/>
-        </arguments>
-
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
-        <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
-        <fillField userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="fillWebsiteField"/>
-        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
-        <waitForPageLoad stepKey="waitForStoreToLoad"/>
-        <seeElement selector="{{AdminStoresGridSection.websiteName(websiteName)}}" stepKey="seeAssertWebsiteInGrid"/>
-    </actionGroup>
-
-    <actionGroup name="AssertWebsiteForm">
-        <annotations>
-            <description>Clicks on the provided Website Name in the Admin Stores grid. Validates that the URL, Website Name/Code are present and correct.</description>
-        </annotations>
-        <arguments>
-            <argument name="websiteName" type="string"/>
-            <argument name="websiteCode" type="string"/>
-        </arguments>
-
-        <click selector="{{AdminStoresGridSection.websiteName(websiteName)}}" stepKey="clickWebsiteFirstRowInGrid"/>
-        <waitForPageLoad stepKey="waitTillWebsiteFormPageIsOpened"/>
-        <grabFromCurrentUrl regex="~(\d+)/~" stepKey="grabWebsiteIdFromCurrentUrl"/>
-        <seeInCurrentUrl url="/system_store/editWebsite/website_id/{$grabWebsiteIdFromCurrentUrl}" stepKey="seeWebsiteId"/>
-        <seeInField selector="{{AdminNewWebsiteSection.name}}" userInput="{{websiteName}}" stepKey="seeAssertWebsiteName"/>
-        <seeInField selector="{{AdminNewWebsiteSection.code}}" userInput="{{websiteCode}}" stepKey="seeAssertWebsiteCode"/>
     </actionGroup>
 </actionGroups>

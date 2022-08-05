@@ -14,7 +14,7 @@
             <stories value="View swatches in product listing"/>
             <title value="Customers can filter products using visual swatches"/>
             <description value="Customers can filter products using visual swatches "/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-3082"/>
             <group value="Swatches"/>
         </annotations>
@@ -24,18 +24,17 @@
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Begin creating a new product attribute -->
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
-        <waitForPageLoad stepKey="waitForNewProductAttributePage"/>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="goToNewProductAttributePage"/>
         <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
 
         <!-- Select visual swatch -->
@@ -43,11 +42,11 @@
 
         <!-- Set swatch #1 using the color picker -->
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch1"/>
-        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch1">
+        <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch1">
             <argument name="index" value="0"/>
         </actionGroup>
         <click selector="{{AdminManageSwatchSection.nthChooseColor('1')}}" stepKey="clickChooseColor1"/>
-        <actionGroup ref="setColorPickerByHex" stepKey="fillHex1">
+        <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillHex1">
             <argument name="nthColorPicker" value="1"/>
             <argument name="hexColor" value="e74c3c"/>
         </actionGroup>
@@ -55,11 +54,11 @@
 
         <!-- Set swatch #2 using the color picker -->
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
-        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch2">
+        <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch2">
             <argument name="index" value="1"/>
         </actionGroup>
         <click selector="{{AdminManageSwatchSection.nthChooseColor('2')}}" stepKey="clickChooseColor2"/>
-        <actionGroup ref="setColorPickerByHex" stepKey="fillHex2">
+        <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillHex2">
             <argument name="nthColorPicker" value="2"/>
             <argument name="hexColor" value="3498db"/>
         </actionGroup>
@@ -79,26 +78,24 @@
         <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccess"/>
 
         <!-- Create a configurable product to verify the storefront with -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad time="30" stepKey="waitForProductGrid"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
 
         <!-- Create configurations based off the visual watch we created earlier -->
-        <actionGroup ref="createConfigurationsForAttribute" stepKey="createConfigurations">
+        <actionGroup ref="CreateConfigurationsForAttributeActionGroup" stepKey="createConfigurations">
             <argument name="attributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
         </actionGroup>
 
-        <!-- Run re-index task-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!-- Go to the category page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPage"/>
 
         <!-- Verify swatches are present in the layered navigation -->
@@ -106,14 +103,14 @@
         <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandAttribute"/>
         <grabAttributeFrom selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" userInput="style" stepKey="grabSwatch1"/>
         <grabAttributeFrom selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '2')}}" userInput="style" stepKey="grabSwatch2"/>
-        <assertContains stepKey="assertSwatch1">
+        <assertStringContainsString stepKey="assertSwatch1">
             <expectedResult type="string">rgb(231, 77, 60)</expectedResult>
             <actualResult type="string">{$grabSwatch1}</actualResult>
-        </assertContains>
-        <assertContains stepKey="assertSwatch2">
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertSwatch2">
             <expectedResult type="string">rgb(52, 152, 219)</expectedResult>
             <actualResult type="string">{$grabSwatch2}</actualResult>
-        </assertContains>
+        </assertStringContainsString>
 
         <!-- Click a swatch and expect to see the configurable product, not see the simple product -->
         <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" stepKey="filterBySwatch1"/>

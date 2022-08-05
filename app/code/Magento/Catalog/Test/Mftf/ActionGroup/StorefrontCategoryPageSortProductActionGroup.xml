@@ -17,16 +17,4 @@
         </arguments>
         <selectOption selector="{{StorefrontCategoryTopToolbarSection.sortByDropdown}}" userInput="{{sortBy}}" stepKey="selectSortByParameter"/>
     </actionGroup>
-    <actionGroup name="StorefrontCategoryPageSortAscendingActionGroup">
-        <annotations>
-            <description>Set Ascending Direction for sorting Products on Category page</description>
-        </annotations>
-        <click selector="{{StorefrontCategoryTopToolbarSection.sortDirectionAsc}}" stepKey="setAscendingDirection"/>
-    </actionGroup>
-    <actionGroup name="StorefrontCategoryPageSortDescendingActionGroup">
-        <annotations>
-            <description>Set Descending Direction for sorting Products on Category page</description>
-        </annotations>
-        <click selector="{{StorefrontCategoryTopToolbarSection.sortDirectionDesc}}" stepKey="setDescendingDirection"/>
-    </actionGroup>
 </actionGroups>

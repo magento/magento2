@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="BundleProductWithTierPriceWithFixedAndPercentOptionsInCartTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Add bundle product to cart on storefront"/>
+            <title value="Customer should get the right subtotal in cart when the bundle product with tier price and bundle items with fixed and percent price added to the cart"/>
+            <description value="Customer should be able to add bundle product with tier price and bundle items with fixed and percent price to the cart and get the right price"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-26543"/>
+            <group value="bundle"/>
+            <group value="catalog"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createProductForBundleItem1">
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createProductForBundleItem2">
+                <field key="price">100.00</field>
+            </createData>
+            <magentoCron groups="index" stepKey="runCronIndex"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createProductForBundleItem1" stepKey="deleteProductForBundleItem1"/>
+            <deleteData createDataKey="createProductForBundleItem2" stepKey="deleteProductForBundleItem2"/>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundle">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
+            <comment userInput="BIC workaround" stepKey="waitForClearProductsGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage">
+            <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+            <argument name="productType" value="{{BundleProduct.type}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
+        <click selector="{{AdminProductFormBundleSection.dynamicSkuToggle}}" stepKey="disableDynamicSku"/>
+        <click selector="{{AdminProductFormBundleSection.dynamicPrice}}" stepKey="clickDynamicPriceSwitcher"/>
+        <fillField selector="{{AdminProductFormBundleSection.priceField}}" userInput="100" stepKey="fillBundlePrice"/>
+        <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainFieldsForBundle"/>
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption1">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$createProductForBundleItem1.sku$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="Option1"/>
+            <argument name="inputType" value="checkbox"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYPrice('0', '0')}}" userInput="100" stepKey="fillBundleOption1Price"/>
+        <selectOption selector="{{AdminProductFormBundleSection.bundlePriceType}}" userInput="Percent" stepKey="selectPercentPrice"/>
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption2">
+            <argument name="x" value="1"/>
+            <argument name="n" value="2"/>
+            <argument name="prodOneSku" value="$createProductForBundleItem2.sku$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="Option2"/>
+            <argument name="inputType" value="checkbox"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYPrice('1', '0')}}" userInput="100" stepKey="fillBundleOption2Price"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfTheProductPage"/>
+        <actionGroup ref="AdminBundleProductSetAdvancedPricingActionGroup" stepKey="addProductTierPrice">
+            <argument name="quantity" value="1"/>
+            <argument name="price" value="Discount"/>
+            <argument name="amount" value="50"/>
+            <argument name="priceView" value="As Low as"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontProductPage.url(BundleProduct.urlKey)}}" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForStorefront"/>
+        <!--Assert Bundle Product Price-->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.asLowAsFinalPrice}}" stepKey="grabProductPrice"/>
+        <assertEquals message="ExpectedPrice" stepKey="assertBundleProductPrice">
+            <actualResult type="variable">grabProductPrice</actualResult>
+            <expectedResult type="string">$150.00</expectedResult>
+        </assertEquals>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickOnCustomizeAndAddToCartButton"/>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AssertSubTotalOnStorefrontMiniCartActionGroup" stepKey="assertSubTotalOnStorefrontMiniCart">
+            <argument name="subTotal" value="$150.00"/>
+        </actionGroup>
+    </test>
+</tests>

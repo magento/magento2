@@ -7,16 +7,13 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\GraphQl\Controller\GraphQl" />
+    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Webapi\Model\WebapiRoleLocator" />
     <type name="Magento\Authorization\Model\CompositeUserContext">
         <arguments>
             <argument name="userContexts" xsi:type="array">
                 <item name="tokenUserContext" xsi:type="array">
                     <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\TokenUserContext</item>
                     <item name="sortOrder" xsi:type="string">10</item>
-                </item>
-                <item name="oauthUserContext" xsi:type="array">
-                    <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\OauthUserContext</item>
-                    <item name="sortOrder" xsi:type="string">40</item>
                 </item>
                 <item name="guestUserContext" xsi:type="array">
                     <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\GuestUserContext</item>
@@ -32,5 +29,16 @@
                 <item name="VerbValidator" xsi:type="object">Magento\GraphQl\Controller\HttpRequestValidator\HttpVerbValidator</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\GraphQl\Model\Mutation\Resolver\ErrorTypeResolver">
+        <arguments>
+            <argument name="validErrorTypes" xsi:type="array">
+                <item name="no_such_entity_uid" xsi:type="string">NoSuchEntityUidError</item>
+                <item name="internal_error" xsi:type="string">InternalError</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Session\SessionStartChecker">
+        <plugin name="graphql_session_disable" type="Magento\GraphQl\Plugin\DisableSession"/>
     </type>
 </config>

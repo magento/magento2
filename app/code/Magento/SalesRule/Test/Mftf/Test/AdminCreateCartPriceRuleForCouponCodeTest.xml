@@ -21,7 +21,7 @@
 
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
@@ -30,12 +30,15 @@
                 <argument name="ruleName" value="{{_defaultCoupon.code}}"/>
             </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create a cart price rule based on a coupon code  -->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForPriceList"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{_defaultCoupon.code}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
@@ -67,7 +70,7 @@
         <seeInField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="5" stepKey="seeDiscountAmount"/>
 
         <!-- Create a product to check the storefront -->
-        <actionGroup ref="FillAdminSimpleProductForm" stepKey="fillProductFieldsInAdmin">
+        <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="_defaultProduct"/>
         </actionGroup>
@@ -75,16 +78,15 @@
         <!-- Spot check the storefront -->
         <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
-        <waitForPageLoad stepKey="waitForAddToCart"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
-        <waitForPageLoad stepKey="waitForCartPage"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage"/>
         <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="applyCoupon">
             <argument name="coupon" value="_defaultCoupon"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad2"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$5.00" stepKey="seeDiscountTotal"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForDiscountElement"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
+            <argument name="discount" value="5.00"/>
+        </actionGroup>
     </test>
 </tests>

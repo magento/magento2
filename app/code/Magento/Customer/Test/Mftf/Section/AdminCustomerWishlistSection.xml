@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerWishlistSection">
+        <element name="productName" type="input" selector="#wishlistGrid_filter_product_name"/>
+        <element name="searchButton" type="button" selector="#wishlistGrid button[data-action='grid-filter-apply']"/>
+        <element name="deleteButton" type="text" selector="//*[@id='wishlistGrid_table']//*[@data-column='action']//*[text()='Delete']"/>
+        <element name="deleteConfirm" type="button" selector=".modal-popup.confirm .action-primary.action-accept"/>
+        <element name="gridTable" type="text" selector="#wishlistGrid_table"/>
+        <element name="configureButton" type="text" selector="//table[@id='wishlistGrid_table']//tbody//td[@data-column='product_name' and contains(text(),'{{productName}}')]/parent::tr//td[@data-column='action']//a[@class='configure-item-link']" timeout="30" parameterized="true"/>
+        <element name="productAttributeOptionsDropDown" type="text" selector="//label[contains(.,'{{var1}}')]/following::div[contains(@class,'control')]//select" parameterized="true"/>
+        <element name="productQty" type="text" selector="table#wishlistGrid_table td.col-number[data-column=qty]"/>
+    </section>
+</sections>

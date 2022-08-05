@@ -15,6 +15,7 @@
             <description value="Admin should not be able to submit orders without invalid address fields"/>
             <severity value="AVERAGE"/>
             <group value="sales"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -25,37 +26,42 @@
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!--Create order via Admin-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
-        <!--<actionGroup ref="navigateToNewOrderPageNewCustomer" stepKey="navigateToNewOrderPage"/>-->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
-        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
+        <!--<actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>-->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToOrderIndexPage"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeIndexPageTitle">
+            <argument name="value" value="Orders"/>
+        </actionGroup>
         <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
         <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeNewOrderPageTitle">
+            <argument name="value" value="Create New Order"/>
+        </actionGroup>
 
         <!--Check if order can be submitted without the required fields including email address-->
-        <actionGroup ref="checkRequiredFieldsNewOrderForm" stepKey="checkRequiredFieldsNewOrder" after="seeNewOrderPageTitle"/>
+        <actionGroup ref="CheckRequiredFieldsNewOrderFormActionGroup" stepKey="checkRequiredFieldsNewOrder" after="seeNewOrderPageTitle"/>
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="checkRequiredFieldsNewOrder"/>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder" after="scrollToTopOfOrderFormPage">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder" after="scrollToTopOfOrderFormPage">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
 
         <!--Fill customer group and customer email-->
-        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectCustomerGroup" after="addSimpleProductToOrder"/>
-        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail" after="selectCustomerGroup"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectCustomerGroup" after="addSimpleProductToOrder"/>
+        <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillCustomerEmail" after="selectCustomerGroup">
+            <argument name="email" value="{{Simple_US_Customer.email}}"/>
+        </actionGroup>
 
         <!--Fill wrong customer address information-->
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillWrongCustomerAddress" after="fillCustomerEmail">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillWrongCustomerAddress" after="fillCustomerEmail">
             <argument name="customer" value="Simple_US_Customer_Incorrect_Name"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
         <!-- Select shipping -->
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRateShipping"
                      after="fillWrongCustomerAddress"/>
 
         <!--Verify totals on Order page-->
@@ -72,7 +78,7 @@
              after="clickSubmitOrderWrong"/>
 
         <!--Fill correct customer address information-->
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress" after="firstNameError">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress" after="firstNameError">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>

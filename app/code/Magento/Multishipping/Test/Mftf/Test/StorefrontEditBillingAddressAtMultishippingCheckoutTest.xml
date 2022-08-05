@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontEditBillingAddressAtMultishippingCheckoutTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Multiple Shipping"/>
+            <title value="Change Billing Address during Multiple Shipping checkout"/>
+            <description value="Verify that Billing Address is changed on Billing Information page after editing it"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-40509"/>
+            <useCaseId value="MC-35289"/>
+            <group value="catalog"/>
+            <group value="sales"/>
+            <group value="multishipping"/>
+        </annotations>
+
+        <before>
+            <!-- Create Product and Customer -->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct"/>
+            <createData entity="Simple_US_Customer_Two_Addresses" stepKey="createCustomer"/>
+
+            <!-- Login to Storefront as created Customer -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+                <argument name="Customer" value="$createCustomer$"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!-- Logout from Customer account -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+
+            <!-- Delete Product and Customer -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Add Product to Cart and go to Billing Information step -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart"/>
+        <actionGroup ref="CheckingWithSingleAddressActionGroup" stepKey="checkoutWithMultishipping"/>
+        <actionGroup ref="StorefrontLeaveDefaultShippingMethodsAndGoToBillingInfoActionGroup" stepKey="goToBillingInformation"/>
+
+        <!-- Select Check / Money order Payment method -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+
+        <!-- Change the first Address -->
+        <actionGroup ref="StorefrontStartEditBillingAddressFromListActionGroup" stepKey="openFirstAddressEditPage"/>
+        <actionGroup ref="FillNewCustomerAddressRequiredFieldsActionGroup" stepKey="editAddressFields">
+            <argument name="address" value="US_Address_CA"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSaveCustomerAddressActionGroup" stepKey="saveAddress"/>
+
+        <!-- Go back to Billing Information step and verify Billing Address -->
+        <actionGroup ref="StorefrontGoToBillingInfoStepFromAddressListActionGroup" stepKey="navigateToBillingInfoStep"/>
+        <actionGroup ref="StorefrontAssertBillingAddressInBillingInfoStepActionGroup" stepKey="verifyBillingAddress"/>
+
+        <!-- Go to Review Order step and Place Order -->
+        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="navigateToReviewOrderPage"/>
+        <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrder"/>
+
+        <!-- Open Order Details page and verify Billing Address -->
+        <actionGroup ref="StorefrontOpenOrderByPositionAfterMultishippingCheckoutActionGroup" stepKey="openOrderDetailsPage"/>
+        <click selector="{{StorefrontGuestOrderViewSection.printOrder}}" stepKey="clickPrintOrderButton"/>
+        <actionGroup ref="AssertSalesPrintOrderBillingAddress" stepKey="verifyPrintOrderBillingAddress">
+            <argument name="address" value="US_Address_CA"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -8,19 +8,20 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="CatalogProductListWidgetOrderTest">
+    <test name="CatalogProductListWidgetOrderTest" deprecated="Use CatalogProductListCheckWidgetOrderTest instead">
         <annotations>
             <features value="CatalogWidget"/>
             <stories value="MC-5905: Wrong sorting on Products component"/>
-            <title value="Checking order of products in the 'catalog Products List' widget"/>
+            <title value="Deprecated. Checking order of products in the 'catalog Products List' widget"/>
             <description value="Check that products are ordered with recently added products first"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-13794"/>
             <group value="CatalogWidget"/>
             <group value="WYSIWYGDisabled"/>
             <skip>
-                <issueId value="MC-13923"/>
+                <issueId value="DEPRECATED">Use CatalogProductListCheckWidgetOrderTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
@@ -37,12 +38,12 @@
                 <field key="price">30</field>
             </createData>
             <createData entity="_defaultCmsPage" stepKey="createPreReqPage"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
         </before>
         <!--Open created cms page-->
         <comment userInput="Open created cms page" stepKey="commentOpenCreatedCmsPage"/>
-        <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage1">
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage1">
             <argument name="CMSPage" value="$$createPreReqPage$$"/>
         </actionGroup>
         <!--Add widget to cms page-->
@@ -76,13 +77,13 @@
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('2','$$createSecondProduct.name$$')}}" stepKey="seeElementByName2"/>
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('3','$$createFirstProduct.name$$')}}" stepKey="seeElementByName3"/>
         <after>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <deleteData createDataKey="createPreReqPage" stepKey="deletePreReqPage" />
             <deleteData createDataKey="simplecategory" stepKey="deleteSimpleCategory"/>
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createThirdProduct" stepKey="deleteThirdProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

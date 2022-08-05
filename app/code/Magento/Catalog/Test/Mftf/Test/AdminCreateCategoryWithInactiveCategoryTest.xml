@@ -18,29 +18,20 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
-            <actionGroup ref="DeleteCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create In active Category -->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForCategoryIndexPageToBeLoaded"/>
-        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
-        <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="disableCategory"/>
-        <checkOption selector="{{AdminCategoryBasicFieldSection.IncludeInMenu}}" stepKey="enableIncludeInMenu"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="fillCategoryName"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
-        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
-        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="dontCategoryIsChecked"/>
-        <!--Verify InActive Category is created-->
-        <seeElement  selector="{{AdminCategoryContentSection.categoryInTree(_defaultCategory.name)}}" stepKey="seeCategoryInTree" />
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminCreateInactiveCategoryActionGroup" stepKey="createInactiveCategory"/>
+        <actionGroup ref="AssertAdminCategoryIsInactiveActionGroup" stepKey="seeDisabledCategory"/>
         <!--Verify Category is not listed store front page-->
-        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name)}}"  stepKey="amOnCategoryPage"/>
-        <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="dontSeeCategoryOnStoreFrontPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeCategoryNameInMenu">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
     </test>
 </tests>

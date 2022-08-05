@@ -3,53 +3,73 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Controller\Adminhtml\Import;
 
-class ValidateTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\View\Result\Layout;
+use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
+use Magento\ImportExport\Controller\Adminhtml\Import\Validate;
+use Magento\ImportExport\Helper\Report;
+use Magento\ImportExport\Model\History;
+use Magento\ImportExport\Model\Report\ReportProcessorInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ValidateTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\ImportExport\Model\Report\ReportProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReportProcessorInterface|MockObject
      */
     private $reportProcessorMock;
 
     /**
-     * @var \Magento\ImportExport\Model\History|\PHPUnit_Framework_MockObject_MockObject
+     * @var History|MockObject
      */
     private $historyMock;
 
     /**
-     * @var \Magento\ImportExport\Helper\Report|\PHPUnit_Framework_MockObject_MockObject
+     * @var Report|MockObject
      */
     private $reportHelperMock;
 
     /**
-     * @var \Magento\ImportExport\Controller\Adminhtml\Import\Validate
+     * @var Validate
      */
     private $validate;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     private $messageManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getPostValue',
@@ -57,14 +77,14 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             ])
             ->getMock();
 
-        $this->resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
+        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
 
-        $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())
@@ -78,19 +98,19 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->messageManagerMock);
 
         $this->reportProcessorMock = $this->getMockBuilder(
-            \Magento\ImportExport\Model\Report\ReportProcessorInterface::class
+            ReportProcessorInterface::class
         )
             ->getMockForAbstractClass();
 
-        $this->historyMock = $this->getMockBuilder(\Magento\ImportExport\Model\History::class)
+        $this->historyMock = $this->getMockBuilder(History::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->reportHelperMock = $this->getMockBuilder(\Magento\ImportExport\Helper\Report::class)
+        $this->reportHelperMock = $this->getMockBuilder(Report::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->validate = new \Magento\ImportExport\Controller\Adminhtml\Import\Validate(
+        $this->validate = new Validate(
             $this->contextMock,
             $this->reportProcessorMock,
             $this->historyMock,
@@ -111,25 +131,25 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             ->method('getPostValue')
             ->willReturn($data);
 
-        $resultBlock = $this->getMockBuilder(\Magento\ImportExport\Block\Adminhtml\Import\Frame\Result::class)
+        $resultBlock = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
+        $layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->getMockForAbstractClass();
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('import.frame.result')
             ->willReturn($resultBlock);
 
-        $resultLayoutMock = $this->getMockBuilder(\Magento\Framework\View\Result\Layout::class)
+        $resultLayoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultLayoutMock->expects($this->once())
             ->method('getLayout')
             ->willReturn($layoutMock);
 
-        $resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        $resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultRedirectMock->expects($this->once())
@@ -139,12 +159,12 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
         $this->resultFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturnMap([
-                [\Magento\Framework\Controller\ResultFactory::TYPE_LAYOUT, [], $resultLayoutMock],
-                [\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT, [], $resultRedirectMock],
+                [ResultFactory::TYPE_LAYOUT, [], $resultLayoutMock],
+                [ResultFactory::TYPE_REDIRECT, [], $resultRedirectMock],
             ]);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('Sorry, but the data is invalid or the file is not uploaded.'));
 
         $this->assertEquals($resultRedirectMock, $this->validate->execute());
@@ -166,21 +186,21 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             ->method('isPost')
             ->willReturn(true);
 
-        $resultBlock = $this->getMockBuilder(\Magento\ImportExport\Block\Adminhtml\Import\Frame\Result::class)
+        $resultBlock = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultBlock->expects($this->once())
             ->method('addError')
             ->with(__('The file was not uploaded.'));
 
-        $layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
+        $layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->getMockForAbstractClass();
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('import.frame.result')
             ->willReturn($resultBlock);
 
-        $resultLayoutMock = $this->getMockBuilder(\Magento\Framework\View\Result\Layout::class)
+        $resultLayoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultLayoutMock->expects($this->once())
@@ -189,7 +209,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
 
         $this->resultFactoryMock->expects($this->any())
             ->method('create')
-            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_LAYOUT)
+            ->with(ResultFactory::TYPE_LAYOUT)
             ->willReturn($resultLayoutMock);
 
         $this->assertEquals($resultLayoutMock, $this->validate->execute());

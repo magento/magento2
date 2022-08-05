@@ -7,18 +7,22 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontCheckoutWithDifferentShippingAndBillingAddressAndRegisterCustomerAfterCheckoutTest">
+    <test name="StorefrontCheckoutWithDifferentShippingAndBillingAddressAndRegisterCustomerAfterCheckoutTest" deprecated="Use StorefrontCheckoutWithDifferentShippingAndBillingAddressAndCreateCustomerAfterCheckoutTest instead">
         <annotations>
             <stories value="Checkout"/>
-            <title value="Verify UK customer checkout with different billing and shipping address and register customer after checkout"/>
+            <title value="DEPRECATED. Verify UK customer checkout with different billing and shipping address and register customer after checkout"/>
             <description value="Checkout as UK customer with different shipping/billing address and register checkout method"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14712"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontCheckoutWithDifferentShippingAndBillingAddressAndCreateCustomerAfterCheckoutTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
                 <field key="price">50.00</field>
             </createData>
@@ -26,16 +30,16 @@
         <after>
             <!-- Sign out Customer from storefront -->
             <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
-            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="UKCustomer.email"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Product page in StoreFront and assert product and price range -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 
@@ -45,20 +49,19 @@
         </actionGroup>
 
         <!--Open View and edit -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickMiniCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
 
         <!-- Fill the Estimate Shipping and Tax section -->
         <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
 
         <!-- Fill the guest form -->
         <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillGuestForm">
                 <argument name="customer" value="UKCustomer"/>
                 <argument name="customerAddress" value="updateCustomerUKAddress"/>
         </actionGroup>
-        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="waitForElementToBeVisible"/>
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="uncheckSameBillingAndShippingAddress"/>
         <conditionalClick selector="{{CheckoutShippingSection.editAddressButton}}" dependentSelector="{{CheckoutShippingSection.editAddressButton}}" visible="true" stepKey="clickEditButton"/>
@@ -70,18 +73,17 @@
 
         <!--Place order -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
-        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <seeElement selector="{{StorefrontMinicartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
 
         <!-- Register customer after checkout -->
         <actionGroup ref="StorefrontRegisterCustomerAfterCheckoutActionGroup" stepKey="registerCustomer"/>
 
         <!-- Open Order Index Page -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
 
         <!-- Filter Order using orderId and assert order-->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$orderId"/>
         </actionGroup>
 

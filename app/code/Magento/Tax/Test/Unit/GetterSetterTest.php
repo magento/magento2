@@ -3,12 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit;
+
+use Magento\Customer\Model\Data\Address;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order\Tax\Item;
+use Magento\Tax\Api\Data\AppliedTaxExtension;
+use Magento\Tax\Api\Data\AppliedTaxRateExtension;
+use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtension;
+use Magento\Tax\Api\Data\OrderTaxDetailsExtension;
+use Magento\Tax\Api\Data\OrderTaxDetailsItemExtension;
+use Magento\Tax\Api\Data\QuoteDetailsExtension;
+use Magento\Tax\Api\Data\QuoteDetailsItemExtension;
+use Magento\Tax\Api\Data\TaxClassExtension;
+use Magento\Tax\Api\Data\TaxClassKeyExtension;
+use Magento\Tax\Api\Data\TaxDetailsExtension;
+use Magento\Tax\Api\Data\TaxDetailsItemExtension;
+use Magento\Tax\Api\Data\TaxRateExtension;
+use Magento\Tax\Api\Data\TaxRateTitleExtension;
+use Magento\Tax\Api\Data\TaxRuleExtension;
+use Magento\Tax\Model\Calculation\Rate;
+use Magento\Tax\Model\Calculation\Rate\Title;
+use Magento\Tax\Model\Calculation\Rule;
+use Magento\Tax\Model\ClassModel;
+use Magento\Tax\Model\Sales\Order\Details;
+use Magento\Tax\Model\Sales\Order\Tax;
+use Magento\Tax\Model\Sales\Quote\ItemDetails;
+use Magento\Tax\Model\Sales\Quote\QuoteDetails;
+use Magento\Tax\Model\TaxClass\Key;
+use Magento\Tax\Model\TaxDetails\AppliedTax;
+use Magento\Tax\Model\TaxDetails\AppliedTaxRate;
+use Magento\Tax\Model\TaxDetails\TaxDetails;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GetterSetterTest extends \PHPUnit\Framework\TestCase
+class GetterSetterTest extends TestCase
 {
     /**
      * @param string $className
@@ -17,7 +50,7 @@ class GetterSetterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGettersSetters($className = null, $variables = null)
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $classObject = $objectManager->getObject($className);
 
         foreach ($variables as $variableName => $variableValue) {
@@ -29,12 +62,12 @@ class GetterSetterTest extends \PHPUnit\Framework\TestCase
             );
 
             if (is_array($variableValue)) {
-                if (strpos($variableValue[0], 'Magento') !== false) {
+                if (strpos((string)$variableValue[0], 'Magento') !== false) {
                     $obj = $objectManager->getObject($variableValue[0]);
                     $variableValue = [$obj];
                     $variables[$variableName] = $variableValue;
                 }
-            } elseif (strpos($variableValue, 'Magento') !== false) {
+            } elseif (strpos((string)$variableValue, 'Magento') !== false) {
                 $obj = $objectManager->getObject($variableValue);
                 $variableValue = $obj;
                 $variables[$variableName] = $variableValue;
@@ -76,70 +109,70 @@ class GetterSetterTest extends \PHPUnit\Framework\TestCase
     {
         // Test each class that implements the Tax Api Data Interfaces
         return [
-            [\Magento\Tax\Model\TaxDetails\AppliedTax::class,
+            [AppliedTax::class,
                 [
                     'TaxRateKey' => 'taxRateKey',
                     'Percent' => 1.0,
                     'Amount' => 1.0,
-                    'Rates' => [\Magento\Tax\Model\TaxDetails\AppliedTaxRate::class
-                        ],
-                    'ExtensionAttributes' => \Magento\Tax\Api\Data\AppliedTaxExtension::class
+                    'Rates' => [AppliedTaxRate::class
+                    ],
+                    'ExtensionAttributes' => AppliedTaxExtension::class
                 ]
             ],
-            [\Magento\Tax\Model\TaxDetails\AppliedTaxRate::class,
+            [AppliedTaxRate::class,
                 [
                     'Code' => 'code',
                     'Title' => 'title',
                     'Percent' => 1.0,
-                    'ExtensionAttributes' => \Magento\Tax\Api\Data\AppliedTaxRateExtension::class
+                    'ExtensionAttributes' => AppliedTaxRateExtension::class
                 ]
             ],
-            [\Magento\Tax\Model\Sales\Order\Tax::class,
+            [Tax::class,
                 [
                     'Code' => 'code',
                     'Title' => 'title',
                     'Percent' => 1.0,
                     'Amount' => 'amount',
                     'BaseAmount' => 'baseAmount',
-                    'ExtensionAttributes' => \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtension::class
+                    'ExtensionAttributes' => OrderTaxDetailsAppliedTaxExtension::class
                 ]
             ],
-            [\Magento\Tax\Model\Sales\Order\Details::class,
+            [Details::class,
                 [
-                    'AppliedTaxes' => [\Magento\Tax\Model\Sales\Order\Tax::class
-                        ],
-                    'Items' => [\Magento\Sales\Model\Order\Tax\Item::class
-                        ],
-                    'ExtensionAttributes' => \Magento\Tax\Api\Data\OrderTaxDetailsExtension::class
+                    'AppliedTaxes' => [Tax::class
+                    ],
+                    'Items' => [Item::class
+                    ],
+                    'ExtensionAttributes' => OrderTaxDetailsExtension::class
                 ]
             ],
-            [\Magento\Sales\Model\Order\Tax\Item::class,
+            [Item::class,
                 [
                     'Type' => 'type',
                     'ItemId' => 1,
                     'AssociatedItemId' => 1,
-                    'AppliedTaxes' => [\Magento\Tax\Model\Sales\Order\Tax::class
-                        ],
-                    'ExtensionAttributes' => \Magento\Tax\Api\Data\OrderTaxDetailsItemExtension::class
+                    'AppliedTaxes' => [Tax::class
+                    ],
+                    'ExtensionAttributes' => OrderTaxDetailsItemExtension::class
                 ]
             ],
-            [\Magento\Tax\Model\Sales\Quote\QuoteDetails::class,
+            [QuoteDetails::class,
                 [
-                    'BillingAddress' => \Magento\Customer\Model\Data\Address::class,
-                    'ShippingAddress' => \Magento\Customer\Model\Data\Address::class,
-                    'CustomerTaxClassKey' => \Magento\Tax\Model\TaxClass\Key::class,
+                    'BillingAddress' => Address::class,
+                    'ShippingAddress' => Address::class,
+                    'CustomerTaxClassKey' => Key::class,
                     'CustomerId' => 1,
-                    'Items' => [\Magento\Sales\Model\Order\Tax\Item::class
-                        ],
+                    'Items' => [Item::class
+                    ],
                     'CustomerTaxClassId' => 1,
-                    'ExtensionAttributes' => \Magento\Tax\Api\Data\QuoteDetailsExtension::class
+                    'ExtensionAttributes' => QuoteDetailsExtension::class
                 ]
             ],
-            [\Magento\Tax\Model\Sales\Quote\ItemDetails::class,
+            [ItemDetails::class,
                 [
                     'Code' => 'code',
                     'Type' => 'type',
-                    'TaxClassKey' => \Magento\Tax\Model\TaxClass\Key::class,
+                    'TaxClassKey' => Key::class,
                     'UnitPrice' => 1.0,
                     'Quantity' => 1.0,
                     'IsTaxIncluded' => true,
@@ -148,34 +181,34 @@ class GetterSetterTest extends \PHPUnit\Framework\TestCase
                     'ParentCode' => 'parentCode',
                     'AssociatedItemCode' => 1,
                     'TaxClassId' => 1,
-                    'ExtensionAttributes' => \Magento\Tax\Api\Data\QuoteDetailsItemExtension::class
+                    'ExtensionAttributes' => QuoteDetailsItemExtension::class
                 ]
             ],
-            [\Magento\Tax\Model\ClassModel::class,
+            [ClassModel::class,
                 [
                     'ClassId' => 1,
                     'ClassName' => 'className',
                     'ClassType' => 'classType',
-                    'ExtensionAttributes' => \Magento\Tax\Api\Data\TaxClassExtension::class
+                    'ExtensionAttributes' => TaxClassExtension::class
                 ]
             ],
-            [\Magento\Tax\Model\TaxClass\Key::class,
+            [Key::class,
                 [
                     'Type' => 'type',
                     'Value' => 'value',
-                    'ExtensionAttributes' => \Magento\Tax\Api\Data\TaxClassKeyExtension::class
+                    'ExtensionAttributes' => TaxClassKeyExtension::class
                 ]
             ],
-            [\Magento\Tax\Model\TaxDetails\TaxDetails::class,
+            [TaxDetails::class,
                 [
                     'Subtotal' => 1.0,
                     'TaxAmount' => 1.0,
                     'DiscountTaxCompensationAmount' => 1.0,
-                    'AppliedTaxes' => [\Magento\Tax\Model\TaxDetails\AppliedTax::class
-                        ],
+                    'AppliedTaxes' => [AppliedTax::class
+                    ],
                     'Items' => [\Magento\Tax\Model\TaxDetails\ItemDetails::class
-                        ],
-                    'ExtensionAttributes' => \Magento\Tax\Api\Data\TaxDetailsExtension::class
+                    ],
+                    'ExtensionAttributes' => TaxDetailsExtension::class
                 ]
             ],
             [\Magento\Tax\Model\TaxDetails\ItemDetails::class,
@@ -191,13 +224,13 @@ class GetterSetterTest extends \PHPUnit\Framework\TestCase
                     'TaxableAmount' => 1.0,
                     'DiscountAmount' => 1.0,
                     'DiscountTaxCompensationAmount' => 1.0,
-                    'AppliedTaxes' => [\Magento\Tax\Model\TaxDetails\AppliedTax::class
-                        ],
+                    'AppliedTaxes' => [AppliedTax::class
+                    ],
                     'AssociatedItemCode' => 1,
-                    'ExtensionAttributes' => \Magento\Tax\Api\Data\TaxDetailsItemExtension::class
+                    'ExtensionAttributes' => TaxDetailsItemExtension::class
                 ]
             ],
-            [\Magento\Tax\Model\Calculation\Rate::class,
+            [Rate::class,
                 [
                     'Id' => 1,
                     'TaxCountryId' => 'taxCountryId',
@@ -209,19 +242,19 @@ class GetterSetterTest extends \PHPUnit\Framework\TestCase
                     'ZipTo' => 1,
                     'Rate' => 1.0,
                     'Code' => 'code',
-                    'Titles' => [\Magento\Tax\Model\Calculation\Rate\Title::class
-                        ],
-                    'ExtensionAttributes' => \Magento\Tax\Api\Data\TaxRateExtension::class
+                    'Titles' => [Title::class
+                    ],
+                    'ExtensionAttributes' => TaxRateExtension::class
                 ]
             ],
-            [\Magento\Tax\Model\Calculation\Rate\Title::class,
+            [Title::class,
                 [
                     'StoreId' => 'storeId',
                     'Value' => 'value',
-                    'ExtensionAttributes' => \Magento\Tax\Api\Data\TaxRateTitleExtension::class
+                    'ExtensionAttributes' => TaxRateTitleExtension::class
                 ]
             ],
-            [\Magento\Tax\Model\Calculation\Rule::class,
+            [Rule::class,
                 [
                     'Id' => 1,
                     'Code' => 'code',
@@ -231,7 +264,7 @@ class GetterSetterTest extends \PHPUnit\Framework\TestCase
                     'ProductTaxClassIds' => [1],
                     'TaxRateIds' => [1],
                     'CalculateSubtotal' => true,
-                    'ExtensionAttributes' => \Magento\Tax\Api\Data\TaxRuleExtension::class
+                    'ExtensionAttributes' => TaxRuleExtension::class
                 ]
             ]
         ];

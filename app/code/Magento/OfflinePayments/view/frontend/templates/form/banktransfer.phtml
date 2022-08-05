@@ -6,12 +6,18 @@
 
 /**
  * @var $block \Magento\OfflinePayments\Block\Form\Banktransfer
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 $instructions = $block->getInstructions();
 ?>
-<?php if ($instructions) : ?>
+<?php if ($instructions): ?>
     <?php $methodCode = $block->escapeHtml($block->getMethodCode());?>
-    <div class="items <?= /* @noEscape */ $methodCode ?> instructions agreement checkout-agreement-item-content" id="payment_form_<?= /* @noEscape */ $methodCode ?>" style="display: none;">
+    <div class="items <?= /* @noEscape */ $methodCode ?> instructions agreement checkout-agreement-item-content"
+         id="payment_form_<?= /* @noEscape */ $methodCode ?>">
         <?= /* @noEscape */ nl2br($block->escapeHtml($instructions)) ?>
     </div>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+        "display:none",
+        'div#payment_form_' . /* @noEscape */ $methodCode
+    ) ?>
 <?php endif; ?>

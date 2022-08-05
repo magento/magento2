@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormNewAttributeAdvancedSection">
+        <element name="sectionHeader" type="button" selector="div[data-index='advanced_fieldset']"/>
+        <element name="defaultValue" type="textarea" selector="input[name='default_value_text']"/>
+        <element name="scope" type="select" selector="//div[@data-index='advanced_fieldset']//select[@name='is_global']"/>
+    </section>
+</sections>

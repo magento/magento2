@@ -11,26 +11,27 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav\Action;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Indexer\Product\Eav\Action\Full;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Decimal;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Source;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\BatchProviderInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FullTest extends \PHPUnit\Framework\TestCase
+class FullTest extends TestCase
 {
     /**
      * @var Full|MockObject
@@ -80,7 +81,7 @@ class FullTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eavDecimalFactory = $this->createPartialMock(DecimalFactory::class, ['create']);
         $this->eavSourceFactory = $this->createPartialMock(SourceFactory::class, ['create']);
@@ -142,9 +143,9 @@ class FullTest extends \PHPUnit\Framework\TestCase
 
         $eavSource->expects($this->once())->method('reindexEntities')->with($ids);
 
-        $this->eavDecimalFactory->expects($this->once())->method('create')->will($this->returnValue($eavSource));
+        $this->eavDecimalFactory->expects($this->once())->method('create')->willReturn($eavSource);
 
-        $this->eavSourceFactory->expects($this->once())->method('create')->will($this->returnValue($eavDecimal));
+        $this->eavSourceFactory->expects($this->once())->method('create')->willReturn($eavDecimal);
 
         $entityMetadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
             ->getMockForAbstractClass();

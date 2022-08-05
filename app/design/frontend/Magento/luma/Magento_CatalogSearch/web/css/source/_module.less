@@ -18,7 +18,7 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-    
+
     .search {
         .fieldset {
             .control {
@@ -31,7 +31,7 @@
             }
         }
     }
-    
+
     .block-search {
         margin-bottom: 0;
 
@@ -80,6 +80,7 @@
         }
 
         input {
+            font-size: 16px;
             left: -300%;
             margin: 15px 0;
             position: absolute;
@@ -136,8 +137,6 @@
     }
 
     .form.search.advanced {
-        &:extend(.abs-forms-general-desktop all);
-
         .fields.range {
             .field {
                 &:first-child {
@@ -161,7 +160,7 @@
                 &:last-child {
                     position: relative;
 
-                    div.mage-error[generated] {
+                    div.mage-error {
                         left: 0;
                         position: absolute;
                         top: 32px;
@@ -274,5 +273,9 @@
 
     .search-autocomplete {
         margin-top: 0;
+    }
+
+    .form.search.advanced {
+        &:extend(.abs-forms-general-desktop all);
     }
 }

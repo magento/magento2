@@ -17,7 +17,7 @@
                 <group value="mtf_migrated"/>
             </annotations>
             <before>
-                <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+                <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
                 <!-- Create store -->
                 <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createFirstStore">
                     <argument name="website" value="{{_defaultWebsite.name}}"/>
@@ -29,7 +29,8 @@
                 <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStore">
                     <argument name="storeGroupName" value="customStore.name"/>
                 </actionGroup>
-                <actionGroup ref="logout" stepKey="logout"/>
+                <magentoCron groups="index" stepKey="reindex"/>
+                <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
 
             <!--Create custom store view-->
@@ -37,9 +38,10 @@
                 <argument name="StoreGroup" value="customStore"/>
                 <argument name="customStore" value="storeViewData"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
-            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
+            <actionGroup ref="AdminCreateStoreViewSaveActionGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
 
             <!--Search store view(from above step) in grid-->
             <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="searchStoreViewInGrid">

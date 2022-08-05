@@ -20,7 +20,7 @@
                         M2.864,0.456
                         h1.189 l14.625,17.55
                         L4.054,35.557
-                        H2.681"/>
+                        H2.681"></path>
                 <path
                     class="g__timeline-arrow"
                     fill="currentColor"
@@ -29,7 +29,7 @@
                         h4.002l15.006,18.007
                         L13.177,36.055
                         H9.175 l15.006-18.008
-                        L9.175,0.04z"/>
+                        L9.175,0.04z"></path>
             </symbol>
         </defs>
     </svg>
@@ -38,7 +38,7 @@
          css="'_from-now': hasToday(),
               '_no-records': !hasData()">
         <div class="timeline-past" if="hasToday()">
-            <time class="timeline-date" translate="'Past'"/>
+            <time class="timeline-date" translate="'Past'"></time>
         </div>
         <ul class="timeline-units">
             <li class="timeline-unit" repeat="foreach: updateRange().days, item: '$date'">
@@ -50,12 +50,12 @@
                     position: 'top',
                     closeButton: false
                 ">
-                    <text args="isToday($date()) ? $t('Today') \: formatHeader($date())"/>
+                    <text args="isToday($date()) ? $t('Today') \: formatHeader($date())"></text>
                 </div>
                 <time attr="'data-tooltip-trigger': $index" class="timeline-date">
 
                     <!-- NOTE: needs to be replaced by the date binding -->
-                    <text args="isToday($date()) ? $t('Today') \: formatHeader($date())"/>
+                    <text args="isToday($date()) ? $t('Today') \: formatHeader($date())"></text>
                 </time>
             </li>
         </ul>
@@ -68,15 +68,15 @@
                         _active: isActive($row()),
                         _permanent: isPermanent($row())
                     "
-                    render="recordTmpl"/>
+                    render="recordTmpl"></li>
             </if>
 
             <ifnot args="hasData()">
                 <li class="timeline-item" data-role="no-data-msg">
                     <div class="timeline-event">
                         <span class="timeline-event-title"
-                                translate="'We couldn\'t find any records.'"/>
-                        <div class="timeline-event-info"/>
+                                translate="'We couldn\'t find any records.'"></span>
+                        <div class="timeline-event-info"></div>
                     </div>
                 </li>
             </ifnot>
@@ -90,8 +90,8 @@
                 max: maxScale,
                 step: scaleStep
             ">
-            <span class="data-slider-from" text="daysToWeeks(minScale) + 'w'"/>
-            <span class="data-slider-to" text="daysToWeeks(maxScale) + 'w'"/>
+            <span class="data-slider-from" text="daysToWeeks(minScale) + 'w'"></span>
+            <span class="data-slider-to" text="daysToWeeks(maxScale) + 'w'"></span>
         </div>
     </div>
 </div>

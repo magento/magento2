@@ -3,24 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
 
-use Magento\Customer\Ui\Component\Listing\Column\ValidationRules;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
+use Magento\Customer\Ui\Component\Listing\Column\ValidationRules;
+use Magento\Framework\DataObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ValidationRulesTest extends \PHPUnit\Framework\TestCase
+class ValidationRulesTest extends TestCase
 {
     /** @var ValidationRules */
     protected $validationRules;
 
-    /** @var ValidationRuleInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ValidationRuleInterface|MockObject */
     protected $validationRule;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->validationRule = $this->getMockBuilder(\Magento\Customer\Api\Data\ValidationRuleInterface::class)
+        $this->validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->validationRules = new ValidationRules();
     }
@@ -50,7 +55,7 @@ class ValidationRulesTest extends \PHPUnit\Framework\TestCase
                 true,
                 [
                     $this->validationRule,
-                    new \Magento\Framework\DataObject(),
+                    new DataObject(),
                 ]
             )
         );

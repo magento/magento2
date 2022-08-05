@@ -5,9 +5,10 @@
  */
 declare(strict_types=1);
 
-// phpcs:ignore Magento2.Security.IncludeFile
-include __DIR__ . '/../../Framework/Search/_files/products.php';
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Framework/Search/_files/products.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

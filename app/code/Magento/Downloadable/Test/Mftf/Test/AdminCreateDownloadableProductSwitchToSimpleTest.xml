@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateDownloadableProductSwitchToSimpleTest" extends="AdminCreateSimpleProductSwitchToVirtualTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Type Switching"/>
+            <title value="Admin should be able to switch a new product from downloadable to simple"/>
+            <description value="After selecting a downloadable product when adding Admin should be switch to simple implicitly"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-10929"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm">
+            <argument name="productType" value="downloadable"/>
+        </actionGroup>
+        <!-- Fill form for Virtual Product Type -->
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductTypeInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Simple Product"/>
+        </actionGroup>
+    </test>
+</tests>

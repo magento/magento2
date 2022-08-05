@@ -3,21 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Image\Adapter;
 
-class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
+
+/**
+ * Image adapter from ImageMagick.
+ */
+class ImageMagick extends AbstractAdapter
 {
     /**
      * The blur factor where > 1 is blurry, < 1 is sharp
      */
-    const BLUR_FACTOR = 0.7;
+    public const BLUR_FACTOR = 0.7;
 
     /**
      * Error messages
      */
-    const ERROR_WATERMARK_IMAGE_ABSENT = 'Watermark Image absent.';
+    public const ERROR_WATERMARK_IMAGE_ABSENT = 'Watermark Image absent.';
 
-    const ERROR_WRONG_IMAGE = 'Image is not readable or file name is empty.';
+    public const ERROR_WRONG_IMAGE = 'Image is not readable or file name is empty.';
 
     /**
      * Options Container
@@ -29,6 +37,18 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
         'small_image' => ['width' => 300, 'height' => 300],
         'sharpen' => ['radius' => 4, 'deviation' => 1],
     ];
+
+    /**
+     * @var \Imagick
+     */
+    protected $_imageHandler;
+
+    /**
+     * Colorspace of the image
+     *
+     * @var int
+     */
+    private $colorspace = -1;
 
     /**
      * Set/get background color. Check Imagick::COLOR_* constants
@@ -66,32 +86,74 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param string $filename
      * @return void
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function open($filename)
     {
+        if ($filename === null || !file_exists($filename)) {
+            throw new FileSystemException(
+                new Phrase('File "%1" does not exist.', [$filename])
+            );
+        }
+        if (!empty($filename) && !$this->validateURLScheme($filename)) {
+            throw new \InvalidArgumentException('Wrong file');
+        }
+
         $this->_fileName = $filename;
         $this->_checkCanProcess();
         $this->_getFileAttributes();
 
         try {
-            $this->_imageHandler = new \Imagick($this->_fileName);
+            if (is_callable('exif_imagetype')) {
+                $fileType = exif_imagetype($this->_fileName);
+
+                if ($fileType === IMAGETYPE_ICO) {
+                    $filename = 'ico:' . $this->_fileName;
+                }
+            }
+
+            $this->_imageHandler = new \Imagick($filename);
         } catch (\ImagickException $e) {
-            throw new \Exception(sprintf('Unsupported image format. File: %s', $this->_fileName), $e->getCode(), $e);
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw new LocalizedException(
+                __('Unsupported image format. File: %1', $this->_fileName),
+                $e,
+                $e->getCode()
+            );
         }
 
+        $this->getColorspace();
+        $this->maybeConvertColorspace();
         $this->backgroundColor();
         $this->getMimeType();
     }
 
     /**
+     * Checks for invalid URL schema if it exists
+     *
+     * @param string $filename
+     * @return bool
+     */
+    private function validateURLScheme(string $filename) : bool
+    {
+        $allowed_schemes = ['ftp', 'ftps', 'http', 'https'];
+        $url = parse_url($filename);
+        if ($url && isset($url['scheme']) && !in_array($url['scheme'], $allowed_schemes)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Save image to specific path.
+     *
      * If some folders of path does not exist they will be created
      *
      * @param null|string $destination
      * @param null|string $newName
      * @return void
-     * @throws \Exception  If destination path is not writable
+     * @throws \Magento\Framework\Exception\LocalizedException If destination path is not writable
      */
     public function save($destination = null, $newName = null)
     {
@@ -109,7 +171,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      */
     protected function _applyOptions()
     {
-        $this->_imageHandler->setImageCompressionQuality($this->quality());
+        $this->_imageHandler->setImageCompressionQuality((int)$this->quality());
         $this->_imageHandler->setImageCompression(\Imagick::COMPRESSION_JPEG);
         $this->_imageHandler->setImageUnits(\Imagick::RESOLUTION_PIXELSPERINCH);
         $this->_imageHandler->setImageResolution(
@@ -124,8 +186,10 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     }
 
     /**
-     * @see \Magento\Framework\Image\Adapter\AbstractAdapter::getImage
+     * Render image and return its binary contents
+     *
      * @return string
+     * @see \Magento\Framework\Image\Adapter\AbstractAdapter::getImage
      */
     public function getImage()
     {
@@ -134,11 +198,12 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     }
 
     /**
-     * Change the image size
+     * Change the image size.
      *
      * @param null|int $frameWidth
      * @param null|int $frameHeight
      * @return void
+     * @throws \ImagickException
      */
     public function resize($frameWidth = null, $frameHeight = null)
     {
@@ -241,7 +306,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param bool $tile
      * @return void
      * @throws \LogicException
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -253,28 +318,12 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
         $this->_checkCanProcess();
 
         $opacity = $this->getWatermarkImageOpacity() ? $this->getWatermarkImageOpacity() : $opacity;
+        $opacity = (double) number_format($opacity / 100, 1);
 
-        $opacity = (double)number_format($opacity / 100, 1);
         $watermark = new \Imagick($imagePath);
 
-        if ($this->getWatermarkWidth() &&
-            $this->getWatermarkHeight() &&
-            $this->getWatermarkPosition() != self::POSITION_STRETCH
-        ) {
-            $watermark->resizeImage(
-                $this->getWatermarkWidth(),
-                $this->getWatermarkHeight(),
-                \Imagick::FILTER_CUBIC,
-                self::BLUR_FACTOR
-            );
-        }
-
-        if (method_exists($watermark, 'getImageAlphaChannel')) {
-            // available from imagick 6.4.0
-            if ($watermark->getImageAlphaChannel() == 0) {
-                $watermark->setImageAlphaChannel(\Imagick::ALPHACHANNEL_OPAQUE);
-            }
-        }
+        $this->resizeWatermark($watermark);
+        $this->handleWatermarkAlphaChannel($watermark);
 
         $compositeChannels = \Imagick::CHANNEL_ALL;
         $watermark->evaluateImage(\Imagick::EVALUATE_MULTIPLY, $opacity, \Imagick::CHANNEL_OPACITY);
@@ -307,33 +356,17 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
 
         try {
             if ($tile) {
-                $offsetX = $positionX;
-                $offsetY = $positionY;
-                while ($offsetY <= $this->_imageSrcHeight + $watermark->getImageHeight()) {
-                    while ($offsetX <= $this->_imageSrcWidth + $watermark->getImageWidth()) {
-                        $this->_imageHandler->compositeImage(
-                            $watermark,
-                            \Imagick::COMPOSITE_OVER,
-                            $offsetX,
-                            $offsetY,
-                            $compositeChannels
-                        );
-                        $offsetX += $watermark->getImageWidth();
-                    }
-                    $offsetX = $positionX;
-                    $offsetY += $watermark->getImageHeight();
-                }
+                $this->addTiledWatermark($positionX, $positionY, $watermark, $compositeChannels);
             } else {
-                $this->_imageHandler->compositeImage(
-                    $watermark,
-                    \Imagick::COMPOSITE_OVER,
-                    $positionX,
-                    $positionY,
-                    $compositeChannels
-                );
+                $this->addSingleWatermark($positionX, $positionY, $watermark, $compositeChannels);
             }
         } catch (\ImagickException $e) {
-            throw new \Exception('Unable to create watermark.', $e->getCode(), $e);
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw new LocalizedException(
+                __('Unable to create watermark.'),
+                $e,
+                $e->getCode()
+            );
         }
 
         // merge layers
@@ -346,12 +379,14 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Checks required dependencies
      *
      * @return void
-     * @throws \Exception If some of dependencies are missing
+     * @throws \Magento\Framework\Exception\LocalizedException If some of dependencies are missing
      */
     public function checkDependencies()
     {
-        if (!class_exists('\Imagick', false)) {
-            throw new \Exception("Required PHP extension 'Imagick' was not loaded.");
+        if (!class_exists('Imagick', false)) {
+            throw new LocalizedException(
+                __('Required PHP extension \'Imagick\' was not loaded.')
+            );
         }
     }
 
@@ -414,8 +449,8 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     /**
      * Check whether the adapter can work with the image
      *
-     * @throws \LogicException
      * @return true
+     * @throws \LogicException
      */
     protected function _checkCanProcess()
     {
@@ -498,5 +533,114 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     protected function _getImagickPixelObject($color = null)
     {
         return new \ImagickPixel($color);
+    }
+
+    /**
+     * Resizes watermark to desired size, when it is not stretched
+     *
+     * @param \Imagick $watermark
+     */
+    private function resizeWatermark(\Imagick $watermark): void
+    {
+        if ($this->getWatermarkWidth() &&
+            $this->getWatermarkHeight() &&
+            $this->getWatermarkPosition() != self::POSITION_STRETCH
+        ) {
+            $watermark->resizeImage(
+                $this->getWatermarkWidth(),
+                $this->getWatermarkHeight(),
+                \Imagick::FILTER_CUBIC,
+                self::BLUR_FACTOR
+            );
+        }
+    }
+
+    /**
+     * Keeps transparenty if watermark is transparent
+     *
+     * @param \Imagick $watermark
+     */
+    private function handleWatermarkAlphaChannel(\Imagick $watermark): void
+    {
+        if (method_exists($watermark, 'getImageAlphaChannel')) {
+            // available from imagick 6.4.0
+            if ($watermark->getImageAlphaChannel() == 0) {
+                $watermark->setImageAlphaChannel(\Imagick::ALPHACHANNEL_OPAQUE);
+            }
+        }
+    }
+
+    /**
+     * Add tiled watermark at starting given X,Y position
+     *
+     * @param int $positionX
+     * @param int $positionY
+     * @param \Imagick $watermark
+     * @param bool $compositeChannels
+     */
+    private function addTiledWatermark($positionX, $positionY, \Imagick $watermark, $compositeChannels): void
+    {
+        $offsetX = $positionX;
+        $offsetY = $positionY;
+        while ($offsetY <= $this->_imageSrcHeight + $watermark->getImageHeight()) {
+            while ($offsetX <= $this->_imageSrcWidth + $watermark->getImageWidth()) {
+                $this->_imageHandler->compositeImage(
+                    $watermark,
+                    \Imagick::COMPOSITE_OVER,
+                    $offsetX,
+                    $offsetY,
+                    $compositeChannels
+                );
+                $offsetX += $watermark->getImageWidth();
+            }
+            $offsetX = $positionX;
+            $offsetY += $watermark->getImageHeight();
+        }
+    }
+
+    /**
+     * Add watermark at given X,Y position
+     *
+     * @param int $positionX
+     * @param int $positionY
+     * @param \Imagick $watermark
+     * @param bool $compositeChannels
+     */
+    private function addSingleWatermark($positionX, int $positionY, \Imagick $watermark, bool $compositeChannels): void
+    {
+        $this->_imageHandler->compositeImage(
+            $watermark,
+            \Imagick::COMPOSITE_OVER,
+            $positionX,
+            $positionY,
+            $compositeChannels
+        );
+    }
+
+    /**
+     * Get and store the image colorspace.
+     *
+     * @return int
+     */
+    private function getColorspace(): int
+    {
+        if ($this->colorspace === -1) {
+            $this->colorspace = $this->_imageHandler->getImageColorspace();
+        }
+
+        return $this->colorspace;
+    }
+
+    /**
+     * Convert colorspace to SRGB if current colorspace is COLORSPACE_CMYK or COLORSPACE_UNDEFINED.
+     *
+     * @return void
+     */
+    private function maybeConvertColorspace(): void
+    {
+        if ($this->colorspace === \Imagick::COLORSPACE_CMYK || $this->colorspace === \Imagick::COLORSPACE_UNDEFINED) {
+            $this->_imageHandler->transformImageColorspace(\Imagick::COLORSPACE_SRGB);
+            $this->colorspace = $this->_imageHandler->getImageColorspace();
+        }
     }
 }

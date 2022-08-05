@@ -3,27 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Pricing\Test\Unit\Helper;
 
 use Magento\Framework\Pricing\Helper\Data;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     protected $priceCurrencyMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->objectManager = new ObjectManager($this);
     }
 
     /**
@@ -39,12 +44,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->priceCurrencyMock->expects($this->once())
                 ->method('convertAndFormat')
                 ->with($amount, $includeContainer)
-                ->will($this->returnValue($result));
+                ->willReturn($result);
         } else {
             $this->priceCurrencyMock->expects($this->once())
                 ->method('convert')
                 ->with($amount)
-                ->will($this->returnValue($result));
+                ->willReturn($result);
         }
         $helper = $this->getHelper(['priceCurrency' => $this->priceCurrencyMock]);
         $this->assertEquals($result, $helper->currency($amount, $format, $includeContainer));
@@ -76,12 +81,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->priceCurrencyMock->expects($this->once())
                 ->method('convertAndFormat')
                 ->with($amount, $includeContainer, PriceCurrencyInterface::DEFAULT_PRECISION, $store)
-                ->will($this->returnValue($result));
+                ->willReturn($result);
         } else {
             $this->priceCurrencyMock->expects($this->once())
                 ->method('convert')
                 ->with($amount, $store)
-                ->will($this->returnValue($result));
+                ->willReturn($result);
         }
         $helper = $this->getHelper(['priceCurrency' => $this->priceCurrencyMock]);
         $this->assertEquals($result, $helper->currencyByStore($amount, $store, $format, $includeContainer));
@@ -107,6 +112,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     private function getHelper($arguments)
     {
-        return $this->objectManager->getObject(\Magento\Framework\Pricing\Helper\Data::class, $arguments);
+        return $this->objectManager->getObject(Data::class, $arguments);
     }
 }

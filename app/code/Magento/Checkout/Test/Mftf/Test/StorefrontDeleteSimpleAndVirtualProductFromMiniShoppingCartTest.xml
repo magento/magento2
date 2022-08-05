@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <!--Create  simple product-->
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
                 <field key="price">10.00</field>
@@ -32,23 +32,22 @@
         <after>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="virtualProduct" stepKey="deleteVirtualproduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Add Simple Product to the cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addSimpleProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
         <!-- Add virtual Product to the cart -->
-        <amOnPage url="{{StorefrontProductPage.url($$virtualProduct.name$$)}}" stepKey="amOnStorefrontVirtualProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$virtualProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontVirtualProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct1ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct1ToTheCart">
             <argument name="productName" value="$$virtualProduct.name$$"/>
         </actionGroup>
 
         <!-- Assert Simple and Virtual products in mini cart -->
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProductInMiniCart">
             <argument name="productName" value="$$simpleProduct.name$$"/>
             <argument name="productPrice" value="$10.00"/>
@@ -64,24 +63,24 @@
         </actionGroup>
 
         <!-- Select mini Cart and verify Simple and Virtual products names in cart-->
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="seeSimpleProductInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="seeSimpleProductInMiniCart">
             <argument name="productName" value="$$simpleProduct.name$$"/>
         </actionGroup>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="seeVirtualProductInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="seeVirtualProductInMiniCart">
             <argument name="productName" value="$$virtualProduct.name$$"/>
         </actionGroup>
 
         <!--Remove Simple and Virtual products from mini cart-->
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProductFromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProductFromMiniCart">
             <argument name="productName" value="$$simpleProduct.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeVirtualProductFromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeVirtualProductFromMiniCart">
             <argument name="productName" value="$$virtualProduct.name$$"/>
         </actionGroup>
         <reloadPage stepKey="reloadPage"/>
 
         <!--Check the minicart is empty and verify EmptyCartMessage and AssertProductAbsentInMiniShoppingCart-->
-        <actionGroup ref="assertMiniCartEmpty" stepKey="miniCartEnpty"/>
+        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="miniCartEnpty"/>
         <dontSee selector="{{StorefrontMinicartSection.productLinkByName($$simpleProduct.name$$)}}" stepKey="verifyAssertSimpleProductAbsentInMiniShoppingCart"/>
         <dontSee selector="{{StorefrontMinicartSection.productLinkByName($$virtualProduct.name$$)}}" stepKey="verifyAssertVirtualProductAbsentInMiniShoppingCart"/>
     </test>

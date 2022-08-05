@@ -13,13 +13,13 @@ use Magento\Webapi\Model\Config\Reader as ConfigReader;
  */
 class ReaderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_fileResolverMock;
 
     /** @var ConfigReader */
     protected $_configReader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
@@ -36,7 +36,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             file_get_contents(realpath(__DIR__ . '/_files/webapiA.xml')),
             file_get_contents(realpath(__DIR__ . '/_files/webapiB.xml')),
         ];
-        $this->_fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($configFiles));
+        $this->_fileResolverMock->expects($this->any())->method('get')->willReturn($configFiles);
 
         $expectedResult = require __DIR__ . '/_files/webapi.php';
         $this->assertEquals($expectedResult, $this->_configReader->read(), 'Error happened during config reading.');

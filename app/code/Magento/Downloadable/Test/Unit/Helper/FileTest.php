@@ -3,61 +3,76 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Helper;
 
-class FileTest extends \PHPUnit\Framework\TestCase
+use Magento\Downloadable\Helper\File;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Model\File\Uploader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FileTest extends TestCase
 {
     /**
-     * @var \Magento\Downloadable\Helper\File
+     * @var File
      */
     private $file;
 
     /**
-     * Core file storage database
-     *
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var Database|MockObject
      */
     private $coreFileStorageDatabase;
 
     /**
-     * Filesystem object.
-     *
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|MockObject
      */
     private $filesystem;
 
     /**
      * Media Directory object (writable).
      *
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|MockObject
      */
     private $mediaDirectory;
 
     /**
-     * @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $appContext;
 
-    protected function setUp()
+    /**
+     * @var Uploader|MockObject
+     */
+    private $uploader;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->mediaDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
+        $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
             ->getMockForAbstractClass();
 
-        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->with(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
+            ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectory);
 
         $this->coreFileStorageDatabase =
-            $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage\Database::class)
+            $this->getMockBuilder(Database::class)
                 ->setMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->appContext = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
+        $this->appContext = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -75,26 +90,54 @@ class FileTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
-        $this->file = new \Magento\Downloadable\Helper\File(
+        $this->file = new File(
             $this->appContext,
             $this->coreFileStorageDatabase,
             $this->filesystem
         );
-    }
 
-    public function testUploadFromTmp()
-    {
-        $uploaderMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
+        $this->uploader = $this->getMockBuilder(Uploader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $uploaderMock->expects($this->once())->method('setAllowRenameFiles');
-        $uploaderMock->expects($this->once())->method('setFilesDispersion');
+    }
+
+    /**
+     * @return void
+     */
+    public function testUploadFromTmp()
+    {
+        $this->uploader->expects($this->once())->method('setAllowRenameFiles');
+        $this->uploader->expects($this->once())->method('setFilesDispersion');
         $this->mediaDirectory->expects($this->once())->method('getAbsolutePath')->willReturn('absPath');
-        $uploaderMock->expects($this->once())->method('save')->with('absPath')
+        $this->uploader->expects($this->once())->method('save')->with('absPath')
             ->willReturn(['file' => 'file.jpg', 'path' => 'absPath']);
 
-        $result = $this->file->uploadFromTmp('tmpPath', $uploaderMock);
+        $result = $this->file->uploadFromTmp('tmpPath', $this->uploader);
 
         $this->assertArrayNotHasKey('path', $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUploadFromTmpSuccess(): void
+    {
+        $tmpPath = __DIR__;
+        $data = ['path' => __DIR__ . DIRECTORY_SEPARATOR . 'media', 'file' => 'test_image.jpg'];
+        $this->uploader->method('save')->willReturn($data);
+        $result = $this->file->uploadFromTmp($tmpPath, $this->uploader);
+        $this->assertEquals('test_image.jpg', $result['file']);
+        $this->assertEquals(1, count($result));
+    }
+
+    /**
+     * @return void
+     */
+    public function testUploadFromTmpFail(): void
+    {
+        $tmpPath = __DIR__;
+        $this->uploader->expects($this->once())->method('save')->willReturn(false);
+        $result = $this->file->uploadFromTmp($tmpPath, $this->uploader);
+        $this->assertEquals(false, $result);
     }
 }

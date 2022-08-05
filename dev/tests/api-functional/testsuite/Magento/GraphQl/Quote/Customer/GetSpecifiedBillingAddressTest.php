@@ -30,7 +30,7 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -96,11 +96,12 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testGetSpecifiedBillingAddressOfNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $maskedQuoteId = 'non_existent_masked_id';
         $query = $this->getQuery($maskedQuoteId);
 
@@ -163,13 +164,13 @@ class GetSpecifiedBillingAddressTest extends GraphQlAbstract
       company
       street
       city
-      region 
+      region
       {
         code
         label
       }
       postcode
-      country 
+      country
       {
         code
         label
@@ -193,5 +194,45 @@ QUERY;
         $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         return $headerMap;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address_without_telephone.php
+     */
+    public function testGetSpecifiedBillingAddressWithoutTelephone()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('billing_address', $response['cart']);
+
+        $expectedBillingAddressData = [
+            'firstname' => 'John',
+            'lastname' => 'Smith',
+            'company' => 'CompanyName',
+            'street' => [
+                'Green str, 67'
+            ],
+            'city' => 'CityM',
+            'region' => [
+                'code' => 'AL',
+                'label' => 'Alabama',
+            ],
+            'postcode' => '75477',
+            'country' => [
+                'code' => 'US',
+                'label' => 'US',
+            ],
+            'telephone' => '',
+            '__typename' => 'BillingCartAddress',
+            'customer_notes' => null,
+        ];
+        self::assertEquals($expectedBillingAddressData, $response['cart']['billing_address']);
     }
 }

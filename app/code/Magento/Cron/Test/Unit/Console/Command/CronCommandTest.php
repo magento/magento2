@@ -3,15 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cron\Test\Unit\Console\Command;
 
 use Magento\Cron\Console\Command\CronCommand;
+use Magento\Framework\App\Cron;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManagerFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CronCommandTest extends \PHPUnit\Framework\TestCase
+class CronCommandTest extends TestCase
 {
     /**
      * @var ObjectManagerFactory|MockObject
@@ -23,7 +28,7 @@ class CronCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $deploymentConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerFactory = $this->createMock(ObjectManagerFactory::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
@@ -57,8 +62,8 @@ class CronCommandTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
-        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $cron = $this->createMock(\Magento\Framework\App\Cron::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $cron = $this->createMock(Cron::class);
         $objectManager->expects($this->once())
             ->method('create')
             ->willReturn($cron);

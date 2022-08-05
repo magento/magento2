@@ -20,13 +20,14 @@
             <skip>
                 <issueId value="DEVOPS-3311"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="ConfigPayPalExpressCheckout" stepKey="ConfigPayPalExpressCheckout"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>

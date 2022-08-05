@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\Db\MySQL\Definition\Columns;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Comment;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Nullable;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\StringBinary;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Columns\StringBinary as StringBinaryColumn;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for StringBinary class.
  *
- * @package Magento\Framework\Setup\Test\Unit\Declaration\Schema\Db\MySQL\Definition\Columns
  */
-class StringBinaryTest extends \PHPUnit\Framework\TestCase
+class StringBinaryTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -30,21 +34,21 @@ class StringBinaryTest extends \PHPUnit\Framework\TestCase
     private $stringBinary;
 
     /**
-     * @var Nullable|\PHPUnit_Framework_MockObject_MockObject
+     * @var Nullable|MockObject
      */
     private $nullableMock;
 
     /**
-     * @var Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Comment|MockObject
      */
     private $commentMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->nullableMock = $this->getMockBuilder(Nullable::class)
@@ -71,7 +75,7 @@ class StringBinaryTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var StringBinaryColumn|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var StringBinaryColumn|MockObject $column */
         $column = $this->getMockBuilder(StringBinaryColumn::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -87,9 +91,9 @@ class StringBinaryTest extends \PHPUnit\Framework\TestCase
         $column->expects($this->any())
             ->method('getDefault')
             ->willReturn('test');
-        $adapterMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($adapterMock);
         $adapterMock->expects($this->once())
             ->method('quoteIdentifier')
@@ -107,6 +111,24 @@ class StringBinaryTest extends \PHPUnit\Framework\TestCase
             '`col` varchar(50) NULL DEFAULT "test" COMMENT "Comment"',
             $this->stringBinary->toDefinition($column)
         );
+    }
+
+    /**
+     * @param array $definition
+     * @param bool $expectedLength
+     * @dataProvider definitionDataProvider()
+     */
+    public function testGetBinaryDefaultValueFromDefinition($definition)
+    {
+        $defaultValue = 'test';
+        if (preg_match('/^(binary|varbinary)/', $definition)) {
+            $default = '0x' . bin2hex($defaultValue);
+        } else {
+            $default = $defaultValue;
+        }
+
+        $result = $this->stringBinary->fromDefinition(['definition' => $definition, 'default' => $default]);
+        $this->assertEquals($result['default'], $defaultValue);
     }
 
     /**

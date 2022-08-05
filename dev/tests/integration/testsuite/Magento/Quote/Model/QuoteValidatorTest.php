@@ -28,17 +28,18 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->quoteValidator = Bootstrap::getObjectManager()->create(QuoteValidator::class);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please check the shipping address information.
      */
     public function testValidateBeforeSubmitShippingAddressInvalid()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Please check the shipping address information.');
+
         $quote = $this->getQuote();
         $quote->getShippingAddress()->setPostcode('');
 
@@ -46,11 +47,12 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Some addresses can't be used due to the configurations for specific countries.
      */
     public function testValidateBeforeSubmitCountryIsNotAllowed()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Some addresses can\'t be used due to the configurations for specific countries.');
+
         /** @magentoConfigFixture does not allow to change the value for the website scope */
         Bootstrap::getObjectManager()->get(
             \Magento\Framework\App\Config\MutableScopeConfigInterface::class
@@ -66,11 +68,12 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The shipping method is missing. Select the shipping method and try again.
      */
     public function testValidateBeforeSubmitShippingMethodInvalid()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The shipping method is missing. Select the shipping method and try again.');
+
         $quote = $this->getQuote();
         $quote->getShippingAddress()->setShippingMethod('NONE');
 
@@ -78,11 +81,12 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please check the billing address information.
      */
     public function testValidateBeforeSubmitBillingAddressInvalid()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Please check the billing address information.');
+
         $quote = $this->getQuote();
         $quote->getBillingAddress()->setTelephone('');
 
@@ -90,11 +94,12 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Enter a valid payment method and try again.
      */
     public function testValidateBeforeSubmitPaymentMethodInvalid()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Enter a valid payment method and try again.');
+
         $quote = $this->getQuote();
         $quote->getPayment()->setMethod('');
 
@@ -102,12 +107,13 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @magentoConfigFixture current_store sales/minimum_order/active 1
      * @magentoConfigFixture current_store sales/minimum_order/amount 100
      */
     public function testValidateBeforeSubmitMinimumAmountInvalid()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $quote = $this->getQuote();
         $quote->getShippingAddress()
             ->setBaseSubtotal(0);

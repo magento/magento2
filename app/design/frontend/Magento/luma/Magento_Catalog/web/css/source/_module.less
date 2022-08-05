@@ -98,13 +98,12 @@
     .product-image-photo {
         bottom: 0;
         display: block;
-        height: auto;
         left: 0;
         margin: auto;
-        max-width: 100%;
         position: absolute;
         right: 0;
         top: 0;
+        width: auto;
     }
 
     //
@@ -174,9 +173,9 @@
             width: 100%;
 
             .price-box {
-                display: table-cell;
+                display: inline-block;
                 vertical-align: top;
-                width: 1px;
+                width: auto;
 
                 .price-container {
                     > span {
@@ -228,7 +227,8 @@
         }
 
         .product-info-stock-sku {
-            display: table-cell;
+            display: inline-block;
+            float: right;
             padding-bottom: @indent__s;
             padding-left: 10%;
             text-align: right;
@@ -622,11 +622,6 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
-    .product-social-links {
-        .action.tocompare {
-            display: none;
-        }
-    }
 
     .product-info-price {
         margin: 0 -@indent__s 0;
@@ -1002,14 +997,23 @@
                 }
             }
         }
+
+        .block-compare {
+            .action {
+                &.delete {
+                    left: 0;
+                    right: initial;
+                }
+            }
+        }
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .compare.wrapper,
-    [class*='block-compare'] {
+    .compare.wrapper {
         display: none;
     }
+
     .catalog-product_compare-index {
         .columns {
             .column {

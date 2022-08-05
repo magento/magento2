@@ -14,7 +14,7 @@ use Magento\Ui\Component\Form\Field;
  * ResetButton field instance
  *
  * @api
- * @since 100.2.0
+ * @since 100.1.9
  */
 class ResetButton extends Field
 {
@@ -66,7 +66,7 @@ class ResetButton extends Field
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 100.2.0
+     * @since 100.1.9
      */
     public function prepare()
     {
@@ -76,6 +76,7 @@ class ResetButton extends Field
             [
                 'actionName' => 'reset',
                 'targetName' => '${ $.name }',
+                '__disableTmpl' => ['targetName' => false],
                 'params'     => [
                     json_encode($this->getRobotsDefaultCustomInstructions())
                 ]

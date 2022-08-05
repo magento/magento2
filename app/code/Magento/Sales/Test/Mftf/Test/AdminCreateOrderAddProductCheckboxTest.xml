@@ -26,23 +26,26 @@
             <createData entity="ApiProductWithDescription" stepKey="createSimpleProduct"/>
 
             <!-- Login to Admin Panel -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!-- Initiate create new order -->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$createSimpleCustomer$$"/>
         </actionGroup>
 
-        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
-        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="$$createSimpleProduct.sku$$" stepKey="fillSkuFilterBundle"/>
-        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchBundle"/>
-        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
-        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectProduct"/>
-        <seeCheckboxIsChecked selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="verifyProductChecked"/>
-
+        <actionGroup ref="AdminAddSimpleProductToOrderAndCheckCheckboxActionGroup" stepKey="clickAddProducts">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        
+         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillSkuFilterBundle"/>        
+         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchBundle"/>     
+         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToCheckColumn"/>
+         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectProduct"/>
+         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="verifyProductChecked"/>
+       
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createSimpleCustomer" stepKey="deleteSimpleCustomer"/>
         </after>

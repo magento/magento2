@@ -8,23 +8,23 @@ declare(strict_types=1);
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create\Form;
 
 use Magento\Backend\Model\Session\Quote as QuoteSession;
-use Magento\Store\Model\Store;
-use Magento\Directory\Helper\Data as DirectoryHelper;
-use Magento\Eav\Model\AttributeDataFactory;
-use Magento\Sales\Block\Adminhtml\Order\Create\Form\Address;
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Customer\Api\Data\AddressSearchResultsInterface;
 use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\AddressSearchResultsInterface;
+use Magento\Customer\Model\Address\Mapper;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\FormFactory;
-use Magento\Customer\Model\Address\Mapper;
-use Magento\Framework\Api\FilterBuilder;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Eav\Model\AttributeDataFactory;
 use Magento\Framework\Api\Filter;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Block\Adminhtml\Order\Create\Form\Address;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -104,7 +104,7 @@ class AddressTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -114,7 +114,8 @@ class AddressTest extends TestCase
 
         $this->quoteSession = $this->getMockBuilder(QuoteSession::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore', 'getCustomerId'])
+            ->onlyMethods(['getStore'])
+            ->addMethods(['getCustomerId'])
             ->getMock();
         $this->store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
@@ -127,35 +128,35 @@ class AddressTest extends TestCase
             ->willReturn($this->customerId);
         $this->directoryHelper = $this->getMockBuilder(DirectoryHelper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDefaultCountry'])
+            ->onlyMethods(['getDefaultCountry'])
             ->getMock();
         $this->directoryHelper->expects($this->any())
             ->method('getDefaultCountry')
             ->willReturn($this->defaultCountryId);
         $this->formFactory = $this->getMockBuilder(FormFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->filterBuilder = $this->getMockBuilder(FilterBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setField', 'setValue', 'setConditionType', 'create'])
+            ->onlyMethods(['setField', 'setValue', 'setConditionType', 'create'])
             ->getMock();
         $this->criteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'addFilters'])
+            ->onlyMethods(['create', 'addFilters'])
             ->getMock();
         $this->addressService = $this->getMockBuilder(AddressRepositoryInterface::class)
-            ->setMethods(['getList'])
+            ->onlyMethods(['getList'])
             ->getMockForAbstractClass();
         $this->addressItem = $this->getMockBuilder(AddressInterface::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
         $this->addressItem->expects($this->any())
             ->method('getId')
             ->willReturn($this->addressId);
         $this->addressMapper = $this->getMockBuilder(Mapper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['toFlatArray'])
+            ->onlyMethods(['toFlatArray'])
             ->getMock();
 
         $this->address = $this->objectManager->getObject(
@@ -172,12 +173,15 @@ class AddressTest extends TestCase
         );
     }
 
-    public function testGetAddressCollectionJson()
+    /**
+     * @return void
+     */
+    public function testGetAddressCollectionJson(): void
     {
         /** @var Form|MockObject $emptyForm */
         $emptyForm = $this->getMockBuilder(Form::class)
             ->disableOriginalConstructor()
-            ->setMethods(['outputData'])
+            ->onlyMethods(['outputData'])
             ->getMock();
         $emptyForm->expects($this->once())
             ->method('outputData')
@@ -217,7 +221,7 @@ class AddressTest extends TestCase
 
         /** @var AddressSearchResultsInterface|MockObject $result */
         $result = $this->getMockBuilder(AddressSearchResultsInterface::class)
-            ->setMethods(['getList'])
+            ->addMethods(['getList'])
             ->getMockForAbstractClass();
         $result->expects($this->once())
             ->method('getItems')
@@ -230,7 +234,7 @@ class AddressTest extends TestCase
         /** @var Form|MockObject $emptyForm */
         $addressForm = $this->getMockBuilder(Form::class)
             ->disableOriginalConstructor()
-            ->setMethods(['outputData'])
+            ->onlyMethods(['outputData'])
             ->getMock();
         $addressForm->expects($this->once())
             ->method('outputData')
@@ -245,18 +249,22 @@ class AddressTest extends TestCase
             ->method('getDefaultCountry')
             ->with($this->store)
             ->willReturn($this->defaultCountryId);
-        $this->formFactory->expects($this->at(0))
+        $this->formFactory
             ->method('create')
-            ->with(
-                'customer_address',
-                'adminhtml_customer_address',
-                [AddressInterface::COUNTRY_ID => $this->defaultCountryId]
-            )
-            ->willReturn($emptyForm);
-        $this->formFactory->expects($this->at(1))
-            ->method('create')
-            ->with('customer_address', 'adminhtml_customer_address', [], false, false)
-            ->willReturn($addressForm);
+            ->withConsecutive(
+                [
+                    'customer_address',
+                    'adminhtml_customer_address',
+                    [AddressInterface::COUNTRY_ID => $this->defaultCountryId]
+                ],
+                [
+                    'customer_address',
+                    'adminhtml_customer_address',
+                    [],
+                    false,
+                    false
+                ]
+            )->willReturnOnConsecutiveCalls($emptyForm, $addressForm);
 
         $this->address->getAddressCollectionJson();
     }

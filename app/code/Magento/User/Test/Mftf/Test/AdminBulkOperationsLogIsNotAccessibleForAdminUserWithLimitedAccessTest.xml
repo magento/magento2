@@ -17,14 +17,15 @@
             <testCaseId value="MC-13245"/>
             <group value="AsynchronousOperations"/>
             <group value="User"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
 
         <after>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
 
             <!-- Delete User -->
             <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteLimitedUser">
@@ -35,7 +36,7 @@
             <actionGroup ref="AdminDeleteRoleByRoleNameActionGroup" stepKey="deleteRole">
                 <argument name="role" value="adminWithoutBulkActionRole"/>
             </actionGroup>
-           <actionGroup ref="logout" stepKey="logout"/>
+           <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create admin user2 who doesn't have access to "Bulk Operations". Role Resources, uncheck point with title "Bulk Operations" -->
@@ -44,11 +45,12 @@
             <argument name="user" value="NewAdminUser"/>
             <argument name="role" value="adminWithoutBulkActionRole"/>
         </actionGroup>
-        <actionGroup ref="logout" stepKey="logoutAdmin"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
 
         <!-- Login as user2 -->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsUser">
-            <argument name="adminUser" value="NewAdminUser"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsUser">
+            <argument name="username" value="{{NewAdminUser.username}}"/>
+            <argument name="password" value="{{NewAdminUser.password}}"/>
         </actionGroup>
 
         <!-- Bulk operation menu item isn't visible( System > Action Logs > -Bulk Actions-) -->
@@ -63,9 +65,9 @@
         <!-- Navigate to "Your Bulk Operations log" directly: %your_build_backend_url%/bulk/ -->
         <amOnPage url="{{AdminBulkActionsLogIndexPage.url}}" stepKey="OnBulkPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        
+
         <!-- Access Denied -->
         <see userInput="Sorry, you need permissions to view this content." selector="{{AdminMessagesSection.accessDenied}}" stepKey="seeAccessDenied"/>
-        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
     </test>
 </tests>

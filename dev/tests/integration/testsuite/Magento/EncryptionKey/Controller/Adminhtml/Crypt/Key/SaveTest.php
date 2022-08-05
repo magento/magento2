@@ -23,7 +23,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ->setPostValue('crypt_key', $encryptionKey);
         $this->dispatch('backend/admin/crypt_key/save');
         $this->assertSessionMessages(
-            $this->contains('Please enter an encryption key.'),
+            $this->containsEqual('Please enter an encryption key.'),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
@@ -49,7 +49,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $this->assertRedirect();
         $this->assertSessionMessages(
-            $this->contains('The encryption key has been changed.'),
+            $this->containsEqual('The encryption key has been changed.'),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }
@@ -72,7 +72,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $this->assertRedirect();
         $this->assertSessionMessages(
-            $this->contains('Encryption key must be 32 character string without any white space.'),
+            $this->containsEqual('Encryption key must be 32 character string without any white space.'),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
@@ -98,7 +98,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $this->assertRedirect();
         $this->assertSessionMessages(
-            $this->contains('The encryption key has been changed.'),
+            $this->containsEqual('The encryption key has been changed.'),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }

@@ -10,7 +10,7 @@ namespace Magento\Paypal\Controller\Adminhtml\Billing\Agreement;
  */
 class CancelTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->resource = 'Magento_Paypal::actions_manage';
         $this->uri = 'backend/paypal/billing_agreement/cancel';

@@ -3,29 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Url\Test\Unit;
 
+use Laminas\Validator\Uri;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Url\Validator;
+use PHPUnit\Framework\TestCase;
 
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+class ValidatorTest extends TestCase
 {
-    /** @var \Magento\Framework\Url\Validator */
+    /** @var Validator */
     protected $object;
 
-    /** @var \Zend\Validator\Uri */
-    protected $zendValidator;
+    /** @var Uri */
+    protected $laminasValidator;
 
     /** @var string[] */
     protected $expectedValidationMessages = ['invalidUrl' => "Invalid URL '%value%'."];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $this->zendValidator = $this->createMock(\Zend\Validator\Uri::class);
+        $this->laminasValidator = $this->createMock(Uri::class);
         $this->object = $objectManager->getObject(
-            \Magento\Framework\Url\Validator::class,
-            ['validator' => $this->zendValidator]
+            Validator::class,
+            ['validator' => $this->laminasValidator]
         );
     }
 
@@ -36,7 +41,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testIsValidWhenValid()
     {
-        $this->zendValidator
+        $this->laminasValidator
             ->method('isValid')
             ->with('http://example.com')
             ->willReturn(true);
@@ -47,7 +52,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testIsValidWhenInvalid()
     {
-        $this->zendValidator
+        $this->laminasValidator
             ->method('isValid')
             ->with('%value%')
             ->willReturn(false);

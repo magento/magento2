@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithCustomerWithoutEmailTest">
+        <annotations>
+            <title value="Admin Create Order"/>
+            <stories value="Admin create order with customer without email."/>
+            <description value="Verify, admin able to create order with customer without email."/>
+            <severity value="MINOR"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+            <!--Disable required 'email' field on create order page.-->
+            <magentoCLI command="config:set {{DisableEmailRequiredForOrder.path}} {{DisableEmailRequiredForOrder.value}}" stepKey="disableRequiredFieldEmailForAdminOrderCreation"/>
+            <!--Create test data.-->
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </before>
+        <after>
+            <!--Clean up created test data.-->
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <!--Enable required 'email' field on create order page.-->
+            <magentoCLI command="config:set {{EnableEmailRequiredForOrder.path}} {{EnableEmailRequiredForOrder.value}}" stepKey="enableRequiredFieldEmailForAdminOrderCreation"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </after>
+
+        <!--Create order.-->
+        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPageNewCustomerActionGroup" />
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="productQty" value="{{SimpleProduct.quantity}}"/>
+        </actionGroup>
+        <!--Fill customer address without 'email'-->
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerInformation">
+            <argument name="customer" value="Simple_US_Customer_CA_Without_Email"/>
+            <argument name="address" value="US_Address_CA"/>
+        </actionGroup>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <!--Verify, 'email' is generated.-->
+        <actionGroup ref="VerifyCreatedOrderInformationWithGeneratedEmailActionGroup" stepKey="verifyCustomerEmail">
+            <argument name="email" value="@example.com"/>
+        </actionGroup>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.customerEmail}}" stepKey="generatedCustomerEmail"/>
+        <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+            <argument name="email" value="$generatedCustomerEmail"/>
+        </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+    </test>
+</tests>

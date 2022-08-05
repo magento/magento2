@@ -19,13 +19,14 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create website and AssertWebsiteSuccessSaveMessage-->
@@ -33,14 +34,15 @@
             <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
             <argument name="websiteCode" value="{{customWebsite.code}}"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Search created website in grid and verify AssertWebsiteInGrid-->
-        <actionGroup ref="AssertWebsiteInGrid" stepKey="seeWebsiteInGrid">
+        <actionGroup ref="AssertWebsiteInGridActionGroup" stepKey="seeWebsiteInGrid">
             <argument name="websiteName" value="{{customWebsite.name}}"/>
         </actionGroup>
 
         <!--Verify website name and websitecode on website form (AssertWebsiteForm and AssertWebsiteOnStoreForm)-->
-        <actionGroup ref="AssertWebsiteForm" stepKey="seeWebsiteForm">
+        <actionGroup ref="AssertWebsiteFormActionGroup" stepKey="seeWebsiteForm">
             <argument name="websiteName" value="{{customWebsite.name}}"/>
             <argument name="websiteCode" value="{{customWebsite.code}}"/>
         </actionGroup>

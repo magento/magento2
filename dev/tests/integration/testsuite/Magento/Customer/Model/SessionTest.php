@@ -6,6 +6,9 @@
 namespace Magento\Customer\Model;
 
 use Magento\Framework\App\PageCache\FormKey;
+use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -29,7 +32,12 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     /** @var PublicCookieMetadata $cookieMetadata */
     protected $cookieMetadata;
 
-    protected function setUp()
+    /**
+     * @var HttpResponse
+     */
+    private $response;
+
+    protected function setUp(): void
     {
         $this->_customerSession = Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\Session::class
@@ -48,6 +56,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
             'form_key',
             $this->cookieMetadata
         );
+        $this->response = Bootstrap::getObjectManager()->get(ResponseInterface::class);
     }
 
     public function testLoginById()
@@ -99,5 +108,27 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $afterKey = $this->formKey->get();
 
         $this->assertNotEquals($beforeKey, $afterKey);
+    }
+
+    /**
+     * Check that SID is not used in redirects.
+     *
+     * @return void
+     * @magentoConfigFixture current_store web/session/use_frontend_sid 1
+     */
+    public function testNoSid(): void
+    {
+        $this->_customerSession->authenticate();
+        $location = (string)$this->response->getHeader('Location');
+        $this->assertNotEmpty($location);
+        $this->assertStringNotContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM . '=', $location);
+        $beforeAuthUrl = $this->_customerSession->getData('before_auth_url');
+        $this->assertNotEmpty($beforeAuthUrl);
+        $this->assertStringNotContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM . '=', $beforeAuthUrl);
+
+        $this->_customerSession->authenticate('/customer/account');
+        $location = (string)$this->response->getHeader('Location');
+        $this->assertNotEmpty($location);
+        $this->assertStringNotContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM . '=', $location);
     }
 }

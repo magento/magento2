@@ -3,11 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Module\Test\Unit;
 
-use \Magento\Framework\Module\ModuleList;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Module\ModuleList;
+use Magento\Framework\Module\ModuleList\Loader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ModuleListTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test for module list
+ */
+class ModuleListTest extends TestCase
 {
     /**
      * Fixture for all modules' meta-information
@@ -24,12 +33,12 @@ class ModuleListTest extends \PHPUnit\Framework\TestCase
     private static $enabledFixture = ['foo' => 1, 'bar' => 0];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $config;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $loader;
 
@@ -38,16 +47,21 @@ class ModuleListTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->config = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
-        $this->loader = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
+        $this->config = $this->createMock(DeploymentConfig::class);
+        $this->loader = $this->createMock(Loader::class);
         $this->model = new ModuleList($this->config, $this->loader);
     }
 
-    public function testGetAll()
+    /**
+     * @return void
+     */
+    public function testGetAll(): void
     {
-        $this->config->expects($this->exactly(2))->method('resetData');
         $this->setLoadAllExpectation();
         $this->setLoadConfigExpectation();
         $expected = ['foo' => self::$allFixture['foo']];
@@ -55,7 +69,10 @@ class ModuleListTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $this->model->getAll()); // second time to ensure loadAll is called once
     }
 
-    public function testGetAllNoData()
+    /**
+     * @return void
+     */
+    public function testGetAllNoData(): void
     {
         $this->loader->expects($this->exactly(2))->method('load')->willReturn([]);
         $this->setLoadConfigExpectation(false);
@@ -63,54 +80,68 @@ class ModuleListTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([], $this->model->getAll());
     }
 
-    public function testGetOne()
+    /**
+     * @return void
+     */
+    public function testGetOne(): void
     {
-        $this->config->expects($this->exactly(2))->method('resetData');
         $this->setLoadAllExpectation();
         $this->setLoadConfigExpectation();
         $this->assertSame(['key' => 'value'], $this->model->getOne('foo'));
         $this->assertNull($this->model->getOne('bar'));
     }
 
-    public function testGetNames()
+    /**
+     * @return void
+     */
+    public function testGetNames(): void
     {
-        $this->config->expects($this->exactly(2))->method('resetData');
         $this->setLoadAllExpectation(false);
         $this->setLoadConfigExpectation();
         $this->assertSame(['foo'], $this->model->getNames());
         $this->assertSame(['foo'], $this->model->getNames()); // second time to ensure config loader is called once
     }
 
-    public function testHas()
+    /**
+     * @return void
+     */
+    public function testHas(): void
     {
-        $this->config->expects($this->exactly(2))->method('resetData');
         $this->setLoadAllExpectation(false);
         $this->setLoadConfigExpectation();
         $this->assertTrue($this->model->has('foo'));
         $this->assertFalse($this->model->has('bar'));
     }
 
-    public function testIsModuleInfoAvailable()
+    /**
+     * @return void
+     */
+    public function testIsModuleInfoAvailable(): void
     {
-        $this->config->expects($this->once())->method('resetData');
         $this->setLoadConfigExpectation(true);
         $this->assertTrue($this->model->isModuleInfoAvailable());
     }
 
-    public function testIsModuleInfoAvailableNoConfig()
+    /**
+     * @return void
+     */
+    public function testIsModuleInfoAvailableNoConfig(): void
     {
-        $this->config->expects($this->at(0))->method('get')->willReturn(['modules' => 'testModule']);
-        $this->config->expects($this->at(1))->method('get')->willReturn(null);
+        $this->config
+            ->method('get')
+            ->willReturnOnConsecutiveCalls(['modules' => 'testModule'], null);
         $this->assertFalse($this->model->isModuleInfoAvailable());
     }
 
     /**
-     * Prepares expectation for loading deployment configuration
+     * Prepares expectation for loading deployment configuration.
      *
      * @param bool $isExpected
      * @return void
+     *
+     * @return void
      */
-    private function setLoadConfigExpectation($isExpected = true)
+    private function setLoadConfigExpectation($isExpected = true): void
     {
         if ($isExpected) {
             $this->config->expects($this->exactly(2))->method('get')->willReturn(self::$enabledFixture);
@@ -120,12 +151,14 @@ class ModuleListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Prepares expectation for loading full list of modules
+     * Prepares expectation for loading full list of modules.
      *
      * @param bool $isExpected
      * @return void
+     *
+     * @return void
      */
-    private function setLoadAllExpectation($isExpected = true)
+    private function setLoadAllExpectation($isExpected = true): void
     {
         if ($isExpected) {
             $this->loader->expects($this->once())->method('load')->willReturn(self::$allFixture);

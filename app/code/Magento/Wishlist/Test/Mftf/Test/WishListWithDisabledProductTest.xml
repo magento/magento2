@@ -23,10 +23,12 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <comment userInput="BIC workaround" stepKey="customerLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
             <argument name="Customer" value="$$createCustomer$$"/>
@@ -35,16 +37,18 @@
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addProductToWishlist">
             <argument name="productVar" value="$$createProduct$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlist" stepKey="checkProductInWishlist">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistActionGroup" stepKey="checkProductInWishlist">
             <argument name="productVar" value="$$createProduct$$"/>
         </actionGroup>
         <openNewTab stepKey="openNewTab"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProductEditPage"/>
-        <actionGroup ref="AdminSetProductDisabled" stepKey="disableProduct"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetProductDisabledActionGroup" stepKey="disableProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <closeTab stepKey="closeSecondTab"/>
         <reloadPage stepKey="refreshPage"/>
-        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmpty" stepKey="checkProductIsAbsentInWishlistIsEmpty"/>
+        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmptyActionGroup" stepKey="checkProductIsAbsentInWishlistIsEmpty"/>
     </test>
 </tests>

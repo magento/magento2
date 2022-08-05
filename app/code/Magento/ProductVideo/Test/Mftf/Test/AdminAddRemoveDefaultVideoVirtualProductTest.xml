@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddRemoveDefaultVideoVirtualProductTest" extends="AdminAddRemoveDefaultVideoSimpleProductTest">
+        <annotations>
+            <features value="ProductVideo"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to add/remove default product video for a Virtual Product"/>
+            <description value="Admin should be able to add/remove default product video for a Virtual Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-109"/>
+            <testCaseId value="MC-204"/>
+            <group value="catalog"/>
+            <group value="productVideo"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="setYoutubeApiKeyConfig"/>
+            <createData entity="VirtualProduct" stepKey="createProduct"/>
+        </before>
+        <after>
+            <remove keyForRemoval="setYoutubeApiKeyDefaultConfig"/>
+        </after>
+
+        <actionGroup ref="AddProductVideoActionGroup" stepKey="addProductVideo">
+            <argument name="video" value="VimeoProductVideo"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertProductVideoPresentInProductEditPage">
+            <argument name="video" value="VimeoProductVideo"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoPresentInStorefrontProductPage">
+            <argument name="videoType" value="vimeo"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertProductVideoNotInAdminProductPageActionGroup" stepKey="assertProductVideoAbsentInProductEditPage">
+            <argument name="video" value="VimeoProductVideo"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertProductVideoNotInStorefrontProductPageActionGroup" stepKey="assertProductVideoAbsentInStorefrontProductPage">
+            <argument name="videoType" value="vimeo"/>
+        </actionGroup>
+    </test>
+</tests>

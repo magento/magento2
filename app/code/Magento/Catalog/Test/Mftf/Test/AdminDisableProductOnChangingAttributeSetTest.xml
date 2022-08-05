@@ -28,12 +28,15 @@
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$$createAttributeSet.attribute_set_id$$/" stepKey="onAttributeSetEdit"/>
-        <actionGroup ref="SaveAttributeSet" stepKey="SaveAttributeSet"/>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>

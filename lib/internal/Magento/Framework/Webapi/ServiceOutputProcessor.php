@@ -11,12 +11,13 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
-use Zend\Code\Reflection\ClassReflection;
+use Laminas\Code\Reflection\ClassReflection;
 
 /**
  * Data object converter
  *
  * @api
+ * @since 100.0.2
  */
 class ServiceOutputProcessor implements ServicePayloadConverterInterface
 {
@@ -110,7 +111,7 @@ class ServiceOutputProcessor implements ServicePayloadConverterInterface
     {
         if (is_array($data)) {
             $result = [];
-            $arrayElementType = substr($type, 0, -2);
+            $arrayElementType = $type !== null ? substr($type, 0, -2) : '';
             foreach ($data as $datum) {
                 if (is_object($datum)) {
                     $datum = $this->processDataObject(

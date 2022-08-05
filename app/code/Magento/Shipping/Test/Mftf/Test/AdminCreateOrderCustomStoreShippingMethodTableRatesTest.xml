@@ -22,7 +22,7 @@
         <before>
             <!--Create product and customer-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create website, store group and store view-->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
                 <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
@@ -37,6 +37,7 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <!--Create customer associated to website-->
             <actionGroup ref="AdminGoCreatedWebsitePageActionGroup" stepKey="DeleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
@@ -64,7 +65,7 @@
                 <argument name="file" value="usa_tablerates.csv"/>
             </actionGroup>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!--Delete created data-->
@@ -73,27 +74,30 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Assign product to custom website-->
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <actionGroup ref="unassignWebsiteFromProductActionGroup" stepKey="unassignWebsiteInProduct">
+        <actionGroup ref="UnassignWebsiteFromProductActionGroup" stepKey="unassignWebsiteInProduct">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
         </actionGroup>
         <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectWebsiteInProduct">
             <argument name="website" value="{{customWebsite.name}}"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <!--Create order-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$createCustomer$$"/>
             <argument name="storeView" value="customStore"/>
         </actionGroup>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToTheOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerInfo">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerInfo">
             <argument name="customer" value="$$createCustomer$$"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>

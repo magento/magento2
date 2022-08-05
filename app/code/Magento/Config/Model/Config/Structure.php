@@ -49,7 +49,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     /**
      * Key that contains field type in structure array
      */
-    const TYPE_KEY = '_elementType';
+    public const TYPE_KEY = '_elementType';
 
     /**
      * Configuration structure represented as tree
@@ -177,7 +177,8 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      */
     public function getElement($path)
     {
-        return $this->getElementByPathParts(explode('/', $path));
+        $parts = $path !== null ? explode('/', $path) : [];
+        return $this->getElementByPathParts($parts);
     }
 
     /**
@@ -185,17 +186,18 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      *
      * @param string $path The configuration path
      * @return \Magento\Config\Model\Config\Structure\ElementInterface|null
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getElementByConfigPath($path)
     {
         $allPaths = $this->getFieldPaths();
 
-        if (isset($allPaths[$path])) {
+        if (isset($allPaths[$path]) && is_array($allPaths[$path])) {
             $path = array_shift($allPaths[$path]);
         }
 
-        return $this->getElementByPathParts(explode('/', $path));
+        $parts = $path !== null ? explode('/', $path) : [];
+        return $this->getElementByPathParts($parts);
     }
 
     /**
@@ -292,19 +294,16 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
             foreach ($section['children'] as $group) {
                 if (isset($group['children'])) {
                     $path = $section['id'] . '/' . $group['id'];
-                    $result = array_merge(
-                        $result,
-                        $this->_getGroupFieldPathsByAttribute(
-                            $group['children'],
-                            $path,
-                            $attributeName,
-                            $attributeValue
-                        )
+                    $result[] = $this->_getGroupFieldPathsByAttribute(
+                        $group['children'],
+                        $path,
+                        $attributeName,
+                        $attributeValue
                     );
                 }
             }
         }
-        return $result;
+        return array_merge([], ...$result);
     }
 
     /**
@@ -368,7 +367,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * ```
      *
      * @return array An array of config path to config structure path map
-     * @since 100.2.0
+     * @since 100.1.12
      */
     public function getFieldPaths()
     {
@@ -398,7 +397,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
                     $this->getFieldsRecursively($element['children'])
                 );
             } else {
-                if ($element['_elementType'] === 'field' && isset($element['label'])) {
+                if ($element['_elementType'] === 'field') {
                     $structurePath = (isset($element['path']) ? $element['path'] . '/' : '') . $element['id'];
                     $configPath = isset($element['config_path']) ? $element['config_path'] : $structurePath;
 

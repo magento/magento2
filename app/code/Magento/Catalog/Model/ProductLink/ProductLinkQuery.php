@@ -103,7 +103,7 @@ class ProductLinkQuery
             if (count($linkTypesToLoad) === 1) {
                 $linkTypesToLoad = $linkTypesToLoad[0];
             } else {
-                $linkTypesToLoad = array_merge(...$linkTypesToLoad);
+                $linkTypesToLoad = array_merge([], ...$linkTypesToLoad);
             }
             $linkTypesToLoad = array_flip($linkTypesToLoad);
             $linkTypes = array_filter(

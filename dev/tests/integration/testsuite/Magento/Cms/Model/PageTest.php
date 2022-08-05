@@ -14,7 +14,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
  */
 class PageTest extends \PHPUnit\Framework\TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\User\Model\User::class

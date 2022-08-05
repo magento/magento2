@@ -3,19 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Filter\Test\Unit\Input;
 
-use \Magento\Framework\Filter\Input\MaliciousCode;
+use Magento\Framework\Filter\Input\MaliciousCode;
+use Magento\Framework\Filter\Input\PurifierInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MaliciousCodeTest extends \PHPUnit\Framework\TestCase
+class MaliciousCodeTest extends TestCase
 {
-    /** @var \Magento\Framework\Filter\Input\MaliciousCode */
-    protected $filter;
+    /**
+     * @var MockObject|PurifierInterface $purifier
+     */
+    private MockObject $purifier;
 
-    protected function setUp()
+    /**
+     * @var MaliciousCode $filter
+     */
+    private MaliciousCode $filter;
+
+    protected function setUp(): void
     {
-        $this->filter = new MaliciousCode();
+        $this->purifier = $this->getMockBuilder(PurifierInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['purify'])
+            ->getMockForAbstractClass();
+
+        $objectManager = new ObjectManager($this);
+
+        $this->filter = $objectManager->getObject(
+            MaliciousCode::class,
+            ['purifier' => $this->purifier]
+        );
+
         parent::setUp();
     }
 
@@ -26,11 +49,11 @@ class MaliciousCodeTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilter($input, $expectedOutput)
     {
-        $this->assertEquals(
-            $expectedOutput,
-            $this->filter->filter($input),
-            'Malicious code is not filtered out correctly.'
-        );
+        $this->purifier->expects(self::atLeastOnce())
+            ->method('purify')
+            ->willReturn($expectedOutput);
+
+        self::assertEquals($expectedOutput, $this->filter->filter($input));
     }
 
     /**
@@ -110,7 +133,19 @@ class MaliciousCodeTest extends \PHPUnit\Framework\TestCase
             'Nested malicious tags' => [
                 '<scri<script>pt>alert(1);</scri<script>pt>',
                 'alert(1);',
-            ]
+            ],
+            'Nested scripts' => [
+                '<?php echo "test" ?>',
+                '',
+                '<?= "test" ?>',
+                '',
+                '<?   ="test" ?>',
+                '',
+                '<?="test?>',
+                '',
+                '<?=$test?>',
+                '',
+            ],
         ];
     }
 
@@ -120,6 +155,11 @@ class MaliciousCodeTest extends \PHPUnit\Framework\TestCase
     public function testAddExpression()
     {
         $customExpression = '/<\/?(customMalicious).*>/Uis';
+
+        $this->purifier->expects(self::atLeastOnce())
+            ->method('purify')
+            ->willReturn('Custom malicious tag is removed customMalicious');
+
         $this->filter->addExpression($customExpression);
         $this->assertEquals(
             /** Tabs should be filtered out along with custom malicious code */
@@ -137,6 +177,11 @@ class MaliciousCodeTest extends \PHPUnit\Framework\TestCase
     public function testSetExpression()
     {
         $customExpression = '/<\/?(customMalicious).*>/Uis';
+
+        $this->purifier->expects(self::atLeastOnce())
+            ->method('purify')
+            ->willReturn("Custom \tmalicious tag\t\t is removed customMalicious");
+
         $this->filter->setExpressions([$customExpression]);
         $this->assertEquals(
             /** Tabs should not be filtered out along with custom malicious code */

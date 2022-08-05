@@ -31,7 +31,7 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
      */
     private $quoteIdToMaskedId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

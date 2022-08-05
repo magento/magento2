@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddProductCustomOptionFileActionGroup">
+        <annotations>
+            <description>Add a custom File Product Option to a Product based on the provided File.</description>
+        </annotations>
+        <arguments>
+            <argument name="option" defaultValue="ProductOptionFile"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" stepKey="waitForOption"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{option.title}}" stepKey="fillTitle"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}" stepKey="openTypeSelect"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionType('File')}}" stepKey="selectTypeFile"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.optionPriceByTitle(option.title)}}" stepKey="waitForElements"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionPriceByTitle(option.title)}}" userInput="{{option.price}}" stepKey="fillPrice"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceTypeByTitle(option.title)}}" userInput="{{option.price_type}}" stepKey="selectPriceType"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionFileExtensionByTitle(option.title)}}" userInput="{{option.file_extension}}" stepKey="fillCompatibleExtensions"/>
+    </actionGroup>
+</actionGroups>

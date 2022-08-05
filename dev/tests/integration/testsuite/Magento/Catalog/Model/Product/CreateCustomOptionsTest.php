@@ -66,7 +66,7 @@ class CreateCustomOptionsTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
@@ -84,6 +84,7 @@ class CreateCustomOptionsTest extends TestCase
      * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
      * @magentoAppArea adminhtml
      * @magentoAppIsolation disabled
+     * @magentoDbIsolation disabled
      * @magentoConfigFixture default_store catalog/price/scope 1
      * @magentoConfigFixture secondstore_store catalog/price/scope 1
      */
@@ -120,6 +121,8 @@ class CreateCustomOptionsTest extends TestCase
      * @dataProvider productCustomOptionsTypeTextDataProvider
      *
      * @param array $optionData
+     *
+     * @magentoDbIsolation enabled
      */
     public function testCreateOptionsWithTypeText(array $optionData): void
     {
@@ -140,6 +143,8 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @param string $rawExtensions
      * @param string $expectedExtensions
+     *
+     * @magentoDbIsolation enabled
      */
     public function testFileExtensions(string $rawExtensions, string $expectedExtensions): void
     {
@@ -174,6 +179,8 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @param array $optionValueData
+     *
+     * @magentoDbIsolation enabled
      */
     public function testCreateOptionsWithTypeSelect(array $optionData, array $optionValueData): void
     {
@@ -199,6 +206,8 @@ class CreateCustomOptionsTest extends TestCase
      * @dataProvider productCustomOptionsTypeDateDataProvider
      *
      * @param array $optionData
+     *
+     * @magentoDbIsolation enabled
      */
     public function testCreateOptionsWithTypeDate(array $optionData): void
     {
@@ -217,6 +226,8 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @param \Exception $expectedErrorObject
+     *
+     * @magentoDbIsolation enabled
      */
     public function testCreateOptionWithError(array $optionData, \Exception $expectedErrorObject): void
     {

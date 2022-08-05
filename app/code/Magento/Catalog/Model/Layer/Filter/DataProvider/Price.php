@@ -9,35 +9,39 @@ use Magento\Catalog\Model\Layer;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Catalog\Model\ResourceModel\Layer\Filter\Price as LayerFilterPrice;
 
+/**
+ * Data provider for price filter in layered navigation
+ */
 class Price
 {
     /**
      * XML configuration paths for Price Layered Navigation
      */
-    const XML_PATH_RANGE_CALCULATION = 'catalog/layered_navigation/price_range_calculation';
+    public const XML_PATH_RANGE_CALCULATION = 'catalog/layered_navigation/price_range_calculation';
 
-    const XML_PATH_RANGE_STEP = 'catalog/layered_navigation/price_range_step';
+    public const XML_PATH_RANGE_STEP = 'catalog/layered_navigation/price_range_step';
 
-    const XML_PATH_RANGE_MAX_INTERVALS = 'catalog/layered_navigation/price_range_max_intervals';
+    public const XML_PATH_RANGE_MAX_INTERVALS = 'catalog/layered_navigation/price_range_max_intervals';
 
-    const XML_PATH_ONE_PRICE_INTERVAL = 'catalog/layered_navigation/one_price_interval';
+    public const XML_PATH_ONE_PRICE_INTERVAL = 'catalog/layered_navigation/one_price_interval';
 
-    const XML_PATH_INTERVAL_DIVISION_LIMIT = 'catalog/layered_navigation/interval_division_limit';
+    public const XML_PATH_INTERVAL_DIVISION_LIMIT = 'catalog/layered_navigation/interval_division_limit';
 
     /**
      * Price layered navigation modes: Automatic (equalize price ranges), Automatic (equalize product counts), Manual
      */
-    const RANGE_CALCULATION_AUTO = 'auto';
+    public const RANGE_CALCULATION_AUTO = 'auto';
 
-    const RANGE_CALCULATION_IMPROVED = 'improved';
+    public const RANGE_CALCULATION_IMPROVED = 'improved';
 
-    const RANGE_CALCULATION_MANUAL = 'manual';
+    public const RANGE_CALCULATION_MANUAL = 'manual';
 
     /**
      * Minimal size of the range
      */
-    const MIN_RANGE_POWER = 10;
+    public const MIN_RANGE_POWER = 10;
 
     /**
      * @var Layer
@@ -55,7 +59,7 @@ class Price
     private $rangeItemCounts = [];
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
+     * @var LayerFilterPrice
      */
     private $resource;
 
@@ -88,13 +92,13 @@ class Price
      * @param Layer $layer
      * @param Registry $coreRegistry
      * @param ScopeConfigInterface $scopeConfig
-     * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price $resource
+     * @param LayerFilterPrice $resource
      */
     public function __construct(
         Layer $layer,
         Registry $coreRegistry,
         ScopeConfigInterface $scopeConfig,
-        \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price $resource
+        LayerFilterPrice $resource
     ) {
         $this->layer = $layer;
         $this->coreRegistry = $coreRegistry;
@@ -103,6 +107,8 @@ class Price
     }
 
     /**
+     * Getter  for interval
+     *
      * @return array
      */
     public function getInterval()
@@ -111,6 +117,8 @@ class Price
     }
 
     /**
+     * Setter for interval
+     *
      * @param array $interval
      * @return void
      */
@@ -120,6 +128,10 @@ class Price
     }
 
     /**
+     * Retrieves price layered navigation modes
+     *
+     * @see RANGE_CALCULATION_AUTO
+     *
      * @return mixed
      */
     public function getRangeCalculationValue()
@@ -131,6 +143,8 @@ class Price
     }
 
     /**
+     * Retrieves range step
+     *
      * @return mixed
      */
     public function getRangeStepValue()
@@ -142,6 +156,8 @@ class Price
     }
 
     /**
+     * Retrieves one price interval
+     *
      * @return mixed
      */
     public function getOnePriceIntervalValue()
@@ -179,6 +195,8 @@ class Price
     }
 
     /**
+     * Retrieves Catalog Layer object
+     *
      * @return Layer
      */
     public function getLayer()
@@ -276,6 +294,8 @@ class Price
     }
 
     /**
+     * Retrieve list of prior filters
+     *
      * @param string $filterParams
      * @return array
      */
@@ -305,12 +325,12 @@ class Price
      */
     public function validateFilter($filter)
     {
-        $filter = explode('-', $filter);
+        $filter = $filter === null ? [] : explode('-', $filter);
         if (count($filter) != 2) {
             return false;
         }
         foreach ($filter as $v) {
-            if ($v !== '' && $v !== '0' && (double)$v <= 0 || is_infinite((double)$v)) {
+            if ($v !== '' && $v !== '0' && (!is_numeric($v) || (double)$v <= 0 || is_infinite((double)$v))) {
                 return false;
             }
         }
@@ -339,6 +359,8 @@ class Price
     }
 
     /**
+     * Getter for prior intervals
+     *
      * @return array
      */
     public function getPriorIntervals()
@@ -347,6 +369,8 @@ class Price
     }
 
     /**
+     * Setter for prior intervals
+     *
      * @param array $priorInterval
      * @return void
      */
@@ -356,7 +380,9 @@ class Price
     }
 
     /**
-     * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
+     * Get Resource model for price filter
+     *
+     * @return LayerFilterPrice
      */
     public function getResource()
     {
@@ -364,6 +390,8 @@ class Price
     }
 
     /**
+     * Retrieves additional request data
+     *
      * @return string
      */
     public function getAdditionalRequestData()

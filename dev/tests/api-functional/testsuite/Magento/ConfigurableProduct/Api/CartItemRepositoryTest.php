@@ -20,7 +20,7 @@ class CartItemRepositoryTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -71,11 +71,12 @@ class CartItemRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage You need to choose options for your item.
      */
     public function testAddProductWithIncorrectOptions()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('You need to choose options for your item.');
+
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
@@ -105,11 +106,12 @@ class CartItemRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The %1 Cart doesn't contain the %2 item.
      */
     public function testUpdateIncorrectItem()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The %1 Cart doesn\'t contain the %2 item.');
+
         $qty = 1;
         /** @var \Magento\Quote\Model\Quote  $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);

@@ -5,14 +5,20 @@
  */
 declare(strict_types=1);
 
-require 'default_rollback.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
-/** @var \Magento\Catalog\Model\Product $product */
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Store/_files/second_store.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/default_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
+/** @var \Magento\Catalog\Model\Product $product */
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store.php');
 
 $addressData = include __DIR__ . '/address_data.php';
-
+$objectManager = Bootstrap::getObjectManager();
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple');
 $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Store\Model\Store::class);
 $secondStoreId = $store->load('fixture_second_store')->getId();

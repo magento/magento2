@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Customer:etc/sections.xsd">
+    <!-- Actions 5-12 are specified in files sections.xml and sections2.xml for merging -->
+    <!-- 5 - Action in both files has unique Section -->
+    <action name="customer/account/logout">
+        <section name="cart"/>
+    </action>
+    <!-- 6 - Action in both files has at least one identical Section -->
+    <action name="customer/account/editPost">
+        <section name="cart"/>
+        <section name="account"/>
+    </action>
+    <!-- 7 - Action in both files has at least one identical Section and "*" -->
+    <action name="checkout/cart/delete">
+        <section name="cart"/>
+        <section name="*"/>
+        <section name="account"/>
+    </action>
+    <!-- 8 - Action in both files has Section and "*" -->
+    <action name="customer/account/createPost">
+        <section name="*"/>
+    </action>
+    <!-- 9 - Action in both files has "*" and "*" -->
+    <action name="catalog/product_compare/add">
+        <section name="*"/>
+    </action>
+    <!-- 10 - Action in both files has Section and "empty_section" -->
+    <action name="catalog/product_compare/remove"/>
+    <!-- 11 - Action in both files has "empty_section" and "empty_section" -->
+    <action name="catalog/product_compare/clear"/>
+    <!-- 12 - Action in both files has "*" and "empty_section" -->
+    <action name="checkout/cart/add"/>
+</config>

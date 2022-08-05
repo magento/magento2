@@ -11,11 +11,11 @@
         <!--Create configurable product-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageConfigurable" after="seeSimpleProductInGrid"/>
         <waitForPageLoad stepKey="waitForProductPageLoadConfigurable" after="visitAdminProductPageConfigurable"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct" after="waitForProductPageLoadConfigurable">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct" after="waitForProductPageLoadConfigurable">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
-        <actionGroup ref="checkRequiredFieldsInProductForm" stepKey="checkRequiredFieldsProductConfigurable" after="goToCreateConfigurableProduct"/>
-        <actionGroup ref="fillMainProductForm" stepKey="fillConfigurableProductMain" after="checkRequiredFieldsProductConfigurable">
+        <actionGroup ref="CheckRequiredFieldsInProductFormActionGroup" stepKey="checkRequiredFieldsProductConfigurable" after="goToCreateConfigurableProduct"/>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillConfigurableProductMain" after="checkRequiredFieldsProductConfigurable">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
         <!--Create product configurations-->
@@ -63,14 +63,15 @@
         <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" time="30" stepKey="waitForAttributeSetConfirmation" after="clickSaveConfigurableProduct"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickConfirmAttributeSet" after="waitForAttributeSetConfirmation"/>
         <see selector="You saved the product" stepKey="seeConfigurableSaveConfirmation" after="clickConfirmAttributeSet"/>
-        <actionGroup ref="viewConfigurableProductInAdminGrid" stepKey="viewConfigurableProductInGrid" after="seeConfigurableSaveConfirmation">
+        <actionGroup ref="ViewConfigurableProductInAdminGridActionGroup" stepKey="viewConfigurableProductInGrid" after="seeConfigurableSaveConfirmation">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
 
         <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
         <comment userInput="Clean up configurable product" stepKey="cleanUpConfigurableProduct" after="deleteSimpleProduct"/>
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteConfigurableProduct" after="cleanUpConfigurableProduct">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProduct" after="cleanUpConfigurableProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

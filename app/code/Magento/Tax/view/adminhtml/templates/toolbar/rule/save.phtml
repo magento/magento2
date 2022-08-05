@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 // @deprecated
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
     <?= $block->getBackButtonHtml() ?>
@@ -11,13 +13,15 @@
     <?= $block->getSaveButtonHtml() ?>
     <?= $block->getDeleteButtonHtml() ?>
 </div>
-<?php if ($form) : ?>
+<?php if ($form): ?>
     <?= $form->toHtml() ?>
-    <script>
+    <?php $scriptString = <<<script
     require(['jquery', "mage/mage"], function(jQuery){
 
-        jQuery('#<?= $block->escapeJs($form->getForm()->getId()) ?>').mage('form').mage('validation');
+        jQuery('#{$block->escapeJs($form->getForm()->getId())}').mage('form').mage('validation');
 
     });
-    </script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php endif; ?>

@@ -3,38 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action\Rows;
 
+use Magento\Catalog\Helper\Product\Flat\Indexer;
+use Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows\TableData;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TableDataTest extends \PHPUnit\Framework\TestCase
+class TableDataTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $_connectionMock;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\Flat\Indexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Indexer|MockObject
      */
     protected $_productIndexerHelper;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resource|MockObject
      */
     protected $_resourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $this->_resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->_productIndexerHelper = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
+        $this->_objectManager = new ObjectManager($this);
+        $this->_connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->_resourceMock = $this->createMock(ResourceConnection::class);
+        $this->_productIndexerHelper = $this->createMock(Indexer::class);
     }
 
     public function testMoveWithNonExistentFlatTable()
@@ -50,8 +59,8 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             'isTableExists'
         )->with(
             $flatTable
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $this->_connectionMock->expects(
@@ -66,12 +75,12 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($this->_connectionMock)
+        )->willReturn(
+            $this->_connectionMock
         );
 
         $model = $this->_objectManager->getObject(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows\TableData::class,
+            TableData::class,
             ['resource' => $this->_resourceMock, 'productIndexerHelper' => $this->_productIndexerHelper]
         );
 
@@ -96,7 +105,7 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             'column_3' => 'column_definition',
         ];
 
-        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $selectMock = $this->createMock(Select::class);
         $selectMock->expects(
             $this->once()
         )->method(
@@ -105,7 +114,7 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             ['tf' => sprintf('%s_tmp_indexer', $flatTable)],
             ['column_2', 'column_3']
         );
-        $sql = md5(time());
+        $sql = hash('md5', (string)time());
         $selectMock->expects(
             $this->once()
         )->method(
@@ -113,13 +122,13 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
         )->with(
             $flatTable,
             ['column_2', 'column_3']
-        )->will(
-            $this->returnValue($sql)
+        )->willReturn(
+            $sql
         );
 
         $this->_connectionMock->expects($this->once())->method('query')->with($sql);
 
-        $this->_connectionMock->expects($this->once())->method('select')->will($this->returnValue($selectMock));
+        $this->_connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
 
         $this->_connectionMock->expects(
             $this->once()
@@ -127,8 +136,8 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             'isTableExists'
         )->with(
             $flatTable
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->_connectionMock->expects(
@@ -137,16 +146,16 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             'describeTable'
         )->with(
             $flatTable
-        )->will(
-            $this->returnValue($describedColumns)
+        )->willReturn(
+            $describedColumns
         );
 
         $this->_productIndexerHelper->expects(
             $this->once()
         )->method(
             'getFlatColumns'
-        )->will(
-            $this->returnValue($flatColumns)
+        )->willReturn(
+            $flatColumns
         );
 
         $this->_connectionMock->expects(
@@ -161,12 +170,12 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($this->_connectionMock)
+        )->willReturn(
+            $this->_connectionMock
         );
 
         $model = $this->_objectManager->getObject(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows\TableData::class,
+            TableData::class,
             ['resource' => $this->_resourceMock, 'productIndexerHelper' => $this->_productIndexerHelper]
         );
 

@@ -26,7 +26,7 @@
             <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete product -->
@@ -36,7 +36,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to Stores > Configuration > Sales > Shipping Methods -->

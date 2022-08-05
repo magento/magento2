@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue\Publisher;
 
-use Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface;
+use Magento\Framework\MessageQueue\DefaultValueProvider;
 
 /**
  * Test access to publisher configuration declared in deprecated queue.xml configs using Publisher\ConfigInterface.
@@ -19,9 +19,15 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    /**
+     * @var DefaultValueProvider
+     */
+    private $defaultValueProvider;
+
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->defaultValueProvider = $this->objectManager->get(DefaultValueProvider::class);
     }
 
     public function testGetPublisher()
@@ -30,12 +36,12 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Publisher\ConfigInterface::class);
         $publisher = $config->getPublisher('deprecated.config.async.string.topic');
         $this->assertEquals('deprecated.config.async.string.topic', $publisher->getTopic());
-        $this->assertEquals(false, $publisher->isDisabled());
+        $this->assertFalse($publisher->isDisabled());
 
         $connection = $publisher->getConnection();
-        $this->assertEquals('amqp', $connection->getName());
+        $this->assertEquals($this->defaultValueProvider->getConnection(), $connection->getName());
         $this->assertEquals('magento', $connection->getExchange());
-        $this->assertEquals(false, $connection->isDisabled());
+        $this->assertFalse($connection->isDisabled());
     }
 
     public function testGetPublisherCustomConnection()
@@ -44,12 +50,12 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Publisher\ConfigInterface::class);
         $publisher = $config->getPublisher('deprecated.config.sync.bool.topic');
         $this->assertEquals('deprecated.config.sync.bool.topic', $publisher->getTopic());
-        $this->assertEquals(false, $publisher->isDisabled());
+        $this->assertFalse($publisher->isDisabled());
 
         $connection = $publisher->getConnection();
-        $this->assertEquals('amqp', $connection->getName());
+        $this->assertEquals('db', $connection->getName());
         $this->assertEquals('customExchange', $connection->getExchange());
-        $this->assertEquals(false, $connection->isDisabled());
+        $this->assertFalse($connection->isDisabled());
     }
 
     public function testGetOverlapWithQueueConfig()
@@ -58,11 +64,11 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Publisher\ConfigInterface::class);
         $publisher = $config->getPublisher('overlapping.topic.declaration');
         $this->assertEquals('overlapping.topic.declaration', $publisher->getTopic());
-        $this->assertEquals(false, $publisher->isDisabled());
+        $this->assertFalse($publisher->isDisabled());
 
         $connection = $publisher->getConnection();
-        $this->assertEquals('amqp', $connection->getName());
+        $this->assertEquals($this->defaultValueProvider->getConnection(), $connection->getName());
         $this->assertEquals('magento', $connection->getExchange());
-        $this->assertEquals(false, $connection->isDisabled());
+        $this->assertFalse($connection->isDisabled());
     }
 }

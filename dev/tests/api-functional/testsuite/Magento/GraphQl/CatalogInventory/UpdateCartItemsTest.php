@@ -27,7 +27,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
      */
     private $getQuoteItemIdByReservedQuoteIdAndSku;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -49,6 +49,24 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $quantity = 0.5;
         $this->expectExceptionMessage(
             "Could not update the product with SKU simple_product: The fewest you may purchase is 1"
+        );
+        $query = $this->getQuery($maskedQuoteId, $itemId, $quantity);
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testUpdateCartItemSetUnavailableQuantity()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $itemId = $this->getQuoteItemIdByReservedQuoteIdAndSku->execute('test_quote', 'simple_product');
+
+        $quantity = 100;
+        $this->expectExceptionMessage(
+            "Could not update the product with SKU simple_product: The requested qty is not available"
         );
         $query = $this->getQuery($maskedQuoteId, $itemId, $quantity);
         $this->graphQlMutation($query);

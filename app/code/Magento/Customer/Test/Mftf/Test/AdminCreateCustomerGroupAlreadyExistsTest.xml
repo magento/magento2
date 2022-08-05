@@ -18,12 +18,13 @@
             <testCaseId value="MC-5302"/>
             <group value="customer"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Steps: 1. Log in to backend as admin user.
                     2. Navigate to Stores > Other Settings > Customer Groups.

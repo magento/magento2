@@ -3,14 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Block;
 
 /**
+ * Class used to initialize layout for MBO Dashboard
+ * @deprecated 102.0.0 dashboard graphs were migrated to dynamic chart.js solution
+ * @see dashboard in adminhtml_dashboard_index.xml
+ *
  * @api
  * @since 100.0.2
  */
-class Dashboard extends \Magento\Backend\Block\Template
+class Dashboard extends Template
 {
     /**
      * Location of the "Enable Chart" config param
@@ -23,42 +28,8 @@ class Dashboard extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Backend::dashboard/index.phtml';
 
     /**
-     * @return void
-     */
-    protected function _prepareLayout()
-    {
-        $this->addChild('lastOrders', \Magento\Backend\Block\Dashboard\Orders\Grid::class);
-
-        $this->addChild('totals', \Magento\Backend\Block\Dashboard\Totals::class);
-
-        $this->addChild('sales', \Magento\Backend\Block\Dashboard\Sales::class);
-
-        $isChartEnabled = $this->_scopeConfig->getValue(
-            self::XML_PATH_ENABLE_CHARTS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        if ($isChartEnabled) {
-            $block = $this->getLayout()->createBlock(\Magento\Backend\Block\Dashboard\Diagrams::class);
-        } else {
-            $block = $this->getLayout()->createBlock(
-                \Magento\Backend\Block\Template::class
-            )->setTemplate(
-                'dashboard/graph/disabled.phtml'
-            )->setConfigUrl(
-                $this->getUrl(
-                    'adminhtml/system_config/edit',
-                    ['section' => 'admin', '_fragment' => 'admin_dashboard-link']
-                )
-            );
-        }
-        $this->setChild('diagrams', $block);
-
-        $this->addChild('grids', \Magento\Backend\Block\Dashboard\Grids::class);
-
-        parent::_prepareLayout();
-    }
-
-    /**
+     * Get url for switch action
+     *
      * @return string
      */
     public function getSwitchUrl()

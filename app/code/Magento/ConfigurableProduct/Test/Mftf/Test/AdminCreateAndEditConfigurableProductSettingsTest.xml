@@ -20,21 +20,21 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a configurable product -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="createConfigurableProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
 
         <!-- Fill configurable product values -->
-        <actionGroup ref="fillMainProductForm" stepKey="fillConfigurableProductValues">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillConfigurableProductValues">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
 
@@ -47,11 +47,11 @@
         </actionGroup>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Open product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
-            <argument name="productUrl" value="{{BaseConfigurableProduct.sku}}"/>
+            <argument name="productUrl" value="{{BaseConfigurableProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert product design settings "left bar is present at product page with 2 columns" -->
@@ -87,11 +87,11 @@
         <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="disableGiftMessageSettings"/>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- Verify Url Key after changing -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
-            <argument name="productUrl" value="{{ApiConfigurableProduct.name}}"/>
+            <argument name="productUrl" value="{{ApiConfigurableProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert product design settings "Layout empty" -->
@@ -102,8 +102,9 @@
         <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOptionBtn"/>
 
         <!-- Delete created configurable product -->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

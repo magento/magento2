@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SaveAndContinueEditCmsPageActionGroup">
+        <annotations>
+            <description>DEPRECATED. Use AdminSaveAndContinueEditCmsPageActionGroup instead. Clicks on the Save and Continue button.</description>
+        </annotations>
+
+        <waitForElementVisible time="10" selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="waitForSaveAndContinueVisibility"/>
+        <click selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="clickSaveAndContinueEditCmsPage"/>
+        <waitForPageLoad stepKey="waitForCmsPageLoad"/>
+        <waitForElementVisible time="1" selector="{{CmsNewPagePageActionsSection.cmsPageTitle}}" stepKey="waitForCmsPageSaveButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+    </actionGroup>
+</actionGroups>

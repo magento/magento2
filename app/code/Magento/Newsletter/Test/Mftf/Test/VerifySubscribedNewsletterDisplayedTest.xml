@@ -16,53 +16,67 @@
             <title value="Newsletter subscription when user is registered on 2 stores"/>
             <description value="Newsletter subscription when user is registered on 2 stores"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-93836"/>
+            <testCaseId value="MC-25840"/>
         </annotations>
 
         <before>
             <!--Log in to Magento as admin.-->
-            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
-                <argument name="newWebsiteName" value="Second"/>
-                <argument name="websiteCode" value="Base2"/>
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
             </actionGroup>
-
             <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
-                <argument name="website" value="Second"/>
-                <argument name="storeGroupName" value="NewStore"/>
-                <argument name="storeGroupCode" value="Base12"/>
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
             </actionGroup>
-
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
-                <argument name="StoreGroup" value="staticStoreGroup"/>
-                <argument name="customStore" value="staticStore"/>
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
             </actionGroup>
-            <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <magentoCron groups="index" stepKey="reindex"/>
 
+            <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </before>
+
         <after>
             <!--Delete created data and set Default Configuration-->
-            <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
+            <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
-                <argument name="websiteName" value="Second"/>
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!--Go to store front (default) and click Create an Account.-->
-        <actionGroup ref="StorefrontCreateNewAccountNewsletterChecked" stepKey="SignUpNewUser">
+        <actionGroup ref="StorefrontCreateNewAccountNewsletterCheckedActionGroup" stepKey="SignUpNewUser">
             <argument name="Customer" value="CustomerEntityOne"/>
         </actionGroup>
         <!--Sign Out-->
-        <amOnPage url="customer/account/logout/" stepKey="customerOnLogoutPage"/>
-        <waitForPageLoad stepKey="waitLogoutCustomer"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logout"/>
+        <comment userInput="BIC workaround" stepKey="customerOnLogoutPage"/>
+        <comment userInput="BIC workaround" stepKey="waitLogoutCustomer"/>
         <!--Create new Account with the same email address. (unchecked Sign Up for Newsletter checkbox)-->
-        <actionGroup ref="StorefrontCreateNewAccountNewsletterUnchecked" stepKey="createNewAccountNewsletterUnchecked">
+        <actionGroup ref="StorefrontCreateNewAccountNewsletterUncheckedActionGroup" stepKey="createNewAccountNewsletterUnchecked">
             <argument name="Customer" value="CustomerEntityOne"/>
-            <argument name="Store" value="staticStore"/>
+            <argument name="Store" value="customStore"/>
+            <argument name="StoreGroup" value="customStoreGroup"/>
         </actionGroup>
     </test>
 </tests>

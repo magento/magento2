@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\View\Gallery;
 use Magento\Catalog\Block\Product\View\GalleryOptions;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Escaper;
-use Magento\Framework\View\Config;
 use Magento\Framework\Config\View;
+use Magento\Framework\Escaper;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
+class GalleryOptionsTest extends TestCase
 {
     /**
      * @var GalleryOptions
@@ -25,12 +29,12 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Gallery|\PHPUnit_Framework_MockObject_MockObject
+     * @var Gallery|MockObject
      */
     private $gallery;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $context;
 
@@ -40,12 +44,12 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
     private $jsonSerializer;
 
     /**
-     * @var View|\PHPUnit_Framework_MockObject_MockObject
+     * @var View|MockObject
      */
     private $configView;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $viewConfig;
 
@@ -54,7 +58,7 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
      */
     private $escaper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -115,23 +119,23 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->configView->expects($this->any())
             ->method('getVarValue')
-            ->will($this->returnValueMap($configMap));
+            ->willReturnMap($configMap);
         $this->gallery->expects($this->any())
             ->method('getImageAttribute')
-            ->will($this->returnValueMap($imageAttributesMap));
+            ->willReturnMap($imageAttributesMap);
 
         $json = $this->model->getOptionsJson();
 
         $decodedJson = $this->jsonSerializer->unserialize($json);
 
         $this->assertSame('thumbs', $decodedJson['nav']);
-        $this->assertSame(false, $decodedJson['loop']);
-        $this->assertSame(true, $decodedJson['keyboard']);
-        $this->assertSame(true, $decodedJson['arrows']);
-        $this->assertSame(false, $decodedJson['showCaption']);
-        $this->assertSame(true, $decodedJson['allowfullscreen']);
+        $this->assertFalse($decodedJson['loop']);
+        $this->assertTrue($decodedJson['keyboard']);
+        $this->assertTrue($decodedJson['arrows']);
+        $this->assertFalse($decodedJson['showCaption']);
+        $this->assertTrue($decodedJson['allowfullscreen']);
         $this->assertSame('horizontal', $decodedJson['navdir']);
-        $this->assertSame(true, $decodedJson['navarrows']);
+        $this->assertTrue($decodedJson['navarrows']);
         $this->assertSame('slides', $decodedJson['navtype']);
         $this->assertSame(5, $decodedJson['thumbmargin']);
         $this->assertSame('slide', $decodedJson['transition']);
@@ -160,7 +164,7 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->configView->expects($this->any())
             ->method('getVarValue')
-            ->will($this->returnValueMap($configMap));
+            ->willReturnMap($configMap);
 
         $json = $this->model->getFSOptionsJson();
 
@@ -169,12 +173,12 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
         //Note, this tests the special case for nav variable set to false. It
         //Should not be converted to boolean.
         $this->assertSame('false', $decodedJson['nav']);
-        $this->assertSame(true, $decodedJson['loop']);
-        $this->assertSame(false, $decodedJson['arrows']);
-        $this->assertSame(true, $decodedJson['keyboard']);
-        $this->assertSame(true, $decodedJson['showCaption']);
+        $this->assertTrue($decodedJson['loop']);
+        $this->assertFalse($decodedJson['arrows']);
+        $this->assertTrue($decodedJson['keyboard']);
+        $this->assertTrue($decodedJson['showCaption']);
         $this->assertSame('vertical', $decodedJson['navdir']);
-        $this->assertSame(false, $decodedJson['navarrows']);
+        $this->assertFalse($decodedJson['navarrows']);
         $this->assertSame(10, $decodedJson['thumbmargin']);
         $this->assertSame('thumbs', $decodedJson['navtype']);
         $this->assertSame('dissolve', $decodedJson['transition']);
@@ -190,7 +194,7 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->configView->expects($this->any())
             ->method('getVarValue')
-            ->will($this->returnValueMap($configMap));
+            ->willReturnMap($configMap);
 
         $json = $this->model->getOptionsJson();
 
@@ -210,7 +214,7 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->configView->expects($this->any())
             ->method('getVarValue')
-            ->will($this->returnValueMap($configMap));
+            ->willReturnMap($configMap);
 
         $json = $this->model->getFSOptionsJson();
 

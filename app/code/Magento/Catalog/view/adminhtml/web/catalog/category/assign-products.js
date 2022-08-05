@@ -3,8 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/* global $, $H */
-
 define([
     'mage/adminhtml/grid'
 ], function () {
@@ -51,15 +49,29 @@ define([
          */
         function categoryProductRowClick(grid, event) {
             var trElement = Event.findElement(event, 'tr'),
-                isInput = Event.element(event).tagName === 'INPUT',
+                eventElement = Event.element(event),
+                isInputCheckbox = eventElement.tagName === 'INPUT' && eventElement.type === 'checkbox',
+                isInputPosition = grid.targetElement &&
+                    grid.targetElement.tagName === 'INPUT' &&
+                    grid.targetElement.name === 'position',
                 checked = false,
                 checkbox = null;
 
-            if (trElement) {
+            if (eventElement.tagName === 'LABEL' &&
+                trElement.querySelector('#' + eventElement.htmlFor) &&
+                trElement.querySelector('#' + eventElement.htmlFor).type === 'checkbox'
+            ) {
+                event.stopPropagation();
+                trElement.querySelector('#' + eventElement.htmlFor).trigger('click');
+
+                return;
+            }
+
+            if (trElement && !isInputPosition) {
                 checkbox = Element.getElementsBySelector(trElement, 'input');
 
                 if (checkbox[0]) {
-                    checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
+                    checked = isInputCheckbox ? checkbox[0].checked : !checkbox[0].checked;
                     gridJsObject.setCheckboxChecked(checkbox[0], checked);
                 }
             }

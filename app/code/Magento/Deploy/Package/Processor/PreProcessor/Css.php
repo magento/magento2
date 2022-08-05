@@ -3,17 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Package\Processor\PreProcessor;
 
 use Magento\Deploy\Console\DeployStaticOptions;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFile;
 use Magento\Deploy\Package\Processor\ProcessorInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Css\PreProcessor\Instruction\Import;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\View\Url\CssResolver;
 use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\View\Url\CssResolver;
 
 /**
  * Pre-processor for speeding up deployment of CSS files
@@ -92,8 +94,7 @@ class Css implements ProcessorInterface
     }
 
     /**
-     * Checks if there are imports of CSS files or images within the given CSS file
-     * which exists in the current package
+     * Checks if there are imports of CSS files or images within the given CSS file which exists in the current package
      *
      * @param PackageFile $parentFile
      * @param Package $package
@@ -126,6 +127,7 @@ class Css implements ProcessorInterface
      * @param string $filePath
      * @param string $fullPath
      * @return void
+     * phpcs:disable Magento2.Functions.DiscouragedFunction
      */
     private function buildMap($packagePath, $filePath, $fullPath)
     {
@@ -135,17 +137,13 @@ class Css implements ProcessorInterface
 
             $content = $this->staticDir->readFile($this->minification->addMinifiedSign($fullPath));
 
-            $callback = function ($matchContent) use ($packagePath, $filePath, & $imports) {
+            $callback = function ($matchContent) use ($packagePath, $filePath, &$imports) {
                 $importRelPath = $this->normalize(pathinfo($filePath, PATHINFO_DIRNAME) . '/' . $matchContent['path']);
                 $imports[$importRelPath] = $this->normalize(
                     $packagePath . '/' . pathinfo($filePath, PATHINFO_DIRNAME) . '/' . $matchContent['path']
                 );
             };
-            preg_replace_callback(
-                \Magento\Framework\Css\PreProcessor\Instruction\Import::REPLACE_PATTERN,
-                $callback,
-                $content
-            );
+            preg_replace_callback(Import::REPLACE_PATTERN, $callback, $content);
 
             preg_match_all(CssResolver::REGEX_CSS_RELATIVE_URLS, $content, $matches);
             if (!empty($matches[0]) && !empty($matches[1])) {
@@ -178,13 +176,16 @@ class Css implements ProcessorInterface
      * @param string $fileName
      * @return array
      */
-    private function collectFileMap($fileName)
+    private function collectFileMap(string $fileName): array
     {
-        $result = isset($this->map[$fileName]) ? $this->map[$fileName] : [];
-        foreach ($result as $path) {
-            $result = array_merge($result, $this->collectFileMap($path));
+        $valueFromMap = $this->map[$fileName] ?? [];
+        $result = [$valueFromMap];
+
+        foreach ($valueFromMap as $path) {
+            $result[] = $this->collectFileMap($path);
         }
-        return array_unique($result);
+
+        return array_unique(array_merge([], ...$result));
     }
 
     /**

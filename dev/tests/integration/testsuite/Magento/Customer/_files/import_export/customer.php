@@ -3,39 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-//Create customer
-$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    \Magento\Customer\Model\Customer::class
-);
-$customer->setWebsiteId(
-    1
-)->setEntityId(
-    1
-)->setEntityTypeId(
-    1
-)->setAttributeSetId(
-    0
-)->setEmail(
-    'CharlesTAlston@teleworm.us'
-)->setPassword(
-    'password'
-)->setGroupId(
-    1
-)->setStoreId(
-    1
-)->setIsActive(
-    1
-)->setFirstname(
-    'Charles'
-)->setLastname(
-    'Alston'
-)->setGender(
-    '2'
-);
+
+declare(strict_types=1);
+
+use Magento\Customer\Model\Address;
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
+use Magento\Framework\Registry;
+use Magento\TestFramework\Helper\Bootstrap;
+
+$objectManager = Bootstrap::getObjectManager();
+
+/**
+ * @var $customer Customer
+ * @var $customerResource CustomerResource
+ */
+$customer = $objectManager->create(Customer::class);
+$customerResource = $objectManager->create(CustomerResource::class);
+
+$customer->setWebsiteId(1)
+    ->setEntityId(1)
+    ->setEntityTypeId(1)
+    ->setAttributeSetId(0)
+    ->setEmail('CharlesTAlston@teleworm.us')
+    ->setPassword('password')
+    ->setGroupId(1)
+    ->setStoreId(1)
+    ->setIsActive(1)
+    ->setFirstname('Charles')
+    ->setLastname('Alston')
+    ->setGender('2');
+
 $customer->isObjectNew(true);
 
 // Create address
-$address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Address::class);
+$address = $objectManager->create(Address::class);
 //  default_billing and default_shipping information would not be saved, it is needed only for simple check
 $address->addData(
     [
@@ -54,14 +56,12 @@ $address->addData(
 
 // Assign customer and address
 $customer->addAddress($address);
-$customer->save();
+$customerResource->save($customer);
 
 // Mark last address as default billing and default shipping for current customer
 $customer->setDefaultBilling($address->getId());
 $customer->setDefaultShipping($address->getId());
-$customer->save();
+$customerResource->save($customer);
 
-/** @var $objectManager \Magento\TestFramework\ObjectManager */
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$objectManager->get(\Magento\Framework\Registry::class)->unregister('_fixture/Magento_ImportExport_Customer');
-$objectManager->get(\Magento\Framework\Registry::class)->register('_fixture/Magento_ImportExport_Customer', $customer);
+$objectManager->get(Registry::class)->unregister('_fixture/Magento_ImportExport_Customer');
+$objectManager->get(Registry::class)->register('_fixture/Magento_ImportExport_Customer', $customer);

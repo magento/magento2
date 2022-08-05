@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillProductQtyOnProductFormActionGroup">
+        <annotations>
+            <description>Fills in Quantity field on the Admin Products creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productQty" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{productQty}}" stepKey="fillProductQty"/>
+    </actionGroup>
+</actionGroups>

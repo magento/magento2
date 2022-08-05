@@ -20,11 +20,13 @@
             <skip>
                 <issueId value="MQE-1576"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <!-- Configure Braintree Vault-enabled payment method -->
-            <createData entity="BraintreeConfig" stepKey="braintreeConfigurationData"/>
-            <createData entity="CustomBraintreeConfigurationData" stepKey="enableBraintree"/>
+            <!-- Configure Paypal Payflow Pro payment method -->
+            <createData entity="PaypalPayflowProConfig" stepKey="configurePaypalPayflowProPayment"/>
+            <!-- Enable Paypal Payflow Pro with Vault -->
+            <createData entity="EnablePaypalPayflowProWithVault" stepKey="enablePaypalPayflowProPaymentWithVault"/>
 
             <!-- Create customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -33,12 +35,12 @@
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Set configs to default -->
-            <createData entity="DefaultBraintreeConfig" stepKey="defaultBraintreeConfig"/>
-            <createData entity="RollBackCustomBraintreeConfigurationData" stepKey="rollBackCustomBraintreeConfigurationData"/>
+            <createData entity="DefaultPaypalPayflowProConfig" stepKey="defaultPaypalPayflowProConfig"/>
+            <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
 
             <!-- Delete product -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
@@ -47,7 +49,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create store views -->
@@ -57,6 +59,7 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
             <argument name="customStore" value="storeViewData2"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!-- Login to Frontend -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
@@ -64,26 +67,26 @@
         </actionGroup>
 
         <!-- Add product to cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
 
         <!-- Customer placed order with payment method save -->
-        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
 
-        <!-- Fill Braintree cart data -->
-        <click selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="selectBraintreePaymentMethod"/>
-        <waitForPageLoad stepKey="waitForBraintreeFormLoad"/>
-        <scrollTo selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="scrollToCreditCardSection"/>
-        <actionGroup ref="StorefrontFillCartDataActionGroup" stepKey="fillCartData"/>
-        <waitForPageLoad stepKey="waitForFillCartData"/>
+        <!-- Fill Paypal card data -->
+        <click selector="{{StorefrontPaypalCheckoutSection.creditCard}}" stepKey="selectPaypalPaymentMethod"/>
+        <waitForPageLoad stepKey="waitForPaypalFormLoad"/>
+        <scrollTo selector="{{StorefrontPaypalCheckoutSection.creditCard}}" stepKey="scrollToCreditCardSection"/>
+        <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
+            <argument name="cardData" value="Visa3DSecureCard"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForFillCardData"/>
 
         <!-- Place order -->
-        <click selector="{{BraintreeConfigurationPaymentSection.paymentMethodContainer}}{{CheckoutPaymentSection.placeOrder}}" stepKey="checkoutPlaceOrder"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
 
         <!-- Go to Configuration > Sales -->
@@ -113,7 +116,9 @@
 
         <!-- 3. Assert customer is logged with saved card with address -->
         <actionGroup ref="OpenStorefrontCustomerStoredPaymentMethodsPageActionGroup" stepKey="openStorefrontCustomerStoredPaymentMethodsPage"/>
-        <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertCustomerPaymentMethod"/>
+        <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertCustomerPaymentMethod">
+                <argument name="card" value="Visa3DSecureCardInfo"/>
+        </actionGroup>
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBook">
             <argument name="menu" value="Address Book"/>
         </actionGroup>
@@ -137,7 +142,7 @@
 
         <!-- Verify changes on the front-end by opening a simple product as a logged in customer with saved card and address on a store view for which description was not changed
              1. New customer session should be started to verify changes -->
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
@@ -149,7 +154,9 @@
 
         <!-- 3. Assert customer is logged with saved card and address -->
         <actionGroup ref="OpenStorefrontCustomerStoredPaymentMethodsPageActionGroup" stepKey="openStorefrontCustomerPaymentMethodsPage"/>
-        <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertPaymentMethod"/>
+        <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertPaymentMethod">
+            <argument name="card" value="Visa3DSecureCardInfo"/>
+        </actionGroup>
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="openAddressBook">
             <argument name="menu" value="Address Book"/>
         </actionGroup>
@@ -171,7 +178,7 @@
         <click selector="{{StorefrontInstantPurchasePopupSection.cancel}}" stepKey="closeModalPopUp"/>
         <waitForPageLoad stepKey="waitForModalClosing"/>
 
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="createdCustomerLogout"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="createdCustomerLogout"/>
 
         <!-- Return to configuration and disable Instant Purchase in a specific store view -->
         <actionGroup ref="AdminOpenInstantPurchaseConfigPageActionGroup" stepKey="openInstantPurchasePage"/>
@@ -196,7 +203,9 @@
 
         <!-- 3. Assert customer is logged with saved card and address -->
         <actionGroup ref="OpenStorefrontCustomerStoredPaymentMethodsPageActionGroup" stepKey="openCustomerPaymentMethodsPage"/>
-        <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertCartPaymentMethod"/>
+        <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertCartPaymentMethod">
+            <argument name="card" value="Visa3DSecureCardInfo"/>
+        </actionGroup>
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBookPage">
             <argument name="menu" value="Address Book"/>
         </actionGroup>
@@ -215,7 +224,7 @@
 
         <!-- Verify changes on the front-end by opening a simple product as a logged in customer with saved card and address in the other store view
              1. New customer session should be started to verify changes -->
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="logoutCustomer"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLoginToStorefront">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
@@ -227,7 +236,9 @@
 
         <!-- 3. Assert customer is logged with saved card and address -->
         <actionGroup ref="OpenStorefrontCustomerStoredPaymentMethodsPageActionGroup" stepKey="goToStorefrontCustomerPaymentMethodsPage"/>
-        <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertCardPaymentMethod"/>
+        <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertCardPaymentMethod">
+            <argument name="card" value="Visa3DSecureCardInfo"/>
+        </actionGroup>
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="openAddressBookPage">
             <argument name="menu" value="Address Book"/>
         </actionGroup>
@@ -251,5 +262,6 @@
         <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteSecondStoreView">
             <argument name="customStore" value="storeViewData2"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex2"/>
     </test>
 </tests>

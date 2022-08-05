@@ -18,16 +18,16 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultCategory" stepKey="category"/>
        </before>
         <after>
             <deleteData createDataKey="category" stepKey="deleteRootCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Url Rewrite Index Page and update the Custom Url Rewrite, Store, Request Path, Redirect Type and Description -->
-        <actionGroup ref="AdminAddUrlRewrite" stepKey="addUrlRewrite">
+        <actionGroup ref="AdminAddUrlRewriteActionGroup" stepKey="addUrlRewrite">
             <argument name="category" value="$$category.name$$"/>
             <argument name="customUrlRewriteValue" value="For Category"/>
             <argument name="storeValue" value="Default Store View"/>
@@ -37,14 +37,14 @@
         </actionGroup>
 
         <!-- Assert Redirect path, Target Path and Redirect type in grid -->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="searchByRequestPath">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
             <argument name="redirectPath" value="newrequestpath.html" />
             <argument name="redirectType" value="Temporary (302)" />
             <argument name="targetPath" value="$$category.name_lwr$$.html"/>
         </actionGroup>
 
         <!--Assert Updated path directs to the category storefront -->
-        <actionGroup ref="AssertStorefrontUrlRewriteRedirect" stepKey="openStorefrontUrlRedirectPath">
+        <actionGroup ref="AssertStorefrontUrlRewriteRedirectActionGroup" stepKey="openStorefrontUrlRedirectPath">
             <argument name="category" value="$$category.name$$"/>
             <argument name="newRequestPath" value="newrequestpath.html"/>
         </actionGroup>

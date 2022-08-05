@@ -3,48 +3,133 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Backend;
 
-class ArrayBackendTest extends \PHPUnit\Framework\TestCase
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend;
+use Magento\Framework\DataObject;
+use PHPUnit\Framework\TestCase;
+
+class ArrayBackendTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend
+     * @var ArrayBackend
      */
-    protected $_model;
+    private $_model;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute
+     * @var Attribute
      */
-    protected $_attribute;
+    private $_attribute;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_attribute = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute::class,
-            ['getAttributeCode', '__wakeup']
+            Attribute::class,
+            ['getAttributeCode', 'getDefaultValue', '__wakeup']
         );
-        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->_model = new \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend($logger);
+        $this->_model = new ArrayBackend();
         $this->_model->setAttribute($this->_attribute);
     }
 
     /**
-     * @dataProvider attributeValueDataProvider
+     * @dataProvider validateDataProvider
+     * @param array $productData
+     * @param bool $hasData
+     * @param string|int|float|null $expectedValue
      */
-    public function testValidate($data)
+    public function testValidate(array $productData, bool $hasData, $expectedValue)
     {
-        $this->_attribute->expects($this->atLeastOnce())->method('getAttributeCode')->will($this->returnValue('code'));
-        $product = new \Magento\Framework\DataObject(['code' => $data, 'empty' => '']);
+        $this->_attribute->expects($this->atLeastOnce())
+            ->method('getAttributeCode')
+            ->willReturn('attr');
+
+        $product = new DataObject($productData);
         $this->_model->validate($product);
-        $this->assertEquals('1,2,3', $product->getCode());
-        $this->assertEquals(null, $product->getEmpty());
+        $this->assertEquals($hasData, $product->hasData('attr'));
+        $this->assertEquals($expectedValue, $product->getAttr());
     }
 
     /**
      * @return array
      */
-    public static function attributeValueDataProvider()
+    public static function validateDataProvider(): array
     {
-        return [[[1, 2, 3]], ['1,2,3']];
+        return [
+            [
+                ['sku' => 'test1', 'attr' => [1, 2, 3]],
+                true,
+                '1,2,3',
+            ],
+            [
+                ['sku' => 'test1', 'attr' => '1,2,3'],
+                true,
+                '1,2,3',
+            ],
+            [
+                ['sku' => 'test1', 'attr' => null],
+                true,
+                null,
+            ],
+            [
+                ['sku' => 'test1'],
+                false,
+                null,
+            ],
+            [
+                ['sku' => 'test1', 'attr' => '13,13'],
+                true,
+                '13'
+            ],
+            [
+                ['sku' => 'test1', 'attr' => '0,1,2,3,4'],
+                true,
+                '0,1,2,3,4'
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider beforeSaveDataProvider
+     * @param array $productData
+     * @param string $defaultValue
+     * @param string $expectedValue
+     */
+    public function testBeforeSave(
+        array $productData,
+        string $defaultValue,
+        string $expectedValue
+    ) {
+        $this->_attribute->expects($this->atLeastOnce())
+            ->method('getAttributeCode')
+            ->willReturn('attr');
+        $this->_attribute->expects($this->any())
+            ->method('getDefaultValue')
+            ->willReturn($defaultValue);
+
+        $product = new DataObject($productData);
+        $this->_model->beforeSave($product);
+        $this->assertEquals($expectedValue, $product->getAttr());
+    }
+
+    /**
+     * @return array
+     */
+    public function beforeSaveDataProvider(): array
+    {
+        return [
+            [
+                ['sku' => 'test1', 'attr' => 'Value 2'],
+                'Default value 1',
+                'Value 2',
+            ],
+            [
+                ['sku' => 'test1'],
+                'Default value 1',
+                'Default value 1',
+            ],
+        ];
     }
 }

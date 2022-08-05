@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSaveCategoryFormActionGroup">
+        <annotations>
+            <description>Save category edit form in Admin and check success message.</description>
+        </annotations>
+
+        <seeInCurrentUrl url="{{AdminCategoryPage.url}}" stepKey="seeOnCategoryPage"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfTheCategoryPage"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCategory"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessageAppears"/>
+        <dontSee selector="{{AdminCategoryMessagesSection.saveCategoryWarningMessage}}" stepKey="dontSeeWarningMessage"/>
+        <see userInput="You saved the category." selector="{{AdminMessagesSection.success}}" stepKey="assertSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

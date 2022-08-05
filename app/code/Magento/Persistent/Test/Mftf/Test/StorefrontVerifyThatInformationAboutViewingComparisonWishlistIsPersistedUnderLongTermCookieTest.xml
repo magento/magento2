@@ -22,6 +22,7 @@
             <skip>
                 <issueId value="MC-15741"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
@@ -36,7 +37,7 @@
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="AdminCreateRecentlyProductsWidgetActionGroup" stepKey="createRecentlyComparedProductsWidget">
                 <argument name="widget" value="RecentlyComparedProductsWidget"/>
             </actionGroup>
@@ -45,6 +46,7 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
             <createData entity="PersistentLogoutClearEnabled" stepKey="persistentLogoutClearEnabled"/>
             <createData entity="DisableSynchronizeWidgetProductsWithBackendStorage" stepKey="disableSynchronizeWidgetProductsWithBackendStorage"/>
@@ -52,28 +54,27 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromCustomer"/>
+            <comment userInput="BIC workaround" stepKey="logoutFromCustomer"/>
             <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteRecentlyComparedProductsWidget">
                 <argument name="widget" value="RecentlyComparedProductsWidget"/>
             </actionGroup>
             <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteRecentlyViewedProductsWidget">
                 <argument name="widget" value="RecentlyViewedProductsWidget"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Login to storefront from customer-->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="checkWelcomeMessage"/>
+        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="checkWelcomeMessage"/>
 
         <!--Open the details page of Simple Product 1, Simple Product 2 and add to cart, get to the category-->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addSimpleProductProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductProductToCart">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addSecondSimpleProductProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSecondSimpleProductProductToCart">
             <argument name="product" value="$$createSecondSimpleProduct$$"/>
         </actionGroup>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="openCategoryPageAfterAddedProductToCart"/>
@@ -95,10 +96,10 @@
         </actionGroup>
         <!--The My Wishlist widget displays Simple Product 1 and Simple Product 2-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="openCategoryPageToCheckProductsInWishlistSidebar"/>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSimpleProductInWishlistSidebar">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" stepKey="checkSimpleProductInWishlistSidebar">
             <argument name="productVar" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSecondSimpleProductInWishlistSidebar">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" stepKey="checkSecondSimpleProductInWishlistSidebar">
             <argument name="productVar" value="$$createSecondSimpleProduct$$"/>
         </actionGroup>
 
@@ -128,7 +129,7 @@
         </actionGroup>
 
         <!--Place the order-->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
         <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder">
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>
@@ -144,13 +145,13 @@
         <!--Sign out and check that widgets persist the information about the items-->
         <actionGroup ref="StorefrontSignOutActionGroup" stepKey="logoutFromCustomerToCheckThatWidgetsPersist"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="openCategoryPageAfterLogoutFromCustomer"/>
-        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="checkWelcomeMessageAfterLogoutFromCustomer"/>
+        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="checkWelcomeMessageAfterLogoutFromCustomer"/>
         <seeElement selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="checkLinkNotYouAfterLogoutFromCustomer"/>
 
         <actionGroup ref="StorefrontAssertProductInRecentlyViewedWidgetActionGroup" stepKey="checkSimpleProductInRecentlyViewedWidgetAfterLogout">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSimpleProductInWishlistSidebarAfterLogout">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" stepKey="checkSimpleProductInWishlistSidebarAfterLogout">
             <argument name="productVar" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAssertProductInRecentlyComparedWidgetActionGroup" stepKey="checkSimpleProductInRecentlyComparedWidgetAfterLogout">
@@ -164,7 +165,7 @@
         <click selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="clickLinkNotYou"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterClickLinkNotYou"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="openCategoryPageAfterClickNotYou"/>
-        <see userInput="Default welcome msg!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="checkWelcomeMessageAfterClickLinkNotYou"/>
+        <see userInput="Default welcome msg!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="checkWelcomeMessageAfterClickLinkNotYou"/>
         <dontSee selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="dontSeeProductInRecentlyViewedWidget"/>
         <dontSee selector="{{StorefrontCustomerWishlistSidebarSection.ProductTitleByName($$createSimpleProduct.name$$)}}" stepKey="dontSeeProductInWishlistWidget"/>
         <dontSee selector="{{StorefrontWidgetsSection.widgetRecentlyComparedProductsGrid}}" userInput="$$createSimpleProduct.name$$" stepKey="dontSeeProductInRecentlyComparedWidget"/>
@@ -175,9 +176,9 @@
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="openCategoryPageToCheckWidgets"/>
-        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="checkWelcomeMessageAfterLogin"/>
+        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="checkWelcomeMessageAfterLogin"/>
 
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSimpleProductNameInWishlistSidebarAfterLogin">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" stepKey="checkSimpleProductNameInWishlistSidebarAfterLogin">
             <argument name="productVar" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAssertProductInRecentlyViewedWidgetActionGroup" stepKey="checkSimpleProductInRecentlyViewedWidgetAfterLogin">

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\EntityManager\Test\Unit\Operation;
 
 use Magento\Framework\App\ResourceConnection;
@@ -14,21 +16,23 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\Update;
 use Magento\Framework\EntityManager\Operation\Update\UpdateMain;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UpdateTest extends \PHPUnit\Framework\TestCase
+class UpdateTest extends TestCase
 {
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|MockObject
      */
     private $metadataPool;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnection;
 
     /**
-     * @var UpdateMain|\PHPUnit_Framework_MockObject_MockObject
+     * @var UpdateMain|MockObject
      */
     private $updateMain;
 
@@ -37,7 +41,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
      */
     private $update;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
@@ -56,15 +60,13 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
-     */
     public function testDuplicateExceptionProcessingOnExecute()
     {
-        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $this->expectException('Magento\Framework\Exception\AlreadyExistsException');
+        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
 
-        $connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $connection->expects($this->once())->method('rollback');
         $this->resourceConnection->expects($this->any())->method('getConnectionByName')->willReturn($connection);
 

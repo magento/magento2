@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Reflection\Test\Unit;
 
+use Magento\Framework\Api\ExtensionAttribute\Config;
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
@@ -13,11 +15,10 @@ use Magento\Framework\Reflection\ExtensionAttributesProcessor;
 use Magento\Framework\Reflection\FieldNamer;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeCaster;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-/**
- * ExtensionAttributesProcessor test
- */
-class ExtensionAttributesProcessorTest extends \PHPUnit\Framework\TestCase
+class ExtensionAttributesProcessorTest extends TestCase
 {
     /**
      * @var ExtensionAttributesProcessor
@@ -45,7 +46,7 @@ class ExtensionAttributesProcessorTest extends \PHPUnit\Framework\TestCase
     private $typeCasterMock;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\Config
+     * @var Config
      */
     private $configMock;
 
@@ -57,31 +58,31 @@ class ExtensionAttributesProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up helper.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->dataObjectProcessorMock = $this->getMockBuilder(\Magento\Framework\Reflection\DataObjectProcessor::class)
+        $this->dataObjectProcessorMock = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->methodsMapProcessorMock = $this->getMockBuilder(\Magento\Framework\Reflection\MethodsMap::class)
+        $this->methodsMapProcessorMock = $this->getMockBuilder(MethodsMap::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->typeCasterMock = $this->getMockBuilder(\Magento\Framework\Reflection\TypeCaster::class)
+        $this->typeCasterMock = $this->getMockBuilder(TypeCaster::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fieldNamerMock = $this->getMockBuilder(\Magento\Framework\Reflection\FieldNamer::class)
+        $this->fieldNamerMock = $this->getMockBuilder(FieldNamer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configMock = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttribute\Config::class)
+        $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->authorizationMock = $this->getMockBuilder(\Magento\Framework\AuthorizationInterface::class)
+        $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = $objectManager->getObject(
-            \Magento\Framework\Reflection\ExtensionAttributesProcessor::class,
+            ExtensionAttributesProcessor::class,
             [
                 'dataObjectProcessor' => $this->dataObjectProcessorMock,
                 'methodsMapProcessor' => $this->methodsMapProcessorMock,
@@ -101,8 +102,8 @@ class ExtensionAttributesProcessorTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuildOutputDataArrayWithPermission($isPermissionAllowed, $expectedValue)
     {
-        $dataObject = new \Magento\Framework\Reflection\Test\Unit\ExtensionAttributesObject();
-        $dataObjectType = \Magento\Framework\Reflection\Test\Unit\ExtensionAttributesObject::class;
+        $dataObject = new ExtensionAttributesObject();
+        $dataObjectType = ExtensionAttributesObject::class;
         $methodName = 'getAttrName';
         $attributeName = 'attr_name';
         $attributeValue = 'attrName';
@@ -110,37 +111,37 @@ class ExtensionAttributesProcessorTest extends \PHPUnit\Framework\TestCase
         $this->methodsMapProcessorMock->expects($this->once())
             ->method('getMethodsMap')
             ->with($dataObjectType)
-            ->will($this->returnValue([$methodName => []]));
+            ->willReturn([$methodName => []]);
         $this->methodsMapProcessorMock->expects($this->once())
             ->method('isMethodValidForDataField')
             ->with($dataObjectType, $methodName)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->fieldNamerMock->expects($this->once())
             ->method('getFieldNameForMethodName')
             ->with($methodName)
-            ->will($this->returnValue($attributeName));
+            ->willReturn($attributeName);
         $permissionName = 'Magento_Permission';
         $this->configMock->expects($this->once())
             ->method('get')
-            ->will($this->returnValue([
+            ->willReturn([
                 $dataObjectType => [
                     $attributeName => [ Converter::RESOURCE_PERMISSIONS => [ $permissionName ] ]
                 ]
-              ]));
+            ]);
         $this->authorizationMock->expects($this->once())
             ->method('isAllowed')
             ->with($permissionName)
-            ->will($this->returnValue($isPermissionAllowed));
+            ->willReturn($isPermissionAllowed);
 
         if ($isPermissionAllowed) {
             $this->methodsMapProcessorMock->expects($this->once())
                 ->method('getMethodReturnType')
                 ->with($dataObjectType, $methodName)
-                ->will($this->returnValue('string'));
+                ->willReturn('string');
             $this->typeCasterMock->expects($this->once())
                 ->method('castValueToType')
                 ->with($attributeValue, 'string')
-                ->will($this->returnValue($attributeValue));
+                ->willReturn($attributeValue);
         }
 
         $value = $this->model->buildOutputDataArray(

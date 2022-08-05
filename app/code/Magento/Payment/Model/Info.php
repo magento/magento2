@@ -38,7 +38,7 @@ class Info extends AbstractExtensibleModel implements InfoInterface
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -177,7 +177,7 @@ class Info extends AbstractExtensibleModel implements InfoInterface
         if (null === $key) {
             return $this->_additionalInformation;
         }
-        return isset($this->_additionalInformation[$key]) ? $this->_additionalInformation[$key] : null;
+        return $this->_additionalInformation[$key] ?? null;
     }
 
     /**
@@ -188,6 +188,7 @@ class Info extends AbstractExtensibleModel implements InfoInterface
      */
     public function unsAdditionalInformation($key = null)
     {
+        $this->_initAdditionalInformation();
         if ($key && isset($this->_additionalInformation[$key])) {
             unset($this->_additionalInformation[$key]);
             return $this->setData('additional_information', $this->_additionalInformation);

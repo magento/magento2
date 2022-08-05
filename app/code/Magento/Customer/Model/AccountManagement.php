@@ -13,6 +13,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\ValidationResultsInterfaceFactory;
+use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
@@ -27,6 +28,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Encryption\Helper\Security;
@@ -68,127 +70,148 @@ class AccountManagement implements AccountManagementInterface
     /**
      * Configuration paths for create account email template
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_REGISTER_EMAIL_TEMPLATE = 'customer/create_account/email_template';
+    public const XML_PATH_REGISTER_EMAIL_TEMPLATE = 'customer/create_account/email_template';
 
     /**
      * Configuration paths for register no password email template
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE = 'customer/create_account/email_no_password_template';
+    public const XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE = 'customer/create_account/email_no_password_template';
 
     /**
      * Configuration paths for remind email identity
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_REGISTER_EMAIL_IDENTITY = 'customer/create_account/email_identity';
+    public const XML_PATH_REGISTER_EMAIL_IDENTITY = 'customer/create_account/email_identity';
 
     /**
      * Configuration paths for remind email template
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_REMIND_EMAIL_TEMPLATE = 'customer/password/remind_email_template';
+    public const XML_PATH_REMIND_EMAIL_TEMPLATE = 'customer/password/remind_email_template';
 
     /**
      * Configuration paths for forgot email email template
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'customer/password/forgot_email_template';
+    public const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'customer/password/forgot_email_template';
 
     /**
      * Configuration paths for forgot email identity
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
+    public const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
 
     /**
      * Configuration paths for account confirmation required
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
      * @see AccountConfirmation::XML_PATH_IS_CONFIRM
      */
-    const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
+    public const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
     /**
      * Configuration paths for account confirmation email template
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
+    public const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
 
     /**
      * Configuration paths for confirmation confirmed email template
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
+    public const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
 
     /**
      * Constants for the type of new account email to be sent
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotificationInterface::NEW_ACCOUNT_EMAIL_REGISTERED
      */
-    const NEW_ACCOUNT_EMAIL_REGISTERED = 'registered';
+    public const NEW_ACCOUNT_EMAIL_REGISTERED = 'registered';
 
     /**
      * Welcome email, when password setting is required
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotificationInterface::NEW_ACCOUNT_EMAIL_REGISTERED
      */
-    const NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD = 'registered_no_password';
+    public const NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD = 'registered_no_password';
 
     /**
      * Welcome email, when confirmation is enabled
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotificationInterface::NEW_ACCOUNT_EMAIL_REGISTERED
      */
-    const NEW_ACCOUNT_EMAIL_CONFIRMATION = 'confirmation';
+    public const NEW_ACCOUNT_EMAIL_CONFIRMATION = 'confirmation';
 
     /**
      * Confirmation email, when account is confirmed
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see EmailNotificationInterface::NEW_ACCOUNT_EMAIL_REGISTERED
      */
-    const NEW_ACCOUNT_EMAIL_CONFIRMED = 'confirmed';
+    public const NEW_ACCOUNT_EMAIL_CONFIRMED = 'confirmed';
 
     /**
      * Constants for types of emails to send out.
      * pdl:
      * forgot, remind, reset email templates
      */
-    const EMAIL_REMINDER = 'email_reminder';
+    public const EMAIL_REMINDER = 'email_reminder';
 
-    const EMAIL_RESET = 'email_reset';
+    public const EMAIL_RESET = 'email_reset';
 
     /**
      * Configuration path to customer password minimum length
      */
-    const XML_PATH_MINIMUM_PASSWORD_LENGTH = 'customer/password/minimum_password_length';
+    public const XML_PATH_MINIMUM_PASSWORD_LENGTH = 'customer/password/minimum_password_length';
 
     /**
      * Configuration path to customer password required character classes number
      */
-    const XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER = 'customer/password/required_character_classes_number';
+    public const XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER = 'customer/password/required_character_classes_number';
 
     /**
      * Configuration path to customer reset password email template
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see Magento/Customer/Model/EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
+    public const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
 
     /**
      * Minimum password length
      *
-     * @deprecated
+     * @deprecated Get rid of Helpers in Password Security Management
+     * @see \Magento\Customer\Model\AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH
      */
-    const MIN_PASSWORD_LENGTH = 6;
+    public const MIN_PASSWORD_LENGTH = 6;
+
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    public const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
     /**
      * @var CustomerFactory
@@ -269,21 +292,6 @@ class AccountManagement implements AccountManagementInterface
      * @var TransportBuilder
      */
     private $transportBuilder;
-
-    /**
-     * @var SessionManagerInterface
-     */
-    private $sessionManager;
-
-    /**
-     * @var SaveHandlerInterface
-     */
-    private $saveHandler;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $visitorCollectionFactory;
 
     /**
      * @var DataObjectProcessor
@@ -371,6 +379,16 @@ class AccountManagement implements AccountManagementInterface
     private $getByToken;
 
     /**
+     * @var SessionCleanerInterface
+     */
+    private $sessionCleaner;
+
+    /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -404,10 +422,15 @@ class AccountManagement implements AccountManagementInterface
      * @param AddressRegistry|null $addressRegistry
      * @param GetCustomerByToken|null $getByToken
      * @param AllowedCountries|null $allowedCountriesReader
+     * @param SessionCleanerInterface|null $sessionCleaner
+     * @param AuthorizationInterface|null $authorization
+     * @param AuthenticationInterface|null $authentication
+     * @param Backend|null $eavValidator
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.LongVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         CustomerFactory $customerFactory,
@@ -442,7 +465,11 @@ class AccountManagement implements AccountManagementInterface
         SearchCriteriaBuilder $searchCriteriaBuilder = null,
         AddressRegistry $addressRegistry = null,
         GetCustomerByToken $getByToken = null,
-        AllowedCountries $allowedCountriesReader = null
+        AllowedCountries $allowedCountriesReader = null,
+        SessionCleanerInterface $sessionCleaner = null,
+        AuthorizationInterface $authorization = null,
+        AuthenticationInterface $authentication = null,
+        Backend $eavValidator = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -473,12 +500,6 @@ class AccountManagement implements AccountManagementInterface
         $this->dateTimeFactory = $dateTimeFactory ?: $objectManager->get(DateTimeFactory::class);
         $this->accountConfirmation = $accountConfirmation ?: $objectManager
             ->get(AccountConfirmation::class);
-        $this->sessionManager = $sessionManager
-            ?: $objectManager->get(SessionManagerInterface::class);
-        $this->saveHandler = $saveHandler
-            ?: $objectManager->get(SaveHandlerInterface::class);
-        $this->visitorCollectionFactory = $visitorCollectionFactory
-            ?: $objectManager->get(CollectionFactory::class);
         $this->searchCriteriaBuilder = $searchCriteriaBuilder
             ?: $objectManager->get(SearchCriteriaBuilder::class);
         $this->addressRegistry = $addressRegistry
@@ -487,22 +508,10 @@ class AccountManagement implements AccountManagementInterface
             ?: $objectManager->get(GetCustomerByToken::class);
         $this->allowedCountriesReader = $allowedCountriesReader
             ?: $objectManager->get(AllowedCountries::class);
-    }
-
-    /**
-     * Get authentication
-     *
-     * @return AuthenticationInterface
-     */
-    private function getAuthentication()
-    {
-        if (!($this->authentication instanceof AuthenticationInterface)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Customer\Model\AuthenticationInterface::class
-            );
-        } else {
-            return $this->authentication;
-        }
+        $this->sessionCleaner = $sessionCleaner ?? $objectManager->get(SessionCleanerInterface::class);
+        $this->authorization = $authorization ?? $objectManager->get(AuthorizationInterface::class);
+        $this->authentication = $authentication ?? $objectManager->get(AuthenticationInterface::class);
+        $this->eavValidator = $eavValidator ?? $objectManager->get(Backend::class);
     }
 
     /**
@@ -525,7 +534,11 @@ class AccountManagement implements AccountManagementInterface
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
+
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -594,11 +607,11 @@ class AccountManagement implements AccountManagementInterface
         }
 
         $customerId = $customer->getId();
-        if ($this->getAuthentication()->isLocked($customerId)) {
+        if ($this->authentication->isLocked($customerId)) {
             throw new UserLockedException(__('The account is locked.'));
         }
         try {
-            $this->getAuthentication()->authenticate($customerId, $password);
+            $this->authentication->authenticate($customerId, $password);
         } catch (InvalidEmailOrPasswordException $e) {
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
@@ -673,7 +686,8 @@ class AccountManagement implements AccountManagementInterface
     {
         throw new InputException(
             __(
-                'Invalid value of "%value" provided for the %fieldName field. Possible values: %template1 or %template2.',
+                'Invalid value of "%value" provided for the %fieldName field. '
+                    . 'Possible values: %template1 or %template2.',
                 [
                     'value' => $template,
                     'fieldName' => 'template',
@@ -690,8 +704,8 @@ class AccountManagement implements AccountManagementInterface
     public function resetPassword($email, $resetToken, $newPassword)
     {
         if (!$email) {
-            $customer = $this->getByToken->execute($resetToken);
-            $email = $customer->getEmail();
+            $params = ['fieldName' => 'email'];
+            throw new InputException(__('"%fieldName" is required. Enter and try again.', $params));
         } else {
             $customer = $this->customerRepository->get($email);
         }
@@ -712,13 +726,7 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
-        $this->destroyCustomerSessions($customer->getId());
-        if ($this->sessionManager->isSessionExists()) {
-            //delete old session and move data to the new session
-            //use this instead of $this->sessionManager->regenerateId because last one doesn't delete old session
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            session_regenerate_id(true);
-        }
+        $this->sessionCleaner->clearFor((int)$customer->getId());
         $this->customerRepository->save($customer);
 
         return true;
@@ -751,7 +759,8 @@ class AccountManagement implements AccountManagementInterface
                 )
             );
         }
-        if ($this->stringHelper->strlen(trim($password)) != $length) {
+        $trimmedPassLength = $this->stringHelper->strlen($password === null ? '' : trim($password));
+        if ($trimmedPassLength != $length) {
             throw new InputException(
                 __("The password can't begin or end with a space. Verify the password and try again.")
             );
@@ -781,17 +790,19 @@ class AccountManagement implements AccountManagementInterface
         $requiredNumber = $this->scopeConfig->getValue(self::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
         $return = 0;
 
-        if (preg_match('/[0-9]+/', $password)) {
-            $counter++;
-        }
-        if (preg_match('/[A-Z]+/', $password)) {
-            $counter++;
-        }
-        if (preg_match('/[a-z]+/', $password)) {
-            $counter++;
-        }
-        if (preg_match('/[^a-zA-Z0-9]+/', $password)) {
-            $counter++;
+        if ($password !== null) {
+            if (preg_match('/[0-9]+/', $password)) {
+                $counter++;
+            }
+            if (preg_match('/[A-Z]+/', $password)) {
+                $counter++;
+            }
+            if (preg_match('/[a-z]+/', $password)) {
+                $counter++;
+            }
+            if (preg_match('/[^a-zA-Z0-9]+/', $password)) {
+                $counter++;
+            }
         }
 
         if ($counter < $requiredNumber) {
@@ -834,6 +845,11 @@ class AccountManagement implements AccountManagementInterface
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
+        $groupId = $customer->getGroupId();
+        if (isset($groupId) && !$this->authorization->isAllowed(self::ADMIN_RESOURCE)) {
+            $customer->setGroupId(null);
+        }
+
         if ($password !== null) {
             $this->checkPasswordStrength($password);
             $customerEmail = $customer->getEmail();
@@ -889,13 +905,10 @@ class AccountManagement implements AccountManagementInterface
             $customer->setWebsiteId($websiteId);
         }
 
+        $this->validateCustomerStoreIdByWebsiteId($customer);
+
         // Update 'created_in' value with actual store name
         if ($customer->getId() === null) {
-            $websiteId = $customer->getWebsiteId();
-            if ($websiteId && !$this->isCustomerInStore($websiteId, $customer->getStoreId())) {
-                throw new LocalizedException(__('The store view is not in the associated website.'));
-            }
-
             $storeName = $this->storeManager->getStore($customer->getStoreId())->getName();
             $customer->setCreatedIn($storeName);
         }
@@ -978,7 +991,6 @@ class AccountManagement implements AccountManagementInterface
                 $templateType = self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD;
             }
             $this->getEmailNotification()->newAccount($customer, $templateType, $redirectUrl, $customer->getStoreId());
-            $customer->setConfirmation(null);
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
@@ -1034,7 +1046,7 @@ class AccountManagement implements AccountManagementInterface
     private function changePasswordForCustomer($customer, $currentPassword, $newPassword)
     {
         try {
-            $this->getAuthentication()->authenticate($customer->getId(), $currentPassword);
+            $this->authentication->authenticate($customer->getId(), $currentPassword);
         } catch (InvalidEmailOrPasswordException $e) {
             throw new InvalidEmailOrPasswordException(
                 __("The password doesn't match this account. Verify the password and try again.")
@@ -1042,12 +1054,12 @@ class AccountManagement implements AccountManagementInterface
         }
         $customerEmail = $customer->getEmail();
         $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $newPassword);
+        $this->checkPasswordStrength($newPassword);
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
-        $this->checkPasswordStrength($newPassword);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
-        $this->destroyCustomerSessions($customer->getId());
+        $this->sessionCleaner->clearFor((int)$customer->getId());
         $this->disableAddressValidation($customer);
         $this->customerRepository->save($customer);
 
@@ -1066,19 +1078,6 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Get EAV validator
-     *
-     * @return Backend
-     */
-    private function getEavValidator()
-    {
-        if ($this->eavValidator === null) {
-            $this->eavValidator = ObjectManager::getInstance()->get(Backend::class);
-        }
-        return $this->eavValidator;
-    }
-
-    /**
      * @inheritdoc
      */
     public function validate(CustomerInterface $customer)
@@ -1091,13 +1090,13 @@ class AccountManagement implements AccountManagementInterface
         );
         $customer->setAddresses($oldAddresses);
 
-        $result = $this->getEavValidator()->isValid($customerModel);
-        if ($result === false && is_array($this->getEavValidator()->getMessages())) {
+        $result = $this->eavValidator->isValid($customerModel);
+        if ($result === false && is_array($this->eavValidator->getMessages())) {
             return $validationResults->setIsValid(false)->setMessages(
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 call_user_func_array(
                     'array_merge',
-                    $this->getEavValidator()->getMessages()
+                    array_values($this->eavValidator->getMessages())
                 )
             );
         }
@@ -1138,6 +1137,22 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
+     * Validate customer store id by customer website id.
+     *
+     * @param CustomerInterface $customer
+     * @return bool
+     * @throws LocalizedException
+     */
+    public function validateCustomerStoreIdByWebsiteId(CustomerInterface $customer)
+    {
+        if (!$this->isCustomerInStore($customer->getWebsiteId(), $customer->getStoreId())) {
+            throw new LocalizedException(__('The store view is not in the associated website.'));
+        }
+
+        return true;
+    }
+
+    /**
      * Validate the Reset Password Token for a customer.
      *
      * @param int $customerId
@@ -1151,9 +1166,9 @@ class AccountManagement implements AccountManagementInterface
      * @throws NoSuchEntityException If customer doesn't exist
      * @SuppressWarnings(PHPMD.LongVariable)
      */
-    private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
+    private function validateResetPasswordToken(int $customerId, string $resetPasswordLinkToken): bool
     {
-        if ($customerId !== null && $customerId <= 0) {
+        if (!$customerId) {
             throw new InputException(
                 __(
                     'Invalid value of "%value" provided for the %fieldName field.',
@@ -1161,14 +1176,7 @@ class AccountManagement implements AccountManagementInterface
                 )
             );
         }
-
-        if ($customerId === null) {
-            //Looking for the customer.
-            $customerId = $this->getByToken
-                ->execute($resetPasswordLinkToken)
-                ->getId();
-        }
-        if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
+        if (!$resetPasswordLinkToken) {
             $params = ['fieldName' => 'resetPasswordLinkToken'];
             throw new InputException(__('"%fieldName" is required. Enter and try again.', $params));
         }
@@ -1360,7 +1368,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return bool
-     * @deprecated
+     * @deprecated 101.0.4
      * @see AccountConfirmation::isConfirmationRequired
      */
     protected function isConfirmationRequired($customer)
@@ -1377,12 +1385,12 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return bool
-     * @deprecated
+     * @deprecated 101.0.4
      * @see AccountConfirmation::isConfirmationRequired
      */
     protected function canSkipConfirmation($customer)
     {
-        if (!$customer->getId()) {
+        if (!$customer->getId() || $customer->getEmail() === null) {
             return false;
         }
 
@@ -1439,7 +1447,7 @@ class AccountManagement implements AccountManagementInterface
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function changeResetPasswordLinkToken($customer, $passwordLinkToken)
+    public function changeResetPasswordLinkToken(CustomerInterface $customer, string $passwordLinkToken): bool
     {
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
             throw new InputException(
@@ -1448,8 +1456,7 @@ class AccountManagement implements AccountManagementInterface
                     ['value' => $passwordLinkToken, 'fieldName' => 'password reset token']
                 )
             );
-        }
-        if (is_string($passwordLinkToken) && !empty($passwordLinkToken)) {
+        } else {
             $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
             $customerSecure->setRpToken($passwordLinkToken);
             $customerSecure->setRpTokenCreatedAt(
@@ -1597,36 +1604,6 @@ class AccountManagement implements AccountManagementInterface
             );
         } else {
             return $this->emailNotification;
-        }
-    }
-
-    /**
-     * Destroy all active customer sessions by customer id (current session will not be destroyed).
-     *
-     * Customer sessions which should be deleted are collecting from the "customer_visitor" table considering
-     * configured session lifetime.
-     *
-     * @param string|int $customerId
-     * @return void
-     */
-    private function destroyCustomerSessions($customerId)
-    {
-        $sessionLifetime = $this->scopeConfig->getValue(
-            \Magento\Framework\Session\Config::XML_PATH_COOKIE_LIFETIME,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        $dateTime = $this->dateTimeFactory->create();
-        $activeSessionsTime = $dateTime->setTimestamp($dateTime->getTimestamp() - $sessionLifetime)
-            ->format(DateTime::DATETIME_PHP_FORMAT);
-        /** @var \Magento\Customer\Model\ResourceModel\Visitor\Collection $visitorCollection */
-        $visitorCollection = $this->visitorCollectionFactory->create();
-        $visitorCollection->addFieldToFilter('customer_id', $customerId);
-        $visitorCollection->addFieldToFilter('last_visit_at', ['from' => $activeSessionsTime]);
-        $visitorCollection->addFieldToFilter('session_id', ['neq' => $this->sessionManager->getSessionId()]);
-        /** @var \Magento\Customer\Model\Visitor $visitor */
-        foreach ($visitorCollection->getItems() as $visitor) {
-            $sessionId = $visitor->getSessionId();
-            $this->saveHandler->destroy($sessionId);
         }
     }
 

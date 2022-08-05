@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImagesFileDirectoryCorrectExplanationTest">
+        <annotations>
+            <features value="Import/Export"/>
+            <stories value="Import CSV file"/>
+            <title value="Images file directory correct explanation test"/>
+            <description value="Check correct explanation for the 'Images File Directory' option."/>
+            <severity value="MINOR"/>
+            <group value="importExport"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="goToImportIndexPage"/>
+        <waitForPageLoad stepKey="adminImportMainSectionLoad"/>
+        <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.importBehavior}}" stepKey="waitForImportBehaviorElementVisible"/>
+
+        <see selector="{{AdminImportMainSection.importImagesFileDirNote}}" userInput='For Type "Local Server" use relative path to &lt;Magento root directory&gt;/var/import/images, e.g. ' stepKey="seeCorrectExplanation"/>
+    </test>
+</tests>

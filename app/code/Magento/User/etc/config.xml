@@ -16,6 +16,7 @@
             </emails>
             <security>
                 <password_reset_link_expiration_period>2</password_reset_link_expiration_period>
+                <use_case_sensitive_login>0</use_case_sensitive_login>
                 <lockout_failures>6</lockout_failures>
                 <lockout_threshold>30</lockout_threshold>
                 <password_lifetime>90</password_lifetime>

@@ -3,48 +3,57 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat;
 
-class StateTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Indexer\Category\Flat\State;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class StateTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Category\Flat\State
+     * @var State
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerInterface|MockObject
      */
     protected $flatIndexerMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|MockObject
      */
     protected $indexerRegistryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockForAbstractClass(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
+            ScopeConfigInterface::class
         );
 
         $this->flatIndexerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class,
+            IndexerInterface::class,
             [],
             '',
             false,
             false,
             true,
-            ['getId', 'getState', '__wakeup']
+            ['getId', 'getState']
         );
 
         $this->indexerRegistryMock = $this->createPartialMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class,
+            IndexerRegistry::class,
             ['get']
         );
     }
@@ -57,15 +66,15 @@ class StateTest extends \PHPUnit\Framework\TestCase
             'isSetFlag'
         )->with(
             'catalog/frontend/flat_catalog_category'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
-        $this->model = new \Magento\Catalog\Model\Indexer\Category\Flat\State(
+        $this->model = new State(
             $this->scopeConfigMock,
             $this->indexerRegistryMock
         );
-        $this->assertEquals(true, $this->model->isFlatEnabled());
+        $this->assertTrue($this->model->isFlatEnabled());
     }
 
     /**
@@ -78,11 +87,11 @@ class StateTest extends \PHPUnit\Framework\TestCase
     public function testIsAvailable($isAvailable, $isFlatEnabled, $isValid, $result)
     {
         $this->flatIndexerMock->expects($this->any())->method('load')->with('catalog_category_flat');
-        $this->flatIndexerMock->expects($this->any())->method('isValid')->will($this->returnValue($isValid));
+        $this->flatIndexerMock->expects($this->any())->method('isValid')->willReturn($isValid);
         $this->indexerRegistryMock->expects($this->any())
             ->method('get')
-            ->with(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID)
-            ->will($this->returnValue($this->flatIndexerMock));
+            ->with(State::INDEXER_ID)
+            ->willReturn($this->flatIndexerMock);
 
         $this->scopeConfigMock->expects(
             $this->any()
@@ -90,11 +99,11 @@ class StateTest extends \PHPUnit\Framework\TestCase
             'isSetFlag'
         )->with(
             'catalog/frontend/flat_catalog_category'
-        )->will(
-            $this->returnValue($isFlatEnabled)
+        )->willReturn(
+            $isFlatEnabled
         );
 
-        $this->model = new \Magento\Catalog\Model\Indexer\Category\Flat\State(
+        $this->model = new State(
             $this->scopeConfigMock,
             $this->indexerRegistryMock,
             $isAvailable

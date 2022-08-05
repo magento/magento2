@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup">
+        <annotations>
+            <description>Clicks on the 'Actions' section on the Admin Cart Price Rule creation/edit page. Fills in the provided Cart Price Rule details.</description>
+        </annotations>
+        <arguments>
+            <argument name="rule" type="entity"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.actionsHeader}}" visible="true" stepKey="clickToExpandActions"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="{{rule.simple_action}}" stepKey="selectActionType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{rule.discount_amount}}" stepKey="fillDiscountAmount"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.maximumQtyDiscount}}" userInput="{{rule.maximumQtyDiscount}}" stepKey="fillMaximumQtyDiscount"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountStep}}" userInput="{{rule.discount_step}}" stepKey="fillDiscountStep"/>
+    </actionGroup>
+</actionGroups>

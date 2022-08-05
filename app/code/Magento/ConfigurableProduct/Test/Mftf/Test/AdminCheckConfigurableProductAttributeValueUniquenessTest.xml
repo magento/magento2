@@ -20,20 +20,23 @@
             <group value="ConfigurableProduct"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="dropdownProductAttribute" stepKey="createProductAttribute"/>
         </before>
         <after>
             <!--Delete created data-->
             <comment userInput="Delete created data" stepKey="deleteCreatedData"/>
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteConfigurableProductAndOptions">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProductAndOptions">
                 <argument name="product" value="$$createConfigProduct$$"/>
             </actionGroup>
-            <waitForPageLoad stepKey="waitForProductIndexPage"/>
-            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
+            <comment userInput="BIC workaround" stepKey="waitForProductIndexPage"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteAttribute"/>
-            <actionGroup ref="logout" stepKey="logOut"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!--Create configurable product-->
         <comment userInput="Create configurable product" stepKey="createConfProd"/>
@@ -43,19 +46,17 @@
         </createData>
         <!--Go to created product page-->
         <comment userInput="Go to created product page" stepKey="goToProdPage"/>
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductGrid"/>
-        <waitForPageLoad stepKey="waitForProductPage1"/>
-        <actionGroup ref="filterProductGridByName2" stepKey="filterByName">
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductGrid"/>
+        <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterByName">
             <argument name="name" value="$$createConfigProduct.name$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductName"/>
-        <waitForPageLoad stepKey="waitForProductEditPageToLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductName"/>
         <!--Create configurations for the product-->
         <comment userInput="Create configurations for the product" stepKey="createConfigurations"/>
         <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="expandConfigurationsTab1"/>
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations1"/>
         <waitForPageLoad stepKey="waitForSelectAttributesPage1"/>
-        <actionGroup ref="selectCreatedAttributeAndCreateTwoOptions" stepKey="selectCreatedAttributeAndCreateOptions">
+        <actionGroup ref="SelectCreatedAttributeAndCreateTwoOptionsActionGroup" stepKey="selectCreatedAttributeAndCreateOptions">
             <argument name="attribute" value="dropdownProductAttribute"/>
             <argument name="firstOption" value="productAttributeOption1"/>
             <argument name="secondOption" value="productAttributeOption1"/>

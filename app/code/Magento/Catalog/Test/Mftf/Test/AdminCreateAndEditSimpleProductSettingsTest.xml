@@ -14,13 +14,13 @@
             <stories value="Create/Edit simple product in Admin"/>
             <title value="Admin should be able to set/edit other product information when creating/editing a simple product"/>
             <description value="Admin should be able to set/edit product information when creating/editing a simple product"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-3241"/>
             <group value="Catalog"/>
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create related products -->
             <createData entity="SimpleProduct2" stepKey="createFirstRelatedProduct"/>
@@ -34,20 +34,20 @@
             <deleteData createDataKey="createThirdRelatedProduct" stepKey="deleteThirdRelatedProduct"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create new simple product -->
-        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createSimpleProduct"/>
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createSimpleProduct"/>
 
         <!-- Fill all main fields -->
-        <actionGroup ref="fillMainProductForm" stepKey="fillAllNecessaryFields"/>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillAllNecessaryFields"/>
 
         <!-- Add two related products -->
-        <actionGroup ref="addRelatedProductBySku" stepKey="addFirstRelatedProduct">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addFirstRelatedProduct">
             <argument name="sku" value="$$createFirstRelatedProduct.sku$$"/>
         </actionGroup>
-        <actionGroup ref="addRelatedProductBySku" stepKey="addSecondRelatedProduct">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addSecondRelatedProduct">
             <argument name="sku" value="$$createSecondRelatedProduct.sku$$"/>
         </actionGroup>
 
@@ -60,11 +60,11 @@
         </actionGroup>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Open product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
-            <argument name="productUrl" value="{{_defaultProduct.name}}"/>
+            <argument name="productUrl" value="{{_defaultProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert related products at the storefront -->
@@ -96,7 +96,7 @@
         </actionGroup>
 
         <!-- Edit related products -->
-        <actionGroup ref="addRelatedProductBySku" stepKey="addThirdRelatedProduct">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addThirdRelatedProduct">
             <argument name="sku" value="$$createThirdRelatedProduct.sku$$"/>
         </actionGroup>
         <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.removeRelatedProduct($$createFirstRelatedProduct.sku$$)}}" stepKey="removeFirstRelatedProduct"/>
@@ -110,16 +110,20 @@
         <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="disableGiftMessageSettings"/>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- Verify Url Key after changing -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
-            <argument name="productUrl" value="{{SimpleProduct.name}}"/>
+            <argument name="productUrl" value="{{SimpleProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert related products at the storefront -->
-        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$createSecondRelatedProduct.name$$)}}" stepKey="seeSecondRelatedProduct"/>
-        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$createThirdRelatedProduct.name$$)}}" stepKey="seeThirdRelatedProduct"/>
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="seeSecondRelatedProduct">
+            <argument name="productName" value="$$createSecondRelatedProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="seeThirdRelatedProduct">
+            <argument name="productName" value="$$createThirdRelatedProduct.name$$"/>
+        </actionGroup>
 
         <!-- Assert product design settings "Layout empty" -->
         <seeElement selector="{{StorefrontProductPageDesignSection.layoutEmpty}}" stepKey="seeNewDesignChanges"/>
@@ -129,8 +133,9 @@
         <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOptionBtn"/>
 
         <!-- Delete created simple product -->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

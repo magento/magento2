@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="login_as_customer_assistance_allowed" resource="default" engine="innodb" comment="Magento Login as Customer Assistance Allowed Table">
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" comment="Customer ID"/>
+        <constraint xsi:type="foreign" referenceId="LOGIN_AS_CUSTOMER_ASSISTANCE_ALLOWED_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID"
+                    table="login_as_customer_assistance_allowed" column="customer_id" referenceTable="customer_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="primary" referenceId="LOGIN_AS_CUSTOMER_ASSISTANCE_ALLOWED_CUSTOMER_ID">
+            <column name="customer_id"/>
+        </constraint>
+    </table>
+</schema>

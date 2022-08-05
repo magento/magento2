@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateAttributeWithValueWithTwoStoreViesFromProductPageActionGroup" extends="AdminCreateAttributeFromProductPageActionGroup">
+        <remove keyForRemoval="saveAttribute"/>
+        <annotations>
+            <description>EXTENDS: AdminCreateAttributeFromProductPage. Adds the 2 provided Store Views to a Product. Clicks on Save.</description>
+        </annotations>
+        <arguments>
+            <argument name="firstStoreViewName" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminProductFormNewAttributeSection.addValue}}" stepKey="addValue" after="selectAttributeType"/>
+        <seeElement selector="{{AdminProductFormNewAttributeSection.optionViewName(firstStoreViewName))}}" stepKey="seeFirstStoreView"/>
+        <seeElement selector="{{AdminProductFormNewAttributeSection.optionViewName(firstStoreViewName))}}" stepKey="seeSecondStoreView"/>
+        <fillField selector="{{AdminProductFormNewAttributeSection.optionValue('1'))}}" userInput="default" stepKey="fillDefaultStoreView"/>
+        <fillField selector="{{AdminProductFormNewAttributeSection.optionValue('2'))}}" userInput="admin" stepKey="fillAdminStoreView"/>
+        <fillField selector="{{AdminProductFormNewAttributeSection.optionValue('3'))}}" userInput="view1" stepKey="fillFirstStoreView"/>
+        <fillField selector="{{AdminProductFormNewAttributeSection.optionValue('4'))}}" userInput="view2" stepKey="fillSecondStoreView"/>
+
+        <!--Check store view in Manage Titles section-->
+        <click selector="{{AdminProductFormNewAttributeSection.manageTitlesHeader}}" stepKey="openManageTitlesSection"/>
+        <seeElement selector="{{AdminProductFormNewAttributeSection.manageTitlesViewName(customStoreEN.name)}}" stepKey="seeFirstStoreViewName"/>
+        <seeElement selector="{{AdminProductFormNewAttributeSection.manageTitlesViewName(customStoreFR.name)}}" stepKey="seeSecondStoreViewName"/>
+        <click selector="{{AdminProductFormNewAttributeSection.saveAttribute}}" stepKey="saveAttribute1"/>
+    </actionGroup>
+</actionGroups>

@@ -14,7 +14,7 @@
             <stories value="Checkout via the Storefront"/>
             <title value="Update price in shopping cart after product save"/>
             <description value="Price in shopping cart should be updated after product save with changed price"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-58179"/>
             <group value="checkout"/>
         </annotations>
@@ -22,7 +22,7 @@
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">100</field>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="SetCustomerDataLifetimeActionGroup" stepKey="setCustomerDataLifetime">
                 <argument name="minutes" value="1"/>
             </actionGroup>
@@ -30,14 +30,14 @@
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="SetCustomerDataLifetimeActionGroup" stepKey="setDefaultCustomerDataLifetime"/>
-            <magentoCLI command="indexer:reindex customer_grid" stepKey="reindexCustomerGrid"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexCustomerGrid"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Go to product page-->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
 
         <!--Add Product to Shopping Cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
 
@@ -46,21 +46,32 @@
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping"/>
 
         <!--Check price-->
-        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="openItemProductBlock"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsClickable"/>
+        <waitForElementNotVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" stepKey="waitForCartItemsActive"/>
+        <waitForPageLoad stepKey="waitForOrderSummaryLoad"/>
+        <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="openItemProductBlock"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskForCartItem"/>
         <see userInput="$100.00" selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="checkSummarySubtotal"/>
         <see userInput="$100.00" selector="{{CheckoutPaymentSection.productItemPriceByName($$createSimpleProduct.name$$)}}" stepKey="checkItemPrice"/>
 
         <!--Edit product price via admin panel-->
         <openNewTab stepKey="openNewTab"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createSimpleProduct.id$$)}}" stepKey="goToProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
         <fillField userInput="120" selector="{{AdminProductFormSection.productPrice}}"  stepKey="setNewPrice"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <closeTab stepKey="closeTab"/>
 
         <!--Check price-->
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForCheckoutPageReload"/>
-        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="openItemProductBlock1"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForCheckoutPageReload"/>
+        <!-- change below waitForElementVisible action to waitForElementClickable to prevent flakiness once MQE-3210 is complete -->
+        <waitForElementVisible selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsVisible1"/>
+        <waitForElementNotVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" stepKey="waitForCartItemsActive1"/>
+        <waitForPageLoad stepKey="waitForOrderSummaryLoad2"/>
+        <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="openItemProductBlock1"/>
+        <waitForPageLoad stepKey="waitForCartItemLoaded"/>
         <see userInput="$120.00" selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="checkSummarySubtotal1"/>
         <see userInput="$120.00" selector="{{CheckoutPaymentSection.productItemPriceByName($$createSimpleProduct.name$$)}}" stepKey="checkItemPrice1"/>
     </test>

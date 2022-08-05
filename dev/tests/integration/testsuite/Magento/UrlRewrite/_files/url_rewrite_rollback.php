@@ -5,8 +5,12 @@
  */
 declare(strict_types=1);
 
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
 /** @var \Magento\Framework\Registry $registry */
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store_rollback.php');
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
@@ -19,6 +23,8 @@ $pageRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->g
 $pageRepository->deleteById('page-a');
 $pageRepository->deleteById('page-b');
 $pageRepository->deleteById('page-c');
+$pageRepository->deleteById('page-d');
+$pageRepository->deleteById('page-e');
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -29,7 +35,23 @@ $urlRewriteCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManage
     ->create(\Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection::class);
 $collection = $urlRewriteCollection
     ->addFieldToFilter('entity_type', 'custom')
-    ->addFieldToFilter('target_path', ['page-a/', 'page-a', 'page-b', 'page-c'])
+    ->addFieldToFilter(
+        'target_path',
+        [
+            'page-a/',
+            'page-a',
+            'page-b',
+            'page-c',
+            'page-d?param1=1',
+            'page-e?param1=1',
+            'http://example.com/external',
+            'https://example.com/external2/',
+            'http://example.com/external?param1=value1',
+            'https://example.com/external2/?param2=value2',
+            '/',
+            'contact?param1=1'
+        ]
+    )
     ->load()
     ->walk('delete');
 

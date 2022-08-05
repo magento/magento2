@@ -3,41 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\View\Result;
 
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\UrlInterface;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RedirectTest extends \PHPUnit\Framework\TestCase
+class RedirectTest extends TestCase
 {
-    /** @var \Magento\Backend\Model\View\Result\Redirect */
+    /** @var Redirect */
     protected $action;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Session|MockObject */
     protected $session;
 
-    /** @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ActionFlag|MockObject */
     protected $actionFlag;
 
-    /** @var \Magento\Backend\Model\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlInterface|MockObject */
     protected $urlBuilder;
 
-    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RedirectInterface|MockObject */
     protected $redirect;
 
     protected $url = 'adminhtml/index';
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->session = $this->createMock(\Magento\Backend\Model\Session::class);
-        $this->actionFlag = $this->createMock(\Magento\Framework\App\ActionFlag::class);
-        $this->urlBuilder = $this->createMock(\Magento\Backend\Model\UrlInterface::class);
-        $this->redirect = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
+        $this->session = $this->createMock(Session::class);
+        $this->actionFlag = $this->createMock(ActionFlag::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->action = $this->objectManagerHelper->getObject(
-            \Magento\Backend\Model\View\Result\Redirect::class,
+            Redirect::class,
             [
                 'session' => $this->session,
                 'actionFlag' => $this->actionFlag,

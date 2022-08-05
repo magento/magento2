@@ -5,6 +5,10 @@
  */
 namespace Magento\Checkout\Block\Total;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Sales\Model\ConfigInterface;
+use Magento\Checkout\Helper\Data as CheckoutHelper;
+
 /**
  * Default Total Row Renderer
  */
@@ -21,11 +25,32 @@ class DefaultTotal extends \Magento\Checkout\Block\Cart\Totals
     protected $_store;
 
     /**
-     * @return void
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param ConfigInterface $salesConfig
+     * @param array $layoutProcessors
+     * @param array $data
+     * @param CheckoutHelper $checkoutHelper
      */
-    protected function _construct()
-    {
-        parent::_construct();
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        ConfigInterface $salesConfig,
+        array $layoutProcessors = [],
+        array $data = [],
+        ?CheckoutHelper $checkoutHelper = null
+    ) {
+        $data['checkoutHelper'] = $checkoutHelper ?? ObjectManager::getInstance()->get(CheckoutHelper::class);
+        parent::__construct(
+            $context,
+            $customerSession,
+            $checkoutSession,
+            $salesConfig,
+            $layoutProcessors,
+            $data
+        );
         $this->_store = $this->_storeManager->getStore();
     }
 
@@ -40,6 +65,8 @@ class DefaultTotal extends \Magento\Checkout\Block\Cart\Totals
     }
 
     /**
+     * Set Total value.
+     *
      * @param float $total
      * @return $this
      */
@@ -53,6 +80,8 @@ class DefaultTotal extends \Magento\Checkout\Block\Cart\Totals
     }
 
     /**
+     * Return store.
+     *
      * @return \Magento\Store\Model\Store
      */
     public function getStore()

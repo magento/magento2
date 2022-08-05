@@ -30,8 +30,8 @@
             <createData entity="Simple_US_Customer_Two_Addresses" stepKey="customer"/>
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRateShipping"/>
-            <magentoCLI command="config:set {{EnableCheckMoneyOrderPaymentMethod.path}} {{EnableCheckMoneyOrderPaymentMethod.value}}" stepKey="enableCheckMoneyOrderPaymentMethod"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="CliEnableCheckMoneyOrderPaymentMethodActionGroup" stepKey="enableCheckMoneyOrderPaymentMethod"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
                 <argument name="Customer" value="$$customer$$"/>
             </actionGroup>
@@ -44,15 +44,15 @@
             <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
-            <actionGroup ref="logout" stepKey="logoutAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
         </after>
 
-        <amOnPage url="$$product1.name$$.html" stepKey="goToProduct1"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProduct1">
+        <amOnPage url="$$product1.custom_attributes[url_key]$$.html" stepKey="goToProduct1"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProduct1">
             <argument name="productName" value="$$product1.name$$"/>
         </actionGroup>
-        <amOnPage url="$$product2.name$$.html" stepKey="goToProduct2"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProduct2">
+        <amOnPage url="$$product2.custom_attributes[url_key]$$.html" stepKey="goToProduct2"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProduct2">
             <argument name="productName" value="$$product2.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>

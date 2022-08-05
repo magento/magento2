@@ -12,13 +12,13 @@
             <stories value="Checkout"/>
             <title value="Verify customer checkout by following new customer registration when guest checkout is disabled"/>
             <description value="Customer is redirected to checkout on login, follow the new Customer registration when guest checkout is disabled"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-14704"/>
             <group value="mtf_migrated"/>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <magentoCLI command="config:set {{DisableGuestCheckoutConfigData.path}} {{DisableGuestCheckoutConfigData.value}}" stepKey="disableGuestCheckout"/>
             <magentoCLI command="config:set {{DisableCustomerRedirectToDashboardConfigData.path}} {{DisableCustomerRedirectToDashboardConfigData.value}}" stepKey="disableCustomerRedirect"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
@@ -32,14 +32,14 @@
 
             <!-- Sign out Customer from storefront -->
             <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
-            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Product page in StoreFront and assert product and price range -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 
@@ -49,9 +49,9 @@
         </actionGroup>
 
         <!--Open View and edit -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickMiniCart"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
 
         <!--Create an account-->
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.createAnAccount}}" stepKey="waitForElementToBeVisible"/>
@@ -62,8 +62,8 @@
         <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="createNewCustomerAccount">
             <argument name="customer" value="Simple_US_Customer" />
         </actionGroup>
-        <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
-        <waitForPageLoad stepKey="waitForCreateAccountButtonToLoad"/>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="clickCreateAccountButton"/>
+        <comment userInput="BIC workaround" stepKey="waitForCreateAccountButtonToLoad"/>
 
         <!--Assert customer information-->
         <see stepKey="seeThankYouMessage" userInput="Thank you for registering with Main Website Store."/>
@@ -83,12 +83,11 @@
         <see userInput="You saved the address." stepKey="verifyAddressAdded"/>
 
         <!-- Open Edit and View  from cart -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="openViewAndEditOption"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openViewAndEditOption"/>
 
         <!-- Proceed to checkout -->
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout1"/>
-        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout1"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
 
         <!-- Verify order summary on payment page -->
         <actionGroup ref="VerifyCheckoutPaymentOrderSummaryActionGroup" stepKey="verifyCheckoutPaymentOrderSummary">
@@ -115,11 +114,10 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="orderId"/>
 
         <!-- Open Order Index Page -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
 
         <!-- Filter Order using orderId and assert order-->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$orderId"/>
         </actionGroup>
 

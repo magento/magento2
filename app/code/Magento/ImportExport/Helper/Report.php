@@ -7,7 +7,9 @@
 namespace Magento\ImportExport\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\ImportExport\Model\Import;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
  * ImportExport history reports helper
@@ -28,6 +30,11 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
     protected $varDirectory;
 
     /**
+     * @var ReadInterface
+     */
+    private $importHistoryDirectory;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -40,7 +47,9 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Filesystem $filesystem
     ) {
         $this->timeZone = $timeZone;
-        $this->varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
+        $importHistoryPath = $this->varDirectory->getAbsolutePath('import_history');
+        $this->importHistoryDirectory = $filesystem->getDirectoryReadByPath($importHistoryPath);
         parent::__construct($context);
     }
 
@@ -111,11 +120,13 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve report file size
      *
      * @param string $filename
-     * @return int|mixed
+     * @return int|null
      */
     public function getReportSize($filename)
     {
-        return $this->varDirectory->stat($this->getFilePath($filename))['size'];
+        $statResult = $this->varDirectory->stat($this->getFilePath($filename));
+
+        return $statResult['size'] ?? null;
     }
 
     /**
@@ -127,17 +138,19 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function getFilePath($filename)
     {
-        if (preg_match('/\.\.(\\\|\/)/', $filename)) {
-            throw new \InvalidArgumentException('Filename has not permitted symbols in it');
+        try {
+            $filePath = $this->varDirectory->getRelativePath($this->importHistoryDirectory->getAbsolutePath($filename));
+        } catch (ValidatorException $e) {
+            throw new \InvalidArgumentException('File not found');
         }
-
-        return $this->varDirectory->getRelativePath(Import::IMPORT_HISTORY_DIR . $filename);
+        return $filePath;
     }
 
     /**
      * Get csv delimiter from request.
      *
      * @return string
+     * @since 100.2.2
      */
     public function getDelimiter()
     {

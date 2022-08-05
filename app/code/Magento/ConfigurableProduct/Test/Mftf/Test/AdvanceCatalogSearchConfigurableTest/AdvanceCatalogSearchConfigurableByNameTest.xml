@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdvanceCatalogSearchConfigurableByNameTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search configurable product with product name"/>
+            <description value="Guest customer should be able to advance search configurable product with product name"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-138"/>
+            <group value="ConfigurableProduct"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="categoryHandle" before="simple1Handle"/>
+
+            <createData entity="SimpleProduct" stepKey="simple1Handle" before="simple2Handle">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <createData entity="SimpleProduct" stepKey="simple2Handle" before="product">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <!-- TODO: Move configurable product creation to an actionGroup when MQE-697 is fixed -->
+            <createData entity="ApiConfigurableProductWithDescription" stepKey="product"/>
+
+            <createData entity="productDropDownAttribute" stepKey="productAttributeHandle"/>
+
+            <createData entity="productAttributeOption1" stepKey="productAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="productAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <createData entity="AddToDefaultSet" stepKey="addToAttributeSetHandle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+
+            <createData entity="SimpleOne" stepKey="childProductHandle1">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+            </createData>
+            <createData entity="SimpleOne" stepKey="childProductHandle2">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductTwoOptions" stepKey="configProductOptionHandle">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle1">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="childProductHandle1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle2">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="childProductHandle2"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="simple1Handle" stepKey="deleteSimple1" before="deleteSimple2"/>
+            <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2" before="delete"/>
+            <deleteData createDataKey="childProductHandle1" stepKey="deleteChildProduct1" before="delete"/>
+            <deleteData createDataKey="childProductHandle2" stepKey="deleteChildProduct2" before="delete"/>
+            <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductDropDownAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+    </test>
+</tests>

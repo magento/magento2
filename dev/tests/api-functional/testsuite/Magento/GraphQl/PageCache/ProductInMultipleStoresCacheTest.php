@@ -20,7 +20,7 @@ class ProductInMultipleStoresCacheTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Store\Model\Store $store */
         $store =  ObjectManager::getInstance()->get(\Magento\Store\Model\Store::class);
@@ -59,7 +59,7 @@ class ProductInMultipleStoresCacheTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Config\App\Config\Type\System $config */
         $config = ObjectManager::getInstance()->get(\Magento\Config\App\Config\Type\System::class);
@@ -93,8 +93,6 @@ class ProductInMultipleStoresCacheTest extends GraphQlAbstract
     products(filter: {sku: {eq: "{$productSku}"}})
     {
         items {
-            attribute_set_id
-            created_at
             id
             name
             price {
@@ -107,7 +105,6 @@ class ProductInMultipleStoresCacheTest extends GraphQlAbstract
             }
             sku
             type_id
-            updated_at
             ... on PhysicalProductInterface {
                 weight
             }
@@ -138,8 +135,6 @@ QUERY;
     products(filter: {sku: {eq: "{$productSku}"}})
     {
         items {
-            attribute_set_id
-            created_at
             id
             name
             price {
@@ -152,7 +147,6 @@ QUERY;
             }
             sku
             type_id
-            updated_at
             ... on PhysicalProductInterface {
                 weight
             }
@@ -187,8 +181,6 @@ QUERY;
     products(filter: {sku: {eq: "{$productSku}"}})
     {
         items {
-            attribute_set_id
-            created_at
             id
             name
             price {
@@ -201,7 +193,6 @@ QUERY;
             }
             sku
             type_id
-            updated_at
             ... on PhysicalProductInterface {
                 weight
             }

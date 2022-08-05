@@ -3,34 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\BundleImportExport\Test\Unit\Model\Import\Product\Type;
 
+use Magento\BundleImportExport\Model\Import\Product\Type\Bundle;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+
 /**
- * Class BundleTest
- *
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
+class BundleTest extends AbstractImportTestCase
 {
     /**
-     * @var \Magento\BundleImportExport\Model\Import\Product\Type\Bundle
+     * @var Bundle
      */
     protected $bundle;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|MockObject
      */
     protected $select;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     protected $entityModel;
 
@@ -39,43 +55,44 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     protected $params;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+    /** @var AdapterInterface|MockObject
      */
     protected $connection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $attrSetColFac;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $prodAttrColFac;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|MockObject
      */
     protected $setCollection;
 
-    /** @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ScopeResolverInterface|MockObject
+     */
     private $scopeResolver;
 
     /**
-     *
      * @return void
      */
-    protected function initFetchAllCalls()
+    protected function initFetchAllCalls(): void
     {
         $fetchAllForInitAttributes = [
             [
                 'attribute_set_name' => '1',
-                'attribute_id' => '1',
+                'attribute_id' => '1'
             ],
             [
                 'attribute_set_name' => '2',
-                'attribute_id' => '2',
-            ],
+                'attribute_id' => '2'
+            ]
         ];
 
         $fetchAllForOtherCalls = [[
@@ -108,59 +125,73 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     }
 
     /**
-     * Set up
-     *
-     * @return void
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->entityModel = $this->createPartialMock(\Magento\CatalogImportExport\Model\Import\Product::class, [
+        $this->entityModel = $this->createPartialMock(
+            Product::class,
+            [
                 'getErrorAggregator',
                 'getBehavior',
                 'getNewSku',
                 'getNextBunch',
                 'isRowAllowedToImport',
                 'getRowScope',
-                'getConnection'
-            ]);
-        $this->entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
-        $this->connection = $this->createPartialMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['select', 'fetchAll', 'fetchPairs', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc']
+                'getConnection',
+                'getMultipleValueSeparator'
+            ]
         );
-        $this->select = $this->createMock(\Magento\Framework\DB\Select::class);
-        $this->select->expects($this->any())->method('from')->will($this->returnSelf());
-        $this->select->expects($this->any())->method('where')->will($this->returnSelf());
-        $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
+        $this->entityModel->method('getMultipleValueSeparator')->willReturn(',');
+        $this->entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
+        $this->connection = $this->getMockBuilder(Mysql::class)
+            ->addMethods(['joinLeft'])
+            ->onlyMethods(
+                [
+                    'select',
+                    'fetchAll',
+                    'fetchPairs',
+                    'insertOnDuplicate',
+                    'delete',
+                    'quoteInto',
+                    'fetchAssoc'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->select = $this->createMock(Select::class);
+        $this->select->expects($this->any())->method('from')->willReturnSelf();
+        $this->select->expects($this->any())->method('where')->willReturnSelf();
+        $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
         $this->select->expects($this->any())->method('getConnection')->willReturn($this->connection);
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
+        $this->connection->expects($this->any())->method('select')->willReturn($this->select);
         $this->initFetchAllCalls();
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
         $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
         $this->resource = $this->createPartialMock(
-            \Magento\Framework\App\ResourceConnection::class,
+            ResourceConnection::class,
             ['getConnection', 'getTableName']
         );
-        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
-        $this->resource->expects($this->any())->method('getTableName')->will($this->returnValue('tableName'));
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
+        $this->resource->expects($this->any())->method('getTableName')->willReturn('tableName');
         $this->attrSetColFac = $this->createPartialMock(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
         $this->setCollection = $this->createPartialMock(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::class,
+            Collection::class,
             ['setEntityTypeFilter']
         );
-        $this->attrSetColFac->expects($this->any())->method('create')->will(
-            $this->returnValue($this->setCollection)
+        $this->attrSetColFac->expects($this->any())->method('create')->willReturn(
+            $this->setCollection
         );
         $this->setCollection->expects($this->any())
             ->method('setEntityTypeFilter')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->prodAttrColFac = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
             ['create']
@@ -168,36 +199,36 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $attrCollection =
             $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class);
         $attrCollection->expects($this->any())->method('addFieldToFilter')->willReturn([]);
-        $this->prodAttrColFac->expects($this->any())->method('create')->will($this->returnValue($attrCollection));
+        $this->prodAttrColFac->expects($this->any())->method('create')->willReturn($attrCollection);
         $this->params = [
             0 => $this->entityModel,
             1 => 'bundle'
         ];
-        $this->scopeResolver = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverInterface::class)
+        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getScope'])
+            ->onlyMethods(['getScope'])
             ->getMockForAbstractClass();
         $this->bundle = $this->objectManagerHelper->getObject(
-            \Magento\BundleImportExport\Model\Import\Product\Type\Bundle::class,
+            Bundle::class,
             [
                 'attrSetColFac' => $this->attrSetColFac,
                 'prodAttrColFac' => $this->prodAttrColFac,
                 'resource' => $this->resource,
                 'params' => $this->params,
-                'scopeResolver' => $this->scopeResolver,
+                'scopeResolver' => $this->scopeResolver
             ]
         );
 
-        $metadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
+        $metadataMock = $this->createMock(EntityMetadata::class);
         $metadataMock->expects($this->any())
             ->method('getLinkField')
             ->willReturn('entity_id');
-        $metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $metadataPoolMock = $this->createMock(MetadataPool::class);
         $metadataPoolMock->expects($this->any())
             ->method('getMetadata')
-            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->with(ProductInterface::class)
             ->willReturn($metadataMock);
-        $reflection = new \ReflectionClass(\Magento\BundleImportExport\Model\Import\Product\Type\Bundle::class);
+        $reflection = new \ReflectionClass(Bundle::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->bundle, $metadataPoolMock);
@@ -208,68 +239,79 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      *
      * @param array $skus
      * @param array $bunch
-     * @param $allowImport
+     * @param bool $allowImport
+     *
+     * @return void
      * @dataProvider saveDataProvider
      */
-    public function testSaveData($skus, $bunch, $allowImport)
+    public function testSaveData(array $skus, array $bunch, bool $allowImport): void
     {
-        $this->entityModel->expects($this->any())->method('getBehavior')->will($this->returnValue(
-            \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND
-        ));
-        $this->entityModel->expects($this->once())->method('getNewSku')->will($this->returnValue($skus['newSku']));
-        $this->entityModel->expects($this->at(2))->method('getNextBunch')->will($this->returnValue([$bunch]));
-        $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->will($this->returnValue(
-            $allowImport
-        ));
-        $scope = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)->getMockForAbstractClass();
+        $this->entityModel->expects($this->any())->method('getBehavior')->willReturn(Import::BEHAVIOR_APPEND);
+        $this->entityModel->expects($this->once())->method('getNewSku')->willReturn($skus['newSku']);
+        $this->entityModel
+            ->method('getNextBunch')
+            ->willReturnOnConsecutiveCalls([$bunch]);
+        $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn($allowImport);
+        $scope = $this->getMockBuilder(ScopeInterface::class)->getMockForAbstractClass();
         $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($scope);
-        $this->connection->expects($this->any())->method('fetchAssoc')->with($this->select)->will($this->returnValue([
-            '1' => [
-                'option_id' => '1',
-                'parent_id' => '1',
-                'required' => '1',
-                'position' => '1',
-                'type' => 'bundle',
-                'value_id' => '1',
-                'title' => 'Bundle1',
-                'name' => 'bundle1',
-                'selections' => [
-                    ['name' => 'Bundlen1',
-                        'type' => 'dropdown',
+        $this->connection->method('fetchPairs')->willReturn([1 => 'sku']);
+        $this->connection->expects($this->any())
+            ->method('fetchAssoc')
+            ->with($this->select)
+            ->willReturn(
+                [
+                    '1' => [
+                        'option_id' => '1',
+                        'parent_id' => '1',
                         'required' => '1',
-                        'sku' => '1',
-                        'price' => '10',
-                        'price_type' => 'fixed',
-                        'shipment_type' => '1',
-                        'default_qty' => '1',
-                        'is_default' => '1',
                         'position' => '1',
-                        'option_id' => '1']
-                ]
-            ],
-            '2' => [
-                'option_id' => '6',
-                'parent_id' => '6',
-                'required' => '6',
-                'position' => '6',
-                'type' => 'bundle',
-                'value_id' => '6',
-                'title' => 'Bundle6',
-                'selections' => [
-                    ['name' => 'Bundlen6',
-                        'type' => 'dropdown',
-                        'required' => '1',
-                        'sku' => '222',
-                        'price' => '10',
-                        'price_type' => 'percent',
-                        'shipment_type' => 0,
-                        'default_qty' => '2',
-                        'is_default' => '1',
+                        'type' => 'bundle',
+                        'value_id' => '1',
+                        'title' => 'Bundle1',
+                        'name' => 'bundle1',
+                        'selections' => [
+                            [
+                                'name' => 'Bundlen1',
+                                'type' => 'dropdown',
+                                'required' => '1',
+                                'sku' => '1',
+                                'price' => '10',
+                                'price_type' => 'fixed',
+                                'shipment_type' => '1',
+                                'default_qty' => '1',
+                                'is_default' => '1',
+                                'position' => '1',
+                                'option_id' => '1'
+                            ]
+                        ]
+                    ],
+                    '2' => [
+                        'option_id' => '6',
+                        'parent_id' => '6',
+                        'required' => '6',
                         'position' => '6',
-                        'option_id' => '6']
+                        'type' => 'bundle',
+                        'value_id' => '6',
+                        'title' => 'Bundle6',
+                        'name' => 'Bundle6',
+                        'selections' => [
+                            [
+                                'name' => 'Bundlen6',
+                                'type' => 'dropdown',
+                                'required' => '1',
+                                'sku' => '222',
+                                'price' => '10',
+                                'price_type' => 'percent',
+                                'shipment_type' => 0,
+                                'default_qty' => '2',
+                                'is_default' => '1',
+                                'position' => '6',
+                                'option_id' => '6'
+                            ]
+                        ]
+                    ]
                 ]
-            ]
-        ]));
+            );
         $bundle = $this->bundle->saveData();
         $this->assertNotNull($bundle);
     }
@@ -279,7 +321,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      *
      * @return array
      */
-    public function saveDataProvider()
+    public function saveDataProvider(): array
     {
         return [
             [
@@ -305,7 +347,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             'Import without bundle values' => [
                 'skus' => ['newSku' => ['sku' => ['sku' => 'sku', 'entity_id' => 3, 'type_id' => 'bundle']]],
                 'bunch' => ['sku' => 'sku', 'name' => 'name'],
-                'allowImport' => true,
+                'allowImport' => true
             ],
             [
                 'skus' => ['newSku' => [
@@ -344,41 +386,48 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
 
     /**
      * Test for method saveData()
+     *
+     * @return void
      */
-    public function testSaveDataDelete()
+    public function testSaveDataDelete(): void
     {
-        $this->entityModel->expects($this->any())->method('getBehavior')->will($this->returnValue(
-            \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE
-        ));
-        $this->entityModel->expects($this->once())->method('getNewSku')->will($this->returnValue([
+        $this->entityModel->expects($this->any())->method('getBehavior')->willReturn(Import::BEHAVIOR_DELETE);
+        $this->entityModel->expects($this->once())->method('getNewSku')->willReturn([
             'sku' => ['sku' => 'sku', 'entity_id' => 3, 'attr_set_code' => 'Default', 'type_id' => 'bundle']
-        ]));
-        $this->entityModel->expects($this->at(2))->method('getNextBunch')->will($this->returnValue([
-            ['bundle_values' => 'value1', 'sku' => 'sku', 'name' => 'name']
-        ]));
-        $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->will($this->returnValue(true));
-        $select = $this->createMock(\Magento\Framework\DB\Select::class);
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
-        $select->expects($this->any())->method('from')->will($this->returnSelf());
-        $select->expects($this->any())->method('where')->will($this->returnSelf());
-        $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
-        $this->connection->expects($this->any())->method('fetchAssoc')->with($select)->will($this->returnValue([
+        ]);
+        $this->entityModel
+            ->method('getNextBunch')
+            ->willReturnOnConsecutiveCalls(
+                [
+                    ['bundle_values' => 'value1', 'sku' => 'sku', 'name' => 'name']
+                ]
+            );
+        $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn(true);
+        $select = $this->createMock(Select::class);
+        $this->connection->expects($this->any())->method('select')->willReturn($select);
+        $select->expects($this->any())->method('from')->willReturnSelf();
+        $select->expects($this->any())->method('where')->willReturnSelf();
+        $select->expects($this->any())->method('joinLeft')->willReturnSelf();
+        $this->connection->expects($this->any())->method('fetchAssoc')->with($select)->willReturn([
             ['id1', 'id2', 'id_3']
-        ]));
+        ]);
         $bundle = $this->bundle->saveData();
         $this->assertNotNull($bundle);
     }
 
-    public function testPrepareAttributesWithDefaultValueForSaveInsideCall()
+    /**
+     * @return void
+     */
+    public function testPrepareAttributesWithDefaultValueForSaveInsideCall(): void
     {
         $bundleMock = $this->createPartialMock(
-            \Magento\BundleImportExport\Model\Import\Product\Type\Bundle::class,
+            Bundle::class,
             ['transformBundleCustomAttributes']
         );
         // Set some attributes to bypass errors due to static call inside method.
         $attrVal = 'value';
         $rowData = [
-            \Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET => $attrVal,
+            Product::COL_ATTR_SET => $attrVal,
         ];
         $this->setPropertyValue($bundleMock, '_attributes', [
             $attrVal => [],
@@ -395,10 +444,12 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
 
     /**
      * Test for isRowValid()
+     *
+     * @return void
      */
-    public function testIsRowValid()
+    public function testIsRowValid(): void
     {
-        $this->entityModel->expects($this->any())->method('getRowScope')->will($this->returnValue(-1));
+        $this->entityModel->expects($this->any())->method('getRowScope')->willReturn(-1);
         $rowData = [
             'bundle_price_type' => 'dynamic',
             'bundle_shipment_type' => 'separately',

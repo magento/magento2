@@ -9,7 +9,7 @@ define([
 ], function ($, SwatchRenderer) {
     'use strict';
 
-    describe('Testing "_RenderSwatchOptions" method of SwatchRenderer Widget', function () {
+    describe('Magento_Swatches/js/swatch-renderer.js', function () {
         var widget,
             html,
             optionConfig,
@@ -18,17 +18,26 @@ define([
             swathImageHeight = '60',
             swathImageWidth = '70',
             swathThumbImageHeight = '40',
-            swathThumbImageWidth = '50';
+            swathThumbImageWidth = '50',
+            options,
+            blockHtml = '<form id="cart"/>' +
+                '<input id="qty"/>' +
+                '</form>',
+            qtyElement,
+            formElement;
 
         beforeEach(function () {
-            widget = new SwatchRenderer();
+            $(blockHtml).appendTo('body');
+            qtyElement = $('#qty');
+            formElement = $('#cart');
             attribute = {
                 id: 1,
                 options: [{
                     id: optionId
                 }]
             };
-            widget.options = {
+
+            options = {
                 classes: {
                     optionClass: 'swatch-option'
                 },
@@ -50,8 +59,15 @@ define([
                     }
                 }
             };
+
+            widget = new SwatchRenderer(options);
+
             optionConfig = widget.options.jsonSwatchConfig[attribute.id];
             html = $(widget._RenderSwatchOptions(attribute, 'option-label-control-id-1'))[0];
+        });
+
+        afterEach(function () {
+            formElement.remove();
         });
 
         it('check if swatch config has attribute id', function () {
@@ -63,18 +79,92 @@ define([
         });
 
         it('check swatch thumbnail image height attribute', function () {
-            expect(html.hasAttribute('thumb-height')).toBe(true);
-            expect(html.getAttribute('thumb-height')).toEqual(swathThumbImageHeight);
+            expect(html.hasAttribute('data-thumb-height')).toBe(true);
+            expect(html.getAttribute('data-thumb-height')).toEqual(swathThumbImageHeight);
         });
 
         it('check swatch thumbnail image width attribute', function () {
-            expect(html.hasAttribute('thumb-width')).toBe(true);
-            expect(html.getAttribute('thumb-width')).toEqual(swathThumbImageWidth);
+            expect(html.hasAttribute('data-thumb-width')).toBe(true);
+            expect(html.getAttribute('data-thumb-width')).toEqual(swathThumbImageWidth);
         });
 
         it('check swatch image styles', function () {
             expect(html.style.height).toEqual(swathImageHeight + 'px');
             expect(html.style.width).toEqual(swathImageWidth + 'px');
+        });
+
+        it('check udate price method', function () {
+            var productPriceMock = {
+                find: jasmine.createSpy().and.returnValue({
+                    hide: jasmine.createSpy(),
+                    priceBox: jasmine.createSpy().and.returnValue(''),
+                    trigger: jasmine.createSpy(),
+                    find: jasmine.createSpy().and.returnValue({
+                        toggleClass: jasmine.createSpy()
+                    })
+                })
+            };
+
+            widget.element =  {
+                parents: jasmine.createSpy().and.returnValue(productPriceMock)
+            };
+            widget._getNewPrices  = jasmine.createSpy().and.returnValue(undefined);
+            widget._UpdatePrice();
+            expect(productPriceMock.find().find.calls.count()).toBe(1);
+        });
+
+        it('check getSelectedOptionPriceIndex', function () {
+            var optionMock = '<div class="swatch-attribute" data-attribute-id="2" data-option-selected="4"></div>',
+                element = $('<div class="' + widget.options.tooltipClass +
+                    '"><div class="image"></div><div class="title"></div><div class="corner"></div>' +
+                    optionMock + '</div>'
+                ),
+                optionPricesMock = {
+                    optionPrices: {
+                        p: {
+                            finalPrice: {
+                                amount: 12
+                            }
+                        }
+                    }
+                };
+
+            widget.element = element;
+            widget.options.classes.attributeClass = 'swatch-attribute';
+            widget.options.jsonConfig = optionPricesMock;
+            widget.optionsMap = {
+                2: {
+                    4: {
+                        products: 'p'
+                    },
+                    hasOwnProperty: jasmine.createSpy().and.returnValue(true)
+                },
+                hasOwnProperty: jasmine.createSpy().and.returnValue(true)
+            };
+
+            expect(widget._getSelectedOptionPriceIndex()).toBe('p');
+        });
+
+        it('check that price is reloaded on qty change', function () {
+            var priceBox = {
+                    hide: jasmine.createSpy(),
+                    priceBox: jasmine.createSpy().and.returnValue({ prices: {}}),
+                    trigger: jasmine.createSpy(),
+                    find: jasmine.createSpy().and.returnValue({
+                        toggleClass: jasmine.createSpy()
+                    })
+                },
+                productPriceMock = {
+                    find: jasmine.createSpy().and.returnValue(priceBox)
+                };
+
+            widget.element =  {
+                parents: jasmine.createSpy().and.returnValue(productPriceMock)
+            };
+            widget._getNewPrices  = jasmine.createSpy().and.returnValue({});
+            widget._getPrices  = jasmine.createSpy().and.returnValue({});
+            qtyElement.trigger('input');
+            expect(priceBox.trigger).toHaveBeenCalledWith('updatePrice', { prices: {}});
         });
     });
 });

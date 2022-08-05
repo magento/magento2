@@ -1,57 +1,68 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Version\Controller\Index;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Controller\Result\RawFactory as RawResponseFactory;
 
 /**
- * Magento Version controller
+ * Magento Version controller: Sets the response body to ProductName/Major.MinorVersion (Edition).
  */
 class Index extends Action implements HttpGetActionInterface
 {
+    public const DEV_PREFIX = 'dev-';
+
     /**
      * @var ProductMetadataInterface
      */
-    protected $productMetadata;
+    private $productMetadata;
+
+    /**
+     * @var RawResponseFactory
+     */
+    private $rawFactory;
 
     /**
      * @param Context $context
+     * @param RawResponseFactory $rawFactory
      * @param ProductMetadataInterface $productMetadata
      */
-    public function __construct(Context $context, ProductMetadataInterface $productMetadata)
-    {
-        $this->productMetadata = $productMetadata;
+    public function __construct(
+        Context $context,
+        RawResponseFactory $rawFactory,
+        ProductMetadataInterface $productMetadata
+    ) {
         parent::__construct($context);
+        $this->rawFactory = $rawFactory;
+        $this->productMetadata = $productMetadata;
     }
 
     /**
-     * Sets the response body to ProductName/Major.MinorVersion (Edition). E.g.: Magento/0.42 (Community). Omits patch
-     * version from response
-     *
-     * @return void
+     * @inheritDoc
      */
     public function execute()
     {
-        $version = $this->productMetadata->getVersion();
+        $rawResponse = $this->rawFactory->create();
+
+        $version = $this->productMetadata->getVersion() ?? '';
         $versionParts = explode('.', $version);
-        if ((!isset($versionParts[0]) || !isset($versionParts[1]))
-            || $this->isGitBasedInstallation($version)
-        ) {
-            return;
+        if (!$this->isGitBasedInstallation($version) && $this->isCorrectVersion($versionParts)) {
+            $rawResponse->setContents(
+                $this->productMetadata->getName() . '/' .
+                $this->getMajorMinorVersion($versionParts) .
+                ' (' . $this->productMetadata->getEdition() . ')'
+            );
         }
-        $majorMinorVersion = $versionParts[0] . '.' . $versionParts[1];
-        $this->getResponse()->setBody(
-            $this->productMetadata->getName() . '/' .
-            $majorMinorVersion . ' (' .
-            $this->productMetadata->getEdition() . ')'
-        );
+
+        return $rawResponse;
     }
 
     /**
@@ -60,9 +71,30 @@ class Index extends Action implements HttpGetActionInterface
      * @param string $fullVersion
      * @return bool
      */
-    private function isGitBasedInstallation($fullVersion)
+    private function isGitBasedInstallation($fullVersion): bool
     {
-        $versionParts = explode('-', $fullVersion);
-        return (isset($versionParts[0]) && $versionParts[0] == 'dev');
+        return 0 === strpos($fullVersion, self::DEV_PREFIX);
+    }
+
+    /**
+     * Verifies if the Magento version is correct
+     *
+     * @param array $versionParts
+     * @return bool
+     */
+    private function isCorrectVersion(array $versionParts): bool
+    {
+        return isset($versionParts[0]) && isset($versionParts[1]);
+    }
+
+    /**
+     * Returns string only with Major and Minor version number
+     *
+     * @param array $versionParts
+     * @return string
+     */
+    private function getMajorMinorVersion(array $versionParts): string
+    {
+        return $versionParts[0] . '.' . $versionParts[1];
     }
 }

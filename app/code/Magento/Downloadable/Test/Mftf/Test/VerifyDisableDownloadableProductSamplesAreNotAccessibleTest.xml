@@ -53,7 +53,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Open Downloadable product from precondition on Storefront -->
@@ -84,16 +84,16 @@
         <closeTab stepKey="closeLinkSampleTab"/>
 
         <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open Downloadable product from precondition -->
-        <actionGroup ref="goToProductPageViaID" stepKey="openProductEditPage">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
             <argument name="productId" value="$createProduct.id$"/>
         </actionGroup>
 
         <!-- Change status of product to "Disable" and save it -->
-        <actionGroup ref="AdminSetProductDisabled" stepKey="disableProduct"/>
-        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+        <actionGroup ref="AdminSetProductDisabledActionGroup" stepKey="disableProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- Assert product is disable on Storefront -->
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryPage">

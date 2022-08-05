@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertWebsiteInGridActionGroup">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Searches the grid for the provided Website Name. Validates that the Website appears in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="websiteName" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="fillWebsiteField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <seeElement selector="{{AdminStoresGridSection.websiteName(websiteName)}}" stepKey="seeAssertWebsiteInGrid"/>
+    </actionGroup>
+</actionGroups>

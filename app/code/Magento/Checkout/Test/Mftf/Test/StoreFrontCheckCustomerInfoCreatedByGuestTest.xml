@@ -12,12 +12,16 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Check customer information created by guest"/>
-            <title value="Check Customer Information Created By Guest"/>
+            <title value="Deprecated. Check Customer Information Created By Guest"/>
             <description value="Check customer information after placing the order as the guest who created an account"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95932"/>
             <useCaseId value="MAGETWO-95820"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontCheckCustomerInfoOnOrderPageCreatedByGuestTest instead.</issueId>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -25,18 +29,18 @@
             <createData entity="_defaultProduct" stepKey="product">
                 <requiredEntity createDataKey="category"/>
             </createData>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
 
         <after>
             <deleteData createDataKey="product" stepKey="deleteProduct" />
             <deleteData createDataKey="category" stepKey="deleteCategory" />
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
-        <amOnPage url="$$product.name$$.html" stepKey="navigateToProductPage"/>
+        <amOnPage url="$$product.custom_attributes[url_key]$$.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$product.name$$"/>
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
@@ -54,9 +58,12 @@
         <fillField selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" userInput="{{CustomerEntityOne.password}}" stepKey="TypeConfirmationPassword"/>
         <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickOnCreateAccount"/>
         <see userInput="Thank you for registering" stepKey="verifyAccountCreated"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdmin"/>
-        <amOnPage url="{{AdminOrderPage.url({$grabOrderNumber})}}" stepKey="navigateToOrderPage"/>
-        <waitForPageLoad stepKey="waitForCreatedOrderPage"/>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdmin"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="navigateToOrderPage">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForCreatedOrderPage"/>
         <see stepKey="seeCustomerName" userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminShipmentOrderInformationSection.customerName}}"/>
     </test>
 </tests>

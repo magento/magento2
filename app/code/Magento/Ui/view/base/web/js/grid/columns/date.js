@@ -9,8 +9,10 @@
 define([
     'mageUtils',
     'moment',
-    './column'
-], function (utils, moment, Column) {
+    './column',
+    'underscore',
+    'moment-timezone-with-data'
+], function (utils, moment, Column, _) {
     'use strict';
 
     return Column.extend({
@@ -20,9 +22,9 @@ define([
         },
 
         /**
-         * Overrides base method to normalize date format.
+         * Overrides base method to normalize date format
          *
-         * @returns {DateColumn} Chainable.
+         * @returns {DateColumn} Chainable
          */
         initConfig: function () {
             this._super();
@@ -43,7 +45,12 @@ define([
             if (this.storeLocale !== undefined) {
                 moment.locale(this.storeLocale, utils.extend({}, this.calendarConfig));
             }
-            date = moment(this._super());
+
+            date = moment.utc(this._super());
+
+            if (!_.isUndefined(this.timezone) && moment.tz.zone(this.timezone) !== null) {
+                date = date.tz(this.timezone);
+            }
 
             date = date.isValid() && value[this.index] ?
                 date.format(format || this.dateFormat) :

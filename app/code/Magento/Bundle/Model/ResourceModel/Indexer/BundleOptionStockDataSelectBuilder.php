@@ -18,6 +18,16 @@ use Magento\Framework\DB\Select;
 class BundleOptionStockDataSelectBuilder
 {
     /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      */

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FillDefaultQuantityForLinkedToGroupProductInGridActionGroup">
+        <annotations>
+            <description>Fills the provided Qty for a Product linked to a Grouped Product.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="qty" type="string"/>
+        </arguments>
+
+        <fillField selector="{{AdminAddedProductsToGroupGrid.inputByProductName(productName)}}" userInput="{{qty}}" stepKey="fillDefaultQtyForLinkedProduct"/>
+    </actionGroup>
+</actionGroups>

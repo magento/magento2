@@ -10,17 +10,19 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/product_configurable.php';
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/product_configurable.php');
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = Bootstrap::getObjectManager();
 
 /** @var $product \Magento\Catalog\Model\Product */
-/** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $product = $productRepository->get('configurable');
-
+/** @var \Magento\Eav\Model\Config $eavConfig */
+$eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
+$attribute = $eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'test_configurable');
 /** @var $options Collection */
 $options = $objectManager->create(Collection::class);
 $option = $options->setAttributeFilter($attribute->getId())->getFirstItem();

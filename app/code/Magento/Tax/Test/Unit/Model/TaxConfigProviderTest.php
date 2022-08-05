@@ -3,51 +3,61 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Model;
 
-use \Magento\Tax\Model\Config;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Tax\Helper\Data;
+use Magento\Tax\Model\Config;
+use Magento\Tax\Model\TaxConfigProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TaxConfigProviderTest extends \PHPUnit\Framework\TestCase
+class TaxConfigProviderTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $taxHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $taxConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $checkoutSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \Magento\Tax\Model\TaxConfigProvider
+     * @var TaxConfigProvider
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->taxHelperMock = $this->createMock(\Magento\Tax\Helper\Data::class);
-        $this->taxConfigMock = $this->createMock(\Magento\Tax\Model\Config::class);
-        $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $this->taxHelperMock = $this->createMock(Data::class);
+        $this->taxConfigMock = $this->createMock(Config::class);
+        $this->checkoutSessionMock = $this->createMock(Session::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->quoteMock = $this->createMock(Quote::class);
         $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
-        $this->model = new \Magento\Tax\Model\TaxConfigProvider(
+        $this->model = new TaxConfigProvider(
             $this->taxHelperMock,
             $this->taxConfigMock,
             $this->checkoutSessionMock,
@@ -79,34 +89,34 @@ class TaxConfigProviderTest extends \PHPUnit\Framework\TestCase
         $config
     ) {
         $this->taxConfigMock->expects($this->any())->method('displayCartShippingBoth')
-            ->will($this->returnValue($cartShippingBoth));
+            ->willReturn($cartShippingBoth);
         $this->taxConfigMock->expects($this->any())->method('displayCartShippingExclTax')
-            ->will($this->returnValue($cartShippingExclTax));
+            ->willReturn($cartShippingExclTax);
 
         $this->taxHelperMock->expects($this->any())->method('displayCartBothPrices')
-            ->will($this->returnValue($cartBothPrices));
+            ->willReturn($cartBothPrices);
         $this->taxHelperMock->expects($this->any())->method('displayCartPriceExclTax')
-            ->will($this->returnValue($cartPriceExclTax));
+            ->willReturn($cartPriceExclTax);
 
         $this->taxConfigMock->expects($this->any())->method('displayCartSubtotalBoth')
-            ->will($this->returnValue($cartSubTotalBoth));
+            ->willReturn($cartSubTotalBoth);
         $this->taxConfigMock->expects($this->any())->method('displayCartSubtotalExclTax')
-            ->will($this->returnValue($cartSubTotalExclTax));
+            ->willReturn($cartSubTotalExclTax);
 
         $this->taxHelperMock->expects(($this->any()))->method('displayShippingPriceExcludingTax')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->taxHelperMock->expects(($this->any()))->method('displayShippingBothPrices')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->taxHelperMock->expects(($this->any()))->method('displayFullSummary')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->taxConfigMock->expects(($this->any()))->method('displayCartTaxWithGrandTotal')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->taxConfigMock->expects(($this->any()))->method('displayCartZeroTax')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $valueMap = [];
         foreach ($config as $key => $value) {
-            $valueMap[] = [$key, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null, $value];
+            $valueMap[] = [$key, ScopeInterface::SCOPE_STORE, null, $value];
         }
         $this->scopeConfigMock->expects($this->atLeastOnce())
             ->method('getValue')

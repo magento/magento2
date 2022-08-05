@@ -4,134 +4,160 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\PageCache\Test\Unit\Controller\Block;
+
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\View;
+use Magento\Framework\Serialize\Serializer\Base64Json;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
+use Magento\Framework\View\Layout\ProcessorInterface;
+use Magento\PageCache\Controller\Block;
+use Magento\PageCache\Controller\Block\Render;
+use Magento\PageCache\Test\Unit\Block\Controller\StubBlock;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RenderTest extends \PHPUnit\Framework\TestCase
+class RenderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var View|MockObject
      */
     protected $viewMock;
 
     /**
-     * @var \Magento\PageCache\Controller\Block
+     * @var Block
      */
     protected $action;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Translate\InlineInterface
+     * @var MockObject|InlineInterface
      */
     protected $translateInline;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var Layout|MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\ProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessorInterface|MockObject
      */
     protected $layoutProcessorMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\LayoutCacheKeyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutCacheKeyInterface|MockObject
      */
     protected $layoutCacheKeyMock;
 
     /**
-     * Set up before test
+     * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->layoutMock = $this->getMockBuilder(Layout::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->layoutProcessorMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Layout\ProcessorInterface::class
+            ProcessorInterface::class
         );
         $this->layoutCacheKeyMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Layout\LayoutCacheKeyInterface::class
+            LayoutCacheKeyInterface::class
         );
 
-        $contextMock = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
-            ->disableOriginalConstructor()->getMock();
+        $contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->requestMock = $this->getMockBuilder(
-            \Magento\Framework\App\Request\Http::class
-        )->disableOriginalConstructor()->getMock();
+            Http::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->responseMock = $this->getMockBuilder(
             \Magento\Framework\App\Response\Http::class
-        )->disableOriginalConstructor()->getMock();
-        $this->viewMock = $this->getMockBuilder(\Magento\Framework\App\View::class)
-            ->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->viewMock = $this->getMockBuilder(View::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->layoutMock->expects($this->any())
             ->method('getUpdate')
-            ->will($this->returnValue($this->layoutProcessorMock));
+            ->willReturn($this->layoutProcessorMock);
 
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
+        $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
 
-        $this->translateInline = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
+        $this->translateInline = $this->getMockForAbstractClass(InlineInterface::class);
 
-        $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helperObjectManager = new ObjectManager($this);
         $this->action = $helperObjectManager->getObject(
-            \Magento\PageCache\Controller\Block\Render::class,
+            Render::class,
             [
                 'context' => $contextMock,
                 'translateInline' => $this->translateInline,
-                'jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Json(),
-                'base64jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Base64Json(),
+                'jsonSerializer' => new Json(),
+                'base64jsonSerializer' => new Base64Json(),
                 'layoutCacheKey' => $this->layoutCacheKeyMock
             ]
         );
     }
 
-    public function testExecuteNotAjax()
+    /**
+     * @return void
+     */
+    public function testExecuteNotAjax(): void
     {
-        $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(false));
-        $this->requestMock->expects($this->once())->method('setActionName')->will($this->returnValue('noroute'));
-        $this->requestMock->expects($this->once())->method('setDispatched')->will($this->returnValue(false));
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(false);
+        $this->requestMock->expects($this->once())->method('setActionName')->willReturn('noroute');
+        $this->requestMock->expects($this->once())->method('setDispatched')->willReturn(false);
         $this->layoutCacheKeyMock->expects($this->never())
             ->method('addCacheKeys');
         $this->action->execute();
     }
 
     /**
-     * Test no params: blocks, handles
+     * Test no params: blocks, handles.
+     *
+     * @return void
      */
-    public function testExecuteNoParams()
+    public function testExecuteNoParams(): void
     {
-        $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(true));
-        $this->requestMock->expects($this->at(10))
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
+        $this->requestMock
             ->method('getParam')
-            ->with($this->equalTo('blocks'), $this->equalTo(''))
-            ->will($this->returnValue(''));
-        $this->requestMock->expects($this->at(11))
-            ->method('getParam')
-            ->with($this->equalTo('handles'), $this->equalTo(''))
-            ->will($this->returnValue(''));
+            ->withConsecutive([], [], [], [], [], [], ['blocks', ''], ['handles', ''])
+            ->willReturnOnConsecutiveCalls(null, null, null, null, null, null, '', '');
         $this->layoutCacheKeyMock->expects($this->never())
             ->method('addCacheKeys');
         $this->action->execute();
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $blocks = ['block1', 'block2'];
         $handles = ['handle1', 'handle2'];
@@ -139,58 +165,53 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $expectedData = ['block1' => 'data1', 'block2' => 'data2'];
 
         $blockInstance1 = $this->createPartialMock(
-            \Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class,
+            StubBlock::class,
             ['toHtml']
         );
-        $blockInstance1->expects($this->once())->method('toHtml')->will($this->returnValue($expectedData['block1']));
+        $blockInstance1->expects($this->once())->method('toHtml')->willReturn($expectedData['block1']);
 
         $blockInstance2 = $this->createPartialMock(
-            \Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class,
+            StubBlock::class,
             ['toHtml']
         );
-        $blockInstance2->expects($this->once())->method('toHtml')->will($this->returnValue($expectedData['block2']));
+        $blockInstance2->expects($this->once())->method('toHtml')->willReturn($expectedData['block2']);
 
-        $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(true));
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
 
-        $this->requestMock->expects($this->at(1))
+        $this->requestMock
             ->method('getRouteName')
-            ->will($this->returnValue('magento_pagecache'));
-        $this->requestMock->expects($this->at(2))
-            ->method('getControllerName')
-            ->will($this->returnValue('block'));
-        $this->requestMock->expects($this->at(3))
-            ->method('getActionName')
-            ->will($this->returnValue('render'));
-        $this->requestMock->expects($this->at(4))
+            ->willReturn('magento_pagecache');
+        $this->requestMock
+            ->method('getParam')
+            ->withConsecutive(
+                ['originalRequest'],
+                ['blocks', ''],
+                ['handles', '']
+            )
+            ->willReturnOnConsecutiveCalls(
+                $originalRequest,
+                json_encode($blocks),
+                base64_encode(json_encode($handles))
+            );
+        $this->requestMock
             ->method('getRequestUri')
-            ->will($this->returnValue('uri'));
-        $this->requestMock->expects($this->at(5))
-            ->method('getParam')
-            ->with($this->equalTo('originalRequest'))
-            ->will($this->returnValue($originalRequest));
-
-        $this->requestMock->expects($this->at(10))
-            ->method('getParam')
-            ->with($this->equalTo('blocks'), $this->equalTo(''))
-            ->will($this->returnValue(json_encode($blocks)));
-        $this->requestMock->expects($this->at(11))
-            ->method('getParam')
-            ->with($this->equalTo('handles'), $this->equalTo(''))
-            ->will($this->returnValue(base64_encode(json_encode($handles))));
-        $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($handles));
-        $this->viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->layoutMock));
+            ->willReturn('uri');
+        $this->requestMock
+            ->method('getActionName')
+            ->willReturn('render');
+        $this->requestMock
+            ->method('getControllerName')
+            ->willReturn('block');
+        $this->viewMock->expects($this->once())->method('loadLayout')->with($handles);
+        $this->viewMock->expects($this->any())->method('getLayout')->willReturn($this->layoutMock);
         $this->layoutMock->expects($this->never())
             ->method('getUpdate');
         $this->layoutCacheKeyMock->expects($this->atLeastOnce())
             ->method('addCacheKeys');
-        $this->layoutMock->expects($this->at(0))
+        $this->layoutMock
             ->method('getBlock')
-            ->with($this->equalTo($blocks[0]))
-            ->will($this->returnValue($blockInstance1));
-        $this->layoutMock->expects($this->at(1))
-            ->method('getBlock')
-            ->with($this->equalTo($blocks[1]))
-            ->will($this->returnValue($blockInstance2));
+            ->withConsecutive([$blocks[0]], [$blocks[1]])
+            ->willReturnOnConsecutiveCalls($blockInstance1, $blockInstance2);
 
         $this->translateInline->expects($this->once())
             ->method('processResponseBody')
@@ -199,7 +220,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
 
         $this->responseMock->expects($this->once())
             ->method('appendBody')
-            ->with($this->equalTo(json_encode($expectedData)));
+            ->with(json_encode($expectedData));
 
         $this->action->execute();
     }

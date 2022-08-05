@@ -12,8 +12,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         $this->dispatch('backend/cms/wysiwyg_images/index/target_element_id/page_content/store/undefined/type/image/');
         $content = $this->getResponse()->getBody();
-        $this->assertNotContains('<html', $content);
-        $this->assertNotContains('<head', $content);
-        $this->assertNotContains('<body', $content);
+        $this->assertStringNotContainsString('<html', $content);
+        $this->assertStringNotContainsString('<head', $content);
+        $this->assertStringNotContainsString('<body', $content);
     }
 }

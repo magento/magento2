@@ -3,25 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Model;
 
-/**
- * Class StockTest
- */
-class StockTest extends \PHPUnit\Framework\TestCase
+use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class StockTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Model\Context
+     * @var Context
      */
     private $context;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     private $registry;
 
     /**
-     * @var Magento\Framework\Api\ExtensionAttributesFactory
+     * @var ExtensionAttributesFactory
      */
     private $extensionFactory;
 
@@ -31,61 +41,61 @@ class StockTest extends \PHPUnit\Framework\TestCase
     private $customAttributeFactory;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\AbstractResource
+     * @var AbstractResource
      */
     private $resource;
 
     /**
-     * @var \Magento\Framework\Data\Collection\AbstractDb
+     * @var AbstractDb
      */
     private $resourceCollection;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $eventDispatcher;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Stock
+     * @var Stock
      */
     private $stockModel;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        /** @var  PHPUnit_Framework_MockObject_MockObject */
-        $this->eventDispatcher = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+        /** @var  MockObject */
+        $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
-            ->getMock();
-        
-        $this->context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
+            ->getMockForAbstractClass();
+
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEventDispatcher'])
             ->getMock();
         $this->context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventDispatcher);
-        
-        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
+
+        $this->registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
-        $this->extensionFactory = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesFactory::class)
+
+        $this->extensionFactory = $this->getMockBuilder(ExtensionAttributesFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
-        $this->customAttributeFactory = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
+
+        $this->customAttributeFactory = $this->getMockBuilder(AttributeValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
-        $this->resource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
+
+        $this->resource = $this->getMockBuilder(AbstractResource::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIdFieldName'])
             ->getMockForAbstractClass();
-        
-        $this->resourceCollection = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
+
+        $this->resourceCollection = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->stockModel = new \Magento\CatalogInventory\Model\Stock(
+        $this->stockModel = new Stock(
             $this->context,
             $this->registry,
             $this->extensionFactory,
@@ -118,7 +128,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
                 return true;
             })
         );
-            
+
         $this->stockModel->$methodName();
         $this->assertTrue(
             ($isCalledWithRightPrefix && $isObjectNameRight),

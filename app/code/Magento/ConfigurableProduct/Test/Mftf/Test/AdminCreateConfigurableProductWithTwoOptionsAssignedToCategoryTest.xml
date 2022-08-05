@@ -22,48 +22,52 @@
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete configurable product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="ApiConfigurableProduct"/>
             </actionGroup>
 
             <!-- Delete children products -->
-            <actionGroup ref="deleteProductBySku" stepKey="deleteFirstChildProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstChildProduct">
                 <argument name="sku" value="{{colorConfigurableProductAttribute1.sku}}"/>
             </actionGroup>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteSecondChildProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondChildProduct">
                 <argument name="sku" value="{{colorConfigurableProductAttribute2.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Delete product attribute -->
-            <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteProductAttribute">
-                <argument name="ProductAttribute" value="colorProductAttribute"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>
+            <comment userInput="BIC workaround" stepKey="reindex"/>
 
-            <!-- Delete attribute set -->
-            <actionGroup ref="deleteAttributeSetByLabel" stepKey="deleteAttributeSet">
+            <!-- Delete attribute set & reindex -->
+            <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteAttributeSet">
                 <argument name="label" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex2">
+                <argument name="indices" value=""/>
             </actionGroup>
 
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create configurable product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="createConfigurableProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
         <!-- Fill configurable product values -->
-        <actionGroup ref="fillMainProductForm" stepKey="fillConfigurableProductValues">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillConfigurableProductValues">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
@@ -72,14 +76,14 @@
         <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
 
         <!--Create new attribute with two options -->
-        <actionGroup ref="addNewProductConfigurationAttribute" stepKey="createProductConfigurationAttribute">
+        <actionGroup ref="AddNewProductConfigurationAttributeActionGroup" stepKey="createProductConfigurationAttribute">
             <argument name="attribute" value="colorProductAttribute"/>
             <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
             <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
         </actionGroup>
 
         <!-- Change product configurations in grid -->
-        <actionGroup ref="changeProductConfigurationsInGrid" stepKey="changeProductConfigurationsInGrid">
+        <actionGroup ref="ChangeProductConfigurationsInGridActionGroup" stepKey="changeProductConfigurationsInGrid">
             <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
             <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
         </actionGroup>
@@ -88,30 +92,33 @@
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory" after="fillConfigurableProductValues"/>
 
         <!-- Save configurable product; add product to new attribute set -->
-        <actionGroup ref="saveConfigurableProductWithNewAttributeSet" stepKey="saveConfigurableProduct"/>
+        <actionGroup ref="SaveConfigurableProductWithNewAttributeSetActionGroup" stepKey="saveConfigurableProduct"/>
 
         <!-- Assert child products in grid -->
-        <actionGroup ref="viewProductInAdminGrid" stepKey="viewFirstChildProductInAdminGrid">
+        <actionGroup ref="ViewProductInAdminGridActionGroup" stepKey="viewFirstChildProductInAdminGrid">
             <argument name="product" value="colorConfigurableProductAttribute1"/>
         </actionGroup>
-        <actionGroup ref="viewProductInAdminGrid" stepKey="viewSecondChildProductInAdminGrid">
+        <actionGroup ref="ViewProductInAdminGridActionGroup" stepKey="viewSecondChildProductInAdminGrid">
             <argument name="product" value="colorConfigurableProductAttribute2"/>
         </actionGroup>
 
         <!-- Assert configurable product in grid -->
-        <actionGroup ref="filterProductGridBySkuAndName" stepKey="findCreatedConfigurableProduct">
+        <actionGroup ref="FilterProductGridBySkuAndNameActionGroup" stepKey="findCreatedConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="{{ApiConfigurableProduct.type_id}}" stepKey="seeProductTypeInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductTypeInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="{{ApiConfigurableProduct.type_id}}"/>
+        </actionGroup>
         <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
 
-        <!-- Flash cache -->
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!--Assert configurable product in category -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <actionGroup ref="StorefrontCheckCategoryConfigurableProduct" stepKey="assertConfigurableProductInCategory">
+        <actionGroup ref="StorefrontCheckCategoryConfigurableProductActionGroup" stepKey="assertConfigurableProductInCategory">
             <argument name="product" value="ApiConfigurableProduct"/>
             <argument name="optionProduct" value="colorConfigurableProductAttribute1"/>
         </actionGroup>
@@ -119,7 +126,7 @@
         <!--Assert configurable product on product page -->
         <amOnPage url="{{ApiConfigurableProduct.urlKey}}.html" stepKey="amOnProductPage" after="assertConfigurableProductInCategory"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <actionGroup ref="storefrontCheckConfigurableProductOptions" stepKey="checkConfigurableProductOptions">
+        <actionGroup ref="StorefrontCheckConfigurableProductOptionsActionGroup" stepKey="checkConfigurableProductOptions">
             <argument name="product" value="ApiConfigurableProduct"/>
             <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
             <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
@@ -131,8 +138,7 @@
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>
 
         <!-- Assert configurable product in cart -->
-        <amOnPage url="/checkout/cart/" stepKey="amOnShoppingCartPage"/>
-        <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnShoppingCartPage"/>
         <actionGroup ref="StorefrontCheckCartConfigurableProductActionGroup" stepKey="storefrontCheckCartConfigurableProductActionGroup">
             <argument name="product" value="ApiConfigurableProduct"/>
             <argument name="optionProduct" value="colorConfigurableProductAttribute1"/>
@@ -140,8 +146,7 @@
         </actionGroup>
 
         <!-- Assert child products are not displayed separately: two next step -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStoreFront"/>
-        <waitForPageLoad stepKey="waitForStoreFrontPageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
 
         <!-- Quick search the storefront for the first attribute option -->
         <submitForm selector="{{StorefrontQuickSearchSection.searchMiniForm}}" parameterArray="['q' => {{colorConfigurableProductAttribute1.sku}}]" stepKey="searchStorefrontFirstChildProduct"/>

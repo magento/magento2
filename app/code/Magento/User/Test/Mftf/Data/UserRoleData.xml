@@ -15,6 +15,13 @@
         <data key="access">1</data>
     </entity>
 
+    <entity name="roleDefaultAdministrator" type="role">
+        <data key="name">Administrators</data>
+        <data key="rolename">Administrators</data>
+        <data key="scope">1</data>
+        <data key="access">1</data>
+    </entity>
+
     <entity name="roleAdministrator" type="user_role">
         <data key="name" unique="suffix">Administrator </data>
         <data key="rolename" unique="suffix">Administrator </data>
@@ -79,7 +86,6 @@
             <item>Magento_Backend::main_actions</item>
             <item>Magento_Backend::mass_actions</item>
             <item>Magento_Backend::additional_cache_management</item>
-            <item>Magento_Backend::setup_wizard</item>
             <item>Magento_Backup::backup</item>
             <item>Magento_Indexer::index</item>
             <item>Magento_Indexer::changeMode</item>

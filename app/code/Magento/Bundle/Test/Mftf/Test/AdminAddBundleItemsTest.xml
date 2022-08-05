@@ -14,122 +14,154 @@
             <stories value="Create/Edit bundle product in Admin"/>
             <title value="Admin should be able to add/edit bundle items when creating/editing a bundle product"/>
             <description value="Admin should be able to add/edit bundle items when creating/editing a bundle product"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-223"/>
             <group value="Bundle"/>
         </annotations>
         <before>
-            <!--Creating data-->
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct0"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
-            <!--Admin login-->
-            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>
         </before>
         <after>
-            <!--Deleting data-->
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="simpleProduct0" stepKey="deleteSimpleProduct0"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="simpleProduct3" stepKey="deleteSimpleProduct3"/>
-            <!--Logging out-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProductBySku">
+                <argument name="sku" value="{{BundleProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <!--Go to bundle product creation page-->
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
-        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
 
-        <!-- Add two bundle items -->
-        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
-        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption3"/>
-        <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
-        <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
-        <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToBundle"/>
-        <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions">
+        <actionGroup ref="AdminOpenCreateBundleProductPageActionGroup" stepKey="goToBundleProductCreationPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenSectionBundleItems"/>
+        <actionGroup ref="AdminClickAddOptionOnBundleProductEditPageActionGroup" stepKey="clickAddOption3"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleOptions"/>
+        <actionGroup ref="AdminFillBundleOptionTitleActionGroup" stepKey="fillOptionTitle">
+            <argument name="optionTitle" value="{{BundleProduct.optionTitle1}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillBundleOptionTypeActionGroup" stepKey="selectInputType"/>
+        <actionGroup ref="AdminClickAddProductToOptionByOptionIndexActionGroup" stepKey="clickAddProductsToOption"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
             <argument name="product" value="$$simpleProduct0$$"/>
         </actionGroup>
-        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions2">
+        <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectFirstGridRow"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions2">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
-        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow2"/>
-        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty1"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty2"/>
-
-        <!--Fill out ancillary data on bundle product-->
-        <actionGroup ref="AncillaryPrepBundleProduct" stepKey="createBundledProductForTwoSimpleProducts">
+        <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectFirstGridRow2"/>
+        <actionGroup ref="AdminClickAddSelectedProductsOnAddProductsToOptionPanelActionGroup" stepKey="clickAddSelectedBundleProducts"/>
+        <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" stepKey="grabbedFirstBundleOptionQuantity"/>
+        <assertEquals stepKey="assertFirstBundleOptionDefaultQuantity">
+            <expectedResult type="string">1</expectedResult>
+            <actualResult type="string">$grabbedFirstBundleOptionQuantity</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" stepKey="grabbedSecondBundleOptionQuantity"/>
+        <assertEquals stepKey="assertSecondBundleOptionDefaultQuantity">
+            <expectedResult type="string">1</expectedResult>
+            <actualResult type="string">$grabbedSecondBundleOptionQuantity</actualResult>
+        </assertEquals>
+        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillProductDefaultQty1">
+            <argument name="optionIndex" value="0"/>
+            <argument name="productIndex" value="0"/>
+            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillProductDefaultQty2">
+            <argument name="optionIndex" value="0"/>
+            <argument name="productIndex" value="1"/>
+            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
+        </actionGroup>
+        <actionGroup ref="AncillaryPrepBundleProductActionGroup" stepKey="createBundledProductForTwoSimpleProducts">
             <argument name="bundleProduct" value="BundleProduct"/>
         </actionGroup>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
-        <!--Save the product-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
-        <see userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
-
-        <!--Checking on admin side-->
         <scrollToTopOfPage stepKey="scroll"/>
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems2"/>
         <seeElement stepKey="LookingForBundleItemPresence" selector="{{AdminProductFormBundleSection.listedBundleItem}}"/>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="GoToProductPage">
+            <argument name="productUrlKey" value="{{BundleProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductPageToLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="LookingForAbilityToAddOptions"/>
 
-        <!--Checking on customer side-->
-        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPage"/>
-        <waitForPageLoad stepKey="waitForBundleProductPageToLoad"/>
-        <seeElement selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="LookingForAbilityToAddOptions"/>
-        <click selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="clickButtonToCustomize"/>
-        <waitForPageLoad stepKey="waitCustomizationDropDown"/>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickButtonToCustomize"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitCustomizationDropDown"/>
         <seeElement selector="{{StorefrontBundledSection.customizableBundleItemOption}}" stepKey="seeBundleItem"/>
 
-        <!--Add another bundle option with 2 items-->
-        <!--Go to bundle product creation page-->
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad"/>
-        <conditionalClick selector="{{AdminProductFiltersSection.filtersClear}}" dependentSelector="{{AdminProductFiltersSection.filtersClear}}" visible="true" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
-        <waitForPageLoad stepKey="WaitForClear"/>
-        <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName">
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="WaitForClear"/>
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-        <click selector="{{AdminProductFormBundleSection.addOptions}}" stepKey="clickOnBundleProductToEdit"/>
-        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItemsToEdit"/>
-        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption"/>
-        <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('1')}}" stepKey="waitForBundleOptionsToAppear"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('1')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillNewestOptionTitle"/>
-        <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('1')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectNewInputType"/>
-        <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToNewBundle"/>
-        <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToNewOption"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterNewBundleProducts"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterNewBundleProductOptions">
-                <argument name="product" value="$$simpleProduct2$$"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="clickOnBundleProductToEdit"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenSectionBundleItemsToEdit"/>
+        <actionGroup ref="AdminClickAddOptionOnBundleProductEditPageActionGroup" stepKey="clickAddOption"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleOptionsToAppear"/>
+        <actionGroup ref="AdminFillBundleOptionTitleActionGroup" stepKey="fillNewestOptionTitle">
+            <argument name="optionTitle" value="{{BundleProduct.optionTitle1}}_new"/>
+            <argument name="index" value="1"/>
         </actionGroup>
-        <checkOption selector="//div[@class='admin__data-grid-outer-wrap']//tr[@data-repeat-index='0']//input[@type='checkbox']" stepKey="selectNewFirstGridRow"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterNewBundleProductOptions2">
-                <argument name="product" value="$$simpleProduct3$$"/>
+        <actionGroup ref="AdminFillBundleOptionTypeActionGroup" stepKey="selectNewInputType">
+            <argument name="optionIndex" value="1"/>
         </actionGroup>
-        <checkOption selector="{{AdminProductFormBundleSection.firstProductOption}}" stepKey="selectNewFirstGridRow2"/>
-        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddNewSelectedBundleProducts"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '2')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillNewProductDefaultQty1"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '3')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillNewProductDefaultQty2"/>
-
-        <!--Save the product-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButtonAgain"/>
+        <actionGroup ref="AdminClickAddProductToOptionByOptionIndexActionGroup" stepKey="clickAddProductsToNewOption">
+            <argument name="optionIndex" value="2"/>
+        </actionGroup>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterNewBundleProductOptions">
+            <argument name="product" value="$$simpleProduct2$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectNewFirstGridRow"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterNewBundleProductOptions2">
+            <argument name="product" value="$$simpleProduct3$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectNewFirstGridRow2"/>
+        <actionGroup ref="AdminClickAddSelectedProductsOnAddProductsToOptionPanelActionGroup" stepKey="clickAddNewSelectedBundleProducts"/>
+        <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" stepKey="grabbedFirstBundleOptionQuantityAfterUserInput"/>
+        <assertEquals stepKey="assertFirstBundleOptionDefaultQuantityAfterUserInput">
+            <expectedResult type="string">{{BundleProduct.defaultQuantity}}</expectedResult>
+            <actualResult type="string">$grabbedFirstBundleOptionQuantityAfterUserInput</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" stepKey="grabbedSecondBundleOptionQuantityAfterUserInput"/>
+        <assertEquals stepKey="assertSecondBundleOptionDefaultQuantityAfterUserInput">
+            <expectedResult type="string">{{BundleProduct.defaultQuantity}}</expectedResult>
+            <actualResult type="string">$grabbedSecondBundleOptionQuantityAfterUserInput</actualResult>
+        </assertEquals>
+        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillNewProductDefaultQty1">
+            <argument name="optionIndex" value="1"/>
+            <argument name="productIndex" value="0"/>
+            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillNewProductDefaultQty2">
+            <argument name="optionIndex" value="1"/>
+            <argument name="productIndex" value="1"/>
+            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButtonAgain"/>
         <see userInput="You saved the product." stepKey="messageYouSavedTheProductIsShownAgain"/>
-
-        <!--Checking on admin side-->
         <scrollToTopOfPage stepKey="scrollAgain"/>
-        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenNewSectionBundleItems2"/>
-        <seeElement selector="{{AdminProductFormBundleSection.listedBundleItem2}}" stepKey="LookingForNewBundleItemPresence"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenNewSectionBundleItems2"/>
+        <see userInput="$$simpleProduct2.sku$$" selector="{{AdminProductFormBundleSection.bundleItem}}" stepKey="LookingForNewBundleItemPresence"/>
 
-        <!--Checking on customer side-->
-        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
-        <waitForPageLoad stepKey="waitForBundleProductPageToLoadAgain"/>
-        <seeElement selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="LookingForAbilityToAddBothOptions"/>
-        <click selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="clickButtonAgainToCustomize"/>
-        <waitForPageLoad stepKey="waitForBothCustomizationDropDown"/>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="GoToProductPageAgain">
+            <argument name="productUrlKey" value="{{BundleProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductPageToLoadAgain"/>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="LookingForAbilityToAddBothOptions"/>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickButtonAgainToCustomize"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBothCustomizationDropDown"/>
         <seeElement selector="{{StorefrontBundledSection.customizableBundleItemOption2}}" stepKey="seeBundleItems"/>
     </test>
 </tests>

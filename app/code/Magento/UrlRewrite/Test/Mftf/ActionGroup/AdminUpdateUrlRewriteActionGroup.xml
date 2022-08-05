@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateUrlRewriteActionGroup">
+        <annotations>
+            <description>Updates the URL Rewrite fields with the provided details.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeValue" type="string"/>
+            <argument name="requestPath" type="string"/>
+            <argument name="redirectTypeValue" type="string"/>
+            <argument name="description" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminUrlRewriteEditSection.store}}" stepKey="clickOnStore"/>
+        <click selector="{{AdminUrlRewriteEditSection.storeValue(storeValue)}}" stepKey="clickOnStoreValue"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.requestPath}}" userInput="{{requestPath}}" stepKey="fillRequestPath"/>
+        <click selector="{{AdminUrlRewriteEditSection.redirectType}}" stepKey="selectRedirectType"/>
+        <click selector="{{AdminUrlRewriteEditSection.redirectTypeValue(redirectTypeValue)}}" stepKey="selectRedirectTypeValue"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.description}}" userInput="{{description}}" stepKey="fillDescription"/>
+        <click selector="{{AdminUrlRewriteEditSection.saveButton}}" stepKey="clickOnSaveButton"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessSaveMessage"/>
+    </actionGroup>
+</actionGroups>

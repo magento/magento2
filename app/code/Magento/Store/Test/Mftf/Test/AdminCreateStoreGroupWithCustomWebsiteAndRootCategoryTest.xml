@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create root category-->
             <createData entity="NewRootCategory" stepKey="rootCategory"/>
             <createData entity="SimpleRootSubCategory" stepKey="category">
@@ -36,25 +36,27 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <!--Delete root category-->
             <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create custom store group with custom website and root category and verify AssertStoreGroupSuccessSaveMessage-->
-        <actionGroup ref="CreateCustomStore" stepKey="createCustomStoreGroup">
+        <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStoreGroup">
             <argument name="website" value="{{customWebsite.name}}"/>
             <argument name="store" value="{{customStoreGroup.name}}"/>
             <argument name="rootCategory" value="$$rootCategory.name$$"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Search created store group(from above step) in grid and verify AssertStoreGroupInGrid-->
-        <actionGroup ref="AssertStoreGroupInGrid" stepKey="seeCreatedStoreGroupInGrid">
+        <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="seeCreatedStoreGroupInGrid">
             <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
         </actionGroup>
 
         <!--Go to store group form page and verify AssertStoreGroupForm and AssertStoreGroupOnStoreViewForm-->
-        <actionGroup ref="AssertStoreGroupForm" stepKey="seeCreatedStoreGroupInForm">
+        <actionGroup ref="AssertStoreGroupFormActionGroup" stepKey="seeCreatedStoreGroupInForm">
             <argument name="website" value="{{customWebsite.name}}"/>
             <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
             <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>

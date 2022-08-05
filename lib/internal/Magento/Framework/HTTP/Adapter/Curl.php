@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\HTTP\Adapter;
 
 /**
  * Curl http adapter
+ *
+ * @api
  */
 class Curl implements \Zend_Http_Client_Adapter_Interface
 {
@@ -166,16 +169,19 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         // set url to post to
         curl_setopt($this->_getResource(), CURLOPT_URL, $url);
         curl_setopt($this->_getResource(), CURLOPT_RETURNTRANSFER, true);
-        if ($method == \Zend_Http_Client::POST) {
+        if ($method === \Zend_Http_Client::POST) {
             curl_setopt($this->_getResource(), CURLOPT_POST, true);
             curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'POST');
             curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
-        } elseif ($method == \Zend_Http_Client::PUT) {
+        } elseif ($method === \Zend_Http_Client::PUT) {
             curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
-        } elseif ($method == \Zend_Http_Client::GET) {
+        } elseif ($method === \Zend_Http_Client::GET) {
             curl_setopt($this->_getResource(), CURLOPT_HTTPGET, true);
             curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'GET');
+        } elseif ($method === \Zend_Http_Client::DELETE) {
+            curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'DELETE');
+            curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
         }
 
         if ($http_ver === \Zend_Http_Client::HTTP_1) {
@@ -205,6 +211,9 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
     public function read()
     {
         $response = curl_exec($this->_getResource());
+        if ($response === false) {
+            return '';
+        }
 
         // Remove 100 and 101 responses headers
         while (\Zend_Http_Response::extractCode($response) == 100

@@ -13,7 +13,7 @@ class ListingTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\App\RequestInterface */
     private $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\App\RequestInterface $request */

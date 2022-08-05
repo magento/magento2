@@ -23,7 +23,7 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit\Framework\
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_eventObserver = $this->_createEventObserver();

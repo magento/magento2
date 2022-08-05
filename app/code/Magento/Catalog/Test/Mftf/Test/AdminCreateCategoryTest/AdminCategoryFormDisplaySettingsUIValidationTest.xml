@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCategoryFormDisplaySettingsUIValidationTest">
+    <annotations>
+        <features value="Catalog"/>
+        <stories value="Default layout configuration MAGETWO-88793"/>
+        <title value="Category should not be saved once layered navigation price step field is left empty"/>
+        <description value="Once the Config setting is unchecked Category should not be saved with layered navigation price field left empty"/>
+        <severity value="BLOCKER"/>
+        <testCaseId value="MAGETWO-95797"/>
+        <group value="category"/>
+            <group value="pr_exclude"/>
+        </annotations>
+    <before>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+    </before>
+    <after>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+    </after>
+    <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
+    <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
+    <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>
+    <click selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" stepKey="clickOnDisplaySettingsTab"/>
+     <waitForElementVisible selector="{{CategoryDisplaySettingsSection.filterPriceRangeUseConfig}}" stepKey="wait"/>
+    <scrollTo selector="{{CategoryDisplaySettingsSection.layeredNavigationPriceInput}}" stepKey="scrollToLayeredNavigationField"/>
+    <uncheckOption selector="{{CategoryDisplaySettingsSection.filterPriceRangeUseConfig}}" stepKey="uncheckConfigSetting"/>
+    <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
+    <see selector="{{AdminCategoryBasicFieldSection.FieldError('uid')}}" userInput="This is a required field." stepKey="seeErrorMessage"/>
+    <!-- Verify that the Layered navigation price step field has the required indicator -->
+    <comment userInput="Check if Layered navigation price field has required indicator icon" stepKey="comment"/>
+    <executeJS function="{{CategoryDisplaySettingsSection.RequiredFieldIndicator('filter_price_range')}}" stepKey="getRequiredFieldIndicator"/>
+    <assertEquals message="pass" stepKey="assertRequiredFieldIndicator1">
+			<actualResult type="variable">getRequiredFieldIndicator</actualResult>
+			<expectedResult type="string">"*"</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

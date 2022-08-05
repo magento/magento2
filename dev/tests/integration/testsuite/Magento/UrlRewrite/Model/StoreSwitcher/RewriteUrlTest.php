@@ -11,12 +11,10 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
-use Magento\Framework\Url\DecoderInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -56,7 +54,7 @@ class RewriteUrlTest extends TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->storeSwitcher = $this->objectManager->get(StoreSwitcher::class);
@@ -67,8 +65,8 @@ class RewriteUrlTest extends TestCase
     /**
      * Test switching stores with non-existent cms pages and then redirecting to the homepage
      *
-     * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
+     * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @return void
@@ -146,13 +144,9 @@ class RewriteUrlTest extends TestCase
 
         $redirectUrl = "http://localhost/index.php/page-c/";
         $expectedUrl = "http://localhost/index.php/page-c-on-2nd-store";
-        /** @var DecoderInterface $decoder */
-        $decoder = $this->objectManager->create(DecoderInterface::class);
+
         $secureRedirectUrl = $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl);
-        parse_str(parse_url($secureRedirectUrl, PHP_URL_QUERY), $secureRedirectUrlQueryParams);
-        $encodedActualUrl = $secureRedirectUrlQueryParams[ActionInterface::PARAM_NAME_URL_ENCODED];
-        $actualUrl = $decoder->decode($encodedActualUrl);
-        $this->assertEquals($expectedUrl, $actualUrl);
+        $this->assertEquals($expectedUrl, $secureRedirectUrl);
     }
 
     /**

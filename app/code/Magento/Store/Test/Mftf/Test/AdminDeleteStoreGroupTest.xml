@@ -16,40 +16,43 @@
             <severity value="CRITICAL"/>
             <group value="store"/>
             <group value="mtf_migrated"/>
+            <group value="skip_in_cloud_native_s3"/>
         </annotations>
 
         <before>
             <magentoCLI command="config:set system/backup/functionality_enabled 1" stepKey="setEnableBackupToYes"/>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create custom store group-->
             <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewCustomStoreGroup">
                 <argument name="website" value="{{_defaultWebsite.name}}"/>
                 <argument name="storeGroupName" value="{{customStore.name}}"/>
                 <argument name="storeGroupCode" value="{{customStore.code}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
+            <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
+            <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteDatabaseBackup">
+                <argument name="backup" value="WebSetupWizardBackup"/>
+            </actionGroup>
             <magentoCLI command="config:set system/backup/functionality_enabled 0" stepKey="setEnableBackupToNo"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Delete custom store group and verify AssertStoreGroupSuccessDeleteAndBackupMessages-->
         <actionGroup ref="DeleteCustomStoreBackupEnabledYesActionGroup" stepKey="deleteCustomStoreGroup">
             <argument name="storeGroupName" value="{{customStore.name}}"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Verify deleted Store group is not present in grid and verify AssertStoreGroupNotInGrid message-->
-        <actionGroup ref="AssertStoreNotInGrid" stepKey="verifyDeletedStoreGroupNotInGrid">
+        <actionGroup ref="AssertStoreNotInGridActionGroup" stepKey="verifyDeletedStoreGroupNotInGrid">
             <argument name="storeGroupName" value="{{customStore.name}}"/>
         </actionGroup>
 
         <!--Go to backup index page and verify AssertBackupInGrid-->
-        <amOnPage url="{{BackupIndexPage.url}}" stepKey="goToBackupIndexPage"/>
-        <waitForPageLoad stepKey="waitForBackupIndexPageLoad"/>
+        <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
         <see selector="{{AdminGridTableSection.backupNameColumn}}" userInput="{{WebSetupWizardBackup.name}}" stepKey="seeBackupInGrid"/>
-        <!--Delete database backup-->
-        <actionGroup ref="deleteBackup" stepKey="deleteDatabaseBackup">
-            <argument name="backup" value="WebSetupWizardBackup"/>
-        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="deleteDatabaseBackup"/>
     </test>
 </tests>

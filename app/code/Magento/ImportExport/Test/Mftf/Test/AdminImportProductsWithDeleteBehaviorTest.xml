@@ -14,7 +14,7 @@
             <stories value="Verify Magento native import products with delete behavior."/>
             <features value="Import/Export"/>
             <title value="Verify Magento native import products with delete behavior."/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-30587"/>
             <group value="importExport"/>
         </annotations>
@@ -34,11 +34,11 @@
                 <field key="name">Api Downloadable Product for Test</field>
                 <field key="sku">Api Downloadable Product for Test</field>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="goToImportIndexPage"/>
         <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>

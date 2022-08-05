@@ -5,13 +5,15 @@
  */
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
 use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\Catalog\Model\CustomOptions\CustomOption;
 use Magento\Catalog\Model\CustomOptions\CustomOptionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
+/**
+ * Processor for product options
+ */
 class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**
@@ -88,7 +90,8 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
         if (!empty($options) && is_array($options)) {
             $data = [];
             foreach ($options as $optionId => $optionValue) {
-                if (is_array($optionValue)) {
+
+                if (is_array($optionValue) && !$this->isDateWithDateInternal($optionValue)) {
                     $optionValue = $this->processFileOptionValue($optionValue);
                     $optionValue = implode(',', $optionValue);
                 }
@@ -126,6 +129,8 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     }
 
     /**
+     * Get url builder
+     *
      * @return \Magento\Catalog\Model\Product\Option\UrlBuilder
      *
      * @deprecated 101.0.0
@@ -137,5 +142,25 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
                 ->get(\Magento\Catalog\Model\Product\Option\UrlBuilder::class);
         }
         return $this->urlBuilder;
+    }
+
+    /**
+     * Check if the option has a date_internal and date
+     *
+     * @param array $optionValue
+     * @return bool
+     */
+    private function isDateWithDateInternal(array $optionValue): bool
+    {
+        $hasDate = !empty($optionValue['day'])
+            && !empty($optionValue['month'])
+            && !empty($optionValue['year']);
+
+        $hasTime = !empty($optionValue['hour'])
+            && isset($optionValue['minute']);
+
+        $hasDateInternal = !empty($optionValue['date_internal']);
+
+        return $hasDateInternal && ($hasDate || $hasTime || !empty($optionValue['date']));
     }
 }

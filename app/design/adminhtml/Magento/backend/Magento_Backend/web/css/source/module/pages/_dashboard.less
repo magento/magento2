@@ -126,16 +126,19 @@
 
 //  Range switcher
 .dashboard-diagram-switcher {
-    margin-bottom: 2rem;
+    border-top: 1px solid @color-gray68;
+    margin-top: -1px;
+    padding: 2rem 2rem 0;
 
     .label {
         &:extend(.abs-visually-hidden all);
     }
-}
 
-//  Chart
-.dashboard-diagram-image {
-    max-width: 100%;
+    + .dashboard-diagram-tab-content {
+        > .ui-tabs-panel {
+            border-top: 0 none;
+        }
+    }
 }
 
 //

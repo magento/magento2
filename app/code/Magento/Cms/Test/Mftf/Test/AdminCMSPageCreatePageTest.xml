@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCMSPageCreatePageTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Create a CMS Page via the Admin"/>
+            <title value="Create CMS Page via the Admin"/>
+            <description value="Admin should be able to create a CMS Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14675"/>
+            <group value="backend"/>
+            <group value="Cms"/>
+            <group value="mtf_migrated"/>
+            <group value="WYSIWYGDisabled"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Go to New CMS Page page-->
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
+        <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageData"/>
+        <!--verify successfully saved-->
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="saveNewPage"/>
+        <!--verify page on frontend-->
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="navigateToPageOnStoreFront">
+            <argument name="identifier" value="{{_duplicatedCMSPage.identifier}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStoreFrontCMSPageActionGroup" stepKey="verifyPageDataOnFrontend">
+            <argument name="cmsTitle" value="{{_duplicatedCMSPage.title}}"/>
+            <argument name="cmsContent" value="{{_duplicatedCMSPage.content}}"/>
+            <argument name="cmsContentHeading" value="{{_duplicatedCMSPage.content_heading}}"/>
+        </actionGroup>
+        <!--verify page in grid-->
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="openCMSPagesGridActionGroup"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortGridByIdDescending"/>
+        <actionGroup ref="AdminSelectCMSPageFromGridActionGroup" stepKey="verifyPageInGrid">
+            <argument name="identifier" value="_duplicatedCMSPage.identifier"/>
+        </actionGroup>
+        <actionGroup ref="DeletePageByUrlKeyActionGroup" stepKey="deletePage">
+            <argument name="UrlKey" value="{{_duplicatedCMSPage.identifier}}"/>
+        </actionGroup>
+    </test>
+</tests>

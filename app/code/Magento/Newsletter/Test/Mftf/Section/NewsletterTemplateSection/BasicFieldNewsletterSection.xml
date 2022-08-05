@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="BasicFieldNewsletterSection">
+        <element name="templateName" type="input" selector="#code"/>
+        <element name="templateSubject" type="input" selector="#subject"/>
+        <element name="senderName" type="input" selector="#sender_name"/>
+        <element name="senderEmail" type="input" selector="#sender_email"/>
+        <element name="save" type="button" selector="button[data-role='template-save']" timeout="60"/>
+        <element name="searchButton" type="button" selector=".admin__filter-actions button[title=Search]"/>
+        <element name="searchInput" type="input" selector="input[name=code]"/>
+        <element name="showHide" type="button" selector=".action-show-hide"/>
+    </section>
+</sections>

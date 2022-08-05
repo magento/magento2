@@ -23,4 +23,26 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="CustomerGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Customer\Ui\Component\Listing\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CustomerGridCollectionReporting" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting">
+        <arguments>
+            <argument name="filterPool" xsi:type="object">CustomerGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Customer\Ui\Component\DataProvider">
+        <arguments>
+            <argument name="reporting" xsi:type="object">CustomerGridCollectionReporting</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Website">
+        <plugin name="reindex_customer_grid_after_website_remove" type="Magento\Customer\Model\Plugin\CustomerGridIndexAfterWebsiteDelete" />
+        <plugin name="deleteCustomerGroupExcludedWebsiteAfterWebsiteDelete" type="Magento\Customer\Model\Plugin\Website\DeleteCustomerGroupExcludedWebsite"/>
+    </type>
 </config>

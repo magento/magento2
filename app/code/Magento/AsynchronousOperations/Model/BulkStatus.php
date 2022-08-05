@@ -6,24 +6,28 @@
 
 namespace Magento\AsynchronousOperations\Model;
 
-use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
-use Magento\Framework\App\ResourceConnection;
+use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory;
+use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 use Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql;
+use Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection as OperationCollection;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Bulk\BulkStatusInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * Class BulkStatus
+ * Process bulk operations status.
  */
-class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
+class BulkStatus implements BulkStatusInterface
 {
     /**
-     * @var \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory
+     * @var BulkSummaryInterfaceFactory
      */
     private $bulkCollectionFactory;
 
     /**
-     * @var \Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory
+     * @var OperationInterfaceFactory
      */
     private $operationCollectionFactory;
 
@@ -43,7 +47,6 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
     private $metadataPool;
 
     /**
-     * BulkStatus constructor.
      * @param ResourceModel\Bulk\CollectionFactory $bulkCollection
      * @param ResourceModel\Operation\CollectionFactory $operationCollection
      * @param ResourceConnection $resourceConnection
@@ -51,14 +54,14 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
      * @param MetadataPool $metadataPool
      */
     public function __construct(
-        \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\CollectionFactory $bulkCollection,
-        \Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory $operationCollection,
+        ResourceModel\Bulk\CollectionFactory $bulkCollection,
+        ResourceModel\Operation\CollectionFactory $operationCollection,
         ResourceConnection $resourceConnection,
         CalculatedStatusSql $calculatedStatusSql,
         MetadataPool $metadataPool
     ) {
-        $this->operationCollectionFactory = $operationCollection;
         $this->bulkCollectionFactory = $bulkCollection;
+        $this->operationCollectionFactory = $operationCollection;
         $this->resourceConnection = $resourceConnection;
         $this->calculatedStatusSql = $calculatedStatusSql;
         $this->metadataPool = $metadataPool;
@@ -87,9 +90,22 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
      */
     public function getOperationsCountByBulkIdAndStatus($bulkUuid, $status)
     {
-        /** @var \Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection $collection */
-        $collection = $this->operationCollectionFactory->create();
-        return $collection->addFieldToFilter('bulk_uuid', $bulkUuid)
+        /** @var OperationCollection $operationCollection */
+        $operationCollection = $this->operationCollectionFactory->create();
+        if ($status === OperationInterface::STATUS_TYPE_OPEN) {
+            $allProcessedOperationsQty = $operationCollection
+                ->addFieldToFilter('bulk_uuid', $bulkUuid)
+                ->getSize();
+
+            if (empty($allProcessedOperationsQty)) {
+                return $this->getOperationCount($bulkUuid);
+            }
+
+            $operationCollection->clear();
+        }
+
+        return $operationCollection
+            ->addFieldToFilter('bulk_uuid', $bulkUuid)
             ->addFieldToFilter('status', $status)
             ->getSize();
     }

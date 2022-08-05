@@ -27,7 +27,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_category;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Category::class
@@ -43,7 +43,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->_model->setRequestVar('cat');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -66,11 +66,10 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
                 \Magento\Framework\View\Element\Text::class
             )
         );
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->assertNull(
-            $objectManager->get(\Magento\Framework\Registry::class)->registry(self::CURRENT_CATEGORY_FILTER)
-        );
+        /** @var $category \Magento\Catalog\Model\Category */
+        $category = $objectManager->get(\Magento\Framework\Registry::class)->registry(self::CURRENT_CATEGORY_FILTER);
+        $this->assertInstanceOf(\Magento\Catalog\Model\Category::class, $category);
+        $this->assertEquals($this->_category->getId(), $category->getId());
     }
 
     public function testApply()
@@ -118,8 +117,8 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $items = $this->_model->getItems();
 
-        $this->assertInternalType('array', $items);
-        $this->assertEquals(2, count($items));
+        $this->assertIsArray($items);
+        $this->assertCount(2, $items);
 
         /** @var $item \Magento\Catalog\Model\Layer\Filter\Item */
         $item = $items[0];
@@ -134,5 +133,36 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Category 1.2', $item->getLabel());
         $this->assertEquals(13, $item->getValue());
         $this->assertEquals(2, $item->getCount());
+    }
+
+    /**
+     * Check that only children category of current category are aggregated
+     *
+     * @magentoDbIsolation disabled
+     */
+    public function testCategoryAggregation(): void
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
+        $request->setParam('cat', 3);
+        $this->_model->apply($request);
+
+        /** @var $category \Magento\Catalog\Model\Category */
+        $category = $objectManager->get(\Magento\Framework\Registry::class)->registry(self::CURRENT_CATEGORY_FILTER);
+        $this->assertInstanceOf(\Magento\Catalog\Model\Category::class, $category);
+        $this->assertEquals(3, $category->getId());
+        $metrics = $this->_model->getLayer()->getProductCollection()->getFacetedData('category');
+        $this->assertIsArray($metrics);
+        $actual = [];
+        foreach ($metrics as $categoryId => $metric) {
+            $actual[$categoryId] = $metric['count'];
+        }
+        $this->assertEquals(
+            [
+                4 => 2,
+                13 => 2
+            ],
+            $actual
+        );
     }
 }

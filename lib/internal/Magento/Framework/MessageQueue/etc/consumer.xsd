@@ -19,11 +19,14 @@
     </xs:element>
     <xs:complexType name="consumerType">
         <xs:attribute type="xs:string" name="name" use="required"/>
-        <xs:attribute type="xs:string" name="queue" use="required"/>
+        <xs:attribute type="xs:string" name="queue" use="optional"/>
         <xs:attribute type="handlerType" name="handler" use="optional"/>
         <xs:attribute type="xs:string" name="consumerInstance" use="optional"/>
-        <xs:attribute name="connection" use="optional" type="xs:string" />
+        <xs:attribute type="xs:string" name="connection" use="optional" />
         <xs:attribute type="xs:integer" name="maxMessages" use="optional"/>
+        <xs:attribute type="xs:integer" name="maxIdleTime" use="optional"/>
+        <xs:attribute type="xs:integer" name="sleep" use="optional"/>
+        <xs:attribute type="xs:boolean" name="onlySpawnWhenMessageAvailable" use="optional"/>
     </xs:complexType>
     <xs:simpleType name="handlerType">
         <xs:annotation>
@@ -32,7 +35,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z\\]+::[a-zA-Z]+" />
+            <xs:pattern value="[a-zA-Z0-9\\]+::[a-zA-Z0-9]+" />
             <xs:minLength value="5" />
         </xs:restriction>
     </xs:simpleType>

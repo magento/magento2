@@ -5,11 +5,13 @@
  */
 
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'customer_two_addresses.php';
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_two_addresses.php');
 
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Customer\Model\Customer $customer */
-$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+$customer = $objectManager->create(
     \Magento\Customer\Model\Customer::class
 )->load(
     1

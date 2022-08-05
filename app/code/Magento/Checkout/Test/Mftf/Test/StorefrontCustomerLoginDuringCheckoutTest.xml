@@ -23,7 +23,7 @@
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete simple product -->
@@ -33,15 +33,26 @@
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
 
             <!-- Delete customer -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexCustomerGrid">
+                <argument name="indices" value="customer_grid"/>
+            </actionGroup>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="CustomerEntityOne.email"/>
             </actionGroup>
 
             <!-- Logout admin -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to Storefront as Guest and create new account -->
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="createNewCustomerAccount"/>
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="Thank you for registering with Main Website Store."/>
+        </actionGroup>
 
         <!-- Sign Out -->
         <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
@@ -55,9 +66,9 @@
         </actionGroup>
 
         <!-- Go to Checkout page -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
 
         <!-- Input in field email and password for newly created customer; click Login button -->
         <actionGroup ref="LoginAsCustomerOnCheckoutPageActionGroup" stepKey="customerLogin">

@@ -1,7 +1,5 @@
 <?php
 /**
- * Import entity of downloadable product type
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,98 +8,99 @@ namespace Magento\DownloadableImportExport\Model\Import\Product\Type;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\EntityManager\MetadataPool;
-use \Magento\Store\Model\Store;
+use Magento\Store\Model\Store;
 
 /**
  * Class Downloadable
  *
  * phpcs:disable Magento2.Commenting.ConstantsPHPDocFormatting
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
     /**
      * Pair value separator.
      */
-    const PAIR_VALUE_SEPARATOR = '=';
+    public const PAIR_VALUE_SEPARATOR = '=';
 
     /**
      * Default sort order
      */
-    const DEFAULT_SORT_ORDER = 0;
+    public const DEFAULT_SORT_ORDER = 0;
 
     /**
      * Default number of downloads
      */
-    const DEFAULT_NUMBER_OF_DOWNLOADS = 0;
+    public const DEFAULT_NUMBER_OF_DOWNLOADS = 0;
 
     /**
      * Default is shareable
      */
-    const DEFAULT_IS_SHAREABLE = 2;
+    public const DEFAULT_IS_SHAREABLE = 2;
 
     /**
      * Default website id
      */
-    const DEFAULT_WEBSITE_ID = 0;
+    public const DEFAULT_WEBSITE_ID = 0;
 
     /**
      * Patch for downloadable files samples
      */
-    const DOWNLOADABLE_PATCH_SAMPLES = 'downloadable/files/samples';
+    public const DOWNLOADABLE_PATCH_SAMPLES = 'downloadable/files/samples';
 
     /**
      * Patch for downloadable files links
      */
-    const DOWNLOADABLE_PATCH_LINKS = 'downloadable/files/links';
+    public const DOWNLOADABLE_PATCH_LINKS = 'downloadable/files/links';
 
     /**
      * Patch for downloadable files link samples
      */
-    const DOWNLOADABLE_PATCH_LINK_SAMPLES = 'downloadable/files/link_samples';
+    public const DOWNLOADABLE_PATCH_LINK_SAMPLES = 'downloadable/files/link_samples';
 
     /**
      * Type option for url
      */
-    const URL_OPTION_VALUE = 'url';
+    public const URL_OPTION_VALUE = 'url';
 
     /**
      * Type option for file
      */
-    const FILE_OPTION_VALUE = 'file';
+    public const FILE_OPTION_VALUE = 'file';
 
     /**
      * Column with downloadable samples
      */
-    const COL_DOWNLOADABLE_SAMPLES = 'downloadable_samples';
+    public const COL_DOWNLOADABLE_SAMPLES = 'downloadable_samples';
 
     /**
      * Column with downloadable links
      */
-    const COL_DOWNLOADABLE_LINKS = 'downloadable_links';
+    public const COL_DOWNLOADABLE_LINKS = 'downloadable_links';
 
     /**
      * Default group title
      */
-    const DEFAULT_GROUP_TITLE = '';
+    public const DEFAULT_GROUP_TITLE = '';
 
     /**
      * Default links can be purchased separately
      */
-    const DEFAULT_PURCHASED_SEPARATELY = 1;
+    public const DEFAULT_PURCHASED_SEPARATELY = 1;
 
     /**
      * Error codes.
      */
-    const ERROR_OPTIONS_NOT_FOUND = 'optionsNotFound';
+    public const ERROR_OPTIONS_NOT_FOUND = 'optionsNotFound';
 
-    const ERROR_GROUP_TITLE_NOT_FOUND = 'groupTitleNotFound';
+    public const ERROR_GROUP_TITLE_NOT_FOUND = 'groupTitleNotFound';
 
-    const ERROR_OPTION_NO_TITLE = 'optionNoTitle';
+    public const ERROR_OPTION_NO_TITLE = 'optionNoTitle';
 
-    const ERROR_MOVE_FILE = 'moveFile';
+    public const ERROR_MOVE_FILE = 'moveFile';
 
-    const ERROR_COLS_IS_EMPTY = 'emptyOptions';
+    public const ERROR_COLS_IS_EMPTY = 'emptyOptions';
 
     private const ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST = 'linkUrlNotInDomainWhitelist';
 
@@ -216,8 +215,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     ];
 
     /**
-     * Option link mapping.
-     *
      * @var array
      */
     protected $optionLinkMapping = [
@@ -229,8 +226,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     ];
 
     /**
-     * Option sample mapping.
-     *
      * @var array
      */
     protected $optionSampleMapping = [
@@ -241,6 +236,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     /**
      * Num row parsing file
+     *
+     * @var int
      */
     protected $rowNum;
 
@@ -302,7 +299,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
                     continue;
                 }
-                $rowSku = strtolower($rowData[ImportProduct::COL_SKU]);
+                $rowSku = strtolower($rowData[ImportProduct::COL_SKU] ?? '');
                 $productData = $newSku[$rowSku];
                 if ($this->_type != $productData['type_id']) {
                     continue;
@@ -332,7 +329,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $this->rowNum = $rowNum;
         $error = false;
-        if (!$this->downloadableHelper->isRowDownloadableNoValid($rowData)) {
+        if (!$this->downloadableHelper->isRowDownloadableNoValid($rowData) && $isNewProduct) {
             $this->_entityModel->addRowError(self::ERROR_OPTIONS_NOT_FOUND, $this->rowNum);
             $error = true;
         }
@@ -365,21 +362,16 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
         $sampleData = $this->prepareSampleData($rowData[static::COL_DOWNLOADABLE_SAMPLES]);
 
-        if ($this->sampleGroupTitle($rowData) == '') {
-            $result = true;
-            $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
-        }
-
-        $result = $result ?? $this->isTitle($sampleData);
+        $result = $this->isTitle($sampleData);
 
         foreach ($sampleData as $link) {
             if ($this->hasDomainNotInWhitelist($link, 'link_type', 'link_url')) {
-                $this->_entityModel->addRowError(static::ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
+                $this->_entityModel->addRowError(self::ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
                 $result = true;
             }
 
             if ($this->hasDomainNotInWhitelist($link, 'sample_type', 'sample_url')) {
-                $this->_entityModel->addRowError(static::ERROR_SAMPLE_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
+                $this->_entityModel->addRowError(self::ERROR_SAMPLE_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
                 $result = true;
             }
         }
@@ -406,21 +398,16 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
         $linkData = $this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]);
 
-        if ($this->linksAdditionalAttributes($rowData, 'group_title', self::DEFAULT_GROUP_TITLE) == '') {
-            $this->_entityModel->addRowError(self::ERROR_GROUP_TITLE_NOT_FOUND, $this->rowNum);
-            $result = true;
-        }
-
-        $result = $result ?? $this->isTitle($linkData);
+        $result = $this->isTitle($linkData);
 
         foreach ($linkData as $link) {
             if ($this->hasDomainNotInWhitelist($link, 'link_type', 'link_url')) {
-                $this->_entityModel->addRowError(static::ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
+                $this->_entityModel->addRowError(self::ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
                 $result = true;
             }
 
             if ($this->hasDomainNotInWhitelist($link, 'sample_type', 'sample_url')) {
-                $this->_entityModel->addRowError(static::ERROR_SAMPLE_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
+                $this->_entityModel->addRowError(self::ERROR_SAMPLE_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
                 $result = true;
             }
         }
@@ -896,12 +883,16 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function uploadDownloadableFiles($fileName, $type = 'links', $renameFileOff = false)
     {
         try {
-            $res = $this->uploaderHelper->getUploader($type, $this->parameters)->move($fileName, $renameFileOff);
-            return $res['file'];
+            $uploader = $this->uploaderHelper->getUploader($type, $this->parameters);
+            if (!$this->uploaderHelper->isFileExist($fileName)) {
+                $res = $uploader->move($fileName, $renameFileOff);
+                $fileName = $res['file'];
+            }
         } catch (\Exception $e) {
             $this->_entityModel->addRowError(self::ERROR_MOVE_FILE, $this->rowNum);
-            return '';
+            $fileName = '';
         }
+        return $fileName;
     }
 
     /**

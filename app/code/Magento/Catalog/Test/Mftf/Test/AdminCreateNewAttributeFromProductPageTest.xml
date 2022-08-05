@@ -20,14 +20,14 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="GoToProductCatalogPage" stepKey="goToProductCatalogPage"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
         <actionGroup ref="AdminClickAddAttributeOnProductEditPageActionGroup" stepKey="clickAddAttribute"/>

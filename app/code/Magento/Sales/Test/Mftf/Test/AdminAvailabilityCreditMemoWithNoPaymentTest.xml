@@ -25,8 +25,8 @@
             </createData>
             <!-- Enable *Free Shipping* -->
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Disable *Free Shipping* -->
@@ -37,16 +37,16 @@
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="logout" stepKey="logOut"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
         </after>
 
         <!--Proceed to Admin panel > SALES > Orders. Created order should be in Processing status-->
-        <actionGroup ref="navigateToNewOrderPageNewCustomer" stepKey="navigateToNewOrderPage"/>
+        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>
 
         <!--Check if order can be submitted without the required fields including email address-->
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage"/>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addFirstProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addFirstProductToOrder">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
@@ -57,30 +57,32 @@
         <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="clickUpdateItemsAndQuantitiesButton"/>
 
         <!--Fill customer group and customer email-->
-        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectCustomerGroup"/>
-        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectCustomerGroup"/>
+        <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillCustomerEmail">
+            <argument name="email" value="{{Simple_US_Customer.email}}"/>
+        </actionGroup>
 
         <!--Fill customer address information-->
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 
         <!-- Select Free shipping -->
-        <actionGroup ref="orderSelectFreeShipping" stepKey="selectFreeShippingOption"/>
-
-        <!--Click *Submit Order* button-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="selectFreeShippingOption"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrder" />
 
         <!--Click *Invoice* button-->
-        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreateInvoice"/>
-        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startCreateInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
 
         <!--Verify that *Credit Memo* button is displayed-->
         <seeElement selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="seeCreditMemo"/>
         <click selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="clickCreditMemoItem"/>
         <waitForPageLoad stepKey="waitForCreditMemoPageLoaded"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoPageTitle"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeNewMemoPageTitle">
+            <argument name="value" value="New Memo"/>
+        </actionGroup>
         <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewMemoUrlOnPage"/>
     </test>
 </tests>

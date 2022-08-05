@@ -14,7 +14,7 @@
         <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl" after="clickShipAction"/>
 
         <see selector="{{AdminShipmentOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="seeShipmentOrderStatus" after="seeOrderShipmentUrl"/>
-        <actionGroup ref="verifyBasicShipmentInformation" stepKey="checkBasicShipmentOrderInfo" after="seeShipmentOrderStatus">
+        <actionGroup ref="VerifyBasicShipmentInformationActionGroup" stepKey="checkBasicShipmentOrderInfo" after="seeShipmentOrderStatus">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="shippingAddress" value="US_Address_TX"/>
             <argument name="billingAddress" value="US_Address_TX"/>
@@ -34,15 +34,15 @@
         <see selector="{{AdminOrderShipmentsTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderShipmentInTabGrid" after="waitForShipmentTabLoad"/>
         <click selector="{{AdminOrderShipmentsTabSection.viewGridRow('1')}}" stepKey="clickRowToViewShipment" after="seeOrderShipmentInTabGrid"/>
         <see selector="{{AdminShipmentOrderInformationSection.orderId}}" userInput="$getOrderId" stepKey="seeOrderIdOnShipment" after="clickRowToViewShipment"/>
-        <actionGroup ref="verifyBasicShipmentInformation" stepKey="checkShipmentOrderInformation" after="seeOrderIdOnShipment">
+        <actionGroup ref="VerifyBasicShipmentInformationActionGroup" stepKey="checkShipmentOrderInformation" after="seeOrderIdOnShipment">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="shippingAddress" value="US_Address_TX"/>
             <argument name="billingAddress" value="US_Address_TX"/>
         </actionGroup>
-        <actionGroup ref="seeProductInShipmentItems" stepKey="seeSimpleProductInShipmentItems" after="checkShipmentOrderInformation">
+        <actionGroup ref="SeeProductInShipmentItemsActionGroup" stepKey="seeSimpleProductInShipmentItems" after="checkShipmentOrderInformation">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
-        <actionGroup ref="seeProductInShipmentItems" stepKey="seeConfigurableProductInShipmentItems" after="seeSimpleProductInShipmentItems">
+        <actionGroup ref="SeeProductInShipmentItemsActionGroup" stepKey="seeConfigurableProductInShipmentItems" after="seeSimpleProductInShipmentItems">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
         <click selector="{{AdminShipmentOrderInformationSection.orderId}}" stepKey="clickOrderIdOnShipment" after="seeConfigurableProductInShipmentItems"/>

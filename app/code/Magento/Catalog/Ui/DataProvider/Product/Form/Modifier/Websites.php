@@ -6,12 +6,12 @@
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Api\GroupRepositoryInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Ui\Component\Form;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\DynamicRows;
+use Magento\Ui\Component\Form;
 
 /**
  * Class Websites customizes websites panel
@@ -165,7 +165,7 @@ class Websites extends AbstractModifier
         $websitesList = $this->getWebsitesList();
         $isNewProduct = !$this->locator->getProduct()->getId();
         $tooltip = [
-            'link' => 'https://docs.magento.com/m2/ce/user_guide/configuration/scope.html',
+            'link' => 'https://docs.magento.com/user-guide/configuration/scope.html',
             'description' => __(
                 'If your Magento installation has multiple websites, ' .
                 'you can edit the scope to use the product on specific sites.'
@@ -211,6 +211,30 @@ class Websites extends AbstractModifier
             }
         }
 
+        $children = $this->setDefaultWebsiteIdIfNoneAreSelected($children);
+        return $children;
+    }
+
+    /**
+     * Set default website id if none are selected
+     *
+     * @param array $children
+     * @return array
+     */
+    private function setDefaultWebsiteIdIfNoneAreSelected(array $children):array
+    {
+        $websitesList = $this->getWebsitesList();
+        $defaultSelectedWebsite = false;
+        foreach ($websitesList as $website) {
+            if ($children[$website['id']]['arguments']['data']['config']['value']) {
+                $defaultSelectedWebsite = true;
+                break;
+            }
+        }
+        if (count($websitesList) === 1 && !$defaultSelectedWebsite) {
+            $website = reset($websitesList);
+            $children[$website['id']]['arguments']['data']['config']['value'] = (string)$website['id'];
+        }
         return $children;
     }
 
@@ -235,7 +259,8 @@ class Websites extends AbstractModifier
                         'columnsHeader' => true,
                         'dndConfig' => ['enabled' => false],
                         'imports' => [
-                            'visible' => '${$.namespace}.${$.namespace}.websites.' . $websiteId . ':checked'
+                            'visible' => '${$.namespace}.${$.namespace}.websites.' . $websiteId . ':checked',
+                            '__disableTmpl' => ['visible' => false],
                         ],
                         'itemTemplate' => 'record',
                         'dataScope' => '',

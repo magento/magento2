@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
-use Magento\Quote\Model\QuoteFactory;
+use Exception;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -39,7 +40,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
      */
     private $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteResource = $objectManager->get(QuoteResource::class);
@@ -114,11 +115,12 @@ class UpdateCartItemsTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testUpdateItemInNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $query = $this->getQuery('non_existent_masked_id', 1, 2);
         $this->graphQlMutation($query);
     }
@@ -182,34 +184,6 @@ class UpdateCartItemsTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Field UpdateCartItemsInput.cart_id of required type String! was not provided.
-     */
-    public function testUpdateWithMissedCartItemId()
-    {
-        $query = <<<QUERY
-mutation {
-  updateCartItems(input: {
-    cart_items: [
-      {
-        cart_item_id: 1
-        quantity: 2
-      }
-    ]  
-  }) {
-    cart {
-      items {
-        id
-        quantity
-      }
-    }
-  }
-}
-QUERY;
-        $this->graphQlMutation($query);
-    }
-
-    /**
      * @param string $input
      * @param string $message
      * @dataProvider dataProviderUpdateWithMissedRequiredParameters
@@ -246,14 +220,6 @@ QUERY;
     public function dataProviderUpdateWithMissedRequiredParameters(): array
     {
         return [
-            'missed_cart_items' => [
-                '',
-                'Field UpdateCartItemsInput.cart_items of required type [CartItemUpdateInput]! was not provided.'
-            ],
-            'missed_cart_item_id' => [
-                'cart_items: [{ quantity: 2 }]',
-                'Field CartItemUpdateInput.cart_item_id of required type Int! was not provided.'
-            ],
             'missed_cart_item_qty' => [
                 'cart_items: [{ cart_item_id: 1 }]',
                 'Required parameter "quantity" for "cart_items" is missing.'
@@ -305,6 +271,95 @@ query {
         name
       }
       quantity
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @magentoConfigFixture default_store sales/gift_options/allow_items 0
+     * @magentoApiDataFixture Magento/GiftMessage/_files/guest/quote_with_item_message.php
+     * @throws Exception
+     */
+    public function testUpdateGiftMessageCartForItemNotAllow()
+    {
+        $messageTo = "";
+        $messageFrom = "";
+        $message = "";
+        $query = $this->getUpdateGiftMessageQuery($messageTo, $messageFrom, $message);
+        foreach ($this->graphQlMutation($query)['updateCartItems']['cart']['items'] as $item) {
+            self::assertNull($item['gift_message']);
+        }
+    }
+
+    /**
+     * @magentoConfigFixture default_store sales/gift_options/allow_items 1
+     * @magentoApiDataFixture Magento/GiftMessage/_files/guest/quote_with_item_message.php
+     * @throws Exception
+     */
+    public function testUpdateGiftMessageCartForItem()
+    {
+        $messageTo = "Alex";
+        $messageFrom = "Mike";
+        $message = "Best regards";
+        $query = $this->getUpdateGiftMessageQuery($messageTo, $messageFrom, $message);
+        foreach ($this->graphQlMutation($query)['updateCartItems']['cart']['items'] as $item) {
+            self::assertArrayHasKey('gift_message', $item);
+            self::assertSame('Alex', $item['gift_message']['to']);
+            self::assertSame('Mike', $item['gift_message']['from']);
+            self::assertSame('Best regards', $item['gift_message']['message']);
+        }
+        $messageTo = "";
+        $messageFrom = "";
+        $message = "";
+        $query = $this->getUpdateGiftMessageQuery($messageTo, $messageFrom, $message);
+        foreach ($this->graphQlMutation($query)['updateCartItems']['cart']['items'] as $item) {
+            self::assertArrayHasKey('gift_message', $item);
+            self::assertSame(null, $item['gift_message']);
+        }
+    }
+
+    private function getUpdateGiftMessageQuery(string $messageTo, string $messageFrom, string $message)
+    {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, 'test_guest_order_with_gift_message', 'reserved_order_id');
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
+        $itemId = (int)$quote->getItemByProduct($this->productRepository->get('simple'))->getId();
+
+        return <<<QUERY
+mutation {
+  updateCartItems(
+    input: {
+      cart_id: "$maskedQuoteId",
+      cart_items: [
+        {
+         cart_item_id: $itemId
+          quantity: 3
+         gift_message: {
+            to: "$messageTo"
+            from: "$messageFrom"
+            message: "$message"
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      items {
+        id
+        product {
+         name
+        }
+        quantity
+          ... on SimpleCartItem {
+          gift_message {
+            to
+            from
+            message
+          }
+        }
+     }
     }
   }
 }

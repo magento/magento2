@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySearchTermEntityRedirectTest">
+        <annotations>
+            <stories value="Search Term Redirect"/>
+            <title value="Create Search Term Entity With Redirect. Check How Redirect is Working on Storefront"/>
+            <description value="Storefront search by created search term with redirect. Verifying if created redirect is working"/>
+            <severity value="CRITICAL"/>
+        </annotations>
+
+        <before>
+            <!-- Login As Admin User -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Navigate To Marketing Search Terms Grid -->
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSearchTermPage">
+                <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminMenuMarketingSEOAndSearchSearchTerms.dataUiId}}"/>
+            </actionGroup>
+            <!-- Create Custom Search Term With Redirect -->
+            <actionGroup ref="AdminCreateNewSearchTermEntityActionGroup" stepKey="createSearchTerm">
+                <argument name="query" value="{{SearchTerm.query_text}}"/>
+                <argument name="store" value="{{SearchTerm.store_id}}"/>
+                <argument name="redirectUrl" value="{{SearchTerm.redirect}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="navigateToSearchTermPage"/>
+            <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="findCreatedTerm">
+                <argument name="searchQuery" value="{{SearchTerm.query_text}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteCreatedSearchTerm"/>
+        </after>
+
+        <!-- TEST BODY -->
+        <!-- Navigate To StoreFront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
+        <!-- Fill in Search Field, Submit Search Request -->
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchByCreatedTerm">
+            <argument name="query" value="{{SearchTerm.query_text}}"/>
+        </actionGroup>
+        <!-- Assert Current Url -->
+        <seeCurrentUrlEquals stepKey="checkUrl" url="{{SearchTerm.redirect}}"/>
+    </test>
+</tests>

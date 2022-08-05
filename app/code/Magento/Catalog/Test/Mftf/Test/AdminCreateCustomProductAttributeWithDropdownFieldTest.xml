@@ -8,22 +8,23 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateCustomProductAttributeWithDropdownFieldTest">
+    <test name="AdminCreateCustomProductAttributeWithDropdownFieldTest" deprecated="Use AdminVerifyCreateCustomProductAttributeTest">
         <annotations>
             <stories value="Create product Attribute"/>
-            <title value="Create Custom Product Attribute Dropdown Field (Not Required) from Product Page"/>
+            <title value="DEPRECATED: Create Custom Product Attribute Dropdown Field (Not Required) from Product Page"/>
             <description value="login as admin and create configurable product attribute with Dropdown field"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-10905"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-15474"/>
+                <issueId value="DEPRECATED">Use AdminVerifyCreateCustomProductAttributeTest</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
             <!--Create Category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -38,25 +39,29 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
 
-            <actionGroup ref="deleteProductAttribute" stepKey="deleteCreatedAttribute">
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteCreatedAttribute">
                 <argument name="ProductAttribute" value="newProductAttribute"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open Product Index Page-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
 
         <!-- Select Created Product-->
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
             <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$createConfigProduct.sku$$)}}"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
 
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="fillProductQty"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQty">
+            <argument name="productQty" value="100"/>
+        </actionGroup>
         <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="selectStockStatus"/>
 
         <!-- Create New Product Attribute -->
@@ -94,8 +99,7 @@
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="clickOnSaveAttribute"/>
         <waitForPageLoad stepKey="waitForAttributeToSave"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="saveTheProduct"/>
-        <waitForPageLoad stepKey="waitForProductToSave"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveTheProduct"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
 
         <!--Verify product attribute added in product form -->
@@ -105,7 +109,7 @@
         <seeElement selector="{{AdminProductFormSection.attributeLabelByText(ProductAttributeFrontendLabel.label)}}" stepKey="seeAttributeLabelInProductForm"/>
 
         <!--Verify Product Attribute in Attribute Form -->
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributeGrid"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{newProductAttribute.attribute_code}}" stepKey="setAttributeCode"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad" />
@@ -116,21 +120,25 @@
         <see selector="{{AdminProductAttributeGridSection.isComparableColumn}}" userInput="Yes" stepKey="seeComparableColumn"/>
 
         <!--Verify Product Attribute is present in Category Store Front Page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToStorefrontPage"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForProductFrontPageToLoad"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="clickOnCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <click selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="openSearchedProduct"/>
         <waitForPageLoad  stepKey="waitForProductToLoad1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductNameInStoreFront"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductNameInStoreFront">
+            <argument name="value" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigProduct.price$$" stepKey="seeProductPriceInStoreFront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="$$createConfigProduct.sku$$" stepKey="seeProductSkuInStoreFront"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront">
+            <argument name="productSku" value="$$createConfigProduct.sku$$"/>
+        </actionGroup>
         <scrollTo selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="scrollToMoreInformation"/>
         <see selector="{{StorefrontProductMoreInformationSection.attributeLabel}}"  userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeAttributeLabel"/>
         <see selector="{{StorefrontProductMoreInformationSection.attributeValue}}"  userInput="{{ProductAttributeOption8.value}}" stepKey="seeAttributeValue"/>
 
         <!--Verify Product Attribute present in search page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToStorefrontPage1"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontPage1"/>
         <waitForPageLoad stepKey="waitForProductFrontPageToLoad1"/>
         <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{ProductAttributeOption8.value}}" stepKey="fillAttribute"/>
         <waitForPageLoad stepKey="waitForSearchTextBox"/>

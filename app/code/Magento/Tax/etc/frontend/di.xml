@@ -35,7 +35,7 @@
         <plugin name="tax-session-depersonalize"
                 type="Magento\Tax\Model\Layout\DepersonalizePlugin" sortOrder="20"/>
     </type>
-    <type name="Magento\Framework\App\Action\AbstractAction">
+    <type name="Magento\Framework\App\ActionInterface">
         <plugin name="tax-app-action-dispatchController-context-plugin"
                 type="Magento\Tax\Model\App\Action\ContextPlugin"/>
     </type>

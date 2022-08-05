@@ -30,7 +30,7 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     /** @var string */
     protected static $_verifier;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_markTestAsRestOnly();
         parent::setUp();
@@ -52,7 +52,7 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         self::$_token = $consumerCredentials['token'];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->_oAuthClients = [];
@@ -84,11 +84,12 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage 401 Unauthorized
      */
     public function testGetRequestTokenExpiredConsumer()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('401 Unauthorized');
+
         $this::consumerFixture('2012-01-01 00:00:00');
         $this::$_consumer->setUpdatedAt('2012-01-01 00:00:00');
         $this::$_consumer->save();
@@ -98,21 +99,23 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage 401 Unauthorized
      */
     public function testGetRequestTokenInvalidConsumerKey()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('401 Unauthorized');
+
         $oAuthClient = $this->_getOauthClient('invalid_key', self::$_consumerSecret);
         $oAuthClient->requestRequestToken();
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage 401 Unauthorized
      */
     public function testGetRequestTokenInvalidConsumerSecret()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('401 Unauthorized');
+
         $oAuthClient = $this->_getOauthClient(self::$_consumerKey, 'invalid_secret');
         $oAuthClient->requestRequestToken();
     }
@@ -142,11 +145,12 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage 401 Unauthorized
      */
     public function testGetAccessTokenInvalidVerifier()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('401 Unauthorized');
+
         $oAuthClient = $this->_getOauthClient(self::$_consumerKey, self::$_consumerSecret);
         $requestToken = $oAuthClient->requestRequestToken();
         $oAuthClient->requestAccessToken(
@@ -157,11 +161,12 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage 401 Unauthorized
      */
     public function testGetAccessTokenConsumerMismatch()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('401 Unauthorized');
+
         $oAuthClientA = $this->_getOauthClient(self::$_consumerKey, self::$_consumerSecret);
         $requestTokenA = $oAuthClientA->requestRequestToken();
         $oauthVerifierA = self::$_verifier;
@@ -178,11 +183,12 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage 400 Bad Request
      */
     public function testAccessApiInvalidAccessToken()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('400 Bad Request');
+
         $oAuthClient = $this->_getOauthClient(self::$_consumerKey, self::$_consumerSecret);
         $requestToken = $oAuthClient->requestRequestToken();
         $accessToken = $oAuthClient->requestAccessToken(

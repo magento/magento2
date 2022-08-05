@@ -48,14 +48,12 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $websites = [];
         $tableName = $this->getMainTable();
-        if ($this->getConnection()->isTableExists($tableName)) {
-            $select = $this->getConnection()
-                ->select()
-                ->from($tableName);
+        $select = $this->getConnection()
+            ->select()
+            ->from($tableName);
 
-            foreach ($this->getConnection()->fetchAll($select) as $websiteData) {
-                $websites[$websiteData['code']] = $websiteData;
-            }
+        foreach ($this->getConnection()->fetchAll($select) as $websiteData) {
+            $websites[$websiteData['code']] = $websiteData;
         }
 
         return $websites;
@@ -70,7 +68,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        if (!preg_match('/^[a-z]+[a-z0-9_]*$/i', $object->getCode())) {
+        if (!$object->getCode() || !preg_match('/^[a-z]+[a-z0-9_]*$/i', $object->getCode())) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'Website code may only contain letters (a-z), numbers (0-9) or underscore (_),'

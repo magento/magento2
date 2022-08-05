@@ -11,16 +11,17 @@
     <test name="NoErrorForMiniCartItemEditTest">
         <annotations>
             <features value="ConfigurableProduct"/>
+            <stories value="Storefront Minicart Update"/>
             <title value="No error for minicart item edit test"/>
             <description value="Already selected configurable option should be selected when configurable product is edited from minicart"/>
             <severity value="MAJOR"/>
             <group value="ConfigurableProduct"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <!-- Create Configurable product -->
-            <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>
@@ -28,13 +29,27 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <!-- Delete the first simple product -->
-            <actionGroup stepKey="deleteProduct1" ref="deleteProductBySku">
+            <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
-                              dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true"
-                              stepKey="clickClearFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersVirtual"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterVirtual">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterVirtual"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clickClearFilters"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go To Created Product Page -->
@@ -59,7 +74,7 @@
         <waitForPageLoad stepKey="waitForMiniCart"/>
 
         <!-- Edit Item in Cart -->
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMiniCart"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart"/>
         <click selector="{{StorefrontMinicartSection.editMiniCartItem}}" stepKey="clickEditCartItem"/>
 
         <!-- Check if Product Configuration is still selected -->

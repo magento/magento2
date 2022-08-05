@@ -65,7 +65,7 @@ class FixedAttributeTest extends AbstractEavTest
         return [
             'visible' => '1',
             'required' => '0',
-            'label' => '',
+            'label' => 'fixed product tax',
             'code' => 'fixed_product_attribute',
             'source' => 'product-details',
             'scopeLabel' => '[GLOBAL]',

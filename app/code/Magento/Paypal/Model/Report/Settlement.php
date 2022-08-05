@@ -595,6 +595,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     protected function _fileNameToDate($filename)
     {
         // Currently filenames look like STL-YYYYMMDD, so that is what we care about.
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $dateSnippet = substr(basename($filename), 4, 8);
         $result = substr($dateSnippet, 0, 4) . '-' . substr($dateSnippet, 4, 2) . '-' . substr($dateSnippet, 6, 2);
         return $result;
@@ -603,13 +604,16 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     /**
      * Filter SFTP file list by filename format
      *
+     * Single Account format = STL-yyyymmdd.sequenceNumber.version.format
+     * Multiple Account format = STL-yyyymmdd.reportingWindow.sequenceNumber.totalFiles.version.format
+     *
      * @param array $list List of files as per $connection->rawls()
      * @return array Trimmed down list of files
      */
     protected function _filterReportsList($list)
     {
         $result = [];
-        $pattern = '/^STL-(\d{8,8})\.(\d{2,2})\.(.{3,3})\.CSV$/';
+        $pattern = '/^STL-(\d{8,8})\.((\d{2,2})|(([A-Z])\.(\d{2,2})\.(\d{2,2})))\.(.{3,3})\.CSV$/';
         foreach ($list as $filename => $data) {
             if (preg_match($pattern, $filename)) {
                 $result[$filename] = $data;

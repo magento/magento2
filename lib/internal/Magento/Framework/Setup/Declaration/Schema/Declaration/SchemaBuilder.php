@@ -7,10 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Declaration\Schema\Declaration;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Phrase;
 use Magento\Framework\Setup\Declaration\Schema\Declaration\TableElement\ElementNameResolver;
-use Magento\Framework\Stdlib\BooleanUtils;
-use Magento\Framework\Setup\Exception;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraint;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementFactory;
@@ -18,6 +17,9 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Index;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\Setup\Declaration\Schema\Sharding;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\BooleanUtils;
+use Magento\Framework\Validation\ValidationException;
 
 /**
  * This type of builder is responsible for converting ENTIRE data, that comes from XML into DTO`s format.
@@ -64,7 +66,7 @@ class SchemaBuilder
     private $validationComposite;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     private $resourceConnection;
 
@@ -76,11 +78,11 @@ class SchemaBuilder
     /**
      * SchemaBuilder constructor.
      *
-     * @param    ElementFactory $elementFactory
-     * @param    BooleanUtils $booleanUtils
-     * @param    Sharding $sharding
-     * @param    ValidationComposite $validationComposite
-     * @param \Magento\Framework\App\ResourceConnection $resourceConnection
+     * @param ElementFactory $elementFactory
+     * @param BooleanUtils $booleanUtils
+     * @param Sharding $sharding
+     * @param ValidationComposite $validationComposite
+     * @param ResourceConnection $resourceConnection
      * @param ElementNameResolver $elementNameResolver
      */
     public function __construct(
@@ -88,7 +90,7 @@ class SchemaBuilder
         BooleanUtils $booleanUtils,
         Sharding $sharding,
         ValidationComposite $validationComposite,
-        \Magento\Framework\App\ResourceConnection $resourceConnection,
+        ResourceConnection $resourceConnection,
         ElementNameResolver $elementNameResolver
     ) {
         $this->sharding = $sharding;
@@ -116,8 +118,8 @@ class SchemaBuilder
     /**
      * Do schema validation and print all errors.
      *
-     * @param  Schema $schema
-     * @throws Exception
+     * @param Schema $schema
+     * @throws LocalizedException
      */
     private function validate(Schema $schema)
     {
@@ -129,16 +131,16 @@ class SchemaBuilder
                 $messages .= sprintf("%s%s", PHP_EOL, $error['message']);
             }
 
-            throw new Exception(new Phrase($messages));
+            throw new LocalizedException(new Phrase($messages));
         }
     }
 
     /**
      * Build schema.
      *
-     * @param  Schema $schema
-     * @throws Exception
+     * @param Schema $schema
      * @return Schema
+     * @throws ValidationException
      */
     public function build(Schema $schema): Schema
     {
@@ -184,10 +186,10 @@ class SchemaBuilder
      *
      * If column was renamed new key will be associated to it.
      *
-     * @param array $tableData
-     * @param string $resource
-     * @param Table $table
-     * @return array
+     * @param   array $tableData
+     * @param   string $resource
+     * @param   Table $table
+     * @return  array
      */
     private function processColumns(array $tableData, string $resource, Table $table): array
     {
@@ -209,10 +211,10 @@ class SchemaBuilder
     /**
      * Process generic data that is support by all 3 child types: columns, constraints, indexes.
      *
-     * @param array $elementData
-     * @param string $resource
-     * @param Table $table
-     * @return array
+     * @param   array $elementData
+     * @param   string $resource
+     * @param   Table $table
+     * @return  array
      */
     private function processGenericData(array $elementData, string $resource, Table $table): array
     {
@@ -327,11 +329,11 @@ class SchemaBuilder
     /**
      * Convert and instantiate constraint objects.
      *
-     * @param  array $tableData
-     * @param  string $resource
-     * @param  Schema $schema
-     * @param Table $table
-     * @return Constraint[]
+     * @param   array $tableData
+     * @param   string $resource
+     * @param   Schema $schema
+     * @param   Table $table
+     * @return  Constraint[]
      */
     private function processConstraints(array $tableData, string $resource, Schema $schema, Table $table): array
     {

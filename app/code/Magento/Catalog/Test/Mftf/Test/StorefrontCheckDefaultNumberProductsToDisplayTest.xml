@@ -21,7 +21,7 @@
         <before>
             <!-- Login as Admin -->
             <comment userInput="Login as Admin" stepKey="commentLoginAsAdmin"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!--Create 37 Products and Subcategory -->
             <comment userInput="Create 37 Products and Subcategory" stepKey="commentCreateData"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -176,7 +176,7 @@
             <deleteData createDataKey="createSimpleProductThirtyFive" stepKey="deleteProductThirtyFive"/>
             <deleteData createDataKey="createSimpleProductThirtySix" stepKey="deleteProductThirtySix"/>
             <deleteData createDataKey="createSimpleProductThirtySeven" stepKey="deleteProductThirtySeven"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Verify configuration for default number of products displayed in the grid view-->
         <comment userInput="Verify configuration for default number of products displayed in the grid view" stepKey="commentVerifyDefaultValues"/>
@@ -187,20 +187,25 @@
         <seeInField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" userInput="12,24,36" stepKey="seeDefaultValueAllowedNumberProductsPerPage"/>
         <seeInField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageDefaultValue}}" userInput="12" stepKey="seeDefaultValueProductPerPage"/>
 
-        <!-- Perform reindex and flush cache -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Open storefront on the category page -->
         <comment userInput="Open storefront on the category page" stepKey="commentOpenStorefront"/>
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="goToStorefrontCreatedCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="goToStorefrontCreatedCategoryPage"/>
         <!-- Check the drop-down at the bottom of page contains options -->
         <comment userInput="Check the drop-down at the bottom of page contains options" stepKey="commentCheckOptions"/>
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" stepKey="scrollToBottomToolbarSection"/>
-        <assertElementContainsAttribute selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" attribute="value" expectedValue="12" stepKey="assertPerPageFirstValue" />
+        <assertElementContainsAttribute stepKey="assertPerPageFirstValue">
+			<expectedResult selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" attribute="value" type="string">12</expectedResult>
+        </assertElementContainsAttribute>
         <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="24" stepKey="selectPerPageSecondValue" />
-        <assertElementContainsAttribute selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" attribute="value" expectedValue="24" stepKey="assertPerPageSecondValue" />
+        <assertElementContainsAttribute stepKey="assertPerPageSecondValue">
+			<expectedResult selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" attribute="value" type="string">24</expectedResult>
+        </assertElementContainsAttribute>
         <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="36" stepKey="selectPerPageThirdValue" />
-        <assertElementContainsAttribute selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" attribute="value" expectedValue="36" stepKey="assertPerPageThirdValue" />
+        <assertElementContainsAttribute stepKey="assertPerPageThirdValue">
+			<expectedResult selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" attribute="value" type="string">36</expectedResult>
+        </assertElementContainsAttribute>
     </test>
 </tests>

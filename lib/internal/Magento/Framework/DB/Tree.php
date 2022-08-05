@@ -18,7 +18,7 @@ use Magento\Framework\Phrase;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * phpcs:ignoreFile
  *
- * @deprecated Not used anymore.
+ * @deprecated 102.0.0 Not used anymore.
  */
 class Tree
 {
@@ -82,7 +82,7 @@ class Tree
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function __construct($config = [])
     {
@@ -93,6 +93,7 @@ class Tree
 
             // use an object from the registry?
             if (is_string($connection)) {
+                /** @phpstan-ignore-next-line */
                 $connection = \Zend::registry($connection);
             }
 
@@ -156,7 +157,7 @@ class Tree
      * @param string $name
      * @return $this
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function setIdField($name)
     {
@@ -170,7 +171,7 @@ class Tree
      * @param string $name
      * @return $this
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function setLeftField($name)
     {
@@ -184,7 +185,7 @@ class Tree
      * @param string $name
      * @return $this
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function setRightField($name)
     {
@@ -198,7 +199,7 @@ class Tree
      * @param string $name
      * @return $this
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function setLevelField($name)
     {
@@ -212,7 +213,7 @@ class Tree
      * @param string $name
      * @return $this
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function setPidField($name)
     {
@@ -226,7 +227,7 @@ class Tree
      * @param string $name
      * @return $this
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function setTable($name)
     {
@@ -237,7 +238,7 @@ class Tree
     /**
      * @return array
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function getKeys()
     {
@@ -256,7 +257,7 @@ class Tree
      * @param array $data
      * @return string
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function clear($data = [])
     {
@@ -283,7 +284,7 @@ class Tree
      * @param string|int $nodeId
      * @return array
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function getNodeInfo($nodeId)
     {
@@ -303,7 +304,7 @@ class Tree
      * @param array $data
      * @return false|string
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function appendChild($nodeId, $data)
     {
@@ -358,6 +359,7 @@ class Tree
             } catch (\Exception $e) {
                 $this->_db->rollBack();
                 echo $e->getMessage();
+                /** @phpstan-ignore-next-line */
                 echo $sql;
                 exit;
             }
@@ -371,7 +373,7 @@ class Tree
     /**
      * @return array
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function checkNodes()
     {
@@ -403,7 +405,7 @@ class Tree
      * @param string|int $nodeId
      * @return bool|Node|void
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function removeNode($nodeId)
     {
@@ -479,7 +481,7 @@ class Tree
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function moveNode($eId, $pId, $aId = 0)
     {
@@ -815,7 +817,7 @@ class Tree
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function moveNodes($eId, $pId, $aId = 0)
     {
@@ -833,6 +835,7 @@ class Tree
         if ($pId == 0) {
             $levelUp = 0;
         } else {
+            /** @phpstan-ignore-next-line */
             $levelUp = $pInfo[$this->_level];
         }
 
@@ -844,15 +847,20 @@ class Tree
             $rightKeyNear = $this->_db->fetchOne('SELECT MAX(' . $this->_right . ') FROM ' . $this->_table);
         } elseif ($aId != 0 && $pId == $eInfo[$this->_pid]) {
             // if we have after ID
+            /** @phpstan-ignore-next-line */
             $rightKeyNear = $aInfo[$this->_right];
+            /** @phpstan-ignore-next-line */
             $leftKeyNear = $aInfo[$this->_left];
         } elseif ($aId == 0 && $pId == $eInfo[$this->_pid]) {
             // if we do not have after ID
+            /** @phpstan-ignore-next-line */
             $rightKeyNear = $pInfo[$this->_left];
         } elseif ($pId != $eInfo[$this->_pid]) {
+            /** @phpstan-ignore-next-line */
             $rightKeyNear = $pInfo[$this->_right] - 1;
         }
 
+        /** @phpstan-ignore-next-line */
         $skewLevel = $pInfo[$this->_level] - $eInfo[$this->_level] + 1;
         $skewTree = $eInfo[$this->_right] - $eInfo[$this->_left] + 1;
 
@@ -996,12 +1004,14 @@ class Tree
 
         $this->_db->beginTransaction();
         try {
+            /** @phpstan-ignore-next-line */
             $this->_db->query($sql);
             $this->_db->commit();
         } catch (\Exception $e) {
             $this->_db->rollBack();
             echo $e->getMessage();
             echo "<br>\r\n";
+            /** @phpstan-ignore-next-line */
             echo $sql;
             echo "<br>\r\n";
             exit;
@@ -1015,7 +1025,7 @@ class Tree
      * @param string $fields
      * @return void
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function addTable($tableName, $joinCondition, $fields = '*')
     {
@@ -1026,7 +1036,7 @@ class Tree
      * @param Select $select
      * @return void
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     protected function _addExtTablesToSelect(Select &$select)
     {
@@ -1041,7 +1051,7 @@ class Tree
      * @param int $endLevel
      * @return NodeSet
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function getChildren($nodeId, $startLevel = 0, $endLevel = 0)
     {
@@ -1052,6 +1062,7 @@ class Tree
             exit;
         }
 
+        /** @phpstan-ignore-next-line */
         $dbSelect = new Select($this->_db);
         $dbSelect->from(
             $this->_table
@@ -1088,10 +1099,11 @@ class Tree
      * @param string|int $nodeId
      * @return Node
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function getNode($nodeId)
     {
+        /** @phpstan-ignore-next-line */
         $dbSelect = new Select($this->_db);
         $dbSelect->from($this->_table)->where($this->_table . '.' . $this->_id . ' >= :id');
 

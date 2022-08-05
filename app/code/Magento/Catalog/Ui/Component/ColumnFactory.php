@@ -5,10 +5,17 @@
  */
 namespace Magento\Catalog\Ui\Component;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Filters\FilterModifier;
+use Magento\Ui\Component\Listing\Columns\ColumnInterface;
 
 /**
- * Column Factory
+ * Create columns factory on product grid page
  *
  * @api
  * @since 100.0.2
@@ -16,7 +23,7 @@ use Magento\Ui\Component\Filters\FilterModifier;
 class ColumnFactory
 {
     /**
-     * @var \Magento\Framework\View\Element\UiComponentFactory
+     * @var UiComponentFactory
      */
     protected $componentFactory;
 
@@ -40,25 +47,36 @@ class ColumnFactory
         'select' => 'select',
         'multiselect' => 'multiselect',
         'date' => 'date',
+        'datetime' => 'date',
     ];
 
     /**
-     * @param \Magento\Framework\View\Element\UiComponentFactory $componentFactory
+     * @var TimezoneInterface
      */
-    public function __construct(\Magento\Framework\View\Element\UiComponentFactory $componentFactory)
-    {
+    private $timezone;
+
+    /**
+     * @param UiComponentFactory $componentFactory
+     * @param TimezoneInterface|null $timezone
+     */
+    public function __construct(
+        UiComponentFactory $componentFactory,
+        TimezoneInterface $timezone = null
+    ) {
         $this->componentFactory = $componentFactory;
+        $this->timezone = $timezone
+            ?? ObjectManager::getInstance()->get(TimezoneInterface::class);
     }
 
     /**
      * Create Factory
      *
-     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
-     * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
+     * @param ProductAttributeInterface $attribute
+     * @param ContextInterface $context
      * @param array $config
      *
-     * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return ColumnInterface
+     * @throws LocalizedException
      */
     public function create($attribute, $context, array $config = [])
     {
@@ -74,28 +92,54 @@ class ColumnFactory
                 'filter' => ($attribute->getIsFilterableInGrid() || array_key_exists($columnName, $filterModifiers))
                     ? $this->getFilterType($attribute->getFrontendInput())
                     : null,
-                '__disableTmpl' => ['label' => true],
             ],
             $config
         );
 
         if ($attribute->usesSource()) {
-            $config['options'] = $attribute->getSource()->getAllOptions();
+            $config['options'] = $attribute->getSource()->getAllOptions(true, true);
             foreach ($config['options'] as &$optionData) {
                 $optionData['__disableTmpl'] = true;
             }
         }
-        
+
         $config['component'] = $this->getJsComponent($config['dataType']);
-        
+
+        if ($config['dataType'] === 'date') {
+            $config += $this->getDateConfig($attribute);
+        }
+
         $arguments = [
             'data' => [
                 'config' => $config,
             ],
             'context' => $context,
         ];
-        
+
         return $this->componentFactory->create($columnName, 'column', $arguments);
+    }
+
+    /**
+     * Get config for Date columns
+     *
+     * @param ProductAttributeInterface $attribute
+     * @return array
+     */
+    private function getDateConfig(ProductAttributeInterface $attribute): array
+    {
+        $isDatetime = $attribute->getFrontendInput() === 'datetime';
+        $dateFormat = $isDatetime
+            ? $this->timezone->getDateTimeFormat(\IntlDateFormatter::MEDIUM)
+            : $this->timezone->getDateFormat(\IntlDateFormatter::MEDIUM);
+        $timezone = $isDatetime
+            ? $this->timezone->getConfigTimezone()
+            : $this->timezone->getDefaultTimezone();
+
+        return [
+            'timezone' => $timezone,
+            'dateFormat' => $dateFormat,
+            'options' => ['showsTime' => $isDatetime],
+        ];
     }
 
     /**
@@ -113,7 +157,7 @@ class ColumnFactory
     /**
      * Get Data Type
      *
-     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @param ProductAttributeInterface $attribute
      *
      * @return string
      */
@@ -130,8 +174,9 @@ class ColumnFactory
      */
     protected function getFilterType($frontendInput)
     {
-        $filtersMap = ['date' => 'dateRange'];
+        $filtersMap = ['date' => 'dateRange', 'datetime' => 'dateRange'];
         $result = array_replace_recursive($this->dataTypeMap, $filtersMap);
+
         return $result[$frontendInput] ?? $result['default'];
     }
 }

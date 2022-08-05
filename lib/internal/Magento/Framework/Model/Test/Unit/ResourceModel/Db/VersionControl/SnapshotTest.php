@@ -3,45 +3,49 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db\VersionControl;
 
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class SnapshotTest
- */
-class SnapshotTest extends \PHPUnit\Framework\TestCase
+class SnapshotTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot
+     * @var Snapshot
      */
     protected $entitySnapshot;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata
+     * @var MockObject|Metadata
      */
     protected $entityMetadata;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Model\AbstractModel
+     * @var MockObject|AbstractModel
      */
     protected $model;
 
     /**
      * Initialization
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->model = $this->createPartialMock(\Magento\Framework\Model\AbstractModel::class, ['getId']);
+        $this->model = $this->createPartialMock(AbstractModel::class, ['getId']);
 
         $this->entityMetadata = $this->createPartialMock(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata::class,
+            Metadata::class,
             ['getFields']
         );
 
         $this->entitySnapshot = $objectManager->getObject(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
+            Snapshot::class,
             ['metadata' => $this->entityMetadata]
         );
     }
@@ -91,5 +95,28 @@ class SnapshotTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->entitySnapshot->isModified($this->model));
         $this->entitySnapshot->registerSnapshot($this->model);
         $this->assertFalse($this->entitySnapshot->isModified($this->model));
+    }
+
+    public function testClear()
+    {
+        $entityId = 1;
+        $data = [
+            'id' => $entityId,
+            'name' => 'test',
+            'description' => '',
+            'custom_not_present_attribute' => ''
+        ];
+        $fields = [
+            'id' => [],
+            'name' => [],
+            'description' => []
+        ];
+        $this->assertTrue($this->entitySnapshot->isModified($this->model));
+        $this->model->setData($data);
+        $this->model->expects($this->any())->method('getId')->willReturn($entityId);
+        $this->entityMetadata->expects($this->any())->method('getFields')->with($this->model)->willReturn($fields);
+        $this->entitySnapshot->registerSnapshot($this->model);
+        $this->entitySnapshot->clear($this->model);
+        $this->assertTrue($this->entitySnapshot->isModified($this->model));
     }
 }

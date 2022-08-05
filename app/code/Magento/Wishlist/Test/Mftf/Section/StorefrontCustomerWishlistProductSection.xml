@@ -25,5 +25,9 @@
         <element name="pager" type="block" selector=".toolbar .pager"/>
         <element name="wishlistEmpty" type="block" selector=".form-wishlist-items .message.info.empty"/>
         <element name="removeProduct" type="button" selector=".products-grid a.btn-remove" timeout="30"/>
+        <element name="editProduct" type="button" selector=".products-grid a.action.edit" timeout="30"/>
+        <element name="productSeeDetailsByName" type="block" selector="//a[contains(text(), '{{productName}}')]/ancestor::div/div[contains(@class, 'product-item-tooltip')]" parameterized="true"/>
+        <element name="productSeeDetailsLabelByName" type="block" selector="//a[contains(text(), '{{productName}}')]/ancestor::div/div[contains(@class, 'product-item-tooltip')]//dt[@class='label']" parameterized="true"/>
+        <element name="productSeeDetailsValueByName" type="block" selector="//a[contains(text(), '{{productName}}')]/ancestor::div/div[contains(@class, 'product-item-tooltip')]//dd[@class='values']" parameterized="true"/>
     </section>
 </sections>

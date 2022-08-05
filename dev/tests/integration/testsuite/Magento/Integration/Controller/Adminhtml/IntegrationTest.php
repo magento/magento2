@@ -4,10 +4,11 @@
  * See COPYING.txt for license details.
  *
  */
+
 namespace Magento\Integration\Controller\Adminhtml;
 
-use Magento\TestFramework\Bootstrap;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\TestFramework\Bootstrap;
 
 /**
  * \Magento\Integration\Controller\Adminhtml\Integration
@@ -18,13 +19,13 @@ use Magento\Framework\App\Request\Http as HttpRequest;
  */
 class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
-    /** @var \Magento\Integration\Model\Integration  */
+    /** @var \Magento\Integration\Model\Integration */
     private $_integration;
 
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         /** @var $integration \Magento\Integration\Model\Integration */
@@ -41,7 +42,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         $this->dispatch('backend/admin/integration/index');
         $response = $this->getResponse()->getBody();
 
-        $this->assertContains('Integrations', $response);
+        $this->assertStringContainsString('Integrations', $response);
         $this->assertEquals(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
@@ -60,8 +61,8 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         $response = $this->getResponse()->getBody();
 
         $this->assertEquals('new', $this->getRequest()->getActionName());
-        $this->assertContains('entry-edit form-inline', $response);
-        $this->assertContains('New Integration', $response);
+        $this->assertStringContainsString('entry-edit form-inline', $response);
+        $this->assertStringContainsString('New Integration', $response);
         $this->assertEquals(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
@@ -82,9 +83,12 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         $response = $this->getResponse()->getBody();
         $saveLink = 'integration/save/';
 
-        $this->assertContains('entry-edit form-inline', $response);
-        $this->assertContains('Edit &quot;' . $this->_integration->getName() . '&quot; Integration', $response);
-        $this->assertContains($saveLink, $response);
+        $this->assertStringContainsString('entry-edit form-inline', $response);
+        $this->assertStringContainsString(
+            'Edit &quot;' . $this->_integration->getName() . '&quot; Integration',
+            $response
+        );
+        $this->assertStringContainsString($saveLink, $response);
         $this->assertEquals(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
@@ -134,6 +138,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
     public function testSaveActionNewIntegration()
     {
         $url = 'http://magento.ll/endpoint_url';
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $integrationName = md5(rand());
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(

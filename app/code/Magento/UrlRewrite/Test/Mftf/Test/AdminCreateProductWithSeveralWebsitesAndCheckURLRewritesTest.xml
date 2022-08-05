@@ -24,7 +24,7 @@
                 <requiredEntity createDataKey="rootCategory"/>
             </createData>
             <createData entity="defaultSimpleProduct" stepKey="createProduct"/>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStore1">
@@ -33,9 +33,10 @@
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStore2">
                 <argument name="storeGroupName" value="customStoreGroup.name"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create first store -->
@@ -51,7 +52,7 @@
         </actionGroup>
 
         <!-- Create second store -->
-        <actionGroup ref="CreateCustomStore" stepKey="createCustomStore">
+        <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStore">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
             <argument name="store" value="{{customStoreGroup.name}}"/>
             <argument name="rootCategory" value="$$rootCategory.name$$"/>
@@ -61,55 +62,67 @@
             <argument name="StoreGroup" value="customStoreGroup"/>
             <argument name="customStore" value="customStoreEN"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!-- Create simple product with categories created in create data -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductsGrid"/>
+
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowOfCreatedSimpleProduct"/>
-        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
-        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
-        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$rootCategory.name$$" stepKey="fillSearchForInitialCategory"/>
-        <waitForPageLoad stepKey="waitForCategory1"/>
-        <click selector="{{AdminProductFormSection.selectCategory($$rootCategory.name$$)}}" stepKey="unselectInitialCategory"/>
-        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$category.name$$" stepKey="fillSearchCategory"/>
-        <waitForPageLoad stepKey="waitForCategory2"/>
-        <click selector="{{AdminProductFormSection.selectCategory($$category.name$$)}}" stepKey="clickOnCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
-        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForSimpleProductSaved"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProduct"/>
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="unselectInitialCategory">
+            <argument name="categoryName" value="$$rootCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="pressDoneButton"/>
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="setNewCategory">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneButton"/>
+        <actionGroup ref="SaveProductFormNoSuccessCheckActionGroup" stepKey="saveProduct"/>
+
         <!-- Verify customer see success message -->
-        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeAssertSimpleProductSaveSuccessMessage">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <!-- Grab category Id -->
-        <actionGroup ref="OpenCategoryFromCategoryTree" stepKey="grabCategoryId">
+        <actionGroup ref="OpenCategoryFromCategoryTreeActionGroup" stepKey="grabCategoryId">
             <argument name="category" value="$$category.name$$"/>
         </actionGroup>
         <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>
         <!-- Open Url Rewrite page and verify new Redirect Path, RedirectType and Target Path for the grabbed category Id -->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="searchPath">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchPath">
             <argument name="redirectPath" value="$$category.name$$.html"/>
             <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
         </actionGroup>
-        <see selector="{{AdminUrlRewriteIndexSection.storeView('1')}}" userInput="{{customStoreGroup.name}}" stepKey="seeStoreValueForCategoryId"/>
-        <see selector="{{AdminUrlRewriteIndexSection.storeView('1')}}" userInput="{{customStoreEN.name}}" stepKey="seeStoreViewValueForCategoryId"/>
+
+        <actionGroup ref="AssertAdminStoreValueIsSetForUrlRewriteActionGroup" stepKey="seeStoreValueForCategoryId">
+            <argument name="storeValue" value="{{customStoreGroup.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminStoreValueIsSetForUrlRewriteActionGroup" stepKey="seeStoreViewValueForCategoryId">
+            <argument name="storeValue" value="{{customStoreEN.name}}"/>
+        </actionGroup>
 
         <!-- Grab product Id -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="grabProductId">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="grabProductId">
             <argument name="productSku" value="$$createProduct.sku$$"/>
         </actionGroup>
         <grabFromCurrentUrl stepKey="productId" regex="#\/([0-9]*)?\/$#"/>
         <!-- Open Url Rewrite page and verify new Redirect Path, RedirectType and Target Path for the grabbed product Id -->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="searchPath1">
+        <actionGroup ref="AdminFilterUrlRewriteGridByRequestPathAndStoreViewActionGroup" stepKey="searchPath1">
             <argument name="redirectPath" value="$$createProduct.name$$.html"/>
             <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
+            <argument name="storeView" value="{{storeViewData.name}}"/>
         </actionGroup>
-        <see selector="{{AdminUrlRewriteIndexSection.storeView('1')}}" userInput="{{customStore.name}}" stepKey="seeStoreValueForProductId"/>
-        <see selector="{{AdminUrlRewriteIndexSection.storeView('1')}}" userInput="{{storeViewData.name}}" stepKey="seeStoreViewValueForProductId"/>
+
+        <actionGroup ref="AssertAdminStoreValueIsSetForUrlRewriteActionGroup" stepKey="seeStoreValueForProductId">
+            <argument name="storeValue" value="{{customStore.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminStoreValueIsSetForUrlRewriteActionGroup" stepKey="seeStoreViewValueForProductId">
+            <argument name="storeValue" value="{{storeViewData.name}}"/>
+        </actionGroup>
     </test>
 </tests>

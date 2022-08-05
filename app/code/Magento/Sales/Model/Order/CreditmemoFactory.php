@@ -6,10 +6,16 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Bundle\Ui\DataProvider\Product\Listing\Collector\BundlePrice;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\FormatInterface;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
  * Factory class for @see \Magento\Sales\Model\Order\Creditmemo
+ *
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreditmemoFactory
 {
@@ -27,12 +33,17 @@ class CreditmemoFactory
 
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $unserialize;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var FormatInterface
+     */
+    private $localeFormat;
+
+    /**
+     * @var JsonSerializer
      */
     private $serializer;
 
@@ -41,18 +52,19 @@ class CreditmemoFactory
      *
      * @param \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory
      * @param \Magento\Tax\Model\Config $taxConfig
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param JsonSerializer $serializer
+     * @param FormatInterface $localeFormat
      */
     public function __construct(
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
         \Magento\Tax\Model\Config $taxConfig,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        JsonSerializer $serializer = null,
+        FormatInterface $localeFormat = null
     ) {
         $this->convertor = $convertOrderFactory->create();
         $this->taxConfig = $taxConfig;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Serialize\Serializer\Json::class
-        );
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(JsonSerializer::class);
+        $this->localeFormat = $localeFormat ?: ObjectManager::getInstance()->get(FormatInterface::class);
     }
 
     /**
@@ -147,7 +159,7 @@ class CreditmemoFactory
         if ($item->isDummy()) {
             if ($item->getHasChildren()) {
                 foreach ($item->getChildrenItems() as $child) {
-                    if (empty($qtys)) {
+                    if (empty($qtys) || (count(array_unique($qtys)) === 1 && (int)end($qtys) === 0)) {
                         if ($this->canRefundNoDummyItem($child, $invoiceQtysRefundLimits)) {
                             return true;
                         }
@@ -166,6 +178,7 @@ class CreditmemoFactory
                     return isset($qtys[$parent->getId()]) && $qtys[$parent->getId()] > 0;
                 }
             }
+            return false;
         } else {
             return $this->canRefundNoDummyItem($item, $invoiceQtysRefundLimits);
         }
@@ -199,14 +212,17 @@ class CreditmemoFactory
     protected function initData($creditmemo, $data)
     {
         if (isset($data['shipping_amount'])) {
-            $creditmemo->setBaseShippingAmount((double)$data['shipping_amount']);
-            $creditmemo->setBaseShippingInclTax((double)$data['shipping_amount']);
+            $shippingAmount = $this->parseNumber($data['shipping_amount']);
+            $creditmemo->setBaseShippingAmount($shippingAmount);
+            $creditmemo->setBaseShippingInclTax($shippingAmount);
         }
         if (isset($data['adjustment_positive'])) {
-            $creditmemo->setAdjustmentPositive($data['adjustment_positive']);
+            $adjustmentPositiveAmount = $this->parseAdjustmentAmount($data['adjustment_positive']);
+            $creditmemo->setAdjustmentPositive($adjustmentPositiveAmount);
         }
         if (isset($data['adjustment_negative'])) {
-            $creditmemo->setAdjustmentNegative($data['adjustment_negative']);
+            $adjustmentNegativeAmount = $this->parseAdjustmentAmount($data['adjustment_negative']);
+            $creditmemo->setAdjustmentNegative($adjustmentNegativeAmount);
         }
     }
 
@@ -339,5 +355,33 @@ class CreditmemoFactory
         }
 
         return (float)$amount;
+    }
+
+    /**
+     * Parse adjustment amount value to number
+     *
+     * @param string|null $amount
+     *
+     * @return float|null
+     */
+    private function parseAdjustmentAmount($amount)
+    {
+        $amount = trim($amount);
+        $percentAmount = substr($amount, -1) == '%';
+        $amount = $this->parseNumber($amount);
+
+        return $percentAmount ? $amount . '%' : $amount;
+    }
+
+    /**
+     * Parse value to number
+     *
+     * @param string|null $value
+     *
+     * @return float|null
+     */
+    private function parseNumber($value)
+    {
+        return $this->localeFormat->getNumber($value);
     }
 }

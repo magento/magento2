@@ -15,5 +15,6 @@
         <element name="shortDescriptionTextArea" type="textarea" selector="#product_form_short_description"/>
         <element name="sectionHeaderIfNotShowing" type="button" selector="//div[@data-index='content']//div[contains(@class, '_hide')]"/>
         <element name="pageHeader" type="textarea" selector="//*[@class='page-header row']"/>
+        <element name="attributeInput" type="input" selector="input[name='product[{{attributeCode}}]']" parameterized="true"/>
     </section>
 </sections>

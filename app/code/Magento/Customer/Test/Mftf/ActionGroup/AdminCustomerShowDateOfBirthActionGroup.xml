@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCustomerShowDateOfBirthActionGroup">
+        <annotations>
+            <description>Goes to the customer configuration. Set "Show Date of Birth" with provided value.</description>
+        </annotations>
+        <arguments>
+            <argument name="value" type="string" defaultValue="{{ShowDateOfBirth.optional}}"/>
+        </arguments>
+        <amOnPage url="{{AdminCustomerConfigPage.url('#customer_address-link')}}" stepKey="openCustomerConfigPage"/>
+        <waitForPageLoad stepKey="waitCustomerConfigPage"/>
+        <scrollTo selector="{{AdminCustomerConfigSection.showDateOfBirth}}" x="0" y="-100" stepKey="scrollToShowDateOfBirth"/>
+        <uncheckOption selector="{{AdminCustomerConfigSection.showDateOfBirthInherit}}" stepKey="uncheckUseSystem"/>
+        <selectOption selector="{{AdminCustomerConfigSection.showDateOfBirth}}" userInput="{{value}}" stepKey="fillShowDateOfBirth"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

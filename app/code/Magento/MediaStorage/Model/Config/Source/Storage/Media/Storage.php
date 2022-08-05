@@ -23,7 +23,7 @@ class Storage implements \Magento\Framework\Option\ArrayInterface
                 'value' => \Magento\MediaStorage\Model\File\Storage::STORAGE_MEDIA_FILE_SYSTEM,
                 'label' => __('File System'),
             ],
-            ['value' => \Magento\MediaStorage\Model\File\Storage::STORAGE_MEDIA_DATABASE, 'label' => __('Database')]
+            ['value' => \Magento\MediaStorage\Model\File\Storage::STORAGE_MEDIA_DATABASE, 'label' => __('Database (Deprecated)')]
         ];
     }
 }

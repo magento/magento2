@@ -17,13 +17,14 @@
                 <group value="mtf_migrated"/>
             </annotations>
             <before>
-                <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+                <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             </before>
             <after>
                 <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                     <argument name="customStore" value="storeViewGermany"/>
                 </actionGroup>
-                <actionGroup ref="logout" stepKey="logout"/>
+                <magentoCron groups="index" stepKey="reindex"/>
+                <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
 
             <!--Create new localized store view-->
@@ -31,9 +32,10 @@
                 <argument name="StoreGroup" value="_defaultStoreGroup"/>
                 <argument name="customStore" value="storeViewGermany"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
-            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
+            <actionGroup ref="AdminCreateStoreViewSaveActionGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
 
             <!--Search store view(from above step) in grid and verify AssertStoreInGrid-->
             <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="searchStoreViewInGrid">

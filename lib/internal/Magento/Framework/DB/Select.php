@@ -7,6 +7,7 @@ namespace Magento\Framework\DB;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Sql\Expression;
 
 /**
  * Class for SQL SELECT generation and results.
@@ -28,23 +29,24 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  * @method \Magento\Framework\DB\Select distinct($flag = true)
  * @method \Magento\Framework\DB\Select reset($part = null)
  * @method \Magento\Framework\DB\Select columns($cols = '*', $correlationName = null)
+ * @since 100.0.2
  */
 class Select extends \Zend_Db_Select
 {
     /**
      * Condition type
      */
-    const TYPE_CONDITION = 'TYPE_CONDITION';
+    public const TYPE_CONDITION = 'TYPE_CONDITION';
 
     /**
      * Straight join key
      */
-    const STRAIGHT_JOIN = 'straightjoin';
+    public const STRAIGHT_JOIN = 'straightjoin';
 
     /**
      * Straight join SQL directive.
      */
-    const SQL_STRAIGHT_JOIN = 'STRAIGHT_JOIN';
+    public const SQL_STRAIGHT_JOIN = 'STRAIGHT_JOIN';
 
     /**
      * @var Select\SelectRenderer
@@ -91,6 +93,12 @@ class Select extends \Zend_Db_Select
      * $select->where('id = :id');
      * </code>
      *
+     * You may also construct IN statements:
+     *
+     * <code>
+     * $select->where('entity_id IN (?)', ['1', '2', '3']);
+     * </code>
+     *
      * Note that it is more correct to use named bindings in your
      * queries for values other than strings. When you use named
      * bindings, don't forget to pass the values when actually
@@ -101,19 +109,19 @@ class Select extends \Zend_Db_Select
      * </code>
      *
      * @param string $cond The WHERE condition.
-     * @param string $value OPTIONAL A single value to quote into the condition.
-     * @param string|int|null $type OPTIONAL The type of the given value
+     * @param array|null|int|string|float|Expression|Select|\DateTimeInterface $value The value to quote.
+     * @param int|string|null $type OPTIONAL SQL datatype of the given value e.g. Zend_Db::FLOAT_TYPE or "INT"
      * @return \Magento\Framework\DB\Select
      */
     public function where($cond, $value = null, $type = null)
     {
         if ($value === null && $type === null) {
             $value = '';
-        } elseif ($type == self::TYPE_CONDITION) {
+        } elseif ((string)$type === self::TYPE_CONDITION) {
             $type = null;
         }
         if (is_array($value)) {
-            $cond = $this->getConnection()->quoteInto($cond, $value);
+            $cond = $this->getConnection()->quoteInto($cond, $value, $type);
             $value = null;
         }
         return parent::where($cond, $value, $type);
@@ -240,7 +248,8 @@ class Select extends \Zend_Db_Select
     protected function _findTableInCond($table, $cond)
     {
         $quote = $this->_adapter->getQuoteIdentifierSymbol();
-
+        $cond = (string)$cond;
+        $table = (string)$table;
         if (strpos($cond, $quote . $table . $quote . '.') !== false) {
             return true;
         }
@@ -377,7 +386,7 @@ class Select extends \Zend_Db_Select
      */
     public function setPart($part, $value)
     {
-        $part = strtolower($part);
+        $part = $part !== null ? strtolower($part) : '';
         if (!array_key_exists($part, $this->_parts)) {
             throw new \Zend_Db_Select_Exception("Invalid Select part '{$part}'");
         }

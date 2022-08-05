@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeleteAttributeSetByLabelActionGroup">
+        <annotations>
+            <description>Deletes the provided Attribute Set Name from the Attribute Sets grid page.</description>
+        </annotations>
+        <arguments>
+            <argument name="label" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
+        <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
+        <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="{{label}}" stepKey="filterByName"/>
+        <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickSearch"/>
+        <click selector="{{AdminProductAttributeSetGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
+        <waitForPageLoad stepKey="waitForClick"/>
+        <click selector="{{AdminProductAttributeSetSection.deleteBtn}}" stepKey="clickDelete"/>
+        <click selector="{{AdminProductAttributeSetSection.modalOk}}" stepKey="confirmDelete"/>
+        <waitForPageLoad stepKey="waitForDeleteToFinish"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="The attribute set has been removed." stepKey="seeDeleteMessage"/>
+    </actionGroup>
+</actionGroups>

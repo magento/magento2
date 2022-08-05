@@ -3,9 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl;
 
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for version control abstract collection model.
@@ -15,28 +19,28 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
     /**
      * Subject of testing.
      *
-     * @var AbstractCollectionStub|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCollectionStub|MockObject
      */
     protected $subject;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var Snapshot|MockObject
      */
     protected $entitySnapshot;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $objectManager = new ObjectManager($this);
 
         $this->entitySnapshot = $this->createPartialMock(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
-            ['registerSnapshot']
+            Snapshot::class,
+            ['registerSnapshot', 'clear']
         );
 
         $this->subject = $objectManager->getObject(
-            \Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl\AbstractCollectionStub::class,
+            AbstractCollectionStub::class,
             [
                 'entityFactory' => $this->coreEntityFactoryMock,
                 'universalFactory' => $this->validatorFactoryMock,
@@ -60,7 +64,7 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
         if (!$data) {
             $this->entitySnapshot->expects($this->never())->method('registerSnapshot');
 
-            $this->assertEquals(false, $this->subject->fetchItem());
+            $this->assertFalse($this->subject->fetchItem());
         } else {
             $this->entitySnapshot->expects($this->once())->method('registerSnapshot')->with($item);
 
@@ -77,5 +81,12 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
             [[]],
             [['attribute' => 'test']]
         ];
+    }
+
+    public function testClearSnapshot()
+    {
+        $item = $this->getMagentoObject();
+        $this->entitySnapshot->expects($this->once())->method('clear')->with($item);
+        $this->subject->clear();
     }
 }

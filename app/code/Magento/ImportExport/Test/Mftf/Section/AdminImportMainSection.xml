@@ -17,5 +17,10 @@
         <element name="messageError" type="text" selector=".messages div.message-error"/>
         <element name="validationStrategy" type="select" selector="#basic_behaviorvalidation_strategy"/>
         <element name="allowedErrorsCount" type="input" selector="#basic_behavior_allowed_error_count"/>
+        <element name="fieldSeparator" type="input" selector="#basic_behavior__import_field_separator"/>
+        <element name="multipleValueSeparator" type="input" selector="#basic_behavior_import_multiple_value_separator"/>
+        <element name="emptyAttributeValueConstant" type="input" selector="#basic_behavior_import_empty_attribute_value_constant"/>
+        <element name="imagesFileDirectory" type="input" selector="#import_images_file_dir"/>
+        <element name="importImagesFileDirNote" type="input" selector="#import_images_file_dir-note"/>
     </section>
 </sections>

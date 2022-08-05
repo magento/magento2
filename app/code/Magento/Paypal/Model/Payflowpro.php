@@ -8,6 +8,9 @@ namespace Magento\Paypal\Model;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Payment\Gateway\Command\CommandException;
+use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Helper\Formatter;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
@@ -34,60 +37,65 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     /**
      * Transaction action codes
      */
-    const TRXTYPE_AUTH_ONLY = 'A';
+    public const TRXTYPE_AUTH_ONLY = 'A';
 
-    const TRXTYPE_SALE = 'S';
+    public const TRXTYPE_SALE = 'S';
 
-    const TRXTYPE_CREDIT = 'C';
+    public const TRXTYPE_CREDIT = 'C';
 
-    const TRXTYPE_DELAYED_CAPTURE = 'D';
+    public const TRXTYPE_DELAYED_CAPTURE = 'D';
 
-    const TRXTYPE_DELAYED_VOID = 'V';
+    public const TRXTYPE_DELAYED_VOID = 'V';
 
-    const TRXTYPE_DELAYED_VOICE = 'F';
+    public const TRXTYPE_DELAYED_VOICE = 'F';
 
-    const TRXTYPE_DELAYED_INQUIRY = 'I';
+    public const TRXTYPE_DELAYED_INQUIRY = 'I';
 
-    const TRXTYPE_ACCEPT_DENY       = 'U';
+    public const TRXTYPE_ACCEPT_DENY       = 'U';
 
-    const UPDATEACTION_APPROVED = 'APPROVE';
+    public const UPDATEACTION_APPROVED = 'APPROVE';
 
-    const UPDATEACTION_DECLINED_BY_MERCHANT = 'FPS_MERCHANT_DECLINE';
+    public const UPDATEACTION_DECLINED_BY_MERCHANT = 'FPS_MERCHANT_DECLINE';
 
     /**
      * Tender type codes
      */
-    const TENDER_CC = 'C';
+    public const TENDER_CC = 'C';
 
     /**
      * Gateway request URLs
      */
-    const TRANSACTION_URL = 'https://payflowpro.paypal.com/transaction';
+    public const TRANSACTION_URL = 'https://payflowpro.paypal.com/transaction';
 
-    const TRANSACTION_URL_TEST_MODE = 'https://pilot-payflowpro.paypal.com/transaction';
+    public const TRANSACTION_URL_TEST_MODE = 'https://pilot-payflowpro.paypal.com/transaction';
 
     /**#@+
      * Response code
      */
-    const RESPONSE_CODE_APPROVED = 0;
+    public const RESPONSE_CODE_APPROVED = 0;
 
-    const RESPONSE_CODE_INVALID_AMOUNT = 4;
+    public const RESPONSE_CODE_INVALID_AMOUNT = 4;
 
-    const RESPONSE_CODE_FRAUDSERVICE_FILTER = 126;
+    public const RESPONSE_CODE_FRAUDSERVICE_FILTER = 126;
 
-    const RESPONSE_CODE_DECLINED = 12;
+    public const RESPONSE_CODE_DECLINED = 12;
 
-    const RESPONSE_CODE_DECLINED_BY_FILTER = 125;
+    public const RESPONSE_CODE_DECLINED_BY_FILTER = 125;
 
-    const RESPONSE_CODE_DECLINED_BY_MERCHANT = 128;
+    public const RESPONSE_CODE_DECLINED_BY_MERCHANT = 128;
 
-    const RESPONSE_CODE_CAPTURE_ERROR = 111;
+    public const RESPONSE_CODE_CAPTURE_ERROR = 111;
 
-    const RESPONSE_CODE_VOID_ERROR = 108;
+    public const RESPONSE_CODE_VOID_ERROR = 108;
 
-    const PNREF = 'pnref';
+    private const RESPONSE_CODE_AUTHORIZATION_EXPIRED = 10601;
 
+    public const PNREF = 'pnref';
     /**#@-*/
+
+    /**
+     * @var string[]
+     */
     protected $_responseParamsMappings = [
         'firstname' => 'billtofirstname',
         'lastname' => 'billtolastname',
@@ -376,7 +384,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @throws InvalidTransitionException
      */
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -410,7 +418,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @throws InvalidTransitionException
      */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -448,7 +456,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param InfoInterface|Payment|Object $payment
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @throws InvalidTransitionException
      */
     public function void(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -491,14 +499,23 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param InfoInterface|Object $payment
      * @return $this
+     * @throws CommandException
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)
     {
         if (!$payment->getOrder()->getInvoiceCollection()->count()) {
-            return $this->void($payment);
+            try {
+                $this->void($payment);
+            } catch (CommandException $e) {
+                // Ignore error about expiration of authorization transaction.
+                if (strpos($e->getMessage(), (string)self::RESPONSE_CODE_AUTHORIZATION_EXPIRED) === false) {
+                    throw $e;
+                }
+            }
+
         }
 
-        return false;
+        return $this;
     }
 
     /**
@@ -508,7 +525,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @throws InvalidTransitionException
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -556,8 +573,9 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param string $status
      * @return bool
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
-    protected static function _isTransactionUnderReview($status)
+    protected function _isTransactionUnderReview($status)
     {
         if (in_array($status, [self::RESPONSE_CODE_APPROVED, self::RESPONSE_CODE_DECLINED_BY_MERCHANT])) {
             return false;
@@ -587,13 +605,15 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
 
     /**
      * @inheritdoc
+     *
+     * @throws ClientException
      */
     public function postRequest(DataObject $request, ConfigInterface $config)
     {
         try {
             return $this->gateway->postRequest($request, $config);
         } catch (\Zend_Http_Client_Exception $e) {
-            throw new LocalizedException(
+            throw new ClientException(
                 __('Payment Gateway is unreachable at the moment. Please use another payment option.'),
                 $e
             );
@@ -612,7 +632,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $request = $this->buildBasicRequest();
         $request->setAmt($this->formatPrice($amount));
         $request->setAcct($payment->getCcNumber());
-        $request->setExpdate(sprintf('%02d', $payment->getCcExpMonth()) . substr($payment->getCcExpYear(), -2, 2));
+        $expYear = $payment->getCcExpYear() !== null ? substr($payment->getCcExpYear(), -2, 2) : '';
+        $request->setExpdate(sprintf('%02d', $payment->getCcExpMonth()) . $expYear);
         $request->setCvv2($payment->getCcCid());
 
         $order = $payment->getOrder();
@@ -649,21 +670,22 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param DataObject $response
      * @return void
-     * @throws \Magento\Payment\Gateway\Command\CommandException
-     * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @throws CommandException
+     * @throws InvalidTransitionException
      */
     public function processErrors(DataObject $response)
     {
-        if ($response->getResultCode() == self::RESPONSE_CODE_VOID_ERROR) {
-            throw new \Magento\Framework\Exception\State\InvalidTransitionException(
+        $resultCode = (int)$response->getResultCode();
+        if ($resultCode === self::RESPONSE_CODE_VOID_ERROR) {
+            throw new InvalidTransitionException(
                 __("The verification transaction can't be voided. ")
             );
-        } elseif ($response->getResultCode() != self::RESPONSE_CODE_APPROVED &&
-            $response->getResultCode() != self::RESPONSE_CODE_FRAUDSERVICE_FILTER
-        ) {
-            throw new \Magento\Payment\Gateway\Command\CommandException(__($response->getRespmsg()));
-        } elseif ($response->getOrigresult() == self::RESPONSE_CODE_DECLINED_BY_FILTER) {
-            throw new \Magento\Payment\Gateway\Command\CommandException(__($response->getRespmsg()));
+        }
+        if (!in_array($resultCode, [self::RESPONSE_CODE_APPROVED, self::RESPONSE_CODE_FRAUDSERVICE_FILTER])) {
+            throw new CommandException(__($response->getRespmsg()));
+        }
+        if ((int)$response->getOrigresult() === self::RESPONSE_CODE_DECLINED_BY_FILTER) {
+            throw new CommandException(__($response->getRespmsg()));
         }
     }
 
@@ -980,6 +1002,6 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      */
     private function mapResponseCreditCardType($ccType)
     {
-        return isset($this->ccTypeMap[$ccType]) ? $this->ccTypeMap[$ccType] : $ccType;
+        return $this->ccTypeMap[$ccType] ?? $ccType;
     }
 }

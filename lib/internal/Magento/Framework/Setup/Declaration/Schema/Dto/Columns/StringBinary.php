@@ -11,7 +11,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 
 /**
  * String or Binary column.
- * Declared in SQL, like VARCHAR(L), BINARY(L)
+ * Declared in SQL, like CHAR(L), VARCHAR(L), BINARY(L)
  * where L - length.
  */
 class StringBinary extends Column implements
@@ -73,10 +73,9 @@ class StringBinary extends Column implements
     }
 
     /**
-     * Return default value.
-     * Note: default value should be string.
+     * Return default value, Note: default value should be string.
      *
-     * @return string | null
+     * @return string|null
      */
     public function getDefault()
     {

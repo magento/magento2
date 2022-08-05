@@ -96,9 +96,12 @@ class Processor
         }
         $item->addQty($candidate->getCartQty());
 
+        if (!$item->getParentItem() || $item->getParentItem()->isChildrenCalculated()) {
+            $item->setPrice($candidate->getFinalPrice());
+        }
+
         $customPrice = $request->getCustomPrice();
-        $item->setPrice($candidate->getFinalPrice());
-        if (!empty($customPrice)) {
+        if (!empty($customPrice) && !$candidate->getParentProductId()) {
             $item->setCustomPrice($customPrice);
             $item->setOriginalCustomPrice($customPrice);
         }

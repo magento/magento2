@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CmsGraphQl\Model\Resolver\DataProvider\Block as BlockProvider;
@@ -48,18 +49,19 @@ class Block implements ResolverInterface
         }
         /** @var Category $category */
         $category = $value['model'];
-        $blockId = $category->getLandingPage();
+        $blockId = (int)$category->getLandingPage();
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
 
         if (empty($blockId)) {
             return null;
         }
 
         try {
-            $block = $this->blockProvider->getData($blockId);
+            $blockData = $this->blockProvider->getBlockById($blockId, $storeId);
         } catch (NoSuchEntityException $e) {
-            return null;
+            return new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         }
 
-        return $block;
+        return $blockData;
     }
 }

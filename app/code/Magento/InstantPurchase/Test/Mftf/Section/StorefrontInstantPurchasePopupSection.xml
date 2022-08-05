@@ -11,5 +11,8 @@
     <section name="StorefrontInstantPurchasePopupSection">
         <element name="modalTitle" type="text" selector=".modal-popup .modal-title"/>
         <element name="cancel" type="button" selector=".modal-popup.confirm button.action-dismiss"/>
+        <element name="shippingAddress" type="text" selector="//aside[contains(@class, 'modal-popup')]//strong[contains(text(),'Shipping Address:')]/following-sibling::p[contains(text(),'{{Data}}')][1]" parameterized="true"/>
+        <element name="billingAddress" type="text" selector="//aside[contains(@class, 'modal-popup')]//strong[contains(text(),'Billing Address:')]/following-sibling::p[contains(text(),'{{Data}}')]" parameterized="true"/>
+        <element name="paymentMethod" type="text" selector="//aside[contains(@class, 'modal-popup')]//strong[contains(text(),'Payment Method:')]/following-sibling::p[contains(text(),'{{Data}}')]" parameterized="true"/>
     </section>
 </sections>

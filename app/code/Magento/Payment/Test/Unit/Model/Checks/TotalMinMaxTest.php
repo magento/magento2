@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Payment\Test\Unit\Model\Checks;
 
-use \Magento\Payment\Model\Checks\TotalMinMax;
+use Magento\Payment\Model\Checks\TotalMinMax;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\TestCase;
 
-class TotalMinMaxTest extends \PHPUnit\Framework\TestCase
+class TotalMinMaxTest extends TestCase
 {
     /**
      * Payment min total value
@@ -24,23 +28,22 @@ class TotalMinMaxTest extends \PHPUnit\Framework\TestCase
      * @dataProvider paymentMethodDataProvider
      * @param int $baseGrandTotal
      * @param bool $expectation
+     *
+     * @return void
      */
-    public function testIsApplicable($baseGrandTotal, $expectation)
+    public function testIsApplicable(int $baseGrandTotal, bool $expectation): void
     {
-        $paymentMethod = $this->getMockBuilder(
-            \Magento\Payment\Model\MethodInterface::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
-        $paymentMethod->expects($this->at(0))->method('getConfigData')->with(
-            TotalMinMax::MIN_ORDER_TOTAL
-        )->will($this->returnValue(self::PAYMENT_MIN_TOTAL));
-        $paymentMethod->expects($this->at(1))->method('getConfigData')->with(
-            TotalMinMax::MAX_ORDER_TOTAL
-        )->will($this->returnValue(self::PAYMENT_MAX_TOTAL));
+        $paymentMethod = $this->getMockBuilder(MethodInterface::class)->disableOriginalConstructor()
+            ->addMethods([])->getMock();
+        $paymentMethod
+            ->method('getConfigData')
+            ->withConsecutive([TotalMinMax::MIN_ORDER_TOTAL], [TotalMinMax::MAX_ORDER_TOTAL])
+            ->willReturnOnConsecutiveCalls(self::PAYMENT_MIN_TOTAL, self::PAYMENT_MAX_TOTAL);
 
-        $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)->disableOriginalConstructor()->setMethods(
-            ['getBaseGrandTotal', '__wakeup']
-        )->getMock();
-        $quote->expects($this->once())->method('getBaseGrandTotal')->will($this->returnValue($baseGrandTotal));
+        $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()
+            ->onlyMethods(['__wakeup'])
+            ->addMethods(['getBaseGrandTotal'])->getMock();
+        $quote->expects($this->once())->method('getBaseGrandTotal')->willReturn($baseGrandTotal);
 
         $model = new TotalMinMax();
         $this->assertEquals($expectation, $model->isApplicable($paymentMethod, $quote));
@@ -49,7 +52,7 @@ class TotalMinMaxTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function paymentMethodDataProvider()
+    public function paymentMethodDataProvider(): array
     {
         return [[1, false], [6, false], [3, true]];
     }

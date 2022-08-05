@@ -18,7 +18,7 @@ class RatingTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation enabled
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Store\Model\StoreManagerInterface::class)

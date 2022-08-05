@@ -24,9 +24,9 @@ use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
- * Class ConfigProvider
- * @api
+ * Provide tokens config
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  *
  * @api
  * @since 100.1.0
@@ -113,6 +113,8 @@ class TokensConfigProvider
     }
 
     /**
+     * Get list of tokens components
+     *
      * @param string $vaultPaymentCode
      * @return TokenUiComponentInterface[]
      * @since 100.1.0
@@ -184,6 +186,13 @@ class TokensConfigProvider
                     ->create(),
                 ]
         );
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder->setField(PaymentTokenInterface::IS_VISIBLE)
+                    ->setValue(1)
+                    ->create(),
+            ]
+        );
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
 
@@ -195,6 +204,8 @@ class TokensConfigProvider
     }
 
     /**
+     * Get component provider
+     *
      * @param string $vaultProviderCode
      * @return TokenUiComponentProviderInterface|null
      */
@@ -210,18 +221,20 @@ class TokensConfigProvider
 
     /**
      * Get active vault payment by code
+     *
      * @param string $vaultPaymentCode
      * @return VaultPaymentInterface|null
      */
     private function getVaultPayment($vaultPaymentCode)
     {
-        $storeId = $this->storeManager->getStore()->getId();
+        $storeId = $this->session->getStoreId() ?? $this->storeManager->getStore()->getId();
         $vaultPayment = $this->getPaymentDataHelper()->getMethodInstance($vaultPaymentCode);
         return $vaultPayment->isActive($storeId) ? $vaultPayment : null;
     }
 
     /**
      * Returns payment token entity id by order payment id
+     *
      * @return int|null
      */
     private function getPaymentTokenEntityId()
@@ -237,6 +250,7 @@ class TokensConfigProvider
      * Returns order payment entity id
      * Using 'getReordered' for Reorder action
      * Using 'getOrder' for Edit action
+     *
      * @return int
      */
     private function getOrderPaymentEntityId()
@@ -250,6 +264,7 @@ class TokensConfigProvider
 
     /**
      * Get payment data helper instance
+     *
      * @return Data
      * @deprecated 100.1.0
      */
@@ -263,6 +278,7 @@ class TokensConfigProvider
 
     /**
      * Returns order repository instance
+     *
      * @return OrderRepositoryInterface
      * @deprecated 100.2.0
      */
@@ -278,6 +294,7 @@ class TokensConfigProvider
 
     /**
      * Returns payment token management instance
+     *
      * @return PaymentTokenManagementInterface
      * @deprecated 100.2.0
      */

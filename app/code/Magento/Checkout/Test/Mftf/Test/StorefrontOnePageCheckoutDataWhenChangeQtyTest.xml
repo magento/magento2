@@ -21,6 +21,8 @@
         <before>
             <!--Create a product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
+
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
         </before>
         <after>
             <!--Delete created data-->
@@ -28,9 +30,9 @@
         </after>
 
         <!--Add product to cart and checkout-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$createProduct.name$$"/>
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
@@ -56,22 +58,22 @@
 
         <!--Select shipping method and finalize checkout-->
         <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
-        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
-        <waitForPageLoad stepKey="waitForShippingMethodLoad"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
 
         <!--Go to cart page, update qty and proceed to checkout-->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
-        <waitForPageLoad stepKey="waitForCartPageLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage"/>
         <see userInput="Shopping Cart" stepKey="seeCartPageIsOpened"/>
-        <fillField selector="{{CheckoutCartProductSection.qty($$createProduct.name$$)}}" userInput="2" stepKey="updateProductQty"/>
+        <fillField selector="{{CheckoutCartProductSection.qty($$createProduct.sku$$)}}" userInput="2" stepKey="updateProductQty"/>
         <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCart"/>
         <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
-        <grabValueFrom selector="{{CheckoutCartProductSection.qty($$createProduct.name$$)}}" stepKey="grabQty"/>
-        <assertEquals expected="2" actual="$grabQty" stepKey="assertQty"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
+        <grabValueFrom selector="{{CheckoutCartProductSection.qty($$createProduct.sku$$)}}" stepKey="grabQty"/>
+        <assertEquals stepKey="assertQty">
+			<actualResult type="const">$grabQty</actualResult>
+			<expectedResult type="const">2</expectedResult>
+        </assertEquals>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
 
         <!--Check that form is filled with customer data-->
         <grabValueFrom selector="{{CheckoutShippingSection.email}}" stepKey="grabEmail1"/>
@@ -83,13 +85,37 @@
         <grabValueFrom selector="{{CheckoutShippingSection.postcode}}" stepKey="grabPostcode1"/>
         <grabValueFrom selector="{{CheckoutShippingSection.telephone}}" stepKey="grabTelephone1"/>
 
-        <assertEquals expected="$grabEmail" actual="$grabEmail1" stepKey="assertEmail"/>
-        <assertEquals expected="$grabFirstName" actual="$grabFirstName1" stepKey="assertFirstName"/>
-        <assertEquals expected="$grabLastName" actual="$grabLastName1" stepKey="assertLastName"/>
-        <assertEquals expected="$grabStreet" actual="$grabStreet1" stepKey="assertStreet"/>
-        <assertEquals expected="$grabCity" actual="$grabCity1" stepKey="assertCity"/>
-        <assertEquals expected="$grabRegion" actual="$grabRegion1" stepKey="assertRegion"/>
-        <assertEquals expected="$grabPostcode" actual="$grabPostcode1" stepKey="assertPostcode"/>
-        <assertEquals expected="$grabTelephone" actual="$grabTelephone1" stepKey="assertTelephone"/>
+        <assertEquals stepKey="assertEmail">
+			<actualResult type="const">$grabEmail1</actualResult>
+			<expectedResult type="const">$grabEmail</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertFirstName">
+			<actualResult type="const">$grabFirstName1</actualResult>
+			<expectedResult type="const">$grabFirstName</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertLastName">
+			<actualResult type="const">$grabLastName1</actualResult>
+			<expectedResult type="const">$grabLastName</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertStreet">
+			<actualResult type="const">$grabStreet1</actualResult>
+			<expectedResult type="const">$grabStreet</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertCity">
+			<actualResult type="const">$grabCity1</actualResult>
+			<expectedResult type="const">$grabCity</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertRegion">
+			<actualResult type="const">$grabRegion1</actualResult>
+			<expectedResult type="const">$grabRegion</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertPostcode">
+			<actualResult type="const">$grabPostcode1</actualResult>
+			<expectedResult type="const">$grabPostcode</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertTelephone">
+			<actualResult type="const">$grabTelephone1</actualResult>
+			<expectedResult type="const">$grabTelephone</expectedResult>
+        </assertEquals>
     </test>
 </tests>

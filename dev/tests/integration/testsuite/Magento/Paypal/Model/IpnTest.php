@@ -5,10 +5,13 @@
  */
 namespace Magento\Paypal\Model;
 
-use Magento\Paypal\Model\IpnFactory;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoAppArea frontend
@@ -20,9 +23,9 @@ class IpnTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->_objectManager = Bootstrap::getObjectManager();
     }
 
     /**
@@ -65,7 +68,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $creditmemo = current($creditmemoItems);
 
         $this->assertEquals(Order::STATE_CLOSED, $order->getState()) ;
-        $this->assertEquals(1, count($creditmemoItems));
+        $this->assertCount(1, $creditmemoItems);
         $this->assertEquals(Creditmemo::STATE_REFUNDED, $creditmemo->getState());
         $this->assertEquals(10, $order->getSubtotalRefunded());
         $this->assertEquals(10, $order->getBaseSubtotalRefunded());
@@ -116,7 +119,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(Order::STATE_PROCESSING, $order->getState()) ;
         $this->assertEmpty(count($creditmemoItems));
-        $this->assertEquals(1, count($comments));
+        $this->assertCount(1, $comments);
         $this->assertEquals($commentOrigin, $commentData->getComment());
     }
 
@@ -147,7 +150,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $creditmemoItems = $order->getCreditmemosCollection()->getItems();
 
         $this->assertEquals(Order::STATE_CLOSED, $order->getState()) ;
-        $this->assertEquals(1, count($creditmemoItems));
+        $this->assertCount(1, $creditmemoItems);
         $this->assertEquals(10, $order->getSubtotalRefunded());
         $this->assertEquals(10, $order->getBaseSubtotalRefunded());
         $this->assertEquals(20, $order->getShippingRefunded());
@@ -156,6 +159,39 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(30, $order->getBaseTotalRefunded());
         $this->assertEquals(30, $order->getTotalOnlineRefunded());
         $this->assertEmpty($order->getTotalOfflineRefunded());
+    }
+
+    /**
+     * Verifies canceling an order that was in payment review state by PayPal Express IPN message service.
+     *
+     * @magentoDataFixture Magento/Paypal/_files/order_express_with_invoice_payment_review.php
+     * @magentoConfigFixture current_store payment/paypal_express/active 1
+     * @magentoConfigFixture current_store paypal/general/merchant_country US
+     */
+    public function testProcessIpnRequestWithFailedStatus()
+    {
+        $ipnData = require __DIR__ . '/../_files/ipn_failed.php';
+
+        /** @var IpnFactory $ipnFactory */
+        $ipnFactory = $this->_objectManager->create(IpnFactory::class);
+        $ipnModel = $ipnFactory->create(
+            [
+                'data' => $ipnData,
+                'curlFactory' => $this->_createMockedHttpAdapter()
+            ]
+        );
+
+        $ipnModel->processIpnRequest();
+
+        $order = $this->getOrder($ipnData['invoice']);
+        $invoiceItems = $order->getInvoiceCollection()
+            ->getItems();
+        /** @var Invoice $invoice */
+        $invoice = array_pop($invoiceItems);
+        $invoice->getState();
+
+        $this->assertEquals(Order::STATE_CANCELED, $order->getState());
+        $this->assertEquals(Invoice::STATE_CANCELED, $invoice->getState());
     }
 
     /**
@@ -217,11 +253,32 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $factory = $this->createPartialMock(\Magento\Framework\HTTP\Adapter\CurlFactory::class, ['create']);
         $adapter = $this->createPartialMock(\Magento\Framework\HTTP\Adapter\Curl::class, ['read', 'write']);
 
-        $adapter->expects($this->once())->method('read')->with()->will($this->returnValue("\nVERIFIED"));
+        $adapter->expects($this->once())->method('read')->with()->willReturn("\nVERIFIED");
 
         $adapter->expects($this->once())->method('write');
 
-        $factory->expects($this->once())->method('create')->with()->will($this->returnValue($adapter));
+        $factory->expects($this->once())->method('create')->with()->willReturn($adapter);
         return $factory;
+    }
+
+    /**
+     * Get stored order.
+     *
+     * @param string $incrementId
+     * @return OrderInterface
+     */
+    private function getOrder(string $incrementId)
+    {
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->_objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilter(OrderInterface::INCREMENT_ID, $incrementId)
+            ->create();
+
+        $orderRepository = $this->_objectManager->get(OrderRepositoryInterface::class);
+        $orders = $orderRepository->getList($searchCriteria)
+            ->getItems();
+
+        /** @var OrderInterface $order */
+        return array_pop($orders);
     }
 }

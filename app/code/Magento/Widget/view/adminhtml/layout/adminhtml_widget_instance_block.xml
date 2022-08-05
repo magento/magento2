@@ -25,6 +25,7 @@
                                 <item name="label" xsi:type="string" translate="true">Delete</item>
                                 <item name="url" xsi:type="string">*/*/massDelete</item>
                                 <item name="selected" xsi:type="string">0</item>
+                                <item name="confirm" xsi:type="string" translate="true">Are you sure you want to delete the selected widget(s)?</item>
                             </item>
                         </argument>
                     </arguments>

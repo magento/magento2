@@ -3,21 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Category\Link;
 
 use Magento\Catalog\Api\Data\CategoryLinkInterface;
 use Magento\Catalog\Api\Data\CategoryLinkInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Category\Link\ReadHandler;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Catalog\Model\Product;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ReadHandlerTest
- */
-class ReadHandlerTest extends \PHPUnit\Framework\TestCase
+class ReadHandlerTest extends TestCase
 {
     /**
      * @var ReadHandler
@@ -42,11 +42,11 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->categoryLinkFactory = $this->getMockBuilder(CategoryLinkInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->productCategoryLink = $this->getMockBuilder(CategoryLink::class)
             ->disableOriginalConstructor()
@@ -62,7 +62,10 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $categoryLinks = [
             ['category_id' => 3, 'position' => 10],
@@ -70,25 +73,28 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         ];
 
         $dtoCategoryLinks = [];
+        $dataObjHelperWithArgs = $categoryLinkFactoryWillReturnArgs = [];
+
         foreach ($categoryLinks as $key => $categoryLink) {
-            $dtoCategoryLinks[$key] = $this->getMockBuilder(CategoryLinkInterface::class)
-                ->getMockForAbstractClass();
-            $this->dataObjectHelper->expects(static::at($key))
-                ->method('populateWithArray')
-                ->with($dtoCategoryLinks[$key], $categoryLink, CategoryLinkInterface::class);
-            $this->categoryLinkFactory->expects(static::at($key))
-                ->method('create')
-                ->willReturn($dtoCategoryLinks[$key]);
+            $dtoCategoryLinks[$key] = $this->getMockBuilder(CategoryLinkInterface::class)->getMockForAbstractClass();
+            $dataObjHelperWithArgs[] = [$dtoCategoryLinks[$key], $categoryLink, CategoryLinkInterface::class];
+            $categoryLinkFactoryWillReturnArgs[] = $dtoCategoryLinks[$key];
         }
+        $this->dataObjectHelper
+            ->method('populateWithArray')
+            ->withConsecutive(...$dataObjHelperWithArgs);
+        $this->categoryLinkFactory
+            ->method('create')
+            ->willReturnOnConsecutiveCalls(...$categoryLinkFactoryWillReturnArgs);
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getExtensionAttributes', 'setExtensionAttributes'])
+            ->onlyMethods(['getExtensionAttributes', 'setExtensionAttributes'])
             ->getMock();
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCategoryLinks'])
+            ->addMethods(['setCategoryLinks'])
             ->getMockForAbstractClass();
         $extensionAttributes->expects(static::once())->method('setCategoryLinks')->with($dtoCategoryLinks);
 
@@ -109,16 +115,19 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         static::assertSame($product, $entity);
     }
 
-    public function testExecuteNullExtensionAttributes()
+    /**
+     * @return void
+     */
+    public function testExecuteNullExtensionAttributes(): void
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getExtensionAttributes', 'setExtensionAttributes'])
+            ->onlyMethods(['getExtensionAttributes', 'setExtensionAttributes'])
             ->getMock();
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCategoryLinks'])
+            ->addMethods(['setCategoryLinks'])
             ->getMockForAbstractClass();
         $extensionAttributes->expects(static::once())->method('setCategoryLinks')->with(null);
 

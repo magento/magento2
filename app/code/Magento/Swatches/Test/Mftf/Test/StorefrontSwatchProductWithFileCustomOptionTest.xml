@@ -26,27 +26,26 @@
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Create a configurable swatch product via the UI -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductPage"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="searchAndSelectCategory"/>
         <!--Add swatch attribute to configurable product-->
         <actionGroup ref="AddVisualSwatchToProductActionGroup" stepKey="addSwatchToProduct"/>
         <!--Add custom option to configurable product-->
-        <actionGroup ref="AddProductCustomOptionFile" stepKey="addCustomOptionToProduct"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
-        
+        <actionGroup ref="AddProductCustomOptionFileActionGroup" stepKey="addCustomOptionToProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+
         <!--Go to storefront-->
         <amOnPage url="" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForHomePageLoad"/>
@@ -76,8 +75,7 @@
         <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="You added {{BaseConfigurableProduct.name}} to your shopping cart." stepKey="seeSuccessMessage"/>
 
         <!--Check item in cart-->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart"/>
-        <waitForPageLoad stepKey="waitForCartPageLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart"/>
         <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName(BaseConfigurableProduct.name)}}" stepKey="seeProductInCart"/>
         <see selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute(BaseConfigurableProduct.name, visualSwatchAttribute.default_label)}}" userInput="{{visualSwatchOption2.default_label}}" stepKey="seeSelectedSwatch"/>
         <see selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute(BaseConfigurableProduct.name, ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="seeCorrectOptionFile"/>
@@ -85,8 +83,9 @@
         <click selector="{{CheckoutCartProductSection.RemoveItem}}" stepKey="deleteCartItem"/>
 
         <!--Delete product-->
-        <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
             <argument name="sku" value="{{BaseConfigurableProduct.sku}}"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

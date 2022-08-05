@@ -32,6 +32,7 @@
                         <item name="namespace" xsi:type="string">recently_compared_product</item>
                         <item name="provider" xsi:type="string">compare-products</item>
                     </item>
+                    <item name="scopeConfig" xsi:type="object">Magento\Framework\App\Config\ScopeConfigInterface</item>
                 </item>
             </argument>
         </argument>

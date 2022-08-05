@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductNameWithHTMLEntitiesTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create product"/>
+            <title value=":Proudct with html special characters in name"/>
+            <description value="Product with html entities in the name should appear correctly on the PDP breadcrumbs on storefront"/>
+            <severity value="CRITICAL"/>
+            <group value="product"/>
+            <testCaseId value="MAGETWO-93794"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategoryOne"/>
+            <createData entity="productWithHTMLEntityOne" stepKey="productOne">
+                <requiredEntity createDataKey="createCategoryOne"/>
+            </createData>
+            <createData entity="productWithHTMLEntityTwo" stepKey="productTwo">
+                <requiredEntity createDataKey="createCategoryOne"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="productOne" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="productTwo" stepKey="deleteProductTwo"/>
+            <deleteData createDataKey="createCategoryOne" stepKey="deleteCategory"/>
+        </after>
+
+        <!--Run re-index task-->
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+
+        <!--Check product in category listing-->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$$createCategoryOne$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitforCategoryPageToLoad"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeCorrectNameProd1CategoryPage">
+            <argument name="productName" value="{{productWithHTMLEntityOne.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeCorrectNameProd2CategoryPage">
+            <argument name="productName" value="{{productWithHTMLEntityTwo.name}}"/>
+        </actionGroup>
+
+        <!--Open product display page-->
+        <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="clickProductToGoProductPage">
+            <argument name="productName" value="{{productWithHTMLEntityOne.name}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductDisplayPageLoad2"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeCorrectName">
+            <argument name="productName" value="{{productWithHTMLEntityOne.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku">
+            <argument name="productSku" value="{{productWithHTMLEntityOne.sku}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeCorrectPrice">
+            <argument name="productPrice" value="{{productWithHTMLEntityOne.price}}"/>
+        </actionGroup>
+
+        <!--Veriy the breadcrumbs on Product Display page-->
+        <actionGroup ref="AssertStorefrontBreadcrubmsAreShownActionGroup" stepKey="seeHomePageInBreadcrumbs1">
+            <argument name="breadcrumbs" value="Home"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontBreadcrubmsAreShownActionGroup" stepKey="seeCorrectBreadCrumbCategory">
+            <argument name="breadcrumbs" value="$$createCategoryOne.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontBreadcrubmsAreShownActionGroup" stepKey="seeCorrectBreadCrumbProduct">
+            <argument name="breadcrumbs" value="$$productOne.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goBackToCategoryPage">
+            <argument name="category" value="$createCategoryOne$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitforCategoryPageToLoad2"/>
+
+        <!--Open product display page-->
+        <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="clickProductToGoSecondProductPage">
+            <argument name="productName" value="{{productWithHTMLEntityTwo.name}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductDisplayPageLoad3"/>
+
+        <!--Verify the breadcrumbs on Product Display page-->
+        <actionGroup ref="AssertStorefrontBreadcrubmsAreShownActionGroup" stepKey="seeHomePageInBreadcrumbs2">
+            <argument name="breadcrumbs" value="Home"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontBreadcrubmsAreShownActionGroup" stepKey="seeCorrectBreadCrumbCategory2">
+            <argument name="breadcrumbs" value="$$createCategoryOne.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontBreadcrubmsAreShownActionGroup" stepKey="seeCorrectBreadCrumbProduct2">
+            <argument name="breadcrumbs" value="$$productTwo.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

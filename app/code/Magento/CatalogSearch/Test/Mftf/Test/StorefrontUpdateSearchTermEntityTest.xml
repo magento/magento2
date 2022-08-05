@@ -18,33 +18,38 @@
             <group value="search"/>
             <group value="mtf_migrated"/>
         </annotations>
-        
+
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory1"/>
             <createData entity="SimpleProduct" stepKey="createProduct1">
                 <requiredEntity createDataKey="createCategory1"/>
             </createData>
 
-            <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage1"/>
-            <waitForPageLoad stepKey="waitForPageLoad1"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
-
             <deleteData createDataKey="createProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
+
+            <!-- Delete all search terms -->
+            <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage"/>
+            <comment userInput="Delete all search terms" stepKey="deleteAllSearchTermsComment"/>
+            <actionGroup ref="AdminDeleteAllSearchTermsActionGroup" stepKey="deleteAllSearchTerms"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin1"/>
         </after>
 
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName1">
             <argument name="phrase" value="$$createProduct1.name$$"/>
         </actionGroup>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
-        <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage1"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage1"/>
 
-        <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterByFirstSearchQuery1">
+        <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByFirstSearchQuery1">
             <argument name="searchQuery" value="$$createProduct1.name$$"/>
         </actionGroup>
 
@@ -55,15 +60,13 @@
             <argument name="searchTerm" value="UpdatedSearchTermData1"/>
         </actionGroup>
 
-        <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage2"/>
-        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage2"/>
 
-        <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterByFirstSearchQuery2">
+        <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByFirstSearchQuery2">
             <argument name="searchQuery" value="{{UpdatedSearchTermData1.query_text}}"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage2"/>
-        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage2"/>
 
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName2">
             <argument name="phrase" value="{{UpdatedSearchTermData1.query_text}}"/>

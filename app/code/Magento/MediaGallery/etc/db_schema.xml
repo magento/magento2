@@ -7,13 +7,16 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="media_gallery_asset" resource="default" engine="innodb" comment="Media Gallery Asset">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
-        <column xsi:type="varchar" name="path" length="255" nullable="true" comment="Path"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="text" name="path" nullable="true" comment="Path"/>
         <column xsi:type="varchar" name="title" length="255" nullable="true" comment="Title"/>
+        <column xsi:type="text" name="description" nullable="true" comment="Description"/>
         <column xsi:type="varchar" name="source" length="255" nullable="true" comment="Source"/>
+        <column xsi:type="varchar" name="hash" length="255" nullable="true" comment="File hash"/>
         <column xsi:type="varchar" name="content_type" length="255" nullable="true" comment="Content Type"/>
-        <column xsi:type="int" name="width" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Width"/>
-        <column xsi:type="int" name="height" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Height"/>
+        <column xsi:type="int" name="width" unsigned="true" nullable="false" identity="false" default="0" comment="Width"/>
+        <column xsi:type="int" name="height" unsigned="true" nullable="false" identity="false" default="0" comment="Height"/>
+        <column xsi:type="int" name="size" unsigned="true" nullable="false" identity="false" comment="Asset file size in bytes"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -22,12 +25,12 @@
         <index referenceId="MEDIA_GALLERY_ID" indexType="btree">
             <column name="id"/>
         </index>
-        <constraint xsi:type="unique" referenceId="MEDIA_GALLERY_ID_PATH_TITLE_CONTENT_TYPE_WIDTH_HEIGHT">
-            <column name="path"/>
-        </constraint>
+        <index referenceId="MEDIA_GALLERY_ASSET_TITLE" indexType="fulltext">
+            <column name="title"/>
+        </index>
     </table>
     <table name="media_gallery_keyword" resource="default" engine="innodb" comment="Media Gallery Keyword">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Keyword ID"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="Keyword ID"/>
         <column xsi:type="varchar" length="255" name="keyword" nullable="false" comment="Keyword"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
@@ -40,8 +43,8 @@
         </constraint>
     </table>
     <table name="media_gallery_asset_keyword" resource="default" engine="innodb" comment="Media Gallery Asset Keyword">
-        <column xsi:type="int" name="keyword_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Keyword Id"/>
-        <column xsi:type="int" name="asset_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Asset ID"/>
+        <column xsi:type="int" name="keyword_id" unsigned="true" nullable="false" identity="false" comment="Keyword Id"/>
+        <column xsi:type="int" name="asset_id" unsigned="true" nullable="false" identity="false" comment="Asset ID"/>
         <index referenceId="MEDIA_GALLERY_ASSET_KEYWORD_ASSET_ID_INDEX" indexType="btree">
             <column name="asset_id"/>
         </index>

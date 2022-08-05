@@ -9,6 +9,7 @@ namespace Magento\Catalog\Controller\Category;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Helper\Category as CategoryHelper;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
 use Magento\Catalog\Model\Design;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
@@ -30,7 +31,6 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
 
 /**
  * View a category on storefront. Needs to be accessible by POST because of the store switching.
@@ -40,22 +40,16 @@ use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
 class View extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Catalog session
-     *
      * @var Session
      */
     protected $_catalogSession;
 
     /**
-     * Catalog design
-     *
      * @var Design
      */
     protected $_catalogDesign;
@@ -205,12 +199,14 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     /**
      * Category view action
      *
-     * @return ResultInterface
      * @throws NoSuchEntityException
      */
     public function execute()
     {
+        $result = null;
+
         if ($this->_request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED)) {
+            //phpcs:ignore Magento2.Legacy.ObsoleteResponse
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl());
         }
         $category = $this->_initCategory();
@@ -239,6 +235,9 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 $page->addPageLayoutHandles(['type' => $parentPageType], null, false);
             }
             $page->addPageLayoutHandles(['type' => $pageType], null, false);
+            $categoryDisplayMode = is_string($category->getDisplayMode()) ?
+                strtolower($category->getDisplayMode()) : '';
+            $page->addPageLayoutHandles(['displaymode' => $categoryDisplayMode], null, false);
             $page->addPageLayoutHandles(['id' => $category->getId()]);
 
             // apply custom layout update once layout is loaded
@@ -250,8 +249,9 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
 
             return $page;
         } elseif (!$this->getResponse()->isRedirect()) {
-            return $this->resultForwardFactory->create()->forward('noroute');
+            $result = $this->resultForwardFactory->create()->forward('noroute');
         }
+        return $result;
     }
 
     /**

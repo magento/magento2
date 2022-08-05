@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- log in -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!-- Set configurations -->
             <magentoCLI command="config:set carriers/tablerate/active 1"  stepKey="setShippingMethodEnabled"/>
             <magentoCLI command="config:set carriers/tablerate/condition_name package_value"  stepKey="setShippingMethodConditionName"/>
@@ -34,12 +34,11 @@
             <createData entity="defaultTaxRule" stepKey="initialTaxRule"/>
             <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
             <!-- Go to tax rule page -->
-            <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
-            <waitForPageLoad stepKey="waitForTaxRatePage"/>
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulePage"/>
             <click stepKey="addNewTaxRate" selector="{{AdminGridMainControls.add}}"/>
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
             <!-- Add tax rule with 20% tax rate -->
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addNYTaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxNYRate"/>
             </actionGroup>
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
@@ -57,20 +56,20 @@
             <createData entity="SimpleProduct2" stepKey="createSimpleProductThird">
                 <field key="price">5.50</field>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Removed created Data -->
-            <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
-            <waitForPageLoad stepKey="waitForRulesPage"/>
+            <deleteData createDataKey="initialTaxRule" stepKey="deleteTaxRule"/>
+            <deleteData createDataKey="initialTaxRate" stepKey="deleteTaxRate"/>
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
                 <argument name="name" value="SampleRule"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
             <!-- Delete the tax rate that were created -->
-            <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRatesPage"/>
-            <waitForPageLoad stepKey="waitForRatesPage"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxNYRate.state}}-{{SimpleTaxNYRate.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
@@ -92,7 +91,7 @@
             <magentoCLI command="config:set tax/cart_display/subtotal 1"  stepKey="unsetSubtotal"/>
             <magentoCLI command="config:set carriers/freeshipping/active 0"  stepKey="unsetFreeShipping"/>
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Add testing products to the cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProductFirst.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
@@ -113,12 +112,13 @@
         </actionGroup>
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="6" stepKey="seeCartQuantity"/>
         <!-- Go to the shopping cart page -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
-        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.orderTotal}}" stepKey="waitForOrderTotalVisible"/>
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectCountry"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForOrderTotalUpdate"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$29.00" stepKey="seeDiscountAmount"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForOrderTotalUpdate"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountAmount">
+            <argument name="discount" value="29.00"/>
+        </actionGroup>
         <see selector="{{CheckoutCartSummarySection.subTotal}}" userInput="$29.00" stepKey="seeSubTotal"/>
         <see selector="{{CheckoutCartSummarySection.orderTotal}}" userInput="0.00" stepKey="seeOrderTotal"/>
     </test>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SelectSingleAttributeAndAddToCartActionGroup">
+        <annotations>
+            <description>Selects a Product Option. Clicks 'Add to Cart'. Validates that the Product Added Success message appears.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="attributeCode" type="string"/>
+            <argument name="optionName" type="string"/>
+        </arguments>
+
+        <selectOption selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID(attributeCode)}}" userInput="{{optionName}}" stepKey="selectAttribute"/>
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartDisabled}}" stepKey="waitForAddToCartButtonToRemoveDisabledState"/>
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
+        <click stepKey="addProduct" selector="{{StorefrontProductActionSection.addToCart}}"/>
+        <waitForElementVisible selector="{{StorefrontQuickSearchResultsSection.messageSection}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddedToCartMessage"/>
+    </actionGroup>
+</actionGroups>

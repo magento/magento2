@@ -17,55 +17,55 @@
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
             <group value="WYSIWYGDisabled"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
         </before>
         <after>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Category Page-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoaded"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
 
         <!--Update Category name,description, urlKey, meta title and disable Include in Menu-->
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="fillCategoryName"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
         <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="disableIncludeInMenu"/>
         <scrollTo  selector="{{AdminCategoryContentSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToContent"/>
         <click selector="{{AdminCategoryContentSection.sectionHeader}}"  stepKey="selectContent"/>
+        <scrollTo selector="{{AdminCategoryContentSection.description}}" x="0" y="-80" stepKey="scrollToDescription"/>
         <fillField selector="{{AdminCategoryContentSection.description}}"  userInput="Updated category Description Fields" stepKey="fillUpdatedDescription"/>
         <scrollTo  selector="{{AdminCategorySEOSection.SectionHeader}}" x="0" y="-80" stepKey="scrollToSearchEngineOptimization"/>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="selectSearchEngineOptimization"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{SimpleRootSubCategory.url_key}}" stepKey="fillUpdatedUrlKey"/>
         <fillField selector="{{AdminCategorySEOSection.MetaTitleInput}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="fillUpdatedMetaTitle"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
 
         <!--Open UrlRewrite Page-->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage"/>
         <waitForPageLoad stepKey="waitForUrlRewritePage"/>
 
         <!--Verify Updated Category UrlKey-->
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{SimpleRootSubCategory.url_key}}" stepKey="fillUpdatedCategoryUrlKey"/>
-        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <see stepKey="seeCategoryUrlKey" selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{SimpleRootSubCategory.url_key}}.html" />
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{SimpleRootSubCategory.url_key}}" stepKey="fillUpdatedCategoryUrlKey"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickOrderApplyFilters"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad"/>
+        <see stepKey="seeCategoryUrlKey" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{SimpleRootSubCategory.url_key}}.html" />
         <!--Verify Updated Category UrlKey directs to category Store Front-->
         <amOnPage url="{{SimpleRootSubCategory.url_key}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
         <waitForPageLoad time="60" stepKey="waitForStoreFrontPageLoad"/>
         <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(SimpleRootSubCategory.name)}}" stepKey="seeUpdatedCategoryInStoreFrontPage"/>
 
         <!--Verify Updated fields in Category Page-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage1"/>
-        <waitForPageLoad stepKey="waitForPageToLoaded1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree1"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree1"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleRootSubCategory.name)}}" stepKey="selectCreatedCategory1"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="seeUpdatedCategoryTitle"/>

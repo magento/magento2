@@ -3,34 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Observer;
 
+use Magento\Captcha\Helper\Data;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Message\ManagerInterface;
 
 /**
- * Class CheckContactUsFormObserver
+ * Check captcha on contact us form submit observer.
  */
 class CheckContactUsFormObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Captcha\Helper\Data
+     * @var Data
      */
     protected $_helper;
 
     /**
-     * @var \Magento\Framework\App\ActionFlag
+     * @var ActionFlag
      */
     protected $_actionFlag;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface
+     * @var RedirectInterface
      */
     protected $redirect;
 
@@ -45,60 +52,48 @@ class CheckContactUsFormObserver implements ObserverInterface
     private $dataPersistor;
 
     /**
-     * @param \Magento\Captcha\Helper\Data $helper
-     * @param \Magento\Framework\App\ActionFlag $actionFlag
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Framework\App\Response\RedirectInterface $redirect
+     * @param Data $helper
+     * @param ActionFlag $actionFlag
+     * @param ManagerInterface $messageManager
+     * @param RedirectInterface $redirect
      * @param CaptchaStringResolver $captchaStringResolver
+     * @param DataPersistorInterface $dataPersistor
      */
     public function __construct(
-        \Magento\Captcha\Helper\Data $helper,
-        \Magento\Framework\App\ActionFlag $actionFlag,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\App\Response\RedirectInterface $redirect,
-        CaptchaStringResolver $captchaStringResolver
+        Data $helper,
+        ActionFlag $actionFlag,
+        ManagerInterface $messageManager,
+        RedirectInterface $redirect,
+        CaptchaStringResolver $captchaStringResolver,
+        DataPersistorInterface $dataPersistor
     ) {
         $this->_helper = $helper;
         $this->_actionFlag = $actionFlag;
         $this->messageManager = $messageManager;
         $this->redirect = $redirect;
         $this->captchaStringResolver = $captchaStringResolver;
+        $this->dataPersistor = $dataPersistor;
     }
 
     /**
      * Check CAPTCHA on Contact Us page
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $formId = 'contact_us';
         $captcha = $this->_helper->getCaptcha($formId);
         if ($captcha->isRequired()) {
-            /** @var \Magento\Framework\App\Action\Action $controller */
+            /** @var Action $controller */
             $controller = $observer->getControllerAction();
             if (!$captcha->isCorrect($this->captchaStringResolver->resolve($controller->getRequest(), $formId))) {
                 $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA.'));
-                $this->getDataPersistor()->set($formId, $controller->getRequest()->getPostValue());
-                $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+                $this->dataPersistor->set($formId, $controller->getRequest()->getPostValue());
+                $this->_actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
                 $this->redirect->redirect($controller->getResponse(), 'contact/index/index');
             }
         }
-    }
-
-    /**
-     * Get Data Persistor
-     *
-     * @return DataPersistorInterface
-     */
-    private function getDataPersistor()
-    {
-        if ($this->dataPersistor === null) {
-            $this->dataPersistor = ObjectManager::getInstance()
-                ->get(DataPersistorInterface::class);
-        }
-
-        return $this->dataPersistor;
     }
 }

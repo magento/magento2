@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="VerifyAllowDynamicMediaURLsSettingIsRemoved">
+    <test name="VerifyAllowDynamicMediaURLsSettingIsRemovedTest">
         <annotations>
             <features value="Backend"/>
             <stories value="Dynamic Media URL"/>
@@ -20,10 +20,10 @@
             <group value="configuration"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{CatalogConfigPage.url}}" stepKey="navigateToConfigurationPage" />
         <waitForPageLoad stepKey="waitForPageLoad"/>

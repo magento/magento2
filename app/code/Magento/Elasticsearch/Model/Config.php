@@ -7,11 +7,9 @@ namespace Magento\Elasticsearch\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Search\EngineResolverInterface;
-use Magento\Search\Model\EngineResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Elasticsearch config model
@@ -70,21 +68,21 @@ class Config implements ClientOptionsInterface
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param ClientResolver|null $clientResolver
-     * @param EngineResolverInterface|null $engineResolver
+     * @param ClientResolver $clientResolver
+     * @param EngineResolverInterface $engineResolver
      * @param string|null $prefix
      * @param array $engineList
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        ClientResolver $clientResolver = null,
-        EngineResolverInterface $engineResolver = null,
+        ClientResolver $clientResolver,
+        EngineResolverInterface $engineResolver,
         $prefix = null,
         $engineList = []
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->clientResolver = $clientResolver ?: ObjectManager::getInstance()->get(ClientResolver::class);
-        $this->engineResolver = $engineResolver ?: ObjectManager::getInstance()->get(EngineResolverInterface::class);
+        $this->clientResolver = $clientResolver;
+        $this->engineResolver = $engineResolver;
         $this->prefix = $prefix ?: $this->clientResolver->getCurrentEngine();
         $this->engineList = $engineList;
     }

@@ -6,11 +6,17 @@
 
 namespace Magento\AsynchronousOperations\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
- * Class Operation
+ * Resource class for Bulk Operations
  */
-class Operation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Operation extends AbstractDb
 {
+
+    public const TABLE_NAME = "magento_operation";
+    public const TABLE_PRIMARY_KEY = "id";
+
     /**
      * Initialize banner sales rule resource model
      *
@@ -18,6 +24,6 @@ class Operation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('magento_operation', 'id');
+        $this->_init(self::TABLE_NAME, self::TABLE_PRIMARY_KEY);
     }
 }

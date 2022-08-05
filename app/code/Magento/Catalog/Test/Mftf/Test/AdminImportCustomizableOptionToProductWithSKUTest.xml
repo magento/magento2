@@ -31,42 +31,43 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
-            <!-- TODO: REMOVE AFTER FIX MC-21717 -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Delete created data-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
             <!--Delete second product with changed sku-->
-            <actionGroup ref="deleteProductBySku" stepKey="deleteSecondProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondProduct">
                 <argument name="sku" value="$$createFirstProduct.sku$$-1"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductGridFilter"/>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductGridFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!--Change second product sku to first product sku-->
-        <amOnPage url="{{AdminProductEditPage.url($$createSecondProduct.id$$)}}" stepKey="goToProductEditPage1"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage1">
+            <argument name="productId" value="$$createSecondProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductEditPageLoad1"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="$$createFirstProduct.sku$$" stepKey="fillProductSku1"/>
         <!--Import customizable options and check-->
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
-        <actionGroup ref="importProductCustomizableOptions" stepKey="importOptions">
+        <actionGroup ref="ImportProductCustomizableOptionsActionGroup" stepKey="importOptions">
             <argument name="productName" value="$$createFirstProduct.name$$"/>
         </actionGroup>
-        <actionGroup ref="checkCustomizableOptionImport" stepKey="checkFirstOptionImport">
+        <actionGroup ref="CheckCustomizableOptionImportActionGroup" stepKey="checkFirstOptionImport">
             <argument name="option" value="ProductOptionField"/>
             <argument name="optionIndex" value="0"/>
         </actionGroup>
-        <actionGroup ref="checkCustomizableOptionImport" stepKey="checkSecondOptionImport">
+        <actionGroup ref="CheckCustomizableOptionImportActionGroup" stepKey="checkSecondOptionImport">
             <argument name="option" value="ProductOptionField2"/>
             <argument name="optionIndex" value="1"/>
         </actionGroup>
         <!--Save product and check sku changed message-->
-        <actionGroup ref="saveProductForm" stepKey="saveSecondProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProduct"/>
         <see selector="{{AdminMessagesSection.notice}}" userInput="SKU for product $$createSecondProduct.name$$ has been changed to $$createFirstProduct.sku$$-1." stepKey="seeSkuChangedMessage"/>
     </test>
 </tests>

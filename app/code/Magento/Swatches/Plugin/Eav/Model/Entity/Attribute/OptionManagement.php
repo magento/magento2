@@ -8,6 +8,9 @@ declare(strict_types = 1);
 namespace Magento\Swatches\Plugin\Eav\Model\Entity\Attribute;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Model\Product\Attribute\OptionManagement as CatalogOptionManagement;
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Store\Model\Store;
 use Magento\Swatches\Helper\Data;
@@ -41,28 +44,61 @@ class OptionManagement
     /**
      * Add swatch value to the attribute option
      *
-     * @param \Magento\Catalog\Model\Product\Attribute\OptionManagement $subject
+     * @param CatalogOptionManagement $subject
      * @param string $attributeCode
-     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
+     * @param AttributeOptionInterface $option
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeAdd(
-        \Magento\Catalog\Model\Product\Attribute\OptionManagement $subject,
+        CatalogOptionManagement $subject,
         ?string $attributeCode,
-        \Magento\Eav\Api\Data\AttributeOptionInterface $option
+        AttributeOptionInterface $option
     ) {
-        if (empty($attributeCode)) {
+        $attribute = $this->initAttribute($attributeCode);
+        if (!$attribute) {
             return;
         }
-        $attribute = $this->attributeRepository->get(
-            ProductAttributeInterface::ENTITY_TYPE_CODE,
-            $attributeCode
-        );
-        if (!$attribute || !$this->swatchHelper->isSwatchAttribute($attribute)) {
+
+        $optionId = $this->getNewOptionId($option);
+        $this->setSwatchAttributeOption($attribute, $option, $optionId);
+    }
+
+    /**
+     * Update swatch value of attribute option
+     *
+     * @param CatalogOptionManagement $subject
+     * @param string $attributeCode
+     * @param int $optionId
+     * @param AttributeOptionInterface $option
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeUpdate(
+        CatalogOptionManagement $subject,
+        $attributeCode,
+        $optionId,
+        AttributeOptionInterface $option
+    ) {
+        $attribute = $this->initAttribute($attributeCode);
+        if (!$attribute) {
             return;
         }
-        $optionId = $this->getOptionId($option);
-        $optionsValue = $option->getValue();
+
+        $this->setSwatchAttributeOption($attribute, $option, (string)$optionId);
+    }
+
+    /**
+     * Set attribute swatch option
+     *
+     * @param AttributeInterface $attribute
+     * @param AttributeOptionInterface $option
+     * @param string $optionId
+     */
+    private function setSwatchAttributeOption(
+        AttributeInterface $attribute,
+        AttributeOptionInterface $option,
+        string $optionId
+    ): void {
+        $optionsValue = trim($option->getValue() ?: '');
         if ($this->swatchHelper->isVisualSwatch($attribute)) {
             $attribute->setData('swatchvisual', ['value' => [$optionId => $optionsValue]]);
         } else {
@@ -80,13 +116,40 @@ class OptionManagement
     }
 
     /**
-     * Returns option id
+     * Init swatch attribute
      *
-     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
+     * @param string $attributeCode
+     * @return bool|AttributeInterface
+     */
+    private function initAttribute($attributeCode)
+    {
+        if (empty($attributeCode)) {
+            return false;
+        }
+        $attribute = $this->attributeRepository->get(
+            ProductAttributeInterface::ENTITY_TYPE_CODE,
+            $attributeCode
+        );
+        if (!$attribute || !$this->swatchHelper->isSwatchAttribute($attribute)) {
+            return false;
+        }
+
+        return $attribute;
+    }
+
+    /**
+     * Get option id to create new option
+     *
+     * @param AttributeOptionInterface $option
      * @return string
      */
-    private function getOptionId(\Magento\Eav\Api\Data\AttributeOptionInterface $option) : string
+    private function getNewOptionId(AttributeOptionInterface $option): string
     {
-        return 'id_' . ($option->getValue() ?: 'new_option');
+        $optionId = trim($option->getValue() ?: '');
+        if (empty($optionId)) {
+            $optionId = 'new_option';
+        }
+
+        return 'id_' . $optionId;
     }
 }

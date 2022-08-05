@@ -6,6 +6,7 @@
 namespace Magento\Framework\MessageQueue\UseCase\DeprecatedFormat;
 
 use Magento\Framework\MessageQueue\UseCase\QueueTestCaseAbstract;
+use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
 
 class AsyncMultiTopicsSeparateQueuesTest extends QueueTestCaseAbstract
 {
@@ -15,7 +16,7 @@ class AsyncMultiTopicsSeparateQueuesTest extends QueueTestCaseAbstract
     protected $uniqueID;
 
     /**
-     * @var \Magento\TestModuleAsyncAmqp\Model\AsyncTestData
+     * @var AsyncTestData
      */
     protected $msgObject;
 
@@ -39,9 +40,10 @@ class AsyncMultiTopicsSeparateQueuesTest extends QueueTestCaseAbstract
      */
     public function testAsyncMultipleTopicsPerQueue()
     {
-        $this->msgObject = $this->objectManager->create(\Magento\TestModuleAsyncAmqp\Model\AsyncTestData::class);
+        $this->msgObject = $this->objectManager->create(AsyncTestData::class); // @phpstan-ignore-line
 
         foreach ($this->topics as $topic) {
+            // phpcs:ignore Magento2.Security.InsecureFunction
             $this->uniqueID[$topic] = md5(uniqid($topic));
             $this->msgObject->setValue($this->uniqueID[$topic] . "_" . $topic);
             $this->msgObject->setTextFilePath($this->logFilePath);
@@ -52,7 +54,10 @@ class AsyncMultiTopicsSeparateQueuesTest extends QueueTestCaseAbstract
 
         //assertions
         foreach ($this->topics as $item) {
-            $this->assertContains($this->uniqueID[$item] . "_" . $item, file_get_contents($this->logFilePath));
+            $this->assertStringContainsString(
+                $this->uniqueID[$item] . "_" . $item,
+                file_get_contents($this->logFilePath)
+            );
         }
     }
 }

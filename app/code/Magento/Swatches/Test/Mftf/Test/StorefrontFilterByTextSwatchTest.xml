@@ -14,7 +14,7 @@
             <stories value="View swatches in product listing"/>
             <title value="Customers can filter products using text swatches"/>
             <description value="Customers can filter products using text swatches"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-3462"/>
             <group value="Swatches"/>
         </annotations>
@@ -23,17 +23,16 @@
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Begin creating a new product attribute -->
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
-        <waitForPageLoad stepKey="waitForNewProductAttributePage"/>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="goToNewProductAttributePage"/>
         <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
 
         <!-- Select text swatch -->
@@ -67,26 +66,24 @@
         <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccess"/>
 
         <!-- Create a configurable product to verify the storefront with -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitForProductGrid"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
 
         <!-- Create configurations based off the text swatch we created earlier -->
-        <actionGroup ref="createConfigurationsForAttribute" stepKey="createConfigurations">
+        <actionGroup ref="CreateConfigurationsForAttributeActionGroup" stepKey="createConfigurations">
             <argument name="attributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
         </actionGroup>
 
-        <!--Run re-index task-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!-- Go to the category page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPage"/>
 
         <!-- Verify swatches are present in the layered navigation -->

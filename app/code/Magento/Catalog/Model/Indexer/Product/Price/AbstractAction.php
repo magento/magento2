@@ -3,13 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
+use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice;
 use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
+use Magento\Directory\Model\Currency;
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
+use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
 
 /**
  * Abstract action reindex class
@@ -26,48 +44,46 @@ abstract class AbstractAction
     protected $_defaultIndexerResource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @var AdapterInterface
      */
     protected $_connection;
 
     /**
      * Core config model
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_config;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Currency factory
      *
-     * @var \Magento\Directory\Model\CurrencyFactory
+     * @var CurrencyFactory
      */
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var TimezoneInterface
      */
     protected $_localeDate;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
     protected $_dateTime;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Type
+     * @var Type
      */
     protected $_catalogProductType;
 
     /**
-     * Indexer price factory
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory
+     * @var Factory
      */
     protected $_indexerPriceFactory;
 
@@ -77,12 +93,12 @@ abstract class AbstractAction
     protected $_indexers;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice
+     * @var TierPrice
      */
     private $tierPriceIndexResource;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory
+     * @var DimensionCollectionFactory
      */
     private $dimensionCollectionFactory;
 
@@ -92,15 +108,15 @@ abstract class AbstractAction
     private $tableMaintainer;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Catalog\Model\Product\Type $catalogProductType
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory
+     * @param ScopeConfigInterface $config
+     * @param StoreManagerInterface $storeManager
+     * @param CurrencyFactory $currencyFactory
+     * @param TimezoneInterface $localeDate
+     * @param DateTime $dateTime
+     * @param Type $catalogProductType
+     * @param Factory $indexerPriceFactory
      * @param DefaultPrice $defaultIndexerResource
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice|null $tierPriceIndexResource
+     * @param TierPrice|null $tierPriceIndexResource
      * @param DimensionCollectionFactory|null $dimensionCollectionFactory
      * @param TableMaintainer|null $tableMaintainer
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -108,17 +124,17 @@ abstract class AbstractAction
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Catalog\Model\Product\Type $catalogProductType,
-        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory,
+        ScopeConfigInterface $config,
+        StoreManagerInterface $storeManager,
+        CurrencyFactory $currencyFactory,
+        TimezoneInterface $localeDate,
+        DateTime $dateTime,
+        Type $catalogProductType,
+        Factory $indexerPriceFactory,
         DefaultPrice $defaultIndexerResource,
-        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice $tierPriceIndexResource = null,
-        \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory $dimensionCollectionFactory = null,
-        \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer $tableMaintainer = null
+        TierPrice $tierPriceIndexResource = null,
+        DimensionCollectionFactory $dimensionCollectionFactory = null,
+        TableMaintainer $tableMaintainer = null
     ) {
         $this->_config = $config;
         $this->_storeManager = $storeManager;
@@ -130,13 +146,13 @@ abstract class AbstractAction
         $this->_defaultIndexerResource = $defaultIndexerResource;
         $this->_connection = $this->_defaultIndexerResource->getConnection();
         $this->tierPriceIndexResource = $tierPriceIndexResource ?? ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice::class
+            TierPrice::class
         );
         $this->dimensionCollectionFactory = $dimensionCollectionFactory ?? ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory::class
+            DimensionCollectionFactory::class
         );
         $this->tableMaintainer = $tableMaintainer ?? ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer::class
+            TableMaintainer::class
         );
     }
 
@@ -152,9 +168,10 @@ abstract class AbstractAction
      * Synchronize data between index storage and original storage
      *
      * @param array $processIds
-     * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
+     * @return AbstractAction
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated Used only for backward compatibility for indexer, which not support indexation by dimensions
+     * @deprecated 102.0.6
+     * @see Used only for backward compatibility for indexer, which not support indexation by dimensions
      */
     protected function _syncData(array $processIds = [])
     {
@@ -173,7 +190,7 @@ abstract class AbstractAction
                 }
             }
 
-            $query = $insertSelect->insertFromSelect($this->tableMaintainer->getMainTable($dimensions));
+            $query = $insertSelect->insertFromSelect($this->tableMaintainer->getMainTableByDimensions($dimensions));
             $this->getConnection()->query($query);
         }
         return $this;
@@ -182,14 +199,14 @@ abstract class AbstractAction
     /**
      * Prepare website current dates table
      *
-     * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
+     * @return AbstractAction
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     protected function _prepareWebsiteDateTable()
     {
-        $baseCurrency = $this->_config->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE);
+        $baseCurrency = $this->_config->getValue(Currency::XML_PATH_CURRENCY_BASE);
 
         $select = $this->getConnection()->select()->from(
             ['cw' => $this->_defaultIndexerResource->getTable('store_website')],
@@ -204,7 +221,7 @@ abstract class AbstractAction
 
         $data = [];
         foreach ($this->getConnection()->fetchAll($select) as $item) {
-            /** @var $website \Magento\Store\Model\Website */
+            /** @var $website Website */
             $website = $this->_storeManager->getWebsite($item['website_id']);
 
             if ($website->getBaseCurrencyCode() != $baseCurrency) {
@@ -220,7 +237,7 @@ abstract class AbstractAction
                 $rate = 1;
             }
 
-            /** @var $store \Magento\Store\Model\Store */
+            /** @var $store Store */
             $store = $this->_storeManager->getStore($item['store_id']);
             if ($store) {
                 $timestamp = $this->_localeDate->scopeTimeStamp($store);
@@ -248,11 +265,11 @@ abstract class AbstractAction
      * Prepare tier price index table
      *
      * @param int|array $entityIds the entity ids limitation
-     * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
+     * @return AbstractAction
      */
     protected function _prepareTierPriceIndex($entityIds = null)
     {
-        $this->tierPriceIndexResource->reindexEntity((array) $entityIds);
+        $this->tierPriceIndexResource->reindexEntity((array)$entityIds);
 
         return $this;
     }
@@ -262,9 +279,9 @@ abstract class AbstractAction
      *
      * @param bool $fullReindexAction
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface[]
+     * @return PriceInterface[]
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getTypeIndexers($fullReindexAction = false)
     {
@@ -301,16 +318,16 @@ abstract class AbstractAction
      * Retrieve Price indexer by Product Type
      *
      * @param string $productTypeId
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceInterface
+     * @return PriceInterface
      *
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws InputException
+     * @throws LocalizedException
      */
     protected function _getIndexer($productTypeId)
     {
         $this->getTypeIndexers();
         if (!isset($this->_indexers[$productTypeId])) {
-            throw new \Magento\Framework\Exception\InputException(__('Unsupported product type "%1".', $productTypeId));
+            throw new InputException(__('Unsupported product type "%1".', $productTypeId));
         }
         return $this->_indexers[$productTypeId];
     }
@@ -325,17 +342,16 @@ abstract class AbstractAction
      */
     protected function _insertFromTable($sourceTable, $destTable, $where = null)
     {
-        $sourceColumns = array_keys($this->getConnection()->describeTable($sourceTable));
-        $targetColumns = array_keys($this->getConnection()->describeTable($destTable));
-        $select = $this->getConnection()->select()->from($sourceTable, $sourceColumns);
+        $columns = array_keys($this->getConnection()->describeTable($destTable));
+        $select = $this->getConnection()->select()->from($sourceTable, $columns);
         if ($where) {
             $select->where($where);
         }
         $query = $this->getConnection()->insertFromSelect(
             $select,
             $destTable,
-            $targetColumns,
-            \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+            $columns,
+            AdapterInterface::INSERT_ON_DUPLICATE
         );
         $this->getConnection()->query($query);
     }
@@ -357,9 +373,9 @@ abstract class AbstractAction
      * @param array $changedIds
      * @return array Affected ids
      *
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     protected function _reindexRows($changedIds = [])
     {
@@ -368,28 +384,36 @@ abstract class AbstractAction
         $productsTypes = $this->getProductsTypes($changedIds);
         $parentProductsTypes = $this->getParentProductsTypes($changedIds);
 
-        $changedIds = array_merge($changedIds, ...array_values($parentProductsTypes));
+        $changedIds = array_unique(array_merge($changedIds, ...array_values($parentProductsTypes)));
         $productsTypes = array_merge_recursive($productsTypes, $parentProductsTypes);
 
-        if ($changedIds) {
+        $typeIndexers = array_filter(
+            $this->getTypeIndexers(),
+            function ($type) use ($productsTypes) {
+                return isset($productsTypes[$type]) && !empty($productsTypes[$type]);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+        if (empty($typeIndexers)) {
             $this->deleteIndexData($changedIds);
+            return $changedIds;
         }
-        foreach ($productsTypes as $productType => $entityIds) {
-            $indexer = $this->_getIndexer($productType);
+
+        foreach ($typeIndexers as $productType => $indexer) {
+            $entityIds = $productsTypes[$productType];
             if ($indexer instanceof DimensionalIndexerInterface) {
                 foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
                     $this->tableMaintainer->createMainTmpTable($dimensions);
                     $temporaryTable = $this->tableMaintainer->getMainTmpTable($dimensions);
                     $this->_emptyTable($temporaryTable);
                     $indexer->executeByDimensions($dimensions, \SplFixedArray::fromArray($entityIds, false));
-                    // copy to index
-                    $this->_insertFromTable(
-                        $temporaryTable,
-                        $this->tableMaintainer->getMainTable($dimensions)
-                    );
+                    $mainTable = $this->tableMaintainer->getMainTableByDimensions($dimensions);
+                    $this->_insertFromTable($temporaryTable, $mainTable);
+                    $this->deleteOutdatedData($entityIds, $temporaryTable, $mainTable);
                 }
             } else {
                 // handle 3d-party indexers for backward compatibility
+                $this->deleteIndexData($changedIds);
                 $this->_emptyTable($this->_defaultIndexerResource->getIdxTable());
                 $this->_copyRelationIndexData($entityIds);
                 $indexer->reindexEntity($entityIds);
@@ -401,6 +425,32 @@ abstract class AbstractAction
     }
 
     /**
+     * Delete records that do not exist anymore
+     *
+     * @param array $entityIds
+     * @param string $temporaryTable
+     * @param string $mainTable
+     * @return void
+     */
+    private function deleteOutdatedData(array $entityIds, string $temporaryTable, string $mainTable): void
+    {
+        $joinCondition = [
+            'tmp_table.entity_id = main_table.entity_id',
+            'tmp_table.customer_group_id = main_table.customer_group_id',
+            'tmp_table.website_id = main_table.website_id',
+        ];
+        $select = $this->getConnection()->select()
+            ->from(['main_table' => $mainTable], null)
+            ->joinLeft(['tmp_table' => $temporaryTable], implode(' AND ', $joinCondition), null)
+            ->where('tmp_table.entity_id IS NULL')
+            ->where('main_table.entity_id IN (?)', $entityIds, \Zend_Db::INT_TYPE);
+        $query = $select->deleteFromSelect('main_table');
+        $this->getConnection()->query($query);
+    }
+
+    /**
+     * Delete Index data index for list of entities
+     *
      * @param array $entityIds
      * @return void
      */
@@ -408,9 +458,9 @@ abstract class AbstractAction
     {
         foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
             $select = $this->getConnection()->select()->from(
-                ['index_price' => $this->tableMaintainer->getMainTable($dimensions)],
+                ['index_price' => $this->tableMaintainer->getMainTableByDimensions($dimensions)],
                 null
-            )->where('index_price.entity_id IN (?)', $entityIds);
+            )->where('index_price.entity_id IN (?)', $entityIds, \Zend_Db::INT_TYPE);
             $query = $select->deleteFromSelect('index_price');
             $this->getConnection()->query($query);
         }
@@ -422,7 +472,8 @@ abstract class AbstractAction
      * @param null|array $parentIds
      * @param array $excludeIds
      * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
-     * @deprecated Used only for backward compatibility for do not broke custom indexer implementation
+     * @deprecated 102.0.6
+     * @see Used only for backward compatibility for do not broke custom indexer implementation
      * which do not work by dimensions.
      * For indexers, which support dimensions all composite products read data directly from main price indexer table
      * or replica table for partial or full reindex correspondingly.
@@ -439,10 +490,11 @@ abstract class AbstractAction
             []
         )->where(
             'e.entity_id IN(?)',
-            $parentIds
+            $parentIds,
+            \Zend_Db::INT_TYPE
         );
         if (!empty($excludeIds)) {
-            $select->where('child_id NOT IN(?)', $excludeIds);
+            $select->where('child_id NOT IN(?)', $excludeIds, \Zend_Db::INT_TYPE);
         }
 
         $children = $this->getConnection()->fetchCol($select);
@@ -453,7 +505,8 @@ abstract class AbstractAction
                     $this->getIndexTargetTableByDimension($dimensions)
                 )->where(
                     'entity_id IN(?)',
-                    $children
+                    $children,
+                    \Zend_Db::INT_TYPE
                 );
                 $query = $select->insertFromSelect($this->_defaultIndexerResource->getIdxTable(), [], false);
                 $this->getConnection()->query($query);
@@ -468,7 +521,7 @@ abstract class AbstractAction
      *
      * This method is used during both partial and full reindex to identify the table.
      *
-     * @param \Magento\Framework\Search\Request\Dimension[] $dimensions
+     * @param Dimension[] $dimensions
      *
      * @return string
      */
@@ -476,7 +529,7 @@ abstract class AbstractAction
     {
         $indexTargetTable = $this->getIndexTargetTable();
         if ($indexTargetTable === self::getIndexTargetTable()) {
-            $indexTargetTable = $this->tableMaintainer->getMainTable($dimensions);
+            $indexTargetTable = $this->tableMaintainer->getMainTableByDimensions($dimensions);
         }
         if ($indexTargetTable === self::getIndexTargetTable() . '_replica') {
             $indexTargetTable = $this->tableMaintainer->getMainReplicaTable($dimensions);
@@ -497,6 +550,8 @@ abstract class AbstractAction
     }
 
     /**
+     * Get product Id field name
+     *
      * @return string
      */
     protected function getProductIdFieldName()
@@ -519,7 +574,7 @@ abstract class AbstractAction
             ['entity_id', 'type_id']
         );
         if ($changedIds) {
-            $select->where('entity_id IN (?)', $changedIds);
+            $select->where('entity_id IN (?)', $changedIds, \Zend_Db::INT_TYPE);
         }
         $pairs = $this->getConnection()->fetchPairs($select);
 
@@ -533,6 +588,7 @@ abstract class AbstractAction
 
     /**
      * Get parent products types
+     *
      * Used for add composite products to reindex if we have only simple products in changed ids set
      *
      * @param array $productsIds
@@ -549,13 +605,14 @@ abstract class AbstractAction
             ['e.entity_id as parent_id', 'type_id']
         )->where(
             'l.child_id IN(?)',
-            $productsIds
+            $productsIds,
+            \Zend_Db::INT_TYPE
         );
         $pairs = $this->getConnection()->fetchPairs($select);
 
         $byType = [];
         foreach ($pairs as $productId => $productType) {
-            $byType[$productType][$productId] = $productId;
+            $byType[$productType][$productId] = (int)$productId;
         }
 
         return $byType;
@@ -564,7 +621,7 @@ abstract class AbstractAction
     /**
      * Get connection
      *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @return AdapterInterface
      */
     private function getConnection()
     {

@@ -35,7 +35,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $connectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

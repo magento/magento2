@@ -45,8 +45,10 @@
                 <requiredEntity createDataKey="createBundleOption1_1"/>
                 <requiredEntity createDataKey="simpleProduct2"/>
             </createData>
-            <magentoCLI stepKey="reindex" command="indexer:reindex"/>
-            <magentoCLI stepKey="flushCache" command="cache:flush"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="cataloginventory_stock catalog_product_price"/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Delete data -->
@@ -55,7 +57,7 @@
             <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Login as a customer -->
@@ -83,6 +85,6 @@
         <click selector="{{StorefrontCustomerWishlistProductSection.removeProduct}}" stepKey="clickRemoveButton"/>
 
         <!-- Assert Wishlist is empty -->
-        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmpty" stepKey="assertWishlistIsEmpty"/>
+        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmptyActionGroup" stepKey="assertWishlistIsEmpty"/>
     </test>
 </tests>

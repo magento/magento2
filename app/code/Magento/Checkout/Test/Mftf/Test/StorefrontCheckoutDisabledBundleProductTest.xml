@@ -36,8 +36,10 @@
                 <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="cacheFlush"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Delete category -->
@@ -47,7 +49,7 @@
             <deleteData createDataKey="createBundleDynamicProduct" stepKey="deleteBundleProduct"/>
         </after>
         <!-- Add simple product to the cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="cartAddSimpleProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="productCount" value="1"/>
         </actionGroup>
@@ -55,15 +57,15 @@
         <amOnPage url="{{StorefrontProductPage.url($$createBundleDynamicProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <!-- Add bundle product to the cart -->
-        <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToCart">
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCart"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$$createBundleDynamicProduct.name$$"/>
         </actionGroup>
         <!-- Login to admin panel -->
         <openNewTab stepKey="openNewTab"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <!-- Find the first simple product that we just created using the product grid and go to its page-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
         <!-- Disabled bundle product from grid -->
         <actionGroup ref="ChangeStatusProductUsingProductGridActionGroup" stepKey="disabledProductFromGrid">
             <argument name="product" value="$$createBundleDynamicProduct$$"/>
@@ -71,7 +73,7 @@
         </actionGroup>
         <closeTab stepKey="closeTab"/>
         <!-- Go to cart page-->
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="openCartPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCartPage"/>
         <!-- Assert checkout button exists on the page-->
         <seeElement selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="seeCheckoutButton"/>
         <!-- Assert no error message is not shown on the page-->

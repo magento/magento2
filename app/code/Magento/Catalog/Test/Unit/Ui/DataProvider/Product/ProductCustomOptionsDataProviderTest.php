@@ -3,16 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Ui\DataProvider\Product\ProductCustomOptionsDataProvider;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Ui\DataProvider\Product\ProductCustomOptionsDataProvider;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\DB\Select as DbSelect;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ProductCustomOptionsDataProviderTest extends \PHPUnit\Framework\TestCase
+class ProductCustomOptionsDataProviderTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -25,26 +32,41 @@ class ProductCustomOptionsDataProviderTest extends \PHPUnit\Framework\TestCase
     protected $dataProvider;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var AbstractCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCollection|MockObject
      */
     protected $collectionMock;
 
     /**
-     * @var DbSelect|\PHPUnit_Framework_MockObject_MockObject
+     * @var DbSelect|MockObject
      */
     protected $dbSelectMock;
 
-    protected function setUp()
+    /**
+     * @var MetadataPool|MockObject
+     */
+    private $metadataPool;
+
+    /**
+     * @var EntityMetadataInterface|MockObject
+     */
+    private $entityMetadata;
+
+    /**
+     * @var PoolInterface|MockObject
+     */
+    private $modifiersPool;
+
+    protected function setUp(): void
     {
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
@@ -73,12 +95,29 @@ class ProductCustomOptionsDataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->collectionMock);
 
+        $this->modifiersPool = $this->getMockBuilder(PoolInterface::class)
+            ->getMockForAbstractClass();
+        $this->entityMetadata = $this->getMockBuilder(EntityMetadataInterface::class)
+            ->getMockForAbstractClass();
+        $this->entityMetadata->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
+        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getMetadata'])
+            ->getMock();
+        $this->metadataPool->expects($this->any())
+            ->method('getMetadata')
+            ->willReturn($this->entityMetadata);
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->dataProvider = $this->objectManagerHelper->getObject(
             ProductCustomOptionsDataProvider::class,
             [
                 'collectionFactory' => $this->collectionFactoryMock,
-                'request' => $this->requestMock
+                'request' => $this->requestMock,
+                'modifiersPool' => $this->modifiersPool,
+                'metadataPool' => $this->metadataPool
             ]
         );
     }

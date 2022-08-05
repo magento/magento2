@@ -23,6 +23,7 @@
         <before>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
 
         <after>
@@ -34,15 +35,20 @@
 
         <!-- Create a product to appear in the widget, fill in basic info first -->
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>
-        <waitForPageLoad stepKey="waitForProductList"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
-        <click selector="{{AdminProductGridActionSection.addBundleProduct}}" stepKey="clickAddBundleProduct"/>
-        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="fillProductName"/>
-        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{_defaultProduct.sku}}" stepKey="fillProductSku"/>
-        <fillField selector="{{AdminProductFormSection.setProductAsNewFrom}}" userInput="01/1/2000" stepKey="fillProductNewFrom"/>
-        <fillField selector="{{AdminProductFormSection.setProductAsNewTo}}" userInput="01/1/2099" stepKey="fillProductNewTo"/>
-
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickAddProductToggle"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddBundleProduct">
+            <argument name="productType" value="bundle"/>
+        </actionGroup>
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillProductName">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductSku"/>
+        <actionGroup ref="AdminSetProductAsNewDateActionGroup" stepKey="fillProductNewFrom">
+            <argument name="fromDate" value="01/1/2000"/>
+            <argument name="toDate" value="01/1/2099"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductNewTo"/>
         <!-- and then configure bundled items for this product -->
 
         <scrollTo selector="{{AdminProductFormBundleSection.addOption}}" stepKey="scrollToAddOptionButton"/>
@@ -50,27 +56,39 @@
         <waitForPageLoad stepKey="waitForOptions"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="MFTF Test Bundle 1" stepKey="fillOptionTitle"/>
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="checkbox" stepKey="selectInputType"/>
-        <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions">
+        <actionGroup ref="AdminClickAddProductToOptionActionGroup" stepKey="clickAddProductsToOption"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
-        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions2">
+        <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectFirstGridRow"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions2">
             <argument name="product" value="$$simpleProduct2$$"/>
         </actionGroup>
-        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow2"/>
+        <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectFirstGridRow2"/>
         <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="1" stepKey="fillProductDefaultQty1"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="1" stepKey="fillProductDefaultQty2"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillProductDefaultQty1">
+            <argument name="optionIndex" value="0"/>
+            <argument name="productIndex" value="0"/>
+            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillProductDefaultQty2">
+            <argument name="optionIndex" value="0"/>
+            <argument name="productIndex" value="1"/>
+            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
+        </actionGroup>
+        
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- If PageCache is enabled, Cache clearing happens here, via merge -->
 
         <!-- Check for product on the CMS page with the New Products widget -->
-
-        <amOnPage url="{{_newDefaultCmsPage.identifier}}" stepKey="amOnCmsPage"/>
-        <waitForPageLoad stepKey="waitForCmsPage"/>
-        <see selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" userInput="{{_defaultProduct.name}}" stepKey="seeProductName"/>
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="amOnCmsPage">
+            <argument name="identifier" value="{{_newDefaultCmsPage.identifier}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCmsPage"/>
+        <actionGroup ref="AssertStorefrontProductIsShownOnCmsPageActionGroup" stepKey="seeProductName">
+            <argument name="cmsTitle" value="{{_newDefaultCmsPage.title}}"/>
+        </actionGroup>
     </test>
 </tests>

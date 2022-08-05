@@ -5,17 +5,38 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
+use Magento\Tax\Model\Config;
+
 /**
  * Discount total calculator
  */
 class Discount extends AbstractTotal
 {
     /**
+     * @var Config
+     */
+    private $taxConfig;
+
+    /**
+     * @param Config $taxConfig
+     * @param array $data
+     */
+    public function __construct(
+        Config $taxConfig,
+        array $data = []
+    ) {
+        $this->taxConfig = $taxConfig;
+
+        parent::__construct($data);
+    }
+
+    /**
      * Collect discount
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
@@ -31,7 +52,7 @@ class Discount extends AbstractTotal
          * Calculate how much shipping discount should be applied
          * basing on how much shipping should be refunded.
          */
-        $baseShippingAmount = $this->getBaseShippingAmount($creditmemo);
+        $baseShippingAmount = $this->getBaseShippingAmount($creditmemo, $order);
 
         /**
          * If credit memo's shipping amount is set and Order's shipping amount is 0,
@@ -43,10 +64,14 @@ class Discount extends AbstractTotal
             );
         }
         if ($baseShippingAmount) {
+            $orderBaseShippingAmount =  $this->isShippingInclTax((int)$order->getStoreId()) ?
+                $order->getBaseShippingInclTax() : $order->getBaseShippingAmount();
+            $orderShippingAmount =  $this->isShippingInclTax((int)$order->getStoreId()) ?
+                $order->getShippingInclTax() : $order->getShippingAmount();
             $baseShippingDiscount = $baseShippingAmount *
                 $order->getBaseShippingDiscountAmount() /
-                $order->getBaseShippingAmount();
-            $shippingDiscount = $order->getShippingAmount() * $baseShippingDiscount / $order->getBaseShippingAmount();
+                $orderBaseShippingAmount;
+            $shippingDiscount = $orderShippingAmount * $baseShippingDiscount / $orderBaseShippingAmount;
             $totalDiscountAmount = $totalDiscountAmount + $shippingDiscount;
             $baseTotalDiscountAmount = $baseTotalDiscountAmount + $baseShippingDiscount;
         }
@@ -104,8 +129,20 @@ class Discount extends AbstractTotal
         if (!$baseShippingAmount) {
             $baseShippingInclTax = (float)$creditmemo->getBaseShippingInclTax();
             $baseShippingTaxAmount = (float)$creditmemo->getBaseShippingTaxAmount();
-            $baseShippingAmount = $baseShippingInclTax - $baseShippingTaxAmount;
+            $baseShippingAmount = $this->isShippingInclTax((int)$creditmemo->getStoreId()) ?
+                $baseShippingInclTax : $baseShippingInclTax - $baseShippingTaxAmount;
         }
         return $baseShippingAmount;
+    }
+
+    /**
+     * Returns whether the user specified a shipping amount that already includes tax
+     *
+     * @param int $storeId
+     * @return bool
+     */
+    private function isShippingInclTax(int $storeId): bool
+    {
+        return (bool)$this->taxConfig->displaySalesShippingInclTax($storeId);
     }
 }

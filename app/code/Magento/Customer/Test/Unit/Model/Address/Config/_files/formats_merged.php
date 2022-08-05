@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 return [
     'format_one' => ['code' => 'format_one', 'title' => 'format_one_title'],

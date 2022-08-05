@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminMarketingFindNewsletterSubscribersInGridActionGroup">
+        <arguments>
+            <argument name="email" type="string"/>
+        </arguments>
+
+        <click stepKey="resetFilter" selector="{{AdminNewsletterSubscriberGridSection.resetFilter}}"/>
+        <waitForPageLoad stepKey="waitForPageLoading"/>
+        <fillField stepKey="fillEmailField" selector="{{AdminNewsletterSubscriberGridSection.emailField}}" userInput="{{email}}"/>
+        <click stepKey="clickSearchButton" selector="{{AdminNewsletterSubscriberGridSection.searchButton}}"/>
+        <waitForPageLoad stepKey="waitForResultsLoading"/>
+    </actionGroup>
+</actionGroups>

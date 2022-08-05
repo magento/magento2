@@ -3,14 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\AreaList::class)
     ->getArea('adminhtml')
     ->load(\Magento\Framework\App\Area::PART_CONFIG);
-
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_duplicated.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_virtual.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple_duplicated.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_virtual.php');
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

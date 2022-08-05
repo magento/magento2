@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CheckBillingAddressInCheckoutWithBillingAddressOnPaymentPageActionGroup">
+        <annotations>
+            <description>Validates that the provided Customer and Address details appear on the Storefront Checkout page under the 'Billing Address' section.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <see userInput="{{customerVar.firstName}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsFirstName"/>
+        <see userInput="{{customerVar.lastName}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsLastName"/>
+        <see userInput="{{customerAddressVar.street[0]}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsStreet"/>
+        <see userInput="{{customerAddressVar.city}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsCity"/>
+        <see userInput="{{customerAddressVar.state}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsState"/>
+        <see userInput="{{customerAddressVar.postcode}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsPostcode"/>
+        <see userInput="{{customerAddressVar.telephone}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsTelephone"/>
+    </actionGroup>
+</actionGroups>

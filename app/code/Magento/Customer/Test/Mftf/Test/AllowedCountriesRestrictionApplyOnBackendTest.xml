@@ -23,10 +23,10 @@
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!--Create new website,store and store view-->
             <comment userInput="Create new website,store and store view" stepKey="createWebsite"/>
-            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="goToAdminSystemStorePage"/>
+            <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="goToAdminSystemStorePage"/>
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="adminCreateNewWebsite">
                 <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
                 <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>
@@ -42,7 +42,7 @@
             <!--Set account sharing option - Default value is 'Per Website'-->
             <comment userInput="Set account sharing option - Default value is 'Per Website'" stepKey="setAccountSharingOption"/>
             <createData entity="CustomerAccountSharingDefault" stepKey="setToAccountSharingToDefault"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <!--delete all created data and set main website country options to default-->
@@ -53,19 +53,19 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
                 <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
             </actionGroup>
-            <actionGroup ref="NavigateToConfigurationGeneralPage" stepKey="navigateToConfigGeneralPage2"/>
+            <actionGroup ref="NavigateToConfigurationGeneralPageActionGroup" stepKey="navigateToConfigGeneralPage2"/>
             <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchWebsiteActionGroup">
                 <argument name="website" value="_defaultWebsite"/>
             </actionGroup>
             <actionGroup ref="SetWebsiteCountryOptionsToDefaultActionGroup" stepKey="setCountryOptionsToDefault"/>
             <createData entity="CustomerAccountSharingSystemValue" stepKey="setAccountSharingToSystemValue"/>
-            <actionGroup ref="logout" stepKey="logout"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
         <!--Check that all countries are allowed initially and get amount-->
         <comment userInput="Check that all countries are allowed initially and get amount" stepKey="checkAllCountriesAreAllowed"/>
-        <actionGroup ref="NavigateToConfigurationGeneralPage" stepKey="navigateToConfigGeneralPage"/>
+        <actionGroup ref="NavigateToConfigurationGeneralPageActionGroup" stepKey="navigateToConfigGeneralPage"/>
         <createData entity="DisableAdminAccountAllowCountry" stepKey="setDefaultValueForAllowCountries"/>
         <executeJS function="return document.querySelectorAll('{{CountryOptionsSection.allowedCountries}} option').length" stepKey="countriesAmount"/>
         <!-- Create customer for US -->
@@ -110,10 +110,12 @@
         <waitForPageLoad stepKey="waitForCustomersPage"/>
         <!--Go to Customers grid and check that filter countries amount is the same as initial allowed countries amount-->
         <comment userInput="Go to Customers grid and check that filter countries amount is the same as initial allowed countries amount" stepKey="compareCountriesAmount"/>
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersGrid"/>
-        <waitForPageLoad stepKey="waitForCustomersGrid"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="goToCustomersGrid"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomersGrid"/>
         <executeJS function="var len = document.querySelectorAll('{{AdminCustomerFiltersSection.countryOptions}}').length; return len-1;" stepKey="countriesAmount2"/>
-        <assertEquals expected="($countriesAmount)" actual="($countriesAmount2)" stepKey="assertCountryAmounts"/>
+        <assertEquals stepKey="assertCountryAmounts">
+			<actualResult type="const">($countriesAmount2)</actualResult>
+			<expectedResult type="const">($countriesAmount)</expectedResult>
+        </assertEquals>
     </test>
 </tests>

@@ -43,37 +43,40 @@
             <deleteData createDataKey="createCustomerForPersistent" stepKey="deleteCustomerForPersistent"/>
         </after>
         <!--Login as a Customer with remember me unchecked-->
-        <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeUnChecked" stepKey="loginToStorefrontAccountWithRememberMeUnchecked">
+        <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeUnCheckedActionGroup" stepKey="loginToStorefrontAccountWithRememberMeUnchecked">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
         <!--Check customer name and last name in welcome message-->
         <seeInCurrentUrl url="{{StorefrontCustomerDashboardPage.url}}" stepKey="seeCustomerAccountPageUrl"/>
-        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!"
+        <waitForText userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
              stepKey="seeLoggedInCustomerWelcomeMessage"/>
         <!--Logout and check default welcome message-->
         <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="storefrontCustomerLogout"/>
-        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeCustomerSignOutPageUrl"/>
-        <see userInput="Default welcome msg!"
+        <actionGroup ref="AssertStorefrontCustomerLogoutSuccessPageActionGroup" stepKey="seeCustomerSignOutPageUrl"/>
+        <waitForText userInput="Default welcome msg!"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
              stepKey="seeDefaultWelcomeMessage"/>
 
         <!--Login as a Customer with remember me checked-->
-        <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeChecked" stepKey="loginToStorefrontAccountWithRememberMeChecked">
+        <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeCheckedActionGroup" stepKey="loginToStorefrontAccountWithRememberMeChecked">
             <argument name="Customer" value="$$createCustomerForPersistent$$"/>
         </actionGroup>
         <!--Check customer name and last name in welcome message-->
         <seeInCurrentUrl url="{{StorefrontCustomerDashboardPage.url}}" stepKey="seeCustomerAccountPageUrl1"/>
-        <see userInput="Welcome, $$createCustomerForPersistent.firstname$$ $$createCustomerForPersistent.lastname$$!"
+        <waitForText userInput="Welcome, $$createCustomerForPersistent.firstname$$ $$createCustomerForPersistent.lastname$$!"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
              stepKey="seeLoggedInCustomerWelcomeMessage1"/>
 
         <!--Logout and check persistent customer welcome message-->
         <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="storefrontCustomerLogout1"/>
-        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeCustomerSignOutPageUrl1"/>
-        <see userInput="Welcome, $$createCustomerForPersistent.firstname$$ $$createCustomerForPersistent.lastname$$! Not you?"
+        <actionGroup ref="AssertStorefrontCustomerLogoutSuccessPageActionGroup" stepKey="seeCustomerSignOutPageUrl1"/>
+        <waitForText userInput="Welcome, $$createCustomerForPersistent.firstname$$ $$createCustomerForPersistent.lastname$$! Not you?"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
              stepKey="seePersistentWelcomeMessage"/>
+        <dontSee userInput="Not you? Not you?"
+             selector="{{StorefrontHeaderSection.welcomeMessage}}"
+             stepKey="verifyNotYouLinkNotDuplicated"/>
     </test>
 </tests>

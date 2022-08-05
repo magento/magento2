@@ -40,7 +40,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      */
     protected $_converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $fixturePath = realpath(__DIR__ . '/_files') . '/';
         $this->_fileList = [
@@ -54,7 +54,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->_fileResolverMock->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($this->_fileList));
+            ->willReturn($this->_fileList);
 
         $this->_converter = new \Magento\Framework\Api\ExtensionAttribute\Config\Converter();
 

@@ -42,7 +42,7 @@ abstract class CollectRatesAbstract extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->shipping = $this->objectManager->get(Shipping::class);

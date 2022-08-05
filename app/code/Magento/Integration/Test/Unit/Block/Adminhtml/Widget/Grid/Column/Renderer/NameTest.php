@@ -3,54 +3,65 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Block\Adminhtml\Widget\Grid\Column\Renderer;
 
-class NameTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Block\Context;
+use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Name;
+use Magento\Integration\Model\Integration;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class NameTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Block\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|MockObject
      */
     protected $escaperMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Name
+     * @var Name
      */
     protected $nameRenderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
-        $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->urlBuilderMock->expects($this->any())->method('getUrl')->willReturn('http://magento.loc/linkurl');
         $this->contextMock = $this->createPartialMock(
-            \Magento\Backend\Block\Context::class,
+            Context::class,
             ['getEscaper', 'getUrlBuilder']
         );
-        $this->contextMock->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaperMock));
+        $this->contextMock->expects($this->any())->method('getEscaper')->willReturn($this->escaperMock);
         $this->contextMock->expects($this->any())
             ->method('getUrlBuilder')
-            ->will($this->returnValue($this->urlBuilderMock));
+            ->willReturn($this->urlBuilderMock);
 
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new ObjectManager($this);
         $this->nameRenderer = $this->objectManagerHelper->getObject(
-            \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Name::class,
+            Name::class,
             ['context' => $this->contextMock]
         );
     }
@@ -61,7 +72,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
      */
     public function testRender($endpoint, $name, $expectedResult)
     {
-        $column = $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid\Column::class)
+        $column = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIndex', 'getEditable', 'getGetter'])
             ->getMock();
@@ -76,7 +87,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
             ->willReturn('getName');
         $this->nameRenderer->setColumn($column);
 
-        $integrationMock = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)
+        $integrationMock = $this->getMockBuilder(Integration::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getEndpoint', 'getIdentityLinkUrl'])
             ->getMock();

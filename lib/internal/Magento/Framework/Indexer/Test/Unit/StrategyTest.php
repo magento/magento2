@@ -3,13 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Indexer\Test\Unit;
 
-/**
- * Class StrategyTest
- * @package Magento\Indexer\Test\Unit\Model\Indexer\Table
- */
-class StrategyTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Indexer\Table\Strategy;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class StrategyTest extends TestCase
 {
     /**
      * Strategy object
@@ -21,17 +24,17 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
     /**
      * Resource mock
      *
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $_resourceMock;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->_model = new \Magento\Framework\Indexer\Table\Strategy(
+        $this->_resourceMock = $this->createMock(ResourceConnection::class);
+        $this->_model = new Strategy(
             $this->_resourceMock
         );
     }
@@ -43,13 +46,13 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
      */
     public function testUseIdxTable()
     {
-        $this->assertEquals(false, $this->_model->getUseIdxTable());
+        $this->assertFalse($this->_model->getUseIdxTable());
         $this->_model->setUseIdxTable(false);
-        $this->assertEquals(false, $this->_model->getUseIdxTable());
+        $this->assertFalse($this->_model->getUseIdxTable());
         $this->_model->setUseIdxTable(true);
-        $this->assertEquals(true, $this->_model->getUseIdxTable());
+        $this->assertTrue($this->_model->getUseIdxTable());
         $this->_model->setUseIdxTable();
-        $this->assertEquals(false, $this->_model->getUseIdxTable());
+        $this->assertFalse($this->_model->getUseIdxTable());
     }
 
     /**
@@ -74,12 +77,10 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
     public function testGetTableName()
     {
         $prefix = 'pre_';
-        $this->_resourceMock->expects($this->any())->method('getTableName')->will(
-            $this->returnCallback(
-                function ($tableName) use ($prefix) {
-                    return $prefix . $tableName;
-                }
-            )
+        $this->_resourceMock->expects($this->any())->method('getTableName')->willReturnCallback(
+            function ($tableName) use ($prefix) {
+                return $prefix . $tableName;
+            }
         );
         $this->assertEquals('pre_test_tmp', $this->_model->getTableName('test'));
         $this->_model->setUseIdxTable(true);

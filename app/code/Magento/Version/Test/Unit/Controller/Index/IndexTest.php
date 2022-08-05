@@ -7,91 +7,82 @@ declare(strict_types=1);
 
 namespace Magento\Version\Test\Unit\Controller\Index;
 
-use Magento\Version\Controller\Index\Index as VersionIndex;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Version\Controller\Index\Index as VersionIndex;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class \Magento\Version\Test\Unit\Controller\Index\IndexTest
- */
-class IndexTest extends \PHPUnit\Framework\TestCase
+class IndexTest extends TestCase
 {
-    /**
-     * @var VersionIndex
-     */
-    private $model;
+    /** @var VersionIndex */
+    private $versionController;
 
-    /**
-     * @var Context
-     */
-    private $context;
+    /** @var MockObject|ProductMetadataInterface */
+    private $productMetadataMock;
 
-    /**
-     * @var ProductMetadataInterface
-     */
-    private $productMetadata;
+    /** @var MockObject|RawFactory */
+    private $rawResponseFactoryMock;
 
-    /**
-     * @var ResponseInterface
-     */
-    private $response;
+    /** @var MockObject|Raw */
+    private $rawResponseMock;
+
+    /** @var MockObject|Context */
+    private $contextMock;
 
     /**
      * Prepare test preconditions
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
 
-        $this->productMetadata = $this->getMockBuilder(ProductMetadataInterface::class)
+        $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getEdition', 'getVersion'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setBody', 'sendResponse'])
-            ->getMock();
+        $this->rawResponseFactoryMock = $this->createPartialMock(RawFactory::class, ['create']);
+        $this->rawResponseMock = $this->createPartialMock(Raw::class, ['setContents']);
+        $this->rawResponseFactoryMock->method('create')->willReturn($this->rawResponseMock);
 
-        $this->context->expects($this->any())
-            ->method('getResponse')
-            ->willReturn($this->response);
-
-        $helper = new ObjectManager($this);
-
-        $this->model = $helper->getObject(
-            'Magento\Version\Controller\Index\Index',
-            [
-                'context' => $this->context,
-                'productMetadata' => $this->productMetadata
-            ]
+        $this->versionController = new VersionIndex(
+            $this->contextMock,
+            $this->rawResponseFactoryMock,
+            $this->productMetadataMock
         );
     }
 
     /**
-     * Test with Git Base version
+     * Git Base version does not return information about version
      */
-    public function testExecuteWithGitBase()
+    public function testGitBasedInstallationDoesNotReturnVersion(): void
     {
-        $this->productMetadata->expects($this->any())->method('getVersion')->willReturn('dev-2.3');
-        $this->assertNull($this->model->execute());
+        $this->productMetadataMock->expects($this->any())
+            ->method('getVersion')
+            ->willReturn('dev-2.3');
+
+        $this->rawResponseMock->expects($this->never())
+            ->method('setContents');
+
+        $this->versionController->execute();
     }
 
     /**
-     * Test with Community Version
+     * Magento Community returns information about major and minor version of product
      */
-    public function testExecuteWithCommunityVersion()
+    public function testCommunityVersionDisplaysMajorMinorVersionAndEditionName(): void
     {
-        $this->productMetadata->expects($this->any())->method('getVersion')->willReturn('2.3.3');
-        $this->productMetadata->expects($this->any())->method('getEdition')->willReturn('Community');
-        $this->productMetadata->expects($this->any())->method('getName')->willReturn('Magento');
-        $this->response->expects($this->once())->method('setBody')
+        $this->productMetadataMock->expects($this->any())->method('getVersion')->willReturn('2.3.3');
+        $this->productMetadataMock->expects($this->any())->method('getEdition')->willReturn('Community');
+        $this->productMetadataMock->expects($this->any())->method('getName')->willReturn('Magento');
+
+        $this->rawResponseMock->expects($this->once())->method('setContents')
             ->with('Magento/2.3 (Community)')
-            ->will($this->returnSelf());
-        $this->model->execute();
+            ->willReturnSelf();
+
+        $this->versionController->execute();
     }
 }

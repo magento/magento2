@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCategoryAccessibleWhenSuffixIsNullTest">
+        <annotations>
+            <stories value="Url rewrites"/>
+            <title value="Storefront category is accessible when url suffix is set to null test"/>
+            <description value="Check no crash occurs on Category page when catalog/seo/category_url_suffix is set to null"/>
+            <features value="CatalogUrlRewrite"/>
+            <stories value="Url rewrites"/>
+            <severity value="MAJOR"/>
+            <group value="CatalogUrlRewrite"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set catalog/seo/category_url_suffix ''" stepKey="setCategoryUrlSuffix"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0"
+                        stepKey="setCategoryProductRewrites"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheBefore"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <magentoCLI command="config:set catalog/seo/category_url_suffix '.html'"
+                        stepKey="restoreCategoryUrlSuffix"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1"
+                        stepKey="restoreCategoryProductRewrites"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfter"/>
+        </after>
+
+        <amOnPage url="/$$createCategory.custom_attributes[url_key]$$" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeInTitle userInput="$$createCategory.name$$" stepKey="assertCategoryNameInTitle"/>
+    </test>
+</tests>

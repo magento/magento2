@@ -20,7 +20,7 @@
             <group value="Msrp"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -104,55 +104,73 @@
             <!--Disable Minimum advertised Price-->
             <createData entity="MsrpDisableMAP" stepKey="disableMAP"/>
 
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Set Manufacturer's Suggested Retail Price to products-->
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct1.id$$)}}" stepKey="goToFirstChildProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToFirstChildProductEditPage">
+            <argument name="productId" value="$$createConfigChildProduct1.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.msrp}}" stepKey="waitForMsrp"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.msrp}}" userInput="55" stepKey="setMsrpForFirstChildProduct"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct1"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
 
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct2.id$$)}}" stepKey="goToSecondChildProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToSecondChildProductEditPage">
+            <argument name="productId" value="$$createConfigChildProduct2.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad1"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton1"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.msrp}}" stepKey="waitForMsrp1"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.msrp}}" userInput="66" stepKey="setMsrpForSecondChildProduct"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton1"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
-        <!--Clear cache-->
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!--Go to store front and check msrp for products-->
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToConfigProductPage"/>
         <waitForPageLoad stepKey="waitForLoadConfigProductPage"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="grabMapPrice"/>
-        <assertEquals expected='$66.00' expectedType="string" actual="($grabMapPrice)" stepKey="assertMapPrice"/>
+        <assertEquals stepKey="assertMapPrice">
+			<actualResult type="const">($grabMapPrice)</actualResult>
+			<expectedResult type="string">$66.00</expectedResult>
+        </assertEquals>
         <seeElement selector="{{StorefrontProductInfoMainSection.clickForPriceLink}}" stepKey="checkClickForPriceLink"/>
 
         <!--Check msrp for second child product-->
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption2.value$$" stepKey="selectSecondOption"/>
         <waitForElement selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="waitForLoad"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="grabSecondProductMapPrice"/>
-        <assertEquals expected='$66.00' expectedType="string" actual="($grabSecondProductMapPrice)" stepKey="assertSecondProductMapPrice"/>
+        <assertEquals stepKey="assertSecondProductMapPrice">
+			<actualResult type="const">($grabSecondProductMapPrice)</actualResult>
+			<expectedResult type="string">$66.00</expectedResult>
+        </assertEquals>
         <seeElement selector="{{StorefrontProductInfoMainSection.clickForPriceLink}}" stepKey="checkClickForPriceLinkForSecondProduct"/>
 
         <!--Check msrp for first child product-->
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption1.value$$" stepKey="selectFirstOption"/>
         <waitForElement selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="waitForLoad1"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="grabFirstProductMapPrice"/>
-        <assertEquals expected='$55.00' expectedType="string" actual="($grabFirstProductMapPrice)" stepKey="assertFirstProductMapPrice"/>
+        <assertEquals stepKey="assertFirstProductMapPrice">
+			<actualResult type="const">($grabFirstProductMapPrice)</actualResult>
+			<expectedResult type="string">$55.00</expectedResult>
+        </assertEquals>
         <seeElement selector="{{StorefrontProductInfoMainSection.clickForPriceLink}}" stepKey="checkClickForPriceLinkForFirstProduct"/>
 
         <!--Check price for third child product-->
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption3.value$$" stepKey="selectThirdOption"/>
         <waitForElement selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="waitForLoad2"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="grabThirdProductMapPrice"/>
-        <assertEquals expected='$70.00' expectedType="string" actual="($grabThirdProductMapPrice)" stepKey="assertThirdProductMapPrice"/>
+        <assertEquals stepKey="assertThirdProductMapPrice">
+			<actualResult type="const">($grabThirdProductMapPrice)</actualResult>
+			<expectedResult type="string">$70.00</expectedResult>
+        </assertEquals>
         <dontSeeElement selector="{{StorefrontProductInfoMainSection.clickForPriceLink}}" stepKey="checkClickForPriceLinkForThirdProduct"/>
     </test>
 </tests>

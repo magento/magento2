@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateNewPageWithBasicValues">
+        <annotations>
+            <description>Click Add new page button and fills basic information in cms page. Values are hardcoded from _defaultCmsPage.</description>
+        </annotations>
+
+        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
+        <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{_defaultCmsPage.content_heading}}" stepKey="fillFieldContentHeading"/>
+        <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{_defaultCmsPage.content}}" stepKey="fillFieldContent"/>
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
+    </actionGroup>
+</actionGroups>

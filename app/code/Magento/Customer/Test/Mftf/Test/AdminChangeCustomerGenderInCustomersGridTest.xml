@@ -21,16 +21,18 @@
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="customer_grid"/>
+            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Reset customer grid filter -->
-            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersGridPage"/>
-            <waitForPageLoad stepKey="waitForCustomersGrid"/>
+            <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="goToCustomersGridPage"/>
             <actionGroup ref="AdminResetFilterInCustomerGrid" stepKey="resetFilter"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Open customers grid page, filter by created customer-->
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCustomerGridByEmail">

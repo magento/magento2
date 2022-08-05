@@ -5,14 +5,14 @@
  */
 -->
 
-<div class="admin__collapsible-block-wrapper opened">
-    <div class="fieldset-wrapper-title">
-        <strong class="admin__collapsible-title" data-toggle="collapse" data-bind="attr:{'data-target': '#'+id}">
+<div class="fieldset-wrapper admin__collapsible-block-wrapper opened" data-bind="mageInit: {'collapsible':{'active':true,'openedState':'opened'}}">
+    <div class="fieldset-wrapper-title toggle" data-role="title">
+        <strong class="admin__collapsible-title" data-bs-toggle="collapse" data-bind="attr:{'data-bs-target': '#'+id}">
             <span data-bind="text: title"></span>
         </strong>
     </div>
 
-    <div class="fieldset-wrapper-content in collapse" data-collapsed="true" data-bind="attr: {id: id}">
+    <div class="fieldset-wrapper-content in collapse" data-role="content" data-collapsed="true" data-bind="attr: {id: id}">
         <!-- ko template: {
             name: "ui/grid/paging/paging", data: paging
             } -->

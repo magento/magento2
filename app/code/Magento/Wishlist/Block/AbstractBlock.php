@@ -224,14 +224,14 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      */
     public function hasDescription($item)
     {
-        return trim($item->getDescription()) != '';
+        return is_string($item->getDescription()) && trim($item->getDescription()) !== '';
     }
 
     /**
      * Retrieve formatted Date
      *
      * @param string $date
-     * @deprecated
+     * @deprecated 101.1.1
      * @return string
      */
     public function getFormatedDate($date)

@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor;
+
+use Magento\Framework\Api\SearchCriteriaInterface;
 
 class TestService
 {
-    const DEFAULT_VALUE = 42;
-    const CUSTOM_ATTRIBUTE_CODE = 'customAttr';
+    public const DEFAULT_VALUE = 42;
+    public const CUSTOM_ATTRIBUTE_CODE = 'customAttr';
 
     /**
      * @param int $entityId
@@ -84,6 +88,15 @@ class TestService
     }
 
     /**
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \Magento\Framework\Api\SearchCriteriaInterface
+     */
+    public function search(SearchCriteriaInterface $searchCriteria)
+    {
+        return $searchCriteria;
+    }
+
+    /**
      * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray $arrayData
      * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray
      */
@@ -115,7 +128,7 @@ class TestService
      * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes
      */
     public function objectWithCustomAttributesMethod(
-        \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes $param
+        ObjectWithCustomAttributes $param
     ) {
         return $param;
     }

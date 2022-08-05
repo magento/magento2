@@ -1,68 +1,113 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 type Mutation {
-    addConfigurableProductsToCart(input: AddConfigurableProductsToCartInput): AddConfigurableProductsToCartOutput @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\AddConfigurableProductsToCart")
+    addConfigurableProductsToCart(input: AddConfigurableProductsToCartInput @doc(description: "An input object that defines which configurable products to add to the cart.")): AddConfigurableProductsToCartOutput @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\AddConfigurableProductsToCart") @doc(description: "Add one or more configurable products to the specified cart. We recommend using `addProductsToCart` instead.")
 }
 
-type ConfigurableProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "ConfigurableProduct defines basic features of a configurable product and its simple product variants") {
-    variants: [ConfigurableVariant] @doc(description: "An array of variants of products") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableVariant")
-    configurable_options: [ConfigurableProductOptions] @doc(description: "An array of linked simple product items") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Options")
+type ConfigurableProduct implements ProductInterface, RoutableInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "Defines basic features of a configurable product and its simple product variants.") {
+    variants: [ConfigurableVariant] @doc(description: "An array of simple product variants.") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableVariant")
+    configurable_options: [ConfigurableProductOptions] @doc(description: "An array of options for the configurable product.") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Options")
+    configurable_product_options_selection(configurableOptionValueUids: [ID!]): ConfigurableProductOptionsSelection @doc(description: "An array of media gallery items and other details about selected configurable product options as well as details about remaining selectable options.") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\OptionsSelectionMetadata")
 }
 
-type ConfigurableVariant @doc(description: "An array containing all the simple product variants of a configurable product") {
-    attributes: [ConfigurableAttributeOption] @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Attributes") @doc(description: "")
-    product: SimpleProduct @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product")
+type ConfigurableVariant @doc(description: "Contains all the simple product variants of a configurable product.") {
+    attributes: [ConfigurableAttributeOption] @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Attributes") @doc(description: "An array of configurable attribute options.")
+    product: SimpleProduct @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product") @doc(description: "An array of linked simple products.")
 }
 
-type ConfigurableAttributeOption @doc(description: "ConfigurableAttributeOption contains the value_index (and other related information) assigned to a configurable product option") {
-    label: String @doc(description: "A string that describes the configurable attribute option")
-    code: String @doc(description: "The ID assigned to the attribute")
-    value_index: Int @doc(description: "A unique index number assigned to the configurable product option")
+type ConfigurableAttributeOption @doc(description: "Contains details about a configurable product attribute option.") {
+    label: String @doc(description: "A string that describes the configurable attribute option.")
+    code: String @doc(description: "The ID assigned to the attribute.")
+    value_index: Int @doc(description: "A unique index number assigned to the configurable product option.")
+    uid: ID! @doc(description: "The unique ID for a `ConfigurableAttributeOption` object.") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Attributes\\ConfigurableAttributeUid")
 }
 
-type ConfigurableProductOptions @doc(description: "ConfigurableProductOptions defines configurable attributes for the specified product") {
-    id: Int @doc(description: "The configurable option ID number assigned by the system")
-    attribute_id: String @doc(description: "The ID assigned to the attribute")
-    attribute_code: String @doc(description: "A string that identifies the attribute")
-    label: String @doc(description: "A string that describes the configurable product option, which is displayed on the UI")
-    position: Int @doc(description: "A number that indicates the order in which the attribute is displayed")
-    use_default: Boolean @doc(description: "Indicates whether the option is the default")
-    values: [ConfigurableProductOptionsValues] @doc(description: "An array that defines the value_index codes assigned to the configurable product")
-    product_id: Int @doc(description: "This is the same as a product's id field")
+type ConfigurableProductOptions @doc(description: "Defines configurable attributes for the specified product.") {
+    id: Int @deprecated(reason: "Use `uid` instead.") @doc(description: "The configurable option ID number assigned by the system.")
+    uid: ID! @doc(description: "The unique ID for a `ConfigurableProductOptions` object.")
+    attribute_id: String @deprecated(reason: "Use `attribute_uid` instead.") @doc(description: "The ID assigned to the attribute.")
+    attribute_id_v2: Int @deprecated(reason: "Use `attribute_uid` instead.") @doc(description: "The ID assigned to the attribute.")
+    attribute_uid: ID! @doc(description: "The unique ID for an `Attribute` object.")
+    attribute_code: String @doc(description: "A string that identifies the attribute.")
+    label: String @doc(description: "A displayed string that describes the configurable product option.")
+    position: Int @doc(description: "A number that indicates the order in which the attribute is displayed.")
+    use_default: Boolean @doc(description: "Indicates whether the option is the default.")
+    values: [ConfigurableProductOptionsValues] @doc(description: "An array that defines the `value_index` codes assigned to the configurable product.")
+    product_id: Int @deprecated(reason: "`product_id` is not needed and can be obtained from its parent.") @doc(description: "This is the same as a product's `id` field.")
 }
 
-type ConfigurableProductOptionsValues @doc(description: "ConfigurableProductOptionsValues contains the index number assigned to a configurable product option") {
-    value_index: Int @doc(description: "A unique index number assigned to the configurable product option")
-    label: String @doc(description: "The label of the product")
-    default_label: String @doc(description: "The label of the product on the default store")
-    store_label: String @doc(description: "The label of the product on the current store")
-    use_default_value: Boolean @doc(description: "Indicates whether to use the default_label")
+type ConfigurableProductOptionsValues @doc(description: "Contains the index number assigned to a configurable product option.") {
+    value_index: Int @deprecated(reason: "Use `uid` instead.") @doc(description: "A unique index number assigned to the configurable product option.")
+    uid: ID @doc(description: "The unique ID for a `ConfigurableProductOptionsValues` object.") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Attributes\\ConfigurableAttributeUid")
+    label: String @doc(description: "The label of the product.")
+    default_label: String @doc(description: "The label of the product on the default store.")
+    store_label: String @doc(description: "The label of the product on the current store.")
+    use_default_value: Boolean @doc(description: "Indicates whether to use the default_label.")
 }
 
-input AddConfigurableProductsToCartInput {
-    cart_id: String!
-    cart_items: [ConfigurableProductCartItemInput!]!
+input AddConfigurableProductsToCartInput @doc(description: "Defines the configurable products to add to the cart.") {
+    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_items: [ConfigurableProductCartItemInput!]! @doc(description: "An array of configurable products to add.")
 }
 
-type AddConfigurableProductsToCartOutput {
-    cart: Cart!
+type AddConfigurableProductsToCartOutput @doc(description: "Contains details about the cart after adding configurable products.") {
+    cart: Cart! @doc(description: "The cart after adding products.")
 }
 
 input ConfigurableProductCartItemInput {
-    data: CartItemInput!
-    variant_sku: String @deprecated(reason: "Use CartItemInput.sku instead.")
-    parent_sku: String @doc(description: "Configurable product SKU.")
-    customizable_options:[CustomizableOptionInput!]
+    data: CartItemInput! @doc(description: "The quantity and SKU of the configurable product.")
+    variant_sku: String @doc(description: "Deprecated. Use `CartItemInput.sku` instead.")
+    parent_sku: String @doc(description: "The SKU of the parent configurable product.")
+    customizable_options:[CustomizableOptionInput!] @doc(description: "The ID and value of the option.")
 }
 
-type ConfigurableCartItem implements CartItemInterface {
-    customizable_options: [SelectedCustomizableOption]!
-    configurable_options: [SelectedConfigurableOption!]! @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableCartItemOptions")
+type ConfigurableCartItem implements CartItemInterface @doc(description: "An implementation for configurable product cart items.") {
+    customizable_options: [SelectedCustomizableOption]! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions") @doc(description: "An array containing the customizable options the shopper selected.")
+    configurable_options: [SelectedConfigurableOption!]! @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableCartItemOptions") @doc(description: "An array containing the configuranle options the shopper selected.")
+    configured_variant: ProductInterface! @doc(description: "Product details of the cart item.") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ProductResolver")
 }
 
-type SelectedConfigurableOption {
-    id: Int!
-    option_label: String!
-    value_id: Int!
-    value_label: String!
+type SelectedConfigurableOption @doc(description: "Contains details about a selected configurable option.") {
+    id: Int! @deprecated(reason: "Use `SelectedConfigurableOption.configurable_product_option_uid` instead.")
+    configurable_product_option_uid: ID! @doc(description: "The unique ID for a `ConfigurableProductOptions` object.")
+    option_label: String! @doc(description: "The display text for the option.")
+    value_id: Int! @deprecated(reason: "Use `SelectedConfigurableOption.configurable_product_option_value_uid` instead.")
+    configurable_product_option_value_uid: ID! @doc(description: "The unique ID for a `ConfigurableProductOptionsValues` object.")
+    value_label: String! @doc(description: "The display name of the selected configurable option.")
+}
+
+type ConfigurableWishlistItem implements WishlistItemInterface @doc(description: "A configurable product wish list item."){
+    child_sku: String! @deprecated(reason: "Use `ConfigurableWishlistItem.configured_variant.sku` instead.") @doc(description: "The SKU of the simple product corresponding to a set of selected configurable options.") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ChildSku")
+    configurable_options: [SelectedConfigurableOption!] @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ConfigurableOptions") @doc(description: "An array of selected configurable options.")
+    configured_variant: ProductInterface @doc(description: "Product details of the selected variant. The value is null if some options are not configured.") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ConfiguredVariant")
+}
+
+type ConfigurableProductOptionsSelection @doc(description: "Contains metadata corresponding to the selected configurable options.") {
+    options_available_for_selection: [ConfigurableOptionAvailableForSelection!] @doc(description: "The configurable options available for further selection based on the current selection.")
+    configurable_options: [ConfigurableProductOption!] @doc(description: "An array of all possible configurable options.")
+    media_gallery: [MediaGalleryInterface!] @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\SelectionMediaGallery") @doc(description: "Product images and videos corresponding to the specified configurable options selection.")
+    variant: SimpleProduct @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Variant") @doc(description: "A variant represented by the specified configurable options selection. The value is expected to be null until selections are made for each configurable option.")
+}
+
+type ConfigurableOptionAvailableForSelection @doc(description: "Describes configurable options that have been selected and can be selected as a result of the previous selections.") {
+    option_value_uids: [ID!]! @doc(description: "An array of selectable option value IDs.")
+    attribute_code: String! @doc(description: "An attribute code that uniquely identifies a configurable option.")
+}
+
+type ConfigurableProductOption @doc(description: "Contains details about configurable product options.") {
+    uid: ID! @doc(description: "The unique ID of the configurable option.")
+    attribute_code: String! @doc(description: "An attribute code that uniquely identifies a configurable option.")
+    label: String! @doc(description: "The display name of the option.")
+    values: [ConfigurableProductOptionValue!] @doc(description: "An array of values that are applicable for this option.")
+}
+
+type ConfigurableProductOptionValue @doc(description: "Defines a value for a configurable product option.") {
+    uid: ID! @doc(description: "The unique ID of the value.")
+    is_available: Boolean! @doc(description: "Indicates whether the product is available with this selected option.")
+    is_use_default: Boolean! @doc(description: "Indicates whether the value is the default.")
+    label: String! @doc(description: "The display name of the value.")
+}
+
+type StoreConfig {
+    configurable_thumbnail_source : String @doc(description: "Indicates whether the `parent` or child (`itself`) thumbnail should be used in the cart for configurable products.")
 }

@@ -3,34 +3,68 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field\Select;
 
-class AllowspecificTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\Select;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Framework\DataObject;
+
+class AllowspecificTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific
+     * @var Allowspecific
      */
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_formMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $testHelper = new ObjectManager($this);
+
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('some-rando-string');
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $listener, string $selector): string {
+                    return "<script>document.querySelector('{$selector}').{$event} = () => { {$listener} };</script>";
+                }
+            );
+        $secureRendererMock->method('renderTag')
+            ->willReturnCallback(
+                function (string $tag, array $attributes, string $content): string {
+                    $attributes = new DataObject($attributes);
+
+                    return "<$tag {$attributes->serialize()}>$content</$tag>";
+                }
+            );
         $this->_object = $testHelper->getObject(
-            \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific::class,
+            Allowspecific::class,
             [
-                '_escaper' => $testHelper->getObject(\Magento\Framework\Escaper::class)
+                '_escaper' => $testHelper->getObject(Escaper::class),
+                'random' => $randomMock,
+                'secureRenderer' => $secureRendererMock
             ]
         );
-        $this->_object->setData('html_id', 'spec_element');
-        $this->_formMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form::class,
-            ['getHtmlIdPrefix', 'getHtmlIdSuffix', 'getElement']
-        );
+        $this->_object->setId('spec_element');
+        $this->_formMock = $this->getMockBuilder(Form::class)
+            ->addMethods(['getHtmlIdPrefix', 'getHtmlIdSuffix'])
+            ->onlyMethods(['getElement'])
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testGetAfterElementHtml()
@@ -39,26 +73,27 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getHtmlIdPrefix'
-        )->will(
-            $this->returnValue('test_prefix_')
+        )->willReturn(
+            'test_prefix_'
         );
         $this->_formMock->expects(
             $this->once()
         )->method(
             'getHtmlIdSuffix'
-        )->will(
-            $this->returnValue('_test_suffix')
+        )->willReturn(
+            '_test_suffix'
         );
 
         $afterHtmlCode = 'after html';
         $this->_object->setData('after_element_html', $afterHtmlCode);
         $this->_object->setForm($this->_formMock);
+        $this->_object->setId('spec_element');
 
         $actual = $this->_object->getAfterElementHtml();
 
         $this->assertStringEndsWith('</script>' . $afterHtmlCode, $actual);
-        $this->assertStringStartsWith('<script type="text/javascript">', trim($actual));
-        $this->assertContains('test_prefix_spec_element_test_suffix', $actual);
+        $this->assertStringStartsWith('<script >', trim($actual));
+        $this->assertStringContainsString('test_prefix_spec_element_test_suffix', $actual);
     }
 
     /**
@@ -69,7 +104,10 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
     {
         $this->_object->setForm($this->_formMock);
 
-        $elementMock = $this->createPartialMock(\Magento\Framework\Data\Form\Element\Select::class, ['setDisabled']);
+        $elementMock = $this->getMockBuilder(Select::class)
+            ->addMethods(['setDisabled'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $elementMock->expects($this->once())->method('setDisabled')->with('disabled');
         $countryId = 'tetst_county_specificcountry';
@@ -80,8 +118,8 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
             'getElement'
         )->with(
             $countryId
-        )->will(
-            $this->returnValue($elementMock)
+        )->willReturn(
+            $elementMock
         );
 
         $this->_object->setValue($value);

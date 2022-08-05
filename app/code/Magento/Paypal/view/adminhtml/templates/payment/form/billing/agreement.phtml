@@ -4,11 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/* @var $block \Magento\Paypal\Block\Payment\Form\Billing\Agreement */
+/**
+ * @var $block \Magento\Paypal\Block\Payment\Form\Billing\Agreement
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
 <?php $code = $block->escapeHtml($block->getMethodCode()) ?>
-<fieldset class="admin__fieldset payment-method form-list"
-          id="payment_form_<?= /* @noEscape */ $code ?>" style="display:none;">
+<fieldset class="admin__fieldset payment-method form-list" id="payment_form_<?= /* @noEscape */ $code ?>">
     <div class="admin__field _required">
         <label class="admin__field-label"
                for="<?= /* @noEscape */ $code ?>_ba_agreement_id">
@@ -19,7 +21,7 @@
                     name="payment[<?= $block->escapeHtml($block->getTransportName()) ?>]"
                     class="required-entry admin__control-select">
                 <option value=""><?= $block->escapeHtml(__('Please Select')) ?></option>
-                <?php foreach ($block->getBillingAgreements() as $id => $referenceId) : ?>
+                <?php foreach ($block->getBillingAgreements() as $id => $referenceId): ?>
                     <option value="<?= $block->escapeHtml($id) ?>"
                         <?= ($id == $block->getInfoData($block->getTransportName())) ?
                             ' selected="selected"' : '';
@@ -31,3 +33,7 @@
         </div>
     </div>
 </fieldset>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    'display:none',
+    'fieldset#payment_form_' . /* @noEscape */ $code
+) ?>

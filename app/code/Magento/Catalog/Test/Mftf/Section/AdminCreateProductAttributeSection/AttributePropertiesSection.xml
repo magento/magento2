@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AttributePropertiesSection">
+        <element name="propertiesTab" type="button" selector="#product_attribute_tabs_main"/>
+        <element name="DefaultLabel" type="input" selector="#attribute_label"/>
+        <element name="InputType" type="select" selector="#frontend_input"/>
+        <element name="ValueRequired" type="select" selector="#is_required"/>
+        <element name="UpdateProductPreviewImage" type="select" selector="[name='update_product_preview_image']"/>
+        <element name="AdvancedProperties" type="button" selector="#advanced_fieldset-wrapper"/>
+        <element name="DefaultValue" type="input" selector="#default_value_text"/>
+        <element name="Scope" type="select" selector="#is_global"/>
+        <element name="Save" type="button" selector="#save" timeout="30"/>
+        <element name="DeleteAttribute" type="button" selector="#delete" timeout="30"/>
+        <element name="SaveAndEdit" type="button" selector="#save_and_edit_button" timeout="30"/>
+        <element name="checkIfTabOpen" selector="//div[@id='advanced_fieldset-wrapper' and not(contains(@class,'opened'))]" type="button"/>
+        <element name="useInLayeredNavigation" type="select" selector="#is_filterable"/>
+        <element name="addSwatch" type="button" selector="#add_new_swatch_text_option_button"/>
+        <element name="dropdownAddOptions" type="button" selector="#add_new_option_button" timeout="30"/>
+        <!-- Manage Options nth child-->
+        <element name="dropdownNthOptionIsDefault" type="checkbox" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) .input-radio" parameterized="true"/>
+        <element name="dropdownNthOptionAdmin" type="textarea" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) td:nth-child(3) input" parameterized="true"/>
+        <element name="dropdownNthOptionDefaultStoreView" type="textarea" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) td:nth-child(4) input" parameterized="true"/>
+        <element name="dropdownNthOptionDelete" type="button" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) button[title='Delete']" parameterized="true"/>
+        <element name="attributeLabelValidationError" type="text" selector=".field-attribute_label .mage-error"/>
+    </section>
+</sections>

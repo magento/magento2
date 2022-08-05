@@ -3,40 +3,49 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product\PriceModifier;
 
-class CompositeTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\PriceModifier\Composite;
+use Magento\Catalog\Model\Product\PriceModifierInterface;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CompositeTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\PriceModifier\Composite
+     * @var Composite
      */
     protected $compositeModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $priceModifierMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->priceModifierMock = $this->createMock(\Magento\Catalog\Model\Product\PriceModifierInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->productMock = $this->createMock(Product::class);
+        $this->priceModifierMock = $this->getMockForAbstractClass(PriceModifierInterface::class);
     }
 
     public function testModifyPriceIfModifierExists()
     {
-        $this->compositeModel = new \Magento\Catalog\Model\Product\PriceModifier\Composite(
+        $this->compositeModel = new Composite(
             $this->objectManagerMock,
             ['some_class_name']
         );
@@ -46,8 +55,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             'some_class_name'
-        )->will(
-            $this->returnValue($this->priceModifierMock)
+        )->willReturn(
+            $this->priceModifierMock
         );
         $this->priceModifierMock->expects(
             $this->once()
@@ -56,15 +65,15 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         )->with(
             100,
             $this->productMock
-        )->will(
-            $this->returnValue(150)
+        )->willReturn(
+            150
         );
         $this->assertEquals(150, $this->compositeModel->modifyPrice(100, $this->productMock));
     }
 
     public function testModifyPriceIfModifierNotExists()
     {
-        $this->compositeModel = new \Magento\Catalog\Model\Product\PriceModifier\Composite(
+        $this->compositeModel = new Composite(
             $this->objectManagerMock,
             []
         );

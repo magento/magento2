@@ -21,7 +21,7 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->encoder = $this->objectManager->create(MessageEncoder::class);
@@ -96,7 +96,7 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
             $addresses[0]
         );
         $this->assertEquals('3468676', $addresses[0]->getTelephone());
-        $this->assertEquals(true, $addresses[0]->isDefaultBilling());
+        $this->assertTrue($addresses[0]->isDefaultBilling());
 
         $this->assertInstanceOf(
             \Magento\Customer\Api\Data\RegionInterface::class,
@@ -106,19 +106,21 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Error occurred during message decoding
      */
     public function testDecodeInvalidMessageFormat()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Error occurred during message decoding');
+
         $this->encoder->decode('customer.created', "{");
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testDecodeInvalidMessage()
     {
+        $this->expectException(\LogicException::class);
+
         $message = 'Property "NotExistingField" does not have accessor method "getNotExistingField" in class '
             . '"Magento\Customer\Api\Data\CustomerInterface".';
         $this->expectExceptionMessage($message);
@@ -126,11 +128,12 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Error occurred during message decoding
      */
     public function testDecodeIncorrectMessage()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Error occurred during message decoding');
+
         $this->encoder->decode('customer.created', "{");
     }
 

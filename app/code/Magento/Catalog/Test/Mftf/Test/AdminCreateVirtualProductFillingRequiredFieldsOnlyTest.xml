@@ -19,38 +19,60 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
-        <waitForPageLoad stepKey="waitForProductToggleToSelectProduct"/>
-        <click selector="{{AdminProductGridActionSection.addVirtualProduct}}" stepKey="clickVirtualProduct"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="openProductCatalogPage"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="clickAddProductToggle"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="waitForProductToggleToSelectProduct"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="clickVirtualProduct">
+            <argument name="productType" value="virtual"/>
+        </actionGroup>
 
         <!-- Create virtual product with required fields only -->
-        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{virtualProductWithRequiredFields.name}}" stepKey="fillProductName"/>
-        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{virtualProductWithRequiredFields.sku}}" stepKey="fillProductSku"/>
-        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{virtualProductWithRequiredFields.price}}" stepKey="fillProductPrice"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForVirtualProductSaved" />
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillProductName">
+            <argument name="product" value="virtualProductWithRequiredFields"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="fillProductSku"/>
+        <actionGroup ref="AdminFillProductPriceFieldAndPressEnterOnProductEditPageActionGroup" stepKey="fillProductPrice">
+            <argument name="price" value="{{virtualProductWithRequiredFields.price}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Verify we see success message -->
-        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeAssertVirtualProductSuccessMessage">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <!-- Verify we see created virtual product(from the above step) on the product grid page -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage1"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage1"/>
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickSelector"/>
-        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFilter"/>
-        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{virtualProductWithRequiredFields.name}}" stepKey="fillProductName1"/>
-        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{virtualProductWithRequiredFields.sku}}" stepKey="fillVirtualProductSku"/>
-        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickSearch2"/>
-        <waitForPageLoad stepKey="waitForProductSearch"/>
-        <seeInField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{virtualProductWithRequiredFields.name}}" stepKey="seeVirtualProductName"/>
-        <seeInField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{virtualProductWithRequiredFields.sku}}" stepKey="seeVirtualProductSku"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage1"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="clickSelector"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="clickFilter"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="fillProductName1"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="fillVirtualProductSku"/>
+        <actionGroup ref="FilterProductGridBySkuAndNameActionGroup" stepKey="clickSearch2">
+            <argument name="product" value="virtualProductWithRequiredFields"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="waitForProductSearch"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeVirtualProductName">
+            <argument name="column" value="Name"/>
+            <argument name="value" value="{{virtualProductWithRequiredFields.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeVirtualProductSku">
+            <argument name="column" value="SKU"/>
+            <argument name="value" value="{{virtualProductWithRequiredFields.sku}}"/>
+        </actionGroup>
     </test>
 </tests>

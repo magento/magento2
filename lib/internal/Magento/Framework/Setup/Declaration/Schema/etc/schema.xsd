@@ -20,6 +20,8 @@
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/longtext.xsd" />
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/mediumtext.xsd" />
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/varchar.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/char.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/json.xsd" />
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/binaries/blob.xsd" />
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/binaries/mediumblob.xsd" />
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/binaries/longblob.xsd" />
@@ -76,7 +78,7 @@
     <xs:complexType name="table">
         <xs:annotation>
             <xs:documentation>
-                Table definition. Here we can found column, constraints and indexes
+                Table definition. Here we can find column, constraints and indexes
             </xs:documentation>
         </xs:annotation>
         <xs:choice minOccurs="0" maxOccurs="unbounded">

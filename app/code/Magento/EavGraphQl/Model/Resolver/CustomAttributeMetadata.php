@@ -9,13 +9,14 @@ namespace Magento\EavGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\EavGraphQl\Model\Resolver\Query\Type;
-use Magento\EavGraphQl\Model\Resolver\Query\FrontendType;
+use Magento\EavGraphQl\Model\Resolver\Query\Attribute;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Eav\Api\Data\AttributeInterface;
 
 /**
  * Resolve data for custom attribute metadata requests
@@ -28,18 +29,18 @@ class CustomAttributeMetadata implements ResolverInterface
     private $type;
 
     /**
-     * @var FrontendType
+     * @var Attribute
      */
-    private $frontendType;
+    private $attribute;
 
     /**
      * @param Type $type
-     * @param FrontendType $frontendType
+     * @param Attribute $attribute
      */
-    public function __construct(Type $type, FrontendType $frontendType)
+    public function __construct(Type $type, Attribute $attribute)
     {
         $this->type = $type;
-        $this->frontendType = $frontendType;
+        $this->attribute = $attribute;
     }
 
     /**
@@ -54,19 +55,22 @@ class CustomAttributeMetadata implements ResolverInterface
     ) {
         $attributes['items'] = null;
         $attributeInputs = $args['attributes'];
-        foreach ($attributeInputs as $attribute) {
-            if (!isset($attribute['attribute_code']) || !isset($attribute['entity_type'])) {
-                $attributes['items'][] = $this->createInputException($attribute);
+        foreach ($attributeInputs as $attributeInput) {
+            if (!isset($attributeInput['attribute_code']) || !isset($attributeInput['entity_type'])) {
+                $attributes['items'][] = $this->createInputException($attributeInput);
                 continue;
             }
             try {
-                $frontendType = $this->frontendType->getType($attribute['attribute_code'], $attribute['entity_type']);
-                $type = $this->type->getType($attribute['attribute_code'], $attribute['entity_type']);
+                $attribute = $this->attribute->getAttribute(
+                    $attributeInput['attribute_code'],
+                    $attributeInput['entity_type']
+                );
+                $type = $this->type->getType($attributeInput['attribute_code'], $attributeInput['entity_type']);
             } catch (InputException $exception) {
                 $attributes['items'][] = new GraphQlNoSuchEntityException(
                     __(
                         'Attribute code %1 of entity type %2 not configured to have a type.',
-                        [$attribute['attribute_code'], $attribute['entity_type']]
+                        [$attributeInput['attribute_code'], $attributeInput['entity_type']]
                     )
                 );
                 continue;
@@ -74,7 +78,7 @@ class CustomAttributeMetadata implements ResolverInterface
                 $attributes['items'][] = new GraphQlInputException(
                     __(
                         'Invalid entity_type specified: %1',
-                        [$attribute['entity_type']]
+                        [$attributeInput['entity_type']]
                     )
                 );
                 continue;
@@ -85,14 +89,46 @@ class CustomAttributeMetadata implements ResolverInterface
             }
 
             $attributes['items'][] = [
-                'attribute_code' => $attribute['attribute_code'],
-                'entity_type' => $attribute['entity_type'],
+                'attribute_code' => $attributeInput['attribute_code'],
+                'entity_type' => $attributeInput['entity_type'],
                 'attribute_type' => ucfirst($type),
-                'input_type' => $frontendType
+                'input_type' => isset($attribute) ? $attribute->getFrontendInput() : null,
+                'storefront_properties' => isset($attribute) ?$this->getStorefrontProperties($attribute) : null
             ];
         }
 
         return $attributes;
+    }
+
+    /**
+     * Format storefront properties
+     *
+     * @param AttributeInterface $attribute
+     * @return array
+     */
+    private function getStorefrontProperties(AttributeInterface $attribute)
+    {
+        return [
+            'position'=> $attribute->getPosition(),
+            'visible_on_catalog_pages'=> $attribute->getIsVisibleOnFront(),
+            'use_in_search_results_layered_navigation' => $attribute->getIsFilterableInSearch(),
+            'use_in_product_listing'=> $attribute->getUsedInProductListing(),
+            'use_in_layered_navigation'=>
+                $this->getLayeredNavigationPropertiesEnum()[$attribute->getisFilterable()] ?? null
+        ];
+    }
+
+    /**
+     * Return enum for resolving use in layered navigation
+     *
+     * @return string[]
+     */
+    private function getLayeredNavigationPropertiesEnum() {
+        return [
+            0 => 'NO',
+            1 => 'FILTERABLE_WITH_RESULTS',
+            2 => 'FILTERABLE_NO_RESULT'
+        ];
     }
 
     /**

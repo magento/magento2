@@ -32,7 +32,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
-        $this->assertContains(
+        $this->assertStringContainsString(
             'catalog/product_attribute/edit/attribute_id/100500',
             $this->getResponse()->getHeader('Location')->getFieldValue()
         );
@@ -58,7 +58,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
-        $this->assertContains(
+        $this->assertStringContainsString(
             'catalog/product/addAttribute/attribute/5',
             $this->getResponse()->getHeader('Location')->getFieldValue()
         );
@@ -79,7 +79,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
-        $this->assertContains(
+        $this->assertStringContainsString(
             'catalog/product_attribute/edit/attribute_id/0',
             $this->getResponse()->getHeader('Location')->getFieldValue()
         );
@@ -98,7 +98,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
-        $this->assertContains(
+        $this->assertStringContainsString(
             'catalog/product_attribute/index',
             $this->getResponse()->getHeader('Location')->getFieldValue()
         );
@@ -124,7 +124,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
-        $this->assertContains(
+        $this->assertStringContainsString(
             'catalog/product_attribute/index',
             $this->getResponse()->getHeader('Location')->getFieldValue()
         );
@@ -146,7 +146,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
-        $this->assertContains(
+        $this->assertStringContainsString(
             'catalog/product_attribute/index',
             $this->getResponse()->getHeader('Location')->getFieldValue()
         );

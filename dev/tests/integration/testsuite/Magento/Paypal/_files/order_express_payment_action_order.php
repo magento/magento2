@@ -5,22 +5,30 @@
  */
 declare(strict_types=1);
 
-use Magento\Sales\Model\Order;
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface as TransactionBuilder;
-use Magento\Sales\Model\Order\Item;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/order_express.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
+Resolver::getInstance()->requireDataFixture('Magento/Paypal/_files/order_express.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
 
 $objectManager = Bootstrap::getObjectManager();
-
+/** @var OrderRepositoryInterface $orderRepository */
+$orderRepository = $objectManager->get(OrderRepositoryInterface::class);
+/** @var Order $order */
+$order = $objectManager->get(Order::class)->loadByIncrementId('100000001');
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple');
 /** @var TransactionBuilder $transactionBuilder */
 $transactionBuilder = $objectManager->create(TransactionBuilder::class);
-$transaction = $transactionBuilder->setPayment($payment)
+$transaction = $transactionBuilder->setPayment($order->getPayment())
     ->setOrder($order)
     ->setTransactionId(1)
     ->build(Transaction::TYPE_ORDER);
@@ -49,6 +57,4 @@ $order->addItem($orderItem)
     ->setBaseGrandTotal($totalAmount)
     ->setGrandTotal($totalAmount);
 
-/** @var OrderRepositoryInterface $orderRepository */
-$orderRepository = $objectManager->get(OrderRepositoryInterface::class);
 $orderRepository->save($order);

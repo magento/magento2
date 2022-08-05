@@ -19,18 +19,18 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Filter the customer From grid-->
-        <amOnPage url="{{AdminNewCustomerPage.url}}" stepKey="navigateToNewCustomerPage"/>
-        <waitForPageLoad time="30" stepKey="waitToCustomerPageLoad"/>
+        <actionGroup ref="AdminNavigateNewCustomerActionGroup" stepKey="navigateToNewCustomerPage"/>
         <selectOption selector="{{AdminCustomerAccountInformationSection.group}}" userInput="Retailer" stepKey="fillCustomerGroup"/>
         <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>
         <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
@@ -51,8 +51,7 @@
         <see userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertEmail"/>
 
         <!--Assert Customer Form -->
-        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickOnEditButton1"/>
-        <waitForPageLoad stepKey="waitForCustomerEditPageToLoad1"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickOnEditButton1"/>
         <click selector="{{AdminCustomerAccountInformationSection.accountInformationButton}}" stepKey="clickOnAccountInformation"/>
         <waitForPageLoad stepKey="waitForCustomerInformationPageToLoad"/>
         <see selector="{{AdminCustomerAccountInformationSection.groupIdValue}}" userInput="Retailer" stepKey="seeCustomerGroup1"/>

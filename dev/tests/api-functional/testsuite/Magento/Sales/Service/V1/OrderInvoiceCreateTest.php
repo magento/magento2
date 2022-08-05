@@ -23,7 +23,7 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
      */
     private $invoiceRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -94,14 +94,18 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
     /**
      * Tests that MAGETWO-95346 was fixed for bundled products
      *
-     * @expectedException \Exception
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessageRegExp /Invoice Document Validation Error\(s\):(?:\n|\\n)The invoice can't be created without products. Add products and try again./
      * @codingStandardsIgnoreEnd
      * @magentoApiDataFixture Magento/Sales/_files/order_with_bundle.php
      */
     public function testOrderWithBundleInvoicedWithInvalidQuantitiesReturnsError()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessageMatches(
+            '/Invoice Document Validation Error\\(s\\):(?:\\n|\\\\n)'
+            . 'The invoice can\'t be created without products. Add products and try again./'
+        );
+
         /** @var \Magento\Sales\Model\Order $existingOrder */
         $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
             ->loadByIncrementId('100000001');
@@ -140,14 +144,18 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
     /**
      * Tests that MAGETWO-95346 was fixed for configurable products
      *
-     * @expectedException \Exception
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessageRegExp /Invoice Document Validation Error\(s\):(?:\n|\\n)The invoice can't be created without products. Add products and try again./
      * @codingStandardsIgnoreEnd
      * @magentoApiDataFixture Magento/Sales/_files/order_configurable_product.php
      */
     public function testOrderWithConfigurableProductInvoicedWithInvalidQuantitiesReturnsError()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessageMatches(
+            '/Invoice Document Validation Error\\(s\\):(?:\\n|\\\\n)'
+            . 'The invoice can\'t be created without products. Add products and try again./'
+        );
+
         /** @var \Magento\Sales\Model\Order $existingOrder */
         $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
             ->loadByIncrementId('100000001');

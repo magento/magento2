@@ -22,7 +22,14 @@ define([
 
             this._super();
             this.renderPayPalButtons(element);
-            this.declinePayment = !customer().firstname && !cart().isGuestCheckoutAllowed;
+
+            if (cart().isGuestCheckoutAllowed === undefined) {
+                cart.subscribe(function (updatedCart) {
+                    this.declinePayment = !customer().firstname && !cart().isGuestCheckoutAllowed;
+
+                    return updatedCart;
+                }.bind(this));
+            }
 
             return this;
         },
@@ -45,7 +52,6 @@ define([
         /** @inheritdoc */
         prepareClientConfig: function () {
             this._super();
-            this.clientConfig.commit = false;
 
             return this.clientConfig;
         }

@@ -13,32 +13,34 @@
             <title value="Can delete a root category not assigned to any store"/>
             <description value="Login as admin and delete a root category not assigned to any store"/>
             <testCaseId value="MC-6048"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="NewRootCategory" stepKey="rootCategory" />
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Verify Created root Category-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForCategoryIndexPageToBeLoaded"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <seeElement selector="{{AdminCategoryBasicFieldSection.CategoryNameInput(NewRootCategory.name)}}" stepKey="seeRootCategory"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandCategoryTree"/>
+        <actionGroup ref="AssertAdminCategoryIsListedInCategoriesTreeActionGroup" stepKey="seeRootCategory">
+            <argument name="categoryName" value="{{NewRootCategory.name}}"/>
+        </actionGroup>
 
         <!--Delete Root Category-->
         <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
 
         <!--Verify Root Category is not listed in backend-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage1"/>
-        <waitForPageLoad stepKey="waitForCategoryIndexPageToBeLoaded1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories1"/>
-        <dontSee selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{NewRootCategory.name}}" stepKey="dontSeeRootCategory"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandTheCategoryTree"/>
+        <actionGroup ref="AssertAdminCategoryIsNotListedInCategoriesTreeActionGroup" stepKey="doNotSeeRootCategory">
+            <argument name="categoryName" value="{{NewRootCategory.name}}"/>
+        </actionGroup>
     </test>
 </tests>

@@ -13,7 +13,7 @@
             <description>Goes to the 'Configuration' page for 'Admin'. Enables 'Admin Account Sharing'. Clicks on the Save button.</description>
         </annotations>
 
-        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/system_config/edit/section/admin/" stepKey="navigateToConfigurationPage"/>
+        <amOnPage url="{{AdminConfigAdvancedAdmin.url}}" stepKey="navigateToConfigurationPage"/>
         <waitForPageLoad stepKey="wait1"/>
         <conditionalClick stepKey="expandSecurityTab" selector="{{AdminSection.SecurityTab}}" dependentSelector="{{AdminSection.CheckIfTabExpand}}" visible="true"/>
         <waitForElementVisible selector="{{AdminSection.AdminAccountSharing}}" stepKey="waitForAdminAccountSharingDrpDown"/>
@@ -21,21 +21,5 @@
         <selectOption selector="{{AdminSection.AdminAccountSharing}}" userInput="Yes" stepKey="selectYes"/>
         <click selector="{{AdminSection.SecurityTab}}" stepKey="clollapseSecurityTab"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
-    </actionGroup>
-
-    <actionGroup name="EnableAdminAccountSharingActionGroup">
-        <annotations>
-            <description>Enabled 'Admin Account Sharing' via the API.</description>
-        </annotations>
-
-        <createData stepKey="setConfig" entity="EnableAdminAccountSharing"/>
-    </actionGroup>
-
-    <actionGroup name="DisableAdminAccountSharingActionGroup">
-        <annotations>
-            <description>Disables 'Admin Account Sharing' via the API.</description>
-        </annotations>
-
-        <createData stepKey="setConfig" entity="DisableAdminAccountSharing"/>
     </actionGroup>
 </actionGroups>

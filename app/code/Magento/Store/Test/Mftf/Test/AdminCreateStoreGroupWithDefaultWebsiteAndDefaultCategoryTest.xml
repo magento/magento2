@@ -19,13 +19,14 @@
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStoreGroup">
                 <argument name="storeGroupName" value="SecondStoreGroupUnique.name"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create custom store group with default website and default category and verify AssertStoreGroupSuccessSaveMessage-->
@@ -34,14 +35,15 @@
             <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
             <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Search created store group(from above step) in grid and verify AssertStoreGroupInGrid-->
-        <actionGroup ref="AssertStoreGroupInGrid" stepKey="seeCreatedStoreGroupInGrid">
+        <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="seeCreatedStoreGroupInGrid">
             <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
         </actionGroup>
 
         <!--Go to store group form page and verify AssertStoreGroupForm and AssertStoreGroupOnStoreViewForm-->
-        <actionGroup ref="AssertStoreGroupForm" stepKey="seeCreatedStoreGroupForm">
+        <actionGroup ref="AssertStoreGroupFormActionGroup" stepKey="seeCreatedStoreGroupForm">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
             <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
             <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>

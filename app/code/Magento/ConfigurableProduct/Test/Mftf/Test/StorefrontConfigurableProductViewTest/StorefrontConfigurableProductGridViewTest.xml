@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductGridViewTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product in a category in storefront"/>
+            <title value="customer should see the configurable product in the category grid"/>
+            <description value="customer should see the configurable product in the category grid"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-94"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+            <!-- Create a configurable product via the UI -->
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup stepKey="deleteProduct" ref="DeleteProductBySkuActionGroup">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersVirtual"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterVirtual">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterVirtual"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Verify the storefront category grid view -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="amOnCategoryPage1">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait1"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.productImage}}" stepKey="seePhoto"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeName">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
+        <seeElement selector="{{StorefrontCategoryMainSection.productLinkByHref(_defaultProduct.urlKey)}}" stepKey="seeNameLink"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seePrice">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+            <argument name="productPrice" value="{{colorProductAttribute1.price}}"/>
+        </actionGroup>
+    </test>
+</tests>

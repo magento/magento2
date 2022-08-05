@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductSwatchMinimumPriceProductPageTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Configurable product with swatch attribute"/>
+            <title value="Swatch option should show the lowest price possible on product page"/>
+            <description value="Swatch option should show the lowest price possible on product page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-19683"/>
+            <group value="Swatches"/>
+        </annotations>
+        <before>
+            <!-- Create category -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <!-- Delete configurable product and all child products -->
+            <actionGroup ref="DeleteProductsByKeywordActionGroup" stepKey="deleteProductsByKeyword">
+                <argument name="keyword" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategoryAttribute"/>
+            <!-- Delete color attribute -->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteColorAttribute">
+                <argument name="ProductAttribute" value="ProductColorAttribute"/>
+            </actionGroup>
+            <!-- Delete size attribute -->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteSizeAttribute">
+                <argument name="ProductAttribute" value="ProductSizeAttribute"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+        </after>
+        <!--Create text swatch attribute with 3 options:  Black, White and Blue-->
+        <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addColorAttribute">
+            <argument name="attributeName" value="{{ProductColorAttribute.frontend_label}}"/>
+            <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+            <argument name="option1" value="Black"/>
+            <argument name="option2" value="White"/>
+            <argument name="option3" value="Blue"/>
+            <argument name="usedInProductListing" value="Yes"/>
+        </actionGroup>
+        <!--Create text swatch attribute with 3 options:  Small, Medium and Large-->
+        <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addSizeAttribute">
+            <argument name="attributeName" value="{{ProductSizeAttribute.frontend_label}}"/>
+            <argument name="attributeCode" value="{{ProductSizeAttribute.attribute_code}}"/>
+            <argument name="option1" value="Small"/>
+            <argument name="option2" value="Medium"/>
+            <argument name="option3" value="Large"/>
+        </actionGroup>
+        <!--Create configurable product with two attributes: Color and Size-->
+        <actionGroup ref="CreateConfigurableProductWithTwoAttributesActionGroup" stepKey="createProduct">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="attribute1" value="ProductColorAttribute"/>
+            <argument name="attribute2" value="ProductSizeAttribute"/>
+        </actionGroup>
+        <!--Set Black-Small product price to 10-->
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeBlackSmallPrice">
+            <argument name="productAttributes" value="Color: Black, Size: Small"/>
+            <argument name="productPrice" value="10"/>
+        </actionGroup>
+        <!--Set Black-Medium product price to 11-->
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeBlackMediumPrice">
+            <argument name="productAttributes" value="Color: Black, Size: Medium"/>
+            <argument name="productPrice" value="11"/>
+        </actionGroup>
+        <!--Set Black-Large product price to 12-->
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeBlackLargePrice">
+            <argument name="productAttributes" value="Color: Black, Size: Large"/>
+            <argument name="productPrice" value="12"/>
+        </actionGroup>
+        <!--Set White-Small product price to 14-->
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeWhiteSmallPrice">
+            <argument name="productAttributes" value="Color: White, Size: Small"/>
+            <argument name="productPrice" value="14"/>
+        </actionGroup>
+        <!--Set White-Medium product price to 13-->
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeWhiteMediumPrice">
+            <argument name="productAttributes" value="Color: White, Size: Medium"/>
+            <argument name="productPrice" value="13"/>
+        </actionGroup>
+        <!--Set White-Large product price to 15-->
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeWhiteLargePrice">
+            <argument name="productAttributes" value="Color: White, Size: Large"/>
+            <argument name="productPrice" value="15"/>
+        </actionGroup>
+        <!--Set Blue-Small product price to 18-->
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeBlueSmallPrice">
+            <argument name="productAttributes" value="Color: Blue, Size: Small"/>
+            <argument name="productPrice" value="18"/>
+        </actionGroup>
+        <!--Set Blue-Medium product price to 17-->
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeBlueMediumPrice">
+            <argument name="productAttributes" value="Color: Blue, Size: Medium"/>
+            <argument name="productPrice" value="17"/>
+        </actionGroup>
+        <!--Set Blue-Large product price to 16-->
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeBlueLargePrice">
+            <argument name="productAttributes" value="Color: Blue, Size: Large"/>
+            <argument name="productPrice" value="16"/>
+        </actionGroup>
+        <!--Save configurable product-->
+        <actionGroup ref="SaveConfigurableProductActionGroup" stepKey="saveProduct">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+
+        <!--Go to product page-->
+        <amOnPage url="{{StorefrontProductPage.url(_defaultProduct.urlKey)}}" stepKey="amOnConfigurableProductPage"/>
+        <waitForPageLoad stepKey="waitForConfigurableProductPage"/>
+
+        <!--Verify that the minimum price is 10-->
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="assertProductPrice">
+            <argument name="productPrice" value="10.00"/>
+        </actionGroup>
+
+        <!--Verify that Black option's minimum price is 16-->
+        <actionGroup ref="StorefrontAssertSwatchOptionPriceActionGroup" stepKey="assertMinimumPriceForBlackOption">
+            <argument name="optionName" value="Black"/>
+            <argument name="optionPrice" value="10.00"/>
+        </actionGroup>
+
+        <!--Verify that White option's minimum price is 16-->
+        <actionGroup ref="StorefrontAssertSwatchOptionPriceActionGroup" stepKey="assertMinimumPriceForWhiteOption">
+            <argument name="optionName" value="White"/>
+            <argument name="optionPrice" value="13.00"/>
+        </actionGroup>
+
+        <!--Verify that Blue option's minimum price is 16-->
+        <actionGroup ref="StorefrontAssertSwatchOptionPriceActionGroup" stepKey="assertMinimumPriceForBlueOption">
+            <argument name="optionName" value="Blue"/>
+            <argument name="optionPrice" value="16.00"/>
+        </actionGroup>
+    </test>
+</tests>

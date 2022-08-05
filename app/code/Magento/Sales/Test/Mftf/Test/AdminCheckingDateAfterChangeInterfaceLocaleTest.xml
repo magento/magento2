@@ -27,7 +27,7 @@
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <!--Login to Admin page-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Delete entities-->
@@ -40,7 +40,7 @@
             <!--Clear filters-->
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
             <!--Logout from Admin page-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create order-->
@@ -51,7 +51,7 @@
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderId"/>
 
         <!--Filter orders grid by ID on Admin page-->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="{$grabOrderId}"/>
         </actionGroup>
 
@@ -62,10 +62,10 @@
         <executeJS function="return (new Date('{$grabPurchaseDateInDefaultLocale}').toLocaleDateString('en-US', {month: 'short'}))" stepKey="getMonthNameInUS"/>
 
         <!--Checking Date with default "Interface Locale"-->
-        <assertContains stepKey="checkingDateWithDefaultInterfaceLocale">
+        <assertStringContainsString stepKey="checkingDateWithDefaultInterfaceLocale">
             <expectedResult type="variable">getMonthNameInUS</expectedResult>
             <actualResult type="variable">grabPurchaseDateInDefaultLocale</actualResult>
-        </assertContains>
+        </assertStringContainsString>
 
         <!--Set Admin "Interface Locale" to "Français (France) / français (France)"-->
         <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToFrance">
@@ -73,7 +73,7 @@
         </actionGroup>
 
         <!--Filter orders grid by ID on Admin page after changing "Interface Locale"-->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridByIdAfterSetFrenchLocale">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdAfterSetFrenchLocale">
             <argument name="orderId" value="{$grabOrderId}"/>
         </actionGroup>
 
@@ -84,9 +84,9 @@
         <executeJS function="return (new Date('{$grabPurchaseDateInDefaultLocale}').toLocaleDateString('fr-FR', {month: 'short'}))" stepKey="getMonthNameInFrench"/>
 
         <!--Checking Date after changing "Interface Locale"-->
-        <assertContains stepKey="checkingDateAfterChangeInterfaceLocale">
+        <assertStringContainsString stepKey="checkingDateAfterChangeInterfaceLocale">
             <expectedResult type="variable">getMonthNameInFrench</expectedResult>
             <actualResult type="variable">grabPurchaseDateInFrenchLocale</actualResult>
-        </assertContains>
+        </assertStringContainsString>
     </test>
 </tests>

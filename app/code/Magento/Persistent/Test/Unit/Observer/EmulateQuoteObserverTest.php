@@ -4,92 +4,115 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Observer;
+
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session as PersistentSessionHelper;
+use Magento\Persistent\Model\Session as PersistentSessionModel;
+use Magento\Persistent\Observer\EmulateQuoteObserver;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EmulateQuoteObserverTest extends \PHPUnit\Framework\TestCase
+class EmulateQuoteObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Persistent\Observer\EmulateQuoteObserver
+     * @var EmulateQuoteObserver
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $customerRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $sessionHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $checkoutSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $eventMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $customerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $sessionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $eventMethods = ['getRequest', 'dispatch', '__wakeUp'];
         $this->customerRepository = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\CustomerRepositoryInterface::class,
+            CustomerRepositoryInterface::class,
             [],
             '',
             false
         );
-        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
-        $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
-        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
-        $this->checkoutSessionMock = $this->createPartialMock(
-            \Magento\Checkout\Model\Session::class,
-            ['isLoggedIn', 'setCustomerData', 'hasQuote', 'getQuote']
-        );
-        $this->eventMock = $this->createPartialMock(\Magento\Framework\Event::class, $eventMethods);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->customerMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $this->customerSessionMock = $this->createMock(Session::class);
+        $this->sessionHelperMock = $this->createMock(PersistentSessionHelper::class);
+        $this->helperMock = $this->createMock(Data::class);
+        $this->observerMock = $this->createMock(Observer::class);
+        $this->checkoutSessionMock = $this->getMockBuilder(CheckoutSession::class)
+            ->addMethods(['isLoggedIn'])
+            ->onlyMethods(['setCustomerData', 'hasQuote', 'getQuote'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getRequest'])
+            ->onlyMethods(['dispatch'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->requestMock = $this->createMock(Http::class);
+        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $this->sessionMock =
-            $this->createPartialMock(\Magento\Persistent\Model\Session::class, ['getCustomerId', '__wakeUp']);
-        $this->model = new \Magento\Persistent\Observer\EmulateQuoteObserver(
+            $this->getMockBuilder(PersistentSessionModel::class)
+                ->addMethods(['getCustomerId'])
+                ->disableOriginalConstructor()
+                ->getMock();
+        $this->model = new EmulateQuoteObserver(
             $this->sessionHelperMock,
             $this->helperMock,
             $this->checkoutSessionMock,
@@ -104,7 +127,7 @@ class EmulateQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->sessionHelperMock->expects($this->never())->method('isPersistent');
         $this->observerMock->expects($this->never())->method('getEvent');
         $this->model->execute($this->observerMock);
@@ -116,8 +139,8 @@ class EmulateQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(false));
+            ->willReturn(true);
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(false);
         $this->checkoutSessionMock->expects($this->never())->method('isLoggedIn');
         $this->observerMock->expects($this->never())->method('getEvent');
         $this->model->execute($this->observerMock);
@@ -129,9 +152,9 @@ class EmulateQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(true));
+            ->willReturn(true);
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(true);
         $this->observerMock->expects($this->never())->method('getEvent');
         $this->model->execute($this->observerMock);
     }
@@ -142,15 +165,15 @@ class EmulateQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
-        $this->observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($this->eventMock));
-        $this->eventMock->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
+            ->willReturn(true);
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $this->observerMock->expects($this->once())->method('getEvent')->willReturn($this->eventMock);
+        $this->eventMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
         $this->requestMock
             ->expects($this->once())
             ->method('getFullActionName')
-            ->will($this->returnValue('persistent_index_saveMethod'));
+            ->willReturn('persistent_index_saveMethod');
         $this->helperMock->expects($this->never())->method('isShoppingCartPersist');
         $this->model->execute($this->observerMock);
     }
@@ -158,37 +181,37 @@ class EmulateQuoteObserverTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWhenShoppingCartIsPersistent()
     {
         $customerId = 1;
-        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $quoteMock = $this->createMock(Quote::class);
         $this->helperMock
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
-        $this->observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($this->eventMock));
-        $this->eventMock->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
+            ->willReturn(true);
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $this->observerMock->expects($this->once())->method('getEvent')->willReturn($this->eventMock);
+        $this->eventMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
         $this->requestMock
             ->expects($this->once())
             ->method('getFullActionName')
-            ->will($this->returnValue('method_name'));
+            ->willReturn('method_name');
         $this->helperMock
             ->expects($this->once())
             ->method('isShoppingCartPersist')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->sessionHelperMock
             ->expects($this->once())
             ->method('getSession')
-            ->will($this->returnValue($this->sessionMock));
-        $this->sessionMock->expects($this->once())->method('getCustomerId')->will($this->returnValue($customerId));
+            ->willReturn($this->sessionMock);
+        $this->sessionMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->customerRepository
             ->expects($this->once())
             ->method('getById')
             ->with($customerId)
-            ->will($this->returnValue($this->customerMock));
+            ->willReturn($this->customerMock);
         $this->checkoutSessionMock->expects($this->once())->method('setCustomerData')->with($this->customerMock);
-        $this->checkoutSessionMock->expects($this->once())->method('hasQuote')->will($this->returnValue(false));
-        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
+        $this->checkoutSessionMock->expects($this->once())->method('hasQuote')->willReturn(false);
+        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $this->model->execute($this->observerMock);
     }
 
@@ -198,19 +221,19 @@ class EmulateQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
-        $this->observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($this->eventMock));
-        $this->eventMock->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
+            ->willReturn(true);
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $this->observerMock->expects($this->once())->method('getEvent')->willReturn($this->eventMock);
+        $this->eventMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
         $this->requestMock
             ->expects($this->once())
             ->method('getFullActionName')
-            ->will($this->returnValue('method_name'));
+            ->willReturn('method_name');
         $this->helperMock
             ->expects($this->once())
             ->method('isShoppingCartPersist')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->checkoutSessionMock->expects($this->never())->method('setCustomerData');
         $this->model->execute($this->observerMock);
     }
@@ -222,30 +245,30 @@ class EmulateQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
-        $this->observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($this->eventMock));
-        $this->eventMock->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
+            ->willReturn(true);
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $this->observerMock->expects($this->once())->method('getEvent')->willReturn($this->eventMock);
+        $this->eventMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
         $this->requestMock
             ->expects($this->once())
             ->method('getFullActionName')
-            ->will($this->returnValue('method_name'));
+            ->willReturn('method_name');
         $this->helperMock
             ->expects($this->once())
             ->method('isShoppingCartPersist')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->sessionHelperMock
             ->expects($this->once())
             ->method('getSession')
-            ->will($this->returnValue($this->sessionMock));
-        $this->sessionMock->expects($this->once())->method('getCustomerId')->will($this->returnValue($customerId));
+            ->willReturn($this->sessionMock);
+        $this->sessionMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->customerRepository
             ->expects($this->once())
             ->method('getById')
             ->with($customerId)
-            ->will($this->returnValue($this->customerMock));
-        $this->checkoutSessionMock->expects($this->once())->method('hasQuote')->will($this->returnValue(true));
+            ->willReturn($this->customerMock);
+        $this->checkoutSessionMock->expects($this->once())->method('hasQuote')->willReturn(true);
         $this->checkoutSessionMock->expects($this->once())->method('setCustomerData')->with($this->customerMock);
         $this->model->execute($this->observerMock);
     }

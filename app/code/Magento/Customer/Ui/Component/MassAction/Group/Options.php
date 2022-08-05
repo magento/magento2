@@ -10,7 +10,9 @@ use Magento\Framework\UrlInterface;
 use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 
 /**
- * Class Options
+ * Class Options for Mass Action Group
+ *
+ * Disable template needed for customers
  */
 class Options implements \JsonSerializable
 {
@@ -79,6 +81,7 @@ class Options implements \JsonSerializable
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         if ($this->options === null) {

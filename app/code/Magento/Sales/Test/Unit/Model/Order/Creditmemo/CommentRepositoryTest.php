@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\Data\CreditmemoCommentInterfaceFactory;
 use Magento\Sales\Api\Data\CreditmemoCommentSearchResultInterfaceFactory;
@@ -16,32 +17,33 @@ use Magento\Sales\Model\Order\Creditmemo\Comment;
 use Magento\Sales\Model\Order\Creditmemo\CommentRepository;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
 use Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class CommentRepositoryTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
+class CommentRepositoryTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCommentResourceInterface
+     * @var MockObject|CreditmemoCommentResourceInterface
      */
     private $commentResource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCommentInterfaceFactory
+     * @var MockObject|CreditmemoCommentInterfaceFactory
      */
     private $commentFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCommentSearchResultInterfaceFactory
+     * @var MockObject|CreditmemoCommentSearchResultInterfaceFactory
      */
     private $searchResultFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CollectionProcessorInterface
+     * @var MockObject|CollectionProcessorInterface
      */
     private $collectionProcessor;
 
@@ -51,35 +53,35 @@ class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
     private $commentRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCommentSender
+     * @var MockObject|CreditmemoCommentSender
      */
     private $creditmemoCommentSender;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoRepositoryInterface
+     * @var MockObject|CreditmemoRepositoryInterface
      */
     private $creditmemoRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Creditmemo
+     * @var MockObject|Creditmemo
      */
     private $creditmemoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Comment
+     * @var MockObject|Comment
      */
     private $commentMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     * @var MockObject|LoggerInterface
      */
     private $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->commentResource = $this->getMockBuilder(CreditmemoCommentResourceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->commentFactory = $this->getMockBuilder(CreditmemoCommentInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -88,17 +90,23 @@ class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->collectionProcessor = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->creditmemoRepositoryMock = $this->getMockBuilder(CreditmemoRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->creditmemoCommentSender = $this->getMockBuilder(CreditmemoCommentSender::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock();
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
-        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)->disableOriginalConstructor()->getMock();
-        $this->commentMock = $this->getMockBuilder(Comment::class)->disableOriginalConstructor()->getMock();
+        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->commentMock = $this->getMockBuilder(Comment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->commentRepository = new CommentRepository(
             $this->commentResource,
@@ -140,20 +148,18 @@ class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->commentRepository->save($this->commentMock);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save the creditmemo comment.
-     */
     public function testSaveWithException()
     {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectExceptionMessage('Could not save the creditmemo comment.');
         $this->commentResource->expects($this->once())
             ->method('save')
             ->with($this->commentMock)
             ->willThrowException(
-                new \Magento\Framework\Exception\CouldNotSaveException(__('Could not save the creditmemo comment.'))
+                new CouldNotSaveException(__('Could not save the creditmemo comment.'))
             );
 
-         $this->commentRepository->save($this->commentMock);
+        $this->commentRepository->save($this->commentMock);
     }
 
     public function testSaveSendCatchException()

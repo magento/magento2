@@ -91,6 +91,7 @@ class FileLock implements LockManagerInterface
 
             while (!$this->tryToLock($fileResource)) {
                 if (!$skipDeadline && $deadline <= microtime(true)) {
+                    $this->tryToUnlock($fileResource);
                     $this->fileDriver->fileClose($fileResource);
                     return false;
                 }
@@ -124,6 +125,7 @@ class FileLock implements LockManagerInterface
                 } else {
                     $result = true;
                 }
+                $this->tryToUnlock($fileResource);
                 $this->fileDriver->fileClose($fileResource);
             }
         } catch (FileSystemException $exception) {

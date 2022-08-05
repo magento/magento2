@@ -8,21 +8,21 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model;
 
 /**
- * Filter custom attributes for product using the blacklist
+ * Filter custom attributes for product using the excluded list
  */
 class FilterProductCustomAttribute
 {
     /**
      * @var array
      */
-    private $blackList;
+    private $excludedList;
 
     /**
-     * @param array $blackList
+     * @param array $excludedList
      */
-    public function __construct(array $blackList = [])
+    public function __construct(array $excludedList = [])
     {
-        $this->blackList = $blackList;
+        $this->excludedList = $excludedList;
     }
 
     /**
@@ -33,6 +33,6 @@ class FilterProductCustomAttribute
      */
     public function execute(array $attributes): array
     {
-        return array_diff_key($attributes, array_flip($this->blackList));
+        return array_diff_key($attributes, array_flip($this->excludedList));
     }
 }

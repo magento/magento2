@@ -3,36 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Cache\Frontend;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\Cache\Backend\Redis;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+class FactoryTest extends TestCase
 {
     /**
      * Object Manager
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\App\Cache\Frontend\Factory
+     * @var Factory
      */
     private $factory;
 
     /**
-     * @var \Magento\Framework\App\Area
+     * @var Area
      */
     private $model;
 
-    protected function setUp()
+    /**
+     * @ingeritdoc
+     */
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->factory = $this->objectManager->create(
-            \Magento\Framework\App\Cache\Frontend\Factory::class
-        );
+        $this->factory = $this->objectManager->create(Factory::class);
     }
 
     /**
@@ -63,6 +70,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         //Removing data
         sleep(2);
         $this->assertTrue($this->model->remove($secondIdentifier));
+        $this->assertTrue($this->model->remove($identifier));
         $this->assertEquals($this->model->load($identifier), false);
         $this->assertEquals($this->model->load($secondIdentifier), false);
 
@@ -73,11 +81,23 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         //Checking data
         $this->assertEquals($this->model->load($identifier), $data);
         $this->assertEquals($this->model->load($secondIdentifier), $secondData);
+    }
 
-        //Removing data
-        sleep(2);
-        $this->assertTrue($this->model->remove($identifier));
-        $this->assertEquals($this->model->load($identifier), false);
-        $this->assertEquals($this->model->load($secondIdentifier), false);
+    /**
+     * Verify factory will create cache frontend instance with default options in case Redis is not available.
+     *
+     * @return void
+     */
+    public function testCreateCacheFrontedInstanceWithFallbackToDefaultOptions(): void
+    {
+        $options = [
+            'backend_options' => [
+                'server' => null,
+            ],
+            'id_prefix' => 'test_prefix',
+            'backend' => Redis::class,
+        ];
+
+        self::assertInstanceOf(FrontendInterface::class, $this->factory->create($options));
     }
 }

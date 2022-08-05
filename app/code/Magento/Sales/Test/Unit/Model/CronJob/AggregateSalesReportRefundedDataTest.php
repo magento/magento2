@@ -3,50 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\CronJob;
 
-use \Magento\Sales\Model\CronJob\AggregateSalesReportRefundedData;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Sales\Model\CronJob\AggregateSalesReportRefundedData;
+use Magento\Sales\Model\ResourceModel\Report\Refunded;
+use Magento\Sales\Model\ResourceModel\Report\RefundedFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Magento\Sales\Model\CronJob\AggregateSalesReportRefundedDataTest
  */
-class AggregateSalesReportRefundedDataTest extends \PHPUnit\Framework\TestCase
+class AggregateSalesReportRefundedDataTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|MockObject
      */
     protected $localeResolverMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|MockObject
      */
     protected $localeDateMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Report\RefundedFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var RefundedFactory|MockObject
      */
     protected $refundedFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\CronJob\AggregateSalesReportRefundedData
+     * @var AggregateSalesReportRefundedData
      */
     protected $observer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->localeResolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
+        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->refundedFactoryMock = $this->getMockBuilder(
-            \Magento\Sales\Model\ResourceModel\Report\RefundedFactory::class
+            RefundedFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->localeDateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
+        $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->observer = new AggregateSalesReportRefundedData(
             $this->localeResolverMock,
@@ -58,7 +66,7 @@ class AggregateSalesReportRefundedDataTest extends \PHPUnit\Framework\TestCase
     public function testExecute()
     {
         $date = $this->setupAggregate();
-        $refundedMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Report\Refunded::class)
+        $refundedMock = $this->getMockBuilder(Refunded::class)
             ->disableOriginalConstructor()
             ->getMock();
         $refundedMock->expects($this->once())
@@ -66,7 +74,7 @@ class AggregateSalesReportRefundedDataTest extends \PHPUnit\Framework\TestCase
             ->with($date);
         $this->refundedFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($refundedMock));
+            ->willReturn($refundedMock);
         $this->observer->execute();
     }
 
@@ -86,7 +94,7 @@ class AggregateSalesReportRefundedDataTest extends \PHPUnit\Framework\TestCase
         $date = (new \DateTime())->sub(new \DateInterval('PT25H'));
         $this->localeDateMock->expects($this->once())
             ->method('date')
-            ->will($this->returnValue($date));
+            ->willReturn($date);
 
         return $date;
     }

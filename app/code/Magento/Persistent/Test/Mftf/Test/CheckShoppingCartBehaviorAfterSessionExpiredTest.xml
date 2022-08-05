@@ -27,11 +27,17 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!-- Create new customer -->
-            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
-                <argument name="Customer" value="Simple_US_Customer_NY"/>
+            <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+            <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+                <argument name="customer" value="Simple_US_Customer_NY"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+            <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+                <argument name="messageType" value="success"/>
+                <argument name="message" value="Thank you for registering with Main Website Store."/>
             </actionGroup>
             <!--Add shipping information-->
-            <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+            <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddressInfo">
                 <argument name="Address" value="US_Address_NY"/>
             </actionGroup>
         </before>
@@ -43,14 +49,14 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
         <!-- Add simple product to cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart1">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart1">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <!--Reset cookies and refresh the page-->
         <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageLoad"/>
         <!--Check product exists in cart-->
         <see userInput="$$createProduct.name$$" stepKey="ProductExistsInCart"/>
     </test>

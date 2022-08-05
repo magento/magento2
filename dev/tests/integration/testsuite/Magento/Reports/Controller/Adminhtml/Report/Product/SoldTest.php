@@ -15,8 +15,8 @@ class SoldTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         $this->dispatch('backend/reports/report_product/sold');
         $actual = $this->getResponse()->getBody();
-        $this->assertContains('Ordered Products Report', $actual);
+        $this->assertStringContainsString('Ordered Products Report', $actual);
         //verify if SKU column is presented on grid
-        $this->assertContains('SKU', $actual);
+        $this->assertStringContainsString('SKU', $actual);
     }
 }

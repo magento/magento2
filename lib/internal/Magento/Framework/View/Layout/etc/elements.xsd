@@ -119,7 +119,7 @@
 
     <xs:simpleType name="htmlClassType">
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_]*(\s[a-zA-Z][a-zA-Z\d\-_]*)*"/>
+            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_:]*(\s[a-zA-Z][a-zA-Z\d\-_:]*)*"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -140,6 +140,13 @@
             <xs:enumeration value="table"/>
             <xs:enumeration value="tfoot"/>
             <xs:enumeration value="ul"/>
+            <xs:enumeration value="article"/>
+            <xs:enumeration value="h1"/>
+            <xs:enumeration value="h2"/>
+            <xs:enumeration value="h3"/>
+            <xs:enumeration value="h4"/>
+            <xs:enumeration value="h5"/>
+            <xs:enumeration value="h6"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -321,6 +328,7 @@
         <xs:attribute type="elementNameType" name="name" use="required"/>
         <xs:attribute type="xs:string" name="template" use="optional"/>
         <xs:attribute type="xs:string" name="class" use="optional"/>
+        <xs:attribute type="xs:string" name="group" use="optional"/>
         <xs:attribute type="xs:boolean" name="display" default="true" use="optional"/>
         <xs:attribute type="xs:boolean" name="remove" use="optional"/>
     </xs:complexType>

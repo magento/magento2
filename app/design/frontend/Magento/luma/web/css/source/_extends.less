@@ -127,6 +127,7 @@
         display: inline-block;
         float: left;
         margin: 0 0 @indent__xs;
+        word-break: break-all;
     }
 };
 
@@ -1570,9 +1571,15 @@
         margin-bottom: @indent__base;
 
         .actions.main {
-            .continue,
-            .clear {
+            .continue {
                 display: none;
+            }
+
+            .clear {
+                .lib-button-as-link(
+                    @_margin: 0 @indent__base 0 0
+                );
+                font-weight: @font-weight__regular;
             }
         }
     }

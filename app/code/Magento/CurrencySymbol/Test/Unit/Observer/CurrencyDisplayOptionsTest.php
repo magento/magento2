@@ -3,71 +3,81 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CurrencySymbol\Test\Unit\Observer;
 
+use Magento\CurrencySymbol\Model\System\Currencysymbol;
 use Magento\CurrencySymbol\Model\System\CurrencysymbolFactory;
+use Magento\CurrencySymbol\Observer\CurrencyDisplayOptions;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Locale\Currency;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\CurrencySymbol\Observer\CurrencyDisplayOptions
  */
-class CurrencyDisplayOptionsTest extends \PHPUnit\Framework\TestCase
+class CurrencyDisplayOptionsTest extends TestCase
 {
     /**
-     * @var \Magento\CurrencySymbol\Observer\CurrencyDisplayOptions
+     * @var CurrencyDisplayOptions
      */
     private $observer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CurrencysymbolFactory $mockSymbolFactory
+     * @var MockObject|CurrencysymbolFactory $mockSymbolFactory
      */
     private $mockSymbolFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CurrencySymbol\Model\System\Currencysymbol $mockSymbol
+     * @var MockObject|Currencysymbol $mockSymbol
      */
     private $mockSymbol;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\Observer $mockEvent
+     * @var MockObject|Observer $mockEvent
      */
     private $mockEventObserver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event $mockEvent
+     * @var MockObject|Event $mockEvent
      */
     private $mockEvent;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockSymbolFactory = $this->createPartialMock(
-            \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory::class,
+            CurrencysymbolFactory::class,
             ['create']
         );
 
         $this->mockSymbol = $this->createPartialMock(
-            \Magento\CurrencySymbol\Model\System\Currencysymbol::class,
+            Currencysymbol::class,
             ['getCurrencySymbol']
         );
 
-        $this->mockEventObserver = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
+        $this->mockEventObserver = $this->createPartialMock(Observer::class, ['getEvent']);
 
-        $this->mockEvent = $this->createPartialMock(
-            \Magento\Framework\Event::class,
-            ['getBaseCode', 'getCurrencyOptions']
-        );
+        $this->mockEvent = $this->getMockBuilder(Event::class)
+            ->addMethods(['getBaseCode', 'getCurrencyOptions'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->mockEventObserver->expects($this->any())->method('getEvent')->willReturn($this->mockEvent);
         $this->mockSymbolFactory->expects($this->any())->method('create')->willReturn($this->mockSymbol);
 
-        $this->observer = new \Magento\CurrencySymbol\Observer\CurrencyDisplayOptions($this->mockSymbolFactory);
+        $this->observer = new CurrencyDisplayOptions($this->mockSymbolFactory);
     }
 
     public function testCurrencyDisplayOptionsEmpty()
     {
         $baseData = [
-            \Magento\Framework\Locale\Currency::CURRENCY_OPTION_NAME => 'US Dollar'
+            Currency::CURRENCY_OPTION_NAME => 'US Dollar'
         ];
-        $sampleCurrencyOptionObject = new \Magento\Framework\DataObject($baseData);
+        $sampleCurrencyOptionObject = new DataObject($baseData);
 
         //Return invalid value
         $this->mockEvent->expects($this->once())->method('getBaseCode')->willReturn(null);
@@ -83,18 +93,18 @@ class CurrencyDisplayOptionsTest extends \PHPUnit\Framework\TestCase
     public function testCurrencyDisplayOptions()
     {
         $baseData = [
-            \Magento\Framework\Locale\Currency::CURRENCY_OPTION_NAME => 'US Dollar'
+            Currency::CURRENCY_OPTION_NAME => 'US Dollar'
         ];
-        $sampleCurrencyOptionObject = new \Magento\Framework\DataObject($baseData);
+        $sampleCurrencyOptionObject = new DataObject($baseData);
         $sampleCurrency = 'USD';
         $sampleCurrencySymbol = '$';
 
         $expectedCurrencyOptions = array_merge(
             $baseData,
             [
-                \Magento\Framework\Locale\Currency::CURRENCY_OPTION_NAME => 'US Dollar',
-                \Magento\Framework\Locale\Currency::CURRENCY_OPTION_SYMBOL => $sampleCurrencySymbol,
-                \Magento\Framework\Locale\Currency::CURRENCY_OPTION_DISPLAY => \Magento\Framework\Currency::USE_SYMBOL
+                Currency::CURRENCY_OPTION_NAME => 'US Dollar',
+                Currency::CURRENCY_OPTION_SYMBOL => $sampleCurrencySymbol,
+                Currency::CURRENCY_OPTION_DISPLAY => \Magento\Framework\Currency::USE_SYMBOL
             ]
         );
 

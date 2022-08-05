@@ -459,7 +459,7 @@
                 }
 
                 .submenu {
-                    top: 0 !important;
+                    top: -1px !important;
                     left: 100% !important;
                 }
 
@@ -470,6 +470,8 @@
 
                 li {
                     margin: 0;
+                    position: relative;
+                    
                     &.parent {
                         > a {
                             > .ui-menu-icon {

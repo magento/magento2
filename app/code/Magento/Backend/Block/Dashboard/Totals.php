@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+namespace Magento\Backend\Block\Dashboard;
+
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Model\Dashboard\Period;
+use Magento\Framework\Module\Manager;
+use Magento\Reports\Model\ResourceModel\Order\Collection;
+use Magento\Reports\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Store\Model\Store;
 
 /**
  * Adminhtml dashboard totals bar
- *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
-namespace Magento\Backend\Block\Dashboard;
-
-/**
- * Totals block.
- */
-class Totals extends \Magento\Backend\Block\Dashboard\Bar
+class Totals extends Bar
 {
     /**
      * @var string
@@ -22,20 +27,20 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
     protected $_template = 'Magento_Backend::dashboard/totalbar.phtml';
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var Manager
      */
     protected $_moduleManager;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param Context $context
+     * @param CollectionFactory $collectionFactory
+     * @param Manager $moduleManager
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
-        \Magento\Framework\Module\Manager $moduleManager,
+        Context $context,
+        CollectionFactory $collectionFactory,
+        Manager $moduleManager,
         array $data = []
     ) {
         $this->_moduleManager = $moduleManager;
@@ -58,9 +63,9 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
         ) || $this->getRequest()->getParam(
             'group'
         );
-        $period = $this->getRequest()->getParam('period', '24h');
+        $period = $this->getRequest()->getParam('period', Period::PERIOD_24_HOURS);
 
-        /* @var $collection \Magento\Reports\Model\ResourceModel\Order\Collection */
+        /* @var $collection Collection */
         $collection = $this->_collectionFactory->create()->addCreateAtPeriodFilter(
             $period
         )->calculateTotals(
@@ -80,7 +85,7 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
                 } elseif (!$collection->isLive()) {
                     $collection->addFieldToFilter(
                         'store_id',
-                        ['eq' => $this->_storeManager->getStore(\Magento\Store\Model\Store::ADMIN_CODE)->getId()]
+                        ['eq' => $this->_storeManager->getStore(Store::ADMIN_CODE)->getId()]
                     );
                 }
             }
@@ -94,5 +99,7 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
         $this->addTotal(__('Tax'), $totals->getTax());
         $this->addTotal(__('Shipping'), $totals->getShipping());
         $this->addTotal(__('Quantity'), $totals->getQuantity() * 1, true);
+
+        return $this;
     }
 }

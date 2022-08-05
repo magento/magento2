@@ -3,16 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
+
+use Magento\Config\Block\System\Config\Form\Field\File;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for \Magento\Framework\Data\Form\Field\File
  */
-namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
-
-class FileTest extends \PHPUnit\Framework\TestCase
+class FileTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Block\System\Config\Form\Field\File
+     * @var File
      */
     protected $file;
 
@@ -21,17 +28,17 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     protected $testData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->testData = [
             'before_element_html' => 'test_before_element_html',
-            'html_id'             => 'test_id',
-            'name'                => 'test_name',
-            'value'               => 'test_value',
-            'title'               => 'test_title',
-            'disabled'            => true,
+            'html_id' => 'test_id',
+            'name' => 'test_name',
+            'value' => 'test_value',
+            'title' => 'test_title',
+            'disabled' => true,
             'after_element_js'    => 'test_after_element_js',
             'after_element_html'  => 'test_after_element_html',
             'html_id_prefix'      => 'test_id_prefix_',
@@ -39,15 +46,15 @@ class FileTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->file = $objectManager->getObject(
-            \Magento\Config\Block\System\Config\Form\Field\File::class,
+            File::class,
             [
-                '_escaper' => $objectManager->getObject(\Magento\Framework\Escaper::class),
+                '_escaper' => $objectManager->getObject(Escaper::class),
                 'data' => $this->testData,
 
             ]
         );
 
-        $formMock = new \Magento\Framework\DataObject();
+        $formMock = new DataObject();
         $formMock->setHtmlIdPrefix($this->testData['html_id_prefix']);
         $formMock->setHtmlIdSuffix($this->testData['html_id_suffix']);
         $this->file->setForm($formMock);
@@ -61,16 +68,19 @@ class FileTest extends \PHPUnit\Framework\TestCase
             . $this->testData['html_id']
             . $this->testData['html_id_suffix'];
 
-        $this->assertContains('<label class="addbefore" for="' . $expectedHtmlId . '"', $html);
-        $this->assertContains($this->testData['before_element_html'], $html);
-        $this->assertContains('<input id="' . $expectedHtmlId . '"', $html);
-        $this->assertContains('name="' . $this->testData['name'] . '"', $html);
-        $this->assertContains('value="' . $this->testData['value'] . '"', $html);
-        $this->assertContains('disabled="disabled"', $html);
-        $this->assertContains('type="file"', $html);
-        $this->assertContains($this->testData['after_element_js'], $html);
-        $this->assertContains('<label class="addafter" for="' . $expectedHtmlId . '"', $html);
-        $this->assertContains($this->testData['after_element_html'], $html);
-        $this->assertContains('<input type="checkbox" name="' . $this->testData['name'] . '[delete]"', $html);
+        $this->assertStringContainsString('<label class="addbefore" for="' . $expectedHtmlId . '"', $html);
+        $this->assertStringContainsString($this->testData['before_element_html'], $html);
+        $this->assertStringContainsString('<input id="' . $expectedHtmlId . '"', $html);
+        $this->assertStringContainsString('name="' . $this->testData['name'] . '"', $html);
+        $this->assertStringContainsString('value="' . $this->testData['value'] . '"', $html);
+        $this->assertStringContainsString('disabled="disabled"', $html);
+        $this->assertStringContainsString('type="file"', $html);
+        $this->assertStringContainsString($this->testData['after_element_js'], $html);
+        $this->assertStringContainsString('<label class="addafter" for="' . $expectedHtmlId . '"', $html);
+        $this->assertStringContainsString($this->testData['after_element_html'], $html);
+        $this->assertStringContainsString(
+            '<input type="checkbox" name="' . $this->testData['name'] . '[delete]"',
+            $html
+        );
     }
 }

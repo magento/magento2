@@ -18,6 +18,8 @@
     <preference for="Magento\Theme\Api\DesignConfigRepositoryInterface" type="Magento\Theme\Model\DesignConfigRepository"/>
     <preference for="Magento\Framework\View\Model\PageLayout\Config\BuilderInterface" type="Magento\Theme\Model\PageLayout\Config\Builder"/>
     <preference for="Magento\Theme\Model\Design\Config\MetadataProviderInterface" type="Magento\Theme\Model\Design\Config\MetadataProvider"/>
+    <preference for="Magento\Theme\Model\Theme\StoreThemesResolverInterface" type="Magento\Theme\Model\Theme\StoreThemesResolver"/>
+    <preference for="Magento\Theme\CustomerData\MessagesProviderInterface" type="Magento\Theme\CustomerData\MessagesProvider"/>
     <type name="Magento\Theme\Model\Config">
         <arguments>
             <argument name="configCache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
@@ -104,6 +106,9 @@
             <argument name="scope" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\App\ActionInterface">
+        <plugin name="designLoader" type="Magento\Theme\Plugin\LoadDesignPlugin"/>
+    </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
              <argument name="collections" xsi:type="array">
@@ -206,6 +211,10 @@
                     <item name="path" xsi:type="string">design/header/welcome</item>
                     <item name="fieldset" xsi:type="string">other_settings/header</item>
                 </item>
+                <item name="header_translate_title" xsi:type="array">
+                    <item name="path" xsi:type="string">design/header/translate_title</item>
+                    <item name="fieldset" xsi:type="string">other_settings/header</item>
+                </item>
                 <item name="footer_copyright" xsi:type="array">
                     <item name="path" xsi:type="string">design/footer/copyright</item>
                     <item name="fieldset" xsi:type="string">other_settings/footer</item>
@@ -284,5 +293,41 @@
             <argument name="resourceModel" xsi:type="string">Magento\Theme\Model\ResourceModel\Theme</argument>
             <argument name="identifierName" xsi:type="string">theme_id</argument>
         </arguments>
+    </type>
+    <virtualType name="configured_design_cache" type="Magento\Framework\App\Cache">
+        <arguments>
+            <argument name="cacheIdentifier" xsi:type="string">layout</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="design_context" type="Magento\Framework\Model\Context">
+        <arguments>
+            <argument name="cacheManager" xsi:type="object">configured_design_cache</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Theme\Model\Design">
+        <arguments>
+            <argument name="context" xsi:type="object">design_context</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Model\Theme\ThemeProvider">
+        <arguments>
+            <argument name="cache" xsi:type="object">configured_design_cache</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Model\Theme\StoreThemesResolver">
+        <arguments>
+            <argument name="resolvers" xsi:type="array">
+                <item name="storeDefaultTheme" xsi:type="object">Magento\Theme\Model\Theme\StoreDefaultThemeResolver</item>
+                <item name="storeUserAgentTheme" xsi:type="object">Magento\Theme\Model\Theme\StoreUserAgentThemeResolver</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Helper\Storage">
+        <arguments>
+            <argument name="filesystemDriver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Data\Collection">
+        <plugin name="currentPageDetection" type="Magento\Theme\Plugin\Data\Collection" />
     </type>
 </config>

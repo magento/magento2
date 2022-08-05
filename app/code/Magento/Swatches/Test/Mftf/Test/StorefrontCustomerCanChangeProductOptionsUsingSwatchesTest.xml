@@ -22,8 +22,10 @@
             <createData entity="Simple_US_Customer" after="createCategory" stepKey="createCustomer"/>
         </before>
         <after>
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createCustomer" before="goToProductAttributes" stepKey="deleteCustomer"/>
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" after="deleteCustomer" stepKey="logoutFromCustomer"/>
+            <comment userInput="BIC workaround" stepKey="logoutFromCustomer"/>
         </after>
 
         <!-- Remove steps that are not used for this test -->
@@ -44,8 +46,8 @@
         </actionGroup>
 
         <!-- Go to shopping cart and update option of configurable product -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="openShoppingCartPage"/>
-        <actionGroup ref="StorefrontUpdateCartConfigurableProductWithSwatches" stepKey="updateConfigurableProductInTheCart">
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <actionGroup ref="StorefrontUpdateCartConfigurableProductWithSwatchesActionGroup" stepKey="updateConfigurableProductInTheCart">
             <argument name="product" value="_defaultProduct"/>
             <argument name="productOption" value="e74d3c"/>
         </actionGroup>

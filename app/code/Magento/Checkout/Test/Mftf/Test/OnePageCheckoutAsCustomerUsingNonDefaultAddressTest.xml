@@ -14,7 +14,7 @@
             <stories value="OnePageCheckout within Offline Payment Methods"/>
             <title value="OnePageCheckout as customer using non default address test"/>
             <description value="Checkout as customer using non default address"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-14739"/>
             <group value="checkout"/>
             <group value="mtf_migrated"/>
@@ -26,11 +26,11 @@
             </createData>
 
             <!-- Create customer -->
-            <createData entity="Customer_US_UK_DE" stepKey="createCustomer"/>
+            <createData entity="Customer_DE_UK_US" stepKey="createCustomer"/>
         </before>
         <after>
             <!-- Admin log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Customer Log out -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
@@ -45,17 +45,17 @@
         <!-- Add Simple Product to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
 
         <!-- Go to shopping cart -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
 
         <!-- Login as customer on checkout page -->
         <actionGroup ref="LoginAsCustomerOnCheckoutPageActionGroup" stepKey="customerLogin">
@@ -64,32 +64,35 @@
         <click selector="{{CheckoutShippingSection.shipHereButton(DE_Address_Berlin_Not_Default_Address.street[0])}}" stepKey="clickShipHere"/>
 
         <!-- Click next button to open payment section -->
-        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
-        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution"/>
 
         <!-- Change the address -->
         <click selector="{{CheckoutPaymentSection.editAddress}}" stepKey="editAddress"/>
-        <waitForElementVisible selector="{{CheckoutShippingSection.addressDropdown}}" stepKey="waitForDropDownToBeVisible"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.addressDropdown}}" stepKey="waitForDropDownToBeVisible"/>
+        <see selector="{{CheckoutPaymentSection.addressDropdownSelected}}" userInput="{{US_Address_NY.street[0]}}" stepKey="seeDefaultBillingAddressStreet"/>
         <selectOption selector="{{CheckoutShippingSection.addressDropdown}}" userInput="{{UK_Not_Default_Address.street[0]}}" stepKey="addAddress"/>
 
         <!-- Check order summary in checkout -->
-        <click selector="{{CheckoutShippingSection.updateAddress}}" stepKey="clickToUpdate"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontClickUpdateAddressInCheckoutActionGroup" stepKey="clickToUpdate"/>
+        <comment userInput="BIC workaround" stepKey="waitForPageLoad"/>
 
         <!-- Place order -->
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <waitForPageLoad stepKey="waitForCheckoutPaymentSectionPageLoad"/>
-        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCheckoutPaymentSectionPageLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="orderIsSuccessfullyPlaced"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="openOrderViewPage"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open created order in backend -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
-        <actionGroup ref="OpenOrderById" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="goToOrders"/>
+        <comment userInput="BIC workaround" stepKey="filterOrderGridById"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="entityId" value="{$grabOrderId}"/>
         </actionGroup>
 
         <!-- Assert order total -->

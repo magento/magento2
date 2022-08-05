@@ -7,16 +7,20 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 use Magento\Eav\Helper\Data;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\DateTime;
 
 /**
- * Product attribute add/edit form main tab
+ * Product attribute add/edit advanced form tab
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Advanced extends Generic
 {
@@ -57,7 +61,7 @@ class Advanced extends Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         Yesno $yesNo,
         Data $eavData,
-        array $disableScopeChangeList = ['sku'],
+        array $disableScopeChangeList = [],
         array $data = []
     ) {
         $this->_yesNo = $yesNo;
@@ -70,7 +74,7 @@ class Advanced extends Generic
      * Adding product form elements for editing attribute
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD)
      */
     protected function _prepareForm()
@@ -139,7 +143,21 @@ class Advanced extends Generic
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
                 'value' => $attributeObject->getDefaultValue(),
-                'date_format' => $dateFormat
+                'date_format' => $dateFormat,
+            ]
+        );
+
+        $timeFormat = $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT);
+        $fieldset->addField(
+            'default_value_datetime',
+            'date',
+            [
+                'name' => 'default_value_datetime',
+                'label' => __('Default Value'),
+                'title' => __('Default Value'),
+                'value' => $this->getLocalizedDateDefaultValue(),
+                'date_format' => $dateFormat,
+                'time_format' => $timeFormat,
             ]
         );
 
@@ -266,7 +284,7 @@ class Advanced extends Generic
     /**
      * Retrieve attribute object from registry
      *
-     * @return mixed
+     * @return Attribute
      */
     private function getAttributeObject()
     {
@@ -284,5 +302,29 @@ class Advanced extends Generic
             $this->propertyLocker = ObjectManager::getInstance()->get(PropertyLocker::class);
         }
         return $this->propertyLocker;
+    }
+
+    /**
+     * Get localized date default value
+     *
+     * @return string
+     * @throws LocalizedException
+     */
+    private function getLocalizedDateDefaultValue(): string
+    {
+        $attributeObject = $this->getAttributeObject();
+        if (empty($attributeObject->getDefaultValue()) || $attributeObject->getFrontendInput() !== 'datetime') {
+            return (string)$attributeObject->getDefaultValue();
+        }
+
+        try {
+            $localizedDate = $this->_localeDate->date($attributeObject->getDefaultValue(), null, false);
+            $localizedDate->setTimezone(new \DateTimeZone($this->_localeDate->getConfigTimezone()));
+            $localizedDate = $localizedDate->format(DateTime::DATETIME_PHP_FORMAT);
+        } catch (\Exception $e) {
+            throw new LocalizedException(__('The default date is invalid.'));
+        }
+
+        return $localizedDate;
     }
 }

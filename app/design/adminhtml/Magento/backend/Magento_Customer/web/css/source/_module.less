@@ -35,21 +35,8 @@
         width: 50%;
 
         .action-additional {
-            margin: 2px 0 0 2px;
+            margin: 2px 0 0 8px;
         }
-    }
-
-    .edit-default-billing-address-button,
-    .edit-default-shipping-address-button {
-        position: absolute;
-    }
-
-    .edit-default-billing-address-button {
-        left: 210px;
-    }
-
-    .edit-default-shipping-address-button {
-        left: 230px;
     }
 
     .customer_form_areas_address_address_customer_address_listing {
@@ -74,6 +61,30 @@
                 font-size: 18px;
                 font-weight: bold;
                 margin-bottom: 16px;
+            }
+        }
+    }
+}
+
+.customer-newsletter-fieldset.admin__fieldset {
+    &.multi-website {
+        > .admin__field > .admin__field-control {
+            width: ~'calc(100% * 0.75 - 30px)';
+
+            table {
+                th.subscriber-status {
+                    text-align: center;
+                }
+
+                td {
+                    &.subscriber-status {
+                        text-align: center;
+                    }
+
+                    select.admin__control-select {
+                        width: 100%;
+                    }
+                }
             }
         }
     }

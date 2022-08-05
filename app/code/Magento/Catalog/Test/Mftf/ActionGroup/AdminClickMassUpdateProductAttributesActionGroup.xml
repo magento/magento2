@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminClickMassUpdateProductAttributesActionGroup">
+        <annotations>
+            <description>Clicks on 'Update attributes' from dropdown actions list on product grid page. Products should be selected via mass action before</description>
+        </annotations>
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickOption"/>
+        <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
+        <seeInCurrentUrl url="{{ProductAttributesEditPage.url}}" stepKey="seeInUrl"/>
+    </actionGroup>
+</actionGroups>

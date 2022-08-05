@@ -15,7 +15,7 @@
             <title value="Admin should be able to associate bundle product to websites"/>
             <description value="Admin should be able to associate bundle product to websites"/>
             <testCaseId value="MC-3344"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="bundle"/>
             <group value="catalog"/>
         </annotations>
@@ -42,11 +42,10 @@
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
 
-            <!-- Reindex -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create website-->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
@@ -64,6 +63,7 @@
                 <argument name="StoreGroup" value="SecondStoreGroupUnique"/>
                 <argument name="customStore" value="SecondStoreUnique"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex2"/>
         </before>
         <after>
             <!-- Disabled Store URLs -->
@@ -78,15 +78,16 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
-            <actionGroup ref="NavigateToAndResetProductGridToDefaultView" stepKey="resetProductGridFilter"/>
+            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridFilter"/>
 
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Open product page and assign grouped project to second website -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="openAdminProductPage">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openAdminProductPage">
             <argument name="productSku" value="$$createBundleProduct.sku$$"/>
         </actionGroup>
         <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="assignProductToSecondWebsite">
@@ -95,15 +96,15 @@
         <actionGroup ref="AdminUnassignProductInWebsiteActionGroup" stepKey="unassignProductFromDefaultWebsite">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveGroupedProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveGroupedProduct"/>
 
         <!-- Assert product is assigned to Second website -->
-        <actionGroup ref="AssertProductIsAssignedToWebsite" stepKey="seeCustomWebsiteIsChecked">
+        <actionGroup ref="AssertProductIsAssignedToWebsiteActionGroup" stepKey="seeCustomWebsiteIsChecked">
             <argument name="website" value="{{secondCustomWebsite.name}}"/>
         </actionGroup>
 
         <!-- Assert product is not assigned to Main website -->
-        <actionGroup ref="AssertProductIsNotAssignedToWebsite" stepKey="seeMainWebsiteIsNotChecked">
+        <actionGroup ref="AssertProductIsNotAssignedToWebsiteActionGroup" stepKey="seeMainWebsiteIsNotChecked">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
         </actionGroup>
 

@@ -3,18 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\ReportXml\Config;
 
 use Magento\Analytics\ReportXml\Config\Mapper;
+use PHPUnit\Framework\TestCase;
 
-class MapperTest extends \PHPUnit\Framework\TestCase
+class MapperTest extends TestCase
 {
     /**
      * @var Mapper
      */
     private $mapper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mapper = new Mapper();
     }
@@ -28,10 +31,10 @@ class MapperTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $expectedResult = [
-          'Product' => [
-              'source' => 'product',
-              'name' => 'Product',
-          ]
+            'Product' => [
+                'source' => 'product',
+                'name' => 'Product',
+            ]
         ];
         $this->assertEquals($this->mapper->execute($configData), $expectedResult);
     }

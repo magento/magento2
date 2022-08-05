@@ -260,6 +260,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             );
         }
 
+        $this->validateEntityType();
+
         $defaultValue = $this->getDefaultValue();
         $hasDefaultValue = (string)$defaultValue != '';
 
@@ -285,13 +287,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
             // save default date value as timestamp
             if ($hasDefaultValue) {
-                try {
-                    $locale = $this->_localeResolver->getLocale();
-                    $defaultValue = $this->_localeDate->date($defaultValue, $locale, false, false);
-                    $this->setDefaultValue($defaultValue->format(DateTime::DATETIME_PHP_FORMAT));
-                } catch (\Exception $e) {
-                    throw new LocalizedException(__('The default date is invalid. Verify the date and try again.'));
-                }
+                $defaultValue = $this->getUtcDateDefaultValue($defaultValue);
+                $this->setDefaultValue($defaultValue);
             }
         }
 
@@ -308,6 +305,29 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         }
 
         return parent::beforeSave();
+    }
+
+    /**
+     * Convert localized date default value to UTC
+     *
+     * @param string $defaultValue
+     * @return string
+     * @throws LocalizedException
+     */
+    private function getUtcDateDefaultValue(string $defaultValue): string
+    {
+        $hasTime = $this->getFrontendInput() === 'datetime';
+        try {
+            $defaultValue = $this->_localeDate->date($defaultValue, null, $hasTime, $hasTime);
+            if ($hasTime) {
+                $defaultValue->setTimezone(new \DateTimeZone($this->_localeDate->getDefaultTimezone()));
+            }
+            $utcValue = $defaultValue->format(DateTime::DATETIME_PHP_FORMAT);
+        } catch (\Exception $e) {
+            throw new LocalizedException(__('The default date is invalid. Verify the date and try again.'));
+        }
+
+        return $utcValue;
     }
 
     /**
@@ -336,16 +356,17 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             case 'text':
             case 'gallery':
             case 'media_image':
-            case 'multiselect':
                 $field = 'varchar';
                 break;
 
             case 'image':
             case 'textarea':
+            case 'multiselect':
                 $field = 'text';
                 break;
 
             case 'date':
+            case 'datetime':
                 $field = 'datetime';
                 break;
 
@@ -399,6 +420,10 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
             case 'date':
                 $field = 'default_value_date';
+                break;
+
+            case 'datetime':
+                $field = 'default_value_datetime';
                 break;
 
             case 'boolean':
@@ -511,5 +536,22 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         $this->_localeResolver = $objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
         $this->reservedAttributeList = $objectManager->get(\Magento\Catalog\Model\Product\ReservedAttributeList::class);
         $this->dateTimeFormatter = $objectManager->get(DateTimeFormatterInterface::class);
+    }
+
+    /**
+     * Entity type for existing attribute shouldn't be changed.
+     *
+     * @return void
+     * @throws LocalizedException
+     */
+    private function validateEntityType(): void
+    {
+        if ($this->getId() !== null) {
+            $origEntityTypeId = $this->getOrigData('entity_type_id');
+
+            if (($origEntityTypeId !== null) && ((int)$this->getEntityTypeId() !== (int)$origEntityTypeId)) {
+                throw new LocalizedException(__('Do not change entity type.'));
+            }
+        }
     }
 }

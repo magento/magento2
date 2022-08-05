@@ -21,20 +21,21 @@
         </annotations>
         <after>
             <!-- Delete configurable product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="BaseConfigurableProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         </after>
 
         <!-- Create product -->
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
 
         <!--Checking content storefront-->
-        <amOnPage url="{{BaseConfigurableProduct.name}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{BaseConfigurableProduct.urlKey}}.html" stepKey="goToStorefront"/>
     </test>
 </tests>

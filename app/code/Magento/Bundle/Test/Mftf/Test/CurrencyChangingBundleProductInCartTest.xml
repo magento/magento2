@@ -13,22 +13,23 @@
                 <stories value="Check that after changing currency price of cart is correct when the bundle product added to the cart"/>
                 <title value="User should be able change the currency and get right price in cart when the bundle product added to the cart"/>
                 <description value="User should be able change the currency and add one more product in cart and get right price in previous currency"/>
-                <severity value="MAJOR"/>
+                <severity value="BLOCKER"/>
                 <testCaseId value="MAGETWO-94467"/>
                 <group value="Bundle"/>
             </annotations>
             <before>
-                <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+                <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
                 <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
                 <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+                <magentoCron stepKey="runCronIndex" groups="index"/>
             </before>
             <after>
                 <!-- Delete the bundled product -->
-                <actionGroup stepKey="deleteBundle" ref="deleteProductUsingProductGrid">
+                <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
                     <argument name="product" value="BundleProduct"/>
                 </actionGroup>
-                <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFiltersAfter"/>
-                <waitForPageLoad stepKey="waitForClearFilter"/>
+                <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="ClearFiltersAfter"/>
+                <comment userInput="BIC workaround" stepKey="waitForClearFilter"/>
                 <!--Clear Configs-->
                 <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
                 <waitForPageLoad stepKey="waitForAdminLoginPageLoad"/>
@@ -39,16 +40,19 @@
                 <click selector="{{CurrencySetupSection.currencyOptions}}" stepKey="closeOptions"/>
                 <waitForPageLoad stepKey="waitForCloseOptions"/>
                 <click stepKey="saveUnselectedConfigs" selector="{{AdminConfigSection.saveButton}}"/>
-                <amOnPage url="{{AdminLogoutPage.url}}" stepKey="logout"/>
+                <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
                 <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
                 <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             </after>
             <!--Go to bundle product creation page-->
-            <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
-            <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
-            <actionGroup ref="fillMainBundleProductForm" stepKey="fillMainFieldsForBundle"/>
+            <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage">
+                <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+                <argument name="productType" value="{{BundleProduct.type}}"/>
+            </actionGroup>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
+            <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainFieldsForBundle"/>
             <!-- Add Option, a "Radio Buttons" type option -->
-            <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addBundleOptionWithTwoProducts2">
+            <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts2">
                 <argument name="x" value="0"/>
                 <argument name="n" value="1"/>
                 <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
@@ -58,7 +62,7 @@
             </actionGroup>
             <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '0')}}" stepKey="userDefinedQuantitiyOptionProduct0"/>
             <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '1')}}" stepKey="userDefinedQuantitiyOptionProduct1"/>
-            <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
             <amOnPage url="{{ConfigCurrencySetupPage.url}}" stepKey="navigateToConfigCurrencySetupPage"/>
             <waitForPageLoad stepKey="waitForConfigCurrencySetupPage"/>
             <conditionalClick selector="{{CurrencySetupSection.currencyOptions}}" dependentSelector="{{CurrencySetupSection.allowCurrencies}}" visible="false" stepKey="openOptions"/>
@@ -76,8 +80,7 @@
                 <argument name="product" value="$$simpleProduct2$$"/>
                 <argument name="currency" value="USD - US Dollar"/>
             </actionGroup>
-            <click stepKey="openMiniCart" selector="{{StorefrontMinicartSection.showCart}}"/>
-            <waitForPageLoad stepKey="waitForMiniCart"/>
+            <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart"/>
             <see stepKey="seeCartSubtotal" userInput="$12,300.00"/>
         </test>
 </tests>

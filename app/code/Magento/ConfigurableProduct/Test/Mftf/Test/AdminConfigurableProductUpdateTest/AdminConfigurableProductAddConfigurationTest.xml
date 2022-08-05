@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductAddConfigurationTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Edit a configurable product in admin"/>
+            <title value="Admin should be able to edit configuration to add a value to an existing attribute"/>
+            <description value="Admin should be able to edit configuration to add a value to an existing attribute"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-95"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersConfigurable"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterConfigurable">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterFillSelectFieldActionGroup" stepKey="addTypeFilterConfigurable">
+                <argument name="filterName" value="type_id"/>
+                <argument name="filterValue" value="Configurable Product"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterConfigurable"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteConfigurableProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersVirtual"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterVirtual">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterVirtual"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Create a configurable product via the UI -->
+        <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+
+        <!--
+            After saving, we are still on the product edit page. There is no need to reload or go to this page
+            again, because a round trip to the server has already happened.
+        -->
+
+        <!-- Add a configuration option to the configurable product -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickEditConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue1"/>
+        <fillField userInput="{{colorProductAttribute4.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="42" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+
+        <!-- Verify that the added option is present in the storefront -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="amOnStorefrontPage">
+            <argument name="productUrlKey" value="{{_defaultProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontPage"/>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown1">
+            <argument name="productAttributeOption" value="{{colorProductAttribute1.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown2">
+            <argument name="productAttributeOption" value="{{colorProductAttribute2.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown3">
+            <argument name="productAttributeOption" value="{{colorProductAttribute3.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown4">
+            <argument name="productAttributeOption" value="{{colorProductAttribute4.name}}"/>
+        </actionGroup>
+    </test>
+</tests>

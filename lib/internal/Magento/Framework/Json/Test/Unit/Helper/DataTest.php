@@ -3,32 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Json\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Json\DecoderInterface;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Json\Helper\Data
+     * @var Data
      */
     protected $helper;
 
-    /** @var \Magento\Framework\Json\EncoderInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var EncoderInterface|MockObject */
     protected $jsonEncoderMock;
 
-    /** @var \Magento\Framework\Json\DecoderInterface | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var DecoderInterface|MockObject  */
     protected $jsonDecoderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->jsonEncoderMock = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
+        $objectManager = new ObjectManager($this);
+        $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->jsonDecoderMock = $this->getMockBuilder(\Magento\Framework\Json\DecoderInterface::class)
+            ->getMockForAbstractClass();
+        $this->jsonDecoderMock = $this->getMockBuilder(DecoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->helper = $objectManager->getObject(
-            \Magento\Framework\Json\Helper\Data::class,
+            Data::class,
             [
                 'jsonEncoder' => $this->jsonEncoderMock,
                 'jsonDecoder' => $this->jsonDecoderMock,

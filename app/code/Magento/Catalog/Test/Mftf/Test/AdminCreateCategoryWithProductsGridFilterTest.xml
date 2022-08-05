@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCategoryWithProductsGridFilterTest">
+        <annotations>
+            <stories value="Create categories"/>
+            <title value="Apply category products grid filter"/>
+            <description value="Login as admin and create default product and product with grid filter"/>
+            <testCaseId value="MC-5273"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct1">
+                <argument name="product" value="defaultSimpleProduct"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct2">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="NavigateToAndResetProductGridToDefaultView"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
+        <!--Create Default Product-->
+        <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddDefaultProduct"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillDefaultProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{SimpleProduct.sku}}" stepKey="fillDefaultProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{SimpleProduct.price}}" stepKey="fillDefaultProductPrice"/>
+        <scrollTo selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="scrollToSearchEngine"/>
+        <click selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="selectSearchEngineOptimization"/>
+        <fillField selector="{{AdminProductFormBundleSection.urlKey}}" userInput="{{SimpleProduct.urlKey}}" stepKey="fillUrlKey"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveDefaultProduct"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="successMessageYouSavedTheProductIsShown"/>
+        <!--Create product with grid filter Not Visible Individually-->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="ProductList"/>
+        <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddFilterProduct"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{defaultSimpleProduct.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{defaultSimpleProduct.price}}" stepKey="fillProductPrice"/>
+        <selectOption selector="{{AdminCategoryProductsGridSection.productVisibility}}" userInput="Not Visible Individually" stepKey="selectProductVisibility"/>
+        <scrollTo selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="scrollToSearchEngineOptimization"/>
+        <click selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="selectSearchEngineOptimization1"/>
+        <fillField selector="{{AdminProductFormBundleSection.urlKey}}" userInput="{{defaultSimpleProduct.urlKey}}" stepKey="fillUrlKey1"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveProduct"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <!--Create sub category-->
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
+        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="fillCategoryName"/>
+        <!--Select the default product and product with grid filter-->
+        <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
+        <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
+        <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="{{SimpleProduct.name}}"  stepKey="selectProduct"/>
+        <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
+        <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromRow"/>
+        <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="{{defaultSimpleProduct.name}}"  stepKey="selectDefaultProduct"/>
+        <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton1"/>
+        <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectDefaultProductFromTableRow"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="successMessageYouSavedTheCategory"/>
+        <!--Verify product with grid filter is not not visible-->
+        <amOnPage url="{{StorefrontProductPage.url(defaultSimpleProduct.urlKey)}}" stepKey="seeOnProductPage"/>
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageToLoad"/>
+        <dontSee selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="dontSeeProductInStoreFrontPage"/>
+        <!--Verify product in Store Front Page-->
+        <amOnPage url="{{StorefrontProductPage.url(SimpleProduct.urlKey)}}" stepKey="seeDefaultProductPage"/>
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageToLoad1"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductInStoreFrontPage">
+            <argument name="value" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
+    </test>
+</tests>

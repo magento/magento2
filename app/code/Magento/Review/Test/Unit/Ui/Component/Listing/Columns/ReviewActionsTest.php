@@ -3,14 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Ui\Component\Listing\Columns;
 
-use Magento\Review\Ui\Component\Listing\Columns\ReviewActions;
 use Magento\Catalog\Test\Unit\Ui\Component\Listing\Columns\AbstractColumnTest;
+use Magento\Review\Ui\Component\Listing\Columns\ReviewActions;
 
-/**
- * Class ReviewActionsTest
- */
 class ReviewActionsTest extends AbstractColumnTest
 {
     /**

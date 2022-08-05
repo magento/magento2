@@ -3,85 +3,109 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Dynamic;
+
+use Magento\AdvancedSearch\Model\Client\ClientInterface;
+use Magento\Catalog\Model\Layer\Filter\Price\Range;
+use Magento\Customer\Model\Session;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Config;
+use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
+use Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider;
+use Magento\Elasticsearch\SearchAdapter\QueryContainer;
+use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Search\Dynamic\EntityStorage;
+use Magento\Framework\Search\Dynamic\IntervalFactory;
+use Magento\Framework\Search\Dynamic\IntervalInterface;
+use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataProviderTest extends \PHPUnit\Framework\TestCase
+class DataProviderTest extends TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\QueryContainer|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryContainer|MockObject
      */
     private $queryContainer;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider
+     * @var DataProvider
      */
     protected $model;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\ConnectionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionManager|MockObject
      */
     protected $connectionManager;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldMapperInterface|MockObject
      */
     protected $fieldMapper;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Filter\Price\Range|\PHPUnit_Framework_MockObject_MockObject
+     * @var Range|MockObject
      */
     protected $range;
 
     /**
-     * @var \Magento\Framework\Search\Dynamic\IntervalFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var IntervalFactory|MockObject
      */
     protected $intervalFactory;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $clientConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Framework\Search\Dynamic\EntityStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityStorage|MockObject
      */
     protected $entityStorage;
 
     /**
-     * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Client\Elasticsearch|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientInterface|MockObject
      */
     protected $clientMock;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchIndexNameResolver|MockObject
      */
     protected $searchIndexNameResolver;
 
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeResolverInterface|MockObject
      */
     protected $scopeResolver;
 
     /**
-     * @var \Magento\Framework\App\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeInterface|MockObject
      */
     protected $scopeInterface;
 
@@ -91,33 +115,33 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      */
     private function setUpMockObjects()
     {
-        $this->connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
+        $this->connectionManager = $this->getMockBuilder(ConnectionManager::class)
             ->setMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->range = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Price\Range::class)
+        $this->range = $this->getMockBuilder(Range::class)
             ->setMethods(['getPriceRange'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->intervalFactory = $this->getMockBuilder(\Magento\Framework\Search\Dynamic\IntervalFactory::class)
+        $this->intervalFactory = $this->getMockBuilder(IntervalFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->clientConfig = $this->getMockBuilder(\Magento\Elasticsearch\Model\Config::class)
+        $this->clientConfig = $this->getMockBuilder(Config::class)
             ->setMethods([
                 'getIndexName',
                 'getEntityType',
             ])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+            ->getMockForAbstractClass();
+        $this->customerSession = $this->getMockBuilder(Session::class)
             ->setMethods(['getCustomerGroupId'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->entityStorage = $this->getMockBuilder(\Magento\Framework\Search\Dynamic\EntityStorage::class)
+        $this->entityStorage = $this->getMockBuilder(EntityStorage::class)
             ->setMethods(['getSource'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -127,9 +151,9 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->customerSession->expects($this->any())
             ->method('getCustomerGroupId')
             ->willReturn(1);
-        $this->storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
@@ -145,38 +169,38 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->clientConfig->expects($this->any())
             ->method('getEntityType')
             ->willReturn('product');
-        $this->clientMock = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
-            ->setMethods(['query'])
+        $this->clientMock = $this->getMockBuilder(ClientInterface::class)
+            ->setMethods(['query', 'testConnection'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->connectionManager->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->clientMock);
 
-        $this->fieldMapper = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\FieldMapperInterface::class)
+        $this->fieldMapper = $this->getMockBuilder(FieldMapperInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->searchIndexNameResolver = $this
-            ->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver::class)
+            ->getMockBuilder(SearchIndexNameResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->scopeResolver = $this->getMockForAbstractClass(
-            \Magento\Framework\App\ScopeResolverInterface::class,
+            ScopeResolverInterface::class,
             [],
             '',
             false
         );
 
         $this->scopeInterface = $this->getMockForAbstractClass(
-            \Magento\Framework\App\ScopeInterface::class,
+            ScopeInterface::class,
             [],
             '',
             false
         );
 
-        $this->queryContainer = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\QueryContainer::class)
+        $this->queryContainer = $this->getMockBuilder(QueryContainer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQuery'])
             ->getMock();
@@ -186,13 +210,13 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      * Setup method
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setUpMockObjects();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider::class,
+            DataProvider::class,
             [
                 'connectionManager' => $this->connectionManager,
                 'fieldMapper' => $this->fieldMapper,
@@ -257,19 +281,32 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testGetAggregationsWithException()
+    {
+        $this->queryContainer->expects($this->once())
+            ->method('getQuery')
+            ->willReturn([]);
+        $this->clientMock->expects($this->once())
+            ->method('query')
+            ->willThrowException(new \Exception());
+
+        $result = $this->model->getAggregations($this->entityStorage);
+        $this->assertIsArray($result);
+    }
+
     /**
      * Test getInterval() method
      */
     public function testGetInterval()
     {
         $dimensionValue = 1;
-        $bucket = $this->getMockBuilder(\Magento\Framework\Search\Request\BucketInterface::class)
+        $bucket = $this->getMockBuilder(BucketInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $interval = $this->getMockBuilder(\Magento\Framework\Search\Dynamic\IntervalInterface::class)
+            ->getMockForAbstractClass();
+        $interval = $this->getMockBuilder(IntervalInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $dimension = $this->getMockBuilder(\Magento\Framework\Search\Request\Dimension::class)
+            ->getMockForAbstractClass();
+        $dimension = $this->getMockBuilder(Dimension::class)
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -304,10 +341,10 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $expectedResult = [
             1 => 1,
         ];
-        $bucket = $this->getMockBuilder(\Magento\Framework\Search\Request\BucketInterface::class)
+        $bucket = $this->getMockBuilder(BucketInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $dimension = $this->getMockBuilder(\Magento\Framework\Search\Request\Dimension::class)
+            ->getMockForAbstractClass();
+        $dimension = $this->getMockBuilder(Dimension::class)
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -359,6 +396,22 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testGetAggregationWithException()
+    {
+        $bucket = $this->createMock(BucketInterface::class);
+        $dimension = $this->createMock(Dimension::class);
+
+        $this->queryContainer->expects($this->once())
+            ->method('getQuery')
+            ->willReturn([]);
+        $this->clientMock->expects($this->once())
+            ->method('query')
+            ->willThrowException(new \Exception());
+
+        $result = $this->model->getAggregation($bucket, [$dimension], 10, $this->entityStorage);
+        $this->assertIsArray($result);
+    }
+
     /**
      * Test prepareData() method
      */
@@ -366,13 +419,13 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     {
         $expectedResult = [
             [
-                'from' => '',
+                'from' => 0,
                 'to' => 10,
                 'count' => 1,
             ],
             [
                 'from' => 10,
-                'to' => '',
+                'to' => 20,
                 'count' => 1,
             ],
         ];

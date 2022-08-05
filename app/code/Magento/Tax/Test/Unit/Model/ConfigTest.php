@@ -3,31 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Tax\Model\Config
  */
 namespace Magento\Tax\Test\Unit\Model;
 
-use \Magento\Tax\Model\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Tax\Model\Calculation;
+use Magento\Tax\Model\Config;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
      * Tests the setter/getter methods that bypass the ScopeConfigInterface object
      *
      * @param string $setterMethod
      * @param string $getterMethod
+     *
      * @param bool $value
      * @dataProvider dataProviderDirectSettersGettersMethods
      */
-    public function testDirectSettersGettersMethods($setterMethod, $getterMethod, $value)
+    public function testDirectSettersGettersMethods($setterMethod, $getterMethod, $value): void
     {
         // Need a mocked object with only dummy methods.  It is just needed for construction.
         // The setter/getter methods do not use this object (for this set of tests).
-        $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
-        /** @var \Magento\Tax\Model\Config */
+        /** @var Config */
         $model = new Config($scopeConfigMock);
         $model->{$setterMethod}($value);
         $this->assertEquals($value, $model->{$getterMethod}());
@@ -36,7 +42,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function dataProviderDirectSettersGettersMethods()
+    public function dataProviderDirectSettersGettersMethods(): array
     {
         return [
             ['setShippingPriceIncludeTax', 'shippingPriceIncludesTax', true],
@@ -55,19 +61,18 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * @param bool $applyTaxAfterDiscount
      * @param bool $discountTaxIncl
      * @param string $expectedValue
+     *
+     * @return void
      * @dataProvider dataProviderGetCalculationSequence
      */
-    public function testGetCalculationSequence($applyTaxAfterDiscount, $discountTaxIncl, $expectedValue)
+    public function testGetCalculationSequence($applyTaxAfterDiscount, $discountTaxIncl, $expectedValue): void
     {
-        $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $scopeConfigMock->expects($this->at(0))
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock
             ->method('getValue')
-            ->will($this->returnValue($applyTaxAfterDiscount));
-        $scopeConfigMock->expects($this->at(1))
-            ->method('getValue')
-            ->will($this->returnValue($discountTaxIncl));
+            ->willReturnOnConsecutiveCalls($applyTaxAfterDiscount, $discountTaxIncl);
 
-        /** @var \Magento\Tax\Model\Config */
+        /** @var Config */
         $model = new Config($scopeConfigMock);
         $this->assertEquals($expectedValue, $model->getCalculationSequence());
     }
@@ -75,13 +80,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function dataProviderGetCalculationSequence()
+    public function dataProviderGetCalculationSequence(): array
     {
         return [
-            [true,  true,  \Magento\Tax\Model\Calculation::CALC_TAX_AFTER_DISCOUNT_ON_INCL],
-            [true,  false, \Magento\Tax\Model\Calculation::CALC_TAX_AFTER_DISCOUNT_ON_EXCL],
-            [false, true,  \Magento\Tax\Model\Calculation::CALC_TAX_BEFORE_DISCOUNT_ON_INCL],
-            [false, false, \Magento\Tax\Model\Calculation::CALC_TAX_BEFORE_DISCOUNT_ON_EXCL]
+            [true,  true,  Calculation::CALC_TAX_AFTER_DISCOUNT_ON_INCL],
+            [true,  false, Calculation::CALC_TAX_AFTER_DISCOUNT_ON_EXCL],
+            [false, true,  Calculation::CALC_TAX_BEFORE_DISCOUNT_ON_INCL],
+            [false, false, Calculation::CALC_TAX_BEFORE_DISCOUNT_ON_EXCL]
         ];
     }
 
@@ -92,17 +97,19 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * @param string $path
      * @param bool|int $configValue
      * @param bool $expectedValue
+     *
+     * @return void
      * @dataProvider dataProviderScopeConfigMethods
      */
-    public function testScopeConfigMethods($method, $path, $configValue, $expectedValue)
+    public function testScopeConfigMethods($method, $path, $configValue, $expectedValue): void
     {
-        $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue($configValue));
+            ->with($path, ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($configValue);
 
-        /** @var \Magento\Tax\Model\Config */
+        /** @var Config */
         $model = new Config($scopeConfigMock);
         $this->assertEquals($expectedValue, $model->{$method}());
     }
@@ -111,14 +118,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderScopeConfigMethods()
+    public function dataProviderScopeConfigMethods(): array
     {
         return [
             [
                 'priceIncludesTax',
                 Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
                 true,
-                true,
+                true
             ],
             [
                 'applyTaxAfterDiscount',

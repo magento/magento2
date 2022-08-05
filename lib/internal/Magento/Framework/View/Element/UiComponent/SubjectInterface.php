@@ -7,11 +7,14 @@ namespace Magento\Framework\View\Element\UiComponent;
 
 /**
  * Interface SubjectInterface
+ *
+ * @api
  */
 interface SubjectInterface
 {
     /**
      * Attach an observer by type
+     *
      * @param string $type
      * @param ObserverInterface $observer
      * @return void
@@ -20,6 +23,7 @@ interface SubjectInterface
 
     /**
      * Detach an observer by type
+     *
      * @param string $type
      * @param ObserverInterface $observer
      * @return void
@@ -28,6 +32,7 @@ interface SubjectInterface
 
     /**
      * Notify an observer(s) by type
+     *
      * @param string $type
      * @return void
      */

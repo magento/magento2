@@ -132,9 +132,10 @@ class ParamsBuilder
         if ($file) {
             $size = explode(
                 'x',
-                $this->scopeConfig->getValue(
+                (string) $this->scopeConfig->getValue(
                     "design/watermark/{$type}_size",
-                    ScopeInterface::SCOPE_STORE
+                    ScopeInterface::SCOPE_STORE,
+                    $scopeId
                 )
             );
             $opacity = $this->scopeConfig->getValue(

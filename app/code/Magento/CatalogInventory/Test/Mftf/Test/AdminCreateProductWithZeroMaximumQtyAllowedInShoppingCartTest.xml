@@ -23,12 +23,13 @@
         <before>
             <createData entity="DefaultValueForMaxSaleQty" stepKey="setDefaultValueForMaxSaleQty"/>
             <createData entity="SimpleProduct2" stepKey="createdProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <createData entity="DefaultValueForMaxSaleQty" stepKey="setDefaultValueForMaxSaleQty"/>
             <deleteData createDataKey="createdProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to Inventory configuration page -->
@@ -54,16 +55,18 @@
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigWithCorrectNumber"/>
 
         <!-- Go to product page -->
-        <amOnPage url="{{AdminProductEditPage.url($$createdProduct.id$$)}}" stepKey="openAdminProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminProductEditPage">
+            <argument name="productId" value="$$createdProduct.id$$"/>
+        </actionGroup>
         <!-- Validate zero value -->
         <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateZeroValue">
             <argument name="qty" value="0"/>
-            <argument name="errorMessage" value="Please enter a number greater than 0 in this field."/>
+            <argument name="errorMessage" value="Please enter a number greater than 0, without comma in this field."/>
         </actionGroup>
         <!-- Validate negative value -->
         <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateNegativeValue">
             <argument name="qty" value="-1"/>
-            <argument name="errorMessage" value="Please enter a number greater than 0 in this field."/>
+            <argument name="errorMessage" value="Please enter a number greater than 0, without comma in this field."/>
         </actionGroup>
         <!-- Validate alphabetical value -->
         <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateAlphabeticalValue">
@@ -71,10 +74,10 @@
             <argument name="errorMessage" value="Please enter a valid number in this field."/>
         </actionGroup>
         <!-- Fill correct value -->
-        <actionGroup ref="AdminProductSetMaxQtyAllowedInShoppingCart" stepKey="setProductMaxQtyAllowedInShoppingCartToCorrectNumber">
+        <actionGroup ref="AdminProductSetMaxQtyAllowedInShoppingCartActionGroup" stepKey="setProductMaxQtyAllowedInShoppingCartToCorrectNumber">
             <argument name="qty" value="50"/>
         </actionGroup>
         <waitForElementNotVisible selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryModal}}" stepKey="waitForModalFormToDisappear"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
     </test>
 </tests>

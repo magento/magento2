@@ -14,59 +14,59 @@
             <resource>Magento_Tax::config_tax</resource>
             <group id="classes" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Tax Classes</label>
-                <field id="shipping_tax_class" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="shipping_tax_class" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Tax Class for Shipping</label>
                     <source_model>Magento\Tax\Model\TaxClass\Source\Product</source_model>
                 </field>
-                <field id="default_product_tax_class" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="default_product_tax_class" translate="label" type="select" sortOrder="20" showInDefault="1" canRestore="1">
                     <label>Default Tax Class for Product</label>
                     <source_model>Magento\Tax\Model\TaxClass\Source\Product</source_model>
                     <backend_model>Magento\Tax\Model\Config\TaxClass</backend_model>
                 </field>
-                <field id="default_customer_tax_class" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="default_customer_tax_class" translate="label" type="select" sortOrder="30" showInDefault="1" canRestore="1">
                     <label>Default Tax Class for Customer</label>
                     <source_model>Magento\Tax\Model\TaxClass\Source\Customer</source_model>
                 </field>
             </group>
             <group id="calculation" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Calculation Settings</label>
-                <field id="algorithm" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="algorithm" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Tax Calculation Method Based On</label>
                     <source_model>Magento\Tax\Model\System\Config\Source\Algorithm</source_model>
                 </field>
-                <field id="based_on" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="based_on" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Tax Calculation Based On</label>
                     <source_model>Magento\Tax\Model\Config\Source\Basedon</source_model>
                     <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
-                <field id="price_includes_tax" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="price_includes_tax" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Catalog Prices</label>
                     <comment>This sets whether catalog prices entered from Magento Admin include tax.</comment>
                     <backend_model>Magento\Tax\Model\Config\Price\IncludePrice</backend_model>
                     <source_model>Magento\Tax\Model\System\Config\Source\PriceType</source_model>
                 </field>
-                <field id="shipping_includes_tax" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="shipping_includes_tax" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Shipping Prices</label>
                     <comment>This sets whether shipping amounts entered from Magento Admin or obtained from gateways include tax.</comment>
                     <backend_model>Magento\Tax\Model\Config\Price\IncludePrice</backend_model>
                     <source_model>Magento\Tax\Model\System\Config\Source\PriceType</source_model>
                 </field>
-                <field id="apply_after_discount" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="apply_after_discount" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Apply Customer Tax</label>
                     <source_model>Magento\Tax\Model\System\Config\Source\Apply</source_model>
                     <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
-                <field id="discount_tax" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="discount_tax" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Apply Discount On Prices</label>
                     <source_model>Magento\Tax\Model\System\Config\Source\PriceType</source_model>
                     <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                     <comment>Warning: To apply the discount on prices including tax and apply the tax after discount, set Catalog Prices to “Including Tax”.</comment>
                 </field>
-                <field id="apply_tax_on" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="apply_tax_on" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Apply Tax On</label>
                     <source_model>Magento\Tax\Model\Config\Source\Apply\On</source_model>
                 </field>
-                <field id="cross_border_trade_enabled" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="cross_border_trade_enabled" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1">
                     <label>Enable Cross Border Trade</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>When catalog price includes tax, enable this setting to fix the price no matter what the customer's tax rate.</comment>
@@ -118,7 +118,7 @@
                     <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
                 <field id="grandtotal" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Include Tax In Order Total</label>
+                    <label>Additionally Show Order Total Without Tax</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="full_summary" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -148,7 +148,7 @@
                     <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
                 <field id="grandtotal" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Include Tax In Order Total</label>
+                    <label>Additionally Show Order Total Without Tax</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="full_summary" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">

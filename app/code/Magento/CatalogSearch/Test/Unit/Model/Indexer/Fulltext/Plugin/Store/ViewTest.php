@@ -3,17 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin\Store;
 
+use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\View as StoreViewIndexerPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Store\Model\ResourceModel\Store as StoreResourceModel;
 use Magento\Store\Model\Store;
-use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ViewTest extends \PHPUnit\Framework\TestCase
+class ViewTest extends TestCase
 {
     /**
      * @var StoreViewIndexerPlugin
@@ -21,31 +24,26 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManagerHelper;
-
-    /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|MockObject
      */
     private $indexerRegistryMock;
 
     /**
-     * @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerInterface|MockObject
      */
     private $indexerMock;
 
     /**
-     * @var StoreResourceModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreResourceModel|MockObject
      */
     private $subjectMock;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
     private $storeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
@@ -60,20 +58,16 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['isObjectNew'])
             ->getMock();
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->plugin = $this->objectManagerHelper->getObject(
-            StoreViewIndexerPlugin::class,
-            ['indexerRegistry' => $this->indexerRegistryMock]
-        );
+        $this->plugin = new StoreViewIndexerPlugin($this->indexerRegistryMock);
     }
 
     /**
      * @param bool $isObjectNew
      * @param int $invalidateCounter
      *
-     * @dataProvider beforeAfterSaveDataProvider
+     * @dataProvider afterSaveDataProvider
      */
-    public function testBeforeAfterSave($isObjectNew, $invalidateCounter)
+    public function testAfterSave(bool $isObjectNew, int $invalidateCounter): void
     {
         $this->prepareIndexer($invalidateCounter);
         $this->storeMock->expects(static::once())
@@ -82,14 +76,16 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->indexerMock->expects(static::exactly($invalidateCounter))
             ->method('invalidate');
 
-        $this->plugin->beforeSave($this->subjectMock, $this->storeMock);
-        $this->assertSame($this->subjectMock, $this->plugin->afterSave($this->subjectMock, $this->subjectMock));
+        $this->assertSame(
+            $this->subjectMock,
+            $this->plugin->afterSave($this->subjectMock, $this->subjectMock, $this->storeMock)
+        );
     }
 
     /**
      * @return array
      */
-    public function beforeAfterSaveDataProvider()
+    public function afterSaveDataProvider(): array
     {
         return [
             [false, 0],
@@ -97,7 +93,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testAfterDelete()
+    public function testAfterDelete(): void
     {
         $this->prepareIndexer(1);
         $this->indexerMock->expects(static::once())
@@ -112,7 +108,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      * @param int $invalidateCounter
      * @return void
      */
-    private function prepareIndexer($invalidateCounter)
+    private function prepareIndexer(int $invalidateCounter): void
     {
         $this->indexerRegistryMock->expects(static::exactly($invalidateCounter))
             ->method('get')

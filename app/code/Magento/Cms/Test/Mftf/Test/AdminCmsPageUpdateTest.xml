@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  *CreateNewPage Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCmsPageUpdateTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Update CMS Page via the Admin"/>
+            <title value="Update CMS Page via the Admin"/>
+            <description value="Admin should be able to update a CMS Page"/>
+            <testCaseId value="MC-14674"/>
+            <severity value="CRITICAL"/>
+            <group value="backend"/>
+            <group value="cMSContent"/>
+            <group value="mtf_migrated"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCmsPage" stepKey="existingCMSPage" />
+        </before>
+        <after>
+            <deleteData createDataKey="existingCMSPage" stepKey="deleteCMSPage" />
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Navigate to Page in Admin-->
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
+            <argument name="CMSPage" value="$$existingCMSPage$$"/>
+        </actionGroup>
+        <!--Fill data using _duplicatedCMSPage-->
+        <actionGroup ref="FillOutCMSPageContent" stepKey="fillNewData"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="saveActivatedPage"/>
+        <!--Verify data in admin-->
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToUpdatedCMSPage">
+            <argument name="CMSPage" value="_duplicatedCMSPage"/>
+        </actionGroup>
+        <actionGroup ref="AssertCMSPageContentActionGroup" stepKey="verifyPageDataInAdmin"/>
+        <!--Verify data on frontend-->
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="navigateToPageOnStorefront">
+            <argument name="identifier" value="{{_duplicatedCMSPage.identifier}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStoreFrontCMSPageActionGroup" stepKey="verifyPageDataOnFrontend">
+            <argument name="cmsTitle" value="{{_duplicatedCMSPage.title}}"/>
+            <argument name="cmsContent" value="{{_duplicatedCMSPage.content}}"/>
+            <argument name="cmsContentHeading" value="{{_duplicatedCMSPage.content_heading}}"/>
+        </actionGroup>
+    </test>
+</tests>

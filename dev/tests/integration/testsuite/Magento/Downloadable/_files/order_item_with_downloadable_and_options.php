@@ -3,8 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/product_downloadable.php';
+Resolver::getInstance()->requireDataFixture('Magento/Downloadable/_files/product_downloadable.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

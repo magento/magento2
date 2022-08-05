@@ -19,8 +19,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->dispatch('backend/admin/system_currencysymbol/index');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('id="currency-symbols-form"', $body);
-        $this->assertContains('<input id="custom_currency_symbolUSD"', $body);
-        $this->assertContains('save primary save-currency-symbols', $body);
+        $this->assertStringContainsString('id="currency-symbols-form"', $body);
+        $this->assertStringContainsString('<input id="custom_currency_symbolUSD"', $body);
+        $this->assertStringContainsString('save primary save-currency-symbols', $body);
     }
 }

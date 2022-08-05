@@ -5,13 +5,17 @@
  */
 
 /** @var Magento\Ui\Block\Wysiwyg\ActiveEditor $block */
-?>
-<script>
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
+$wysiwygAdapterPath = /* @noEscape */ $block->getWysiwygAdapterPath();
+$scriptString = <<<script
     require.config({
         map: {
             '*': {
-                wysiwygAdapter: '<?= /* @noEscape */ $block->getWysiwygAdapterPath() ?>'
+                wysiwygAdapter: '{$wysiwygAdapterPath}'
             }
         }
     });
-</script>
+script;
+
+echo /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false);

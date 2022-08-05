@@ -3,11 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Model\ResourceModel;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Tax\Helper\Data;
+use Magento\Tax\Model\ResourceModel\Calculation;
+use PHPUnit\Framework\TestCase;
 
-class CalculationTest extends \PHPUnit\Framework\TestCase
+class CalculationTest extends TestCase
 {
     /**
      * Tests the building of the search templates for the postal code
@@ -19,18 +26,18 @@ class CalculationTest extends \PHPUnit\Framework\TestCase
     public function testCreateSearchPostCodeTemplates($postalCode, $exactPostalcode)
     {
         // create the mocks
-        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $resource = $this->createMock(ResourceConnection::class);
+        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
-        $taxData = $this->createPartialMock(\Magento\Tax\Helper\Data::class, ['getPostCodeSubStringLength']);
+        $taxData = $this->createPartialMock(Data::class, ['getPostCodeSubStringLength']);
         $taxData
             ->expects($this->any())
             ->method('getPostCodeSubStringLength')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
 
         $objectManager = new ObjectManager($this);
         $calcMock = $objectManager->getObject(
-            \Magento\Tax\Model\ResourceModel\Calculation::class,
+            Calculation::class,
             [
                 'resource' => $resource,
                 'taxData' => $taxData,
@@ -40,7 +47,7 @@ class CalculationTest extends \PHPUnit\Framework\TestCase
 
         // get access to the method
         $method = new \ReflectionMethod(
-            \Magento\Tax\Model\ResourceModel\Calculation::class,
+            Calculation::class,
             '_createSearchPostCodeTemplates'
         );
         $method->setAccessible(true);
@@ -72,9 +79,9 @@ class CalculationTest extends \PHPUnit\Framework\TestCase
         );
 
         // verify code(s) are present within the array
-        $this->assertTrue(in_array($code1, $resultsArr, 'Expected to find code "' . $code1 . '"'));
+        $this->assertTrue(in_array($code1, $resultsArr), 'Expected to find code "' . $code1 . '"');
         if ($code2) {
-            $this->assertTrue(in_array($code2, $resultsArr, 'Expected to find code "' . $code2 . '"'));
+            $this->assertTrue(in_array($code2, $resultsArr), 'Expected to find code "' . $code2 . '"');
         }
     }
 

@@ -5,6 +5,7 @@
  */
 
 use Magento\Downloadable\Api\DomainManagerInterface;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -12,5 +13,4 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $domainManager = $objectManager->get(DomainManagerInterface::class);
 $domainManager->removeDomains(['sampleurl.com']);
 
-// @codingStandardsIgnoreLine
-require __DIR__ . '/product_downloadable_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Downloadable/_files/product_downloadable_rollback.php');

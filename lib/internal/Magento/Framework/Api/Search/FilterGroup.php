@@ -12,6 +12,7 @@ use Magento\Framework\Api\AbstractSimpleObject;
  * Groups two or more filters together using a logical OR
  *
  * @api
+ * @since 100.0.2
  */
 class FilterGroup extends AbstractSimpleObject
 {

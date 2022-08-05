@@ -6,17 +6,20 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Reader;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Code\Reader\ArgumentsReader;
+
 require_once __DIR__ . '/_files/ClassesForArgumentsReader.php';
-class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
+class ArgumentsReaderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Code\Reader\ArgumentsReader
+     * @var ArgumentsReader
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_model = new \Magento\Framework\Code\Reader\ArgumentsReader();
+        $this->_model = new ArgumentsReader();
     }
 
     public function testGetConstructorArgumentsClassWithAllArgumentsType()
@@ -43,33 +46,61 @@ class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
                 'isOptional' => false,
                 'default' => null,
             ],
+            'noType' => [
+                'name' => 'noType',
+                'position' => 3,
+                'type' => '\\\\noType',
+                'isOptional' => false,
+                'default' => null,
+            ],
             'const' => [
                 'name' => 'const',
-                'position' => 3,
+                'position' => 4,
                 'type' => 'string',
                 'isOptional' => true,
                 'default' => 'Const Value',
             ],
             'optionalNumValue' => [
                 'name' => 'optionalNumValue',
-                'position' => 4,
+                'position' => 5,
                 'type' => 'int',
                 'isOptional' => true,
                 'default' => 9807,
             ],
             'optionalStringValue' => [
                 'name' => 'optionalStringValue',
-                'position' => 5,
+                'position' => 6,
                 'type' => 'string',
                 'isOptional' => true,
                 'default' => 'optional string',
             ],
             'optionalArrayValue' => [
                 'name' => 'optionalArrayValue',
-                'position' => 6,
+                'position' => 7,
                 'type' => 'array',
                 'isOptional' => true,
                 'default' => "array('optionalKey' => 'optionalValue')",
+            ],
+            'optNullValue' => [
+                'name' => 'optNullValue',
+                'position' => 8,
+                'type' => null,
+                'isOptional' => true,
+                'default' => null,
+            ],
+            'optNullIntValue' => [
+                'name' => 'optNullIntValue',
+                'position' => 9,
+                'type' => null,
+                'isOptional' => true,
+                'default' => 1,
+            ],
+            'optNoTypeValue' => [
+                'name' => 'optNoTypeValue',
+                'position' => 10,
+                'type' => '\\\\optNoTypeValue',
+                'isOptional' => true,
+                'default' => null,
             ],
         ];
         $class = new \ReflectionClass('ClassWithAllArgumentTypes');
@@ -110,33 +141,61 @@ class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
                 'isOptional' => false,
                 'default' => null,
             ],
+            'noType' => [
+                'name' => 'noType',
+                'position' => 3,
+                'type' => '\\\\noType',
+                'isOptional' => false,
+                'default' => null,
+            ],
             'const' => [
                 'name' => 'const',
-                'position' => 3,
+                'position' => 4,
                 'type' => 'string',
                 'isOptional' => true,
                 'default' => 'Const Value',
             ],
             'optionalNumValue' => [
                 'name' => 'optionalNumValue',
-                'position' => 4,
+                'position' => 5,
                 'type' => 'int',
                 'isOptional' => true,
                 'default' => 9807,
             ],
             'optionalStringValue' => [
                 'name' => 'optionalStringValue',
-                'position' => 5,
+                'position' => 6,
                 'type' => 'string',
                 'isOptional' => true,
                 'default' => 'optional string',
             ],
             'optionalArrayValue' => [
                 'name' => 'optionalArrayValue',
-                'position' => 6,
+                'position' => 7,
                 'type' => 'array',
                 'isOptional' => true,
                 'default' => "array('optionalKey' => 'optionalValue')",
+            ],
+            'optNullValue' => [
+                'name' => 'optNullValue',
+                'position' => 8,
+                'type' => null,
+                'isOptional' => true,
+                'default' => null,
+            ],
+            'optNullIntValue' => [
+                'name' => 'optNullIntValue',
+                'position' => 9,
+                'type' => null,
+                'isOptional' => true,
+                'default' => 1,
+            ],
+            'optNoTypeValue' => [
+                'name' => 'optNoTypeValue',
+                'position' => 10,
+                'type' => '\\\\optNoTypeValue',
+                'isOptional' => true,
+                'default' => null,
             ],
         ];
         $class = new \ReflectionClass('ClassWithoutOwnConstruct');

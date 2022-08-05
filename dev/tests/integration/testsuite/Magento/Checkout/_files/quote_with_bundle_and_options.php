@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../../Magento/Bundle/_files/product_with_multiple_options.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/product_with_multiple_options.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

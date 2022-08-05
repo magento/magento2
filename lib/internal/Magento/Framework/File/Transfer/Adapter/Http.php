@@ -10,7 +10,7 @@ use Magento\Framework\HTTP\PhpEnvironment\Response;
 use Magento\Framework\File\Mime;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\ObjectManager;
-use Zend\Http\Headers;
+use Laminas\Http\Headers;
 
 /**
  * File adapter to send the file to the client.

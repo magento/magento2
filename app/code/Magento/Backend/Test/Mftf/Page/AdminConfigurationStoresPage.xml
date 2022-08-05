@@ -5,16 +5,9 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="ConfigurationStoresPage" url="admin/system_config/edit/section/cms/" area="admin" module="Catalog">
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <page name="AdminConfigurationStoresPage" url="admin/system_config/edit/section/cms/" area="admin" module="Catalog">
         <section name="WYSIWYGOptionsSection"/>
-    </page>
-    <page name="WebConfigurationPage" url="admin/system_config/edit/section/web/" area="admin" module="Backend">
-        <section name="WYSIWYGOptionsSection"/>
-    </page>
-    <page name="GeneralConfigurationPage" url="admin/system_config/edit/section/general/" area="admin" module="Backend">
-        <section name="LocaleOptionsSection"/>
     </page>
 </pages>

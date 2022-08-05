@@ -3,14 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorization\Model\Acl\Loader;
 
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
+use Magento\Authorization\Model\Acl\Role\GroupFactory;
 use Magento\Authorization\Model\Acl\Role\User as RoleUser;
-use Magento\Framework\App\ObjectManager;
+use Magento\Authorization\Model\Acl\Role\UserFactory;
+use Magento\Framework\Acl\Data\CacheInterface;
+use Magento\Framework\Acl\LoaderInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Serialize\Serializer\Json;
 
-class Role implements \Magento\Framework\Acl\LoaderInterface
+/**
+ * Acl Role Loader
+ */
+class Role implements LoaderInterface
 {
     /**
      * Cache key for ACL roles cache
@@ -18,22 +27,22 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
     const ACL_ROLES_CACHE_KEY = 'authorization_role_cached_data';
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     protected $_resource;
 
     /**
-     * @var \Magento\Authorization\Model\Acl\Role\GroupFactory
+     * @var GroupFactory
      */
     protected $_groupFactory;
 
     /**
-     * @var \Magento\Authorization\Model\Acl\Role\UserFactory
+     * @var UserFactory
      */
     protected $_roleFactory;
 
     /**
-     * @var \Magento\Framework\Acl\Data\CacheInterface
+     * @var CacheInterface
      */
     private $aclDataCache;
 
@@ -48,28 +57,26 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
     private $cacheKey;
 
     /**
-     * @param \Magento\Authorization\Model\Acl\Role\GroupFactory $groupFactory
-     * @param \Magento\Authorization\Model\Acl\Role\UserFactory $roleFactory
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
+     * @param GroupFactory $groupFactory
+     * @param UserFactory $roleFactory
+     * @param ResourceConnection $resource
+     * @param CacheInterface $aclDataCache
      * @param Json $serializer
      * @param string $cacheKey
      */
     public function __construct(
-        \Magento\Authorization\Model\Acl\Role\GroupFactory $groupFactory,
-        \Magento\Authorization\Model\Acl\Role\UserFactory $roleFactory,
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null,
-        Json $serializer = null,
+        GroupFactory $groupFactory,
+        UserFactory $roleFactory,
+        ResourceConnection $resource,
+        CacheInterface $aclDataCache,
+        Json $serializer,
         $cacheKey = self::ACL_ROLES_CACHE_KEY
     ) {
-        $this->_resource = $resource;
         $this->_groupFactory = $groupFactory;
         $this->_roleFactory = $roleFactory;
-        $this->aclDataCache = $aclDataCache ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Acl\Data\CacheInterface::class
-        );
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->_resource = $resource;
+        $this->aclDataCache = $aclDataCache;
+        $this->serializer = $serializer;
         $this->cacheKey = $cacheKey;
     }
 

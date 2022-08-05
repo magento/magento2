@@ -10,7 +10,7 @@ namespace Magento\Paypal\Controller\Adminhtml\Paypal\Reports;
  */
 class FetchTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->resource = 'Magento_Paypal::fetch';
         $this->uri = 'backend/paypal/paypal_reports/fetch';

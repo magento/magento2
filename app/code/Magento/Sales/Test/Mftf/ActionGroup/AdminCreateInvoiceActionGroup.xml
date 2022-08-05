@@ -15,16 +15,4 @@
         <waitForPageLoad stepKey="waitForLoadPage"/>
         <see userInput="The invoice has been created." stepKey="seeMessage"/>
     </actionGroup>
-    <actionGroup name="AdminCreateInvoiceAndShipmentActionGroup" extends="AdminCreateInvoiceActionGroup">
-        <checkOption selector="{{AdminInvoicePaymentShippingSection.CreateShipment}}" stepKey="checkCreateShipment" after="waitForInvoicePage"/>
-        <see userInput="You created the invoice and shipment." stepKey="seeMessage"/>
-    </actionGroup>
-    <actionGroup name="AdminCreateInvoiceAndCreditMemoActionGroup" extends="AdminCreateInvoiceActionGroup">
-        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="pushButtonCreditMemo" after="seeMessage"/>
-        <waitForPageLoad stepKey="waitForLoadingCreditMemoPage" after="pushButtonCreditMemo"/>
-        <scrollTo selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="scrollToBottom" after="waitForLoadingCreditMemoPage"/>
-        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmitRefund" after="scrollToBottom"/>
-        <waitForPageLoad stepKey="waitForMainOrderPageLoad" after="clickSubmitRefund"/>
-        <see userInput="You created the credit memo." stepKey="seeCreditMemoMessage" after="waitForMainOrderPageLoad"/>
-    </actionGroup>
 </actionGroups>

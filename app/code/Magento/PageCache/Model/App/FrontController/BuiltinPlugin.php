@@ -53,6 +53,8 @@ class BuiltinPlugin
     }
 
     /**
+     * Add PageCache functionality to Dispatch method
+     *
      * @param \Magento\Framework\App\FrontControllerInterface $subject
      * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
@@ -65,7 +67,7 @@ class BuiltinPlugin
         \Magento\Framework\App\RequestInterface $request
     ) {
         $this->version->process();
-        if (!$this->config->isEnabled() || $this->config->getType() != \Magento\PageCache\Model\Config::BUILT_IN) {
+        if (!$this->config->isEnabled() || $this->config->getType() !== \Magento\PageCache\Model\Config::BUILT_IN) {
             return $proceed($request);
         }
         $result = $this->kernel->load();
@@ -90,7 +92,7 @@ class BuiltinPlugin
     protected function addDebugHeaders(ResponseHttp $result)
     {
         $cacheControlHeader = $result->getHeader('Cache-Control');
-        if ($cacheControlHeader instanceof \Zend\Http\Header\HeaderInterface) {
+        if ($cacheControlHeader instanceof \Laminas\Http\Header\HeaderInterface) {
             $this->addDebugHeader($result, 'X-Magento-Cache-Control', $cacheControlHeader->getFieldValue());
         }
         $this->addDebugHeader($result, 'X-Magento-Cache-Debug', 'MISS', true);

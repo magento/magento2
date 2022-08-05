@@ -64,7 +64,7 @@ class Integer extends Column implements
         string $name,
         string $type,
         Table $table,
-        int $padding,
+        int $padding = null,
         bool $nullable = true,
         bool $unsigned = false,
         bool $identity = false,
@@ -83,7 +83,7 @@ class Integer extends Column implements
     /**
      * Column padding.
      *
-     * @return int
+     * @return int | null
      */
     public function getPadding()
     {
@@ -102,6 +102,7 @@ class Integer extends Column implements
 
     /**
      * Return default value.
+     *
      * Note: default value should be int.
      *
      * @return int | null

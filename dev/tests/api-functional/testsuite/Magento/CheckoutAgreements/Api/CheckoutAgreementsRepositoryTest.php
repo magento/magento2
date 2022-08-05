@@ -14,7 +14,7 @@ class CheckoutAgreementsRepositoryTest extends WebapiAbstract
      */
     private $listServiceInfo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->listServiceInfo = [
             'soap' => [

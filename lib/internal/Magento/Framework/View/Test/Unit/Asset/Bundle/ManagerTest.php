@@ -3,50 +3,63 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Asset\Bundle;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\View;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\View\Asset\Bundle;
+use Magento\Framework\View\Asset\Bundle\ConfigInterface;
 use Magento\Framework\View\Asset\Bundle\Manager;
+use Magento\Framework\View\Asset\File\FallbackContext;
+use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Framework\View\Asset\Minification;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ManagerTest extends \PHPUnit\Framework\TestCase
+class ManagerTest extends TestCase
 {
-    /** @var  Manager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Manager|MockObject */
     protected $manager;
 
-    /** @var  \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Filesystem|MockObject */
     protected $filesystem;
 
-    /** @var  \Magento\Framework\View\Asset\Bundle|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Bundle|MockObject */
     protected $bundle;
 
-    /** @var  \Magento\Framework\View\Asset\Bundle\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ConfigInterface|MockObject */
     protected $bundleConfig;
 
-    /** @var  \Magento\Framework\View\Asset\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\View\Asset\ConfigInterface|MockObject */
     protected $assetConfig;
 
-    /** @var  \Magento\Framework\View\Asset\LocalInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  LocalInterface|MockObject */
     protected $asset;
 
-    /** @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Minification|MockObject */
     private $minificationMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->bundle = $this->getMockBuilder(\Magento\Framework\View\Asset\Bundle::class)
+        $this->bundle = $this->getMockBuilder(Bundle::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->bundleConfig = $this->getMockBuilder(\Magento\Framework\View\Asset\Bundle\ConfigInterface::class)
+        $this->bundleConfig = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->assetConfig = $this->getMockBuilder(\Magento\Framework\View\Asset\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->asset = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Asset\LocalInterface::class,
+            LocalInterface::class,
             [],
             '',
             false,
@@ -55,7 +68,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             ['getContentType']
         );
 
-        $this->minificationMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Minification::class)
+        $this->minificationMock = $this->getMockBuilder(Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -79,13 +92,13 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testAddAssetWithExcludedFile()
     {
-        $dirRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
+        $dirRead = $this->getMockBuilder(ReadInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $context = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $context = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configView = $this->getMockBuilder(\Magento\Framework\Config\View::class)
+        $configView = $this->getMockBuilder(View::class)
             ->setMockClassName('configView')
             ->disableOriginalConstructor()
             ->getMock();
@@ -105,9 +118,16 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $this->asset->expects($this->atLeastOnce())
             ->method('getFilePath')
             ->willReturn('source/file.min.js');
+        $this->asset->expects($this->once())
+            ->method('getPath')
+            ->willReturn('some/path/to_file');
+        $dirRead->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('some/path/to_file')
+            ->willReturn('some/path/to_file');
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Framework\App\Filesystem\DirectoryList::APP)
+            ->with(DirectoryList::APP)
             ->willReturn($dirRead);
         $this->bundleConfig->expects($this->atLeastOnce())
             ->method('getConfig')
@@ -122,19 +142,19 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testAddAssetWithExcludedDirectory()
     {
-        $dirRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
+        $dirRead = $this->getMockBuilder(ReadInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $context = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $context = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configView = $this->getMockBuilder(\Magento\Framework\Config\View::class)
+        $configView = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Framework\App\Filesystem\DirectoryList::APP)
+            ->with(DirectoryList::APP)
             ->willReturn($dirRead);
         $dirRead->expects($this->once())
             ->method('getAbsolutePath')
@@ -158,6 +178,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $this->asset->expects($this->atLeastOnce())
             ->method('getContext')
             ->willReturn($context);
+        $this->asset->method('getPath')
+            ->willReturn('');   // PHP 8.1. compatibility
         $this->bundleConfig->expects($this->atLeastOnce())
             ->method('getConfig')
             ->with($context)
@@ -174,20 +196,23 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testAddAsset()
     {
-        $dirRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
+        $dirRead = $this->getMockBuilder(ReadInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getAbsolutePath'])
+            ->getMockForAbstractClass();
+        $context = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $context = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configView = $this->getMockBuilder(\Magento\Framework\Config\View::class)
+        $configView = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Framework\App\Filesystem\DirectoryList::APP)
+            ->with(DirectoryList::APP)
             ->willReturn($dirRead);
+        $dirRead->method('getAbsolutePath')
+            ->willReturn('some/excluded/file');
         $this->asset->expects($this->atLeastOnce())
             ->method('getSourceFile')
             ->willReturn('/path/to/source/file.min.js');

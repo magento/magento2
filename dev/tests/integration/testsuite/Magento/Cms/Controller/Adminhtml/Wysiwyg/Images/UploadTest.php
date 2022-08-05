@@ -8,16 +8,28 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller\Result\Json as JsonResponse;
 use Magento\Framework\App\Response\HttpFactory as ResponseFactory;
 use Magento\Framework\App\Response\Http as Response;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Upload class.
+ *
+ * @magentoAppArea adminhtml
  */
 class UploadTest extends \PHPUnit\Framework\TestCase
 {
+    private const MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH
+        = 'system/media_storage_configuration/allowed_resources/media_gallery_image_folders';
+
+    /**
+     * @var array
+     */
+    private $origConfigValue;
+
     /**
      * @var \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Upload
      */
@@ -59,19 +71,26 @@ class UploadTest extends \PHPUnit\Framework\TestCase
     private $responseFactory;
 
     /**
+     * @var  \Magento\Cms\Helper\Wysiwyg\Images
+     */
+    private $imagesHelper;
+
+    /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $directoryName = 'directory1';
+        $directoryName = 'testDir';
         $excludedDirName = 'downloadable';
         $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
-        $imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
+        $this->imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->fullDirectoryPath = $imagesHelper->getStorageRoot() . DIRECTORY_SEPARATOR . $directoryName;
-        $this->fullExcludedDirectoryPath = $imagesHelper->getStorageRoot() . DIRECTORY_SEPARATOR . $excludedDirName;
+        $this->fullDirectoryPath = rtrim($this->imagesHelper->getStorageRoot(), '/')
+            . DIRECTORY_SEPARATOR . $directoryName;
+        $this->fullExcludedDirectoryPath = $this->imagesHelper->getStorageRoot()
+            . DIRECTORY_SEPARATOR . $excludedDirName;
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
         $this->responseFactory = $this->objectManager->get(ResponseFactory::class);
         $this->model = $this->objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Upload::class);
@@ -87,6 +106,29 @@ class UploadTest extends \PHPUnit\Framework\TestCase
                 'size' => filesize($fixtureDir),
             ],
         ];
+        $config = $this->objectManager->get(ScopeConfigInterface::class);
+        $this->origConfigValue = $config->getValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            'default'
+        );
+        $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
+        $scopeConfig->setValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            array_merge($this->origConfigValue, ['testDir']),
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        $directoryName = 'testDir';
+        $this->mediaDirectory->delete(
+            $this->mediaDirectory->getRelativePath($this->imagesHelper->getStorageRoot() . '/' . $directoryName)
+        );
+        $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
+        $scopeConfig->setValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            $this->origConfigValue
+        );
     }
 
     /**
@@ -130,7 +172,7 @@ class UploadTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithExcludedDirectory()
     {
-        $expectedError = 'We can\'t upload the file to current folder right now. Please try another folder.';
+        $expectedError = 'We can\'t upload the file to the current folder right now. Please try another folder.';
         $this->model->getRequest()->setParams(['type' => 'image/png']);
         $this->model->getRequest()->setMethod('POST');
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullExcludedDirectoryPath);
@@ -159,9 +201,13 @@ class UploadTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithLinkedMedia()
     {
+        if (!$this->mediaDirectory->getDriver() instanceof File) {
+            self::markTestSkipped('Remote storages like AWS S3 doesn\'t support symlinks');
+        }
+
         $directoryName = 'linked_media';
         $fullDirectoryPath = $this->filesystem->getDirectoryRead(DirectoryList::PUB)
-                ->getAbsolutePath() . DIRECTORY_SEPARATOR . $directoryName;
+                ->getAbsolutePath() . $directoryName;
         $wysiwygDir = $this->mediaDirectory->getAbsolutePath() . '/wysiwyg';
         $this->model->getRequest()->setParams(['type' => 'image/png']);
         $this->model->getStorage()->getSession()->setCurrentPath($wysiwygDir);
@@ -182,7 +228,7 @@ class UploadTest extends \PHPUnit\Framework\TestCase
         $this->model->getStorage()->getSession()->setCurrentPath($dirPath);
         $this->model->execute();
 
-        $this->assertFileNotExists(
+        $this->assertFileDoesNotExist(
             $this->fullDirectoryPath . $dirPath . $this->fileName
         );
     }
@@ -202,13 +248,13 @@ class UploadTest extends \PHPUnit\Framework\TestCase
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
         $this->model->execute();
 
-        $this->assertFileNotExists($this->fullDirectoryPath . $newFilename);
+        $this->assertFileDoesNotExist($this->fullDirectoryPath . $newFilename);
     }
 
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\Filesystem::class);

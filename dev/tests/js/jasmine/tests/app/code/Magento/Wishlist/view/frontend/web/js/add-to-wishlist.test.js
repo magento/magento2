@@ -6,15 +6,22 @@
 define([
     'jquery',
     'Magento_Wishlist/js/add-to-wishlist'
-], function ($) {
+], function ($, Widget) {
     'use strict';
 
     describe('Testing addToWishlist widget', function () {
-        var wdContainer;
+        var wdContainer,
+            wishlistWidget,
+            eventMock = {
+                preventDefault: jasmine.createSpy(),
+                stopPropagation: jasmine.createSpy()
+            };
 
         beforeEach(function () {
             wdContainer = $('<input type="hidden" class="bundle-option-11  product bundle option" \n' +
                 'name="bundle_option[11]" value="15" aria-required="true"/>');
+            wishlistWidget = new Widget();
+            $.fn.validation = {};
         });
 
         afterEach(function () {
@@ -31,5 +38,15 @@ define([
             });
             expect(wdContainer.addToWishlist('option', 'bundleInfo')).toBe('test');
         });
+
+        it('verify update wichlist with validate product qty, valid qty', function () {
+            var validation = spyOn($.fn, 'validation').and.returnValue(false);
+
+            wishlistWidget._validateWishlistQty(eventMock);
+            expect(validation).toHaveBeenCalled();
+            expect(eventMock.preventDefault).toHaveBeenCalled();
+            expect(eventMock.stopPropagation).toHaveBeenCalled();
+        });
+
     });
 });

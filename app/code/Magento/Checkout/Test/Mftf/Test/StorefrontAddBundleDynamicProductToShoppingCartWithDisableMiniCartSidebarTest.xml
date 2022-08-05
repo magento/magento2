@@ -49,8 +49,10 @@
                 <requiredEntity createDataKey="createBundleOption1_1"/>
                 <requiredEntity createDataKey="simpleProduct2"/>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="cataloginventory_stock"/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
@@ -61,7 +63,7 @@
         </after>
 
         <!--Open Product page in StoreFront and assert product and price range -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$createBundleProduct$$"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePriceRangeIsVisible">
@@ -111,7 +113,7 @@
 
         <!--Enabled Mini Cart -->
         <magentoCLI stepKey="enableShoppingCartSidebar" command="config:set checkout/sidebar/display 1"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         <reloadPage stepKey="reloadThePage"/>
 
         <!--Click on mini cart-->

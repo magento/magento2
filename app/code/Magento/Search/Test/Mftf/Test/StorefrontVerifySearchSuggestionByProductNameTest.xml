@@ -20,30 +20,28 @@
 
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create Simple Product -->
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
 
-            <!-- Perform reindex and flush cache -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Delete create product -->
             <deleteData createDataKey="simpleProduct"  stepKey="deleteProduct"/>
 
             <!-- Go to the catalog search term page -->
-            <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage"/>
-            <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
+            <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage"/>
 
             <!--Filter the search term -->
-            <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterByThirdSearchQuery">
+            <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByThirdSearchQuery">
                 <argument name="searchQuery" value="$$simpleProduct.name$$"/>
             </actionGroup>
             <!-- Delete created below search terms -->
-            <actionGroup ref="deleteSearchTerm" stepKey="deleteSearchTerms"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteSearchTerms"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to storefront home page -->

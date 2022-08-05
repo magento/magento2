@@ -20,9 +20,9 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="enableTinyMCE4"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE"/>
             <waitForPageLoad stepKey="waitConfigToSave"/>
             <createData entity="ApiCategory" stepKey="createFirstCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="product1">
@@ -34,21 +34,21 @@
             <createData entity="_defaultCmsPage" stepKey="createCMSPage"/>
         </before>
         <after>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <deleteData createDataKey="createFirstCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage"/>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
-        <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage1">
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage1">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
         </actionGroup>
         <conditionalClick selector="{{CmsNewPagePageContentSection.header}}"
                           dependentSelector="{{CmsNewPagePageContentSection.header}}._show" visible="false"
                           stepKey="clickContentTab1"/>
         <waitForPageLoad stepKey="waitForContentSectionLoad1"/>
-        <waitForElementNotVisible selector="{{CmsWYSIWYGSection.CheckIfTabExpand}}" stepKey="waitForTabExpand1"/>
+        <waitForElementNotVisible selector="{{TinyMCESection.CheckIfTabExpand}}" stepKey="waitForTabExpand1"/>
         <click selector="{{CmsNewPagePageActionsSection.showHideEditor}}" stepKey="showHiddenButtons"/>
         <seeElement selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="seeWidgetButton"/>
         <click selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="clickInsertWidgetButton"/>
@@ -90,8 +90,8 @@
         <waitForPageLoad stepKey="waitForPageToLoadBeforeSelectingProduct2"/>
         <click selector="{{WidgetSection.PreCreateProduct('$$product2.name$$')}}" stepKey="selectProduct2"/>
         <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="applyProducts"/>
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickOnInsertWidgetButton"/>
-        <waitForPageLoad stepKey="waitForPageToLoadBeforeClickingOnSaveWidget1"/>
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickOnInsertWidgetButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoadBeforeClickingOnSaveWidget1"/>
         <click selector="{{InsertWidgetSection.save}}" stepKey="saveWidget"/>
         <waitForPageLoad stepKey="waitForSaveComplete"/>
         <actionGroup ref="CompareTwoProductsOrder" stepKey="compareProductOrders1">
@@ -99,14 +99,15 @@
             <argument name="product_1" value="$$product1$$"/>
             <argument name="product_2" value="$$product2$$"/>
         </actionGroup>
-        <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage2">
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage2">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
         </actionGroup>
+        <scrollTo stepKey="scrollToContent" selector="{{CmsNewPagePageContentSection.header}}"  x="0" y="-80"/>
         <conditionalClick selector="{{CmsNewPagePageContentSection.header}}"
                           dependentSelector="{{CmsNewPagePageContentSection.header}}._show" visible="false"
                           stepKey="clickContentTab2"/>
         <waitForPageLoad stepKey="waitForContentSectionLoad2"/>
-        <waitForElementNotVisible selector="{{CmsWYSIWYGSection.CheckIfTabExpand}}" stepKey="waitForTabExpand2"/>
+        <waitForElementNotVisible selector="{{TinyMCESection.CheckIfTabExpand}}" stepKey="waitForTabExpand2"/>
         <executeJS function="jQuery('[id=\'cms_page_form_content_ifr\']').attr('name', 'preview-iframe')"
                    stepKey="setPreviewFrameName"/>
         <switchToIFrame selector="preview-iframe" stepKey="switchToIframe"/>
@@ -124,8 +125,8 @@
         <click selector="{{WidgetSection.PreCreateProduct('$$product1.name$$')}}" stepKey="selectProduct1_1"/>
         <click selector="{{WidgetSection.PreCreateProduct('$$product1.name$$')}}" stepKey="selectProduct2_2"/>
         <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="applyProducts1"/>
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickOnInsertWidgetButton1"/>
-        <waitForPageLoad stepKey="waitForPageToLoadBeforeClickingOnSaveWidget2"/>
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickOnInsertWidgetButton1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoadBeforeClickingOnSaveWidget2"/>
         <click selector="{{InsertWidgetSection.save}}" stepKey="saveWidget1"/>
         <waitForPageLoad stepKey="waitForSaveComplete1"/>
 

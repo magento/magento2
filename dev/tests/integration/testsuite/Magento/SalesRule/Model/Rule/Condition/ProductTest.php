@@ -6,24 +6,41 @@
 
 namespace Magento\SalesRule\Model\Rule\Condition;
 
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Quote\Api\Data\CartInterface;
-use Magento\SalesRule\Api\RuleRepositoryInterface;
+use Magento\Framework\Registry;
+use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Test\Fixture\ProductCondition as ProductConditionFixture;
+use Magento\SalesRule\Test\Fixture\ProductFoundInCartConditions as ProductFoundInCartConditionsFixture;
+use Magento\SalesRule\Test\Fixture\ProductSubselectionInCartConditions as ProductSubselectionInCartConditionsFixture;
+use Magento\SalesRule\Test\Fixture\Rule as RuleFixture;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
+    use ConditionHelper;
+
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
-    protected function setUp()
+    /**
+     * @var \Magento\TestFramework\Fixture\DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->fixtures = DataFixtureStorageManager::getStorage();
     }
 
     /**
@@ -33,15 +50,32 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * 2. Set product's associated category according to test case
      * 3. Attempt to validate the sales rule against the quote and assert the output is as expected
      *
-     * @magentoAppIsolation enabled
      * @param int $categoryId
      * @param bool $expectedResult
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
-     * @magentoDataFixture Magento/SalesRule/_files/rules_category.php
+     * @magentoDataFixture Magento/Catalog/_files/category.php
      * @dataProvider validateProductConditionDataProvider
-     * @magentoDbIsolation disabled
      */
+    #[
+        AppIsolation(true),
+        DbIsolation(false),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'category_ids', 'value' => '333'],
+            'cond11'
+        ),
+        DataFixture(
+            ProductFoundInCartConditionsFixture::class,
+            ['conditions' => ['$cond11$']],
+            'cond1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            ['discount_amount' => 50, 'conditions' => ['$cond1$']],
+            'rule1'
+        ),
+    ]
     public function testValidateCategorySalesRuleIncludesChildren($categoryId, $expectedResult)
     {
         // Load the quote that contains a child of a configurable product
@@ -49,10 +83,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)
             ->load('test_cart_with_configurable', 'reserved_order_id');
 
+        $ruleId = $this->fixtures->get('rule1')->getId();
         // Load the SalesRule looking for products in a specific category
-        /** @var $rule \Magento\SalesRule\Model\Rule */
-        $rule = $this->objectManager->get(\Magento\Framework\Registry::class)
-            ->registry('_fixture/Magento_SalesRule_Category');
+        /** @var $rule Rule */
+        $rule = $this->objectManager->create(Rule::class)->load($ruleId);
 
         // Prepare the parent product with the given category setting
         /** @var $product \Magento\Catalog\Model\Product */
@@ -80,11 +114,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->load('test_cart_with_bundle_and_options', 'reserved_order_id');
 
         // Load the SalesRule looking for excluding products with selected sku
-        /** @var $rule \Magento\SalesRule\Model\Rule */
-        $rule = $this->objectManager->get(\Magento\Framework\Registry::class)
+        /** @var $rule Rule */
+        $rule = $this->objectManager->get(Registry::class)
             ->registry('_fixture/Magento_SalesRule_Sku_Exclude');
 
-        $this->assertEquals(false, $rule->validate($quote));
+        $this->assertFalse($rule->validate($quote));
     }
 
     /**
@@ -92,7 +126,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function validateProductConditionDataProvider()
     {
-        $validCategoryId = 66;
+        $validCategoryId = 333;
         $invalidCategoryId = 2;
         return [
             [
@@ -113,15 +147,33 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * 2. Attempt to validate the sales rule against the quote and assert the output is negative.
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
-     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off.php
      */
+    #[
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'attribute_set_id', 'value' => '4'],
+            'cond11'
+        ),
+        DataFixture(
+            ProductSubselectionInCartConditionsFixture::class,
+            ['attribute' => 'qty', 'operator' => '==', 'value' => 2, 'conditions' => ['$cond11$']],
+            'cond1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            ['discount_amount' => 50, 'conditions' => ['$cond1$']],
+            'rule1'
+        ),
+    ]
     public function testValidateQtySalesRuleWithConfigurable()
     {
         // Load the quote that contains a child of a configurable product with quantity 1.
         $quote = $this->getQuote('test_cart_with_configurable');
 
-        // Load the SalesRule looking for products with quantity 2.
-        $rule = $this->getSalesRule('10% Off on orders with two items');
+        $ruleId = $this->fixtures->get('rule1')->getId();
+        // Load the SalesRule looking for products in a specific category
+        /** @var $rule Rule */
+        $rule = $this->objectManager->create(Rule::class)->load($ruleId);
 
         $this->assertFalse(
             $rule->validate($quote->getBillingAddress())
@@ -129,47 +181,166 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Gets quote by reserved order id.
+     * Ensure that SalesRules filtering on quote items quantity validates configurable product parent category correctly
      *
-     * @param string $reservedOrderId
-     * @return CartInterface
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
+     * @magentoDataFixture Magento/SalesRule/_files/rules_parent_category.php
+     * @dataProvider conditionsDataProvider
      */
-    private function getQuote($reservedOrderId)
+    public function testValidateParentCategoryWithConfigurable(array $conditions, bool $expected): void
     {
-        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
-        $searchCriteria = $searchCriteriaBuilder->addFilter('reserved_order_id', $reservedOrderId)
-            ->create();
+        $quote = $this->getQuote('test_cart_with_configurable');
+        $registry = $this->objectManager->get(Registry::class);
+        /** @var Rule $rule */
+        $rule = $this->objectManager->create(Rule::class);
+        $ruleId = $registry->registry('50% Off on Configurable parent category');
+        $rule->load($ruleId);
+        $rule->getConditions()->setConditions([])->loadArray(
+            [
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
+                'attribute' => null,
+                'operator' => null,
+                'value' => '1',
+                'is_value_processed' => null,
+                'aggregator' => 'all',
+                'conditions' => $conditions
+            ]
+        );
+        $rule->save();
 
-        /** @var CartRepositoryInterface $quoteRepository */
-        $quoteRepository = $this->objectManager->get(CartRepositoryInterface::class);
-        $items = $quoteRepository->getList($searchCriteria)->getItems();
-        return array_pop($items);
+        $this->assertEquals(
+            $expected,
+            $rule->validate($quote->getShippingAddress()),
+            'Cart price rule validation failed.'
+        );
     }
 
     /**
-     * Gets rule by name.
-     *
-     * @param string $name
-     * @return \Magento\SalesRule\Model\Rule
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return array
      */
-    private function getSalesRule(string $name): \Magento\SalesRule\Model\Rule
+    public function conditionsDataProvider(): array
     {
-        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
-        $searchCriteria = $searchCriteriaBuilder->addFilter('name', $name)
-            ->create();
-
-        /** @var CartRepositoryInterface $quoteRepository */
-        $ruleRepository = $this->objectManager->get(RuleRepositoryInterface::class);
-        $items = $ruleRepository->getList($searchCriteria)->getItems();
-
-        $rule = array_pop($items);
-        /** @var \Magento\SalesRule\Model\Converter\ToModel $converter */
-        $converter = $this->objectManager->get(\Magento\SalesRule\Model\Converter\ToModel::class);
-
-        return $converter->toModel($rule);
+        return [
+            'If total quantity  is 1 for a subselection of items in cart matching ALL of these conditions: ' .
+            'Category (Parent Only) is not "Default Category"' => [
+                'conditions' => [
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Subselect::class,
+                        'attribute' => 'qty',
+                        'operator' => '==',
+                        'value' => '1',
+                        'is_value_processed' => null,
+                        'aggregator' => 'all',
+                        'conditions' =>
+                            [
+                                [
+                                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                                    'attribute' => 'category_ids',
+                                    'attribute_scope' => 'parent',
+                                    'operator' => '!=',
+                                    'value' => '2',
+                                    'is_value_processed' => false,
+                                ],
+                            ],
+                    ],
+                ],
+                'expected' => false
+            ],
+            'If total quantity  is 1 for a subselection of items in cart matching ALL of these conditions: ' .
+            'Category (Parent Only) is "Default Category"' => [
+                'conditions' => [
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Subselect::class,
+                        'attribute' => 'qty',
+                        'operator' => '==',
+                        'value' => '1',
+                        'is_value_processed' => null,
+                        'aggregator' => 'all',
+                        'conditions' =>
+                            [
+                                [
+                                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                                    'attribute' => 'category_ids',
+                                    'attribute_scope' => 'parent',
+                                    'operator' => '==',
+                                    'value' => '2',
+                                    'is_value_processed' => false,
+                                ],
+                            ],
+                    ],
+                ],
+                'expected' => true
+            ],
+            'If an item is found in the cart with all these conditions true: ' .
+            'Category (Parent Only) is not "Default Category"' => [
+                'conditions' => [
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+                        'value' => '1',
+                        'is_value_processed' => null,
+                        'aggregator' => 'all',
+                        'conditions' =>
+                            [
+                                [
+                                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                                    'attribute' => 'category_ids',
+                                    'attribute_scope' => 'parent',
+                                    'operator' => '!=',
+                                    'value' => '2',
+                                    'is_value_processed' => false,
+                                ],
+                            ],
+                    ],
+                ],
+                'expected' => false
+            ],
+            'If an item is found in the cart with all these conditions true: ' .
+            'Category (Parent Only) is "Default Category"' => [
+                'conditions' => [
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+                        'value' => '1',
+                        'is_value_processed' => null,
+                        'aggregator' => 'all',
+                        'conditions' =>
+                            [
+                                [
+                                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                                    'attribute' => 'category_ids',
+                                    'attribute_scope' => 'parent',
+                                    'operator' => '==',
+                                    'value' => '2',
+                                    'is_value_processed' => false,
+                                ],
+                            ],
+                    ],
+                ],
+                'expected' => true
+            ],
+            'If an item is not found in the cart with all these conditions true: ' .
+            'Category (Parent Only) is "Default Category"' => [
+                'conditions' => [
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+                        'value' => '0',
+                        'is_value_processed' => null,
+                        'aggregator' => 'all',
+                        'conditions' =>
+                            [
+                                [
+                                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                                    'attribute' => 'category_ids',
+                                    'attribute_scope' => 'parent',
+                                    'operator' => '==',
+                                    'value' => '2',
+                                    'is_value_processed' => false,
+                                ],
+                            ],
+                    ],
+                ],
+                'expected' => false
+            ],
+        ];
     }
 }

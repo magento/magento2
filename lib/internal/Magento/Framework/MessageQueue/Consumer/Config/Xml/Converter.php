@@ -26,8 +26,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $configParser;
 
     /**
-     * Default value provider.
-     *
      * @var DefaultValueProvider
      */
     private $defaultValueProvider;
@@ -45,7 +43,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function convert($source)
     {
@@ -54,9 +52,14 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         foreach ($source->getElementsByTagName('consumer') as $consumerNode) {
             $consumerName = $this->getAttributeValue($consumerNode, 'name');
             $handler = $this->getAttributeValue($consumerNode, 'handler');
+            $onlySpawnWhenMessageAvailable =  $this->getAttributeValue(
+                $consumerNode,
+                'onlySpawnWhenMessageAvailable'
+            );
+
             $result[$consumerName] = [
                 'name' => $consumerName,
-                'queue' => $this->getAttributeValue($consumerNode, 'queue'),
+                'queue' => $this->getAttributeValue($consumerNode, 'queue', $consumerName),
                 'consumerInstance' => $this->getAttributeValue(
                     $consumerNode,
                     'consumerInstance',
@@ -68,7 +71,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     'connection',
                     $this->defaultValueProvider->getConnection()
                 ),
-                'maxMessages' => $this->getAttributeValue($consumerNode, 'maxMessages')
+                'maxMessages' => $this->getAttributeValue($consumerNode, 'maxMessages'),
+                'maxIdleTime' => $this->getAttributeValue($consumerNode, 'maxIdleTime'),
+                'sleep' => $this->getAttributeValue($consumerNode, 'sleep'),
+                'onlySpawnWhenMessageAvailable' =>
+                    $onlySpawnWhenMessageAvailable === null ? null : boolval($onlySpawnWhenMessageAvailable)
             ];
         }
         return $result;

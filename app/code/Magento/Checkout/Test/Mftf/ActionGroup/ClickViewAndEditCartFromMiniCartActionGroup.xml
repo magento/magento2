@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ClickViewAndEditCartFromMiniCartActionGroup">
+        <annotations>
+            <description>Clicks on the Storefront Mini Shopping Cart icon. Clicks on the 'View and Edit Cart' link. Validates that the URL is present and correct. PLEASE NOTE: The URL is Hardcoded.</description>
+        </annotations>
+
+        <scrollTo selector="{{StorefrontMinicartSection.showCart}}" stepKey="scrollToMiniCart"/>
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
+        <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="viewAndEditCart"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="waitForOrderTotal"/>
+        <waitForPageLoad stepKey="waitForOrderTotalCalculation"/>
+        <seeInCurrentUrl url="checkout/cart" stepKey="seeInCurrentUrl"/>
+    </actionGroup>
+</actionGroups>

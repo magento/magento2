@@ -38,7 +38,7 @@ class ServiceVersionV1Test extends \Magento\Webapi\Routing\BaseService
     /** @var ItemFactory */
     protected $itemFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_version = 'V1';
         $this->_soapService = 'testModule1AllSoapAndRestV1';

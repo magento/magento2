@@ -15,6 +15,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->dispatch('backend/admin/crypt_key/index');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<h1 class="page-title">Encryption Key</h1>', $body);
+        $this->assertStringContainsString('<h1 class="page-title">Encryption Key</h1>', $body);
     }
 }

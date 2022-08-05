@@ -15,9 +15,12 @@ use Magento\Catalog\Helper\Product\Compare;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Url;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CompareProductsTest extends \PHPUnit\Framework\TestCase
+class CompareProductsTest extends TestCase
 {
     /**
      * @var CompareProducts
@@ -25,17 +28,17 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Compare|\PHPUnit_Framework_MockObject_MockObject
+     * @var Compare|MockObject
      */
     private $helperMock;
 
     /**
-     * @var Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var Url|MockObject
      */
     private $productUrlMock;
 
     /**
-     * @var Output|\PHPUnit_Framework_MockObject_MockObject
+     * @var Output|MockObject
      */
     private $outputHelperMock;
 
@@ -45,6 +48,11 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
      * @var array
      */
     private $productValueMap = [
@@ -52,7 +60,7 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
         ProductInterface::NAME => 'getName'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -65,6 +73,9 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
         $this->outputHelperMock = $this->getMockBuilder(Output::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -73,7 +84,8 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
             [
                 'helper' => $this->helperMock,
                 'productUrl' => $this->productUrlMock,
-                'outputHelper' => $this->outputHelperMock
+                'outputHelper' => $this->outputHelperMock,
+                'scopeConfig'  => $this->scopeConfigMock
             ]
         );
     }
@@ -82,9 +94,9 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
      * Prepare compare items collection.
      *
      * @param array $items
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
-    private function getItemCollectionMock(array $items) : \PHPUnit_Framework_MockObject_MockObject
+    private function getItemCollectionMock(array $items) : MockObject
     {
         $itemCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
@@ -109,6 +121,7 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
         $urlMap = [];
         $outputMap = [];
         $helperMap = [];
+        $productScopeMap = [];
 
         $count = count($dataSet);
 
@@ -119,19 +132,20 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
             $outputMap[] = [$item, $data['name'], 'name', 'productName#' . $data['id']];
             $helperMap[] = [$item, 'http://remove.url/' . $data['id']];
             $urlMap[] = [$item, [], 'http://product.url/' . $data['id']];
+            $productScopeMap[] = [$item, 'store-' . $data['id']];
         }
 
         $this->productUrlMock->expects($this->exactly($count))
             ->method('getUrl')
-            ->will($this->returnValueMap($urlMap));
+            ->willReturnMap($urlMap);
 
         $this->outputHelperMock->expects($this->exactly($count))
             ->method('productAttribute')
-            ->will($this->returnValueMap($outputMap));
+            ->willReturnMap($outputMap);
 
         $this->helperMock->expects($this->exactly($count))
             ->method('getPostDataRemove')
-            ->will($this->returnValueMap($helperMap));
+            ->willReturnMap($helperMap);
 
         return $items;
     }
@@ -140,9 +154,9 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
      * Prepare mock of product object.
      *
      * @param array $data
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
-    private function getProductMock(array $data) : \PHPUnit_Framework_MockObject_MockObject
+    private function getProductMock(array $data) : MockObject
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -193,19 +207,22 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
                         'id' => 1,
                         'product_url' => 'http://product.url/1',
                         'name' => 'productName#1',
-                        'remove_url' => 'http://remove.url/1'
+                        'remove_url' => 'http://remove.url/1',
+                        'productScope' => null
                     ],
                     [
                         'id' => 2,
                         'product_url' => 'http://product.url/2',
                         'name' => 'productName#2',
-                        'remove_url' => 'http://remove.url/2'
+                        'remove_url' => 'http://remove.url/2',
+                        'productScope' => null
                     ],
                     [
                         'id' => 3,
                         'product_url' => 'http://product.url/3',
                         'name' => 'productName#3',
-                        'remove_url' => 'http://remove.url/3'
+                        'remove_url' => 'http://remove.url/3',
+                        'productScope' => null
                     ]
                 ]
             ],
@@ -276,7 +293,8 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
                         'id' => 12345,
                         'product_url' => 'http://product.url/12345',
                         'name' => 'productName#12345',
-                        'remove_url' => 'http://remove.url/12345'
+                        'remove_url' => 'http://remove.url/12345',
+                        'productScope' => null
                     ]
                 ]
             ],

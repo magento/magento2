@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <!--Create  simple product-->
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
                 <field key="price">10.00</field>
@@ -27,17 +27,16 @@
         </before>
         <after>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Add Simple Product to the cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 
         <!-- Assert Product in Mini Cart -->
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
             <argument name="productName" value="$$simpleProduct.name$$"/>
             <argument name="productPrice" value="$10.00"/>
@@ -46,18 +45,19 @@
         </actionGroup>
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="seeProductInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="seeProductInMiniCart">
             <argument name="productName" value="$$simpleProduct.name$$"/>
         </actionGroup>
 
         <!--Remove an item from the cart using minicart-->
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProductFromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProductFromMiniCart">
             <argument name="productName" value="$$simpleProduct.name$$"/>
         </actionGroup>
         <reloadPage stepKey="reloadPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
 
         <!--Check the minicart is empty and verify AssertProductAbsentInMiniShoppingCart-->
-        <actionGroup ref="assertMiniCartEmpty" stepKey="miniCartEnpty"/>
+        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="miniCartEnpty"/>
         <dontSee selector="{{StorefrontMinicartSection.productLinkByName($$simpleProduct.name$$)}}" stepKey="verifyAssertProductAbsentInMiniShoppingCart"/>
     </test>
 </tests>

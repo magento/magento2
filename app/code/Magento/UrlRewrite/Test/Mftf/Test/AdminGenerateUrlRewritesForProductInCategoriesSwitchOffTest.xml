@@ -21,10 +21,9 @@
             <!-- Set the configuration for Generate "category/product" URL Rewrites-->
             <comment userInput="Enable config to generate category/product URL Rewrites" stepKey="commentEnableConfig" />
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
-            <!--Flush cache-->
-            <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -37,37 +36,37 @@
             <!-- Set the configuration for Generate "category/product" URL Rewrites-->
             <comment userInput="Enable config to generate category/product URL Rewrites" stepKey="commentEnableConfig" />
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
-            <!--Flush cache-->
-            <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- 1. Open Marketing - SEO & Search - URL Rewrites -->
-        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue1"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createCategory.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeValue2"/>
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingUrlRewrite">
+            <argument name="requestPath" value="$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeProductUrlInGrid">
+            <argument name="requestPath" value="$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeCategoryUrlInGrid">
+            <argument name="requestPath" value="$createCategory.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
 
         <!-- 2. Set the configuration for Generate "category/product" URL Rewrites to No-->
-        <amOnPage url="{{CatalogConfigPage.url}}" stepKey="amOnCatalogConfigPage"/>
-        <conditionalClick selector="{{CatalogSection.seo}}" dependentSelector="{{CatalogSection.CheckIfSeoTabExpand}}" visible="true" stepKey="expandSeoTab" />
-        <waitForElementVisible  selector="{{CatalogSection.GenerateUrlRewrites}}" stepKey="GenerateUrlRewritesSelect"/>
-        <selectOption userInput="0" selector="{{CatalogSection.GenerateUrlRewrites}}" stepKey="selectUrlGenerationNo" />
-        <waitForElementVisible selector="{{GenerateUrlRewritesConfirm.title}}" stepKey="waitForConfirmModal"/>
-        <click selector="{{GenerateUrlRewritesConfirm.ok}}" stepKey="confirmSwitchingGenerationOff"/>
-        <click selector="{{CatalogSection.save}}" stepKey="saveConfig" />
-        <waitForPageLoad stepKey="waitForSavingSystemConfiguration"/>
+        <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
 
         <!-- 3. Flush cache-->
-        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- 4. Open Marketing - SEO & Search - URL Rewrites -->
-        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage2"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName2"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton2"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeInListValue1"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.requestPathColumnValue($createCategory.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="dontSeeValue2"/>
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingUrlRewriteAfterDisablingTheConfig">
+            <argument name="requestPath" value="$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeProductUrlInGridAfterDisablingTheConfig">
+            <argument name="requestPath" value="$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathIsNotFoundInUrlRewriteGrigActionGroup" stepKey="categoryUrlIsNotShownAfterDisablingTheConfig">
+            <argument name="requestPath" value="$createCategory.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
     </test>
 </tests>

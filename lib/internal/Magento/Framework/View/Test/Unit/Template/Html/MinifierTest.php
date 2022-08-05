@@ -3,8 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Template\Html;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
@@ -12,7 +19,7 @@ use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Template\Html\Minifier;
 
-class MinifierTest extends \PHPUnit\Framework\TestCase
+class MinifierTest extends TestCase
 {
     /**
      * @var Minifier
@@ -20,36 +27,36 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     protected $htmlDirectoryMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     protected $appDirectoryMock;
 
     /**
-     * @var Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem\Directory\ReadFactory|MockObject
      */
     protected $readFactoryMock;
 
     /**
-     * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadInterface|MockObject
      */
     protected $rootDirectoryMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     protected $filesystemMock;
 
     /**
-     * Initialize testable object
+     * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->htmlDirectoryMock = $this->getMockBuilder(Filesystem\Directory\WriteInterface::class)
+        $this->htmlDirectoryMock = $this->getMockBuilder(WriteInterface::class)
             ->getMockForAbstractClass();
         $this->appDirectoryMock = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
@@ -58,7 +65,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->readFactoryMock = $this->getMockBuilder(Filesystem\Directory\ReadFactory::class)
+        $this->readFactoryMock = $this->getMockBuilder(ReadFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -86,10 +93,12 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Covered method getPathToMinified
+     * Covered method getPathToMinified.
+     *
+     * @return void
      * @test
      */
-    public function testGetPathToMinified()
+    public function testGetPathToMinified(): void
     {
         $file = '/absolute/path/to/phtml/template/file';
         $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
@@ -106,10 +115,13 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
     // @codingStandardsIgnoreStart
 
     /**
-     * Covered method minify and test regular expressions
+     * Covered method minify and test regular expressions.
      * @test
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testMinify()
+    public function testMinify(): void
     {
         $file = '/absolute/path/to/phtml/template/file';
         $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
@@ -131,7 +143,9 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
         <a href="http://somelink.com/text.html">Text Link</a>
         <img src="test.png" alt="some text" />
         <?php echo \$block->someMethod(); ?>
+        <img src="data:image/gif;base64,P///yH5BAEAAAA" data-component="main-image"><?= \$block->someMethod(); ?>
         <div style="width: 800px" class="<?php echo \$block->getClass() ?>" />
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-component="main-image">
         <script>
             var i = 1;// comment
             var j = 1;// <?php echo 'hi' ?>
@@ -162,11 +176,17 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
             <?php // echo \$block->getChildHtml('anotherChildBlock'); ?>
         <?php // endif; ?>
     </body>
+    <?php
+    \$sometext = <<<SOMETEXT
+    mytext
+    mytextline2
+SOMETEXT;
+    ?>
 </html>
 TEXT;
 
         $expectedContent = <<<TEXT
-<?php /** * Copyright © Magento, Inc. All rights reserved. * See COPYING.txt for license details. */ ?> <?php ?> <html><head><title>Test title</title></head><link rel="stylesheet" href='https://www.example.com/2' type="text/css" /><link rel="stylesheet" type="text/css" media="all" href="https://www.example.com/1" type="text/css" /><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?> <div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><script>
+<?php /** * Copyright © Magento, Inc. All rights reserved. * See COPYING.txt for license details. */ ?> <?php ?> <html><head><title>Test title</title></head><link rel="stylesheet" href='https://www.example.com/2' type="text/css" /><link rel="stylesheet" type="text/css" media="all" href="https://www.example.com/1" type="text/css" /><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?> <img src="data:image/gif;base64,P///yH5BAEAAAA" data-component="main-image"><?= \$block->someMethod(); ?> <div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-component="main-image"><script>
             var i = 1;
             var j = 1;
 
@@ -184,7 +204,10 @@ TEXT;
                 }
             });
             //]]>
-</script><?php echo "http://some.link.com/" ?> <?php echo "//some.link.com/" ?> <?php echo '//some.link.com/' ?> <em>inline text</em> <a href="http://www.<?php echo 'hi' ?>"></a> <?php ?> <?php echo \$block->getChildHtml('someChildBlock'); ?> <?php ?> <?php ?> <?php ?></body></html>
+</script><?php echo "http://some.link.com/" ?> <?php echo "//some.link.com/" ?> <?php echo '//some.link.com/' ?> <em>inline text</em> <a href="http://www.<?php echo 'hi' ?>"></a> <?php ?> <?php echo \$block->getChildHtml('someChildBlock'); ?> <?php ?> <?php ?> <?php ?></body><?php \$sometext = <<<SOMETEXT
+    mytext
+    mytextline2
+SOMETEXT; ?></html>
 TEXT;
 
         $this->appDirectoryMock->expects($this->once())
@@ -207,25 +230,26 @@ TEXT;
     // @codingStandardsIgnoreEnd
 
     /**
-     * Contain method modify and getPathToModified
+     * Contain method modify and getPathToModified.
+     *
+     * @return void
      * @test
      */
-    public function testGetMinified()
+    public function testGetMinified(): void
     {
         $file = '/absolute/path/to/phtml/template/file';
         $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
 
-        $htmlDriver = $this->createMock(\Magento\Framework\Filesystem\DriverInterface::class);
+        $htmlDriver = $this->getMockForAbstractClass(DriverInterface::class);
         $htmlDriver
             ->expects($this->once())
             ->method('getRealPathSafety')
             ->willReturn($file);
 
         $this->htmlDirectoryMock
-            ->expects($this->at(1))
             ->method('isExist')
-            ->with($relativeGeneratedPath)
-            ->willReturn(false);
+            ->withConsecutive([$relativeGeneratedPath])
+            ->willReturnOnConsecutiveCalls(false);
 
         $this->htmlDirectoryMock
             ->expects($this->once())

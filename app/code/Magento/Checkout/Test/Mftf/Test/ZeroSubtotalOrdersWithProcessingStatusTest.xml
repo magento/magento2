@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94178"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminCheckZeroSubtotalOrderIsInProcessingStatusTest instead</issueId>
+            </skip> 
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
@@ -26,7 +29,7 @@
             <createData entity="PaymentMethodsSettingConfig" stepKey="paymentMethodsSettingConfig"/>
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
             <!--Go to Admin page-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
@@ -36,20 +39,18 @@
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
             <createData entity="DisablePaymentMethodsSettingConfig" stepKey="disablePaymentMethodsSettingConfig"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="simpleproduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
         </after>
 
-        <!--Open MARKETING > Cart Price Rules-->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
 
         <!--Add New Rule-->
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ApiSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsite"/>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="chooseNotLoggedInCustomerGroup"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="chooseNotLoggedInCustomerGroup"/>
         <generateDate date="-1 day" format="m/d/Y" stepKey="yesterdayDate"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$yesterdayDate}" stepKey="fillFromDate"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
@@ -63,12 +64,12 @@
 
         <!--Proceed to store front and place an order with free shipping using created coupon-->
         <!--Add product to card-->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="AddProductToCard">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="AddProductToCard">
             <argument name="product" value="$$simpleproduct$$"/>
         </actionGroup>
 
         <!--Proceed to shipment-->
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickToOpenCard"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickToOpenCard"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="clickToProceedToCheckout"/>
         <waitForPageLoad stepKey="waitForTheFormIsOpened"/>
 
@@ -81,8 +82,8 @@
         <waitForPageLoad stepKey="WaitForDiscountToBeAdded"/>
         <see userInput="Your coupon was successfully applied." stepKey="verifyText"/>
 
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPlaceOrderButton"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
         <!--Proceed to Admin panel > SALES > Orders. Created order should be in Processing status-->
@@ -90,11 +91,11 @@
         <waitForPageLoad stepKey="waitForSalesOrderPageLoaded"/>
 
         <!-- Open Order -->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
-        <waitForPageLoad stepKey="waitForCreatedOrderPageOpened"/>
+
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
 
         <!--Verify that Created order is in Processing status-->
         <see selector="{{AdminShipmentOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="seeShipmentOrderStatus"/>

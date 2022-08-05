@@ -186,7 +186,6 @@ class AdvancedInventory extends AbstractModifier
 
         if ($pathField) {
             $fieldsetPath = $this->arrayManager->slicePath($pathField, 0, -4);
-
             $this->meta = $this->arrayManager->merge(
                 $pathField . '/arguments/data/config',
                 $this->meta,
@@ -197,6 +196,7 @@ class AdvancedInventory extends AbstractModifier
                     'scopeLabel' => '[GLOBAL]',
                     'imports' => [
                         'visible' => '${$.provider}:data.product.stock_data.manage_stock',
+                        '__disableTmpl' => ['visible' => false],
                     ],
                 ]
             );
@@ -240,8 +240,10 @@ class AdvancedInventory extends AbstractModifier
                 ],
                 'imports' => [
                     'handleChanges' => '${$.provider}:data.product.stock_data.is_qty_decimal',
+                    '__disableTmpl' => ['handleChanges' => false],
                 ],
                 'sortOrder' => 10,
+                'disabled' => $this->locator->getProduct()->isLockedAttribute($fieldCode),
             ];
             $advancedInventoryButton['arguments']['data']['config'] = [
                 'displayAsLink' => true,
@@ -268,7 +270,6 @@ class AdvancedInventory extends AbstractModifier
                 'qty' => $qty,
                 'advanced_inventory_button' => $advancedInventoryButton,
             ];
-
             $this->meta = $this->arrayManager->merge(
                 $fieldsetPath . '/children',
                 $this->meta,

@@ -23,7 +23,7 @@
             <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="setAddStoreCodeToUrlsToYes"/>
             <createData entity="secondCustomWebsite" stepKey="createCustomWebsite"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminStoreGroupCreateActionGroup" stepKey="createNewStore">
                 <argument name="Website" value="secondCustomWebsite"/>
                 <argument name="storeGroup" value="customStoreGroup"/>
@@ -32,6 +32,7 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
 
         <after>
@@ -42,14 +43,15 @@
                 <argument name="websiteName" value="$createCustomWebsite.website[name]$"/>
             </actionGroup>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetFiltersOnStoresIndexPage"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPageToResetFilters"/>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFiltersOnProductIndexPage"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- 1. Go to product page in admin panel to edit -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPageToAssociateToSecondWebsite"/>
-        <actionGroup ref="filterProductGridByName2" stepKey="filterProductInGrid">
+        <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterProductInGrid">
             <argument name="name" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
 
@@ -59,10 +61,10 @@
             <argument name="websiteToUnassign" value="_defaultWebsite"/>
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <actionGroup ref="AssertProductIsAssignedToWebsite" stepKey="seeCustomWebsiteIsChecked">
+        <actionGroup ref="AssertProductIsAssignedToWebsiteActionGroup" stepKey="seeCustomWebsiteIsChecked">
             <argument name="website" value="$createCustomWebsite.website[name]$"/>
         </actionGroup>
-        <actionGroup ref="AssertProductIsNotAssignedToWebsite" stepKey="seeMainWebsiteIsNotChecked">
+        <actionGroup ref="AssertProductIsNotAssignedToWebsiteActionGroup" stepKey="seeMainWebsiteIsNotChecked">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
         </actionGroup>
 

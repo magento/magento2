@@ -11,7 +11,11 @@ use \Magento\Framework\Api\AttributeValueFactory;
  * Base Class for extensible data Objects
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
+ * @deprecated 103.0.0
+ * @see \Magento\Framework\Model\AbstractExtensibleModel
+ * @since 100.0.2
  */
 abstract class AbstractExtensibleObject extends AbstractSimpleObject implements CustomAttributesDataInterface
 {

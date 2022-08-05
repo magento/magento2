@@ -17,9 +17,18 @@
         <executeJS function="return window.getComputedStyle(document.querySelector('{{elementSelector}}')).getPropertyValue('outline-style')" stepKey="getBorderType"/>
         <executeJS function="return window.getComputedStyle(document.querySelector('{{elementSelector}}')).getPropertyValue('outline-width')" stepKey="getBorderWidth"/>
 
-        <assertContains actual="$getBorderColor" expected="{{TranslateInlineModeStyleData.borderColor}}"  expectedType="string" stepKey="assertBorderColor"/>
-        <assertContains actual="$getBorderType" expected="{{TranslateInlineModeStyleData.borderType}}" expectedType="string" stepKey="assertBorderType"/>
-        <assertContains actual="$getBorderWidth" expected="{{TranslateInlineModeStyleData.borderWidth}}" expectedType="string" stepKey="assertBorderWidth"/>
+        <assertStringContainsString stepKey="assertBorderColor">
+			<actualResult type="const">$getBorderColor</actualResult>
+			<expectedResult type="string">{{TranslateInlineModeStyleData.borderColor}}</expectedResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertBorderType">
+			<actualResult type="const">$getBorderType</actualResult>
+			<expectedResult type="string">{{TranslateInlineModeStyleData.borderType}}</expectedResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertBorderWidth">
+			<actualResult type="const">$getBorderWidth</actualResult>
+			<expectedResult type="string">{{TranslateInlineModeStyleData.borderWidth}}</expectedResult>
+        </assertStringContainsString>
 
     </actionGroup>
 </actionGroups>

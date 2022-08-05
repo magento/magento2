@@ -13,7 +13,7 @@
             <title value="Create a simple products with all types of oprtions and add it to the cart"/>
             <description value="Create a simple products with all types of oprtions and add it to the cart"/>
             <testCaseId value="MC-14726"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
 
@@ -23,14 +23,14 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <updateData createDataKey="createProduct" entity="productWithOptions" stepKey="updateProductWithCustomOptions"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         </before>
         <after>
             <deleteData  createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData  createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
         <!-- Open Product page in StoreFront -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct1PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct1PageAndVerifyProduct">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
@@ -48,7 +48,10 @@
         <actionGroup ref="StorefrontAttachOptionFileActionGroup" stepKey="selectAndAttachFile"/>
 
         <!--Select Option From DropDown option -->
-        <actionGroup ref="StorefrontSelectOptionDropDownActionGroup" stepKey="selectDropDownOption"/>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectFirstOption">
+            <argument name="attributeLabel" value="{{ProductOptionDropDown.title}}"/>
+            <argument name="optionLabel" value="{{ProductOptionValueDropdown2.title}}"/>
+        </actionGroup>
         <scrollTo selector="{{StorefrontProductInfoMainSection.customOptionLabel(ProductOptionMultiSelect.title)}}" stepKey="scrollToMultiSelect"/>
 
         <!-- Select CheckBox From CheckBox option -->
@@ -100,7 +103,7 @@
         <!-- Assert Product Count in Mini Cart -->
         <actionGroup ref="StorefrontAssertMiniCartItemCountActionGroup" stepKey="assertProductCountAndTextInMiniCart">
             <argument name="productCount" value="2"/>
-            <argument name="productCountText" value="2 Item in Cart"/>
+            <argument name="productCountText" value="2 Items in Cart"/>
         </actionGroup>
 
         <!--Assert Product Items in Mini cart-->

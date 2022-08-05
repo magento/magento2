@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillSpecificPageWidgetMainFieldsActionGroup">
+        <annotations>
+            <description>Fill widget main fields and widget layout by index for specified page DisplayOn option</description>
+        </annotations>
+        <arguments>
+            <argument name="widget" type="entity" defaultValue="ProductsListWidget"/>
+            <argument name="index" type="string" defaultValue="0"/>
+        </arguments>
+        <selectOption selector="{{AdminNewWidgetSection.widgetType}}" userInput="{{widget.type}}" stepKey="setWidgetType"/>
+        <selectOption selector="{{AdminNewWidgetSection.widgetDesignTheme}}" userInput="{{widget.design_theme}}" stepKey="setWidgetDesignTheme"/>
+        <click selector="{{AdminNewWidgetSection.continue}}" stepKey="clickContinue"/>
+        <fillField selector="{{AdminNewWidgetSection.widgetTitle}}" userInput="{{widget.name}}" stepKey="fillTitle"/>
+        <selectOption selector="{{AdminNewWidgetSection.widgetStoreIds}}" parameterArray="{{widget.store_ids}}" stepKey="setWidgetStoreIds"/>
+        <fillField selector="{{AdminNewWidgetSection.widgetSortOrder}}" userInput="{{widget.sort_order}}" stepKey="fillSortOrder"/>
+        <click selector="{{AdminNewWidgetSection.addLayoutUpdate}}" stepKey="clickAddLayoutUpdate"/>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.selectDisplayOn}}" stepKey="waitForSelectElement"/>
+        <selectOption selector="{{AdminNewWidgetSection.displayOnByIndex(index)}}" userInput="{{widget.display_on}}" stepKey="setDisplayOn"/>
+        <waitForPageLoad stepKey="waitForDisplayOnChangesApplied"/>
+        <selectOption selector="{{AdminNewWidgetSection.layoutByIndex(index)}}" userInput="{{widget.page}}" stepKey="selectPage"/>
+        <waitForPageLoad stepKey="waitForPageChangesApplied"/>
+        <selectOption selector="{{AdminNewWidgetSection.templateByIndex(index)}}" userInput="{{widget.template}}" stepKey="selectTemplate"/>
+        <waitForPageLoad stepKey="waitForTemplateChangesApplied"/>
+        <comment userInput="BIC workaround" stepKey="scrollToSelectContainerElement"/>
+        <comment userInput="BIC workaround" stepKey="waitForScroll"/>
+        <selectOption selector="{{AdminNewWidgetSection.containerByIndex(index)}}" userInput="{{widget.container}}" stepKey="setContainer"/>
+        <waitForPageLoad stepKey="waitForContainerChangesApplied"/>
+    </actionGroup>
+</actionGroups>

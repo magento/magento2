@@ -34,7 +34,7 @@
             <createData entity="VirtualProduct" stepKey="virtualProduct4">
                 <field key="price">40.00</field>
             </createData>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="virtualProduct1" stepKey="deleteProduct1"/>
@@ -46,42 +46,42 @@
         </after>
 
         <!-- Open Product1 page in StoreFront -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct1PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct1PageAndVerifyProduct">
             <argument name="product" value="$$virtualProduct1$$"/>
         </actionGroup>
 
         <!-- Add Product1 to the cart -->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct1ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct1ToTheCart">
             <argument name="productName" value="$$virtualProduct1.name$$"/>
         </actionGroup>
 
         <!-- Open Product2 page in StoreFront -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct2PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct2PageAndVerifyProduct">
             <argument name="product" value="$$virtualProduct2$$"/>
         </actionGroup>
 
         <!-- Add Product2 to the cart -->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct2ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct2ToTheCart">
             <argument name="productName" value="$$virtualProduct2.name$$"/>
         </actionGroup>
 
         <!-- Open Product3 page in StoreFront -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct3PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct3PageAndVerifyProduct">
             <argument name="product" value="$$virtualProduct3$$"/>
         </actionGroup>
 
         <!-- Add Product3 to the cart -->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct3ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct3ToTheCart">
             <argument name="productName" value="$$virtualProduct3.name$$"/>
         </actionGroup>
 
         <!-- Open Product4 page in StoreFront -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct4PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct4PageAndVerifyProduct">
             <argument name="product" value="$$virtualProduct4$$"/>
         </actionGroup>
 
         <!-- Add Product4 to the cart -->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct4ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct4ToTheCart">
             <argument name="productName" value="$$virtualProduct4.name$$"/>
         </actionGroup>
 

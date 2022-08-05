@@ -19,34 +19,31 @@
         </annotations>
         <before>
             <!--Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <!--Create Parent Category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
         </before>
         <after>
             <!--Delete created data-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open Category Page-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoaded"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <!--Create subcategory under parent category -->
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
-        <waitForPageLoad stepKey="waitForCategoryToLoad"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}" stepKey="selectCategory"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="addSubCategoryName"/>
-        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
-        <checkOption selector="{{AdminCategoryBasicFieldSection.IncludeInMenu}}" stepKey="enableIncludeInMenu"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="openCreatedCategory">
+            <argument name="Category" value="$$createCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="CreateCategoryActionGroup" stepKey="createSubcategory">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
+        </actionGroup>
         <!-- Verify Parent Category is visible in navigation menu and Sub category is not visible in navigation menu -->
-        <amOnPage url="$$createCategory.name_lwr$$/{{SimpleSubCategory.name_lwr}}.html" stepKey="openCategoryStoreFrontPage"/>
-        <waitForPageLoad stepKey="waitForCategoryStoreFrontPageToLoad"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="seeCategoryOnStoreNavigationBar"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="dontSeeSubCategoryOnStoreNavigation"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomepage"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCategoryOnStoreNavigationBar">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeSubCategoryOnStoreNavigation">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
     </test>
 </tests>

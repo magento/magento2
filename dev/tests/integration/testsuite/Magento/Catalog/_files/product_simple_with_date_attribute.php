@@ -6,8 +6,15 @@
 
 declare(strict_types=1);
 
-include __DIR__ . '/product_date_attribute.php';
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_date_attribute.php');
+
+$objectManager = Bootstrap::getObjectManager();
+/** @var \Magento\Eav\Model\Config $eavConfig */
+$eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
+$attribute = $eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'date_attribute');
 $attribute->setData('is_used_for_promo_rules', 1);
 
 /** @var \Magento\Catalog\Model\ProductFactory $productFactory */

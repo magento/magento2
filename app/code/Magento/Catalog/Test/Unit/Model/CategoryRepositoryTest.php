@@ -3,16 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model;
 
-use Magento\Catalog\Model\Category;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Category as CategoryModel;
+use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\CategoryRepository;
+use Magento\Catalog\Model\CategoryRepository\PopulateWithValues;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\DataObject;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
+class CategoryRepositoryTest extends TestCase
 {
     /**
      * @var CategoryRepository
@@ -20,65 +35,79 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $categoryFactoryMock;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject
+     * @var  MockObject
      */
     protected $categoryResourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $extensibleDataObjectConverterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|MockObject
      */
     protected $metadataPoolMock;
 
-    protected function setUp()
+    /**
+     * @var PopulateWithValues|MockObject
+     */
+    private $populateWithValuesMock;
+
+    /**
+     * @inheridoc
+     */
+    protected function setUp(): void
     {
         $this->categoryFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Model\CategoryFactory::class,
+            CategoryFactory::class,
             ['create']
         );
         $this->categoryResourceMock =
             $this->createMock(\Magento\Catalog\Model\ResourceModel\Category::class);
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
         $this->extensibleDataObjectConverterMock = $this
-            ->getMockBuilder(\Magento\Framework\Api\ExtensibleDataObjectConverter::class)
+            ->getMockBuilder(ExtensibleDataObjectConverter::class)
             ->setMethods(['toNestedArray'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $metadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
+        $metadataMock = $this->createMock(EntityMetadata::class);
         $metadataMock->expects($this->any())
             ->method('getLinkField')
             ->willReturn('entity_id');
 
-        $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
         $this->metadataPoolMock->expects($this->any())
             ->method('getMetadata')
-            ->with(\Magento\Catalog\Api\Data\CategoryInterface::class)
+            ->with(CategoryInterface::class)
             ->willReturn($metadataMock);
+
+        $this->populateWithValuesMock = $this
+            ->getMockBuilder(PopulateWithValues::class)
+            ->onlyMethods(['execute'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = (new ObjectManager($this))->getObject(
             CategoryRepository::class,
@@ -88,6 +117,7 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
                 'storeManager' => $this->storeManagerMock,
                 'metadataPool' => $this->metadataPoolMock,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
+                'populateWithValues' => $this->populateWithValuesMock,
             ]
         );
     }
@@ -95,7 +125,7 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testGet()
     {
         $categoryId = 5;
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $categoryMock = $this->createMock(CategoryModel::class);
         $categoryMock->expects(
             $this->once()
         )->method('getId')->willReturn(
@@ -115,14 +145,12 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($categoryMock, $this->model->get($categoryId));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with id = 5
-     */
     public function testGetWhenCategoryDoesNotExist()
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectExceptionMessage('No such entity with id = 5');
         $categoryId = 5;
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $categoryMock = $this->createMock(CategoryModel::class);
         $categoryMock->expects(
             $this->once()
         )->method('getId')->willReturn(null);
@@ -176,7 +204,7 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testFilterExtraFieldsOnUpdateCategory($categoryId, $categoryData, $dataForSave)
     {
         $this->storeMock->expects($this->any())->method('getId')->willReturn(1);
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $categoryMock = $this->createMock(CategoryModel::class);
         $categoryMock->expects(
             $this->atLeastOnce()
         )->method('getId')->willReturn($categoryId);
@@ -188,12 +216,12 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue($categoryData));
+            ->willReturn($categoryData);
         $categoryMock->expects($this->once())->method('validate')->willReturn(true);
-        $categoryMock->expects($this->once())->method('addData')->with($dataForSave);
+        $this->populateWithValuesMock->expects($this->once())->method('execute')->with($categoryMock, $dataForSave);
         $this->categoryResourceMock->expects($this->once())
             ->method('save')
-            ->willReturn(\Magento\Framework\DataObject::class);
+            ->willReturn(DataObject::class);
         $this->assertEquals($categoryMock, $this->model->save($categoryMock));
     }
 
@@ -204,13 +232,13 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
         $parentCategoryId = 15;
         $newCategoryId = 25;
         $categoryData = ['level' => '1', 'path' => '1/2', 'parent_id' => 1, 'name' => 'category'];
-        $dataForSave = ['store_id' => 1, 'name' => 'category', 'path' => 'path', 'parent_id' => 15];
+        $dataForSave = ['store_id' => 1, 'name' => 'category', 'path' => 'path', 'parent_id' => 15, 'level' => null];
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue($categoryData));
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $parentCategoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+            ->willReturn($categoryData);
+        $categoryMock = $this->createMock(CategoryModel::class);
+        $parentCategoryMock = $this->createMock(CategoryModel::class);
         $categoryMock->expects($this->any())->method('getId')
             ->will($this->onConsecutiveCalls($categoryId, $newCategoryId));
         $this->categoryFactoryMock->expects($this->exactly(2))->method('create')->willReturn($parentCategoryMock);
@@ -218,26 +246,24 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $categoryMock->expects($this->once())->method('getParentId')->willReturn($parentCategoryId);
         $parentCategoryMock->expects($this->once())->method('getPath')->willReturn('path');
-        $categoryMock->expects($this->once())->method('addData')->with($dataForSave);
         $categoryMock->expects($this->once())->method('validate')->willReturn(true);
         $this->categoryResourceMock->expects($this->once())
             ->method('save')
-            ->willReturn(\Magento\Framework\DataObject::class);
+            ->willReturn(DataObject::class);
+        $this->populateWithValuesMock->expects($this->once())->method('execute')->with($categoryMock, $dataForSave);
         $this->assertEquals($categoryMock, $this->model->save($categoryMock));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save category
-     */
     public function testSaveWithException()
     {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectExceptionMessage('Could not save category');
         $categoryId = 5;
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $categoryMock = $this->createMock(CategoryModel::class);
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $categoryMock->expects(
             $this->atLeastOnce()
         )->method('getId')->willReturn($categoryId);
@@ -258,12 +284,15 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->expectException($expectedException);
         $this->expectExceptionMessage($expectedExceptionMessage);
         $categoryId = 5;
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $categoryMock = $this->createMock(CategoryModel::class);
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue([]));
-        $objectMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getFrontend', 'getLabel']);
+            ->willReturn([]);
+        $objectMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getFrontend', 'getLabel'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $categoryMock->expects(
             $this->atLeastOnce()
         )->method('getId')->willReturn($categoryId);
@@ -287,10 +316,10 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                true, \Magento\Framework\Exception\CouldNotSaveException::class,
+                true, CouldNotSaveException::class,
                 'Could not save category: The "ValidateCategoryTest" attribute is required. Enter and try again.'
             ], [
-                'Something went wrong', \Magento\Framework\Exception\CouldNotSaveException::class,
+                'Something went wrong', CouldNotSaveException::class,
                 'Could not save category: Something went wrong'
             ]
         ];
@@ -298,18 +327,18 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testDelete()
     {
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $categoryMock = $this->createMock(CategoryModel::class);
         $this->assertTrue($this->model->delete($categoryMock));
     }
 
     /**
-     * @throws \Magento\Framework\Exception\StateException
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot delete category with id
+     * @throws StateException
      */
     public function testDeleteWithException()
     {
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $this->expectException('Magento\Framework\Exception\StateException');
+        $this->expectExceptionMessage('Cannot delete category with id');
+        $categoryMock = $this->createMock(CategoryModel::class);
         $this->categoryResourceMock->expects($this->once())->method('delete')->willThrowException(new \Exception());
         $this->model->delete($categoryMock);
     }
@@ -317,7 +346,7 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testDeleteByIdentifier()
     {
         $categoryId = 5;
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $categoryMock = $this->createMock(CategoryModel::class);
         $categoryMock->expects(
             $this->any()
         )->method('getId')->willReturn(
@@ -336,14 +365,12 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->deleteByIdentifier($categoryId));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with id = 5
-     */
     public function testDeleteByIdentifierWithException()
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectExceptionMessage('No such entity with id = 5');
         $categoryId = 5;
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $categoryMock = $this->createMock(CategoryModel::class);
         $categoryMock->expects(
             $this->once()
         )->method('getId')->willReturn(null);

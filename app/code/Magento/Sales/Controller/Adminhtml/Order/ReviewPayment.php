@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 
 /**
@@ -63,17 +62,20 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order implements
                 }
                 $this->orderRepository->save($order);
                 $this->messageManager->addSuccessMessage($message);
-                $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getEntityId()]);
-            } else {
-                $resultRedirect->setPath('sales/*/');
-                return $resultRedirect;
             }
             // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->messageManager->addErrorMessage(__('We can\'t update the payment right now.'));
             $this->logger->critical($e);
+        }
+
+        if ($order) {
+            $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getEntityId()]);
+        } else {
             $resultRedirect->setPath('sales/*/');
         }
+
         return $resultRedirect;
     }
 }

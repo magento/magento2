@@ -8,11 +8,13 @@ namespace Magento\Fedex\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Webapi\Soap\ClientFactory;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
 
@@ -21,6 +23,7 @@ use Magento\Shipping\Model\Rate\Result;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -29,21 +32,21 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @var string
      */
-    const CODE = 'fedex';
+    public const CODE = 'fedex';
 
     /**
      * Purpose of rate request
      *
      * @var string
      */
-    const RATE_REQUEST_GENERAL = 'general';
+    public const RATE_REQUEST_GENERAL = 'general';
 
     /**
      * Purpose of rate request
      *
      * @var string
      */
-    const RATE_REQUEST_SMARTPOST = 'SMART_POST';
+    public const RATE_REQUEST_SMARTPOST = 'SMART_POST';
 
     /**
      * Code of the carrier
@@ -121,7 +124,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_productCollectionFactory;
 
     /**
-     * @inheritdoc
+     * @var string[]
      */
     protected $_debugReplacePrivateDataKeys = [
         'Key', 'Password', 'MeterNumber',
@@ -148,6 +151,16 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @var ClientFactory
      */
     private $soapClientFactory;
+
+    /**
+     * @var array
+     */
+    private $baseCurrencyRate;
+
+    /**
+     * @var DataObject
+     */
+    private $_rawTrackingRequest;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -369,14 +382,15 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $r->setDestCity($request->getDestCity());
         }
 
-        $weight = $this->getTotalNumOfBoxes($request->getPackageWeight());
-        $r->setWeight($weight);
         if ($request->getFreeMethodWeight() != $request->getPackageWeight()) {
             $r->setFreeMethodWeight($request->getFreeMethodWeight());
         }
 
+        $r->setWeight($request->getPackageWeight());
         $r->setValue($request->getPackagePhysicalValue());
         $r->setValueWithDiscount($request->getPackageValueWithDiscount());
+
+        $r->setPackages($this->createPackages((float) $request->getPackageWeight(), (array) $request->getPackages()));
 
         $r->setMeterNumber($this->getConfigData('meter_number'));
         $r->setKey($this->getConfigData('key'));
@@ -433,7 +447,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'DropoffType' => $r->getDropoffType(),
                 'ShipTimestamp' => date('c'),
                 'PackagingType' => $r->getPackaging(),
-                'TotalInsuredValue' => ['Amount' => $r->getValue(), 'Currency' => $this->getCurrencyCode()],
                 'Shipper' => [
                     'Address' => ['PostalCode' => $r->getOrigPostal(), 'CountryCode' => $r->getOrigCountry()],
                 ],
@@ -452,37 +465,36 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     'CustomsValue' => ['Amount' => $r->getValue(), 'Currency' => $this->getCurrencyCode()],
                 ],
                 'RateRequestTypes' => 'LIST',
-                'PackageCount' => '1',
                 'PackageDetail' => 'INDIVIDUAL_PACKAGES',
-                'RequestedPackageLineItems' => [
-                    '0' => [
-                        'Weight' => [
-                            'Value' => (double)$r->getWeight(),
-                            'Units' => $this->getConfigData('unit_of_measure'),
-                        ],
-                        'GroupPackageCount' => 1,
-                    ],
-                ],
             ],
         ];
+
+        foreach ($r->getPackages() as $packageNum => $package) {
+            $ratesRequest['RequestedShipment']['RequestedPackageLineItems'][$packageNum]['GroupPackageCount'] = 1;
+            $ratesRequest['RequestedShipment']['RequestedPackageLineItems'][$packageNum]['Weight']['Value']
+                = (double) $package['weight'];
+            $ratesRequest['RequestedShipment']['RequestedPackageLineItems'][$packageNum]['Weight']['Units']
+                = $this->getConfigData('unit_of_measure');
+            if (isset($package['price'])) {
+                $ratesRequest['RequestedShipment']['RequestedPackageLineItems'][$packageNum]['InsuredValue']['Amount']
+                    = (double) $package['price'];
+                $ratesRequest['RequestedShipment']['RequestedPackageLineItems'][$packageNum]['InsuredValue']['Currency']
+                    = $this->getCurrencyCode();
+            }
+        }
+
+        $ratesRequest['RequestedShipment']['PackageCount'] = count($r->getPackages());
 
         if ($r->getDestCity()) {
             $ratesRequest['RequestedShipment']['Recipient']['Address']['City'] = $r->getDestCity();
         }
 
-        if ($purpose == self::RATE_REQUEST_GENERAL) {
-            $ratesRequest['RequestedShipment']['RequestedPackageLineItems'][0]['InsuredValue'] = [
-                'Amount' => $r->getValue(),
-                'Currency' => $this->getCurrencyCode(),
+        if ($purpose == self::RATE_REQUEST_SMARTPOST) {
+            $ratesRequest['RequestedShipment']['ServiceType'] = self::RATE_REQUEST_SMARTPOST;
+            $ratesRequest['RequestedShipment']['SmartPostDetail'] = [
+                'Indicia' => (double)$r->getWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
+                'HubId' => $this->getConfigData('smartpost_hubid'),
             ];
-        } else {
-            if ($purpose == self::RATE_REQUEST_SMARTPOST) {
-                $ratesRequest['RequestedShipment']['ServiceType'] = self::RATE_REQUEST_SMARTPOST;
-                $ratesRequest['RequestedShipment']['SmartPostDetail'] = [
-                    'Indicia' => (double)$r->getWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
-                    'HubId' => $this->getConfigData('smartpost_hubid'),
-                ];
-            }
         }
 
         return $ratesRequest;
@@ -621,6 +633,40 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     }
 
     /**
+     * Get final price for shipping method with handling fee per package
+     *
+     * @param float $cost
+     * @param string $handlingType
+     * @param float $handlingFee
+     * @return float
+     */
+    protected function _getPerpackagePrice($cost, $handlingType, $handlingFee)
+    {
+        if ($handlingType == AbstractCarrier::HANDLING_TYPE_PERCENT) {
+            return $cost + $cost * $this->_numBoxes * $handlingFee / 100;
+        }
+
+        return $cost + $this->_numBoxes * $handlingFee;
+    }
+
+    /**
+     * Get final price for shipping method with handling fee per order
+     *
+     * @param float $cost
+     * @param string $handlingType
+     * @param float $handlingFee
+     * @return float
+     */
+    protected function _getPerorderPrice($cost, $handlingType, $handlingFee)
+    {
+        if ($handlingType == self::HANDLING_TYPE_PERCENT) {
+            return $cost + $cost * $handlingFee / 100;
+        }
+
+        return $cost + $handlingFee;
+    }
+
+    /**
      * Get origin based amount form response of rate estimation
      *
      * @param \stdClass $rate
@@ -629,12 +675,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected function _getRateAmountOriginBased($rate)
     {
         $amount = null;
+        $currencyCode = '';
         $rateTypeAmounts = [];
-
         if (is_object($rate)) {
             // The "RATED..." rates are expressed in the currency of the origin country
             foreach ($rate->RatedShipmentDetails as $ratedShipmentDetail) {
                 $netAmount = (string)$ratedShipmentDetail->ShipmentRateDetail->TotalNetCharge->Amount;
+                $currencyCode = (string)$ratedShipmentDetail->ShipmentRateDetail->TotalNetCharge->Currency;
                 $rateType = (string)$ratedShipmentDetail->ShipmentRateDetail->RateType;
                 $rateTypeAmounts[$rateType] = $netAmount;
             }
@@ -649,9 +696,40 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             if ($amount === null) {
                 $amount = (string)$rate->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount;
             }
+
+            $amount = (float)$amount * $this->getBaseCurrencyRate($currencyCode);
         }
 
         return $amount;
+    }
+
+    /**
+     * Returns base currency rate.
+     *
+     * @param string $currencyCode
+     * @return float
+     * @throws LocalizedException
+     */
+    private function getBaseCurrencyRate(string $currencyCode): float
+    {
+        if (!isset($this->baseCurrencyRate[$currencyCode])) {
+            $baseCurrencyCode = $this->_request->getBaseCurrency()->getCode();
+            $rate = $this->_currencyFactory->create()
+                ->load($currencyCode)
+                ->getAnyRate($baseCurrencyCode);
+            if ($rate === false) {
+                $errorMessage = __(
+                    'Can\'t convert a shipping cost from "%1-%2" for FedEx carrier.',
+                    $currencyCode,
+                    $baseCurrencyCode
+                );
+                $this->_logger->critical($errorMessage);
+                throw new LocalizedException($errorMessage);
+            }
+            $this->baseCurrencyRate[$currencyCode] = (float)$rate;
+        }
+
+        return $this->baseCurrencyRate[$currencyCode];
     }
 
     /**
@@ -665,6 +743,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $r = $this->_rawRequest;
         $weight = $this->getTotalNumOfBoxes($r->getFreeMethodWeight());
         $r->setWeight($weight);
+        $r->setPackages($this->createPackages((float)$r->getFreeMethodWeight(), []));
         $r->setService($freeMethod);
     }
 
@@ -726,9 +805,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $debugData = ['request' => $this->filterDebugData($request)];
             try {
                 $url = $this->getConfigData('gateway_url');
-                if (!$url) {
-                    $url = $this->_defaultGatewayUrl;
-                }
+
+                // phpcs:disable Magento2.Functions.DiscouragedFunction
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_URL, $url);
@@ -737,6 +815,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
                 $responseBody = curl_exec($ch);
                 curl_close($ch);
+                // phpcs:enable
 
                 $debugData['result'] = $this->filterDebugData($responseBody);
                 $this->_setCachedQuotes($request, $responseBody);
@@ -765,14 +844,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (strlen(trim($response)) > 0) {
             $xml = $this->parseXml($response, \Magento\Shipping\Model\Simplexml\Element::class);
             if (is_object($xml)) {
-                if (is_object($xml->Error) && is_object($xml->Error->Message)) {
-                    $errorTitle = (string)$xml->Error->Message;
-                } elseif (is_object($xml->SoftError) && is_object($xml->SoftError->Message)) {
-                    $errorTitle = (string)$xml->SoftError->Message;
-                } else {
-                    $errorTitle = 'Sorry, something went wrong. Please try again or contact us and we\'ll try to help.';
-                }
-
                 $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
 
                 foreach ($xml->Entry as $entry) {
@@ -789,11 +860,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 }
 
                 asort($priceArr);
-            } else {
-                $errorTitle = 'Response is in the wrong format.';
             }
-        } else {
-            $errorTitle = 'For some reason we can\'t retrieve tracking info right now.';
         }
 
         $result = $this->_rateFactory->create();
@@ -1168,6 +1235,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 }
             }
         }
+        // phpstan:ignore
         if (empty($statuses)) {
             $statuses = __('Empty response');
         }
@@ -1776,5 +1844,25 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         return $request->getIsReturn() && $request->getShippingMethod() !== self::RATE_REQUEST_SMARTPOST
             ? 'RECIPIENT'
             : 'SENDER';
+    }
+
+    /**
+     * Creates packages for rate request.
+     *
+     * @param float $totalWeight
+     * @param array $packages
+     * @return array
+     */
+    private function createPackages(float $totalWeight, array $packages): array
+    {
+        if (empty($packages)) {
+            $dividedWeight = $this->getTotalNumOfBoxes($totalWeight);
+            for ($i=0; $i < $this->_numBoxes; $i++) {
+                $packages[$i]['weight'] = $dividedWeight;
+            }
+        }
+        $this->_numBoxes = count($packages);
+
+        return $packages;
     }
 }

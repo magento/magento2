@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminNewsletterTemplateFormActionGroup">
+        <arguments>
+            <argument name="name" type="string"/>
+            <argument name="subject" type="string"/>
+            <argument name="senderName" type="string"/>
+            <argument name="senderEmail" type="string"/>
+            <argument name="templateContent" type="string"/>
+          </arguments>
+
+        <seeInField stepKey="seeTemplateNameField" userInput="{{name}}" selector="{{BasicFieldNewsletterSection.templateName}}"/>
+        <seeInField stepKey="seeTemplateSubjectField" userInput="{{subject}}" selector="{{BasicFieldNewsletterSection.templateSubject}}"/>
+        <seeInField stepKey="seeTemplateSenderNameField" userInput="{{senderName}}" selector="{{BasicFieldNewsletterSection.senderName}}"/>
+        <seeInField stepKey="seeTemplateSenderEmailField" userInput="{{senderEmail}}" selector="{{BasicFieldNewsletterSection.senderEmail}}"/>
+        <seeInField stepKey="seeTemplateContentField" userInput="{{templateContent}}"  selector="{{TinyMCESection.Content}}"/>
+    </actionGroup>
+</actionGroups>

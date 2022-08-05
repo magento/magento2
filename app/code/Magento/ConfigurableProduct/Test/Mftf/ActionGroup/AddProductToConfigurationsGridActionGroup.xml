@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddProductToConfigurationsGridActionGroup">
+        <annotations>
+            <description>Adds the provided Product SKU to the provided Product Name.</description>
+        </annotations>
+        <arguments>
+            <argument name="sku" type="string"/>
+            <argument name="name" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtnByProductName(name)}}" stepKey="clickToExpandFirstActions"/>
+        <click selector="{{AdminProductFormConfigurationsSection.addProduct(name)}}" stepKey="clickChooseFirstDifferentProduct"/>
+        <switchToIFrame stepKey="switchOutOfIFrame"/>
+        <waitForPageLoad stepKey="waitForFilters"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <click selector="{{AdminProductGridFilterSection.firstRowBySku(sku)}}" stepKey="clickOnFirstRow"/>
+    </actionGroup>
+</actionGroups>

@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\Cache\Config;
 
+/**
+ * Cache configuration schema locator
+ */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**
@@ -15,6 +18,9 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     protected $urnResolver;
 
     /**
+     * Initialize dependencies.
+     *
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      */
     public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
@@ -25,6 +31,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      * Get path to merged config schema
      *
      * @return string|null
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function getSchema()
     {
@@ -34,10 +41,11 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     /**
      * Get path to pre file validation schema
      *
-     * @return null
+     * @return string|null
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function getPerFileSchema()
     {
-        return null;
+        return $this->urnResolver->getRealPath('urn:magento:framework:Cache/etc/cache.xsd');
     }
 }

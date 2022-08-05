@@ -33,7 +33,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -61,7 +61,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     /**
      * Cleanup session, contaminated by product initialization methods
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->get(\Magento\Catalog\Model\Session::class)->unsLastViewedProductId();
         $this->_controller = null;
@@ -77,7 +77,10 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $uniqid = uniqid();
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
-        $product->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE)->setId(99)->setUrlKey($uniqid);
+        $product->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE)
+            ->setId(99)
+            ->setSku('test-sku')
+            ->setUrlKey($uniqid);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = $this->objectManager;
         $objectManager->get(\Magento\Framework\Registry::class)->register('product', $product);
@@ -90,7 +93,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\Page\Config::ELEMENT_TYPE_BODY,
             \Magento\Framework\View\Page\Config::BODY_ATTRIBUTE_CLASS
         );
-        $this->assertContains("product-{$uniqid}", $bodyClass);
+        $this->assertStringContainsString("product-{$uniqid}", $bodyClass);
         $handles = $this->page->getLayout()->getUpdate()->getHandles();
         $this->assertContains('catalog_product_view_type_simple', $handles);
     }
@@ -119,11 +122,12 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @magentoAppIsolation enabled
      */
     public function testPrepareAndRenderWrongController()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $objectManager = $this->objectManager;
         $controller = $objectManager->create(\Magento\Catalog\Helper\Product\Stub\ProductControllerStub::class);
         $this->_helper->prepareAndRender($this->page, 10, $controller);
@@ -131,10 +135,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testPrepareAndRenderWrongProduct()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $this->_helper->prepareAndRender($this->page, 999, $this->_controller);
     }
 }

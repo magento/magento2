@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Set default flat rate shipping method settings -->
             <comment userInput="Set default flat rate shipping method settings" stepKey="setDefaultFlatRateShippingMethodComment"/>
             <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
@@ -94,8 +94,8 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct1"/>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
@@ -107,34 +107,37 @@
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigurableProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Create new customer order -->
         <comment userInput="Create new customer order" stepKey="createNewCustomerOrderComment"/>
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
         <!-- Add bundle product to order and check product price in grid -->
         <comment userInput="Add bundle product to order and check product price in grid" stepKey="addBundleProductToOrderComment"/>
-        <actionGroup ref="addBundleProductToOrder" stepKey="addBundleProductToOrder">
+        <actionGroup ref="AddBundleProductToOrderActionGroup" stepKey="addBundleProductToOrder">
             <argument name="product" value="$$createBundleProduct$$"/>
             <argument name="quantity" value="1"/>
         </actionGroup>
         <!-- Add configurable product to order -->
         <comment userInput="Add configurable product to order" stepKey="addConfigurableProductToOrderComment"/>
-        <actionGroup ref="newAddConfigurableProductToOrder" stepKey="addConfigurableProductToOrder">
+        <actionGroup ref="NewAddConfigurableProductToOrderActionGroup" stepKey="addConfigurableProductToOrder">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="attribute" value="$$createConfigProductAttribute$$"/>
             <argument name="option" value="$$getConfigAttributeOption1$$"/>
         </actionGroup>
         <!-- Add Simple product to order -->
         <comment userInput="Add Simple product to order" stepKey="addSimpleProductToOrderComment"/>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToTheOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
         <!-- Add Virtual product to order -->
         <comment userInput="Add Virtual product to order" stepKey="addVirtualProductToOrderComment"/>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addVirtualProductToTheOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addVirtualProductToTheOrder">
             <argument name="product" value="$$virtualProduct$$"/>
         </actionGroup>
         <!-- Select FlatRate shipping method -->
@@ -142,17 +145,18 @@
         <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
         <!-- Submit order -->
         <comment userInput="Submit order" stepKey="submitOrderComment"/>
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
         <!-- Verify order information -->
         <comment userInput="Verify order information" stepKey="verifyOrderInformationComment"/>
-        <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+        <comment userInput="BIC workaround" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
         <!-- Cancel the Order -->
         <comment userInput="Cancel the Order" stepKey="cancelTheOrder"/>
-        <actionGroup ref="cancelPendingOrder" stepKey="cancelPendingOrder"/>
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
         <!-- Assert Simple Product Quantity in backend after order Canceled -->
         <comment userInput="Assert Simple Product Quantity in backend after order Canceled" stepKey="assertSimpleProductQuantityAfterOrderCanceledComment"/>
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct">
             <argument name="productSku" value="$$simpleProduct.sku$$"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad"/>
@@ -167,7 +171,7 @@
         </actionGroup>
         <!-- Assert Virtual Product Quantity in backend after order canceled -->
         <comment userInput="Assert Virtual Product Quantity in backend after order canceled" stepKey="assertVirtualProductQuantityAfterOrderCanceledComment"/>
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheVirtualProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheVirtualProduct">
             <argument name="productSku" value="$$virtualProduct.sku$$"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad1"/>
@@ -182,7 +186,7 @@
         </actionGroup>
         <!-- Assert Bundle Product Quantity in backend after order canceled -->
         <comment userInput="Assert Bundle Product Quantity in backend after order canceled" stepKey="assertBundleProductQuantityAfterOrderCanceledComment"/>
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheBundleProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheBundleProduct">
             <argument name="productSku" value="$$simpleProduct1.sku$$"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad2"/>
@@ -197,7 +201,7 @@
         </actionGroup>
         <!-- Assert Configurable Product Quantity in backend after order canceled -->
         <comment userInput="Assert Configurable Product quantity in backend after order canceled" stepKey="assertConfigurableProductQuantityAfterOrderCanceledComment"/>
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheConfigProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheConfigProduct">
             <argument name="productSku" value="$$createConfigChildProduct1.sku$$"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad3"/>
@@ -212,14 +216,13 @@
         </actionGroup>
         <!-- Open Order Index Page -->
         <comment userInput="Open Order Index Page" stepKey="openOrderIndexPageComemnt"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
-        <!-- Filter order using orderId -->
-        <comment userInput="Filter order using orderId" stepKey="filterOrderUsingOrderIdComment"/>
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$orderId"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
+        <!-- Filter order using order number -->
+        <comment userInput="Filter order using order number" stepKey="filterOrderUsingOrderIdComment"/>
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="{$orderNumber}"/>
         </actionGroup>
-        <see selector="{{AdminOrdersGridSection.firstRow}}" userInput="$orderId" stepKey="seeOrderIdInGrid"/>
+        <see selector="{{AdminOrdersGridSection.firstRow}}" userInput="$orderNumber" stepKey="seeOrderIdInGrid"/>
         <see selector="{{AdminOrdersGridSection.firstRow}}" userInput="Canceled" stepKey="seeStatusInGrid"/>
         <!-- Log in to Storefront as Customer  -->
         <comment userInput="Log in to Storefront as Customer" stepKey="logInAsCustomerComment"/>
@@ -230,6 +233,9 @@
         <comment userInput="Assert Order status in frontend order grid " stepKey="assertOrderStatusInFrontendComment"/>
         <click selector="{{StorefrontCustomerSidebarSection.sidebarCurrentTab('My Orders')}}" stepKey="clickOnMyOrders"/>
         <waitForPageLoad stepKey="waitForOrderDetailsToLoad"/>
-        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderStatusInGrid('$orderId', 'Canceled')}}" stepKey="seeOrderStatusInGrid"/>
+        <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
+            <argument name="orderId" value="$orderNumber"/>
+            <argument name="status" value="Canceled"/>
+        </actionGroup>
     </test>
 </tests>

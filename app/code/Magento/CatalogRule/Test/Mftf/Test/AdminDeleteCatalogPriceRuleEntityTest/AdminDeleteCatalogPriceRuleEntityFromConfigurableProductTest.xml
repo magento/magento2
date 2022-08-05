@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteCatalogPriceRuleEntityFromConfigurableProductTest">
+        <annotations>
+            <stories value="Delete Catalog Price Rule"/>
+            <title value="Delete Catalog Price Rule for Configurable Product"/>
+            <description value="Assert that Catalog Price Rule is not applied for configurable product"/>
+            <testCaseId value="MC-14074"/>
+            <severity value="CRITICAL"/>
+            <group value="CatalogRule"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer1"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
+
+            <!-- Create the configurable product based on the data in the /data folder -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct1">
+                <requiredEntity createDataKey="createCategory1"/>
+            </createData>
+
+            <!-- Make the configurable product have two options, that are children of the default attribute set -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute1"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute1"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute1"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute1"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute1"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute1"/>
+            </getData>
+
+            <!-- Create the 2 children that will be a part of the configurable product -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Assign the two products to the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption1">
+                <requiredEntity createDataKey="createConfigProduct1"/>
+                <requiredEntity createDataKey="createConfigProductAttribute1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct1"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct1"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+
+            <amOnPage url="{{AdminNewCatalogPriceRulePage.url}}" stepKey="openNewCatalogPriceRulePage"/>
+            <waitForPageLoad stepKey="waitForPageToLoad1"/>
+
+            <actionGroup ref="CreateCatalogPriceRuleViaTheUiActionGroup" stepKey="createCatalogPriceRuleViaTheUi1">
+                <argument name="catalogRule" value="DeleteActiveCatalogPriceRuleWithConditions"/>
+                <argument name="customerGroup" value="General"/>
+                <argument name="disregardRules" value="Yes"/>
+            </actionGroup>
+
+            <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="saveTheCatalogRule"/>
+            <waitForPageLoad stepKey="waitForPageToLoad3"/>
+            <see selector="{{AdminNewCatalogPriceRule.successMessage}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin1"/>
+
+            <deleteData createDataKey="createCustomer1" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
+            <deleteData createDataKey="createConfigProduct1" stepKey="deleteConfigProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute1" stepKey="deleteConfigProductAttribute1"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <!-- Delete the simple product and catalog price rule -->
+        <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage1"/>
+        <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule1">
+            <argument name="name" value="{{DeleteActiveCatalogPriceRuleWithConditions.name}}"/>
+            <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+        </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
+
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+
+        <!-- Assert that the rule isn't present on the Category page -->
+        <amOnPage url="$$createCategory1.custom_attributes[url_key]$$.html" stepKey="goToStorefrontCategoryPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createConfigProduct1.name$$)}}" userInput="$$createConfigChildProduct1.price$$" stepKey="seeRegularPriceText1"/>
+
+        <!-- Assert that the rule isn't present on the Product page -->
+        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct1.custom_attributes[url_key]$$)}}" stepKey="goToStorefrontProductPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <dontSee selector="{{StorefrontProductInfoMainSection.oldPriceTag}}" userInput="Regular Price" stepKey="dontSeeRegularPriceText2"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigChildProduct1.price$$" stepKey="seeTrueProductPrice1"/>
+
+        <!-- Assert that the rule isn't present in the Shopping Cart -->
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="option1" stepKey="selectOption1"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added $$createConfigProduct1.name$ to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniShoppingCart1"/>
+        <see selector="{{StorefrontMinicartSection.productPriceByName($$createConfigProduct1.name$$)}}" userInput="$$createConfigProduct1.price$$" stepKey="seeCorrectProductPrice1"/>
+    </test>
+</tests>

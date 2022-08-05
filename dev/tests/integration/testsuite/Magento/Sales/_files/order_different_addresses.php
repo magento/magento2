@@ -5,15 +5,19 @@
  */
 declare(strict_types=1);
 
-// @codingStandardsIgnoreFile
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'default_rollback.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
-/** @var \Magento\Catalog\Model\Product $product */
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/default_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
+
+$objectManager = Bootstrap::getObjectManager();
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple');
 
 $addressData = include __DIR__ . '/address_data.php';
-
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Sales\Model\Order\Address $billingAddress */
 $billingAddress = $objectManager->create(\Magento\Sales\Model\Order\Address::class, ['data' => $addressData]);

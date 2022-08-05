@@ -7,13 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mail;
 
+use Laminas\Mail\Exception\InvalidArgumentException as LaminasInvalidArgumentException;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Mail\Exception\InvalidArgumentException;
-use Zend\Mail\Address as ZendAddress;
-use Zend\Mail\AddressList;
-use Zend\Mime\Message as ZendMimeMessage;
+use Laminas\Mail\Address as LaminasAddress;
+use Laminas\Mail\AddressList;
+use Laminas\Mime\Message as LaminasMimeMessage;
+use Psr\Log\LoggerInterface;
 
 /**
- * Email message
+ * Magento Framework Email message
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailMessage extends Message implements EmailMessageInterface
 {
@@ -28,8 +33,11 @@ class EmailMessage extends Message implements EmailMessageInterface
     private $addressFactory;
 
     /**
-     * EmailMessage constructor
-     *
+     * @var LoggerInterface|null
+     */
+    private $logger;
+
+    /**
      * @param MimeMessageInterface $body
      * @param array $to
      * @param MimeMessageInterfaceFactory $mimeMessageFactory
@@ -41,8 +49,8 @@ class EmailMessage extends Message implements EmailMessageInterface
      * @param Address|null $sender
      * @param string|null $subject
      * @param string|null $encoding
+     * @param LoggerInterface|null $logger
      * @throws InvalidArgumentException
-     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -58,10 +66,12 @@ class EmailMessage extends Message implements EmailMessageInterface
         ?array $replyTo = null,
         ?Address $sender = null,
         ?string $subject = '',
-        ?string $encoding = 'utf-8'
+        ?string $encoding = 'utf-8',
+        ?LoggerInterface $logger = null
     ) {
         parent::__construct($encoding);
-        $mimeMessage = new ZendMimeMessage();
+        $mimeMessage = new LaminasMimeMessage();
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
         $mimeMessage->setParts($body->getParts());
         $this->zendMessage->setBody($mimeMessage);
         if ($subject) {
@@ -153,15 +163,15 @@ class EmailMessage extends Message implements EmailMessageInterface
      */
     public function getSender(): ?Address
     {
-        /** @var ZendAddress $zendSender */
-        if (!$zendSender = $this->zendMessage->getSender()) {
+        /** @var LaminasAddress $laminasSender */
+        if (!$laminasSender = $this->zendMessage->getSender()) {
             return null;
         }
 
         return $this->addressFactory->create(
             [
-                'email' => $zendSender->getEmail(),
-                'name' => $zendSender->getName()
+                'email' => $laminasSender->getEmail(),
+                'name' => $laminasSender->getName()
             ]
         );
     }
@@ -222,11 +232,19 @@ class EmailMessage extends Message implements EmailMessageInterface
      */
     private function convertAddressArrayToAddressList(array $arrayList): AddressList
     {
-        $zendAddressList = new AddressList();
+        $laminasAddressList = new AddressList();
         foreach ($arrayList as $address) {
-            $zendAddressList->add($address->getEmail(), $address->getName());
+            try {
+                $laminasAddressList->add($address->getEmail(), $address->getName());
+            } catch (LaminasInvalidArgumentException $e) {
+                $this->logger->warning(
+                    'Could not add an invalid email address to the mailing queue',
+                    ['exception' => $e]
+                );
+                continue;
+            }
         }
 
-        return $zendAddressList;
+        return $laminasAddressList;
     }
 }

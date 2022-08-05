@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Quote\Model\Cart;
 
 use Magento\Quote\Api;
@@ -12,9 +15,11 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Quote\Model\Cart\Totals\ItemConverter;
 use Magento\Quote\Api\CouponManagementInterface;
+use Magento\Quote\Api\Data\TotalsInterface as QuoteTotalsInterface;
 
 /**
  * Cart totals data object.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartTotalRepository implements CartTotalRepositoryInterface
@@ -27,8 +32,6 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     private $totalsFactory;
 
     /**
-     * Quote repository.
-     *
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     private $quoteRepository;
@@ -79,15 +82,13 @@ class CartTotalRepository implements CartTotalRepositoryInterface
 
     /**
      * @inheritdoc
-     *
-     * @param int $cartId The cart ID.
-     * @return Totals Quote totals data.
      */
-    public function get($cartId)
+    public function get($cartId): QuoteTotalsInterface
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
+            $quote->collectTotals();
             $addressTotalsData = $quote->getBillingAddress()->getData();
             $addressTotals = $quote->getBillingAddress()->getTotals();
         } else {
@@ -96,24 +97,17 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         }
         unset($addressTotalsData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
 
-        /** @var \Magento\Quote\Api\Data\TotalsInterface $quoteTotals */
+        /** @var QuoteTotalsInterface $quoteTotals */
         $quoteTotals = $this->totalsFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $quoteTotals,
             $addressTotalsData,
-            \Magento\Quote\Api\Data\TotalsInterface::class
+            QuoteTotalsInterface::class
         );
-        $items = [];
-        foreach ($quote->getAllVisibleItems() as $index => $item) {
-            $items[$index] = $this->itemConverter->modelToDataObject($item);
-        }
+        $items = array_map([$this->itemConverter, 'modelToDataObject'], $quote->getAllVisibleItems());
         $calculatedTotals = $this->totalsConverter->process($addressTotals);
         $quoteTotals->setTotalSegments($calculatedTotals);
-
-        $amount = $quoteTotals->getGrandTotal() - $quoteTotals->getTaxAmount();
-        $amount = $amount > 0 ? $amount : 0;
         $quoteTotals->setCouponCode($this->couponService->get($cartId));
-        $quoteTotals->setGrandTotal($amount);
         $quoteTotals->setItems($items);
         $quoteTotals->setItemsQty($quote->getItemsQty());
         $quoteTotals->setBaseCurrencyCode($quote->getBaseCurrencyCode());

@@ -1,19 +1,15 @@
 <?php
 /**
- * Protocol validator
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Validator;
 
-use \Zend\Uri\Uri;
+use \Laminas\Uri\Uri;
 
 /**
- * Check is URI starts from allowed protocol
- *
- * Class AllowedProtocols
- * @package Magento\Framework\Validator
+ * Protocol validator
  */
 class AllowedProtocols extends AbstractValidator
 {
@@ -29,6 +25,7 @@ class AllowedProtocols extends AbstractValidator
 
     /**
      * Constructor.
+     *
      * @param array $listOfProtocols
      */
     public function __construct($listOfProtocols = [])
@@ -48,12 +45,13 @@ class AllowedProtocols extends AbstractValidator
     {
         $uri = new Uri($value);
         $isValid = in_array(
-            strtolower($uri->getScheme()),
+            strtolower($uri->getScheme() ?? ''),
             $this->listOfProtocols
         );
         if (!$isValid) {
             $this->_addMessages(["Protocol isn't allowed"]);
         }
+
         return $isValid;
     }
 }

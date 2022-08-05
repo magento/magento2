@@ -7,8 +7,8 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="SalesOrderPrintSection">
-        <element name="isOrderPrintPage" type="block" selector=".preview-area"/>
+        <element name="isOrderPrintPage" type="block" selector="print-preview-app"/>
     </section>
 </sections>

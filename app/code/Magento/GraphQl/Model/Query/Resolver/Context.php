@@ -12,7 +12,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 /**
  * Do not use this class. It was kept for backward compatibility.
  *
- * @deprecated \Magento\GraphQl\Model\Query\Context is used instead of this
+ * @deprecated 100.3.3 \Magento\GraphQl\Model\Query\Context is used instead of this
  */
 class Context extends \Magento\Framework\Model\AbstractExtensibleModel implements ContextInterface
 {

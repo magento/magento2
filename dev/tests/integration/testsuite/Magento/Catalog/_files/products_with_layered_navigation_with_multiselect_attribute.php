@@ -4,13 +4,15 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\TestFramework\Helper\CacheCleaner;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
 /**
  * Create multiselect attribute
  */
-require __DIR__ . '/multiselect_attribute.php';
-
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Eav\Api\AttributeRepositoryInterface;
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/multiselect_attribute.php');
 
 /** Create product with options and multiselect attribute */
 
@@ -89,10 +91,4 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
 
 $productRepository->save($product);
 
-/** @var \Magento\Indexer\Model\Indexer\Collection $indexerCollection */
-$indexerCollection = Bootstrap::getObjectManager()->get(\Magento\Indexer\Model\Indexer\Collection::class);
-$indexerCollection->load();
-/** @var \Magento\Indexer\Model\Indexer $indexer */
-foreach ($indexerCollection->getItems() as $indexer) {
-    $indexer->reindexAll();
-}
+CacheCleaner::cleanAll();

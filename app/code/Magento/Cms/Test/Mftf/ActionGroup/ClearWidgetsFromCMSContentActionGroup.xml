@@ -8,31 +8,22 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="ClearWidgetsFromCMSContent">
+    <actionGroup name="ClearWidgetsFromCMSContentActionGroup">
         <annotations>
             <description>Goes to the Admin CMS Page Edit page for the Page ID number 2. Clears the Widget and replaces it with Text. PLEASE NOTE: The Page ID/Text are Hardcoded.</description>
         </annotations>
-        
-        <amOnPage url="{{CmsPageEditPage.url('2')}}" stepKey="navigateToEditHomePagePage"/>
+
+        <amOnPage url="{{AdminCmsPageEditPage.url('2')}}" stepKey="navigateToEditHomePagePage"/>
         <waitForPageLoad stepKey="waitEditHomePagePageToLoad"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab"/>
-        <waitForElementNotVisible selector="{{CmsWYSIWYGSection.CheckIfTabExpand}}" stepKey="waitForTabExpand"/>
+        <waitForElementNotVisible selector="{{TinyMCESection.CheckIfTabExpand}}" stepKey="waitForTabExpand"/>
         <executeJS function="jQuery('[id=\'cms_page_form_content_ifr\']').attr('name', 'preview-iframe')" stepKey="setPreviewFrameName"/>
         <switchToIFrame selector="preview-iframe" stepKey="switchToIframe"/>
-        <fillField selector="{{TinyMCESection.EditorContent}}" userInput="Hello TinyMCE4!" stepKey="clearWidgets"/>
+        <fillField selector="{{TinyMCESection.EditorContent}}" userInput="Hello TinyMCE!" stepKey="clearWidgets"/>
         <switchToIFrame stepKey="switchOutFromIframe"/>
-        <executeJS function="tinyMCE.activeEditor.setContent('Hello TinyMCE4!');" stepKey="executeJSFillContent1"/>
+        <executeJS function="tinyMCE.activeEditor.setContent('Hello TinyMCE!');" stepKey="executeJSFillContent1"/>
         <click selector="{{InsertWidgetSection.save}}" stepKey="saveWidget"/>
         <waitForPageLoad stepKey="waitSaveToBeApplied"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the page." stepKey="seeSaveSuccess"/>
-    </actionGroup>
-    <actionGroup name="ClearWidgetsForCMSHomePageContentWYSIWYGDisabled">
-        <amOnPage url="{{CmsPageEditPage.url('2')}}" stepKey="navigateToEditHomePagePage"/>
-        <waitForPageLoad stepKey="waitForCmsPageEditPage"/>
-        <conditionalClick selector="{{CmsNewPagePageActionsSection.contentSectionName}}" dependentSelector="{{CatalogWidgetSection.insertWidgetButton}}" visible="false" stepKey="clickShowHideEditorIfVisible"/>
-        <waitForElementVisible selector="{{CmsNewPagePageContentSection.content}}" stepKey="waitForContentField"/>
-        <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="CMS homepage content goes here." stepKey="resetCMSPageToDefaultContent"/>
-        <click selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="clickSave"/>
-        <waitForPageLoad stepKey="waitForSettingsApply"/>
     </actionGroup>
 </actionGroups>

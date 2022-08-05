@@ -202,6 +202,7 @@
             </argument>
             <settings>
                 <label translate="true">Description</label>
+                <notice translate="true">Note: Keyboard shortcut to activate editor help : Alt + 0 (Windows) or &#x2325;0 (MacOS)</notice>
                 <dataScope>description</dataScope>
             </settings>
             <formElements>
@@ -354,7 +355,6 @@
                     <additionalClasses>
                         <class name="admin__field-small">true</class>
                     </additionalClasses>
-                    <addBefore>$</addBefore>
                     <label translate="true">Layered Navigation Price Step</label>
                 </settings>
             </field>
@@ -471,7 +471,7 @@
                 </imports>
             </settings>
         </field>
-        <field name="page_layout" sortOrder="190" formElement="select" component="Magento_Catalog/js/components/use-parent-settings/select" class="Magento\Catalog\Ui\Component\Form\Field\Category\PageLayout">
+        <field name="page_layout" sortOrder="190" formElement="select" component="Magento_Catalog/js/components/use-parent-settings/select">
             <settings>
                 <dataType>string</dataType>
                 <label translate="true">Layout</label>

@@ -14,38 +14,40 @@
             <description value="Login as admin, move category from one to another and check category url rewrites"/>
             <testCaseId value="MC-6494"/>
             <features value="Catalog"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
-            <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <createData entity="FirstLevelSubCat" stepKey="createDefaultCategory">
+                <field key="is_active">true</field>
+            </createData>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open category page-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoaded"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
-        <waitForPageLoad stepKey="waitForCategoryToLoad"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCategory"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(FirstLevelSubCat.name)}}" stepKey="selectCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
 
         <!--Create second level category-->
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SubCategory.name}}" stepKey="addSubCategoryName"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory1"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave1"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory1"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage1"/>
 
         <!--Create third level category under second level category-->
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton1"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="addSubCategoryName1"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory2"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave2"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory2"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage2"/>
         <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#" />
 
@@ -54,27 +56,26 @@
         <waitForPageLoad stepKey="waitForUrlRewritePage"/>
 
         <!--Search third level category Redirect Path, Target Path and Redirect Type-->
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="fillRedirectPathFilter"/>
-        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton"/>
-        <waitForPageLoad stepKey="waitForPageToLoad0"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="fillRequestPathFilter"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickOrderApplyFilters"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad0"/>
 
         <!--Verify Category RedirectType-->
-        <see stepKey="verifyTheRedirectType" selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="No" />
+        <see stepKey="verifyTheRedirectType" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Redirect Type')}}" userInput="No" />
 
         <!--Verify Redirect Path -->
-        <see selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" stepKey="verifyTheRedirectPath"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{FirstLevelSubCat.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" stepKey="verifyTheRedirectPath"/>
 
         <!--Verify Category Target Path-->
-        <see stepKey="verifyTheTargetPath" selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="catalog/category/view/id/{$categoryId}"/>
+        <see stepKey="verifyTheTargetPath" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Target Path')}}" userInput="catalog/category/view/id/{$categoryId}"/>
 
         <!--Open Category Page -->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage1"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree2"/>
-        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree2"/>
 
         <!--Move the third level category under first level category -->
-        <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" selector2="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="moveCategory"/>
+        <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" selector2="{{AdminCategorySidebarTreeSection.categoryInTree($$createDefaultCategory.name$$)}}" stepKey="m0oveCategory"/>
         <see selector="{{AdminCategoryModalSection.message}}" userInput="This operation can take a long time" stepKey="seeWarningMessage"/>
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkButtonOnWarningPopup"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
@@ -83,31 +84,35 @@
         <!--Open Url Rewrite page  -->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage1"/>
         <waitForPageLoad stepKey="waitForUrlRewritePage1"/>
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{_defaultCategory.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" stepKey="fillCategoryUrlKey1"/>
-        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton1"/>
-        <waitForPageLoad stepKey="waitForPageToLoad4"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters1"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{FirstLevelSubCat.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" stepKey="fillCategoryUrlKey1"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickOrderApplyFilters1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad4"/>
 
         <!--Verify new Redirect Path after move -->
-        <see stepKey="verifyTheRequestPathAfterMove" selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
+        <see stepKey="verifyTheRequestPathAfterMove" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{FirstLevelSubCat.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
 
         <!--Verify new Target Path after move -->
-        <see stepKey="verifyTheTargetPathAfterMove" selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="catalog/category/view/id/{$categoryId}" />
+        <see stepKey="verifyTheTargetPathAfterMove" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Target Path')}}" userInput="catalog/category/view/id/{$categoryId}" />
 
         <!--Verify new RedirectType after move -->
-        <see stepKey="verifyTheRedirectTypeAfterMove" selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="No" />
+        <see stepKey="verifyTheRedirectTypeAfterMove" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Redirect Type')}}" userInput="No" />
 
         <!--Verify before move Redirect Path displayed with associated Target Path and Redirect Type-->
-        <fillField selector="{{AdminUrlRewriteIndexSection.requestPathFilter}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="fillCategoryUrlKey2"/>
-        <click selector="{{AdminUrlRewriteIndexSection.searchButton}}" stepKey="clickOnSearchButton2"/>
-        <waitForPageLoad stepKey="waitForPageToLoad5"/>
-        <see stepKey="verifyTheRedirectTypeAfterMove1" selector="{{AdminUrlRewriteIndexSection.redirectTypeColumn('1')}}" userInput="Permanent (301)" />
-        <see stepKey="verifyTheRequestPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.requestPathColumn('1')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" />
-        <see stepKey="verifyTheTargetPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.targetPathColumn('1')}}" userInput="{{_defaultCategory.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters2"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="fillCategoryUrlKey2"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickOrderApplyFilters2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad5"/>
+
+
+        <see stepKey="verifyTheRedirectTypeAfterMove1" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Redirect Type')}}" userInput="Permanent (301)" />
+        <see stepKey="verifyTheRequestPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{FirstLevelSubCat.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" />
+        <see stepKey="verifyTheTargetPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Target Path')}}" userInput="{{FirstLevelSubCat.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
 
         <!--Verify before move Redirect Path directs to the category page-->
-        <amOnPage url="{{_defaultCategory.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" stepKey="openCategoryStoreFrontPage"/>
+        <amOnPage url="{{FirstLevelSubCat.urlKey}}2/{{SubCategory.urlKey}}/{{SimpleSubCategory.urlKey}}.html" stepKey="openCategoryStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCategoryOnStoreNavigationBar"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(FirstLevelSubCat.name)}}" stepKey="seeCategoryOnStoreNavigationBar"/>
         <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(SimpleSubCategory.name)}}" stepKey="seeCategoryInTitle"/>
     </test>
 </tests>

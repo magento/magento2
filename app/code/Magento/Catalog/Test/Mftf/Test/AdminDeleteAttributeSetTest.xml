@@ -18,7 +18,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
             <createData entity="SimpleProductWithCustomAttributeSet" stepKey="SimpleProductWithCustomAttributeSet">
@@ -28,7 +28,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetsPage"/>
         <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="$$createAttributeSet.attribute_set_name$$" stepKey="filterByAttributeName"/>
@@ -45,9 +45,8 @@
         <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickSearch2"/>
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
         <!-- Search for the product by sku and name on the product page -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToAdminProductIndex"/>
-        <waitForPageLoad stepKey="waitForAdminProductIndex"/>
-        <actionGroup ref="filterProductGridBySkuAndName" stepKey="filerProductsBySkuAndName">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToAdminProductIndex"/>
+        <actionGroup ref="FilterProductGridBySkuAndNameActionGroup" stepKey="filerProductsBySkuAndName">
             <argument name="product" value="SimpleProductWithCustomAttributeSet"/>
         </actionGroup>
         <!-- Should not see the product -->

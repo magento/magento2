@@ -3,17 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Block\Account\Dashboard;
 
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Block\Account\Dashboard\Info;
+use Magento\Customer\Block\Form\Register;
+use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Customer\Helper\View;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Newsletter\Model\Subscriber;
+use Magento\Newsletter\Model\SubscriberFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Customer\Block\Account\Dashboard\Info.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InfoTest extends \PHPUnit\Framework\TestCase
+class InfoTest extends TestCase
 {
     /** Constant values used for testing */
     const CUSTOMER_ID = 1;
@@ -22,75 +35,77 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
     const EMAIL_ADDRESS = 'john.doe@example.com';
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\View\Element\Template\Context */
+    /** @var MockObject|Context */
     private $_context;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session */
+    /** @var MockObject|Session */
     private $_customerSession;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\Data\CustomerInterface */
+    /** @var MockObject|CustomerInterface */
     private $_customer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\View
+     * @var MockObject|View
      */
     private $_helperView;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Newsletter\Model\Subscriber */
+    /** @var MockObject|Subscriber */
     private $_subscriber;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Newsletter\Model\SubscriberFactory */
+    /** @var MockObject|SubscriberFactory */
     private $_subscriberFactory;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Block\Form\Register */
+    /** @var MockObject|Register */
     private $_formRegister;
 
     /** @var Info */
     private $_block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\Session\CurrentCustomer
+     * @var MockObject|CurrentCustomer
      */
     protected $currentCustomer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->currentCustomer = $this->createMock(\Magento\Customer\Helper\Session\CurrentCustomer::class);
+        $this->currentCustomer = $this->createMock(CurrentCustomer::class);
 
-        $urlBuilder = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class, [], '', false);
-        $urlBuilder->expects($this->any())->method('getUrl')->will($this->returnValue(self::CHANGE_PASSWORD_URL));
+        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class, [], '', false);
+        $urlBuilder->expects($this->any())->method('getUrl')->willReturn(self::CHANGE_PASSWORD_URL);
 
-        $layout = $this->getMockForAbstractClass(\Magento\Framework\View\LayoutInterface::class, [], '', false);
-        $this->_formRegister = $this->createMock(\Magento\Customer\Block\Form\Register::class);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class, [], '', false);
+        $this->_formRegister = $this->createMock(Register::class);
         $layout->expects($this->any())
             ->method('getBlockSingleton')
-            ->with(\Magento\Customer\Block\Form\Register::class)
-            ->will($this->returnValue($this->_formRegister));
+            ->with(Register::class)
+            ->willReturn($this->_formRegister);
 
-        $this->_context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->_context->expects($this->once())->method('getUrlBuilder')->will($this->returnValue($urlBuilder));
-        $this->_context->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
+        $this->_context = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_context->expects($this->once())->method('getUrlBuilder')->willReturn($urlBuilder);
+        $this->_context->expects($this->once())->method('getLayout')->willReturn($layout);
 
-        $this->_customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->_customerSession->expects($this->any())->method('getId')->will($this->returnValue(self::CUSTOMER_ID));
+        $this->_customerSession = $this->createMock(Session::class);
+        $this->_customerSession->expects($this->any())->method('getId')->willReturn(self::CUSTOMER_ID);
 
-        $this->_customer = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-        $this->_customer->expects($this->any())->method('getEmail')->will($this->returnValue(self::EMAIL_ADDRESS));
+        $this->_customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->_customer->expects($this->any())->method('getEmail')->willReturn(self::EMAIL_ADDRESS);
         $this->_helperView = $this->getMockBuilder(
-            \Magento\Customer\Helper\View::class
-        )->disableOriginalConstructor()->getMock();
+            View::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_subscriberFactory = $this->createPartialMock(
-            \Magento\Newsletter\Model\SubscriberFactory::class,
+            SubscriberFactory::class,
             ['create']
         );
-        $this->_subscriber = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
-        $this->_subscriber->expects($this->any())->method('loadByEmail')->will($this->returnSelf());
+        $this->_subscriber = $this->createMock(Subscriber::class);
+        $this->_subscriber->expects($this->any())->method('loadByEmail')->willReturnSelf();
         $this->_subscriberFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->_subscriber));
+            ->willReturn($this->_subscriber);
 
-        $this->_block = new \Magento\Customer\Block\Account\Dashboard\Info(
+        $this->_block = new Info(
             $this->_context,
             $this->currentCustomer,
             $this->_subscriberFactory,
@@ -102,7 +117,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     {
         $this->currentCustomer->expects($this->once())
             ->method('getCustomer')
-            ->will($this->returnValue($this->_customer));
+            ->willReturn($this->_customer);
 
         $customer = $this->_block->getCustomer();
         $this->assertEquals($customer, $this->_customer);
@@ -112,13 +127,13 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     {
         $this->currentCustomer->expects($this->once())
             ->method('getCustomer')
-            ->will(
-                $this->throwException(new NoSuchEntityException(
+            ->willThrowException(
+                new NoSuchEntityException(
                     __(
                         'No such entity with %fieldName = %fieldValue',
                         ['fieldName' => 'customerId', 'fieldValue' => 1]
                     )
-                ))
+                )
             );
 
         $this->assertNull($this->_block->getCustomer());
@@ -130,12 +145,12 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
         $this->currentCustomer->expects($this->once())
             ->method('getCustomer')
-            ->will($this->returnValue($this->_customer));
+            ->willReturn($this->_customer);
 
         /**
          * Called three times, once for each attribute (i.e. prefix, middlename, and suffix)
          */
-        $this->_helperView->expects($this->any())->method('getCustomerName')->will($this->returnValue($expectedValue));
+        $this->_helperView->expects($this->any())->method('getCustomerName')->willReturn($expectedValue);
 
         $this->assertEquals($expectedValue, $this->_block->getName());
     }
@@ -158,7 +173,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetIsSubscribed($isSubscribed, $expectedValue)
     {
-        $this->_subscriber->expects($this->once())->method('isSubscribed')->will($this->returnValue($isSubscribed));
+        $this->_subscriber->expects($this->once())->method('isSubscribed')->willReturn($isSubscribed);
         $this->assertEquals($expectedValue, $this->_block->getIsSubscribed());
     }
 
@@ -180,7 +195,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     {
         $this->_formRegister->expects($this->once())
             ->method('isNewsletterEnabled')
-            ->will($this->returnValue($isNewsletterEnabled));
+            ->willReturn($isNewsletterEnabled);
         $this->assertEquals($expectedValue, $this->_block->isNewsletterEnabled());
     }
 

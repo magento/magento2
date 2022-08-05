@@ -4,11 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../../Magento/Catalog/_files/products.php';
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/products.php');
+
+$objectManager = Bootstrap::getObjectManager();
 /** @var $quote \Magento\Quote\Model\Quote */
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
-$quote->setStoreId(1)->setIsActive(false)->setIsMultiShipping(false)->addProduct($product->load($product->getId()), 2);
+$quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple');
+$quote->setStoreId(1)->setIsActive(false)->setIsMultiShipping(false)->addProduct($product, 2);
 
 $quote->getPayment()->setMethod('checkmo');
 

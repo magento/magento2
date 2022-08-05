@@ -29,7 +29,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -65,7 +65,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             " class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'",
         ];
         $html = $this->model->blockDirective($data);
-        $this->assertContains('<div class="footer-container">', $html);
+        $this->assertStringContainsString('<div class="footer-container">', $html);
     }
 
     /**
@@ -158,6 +158,8 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      * @param $expectedResult
      * @param array $variables
      * @internal param $translatorData
+     * @magentoConfigFixture default_store dev/translate_inline/active 1
+     * @magentoAppArea frontend
      * @dataProvider transDirectiveDataProvider
      */
     public function testTransDirective($directive, $translations, $expectedResult, $variables = [])
@@ -290,7 +292,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $output = $this->model->cssDirective(['{{css ' . $directiveParams . '}}', 'css', ' ' . $directiveParams]);
 
         if ($expectedOutput !== '') {
-            $this->assertContains($expectedOutput, $output);
+            $this->assertStringContainsString($expectedOutput, $output);
         } else {
             $this->assertSame($expectedOutput, $output);
         }
@@ -377,7 +379,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $appMode = $productionMode ? State::MODE_PRODUCTION : State::MODE_DEVELOPER;
         $this->objectManager->get(\Magento\Framework\App\State::class)->setMode($appMode);
 
-        $this->assertContains($expectedOutput, $this->model->filter($templateText));
+        $this->assertStringContainsString($expectedOutput, $this->model->filter($templateText));
     }
 
     /**

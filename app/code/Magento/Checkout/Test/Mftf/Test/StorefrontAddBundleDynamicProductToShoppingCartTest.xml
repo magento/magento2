@@ -9,6 +9,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontAddBundleDynamicProductToShoppingCartTest">
         <annotations>
+            <features value="Checkout"/>
             <stories value="Shopping Cart"/>
             <title value="Add bundle dynamic product to the cart"/>
             <description value="Add bundle dynamic product to the cart"/>
@@ -18,6 +19,7 @@
         </annotations>
 
         <before>
+            <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRateDefaultPrice"/>
             <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
@@ -46,19 +48,24 @@
                 <requiredEntity createDataKey="createBundleOption1_1"/>
                 <requiredEntity createDataKey="simpleProduct2"/>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllRules"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="cataloginventory_stock"/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
             <deleteData createDataKey="createSubCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
         </after>
 
         <!--Open Product page in StoreFront -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
-            <argument name="product" value="$$createBundleProduct$$"/>
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
+            <argument name="product" value="$createBundleProduct$"/>
         </actionGroup>
 
         <!--Assert Product Price Range -->
@@ -82,10 +89,10 @@
         </actionGroup>
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="selectViewAndEditCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!--Assert Shopping Cart Summary-->
-        <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary" >
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="AssertCartSummary" >
             <argument name="subtotal" value="$100.00"/>
             <argument name="shipping" value="10.00"/>
             <argument name="total" value="110.00"/>
@@ -93,8 +100,8 @@
 
         <!--Assert Product items in cart -->
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertSimpleProduct1ItemsInCheckOutCart">
-            <argument name="productName" value="$$createBundleProduct.name$$"/>
-            <argument name="productSku" value="$$createBundleProduct.sku$$"/>
+            <argument name="productName" value="$createBundleProduct.name$"/>
+            <argument name="productSku" value="$createBundleProduct.sku$"/>
             <argument name="productPrice" value="$50.00"/>
             <argument name="subtotal" value="$100.00" />
             <argument name="qty" value="2"/>
@@ -107,14 +114,13 @@
         </actionGroup>
         <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeProductOptionInCart">
             <argument name="selector" value="{{CheckoutCartProductSection.productOptionLabel}}"/>
-            <argument name="userInput" value="1 x $$simpleProduct2.name$$ $50.00"/>
+            <argument name="userInput" value="1 x $simpleProduct2.name$ $50.00"/>
         </actionGroup>
 
         <!-- Assert Product in Mini Cart -->
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
-            <argument name="productName" value="$$createBundleProduct.name$$"/>
+            <argument name="productName" value="$createBundleProduct.name$"/>
             <argument name="productPrice" value="$50.00"/>
             <argument name="cartSubtotal" value="$100.00" />
             <argument name="qty" value="2"/>

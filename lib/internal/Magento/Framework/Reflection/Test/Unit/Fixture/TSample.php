@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Reflection\Test\Unit\Fixture;
 
-class TSample implements TSampleInterface
+class TSample extends TSampleAbstract implements TSampleInterface
 {
     /**
      * @inheritdoc
@@ -21,5 +21,29 @@ class TSample implements TSampleInterface
     public function getName()
     {
         return '';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWithNull()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOnlyNull()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDataOverridden()
+    {
+        return [];
     }
 }

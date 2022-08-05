@@ -23,37 +23,48 @@
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <magentoCLI stepKey="allowSpecificValue" command="config:set payment/cashondelivery/active 0" />
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{Simple_US_Customer.email}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!--Create order via Admin-->
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
-        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToOrderIndexPage"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeIndexPageTitle">
+            <argument name="value" value="Orders"/>
+        </actionGroup>
         <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
         <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeNewOrderPageTitle">
+            <argument name="value" value="Create New Order"/>
+        </actionGroup>
+        <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
+        <waitForPageLoad stepKey="waitForStoreSelection"/>
 
         <!--Check if order can be submitted without the required fields-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder" after="seeNewOrderPageTitle">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder" after="seeNewOrderPageTitle">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
-        <actionGroup ref="checkRequiredFieldsNewOrderForm" stepKey="checkRequiredFieldsNewOrder" after="addSimpleProductToOrder"/>
+        <actionGroup ref="CheckRequiredFieldsNewOrderFormActionGroup" stepKey="checkRequiredFieldsNewOrder" after="addSimpleProductToOrder"/>
         <see selector="{{AdminOrderFormPaymentSection.paymentError}}" userInput="Please select one of the options." stepKey="seePaymentMethodRequired" after="checkRequiredFieldsNewOrder"/>
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="seePaymentMethodRequired"/>
 
         <!--Fill customer group and customer email-->
-        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectCustomerGroup" after="scrollToTopOfOrderFormPage"/>
-        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail" after="selectCustomerGroup"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectCustomerGroup" after="scrollToTopOfOrderFormPage"/>
+        <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillCustomerEmail" after="selectCustomerGroup">
+            <argument name="email" value="{{Simple_US_Customer.email}}"/>
+        </actionGroup>
 
         <!--Fill customer address information-->
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress" after="fillCustomerEmail">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress" after="fillCustomerEmail">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
@@ -61,7 +72,7 @@
         <!-- Select payment and shipping -->
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" stepKey="waitForPaymentOptions"/>
         <selectOption selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" userInput="checkmo" stepKey="checkPaymentOption"/>
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping" after="fillCustomerAddress"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRateShipping" after="fillCustomerAddress"/>
 
         <!--Verify totals on Order page-->
         <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProduct.subtotal}}" stepKey="seeOrderSubTotal" after="selectFlatRateShipping"/>

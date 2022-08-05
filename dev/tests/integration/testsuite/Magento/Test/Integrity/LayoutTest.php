@@ -20,14 +20,14 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
      */
     protected static $_cachedFiles = [];
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
             ['preferences' => [\Magento\Theme\Model\Theme::class => \Magento\Theme\Model\Theme\Data::class]]
         );
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::$_cachedFiles = []; // Free memory
     }

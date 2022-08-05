@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontCheckoutCartTaxAmountActionGroup">
+        <annotations>
+            <description>Check tax summary data in Summary section of shopping cart on storefront</description>
+        </annotations>
+        <arguments>
+            <argument name="taxAmount" type="string" defaultValue="$0.83"/>
+            <argument name="rate" type="string" defaultValue="US-CA-*-Rate 1 (8.25%)"/>
+        </arguments>
+
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="{{taxAmount}}" stepKey="checkTaxAmount" />
+        <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary" />
+        <conditionalClick selector="{{CheckoutCartSummarySection.taxSummary}}" dependentSelector="{{CheckoutCartSummarySection.rate}}" visible="false" stepKey="expandTaxSummary"/>
+        <see selector="{{CheckoutCartSummarySection.rate}}" userInput="{{rate}}" stepKey="checkRate" />
+    </actionGroup>
+</actionGroups>

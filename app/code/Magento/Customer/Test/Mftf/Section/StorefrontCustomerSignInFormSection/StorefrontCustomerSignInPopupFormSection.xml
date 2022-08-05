@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerSignInPopupFormSection">
+        <element name="errorMessage" type="input" selector="[data-ui-id='checkout-cart-validationmessages-message-error']"/>
+        <element name="email" type="input" selector="#customer-email"/>
+        <element name="password" type="input" selector="#pass"/>
+        <element name="signIn" type="button" selector="#send2" timeout="30"/>
+        <element name="forgotYourPassword" type="button" selector="//a[@class='action']//span[contains(text(),'Forgot Your Password?')]" timeout="30"/>
+        <element name="createAnAccount" type="button" selector="//div[contains(@class,'actions-toolbar')]//a[contains(.,'Create an Account')]" timeout="30"/>
+    </section>
+</sections>

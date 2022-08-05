@@ -37,8 +37,7 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
     }
 
     /**
-     * Retrieve Saleable Status Ids
-     * Default Product Enable status
+     * Retrieve Saleable Status Ids, default Product Enable status
      *
      * @return int[]
      */
@@ -51,6 +50,7 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
      * Retrieve option array
      *
      * @return string[]
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getOptionArray()
     {
@@ -83,7 +83,7 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
     {
         $options = self::getOptionArray();
 
-        return isset($options[$optionId]) ? $options[$optionId] : null;
+        return $options[$optionId] ?? null;
     }
 
     /**

@@ -19,11 +19,10 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
-            <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryPage"/>
-            <waitForPageLoad time="60" stepKey="waitForCategoryPageLoad"/>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
             <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(FirstLevelSubCat.name)}}" stepKey="clickCategoryLink"/>
             <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="clickDelete"/>
             <waitForElementVisible selector="{{AdminCategoryModalSection.message}}" stepKey="waitForConfirmationModal"/>
@@ -31,50 +30,54 @@
             <click selector="{{AdminCategoryModalSection.ok}}" stepKey="confirmDelete"/>
             <waitForPageLoad time="60" stepKey="waitForDeleteToFinish"/>
             <see selector="You deleted the category." stepKey="seeDeleteSuccess"/>
-            <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories"/>
+            <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandToSeeAllCategories"/>
             <dontSee selector="{{AdminCategorySidebarTreeSection.categoryInTree(FirstLevelSubCat.name)}}" stepKey="dontSeeCategoryInTree"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Create Category with Five Nesting -->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForCategoryIndexPageToBeLoaded"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <!--Create Nested First Category-->
-        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
+        <actionGroup ref="AdminClickAddSubcategoryButtonActionGroup" stepKey="clickOnAddSubCategoryButton"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{FirstLevelSubCat.name}}" stepKey="fillFirstSubCategoryName"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveFirstSubCategory"/>
-        <waitForPageLoad stepKey="waitForSFirstSubCategorySaved"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillFirstSubCategoryName">
+            <argument name="categoryName" value="{{FirstLevelSubCat.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveFirstSubCategory"/>
         <!-- Verify success message -->
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
         <!--Create Nested Second Sub Category-->
-        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton1"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SecondLevelSubCat.name}}" stepKey="fillSecondSubCategoryName"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSecondSubCategory"/>
-        <waitForPageLoad stepKey="waitForSecondCategory"/>
+        <actionGroup ref="AdminClickAddSubcategoryButtonActionGroup" stepKey="clickOnAddSubCategoryButton1"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillSecondSubCategoryName">
+            <argument name="categoryName" value="{{SecondLevelSubCat.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSecondSubCategory"/>
         <!-- Verify success message -->
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage1"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage1"/>
         <!--Create Nested Third Sub Category/>-->
-        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton2"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{ThirdLevelSubCat.name}}" stepKey="fillThirdSubCategoryName"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveThirdSubCategory"/>
-        <waitForPageLoad stepKey="waitForThirdCategorySaved"/>
+        <actionGroup ref="AdminClickAddSubcategoryButtonActionGroup" stepKey="clickOnAddSubCategoryButton2"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillThirdSubCategoryName">
+            <argument name="categoryName" value="{{ThirdLevelSubCat.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveThirdSubCategory"/>
         <!-- Verify success message -->
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage2"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage2"/>
         <!--Create Nested fourth Sub Category />-->
-        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton3"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{FourthLevelSubCat.name}}" stepKey="fillFourthSubCategoryName"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveFourthSubCategory"/>
-        <waitForPageLoad stepKey="waitForFourthCategorySaved"/>
+        <actionGroup ref="AdminClickAddSubcategoryButtonActionGroup" stepKey="clickOnAddSubCategoryButton3"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillFourthSubCategoryName">
+            <argument name="categoryName" value="{{FourthLevelSubCat.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveFourthSubCategory"/>
         <!-- Verify success message -->
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage3"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage3"/>
         <!--Create Nested fifth Sub Category />-->
-        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton4"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{FifthLevelCat.name}}" stepKey="fillFifthSubCategoryName"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveFifthLevelCategory"/>
-        <waitForPageLoad stepKey="waitForFifthCategorySaved"/>
+        <actionGroup ref="AdminClickAddSubcategoryButtonActionGroup" stepKey="clickOnAddSubCategoryButton4"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillFifthSubCategoryName">
+            <argument name="categoryName" value="{{FifthLevelCat.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveFifthLevelCategory"/>
         <!-- Verify success message -->
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage4"/>
-        <amOnPage url="/{{FirstLevelSubCat.name}}/{{SecondLevelSubCat.name}}/{{ThirdLevelSubCat.name}}/{{FourthLevelSubCat.name}}/{{FifthLevelCat.name}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage4"/>
+        <amOnPage url="/{{FirstLevelSubCat.urlKey}}/{{SecondLevelSubCat.urlKey}}/{{ThirdLevelSubCat.urlKey}}/{{FourthLevelSubCat.urlKey}}/{{FifthLevelCat.urlKey}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
         <waitForPageLoad time="60" stepKey="waitForStoreFrontPageLoad"/>
         <!--<Verify category displayed in store front page-->
         <grabMultiple selector=".breadcrumbs li"  stepKey="breadcrumbs"/>

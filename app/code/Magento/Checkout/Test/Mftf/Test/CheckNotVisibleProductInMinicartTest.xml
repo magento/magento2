@@ -27,13 +27,13 @@
         <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
 
         <!--Add simple product1 to Shopping Cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage1">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage1">
             <argument name="productName" value="$$createSimpleProduct1.name$$"/>
         </actionGroup>
 
         <!--Check simple product1 in minicart-->
         <comment userInput="Check simple product 1 in minicart" stepKey="commentCheckSimpleProduct1InMinicart" after="addToCartFromStorefrontProductPage1"/>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="assertProduct1NameInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertProduct1NameInMiniCart">
             <argument name="productName" value="$$createSimpleProduct1.name$$"/>
         </actionGroup>
 
@@ -47,19 +47,19 @@
         <waitForPageLoad stepKey="waitForCatalogPageLoad2"/>
 
         <!--Add simple product2 to Shopping Cart for updating cart items-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage2">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage2">
             <argument name="productName" value="$$createSimpleProduct2.name$$"/>
         </actionGroup>
 
         <!--Check simple product1 in minicart-->
         <comment userInput="Check hidden simple product 1 in minicart" stepKey="commentCheckHiddenSimpleProduct1InMinicart" after="addToCartFromStorefrontProductPage2"/>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="assertHiddenProduct1NameInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertHiddenProduct1NameInMiniCart">
             <argument name="productName" value="$$createSimpleProduct1.name$$"/>
         </actionGroup>
 
         <!--Check simple product2 in minicart-->
         <comment userInput="Check hidden simple product 2 in minicart" stepKey="commentCheckSimpleProduct2InMinicart" after="addToCartFromStorefrontProductPage2"/>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="assertProduct2NameInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertProduct2NameInMiniCart">
             <argument name="productName" value="$$createSimpleProduct2.name$$"/>
         </actionGroup>
 

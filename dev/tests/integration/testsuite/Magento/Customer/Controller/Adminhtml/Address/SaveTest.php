@@ -32,7 +32,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->customerRepository = Bootstrap::getObjectManager()->get(
@@ -48,7 +48,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /**
          * Unset customer data

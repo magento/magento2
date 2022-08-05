@@ -17,18 +17,20 @@
             <group value="Swatches"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <!-- Remove attribute -->
-            <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="visualSwatchAttribute"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="navigateToNewProductAttributePage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="navigateToNewProductAttributePage"/>
 
         <!-- Set attribute properties -->
         <fillField selector="{{AttributePropertiesSection.DefaultLabel}}"
@@ -47,11 +49,11 @@
 
         <!-- Add new swatch option without label -->
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch1"/>
-        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch1">
+        <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch1">
             <argument name="index" value="0"/>
         </actionGroup>
         <click selector="{{AdminManageSwatchSection.nthChooseColor('1')}}" stepKey="clickChooseColor1"/>
-        <actionGroup ref="setColorPickerByHex" stepKey="fillHex1">
+        <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillHex1">
             <argument name="nthColorPicker" value="1"/>
             <argument name="hexColor" value="ff0000"/>
         </actionGroup>
@@ -66,11 +68,11 @@
 
         <!-- Add 2 additional new swatch options -->
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
-        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch2">
+        <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch2">
             <argument name="index" value="1"/>
         </actionGroup>
         <click selector="{{AdminManageSwatchSection.nthChooseColor('2')}}" stepKey="clickChooseColor2"/>
-        <actionGroup ref="setColorPickerByHex" stepKey="fillHex2">
+        <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillHex2">
             <argument name="nthColorPicker" value="2"/>
             <argument name="hexColor" value="00ff00"/>
         </actionGroup>
@@ -78,11 +80,11 @@
                    userInput="green" stepKey="fillAdmin2"/>
 
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch3"/>
-        <actionGroup ref="openSwatchMenuByIndex" stepKey="clickSwatch3">
+        <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch3">
             <argument name="index" value="2"/>
         </actionGroup>
         <click selector="{{AdminManageSwatchSection.nthChooseColor('3')}}" stepKey="clickChooseColor3"/>
-        <actionGroup ref="setColorPickerByHex" stepKey="fillHex3">
+        <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillHex3">
             <argument name="nthColorPicker" value="3"/>
             <argument name="hexColor" value="0000ff"/>
         </actionGroup>
@@ -103,7 +105,7 @@
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}"
                                stepKey="waitForSuccessMessage"/>
 
-        <actionGroup ref="navigateToCreatedProductAttribute" stepKey="navigateToAttribute">
+        <actionGroup ref="NavigateToCreatedProductAttributeActionGroup" stepKey="navigateToAttribute">
             <argument name="ProductAttribute" value="visualSwatchAttribute"/>
         </actionGroup>
         <!-- Check attribute data -->

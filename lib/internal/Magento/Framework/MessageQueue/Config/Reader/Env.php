@@ -54,8 +54,11 @@ class Env implements \Magento\Framework\Config\ReaderInterface
     {
         $configData = $this->deploymentConfig->getConfigData(self::ENV_QUEUE) ?: [];
         if (isset($configData['config'])) {
-            $configData = $this->publisherConverter->convert($configData = $configData['config']);
+            $convertedConfigData = $this->publisherConverter->convert($configData['config']);
+            unset($configData['config']);
+            $configData = array_replace_recursive($configData, $convertedConfigData);
         }
+
         return $configData;
     }
 }

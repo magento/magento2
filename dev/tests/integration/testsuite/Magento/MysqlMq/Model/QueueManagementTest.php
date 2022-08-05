@@ -22,7 +22,7 @@ class QueueManagementTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->queueManagement = $this->objectManager->create(QueueManagement::class);
@@ -49,9 +49,9 @@ class QueueManagementTest extends \PHPUnit\Framework\TestCase
             QueueManagement::MESSAGE_STATUS_IN_PROGRESS,
             $firstMessage[QueueManagement::MESSAGE_STATUS]
         );
-        $this->assertTrue(is_numeric($firstMessage[QueueManagement::MESSAGE_QUEUE_ID]));
-        $this->assertTrue(is_numeric($firstMessage[QueueManagement::MESSAGE_ID]));
-        $this->assertTrue(is_numeric($firstMessage[QueueManagement::MESSAGE_QUEUE_RELATION_ID]));
+        $this->assertIsNumeric($firstMessage[QueueManagement::MESSAGE_QUEUE_ID]);
+        $this->assertIsNumeric($firstMessage[QueueManagement::MESSAGE_ID]);
+        $this->assertIsNumeric($firstMessage[QueueManagement::MESSAGE_QUEUE_RELATION_ID]);
         $this->assertEquals(0, $firstMessage[QueueManagement::MESSAGE_NUMBER_OF_TRIALS]);
         $this->assertCount(12, date_parse($firstMessage[QueueManagement::MESSAGE_UPDATED_AT]));
 
@@ -63,9 +63,9 @@ class QueueManagementTest extends \PHPUnit\Framework\TestCase
             QueueManagement::MESSAGE_STATUS_IN_PROGRESS,
             $secondMessage[QueueManagement::MESSAGE_STATUS]
         );
-        $this->assertTrue(is_numeric($secondMessage[QueueManagement::MESSAGE_QUEUE_ID]));
-        $this->assertTrue(is_numeric($secondMessage[QueueManagement::MESSAGE_ID]));
-        $this->assertTrue(is_numeric($secondMessage[QueueManagement::MESSAGE_QUEUE_RELATION_ID]));
+        $this->assertIsNumeric($secondMessage[QueueManagement::MESSAGE_QUEUE_ID]);
+        $this->assertIsNumeric($secondMessage[QueueManagement::MESSAGE_ID]);
+        $this->assertIsNumeric($secondMessage[QueueManagement::MESSAGE_QUEUE_RELATION_ID]);
         $this->assertEquals(0, $secondMessage[QueueManagement::MESSAGE_NUMBER_OF_TRIALS]);
         $this->assertCount(12, date_parse($secondMessage[QueueManagement::MESSAGE_UPDATED_AT]));
     }

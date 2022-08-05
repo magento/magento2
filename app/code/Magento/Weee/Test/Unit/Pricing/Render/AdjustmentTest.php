@@ -3,20 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Weee\Test\Unit\Pricing\Render;
 
+use Magento\Catalog\Model\Product;
+use Magento\Directory\Model\PriceCurrency;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Pricing\Amount\Base;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\Render\Amount;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Weee\Helper\Data;
+use Magento\Weee\Model\Tax;
+use Magento\Weee\Pricing\Adjustment as PricingAdjustment;
 use Magento\Weee\Pricing\Render\Adjustment;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class AdjustmentTest for testing Adjustment class
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdjustmentTest extends \PHPUnit\Framework\TestCase
+class AdjustmentTest extends TestCase
 {
     /**
-     * @var \Magento\Weee\Pricing\Render\Adjustment
+     * @var Adjustment
      */
     protected $model;
 
@@ -35,21 +47,22 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     /**
      * Price currency model mock
      *
-     * @var \Magento\Directory\Model\PriceCurrency
+     * @var PriceCurrency
      */
     protected $priceCurrencyMock;
 
     /**
      * Set up mocks for tested class
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->contextMock = $this->createPartialMock(
-            \Magento\Framework\View\Element\Template\Context::class,
-            ['getStoreConfig', 'getEventManager', 'getScopeConfig']
-        );
+        $this->contextMock = $this->getMockBuilder(Context::class)
+            ->addMethods(['getStoreConfig'])
+            ->onlyMethods(['getEventManager', 'getScopeConfig'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->priceCurrencyMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Pricing\PriceCurrencyInterface::class,
+            PriceCurrencyInterface::class,
             [],
             '',
             true,
@@ -57,26 +70,19 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
             true,
             []
         );
-        $this->weeeHelperMock = $this->createMock(\Magento\Weee\Helper\Data::class);
-        $eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+        $this->weeeHelperMock = $this->createMock(Data::class);
+        $eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $storeConfigMock = $this->getMockBuilder(\Magento\Store\Model\Store\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManagerMock));
-        $this->contextMock->expects($this->any())
-            ->method('getStoreConfig')
-            ->will($this->returnValue($storeConfigMock));
+            ->willReturn($eventManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
+            ->willReturn($scopeConfigMock);
 
         $this->model = new Adjustment(
             $this->contextMock,
@@ -90,7 +96,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAdjustmentCode()
     {
-        $this->assertEquals(\Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE, $this->model->getAdjustmentCode());
+        $this->assertEquals(PricingAdjustment::ADJUSTMENT_CODE, $this->model->getAdjustmentCode());
     }
 
     /**
@@ -101,28 +107,28 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrencyMock->expects($this->once())
             ->method('format')
             ->with(10, true, 2)
-            ->will($this->returnValue("$10.00"));
+            ->willReturn("$10.00");
 
         $displayValue = 10;
         $expectedValue = "$10.00";
         $typeOfDisplay = 1; //Just to set it to not false
-        /** @var \Magento\Framework\Pricing\Render\Amount $amountRender */
-        $amountRender = $this->getMockBuilder(\Magento\Framework\Pricing\Render\Amount::class)
+        /** @var Amount $amountRender */
+        $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
             ->setMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
             ->getMock();
         $amountRender->expects($this->any())
             ->method('getDisplayValue')
-            ->will($this->returnValue($displayValue));
-        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->will($this->returnValue($typeOfDisplay));
-        /** @var \Magento\Framework\Pricing\Amount\Base $baseAmount */
-        $baseAmount = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
+            ->willReturn($displayValue);
+        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->willReturn($typeOfDisplay);
+        /** @var Base $baseAmount */
+        $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
         $amountRender->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
 
         $this->model->render($amountRender);
         $result = $this->model->getFinalAmount();
@@ -137,29 +143,28 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     public function testShowInclDescr($typeOfDisplay, $amount, $expectedResult)
     {
-        /** @var \Magento\Framework\Pricing\Render\Amount $amountRender */
-        $amountRender = $this->getMockBuilder(\Magento\Framework\Pricing\Render\Amount::class)
+        /** @var Amount $amountRender */
+        $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
             ->setMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
             ->getMock();
-        /** @var \Magento\Catalog\Model\Product $saleable */
-        $saleable = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        /** @var Product $saleable */
+        $saleable = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
             ->getMock();
-        /** @var \Magento\Framework\Pricing\Amount\Base $baseAmount */
-        $baseAmount = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
+        /** @var Base $baseAmount */
+        $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
 
         $baseAmount->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($amount));
+            ->willReturn($amount);
 
         $amountRender->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
 
         $callback = function ($argument) use ($typeOfDisplay) {
             if (is_array($argument)) {
@@ -169,9 +174,9 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
             }
         };
 
-        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->will($this->returnCallback($callback));
-        $this->weeeHelperMock->expects($this->any())->method('getAmountExclTax')->will($this->returnValue($amount));
-        $amountRender->expects($this->any())->method('getSaleableItem')->will($this->returnValue($saleable));
+        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->willReturnCallback($callback);
+        $this->weeeHelperMock->expects($this->any())->method('getAmountExclTax')->willReturn($amount);
+        $amountRender->expects($this->any())->method('getSaleableItem')->willReturn($saleable);
 
         $this->model->render($amountRender);
         $result = $this->model->showInclDescr();
@@ -187,15 +192,15 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     public function showInclDescrDataProvider()
     {
         return [
-            [\Magento\Weee\Model\Tax::DISPLAY_INCL, 1.23, false],
-            [\Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR, 1.23, true],
-            [\Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL, 1.23, false],
-            [\Magento\Weee\Model\Tax::DISPLAY_EXCL, 1.23, false],
+            [Tax::DISPLAY_INCL, 1.23, false],
+            [Tax::DISPLAY_INCL_DESCR, 1.23, true],
+            [Tax::DISPLAY_EXCL_DESCR_INCL, 1.23, false],
+            [Tax::DISPLAY_EXCL, 1.23, false],
             [4, 1.23, false],
-            [\Magento\Weee\Model\Tax::DISPLAY_INCL, 0, false],
-            [\Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR, 0, false],
-            [\Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL, 0, false],
-            [\Magento\Weee\Model\Tax::DISPLAY_EXCL, 0, false],
+            [Tax::DISPLAY_INCL, 0, false],
+            [Tax::DISPLAY_INCL_DESCR, 0, false],
+            [Tax::DISPLAY_EXCL_DESCR_INCL, 0, false],
+            [Tax::DISPLAY_EXCL, 0, false],
             [4, 0, false],
         ];
     }
@@ -210,27 +215,27 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     public function testShowExclDescrIncl($typeOfDisplay, $amount, $expectedResult)
     {
-        /** @var \Magento\Framework\Pricing\Render\Amount $amountRender */
-        $amountRender = $this->getMockBuilder(\Magento\Framework\Pricing\Render\Amount::class)
+        /** @var Amount $amountRender */
+        $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
             ->setMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
             ->getMock();
-        /** @var \Magento\Catalog\Model\Product $saleable */
-        $saleable = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        /** @var Product $saleable */
+        $saleable = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup'])
             ->getMock();
-        /** @var \Magento\Framework\Pricing\Amount\Base $baseAmount */
-        $baseAmount = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
+        /** @var Base $baseAmount */
+        $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
         $baseAmount->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($amount));
+            ->willReturn($amount);
         $amountRender->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
 
         $callback = function ($argument) use ($typeOfDisplay) {
             if (is_array($argument)) {
@@ -240,9 +245,9 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
             }
         };
 
-        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->will($this->returnCallback($callback));
-        $this->weeeHelperMock->expects($this->any())->method('getAmountExclTax')->will($this->returnValue($amount));
-        $amountRender->expects($this->any())->method('getSaleableItem')->will($this->returnValue($saleable));
+        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->willReturnCallback($callback);
+        $this->weeeHelperMock->expects($this->any())->method('getAmountExclTax')->willReturn($amount);
+        $amountRender->expects($this->any())->method('getSaleableItem')->willReturn($saleable);
 
         $this->model->render($amountRender);
         $result = $this->model->showExclDescrIncl();
@@ -258,15 +263,15 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     public function showExclDescrInclDataProvider()
     {
         return [
-            [\Magento\Weee\Model\Tax::DISPLAY_INCL, 1.23, false],
-            [\Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR, 1.23, false],
-            [\Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL, 1.23, true],
-            [\Magento\Weee\Model\Tax::DISPLAY_EXCL, 1.23, false],
+            [Tax::DISPLAY_INCL, 1.23, false],
+            [Tax::DISPLAY_INCL_DESCR, 1.23, false],
+            [Tax::DISPLAY_EXCL_DESCR_INCL, 1.23, true],
+            [Tax::DISPLAY_EXCL, 1.23, false],
             [4, 1.23, false],
-            [\Magento\Weee\Model\Tax::DISPLAY_INCL, 0, false],
-            [\Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR, 0, false],
-            [\Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL, 0, false],
-            [\Magento\Weee\Model\Tax::DISPLAY_EXCL, 0, false],
+            [Tax::DISPLAY_INCL, 0, false],
+            [Tax::DISPLAY_INCL_DESCR, 0, false],
+            [Tax::DISPLAY_EXCL_DESCR_INCL, 0, false],
+            [Tax::DISPLAY_EXCL, 0, false],
             [4, 0, false],
         ];
     }
@@ -281,24 +286,23 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetWeeeTaxAttributes($typeOfDisplay, $attributes, $expectedResult)
     {
-        /** @var \Magento\Framework\Pricing\Render\Amount $amountRender */
-        $amountRender = $this->getMockBuilder(\Magento\Framework\Pricing\Render\Amount::class)
+        /** @var Amount $amountRender */
+        $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
             ->setMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
             ->getMock();
-        /** @var \Magento\Catalog\Model\Product $saleable */
-        $saleable = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        /** @var Product $saleable */
+        $saleable = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
             ->getMock();
-        /** @var \Magento\Framework\Pricing\Amount\Base $baseAmount */
-        $baseAmount = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
+        /** @var Base $baseAmount */
+        $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
         $amountRender->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
         $callback = function ($argument) use ($typeOfDisplay) {
             if (is_array($argument)) {
                 return in_array($typeOfDisplay, $argument);
@@ -306,11 +310,11 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
                 return $argument == $typeOfDisplay;
             }
         };
-        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->will($this->returnCallback($callback));
+        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->willReturnCallback($callback);
         $this->weeeHelperMock->expects($this->any())
             ->method('getProductWeeeAttributesForDisplay')
-            ->will($this->returnValue($attributes));
-        $amountRender->expects($this->any())->method('getSaleableItem')->will($this->returnValue($saleable));
+            ->willReturn($attributes);
+        $amountRender->expects($this->any())->method('getSaleableItem')->willReturn($saleable);
 
         $this->model->render($amountRender);
         $result = $this->model->getWeeeTaxAttributes();
@@ -326,10 +330,10 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     public function getWeeeTaxAttributesDataProvider()
     {
         return [
-            [\Magento\Weee\Model\Tax::DISPLAY_INCL, [1, 2, 3], []],
-            [\Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR, [1, 2, 3], [1, 2, 3]],
-            [\Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL, [1, 2, 3], [1, 2, 3]],
-            [\Magento\Weee\Model\Tax::DISPLAY_EXCL, [1, 2, 3], []],
+            [Tax::DISPLAY_INCL, [1, 2, 3], []],
+            [Tax::DISPLAY_INCL_DESCR, [1, 2, 3], [1, 2, 3]],
+            [Tax::DISPLAY_EXCL_DESCR_INCL, [1, 2, 3], [1, 2, 3]],
+            [Tax::DISPLAY_EXCL, [1, 2, 3], []],
             [4, [1, 2, 3], []],
         ];
     }
@@ -337,13 +341,13 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for method renderWeeeTaxAttribute
      *
-     * @param \Magento\Framework\DataObject $attribute
+     * @param DataObject $attribute
      * @param string $expectedResult
      * @dataProvider renderWeeeTaxAttributeAmountDataProvider
      */
     public function testRenderWeeeTaxAttributeAmount($attribute, $expectedResult)
     {
-        $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->will($this->returnArgument(0));
+        $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->willReturnArgument(0);
 
         $result = $this->model->renderWeeeTaxAttribute($attribute);
         $this->assertEquals($expectedResult, $result);
@@ -357,21 +361,21 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     public function renderWeeeTaxAttributeAmountDataProvider()
     {
         return [
-            [new \Magento\Framework\DataObject(['amount' => 51]), 51],
-            [new \Magento\Framework\DataObject(['amount' => false]), false],
+            [new DataObject(['amount' => 51]), 51],
+            [new DataObject(['amount' => false]), false],
         ];
     }
 
     /**
      * Test for method renderWeeeTaxAttributeName
      *
-     * @param \Magento\Framework\DataObject $attribute
+     * @param DataObject $attribute
      * @param string $expectedResult
      * @dataProvider renderWeeeTaxAttributeNameDataProvider
      */
     public function testRenderWeeeTaxAttributeName($attribute, $expectedResult)
     {
-        $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->will($this->returnArgument(0));
+        $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->willReturnArgument(0);
 
         $result = $this->model->renderWeeeTaxAttributeName($attribute);
         $this->assertEquals($expectedResult, $result);
@@ -385,21 +389,21 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     public function renderWeeeTaxAttributeNameDataProvider()
     {
         return [
-            [new \Magento\Framework\DataObject(['name' => 51]), 51],
-            [new \Magento\Framework\DataObject(['name' => false]), false],
+            [new DataObject(['name' => 51]), 51],
+            [new DataObject(['name' => false]), false],
         ];
     }
 
     /**
      * Test for method renderWeeeTaxAttributeWithTax
      *
-     * @param \Magento\Framework\DataObject $attribute
+     * @param DataObject $attribute
      * @param string $expectedResult
      * @dataProvider renderWeeeTaxAttributeAmountWithTaxDataProvider
      */
     public function testRenderWeeeTaxAttributeWithTax($attribute, $expectedResult)
     {
-        $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->will($this->returnArgument(0));
+        $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->willReturnArgument(0);
 
         $result = $this->model->renderWeeeTaxAttributeWithTax($attribute);
         $this->assertEquals($expectedResult, $result);
@@ -413,8 +417,8 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     public function renderWeeeTaxAttributeAmountWithTaxDataProvider()
     {
         return [
-            [new \Magento\Framework\DataObject(['amount_excl_tax' => 50, 'tax_amount' => 5]), 55],
-            [new \Magento\Framework\DataObject(['amount_excl_tax' => false]), false],
+            [new DataObject(['amount_excl_tax' => 50, 'tax_amount' => 5]), 55],
+            [new DataObject(['amount_excl_tax' => false]), false],
         ];
     }
 }

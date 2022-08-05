@@ -15,7 +15,7 @@
         <arguments>
             <argument name="countryCode" type="string" defaultValue="us"/>
         </arguments>
-        
+
         <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalConfigureBtn"/>
         <waitForElementVisible selector="{{PayPalAdvancedSettingConfigSection.advancedSettingTab(countryCode)}}" stepKey="waitForAdvancedSettingTab"/>
         <click selector="{{PayPalAdvancedSettingConfigSection.advancedSettingTab(countryCode)}}" stepKey="openAdvancedSettingTab"/>

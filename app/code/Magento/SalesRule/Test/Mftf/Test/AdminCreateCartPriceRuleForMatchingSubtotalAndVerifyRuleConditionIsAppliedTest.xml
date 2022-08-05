@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct"/>
         </before>
         <after>
@@ -27,12 +27,11 @@
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCreatedCartPriceRule">
                 <argument name="ruleName" value="{{CartPriceRuleConditionAppliedForSubtotal.name}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create cart price rule as per data and verify AssertCartPriceRuleSuccessSaveMessage-->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForPriceList"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.name}}" stepKey="fillRuleName"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.description}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.description}}" stepKey="fillDescription"/>
@@ -84,7 +83,7 @@
         <seeInField selector="{{AdminCartPriceRulesFormSection.defaultStoreView}}" userInput="{{CartPriceRuleConditionAppliedForSubtotal.defaultStoreView}}" stepKey="seeDefaultStoreView"/>
 
         <!--Go to storefront page and verify created product-->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$initialSimpleProduct$$"/>
         </actionGroup>
         <!--Click on Add To Cart button-->
@@ -101,7 +100,7 @@
         </actionGroup>
 
         <!--Click on view and edit cart link-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <waitForPageLoad stepKey="waitForViewAndEditCartToOpen"/>
         <conditionalClick selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" visible="true" stepKey="clickEstimateShippingAndTaxToOpen"/>
         <waitForPageLoad stepKey="waitForEstimateShippingAndTaxToOpen"/>
@@ -117,6 +116,8 @@
             <argument name="shippingMethod" value="Flat Rate - Fixed"/>
             <argument name="total" value="$285.00"/>
         </actionGroup>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$280.00" stepKey="seeAssertDiscountAmountAppliedForSubtotalConditionIsTrue"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeAssertDiscountAmountAppliedForSubtotalConditionIsTrue">
+            <argument name="discount" value="280.00"/>
+        </actionGroup>
     </test>
 </tests>

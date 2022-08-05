@@ -7,31 +7,34 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminUpdateCategoryWithProductsTest">
+    <test name="AdminUpdateCategoryWithProductsTest" deprecated="Use AdminUpdateCategoryWithProductsDefaultSortingTest instead">
         <annotations>
             <stories value="Update categories"/>
-            <title value="Update category, sort products by default sorting"/>
+            <title value="DEPRECATED. Update category, sort products by default sorting"/>
             <description value="Login as admin, update category and sort products"/>
             <testCaseId value="MC-6059"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminUpdateCategoryWithProductsDefaultSortingTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct" />
             <createData entity="_defaultCategory" stepKey="createCategory"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData  createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Category Page-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoaded"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
 
@@ -56,20 +59,18 @@
         <waitForPageLoad stepKey="waitFroPageToLoad1"/>
         <scrollTo  selector="{{AdminCategoryContentSection.productTableRow}}"  stepKey="scrollToTableRow"/>
         <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProduct1FromTableRow"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
 
         <!--Verify Category Title-->
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
 
-        <!-- Perform reindex and flush cache -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!--Verify Category in store front page-->
-        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name)}}" stepKey="seeDefaultProductPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.urlKey)}}" stepKey="seeDefaultProductPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCategoryOnNavigation"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="selectCategory"/>
@@ -81,7 +82,9 @@
         <waitForPageLoad  stepKey="waitForProductToLoad1"/>
 
         <!--Verify product name and price on Store Front-->
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="assertProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertProductName">
+            <argument name="value" value="{{defaultSimpleProduct.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{defaultSimpleProduct.price}}" stepKey="assertProductPrice"/>
     </test>
 </tests>

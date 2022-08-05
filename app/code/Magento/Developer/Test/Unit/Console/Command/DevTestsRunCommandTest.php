@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -39,7 +39,7 @@ namespace Magento\Developer\Console\Command {
          */
         private $command;
 
-        protected function setUp()
+        protected function setUp(): void
         {
             $this->command = new DevTestsRunCommand();
         }
@@ -48,7 +48,7 @@ namespace Magento\Developer\Console\Command {
         {
             $commandTester = new CommandTester($this->command);
             $commandTester->execute([DevTestsRunCommand::INPUT_ARG_TYPE => 'bad']);
-            $this->assertContains('Invalid type: "bad"', $commandTester->getDisplay());
+            $this->assertStringContainsString('Invalid type: "bad"', $commandTester->getDisplay());
         }
 
         public function testPassArgumentsToPHPUnit()
@@ -64,12 +64,12 @@ namespace Magento\Developer\Console\Command {
                     '-' . DevTestsRunCommand::INPUT_OPT_COMMAND_ARGUMENTS_SHORT => '--list-suites',
                 ]
             );
-            $this->assertContains(
+            $this->assertStringContainsString(
                 'phpunit  --list-suites',
                 $commandTester->getDisplay(),
                 'Parameters should be passed to PHPUnit'
             );
-            $this->assertContains(
+            $this->assertStringContainsString(
                 'PASSED (',
                 $commandTester->getDisplay(),
                 'PHPUnit runs should have passed'
@@ -89,12 +89,12 @@ namespace Magento\Developer\Console\Command {
                     '-' . DevTestsRunCommand::INPUT_OPT_COMMAND_ARGUMENTS_SHORT => '--list-suites',
                 ]
             );
-            $this->assertContains(
+            $this->assertStringContainsString(
                 'phpunit  --list-suites',
                 $commandTester->getDisplay(),
                 'Parameters should be passed to PHPUnit'
             );
-            $this->assertContains(
+            $this->assertStringContainsString(
                 'FAILED - ',
                 $commandTester->getDisplay(),
                 'PHPUnit runs should have passed'

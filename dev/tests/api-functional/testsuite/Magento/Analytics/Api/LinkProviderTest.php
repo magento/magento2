@@ -31,7 +31,7 @@ class LinkProviderTest extends WebapiAbstract
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }
@@ -67,7 +67,7 @@ class LinkProviderTest extends WebapiAbstract
             try {
                 $this->_webApiCall($serviceInfo);
             } catch (\Exception $e) {
-                $this->assertContains(
+                $this->assertStringContainsString(
                     'Operation allowed only in HTTPS',
                     $e->getMessage()
                 );
@@ -76,7 +76,7 @@ class LinkProviderTest extends WebapiAbstract
             $this->fail("Exception 'Operation allowed only in HTTPS' should be thrown");
         } else {
             $response = $this->_webApiCall($serviceInfo);
-            $this->assertEquals(2, count($response));
+            $this->assertCount(2, $response);
             $this->assertEquals(
                 base64_encode($fileInfo->getInitializationVector()),
                 $response['initialization_vector']

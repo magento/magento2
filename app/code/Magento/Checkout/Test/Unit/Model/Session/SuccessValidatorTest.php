@@ -3,101 +3,106 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Model\Session;
 
+use Magento\Checkout\Model\Session;
+use Magento\Checkout\Model\Session\SuccessValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SuccessValidatorTest extends \PHPUnit\Framework\TestCase
+class SuccessValidatorTest extends TestCase
 {
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
     }
 
-    public function testIsValid()
+    /**
+     * @return void
+     */
+    public function testIsValid(): void
     {
         $checkoutSession = $this->getMockBuilder(
-            \Magento\Checkout\Model\Session::class
-        )->disableOriginalConstructor()->getMock();
+            Session::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->assertFalse($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
 
-    public function testIsValidWithNotEmptyGetLastSuccessQuoteId()
+    /**
+     * @return void
+     */
+    public function testIsValidWithNotEmptyGetLastSuccessQuoteId(): void
     {
         $checkoutSession = $this->getMockBuilder(
-            \Magento\Checkout\Model\Session::class
-        )->disableOriginalConstructor()->getMock();
+            Session::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
-        $checkoutSession->expects(
-            $this->at(0)
-        )->method(
-            '__call'
-        )->with(
-            'getLastSuccessQuoteId'
-        )->will(
-            $this->returnValue(1)
-        );
-
-        $checkoutSession->expects($this->at(1))->method('__call')->with('getLastQuoteId')->will($this->returnValue(0));
-
-        $this->assertFalse($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
-    }
-
-    public function testIsValidWithEmptyQuoteAndOrder()
-    {
-        $checkoutSession = $this->getMockBuilder(
-            \Magento\Checkout\Model\Session::class
-        )->disableOriginalConstructor()->getMock();
-        $checkoutSession->expects(
-            $this->at(0)
-        )->method(
-            '__call'
-        )->with(
-            'getLastSuccessQuoteId'
-        )->will(
-            $this->returnValue(1)
-        );
-
-        $checkoutSession->expects($this->at(1))->method('__call')->with('getLastQuoteId')->will($this->returnValue(1));
-
-        $checkoutSession->expects($this->at(2))->method('__call')->with('getLastOrderId')->will($this->returnValue(0));
+        $checkoutSession
+            ->method('__call')
+            ->withConsecutive(['getLastSuccessQuoteId'], ['getLastQuoteId'])
+            ->willReturnOnConsecutiveCalls(1, 0);
 
         $this->assertFalse($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
 
-    public function testIsValidTrue()
+    /**
+     * @return void
+     */
+    public function testIsValidWithEmptyQuoteAndOrder(): void
     {
         $checkoutSession = $this->getMockBuilder(
-            \Magento\Checkout\Model\Session::class
-        )->disableOriginalConstructor()->getMock();
-        $checkoutSession->expects(
-            $this->at(0)
-        )->method(
-            '__call'
-        )->with(
-            'getLastSuccessQuoteId'
-        )->will(
-            $this->returnValue(1)
-        );
+            Session::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
-        $checkoutSession->expects($this->at(1))->method('__call')->with('getLastQuoteId')->will($this->returnValue(1));
+        $checkoutSession
+            ->method('__call')
+            ->withConsecutive(['getLastSuccessQuoteId'], ['getLastQuoteId'], ['getLastOrderId'])
+            ->willReturnOnConsecutiveCalls(1, 1, 0);
 
-        $checkoutSession->expects($this->at(2))->method('__call')->with('getLastOrderId')->will($this->returnValue(1));
+        $this->assertFalse($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
+    }
+
+    /**
+     * @return void
+     */
+    public function testIsValidTrue(): void
+    {
+        $checkoutSession = $this->getMockBuilder(
+            Session::class
+        )->disableOriginalConstructor()
+            ->getMock();
+
+        $checkoutSession
+            ->method('__call')
+            ->withConsecutive(['getLastSuccessQuoteId'], ['getLastQuoteId'], ['getLastOrderId'])
+            ->willReturnOnConsecutiveCalls(1, 1, 1);
 
         $this->assertTrue($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $checkoutSession
+     * @param MockObject $checkoutSession
+     *
      * @return object
      */
-    protected function createSuccessValidator(\PHPUnit_Framework_MockObject_MockObject $checkoutSession)
+    protected function createSuccessValidator(MockObject $checkoutSession): object
     {
         return $this->objectManagerHelper->getObject(
-            \Magento\Checkout\Model\Session\SuccessValidator::class,
+            SuccessValidator::class,
             ['checkoutSession' => $checkoutSession]
         );
     }

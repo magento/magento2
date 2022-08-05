@@ -34,6 +34,16 @@ class AsyncClientInterfaceMock implements AsyncClientInterface
     private $lastRequest;
 
     /**
+     * @var Request[]
+     */
+    private $requests = [];
+
+    /**
+     * @var HttpResponseDeferredInterface
+     */
+    private $mockDeferredResponse;
+
+    /**
      * AsyncClientInterfaceMock constructor.
      * @param GuzzleAsyncClient $client
      */
@@ -64,13 +74,48 @@ class AsyncClientInterfaceMock implements AsyncClientInterface
     }
 
     /**
+     * Returns all requests made.
+     *
+     * @return Request[]|null
+     */
+    public function getRequests(): array
+    {
+        return $this->requests;
+    }
+
+    /**
+     * Clear requests.
+     *
+     * @return void
+     */
+    public function clearRequests()
+    {
+        $this->requests = [];
+        $this->lastRequest = null;
+    }
+
+    /**
+     * Next responses will be as given.
+     *
+     * @param  HttpResponseDeferredInterface|null $mockDeferredResponse
+     * @return self
+     */
+    public function setDeferredResponseMock(?HttpResponseDeferredInterface $mockDeferredResponse): self
+    {
+        $this->mockDeferredResponse = $mockDeferredResponse;
+
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     public function request(Request $request): HttpResponseDeferredInterface
     {
         $this->lastRequest = $request;
-        if ($mockResponse = array_shift($this->mockResponses)) {
-            return new MockDeferredResponse($mockResponse);
+        $this->requests[] = $request;
+        if ($mockResponse = $this->mockDeferredResponse ?? array_shift($this->mockResponses)) {
+            return $this->mockDeferredResponse ?? new MockDeferredResponse($mockResponse);
         }
 
         return $this->client->request($request);

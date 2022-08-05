@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckProductListPriceAttributesTest">
+        <annotations>
+            <stories value="Check price attributes values on Admin Product List"/>
+            <title value="Check price attributes values on Admin Product List."/>
+            <description value="Login as admin, create simple product, add cost, special price. Go to Admin
+                Product List page filter grid by created product, add mentioned columns to grid, check values."/>
+            <group value="catalog"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <createData entity="SimpleOutOfStockProductWithSpecialPriceAndCost" stepKey="createSimpleProduct"/>
+
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="adminOpenProductIndexPage"/>
+            <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridByCreatedSimpleProductSku">
+                <argument name="product" value="$$createSimpleProduct$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearFiltersAdminProductGrid"/>
+            <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openToResetColumnsDropdown"/>
+            <actionGroup ref="ResetAdminProductGridColumnsActionGroup" stepKey="resetAdminProductGridColumns"/>
+
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+           <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdown"/>
+        <actionGroup ref="CheckAdminProductGridColumnOptionActionGroup" stepKey="checkSpecialPriceOption">
+            <argument name="optionName" value="Special Price"/>
+        </actionGroup>
+        <actionGroup ref="CheckAdminProductGridColumnOptionActionGroup" stepKey="checkCostOption">
+            <argument name="optionName" value="Cost"/>
+        </actionGroup>
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdown"/>
+
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seePrice">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Price"/>
+            <argument name="value" value="${{SimpleOutOfStockProduct.price}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeCorrectSpecialPrice">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Special Price"/>
+            <argument name="value" value="${{ApiProductSpecialPrice.value}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeCorrectCost">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Cost"/>
+            <argument name="value" value="${{ApiProductCost.value}}"/>
+        </actionGroup>
+    </test>
+</tests>

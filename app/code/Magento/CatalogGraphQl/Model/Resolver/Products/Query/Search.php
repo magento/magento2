@@ -7,18 +7,26 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
+use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search\QueryPopularity;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
-use Magento\Framework\Api\Search\SearchCriteriaInterfaceFactory;
+use Magento\Search\Model\Search\PageSizeProvider;
 
 /**
  * Full text search for catalog using given search criteria.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Search
+class Search implements ProductQueryInterface
 {
     /**
      * @var SearchInterface
@@ -31,14 +39,9 @@ class Search
     private $searchResultFactory;
 
     /**
-     * @var \Magento\Search\Model\Search\PageSizeProvider
+     * @var PageSizeProvider
      */
     private $pageSizeProvider;
-
-    /**
-     * @var SearchCriteriaInterfaceFactory
-     */
-    private $searchCriteriaFactory;
 
     /**
      * @var FieldSelection
@@ -46,72 +49,105 @@ class Search
     private $fieldSelection;
 
     /**
+     * @var ArgumentsProcessorInterface
+     */
+    private $argsSelection;
+
+    /**
      * @var ProductSearch
      */
     private $productsProvider;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var Suggestions
+     */
+    private $suggestions;
+
+    /**
+     * @var QueryPopularity
+     */
+    private $queryPopularity;
+
+    /**
      * @param SearchInterface $search
      * @param SearchResultFactory $searchResultFactory
-     * @param \Magento\Search\Model\Search\PageSizeProvider $pageSize
-     * @param SearchCriteriaInterfaceFactory $searchCriteriaFactory
+     * @param PageSizeProvider $pageSize
      * @param FieldSelection $fieldSelection
      * @param ProductSearch $productsProvider
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param ArgumentsProcessorInterface|null $argsSelection
+     * @param Suggestions|null $suggestions
+     * @param QueryPopularity|null $queryPopularity
      */
     public function __construct(
         SearchInterface $search,
         SearchResultFactory $searchResultFactory,
-        \Magento\Search\Model\Search\PageSizeProvider $pageSize,
-        SearchCriteriaInterfaceFactory $searchCriteriaFactory,
+        PageSizeProvider $pageSize,
         FieldSelection $fieldSelection,
-        ProductSearch $productsProvider
+        ProductSearch $productsProvider,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        ArgumentsProcessorInterface $argsSelection = null,
+        Suggestions $suggestions = null,
+        QueryPopularity $queryPopularity = null
     ) {
         $this->search = $search;
         $this->searchResultFactory = $searchResultFactory;
         $this->pageSizeProvider = $pageSize;
-        $this->searchCriteriaFactory = $searchCriteriaFactory;
         $this->fieldSelection = $fieldSelection;
         $this->productsProvider = $productsProvider;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->argsSelection = $argsSelection ?: ObjectManager::getInstance()
+            ->get(ArgumentsProcessorInterface::class);
+        $this->suggestions = $suggestions ?: ObjectManager::getInstance()
+            ->get(Suggestions::class);
+        $this->queryPopularity = $queryPopularity ?: ObjectManager::getInstance()->get(QueryPopularity::class);
     }
 
     /**
-     * Return results of full text catalog search of given term, and will return filtered results if filter is specified
+     * Return product search results using Search API
      *
-     * @param SearchCriteriaInterface $searchCriteria
+     * @param array $args
      * @param ResolveInfo $info
+     * @param ContextInterface $context
      * @return SearchResult
-     * @throws \Exception
+     * @throws GraphQlInputException
      */
     public function getResult(
-        SearchCriteriaInterface $searchCriteria,
-        ResolveInfo $info
+        array $args,
+        ResolveInfo $info,
+        ContextInterface $context
     ): SearchResult {
-        $queryFields = $this->fieldSelection->getProductsFieldSelection($info);
+        $searchCriteria = $this->buildSearchCriteria($args, $info);
 
         $realPageSize = $searchCriteria->getPageSize();
         $realCurrentPage = $searchCriteria->getCurrentPage();
-        // Current page must be set to 0 and page size to max for search to grab all ID's as temporary workaround
+        //Because of limitations of sort and pagination on search API we will query all IDS
         $pageSize = $this->pageSizeProvider->getMaxPageSize();
         $searchCriteria->setPageSize($pageSize);
         $searchCriteria->setCurrentPage(0);
         $itemsResults = $this->search->search($searchCriteria);
 
-        //Create copy of search criteria without conditions (conditions will be applied by joining search result)
-        $searchCriteriaCopy = $this->searchCriteriaFactory->create()
-            ->setSortOrders($searchCriteria->getSortOrders())
-            ->setPageSize($realPageSize)
-            ->setCurrentPage($realCurrentPage);
-
-        $searchResults = $this->productsProvider->getList($searchCriteriaCopy, $itemsResults, $queryFields);
-
-        //possible division by 0
-        if ($realPageSize) {
-            $maxPages = (int)ceil($searchResults->getTotalCount() / $realPageSize);
-        } else {
-            $maxPages = 0;
-        }
+        //Address limitations of sort and pagination on search API apply original pagination from GQL query
         $searchCriteria->setPageSize($realPageSize);
         $searchCriteria->setCurrentPage($realCurrentPage);
+        $searchResults = $this->productsProvider->getList(
+            $searchCriteria,
+            $itemsResults,
+            $this->fieldSelection->getProductsFieldSelection($info),
+            $context
+        );
+
+        $totalPages = $realPageSize ? ((int)ceil($searchResults->getTotalCount() / $realPageSize)) : 0;
+
+        // add query statistics data
+        if (!empty($args['search'])) {
+            $this->queryPopularity->execute($context, $args['search'], (int) $searchResults->getTotalCount());
+        }
 
         $productArray = [];
         /** @var \Magento\Catalog\Model\Product $product */
@@ -120,15 +156,39 @@ class Search
             $productArray[$product->getId()]['model'] = $product;
         }
 
+        $suggestions = [];
+        $totalCount = (int) $searchResults->getTotalCount();
+        if ($totalCount === 0 && !empty($args['search'])) {
+            $suggestions = $this->suggestions->execute($context, $args['search']);
+        }
+
         return $this->searchResultFactory->create(
             [
-                'totalCount' => $searchResults->getTotalCount(),
+                'totalCount' => $totalCount,
                 'productsSearchResult' => $productArray,
                 'searchAggregation' => $itemsResults->getAggregations(),
                 'pageSize' => $realPageSize,
                 'currentPage' => $realCurrentPage,
-                'totalPages' => $maxPages,
+                'totalPages' => $totalPages,
+                'suggestions' => $suggestions,
             ]
         );
+    }
+
+    /**
+     * Build search criteria from query input args
+     *
+     * @param array $args
+     * @param ResolveInfo $info
+     * @return SearchCriteriaInterface
+     */
+    private function buildSearchCriteria(array $args, ResolveInfo $info): SearchCriteriaInterface
+    {
+        $productFields = (array)$info->getFieldSelection(1);
+        $includeAggregations = isset($productFields['filters']) || isset($productFields['aggregations']);
+        $processedArgs = $this->argsSelection->process((string) $info->fieldName, $args);
+        $searchCriteria = $this->searchCriteriaBuilder->build($processedArgs, $includeAggregations);
+
+        return $searchCriteria;
     }
 }

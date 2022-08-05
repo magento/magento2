@@ -21,20 +21,21 @@
         </annotations>
         <after>
             <!-- Delete virtual product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="defaultVirtualProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         </after>
 
         <!-- Create product -->
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="defaultVirtualProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm">
             <argument name="product" value="defaultVirtualProduct"/>
         </actionGroup>
 
         <!--Checking content storefront-->
-        <amOnPage url="{{defaultVirtualProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{defaultVirtualProduct.urlKey}}.html" stepKey="goToStorefront"/>
     </test>
 </tests>

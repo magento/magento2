@@ -26,4 +26,18 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="url_rewrite_listing_data_source" xsi:type="string">Magento\UrlRewrite\Ui\Component\UrlRewrite\DataProvider\SearchResult</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\UrlRewrite\Ui\Component\UrlRewrite\DataProvider\SearchResult" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">url_rewrite</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\UrlRewrite\Model\ResourceModel\UrlRewrite</argument>
+            <argument name="identifierName" xsi:type="string">url_rewrite_id</argument>
+        </arguments>
+    </virtualType>
 </config>

@@ -24,4 +24,6 @@
     <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="cleanups_wishlist_item_after_product_delete" type="Magento\Wishlist\Plugin\Model\ResourceModel\Product" />
     </type>
+    <preference for="Magento\Wishlist\Model\ResourceModel\Item\Product\CollectionBuilderInterface"
+                type="Magento\Wishlist\Model\Adminhtml\ResourceModel\Item\Product\CollectionBuilder"/>
 </config>

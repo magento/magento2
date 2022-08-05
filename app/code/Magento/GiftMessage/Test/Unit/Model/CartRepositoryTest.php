@@ -4,12 +4,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GiftMessage\Test\Unit\Model;
 
 use Magento\GiftMessage\Model\CartRepository;
+use Magento\GiftMessage\Model\GiftMessageManager;
+use Magento\GiftMessage\Model\Message;
+use Magento\GiftMessage\Model\MessageFactory;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CartRepositoryTest extends \PHPUnit\Framework\TestCase
+class CartRepositoryTest extends TestCase
 {
     /**
      * @var CartRepository
@@ -17,27 +28,27 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $cartRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $messageFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $messageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteItemMock;
 
@@ -47,59 +58,50 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $cartId = 13;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $giftMessageManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
-        $this->messageFactoryMock = $this->createPartialMock(
-            \Magento\GiftMessage\Model\MessageFactory::class,
-            [
-                'create',
-                '__wakeup'
-            ]
-        );
-        $this->messageMock = $this->createMock(\Magento\GiftMessage\Model\Message::class);
-        $this->quoteItemMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            [
-                'getGiftMessageId',
-                '__wakeup'
-            ]
-        );
-        $this->quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
-            [
-                'getGiftMessageId',
-                'getItemById',
-                'getItemsCount',
-                'isVirtual',
-                '__wakeup',
-            ]
-        );
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
+        $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->messageMock = $this->createMock(Message::class);
+        $this->quoteItemMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['getGiftMessageId'])
+            ->onlyMethods(['__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getGiftMessageId'])
+            ->onlyMethods(['getItemById', 'getItemsCount', 'isVirtual', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->giftMessageManagerMock =
-            $this->createMock(\Magento\GiftMessage\Model\GiftMessageManager::class);
+            $this->createMock(GiftMessageManager::class);
         $this->helperMock = $this->createMock(\Magento\GiftMessage\Helper\Message::class);
-        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->cartRepository = new \Magento\GiftMessage\Model\CartRepository(
+        $this->storeMock = $this->createMock(Store::class);
+        $this->cartRepository = new CartRepository(
             $this->quoteRepositoryMock,
             $this->storeManagerMock,
             $this->giftMessageManagerMock,
@@ -110,13 +112,13 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with($this->cartId)
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
     }
 
     public function testGetWithOutMessageId()
     {
         $messageId = 0;
-        $this->quoteMock->expects($this->once())->method('getGiftMessageId')->will($this->returnValue($messageId));
+        $this->quoteMock->expects($this->once())->method('getGiftMessageId')->willReturn($messageId);
         $this->assertNull($this->cartRepository->get($this->cartId));
     }
 
@@ -124,49 +126,45 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $messageId = 156;
 
-        $this->quoteMock->expects($this->once())->method('getGiftMessageId')->will($this->returnValue($messageId));
+        $this->quoteMock->expects($this->once())->method('getGiftMessageId')->willReturn($messageId);
         $this->messageFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->messageMock));
-        $this->messageMock->expects($this->once())->method('load')->will($this->returnValue($this->messageMock));
+            ->willReturn($this->messageMock);
+        $this->messageMock->expects($this->once())->method('load')->willReturn($this->messageMock);
 
         $this->assertEquals($this->messageMock, $this->cartRepository->get($this->cartId));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Gift messages can't be used for an empty cart. Add an item and try again.
-     */
     public function testSaveWithInputException()
     {
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(0));
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectExceptionMessage('Gift messages can\'t be used for an empty cart. Add an item and try again.');
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(0);
         $this->cartRepository->save($this->cartId, $this->messageMock);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Gift messages can't be used for virtual products.
-     */
     public function testSaveWithInvalidTransitionException()
     {
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
-        $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(true));
+        $this->expectException('Magento\Framework\Exception\State\InvalidTransitionException');
+        $this->expectExceptionMessage('Gift messages can\'t be used for virtual products.');
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(1);
+        $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn(true);
         $this->cartRepository->save($this->cartId, $this->messageMock);
     }
 
     public function testSave()
     {
-        $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
+        $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn(false);
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(1);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
         $this->helperMock->expects($this->once())
             ->method('isMessagesAllowed')
             ->with('quote', $this->quoteMock, $this->storeMock)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->giftMessageManagerMock->expects($this->once())
             ->method('setMessage')
             ->with($this->quoteMock, 'quote', $this->messageMock)
-            ->will($this->returnValue($this->giftMessageManagerMock));
+            ->willReturn($this->giftMessageManagerMock);
         $this->messageMock->expects($this->once())->method('getMessage')->willReturn('message');
 
         $this->assertTrue($this->cartRepository->save($this->cartId, $this->messageMock));

@@ -17,16 +17,7 @@
 
         <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="clickOnAdvancedInventoryLink"/>
         <waitForPageLoad stepKey="waitForAdvancedInventoryPageToLoad"/>
-    </actionGroup>
-
-    <!-- ActionGroup click on Advanced Inventory Button in product form;
-         You must already be on the product form page -->
-    <actionGroup name="AdminClickOnAdvancedInventoryButtonActionGroup">
-        <annotations>
-            <description>Clicks on the 'Advanced Inventory' link on the Admin Product creation/edit page.</description>
-        </annotations>
-
-        <click selector="{{AdminProductFormSection.advancedInventoryButton}}" stepKey="clickOnAdvancedInventoryLink"/>
-        <waitForPageLoad stepKey="waitForAdvancedInventoryPageToLoad"/>
+        <!-- Wait for close button appeared. That means animation finished and modal window is fully visible -->
+        <waitForElementVisible selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryCloseButton}}" stepKey="waitForCloseButtonAppeared"/>
     </actionGroup>
 </actionGroups>

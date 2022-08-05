@@ -12,7 +12,7 @@ class ClassTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

@@ -9,9 +9,12 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminMarketingSiteMapGridSection">
+        <element name="add" type="button" selector=".page-actions-buttons .add"/>
+        <element name="rowByIndex" type="text" selector="tr[data-role='row']:nth-of-type({{var1}})" parameterized="true" timeout="30"/>
         <element name="resetButton" type="button" selector="button[title='Reset Filter']"/>
         <element name="searchButton" type="button" selector=".admin__filter-actions [title='Search']"/>
         <element name="firstSearchResult" type="text" selector="#sitemapGrid_table>tbody>tr:nth-child(1)"/>
         <element name="fileNameTextField" type="input" selector="#sitemapGrid_filter_sitemap_filename" timeout="90"/>
+        <element name="firstRowLink" type="button" selector="//td[contains(@class, 'col-link')][1]/a"/>
     </section>
 </sections>

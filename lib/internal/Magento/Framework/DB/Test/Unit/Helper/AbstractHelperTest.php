@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * \Magento\Framework\DB\Helper\AbstractHelper test case
  *
@@ -7,35 +7,41 @@
  */
 namespace Magento\Framework\DB\Test\Unit\Helper;
 
-class AbstractHelperTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Helper\AbstractHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AbstractHelperTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Helper\AbstractHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractHelper|MockObject
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $_resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $_adapterMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_adapterMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->_adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
-        $this->_resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->_resourceMock = $this->createMock(ResourceConnection::class);
         $this->_resourceMock->expects($this->any())
             ->method('getConnection')
             ->with('prefix')
-            ->will($this->returnValue($this->_adapterMock));
+            ->willReturn($this->_adapterMock);
 
         $this->_model = $this->getMockForAbstractClass(
-            \Magento\Framework\DB\Helper\AbstractHelper::class,
+            AbstractHelper::class,
             [$this->_resourceMock, 'prefix'],
             '',
             true,
@@ -64,12 +70,12 @@ class AbstractHelperTest extends \PHPUnit\Framework\TestCase
         $this->_adapterMock->expects($this->once())
             ->method('quoteIdentifier')
             ->with($field)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->_model->expects($this->once())
             ->method('addLikeEscape')
             ->with($value, $options)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $result = $this->_model->getCILike($field, $value, $options);
         $this->assertInstanceOf('Zend_Db_Expr', $result);

@@ -48,7 +48,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
     /** @var Request|MockObject */
     private $payflowRequest;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
@@ -85,7 +85,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(Gateway::class);
     }
@@ -117,14 +117,14 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-            payflow_link: 
+            payflow_link:
             {
            cancel_url:"paypal/payflow/cancel"
            return_url:"paypal/payflow/return"
            error_url:"paypal/payflow/error"
           }
       }
-  }) {    
+  }) {
        cart {
           selected_payment_method {
           code
@@ -140,7 +140,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
 QUERY;
 
         $productMetadata = ObjectManager::getInstance()->get(ProductMetadataInterface::class);
-        $button = 'Magento_Cart_' . $productMetadata->getEdition();
+        $button = 'Magento_2_' . $productMetadata->getEdition();
 
         $payflowLinkResponse = new DataObject(
             [
@@ -219,14 +219,14 @@ QUERY;
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-            payflow_link: 
+            payflow_link:
             {
            cancel_url:"paypal/payflow/cancelPayment"
            return_url:"paypal/payflow/returnUrl"
            error_url:"paypal/payflow/returnUrl"
           }
       }
-  }) {    
+  }) {
        cart {
           selected_payment_method {
           code

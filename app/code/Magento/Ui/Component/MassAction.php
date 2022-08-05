@@ -28,7 +28,7 @@ class MassAction extends AbstractComponent
             if ($disabledAction) {
                 continue;
             }
-            $config['actions'][] = array_merge($componentConfig, ['__disableTmpl' => true]);
+            $config['actions'][] = $componentConfig;
         }
 
         $origConfig = $this->getConfiguration();

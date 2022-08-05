@@ -3,51 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\ObjectManager\Test\Unit\Config\Mapper;
 
-use \Magento\Framework\ObjectManager\Config\Mapper\Dom;
+use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\ObjectManager\Config\Mapper\ArgumentParser;
+use Magento\Framework\ObjectManager\Config\Mapper\Dom;
+use Magento\Framework\Stdlib\BooleanUtils;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DomTest extends \PHPUnit\Framework\TestCase
+class DomTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManager\Config\Mapper\Dom
+     * @var Dom
      */
     protected $_mapper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $argumentInterpreter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $argumentParser = $this->createMock(\Magento\Framework\ObjectManager\Config\Mapper\ArgumentParser::class);
+        $argumentParser = $this->createMock(ArgumentParser::class);
         $argumentParser->expects(
             $this->any()
         )->method(
             'parse'
-        )->will(
-            $this->returnCallback([$this, 'parserMockCallback'])
+        )->willReturnCallback(
+            [$this, 'parserMockCallback']
         );
 
-        $booleanUtils = $this->createMock(\Magento\Framework\Stdlib\BooleanUtils::class);
+        $booleanUtils = $this->createMock(BooleanUtils::class);
         $booleanUtils->expects(
             $this->any()
         )->method(
             'toBoolean'
-        )->will(
-            $this->returnValueMap([['true', true], ['false', false]])
+        )->willReturnMap(
+            [['true', true], ['false', false]]
         );
 
-        $this->argumentInterpreter = $this->createMock(\Magento\Framework\Data\Argument\InterpreterInterface::class);
+        $this->argumentInterpreter = $this->getMockForAbstractClass(InterpreterInterface::class);
         $this->argumentInterpreter->expects(
             $this->any()
         )->method(
             'evaluate'
         )->with(
             ['xsi:type' => 'string', 'value' => 'test value']
-        )->will(
-            $this->returnValue('test value')
+        )->willReturn(
+            'test value'
         );
         $this->_mapper = new Dom($this->argumentInterpreter, $booleanUtils, $argumentParser);
     }
@@ -79,11 +86,11 @@ class DomTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $xmlData
      * @dataProvider wrongXmlDataProvider
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid application config. Unknown node: wrong_node.
      */
     public function testMapThrowsExceptionWhenXmlHasWrongFormat($xmlData)
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Invalid application config. Unknown node: wrong_node.');
         $dom = new \DOMDocument();
         $dom->loadXML($xmlData);
         $this->_mapper->convert($dom);

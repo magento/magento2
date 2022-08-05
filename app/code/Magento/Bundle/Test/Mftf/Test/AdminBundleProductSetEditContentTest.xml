@@ -21,20 +21,20 @@
         </annotations>
         <after>
             <!-- Delete bundle product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
         </after>
 
         <!-- Create product -->
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 
         <!--Checking content storefront-->
-        <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToStorefront"/>
     </test>
 </tests>

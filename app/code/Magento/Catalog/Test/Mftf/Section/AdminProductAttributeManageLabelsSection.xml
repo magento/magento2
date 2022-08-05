@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductAttributeManageLabelsSection">
+        <element name="DefaultStoreLabel" type="input" selector="#attribute-labels-table [name='frontend_label[1]']"/>
+        <element name="attributeStoreLabelValidationError" type="text" selector="#attribute-labels-table .mage-error"/>
+    </section>
+</sections>

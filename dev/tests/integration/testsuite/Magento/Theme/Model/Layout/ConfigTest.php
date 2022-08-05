@@ -14,7 +14,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $cache \Magento\Framework\App\Cache */
@@ -26,7 +26,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $fileResolverMock->expects($this->any())
             ->method('get')
-            ->will($this->returnValue([$configFile]));
+            ->willReturn([$configFile]);
         $reader = $objectManager->create(
             \Magento\Theme\Model\Layout\Config\Reader::class,
             ['fileResolver' => $fileResolverMock]

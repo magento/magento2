@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateIntegrationEntityTest">
+        <annotations>
+            <features value="Integration"/>
+            <stories value="System Integration"/>
+            <title value="Updating System Integration Entity"/>
+            <description value="Admin Updates Created Integration"/>
+            <severity value="MAJOR"/>
+            <group value="integration"/>
+            <testCaseId value="MC-14398"/>
+            <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Login As Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!-- Navigate To Integrations Page -->
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIntegrationsPage">
+                <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminMenuSystemExtensionsIntegrations.dataUiId}}"/>
+            </actionGroup>
+            <!-- Click the "Add New Integration" button -->
+            <actionGroup ref="AdminNavigateToCreateIntegrationPageActionGroup" stepKey="clickAddNewIntegrationButton"/>
+            <!-- Create New Integration -->
+            <actionGroup ref="AdminCreatesNewIntegrationActionGroup" stepKey="createIntegration">
+                <argument name="name" value="{{defaultIntegrationData.name}}"/>
+                <argument name="password" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminSubmitNewIntegrationFormActionGroup" stepKey="submitTheForm"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="returnToIntegrationsPage">
+                <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminMenuSystemExtensionsIntegrations.dataUiId}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminSearchIntegrationInGridActionGroup" stepKey="searchForIntegration">
+                <argument name="name" value="{{defaultIntegrationData.name}} Updated"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- TEST BODY -->
+        <!-- Find Created Integration In Grid -->
+        <actionGroup ref="AdminSearchIntegrationInGridActionGroup" stepKey="findCreatedIntegration">
+            <argument name="name" value="{{defaultIntegrationData.name}}"/>
+        </actionGroup>
+        <!-- Open Integration Edit Page -->
+        <actionGroup ref="AdminClickEditIntegrationEntityActionGroup" stepKey="clickEditButton"/>
+        <!-- Update Integration Entity -->
+        <actionGroup ref="AdminUpdateCreatedIntegrationEntityActionGroup" stepKey="updateIntegrationEntity">
+            <argument name="name" value="{{defaultIntegrationData.name}} Updated"/>
+            <argument name="endpoint" value="https://endpoint-updated.com"/>
+            <argument name="linkUrl" value="https://testlink-updated.com"/>
+            <argument name="password" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        </actionGroup>
+        <!-- Submit The Form -->
+        <actionGroup ref="AdminSubmitIntegrationFormActionGroup" stepKey="submitTheForm"/>
+        <!-- Assert Success Message -->
+        <actionGroup ref="AssertAdminMessageCreateIntegrationEntityActionGroup" stepKey="seeSuccessMessage">
+            <argument name="message" value="The integration '{{defaultIntegrationData.name}} Updated' has been saved."/>
+            <argument value="success" name="messageType"/>
+        </actionGroup>
+        <!-- Assert Updated Entity In Grid -->
+        <actionGroup ref="AdminSearchIntegrationInGridActionGroup" stepKey="findDeletedIntegration">
+            <argument name="name" value="{{defaultIntegrationData.name}} Updated"/>
+        </actionGroup>
+        <actionGroup ref="AssertUpdatedIntegrationEntityInGridActionGroup" stepKey="seeIntegrationEntity">
+            <argument name="name" value="{{defaultIntegrationData.name}} Updated"/>
+        </actionGroup>
+    </test>
+</tests>

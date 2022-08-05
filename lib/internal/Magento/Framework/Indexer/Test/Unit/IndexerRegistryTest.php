@@ -3,23 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Indexer\Test\Unit;
 
-class IndexerRegistryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\TestCase;
+
+class IndexerRegistryTest extends TestCase
 {
-    public function testGetCreatesIndexerInstancesAndReusesExistingOnes()
+    /**
+     * @return void
+     */
+    public function testGetCreatesIndexerInstancesAndReusesExistingOnes(): void
     {
-        $firstIndexer = $this->createMock(\Magento\Framework\Indexer\IndexerInterface::class);
+        $firstIndexer = $this->getMockForAbstractClass(IndexerInterface::class);
         $firstIndexer->expects($this->once())->method('load')->with('first-indexer')->willReturnSelf();
 
-        $secondIndexer = $this->createMock(\Magento\Framework\Indexer\IndexerInterface::class);
+        $secondIndexer = $this->getMockForAbstractClass(IndexerInterface::class);
         $secondIndexer->expects($this->once())->method('load')->with('second-indexer')->willReturnSelf();
 
-        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManager->expects($this->at(0))->method('create')->willReturn($firstIndexer);
-        $objectManager->expects($this->at(1))->method('create')->willReturn($secondIndexer);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManager
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($firstIndexer, $secondIndexer);
 
-        $unit = new \Magento\Framework\Indexer\IndexerRegistry($objectManager);
+        $unit = new IndexerRegistry($objectManager);
         $this->assertSame($firstIndexer, $unit->get('first-indexer'));
         $this->assertSame($secondIndexer, $unit->get('second-indexer'));
         $this->assertSame($firstIndexer, $unit->get('first-indexer'));

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertOneProductNameInMiniCartActionGroup">
+        <annotations>
+            <description>Validates that the provided Product Name is present in the Storefront Mini Shopping Cart.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontMinicartSection.nonEmptyCartCounter}}" stepKey="waitForNonEmptyCartCounter" />
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
+        <waitForPageLoad stepKey="waitForCartToAppear"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.miniCartItemsText}}" stepKey="waitForMiniCartTextVisible" />
+        <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{productName}}" stepKey="seeInMiniCart"/>
+    </actionGroup>
+</actionGroups>

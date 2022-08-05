@@ -20,7 +20,7 @@
             <group value="currency"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <!--Set price scope website-->
@@ -43,15 +43,26 @@
             <magentoCLI command="config:set {{SetDefaultCurrencyUSDConfig.path}} {{SetDefaultCurrencyUSDConfig.value}}" stepKey="setCurrencyDefaultUSD"/>
             <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="setAllowedCurrencyUSD"/>
             <!--Set Currency options for Website-->
+            <actionGroup ref="AdminNavigateToCurrencySetupPageActionGroup" stepKey="goToCurrencySetupPage"/>
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="switchToMainWebsite">
+                <argument name="website" value="_defaultWebsite"/>
+            </actionGroup>
+            <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForDefaultDisplayCurrency">
+                <argument name="rowId" value="row_currency_options_default"/>
+            </actionGroup>
+            <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForAllowedCurrency">
+                <argument name="rowId" value="row_currency_options_allow"/>
+            </actionGroup>
+            <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveStoreConfiguration"/>
             <magentoCLI command="config:set --scope={{SetCurrencyUSDBaseConfig.scope}} --scope-code={{SetCurrencyUSDBaseConfig.scope_code}} {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseUSDWebsites"/>
-            <magentoCLI command="config:set --scope={{SetDefaultCurrencyUSDConfig.scope}} --scope-code={{SetDefaultCurrencyUSDConfig.scope_code}} {{SetDefaultCurrencyUSDConfig.path}} {{SetDefaultCurrencyUSDConfig.value}}" stepKey="setCurrencyDefaultUSDWebsites"/>
-            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForUSD.scope}} --scope-code={{SetAllowedCurrenciesConfigForUSD.scope_code}} {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="setAllowedCurrencyUSDWebsites"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <comment userInput="BIC workaround" stepKey="setCurrencyDefaultUSDWebsites"/>
+            <comment userInput="BIC workaround" stepKey="setAllowedCurrencyUSDWebsites"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open created product on Storefront and place for order-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPagePageLoad"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" />
@@ -64,10 +75,12 @@
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <!--Open order and check rates display in one line-->
-        <actionGroup ref="OpenOrderById" stepKey="openOrderById">
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
-        <see selector="{{AdminOrderDetailsInformationSection.orderInformationTable}}" userInput="EUR / USD rate" stepKey="seeEURandUSDRate"/>
+        <actionGroup ref="AdminAssertCurrencyInOrderActionGroup" stepKey="seeEURandUSDRate">
+            <argument name="rate" value="EUR / USD rate"/>
+        </actionGroup>
         <grabMultiple selector="{{AdminOrderDetailsInformationSection.rate}}" stepKey="grabRate" />
         <assertEquals stepKey="assertSelectedCategories">
             <actualResult type="variable">grabRate</actualResult>

@@ -33,7 +33,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
      */
     private $menuConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configCacheType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\App\Cache\Type\Config::class
@@ -151,7 +151,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->configCacheType->save('', \Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT);
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);

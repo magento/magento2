@@ -3,38 +3,54 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order\Address;
+use Magento\Sales\Model\Order\Email\Container\OrderIdentity;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Sales\Model\ResourceModel\EntityAbstract;
+use Magento\Sales\Model\ResourceModel\Order;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class OrderSenderTest extends AbstractSenderTest
 {
+    private const ORDER_ID = 1;
+
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender\OrderSender
+     * @var OrderSender
      */
     protected $sender;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityAbstract|MockObject
      */
     protected $orderResourceMock;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $this->stepMockSetup();
 
         $this->orderResourceMock = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order::class,
+            Order::class,
             ['saveAttribute']
         );
 
         $this->identityContainerMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Email\Container\OrderIdentity::class,
+            OrderIdentity::class,
             ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId', 'getCopyMethod']
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
+
+        $this->orderMock->method('getId')
+            ->willReturn(self::ORDER_ID);
 
         $this->sender = new OrderSender(
             $this->templateContainerMock,
@@ -51,15 +67,20 @@ class OrderSenderTest extends AbstractSenderTest
 
     /**
      * @param int $configValue
-     * @param bool|null $forceSyncMode
+     * @param int|null $forceSyncMode
      * @param bool|null $emailSendingResult
-     * @param $senderSendException
+     * @param bool $senderSendException
+     *
      * @return void
-     * @dataProvider sendDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @dataProvider sendDataProvider
      */
-    public function testSend($configValue, $forceSyncMode, $emailSendingResult, $senderSendException)
-    {
+    public function testSend(
+        int $configValue,
+        ?int $forceSyncMode,
+        ?bool $emailSendingResult,
+        bool $senderSendException
+    ): void {
         $address = 'address_test';
         $configPath = 'sales_email/general/async_sending';
         $createdAtFormatted='Oct 14, 2019, 4:11:58 PM';
@@ -86,7 +107,7 @@ class OrderSenderTest extends AbstractSenderTest
                     ->method('getCopyMethod')
                     ->willReturn('copy');
 
-                $addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
+                $addressMock = $this->createMock(Address::class);
 
                 $this->addressRenderer->expects($this->any())
                     ->method('format')
@@ -127,6 +148,7 @@ class OrderSenderTest extends AbstractSenderTest
                     ->with(
                         [
                             'order' => $this->orderMock,
+                            'order_id' => self::ORDER_ID,
                             'billing' => $addressMock,
                             'payment_html' => 'payment',
                             'store' => $this->storeMock,
@@ -139,7 +161,6 @@ class OrderSenderTest extends AbstractSenderTest
                                 'email_customer_note' => '',
                                 'frontend_status_label' => $frontendStatusLabel
                             ]
-
                         ]
                     );
 
@@ -176,12 +197,12 @@ class OrderSenderTest extends AbstractSenderTest
                 );
             }
         } else {
-            $this->orderResourceMock->expects($this->at(0))
+            $this->orderResourceMock
                 ->method('saveAttribute')
-                ->with($this->orderMock, 'email_sent');
-            $this->orderResourceMock->expects($this->at(1))
-                ->method('saveAttribute')
-                ->with($this->orderMock, 'send_email');
+                ->withConsecutive(
+                    [$this->orderMock, 'email_sent'],
+                    [$this->orderMock, 'send_email']
+                );
 
             $this->assertFalse(
                 $this->sender->send($this->orderMock)
@@ -194,7 +215,7 @@ class OrderSenderTest extends AbstractSenderTest
      *
      * @return void
      */
-    protected function checkSenderSendExceptionCase()
+    protected function checkSenderSendExceptionCase(): void
     {
         $this->senderMock->expects($this->once())
             ->method('send')
@@ -212,7 +233,7 @@ class OrderSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public function sendDataProvider()
+    public function sendDataProvider(): array
     {
         return [
             [0, 0, true, false],
@@ -232,12 +253,17 @@ class OrderSenderTest extends AbstractSenderTest
      * @param bool $isVirtualOrder
      * @param int $formatCallCount
      * @param string|null $expectedShippingAddress
+     *
+     * @return void
      * @dataProvider sendVirtualOrderDataProvider
      */
-    public function testSendVirtualOrder($isVirtualOrder, $formatCallCount, $expectedShippingAddress)
-    {
+    public function testSendVirtualOrder(
+        bool $isVirtualOrder,
+        int $formatCallCount,
+        ?string $expectedShippingAddress
+    ): void {
         $address = 'address_test';
-        $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+        $this->orderMock->setData(OrderInterface::IS_VIRTUAL, $isVirtualOrder);
         $createdAtFormatted='Oct 14, 2019, 4:11:58 PM';
         $customerName = 'test customer';
         $frontendStatusLabel = 'Complete';
@@ -260,7 +286,7 @@ class OrderSenderTest extends AbstractSenderTest
             ->method('getCopyMethod')
             ->willReturn('copy');
 
-        $addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
+        $addressMock = $this->createMock(Address::class);
 
         $this->addressRenderer->expects($this->exactly($formatCallCount))
             ->method('format')
@@ -295,6 +321,7 @@ class OrderSenderTest extends AbstractSenderTest
             ->with(
                 [
                     'order' => $this->orderMock,
+                    'order_id' => self::ORDER_ID,
                     'billing' => $addressMock,
                     'payment_html' => 'payment',
                     'store' => $this->storeMock,
@@ -332,7 +359,7 @@ class OrderSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public function sendVirtualOrderDataProvider()
+    public function sendVirtualOrderDataProvider(): array
     {
         return [
             [true, 1, null],

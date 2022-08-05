@@ -39,7 +39,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $method->invoke($formBlock, $attributes, $fieldSet);
         $fields = $fieldSet->getElements();
 
-        $this->assertEquals(1, count($fields));
+        $this->assertCount(1, $fields);
         $this->assertInstanceOf(\Magento\Framework\Data\Form\Element\Date::class, $fields[0]);
         $this->assertNotEmpty($fields[0]->getDateFormat());
     }

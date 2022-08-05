@@ -3,19 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field\FieldArray;
 
-class AbstractTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Block\Template\Context;
+use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
+use Magento\Framework\Data\Form\Element\Multiselect;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class AbstractTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
+     * @var AbstractFieldArray
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = $this->getMockForAbstractClass(
-            \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray::class,
+            AbstractFieldArray::class,
             [],
             '',
             false,
@@ -27,14 +36,14 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
 
     public function testGetArrayRows()
     {
-        $this->model->expects($this->any())->method('escapeHtml')->will($this->returnArgument(0));
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $element = $objectManager->getObject(\Magento\Framework\Data\Form\Element\Multiselect::class);
+        $this->model->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
+        $objectManager = new ObjectManager($this);
+        $element = $objectManager->getObject(Multiselect::class);
         $element->setValue([['te<s>t' => 't<e>st', 'data&1' => 'da&ta1']]);
         $this->model->setElement($element);
         $this->assertEquals(
             [
-                new \Magento\Framework\DataObject(
+                new DataObject(
                     [
                         'te<s>t' => 't<e>st',
                         'data&1' => 'da&ta1',
@@ -49,7 +58,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAddButtonLabel()
     {
-        $contextMock = $this->getMockBuilder(\Magento\Backend\Block\Template\Context::class)
+        $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model->__construct($contextMock);

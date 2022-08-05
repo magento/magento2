@@ -30,7 +30,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->updater = $this->objectManager->create(Updater::class);

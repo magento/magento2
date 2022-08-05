@@ -14,14 +14,14 @@
             <title value="Out of stock configurable attribute option doesn't show in Layered Navigation"/>
             <description value=" Login as admin and verify out of stock configurable attribute option doesn't show in Layered Navigation"/>
             <testCaseId value="MC-13734"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="ConfigurableProduct"/>
             <group value="mtf_migrated"/>
         </annotations>
 
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
 
             <!-- Create Default Category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -116,13 +116,15 @@
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteConfigChildProduct3"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Open Product Index Page and Filter First Child product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="ApiSimpleOne"/>
         </actionGroup>
 
@@ -130,13 +132,13 @@
         <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="selectFirstRow"/>
         <waitForPageLoad stepKey="waitForProductPageToLoad"/>
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToProductQuantity"/>
-        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="disableProduct"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="clickOnSaveButton"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="disableProduct">
+           <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>   
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
 
-        <!--Run re-index task-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!--Open Category in Store Front and select product attribute option from sidebar -->
         <actionGroup ref="SelectStorefrontSideBarAttributeOption" stepKey="selectStorefrontProductAttributeOption">

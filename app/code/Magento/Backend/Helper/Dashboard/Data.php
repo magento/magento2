@@ -5,8 +5,14 @@
  */
 namespace Magento\Backend\Helper\Dashboard;
 
+use Magento\Backend\Model\Dashboard\Period;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Data helper for dashboard
@@ -14,10 +20,10 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  * @api
  * @since 100.0.2
  */
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class Data extends AbstractHelper
 {
     /**
-     * @var \Magento\Framework\Data\Collection\AbstractDb
+     * @var AbstractDb
      */
     protected $_stores;
 
@@ -27,25 +33,33 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_installDate;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $_storeManager;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @var Period
+     */
+    private $period;
+
+    /**
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
      * @param DeploymentConfig $deploymentConfig
+     * @param Period|null $period
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        DeploymentConfig $deploymentConfig
+        Context $context,
+        StoreManagerInterface $storeManager,
+        DeploymentConfig $deploymentConfig,
+        ?Period $period = null
     ) {
-        parent::__construct(
-            $context
-        );
+        parent::__construct($context);
         $this->_installDate = $deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE);
         $this->_storeManager = $storeManager;
+        $this->period = $period ?? ObjectManager::getInstance()->get(Period::class);
     }
 
     /**
@@ -74,17 +88,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Prepare array with periods for dashboard graphs
      *
+     * @deprecated 102.0.0 periods were moved to it's own class
+     * @see Period::getDatePeriods()
+     *
      * @return array
      */
     public function getDatePeriods()
     {
-        return [
-            '24h' => __('Last 24 Hours'),
-            '7d' => __('Last 7 Days'),
-            '1m' => __('Current Month'),
-            '1y' => __('YTD'),
-            '2y' => __('2YTD')
-        ];
+        return $this->period->getDatePeriods();
     }
 
     /**

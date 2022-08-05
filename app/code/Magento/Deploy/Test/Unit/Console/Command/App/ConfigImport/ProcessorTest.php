@@ -3,68 +3,72 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Test\Unit\Console\Command\App\ConfigImport;
 
-use Magento\Framework\App\DeploymentConfig\ImporterInterface;
-use Magento\Framework\App\DeploymentConfig;
-use Psr\Log\LoggerInterface as Logger;
 use Magento\Deploy\Console\Command\App\ConfigImport\Processor;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
-use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputInterface;
 use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
-use Magento\Framework\Console\QuestionPerformer\YesNo;
+use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\DeploymentConfig\ValidatorInterface;
+use Magento\Framework\Console\QuestionPerformer\YesNo;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface as Logger;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProcessorTest extends \PHPUnit\Framework\TestCase
+class ProcessorTest extends TestCase
 {
     /**
-     * @var ChangeDetector|\PHPUnit_Framework_MockObject_MockObject
+     * @var ChangeDetector|MockObject
      */
     private $changeDetectorMock;
 
     /**
-     * @var ImporterPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImporterPool|MockObject
      */
     private $configImporterPoolMock;
 
     /**
-     * @var ImporterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImporterFactory|MockObject
      */
     private $importerFactoryMock;
 
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var Hash|\PHPUnit_Framework_MockObject_MockObject
+     * @var Hash|MockObject
      */
     private $configHashMock;
 
     /**
-     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var Logger|MockObject
      */
     private $loggerMock;
 
     /**
-     * @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OutputInterface|MockObject
      */
     private $outputMock;
 
     /**
-     * @var InputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InputInterface|MockObject
      */
     private $inputMock;
 
     /**
-     * @var YesNo|\PHPUnit_Framework_MockObject_MockObject
+     * @var YesNo|MockObject
      */
     private $questionPerformerMock;
 
@@ -73,7 +77,10 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $processor;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $this->importerFactoryMock = $this->getMockBuilder(ImporterFactory::class)
             ->disableOriginalConstructor()
@@ -116,9 +123,11 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      * @param bool $doImport
      * @param bool $skipImport
      * @param array $warningMessages
+     *
+     * @return void
      * @dataProvider importDataProvider
      */
-    public function testImport($doImport, $skipImport, array $warningMessages)
+    public function testImport(bool $doImport, bool $skipImport, array $warningMessages): void
     {
         $configData = ['some data'];
         $messages = ['The import is complete'];
@@ -164,12 +173,12 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             $this->configHashMock->expects($this->never())
                 ->method('regenerate');
         } else {
-            $this->outputMock->expects($this->at(0))
+            $this->outputMock
                 ->method('writeln')
-                ->with('<info>Processing configurations data from configuration file...</info>');
-            $this->outputMock->expects($this->at(1))
-                ->method('writeln')
-                ->with($expectsMessages);
+                ->withConsecutive(
+                    ['<info>Processing configurations data from configuration file...</info>'],
+                    [$expectsMessages]
+                );
             $importerMock->expects($this->once())
                 ->method('import')
                 ->with($configData)
@@ -184,38 +193,39 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function importDataProvider()
+    public function importDataProvider(): array
     {
         return [
             [
                 'doImport' => false,
                 'skipImport' => false,
-                'warningMessages' => [],
+                'warningMessages' => []
             ],
             [
                 'doImport' => true,
                 'skipImport' => false,
-                'warningMessages' => [],
+                'warningMessages' => []
             ],
             [
                 'doImport' => true,
                 'skipImport' => false,
-                'warningMessages' => ['Some message'],
+                'warningMessages' => ['Some message']
             ],
             [
                 'doImport' => false,
                 'skipImport' => true,
-                'warningMessages' => ['Some message'],
+                'warningMessages' => ['Some message']
             ],
         ];
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Import failed: Some error
+     * @return void
      */
-    public function testImportWithException()
+    public function testImportWithException(): void
     {
+        $this->expectException('Magento\Framework\Exception\RuntimeException');
+        $this->expectExceptionMessage('Import failed: Some error');
         $exception = new \Exception('Some error');
         $this->outputMock->expects($this->never())
             ->method('writeln');
@@ -236,11 +246,12 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Import failed: error message
+     * @return void
      */
-    public function testImportWithValidation()
+    public function testImportWithValidation(): void
     {
+        $this->expectException('Magento\Framework\Exception\RuntimeException');
+        $this->expectExceptionMessage('Import failed: error message');
         $configData = ['config data'];
         $importerClassName = 'someImporterClassName';
         $importers = ['someSection' => $importerClassName];
@@ -280,9 +291,11 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $importers
      * @param bool $isValid
+     *
+     * @return void
      * @dataProvider importNothingToImportDataProvider
      */
-    public function testImportNothingToImport(array $importers, $isValid)
+    public function testImportNothingToImport(array $importers, bool $isValid): void
     {
         $this->configImporterPoolMock->expects($this->once())
             ->method('getImporters')
@@ -297,7 +310,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->loggerMock->expects($this->never())
             ->method('error');
 
-        $this->outputMock->expects($this->at(0))
+        $this->outputMock
             ->method('writeln')
             ->with('<info>Nothing to import.</info>');
 
@@ -307,12 +320,12 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function importNothingToImportDataProvider()
+    public function importNothingToImportDataProvider(): array
     {
         return [
             ['importers' => [], 'isValid' => false],
             ['importers' => [], 'isValid' => true],
-            ['importers' => ['someImporter'], 'isValid' => false],
+            ['importers' => ['someImporter'], 'isValid' => false]
         ];
     }
 }

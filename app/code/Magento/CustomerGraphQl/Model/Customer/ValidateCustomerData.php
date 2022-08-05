@@ -7,10 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Customer;
 
+use Magento\CustomerGraphQl\Api\ValidateCustomerDataInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Validator\EmailAddress as EmailAddressValidator;
 
 /**
- * Class ValidateCustomerData
+ * Customer data validation used during customer account creation and updating
  */
 class ValidateCustomerData
 {
@@ -22,42 +26,45 @@ class ValidateCustomerData
     private $getAllowedCustomerAttributes;
 
     /**
+     * @var EmailAddressValidator
+     */
+    private $emailAddressValidator;
+
+    /**
+     * @var ValidateCustomerDataInterface[]
+     */
+    private $validators = [];
+
+    /**
      * ValidateCustomerData constructor.
      *
      * @param GetAllowedCustomerAttributes $getAllowedCustomerAttributes
+     * @param EmailAddressValidator $emailAddressValidator
+     * @param array $validators
      */
-    public function __construct(GetAllowedCustomerAttributes $getAllowedCustomerAttributes)
-    {
+    public function __construct(
+        GetAllowedCustomerAttributes $getAllowedCustomerAttributes,
+        EmailAddressValidator $emailAddressValidator,
+        $validators = []
+    ) {
         $this->getAllowedCustomerAttributes = $getAllowedCustomerAttributes;
+        $this->emailAddressValidator = $emailAddressValidator;
+        $this->validators = $validators;
     }
 
     /**
      * Validate customer data
      *
      * @param array $customerData
-     *
-     * @return void
-     *
      * @throws GraphQlInputException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
-    public function execute(array $customerData): void
+    public function execute(array $customerData)
     {
-        $attributes = $this->getAllowedCustomerAttributes->execute(array_keys($customerData));
-        $errorInput = [];
-
-        foreach ($attributes as $attributeInfo) {
-            if ($attributeInfo->getIsRequired()
-                && (!isset($customerData[$attributeInfo->getAttributeCode()])
-                    || $customerData[$attributeInfo->getAttributeCode()] == '')
-            ) {
-                $errorInput[] = $attributeInfo->getDefaultFrontendLabel();
-            }
-        }
-
-        if ($errorInput) {
-            throw new GraphQlInputException(
-                __('Required parameters are missing: %1', [implode(', ', $errorInput)])
-            );
+        /** @var ValidateCustomerDataInterface $validator */
+        foreach ($this->validators as $validator) {
+            $validator->execute($customerData);
         }
     }
 }

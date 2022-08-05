@@ -13,6 +13,9 @@
                 <postcode>90034</postcode>
                 <region_id>12</region_id>
             </origin>
+            <shipping_policy>
+                <enable_shipping_policy>0</enable_shipping_policy>
+            </shipping_policy>
         </shipping>
     </default>
 </config>

@@ -5,4 +5,6 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/configurable_products_rollback.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_products_rollback.php');

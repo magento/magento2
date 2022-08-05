@@ -3,18 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Model\Import;
 
 use Magento\ImportExport\Model\Import\Adapter as Adapter;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AdapterTest extends \PHPUnit\Framework\TestCase
+class AdapterTest extends TestCase
 {
     /**
-     * @var Adapter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Adapter|MockObject
      */
     protected $adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->adapter = $this->createMock(\Magento\ImportExport\Model\Import\Adapter::class);
     }

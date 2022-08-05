@@ -9,7 +9,10 @@ declare(strict_types=1);
 namespace Magento\Framework\Mview;
 
 use InvalidArgumentException;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\Mview\View\ChangeLogBatchWalkerFactory;
+use Magento\Framework\Mview\View\ChangeLogBatchWalkerInterface;
 use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
 use Magento\Framework\Mview\View\SubscriptionFactory;
 use Exception;
@@ -26,11 +29,6 @@ class View extends DataObject implements ViewInterface
      * Default batch size for partial reindex
      */
     const DEFAULT_BATCH_SIZE = 1000;
-
-    /**
-     * Max versions to load from database at a time
-     */
-    private static $maxVersionQueryBatch = 100000;
 
     /**
      * @var string
@@ -68,6 +66,11 @@ class View extends DataObject implements ViewInterface
     private $changelogBatchSize;
 
     /**
+     * @var ChangeLogBatchWalkerFactory
+     */
+    private $changeLogBatchWalkerFactory;
+
+    /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
      * @param View\StateInterface $state
@@ -75,6 +78,7 @@ class View extends DataObject implements ViewInterface
      * @param SubscriptionFactory $subscriptionFactory
      * @param array $data
      * @param array $changelogBatchSize
+     * @param ChangeLogBatchWalkerFactory $changeLogBatchWalkerFactory
      */
     public function __construct(
         ConfigInterface $config,
@@ -83,7 +87,8 @@ class View extends DataObject implements ViewInterface
         View\ChangelogInterface $changelog,
         SubscriptionFactory $subscriptionFactory,
         array $data = [],
-        array $changelogBatchSize = []
+        array $changelogBatchSize = [],
+        ChangeLogBatchWalkerFactory $changeLogBatchWalkerFactory = null
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
@@ -92,6 +97,8 @@ class View extends DataObject implements ViewInterface
         $this->subscriptionFactory = $subscriptionFactory;
         $this->changelogBatchSize = $changelogBatchSize;
         parent::__construct($data);
+        $this->changeLogBatchWalkerFactory = $changeLogBatchWalkerFactory ?:
+            ObjectManager::getInstance()->get(ChangeLogBatchWalkerFactory::class);
     }
 
     /**
@@ -291,23 +298,34 @@ class View extends DataObject implements ViewInterface
      */
     private function executeAction(ActionInterface $action, int $lastVersionId, int $currentVersionId)
     {
-        $versionBatchSize = self::$maxVersionQueryBatch;
         $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
             ? (int) $this->changelogBatchSize[$this->getChangelog()->getViewId()]
             : self::DEFAULT_BATCH_SIZE;
 
-        for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
-            // Don't go past the current version for atomicity.
-            $versionTo = min($currentVersionId, $vsFrom + $versionBatchSize);
-            $ids = $this->getChangelog()->getList($vsFrom, $versionTo);
+        $vsFrom = $lastVersionId;
+        while ($vsFrom < $currentVersionId) {
+            $walker = $this->getWalker();
+            $ids = $walker->walk($this->getChangelog(), $vsFrom, $currentVersionId, $batchSize);
 
-            // We run the actual indexer in batches.
-            // Chunked AFTER loading to avoid duplicates in separate chunks.
-            $chunks = array_chunk($ids, $batchSize);
-            foreach ($chunks as $ids) {
-                $action->execute($ids);
+            if (empty($ids)) {
+                break;
             }
+            $vsFrom += $batchSize;
+            $action->execute($ids);
         }
+    }
+
+    /**
+     * Create and validate walker class for changelog
+     *
+     * @return ChangeLogBatchWalkerInterface|mixed
+     * @throws Exception
+     */
+    private function getWalker(): ChangeLogBatchWalkerInterface
+    {
+        $config = $this->config->getView($this->changelog->getViewId());
+        $walkerClass = $config['walker'];
+        return $this->changeLogBatchWalkerFactory->create($walkerClass);
     }
 
     /**

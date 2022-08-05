@@ -18,7 +18,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <magentoCLI command="config:set {{DisableGuestCheckoutConfigData.path}} {{DisableGuestCheckoutConfigData.value}}" stepKey="disableGuestCheckout"/>
             <magentoCLI command="config:set {{DisableCustomerRedirectToDashboardConfigData.path}} {{DisableCustomerRedirectToDashboardConfigData.value}}" stepKey="disableCustomerRedirect"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
@@ -32,14 +32,14 @@
 
             <!-- Sign out Customer from storefront -->
             <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
-            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Product page in StoreFront and assert product and price range -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 
@@ -49,21 +49,22 @@
         </actionGroup>
 
         <!--Open View and edit -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickMiniCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
 
         <!-- Fill the Estimate Shipping and Tax section -->
         <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
 
         <!--Fill the pop up sign form -->
         <actionGroup ref="StorefrontCustomerSignInPopUpActionGroup" stepKey="customerSignIn">
             <argument name="customerEmail" value="$$createCustomer.email$$"/>
             <argument name="customerPwd" value="$$createCustomer.password$$"/>
         </actionGroup>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout1"/>
-        <waitForPageLoad stepKey="waitForShippingMethodSectionToLoad"/>
-        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="waitProceedToCheckout"/>
+        <scrollTo selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="scrollToGoToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout1"/>
+        <comment userInput="Adding the comment to replace waitForShippingMethodSectionToLoad action for preserving Backward Compatibility" stepKey="waitForShippingMethodSectionToLoad"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
 
         <!-- Verify order summary on payment page -->
         <actionGroup ref="VerifyCheckoutPaymentOrderSummaryActionGroup" stepKey="verifyCheckoutPaymentOrderSummary">
@@ -75,18 +76,16 @@
         <!-- Place order and Assert success message -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="orderId"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="openOrderViewPage"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
-        <!-- Open Order Index Page -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-
-        <!-- Filter Order using orderId and assert order-->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$orderId"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openAdminOrderViewPage">
+            <argument name="entityId" value="$grabOrderId"/>
         </actionGroup>
-
-        <click selector="{{AdminOrdersGridSection.viewLink('$orderId')}}" stepKey="clickOnViewLink"/>
-        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToOrders"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterOrderGridById"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnViewLink"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderPageToLoad"/>
 
         <!-- Ship the order and assert the shipping status -->
         <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="shipTheOrder"/>

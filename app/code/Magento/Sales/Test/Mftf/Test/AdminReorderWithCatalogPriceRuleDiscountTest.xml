@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReorderWithCatalogPriceRuleDiscountTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Admin create order"/>
+            <title value="Reorder doesn't show discount price in Order Totals block"/>
+            <description value="Reorder doesn't show discount price in Order Totals block"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-28642"/>
+            <useCaseId value="MAGETWO-99691"/>
+            <group value="sales"/>
+            <group value="catalogRule"/>
+        </annotations>
+
+        <before>
+            <!--Create product-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRateShipping"/>
+            <magentoCLI command="config:set carriers/flatrate/price 5.00" stepKey="setFlatRateShippingPrice"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProductApi"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToAdminCatalogPriceRuleGridPage2"/>
+            <!-- It sometimes is loading too long for default 10s -->
+            <waitForPageLoad time="60" stepKey="waitForPageFullyLoaded2"/>
+            <!--Create the catalog price rule -->
+            <createData entity="CatalogRuleToPercent" stepKey="createCatalogRule"/>
+            <!--Create order via API-->
+            <createData entity="GuestCart" stepKey="createGuestCart"/>
+            <createData entity="SimpleCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createSimpleProductApi"/>
+            </createData>
+            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddress">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </createData>
+            <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </updateData>
+            <!--END Create order via API-->
+        </before>
+
+        <after>
+            <deleteData createDataKey="createSimpleProductApi" stepKey="deleteSimpleProductApi"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!--Open order by Id-->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="navigateToOrderPage">
+            <argument name="entityId" value="$createGuestCart.return$"/>
+        </actionGroup>
+        <!--Reorder-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
+        <!--Verify order item row-->
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productPrice('2')}}" stepKey="waitOrderItemPriceToBeVisible"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productPrice('2')}}" userInput="{{AdminOrderSimpleProductWithCatalogRule.subtotal}}" stepKey="seeOrderItemPrice"/>
+        <!--Verify totals on Order page-->
+        <scrollTo selector="{{AdminOrderFormTotalSection.grandTotal}}" stepKey="scrollToOrderGrandTotal"/>
+        <waitForElementVisible selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" stepKey="waitOrderSubtotalToBeVisible"/>
+        <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="{{AdminOrderSimpleProductWithCatalogRule.subtotal}}" stepKey="seeOrderSubTotal"/>
+        <waitForElementVisible selector="{{AdminOrderFormTotalSection.total('Shipping')}}" stepKey="waitOrderShippingToBeVisible"/>
+        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="{{AdminOrderSimpleProductWithCatalogRule.shipping}}" stepKey="seeOrderShipping"/>
+        <waitForElementVisible selector="{{AdminOrderFormTotalSection.grandTotal}}" stepKey="waitOrderGrandTotalToBeVisible"/>
+        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="{{AdminOrderSimpleProductWithCatalogRule.grandTotal}}" stepKey="seeCorrectGrandTotal"/>
+    </test>
+</tests>

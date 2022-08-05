@@ -3,12 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Test\Unit\Pricing\Render;
 
+use Magento\Bundle\Pricing\Price\FinalPrice;
 use Magento\Bundle\Pricing\Render\FinalPriceBox;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
+class FinalPriceBoxTest extends TestCase
 {
     /**
      * @var FinalPriceBox
@@ -16,65 +24,73 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SaleableInterface|MockObject
      */
     protected $saleableItem;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->saleableItem = $this->createMock(\Magento\Framework\Pricing\SaleableInterface::class);
+        $this->saleableItem = $this->getMockForAbstractClass(SaleableInterface::class);
 
-        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectHelper = new ObjectManager($this);
         $this->model = $objectHelper->getObject(
-            \Magento\Bundle\Pricing\Render\FinalPriceBox::class,
+            FinalPriceBox::class,
             ['saleableItem' => $this->saleableItem]
         );
     }
 
     /**
+     * @return void
      * @dataProvider showRangePriceDataProvider
      */
-    public function testShowRangePrice($optMinValue, $optMaxValue, $custMinValue, $custMaxValue, $expectedShowRange)
-    {
+    public function testShowRangePrice(
+        $optMinValue,
+        $optMaxValue,
+        $custMinValue,
+        $custMaxValue,
+        $expectedShowRange
+    ): void {
         $enableCustomOptionMocks = ($optMinValue == $optMaxValue);
 
-        $priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
-        $bundlePrice = $this->getMockBuilder(\Magento\Bundle\Pricing\Price\FinalPrice::class)
+        $priceInfo = $this->createMock(Base::class);
+        $bundlePrice = $this->getMockBuilder(FinalPrice::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $customOptionPrice = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\CustomOptionPrice::class)
+        $customOptionPrice = $this->getMockBuilder(CustomOptionPrice::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->saleableItem->expects($this->atLeastOnce())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfo));
+            ->willReturn($priceInfo);
 
-        $priceInfo->expects($this->at(0))
-            ->method('getPrice')
-            ->with(\Magento\Bundle\Pricing\Price\FinalPrice::PRICE_CODE)
-            ->will($this->returnValue($bundlePrice));
+        $priceWithArgs = $priceWillReturnArgs = [];
+        $priceWithArgs[] = [FinalPrice::PRICE_CODE];
+        $priceWillReturnArgs[] = $bundlePrice;
+
         if ($enableCustomOptionMocks) {
-            $priceInfo->expects($this->at(1))
-                ->method('getPrice')
-                ->with(CustomOptionPrice::PRICE_CODE)
-                ->will($this->returnValue($customOptionPrice));
+            $priceWithArgs[] = [CustomOptionPrice::PRICE_CODE];
+            $priceWillReturnArgs[] = $customOptionPrice;
         }
+        $priceInfo
+            ->method('getPrice')
+            ->withConsecutive(...$priceWithArgs)
+            ->willReturnOnConsecutiveCalls(...$priceWillReturnArgs);
 
         $bundlePrice->expects($this->once())
             ->method('getMinimalPrice')
-            ->will($this->returnValue($optMinValue));
+            ->willReturn($optMinValue);
         $bundlePrice->expects($this->once())
             ->method('getMaximalPrice')
-            ->will($this->returnValue($optMaxValue));
+            ->willReturn($optMaxValue);
 
         if ($enableCustomOptionMocks) {
-            $customOptionPrice->expects($this->at(0))
+            $customOptionPrice
                 ->method('getCustomOptionRange')
-                ->will($this->returnValue($custMinValue));
-            $customOptionPrice->expects($this->at(1))
-                ->method('getCustomOptionRange')
-                ->will($this->returnValue($custMaxValue));
+                ->willReturnOnConsecutiveCalls($custMinValue, $custMaxValue);
         }
 
         $this->assertEquals($expectedShowRange, $this->model->showRangePrice());
@@ -83,7 +99,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function showRangePriceDataProvider()
+    public function showRangePriceDataProvider(): array
     {
         return [
             'bundle options different, custom options noop' => [
@@ -116,7 +132,7 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
                 'custMinValue' => 0,
                 'custMaxValue' => 1,
                 'expectedShowRange' => true
-            ],
+            ]
         ];
     }
 }

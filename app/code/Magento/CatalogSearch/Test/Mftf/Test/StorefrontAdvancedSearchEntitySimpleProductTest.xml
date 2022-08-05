@@ -19,21 +19,22 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Delete all products left by prev tests because it sensitive for search-->
-            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <!-- Create Data -->
             <createData entity="ABC_dfj_SimpleProduct" stepKey="createProduct"/>
         </before>
         <after>
             <!-- Delete data -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logoutAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
         </after>
 
-        <!-- Perform reindex and flush cache -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- 1. Navigate to Frontend -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>

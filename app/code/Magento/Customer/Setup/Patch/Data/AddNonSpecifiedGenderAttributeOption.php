@@ -3,30 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Setup\CustomerSetupFactory;
-use Magento\Directory\Model\AllowedCountries;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Encryption\Encryptor;
-use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Framework\Setup\SetupInterface;
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\DB\FieldDataConverterFactory;
-use Magento\Framework\DB\DataConverter\SerializedToJson;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Class AddNonSpecifiedGenderAttributeOption
- * @package Magento\Customer\Setup\Patch
+ * Class add non specified gender attribute option to customer
  */
 class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchVersionInterface
 {
@@ -41,7 +29,6 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
     private $customerSetupFactory;
 
     /**
-     * AddNonSpecifiedGenderAttributeOption constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CustomerSetupFactory $customerSetupFactory
      */
@@ -54,7 +41,7 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -64,10 +51,12 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
 
         $option = ['attribute_id' => $attributeId, 'values' => [3 => 'Not Specified']];
         $customerSetup->addAttributeOption($option);
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -77,7 +66,7 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -85,7 +74,7 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

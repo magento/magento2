@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Config\Test\Unit\Dom;
 
 use Magento\Framework\Config\Dom\ArrayNodeConfig;
 use Magento\Framework\Config\Dom\NodePathMatcher;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for
  *
  * @see ArrayNodeConfig
  */
-class ArrayNodeConfigTest extends \PHPUnit\Framework\TestCase
+class ArrayNodeConfigTest extends TestCase
 {
     /**
      * @var ArrayNodeConfig
@@ -21,11 +25,14 @@ class ArrayNodeConfigTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var NodePathMatcher|\PHPUnit_Framework_MockObject_MockObject
+     * @var NodePathMatcher|MockObject
      */
     protected $nodePathMatcher;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $this->nodePathMatcher = $this->createMock(NodePathMatcher::class);
         $this->object = new ArrayNodeConfig(
@@ -35,127 +42,66 @@ class ArrayNodeConfigTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testIsNumericArrayMatched()
+    /**
+     * @return void
+     */
+    public function testIsNumericArrayMatched(): void
     {
         $xpath = '/root/numeric[@attr="value"]/two';
-        $this->nodePathMatcher->expects(
-            $this->at(0)
-        )->method(
-            'match'
-        )->with(
-            '/root/numeric/one',
-            $xpath
-        )->will(
-            $this->returnValue(false)
-        );
-        $this->nodePathMatcher->expects(
-            $this->at(1)
-        )->method(
-            'match'
-        )->with(
-            '/root/numeric/two',
-            $xpath
-        )->will(
-            $this->returnValue(true)
-        );
+        $this->nodePathMatcher
+            ->method('match')
+            ->withConsecutive(['/root/numeric/one', $xpath], ['/root/numeric/two', $xpath])
+            ->willReturnOnConsecutiveCalls(false, true);
         $this->assertTrue($this->object->isNumericArray($xpath));
     }
 
-    public function testIsNumericArrayNotMatched()
+    /**
+     * @return void
+     */
+    public function testIsNumericArrayNotMatched(): void
     {
         $xpath = '/root/numeric[@attr="value"]/four';
-        $this->nodePathMatcher->expects(
-            $this->at(0)
-        )->method(
-            'match'
-        )->with(
-            '/root/numeric/one',
-            $xpath
-        )->will(
-            $this->returnValue(false)
-        );
-        $this->nodePathMatcher->expects(
-            $this->at(1)
-        )->method(
-            'match'
-        )->with(
-            '/root/numeric/two',
-            $xpath
-        )->will(
-            $this->returnValue(false)
-        );
-        $this->nodePathMatcher->expects(
-            $this->at(2)
-        )->method(
-            'match'
-        )->with(
-            '/root/numeric/three',
-            $xpath
-        )->will(
-            $this->returnValue(false)
-        );
+        $this->nodePathMatcher
+            ->method('match')
+            ->withConsecutive(
+                ['/root/numeric/one', $xpath],
+                ['/root/numeric/two', $xpath],
+                ['/root/numeric/three', $xpath]
+            )
+            ->willReturnOnConsecutiveCalls(false, false, false);
         $this->assertFalse($this->object->isNumericArray($xpath));
     }
 
-    public function testGetAssocArrayKeyAttributeMatched()
+    /**
+     * @return void
+     */
+    public function testGetAssocArrayKeyAttributeMatched(): void
     {
         $xpath = '/root/assoc[@attr="value"]/two';
-        $this->nodePathMatcher->expects(
-            $this->at(0)
-        )->method(
-            'match'
-        )->with(
-            '/root/assoc/one',
-            $xpath
-        )->will(
-            $this->returnValue(false)
-        );
-        $this->nodePathMatcher->expects(
-            $this->at(1)
-        )->method(
-            'match'
-        )->with(
-            '/root/assoc/two',
-            $xpath
-        )->will(
-            $this->returnValue(true)
-        );
+        $this->nodePathMatcher
+            ->method('match')
+            ->withConsecutive(
+                ['/root/assoc/one', $xpath],
+                ['/root/assoc/two', $xpath]
+            )
+            ->willReturnOnConsecutiveCalls(false, true);
         $this->assertEquals('id', $this->object->getAssocArrayKeyAttribute($xpath));
     }
 
-    public function testGetAssocArrayKeyAttributeNotMatched()
+    /**
+     * @return void
+     */
+    public function testGetAssocArrayKeyAttributeNotMatched(): void
     {
         $xpath = '/root/assoc[@attr="value"]/four';
-        $this->nodePathMatcher->expects(
-            $this->at(0)
-        )->method(
-            'match'
-        )->with(
-            '/root/assoc/one',
-            $xpath
-        )->will(
-            $this->returnValue(false)
-        );
-        $this->nodePathMatcher->expects(
-            $this->at(1)
-        )->method(
-            'match'
-        )->with(
-            '/root/assoc/two',
-            $xpath
-        )->will(
-            $this->returnValue(false)
-        );
-        $this->nodePathMatcher->expects(
-            $this->at(2)
-        )->method(
-            'match'
-        )->with(
-            '/root/assoc/three',
-            $xpath
-        )->will(
-            $this->returnValue(false)
-        );
+        $this->nodePathMatcher
+            ->method('match')
+            ->withConsecutive(
+                ['/root/assoc/one', $xpath],
+                ['/root/assoc/two', $xpath],
+                ['/root/assoc/three', $xpath]
+            )
+            ->willReturnOnConsecutiveCalls(false, false, false);
         $this->assertNull($this->object->getAssocArrayKeyAttribute($xpath));
     }
 }

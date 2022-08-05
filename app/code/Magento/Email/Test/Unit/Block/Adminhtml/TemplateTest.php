@@ -3,53 +3,65 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Block\Adminhtml;
+
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Button\ButtonList;
+use Magento\Backend\Block\Widget\Button\Item;
+use Magento\Backend\Block\Widget\Button\ItemFactory;
+use Magento\Email\Block\Adminhtml\Template;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers Magento\Email\Block\Adminhtml\Template
  */
-class TemplateTest extends \PHPUnit\Framework\TestCase
+class TemplateTest extends TestCase
 {
-    /** @var \Magento\Email\Block\Adminhtml\Template */
+    /** @var Template */
     protected $template;
 
-    /** @var \Magento\Backend\Block\Template\Context */
+    /** @var Context */
     protected $context;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlInterface|MockObject */
     protected $urlBuilderMock;
 
-    /** @var \Magento\Backend\Block\Widget\Button\ItemFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ItemFactory|MockObject */
     protected $itemFactoryMock;
 
-    /** @var \Magento\Backend\Block\Widget\Button\ButtonList */
+    /** @var ButtonList */
     protected $buttonList;
 
-    /** @var \Magento\Backend\Block\Widget\Button\Item|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Item|MockObject */
     protected $buttonMock;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var ObjectManager */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->itemFactoryMock = $this->getMockBuilder(\Magento\Backend\Block\Widget\Button\ItemFactory::class)
+        $this->objectManager = new ObjectManager($this);
+        $this->itemFactoryMock = $this->getMockBuilder(ItemFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->buttonMock = $this->getMockBuilder(\Magento\Backend\Block\Widget\Button\Item::class)
+        $this->buttonMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->itemFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->buttonMock);
         $this->buttonList = $this->objectManager->getObject(
-            \Magento\Backend\Block\Widget\Button\ButtonList::class,
+            ButtonList::class,
             [ 'itemFactory' => $this->itemFactoryMock]
         );
         $this->urlBuilderMock = $this->getMockForAbstractClass(
-            \Magento\Framework\UrlInterface::class,
+            UrlInterface::class,
             [],
             '',
             false,
@@ -58,13 +70,13 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ['getUrl']
         );
         $this->context = $this->objectManager->getObject(
-            \Magento\Backend\Block\Template\Context::class,
+            Context::class,
             [
                 'urlBuilder' => $this->urlBuilderMock
             ]
         );
         $this->template = $this->objectManager->getObject(
-            \Magento\Email\Block\Adminhtml\Template::class,
+            Template::class,
             [
                 'context' => $this->context,
                 'buttonList' => $this->buttonList
@@ -74,28 +86,30 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     public function testAddButton()
     {
-        $this->template->addButton('1', ['title' => 'My Button']);
+        $this->template->addButton('myButton', ['title' => 'My Button']);
         $buttons = $this->buttonList->getItems()[0];
-        $this->assertContains('1', array_keys($buttons));
+        $this->assertArrayHasKey('myButton', $buttons);
     }
 
     public function testUpdateButton()
     {
-        $this->testAddButton();
+        $this->template->addButton('myButton', ['title' => 'My Button']);
+
         $this->buttonMock->expects($this->once())
             ->method('setData')
             ->with('title', 'Updated Button')
             ->willReturnSelf();
-        $result = $this->template->updateButton('1', 'title', 'Updated Button');
+        $result = $this->template->updateButton('myButton', 'title', 'Updated Button');
         $this->assertSame($this->template, $result);
     }
 
     public function testRemoveButton()
     {
-        $this->testAddButton();
-        $this->template->removeButton('1');
+        $this->template->addButton('myButton', ['title' => 'My Button']);
+
+        $this->template->removeButton('myButton');
         $buttons = $this->buttonList->getItems()[0];
-        $this->assertNotContains('1', array_keys($buttons));
+        $this->assertArrayNotHasKey('myButton', $buttons);
     }
 
     public function testGetCreateUrl()

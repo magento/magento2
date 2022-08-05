@@ -3,27 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
-class ProductPriceCalculatorTest extends \PHPUnit\Framework\TestCase
+use Magento\CatalogRule\Model\Indexer\ProductPriceCalculator;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ProductPriceCalculatorTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator
+     * @var ProductPriceCalculator
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     private $priceCurrencyMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->priceCurrencyMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
+        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->model = new \Magento\CatalogRule\Model\Indexer\ProductPriceCalculator($this->priceCurrencyMock);
+            ->getMockForAbstractClass();
+        $this->model = new ProductPriceCalculator($this->priceCurrencyMock);
     }
 
     public function testCalculateToFixedPrice()

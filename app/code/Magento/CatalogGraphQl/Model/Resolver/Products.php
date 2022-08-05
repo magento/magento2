@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter;
-use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Query\ProductQueryInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
-use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\SearchFilter;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 
@@ -24,27 +22,9 @@ use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 class Products implements ResolverInterface
 {
     /**
-     * @var Builder
-     * @deprecated
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var Search
+     * @var ProductQueryInterface
      */
     private $searchQuery;
-
-    /**
-     * @var Filter
-     * @deprecated
-     */
-    private $filterQuery;
-
-    /**
-     * @var SearchFilter
-     * @deprecated
-     */
-    private $searchFilter;
 
     /**
      * @var SearchCriteriaBuilder
@@ -52,23 +32,14 @@ class Products implements ResolverInterface
     private $searchApiCriteriaBuilder;
 
     /**
-     * @param Builder $searchCriteriaBuilder
-     * @param Search $searchQuery
-     * @param Filter $filterQuery
-     * @param SearchFilter $searchFilter
+     * @param ProductQueryInterface $searchQuery
      * @param SearchCriteriaBuilder|null $searchApiCriteriaBuilder
      */
     public function __construct(
-        Builder $searchCriteriaBuilder,
-        Search $searchQuery,
-        Filter $filterQuery,
-        SearchFilter $searchFilter,
+        ProductQueryInterface $searchQuery,
         SearchCriteriaBuilder $searchApiCriteriaBuilder = null
     ) {
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchQuery = $searchQuery;
-        $this->filterQuery = $filterQuery;
-        $this->searchFilter = $searchFilter;
         $this->searchApiCriteriaBuilder = $searchApiCriteriaBuilder ??
             \Magento\Framework\App\ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
     }
@@ -83,23 +54,9 @@ class Products implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if ($args['currentPage'] < 1) {
-            throw new GraphQlInputException(__('currentPage value must be greater than 0.'));
-        }
-        if ($args['pageSize'] < 1) {
-            throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
-        }
-        if (!isset($args['search']) && !isset($args['filter'])) {
-            throw new GraphQlInputException(
-                __("'search' or 'filter' input argument is required.")
-            );
-        }
+        $this->validateInput($args);
 
-        //get product children fields queried
-        $productFields = (array)$info->getFieldSelection(1);
-        $includeAggregations = isset($productFields['filters']) || isset($productFields['aggregations']);
-        $searchCriteria = $this->searchApiCriteriaBuilder->build($args, $includeAggregations);
-        $searchResult = $this->searchQuery->getResult($searchCriteria, $info, $args);
+        $searchResult = $this->searchQuery->getResult($args, $info, $context);
 
         if ($searchResult->getCurrentPage() > $searchResult->getTotalPages() && $searchResult->getTotalCount() > 0) {
             throw new GraphQlInputException(
@@ -113,6 +70,7 @@ class Products implements ResolverInterface
         $data = [
             'total_count' => $searchResult->getTotalCount(),
             'items' => $searchResult->getProductsSearchResult(),
+            'suggestions' => $searchResult->getSuggestions(),
             'page_info' => [
                 'page_size' => $searchResult->getPageSize(),
                 'current_page' => $searchResult->getCurrentPage(),
@@ -122,6 +80,36 @@ class Products implements ResolverInterface
             'layer_type' => isset($args['search']) ? Resolver::CATALOG_LAYER_SEARCH : Resolver::CATALOG_LAYER_CATEGORY,
         ];
 
+        if (isset($args['filter']['category_id'])) {
+            $data['categories'] = $args['filter']['category_id']['eq'] ?? $args['filter']['category_id']['in'];
+            $data['categories'] = is_array($data['categories']) ? $data['categories'] : [$data['categories']];
+        }
+
         return $data;
+    }
+
+    /**
+     * Validate input arguments
+     *
+     * @param array $args
+     * @throws GraphQlAuthorizationException
+     * @throws GraphQlInputException
+     */
+    private function validateInput(array $args)
+    {
+        if (isset($args['searchAllowed']) && $args['searchAllowed'] === false) {
+            throw new GraphQlAuthorizationException(__('Product search has been disabled.'));
+        }
+        if ($args['currentPage'] < 1) {
+            throw new GraphQlInputException(__('currentPage value must be greater than 0.'));
+        }
+        if ($args['pageSize'] < 1) {
+            throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
+        }
+        if (!isset($args['search']) && !isset($args['filter'])) {
+            throw new GraphQlInputException(
+                __("'search' or 'filter' input argument is required.")
+            );
+        }
     }
 }

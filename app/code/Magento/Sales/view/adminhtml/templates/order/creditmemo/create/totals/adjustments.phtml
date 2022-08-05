@@ -3,48 +3,63 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php $_source  = $block->getSource() ?>
-<?php if ($_source) : ?>
+<?php if ($_source): ?>
     <tr>
-        <td class="label"><?= $block->escapeHtml($block->getShippingLabel()) ?><div id="shipping_amount_adv"></div></td>
+        <td class="label">
+            <?= $block->escapeHtml($block->getShippingLabel()) ?>
+            <div id="shipping_amount_adv"></div>
+        </td>
         <td>
             <input type="text"
                    name="creditmemo[shipping_amount]"
-                   value="<?= $block->escapeHtmlAttr($block->getShippingAmount()) ?>"
+                   value="<?= /* @noEscape */ $block->formatValue($block->getShippingAmount()) ?>"
                    class="input-text admin__control-text not-negative-amount"
                    id="shipping_amount" />
         </td>
     </tr>
     <tr>
-        <td class="label"><?= $block->escapeHtml(__('Adjustment Refund')) ?><div id="adjustment_positive_adv"></div></td>
+        <td class="label">
+            <?= $block->escapeHtml(__('Adjustment Refund')) ?>
+            <div id="adjustment_positive_adv"></div>
+        </td>
         <td>
             <input type="text"
                    name="creditmemo[adjustment_positive]"
-                   value="<?= $block->escapeHtmlAttr($_source->getBaseAdjustmentPositive()) ?>"
+                   value="<?= /* @noEscape */ $block->formatValue($_source->getBaseAdjustmentPositive()) ?>"
                    class="input-text admin__control-text not-negative-amount"
                    id="adjustment_positive" />
         </td>
     </tr>
     <tr>
-        <td class="label"><?= $block->escapeHtml(__('Adjustment Fee')) ?><div id="adjustment_negative_adv"></div></td>
+        <td class="label">
+            <?= $block->escapeHtml(__('Adjustment Fee')) ?>
+            <div id="adjustment_negative_adv"></div>
+        </td>
         <td>
             <input type="text"
                    name="creditmemo[adjustment_negative]"
-                   value="<?= $block->escapeHtmlAttr($_source->getBaseAdjustmentNegative()) ?>"
+                   value="<?= /* @noEscape */ $block->formatValue($_source->getBaseAdjustmentNegative()) ?>"
                    class="input-text admin__control-text not-negative-amount"
                    id="adjustment_negative"/>
-            <script>
+            <?php $scriptString = <<<script
                 require(['prototype'], function(){
 
                 //<![CDATA[
                 Validation.addAllThese([
-                    ['not-negative-amount', '<?= $block->escapeJs(__('Please enter a positive number in this field.')) ?>', function(v) {
-                        if(v.length)
-                            return /^\s*\d+([,.]\d+)*\s*%?\s*$/.test(v);
-                        else
-                            return true;
-                    }]
+                    [
+                        'not-negative-amount',
+                        '{$block->escapeJs(__('Please enter a positive number in this field.'))}',
+                        function (v) {
+                            if (v.length)
+                                return /^\s*\d+([,.]\d+)*\s*%?\s*$/.test(v);
+                            else
+                                return true;
+                        }
+                    ]
                 ]);
 
                 if ($('shipping_amount')) {
@@ -73,7 +88,9 @@
                 //]]>
 
                 });
-            </script>
+script;
+            ?>
+            <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
         </td>
     </tr>
 

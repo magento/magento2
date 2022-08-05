@@ -17,14 +17,15 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-82648"/>
             <group value="analytics"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="adminNoReportRole" stepKey="noReportUserRole"/>
             <createData entity="adminNoReport" stepKey="noReportUser"/>
-            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <amOnPage url="{{AdminUsersPage.url}}" stepKey="amOnAdminUsersPage"/>
         <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="$$noReportUser.username$$" stepKey="fillUsernameSearch"/>
@@ -35,8 +36,9 @@
         <waitForPageLoad time="30" stepKey="wait2"/>
         <seeInField selector="{{AdminEditUserSection.usernameTextField}}" userInput="$$noReportUser.username$$" stepKey="seeUsernameInField"/>
         <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillCurrentPassword"/>
-        <click selector="{{AdminEditUserSection.userRoleTab}}" stepKey="clickUserRoleTab"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
 
+        <click selector="{{AdminEditUserSection.userRoleTab}}" stepKey="clickUserRoleTab"/>
         <fillField selector="{{AdminEditUserSection.roleNameFilterTextField}}" userInput="$$noReportUserRole.rolename$$" stepKey="fillRoleNameSearch"/>
         <click selector="{{AdminEditUserSection.searchButton}}" stepKey="clickSearchButtonUserRole"/>
         <waitForPageLoad time="10" stepKey="wait3"/>
@@ -51,7 +53,7 @@
         <scrollTo selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" stepKey="scrollToMenuItem"/>
         <!--<see stepKey="seeAdvancedReportingConfigMenuItem" selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" userInput="Advanced Reporting"/>-->
         <seeElementInDOM selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" stepKey="seeAdvancedReportingConfigMenuItem"/>
-        <actionGroup ref="logout" stepKey="logoutOfAdmin2"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin2"/>
 
         <amOnPage url="{{AdminLoginPage.url}}" stepKey="amOnAdminLoginPage"/>
         <fillField selector="{{AdminLoginFormSection.username}}" userInput="$$noReportUser.username$$" stepKey="fillUsernameNoReport"/>

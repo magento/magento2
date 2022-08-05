@@ -1,0 +1,17 @@
+{
+    "magento_login_as_customer_log": {
+        "column": {
+            "log_id": true,
+            "user_name": true,
+            "user_id": true,
+            "customer_id": true,
+            "customer_email": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        },
+        "index": {
+            "MAGENTO_LOGIN_AS_CUSTOMER_LOG_USER_ID": true
+        }
+    }
+}

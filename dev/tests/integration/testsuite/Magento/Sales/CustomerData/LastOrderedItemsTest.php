@@ -22,7 +22,7 @@ class LastOrderedItemsTest extends TestCase
      */
     private $objectManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }
@@ -42,7 +42,7 @@ class LastOrderedItemsTest extends TestCase
         $this->assertEquals(
             LastOrderedItems::SIDEBAR_ORDER_LIMIT,
             count($data['items']),
-            'Section items count should not be greater then ' . LastOrderedItems::SIDEBAR_ORDER_LIMIT
+            'Section items count should not be greater than ' . LastOrderedItems::SIDEBAR_ORDER_LIMIT
         );
     }
 }

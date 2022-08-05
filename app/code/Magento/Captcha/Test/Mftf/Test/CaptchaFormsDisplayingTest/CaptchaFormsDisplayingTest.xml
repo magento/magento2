@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CaptchaFormsDisplayingTest">
+        <annotations>
+            <features value="Captcha"/>
+            <stories value="MAGETWO-91552 - [github] CAPTCHA doesn't show when check out as guest"/>
+            <title value="Captcha forms displaying"/>
+            <description value="Captcha forms displaying"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-93941"/>
+            <group value="captcha"/>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <!--Login as admin-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        <!--Go to Captcha-->
+        <actionGroup ref="CaptchaFormsDisplayingActionGroup" stepKey="CaptchaFormsDisplayingActionGroup"/>
+        <waitForPageLoad stepKey="WaitForPageLoaded"/>
+        <!--Verify fields removed-->
+        <grabTextFrom selector="{{CaptchaFormsDisplayingSection.forms}}" stepKey="formItems"/>
+        <assertStringNotContainsString stepKey="checkoutAsGuest">
+            <expectedResult type="string">{{CaptchaData.checkoutAsGuest}}</expectedResult>
+            <actualResult type="variable">$formItems</actualResult>
+        </assertStringNotContainsString>
+        <assertStringNotContainsString stepKey="register">
+            <expectedResult type="string">{{CaptchaData.register}}</expectedResult>
+            <actualResult type="variable">$formItems</actualResult>
+        </assertStringNotContainsString>
+        <!--Verify fields existence-->
+        <grabTextFrom selector="{{CaptchaFormsDisplayingSection.createUser}}" stepKey="createUser"/>
+        <assertEquals stepKey="CreateUserFieldIsPresent">
+            <expectedResult type="string">{{CaptchaData.createUser}}</expectedResult>
+            <actualResult type="variable">$createUser</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{CaptchaFormsDisplayingSection.userLogin}}" stepKey="login"/>
+        <assertEquals stepKey="LoginFieldIsPresent">
+            <expectedResult type="string">{{CaptchaData.login}}</expectedResult>
+            <actualResult type="variable">login</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{CaptchaFormsDisplayingSection.forgotpassword}}" stepKey="forgotpassword"/>
+        <assertEquals stepKey="PasswordFieldIsPresent">
+            <expectedResult type="string">{{CaptchaData.passwd}}</expectedResult>
+            <actualResult type="variable">$forgotpassword</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{CaptchaFormsDisplayingSection.contactUs}}" stepKey="contactUs"/>
+        <assertEquals stepKey="contactUsFieldIsPresent">
+            <expectedResult type="string">{{CaptchaData.contactUs}}</expectedResult>
+            <actualResult type="variable">$contactUs</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{CaptchaFormsDisplayingSection.userEdit}}" stepKey="userEdit"/>
+        <assertEquals stepKey="userEditFieldIsPresent">
+            <expectedResult type="string">{{CaptchaData.changePasswd}}</expectedResult>
+            <actualResult type="variable">$userEdit</actualResult>
+        </assertEquals>
+
+        <!--Roll back configuration-->
+        <scrollToTopOfPage stepKey="ScrollToTop"/>
+        <click selector="{{CaptchaFormsDisplayingSection.captcha}}" stepKey="ClickToCloseCaptcha"/>
+    </test>
+</tests>

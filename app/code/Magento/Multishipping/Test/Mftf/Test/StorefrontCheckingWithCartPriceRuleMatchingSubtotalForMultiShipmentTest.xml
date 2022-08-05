@@ -19,12 +19,6 @@
             <group value="Multishipment"/>
             <group value="SalesRule"/>
         </annotations>
-        <before>
-            <magentoCLI command="config:set multishipping/options/checkout_multiple 1" stepKey="allowShippingToMultipleAddresses"/>
-        </before>
-        <after>
-            <magentoCLI command="config:set multishipping/options/checkout_multiple 0" stepKey="disableShippingToMultipleAddresses"/>
-        </after>
         <actionGroup ref="AdminCreateCartPriceRuleActionsWithSubtotalActionGroup" before="goToProduct1" stepKey="createSubtotalCartPriceRuleActionsSection">
             <argument name="ruleName" value="CartPriceRuleConditionForSubtotalForMultiShipping"/>
          </actionGroup>

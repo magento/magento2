@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FillAllRequiredFieldsActionGroup">
+        <annotations>
+            <description>Fills the Product Name, Price and Weight fields. Clicks on 'Create Configurations'. Clicks on 'Create New Attribute'.</description>
+        </annotations>
+
+        <fillField stepKey="fillInProductNameFields" selector="{{NewProduct.productName}}" userInput="{{NewProductsData.productName}}"/>
+        <fillField stepKey="fillInPriceFields" selector="{{NewProduct.price}}" userInput="{{NewProductsData.price}}"/>
+        <fillField stepKey="fillInWeightFields" selector="{{NewProduct.weight}}" userInput="{{NewProductsData.weight}}"/>
+        <click stepKey="clickOnCreateConfigurationsButton" selector="{{NewProduct.createConfigurationButton}}"/>
+        <waitForPageLoad stepKey="waitForCreateProductConfigurationsPageLoad"/>
+        <click stepKey="clickOnCreateNewAttributeButton" selector="{{NewProduct.createNewAttributeButton}}"/>
+        <waitForPageLoad stepKey="waitForNewAttributePageLoad"/>
+    </actionGroup>
+</actionGroups>

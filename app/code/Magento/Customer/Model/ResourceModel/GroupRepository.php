@@ -134,6 +134,15 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
             $taxClassId = $group->getTaxClassId() ?: self::DEFAULT_TAX_CLASS_ID;
             $this->_verifyTaxClassModel($taxClassId, $group);
             $groupModel->setTaxClassId($taxClassId);
+
+            $groupDataAttributes = $this->dataObjectProcessor->buildOutputDataArray(
+                $group,
+                \Magento\Customer\Api\Data\GroupInterface::class
+            );
+
+            if (!empty($groupDataAttributes['extension_attributes'])) {
+                $groupModel->setDataUsingMethod('extension_attributes', $groupDataAttributes['extension_attributes']);
+            }
         }
 
         try {
@@ -220,7 +229,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -243,7 +252,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     /**
      * Translates a field name to a DB column name for use in collection queries.
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @param string $field a field name that should be translated to a DB column name.
      * @return string
      */
@@ -343,7 +352,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

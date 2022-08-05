@@ -18,17 +18,23 @@
             <severity value="CRITICAL"/>
             <group value="user"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
-
         <before>
             <magentoCLI command="config:set admin/captcha/enable 0" stepKey="disableAdminCaptcha"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches1"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+            <magentoCLI command="config:set admin/security/lockout_failures 2" stepKey="setDefaultMaximumLoginFailures"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches1">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
         </before>
         <after>
             <magentoCLI command="config:set admin/captcha/enable 1" stepKey="enableAdminCaptcha"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
-            <actionGroup ref="logout" stepKey="logOut"/>
+            <magentoCLI command="config:set admin/security/lockout_failures 6" stepKey="setDefaultMaximumLoginFailures"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!--Create New User-->
@@ -38,33 +44,28 @@
         </actionGroup>
         <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveNewUser"/>
 
-        <!--Set 'Maximum Login Failures to Lockout Account'-->
-        <actionGroup ref="AdminOpenConfigAdminPageActionGroup" stepKey="goToConfigAdminSectionPage"/>
-        <actionGroup ref="AdminExpandSecurityTabActionGroup" stepKey="openSecurityTab"/>
-        <actionGroup ref="AdminSetMaximumLoginFailuresToLockoutAccountActionGroup" stepKey="setMaximumLoginFailures">
-            <argument name="qty" value="2"/>
-        </actionGroup>
-        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveChanges"/>
-
         <!-- Log in to Admin Panel with incorrect password specified number of times-->
-        <actionGroup ref="logout" stepKey="logoutAsDefaultUser"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUserFirstAttempt">
-            <argument name="adminUser" value="adminUserIncorrectPassword"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsDefaultUser"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUserFirstAttempt">
+            <argument name="username" value="{{adminUserIncorrectPassword.username}}"/>
+            <argument name="password" value="{{adminUserIncorrectPassword.password}}"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorFirstAttempt"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUserSecondAttempt">
-            <argument name="adminUser" value="adminUserIncorrectPassword"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUserSecondAttempt">
+            <argument name="username" value="{{adminUserIncorrectPassword.username}}"/>
+            <argument name="password" value="{{adminUserIncorrectPassword.password}}"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorSecondAttempt"/>
 
         <!-- Log in to Admin Panel with correct password-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUserThirdAttempt">
-            <argument name="adminUser" value="adminUserCorrectPassword"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUserThirdAttempt">
+            <argument name="username" value="{{adminUserCorrectPassword.username}}"/>
+            <argument name="password" value="{{adminUserCorrectPassword.password}}"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorThirdAttempt"/>
 
         <!--Login as default admin user-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsDefaultAdminUser"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdminUser"/>
 
         <!--Delete new User-->
         <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNewUser">

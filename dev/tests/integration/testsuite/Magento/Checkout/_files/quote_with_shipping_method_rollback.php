@@ -5,4 +5,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-require 'quote_with_address_saved_rollback.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/quote_with_address_saved_rollback.php');

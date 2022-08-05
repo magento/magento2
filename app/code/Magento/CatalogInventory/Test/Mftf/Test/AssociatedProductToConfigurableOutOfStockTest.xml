@@ -77,16 +77,20 @@
             <createData entity="Simple_US_Customer" stepKey="createSimpleUsCustomer">
                 <field key="group_id">1</field>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
 
         <after>
-              <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
-              <deleteData createDataKey="simplecategory" stepKey="deleteSimpleCategory"/>
-              <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
-              <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
-              <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
-              <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
-          </after>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="simplecategory" stepKey="deleteSimpleCategory"/>
+            <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
 
         <!-- Login as a customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
@@ -98,41 +102,35 @@
 
         <!-- Order product with single quantity -->
         <selectOption userInput="$$createConfigProductAttributeOption1.option[store_labels][1][label]$$" selector="{{StorefrontProductInfoMainSection.optionByAttributeId($$createConfigProductAttribute.attribute_id$$)}}" stepKey="configProductFillOption" />
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
         <click stepKey="addSimpleProductToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
-        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <waitForPageLoad stepKey="waitForOrderSuccessPage1"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderSuccessPage1"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="StorefrontSignOutActionGroup"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="StorefrontSignOutActionGroup"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
         <!-- Reset admin order filter -->
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask5"/>
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
 
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
-        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
-        <waitForPageLoad stepKey="waitForNewInvoicePageToLoad"/>
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForPageLoad stepKey="waitForNewInvoiceToBeCreated"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoice"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShip"/>
         <waitForLoadingMaskToDisappear stepKey="waitForShipLoadingMask"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="submitShipment"/>
         <waitForPageLoad stepKey="waitShipmentCreated"/>
-        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         <magentoCLI stepKey="runCron" command="cron:run --group='index'"/>
 
         <!-- Wait till cron job runs for schedule updates -->

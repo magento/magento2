@@ -20,7 +20,7 @@
             <group value="Product Attributes"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createProductOne">
                 <requiredEntity createDataKey="createCategory"/>
@@ -28,23 +28,24 @@
             <createData entity="ApiSimpleProduct" stepKey="createProductTwo">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
 
         <!-- Search and select products -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
-        <actionGroup ref="searchProductGridByKeyword2" stepKey="searchByKeyword">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+        <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">
             <argument name="keyword" value="api-simple-product"/>
         </actionGroup>
-        <actionGroup ref="sortProductsByIdDescending" stepKey="sortProductsByIdDescending"/>
-        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox1"/>
-        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckbox2"/>
+        <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
+        <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox1"/>
+        <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckbox2"/>
         <!-- Mass change status -->
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Change status')}}" stepKey="clickChangeStatus"/>

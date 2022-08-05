@@ -25,7 +25,7 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
     }
@@ -34,7 +34,7 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
      * Build a basic mock object
      *
      * @param string $className
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function basicMock($className)
     {

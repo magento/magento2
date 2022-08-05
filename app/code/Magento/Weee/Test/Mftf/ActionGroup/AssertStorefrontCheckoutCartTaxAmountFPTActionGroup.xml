@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontCheckoutCartTaxAmountFPTActionGroup" extends="AssertStorefrontCheckoutCartTaxAmountActionGroup">
+        <annotations>
+            <description>EXTENDS: AssertStorefrontCheckoutCartTaxAmountActionGroup. Add check FPT tax summary in Summary section of shopping cart on storefront</description>
+        </annotations>
+        <arguments>
+            <argument name="FPTAmount" type="string" defaultValue="$10"/>
+        </arguments>
+
+        <see selector="{{CheckoutCartSummarySection.amountFPT}}" userInput="{{FPTAmount}}" before="checkTaxAmount" stepKey="checkFPTAmount"/>
+    </actionGroup>
+</actionGroups>

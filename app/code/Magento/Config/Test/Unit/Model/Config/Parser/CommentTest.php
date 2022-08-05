@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Parser;
 
 use Magento\Config\Model\Config\Parser\Comment;
@@ -10,9 +12,10 @@ use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CommentTest extends \PHPUnit\Framework\TestCase
+class CommentTest extends TestCase
 {
     /**
      * @var PlaceholderInterface|MockObject
@@ -32,7 +35,7 @@ class CommentTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->placeholderMock = $this->getMockBuilder(PlaceholderInterface::class)
             ->disableOriginalConstructor()

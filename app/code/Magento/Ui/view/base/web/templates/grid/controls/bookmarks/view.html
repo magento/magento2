@@ -4,37 +4,36 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="action-dropdown-menu-item-edit" if="$view().editable">
+<div class="action-dropdown-menu-item-edit" if="$view.editable">
     <input
         class="admin__control-text"
         data-bind="
-            value: $view().value,
-            hasFocus: isEditing($view().index),
-            autoselect,
+            value: $view.value,
+            hasFocus: $parent.isEditing($view.index),
             attr: {
-                placeholder: $view().label
+                placeholder: $view.label
             },
             keyboard: {
-                13: updateAndSave.bind($data, $view().index),
-                27: endEdit.bind($data, $view().index)
+                13: $parent.updateAndSave.bind($parent, $view.index),
+                27: $parent.endEdit.bind($parent, $view.index)
             }"
-        type="text">
-    <button class="action-submit" type="button" attr="title: $t('Save all changes')" click="updateAndSave.bind($data, $view().index)">
-        <span translate="'Submit'"/>
+        type="text"/>
+    <button class="action-submit" type="button" attr="title: $t('Save all changes')" click="$parent.updateAndSave.bind($parent, $view.index)">
+        <span translate="'Submit'"></span>
     </button>
     <div class="action-dropdown-menu-item-actions">
-        <button class="action-delete" type="button" attr="title: $t('Delete bookmark')" click="removeView.bind($data, $view().index)">
-            <span translate="'Delete'"/>
+        <button class="action-delete" type="button" attr="title: $t('Delete bookmark')" click="$parent.removeView.bind($parent, $view.index)">
+            <span translate="'Delete'"></span>
         </button>
     </div>
 </div>
 
 <div class="action-dropdown-menu-item">
-    <a href="" class="action-dropdown-menu-link" translate="$view().label" click="applyView.bind($data, $view().index)" closeCollapsible/>
+    <a href="" class="action-dropdown-menu-link" translate="$view.label" click="$parent.applyView.bind($parent, $view.index)" closeCollapsible></a>
 
-    <div class="action-dropdown-menu-item-actions" if="$view().editable">
-        <button class="action-edit" type="button" attr="title: $t('Edit bookmark')" click="editView.bind($data, $view().index)">
-            <span translate="'Edit'"/>
+    <div class="action-dropdown-menu-item-actions" if="$view.editable">
+        <button class="action-edit" type="button" attr="title: $t('Edit bookmark')" click="$parent.editView.bind($parent, $view.index)">
+            <span translate="'Edit'"></span>
         </button>
     </div>
 </div>

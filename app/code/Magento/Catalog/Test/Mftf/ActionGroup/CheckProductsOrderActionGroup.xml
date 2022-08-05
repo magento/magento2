@@ -25,8 +25,14 @@
         <waitForPageLoad stepKey="waitForPageLoad5AfterCacheCleared" time="60"/>
         <waitForElement selector="{{StorefrontCategoryProductSection.ProductImageByNumber('1')}}" time="120" stepKey="waitCompareWidgetLoad" />
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByNumber('1')}}" userInput="alt" stepKey="grabFirstProductName1_1"/>
-        <assertEquals  expected="{{product_1.name}}" actual="($grabFirstProductName1_1)" message="notExpectedOrder" stepKey="compare1"/>
+        <assertEquals message="notExpectedOrder" stepKey="compare1">
+			<actualResult type="const">($grabFirstProductName1_1)</actualResult>
+			<expectedResult type="const">{{product_1.name}}</expectedResult>
+        </assertEquals>
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByNumber('2')}}" userInput="alt" stepKey="grabFirstProductName2_2"/>
-        <assertEquals  expected="{{product_2.name}}" actual="($grabFirstProductName2_2)" message="notExpectedOrder" stepKey="compare2"/>
+        <assertEquals message="notExpectedOrder" stepKey="compare2">
+			<actualResult type="const">($grabFirstProductName2_2)</actualResult>
+			<expectedResult type="const">{{product_2.name}}</expectedResult>
+        </assertEquals>
     </actionGroup>
 </actionGroups>

@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create website-->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
                 <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
@@ -30,23 +30,25 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create custom store group with custom website and default category and verify AssertStoreGroupSuccessSaveMessage-->
-        <actionGroup ref="CreateCustomStore" stepKey="createCustomStoreGroup">
+        <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStoreGroup">
             <argument name="website" value="{{customWebsite.name}}"/>
             <argument name="store" value="{{customStoreGroup.name}}"/>
             <argument name="rootCategory" value="Default Category"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Search created store group(from above step) in grid and verify AssertStoreGroupInGrid message-->
-        <actionGroup ref="AssertStoreGroupInGrid" stepKey="seeCreatedStoreGroupInGrid">
+        <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="seeCreatedStoreGroupInGrid">
             <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
         </actionGroup>
 
         <!--Go to store group form page and verify AssertStoreGroupForm-->
-        <actionGroup ref="AssertStoreGroupForm" stepKey="seeCreatedStoreGroupForm">
+        <actionGroup ref="AssertStoreGroupFormActionGroup" stepKey="seeCreatedStoreGroupForm">
             <argument name="website" value="{{customWebsite.name}}"/>
             <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
             <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>

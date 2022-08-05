@@ -17,7 +17,7 @@
             <field name="store_group_id" xsi:type="filterable" dataType="int"/>
             <field name="store_id" xsi:type="filterable" dataType="int"/>
         </fieldset>
-        <saveHandler class="Magento\Framework\Indexer\SaveHandler\Grid"/>
+        <saveHandler class="Magento\Theme\Model\Indexer\Design\IndexerHandler"/>
         <structure class="Magento\Framework\Indexer\GridStructure"/>
     </indexer>
 </config>

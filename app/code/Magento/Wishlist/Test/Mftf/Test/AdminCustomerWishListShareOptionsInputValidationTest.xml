@@ -17,16 +17,17 @@
             <description value="When user tries to set the Email Text Length Limit higher then 10,000 then validation message occurs"/>
             <severity value="AVERAGE"/>
             <testCaseId value="N/a"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         </before>
         <after>
             <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="rollbackEmailTextLengthLimit">
                 <argument name="emailTextLengthLimit" value="{{Wishlist.default_email_text_length_limit}}"/>
             </actionGroup>
             <checkOption selector="{{WishListShareOptionsSection.useSystemValueForWishListEmailTextLimit}}" stepKey="checkUseSystemValueForWishListEmailTextLimit"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="setEmailTextLengthLimitToMin">

@@ -31,8 +31,8 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     public function testGetAbsolutePath()
     {
         $dir = $this->getDirectoryInstance('foo');
-        $this->assertContains('_files/foo', $dir->getAbsolutePath());
-        $this->assertContains('_files/foo/bar', $dir->getAbsolutePath('bar'));
+        $this->assertStringContainsString('_files/foo', $dir->getAbsolutePath());
+        $this->assertStringContainsString('_files/foo/bar', $dir->getAbsolutePath('bar'));
     }
 
     public function testGetAbsolutePathOutside()
@@ -73,17 +73,17 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $exceptions = 0;
         $dir = $this->getDirectoryInstance('foo');
         try {
-            $dir->getRelativePath(__DIR__ .'/ReadTest.php');
+            $dir->getRelativePath(__DIR__ . '/ReadTest.php');
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
         try {
-            $dir->getRelativePath(__DIR__ .'//./..////Directory/ReadTest.php');
+            $dir->getRelativePath(__DIR__ . '//./..////Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
         try {
-            $dir->getRelativePath(__DIR__ .'\..\Directory\ReadTest.php');
+            $dir->getRelativePath(__DIR__ . '\..\Directory\ReadTest.php');
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
@@ -222,7 +222,13 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      */
     public function existsProvider()
     {
-        return [['foo', 'bar', true], ['foo', 'bar/baz/', true], ['foo', 'bar/notexists', false]];
+        return [
+            ['foo', 'bar', true],
+            ['foo', 'bar/baz', true],
+            ['foo', 'bar/notexists', false],
+            ['foo', 'foo/../bar', true],
+            ['foo', 'foo/../notexists', false]
+        ];
     }
 
     public function testIsExistOutside()
@@ -274,7 +280,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         ];
         $result = $dir->stat($path);
         foreach ($expectedInfo as $key) {
-            $this->assertTrue(array_key_exists($key, $result));
+            $this->assertArrayHasKey($key, $result);
         }
     }
 

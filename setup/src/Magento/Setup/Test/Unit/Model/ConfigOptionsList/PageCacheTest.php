@@ -3,38 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model\ConfigOptionsList;
 
-use Magento\Setup\Model\ConfigOptionsList\PageCache;
-use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Setup\Option\SelectConfigOption;
+use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Setup\Model\ConfigOptionsList\PageCache;
 use Magento\Setup\Validator\RedisConnectionValidator;
+use PHPUnit\Framework\TestCase;
 
-class PageCacheTest extends \PHPUnit\Framework\TestCase
+class PageCacheTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Model\ConfigOptionsList\PageCache
+     * @var PageCache
      */
     private $configList;
 
     /**
-     * @var \Magento\Setup\Validator\RedisConnectionValidator
+     * @var RedisConnectionValidator
      */
     private $validatorMock;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig
+     * @var DeploymentConfig
      */
     private $deploymentConfigMock;
 
-    /**
-     * Test setup
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->validatorMock = $this->createMock(RedisConnectionValidator::class, [], [], '', false);
-        $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->validatorMock = $this->createMock(RedisConnectionValidator::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
         $this->configList = new PageCache($this->validatorMock);
     }
@@ -91,9 +91,9 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
             'cache' => [
                 'frontend' => [
                     'page_cache' => [
-                        'backend' => 'Cm_Cache_Backend_Redis',
+                        'backend' => \Magento\Framework\Cache\Backend\Redis::class,
                         'backend_options' => [
-                            'server'=> '',
+                            'server' => '',
                             'port' => '',
                             'database' => '',
                             'compress_data' => '',
@@ -116,11 +116,29 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateConfigWithRedisConfiguration()
     {
+        $this->deploymentConfigMock->method('get')->withConsecutive(
+            [PageCache::CONFIG_PATH_PAGE_CACHE_ID_PREFIX],
+            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER, '127.0.0.1'],
+            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE, '1'],
+            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT, '6379'],
+            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD, ''],
+            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA, '0'],
+            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB, '']
+        )->willReturnOnConsecutiveCalls(
+            'XXX_',
+            '127.0.0.1',
+            '1',
+            '6379',
+            '',
+            '0',
+            ''
+        );
+
         $expectedConfigData = [
             'cache' => [
                 'frontend' => [
                     'page_cache' => [
-                        'backend' => 'Cm_Cache_Backend_Redis',
+                        'backend' => \Magento\Framework\Cache\Backend\Redis::class,
                         'backend_options' => [
                             'server' => 'foo.bar',
                             'port' => '9000',
@@ -129,7 +147,6 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
                             'compress_data' => '1',
                             'compression_lib' => 'gzip',
                         ],
-                        'id_prefix' => $this->expectedIdPrefix(),
                     ]
                 ]
             ]
@@ -238,6 +255,6 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
      */
     private function expectedIdPrefix(): string
     {
-        return substr(\md5(dirname(__DIR__, 8)), 0, 3) . '_';
+        return substr(\hash('sha256', dirname(__DIR__, 8)), 0, 3) . '_';
     }
 }

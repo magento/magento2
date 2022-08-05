@@ -9,6 +9,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminMessagesSection">
+        <!-- Keep both sets of elements -->
+        <!-- Set One - more specific, works for most of message blocks -->
         <element name="success" type="text" selector="#messages div.message-success"/>
         <element name="nthSuccess" type="text" selector=".message.message-success.success:nth-of-type({{n}})>div" parameterized="true"/>
         <element name="error" type="text" selector="#messages div.message-error"/>
@@ -16,8 +18,7 @@
         <element name="messageByType" type="text" selector="#messages div.message-{{messageType}}" parameterized="true" />
         <element name="warning" type="text" selector="#messages div.message-warning"/>
         <element name="accessDenied" type="text" selector=".access-denied-page"/>
-        <!-- Deprecated elements, please do not use them. Use elements above-->
-        <!-- Elements below are too common and catch non messages blocks. Ex: system messages blocks-->
+        <!-- Set Two - more generic, needed for message blocks in Product Import, Staging Update, etc -->
         <element name="successMessage" type="text" selector=".message-success"/>
         <element name="errorMessage" type="text" selector=".message.message-error.error"/>
         <element name="warningMessage" type="text" selector=".message-warning"/>

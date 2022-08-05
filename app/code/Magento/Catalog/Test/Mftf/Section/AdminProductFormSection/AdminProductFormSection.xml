@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormSection">
+        <element name="additionalOptions" type="select" selector=".admin__control-multiselect"/>
+        <element name="datepickerNewAttribute" type="input" selector="[data-index='{{attrName}}'] input" timeout="30" parameterized="true"/>
+        <element name="attributeSet" type="select" selector="div[data-index='attribute_set_id'] .admin__field-control"/>
+        <element name="attributeSetFilter" type="input" selector="div[data-index='attribute_set_id'] .admin__field-control input" timeout="30"/>
+        <element name="attributeSetFilterResult" type="input" selector="div[data-index='attribute_set_id'] .action-menu-item._last" timeout="30"/>
+        <element name="attributeSetFilterResultByName" type="text" selector="//label/span[text() = '{{var}}']" timeout="30" parameterized="true"/>
+        <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
+        <element name="productNameDisabled" type="input" selector=".admin__field[data-index=name] input[disabled=true]"/>
+        <element name="RequiredNameIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
+        <element name="RequiredSkuIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=sku]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
+        <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
+        <element name="productSkuDisabled" type="input" selector=".admin__field[data-index=sku] input[disabled=true]"/>
+        <element name="enableProductAttributeLabel" type="text" selector="//span[text()='Enable Product']/parent::label"/>
+        <element name="enableProductAttributeLabelWrapper" type="text" selector="//span[text()='Enable Product']/parent::label/parent::div"/>
+        <element name="productStatus" type="checkbox" selector="input[name='product[status]']"/>
+        <element name="productStatusValue" type="checkbox" selector="input[name='product[status]'][value='{{value}}']" timeout="30" parameterized="true"/>
+        <element name="productStatusDisabled" type="checkbox" selector="input[name='product[status]'][disabled]"/>
+        <element name="enableProductLabel" type="checkbox" selector="input[name='product[status]']+label"/>
+        <element name="productStatusUseDefault" type="checkbox" selector="input[name='use_default[status]']"/>
+        <element name="productNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
+        <element name="productPrice" type="input" selector=".admin__field[data-index=price] input"/>
+        <element name="productPriceDisabled" type="input" selector=".admin__field[data-index=price] input[disabled=true]"/>
+        <element name="productPriceUseDefault" type="checkbox" selector=".admin__field[data-index=price] [name='use_default[price]']"/>
+        <element name="productTaxClass" type="select" selector="//*[@name='product[tax_class_id]']"/>
+        <element name="productTaxClassDisabled" type="select" selector="select[name='product[tax_class_id]'][disabled=true]"/>
+        <element name="productTaxClassUseDefault" type="checkbox" selector="input[name='use_default[tax_class_id]']"/>
+        <element name="advancedPricingLink" type="button" selector="button[data-index='advanced_pricing_button']" timeout="30"/>
+        <element name="currentCategory" type="text" selector=".admin__action-multiselect-crumb &gt; span"/>
+        <element name="categoriesDropdown" type="multiselect" selector="div[data-index='category_ids']" timeout="30"/>
+        <element name="unselectCategories" type="button" selector="//span[@class='admin__action-multiselect-crumb']/span[contains(.,'{{category}}')]/../button[@data-action='remove-selected-item']" parameterized="true" timeout="30"/>
+        <element name="productQuantity" type="input" selector=".admin__field[data-index=qty] input"/>
+        <element name="advancedInventoryLink" type="button" selector="button[data-index='advanced_inventory_button'].action-additional" timeout="30"/>
+        <element name="productStockStatus" type="select" selector="select[name='product[quantity_and_stock_status][is_in_stock]']" timeout="30"/>
+        <element name="productStockStatusDisabled" type="select" selector="select[name='product[quantity_and_stock_status][is_in_stock]'][disabled=true]"/>
+        <element name="stockStatus" type="select" selector="[data-index='product-details'] select[name='product[quantity_and_stock_status][is_in_stock]']"/>
+        <element name="productWeight" type="input" selector=".admin__field[data-index=weight] input"/>
+        <element name="productWeightSelect" type="select" selector="select[name='product[product_has_weight]']"/>
+        <element name="contentTab" type="button" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Content']"/>
+        <element name="fieldError" type="text" selector="//input[@name='product[{{fieldName}}]']/following-sibling::label[@class='admin__field-error']" parameterized="true"/>
+        <element name="priceFieldError" type="text" selector="//input[@name='product[price]']/parent::div/parent::div/label[@class='admin__field-error']"/>
+        <element name="addAttributeBtn" type="button" selector="#addAttribute" timeout="30"/>
+        <element name="createNewAttributeBtn" type="button" selector="button[data-index='add_new_attribute_button']" timeout="30"/>
+        <element name="save" type="button" selector="#save-button" timeout="30"/>
+        <element name="saveNewAttribute" type="button" selector="//aside[contains(@class, 'create_new_attribute_modal')]//button[@id='save']"/>
+        <element name="successMessage" type="text" selector="#messages"/>
+        <element name="attributeTab" type="button" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Attributes']"/>
+        <element name="attributeTabOpened" type="button" selector="//div[contains(@class, 'admin__collapsible-block-wrapper') and contains(@class, '_show') ]//span[text()='Attributes']"/>
+        <element name="attributeLabel" type="input" selector="//input[@name='frontend_label[0]']"/>
+        <element name="frontendInput" type="select" selector="select[name = 'frontend_input']"/>
+        <element name="productFormTab" type="button" selector="//strong[@class='admin__collapsible-title']/span[contains(text(), '{{tabName}}')]" parameterized="true"/>
+        <element name="productFormTabState" type="text" selector="//strong[@class='admin__collapsible-title']/span[contains(text(), '{{tabName}}')]/parent::*/parent::*[@data-state-collapsible='{{state}}']" parameterized="true"/>
+        <element name="visibility" type="select" selector="//select[@name='product[visibility]']"/>
+        <element name="visibilityDisabled" type="select" selector="select[name='product[visibility]'][disabled=true]"/>
+        <element name="visibilityUseDefault" type="checkbox" selector="//input[@name='use_default[visibility]']"/>
+        <element name="divByDataIndex" type="input" selector="div[data-index='{{var}}']" parameterized="true"/>
+        <element name="setProductAsNewFrom" type="input" selector="input[name='product[news_from_date]']"/>
+        <element name="setProductAsNewTo" type="input" selector="input[name='product[news_to_date]']"/>
+        <element name="attributeLabelByText" type="text" selector="//*[@class='admin__field']//span[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="attributeRequiredInput" type="input" selector="//input[contains(@name, 'product[{{attributeCode}}]')]" parameterized="true"/>
+        <element name="attributeFieldError" type="text" selector="//*[@class='admin__field _required _error']/..//label[contains(.,'This is a required field.')]"/>
+        <element name="customSelectField" type="select" selector="//select[@name='product[{{var}}]']" parameterized="true"/>
+        <element name="searchCategory" type="input" selector="//*[@data-index='category_ids']//input[contains(@class, 'multiselect-search')]" timeout="30"/>
+        <element name="selectCategory" type="input" selector="//*[@data-index='category_ids']//label[contains(., '{{categoryName}}')]" parameterized="true" timeout="30"/>
+        <element name="done" type="button" selector="//*[@data-index='category_ids']//button[@data-action='close-advanced-select']" timeout="30"/>
+        <element name="selectMultipleCategories" type="input" selector="//*[@data-index='container_category_ids']//*[contains(@class, '_selected')]"/>
+        <element name="countryOfManufacture" type="select" selector="select[name='product[country_of_manufacture]']"/>
+        <element name="newAddedAttribute" type="text" selector="//fieldset[@class='admin__fieldset']//div[contains(@data-index,'{{attributeCode}}')]" parameterized="true"/>
+        <element name="newAddedAttributeInput" type="text" selector="//fieldset[@class='admin__fieldset']//div[contains(@data-index,'{{attributeCode}}')]//input" parameterized="true"/>
+        <element name="newCategoryButton" type="button" selector="button[data-index='create_category_button']" timeout="30"/>
+        <element name="footerBlock" type="block" selector="//footer"/>
+        <element name="categories" type="text" selector="//*[@class='admin__action-multiselect-crumb']/span[contains(text(), '{{categoryName}}')]" parameterized="true"/>
+    </section>
+</sections>

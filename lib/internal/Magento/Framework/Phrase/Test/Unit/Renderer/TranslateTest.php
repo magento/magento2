@@ -3,37 +3,62 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 
-class TranslateTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Phrase\Renderer\MessageFormatter;
+use Magento\Framework\Phrase\Renderer\Translate as PhraseRenderer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Translate;
+use Magento\Framework\TranslateInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+class TranslateTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Translate|\PHPUnit_Framework_MockObject_MockObject
+     * @var Translate|MockObject
      */
     protected $_translator;
 
     /**
-     * @var \Magento\Framework\Phrase\Renderer\Translate
+     * @var PhraseRenderer
      */
     protected $_renderer;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $loggerMock;
 
-    protected function setUp()
-    {
-        $this->_translator = $this->createMock(\Magento\Framework\TranslateInterface::class);
-        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
-            ->getMock();
+    /**
+     * @var MessageFormatter|MockObject
+     */
+    private $messageFormatter;
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+    protected function setUp(): void
+    {
+        $this->_translator = $this->getMockForAbstractClass(TranslateInterface::class);
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
+        $this->messageFormatter = $this->getMockBuilder(MessageFormatter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->messageFormatter
+            ->method('render')
+            ->willReturnCallback(function ($source) {
+                return end($source);
+            });
+
+        $objectManagerHelper = new ObjectManager($this);
         $this->_renderer = $objectManagerHelper->getObject(
-            \Magento\Framework\Phrase\Renderer\Translate::class,
+            PhraseRenderer::class,
             [
                 'translator' => $this->_translator,
-                'logger' => $this->loggerMock
+                'logger' => $this->loggerMock,
+                'messageFormatter' => $this->messageFormatter,
             ]
         );
     }
@@ -55,7 +80,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
 
         $this->_translator->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue([$translatedTextInDictionary => $translate]));
+            ->willReturn([$translatedTextInDictionary => $translate]);
 
         $this->assertEquals($translate, $this->_renderer->render([$translatedTextInput], []));
     }
@@ -65,7 +90,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         $translate = "Text with quote \'";
         $this->_translator->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->assertEquals($translate, $this->_renderer->render([$translate], []));
     }
 
@@ -77,7 +102,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
 
         $this->_translator->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue([$translatedTextInDictionary => $translate]));
+            ->willReturn([$translatedTextInDictionary => $translate]);
 
         $this->assertEquals($translate, $this->_renderer->render([$translatedTextInput], []));
     }
@@ -86,7 +111,8 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
     {
         $message = 'something went wrong';
         $exception = new \Exception($message);
-
+        $this->messageFormatter->expects($this->never())
+            ->method('render');
         $this->_translator->expects($this->once())
             ->method('getData')
             ->willThrowException($exception);

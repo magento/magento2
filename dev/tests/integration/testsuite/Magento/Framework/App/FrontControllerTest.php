@@ -70,7 +70,7 @@ class FrontControllerTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = Bootstrap::getObjectManager();
         $this->_model = $this->_objectManager->create(

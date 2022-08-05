@@ -19,10 +19,10 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
         <!-- Create a new attribute set -->
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
@@ -40,23 +40,29 @@
 
         <!-- Go to new product page and see a default attribute -->
         <!-- Switch from default attribute set to new attribute set -->
-        <amOnPage url="{{AdminProductCreatePage.url('4', 'bundle')}}" stepKey="goToNewProductPage"/>
-        <waitForPageLoad stepKey="wait2"/>
-        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
-        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="searchForAttrSet"/>
-        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToNewProductPage">
+            <argument name="attributeSetId" value="4"/>
+            <argument name="productType" value="bundle"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait2"/>
+
+        <actionGroup ref="AdminSelectAttributeSetOnEditProductPageActionGroup" stepKey="startEditAttrSet">
+            <argument name="attributeSet" value="{{ProductAttributeFrontendLabel.label}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="searchForAttrSet"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectAttrSet"/>
+       
         <fillField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{BundleProduct.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{BundleProduct.sku}}" stepKey="fillProductSku"/>
 
         <!--save the product/published by default-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
         <!--Testing that price appears correctly in admin catalog-->
         <!--Set filter to product name-->
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad"/>
-        <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName">
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
         <seeElement selector="{{AdminProductFiltersSection.attributeSetOfFirstRow(ProductAttributeFrontendLabel.label)}}" stepKey="seeAttributeSet"/>
@@ -65,19 +71,20 @@
         <click selector="{{AdminProductFiltersSection.attributeSetOfFirstRow(ProductAttributeFrontendLabel.label)}}" stepKey="clickAttributeSet2"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
 
-        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet2"/>
-        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{BundleProduct.defaultAttribute}}" stepKey="searchForAttrSet2"/>
-        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet2"/>
+        <actionGroup ref="AdminSelectAttributeSetOnEditProductPageActionGroup" stepKey="startEditAttrSet2">
+            <argument name="attributeSet" value="{{BundleProduct.defaultAttribute}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="searchForAttrSet2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectAttrSet2"/>
 
         <!--save the product/published by default-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton2"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton2"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown2"/>
 
         <!--Testing that price appears correctly in admin catalog-->
         <!--Set filter to product name-->
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage2"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad2"/>
-        <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName2">
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage2"/>
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName2">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
         <seeElement selector="{{AdminProductFiltersSection.attributeSetOfFirstRow(BundleProduct.defaultAttribute)}}" stepKey="seeAttributeSet2"/>

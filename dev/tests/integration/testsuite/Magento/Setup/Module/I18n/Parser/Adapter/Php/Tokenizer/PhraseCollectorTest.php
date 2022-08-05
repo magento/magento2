@@ -23,7 +23,7 @@ class PhraseCollectorTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->phraseCollector = $this->objectManager->create(

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CheckOrderSummaryInCheckoutActionGroup">
+        <annotations>
+            <description>Validates that the provided Subtotal, Shipping Total, Shipping Method and Total are present and correct on the Storefront Checkout page under the 'Order Summary' section.</description>
+        </annotations>
+        <arguments>
+            <argument name="subtotal" type="string"/>
+            <argument name="shippingTotal" type="string"/>
+            <argument name="shippingMethod" type="string"/>
+            <argument name="total" type="string"/>
+        </arguments>
+
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <see userInput="{{subtotal}}" selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="assertSubtotal"/>
+        <see userInput="{{shippingTotal}}" selector="{{CheckoutPaymentSection.orderSummaryShippingTotal}}" stepKey="assertShipping"/>
+        <see userInput="{{shippingMethod}}" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertShippingMethod"/>
+        <see userInput="{{total}}" selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="assertTotal"/>
+    </actionGroup>
+</actionGroups>

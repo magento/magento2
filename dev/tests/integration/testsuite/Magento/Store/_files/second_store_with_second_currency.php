@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-// phpcs:ignore Magento2.Security.IncludeFile
-require_once __DIR__ . '/second_store.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $store = $objectManager->create(\Magento\Store\Model\Store::class);

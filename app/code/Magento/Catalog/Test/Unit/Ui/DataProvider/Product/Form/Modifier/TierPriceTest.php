@@ -3,26 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\TierPrice;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\TierPrice;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class TierPriceTest.
- */
-class TierPriceTest extends \PHPUnit\Framework\TestCase
+class TierPriceTest extends TestCase
 {
     /**
-     * @var ProductPriceOptionsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductPriceOptionsInterface|MockObject
      */
     private $productPriceOptions;
 
     /**
-     * @var ArrayManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayManager|MockObject
      */
     private $arrayManager;
 
@@ -35,9 +36,9 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
      * Set Up.
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->productPriceOptions = $this->createMock(ProductPriceOptionsInterface::class);
+        $this->productPriceOptions = $this->getMockForAbstractClass(ProductPriceOptionsInterface::class);
         $this->arrayManager = $this->createMock(ArrayManager::class);
 
         $this->tierPrice = (new ObjectManager($this))->getObject(TierPrice::class, [

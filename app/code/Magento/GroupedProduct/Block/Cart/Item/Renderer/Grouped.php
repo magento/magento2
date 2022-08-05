@@ -45,10 +45,10 @@ class Grouped extends Renderer implements IdentityInterface
      */
     public function getIdentities()
     {
-        $identities = parent::getIdentities();
+        $identities = [parent::getIdentities()];
         if ($this->getItem()) {
-            $identities = array_merge($identities, $this->getGroupedProduct()->getIdentities());
+            $identities[] = $this->getGroupedProduct()->getIdentities();
         }
-        return $identities;
+        return array_merge([], ...$identities);
     }
 }

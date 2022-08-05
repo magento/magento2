@@ -14,28 +14,27 @@
             <stories value="Add Products to Order from Shopping Cart"/>
             <title value="Add simple product to order from shopping cart test"/>
             <description value="Add simple product to order from shopping cart"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-16007"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
         </annotations>
+
         <before>
             <!-- Create customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-
             <!-- Create product -->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
+
         <after>
             <!-- Admin log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
-
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <!-- Customer log out -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
-
             <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-
             <!-- Delete product -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
@@ -52,14 +51,14 @@
         </actionGroup>
 
         <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Search and open customer -->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCreatedCustomer">
-            <argument name="email" value="$$createCustomer.email$$"/>
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$createCustomer.id$"/>
         </actionGroup>
-        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEditButton"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterCreatedCustomer"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickEditButton"/>
 
         <!-- Click create order -->
         <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickCreateOrder"/>
@@ -71,8 +70,8 @@
 
         <!-- Click update changes -->
         <checkOption selector="{{AdminCustomerActivitiesShoppingCartSection.addToOrder}}" stepKey="checkOptionAddToOrder"/>
-        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickUpdateChangesBtn"/>
-        <waitForPageLoad stepKey="waitForOrderUpdating"/>
+        <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesBtn"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderUpdating"/>
 
         <!-- Assert product in items ordered grid -->
         <see selector="{{AdminCustomerCreateNewOrderSection.productName}}" userInput="$$createProduct.name$$" stepKey="seeProductName"/>

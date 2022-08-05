@@ -13,7 +13,8 @@ define([
     'priceUtils',
     'priceBox',
     'jquery-ui-modules/widget',
-    'jquery/jquery.parsequery'
+    'jquery/jquery.parsequery',
+    'fotoramaVideoEvents'
 ], function ($, _, mageTemplate, $t, priceUtils) {
     'use strict';
 
@@ -32,7 +33,7 @@ define([
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
             mediaGalleryInitial: null,
             slyOldPriceSelector: '.sly-old-price',
-            normalPriceLabelSelector: '.normal-price .price-label',
+            normalPriceLabelSelector: '.product-info-main .normal-price .price-label',
 
             /**
              * Defines the mechanism of how images of a gallery should be
@@ -45,7 +46,10 @@ define([
             gallerySwitchStrategy: 'replace',
             tierPriceTemplateSelector: '#tier-prices-template',
             tierPriceBlockSelector: '[data-role="tier-price-block"]',
-            tierPriceTemplate: ''
+            tierPriceTemplate: '',
+            selectorProduct: '.product-info-main',
+            selectorProductPrice: '[data-role=priceBox]',
+            qtyInfo: '#qty'
         },
 
         /**
@@ -72,6 +76,7 @@ define([
             this._configureForValues();
 
             $(this.element).trigger('configurable.initialized');
+            $(this.options.qtyInfo).on('input', this._reloadPrice.bind(this));
         },
 
         /**
@@ -139,7 +144,12 @@ define([
             });
 
             $.each(queryParams, $.proxy(function (key, value) {
-                this.options.values[key] = value;
+                if (this.options.spConfig.attributes[key] !== undefined &&
+                    _.find(this.options.spConfig.attributes[key].options, function (element) {
+                        return element.id === value;
+                    })) {
+                    this.options.values[key] = value;
+                }
             }, this));
         },
 
@@ -155,7 +165,13 @@ define([
 
                 if (element.value) {
                     attributeId = element.id.replace(/[a-z]*/, '');
-                    this.options.values[attributeId] = element.value;
+
+                    if (this.options.spConfig.attributes[attributeId] !== undefined &&
+                        _.find(this.options.spConfig.attributes[attributeId].options, function (optionElement) {
+                            return optionElement.id === element.value;
+                        })) {
+                        this.options.values[attributeId] = element.value;
+                    }
                 }
             }, this));
         },
@@ -296,9 +312,13 @@ define([
         _changeProductImage: function () {
             var images,
                 initialImages = this.options.mediaGalleryInitial,
-                galleryObject = $(this.options.mediaGallerySelector).data('gallery');
+                gallery = $(this.options.mediaGallerySelector).data('gallery');
 
-            if (!galleryObject) {
+            if (_.isUndefined(gallery)) {
+                $(this.options.mediaGallerySelector).on('gallery:loaded', function () {
+                    this._changeProductImage();
+                }.bind(this));
+
                 return;
             }
 
@@ -314,17 +334,35 @@ define([
                 images = $.extend(true, [], images);
                 images = this._setImageIndex(images);
 
-                galleryObject.updateData(images);
-
-                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
-                    selectedOption: this.simpleProduct,
-                    dataMergeStrategy: this.options.gallerySwitchStrategy
-                });
+                gallery.updateData(images);
+                this._addFotoramaVideoEvents(false);
             } else {
-                galleryObject.updateData(initialImages);
-                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+                gallery.updateData(initialImages);
+                this._addFotoramaVideoEvents(true);
+            }
+        },
+
+        /**
+         * Add video events
+         *
+         * @param {Boolean} isInitial
+         * @private
+         */
+        _addFotoramaVideoEvents: function (isInitial) {
+            if (_.isUndefined($.mage.AddFotoramaVideoEvents)) {
+                return;
             }
 
+            if (isInitial) {
+                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+
+                return;
+            }
+
+            $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
+                selectedOption: this.simpleProduct,
+                dataMergeStrategy: this.options.gallerySwitchStrategy
+            });
         },
 
         /**
@@ -396,7 +434,9 @@ define([
                 allowedOptions = [],
                 indexKey,
                 allowedProductMinPrice,
-                allowedProductsAllMinPrice;
+                allowedProductsAllMinPrice,
+                canDisplayOutOfStockProducts = false,
+                filteredSalableProducts;
 
             this._clearSelect(element);
             element.options[0] = new Option('', '');
@@ -458,7 +498,7 @@ define([
                         options[i].label = options[i].initialLabel;
 
                         if (optionPriceDiff !== 0) {
-                            options[i].label += ' ' + priceUtils.formatPrice(
+                            options[i].label += ' ' + priceUtils.formatPriceLocale(
                                 optionPriceDiff,
                                 this.options.priceFormat,
                                 true
@@ -470,11 +510,17 @@ define([
                         options[i].allowedProducts = allowedProducts;
                         element.options[index] = new Option(this._getOptionLabel(options[i]), options[i].id);
 
+                        if (this.options.spConfig.canDisplayShowOutOfStockStatus) {
+                            filteredSalableProducts = $(this.options.spConfig.salable[attributeId][options[i].id]).
+                            filter(options[i].allowedProducts);
+                            canDisplayOutOfStockProducts = filteredSalableProducts.length === 0;
+                        }
+
                         if (typeof options[i].price !== 'undefined') {
                             element.options[index].setAttribute('price', options[i].price);
                         }
 
-                        if (allowedProducts.length === 0) {
+                        if (allowedProducts.length === 0 || canDisplayOutOfStockProducts) {
                             element.options[index].disabled = true;
                         }
 
@@ -544,7 +590,7 @@ define([
             _.each(elements, function (element) {
                 var selected = element.options[element.selectedIndex],
                     config = selected && selected.config,
-                    priceValue = {};
+                    priceValue = this._calculatePrice({});
 
                 if (config && config.allowedProducts.length === 1) {
                     priceValue = this._calculatePrice(config);
@@ -598,12 +644,10 @@ define([
          */
         _calculatePrice: function (config) {
             var displayPrices = $(this.options.priceHolderSelector).priceBox('option').prices,
-                newPrices = this.options.spConfig.optionPrices[_.first(config.allowedProducts)];
+                newPrices = this.options.spConfig.optionPrices[_.first(config.allowedProducts)] || {};
 
             _.each(displayPrices, function (price, code) {
-                if (newPrices[code]) {
-                    displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
-                }
+                displayPrices[code].amount = newPrices[code] ? newPrices[code].amount - displayPrices[code].amount : 0;
             });
 
             return displayPrices;
@@ -642,7 +686,9 @@ define([
          * @private
          */
         _displayRegularPriceBlock: function (optionId) {
-            var shouldBeShown = true;
+            var shouldBeShown = true,
+                $priceBox = this.element.parents(this.options.selectorProduct)
+                    .find(this.options.selectorProductPrice);
 
             _.each(this.options.settings, function (element) {
                 if (element.value === '') {
@@ -662,7 +708,8 @@ define([
             $(document).trigger('updateMsrpPriceBlock',
                 [
                     optionId,
-                    this.options.spConfig.optionPrices
+                    this.options.spConfig.optionPrices,
+                    $priceBox
                 ]
             );
         },
@@ -706,21 +753,19 @@ define([
          * @private
          */
         _displayTierPriceBlock: function (optionId) {
-            var options, tierPriceHtml;
+            var tierPrices = typeof optionId != 'undefined' && this.options.spConfig.optionPrices[optionId].tierPrices;
 
-            if (typeof optionId != 'undefined' &&
-                this.options.spConfig.optionPrices[optionId].tierPrices != [] // eslint-disable-line eqeqeq
-            ) {
-                options = this.options.spConfig.optionPrices[optionId];
+            if (_.isArray(tierPrices) && tierPrices.length > 0) {
 
                 if (this.options.tierPriceTemplate) {
-                    tierPriceHtml = mageTemplate(this.options.tierPriceTemplate, {
-                        'tierPrices': options.tierPrices,
-                        '$t': $t,
-                        'currencyFormat': this.options.spConfig.currencyFormat,
-                        'priceUtils': priceUtils
-                    });
-                    $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
+                    $(this.options.tierPriceBlockSelector).html(
+                        mageTemplate(this.options.tierPriceTemplate, {
+                            'tierPrices': tierPrices,
+                            '$t': $t,
+                            'currencyFormat': this.options.spConfig.currencyFormat,
+                            'priceUtils': priceUtils
+                        })
+                    ).show();
                 }
             } else {
                 $(this.options.tierPriceBlockSelector).hide();

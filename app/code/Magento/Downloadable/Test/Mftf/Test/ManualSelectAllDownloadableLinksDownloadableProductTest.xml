@@ -25,17 +25,16 @@
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
             <!-- Create downloadable product -->
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-            <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
-            <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createProduct">
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+            <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createProduct">
                 <argument name="productType" value="downloadable"/>
             </actionGroup>
 
             <!-- Fill downloadable product values -->
-            <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillDownloadableProductForm">
+            <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillDownloadableProductForm">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
 
@@ -51,17 +50,17 @@
                          stepKey="checkOptionPurchaseSeparately"/>
 
             <!-- Add first downloadable link -->
-            <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addFirstDownloadableProductLink">
+            <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addFirstDownloadableProductLink">
                 <argument name="link" value="downloadableLinkWithMaxDownloads"/>
             </actionGroup>
 
             <!-- Add second downloadable link -->
-            <actionGroup ref="addDownloadableProductLink" stepKey="addSecondDownloadableProductLink">
+            <actionGroup ref="AddDownloadableProductLinkActionGroup" stepKey="addSecondDownloadableProductLink">
                 <argument name="link" value="downloadableLink"/>
             </actionGroup>
 
             <!-- Save product -->
-            <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         </before>
         <after>
             <!-- Remove downloadable domains -->
@@ -71,12 +70,13 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Delete created downloadable product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Step 1: Navigate to store front Product page as guest -->

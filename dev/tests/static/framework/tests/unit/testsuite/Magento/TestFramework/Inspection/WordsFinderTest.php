@@ -12,11 +12,12 @@ class WordsFinderTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $configFile
      * @param string $baseDir
-     * @expectedException \Magento\TestFramework\Inspection\Exception
      * @dataProvider constructorExceptionDataProvider
      */
     public function testConstructorException($configFile, $baseDir)
     {
+        $this->expectException(\Magento\TestFramework\Inspection\Exception::class);
+
         new \Magento\TestFramework\Inspection\WordsFinder($configFile, $baseDir, new ComponentRegistrar());
     }
 

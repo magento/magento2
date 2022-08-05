@@ -26,22 +26,24 @@
             <createData entity="SimpleProduct_25" stepKey="simpleProduct">
                 <field key="price">5</field>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$simpleProduct$$"/>
             <argument name="productQty" value="{{SimpleProduct_25.quantity}}"/>
         </actionGroup>
         <actionGroup ref="SelectCashOnDeliveryPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="orderSelectFlatRateShippingMethod"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
-        <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
-        <actionGroup ref="OpenOrderById" stepKey="openOrder">
-            <argument name="orderId" value="$getOrderId"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+        <comment userInput="BIC workaround" stepKey="getOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
@@ -52,7 +54,7 @@
         <actionGroup ref="StorefrontCustomerReorderButtonNotVisibleActionGroup" stepKey="checkReorderButton"/>
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <magentoCLI command="config:set payment/cashondelivery/active 0" stepKey="disableCashOnDeliveryMethod"/>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>

@@ -40,9 +40,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     /**
      * Possible customer address types
      */
-    const TYPE_BILLING = 'billing';
+    public const TYPE_BILLING = 'billing';
 
-    const TYPE_SHIPPING = 'shipping';
+    public const TYPE_SHIPPING = 'shipping';
 
     /**
      * Prefix of model events
@@ -73,8 +73,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     protected static $_regionModels = [];
 
     /**
-     * Directory data
-     *
      * @var \Magento\Directory\Helper\Data
      */
     protected $_directoryData = null;
@@ -121,6 +119,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
 
     /** @var CompositeValidator */
     private $compositeValidator;
+
+    /**
+     * @var array
+     */
+    private array $regionIdCountry = [];
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -241,7 +244,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     public function getStreetFull()
     {
         $street = $this->getData('street');
-        return is_array($street) ? implode("\n", $street) : $street;
+        return is_array($street) ? implode("\n", $street) : ($street ?? '');
     }
 
     /**
@@ -281,7 +284,13 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             $key = $this->_implodeArrayField($key);
         } elseif (is_array($value) && $this->isAddressMultilineAttribute($key)) {
             $value = $this->_implodeArrayValues($value);
+        } elseif (self::CUSTOM_ATTRIBUTES === $key && is_array($value)) {
+            foreach ($value as &$attribute) {
+                $attribute = is_array($attribute) ? $attribute : $attribute->__toArray();
+                $attribute = $this->processCustomAttribute($attribute);
+            }
         }
+
         return parent::setData($key, $value);
     }
 
@@ -325,10 +334,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
                 return '';
             }
 
-            $isScalar = false;
+            $isScalar = true;
             foreach ($value as $val) {
-                if (is_scalar($val)) {
-                    $isScalar = true;
+                if (!is_scalar($val)) {
+                    $isScalar = false;
+                    break;
                 }
             }
             if ($isScalar) {
@@ -393,7 +403,13 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         $region = $this->getData('region');
 
         if (!$regionId && is_numeric($region)) {
-            if ($this->getRegionModel($region)->getCountryId() == $this->getCountryId()) {
+            $regionId = $this->getRegionIdByCode(
+                (string)$region,
+                (string)$this->getCountryId()
+            );
+            if ($regionId) {
+                $this->setData('region_code', $region);
+            } elseif ($this->getRegionModel($region)->getCountryId() == $this->getCountryId()) {
                 $this->setData('region_code', $this->getRegionModel($region)->getCode());
             }
         } elseif ($regionId) {
@@ -414,20 +430,53 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     public function getRegionId()
     {
         $regionId = $this->getData('region_id');
+        if ($regionId) {
+            return $regionId;
+        }
+
         $region = $this->getData('region');
-        if (!$regionId) {
-            if (is_numeric($region)) {
-                $this->setData('region_id', $region);
+        if (is_numeric($region)) {
+            $regionId = $this->getRegionIdByCode(
+                (string)$region,
+                (string)$this->getCountryId()
+            );
+            if ($regionId) {
+                $this->setData('region_id', $regionId);
                 $this->unsRegion();
             } else {
-                $regionModel = $this->_createRegionInstance()->loadByCode(
-                    $this->getRegionCode(),
-                    $this->getCountryId()
-                );
-                $this->setData('region_id', $regionModel->getId());
+                $this->setData('region_id', $region);
             }
+        } else {
+            $regionId = $this->getRegionIdByCode(
+                (string)$this->getRegionCode(),
+                (string)$this->getCountryId()
+            );
+            $this->setData('region_id', $regionId);
         }
-        return $this->getData('region_id');
+
+        return $regionId;
+    }
+
+    /**
+     * Returns region id.
+     *
+     * @param string $regionCode
+     * @param string $countryId
+     * @return int|null
+     */
+    private function getRegionIdByCode(string $regionCode, string $countryId): ?int
+    {
+        $key = $countryId . '_' . $regionCode;
+        if (!array_key_exists($key, $this->regionIdCountry)) {
+            $regionModel = $this->_createRegionInstance()->loadByCode(
+                $regionCode,
+                $countryId
+            );
+
+            $this->regionIdCountry[$key] = $regionModel->getId() ? (int)$regionModel->getId() : null;
+        }
+
+        return $this->regionIdCountry[$key];
     }
 
     /**
@@ -626,7 +675,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Unset Region from address
      *
      * @return $this
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function unsRegion()
     {
@@ -637,8 +686,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Is company required
      *
      * @return bool
-     * @since 100.2.0
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 101.0.0
      */
     protected function isCompanyRequired()
     {
@@ -649,8 +698,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Is telephone required
      *
      * @return bool
-     * @since 100.2.0
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 101.0.0
      */
     protected function isTelephoneRequired()
     {
@@ -661,11 +710,30 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Is fax required
      *
      * @return bool
-     * @since 100.2.0
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 101.0.0
      */
     protected function isFaxRequired()
     {
         return ($this->_eavConfig->getAttribute('customer_address', 'fax')->getIsRequired());
+    }
+
+    /**
+     * Unify attribute format.
+     *
+     * @param array $attribute
+     * @return array
+     */
+    private function processCustomAttribute(array $attribute): array
+    {
+        if (isset($attribute['attribute_code']) &&
+            isset($attribute['value']) &&
+            is_array($attribute['value']) &&
+            $this->isAddressMultilineAttribute($attribute['attribute_code'])
+        ) {
+            $attribute['value'] = $this->_implodeArrayValues($attribute['value']);
+        }
+
+        return $attribute;
     }
 }

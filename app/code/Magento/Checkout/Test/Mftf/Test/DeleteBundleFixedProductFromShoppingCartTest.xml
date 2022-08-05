@@ -33,7 +33,9 @@
                 <requiredEntity createDataKey="createBundleOption"/>
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="cataloginventory_stock"/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete bundle product data -->
@@ -46,14 +48,13 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
 
         <!-- Add product to the cart -->
-        <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToCart">
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCart"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$$createFixedBundleProduct.name$$"/>
         </actionGroup>
 
         <!-- Remove product from cart -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart"/>
-        <waitForPageLoad stepKey="waitForCartPageLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart"/>
         <actionGroup ref="DeleteProductFromShoppingCartActionGroup" stepKey="deleteProduct">
             <argument name="productName" value="$$createFixedBundleProduct.name$$"/>
         </actionGroup>

@@ -7,37 +7,33 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ApplyCatalogRuleForSimpleProductWithCustomOptionsTest">
+    <test name="ApplyCatalogRuleForSimpleProductWithCustomOptionsTest" deprecated="Use StorefrontApplyCatalogRuleForSimpleProductsWithCustomOptionsTest instead">
         <annotations>
             <features value="CatalogRule"/>
             <stories value="Apply catalog price rule"/>
-            <title value="Admin should be able to apply the catalog price rule for simple product with custom options"/>
-            <description value="Admin should be able to apply the catalog price rule for simple product with custom options"/>
+            <title value="Deprecated. Admin should be able to apply the catalog price rule for simple product with 3 custom options"/>
+            <description value="Admin should be able to apply the catalog price rule for simple product with 3 custom options"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14769"/>
             <group value="CatalogRule"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontApplyCatalogRuleForSimpleProductsWithCustomOptionsTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-
-            <!-- Create category -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
-
-            <!-- Create Simple Product 1 -->
             <createData entity="_defaultProduct" stepKey="createProduct1">
             <requiredEntity createDataKey="createCategory"/>
             <field key="price">56.78</field>
             </createData>
-
-            <!-- Create Simple Product 2 -->
             <createData entity="_defaultProduct" stepKey="createProduct2">
                 <requiredEntity createDataKey="createCategory"/>
                 <field key="price">56.78</field>
             </createData>
-
-            <!-- Create Simple Product 3 -->
             <createData entity="_defaultProduct" stepKey="createProduct3">
                 <requiredEntity createDataKey="createCategory"/>
                 <field key="price">56.78</field>
@@ -47,6 +43,7 @@
             <updateData createDataKey="createProduct1" entity="productWithCustomOptions" stepKey="updateProductWithOptions1"/>
             <updateData createDataKey="createProduct2" entity="productWithCustomOptions" stepKey="updateProductWithOptions2"/>
             <updateData createDataKey="createProduct3" entity="productWithCustomOptions" stepKey="updateProductWithOptions3"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <!-- Delete products and category -->
@@ -56,30 +53,30 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Delete the catalog price rule -->
-            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
             <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
 
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- 1. Begin creating a new catalog price rule -->
-        <actionGroup ref="newCatalogPriceRuleByUIWithConditionIsCategory" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
+        <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
             <argument name ="categoryId" value="$createCategory.id$"/>
         </actionGroup>
 
         <!-- Select not logged in customer group -->
-        <actionGroup ref="selectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
 
         <!-- Save and apply the new catalog price rule -->
         <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Navigate to category on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
 
         <!-- Check product 1 price on store front category page -->
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct1.name$)}}" userInput="$51.10" stepKey="storefrontProduct1Price"/>
@@ -100,7 +97,7 @@
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct3.name$)}}" userInput="$56.78" stepKey="storefrontProduct3RegularPrice"/>
 
         <!-- Navigate to product 1 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct1.name$)}}" stepKey="goToProductPage1"/>
+        <amOnPage url="{{StorefrontProductPage.url($createProduct1.custom_attributes[url_key]$)}}" stepKey="goToProductPage1"/>
 
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
         <actionGroup ref="StorefrontSelectCustomOptionDropDownAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices1">
@@ -115,7 +112,7 @@
         </actionGroup>
 
         <!-- Navigate to product 2 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct1.name$)}}" stepKey="goToProductPage2"/>
+        <amOnPage url="{{StorefrontProductPage.url($createProduct1.custom_attributes[url_key]$)}}" stepKey="goToProductPage2"/>
 
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown3 -->
         <actionGroup ref="StorefrontSelectCustomOptionDropDownAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices2">
@@ -130,7 +127,7 @@
         </actionGroup>
 
         <!-- Navigate to product 3 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct3.name$)}}" stepKey="goToProductPage3"/>
+        <amOnPage url="{{StorefrontProductPage.url($createProduct3.custom_attributes[url_key]$)}}" stepKey="goToProductPage3"/>
 
         <!-- Add product 3 to cart with no custom option -->
         <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddSimpleProduct3ToCart">

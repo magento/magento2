@@ -458,7 +458,7 @@ define([
                     return false;
                 }
 
-                pass = $.trim(value);
+                pass = value.trim();
 
                 if (!pass.length) {
                     return true;
@@ -476,7 +476,7 @@ define([
                     return false;
                 }
 
-                pass = $.trim(value);
+                pass = value.trim();
 
                 if (pass.length === 0) {
                     return true;
@@ -500,7 +500,7 @@ define([
                     counter = 0,
                     passwordMinLength = $(elm).data('password-min-length'),
                     passwordMinCharacterSets = $(elm).data('password-min-character-sets'),
-                    pass = $.trim(v),
+                    pass = v.trim(),
                     result = pass.length >= passwordMinLength;
 
                 if (result === false) {
@@ -605,38 +605,26 @@ define([
         ],
         'validate-not-negative-number': [
             function (value) {
-                if (utils.isEmptyNoTrim(value)) {
-                    return true;
-                }
-                value = utils.parseNumber(value);
-
-                return !isNaN(value) && value >= 0;
+                return utils.isEmptyNoTrim(value) || !isNaN(utils.parseNumber(value))
+                    && value >= 0 && (/^\s*-?\d+([,.]\d+)*\s*%?\s*$/).test(value);
 
             },
-            $.mage.__('Please enter a number 0 or greater in this field.')
+            $.mage.__('Please enter a number 0 or greater, without comma in this field.')
         ],
         // validate-not-negative-number should be replaced in all places with this one and then removed
         'validate-zero-or-greater': [
             function (value) {
-                if (utils.isEmptyNoTrim(value)) {
-                    return true;
-                }
-                value = utils.parseNumber(value);
-
-                return !isNaN(value) && value >= 0;
+                return utils.isEmptyNoTrim(value) || !isNaN(utils.parseNumber(value))
+                    && value >= 0 && (/^\s*-?\d+([,.]\d+)*\s*%?\s*$/).test(value);
             },
-            $.mage.__('Please enter a number 0 or greater in this field.')
+            $.mage.__('Please enter a number 0 or greater, without comma in this field.')
         ],
         'validate-greater-than-zero': [
             function (value) {
-                if (utils.isEmptyNoTrim(value)) {
-                    return true;
-                }
-                value = utils.parseNumber(value);
-
-                return !isNaN(value) && value > 0;
+                return utils.isEmptyNoTrim(value) || !isNaN(utils.parseNumber(value))
+                    && value > 0 && (/^\s*-?\d+([,.]\d+)*\s*%?\s*$/).test(value);
             },
-            $.mage.__('Please enter a number greater than 0 in this field.')
+            $.mage.__('Please enter a number greater than 0, without comma in this field.')
         ],
         'validate-css-length': [
             function (value) {
@@ -817,6 +805,12 @@ define([
             },
             $.mage.__('Please enter a valid URL Key (Ex: "example-page", "example-page.html" or "anotherlevel/example-page").')//eslint-disable-line max-len
         ],
+        'validate-trailing-hyphen': [
+            function (value) {
+                return utils.isEmptyNoTrim(value) || /^(?!-)(?!.*-$).+$/.test(value);
+            },
+            $.mage.__('Trailing hyphens are not allowed.')
+        ],
         'validate-zip-international': [
 
             /*function(v) {
@@ -830,29 +824,53 @@ define([
         ],
         'validate-state': [
             function (value) {
-                return value !== 0 || value === '';
+                return value !== 0;
             },
             $.mage.__('Please select State/Province.')
         ],
         'less-than-equals-to': [
             function (value, params) {
-                if ($.isNumeric(params) && $.isNumeric(value)) {
-                    return parseFloat(value) <= parseFloat(params);
+                value = utils.parseNumber(value);
+
+                if (isNaN(parseFloat(params))) {
+                    params = $(params).val();
+                }
+
+                params = utils.parseNumber(params);
+
+                if (!isNaN(params) && !isNaN(value)) {
+                    this.lteToVal = params;
+
+                    return value <= params;
                 }
 
                 return true;
             },
-            $.mage.__('Please enter a value less than or equal to {0}.')
+            function () {
+                return $.mage.__('Please enter a value less than or equal to %s.').replace('%s', this.lteToVal);
+            }
         ],
         'greater-than-equals-to': [
             function (value, params) {
-                if ($.isNumeric(params) && $.isNumeric(value)) {
-                    return parseFloat(value) >= parseFloat(params);
+                value = utils.parseNumber(value);
+
+                if (isNaN(parseFloat(params))) {
+                    params = $(params).val();
+                }
+
+                params = utils.parseNumber(params);
+
+                if (!isNaN(params) && !isNaN(value)) {
+                    this.gteToVal = params;
+
+                    return value >= params;
                 }
 
                 return true;
             },
-            $.mage.__('Please enter a value greater than or equal to {0}.')
+            function () {
+                return $.mage.__('Please enter a value greater than or equal to %s.').replace('%s', this.gteToVal);
+            }
         ],
         'validate-emails': [
             function (value) {
@@ -1069,14 +1087,30 @@ define([
             $.mage.__('This link is not allowed.')
         ],
         'validate-dob': [
-            function (value) {
+            function (value, param, params) {
                 if (value === '') {
                     return true;
                 }
 
-                return moment(value).isBefore(moment());
+                return moment.utc(value, params.dateFormat).isSameOrBefore(moment.utc());
             },
             $.mage.__('The Date of Birth should not be greater than today.')
+        ],
+        'validate-no-utf8mb4-characters': [
+            function (value) {
+                var validator = this,
+                    message = $.mage.__('Please remove invalid characters: {0}.'),
+                    matches = value.match(/(?:[\uD800-\uDBFF][\uDC00-\uDFFF])/g),
+                    result = matches === null;
+
+                if (!result) {
+                    validator.charErrorMessage = message.replace('{0}', matches.join());
+                }
+
+                return result;
+            }, function () {
+                return this.charErrorMessage;
+            }
         ]
     }, function (data) {
         return {

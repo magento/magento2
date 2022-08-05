@@ -7,21 +7,22 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontGuestCheckoutUsingFreeShippingAndTaxesTest">
+    <test name="StorefrontGuestCheckoutUsingFreeShippingAndTaxesTest" deprecated="Use StorefrontVerifyGuestCheckoutUsingFreeShippingAndTaxesTest">
         <annotations>
             <stories value="Checkout"/>
-            <title value="Verify guest checkout using free shipping and tax variations"/>
+            <title value="DEPRECATED. Verify guest checkout using free shipping and tax variations"/>
             <description value="Verify guest checkout using free shipping and tax variations"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14709"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-18802"/>
+                <issueId value="DEPRECATED">Use StorefrontVerifyGuestCheckoutUsingFreeShippingAndTaxesTest</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
             <createData entity="MinimumOrderAmount100" stepKey="minimumOrderAmount100"/>
@@ -90,8 +91,10 @@
                 <requiredEntity createDataKey="createBundleOption1_1"/>
                 <requiredEntity createDataKey="simpleProduct2"/>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
@@ -108,14 +111,15 @@
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule1"/>
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DefaultMinimumOrderAmount" stepKey="defaultMinimumOrderAmount"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Create a Tax Rule -->
-        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>
-        <waitForPageLoad stepKey="waitForTaxRuleIndex1"/>
-        <click selector="{{AdminTaxRuleGridSection.add}}" stepKey="clickAddNewTaxRuleButton"/>
-        <waitForPageLoad stepKey="waitForTaxRuleIndex2"/>
+        <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex1"/>
+        <actionGroup ref="AdminClickAddTaxRuleButtonActionGroup" stepKey="clickAddNewTaxRuleButton"/>
 
         <!-- Create a tax rule with defaults -->
         <fillField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode1"/>
@@ -129,7 +133,7 @@
         <see selector="{{AdminTaxRuleGridSection.successMessage}}" userInput="You saved the tax rule." stepKey="assertTaxRuleSuccessMessage" />
 
         <!--Open Product page in StoreFront and assert product and price range -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 
@@ -147,7 +151,7 @@
         </actionGroup>
 
         <!--Open Product page in StoreFront -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openBundleProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openBundleProduct">
             <argument name="product" value="$$createBundleProduct$$"/>
         </actionGroup>
 
@@ -161,42 +165,40 @@
         </actionGroup>
 
         <!--Open View and edit -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickMiniCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
 
         <!-- Fill the Estimate Shipping and Tax section -->
         <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields">
             <argument name="address" value="US_Address_NY_Default_Shipping"/>
         </actionGroup>
-        <reloadPage stepKey="reloadThePage"/>
-        <waitForPageLoad stepKey="waitForPageToReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadThePage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageToReload"/>
+
         <waitForText selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$9.60" time="90" stepKey="waitForTaxAmount"/>
 
         <!--Select Free Shipping and proceed to checkout -->
         <click selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="selectFlatRateShippingMethod"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
         <!-- Fill Guest form -->
         <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillTheSignInForm">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="customerAddress" value="US_Address_NY_Default_Shipping"/>
         </actionGroup>
-        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
 
         <!-- Place order and Assert success message -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
 
         <!-- Assert empty Mini Cart -->
-        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <seeElement selector="{{StorefrontMinicartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
 
         <!-- Open Order Index Page -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
 
         <!-- Filter Order using orderId and assert order-->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$orderId"/>
         </actionGroup>
         <click selector="{{AdminOrdersGridSection.viewLink('$orderId')}}" stepKey="clickOnViewLink"/>

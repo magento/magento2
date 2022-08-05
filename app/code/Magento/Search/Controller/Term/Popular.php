@@ -3,59 +3,83 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Search\Controller\Term;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\ForwardFactory as ResultForwardFactory;
+use Magento\Framework\View\Result\PageFactory as ResultPageFactory;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\Controller\ResultFactory;
 
-class Popular extends Action
+/**
+ * Popular search terms page
+ */
+class Popular extends Action implements HttpGetActionInterface
 {
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
+    private const XML_PATH_SEO_SEARCH_TERMS = 'catalog/seo/search_terms';
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @var ResultForwardFactory
      */
-    public function __construct(Context $context, ScopeConfigInterface $scopeConfig)
-    {
-        $this->scopeConfig = $scopeConfig;
+    private $resultForwardFactory;
+
+    /**
+     * @var ResultPageFactory
+     */
+    private $resultPageFactory;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @param Context $context
+     * @param ResultForwardFactory $resultForwardFactory
+     * @param ResultPageFactory $resultPageFactory
+     * @param ScopeConfigInterface $scopeConfig
+     */
+    public function __construct(
+        Context $context,
+        ResultForwardFactory $resultForwardFactory,
+        ResultPageFactory $resultPageFactory,
+        ScopeConfigInterface $scopeConfig
+    ) {
         parent::__construct($context);
+        $this->resultForwardFactory = $resultForwardFactory;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
-     * Dispatch request
-     *
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @return \Magento\Framework\App\ResponseInterface
-     * @throws \Magento\Framework\Exception\NotFoundException
-     */
-    public function dispatch(RequestInterface $request)
-    {
-        $searchTerms = $this->scopeConfig->getValue(
-            'catalog/seo/search_terms',
-            ScopeInterface::SCOPE_STORE
-        );
-        if (!$searchTerms) {
-            $this->_redirect('noroute');
-            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
-        }
-        return parent::dispatch($request);
-    }
-
-    /**
-     * @return \Magento\Framework\View\Result\Page
+     * @inheritDoc
      */
     public function execute()
     {
-        /** @var \Magento\Framework\View\Result\Page $resultPage */
-        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        return $resultPage;
+        if (!$this->checkEnabledSearchTerms()) {
+            $resultForward = $this->resultForwardFactory->create();
+            $resultForward->forward('noroute');
+
+            return $resultForward;
+        }
+
+        return $this->resultPageFactory->create();
+    }
+
+    /**
+     * Check if search terms are enabled
+     *
+     * @return bool
+     */
+    private function checkEnabledSearchTerms(): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SEO_SEARCH_TERMS,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 }

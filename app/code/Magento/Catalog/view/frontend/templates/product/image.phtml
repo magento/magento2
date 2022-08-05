@@ -4,11 +4,17 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $block \Magento\Catalog\Block\Product\Image */ ?>
-
-<img class="photo image <?= $block->escapeHtmlAttr($block->getClass()) ?>"
-    <?= $block->escapeHtml($block->getCustomAttributes()) ?>
-    src="<?= $block->escapeUrl($block->getImageUrl()) ?>"
-    width="<?= $block->escapeHtmlAttr($block->getWidth()) ?>"
-    height="<?= $block->escapeHtmlAttr($block->getHeight()) ?>"
-    alt="<?= /* @noEscape */ $block->stripTags($block->getLabel(), null, true) ?>" />
+<?php
+/** @var $block \Magento\Catalog\Block\Product\Image */
+/** @var $escaper \Magento\Framework\Escaper */
+?>
+<!--deprecated template as image_with_borders is a primary one-->
+<img class="photo image <?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
+    <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
+        <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtml($value) ?>"
+    <?php endforeach; ?>
+    src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
+    loading="lazy"
+    width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
+    height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
+    alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>" />

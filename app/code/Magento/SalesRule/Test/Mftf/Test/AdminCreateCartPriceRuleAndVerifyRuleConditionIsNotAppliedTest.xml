@@ -22,19 +22,18 @@
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRateDefaultPrice"/>
             <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData stepKey="deleteProduct" createDataKey="initialSimpleProduct"/>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCreatedCartPriceRule">
                 <argument name="ruleName" value="{{CartPriceRuleConditionNotApplied.name}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutAsAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
         </after>
 
         <!--Create cart price rule as per data and verify AssertCartPriceRuleSuccessSaveMessage-->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForPriceList"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{CartPriceRuleConditionNotApplied.name}}" stepKey="fillRuleName"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.description}}" userInput="{{CartPriceRuleConditionNotApplied.description}}" stepKey="fillDescription"/>
@@ -85,7 +84,7 @@
         <seeInField selector="{{AdminCartPriceRulesFormSection.defaultStoreView}}" userInput="{{CartPriceRuleConditionNotApplied.defaultStoreView}}" stepKey="seeDefaultStoreView"/>
 
         <!--Go to storefront page and verify created product-->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$initialSimpleProduct$$"/>
         </actionGroup>
         <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="2" stepKey="fillProductQuantity"/>
@@ -103,7 +102,7 @@
         </actionGroup>
 
         <!--Click on view and edit cart link-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <waitForPageLoad stepKey="waitForViewAndEditCartToOpen"/>
         <!--Verify AssertCartPriceRuleConditionIsNotApplied(Shopping cart subtotal equals to grand total - price rule has not been applied)-->
         <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssert">

@@ -18,32 +18,37 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete configurable product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="ApiConfigurableProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Delete product attribute -->
-            <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteProductAttribute">
-                <argument name="ProductAttribute" value="colorProductAttribute"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create configurable product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="createConfigurableProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
         <!-- Fill configurable product values -->
-        <actionGroup ref="fillMainProductForm" stepKey="fillConfigurableProductValues">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillConfigurableProductValues">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
@@ -52,7 +57,7 @@
         <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
 
         <!--Create new attribute with two option -->
-        <actionGroup ref="addNewProductConfigurationAttribute" stepKey="createProductConfigurationAttribute">
+        <actionGroup ref="AddNewProductConfigurationAttributeActionGroup" stepKey="createProductConfigurationAttribute">
             <argument name="attribute" value="colorProductAttribute"/>
             <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
             <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
@@ -64,7 +69,7 @@
 
         <!-- Save product -->
         <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveBtnVisible"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductAgain"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductAgain"/>
         <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="waitPopUpVisible"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmPopup"/>
 

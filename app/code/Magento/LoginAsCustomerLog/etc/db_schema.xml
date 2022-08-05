@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="magento_login_as_customer_log" resource="default" engine="innodb" comment="Login as Customer Logging">
+        <column xsi:type="int" name="log_id" unsigned="false" nullable="false" identity="true" comment="Log Id"/>
+        <column xsi:type="timestamp" name="time" on_update="false" nullable="true" comment="Event Date"/>
+        <column xsi:type="int" name="user_id" unsigned="true" nullable="true" identity="false" comment="User Id"/>
+        <column xsi:type="varchar" name="user_name" nullable="true" length="40" comment="User Name"/>
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="true" identity="false" comment="Customer Id"/>
+        <column xsi:type="varchar" name="customer_email" nullable="true" length="40" comment="Customer email"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="log_id"/>
+        </constraint>
+        <index referenceId="MAGENTO_LOGIN_AS_CUSTOMER_LOG_USER_ID" indexType="btree">
+            <column name="user_id"/>
+        </index>
+    </table>
+</schema>

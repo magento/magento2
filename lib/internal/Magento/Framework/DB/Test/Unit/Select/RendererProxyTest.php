@@ -3,23 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\DB\Test\Unit\Select;
 
-class RendererProxyTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Select\RendererProxy;
+use Magento\Framework\DB\Select\SelectRenderer;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\TestCase;
+
+class RendererProxyTest extends TestCase
 {
     public function testRender()
     {
-        $objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $selectRender = $this->getMockBuilder(\Magento\Framework\DB\Select\SelectRenderer::class)
+            ->getMockForAbstractClass();
+        $selectRender = $this->getMockBuilder(SelectRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager->expects($this->once())
             ->method('get')
-            ->with(\Magento\Framework\DB\Select\SelectRenderer::class)
+            ->with(SelectRenderer::class)
             ->willReturn($selectRender);
-        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $selectRender->expects($this->once())
@@ -27,7 +35,7 @@ class RendererProxyTest extends \PHPUnit\Framework\TestCase
             ->with($selectMock, '')
             ->willReturn('sql');
 
-        $model = new \Magento\Framework\DB\Select\RendererProxy($objectManager);
+        $model = new RendererProxy($objectManager);
         $this->assertEquals('sql', $model->render($selectMock, ''));
     }
 }

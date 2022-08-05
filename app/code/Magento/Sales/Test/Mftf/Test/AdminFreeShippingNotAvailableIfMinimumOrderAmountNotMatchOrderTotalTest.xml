@@ -27,8 +27,8 @@
             <createData entity="DisableFlatRateShippingMethodConfig" stepKey="disableFlatRate"/>
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShippingMethod"/>
             <createData entity="setFreeShippingSubtotal" stepKey="setFreeShippingSubtotal"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -37,15 +37,15 @@
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
             <createData entity="setFreeShippingSubtotalToDefault" stepKey="setFreeShippingSubtotalToDefault"/>
-            <actionGroup ref="logout" stepKey="logout"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache2"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
         <!--Create new order with existing customer-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="goToCreateOrderPage">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <!--Add product to order-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
@@ -54,8 +54,7 @@
         <!--Click *Get shipping methods and rates* and see that Free Shipping is absent-->
         <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickGetShippingMehods"/>
         <dontSeeElement selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="seeAbsentFreeShipping"/>
-        <!--Submit Order and verify that Order isn't placed-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrder" />
 
         <dontSeeElement selector="{{AdminOrderFormMessagesSection.success}}" stepKey="seeSuccessMessage"/>
         <seeElement selector="{{AdminOrderFormMessagesSection.error}}" stepKey="seeErrorMessage"/>

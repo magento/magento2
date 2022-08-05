@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Downloadable\Model\Link;
 
 use Magento\Downloadable\Helper\File;
@@ -12,7 +13,8 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\DataObject\Copy;
 
 /**
- * Class Builder
+ * Builder download link model for downloadable product
+ *
  * @api
  * @since 100.1.0
  */
@@ -116,7 +118,7 @@ class Builder
             $link->setLinkFile($linkFileName);
             $link->setLinkUrl(null);
         }
-        
+
         if (isset($this->data['sample'])) {
             $link = $this->buildSample($link, $this->data['sample']);
         }
@@ -131,6 +133,12 @@ class Builder
 
         if (isset($this->data['is_unlimited']) && $this->data['is_unlimited']) {
             $link->setNumberOfDownloads(0);
+        }
+
+        $useDefaultTitle = $this->data['use_default_title'] ?? false;
+
+        if ($useDefaultTitle) {
+            $link->setTitle(null);
         }
         $this->resetData();
 

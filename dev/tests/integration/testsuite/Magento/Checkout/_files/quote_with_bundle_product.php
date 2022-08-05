@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../../Magento/Bundle/_files/product.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/product.php');
+
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 /** @var $product \Magento\Catalog\Model\Product */

@@ -26,7 +26,7 @@ class DescriptionTest extends TestCase
      */
     private $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->block = $objectManager->create(Description::class, [

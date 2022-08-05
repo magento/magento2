@@ -16,12 +16,13 @@
             <description value="Admin should be able to see the grid onn export page"/>
             <severity value="CRITICAL"/>
             <group value="importExport"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateToExportPageActionGroup" stepKey="navigateToExportPage"/>
         <actionGroup ref="AdminAssertVisiblePagerActionGroup" stepKey="seeGridPager"/>

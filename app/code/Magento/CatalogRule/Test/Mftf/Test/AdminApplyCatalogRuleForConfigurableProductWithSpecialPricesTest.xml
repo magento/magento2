@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create category -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -74,6 +74,7 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createSecondConfigChildProduct"/>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <!-- Delete the catalog price rule -->
@@ -84,7 +85,7 @@
             </actionGroup>
 
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
 
             <!-- Delete all created data -->
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
@@ -92,39 +93,41 @@
             <deleteData createDataKey="createSecondConfigChildProduct" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Add special prices for products -->
-        <actionGroup ref="goToProductPageViaID" stepKey="goToFirstChildProduct">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToFirstChildProduct">
             <argument name="productId" value="$$createFirstConfigChildProduct.id$$"/>
         </actionGroup>
         <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceForFirstProduct">
             <argument name="price" value="{{specialProductPrice.price}}"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveFirstProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveFirstProduct"/>
 
-        <actionGroup ref="goToProductPageViaID" stepKey="goToSecondChildProduct">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToSecondChildProduct">
             <argument name="productId" value="$$createSecondConfigChildProduct.id$$"/>
         </actionGroup>
         <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceForSecondProduct">
             <argument name="price" value="{{specialProductPrice.price}}"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveSecondProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProduct"/>
 
         <!-- Create a new catalog price rule -->
-        <actionGroup ref="newCatalogPriceRuleByUIWithConditionIsCategory" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
+        <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
             <argument name="categoryId" value="$createCategory.id$"/>
         </actionGroup>
 
         <!-- Select not logged in customer group -->
-        <actionGroup ref="selectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
 
         <!-- Save and apply the new catalog price rule -->
         <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
-        <!-- Reindex and flash cache -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Open Storefront product page and assert created configurable product -->
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">

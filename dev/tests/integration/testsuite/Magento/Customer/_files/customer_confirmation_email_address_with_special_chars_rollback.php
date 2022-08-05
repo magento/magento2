@@ -6,12 +6,12 @@
 
 declare(strict_types=1);
 
-include __DIR__ . '/customer_confirmation_config_enable_rollback.php';
-
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_confirmation_config_enable_rollback.php');
 /** @var Registry $registry */
 $registry = Bootstrap::getObjectManager()->get(Registry::class);
 $registry->unregister('isSecureArea');

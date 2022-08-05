@@ -3,49 +3,57 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\CronJob;
 
-use \Magento\Sales\Model\CronJob\AggregateSalesReportBestsellersData;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Sales\Model\CronJob\AggregateSalesReportBestsellersData;
+use Magento\Sales\Model\ResourceModel\Report\Bestsellers;
+use Magento\Sales\Model\ResourceModel\Report\BestsellersFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Magento\Sales\Model\CronJob\AggregateSalesReportBestsellersDataTest
  */
-class AggregateSalesReportBestsellersDataTest extends \PHPUnit\Framework\TestCase
+class AggregateSalesReportBestsellersDataTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|MockObject
      */
     protected $localeResolverMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|MockObject
      */
     protected $localeDateMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Report\BestsellersFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var BestsellersFactory|MockObject
      */
     protected $bestsellersFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\CronJob\AggregateSalesReportBestsellersData
+     * @var AggregateSalesReportBestsellersData
      */
     protected $observer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->localeResolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
+        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->bestsellersFactoryMock =
-            $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Report\BestsellersFactory::class)
+            $this->getMockBuilder(BestsellersFactory::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])
+                ->getMock();
+        $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->localeDateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->observer = new AggregateSalesReportBestsellersData(
             $this->localeResolverMock,
@@ -57,7 +65,7 @@ class AggregateSalesReportBestsellersDataTest extends \PHPUnit\Framework\TestCas
     public function testExecute()
     {
         $date = $this->setupAggregate();
-        $bestsellersMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Report\Bestsellers::class)
+        $bestsellersMock = $this->getMockBuilder(Bestsellers::class)
             ->disableOriginalConstructor()
             ->getMock();
         $bestsellersMock->expects($this->once())
@@ -65,7 +73,7 @@ class AggregateSalesReportBestsellersDataTest extends \PHPUnit\Framework\TestCas
             ->with($date);
         $this->bestsellersFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($bestsellersMock));
+            ->willReturn($bestsellersMock);
         $this->observer->execute();
     }
 
@@ -85,7 +93,7 @@ class AggregateSalesReportBestsellersDataTest extends \PHPUnit\Framework\TestCas
         $date = (new \DateTime())->sub(new \DateInterval('PT25H'));
         $this->localeDateMock->expects($this->once())
             ->method('date')
-            ->will($this->returnValue($date));
+            ->willReturn($date);
 
         return $date;
     }

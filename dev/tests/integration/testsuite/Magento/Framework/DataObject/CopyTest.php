@@ -12,7 +12,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
      */
     protected $_service;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\DataObject\Copy::class);

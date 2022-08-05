@@ -4,10 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../../Magento/Catalog/_files/multiple_products.php';
-
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/multiple_products.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

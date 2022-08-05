@@ -31,7 +31,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
         <!-- Add simple product to cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart1">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart1">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <!-- Navigate to checkout -->
@@ -48,8 +48,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <click selector="{{CheckoutShippingGuestInfoSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
         <!-- Check that have the same values after page reload -->
-        <amOnPage url="{{CheckoutPage.url}}" stepKey="amOnCheckoutShippingInfoPage"/>
-        <waitForPageLoad stepKey="waitForShippingPageReload"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="amOnCheckoutShippingInfoPage"/>
         <seeInField selector="{{CheckoutShippingGuestInfoSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="seeEmailOnCheckout" />
         <seeInField selector="{{CheckoutShippingGuestInfoSection.firstName}}" userInput="{{CustomerEntityOne.firstName}}" stepKey="seeFirstnameOnCheckout" />
         <seeInField selector="{{CheckoutShippingGuestInfoSection.lastName}}" userInput="{{CustomerEntityOne.lastName}}" stepKey="seeLastnameOnCheckout" />
@@ -59,7 +58,7 @@
         <seeInField selector="{{CheckoutShippingGuestInfoSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="seePostcodeOnCheckout" />
         <seeInField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="seePhoneOnCheckout" />
         <!-- Click next button to open payment section -->
-        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment" />
         <!-- Reload payment section -->
         <amOnPage url="{{GuestCheckoutReviewAndPaymentsPage.url}}" stepKey="amOnCheckoutPaymentsPage"/>

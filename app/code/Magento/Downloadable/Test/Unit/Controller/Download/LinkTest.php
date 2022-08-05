@@ -3,126 +3,140 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Controller\Download;
 
+use Magento\Catalog\Model\Product;
+use Magento\Customer\Model\Session;
+use Magento\Downloadable\Controller\Download\Link;
+use Magento\Downloadable\Helper\Data;
+use Magento\Downloadable\Helper\Download;
+use Magento\Downloadable\Model\Link\Purchased;
+use Magento\Downloadable\Model\Link\Purchased\Item;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\HTTP\Mime;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LinkTest extends \PHPUnit\Framework\TestCase
+class LinkTest extends TestCase
 {
-    /** @var \Magento\Downloadable\Controller\Download\Link */
+    /**
+     * @var Link
+     */
     protected $link;
 
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
+     * @var MockObject|Http
      */
     protected $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface
+     * @var MockObject|ResponseInterface
      */
     protected $response;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Model\Link\Purchased\Item
+     * @var MockObject|Item
      */
     protected $linkPurchasedItem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Model\Link\Purchased
+     * @var MockObject|Purchased
      */
     protected $linkPurchased;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManager\ObjectManager
+     * @var MockObject|\Magento\Framework\ObjectManager\ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Message\ManagerInterface
+     * @var MockObject|ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Response\RedirectInterface
+     * @var MockObject|RedirectInterface
      */
     protected $redirect;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\Session
+     * @var MockObject|Session
      */
     protected $session;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Helper\Data
+     * @var MockObject|Data
      */
     protected $helperData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Helper\Download
+     * @var MockObject|Download
      */
     protected $downloadHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var MockObject|Product
      */
     protected $product;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\UrlInterface
+     * @var MockObject|UrlInterface
      */
     protected $urlInterface;
 
     /**
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->response = $this->createPartialMock(
-            \Magento\Framework\App\ResponseInterface::class,
-            [
-                'setHttpResponseCode',
-                'clearBody',
-                'sendHeaders',
-                'sendResponse',
-                'setHeader'
-            ]
-        );
-        $this->session = $this->createPartialMock(\Magento\Customer\Model\Session::class, [
-                'getCustomerId',
-                'authenticate',
-                'setBeforeAuthUrl'
-            ]);
-        $this->helperData = $this->createPartialMock(\Magento\Downloadable\Helper\Data::class, [
-                'getIsShareable'
-            ]);
-        $this->downloadHelper = $this->createPartialMock(\Magento\Downloadable\Helper\Download::class, [
-                'setResource',
-                'getFilename',
-                'getContentType',
-                'getFileSize',
-                'getContentDisposition',
-                'output'
-            ]);
-        $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
-                '_wakeup',
-                'load',
-                'getId',
-                'getProductUrl',
-                'getName'
-            ]);
-        $this->linkPurchasedItem = $this->createPartialMock(\Magento\Downloadable\Model\Link\Purchased\Item::class, [
-                'load',
-                'getId',
+        $this->request = $this->getMockBuilder(Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setHttpResponseCode', 'clearBody', 'sendHeaders', 'setHeader'])
+            ->onlyMethods(['sendResponse'])
+            ->getMockForAbstractClass();
+        $this->session = $this->createPartialMock(Session::class, [
+            'getCustomerId',
+            'authenticate',
+            'setBeforeAuthUrl'
+        ]);
+        $this->helperData = $this->createPartialMock(Data::class, [
+            'getIsShareable'
+        ]);
+        $this->downloadHelper = $this->createPartialMock(Download::class, [
+            'setResource',
+            'getFilename',
+            'getContentType',
+            'getFileSize',
+            'getContentDisposition',
+            'output'
+        ]);
+        $this->product = $this->getMockBuilder(Product::class)
+            ->addMethods(['_wakeup'])
+            ->onlyMethods(['load', 'getId', 'getProductUrl', 'getName'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->linkPurchasedItem = $this->getMockBuilder(Item::class)
+            ->addMethods([
                 'getProductId',
                 'getPurchasedId',
                 'getNumberOfDownloadsBought',
@@ -132,22 +146,25 @@ class LinkTest extends \PHPUnit\Framework\TestCase
                 'getLinkUrl',
                 'getLinkFile',
                 'setNumberOfDownloadsUsed',
-                'setStatus',
-                'save',
-            ]);
-        $this->linkPurchased = $this->createPartialMock(\Magento\Downloadable\Model\Link\Purchased::class, [
-                'load',
-                'getCustomerId'
-            ]);
-        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
-        $this->redirect = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
-        $this->urlInterface = $this->createMock(\Magento\Framework\UrlInterface::class);
+                'setStatus'
+            ])
+            ->onlyMethods(['load', 'getId', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->linkPurchased = $this->getMockBuilder(Purchased::class)
+            ->addMethods(['getCustomerId'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
+        $this->urlInterface = $this->getMockForAbstractClass(UrlInterface::class);
         $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, [
-                'create',
-                'get'
-            ]);
+            'create',
+            'get'
+        ]);
         $this->link = $this->objectManagerHelper->getObject(
-            \Magento\Downloadable\Controller\Download\Link::class,
+            Link::class,
             [
                 'objectManager' => $this->objectManager,
                 'request' => $this->request,
@@ -158,16 +175,19 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testAbsentLinkId()
+    /**
+     * @return void
+     */
+    public function testAbsentLinkId(): void
     {
-        $this->objectManager->expects($this->once())
+        $this->objectManager->expects($this->never())
             ->method('get')
-            ->with(\Magento\Customer\Model\Session::class)
+            ->with(Session::class)
             ->willReturn($this->session);
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with(\Magento\Downloadable\Model\Link\Purchased\Item::class)
+            ->with(Item::class)
             ->willReturn($this->linkPurchasedItem);
         $this->linkPurchasedItem->expects($this->once())
             ->method('load')
@@ -182,35 +202,22 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->response, $this->link->execute());
     }
 
-    public function testGetLinkForGuestCustomer()
+    /**
+     * @return void
+     */
+    public function testGetLinkForGuestCustomer(): void
     {
-        $this->objectManager->expects($this->at(0))
-            ->method('get')
-            ->with(\Magento\Customer\Model\Session::class)
-            ->willReturn($this->session);
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
-        $this->objectManager->expects($this->at(1))
-            ->method('create')
-            ->with(\Magento\Downloadable\Model\Link\Purchased\Item::class)
-            ->willReturn($this->linkPurchasedItem);
         $this->linkPurchasedItem->expects($this->once())
             ->method('load')
             ->with('some_id', 'link_hash')
             ->willReturnSelf();
         $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(5);
-        $this->objectManager->expects($this->at(2))
-            ->method('get')
-            ->with(\Magento\Downloadable\Helper\Data::class)
-            ->willReturn($this->helperData);
         $this->helperData->expects($this->once())
             ->method('getIsShareable')
             ->with($this->linkPurchasedItem)
             ->willReturn(false);
         $this->session->expects($this->once())->method('getCustomerId')->willReturn(null);
-        $this->objectManager->expects($this->at(3))
-            ->method('create')
-            ->with(\Magento\Catalog\Model\Product::class)
-            ->willReturn($this->product);
         $this->linkPurchasedItem->expects($this->once())->method('getProductId')->willReturn('product_id');
         $this->product->expects($this->once())->method('load')->with('product_id')->willReturnSelf();
         $this->product->expects($this->once())->method('getId')->willReturn('product_id');
@@ -220,10 +227,14 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->method('addNotice')
             ->with('Please sign in to download your product or purchase <a href="product_url">product_name</a>.');
         $this->session->expects($this->once())->method('authenticate')->willReturn(true);
-        $this->objectManager->expects($this->at(4))
+        $this->objectManager
+            ->method('get')
+            ->withConsecutive([Data::class], [Session::class])
+            ->willReturnOnConsecutiveCalls($this->helperData, $this->session);
+        $this->objectManager
             ->method('create')
-            ->with(\Magento\Framework\UrlInterface::class)
-            ->willReturn($this->urlInterface);
+            ->withConsecutive([Item::class], [Product::class], [UrlInterface::class])
+            ->willReturnOnConsecutiveCalls($this->linkPurchasedItem, $this->product, $this->urlInterface);
         $this->urlInterface->expects($this->once())
             ->method('getUrl')
             ->with('downloadable/customer/products/', ['_secure' => true])
@@ -233,35 +244,30 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->link->execute());
     }
 
-    public function testGetLinkForWrongCustomer()
+    /**
+     * @return void
+     */
+    public function testGetLinkForWrongCustomer(): void
     {
-        $this->objectManager->expects($this->at(0))
-            ->method('get')
-            ->with(\Magento\Customer\Model\Session::class)
-            ->willReturn($this->session);
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
-        $this->objectManager->expects($this->at(1))
-            ->method('create')
-            ->with(\Magento\Downloadable\Model\Link\Purchased\Item::class)
-            ->willReturn($this->linkPurchasedItem);
         $this->linkPurchasedItem->expects($this->once())
             ->method('load')
             ->with('some_id', 'link_hash')
             ->willReturnSelf();
         $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(5);
-        $this->objectManager->expects($this->at(2))
-            ->method('get')
-            ->with(\Magento\Downloadable\Helper\Data::class)
-            ->willReturn($this->helperData);
         $this->helperData->expects($this->once())
             ->method('getIsShareable')
             ->with($this->linkPurchasedItem)
             ->willReturn(false);
         $this->session->expects($this->once())->method('getCustomerId')->willReturn('customer_id');
-        $this->objectManager->expects($this->at(3))
+        $this->objectManager
+            ->method('get')
+            ->withConsecutive([Data::class], [Session::class])
+            ->willReturnOnConsecutiveCalls($this->helperData, $this->session);
+        $this->objectManager
             ->method('create')
-            ->with(\Magento\Downloadable\Model\Link\Purchased::class)
-            ->willReturn($this->linkPurchased);
+            ->withConsecutive([Item::class], [Purchased::class])
+            ->willReturnOnConsecutiveCalls($this->linkPurchasedItem, $this->linkPurchased);
         $this->linkPurchasedItem->expects($this->once())->method('getPurchasedId')->willReturn('purchased_id');
         $this->linkPurchased->expects($this->once())->method('load')->with('purchased_id')->willReturnSelf();
         $this->linkPurchased->expects($this->once())->method('getCustomerId')->willReturn('other_customer_id');
@@ -276,29 +282,26 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $mimeType
      * @param string $disposition
-     * @dataProvider downloadTypesDataProvider
+     *
      * @return void
+     * @dataProvider downloadTypesDataProvider
      */
-    public function testExceptionInUpdateLinkStatus($mimeType, $disposition)
+    public function testExceptionInUpdateLinkStatus($mimeType, $disposition): void
     {
-        $this->objectManager->expects($this->at(0))
-            ->method('get')
-            ->with(\Magento\Customer\Model\Session::class)
-            ->willReturn($this->session);
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
-        $this->objectManager->expects($this->at(1))
-            ->method('create')
-            ->with(\Magento\Downloadable\Model\Link\Purchased\Item::class)
-            ->willReturn($this->linkPurchasedItem);
         $this->linkPurchasedItem->expects($this->once())
             ->method('load')
             ->with('some_id', 'link_hash')
             ->willReturnSelf();
-        $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(5);
-        $this->objectManager->expects($this->at(2))
+        $this->objectManager
             ->method('get')
-            ->with(\Magento\Downloadable\Helper\Data::class)
-            ->willReturn($this->helperData);
+            ->withConsecutive([Data::class], [Download::class])
+            ->willReturnOnConsecutiveCalls($this->helperData, $this->downloadHelper);
+        $this->objectManager
+            ->method('create')
+            ->withConsecutive([Item::class])
+            ->willReturnOnConsecutiveCalls($this->linkPurchasedItem);
+        $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(5);
         $this->helperData->expects($this->once())
             ->method('getIsShareable')
             ->with($this->linkPurchasedItem)
@@ -315,7 +318,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->linkPurchasedItem->expects($this->any())->method('setStatus')->with('expired')->willReturnSelf();
         $this->linkPurchasedItem->expects($this->any())->method('save')->willThrowException(new \Exception());
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Something went wrong while getting the requested content.')
             ->willReturnSelf();
         $this->redirect->expects($this->once())->method('redirect')->with($this->response, '*/customer/products', []);
@@ -328,17 +331,14 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      * @param string $resourceType
      * @param string $mimeType
      * @param string $disposition
+     *
      * @return void
      */
-    private function processDownload($resource, $resourceType, $mimeType, $disposition)
+    private function processDownload($resource, $resourceType, $mimeType, $disposition): void
     {
         $fileSize = 58493;
         $fileName = 'link.jpg';
 
-        $this->objectManager->expects($this->at(3))
-            ->method('get')
-            ->with(\Magento\Downloadable\Helper\Download::class)
-            ->willReturn($this->downloadHelper);
         $this->downloadHelper->expects($this->once())
             ->method('setResource')
             ->with($resource, $resourceType)
@@ -369,28 +369,26 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      * @param string $messageType
      * @param string $status
      * @param string $notice
+     *
+     * @return void
      * @dataProvider linkNotAvailableDataProvider
      */
-    public function testLinkNotAvailable($messageType, $status, $notice)
+    public function testLinkNotAvailable($messageType, $status, $notice): void
     {
-        $this->objectManager->expects($this->at(0))
-            ->method('get')
-            ->with(\Magento\Customer\Model\Session::class)
-            ->willReturn($this->session);
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
-        $this->objectManager->expects($this->at(1))
-            ->method('create')
-            ->with(\Magento\Downloadable\Model\Link\Purchased\Item::class)
-            ->willReturn($this->linkPurchasedItem);
         $this->linkPurchasedItem->expects($this->once())
             ->method('load')
             ->with('some_id', 'link_hash')
             ->willReturnSelf();
         $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(5);
-        $this->objectManager->expects($this->at(2))
+        $this->objectManager
             ->method('get')
-            ->with(\Magento\Downloadable\Helper\Data::class)
-            ->willReturn($this->helperData);
+            ->withConsecutive([Data::class], [Session::class])
+            ->willReturnOnConsecutiveCalls($this->helperData, $this->session);
+        $this->objectManager
+            ->method('create')
+            ->with(Item::class)
+            ->willReturn($this->linkPurchasedItem);
         $this->helperData->expects($this->once())
             ->method('getIsShareable')
             ->with($this->linkPurchasedItem)
@@ -406,32 +404,33 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $mimeType
      * @param string $disposition
-     * @dataProvider downloadTypesDataProvider
+     *
      * @return void
+     * @dataProvider downloadTypesDataProvider
      */
-    public function testContentDisposition($mimeType, $disposition)
+    public function testContentDisposition($mimeType, $disposition): void
     {
         $this->objectManager->expects($this->any())
             ->method('get')
             ->willReturnMap([
                 [
-                    \Magento\Customer\Model\Session::class,
-                    $this->session,
+                    Session::class,
+                    $this->session
                 ],
                 [
-                    \Magento\Downloadable\Helper\Data::class,
-                    $this->helperData,
+                    Data::class,
+                    $this->helperData
                 ],
                 [
-                    \Magento\Downloadable\Helper\Download::class,
-                    $this->downloadHelper,
-                ],
+                    Download::class,
+                    $this->downloadHelper
+                ]
             ]);
-        
+
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
-        $this->objectManager->expects($this->at(1))
+        $this->objectManager
             ->method('create')
-            ->with(\Magento\Downloadable\Model\Link\Purchased\Item::class)
+            ->with(Item::class)
             ->willReturn($this->linkPurchasedItem);
         $this->linkPurchasedItem->expects($this->once())
             ->method('load')
@@ -476,24 +475,24 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function linkNotAvailableDataProvider()
+    public function linkNotAvailableDataProvider(): array
     {
         return [
             ['addNotice', 'expired', 'The link has expired.'],
             ['addNotice', 'pending', 'The link is not available.'],
             ['addNotice', 'payment_review', 'The link is not available.'],
-            ['addError', 'wrong_status', 'Something went wrong while getting the requested content.']
+            ['addErrorMessage', 'wrong_status', 'Something went wrong while getting the requested content.']
         ];
     }
 
     /**
      * @return array
      */
-    public function downloadTypesDataProvider()
+    public function downloadTypesDataProvider(): array
     {
         return [
-            ['mimeType' => 'text/html',  'disposition' => \Magento\Framework\HTTP\Mime::DISPOSITION_ATTACHMENT],
-            ['mimeType' => 'image/jpeg', 'disposition' => \Magento\Framework\HTTP\Mime::DISPOSITION_INLINE],
+            ['mimeType' => 'text/html',  'disposition' => Mime::DISPOSITION_ATTACHMENT],
+            ['mimeType' => 'image/jpeg', 'disposition' => Mime::DISPOSITION_INLINE]
         ];
     }
 }

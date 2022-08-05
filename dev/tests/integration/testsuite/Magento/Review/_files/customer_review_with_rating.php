@@ -4,18 +4,29 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(
     \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
 );
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
 
-require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
-
-$storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+$objectManager = Bootstrap::getObjectManager();
+/** @var CustomerRegistry $customerRegistry */
+$customerRegistry = $objectManager->create(CustomerRegistry::class);
+$customer = $customerRegistry->retrieve(1);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple');
+$storeId = $objectManager->get(
     \Magento\Store\Model\StoreManagerInterface::class
 )->getStore()->getId();
 
-$review = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+$review = $objectManager->create(
     \Magento\Review\Model\Review::class,
     ['data' => [
         'customer_id' => $customer->getId(),
@@ -33,13 +44,13 @@ $review
     ->setStores([$storeId])
     ->save();
 
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class)->register(
+$objectManager->get(\Magento\Framework\Registry::class)->register(
     'review_data',
     $review
 );
 
 /** @var \Magento\Review\Model\ResourceModel\Review\Collection $ratingCollection */
-$ratingCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+$ratingCollection = $objectManager->create(
     \Magento\Review\Model\Rating::class
 )->getCollection()
     ->setPageSize(2)
@@ -50,7 +61,7 @@ foreach ($ratingCollection as $rating) {
 }
 
 foreach ($ratingCollection as $rating) {
-    $ratingOption = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    $ratingOption = $objectManager
         ->create(\Magento\Review\Model\Rating\Option::class)
         ->getCollection()
         ->setPageSize(1)
@@ -61,7 +72,7 @@ foreach ($ratingCollection as $rating) {
         ->addOptionVote($ratingOption->getId(), $product->getId());
 }
 
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class)->register(
+$objectManager->get(\Magento\Framework\Registry::class)->register(
     'rating_data',
     $ratingCollection->getFirstItem()
 );

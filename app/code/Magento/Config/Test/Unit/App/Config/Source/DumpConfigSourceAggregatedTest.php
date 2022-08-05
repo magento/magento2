@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\App\Config\Source;
 
 use Magento\Config\App\Config\Source\DumpConfigSourceAggregated;
@@ -10,9 +12,10 @@ use Magento\Config\Model\Config\Export\ExcludeList;
 use Magento\Config\Model\Config\TypePool;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DumpConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
+class DumpConfigSourceAggregatedTest extends TestCase
 {
     /**
      * @var ConfigSourceInterface|MockObject
@@ -44,7 +47,7 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->sourceMock = $this->getMockBuilder(ConfigSourceInterface::class)

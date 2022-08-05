@@ -25,7 +25,7 @@
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
@@ -33,23 +33,23 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Delete created downloadable product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create downloadable product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
-        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createProduct">
             <argument name="productType" value="downloadable"/>
         </actionGroup>
 
         <!-- Fill downloadable product values -->
-        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillDownloadableProductForm">
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillDownloadableProductForm">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
 
@@ -66,26 +66,24 @@
         <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately"/>
 
         <!-- Add first downloadable link -->
-        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addFirstDownloadableProductLink">
+        <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addFirstDownloadableProductLink">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
 
         <!-- Add second downloadable link -->
-        <actionGroup ref="addDownloadableProductLink" stepKey="addSecondDownloadableProductLink">
+        <actionGroup ref="AddDownloadableProductLinkActionGroup" stepKey="addSecondDownloadableProductLink">
             <argument name="link" value="downloadableLink"/>
         </actionGroup>
 
         <!-- Save product -->
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!-- Find downloadable product in grid -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
-        <waitForPageLoad stepKey="waitForAdminProductPageLoad"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedConfigurableProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedConfigurableProduct">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProduct"/>
-        <waitForPageLoad stepKey="waitForProductFormPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProduct"/>
 
         <!-- Assert downloadable links in product form -->
         <scrollTo selector="{{AdminProductDownloadableSection.sectionLinkGrid}}" stepKey="scrollToLinks"/>
@@ -93,7 +91,7 @@
         <seeInField selector="{{AdminProductDownloadableSection.addLinkTitleInput('1')}}" userInput="{{downloadableLink.title}}" stepKey="seeSecondLinkTitle"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
 

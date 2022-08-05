@@ -1,0 +1,30 @@
+{
+    "name": "magento/module-login-as-customer-admin-ui",
+    "description": "",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "*",
+        "magento/module-login-as-customer-api": "*",
+        "magento/module-login-as-customer-frontend-ui": "*",
+        "magento/module-backend": "*",
+        "magento/module-customer": "*",
+        "magento/module-sales": "*",
+        "magento/module-store": "*"
+    },
+    "suggest": {
+        "magento/module-login-as-customer": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\LoginAsCustomerAdminUi\\": ""
+        }
+    }
+}

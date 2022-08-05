@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\ObjectManager\Test\Unit\Config\Mapper;
 
-use \Magento\Framework\ObjectManager\Config\Mapper\ArgumentParser;
+use Magento\Framework\ObjectManager\Config\Mapper\ArgumentParser;
+use PHPUnit\Framework\TestCase;
 
-class ArgumentParserTest extends \PHPUnit\Framework\TestCase
+class ArgumentParserTest extends TestCase
 {
     public function testParse()
     {

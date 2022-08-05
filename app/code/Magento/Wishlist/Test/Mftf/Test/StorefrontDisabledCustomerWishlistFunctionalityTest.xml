@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontDisabledCustomerWishlistFunctionalityTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Disabled Wishlist Functionality"/>
+            <title value="Wishlist Functionality is disabled in system configurations and not visible on FE"/>
+            <description value="Customer should not see wishlist functionality if it's disabled"/>
+            <testCaseId value="MC-35200"/>
+            <severity value="AVERAGE"/>
+            <group value="wishlist"/>
+            <group value="configuration"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set wishlist/general/active 0" stepKey="disableWishlist"/>
+            <magentoCLI command="cache:clean config" stepKey="cleanCache"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set wishlist/general/active 1" stepKey="enableWishlist"/>
+            <magentoCLI command="cache:clean config" stepKey="cacheClean"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCustomerSidebarItemIsNotPresentActionGroup" stepKey="assertItemIsNotPresent">
+            <argument name="itemName" value="My Wish List"/>
+        </actionGroup>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPageAddToWishlistButtonIsNotPresentActionGroup" stepKey="assertButtonIsAbsent"/>
+    </test>
+</tests>

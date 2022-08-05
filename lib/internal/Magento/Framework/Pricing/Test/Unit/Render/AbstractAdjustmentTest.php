@@ -3,22 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Pricing\Test\Unit\Render;
 
-use \Magento\Framework\Pricing\Render\AbstractAdjustment;
+use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
+use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\Pricing\Render\AbstractAdjustment;
+use Magento\Framework\Pricing\Render\Amount;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Framework\Pricing\Render\AbstractAdjustment
  */
-class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
+class AbstractAdjustmentTest extends TestCase
 {
     /**
-     * @var AbstractAdjustment | \PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAdjustment|MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     protected $priceCurrency;
 
@@ -27,163 +38,186 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     protected $data;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->priceCurrency = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $this->data = ['argument_one' => 1];
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $constructorArgs = $objectManager->getConstructArguments(
-            \Magento\Framework\Pricing\Render\AbstractAdjustment::class,
+            AbstractAdjustment::class,
             [
                 'priceCurrency' => $this->priceCurrency,
                 'data' => $this->data
             ]
         );
-        $this->model = $this->getMockBuilder(\Magento\Framework\Pricing\Render\AbstractAdjustment::class)
-            ->setConstructorArgs($constructorArgs)
-            ->setMethods(['getData', 'setData', 'apply'])
+        $this->model = $this->getMockBuilder(AbstractAdjustment::class)->setConstructorArgs($constructorArgs)
+            ->onlyMethods(['getData', 'setData', 'apply'])
             ->getMockForAbstractClass();
     }
 
-    public function testConvertAndFormatCurrency()
+    /**
+     * @return void
+     */
+    public function testConvertAndFormatCurrency(): void
     {
         $amount = '100';
         $includeContainer = true;
-        $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION;
+        $precision = PriceCurrencyInterface::DEFAULT_PRECISION;
 
         $result = '100.0 grn';
 
         $this->priceCurrency->expects($this->once())
             ->method('convertAndFormat')
             ->with($amount, $includeContainer, $precision)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $this->assertEquals($result, $this->model->convertAndFormatCurrency($amount, $includeContainer, $precision));
     }
 
-    public function testRender()
+    /**
+     * @return void
+     */
+    public function testRender(): void
     {
-        $amountRender = $this->createMock(\Magento\Framework\Pricing\Render\Amount::class);
+        $amountRender = $this->createMock(Amount::class);
         $arguments = ['argument_two' => 2];
         $mergedArguments = ['argument_one' => 1, 'argument_two' => 2];
         $renderText = 'amount data';
 
-        $this->model->expects($this->at(0))
+        $this->model
             ->method('getData')
-            ->will($this->returnValue($this->data));
-        $this->model->expects($this->at(1))
-            ->method('setData')
-            ->with($mergedArguments);
-        $this->model->expects($this->at(2))
+            ->willReturn($this->data);
+        $this->model
             ->method('apply')
-            ->will($this->returnValue($renderText));
-        $this->model->expects($this->at(3))
+            ->willReturn($renderText);
+        $this->model
             ->method('setData')
-            ->with($this->data);
+            ->withConsecutive([$mergedArguments], [$this->data]);
 
         $result = $this->model->render($amountRender, $arguments);
         $this->assertEquals($renderText, $result);
     }
 
-    public function testGetAmountRender()
+    /**
+     * @return void
+     */
+    public function testGetAmountRender(): void
     {
-        $amountRender = $this->createMock(\Magento\Framework\Pricing\Render\Amount::class);
-        $this->model->expects($this->at(0))
+        $amountRender = $this->createMock(Amount::class);
+        $this->model
             ->method('getData')
-            ->will($this->returnValue($this->data));
+            ->willReturn($this->data);
         $this->model->render($amountRender);
         $this->assertEquals($amountRender, $this->model->getAmountRender());
     }
 
-    public function testGetPriceType()
+    /**
+     * @return void
+     */
+    public function testGetPriceType(): void
     {
-        $amountRender = $this->createMock(\Magento\Framework\Pricing\Render\Amount::class);
-        $price = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Price\PriceInterface::class);
-        $sealableItem = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
-        $priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
+        $amountRender = $this->createMock(Amount::class);
+        $price = $this->getMockForAbstractClass(PriceInterface::class);
+        $sealableItem = $this->getMockForAbstractClass(SaleableInterface::class);
+        $priceInfo = $this->createMock(Base::class);
         $priceCode = 'regular_price';
 
         $amountRender->expects($this->once())
             ->method('getSaleableItem')
-            ->will($this->returnValue($sealableItem));
+            ->willReturn($sealableItem);
         $sealableItem->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfo));
+            ->willReturn($priceInfo);
         $priceInfo->expects($this->once())
             ->method('getPrice')
             ->with($priceCode)
-            ->will($this->returnValue($price));
+            ->willReturn($price);
 
-        $this->model->expects($this->at(0))
+        $this->model
             ->method('getData')
-            ->will($this->returnValue($this->data));
+            ->willReturn($this->data);
         $this->model->render($amountRender);
         $this->assertEquals($price, $this->model->getPriceType($priceCode));
     }
 
-    public function testGetPrice()
+    /**
+     * @return void
+     */
+    public function testGetPrice(): void
     {
         $price = 100;
-        $amountRender = $this->createMock(\Magento\Framework\Pricing\Render\Amount::class);
+        $amountRender = $this->createMock(Amount::class);
         $amountRender->expects($this->once())
             ->method('getPrice')
             ->with()
-            ->will($this->returnValue($price));
+            ->willReturn($price);
 
-        $this->model->expects($this->at(0))
+        $this->model
             ->method('getData')
-            ->will($this->returnValue($this->data));
+            ->willReturn($this->data);
         $this->model->render($amountRender);
         $this->assertEquals($price, $this->model->getPrice());
     }
 
-    public function testGetSealableItem()
+    /**
+     * @return void
+     */
+    public function testGetSealableItem(): void
     {
-        $sealableItem = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
-        $amountRender = $this->createMock(\Magento\Framework\Pricing\Render\Amount::class);
+        $sealableItem = $this->getMockForAbstractClass(SaleableInterface::class);
+        $amountRender = $this->createMock(Amount::class);
         $amountRender->expects($this->once())
             ->method('getSaleableItem')
             ->with()
-            ->will($this->returnValue($sealableItem));
+            ->willReturn($sealableItem);
 
-        $this->model->expects($this->at(0))
+        $this->model
             ->method('getData')
-            ->will($this->returnValue($this->data));
+            ->willReturn($this->data);
         $this->model->render($amountRender);
         $this->assertEquals($sealableItem, $this->model->getSaleableItem());
     }
 
-    public function testGetAdjustment()
+    /**
+     * @return void
+     */
+    public function testGetAdjustment(): void
     {
-        $amountRender = $this->createMock(\Magento\Framework\Pricing\Render\Amount::class);
-        $adjustment = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class);
-        $sealableItem = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
-        $priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
+        $amountRender = $this->createMock(Amount::class);
+        $adjustment = $this->getMockForAbstractClass(AdjustmentInterface::class);
+        $sealableItem = $this->getMockForAbstractClass(SaleableInterface::class);
+        $priceInfo = $this->createMock(Base::class);
         $adjustmentCode = 'tax';
 
         $amountRender->expects($this->once())
             ->method('getSaleableItem')
-            ->will($this->returnValue($sealableItem));
+            ->willReturn($sealableItem);
         $sealableItem->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfo));
+            ->willReturn($priceInfo);
         $priceInfo->expects($this->once())
             ->method('getAdjustment')
             ->with($adjustmentCode)
-            ->will($this->returnValue($adjustment));
+            ->willReturn($adjustment);
 
-        $this->model->expects($this->at(0))
+        $this->model
             ->method('getData')
-            ->will($this->returnValue($this->data));
+            ->willReturn($this->data);
         $this->model->expects($this->once())
             ->method('getAdjustmentCode')
-            ->will($this->returnValue($adjustmentCode));
+            ->willReturn($adjustmentCode);
         $this->model->render($amountRender);
         $this->assertEquals($adjustment, $this->model->getAdjustment());
     }
 
-    public function testFormatCurrency()
+    /**
+     * @return void
+     */
+    public function testFormatCurrency(): void
     {
         $amount = 5.3456;
         $includeContainer = false;
@@ -194,7 +228,7 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrency->expects($this->once())
             ->method('format')
             ->with($amount, $includeContainer, $precision)
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $result = $this->model->formatCurrency($amount, $includeContainer, $precision);
         $this->assertEquals($expected, $result, 'formatCurrent returned unexpected result');

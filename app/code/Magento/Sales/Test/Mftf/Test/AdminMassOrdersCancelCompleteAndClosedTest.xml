@@ -8,18 +8,22 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMassOrdersCancelCompleteAndClosedTest">
+    <test name="AdminMassOrdersCancelCompleteAndClosedTest" deprecated="Use AdminMassOrdersCancelClosedAndCompleteTest instead">
         <annotations>
             <stories value="Mass Update Orders"/>
-            <title value="Mass cancel orders in status  Complete, Closed"/>
+            <title value="DEPRECATED. Mass cancel orders in status  Complete, Closed"/>
             <description value="Try to cancel orders in status Complete, Closed"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-16183"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminMassOrdersCancelClosedAndCompleteTest instead</issueId>
+            </skip>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
             <!-- Create Data -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -33,7 +37,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create first order -->
@@ -41,8 +45,12 @@
             <argument name="product" value="$$createProduct$$"/>
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getFirstOrderId"/>
-        <assertNotEmpty actual="$getFirstOrderId" stepKey="assertOrderIdIsNotEmpty" after="getFirstOrderId"/>
+        <comment userInput="BIC workaround" stepKey="getFirstOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber1"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId1"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
+            <actualResult type="const">$orderNumber1</actualResult>
+        </assertNotEmpty>
 
         <!-- Create Shipment for first Order -->
         <actionGroup ref="AdminCreateInvoiceAndShipmentActionGroup" stepKey="createShipmentForFirstOrder"/>
@@ -52,40 +60,42 @@
             <argument name="product" value="$$createProduct$$"/>
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getSecondOrderId"/>
-        <assertNotEmpty actual="$getSecondOrderId" stepKey="assertSecondOrderIdIsNotEmpty" after="getSecondOrderId"/>
+        <comment userInput="BIC workaround" stepKey="getSecondOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber2"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId2"/>
+        <assertNotEmpty stepKey="assertSecondOrderIdIsNotEmpty">
+            <actualResult type="const">$orderNumber2</actualResult>
+        </assertNotEmpty>
 
         <!-- Create CreditMemo for second Order -->
         <actionGroup ref="AdminCreateInvoiceAndCreditMemoActionGroup" stepKey="createCreditMemo"/>
 
         <!-- Navigate to backend: Go to Sales > Orders -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrderPage"/>
-        <waitForPageLoad stepKey="waitForOrderPageLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
 
         <!-- Select Mass Action according to dataset: Cancel -->
         <actionGroup ref="AdminTwoOrderActionOnGridActionGroup" stepKey="massActionCancel">
             <argument name="action" value="Cancel"/>
-            <argument name="orderId" value="{$getFirstOrderId}"/>
-            <argument name="secondOrderId" value="{$getSecondOrderId}"/>
+            <argument name="orderId" value="{$orderNumber1}"/>
+            <argument name="secondOrderId" value="{$orderNumber2}"/>
         </actionGroup>
         <see userInput="You cannot cancel the order(s)." stepKey="assertOrderCancelMassActionFailMessage"/>
 
         <!--Assert first order in orders grid -->
         <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeFirstOrder">
-            <argument name="orderId" value="{$getFirstOrderId}"/>
+            <argument name="orderId" value="{$orderNumber1}"/>
             <argument name="orderStatus" value="Complete"/>
         </actionGroup>
-        <see userInput="{$getFirstOrderId}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertFirstOrderID"/>
+        <see userInput="{$orderNumber1}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertFirstOrderID"/>
         <see userInput="Complete" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertFirstOrderStatus"/>
 
         <!--Assert second order in orders grid -->
         <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeSecondOrder">
-            <argument name="orderId" value="{$getSecondOrderId}"/>
+            <argument name="orderId" value="{$orderNumber2}"/>
             <argument name="orderStatus" value="Closed"/>
         </actionGroup>
-        <see userInput="{$getSecondOrderId}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertSecondOrderID"/>
+        <see userInput="{$orderNumber2}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertSecondOrderID"/>
         <see userInput="Closed" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertSecondStatus"/>
     </test>
 </tests>

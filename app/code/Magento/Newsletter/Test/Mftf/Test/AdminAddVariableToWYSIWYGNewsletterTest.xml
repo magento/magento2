@@ -18,15 +18,15 @@
             <severity value="AVERAGE"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
         </before>
         <!--Create Custom Variable-->
         <actionGroup ref="CreateCustomVariableActionGroup" stepKey="createCustomVariable" />
         <!--Setup Store information-->
         <waitForPageLoad stepKey="wait" />
-        <amOnPage url="/admin/admin/system_config/" stepKey="goToConfigStoreInformation" />
+        <amOnPage url="{{AdminConfigPage.url}}" stepKey="goToConfigStoreInformation" />
         <waitForPageLoad stepKey="waitForPageLoad1" />
         <conditionalClick selector="{{StoreConfigSection.StoreInformation}}" dependentSelector="{{StoreConfigSection.CheckIfTabExpand}}" stepKey="checkIfTabOpen" visible="true"/>
         <fillField selector="{{StoreConfigSection.City}}" userInput="{{_defaultVariable.city}}" stepKey="fillCity" />
@@ -38,13 +38,13 @@
         <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{_defaultNewsletter.subject}}" stepKey="fillTemplateSubject" />
         <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />
         <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
-        <conditionalClick selector="{{NewsletterWYSIWYGSection.ShowHideBtn}}" dependentSelector="{{NewsletterWYSIWYGSection.TinyMCE4}}" visible="false" stepKey="toggleEditorIfHidden"/>
+        <conditionalClick selector="{{TinyMCESection.ShowHideBtn}}" dependentSelector="{{TinyMCESection.TinyMCE}}" visible="false" stepKey="toggleEditorIfHidden"/>
         <waitForPageLoad time="10" stepKey="waitForPageLoad21"/>
-        <conditionalClick selector="#toggletext" dependentSelector=".mce-tinymce" visible="false" stepKey="clickBtnIfTinyMCEHidden"/>
-        <waitForElementVisible selector="{{NewsletterWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <conditionalClick selector="#toggletext" dependentSelector=".tox-tinymce" visible="false" stepKey="clickBtnIfTinyMCEHidden"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE"/>
         <executeJS function="tinyMCE.get('text').setContent('Hello World From Newsletter Template!');" stepKey="executeJSFillContent"/>
-        <seeElement selector="{{NewsletterWYSIWYGSection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />
-        <click selector="{{NewsletterWYSIWYGSection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon1" />
+        <seeElement selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />
+        <click selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon1" />
         <waitForText userInput="Insert Variable" stepKey="waitForSlideOutOpen"/>
         <waitForLoadingMaskToDisappear stepKey="waitForPageLoad3"/>
         <!--see Insert Variable button disabled-->
@@ -61,7 +61,7 @@
         <see selector="{{VariableSection.InsertVariableBtnEnabled}}" userInput="Insert Variable" stepKey="seeInsertVarialeEnabled" />
         <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save1" />
         <waitForPageLoad stepKey="waitForPageLoad10" />
-        <click selector="{{NewsletterWYSIWYGSection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon2" />
+        <click selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon2" />
         <waitForPageLoad stepKey="waitForPageLoad4"/>
         <!--see custom variable-->
         <see userInput="{{customVariable.code}}"  stepKey="seeCustomVariable"/>
@@ -76,12 +76,12 @@
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save2" />
         <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideOutClose" />
-        <click selector="{{NewsletterWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
-        <waitForElementVisible selector="{{NewsletterWYSIWYGSection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
-        <seeElement selector="{{NewsletterWYSIWYGSection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
+        <waitForElementVisible selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
+        <seeElement selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
         <click selector="{{BasicFieldNewsletterSection.save}}" stepKey="clickSaveTemplate"/>
         <waitForPageLoad stepKey="waitForPageLoad9" />
-        <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview1" />
+        <click selector="{{AdminNewsletterGridMainActionsSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview1" />
         <switchToWindow userInput="action_window" stepKey="switchToWindow1"/>
         <actionGroup ref="SwitchToPreviewIframeActionGroup" stepKey="switchToIframe"/>
         <!--see Default Variable on Storefront-->
@@ -92,15 +92,15 @@
         <actionGroup ref="DeleteCustomVariableActionGroup" stepKey="deleteCustomVariable" />
         <!--Refresh Storefront-->
         <amOnPage url="{{NewsletterTemplateGrid.url}}" stepKey="amOnTemplateGrid" />
-        <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview2" />
+        <click selector="{{AdminNewsletterGridMainActionsSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview2" />
         <switchToWindow userInput="action_window" stepKey="switchToWindow2"/>
         <actionGroup ref="SwitchToPreviewIframeActionGroup" stepKey="switchToIframeAfterVariableDelete"/>
         <!--see custom variable blank-->
         <dontSee userInput="{{customVariable.html}}" stepKey="dontSeeCustomVariableName" />
         <closeTab stepKey="closeTab"/>
         <after>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

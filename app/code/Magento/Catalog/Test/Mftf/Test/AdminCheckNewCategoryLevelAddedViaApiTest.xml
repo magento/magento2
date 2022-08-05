@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckNewCategoryLevelAddedViaApiTest">
+        <annotations>
+            <stories value="Add parent and child categories via API"/>
+            <title value="Add parent and child categories via API"/>
+            <description value="Login as admin, create parent and child categories via API.
+                Check category level for child category entity based on parent level.
+                Check category tree: parent element has child element. "/>
+            <group value="catalog"/>
+            <severity value="MAJOR"/>
+            <group value="pr_exclude"/>
+            <group value="cloud_smoke"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <createData entity="ApiCategoryWithChildren" stepKey="createCategoryWithChildrenBlank"/>
+            <createData entity="ApiSubCategoryWithLevelZero" stepKey="createSubCategoryWithLevelZero">
+                <requiredEntity createDataKey="createCategoryWithChildrenBlank"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategoryWithChildrenBlank" stepKey="deleteCategoryWithChildrenBlank"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AssertAdminCategoryLevelByParentCategoryLevelActionGroup" stepKey="assertCategoryLevelByParentCategory">
+            <argument name="parentCategoryLevel" value="$createCategoryWithChildrenBlank.level$"/>
+            <argument name="categoryLevel" value="$createSubCategoryWithLevelZero.level$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandCategoryTree"/>
+        <actionGroup ref="AdminAssertParentChildCategoryTreeElementsActionGroup" stepKey="assertParentChildCategoryTreeElements">
+            <argument name="parentCategoryName" value="$createCategoryWithChildrenBlank.name$"/>
+            <argument name="childCategoryName" value="$createSubCategoryWithLevelZero.name$"/>
+        </actionGroup>
+    </test>
+</tests>

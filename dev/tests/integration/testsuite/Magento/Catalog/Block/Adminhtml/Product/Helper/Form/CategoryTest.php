@@ -32,6 +32,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $form = $formFactory->create();
         $block->setForm($form);
 
-        $this->assertRegExp('/<button[^>]*New\sCategory[^>]*>/', $block->getAfterElementHtml());
+        $this->assertMatchesRegularExpression('/<button[^>]*New\sCategory[^>]*>/', $block->getAfterElementHtml());
     }
 }

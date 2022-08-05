@@ -20,33 +20,36 @@
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteVirtualProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteVirtualProduct">
                 <argument name="sku" value="{{virtualProductCustomImportOptions.sku}}"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="resetOrderFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetOrderFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
-        <waitForPageLoad stepKey="waitForProductToggleToSelectProduct"/>
-        <click selector="{{AdminProductGridActionSection.addVirtualProduct}}" stepKey="clickVirtualProduct"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickAddProductToggle"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForProductToggleToSelectProduct"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickVirtualProduct">
+            <argument name="productType" value="virtual"/>
+        </actionGroup>
 
         <!-- Create virtual product with custom options suite and import options -->
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{virtualProductCustomImportOptions.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{virtualProductCustomImportOptions.sku}}" stepKey="fillProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{virtualProductCustomImportOptions.price}}" stepKey="fillProductPrice"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductCustomImportOptions.quantity}}" stepKey="fillProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQuantity">
+            <argument name="productQty" value="{{virtualProductCustomImportOptions.quantity}}"/>
+        </actionGroup>
         <click selector="{{AdminProductFormSection.productStockStatus}}" stepKey="clickProductStockStatus"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{virtualProductCustomImportOptions.urlKey}}" stepKey="fillUrlKey"/>
         <click selector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" stepKey="clickAdminProductCustomizableOption"/>
@@ -112,27 +115,34 @@
         <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_price_type}}" stepKey="selectOptionPriceTypeForFourthDataSetSecondRow"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_sku}}" stepKey="fillOptionSkuForFourthDataSetSecondRow"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <magentoCron groups="index" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Verify customer see created virtual product with custom options suite and import options(from above step) on storefront page and is searchable by sku -->
         <amOnPage url="{{StorefrontProductPage.url(virtualProductCustomImportOptions.urlKey)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{virtualProductCustomImportOptions.sku}}" stepKey="fillVirtualProductName"/>
-        <waitForPageLoad stepKey="waitForSearchTextBox"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
-        <see selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{virtualProductCustomImportOptions.name}}" stepKey="seeVirtualProductName"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillVirtualProductName">
+            <argument name="phrase" value="{{virtualProductCustomImportOptions.sku}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeVirtualProductName">
+            <argument name="productName" value="{{virtualProductCustomImportOptions.name}}"/>
+        </actionGroup>
         <click selector="{{StorefrontQuickSearchResultsSection.productLink}}" stepKey="openSearchedProduct"/>
 
         <!-- Verify we see created virtual product with custom options suite and import options on the storefront page -->
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{virtualProductCustomImportOptions.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{virtualProductCustomImportOptions.sku}}" stepKey="seeVirtualProductSku"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeVirtualProductNameOnStoreFrontPage">
+            <argument name="value" value="{{virtualProductCustomImportOptions.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeVirtualProductSku">
+            <argument name="productSku" value="{{virtualProductCustomImportOptions.sku}}"/>
+        </actionGroup>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
         <assertEquals stepKey="assertStockAvailableOnProductPage">
             <expectedResult type="string">{{virtualProductCustomImportOptions.storefrontStatus}}</expectedResult>
@@ -140,7 +150,7 @@
         </assertEquals>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="productPriceAmount"/>
         <assertEquals stepKey="assertOldPriceTextOnProductPage">
-            <expectedResult type="string">${{virtualProductCustomImportOptions.price}}</expectedResult>
+            <expectedResult type="string">${{virtualProductCustomImportOptions.formattedPrice}}</expectedResult>
             <actualResult type="variable">productPriceAmount</actualResult>
         </assertEquals>
 

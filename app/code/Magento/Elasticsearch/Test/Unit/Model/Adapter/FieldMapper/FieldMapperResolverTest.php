@@ -3,13 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FieldMapperResolverTest extends \PHPUnit\Framework\TestCase
+class FieldMapperResolverTest extends TestCase
 {
     /**
      * @var FieldMapperResolver
@@ -17,7 +22,7 @@ class FieldMapperResolverTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
@@ -27,7 +32,7 @@ class FieldMapperResolverTest extends \PHPUnit\Framework\TestCase
     private $fieldMappers;
 
     /**
-     * @var FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldMapperInterface|MockObject
      */
     private $fieldMapperEntity;
 
@@ -36,13 +41,13 @@ class FieldMapperResolverTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->fieldMapperEntity = $this->getMockBuilder(
-            \Magento\Elasticsearch\Model\Adapter\FieldMapperInterface::class
+            FieldMapperInterface::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -51,7 +56,7 @@ class FieldMapperResolverTest extends \PHPUnit\Framework\TestCase
         ];
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver::class,
+            FieldMapperResolver::class,
             [
                 'objectManager' => $this->objectManagerMock,
                 'fieldMappers' => $this->fieldMappers
@@ -62,30 +67,33 @@ class FieldMapperResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * Test getFieldName() with Exception
      * @return void
-     * @expectedException \Exception
      */
     public function testGetFieldNameEmpty()
     {
+        $this->expectException(\Exception::class);
+
         $this->model->getFieldName('attribute', ['entityType' => '']);
     }
 
     /**
      * Test getFieldName() with Exception
      * @return void
-     * @expectedException \LogicException
      */
     public function testGetFieldNameWrongType()
     {
+        $this->expectException(\LogicException::class);
+
         $this->model->getFieldName('attribute', ['entityType' => 'error']);
     }
 
     /**
      * Test getFieldName() with Exception
      * @return void
-     * @expectedException \InvalidArgumentException
      */
     public function testGetFieldNameFailure()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->willReturn(false);

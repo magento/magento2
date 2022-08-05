@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ChangeToDefaultTaxConfigurationUIActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Tax'. Set the Tax Configuration Settings to the Default values. Clicks on Save. Validates that the Success Message is present and correct.</description>
+        </annotations>
+
+        <!-- navigate to the tax configuration page -->
+        <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToAdminTaxPage"/>
+        <waitForPageLoad stepKey="waitForTaxConfigLoad"/>
+
+        <!-- change the default state to none -->
+        <!-- conditionalClick twice to fix some flaky behavior -->
+        <conditionalClick stepKey="clickCalculationSettings" selector="{{AdminConfigureTaxSection.defaultDestination}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDefaultState}}" visible="false"/>
+        <conditionalClick stepKey="clickCalculationSettingsAgain" selector="{{AdminConfigureTaxSection.defaultDestination}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDefaultState}}" visible="false"/>
+        <checkOption stepKey="clickDefaultState" selector="{{AdminConfigureTaxSection.systemValueDefaultState}}"/>
+        <selectOption stepKey="selectDefaultState" selector="{{AdminConfigureTaxSection.dropdownDefaultState}}" userInput="California"/>
+        <fillField stepKey="fillDefaultPostCode" selector="{{AdminConfigureTaxSection.defaultPostCode}}" userInput=""/>
+
+        <!-- change the options for shopping cart display to not show tax -->
+        <!-- conditionalClick twice to fix some flaky behavior -->
+        <conditionalClick stepKey="clickShoppingCartDisplaySettings" selector="{{AdminConfigureTaxSection.shoppingCartDisplay}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalCart}}" visible="false"/>
+        <conditionalClick stepKey="clickShoppingCartDisplaySettingsAgain" selector="{{AdminConfigureTaxSection.shoppingCartDisplay}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalCart}}" visible="false"/>
+        <checkOption stepKey="clickTaxTotalCart" selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalCart}}"/>
+        <selectOption stepKey="selectTaxTotalCart" selector="{{AdminConfigureTaxSection.dropdownIncludeTaxTotalCart}}" userInput="Yes"/>
+        <checkOption stepKey="clickDisplayTaxSummaryCart" selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummaryCart}}"/>
+        <selectOption stepKey="selectDisplayTaxSummaryCart" selector="{{AdminConfigureTaxSection.dropdownDisplayTaxSummaryCart}}" userInput="Yes"/>
+        <checkOption stepKey="clickDisplayZeroTaxCart" selector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxCart}}"/>
+        <selectOption stepKey="selectDisplayZeroTaxCart" selector="{{AdminConfigureTaxSection.dropdownDisplayZeroTaxCart}}" userInput="Yes"/>
+
+        <!-- change the options for orders, invoices, credit memos display to not show tax -->
+        <!-- conditionalClick twice to fix some flaky behavior -->
+        <conditionalClick stepKey="clickOrdersInvoicesCreditSales" selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}" visible="false"/>
+        <conditionalClick stepKey="clickOrdersInvoicesCreditSalesAgain" selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}" visible="false"/>
+        <checkOption stepKey="clickTaxTotalSales" selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}"/>
+        <selectOption stepKey="selectTaxTotalSales" selector="{{AdminConfigureTaxSection.dropdownIncludeTaxTotalSales}}" userInput="Yes"/>
+        <checkOption stepKey="clickDisplayTaxSummarySales" selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummarySales}}"/>
+        <selectOption stepKey="selectDisplayTaxSummarySales" selector="{{AdminConfigureTaxSection.dropdownDisplayTaxSummarySales}}" userInput="Yes"/>
+        <checkOption stepKey="clickDisplayZeroTaxSales" selector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxSales}}"/>
+        <selectOption stepKey="selectDisplayZeroTaxSales" selector="{{AdminConfigureTaxSection.dropdownDisplayZeroTaxSales}}" userInput="Yes"/>
+
+        <!-- Save the settings -->
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click stepKey="saveTaxOptions" selector="{{AdminCategoryMainActionsSection.SaveButton}}"/>
+        <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the configuration."/>
+    </actionGroup>
+</actionGroups>

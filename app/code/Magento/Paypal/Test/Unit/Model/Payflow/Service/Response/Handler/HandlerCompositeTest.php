@@ -3,16 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Handler;
 
+use Magento\Framework\DataObject;
+use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerComposite;
+use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
+use PHPUnit\Framework\TestCase;
 
-class HandlerCompositeTest extends \PHPUnit\Framework\TestCase
+class HandlerCompositeTest extends TestCase
 {
     public function testConstructorSuccess()
     {
         $handler = $this->getMockBuilder(
-            \Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface::class
+            HandlerInterface::class
         )->getMock();
 
         $result = new HandlerComposite(
@@ -35,14 +41,14 @@ class HandlerCompositeTest extends \PHPUnit\Framework\TestCase
 
     public function testHandle()
     {
-        $paymentMock = $this->getMockBuilder(\Magento\Payment\Model\InfoInterface::class)
+        $paymentMock = $this->getMockBuilder(InfoInterface::class)
             ->getMock();
-        $responseMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $responseMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $handler = $this->getMockBuilder(
-            \Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface::class
+            HandlerInterface::class
         )->getMock();
         $handler->expects($this->once())
             ->method('handle')

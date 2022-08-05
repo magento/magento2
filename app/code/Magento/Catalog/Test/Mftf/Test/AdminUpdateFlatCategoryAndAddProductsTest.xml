@@ -16,36 +16,35 @@
             <severity value="CRITICAL"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <!-- Create Simple Product -->
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <!-- Create category -->
             <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct"/>
             <!-- Create First StoreView  -->
-            <actionGroup ref="CreateStoreView" stepKey="createCustomStoreViewEn">
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewEn">
                 <argument name="storeView" value="customStoreEN"/>
             </actionGroup>
             <!-- Create Second StoreView -->
-            <actionGroup ref="CreateStoreView" stepKey="createCustomStoreViewFr">
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewFr">
                 <argument name="storeView" value="customStoreFR"/>
             </actionGroup>
-            <!--Run full reindex and clear caches -->
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
             <!--Enable Flat Catalog Category -->
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1"/>
             <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
             <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="schedule" />
-            <!-- Run cron twice -->
-            <magentoCLI command="cron:run" stepKey="runCron1"/>
-            <magentoCLI command="cron:run" stepKey="runCron2"/>
+            <!-- Run cron -->
+            <magentoCron stepKey="runAllCronJobs"/>
         </before>
         <after>
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0 "/>
             <magentoCLI stepKey="setIndexersMode" command="indexer:set-mode" arguments="realtime" />
-            <magentoCLI stepKey="indexerReindex" command="indexer:reindex" />
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="indexerReindex"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
@@ -54,50 +53,66 @@
             </actionGroup>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <!-- Select Created Category-->
-        <magentoCLI command="indexer:reindex" stepKey="reindexBeforeFlow"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="selectCreatedCategory"/>
-        <waitForPageLoad stepKey="waitForTheCategoryPageToLoaded"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexBeforeFlow"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCreatedCategory">
+            <argument name="category" value="SimpleSubCategory"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForTheCategoryPageToLoaded"/>
         <!--Add Products in Category-->
-        <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
-        <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
-        <scrollToTopOfPage stepKey="scrollOnTopOfPage"/>
-        <conditionalClick selector="{{CatalogProductsSection.resetFilter}}" dependentSelector="{{CatalogProductsSection.resetFilter}}" visible="true" stepKey="clickOnResetFilter"/>
-        <waitForPageLoad stepKey="waitForProductsToLoad"/>
-        <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="$$createSimpleProduct.name$$"  stepKey="selectProduct"/>
-        <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
-        <waitForPageLoad stepKey="waitFroPageToLoad1"/>
-        <scrollTo  selector="{{AdminCategoryContentSection.productTableRow}}"  stepKey="scrollToTableRow"/>
-        <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
-        <!--Open Index Management Page and verify flat categoryIndex status-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
-        <!--Open Index Management Page -->
-        <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="openIndexManagementPage"/>
-        <waitForPageLoad stepKey="waitForIndexPageToLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToProductInCategory"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnProductInCategory"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollOnTopOfPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnResetFilter"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductsToLoad"/>
+        <actionGroup ref="AdminAddProductToCategoryActionGroup" stepKey="selectProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitFroPageToLoad1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToTableRow"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectProductFromTableRow"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
+            <argument name="message" value="You saved the category."/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="openIndexManagementPage"/>
         <see stepKey="seeCategoryIndexStatus"  selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" userInput="Ready"/>
         <!--Verify Product In Store Front-->
-        <amOnPage url="$$createSimpleProduct.name$$.html" stepKey="goToStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToStorefrontPage">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToBeLoaded"/>
         <!--Verify product and category is visible in First Store View -->
-        <click stepKey="selectStoreSwitcher" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>
-        <click stepKey="selectFirstStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreEN.name)}}"/>
-        <waitForPageLoad stepKey="waitForFirstStoreView"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category.name$$)}}" stepKey="seeCategoryOnNavigation"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="assertProductName"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectStoreSwitcher"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="selectFirstStoreView">
+            <argument name="storeView" value="customStoreEN"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForFirstStoreView"/>
+        <!--<seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category.name$$)}}" stepKey="seeCategoryOnNavigation"/>-->
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCategoryOnNavigation">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+        <!--<see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="assertProductName"/>-->
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="assertProductName">
+            <argument name="productName" value="{{defaultSimpleProduct.name}}"/>
+        </actionGroup>
         <!--Verify product and category is visible in Second Store View -->
-        <click stepKey="selectStoreSwitcher1" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>
-        <click stepKey="selectSecondStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreFR.name)}}"/>
-        <waitForPageLoad stepKey="waitForSecondStoreView"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category.name$$)}}" stepKey="seeCategoryOnNavigation1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="seeProductName"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectStoreSwitcher1"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="selectSecondStoreView">
+            <argument name="storeView" value="customStoreFR"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSecondStoreView"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCategoryOnNavigation1">
+            <argument name="categoryName" value="$$category.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeProductName">
+            <argument name="productName" value="{{defaultSimpleProduct.name}}"/>
+        </actionGroup>
     </test>
 </tests>

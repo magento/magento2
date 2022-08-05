@@ -49,7 +49,8 @@ class ExtractQuoteAddressData
                 ],
                 'region' => [
                     'code' => $address->getRegionCode(),
-                    'label' => $address->getRegion()
+                    'label' => $address->getRegion(),
+                    'region_id'=> $address->getRegionId()
                 ],
                 'street' => $address->getStreet(),
                 'items_weight' => $address->getWeight(),

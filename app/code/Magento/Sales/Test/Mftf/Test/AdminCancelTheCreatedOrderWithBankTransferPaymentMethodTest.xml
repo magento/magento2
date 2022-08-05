@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Enable Bank Transfer payment -->
             <magentoCLI command="config:set {{EnablePaymentBankTransferConfigData.path}} {{EnablePaymentBankTransferConfigData.value}}" stepKey="enableBankTransferPayment"/>
@@ -40,16 +40,16 @@
             <magentoCLI command="config:set {{DisablePaymentBankTransferConfigData.path}} {{DisablePaymentBankTransferConfigData.value}}" stepKey="disableBankTransferPayment"/>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create new customer order-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
 
         <!--Add Simple product to order-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToTheOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 
@@ -59,16 +59,15 @@
         <!-- Select bank Transfer payment method -->
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
         <conditionalClick selector="{{AdminOrderFormPaymentSection.bankTransferOption}}" dependentSelector="{{AdminOrderFormPaymentSection.bankTransferOption}}" visible="true" stepKey="checkBankTransferOption"/>
-
-        <!-- Submit order -->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
 
         <!-- Verify order information -->
-        <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+        <comment userInput="BIC workaround" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
 
         <!-- Cancel the Order -->
-        <actionGroup ref="cancelPendingOrder" stepKey="cancelPendingOrder"/>
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
 
         <!--Log in to Storefront as Customer  -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
@@ -78,6 +77,9 @@
         <!-- Assert OrderId and status in frontend order grid -->
         <click selector="{{StorefrontCustomerSidebarSection.sidebarCurrentTab('My Orders')}}" stepKey="clickOnMyOrders"/>
         <waitForPageLoad stepKey="waitForOrderDetailsToLoad"/>
-        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderStatusInGrid('$orderId', 'Canceled')}}" stepKey="seeOrderStatusInGrid"/>
+        <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
+            <argument name="orderId" value="$orderNumber"/>
+            <argument name="status" value="Canceled"/>
+        </actionGroup>
     </test>
 </tests>

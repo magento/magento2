@@ -4,21 +4,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Newsletter\Controller\Subscriber;
 
 use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Validator\EmailAddress as EmailValidator;
 use Magento\Newsletter\Controller\Subscriber as SubscriberController;
 use Magento\Newsletter\Model\Subscriber;
+use Magento\Newsletter\Model\SubscriptionManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
@@ -41,6 +44,16 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     private $emailValidator;
 
     /**
+     * @var SubscriptionManagerInterface
+     */
+    private $subscriptionManager;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
      * Initialize dependencies.
      *
      * @param Context $context
@@ -49,7 +62,9 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      * @param StoreManagerInterface $storeManager
      * @param CustomerUrl $customerUrl
      * @param CustomerAccountManagement $customerAccountManagement
-     * @param EmailValidator $emailValidator
+     * @param SubscriptionManagerInterface $subscriptionManager
+     * @param EmailValidator|null $emailValidator
+     * @param CustomerRepositoryInterface|null $customerRepository
      */
     public function __construct(
         Context $context,
@@ -58,10 +73,15 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
         StoreManagerInterface $storeManager,
         CustomerUrl $customerUrl,
         CustomerAccountManagement $customerAccountManagement,
-        EmailValidator $emailValidator = null
+        SubscriptionManagerInterface $subscriptionManager,
+        EmailValidator $emailValidator = null,
+        CustomerRepositoryInterface $customerRepository = null
     ) {
         $this->customerAccountManagement = $customerAccountManagement;
+        $this->subscriptionManager = $subscriptionManager;
         $this->emailValidator = $emailValidator ?: ObjectManager::getInstance()->get(EmailValidator::class);
+        $this->customerRepository = $customerRepository ?: ObjectManager::getInstance()
+            ->get(CustomerRepositoryInterface::class);
         parent::__construct(
             $context,
             $subscriberFactory,
@@ -132,7 +152,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     /**
      * New subscription action
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
@@ -144,27 +164,55 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
                 $this->validateGuestSubscription();
                 $this->validateEmailAvailable($email);
 
-                $subscriber = $this->_subscriberFactory->create()->loadByEmail($email);
+                $websiteId = (int)$this->_storeManager->getStore()->getWebsiteId();
+                /** @var Subscriber $subscriber */
+                $subscriber = $this->_subscriberFactory->create()->loadBySubscriberEmail($email, $websiteId);
                 if ($subscriber->getId()
-                    && (int) $subscriber->getSubscriberStatus() === Subscriber::STATUS_SUBSCRIBED
-                ) {
+                    && (int)$subscriber->getSubscriberStatus() === Subscriber::STATUS_SUBSCRIBED) {
                     throw new LocalizedException(
                         __('This email address is already subscribed.')
                     );
                 }
 
-                $status = (int) $this->_subscriberFactory->create()->subscribe($email);
-                $this->messageManager->addSuccessMessage($this->getSuccessMessage($status));
+                $storeId = (int)$this->_storeManager->getStore()->getId();
+                $currentCustomerId = $this->getCustomerId($email, $websiteId);
+
+                $subscriber = $currentCustomerId
+                    ? $this->subscriptionManager->subscribeCustomer($currentCustomerId, $storeId)
+                    : $this->subscriptionManager->subscribe($email, $storeId);
+                $message = $this->getSuccessMessage((int)$subscriber->getSubscriberStatus());
+                $this->messageManager->addSuccessMessage($message);
             } catch (LocalizedException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->messageManager->addComplexErrorMessage(
+                    'localizedSubscriptionErrorMessage',
+                    ['message' => $e->getMessage()]
+                );
             } catch (\Exception $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong with the subscription.'));
             }
         }
-        /** @var \Magento\Framework\Controller\Result\Redirect $redirect */
-        $redirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
+        /** @var Redirect $redirect */
+        $redirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $redirectUrl = $this->_redirect->getRedirectUrl();
         return $redirect->setUrl($redirectUrl);
+    }
+
+    /**
+     * Check if customer with provided email exists and return its id
+     *
+     * @param string $email
+     * @param int $websiteId
+     * @return int|null
+     */
+    private function getCustomerId(string $email, int $websiteId): ?int
+    {
+        try {
+            $customer = $this->customerRepository->get($email, $websiteId);
+            return (int)$customer->getId();
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            return null;
+        }
     }
 
     /**

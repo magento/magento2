@@ -3,38 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\CustomerData;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\CustomerData\LastOrderedItems;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Config;
+use Magento\Sales\Model\Order\Item;
+use Magento\Sales\Model\ResourceModel\Order\Collection;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LastOrderedItemsTest extends \PHPUnit\Framework\TestCase
+class LastOrderedItemsTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $orderCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $orderConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $stockRegistryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $storeManagerMock;
 
@@ -44,52 +62,55 @@ class LastOrderedItemsTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $orderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $productRepositoryMock;
 
     /**
-     * @var \Magento\Sales\CustomerData\LastOrderedItems
+     * @var LastOrderedItems
      */
     private $section;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->orderCollectionFactoryMock =
-            $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\CollectionFactory::class)
+            $this->getMockBuilder(CollectionFactory::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->getMock();
-        $this->orderConfigMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Config::class)
+        $this->orderConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+        $this->customerSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stockRegistryMock = $this->getMockBuilder(\Magento\CatalogInventory\Api\StockRegistryInterface::class)
+        $this->stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)
             ->getMockForAbstractClass();
-        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
-        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productRepositoryMock = $this->getMockBuilder(\Magento\Catalog\Api\ProductRepositoryInterface::class)
+        $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->getMockForAbstractClass();
-        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMockForAbstractClass();
 
-        $this->section = new \Magento\Sales\CustomerData\LastOrderedItems(
+        $this->section = new LastOrderedItems(
             $this->orderCollectionFactoryMock,
             $this->orderConfigMock,
             $this->customerSessionMock,
@@ -100,7 +121,10 @@ class LastOrderedItemsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetSectionData()
+    /**
+     * @return void
+     */
+    public function testGetSectionData(): void
     {
         $storeId = 1;
         $websiteId = 4;
@@ -108,39 +132,40 @@ class LastOrderedItemsTest extends \PHPUnit\Framework\TestCase
             'id' => 1,
             'name' => 'Product Name 1',
             'url' => 'http://example.com',
-            'is_saleable' => true,
+            'is_saleable' => true
         ];
         $expectedItem2 = [
             'id' => 2,
             'name' => 'Product Name 2',
             'url' => null,
-            'is_saleable' => true,
+            'is_saleable' => true
         ];
         $productIdVisible = 1;
         $productIdNotVisible = 2;
-        $stockItemMock = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockItemInterface::class)
+        $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
             ->getMockForAbstractClass();
-        $itemWithVisibleProduct = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $itemWithVisibleProduct = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $itemWithNotVisibleProduct = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $itemWithNotVisibleProduct = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productVisible = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productVisible = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productNotVisible = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productNotVisible = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
         $items = [$itemWithVisibleProduct, $itemWithNotVisibleProduct];
         $this->getLastOrderMock();
-        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMockForAbstractClass();
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->getMockForAbstractClass();
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->any())->method('getWebsiteId')->willReturn($websiteId);
         $storeMock->expects($this->any())->method('getId')->willReturn($storeId);
         $this->orderMock->expects($this->once())
             ->method('getParentItemsRandomCollection')
-            ->with(\Magento\Sales\CustomerData\LastOrderedItems::SIDEBAR_ORDER_LIMIT)
+            ->with(LastOrderedItems::SIDEBAR_ORDER_LIMIT)
             ->willReturn($items);
         $productVisible->expects($this->once())->method('isVisibleInSiteVisibility')->willReturn(true);
         $productVisible->expects($this->once())->method('getProductUrl')->willReturn($expectedItem1['url']);
@@ -164,42 +189,39 @@ class LastOrderedItemsTest extends \PHPUnit\Framework\TestCase
             ->method('getById')
             ->willReturnMap([
                 [$productIdVisible, false, $storeId, false, $productVisible],
-                [$productIdNotVisible, false, $storeId, false, $productNotVisible],
+                [$productIdNotVisible, false, $storeId, false, $productNotVisible]
             ]);
         $this->stockRegistryMock
             ->expects($this->any())
             ->method('getStockItem')
             ->willReturnMap([
                 [$productIdVisible, $websiteId, $stockItemMock],
-                [$productIdNotVisible, $websiteId, $stockItemMock],
+                [$productIdNotVisible, $websiteId, $stockItemMock]
             ]);
         $stockItemMock->expects($this->exactly(2))->method('getIsInStock')->willReturn($expectedItem1['is_saleable']);
         $this->assertEquals(['items' => [$expectedItem1, $expectedItem2]], $this->section->getSectionData());
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
-    private function getLastOrderMock()
+    private function getLastOrderMock(): MockObject
     {
         $customerId = 1;
         $visibleOnFrontStatuses = ['complete'];
         $orderCollectionMock = $this->objectManagerHelper
-            ->getCollectionMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class, [$this->orderMock]);
+            ->getCollectionMock(Collection::class, [$this->orderMock]);
         $this->customerSessionMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->orderConfigMock
             ->expects($this->once())
             ->method('getVisibleOnFrontStatuses')
             ->willReturn($visibleOnFrontStatuses);
         $this->orderCollectionFactoryMock->expects($this->once())->method('create')->willReturn($orderCollectionMock);
-        $orderCollectionMock->expects($this->at(0))
-            ->method('addAttributeToFilter')
-            ->with('customer_id', $customerId)
-            ->willReturnSelf();
-        $orderCollectionMock->expects($this->at(1))
-            ->method('addAttributeToFilter')
-            ->with('status', ['in' => $visibleOnFrontStatuses])
-            ->willReturnSelf();
+        $orderCollectionMock->method('addAttributeToFilter')
+            ->withConsecutive(
+                ['customer_id', $customerId],
+                ['status', ['in' => $visibleOnFrontStatuses]]
+            )->willReturnOnConsecutiveCalls($orderCollectionMock, $orderCollectionMock);
         $orderCollectionMock->expects($this->once())
             ->method('addAttributeToSort')
             ->willReturnSelf();
@@ -209,17 +231,21 @@ class LastOrderedItemsTest extends \PHPUnit\Framework\TestCase
         return $this->orderMock;
     }
 
-    public function testGetSectionDataWithNotExistingProduct()
+    /**
+     * @return void
+     */
+    public function testGetSectionDataWithNotExistingProduct(): void
     {
         $storeId = 1;
         $websiteId = 4;
         $productId = 1;
-        $exception = new \Magento\Framework\Exception\NoSuchEntityException(__("Product doesn't exist"));
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $exception = new NoSuchEntityException(__("Product doesn't exist"));
+        $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProductId'])
+            ->onlyMethods(['getProductId'])
             ->getMock();
-        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMockForAbstractClass();
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->getMockForAbstractClass();
 
         $this->getLastOrderMock();
         $this->storeManagerMock->expects($this->exactly(2))->method('getStore')->willReturn($storeMock);
@@ -227,7 +253,7 @@ class LastOrderedItemsTest extends \PHPUnit\Framework\TestCase
         $storeMock->expects($this->once())->method('getId')->willReturn($storeId);
         $this->orderMock->expects($this->once())
             ->method('getParentItemsRandomCollection')
-            ->with(\Magento\Sales\CustomerData\LastOrderedItems::SIDEBAR_ORDER_LIMIT)
+            ->with(LastOrderedItems::SIDEBAR_ORDER_LIMIT)
             ->willReturn([$orderItemMock]);
         $orderItemMock->expects($this->once())->method('getProductId')->willReturn($productId);
         $this->productRepositoryMock->expects($this->once())

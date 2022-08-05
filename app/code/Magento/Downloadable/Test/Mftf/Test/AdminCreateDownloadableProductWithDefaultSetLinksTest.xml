@@ -23,11 +23,10 @@
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <!-- Create category -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
-            <!-- Reindex and clear page cache -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" arguments="full_page" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
@@ -35,23 +34,23 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Delete created downloadable product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create downloadable product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
-        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createProduct">
             <argument name="productType" value="downloadable"/>
         </actionGroup>
 
         <!-- Fill downloadable product values -->
-        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillDownloadableProductForm">
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillDownloadableProductForm">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
 
@@ -65,28 +64,26 @@
         <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately"/>
 
         <!-- Add first downloadable link -->
-        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addFirstDownloadableProductLink">
+        <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addFirstDownloadableProductLink">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
 
         <!-- Add second downloadable link -->
-        <actionGroup ref="addDownloadableProductLink" stepKey="addSecondDownloadableProductLink">
+        <actionGroup ref="AddDownloadableProductLinkActionGroup" stepKey="addSecondDownloadableProductLink">
             <argument name="link" value="downloadableLink"/>
         </actionGroup>
 
         <!-- Save product -->
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Find downloadable product in grid -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
-        <waitForPageLoad stepKey="waitForAdminProductPageLoad"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedConfigurableProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedConfigurableProduct">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProduct"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProduct"/>
 
         <!-- Assert downloadable links in product form -->
         <scrollTo selector="{{AdminProductDownloadableSection.sectionLinkGrid}}" stepKey="scrollToLinks"/>
@@ -94,7 +91,7 @@
         <seeElement selector="{{AdminProductDownloadableSection.addLinkTitleInput('1')}}" stepKey="seeSecondLinkTitle"/>
 
         <!-- Go to storefront category page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
 
         <!-- Assert product in storefront category page -->
@@ -103,7 +100,7 @@
         </actionGroup>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
 

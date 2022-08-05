@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * test Magento\Customer\Model\Metadata\Form\Text
  *
@@ -10,19 +10,21 @@ namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 use Magento\Customer\Model\Metadata\Form\Text;
+use Magento\Framework\Phrase;
+use Magento\Framework\Stdlib\StringUtils;
 
 class TextTest extends AbstractFormTestCase
 {
-    /** @var \Magento\Framework\Stdlib\StringUtils */
+    /** @var StringUtils */
     protected $stringHelper;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
-        $this->stringHelper = new \Magento\Framework\Stdlib\StringUtils();
+        $this->stringHelper = new StringUtils();
     }
 
     /**
@@ -33,7 +35,7 @@ class TextTest extends AbstractFormTestCase
      */
     protected function getClass($value)
     {
-        return new \Magento\Customer\Model\Metadata\Form\Text(
+        return new Text(
             $this->localeMock,
             $this->loggerMock,
             $this->attributeMetadataMock,
@@ -80,7 +82,7 @@ class TextTest extends AbstractFormTestCase
      */
     public function testValidateValueRequired($value, $expected)
     {
-        $this->attributeMetadataMock->expects($this->any())->method('isRequired')->will($this->returnValue(true));
+        $this->attributeMetadataMock->expects($this->any())->method('isRequired')->willReturn(true);
 
         $sut = $this->getClass($value);
         $actual = $sut->validateValue($value);
@@ -88,6 +90,14 @@ class TextTest extends AbstractFormTestCase
         if (is_bool($actual)) {
             $this->assertEquals($expected, $actual);
         } else {
+            if (is_array($actual)) {
+                $actual = array_map(
+                    function (Phrase $message) {
+                        return $message->__toString();
+                    },
+                    $actual
+                );
+            }
             $this->assertContains($expected, $actual);
         }
     }
@@ -100,7 +110,7 @@ class TextTest extends AbstractFormTestCase
         return [
             'empty' => ['', '"" is a required value.'],
             'null' => [null, '"" is a required value.'],
-            '0' => [0, true],
+            '0' => [0, '"" is a required value.'],
             'zero' => ['0', true],
             'string' => ['some text', true],
             'number' => [123, true],
@@ -122,10 +132,10 @@ class TextTest extends AbstractFormTestCase
             ->getMockForAbstractClass();
         $minTextLengthRule->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('min_text_length'));
+            ->willReturn('min_text_length');
         $minTextLengthRule->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(4));
+            ->willReturn(4);
 
         $maxTextLengthRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
@@ -133,10 +143,10 @@ class TextTest extends AbstractFormTestCase
             ->getMockForAbstractClass();
         $maxTextLengthRule->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('max_text_length'));
+            ->willReturn('max_text_length');
         $maxTextLengthRule->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(8));
+            ->willReturn(8);
 
         $inputValidationRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
@@ -144,10 +154,10 @@ class TextTest extends AbstractFormTestCase
             ->getMockForAbstractClass();
         $inputValidationRule->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('input_validation'));
+            ->willReturn('input_validation');
         $inputValidationRule->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue('other'));
+            ->willReturn('other');
 
         $validationRules = [
             'input_validation' => $inputValidationRule,
@@ -159,8 +169,8 @@ class TextTest extends AbstractFormTestCase
             $this->any()
         )->method(
             'getValidationRules'
-        )->will(
-            $this->returnValue($validationRules)
+        )->willReturn(
+            $validationRules
         );
 
         $sut = $this->getClass($value);
@@ -169,6 +179,11 @@ class TextTest extends AbstractFormTestCase
         if (is_bool($actual)) {
             $this->assertEquals($expected, $actual);
         } else {
+            if (is_array($actual)) {
+                $actual = array_map(function (Phrase $message) {
+                    return $message->__toString();
+                }, $actual);
+            }
             $this->assertContains($expected, $actual);
         }
     }

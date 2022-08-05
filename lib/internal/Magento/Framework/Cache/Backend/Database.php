@@ -59,6 +59,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Constructor
      *
      * @param array $options associative array of options
+     * @throws \Zend_Cache_Exception
      */
     public function __construct($options = [])
     {
@@ -82,6 +83,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Get DB adapter
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @throws \Zend_Cache_Exception
      */
     protected function _getConnection()
     {
@@ -106,6 +108,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Get table name where data is stored
      *
      * @return string
+     * @throws \Zend_Cache_Exception
      */
     protected function _getDataTable()
     {
@@ -122,6 +125,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Get table name where tags are stored
      *
      * @return string
+     * @throws \Zend_Cache_Exception
      */
     protected function _getTagsTable()
     {
@@ -139,9 +143,10 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * Note : return value is always "string" (unserialization is done by the core not by the backend)
      *
-     * @param  string $id Cache id
-     * @param  boolean $doNotTestCacheValidity If set to true, the cache validity won't be tested
+     * @param string $id Cache id
+     * @param boolean $doNotTestCacheValidity If set to true, the cache validity won't be tested
      * @return string|false cached datas
+     * @throws \Zend_Cache_Exception
      */
     public function load($id, $doNotTestCacheValidity = false)
     {
@@ -166,8 +171,9 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     /**
      * Test if a cache is available or not (for the given id)
      *
-     * @param  string $id cache id
+     * @param string $id cache id
      * @return mixed|false (a cache is not available) or "last modified" timestamp (int) of the available cache record
+     * @throws \Zend_Cache_Exception
      */
     public function test($id)
     {
@@ -196,11 +202,13 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Note : $data is always "string" (serialization is done by the
      * core not by the backend)
      *
-     * @param string $data            Datas to cache
-     * @param string $id              Cache id
-     * @param string[] $tags          Array of strings, the cache record will be tagged by each string entry
-     * @param int|bool $specificLifetime  Integer to set a specific lifetime or null for infinite lifetime
+     * @param string $data Datas to cache
+     * @param string $id Cache id
+     * @param string[] $tags Array of strings, the cache record will be tagged by each string entry
+     * @param int|bool $specificLifetime Integer to set a specific lifetime or null for infinite lifetime
      * @return bool true if no problem
+     * @throws \Zend_Db_Statement_Exception
+     * @throws \Zend_Cache_Exception
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
@@ -239,8 +247,9 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     /**
      * Remove a cache record
      *
-     * @param  string $id Cache id
-     * @return boolean True if no problem
+     * @param string $id Cache id
+     * @return int|boolean Number of affected rows or false on failure
+     * @throws \Zend_Cache_Exception
      */
     public function remove($id)
     {
@@ -266,9 +275,10 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG => remove cache entries matching any given tags
      *                                               ($tags can be an array of strings or a single string)
      *
-     * @param  string $mode Clean mode
-     * @param  string[] $tags Array of tags
+     * @param string $mode Clean mode
+     * @param string[] $tags Array of tags
      * @return boolean true if no problem
+     * @throws \Zend_Cache_Exception
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
@@ -301,6 +311,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Return an array of stored cache ids
      *
      * @return string[] array of stored cache ids (string)
+     * @throws \Zend_Cache_Exception
      */
     public function getIds()
     {
@@ -316,6 +327,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Return an array of stored tags
      *
      * @return string[] array of stored tags (string)
+     * @throws \Zend_Cache_Exception
      */
     public function getTags()
     {
@@ -330,6 +342,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param string[] $tags array of tags
      * @return string[] array of matching cache ids (string)
+     * @throws \Zend_Cache_Exception
      */
     public function getIdsMatchingTags($tags = [])
     {
@@ -356,6 +369,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param string[] $tags array of tags
      * @return string[] array of not matching cache ids (string)
+     * @throws \Zend_Cache_Exception
      */
     public function getIdsNotMatchingTags($tags = [])
     {
@@ -369,6 +383,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param string[] $tags array of tags
      * @return string[] array of any matching cache ids (string)
+     * @throws \Zend_Cache_Exception
      */
     public function getIdsMatchingAnyTags($tags = [])
     {
@@ -404,6 +419,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param string $id cache id
      * @return array|false array of metadatas (false if the cache id is not found)
+     * @throws \Zend_Cache_Exception
      */
     public function getMetadatas($id)
     {
@@ -425,6 +441,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param string $id cache id
      * @param int $extraLifetime
      * @return boolean true if ok
+     * @throws \Zend_Cache_Exception
      */
     public function touch($id, $extraLifetime)
     {
@@ -471,6 +488,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param string $id
      * @param string[] $tags
      * @return bool
+     * @throws \Zend_Cache_Exception
      */
     protected function _saveTags($id, $tags)
     {
@@ -509,6 +527,8 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param string $mode
      * @param string[] $tags
      * @return bool
+     * @throws \Zend_Cache_Exception
+     * @throws \Zend_Db_Statement_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _cleanByTags($mode, $tags)
@@ -558,6 +578,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return bool
+     * @throws \Zend_Cache_Exception
      */
     private function cleanAll(\Magento\Framework\DB\Adapter\AdapterInterface $connection)
     {
@@ -575,6 +596,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return bool
+     * @throws \Zend_Cache_Exception
      */
     private function cleanOld(\Magento\Framework\DB\Adapter\AdapterInterface $connection)
     {

@@ -17,7 +17,7 @@ class WeightTest extends \PHPUnit\Framework\TestCase
      */
     protected $_formFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_formFactory = $this->_objectManager->create(\Magento\Framework\Data\FormFactory::class);
@@ -38,7 +38,7 @@ class WeightTest extends \PHPUnit\Framework\TestCase
         $form->setDataObject($currentProduct);
         $block->setForm($form);
 
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/value="0".*checked="checked"/',
             $block->getElementHtml(),
             '"Does this have a weight" is set to "Yes" for virtual products'
@@ -71,7 +71,7 @@ class WeightTest extends \PHPUnit\Framework\TestCase
         $form = $this->_formFactory->create();
         $form->setDataObject($currentProduct);
         $block->setForm($form);
-        $this->assertNotRegExp(
+        $this->assertDoesNotMatchRegularExpression(
             '/value="0".*checked="checked"/',
             $block->getElementHtml(),
             '"Does this have a weight" is set to "No" for physical products'

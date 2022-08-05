@@ -16,4 +16,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="\Magento\GroupedProduct\Model\Product\Type\Grouped">
+        <plugin name="grouped_product_minimum_advertised_price" type="\Magento\MsrpGroupedProduct\Plugin\Model\Product\Type\Grouped"/>
+    </type>
 </config>

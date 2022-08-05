@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminSearchTermsPageFormFieldsSection">
+        <element name="query_text" type="input" selector="#query_text"/>
+        <element name="store_id" type="select" selector="#store_id"/>
+        <element name="redirect" type="input" selector="#redirect"/>
+        <element name="display_in_terms" type="select" selector="#display_in_terms"/>
+    </section>
+</sections>

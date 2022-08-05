@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create first store -->
             <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createFirstStore">
                 <argument name="website" value="{{_defaultWebsite.name}}"/>
@@ -42,6 +42,7 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="storeViewData2"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteFirstStore">
@@ -50,7 +51,8 @@
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteSecondStore">
                 <argument name="storeGroupName" value="customStoreGroup.name"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Search created second store view in grid-->
@@ -62,7 +64,7 @@
             <argument name="storeDropdown" value="{{customStore.name}}"/>
         </actionGroup>
         <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
-        <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
+        <actionGroup ref="AdminCreateStoreViewSaveActionGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
 
         <!--Search moved store view(from above step) in grid and verify AssertStoreInGrid-->
         <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="searchMovedStoreViewInGrid">

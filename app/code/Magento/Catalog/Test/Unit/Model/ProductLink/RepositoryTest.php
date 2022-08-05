@@ -3,89 +3,105 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ProductLink;
+
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
+use Magento\Catalog\Model\Product\LinkTypeProvider;
+use Magento\Catalog\Model\ProductLink\CollectionProvider;
+use Magento\Catalog\Model\ProductLink\Management;
+use Magento\Catalog\Model\ProductLink\Repository;
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Model\ResourceModel\Product\Link;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\Hydrator;
+use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RepositoryTest extends \PHPUnit\Framework\TestCase
+class RepositoryTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $metadataPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $hydratorPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $hydratorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $metadataMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $linkTypeProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $linkResourceMock;
 
     /**
-     * @var \Magento\Catalog\Model\ProductLink\Repository
+     * @var Repository
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
-
     protected $productRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $entityCollectionProviderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $linkInitializerMock;
 
     /**
      * Test method
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $linkManagementMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Management::class);
-        $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Model\ProductRepository::class);
+        $linkManagementMock = $this->createMock(Management::class);
+        $this->productRepositoryMock = $this->createMock(ProductRepository::class);
         $this->entityCollectionProviderMock = $this->createMock(
-            \Magento\Catalog\Model\ProductLink\CollectionProvider::class
+            CollectionProvider::class
         );
         $this->linkInitializerMock = $this->createMock(
-            \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks::class
+            ProductLinks::class
         );
-        $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
-        $this->hydratorPoolMock = $this->createMock(\Magento\Framework\EntityManager\HydratorPool::class);
-        $this->hydratorMock = $this->createPartialMock(\Magento\Framework\EntityManager\Hydrator::class, ['extract']);
-        $this->metadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
-        $this->linkTypeProvider = $this->createMock(\Magento\Catalog\Model\Product\LinkTypeProvider::class);
-        $this->linkResourceMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Link::class);
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
+        $this->hydratorPoolMock = $this->createMock(HydratorPool::class);
+        $this->hydratorMock = $this->createPartialMock(Hydrator::class, ['extract']);
+        $this->metadataMock = $this->createMock(EntityMetadata::class);
+        $this->linkTypeProvider = $this->createMock(LinkTypeProvider::class);
+        $this->linkResourceMock = $this->createMock(Link::class);
         $this->hydratorPoolMock->expects($this->any())->method('getHydrator')->willReturn($this->hydratorMock);
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->metadataMock);
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\ProductLink\Repository::class,
+            Repository::class,
             [
                 'productRepository' => $this->productRepositoryMock,
                 'entityCollectionProvider' => $this->entityCollectionProviderMock,
@@ -105,18 +121,16 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     public function testSave()
     {
         $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
-        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $productMock = $this->createMock(Product::class);
 
-        $linkedProductMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $linkedProductMock = $this->createMock(Product::class);
         $parentId = 42;
         $linkedProductId = 37;
         $typeId = 4;
-        $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
-            [
-                ['product', false, null, false, $productMock],
-                ['linkedProduct', false, null, false, $linkedProductMock],
-            ]
-        ));
+        $this->productRepositoryMock->expects($this->exactly(2))->method('get')->willReturnMap([
+            ['product', false, null, false, $productMock],
+            ['linkedProduct', false, null, false, $linkedProductMock],
+        ]);
         $entityMock->expects($this->once())->method('getLinkedProductSku')->willReturn('linkedProduct');
         $entityMock->expects($this->once())->method('getSku')->willReturn('product');
         $entityMock->expects($this->exactly(1))->method('getLinkType')->willReturn('linkType');
@@ -135,24 +149,20 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->save($entityMock));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The linked products data is invalid. Verify the data and try again.
-     */
     public function testSaveWithException()
     {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectExceptionMessage('The linked products data is invalid. Verify the data and try again.');
         $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
-        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $linkedProductMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $productMock = $this->createMock(Product::class);
+        $linkedProductMock = $this->createMock(Product::class);
         $parentId = 42;
         $linkedProductId = 37;
         $typeId = 4;
-        $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
-            [
-                ['product', false, null, false, $productMock],
-                ['linkedProduct', false, null, false, $linkedProductMock],
-            ]
-        ));
+        $this->productRepositoryMock->expects($this->exactly(2))->method('get')->willReturnMap([
+            ['product', false, null, false, $productMock],
+            ['linkedProduct', false, null, false, $linkedProductMock],
+        ]);
         $entityMock->expects($this->once())->method('getLinkedProductSku')->willReturn('linkedProduct');
         $entityMock->expects($this->once())->method('getSku')->willReturn('product');
         $entityMock->expects($this->exactly(1))->method('getLinkType')->willReturn('linkType');
@@ -176,18 +186,16 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     public function testDelete()
     {
         $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
-        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $linkedProductMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $productMock = $this->createMock(Product::class);
+        $linkedProductMock = $this->createMock(Product::class);
         $parentId = 42;
         $linkedProductId = 37;
         $typeId = 4;
         $linkId = 33;
-        $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
-            [
-                ['product', false, null, false, $productMock],
-                ['linkedProduct', false, null, false, $linkedProductMock],
-            ]
-        ));
+        $this->productRepositoryMock->expects($this->exactly(2))->method('get')->willReturnMap([
+            ['product', false, null, false, $productMock],
+            ['linkedProduct', false, null, false, $linkedProductMock],
+        ]);
         $entityMock->expects($this->once())->method('getLinkedProductSku')->willReturn('linkedProduct');
         $entityMock->expects($this->once())->method('getSku')->willReturn('product');
         $entityMock->expects($this->exactly(1))->method('getLinkType')->willReturn('linkType');
@@ -206,25 +214,21 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->delete($entityMock));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The linked products data is invalid. Verify the data and try again.
-     */
     public function testDeleteWithInvalidDataException()
     {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectExceptionMessage('The linked products data is invalid. Verify the data and try again.');
         $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
-        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $linkedProductMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $productMock = $this->createMock(Product::class);
+        $linkedProductMock = $this->createMock(Product::class);
         $parentId = 42;
         $linkedProductId = 37;
         $typeId = 4;
         $linkId = 33;
-        $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
-            [
-                ['product', false, null, false, $productMock],
-                ['linkedProduct', false, null, false, $linkedProductMock],
-            ]
-        ));
+        $this->productRepositoryMock->expects($this->exactly(2))->method('get')->willReturnMap([
+            ['product', false, null, false, $productMock],
+            ['linkedProduct', false, null, false, $linkedProductMock],
+        ]);
         $entityMock->expects($this->once())->method('getLinkedProductSku')->willReturn('linkedProduct');
         $entityMock->expects($this->once())->method('getSku')->willReturn('product');
         $entityMock->expects($this->exactly(1))->method('getLinkType')->willReturn('linkType');
@@ -244,25 +248,31 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->model->delete($entityMock);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Product with SKU 'linkedProduct' is not linked to product with SKU 'product'
-     */
     public function testDeleteWithNoSuchEntityException()
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectExceptionMessage(
+            'Product with SKU \'linkedProduct\' is not linked to product with SKU \'product\''
+        );
+
         $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
-        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $linkedProductMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
+        $productMock = $this->createMock(Product::class);
+        $linkedProductMock = $this->createMock(Product::class);
+        $this->productRepositoryMock->expects($this->exactly(2))->method('get')->willReturnMap(
             [
                 ['product', false, null, false, $productMock],
                 ['linkedProduct', false, null, false, $linkedProductMock],
             ]
-        ));
+        );
         $entityMock->expects($this->exactly(2))->method('getLinkedProductSku')->willReturn('linkedProduct');
         $entityMock->expects($this->exactly(2))->method('getSku')->willReturn('product');
         $entityMock->expects($this->once())->method('getLinkType')->willReturn('linkType');
         $this->metadataPoolMock->expects($this->once())->method('getHydrator')->willReturn($this->hydratorMock);
+
+        $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn('linkField');
+        $this->hydratorMock->expects($this->once())->method('extract')->willReturn(['linkField' => 'parent_id']);
+        $this->linkTypeProvider->expects($this->once())->method('getLinkTypes')->willReturn(['linkType' => 1]);
+
         $this->model->delete($entityMock);
     }
 }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigPaymentsConflictResolutionForPayPalInUnitedKingdomTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Conflict resolution for PayPal in United Kingdom"/>
+            <description value="A popup should show when enabling different paypal solutions when one is already enabled for merchant country United Kingdom"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-16679"/>
+            <group value="paypal"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
+                <argument name="credentials" value="SamplePaypalExpressConfig"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry"/>
+            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
+            <magentoCLI command="config:set payment/wps_express/active 0" stepKey="disableWPSExpress"/>
+            <magentoCLI command="config:set payment/hosted_pro/active 0" stepKey="disableHostedProExpress"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Change Merchant Country -->
+        <comment userInput="Change Merchant Country" stepKey="changeMerchantCountryComment"/>
+        <waitForElementVisible selector="{{PaymentsConfigSection.merchantCountry}}" stepKey="waitForMerchantCountry"/>
+        <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="United Kingdom" stepKey="setMerchantCountry"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <!-- Enable WPS Express -->
+        <comment userInput="Enable WPS Express" stepKey="enableWPSExpressComment"/>
+        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableWPSExpress">
+            <argument name="payPalConfigType" value="WPSExpressConfigSection"/>
+            <argument name="countryCode" value="gb"/>
+        </actionGroup>
+        <!-- Check only the correct solution is enabled -->
+        <comment userInput="Check only the correct solution is enabled" stepKey="checkOnlyTheCorrectSolutionIsEnabledComment1"/>
+        <actionGroup ref="CheckEnableOptionPayPalConfigurationActionGroup" stepKey="checkPayPalExpressIsDisabled">
+            <argument name="payPalConfigType" value="PayPalExpressCheckoutConfigSection"/>
+            <argument name="enabledOption" value="No"/>
+            <argument name="countryCode" value="gb"/>
+        </actionGroup>
+        <actionGroup ref="CheckEnableOptionPayPalConfigurationActionGroup" stepKey="checkWPSExpressIsEnabled">
+            <argument name="payPalConfigType" value="WPSExpressConfigSection"/>
+            <argument name="enabledOption" value="Yes"/>
+            <argument name="countryCode" value="gb"/>
+        </actionGroup>
+        <!-- Enable Pro Hosted With Express Checkout -->
+        <comment userInput="Enable Pro Hosted With Express Checkout" stepKey="enableProHostedWithExpressCheckoutComment"/>
+        <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableProHostedWithExpressCheckou">
+            <argument name="payPalConfigType" value="PaymentsProHostedWithExpressCheckoutConfigSection"/>
+            <argument name="countryCode" value="gb"/>
+        </actionGroup>
+        <!-- Check only the correct solution is enabled -->
+        <comment userInput="Check only the correct solution is enabled" stepKey="checkOnlyTheCorrectSolutionIsEnabledComment2"/>
+        <actionGroup ref="CheckEnableOptionPayPalConfigurationActionGroup" stepKey="checkWPSExpressIsDisabled">
+            <argument name="payPalConfigType" value="WPSExpressConfigSection"/>
+            <argument name="enabledOption" value="No"/>
+            <argument name="countryCode" value="gb"/>
+        </actionGroup>
+        <actionGroup ref="CheckEnableOptionPayPalConfigurationActionGroup" stepKey="checkProHostedIsEnabled">
+            <argument name="payPalConfigType" value="PaymentsProHostedWithExpressCheckoutConfigSection"/>
+            <argument name="enabledOption" value="Yes"/>
+            <argument name="countryCode" value="gb"/>
+        </actionGroup>
+    </test>
+</tests>

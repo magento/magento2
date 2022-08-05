@@ -20,7 +20,7 @@
             <group value="Cms"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create Cms Pages -->
             <createData entity="_newDefaultCmsPage" stepKey="createFirstCmsPage"/>
@@ -32,16 +32,18 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                 <argument name="customStore" value="NewStoreViewData"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create StoreView -->
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
             <argument name="customStore" value="NewStoreViewData"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!-- Add StoreView To Cms Page-->
-        <actionGroup ref="AddStoreViewToCmsPage" stepKey="gotToCmsPage">
+        <actionGroup ref="AddStoreViewToCmsPageActionGroup" stepKey="gotToCmsPage">
             <argument name="CMSPage" value="$$createSecondCmsPage$$"/>
             <argument name="storeViewName" value="{{NewStoreViewData.name}}"/>
         </actionGroup>

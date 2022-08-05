@@ -3,40 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\OfflinePayments\Test\Unit\Model;
 
-class CashondeliveryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\OfflinePayments\Model\Cashondelivery;
+use Magento\Payment\Block\Info\Instructions;
+use Magento\Payment\Helper\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CashondeliveryTest extends TestCase
 {
     /**
-     * @var \Magento\OfflinePayments\Model\Cashondelivery
+     * @var Cashondelivery
      */
-    protected $_object;
+    private $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
-    protected $_scopeConfig;
+    private $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
 
-        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
-        $paymentDataMock = $this->createMock(\Magento\Payment\Helper\Data::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $paymentDataMock = $this->createMock(Data::class);
 
-        $this->_scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->_object = $helper->getObject(
-            \Magento\OfflinePayments\Model\Cashondelivery::class,
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->object = $helper->getObject(
+            Cashondelivery::class,
             [
                 'eventManager' => $eventManager,
                 'paymentData' => $paymentDataMock,
-                'scopeConfig' => $this->_scopeConfig,
+                'scopeConfig' => $this->scopeConfigMock,
             ]
         );
     }
 
     public function testGetInfoBlockType()
     {
-        $this->assertEquals(\Magento\Payment\Block\Info\Instructions::class, $this->_object->getInfoBlockType());
+        $this->assertEquals(Instructions::class, $this->object->getInfoBlockType());
     }
 }

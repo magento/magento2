@@ -16,18 +16,18 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-5314"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open New Customer Page -->
-        <amOnPage url="{{AdminNewCustomerPage.url}}" stepKey="navigateToNewCustomerPage"/>
-        <waitForPageLoad stepKey="waitToCustomerPageLoad"/>
+        <actionGroup ref="AdminNavigateNewCustomerActionGroup" stepKey="navigateToNewCustomerPage"/>
         <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
 

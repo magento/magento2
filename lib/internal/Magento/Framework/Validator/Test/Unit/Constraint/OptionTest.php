@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Validator\Test\Unit\Constraint;
+
+use Magento\Framework\Validator\Constraint\Option;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for \Magento\Framework\Validator\Constraint\Option
  */
-class OptionTest extends \PHPUnit\Framework\TestCase
+class OptionTest extends TestCase
 {
     /**
      * Test getValue
@@ -17,7 +21,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
     public function testGetValue()
     {
         $expected = 'test_value';
-        $option = new \Magento\Framework\Validator\Constraint\Option($expected);
+        $option = new Option($expected);
         $this->assertEquals($expected, $option->getValue());
     }
 }

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductSwatchTierPriceTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Configurable product with swatch attribute"/>
+            <title value="Swatch option should show the tier price on product page"/>
+            <description value="Configurable product with swatch attribute should show the tier price on product page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-34033"/>
+            <useCaseId value="MC-33147"/>
+            <group value="Swatches"/>
+        </annotations>
+        <before>
+            <!-- Create configurable product -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete configurable product -->
+            <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete color attribute -->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteColorAttribute">
+                <argument name="ProductAttribute" value="ProductColorAttribute"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Create text swatch attribute with 3 options: Black, White and Blue -->
+        <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addColorAttribute">
+            <argument name="attributeName" value="{{ProductColorAttribute.frontend_label}}"/>
+            <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+            <argument name="option1" value="Black"/>
+            <argument name="option2" value="White"/>
+            <argument name="option3" value="Blue"/>
+        </actionGroup>
+        <!-- Open configurable product edit page -->
+        <amOnPage url="{{AdminProductEditPage.url($createConfigurableProduct.id$)}}" stepKey="goToConfigurableProduct"/>
+        <!-- Generate configurations for configurable product -->
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createProductConfigurations">
+            <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveConfigurableProduct"/>
+        <!-- Set Tier Price to one of configuration product -->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterProduct">
+            <argument name="productSku" value="$$createConfigurableProduct.sku$$-White"/>
+        </actionGroup>
+        <actionGroup ref="ProductSetAdvancedPricingActionGroup" stepKey="addTierPriceToSimpleProduct">
+            <argument name="group" value="ALL GROUPS"/>
+            <argument name="quantity" value="5"/>
+            <argument name="price" value="Discount"/>
+            <argument name="amount" value="50"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+        <!-- Go to storefront product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage">
+            <argument name="productUrl" value="$createConfigurableProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForConfigurableProductPage"/>
+        <!-- Select White configuration -->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectWhiteOption">
+            <argument name="optionName" value="White"/>
+        </actionGroup>
+        <!-- Assert tier price on selected configuration -->
+        <actionGroup ref="AssertStorefrontProductDetailPageTierPriceActionGroup" stepKey="assertProductTierPriceText">
+            <argument name="tierProductPriceDiscountQuantity" value="5"/>
+            <argument name="productPriceWithAppliedTierPriceDiscount" value="61.50"/>
+            <argument name="productSavedPricePercent" value="50"/>
+        </actionGroup>
+    </test>
+</tests>

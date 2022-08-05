@@ -147,7 +147,7 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             )->where(
                 $connection->quoteInto('group_id=?', $model->getOriginalGroupId())
             );
-            $storeId = $connection->fetchOne($select, 'default_store_id');
+            $storeId = $connection->fetchOne($select);
 
             if ($storeId == $model->getId()) {
                 $bind = ['default_store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID];
@@ -166,16 +166,10 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function readAllStores()
     {
-        $stores = [];
-        if ($this->getConnection()->isTableExists($this->getMainTable())) {
-            $select = $this->getConnection()
-                ->select()
-                ->from($this->getTable($this->getMainTable()));
-
-            $stores = $this->getConnection()->fetchAll($select);
-        }
-
-        return $stores;
+        $select = $this->getConnection()
+            ->select()
+            ->from($this->getTable($this->getMainTable()));
+        return $this->getConnection()->fetchAll($select);
     }
 
     /**

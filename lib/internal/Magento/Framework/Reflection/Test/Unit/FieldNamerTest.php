@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Reflection\Test\Unit;
 
 use Magento\Framework\Reflection\FieldNamer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Field namer Test
- */
-class FieldNamerTest extends \PHPUnit\Framework\TestCase
+class FieldNamerTest extends TestCase
 {
     /**
      * @var FieldNamer
@@ -20,10 +21,10 @@ class FieldNamerTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up helper.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject(\Magento\Framework\Reflection\FieldNamer::class);
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(FieldNamer::class);
     }
 
     /**

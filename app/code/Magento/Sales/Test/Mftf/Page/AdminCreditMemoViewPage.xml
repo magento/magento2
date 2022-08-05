@@ -8,7 +8,7 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="AdminCreditMemoViewPage" url="sales/order_creditmemo/view/creditmemo_id/{{memoId}}/" area="admin" module="Magento_Sales">
+    <page name="AdminCreditMemoViewPage" url="sales/creditmemo/view/creditmemo_id/" area="admin" module="Magento_Sales">
         <section name="AdminCreditMemoViewItemsSection"/>
         <section name="AdminCreditMemoViewTotalSection"/>
     </page>

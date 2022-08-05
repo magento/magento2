@@ -43,7 +43,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected $attributeLoader;
 
     /**
-     * Connection name
+     * The connection name.
      *
      * @var string
      */
@@ -85,8 +85,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected $_staticAttributes = [];
 
     /**
-     * Entity table
-     *
      * @var string
      */
     protected $_entityTable;
@@ -226,11 +224,13 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param Context $context
      * @param array $data
      * @param UniqueValidationInterface|null $uniqueValidator
+     * @param AttributeLoaderInterface|null $attributeLoader
      */
     public function __construct(
         Context $context,
         $data = [],
-        UniqueValidationInterface $uniqueValidator = null
+        UniqueValidationInterface $uniqueValidator = null,
+        AttributeLoaderInterface $attributeLoader = null
     ) {
         $this->_eavConfig = $context->getEavConfig();
         $this->_resource = $context->getResource();
@@ -240,8 +240,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $this->_universalFactory = $context->getUniversalFactory();
         $this->transactionManager = $context->getTransactionManager();
         $this->objectRelationProcessor = $context->getObjectRelationProcessor();
-        $this->uniqueValidator = $uniqueValidator ?:
-            ObjectManager::getInstance()->get(UniqueValidationInterface::class);
+        $this->uniqueValidator = $uniqueValidator
+            ?: ObjectManager::getInstance()->get(UniqueValidationInterface::class);
+        $this->attributeLoader = $attributeLoader
+            ?: ObjectManager::getInstance()->get(AttributeLoaderInterface::class);
         parent::__construct();
         $properties = get_object_vars($this);
         foreach ($data as $key => $value) {
@@ -547,7 +549,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     public function loadAllAttributes($object = null)
     {
-        return $this->getAttributeLoader()->loadAllAttributes($this, $object);
+        return $this->attributeLoader->loadAllAttributes($this, $object);
     }
 
     /**
@@ -626,6 +628,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     public function walkAttributes($partMethod, array $args = [], $collectExceptionMessages = null)
     {
         $methodArr = explode('/', $partMethod);
+        $part = '';
+        $method = '';
         switch (count($methodArr)) {
             case 1:
                 $part = 'attribute';
@@ -642,6 +646,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         }
         $results = [];
         $suffix = $this->getAttributesCacheSuffix($args[0]);
+        $instance = null;
         foreach ($this->getAttributesByScope($suffix) as $attrCode => $attribute) {
             if (isset($args[0]) && is_object($args[0]) && !$this->_isApplicableAttribute($args[0], $attribute)) {
                 continue;
@@ -674,7 +679,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
 
             try {
                 // phpcs:disable Magento2.Functions.DiscouragedFunction
-                $results[$attrCode] = call_user_func_array([$instance, $method], $args);
+                $results[$attrCode] = call_user_func_array([$instance, $method], array_values($args));
             } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
                 if ($collectExceptionMessages) {
                     $results[$attrCode] = $e->getMessage();
@@ -766,7 +771,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         if (!$this->linkIdField) {
             $indexList = $this->getConnection()->getIndexList($this->getEntityTable());
             $pkName = $this->getConnection()->getPrimaryKeyName($this->getEntityTable());
-            $this->linkIdField = $indexList[$pkName]['COLUMNS_LIST'][0];
+            $this->linkIdField = $indexList[$pkName]['COLUMNS_LIST'][0] ?? null;
             if (!$this->linkIdField) {
                 $this->linkIdField = $this->getEntityIdField();
             }
@@ -922,7 +927,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $attributeBackend = $attribute->getBackend();
         if ($attributeBackend->getType() === 'static') {
             $value = $object->getData($attribute->getAttributeCode());
-            $bind = ['value' => trim($value)];
+            $bind = ['value' => $value !== null ? trim($value) : ''];
 
             $select->from(
                 $this->getEntityTable(),
@@ -937,7 +942,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             }
             $bind = [
                 'attribute_id' => $attribute->getId(),
-                'value' => trim($value),
+                'value' => $value !== null ? trim($value) : '',
             ];
 
             $entityIdField = $object->getResource()->getLinkField();
@@ -993,7 +998,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $select = $this->_getLoadRowSelect($object, $entityId);
         $row = $this->getConnection()->fetchRow($select);
 
-        if (is_array($row)) {
+        if (is_array($row) && !empty($row)) {
             $object->addData($row);
             $this->loadAttributesForObject($attributes, $object);
 
@@ -1013,7 +1018,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Loads attributes metadata.
      *
-     * @deprecated 100.2.0 Use self::loadAttributesForObject instead
+     * @deprecated 101.0.0 Use self::loadAttributesForObject instead
      * @param array|null $attributes
      * @return $this
      * @since 100.1.0
@@ -1021,6 +1026,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected function loadAttributesMetadata($attributes)
     {
         $this->loadAttributesForObject($attributes);
+
+        return $this;
     }
 
     /**
@@ -1335,7 +1342,9 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             if ($this->_canUpdateAttribute($attribute, $v, $origData)) {
                 if ($this->_isAttributeValueEmpty($attribute, $v)) {
                     $this->_aggregateDeleteData($delete, $attribute, $newObject);
-                } elseif (!is_numeric($v) && $v !== $origData[$k] || is_numeric($v) && $v != $origData[$k]) {
+                } elseif (!is_numeric($v) && $v !== $origData[$k]
+                    || is_numeric($v) && ($v != $origData[$k] || strlen($v) !== strlen($origData[$k]))
+                ) {
                     $update[$attrId] = [
                         'value_id' => $attribute->getBackend()->getEntityValueId($newObject),
                         'value' => is_array($v) ? array_shift($v) : $v,//@TODO: MAGETWO-44182,
@@ -1433,8 +1442,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $insertEntity = true;
         $entityTable = $this->getEntityTable();
         $entityIdField = $this->getEntityIdField();
+        // phpstan:ignore "Undefined variable"
         $entityId = $newObject->getId();
 
+        // phpstan:ignore "Undefined variable"
         unset($entityRow[$entityIdField]);
         if (!empty($entityId) && is_numeric($entityId)) {
             $bind = ['entity_id' => $entityId];
@@ -1450,6 +1461,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         /**
          * Process base row
          */
+        // phpstan:ignore "Undefined variable"
         $entityObject = new DataObject($entityRow);
         $entityRow = $this->_prepareDataForTable($entityObject, $entityTable);
         if ($insertEntity) {
@@ -1460,6 +1472,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $connection->insert($entityTable, $entityRow);
                 $entityId = $connection->lastInsertId($entityTable);
             }
+            // phpstan:ignore "Undefined variable"
             $newObject->setId($entityId);
         } else {
             $where = sprintf('%s=%d', $connection->quoteIdentifier($entityIdField), $entityId);
@@ -1472,6 +1485,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         if (!empty($insert)) {
             foreach ($insert as $attributeId => $value) {
                 $attribute = $this->getAttribute($attributeId);
+                // phpstan:ignore "Undefined variable"
                 $this->_insertAttribute($newObject, $attribute, $value);
             }
         }
@@ -1482,6 +1496,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         if (!empty($update)) {
             foreach ($update as $attributeId => $v) {
                 $attribute = $this->getAttribute($attributeId);
+                // phpstan:ignore "Undefined variable"
                 $this->_updateAttribute($newObject, $attribute, $v['value_id'], $v['value']);
             }
         }
@@ -1491,12 +1506,14 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
          */
         if (!empty($delete)) {
             foreach ($delete as $table => $values) {
+                // phpstan:ignore "Undefined variable"
                 $this->_deleteAttributes($newObject, $table, $values);
             }
         }
 
         $this->_processAttributeValues();
 
+        // phpstan:ignore "Undefined variable"
         $newObject->isObjectNew(false);
 
         return $this;
@@ -1573,7 +1590,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         $connection = $this->getConnection();
         foreach ($this->_attributeValuesToSave as $table => $data) {
-            $connection->insertOnDuplicate($table, $data, ['value']);
+            $connection->insertOnDuplicate($table, $data, array_keys($data[0]));
         }
 
         foreach ($this->_attributeValuesToDelete as $table => $valueIds) {
@@ -1607,7 +1624,9 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             self::$_attributeBackendTables[$backendTable] = $this->getConnection()->describeTable($backendTable);
         }
         $describe = self::$_attributeBackendTables[$backendTable];
-        return $this->getConnection()->prepareColumnValue($describe['value'], $value);
+        $columnName = $attribute->isStatic() ? $attribute->getAttributeCode() : 'value';
+
+        return $this->getConnection()->prepareColumnValue($describe[$columnName], $value);
     }
 
     /**
@@ -1727,6 +1746,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         try {
             $connection = $this->transactionManager->start($this->getConnection());
+            $id = 0;
             if (is_numeric($object)) {
                 $id = (int) $object;
             } elseif ($object instanceof \Magento\Framework\Model\AbstractModel) {
@@ -1910,9 +1930,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     protected function getAttributeLoader()
     {
-        if ($this->attributeLoader === null) {
-            $this->attributeLoader= ObjectManager::getInstance()->get(AttributeLoaderInterface::class);
-        }
         return $this->attributeLoader;
     }
 
@@ -1979,7 +1996,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param array $attributes
      * @param AbstractEntity|null $object
      * @return void
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function loadAttributesForObject($attributes, $object = null)
     {

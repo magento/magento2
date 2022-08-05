@@ -112,11 +112,18 @@ define([
          */
         setEventListener: function () {
             window.addEventListener('resize', function () {
-                raf(function () {
-                    this.containerWidth = window.innerWidth;
-                    this.setLayoutStyles();
-                }.bind(this), this.refreshFPS);
+                this.updateStyles();
             }.bind(this));
+        },
+
+        /**
+         * Updates styles for component.
+         */
+        updateStyles: function () {
+            raf(function () {
+                this.containerWidth = window.innerWidth;
+                this.setLayoutStyles();
+            }.bind(this), this.refreshFPS);
         },
 
         /**

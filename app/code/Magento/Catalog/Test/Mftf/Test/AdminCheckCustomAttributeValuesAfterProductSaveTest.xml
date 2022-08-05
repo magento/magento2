@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckCustomAttributeValuesAfterProductSaveTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product attributes"/>
+            <title value="Saving custom attribute values using UI"/>
+            <description value="Checks that saved custom attribute values are reflected on the product's edit page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-29653"/>
+            <useCaseId value="MC-29023"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Create multi select product attribute -->
+            <createData entity="productAttributeMultiselectTwoOptions" stepKey="createMultiSelectProductAttribute"/>
+            <!-- Add options to created product attribute -->
+            <createData entity="productAttributeOption1" stepKey="addFirstOptionToAttribute">
+                <requiredEntity createDataKey="createMultiSelectProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="addSecondOptionToAttribute">
+                <requiredEntity createDataKey="createMultiSelectProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption3" stepKey="addThirdOptionToAttribute">
+                <requiredEntity createDataKey="createMultiSelectProductAttribute"/>
+            </createData>
+            <!-- Create simple product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexCatalogSearch"/>
+            <!-- Login to Admin page -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete created entities -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createMultiSelectProductAttribute" stepKey="deleteMultiSelectProductAttribute"/>
+            <!-- Logout from Admin page -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <!-- Open created product for edit -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+
+        <!-- Add created attribute to the product -->
+        <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addAttributeToProduct">
+            <argument name="attributeCode" value="$createMultiSelectProductAttribute.attribute_code$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForAttributeAdded"/>
+
+        <!-- Expand 'Attributes' tab -->
+        <actionGroup ref="AdminExpandProductAttributesTabActionGroup" stepKey="expandAttributesTab"/>
+        <!-- Check created attribute presents in the 'Attributes' tab -->
+        <seeElement selector="{{AdminProductAttributesSection.attributeDropdownByCode($createMultiSelectProductAttribute.attribute_code$)}}" stepKey="assertAttributeIsPresentInTab"/>
+        <!-- Select attribute options -->
+        <selectOption selector="{{AdminProductAttributesSection.attributeDropdownByCode($createMultiSelectProductAttribute.attribute_code$)}}" parameterArray="[$addFirstOptionToAttribute.option[store_labels][0][label]$, $addThirdOptionToAttribute.option[store_labels][0][label]$]" stepKey="selectAttributeOptions"/>
+        <!-- Save product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+
+        <!-- Check attribute options are selected -->
+        <actionGroup ref="AdminExpandProductAttributesTabActionGroup" stepKey="expandAttributesTabAfterProductSave"/>
+        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode($createMultiSelectProductAttribute.attribute_code$)}}" userInput="$addFirstOptionToAttribute.option[store_labels][0][label]$" stepKey="assertFirstOptionIsSelected"/>
+        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode($createMultiSelectProductAttribute.attribute_code$)}}" userInput="$addThirdOptionToAttribute.option[store_labels][0][label]$" stepKey="assertThirdOptionIsSelected"/>
+
+        <!-- Search for the product on Storefront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchProductOnStorefront">
+            <argument name="phrase" value="$createSimpleProduct.name$"/>
+        </actionGroup>
+
+        <!-- Assert that attribute values present in layered navigation -->
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertFirstAttributeOptionPresence">
+            <argument name="attributeLabel" value="$createMultiSelectProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$addFirstOptionToAttribute.option[store_labels][0][label]$"/>
+            <argument name="attributeOptionPosition" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertThirdAttributeOptionPresence">
+            <argument name="attributeLabel" value="$createMultiSelectProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$addThirdOptionToAttribute.option[store_labels][0][label]$"/>
+            <argument name="attributeOptionPosition" value="2"/>
+        </actionGroup>
+    </test>
+</tests>

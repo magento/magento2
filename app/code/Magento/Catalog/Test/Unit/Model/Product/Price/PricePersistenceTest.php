@@ -3,46 +3,57 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Price;
 
-/**
- * Class PricePersistenceTest.
- */
-class PricePersistenceTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\Product\Price\PricePersistence;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\ProductIdLocatorInterface;
+use Magento\Catalog\Model\ResourceModel\Attribute;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PricePersistenceTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|MockObject
      */
     private $attributeResource;
 
     /**
-     * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeRepositoryInterface|MockObject
      */
     private $attributeRepository;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductAttributeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeInterface|MockObject
      */
     private $productAttribute;
 
     /**
-     * @var \Magento\Catalog\Model\ProductIdLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductIdLocatorInterface|MockObject
      */
     private $productIdLocator;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connection;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|MockObject
      */
     private $metadataPool;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\PricePersistence
+     * @var PricePersistence
      */
     private $model;
 
@@ -51,29 +62,33 @@ class PricePersistenceTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->attributeResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Attribute::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->attributeResource = $this->getMockBuilder(Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->attributeRepository = $this->getMockBuilder(
-            \Magento\Catalog\Api\ProductAttributeRepositoryInterface::class
+            ProductAttributeRepositoryInterface::class
         )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->productIdLocator = $this->getMockBuilder(\Magento\Catalog\Model\ProductIdLocatorInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
-        $this->metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+        $this->productIdLocator = $this->getMockBuilder(ProductIdLocatorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLinkField', 'getMetadata'])
             ->getMock();
-        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
-        $this->productAttribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+        $this->connection = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->productAttribute = $this->getMockBuilder(ProductAttributeInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\Product\Price\PricePersistence::class,
+            PricePersistence::class,
             [
                 'attributeResource' => $this->attributeResource,
                 'attributeRepository' => $this->attributeRepository,
@@ -94,14 +109,15 @@ class PricePersistenceTest extends \PHPUnit\Framework\TestCase
         $skus = ['sku_1', 'sku_2'];
         $idsBySku = [
             'sku_1' => [
-                1 => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
+                1 => Type::TYPE_SIMPLE
             ],
             'sku_2' => [
-                2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
+                2 => Type::TYPE_VIRTUAL
             ]
         ];
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
-            ->disableOriginalConstructor()->getMock();
+        $select = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productIdLocator
             ->expects($this->once())
             ->method('retrieveProductIdsBySkus')->with($skus)
@@ -172,12 +188,11 @@ class PricePersistenceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test update method throws exception.
-     *
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save Prices.
      */
     public function testUpdateWithException()
     {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectExceptionMessage('Could not save Prices.');
         $attributeId = 5;
         $prices = [
             [
@@ -227,10 +242,10 @@ class PricePersistenceTest extends \PHPUnit\Framework\TestCase
         $skus = ['sku_1', 'sku_2'];
         $idsBySku = [
             'sku_1' => [
-                1 => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
+                1 => Type::TYPE_SIMPLE
             ],
             'sku_2' => [
-                2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
+                2 => Type::TYPE_VIRTUAL
             ]
         ];
         $this->productIdLocator
@@ -265,20 +280,19 @@ class PricePersistenceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test delete method throws exception.
-     *
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage Could not delete Prices
      */
     public function testDeleteWithException()
     {
+        $this->expectException('Magento\Framework\Exception\CouldNotDeleteException');
+        $this->expectExceptionMessage('Could not delete Prices');
         $attributeId = 5;
         $skus = ['sku_1', 'sku_2'];
         $idsBySku = [
             'sku_1' => [
-                1 => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
+                1 => Type::TYPE_SIMPLE
             ],
             'sku_2' => [
-                2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
+                2 => Type::TYPE_VIRTUAL
             ]
         ];
         $this->productIdLocator
@@ -287,7 +301,7 @@ class PricePersistenceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($idsBySku);
         $this->attributeRepository->expects($this->once())->method('get')->willReturn($this->productAttribute);
         $this->productAttribute->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
-        $this->attributeResource->expects($this->atLeastOnce(2))->method('getConnection')
+        $this->attributeResource->expects($this->atLeastOnce())->method('getConnection')
             ->willReturn($this->connection);
         $this->connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $this->attributeResource

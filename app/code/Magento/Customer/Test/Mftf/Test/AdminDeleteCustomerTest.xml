@@ -13,7 +13,7 @@
             <stories value="Delete customer"/>
             <title value="DeleteCustomerBackendEntityTestVariation1"/>
             <description value="Login as admin and delete the customer"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-14587"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -22,10 +22,10 @@
             <!-- Create Customer -->
             <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Delete created customer -->
@@ -34,6 +34,7 @@
         </actionGroup>
         <seeElement selector="{{CustomersPageSection.deletedSuccessMessage}}" stepKey="seeSuccessMessage"/>
         <waitForPageLoad stepKey="waitForCustomerGridPageToLoad"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
 
         <!--Assert Customer is not in Grid -->
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="clickFilterButton"/>

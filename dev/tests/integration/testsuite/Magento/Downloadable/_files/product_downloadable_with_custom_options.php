@@ -4,10 +4,17 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/product_downloadable_with_purchased_separately_links.php';
-
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Downloadable/_files/product_downloadable_with_purchased_separately_links.php'
+);
+$objectManager = Bootstrap::getObjectManager();
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('downloadable-product-with-purchased-separately-links');
 $product->setCanSaveCustomOptions(true);
 $product->setHasOptions(true);
 
@@ -93,8 +100,4 @@ foreach ($options as $option) {
 }
 
 $product->setOptions($customOptions);
-
-/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */
-$productRepositoryFactory =  Bootstrap::getObjectManager()
-    ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-$productRepositoryFactory->save($product);
+$productRepository->save($product);

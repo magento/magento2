@@ -31,6 +31,6 @@ class MsrpPriceCalculator implements MsrpPriceCalculatorInterface
         /** @var Grouped $groupedProduct */
         $groupedProduct = $product->getTypeInstance();
 
-        return $groupedProduct->getChildrenMsrp($product);
+        return (float) $groupedProduct->getChildrenMsrp($product);
     }
 }

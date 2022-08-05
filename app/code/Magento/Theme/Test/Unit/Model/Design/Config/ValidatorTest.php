@@ -7,26 +7,32 @@ declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Mail\TemplateInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Theme\Api\Data\DesignConfigInterface;
+use Magento\Theme\Model\Data\Design\Config\Data;
 use Magento\Theme\Model\Design\Config\Validator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for Magento\Theme\Test\Unit\Model\Design\Config\Validator.
  */
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+class ValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Mail\TemplateInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mail\TemplateInterfaceFactory|MockObject
      */
     private $templateFactory;
 
     /**
-     * @var \Magento\Framework\Mail\TemplateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TemplateInterface|MockObject
      */
     private $template;
 
     /**
-     * @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DesignConfigInterface|MockObject
      */
     private $designConfig;
 
@@ -38,14 +44,14 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->templateFactory = $this->getMockBuilder(\Magento\Framework\Mail\TemplateInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMockForAbstractClass();
-        $this->template = $this->getMockBuilder(\Magento\Framework\Mail\TemplateInterface::class)
+        $this->template = $this->getMockBuilder(TemplateInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -58,7 +64,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             )
             ->getMockForAbstractClass();
         $this->templateFactory->expects($this->any())->method('create')->willReturn($this->template);
-        $this->designConfig = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigInterface::class)
+        $this->designConfig = $this->getMockBuilder(DesignConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getExtensionAttributes'])
             ->getMockForAbstractClass();
@@ -66,6 +72,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
+     * @throws LocalizedException
      */
     public function testGetDefaultTemplateTextDefaultScope(): void
     {
@@ -80,7 +87,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->template->expects($this->once())->method('emulateDesign');
         $this->template->expects($this->once())->method('setForcedArea')->with($templateId);
         $this->template->expects($this->once())->method('loadDefault')->with($templateId);
-        $this->template->expects($this->once())->method('getTemplateText');
+        $this->template->expects($this->once())->method('getTemplateText')->willReturn('');
         $this->template->expects($this->once())->method('revertDesign');
 
         $extensionAttributes = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
@@ -111,12 +118,12 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      * Returns design config data object.
      *
      * @param array $data
-     * @return \Magento\Theme\Model\Data\Design\Config\Data
+     * @return Data
      */
-    private function getDesignConfigData(array $data = []): \Magento\Theme\Model\Data\Design\Config\Data
+    private function getDesignConfigData(array $data = []): Data
     {
         return $this->objectManager->getObject(
-            \Magento\Theme\Model\Data\Design\Config\Data::class,
+            Data::class,
             [
                 'data' => $data,
             ]

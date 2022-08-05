@@ -26,10 +26,10 @@ class SendTest extends AbstractController
     /**
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $session = Bootstrap::getObjectManager()->create(
             Session::class,
             [$logger]

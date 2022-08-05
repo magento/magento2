@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -31,5 +32,6 @@ foreach (['simple_10', 'simple_11', 'simple_12', 'configurable'] as $sku) {
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
-
-require __DIR__ . '/configurable_attribute_with_source_model_rollback.php';
+Resolver::getInstance()->requireDataFixture(
+    'Magento/ConfigurableProduct/_files/configurable_attribute_with_source_model_rollback.php'
+);

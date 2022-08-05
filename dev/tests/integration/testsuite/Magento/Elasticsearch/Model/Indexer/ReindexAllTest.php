@@ -10,9 +10,11 @@ use Magento\Indexer\Model\Indexer;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
+use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
+use Magento\Framework\Search\EngineResolverInterface;
+use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
 
 /**
  * Important: Please make sure that each integration test file works with unique elastic search index. In order to
@@ -22,9 +24,15 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
  *
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReindexAllTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var string
+     */
+    private $searchEngine;
+
     /**
      * @var ConnectionManager
      */
@@ -55,7 +63,15 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
      */
     private $productRepository;
 
-    protected function setUp()
+    /**
+     * Elasticsearch7 engine configuration is also compatible with OpenSearch 1
+     */
+    private const ENGINE_SUPPORTED_VERSIONS = [
+        7 => 'elasticsearch7',
+        1 => 'elasticsearch7',
+    ];
+
+    protected function setUp(): void
     {
         $this->connectionManager = Bootstrap::getObjectManager()->create(ConnectionManager::class);
         $this->client = $this->connectionManager->getConnection();
@@ -66,9 +82,24 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Make sure that correct engine is set
+     */
+    protected function assertPreConditions(): void
+    {
+        $currentEngine = Bootstrap::getObjectManager()->get(EngineResolverInterface::class)->getCurrentSearchEngine();
+        $this->assertEquals(
+            $this->getInstalledSearchEngine(),
+            $currentEngine,
+            sprintf(
+                'Search engine configuration "%s" is not compatible with the installed version',
+                $currentEngine
+            )
+        );
+    }
+
+    /**
      * Test search of all products after full reindex
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest_configurable
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
      */
@@ -80,20 +111,102 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test search of specific product after full reindex
+     * Test sorting of all products after full reindex
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
+     * @magentoDbIsolation enabled
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest_configurable
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
      */
-    public function testSearchSpecificProduct()
+    public function testSort()
+    {
+        /** @var $productFifth \Magento\Catalog\Model\Product */
+        $productSimple = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+        $productSimple->setTypeId('simple')
+            ->setAttributeSetId(4)
+            ->setWebsiteIds([1])
+            ->setName('ABC')
+            ->setSku('abc-first-in-sort')
+            ->setPrice(20)
+            ->setMetaTitle('meta title')
+            ->setMetaKeyword('meta keyword')
+            ->setMetaDescription('meta description')
+            ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
+            ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+            ->setStockData(['use_config_manage_stock' => 0])
+            ->save();
+        $productConfigurableOption = $this->productRepository->get('simple_10');
+        $productConfigurableOption->setName('1ABC');
+        $this->productRepository->save($productConfigurableOption);
+        $this->reindexAll();
+        $productSimple = $this->productRepository->get('abc-first-in-sort');
+        $result = $this->sortByName();
+        $firstInSearchResults = (int) $result[0]['_id'];
+        $productSimpleId = (int) $productSimple->getId();
+        $this->assertEquals($productSimpleId, $firstInSearchResults);
+    }
+
+    /**
+     * Test sorting of products with lower and upper case names after full reindex
+     *
+     * @magentoDbIsolation enabled
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
+     * @magentoDataFixture Magento/Elasticsearch/_files/case_sensitive.php
+     */
+    public function testSortCaseSensitive(): void
+    {
+        $productFirst = $this->productRepository->get('fulltext-1');
+        $productSecond = $this->productRepository->get('fulltext-2');
+        $productThird = $this->productRepository->get('fulltext-3');
+        $productFourth = $this->productRepository->get('fulltext-4');
+        $productFifth = $this->productRepository->get('fulltext-5');
+
+        $this->reindexAll();
+        $result = $this->sortByName();
+        $firstInSearchResults = (int) $result[0]['_id'];
+        $secondInSearchResults = (int) $result[1]['_id'];
+        $thirdInSearchResults = (int) $result[2]['_id'];
+        $fourthInSearchResults = (int) $result[3]['_id'];
+        $fifthInSearchResults = (int) $result[4]['_id'];
+
+        self::assertCount(5, $result);
+        self::assertEqualsCanonicalizing(
+            [$productFirst->getId(), $productFourth->getId()],
+            [$firstInSearchResults, $secondInSearchResults]
+        );
+        self::assertEqualsCanonicalizing(
+            [$productSecond->getId(), $productFifth->getId()],
+            [$thirdInSearchResults, $fourthInSearchResults]
+        );
+        self::assertEquals($productThird->getId(), $fifthInSearchResults);
+    }
+
+    /**
+     * Test search of specific product after full reindex
+     *
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest_configurable
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
+     * @magentoDataFixture Magento/Catalog/_files/products.php
+     * @dataProvider searchSpecificProductDataProvider
+     * @param string $searchName
+     * @param string $sku
+     * @param int $expectedCount
+     */
+    public function testSearchSpecificProduct(string $searchName, string $sku, int $expectedCount)
     {
         $this->reindexAll();
-        $result = $this->searchByName('12345');
-        self::assertCount(1, $result);
+        $result = $this->searchByName($searchName);
+        self::assertCount($expectedCount, $result);
 
-        $specificProduct = $this->productRepository->get('configurable_12345');
+        $specificProduct = $this->productRepository->get($sku);
         self::assertEquals($specificProduct->getId(), $result[0]['_id']);
+    }
+
+    public function searchSpecificProductDataProvider(): array
+    {
+        return [
+            'search by numeric name' => ['12345', 'configurable_12345', 1],
+            'search by name with diacritics' => ['Cùstöm Dèsign', 'custom-design-simple-product', 1],
+        ];
     }
 
     /**
@@ -126,6 +239,38 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return array
+     */
+    private function sortByName()
+    {
+        $storeId = $this->storeManager->getDefaultStoreView()->getId();
+        $searchQuery = [
+            'index' => $this->searchIndexNameResolver->getIndexName($storeId, 'catalogsearch_fulltext'),
+            'type' => $this->clientConfig->getEntityType(),
+            'body' => [
+                'sort' => [
+                    'name.sort_name' => [
+                        'order' => 'asc'
+                    ],
+                ],
+                'query' => [
+                    'bool' => [
+                        'must' => [
+                            [
+                                'terms' => [
+                                    'visibility' => [2, 4],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $queryResult = $this->client->query($searchQuery);
+        return isset($queryResult['hits']['hits']) ? $queryResult['hits']['hits'] : [];
+    }
+
+    /**
      * Make fulltext catalog search reindex
      *
      * @return void
@@ -137,5 +282,20 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
         $indexer = Bootstrap::getObjectManager()->create(Indexer::class);
         $indexer->load('catalogsearch_fulltext');
         $indexer->reindexAll();
+    }
+
+    /**
+     * Returns installed on server search service
+     *
+     * @return string
+     */
+    private function getInstalledSearchEngine()
+    {
+        if (!$this->searchEngine) {
+            // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
+            $version = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class)->getVersion();
+            $this->searchEngine = self::ENGINE_SUPPORTED_VERSIONS[$version] ?? 'elasticsearch' . $version;
+        }
+        return $this->searchEngine;
     }
 }

@@ -12,8 +12,10 @@ use Magento\CatalogSearch\Model\Indexer\Scope\StateFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\DimensionProviderInterface;
+use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Store\Model\StoreDimensionProvider;
 use Magento\Indexer\Model\ProcessManager;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Provide functionality for Fulltext Search indexing.
@@ -31,7 +33,12 @@ class Fulltext implements
     /**
      * Indexer ID in configuration
      */
-    const INDEXER_ID = 'catalogsearch_fulltext';
+    public const INDEXER_ID = 'catalogsearch_fulltext';
+
+    /**
+     * Default batch size
+     */
+    private const BATCH_SIZE = 1000;
 
     /**
      * @var array index structure
@@ -55,11 +62,15 @@ class Fulltext implements
 
     /**
      * @var IndexSwitcherInterface
+     * @deprecated
+     * @see \Magento\Elasticsearch
      */
     private $indexSwitcher;
 
     /**
      * @var \Magento\CatalogSearch\Model\Indexer\Scope\State
+     * @deprecated
+     * @see \Magento\Elasticsearch
      */
     private $indexScopeState;
 
@@ -74,6 +85,23 @@ class Fulltext implements
     private $processManager;
 
     /**
+     * @var int
+     */
+    private $batchSize;
+
+    /**
+     * @var DeploymentConfig|null
+     */
+    private $deploymentConfig;
+
+    /**
+     * Deployment config path
+     *
+     * @var string
+     */
+    private const DEPLOYMENT_CONFIG_INDEXER_BATCHES = 'indexer/batch_size/';
+
+    /**
      * @param FullFactory $fullActionFactory
      * @param IndexerHandlerFactory $indexerHandlerFactory
      * @param FulltextResource $fulltextResource
@@ -81,8 +109,11 @@ class Fulltext implements
      * @param StateFactory $indexScopeStateFactory
      * @param DimensionProviderInterface $dimensionProvider
      * @param array $data
-     * @param ProcessManager $processManager
+     * @param ProcessManager|null $processManager
+     * @param int|null $batchSize
+     * @param DeploymentConfig|null $deploymentConfig
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FullFactory $fullActionFactory,
@@ -92,7 +123,9 @@ class Fulltext implements
         StateFactory $indexScopeStateFactory,
         DimensionProviderInterface $dimensionProvider,
         array $data,
-        ProcessManager $processManager = null
+        ProcessManager $processManager = null,
+        ?int $batchSize = null,
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
         $this->indexerHandlerFactory = $indexerHandlerFactory;
@@ -102,6 +135,8 @@ class Fulltext implements
         $this->indexScopeState = ObjectManager::getInstance()->get(State::class);
         $this->dimensionProvider = $dimensionProvider;
         $this->processManager = $processManager ?: ObjectManager::getInstance()->get(ProcessManager::class);
+        $this->batchSize = $batchSize ?? self::BATCH_SIZE;
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -122,6 +157,7 @@ class Fulltext implements
      * @inheritdoc
      *
      * @throws \InvalidArgumentException
+     * @since 101.0.0
      */
     public function executeByDimensions(array $dimensions, \Traversable $entityIds = null)
     {
@@ -136,24 +172,53 @@ class Fulltext implements
         );
 
         if (null === $entityIds) {
-            $this->indexScopeState->useTemporaryIndex();
             $saveHandler->cleanIndex($dimensions);
             $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId));
-
-            $this->indexSwitcher->switchIndex($dimensions);
-            $this->indexScopeState->useRegularIndex();
 
             $this->fulltextResource->resetSearchResultsByStore($storeId);
         } else {
             // internal implementation works only with array
             $entityIds = iterator_to_array($entityIds);
-            $productIds = array_unique(
-                array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
-            );
-            if ($saveHandler->isAvailable($dimensions)) {
-                $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
-                $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
+            $currentBatch = [];
+            $i = 0;
+
+            $this->batchSize = $this->deploymentConfig->get(
+                self::DEPLOYMENT_CONFIG_INDEXER_BATCHES . self::INDEXER_ID . '/partial_reindex'
+            ) ?? $this->batchSize;
+
+            foreach ($entityIds as $entityId) {
+                $currentBatch[] = $entityId;
+                if (++$i === $this->batchSize) {
+                    $this->processBatch($saveHandler, $dimensions, $currentBatch);
+                    $i = 0;
+                    $currentBatch = [];
+                }
             }
+            if (!empty($currentBatch)) {
+                $this->processBatch($saveHandler, $dimensions, $currentBatch);
+            }
+        }
+    }
+
+    /**
+     * Process batch
+     *
+     * @param IndexerInterface $saveHandler
+     * @param array $dimensions
+     * @param array $entityIds
+     */
+    private function processBatch(
+        IndexerInterface $saveHandler,
+        array $dimensions,
+        array $entityIds
+    ) : void {
+        $storeId = $dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue();
+        $productIds = array_unique(
+            array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
+        );
+        if ($saveHandler->isAvailable($dimensions)) {
+            $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
+            $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
         }
     }
 

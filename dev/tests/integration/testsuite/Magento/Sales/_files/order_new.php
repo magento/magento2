@@ -3,7 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-require __DIR__ . '/order.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

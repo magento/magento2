@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminMediaGalleryFolderData">
+        <data key="name" unique="suffix">folder</data>
+    </entity>
+    <entity name="AdminMediaGalleryFolder2Data">
+        <data key="name" unique="suffix">folder2</data>
+    </entity>
+    <entity name="AdminMediaGalleryFolder3Data">
+        <data key="name" unique="suffix">folder_name-3</data>
+    </entity>
+    <entity name="AdminMediaGalleryFolderInvalidData">
+        <data key="name">,.?/:;'[{]}|~`!@#$%^*()_=+</data>
+    </entity>
+</entities>

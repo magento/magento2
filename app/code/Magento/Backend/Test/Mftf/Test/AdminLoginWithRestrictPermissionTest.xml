@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginWithRestrictPermissionTest">
+        <annotations>
+            <features value="Backend"/>
+            <title value="Login with restrict role."/>
+            <stories value="Login on the Admin Login page" />
+            <testCaseId value="MC-29321" />
+            <severity value="MAJOR" />
+            <description value="Check login with restrict role."/>
+            <group value="login"/>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logIn"/>
+            <!--Create user role-->
+            <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
+                <argument name="User" value="adminRole"/>
+                <argument name="restrictedRole" value="Global Search"/>
+            </actionGroup>
+            <actionGroup ref="AdminUserClickRoleResourceTabActionGroup" stepKey="switchToRoleResourceTab"/>
+            <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="addRestrictedRoleStores">
+                <argument name="User" value="adminRole"/>
+                <argument name="restrictedRole" value="Global Search"/>
+            </actionGroup>
+            <actionGroup ref="AdminUserSaveRoleActionGroup" stepKey="saveRole"/>
+            <!--Create user and assign role to it-->
+            <actionGroup ref="AdminCreateUserActionGroup" stepKey="createAdminUser">
+                <argument name="role" value="adminRole"/>
+                <argument name="User" value="admin2"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsSaleRoleUser"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Delete created data-->
+            <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteUserRole">
+                <argument name="roleName" value="{{adminRole.rolename}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenAdminUsersPageActionGroup" stepKey="goToAllUsersPage"/>
+            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="deleteUser">
+                <argument name="userName" value="{{admin2.username}}"/>
+            </actionGroup>
+        </after>
+        <!--Log out of admin and login with newly created user-->
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
+            <argument name="username" value="{{admin2.username}}"/>
+            <argument name="password" value="{{admin2.password}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertUserRoleRestrictedAccessActionGroup" stepKey="assertRestrictPage"/>
+    </test>
+</tests>

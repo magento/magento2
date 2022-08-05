@@ -11,15 +11,15 @@
 $group = $block->getGroupName();
 $groupCss = $block->getGroupCss();
 ?>
-<?php if ($detailedInfoGroup = $block->getGroupChildNames($group, 'getChildHtml')) :?>
+<?php if ($detailedInfoGroup = $block->getGroupChildNames($group)):?>
     <div class="sections <?= $block->escapeHtmlAttr($groupCss) ?>">
         <?php $layout = $block->getLayout(); ?>
         <div class="section-items <?= $block->escapeHtmlAttr($groupCss) ?>-items"
              data-mage-init='{"tabs":{"openedState":"active"}}'>
-            <?php foreach ($detailedInfoGroup as $name) :?>
+            <?php foreach ($detailedInfoGroup as $name):?>
                 <?php
                     $html = $layout->renderElement($name);
-                if (!trim($html) && ($block->getUseForce() != true)) {
+                if (!($html !== null && trim($html)) && ($block->getUseForce() != true)) {
                     continue;
                 }
                     $alias = $layout->getElementAlias($name);

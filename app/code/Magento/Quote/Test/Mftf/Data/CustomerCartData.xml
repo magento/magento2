@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="CustomerCart" type="CustomerCart">
+        <var key="customer_id" entityType="customer" entityKey="id"/>
+    </entity>
+
+    <entity name="CustomerAddressInformation" type="CustomerAddressInformation">
+        <var key="cart_id" entityKey="return" entityType="CustomerCart"/>
+        <requiredEntity type="shipping_address">ShippingAddressTX</requiredEntity>
+        <requiredEntity type="billing_address">BillingAddressTX</requiredEntity>
+        <data key="shipping_method_code">flatrate</data>
+        <data key="shipping_carrier_code">flatrate</data>
+    </entity>
+
+    <entity name="CustomerOrderPaymentMethod" type="CustomerPaymentInformation">
+        <var key="cart_id" entityKey="return" entityType="CustomerCart"/>
+        <requiredEntity type="payment_method">PaymentMethodCheckMoneyOrder</requiredEntity>
+        <requiredEntity type="billing_address">BillingAddressTX</requiredEntity>
+    </entity>
+
+    <entity name="CashOnDeliveryOrderPaymentMethod" type="CustomerPaymentInformation">
+        <var key="cart_id" entityKey="return" entityType="CustomerCart"/>
+        <requiredEntity type="payment_method">CashOnDeliveryPaymentMethod</requiredEntity>
+        <requiredEntity type="billing_address">BillingAddressTX</requiredEntity>
+    </entity>
+
+    <entity name="GetOrderData" type="CustomerCart">
+        <var key="cart_id" entityKey="return" entityType="CustomerCart"/>
+    </entity>
+
+</entities>

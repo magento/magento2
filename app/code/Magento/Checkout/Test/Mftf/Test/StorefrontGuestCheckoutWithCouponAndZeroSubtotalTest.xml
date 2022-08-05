@@ -18,7 +18,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="VirtualProduct" stepKey="virtualProduct">
                 <field key="price">50.00</field>
             </createData>
@@ -27,30 +27,32 @@
         <after>
             <deleteData createDataKey="virtualProduct" stepKey="deleteVirtualProduct"/>
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Product page in StoreFront and assert product and price range -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openVirtualProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openVirtualProductPageAndVerifyProduct">
             <argument name="product" value="$$virtualProduct$$"/>
         </actionGroup>
 
         <!-- Add Product to the cart -->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct1ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct1ToTheCart">
             <argument name="productName" value="$$virtualProduct.name$$"/>
         </actionGroup>
 
         <!--Open View and edit -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickMiniCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
 
         <!-- Fill the Estimate Shipping and Tax section -->
         <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
 
         <!-- Assert Discount and proceed to checkout -->
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$50.00" stepKey="seeDiscountTotal"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForDiscountElement"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
+            <argument name="discount" value="50.00"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
 
         <!--Fill Customer Information -->
         <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{Simple_US_Customer.email}}" stepKey="enterEmail"/>
@@ -69,15 +71,14 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
 
         <!-- Assert empty Mini Cart -->
-        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <seeElement selector="{{StorefrontMinicartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
 
         <!-- Open Order Index Page -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
 
         <!-- Filter Order using orderId and assert order-->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$orderId"/>
         </actionGroup>
         <click selector="{{AdminOrdersGridSection.viewLink('$orderId')}}" stepKey="clickOnViewLink"/>

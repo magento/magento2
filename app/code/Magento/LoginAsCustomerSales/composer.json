@@ -1,0 +1,27 @@
+{
+    "name": "magento/module-login-as-customer-sales",
+    "description": "",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-user": "*",
+        "magento/module-login-as-customer-api": "*"
+    },
+    "suggest": {
+        "magento/module-sales": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\LoginAsCustomerSales\\": ""
+        }
+    }
+}

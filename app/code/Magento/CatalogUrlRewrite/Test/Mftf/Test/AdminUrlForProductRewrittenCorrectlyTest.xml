@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create product-->
             <createData entity="_defaultCategory" stepKey="category"/>
@@ -33,15 +33,17 @@
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Created product-->
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="amOnEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="amOnEditPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForEditPage"/>
 
         <!--Switch to Default Store view-->
-        <actionGroup ref="SwitchToTheNewStoreView" stepKey="selectSecondStoreView">
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="selectSecondStoreView">
             <argument name="storeViewName" value="Default Store View"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForStoreViewLoad"/>
@@ -51,12 +53,11 @@
         <waitForElementVisible selector="{{AdminProductSEOSection.useDefaultUrl}}" stepKey="waitForUseDefaultUrlCheckbox"/>
         <click selector="{{AdminProductSEOSection.useDefaultUrl}}" stepKey="clickUseDefaultUrlCheckbox"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="$$createProduct.sku$$-new" stepKey="changeUrlKey"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Select product and go toUpdate Attribute page-->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="GoToCatalogPageChangingView"/>
-        <waitForPageLoad stepKey="WaitForPageToLoadFullyChangingView"/>
-        <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName">
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToCatalogPageChangingView"/>
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="ApiSimpleProduct"/>
         </actionGroup>
         <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="ClickOnSelectAllCheckBoxChangingView"/>
@@ -70,14 +71,16 @@
         <click selector="{{AdminUpdateAttributesSection.saveButton}}" stepKey="clickSave"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeSaveSuccess"/>
 
-        <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
-        <magentoCLI command="cron:run" stepKey="runCron2"/>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitFormToReload1"/>
+        <!-- Start message queue -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueueConsumer">
+            <argument name="consumerName" value="{{AdminProductAttributeWebsiteUpdateConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminProductAttributeWebsiteUpdateConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <!-- Run cron -->
+        <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
 
         <!--Got to Store front product page and check url-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.sku$$-new)}}" stepKey="navigateToSimpleProductPage"/>
-        <seeInCurrentUrl url="{{StorefrontProductPage.url($$createProduct.sku$$-new)}}" stepKey="seeProductNewUrl"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$-new)}}" stepKey="navigateToSimpleProductPage"/>
+        <seeInCurrentUrl url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$-new)}}" stepKey="seeProductNewUrl"/>
     </test>
 </tests>

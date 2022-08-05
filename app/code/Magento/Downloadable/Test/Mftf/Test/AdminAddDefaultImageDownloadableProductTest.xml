@@ -20,28 +20,28 @@
         </annotations>
         <before>
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="adminProductIndexPageAdd"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillMainProductForm">
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillMainProductForm">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
 
         <!-- Add image to product -->
-        <actionGroup ref="addProductImage" stepKey="addImageForProduct">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProduct">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
 
@@ -51,26 +51,26 @@
         <fillField userInput="{{downloadableData.link_title}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="fillDownloadableLinkTitle"/>
         <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkLinksPurchasedSeparately"/>
         <fillField userInput="{{downloadableData.sample_title}}" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="fillDownloadableSampleTitle"/>
-        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableLinkWithMaxDownloads">
+        <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addDownloadableLinkWithMaxDownloads">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
-        <actionGroup ref="addDownloadableProductLink" stepKey="addDownloadableLink">
+        <actionGroup ref="AddDownloadableProductLinkActionGroup" stepKey="addDownloadableLink">
             <argument name="link" value="downloadableLink"/>
         </actionGroup>
 
         <!--Save product-->
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!-- Assert product image in admin product form -->
-        <actionGroup ref="assertProductImageAdminProductPage" stepKey="assertProductImageAdminProductPage"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
 
         <!-- Assert product image in storefront product page -->
-        <actionGroup ref="assertProductImageStorefrontProductPage" stepKey="assertProductImageStorefrontProductPage">
+        <actionGroup ref="AssertProductImageStorefrontProductPageActionGroup" stepKey="assertProductImageStorefrontProductPage">
             <argument name="product" value="DownloadableProduct"/>
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>

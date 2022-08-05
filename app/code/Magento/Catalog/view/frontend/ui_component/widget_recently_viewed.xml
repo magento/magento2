@@ -31,6 +31,7 @@
                     <item name="identifiersConfig" xsi:type="array">
                         <item name="namespace" xsi:type="string">recently_viewed_product</item>
                     </item>
+                    <item name="scopeConfig" xsi:type="object">Magento\Framework\App\Config\ScopeConfigInterface</item>
                 </item>
             </argument>
         </argument>

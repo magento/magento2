@@ -20,12 +20,15 @@
         <waitForPageLoad stepKey="waitForCatalogSubmenu" time="5"/>
         <click stepKey="clickOnProducts" selector="{{CatalogSubmenuSection.products}}"/>
         <waitForPageLoad stepKey="waitForProductsPage" time="10"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <click stepKey="TickCheckbox" selector="{{ProductsPageSection.checkboxForProduct(productName)}}"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click stepKey="OpenActions" selector="{{ProductsPageSection.actions}}"/>
-        <waitForAjaxLoad stepKey="waitForDelete" time="5"/>
+        <waitForPageLoad stepKey="waitForDelete" time="5"/>
         <click stepKey="ChooseDelete" selector="{{ProductsPageSection.delete}}"/>
         <waitForPageLoad stepKey="waitForDeleteItemPopup" time="10"/>
         <click stepKey="clickOnOk" selector="{{ProductsPageSection.ok}}"/>
         <waitForElementVisible stepKey="waitForSuccessfullyDeletedMessage" selector="{{ProductsPageSection.deletedSuccessMessage}}" time="10"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskDisappear"/>
     </actionGroup>
 </actionGroups>

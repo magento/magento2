@@ -8,40 +8,43 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontSwatchAttributesDisplayInWidgetCMSTest">
+    <test name="StorefrontSwatchAttributesDisplayInWidgetCMSTest" deprecated="Use StorefrontSwatchAttributeDisplayedInWidgetCMSTest instead">
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Swatches"/>
-            <title value="Swatch Attribute is not displayed in the Widget CMS"/>
-            <description value="Swatch Attribute is not displayed in the Widget CMS"/>
+            <title value="Deprecated. Swatch Attribute is not displayed in the Widget CMS"/>
+            <description value="Deprecated. Swatch Attribute is not displayed in the Widget CMS"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-96469"/>
             <useCaseId value="MAGETWO-96406"/>
             <group value="ConfigurableProduct"/>
             <skip>
-                <issueId value="MQE-1424" />
+                <issueId value="DEPRECATED">Use StorefrontSwatchAttributeDisplayedInWidgetCMSTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
-            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <createData entity="NewRootCategory" stepKey="createRootCategory"/>
         </before>
 
         <after>
             <!--delete created configurable product-->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="BaseConfigurableProduct"/>
             </actionGroup>
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
-            <waitForPageLoad stepKey="waitForAdminProductGridLoad"/>
-            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
-            <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteAttribute">
-                <argument name="ProductAttribute" value="visualSwatchAttribute"/>
+            <comment userInput="BIC workaround" stepKey="visitAdminProductPage"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clickClearFiltersInitial"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
+                <argument name="productAttributeLabel" value="{{visualSwatchAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
             <!--delete root category-->
-            <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
-            <waitForPageLoad time="30" stepKey="waitForPageCategoryLoad"/>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
             <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('$$createRootCategory.name$$')}}" stepKey="clickOnDefaultRootCategory"/>
             <waitForPageLoad stepKey="waitForPageDefaultCategoryEditLoad" />
             <seeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="assertDeleteButtonIsPresent1"/>
@@ -49,19 +52,18 @@
             <waitForElementVisible selector="{{AdminCategoryModalSection.ok}}" stepKey="waitForModalDeleteDefaultRootCategory" />
             <click selector="{{AdminCategoryModalSection.ok}}" stepKey="acceptModal1"/>
             <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="waitForPageReloadAfterDeleteDefaultCategory"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <!--logout-->
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Login-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdmin"/>
          <!--Create a configurable swatch product via the UI -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductPage"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createRootCategory.name$$]" stepKey="searchAndSelectCategory"/>
@@ -77,7 +79,7 @@
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickToExpandSEOSection"/>
         <scrollTo selector="{{CmsNewPagePageSeoSection.urlKey}}" stepKey="scrollToUrlKey"/>
         <grabValueFrom selector="{{CmsNewPagePageSeoSection.urlKey}}"  stepKey="grabTextFromUrlKey"/>
-        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
         <!--Open Storefront page for the new created page-->
         <amOnPage url="{{StorefrontHomePage.url}}$grabTextFromUrlKey" stepKey="gotToCreatedCmsPage"/>
@@ -86,7 +88,7 @@
         <seeElement selector="{{StorefrontProductInfoMainSection.productSwatch(visualSwatchOption2.default_label)}}" stepKey="assertAddedWidgetM"/>
 
         <!--Login to delete CMS page-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="DeletePageByUrlKeyActionGroup" stepKey="deletePage">
             <argument name="UrlKey" value="$grabTextFromUrlKey"/>
         </actionGroup>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FillCategoryNameAndUrlKeyAndSaveActionGroup">
+        <annotations>
+            <description>Requires navigation to subcategory creation/edit. Fills the name, and sets the Search Engine Optimization for the category.</description>
+        </annotations>
+        <arguments>
+            <argument name="categoryName" type="string"/>
+            <argument name="categoryUrlKey" type="string"/>
+        </arguments>
+
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{categoryName}}" stepKey="enterCategoryName"/>
+        <scrollTo selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="scrollToSearchEngineOptimization"/>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="openSEO"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{categoryUrlKey}}" stepKey="enterURLKey"/>
+        <scrollToTopOfPage stepKey="scrollToTheTopOfPage"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+    </actionGroup>
+</actionGroups>

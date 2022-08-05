@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require realpath(__DIR__ . '/../../') . '/Catalog/_files/product_associated.php';
-require realpath(__DIR__ . '/../../') . '/Catalog/_files/product_virtual_in_stock.php';
-require realpath(__DIR__ . '/../../') . '/Catalog/_files/product_virtual_out_of_stock.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_associated.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_virtual_in_stock.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_virtual_out_of_stock.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);

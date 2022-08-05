@@ -19,28 +19,28 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="DeleteCategory" stepKey="DeleteCategory">
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="DeleteCategory">
                 <argument name="categoryEntity" value="SimpleSubCategory"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to create a new category with image -->
-        <actionGroup ref="goToCreateCategoryPage" stepKey="goToCreateCategoryPage"/>
-        <actionGroup ref="fillCategoryForm" stepKey="fillCategoryForm">
+        <actionGroup ref="GoToCreateCategoryPageActionGroup" stepKey="goToCreateCategoryPage"/>
+        <actionGroup ref="FillCategoryFormActionGroup" stepKey="fillCategoryForm">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>
-        <actionGroup ref="addCategoryImage" stepKey="addCategoryImage"/>
-        <actionGroup ref="saveCategoryForm" stepKey="saveCategoryForm"/>
+        <actionGroup ref="AddCategoryImageActionGroup" stepKey="addCategoryImage"/>
+        <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategoryForm"/>
 
         <!-- Verify category with image in admin -->
-        <actionGroup ref="checkCategoryImageInAdmin" stepKey="checkCategoryImageInAdmin"/>
+        <actionGroup ref="CheckCategoryImageInAdminActionGroup" stepKey="checkCategoryImageInAdmin"/>
 
         <!-- Verify category with image in storefront -->
-        <actionGroup ref="CheckCategoryOnStorefront" stepKey="CheckCategoryOnStorefront">
+        <actionGroup ref="CheckCategoryOnStorefrontActionGroup" stepKey="CheckCategoryOnStorefront">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>
         <seeElement selector="{{StorefrontCategoryMainSection.imageSource(ProductImage.filename)}}" stepKey="seeImage"/>

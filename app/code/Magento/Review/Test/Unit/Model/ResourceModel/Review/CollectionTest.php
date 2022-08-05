@@ -3,56 +3,72 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Model\ResourceModel\Review;
 
-class CollectionTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Review\Model\ResourceModel\Review\Collection;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CollectionTest extends TestCase
 {
     /**
-     * @var \Magento\Review\Model\ResourceModel\Review\Collection
+     * @var Collection
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\DB\Select | \PHPUnit_Framework_MockObject_MockObject
+     * @var Select|MockObject
      */
     protected $selectMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb | \PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractDb|MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $readerAdapterMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId']);
-        $store->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($store));
-        $this->objectManager = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this));
-        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
+        $store = $this->createPartialMock(Store::class, ['getId']);
+        $store->expects($this->any())->method('getId')->willReturn(1);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($store);
+        $this->objectManager = (new ObjectManager($this));
+        $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection', 'getMainTable', 'getTable'])
+            ->onlyMethods(['getConnection', 'getMainTable', 'getTable'])
             ->getMockForAbstractClass();
-        $this->readerAdapterMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
+        $this->readerAdapterMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
-            ->setMethods(['select', 'prepareSqlCondition', 'quoteInto'])
+            ->onlyMethods(['select', 'prepareSqlCondition', 'quoteInto'])
             ->getMockForAbstractClass();
-        $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->readerAdapterMock->expects($this->any())
@@ -70,7 +86,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 return $table;
             });
         $this->model = $this->objectManager->getObject(
-            \Magento\Review\Model\ResourceModel\Review\Collection::class,
+            Collection::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'resource' => $this->resourceMock,
@@ -78,17 +94,20 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testInitSelect()
+    /**
+     * @return void
+     */
+    public function testInitSelect(): void
     {
         $this->selectMock->expects($this->once())
             ->method('join')
             ->with(
                 ['detail' => 'review_detail'],
                 'main_table.review_id = detail.review_id',
-                ['detail_id', 'title', 'detail', 'nickname', 'customer_id']
+                ['detail_id', 'store_id', 'title', 'detail', 'nickname', 'customer_id']
             );
         $this->objectManager->getObject(
-            \Magento\Review\Model\ResourceModel\Review\Collection::class,
+            Collection::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'resource' => $this->resourceMock,
@@ -96,7 +115,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testAddStoreFilter()
+    /**
+     * @return void
+     */
+    public function testAddStoreFilter(): void
     {
         $this->readerAdapterMock->expects($this->once())
             ->method('prepareSqlCondition');
@@ -113,30 +135,30 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @param int|string $entity
      * @param int $pkValue
-     * @param string $quoteIntoArguments1
-     * @param string $quoteIntoArguments2
+     * @param array $quoteIntoArguments1
+     * @param array $quoteIntoArguments2
      * @param string $quoteIntoReturn1
      * @param string $quoteIntoReturn2
      * @param int $callNum
+     *
+     * @return void
      * @dataProvider addEntityFilterDataProvider
      */
     public function testAddEntityFilter(
         $entity,
-        $pkValue,
-        $quoteIntoArguments1,
-        $quoteIntoArguments2,
-        $quoteIntoReturn1,
-        $quoteIntoReturn2,
-        $callNum
-    ) {
-        $this->readerAdapterMock->expects($this->at(0))
+        int $pkValue,
+        array $quoteIntoArguments1,
+        array $quoteIntoArguments2,
+        string $quoteIntoReturn1,
+        string $quoteIntoReturn2,
+        int $callNum
+    ): void {
+        $this->readerAdapterMock
             ->method('quoteInto')
-            ->with($quoteIntoArguments1[0], $quoteIntoArguments1[1])
-            ->willReturn($quoteIntoReturn1);
-        $this->readerAdapterMock->expects($this->at(1))
-            ->method('quoteInto')
-            ->with($quoteIntoArguments2[0], $quoteIntoArguments2[1])
-            ->willReturn($quoteIntoReturn2);
+            ->withConsecutive(
+                [$quoteIntoArguments1[0], $quoteIntoArguments1[1]],
+                [$quoteIntoArguments2[0], $quoteIntoArguments2[1]]
+            )->willReturnOnConsecutiveCalls($quoteIntoReturn1, $quoteIntoReturn2);
         $this->selectMock->expects($this->exactly($callNum))
             ->method('join')
             ->with(
@@ -150,7 +172,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function addEntityFilterDataProvider()
+    public function addEntityFilterDataProvider(): array
     {
         return [
             [
@@ -174,7 +196,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testAddReviewsTotalCount()
+    /**
+     * @return void
+     */
+    public function testAddReviewsTotalCount(): void
     {
         $this->selectMock->expects($this->once())
             ->method('joinLeft')

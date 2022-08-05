@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ExpandAdminProductSectionActionGroup">
+        <annotations>
+            <description>Expand the provided Section Selector based on the provided dependant Section Selector.</description>
+        </annotations>
+        <arguments>
+            <argument name="sectionSelector" defaultValue="{{AdminProductContentSection.sectionHeader}}" type="string"/>
+            <argument name="sectionDependentSelector" defaultValue="{{AdminProductContentSection.sectionHeaderShow}}" type="string"/>
+        </arguments>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <waitForElementVisible time="30" selector="{{sectionSelector}}" stepKey="waitForSection"/>
+        <conditionalClick selector="{{sectionSelector}}" dependentSelector="{{sectionDependentSelector}}" visible="false" stepKey="expandSection"/>
+        <waitForPageLoad time="30" stepKey="waitForSectionToExpand"/>
+    </actionGroup>
+</actionGroups>

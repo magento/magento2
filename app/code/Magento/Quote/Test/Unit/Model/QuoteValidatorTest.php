@@ -3,44 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Directory\Model\AllowedCountries;
-use Magento\Quote\Model\Quote\Address;
-use Magento\Quote\Model\Quote\Payment;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as OrderAmountValidationMessage;
 use Magento\Quote\Model\QuoteValidator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class QuoteValidatorTest
- */
-class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
+class QuoteValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Model\QuoteValidator
+     * @var QuoteValidator
      */
     protected $quoteValidator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Quote\Model\Quote
+     * @var MockObject|Quote
      */
     protected $quoteMock;
 
     /**
-     * @var AllowedCountries|\PHPUnit_Framework_MockObject_MockObject
+     * @var AllowedCountries|MockObject
      */
     private $allowedCountryReader;
 
     /**
-     * @var OrderAmountValidationMessage|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderAmountValidationMessage|MockObject
      */
     private $orderAmountValidationMessage;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->allowedCountryReader = $this->getMockBuilder(AllowedCountries::class)
             ->disableOriginalConstructor()
@@ -49,33 +48,34 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->quoteValidator = new \Magento\Quote\Model\QuoteValidator(
+        $this->quoteValidator = new QuoteValidator(
             $this->allowedCountryReader,
             $this->orderAmountValidationMessage
         );
 
-        $this->quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
-            [
-                'getShippingAddress',
-                'getBillingAddress',
-                'getPayment',
-                'getHasError',
-                'setHasError',
-                'addMessage',
-                'isVirtual',
-                'validateMinimumAmount',
-                'getIsMultiShipping',
-                '__wakeup'
-            ]
-        );
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getHasError', 'getIsMultiShipping'])
+            ->onlyMethods(
+                [
+                    'getShippingAddress',
+                    'getBillingAddress',
+                    'getPayment',
+                    'setHasError',
+                    'addMessage',
+                    'isVirtual',
+                    'validateMinimumAmount',
+                    '__wakeup'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testCheckQuoteAmountExistingError()
     {
         $this->quoteMock->expects($this->once())
             ->method('getHasError')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->quoteMock->expects($this->never())
             ->method('setHasError');

@@ -3,26 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Test\Unit\Model;
 
 use Magento\Deploy\Model\Filesystem as DeployFilesystem;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Setup\Lists;
 use Magento\Framework\ShellInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\Locale;
 use Magento\Store\Model\Config\StoreView;
 use Magento\User\Model\ResourceModel\User\Collection;
 use Magento\User\Model\User;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Validator\Locale;
-use Magento\Framework\Setup\Lists;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FilesystemTest extends \PHPUnit\Framework\TestCase
+class FilesystemTest extends TestCase
 {
     /**
      * @var StoreView|MockObject
@@ -70,9 +73,9 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
     private $cmdPrefix;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -81,19 +84,19 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->shell = $this->getMockBuilder(ShellInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->output = $this->getMockBuilder(OutputInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->directoryWrite = $this->getMockBuilder(WriteInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->filesystem->method('getDirectoryWrite')
             ->willReturn($this->directoryWrite);
 
@@ -109,7 +112,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
                 'fr_FR' => 'France',
                 'de_DE' => 'Germany',
                 'nl_NL' => 'Netherlands',
-                'en_US' => 'USA',
+                'en_US' => 'USA'
             ]);
         $locale = $objectManager->getObject(Locale::class, ['lists' => $lists]);
 
@@ -120,7 +123,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
                 'shell' => $this->shell,
                 'filesystem' => $this->filesystem,
                 'userCollection' => $this->userCollection,
-                'locale' => $locale,
+                'locale' => $locale
             ]
         );
 
@@ -128,9 +131,9 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
      */
-    public function testRegenerateStatic()
+    public function testRegenerateStatic(): void
     {
         $storeLocales = ['fr_FR', 'de_DE', 'nl_NL'];
         $this->storeView->method('retrieveLocales')
@@ -148,18 +151,16 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
             ->method('execute')
             ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$cacheFlushCmd], [$staticContentDeployCmd]);
 
-        $this->output->expects(self::at(0))
+        $this->output
             ->method('writeln')
-            ->with('Starting compilation');
-        $this->output->expects(self::at(2))
-            ->method('writeln')
-            ->with('Compilation complete');
-        $this->output->expects(self::at(3))
-            ->method('writeln')
-            ->with('Starting deployment of static content');
-        $this->output->expects(self::at(5))
-            ->method('writeln')
-            ->with('Deployment of static content complete');
+            ->withConsecutive(
+                ['Starting compilation'],
+                [],
+                ['Compilation complete'],
+                ['Starting deployment of static content'],
+                [],
+                ['Deployment of static content complete']
+            );
 
         $this->deployFilesystem->regenerateStatic($this->output);
     }
@@ -168,12 +169,13 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
      * Checks a case when configuration contains incorrect locale code.
      *
      * @return void
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage ;echo argument has invalid value, run info:language:list for list of available locales
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function testGenerateStaticForNotAllowedStoreViewLocale()
+    public function testGenerateStaticForNotAllowedStoreViewLocale(): void
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
+            ';echo argument has invalid value, run info:language:list for list of available locales'
+        );
         $storeLocales = ['fr_FR', 'de_DE', ';echo'];
         $this->storeView->method('retrieveLocales')
             ->willReturn($storeLocales);
@@ -187,12 +189,13 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
      * Checks as case when admin locale is incorrect.
      *
      * @return void
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage ;echo argument has invalid value, run info:language:list for list of available locales
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function testGenerateStaticForNotAllowedAdminLocale()
+    public function testGenerateStaticForNotAllowedAdminLocale(): void
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
+            ';echo argument has invalid value, run info:language:list for list of available locales'
+        );
         $storeLocales = ['fr_FR', 'de_DE', 'en_US'];
         $this->storeView->method('retrieveLocales')
             ->willReturn($storeLocales);
@@ -206,9 +209,10 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
      * Initializes admin user locale.
      *
      * @param string $locale
+     *
      * @return void
      */
-    private function initAdminLocaleMock($locale)
+    private function initAdminLocaleMock($locale): void
     {
         /** @var User|MockObject $user */
         $user = $this->getMockBuilder(User::class)

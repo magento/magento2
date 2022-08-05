@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSearchByRequestPathActionGroup">
+        <annotations>
+            <description>Goes to the Admin URL Rewrite grid page. Searches the grid based on the provided Redirect Path. Validates that the provided Redirect Path, Type and Target Path are present and correct in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="redirectPath" type="string"/>
+            <argument name="redirectType" type="string"/>
+            <argument name="targetPath" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
+        <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{redirectPath}}" stepKey="fillRedirectPathFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{redirectPath}}" stepKey="seeTheRedirectPathForOldUrl"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Target Path')}}" userInput="{{targetPath}}" stepKey="seeTheTargetPath"/>
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Redirect Type')}}" userInput="{{redirectType}}" stepKey="seeTheRedirectTypeForOldUrl"/>
+    </actionGroup>
+</actionGroups>

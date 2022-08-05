@@ -19,27 +19,27 @@
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <actionGroup ref="FillAdminSimpleProductForm" stepKey="fillProductFieldsInAdmin">
+            <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
                 <argument name="category" value="$$createCategory$$"/>
                 <argument name="simpleProduct" value="_defaultProduct"/>
             </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deletePreReqCategory"/>
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteSimpleProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteSimpleProduct">
                 <argument name="product" value="_defaultProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilter"/>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCreatedCartPriceRule">
                 <argument name="ruleName" value="{{CartPriceRuleConditionAppliedForCategory.name}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create cart price rule as per data and verify AssertCartPriceRuleSuccessSaveMessage-->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForPriceList"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{CartPriceRuleConditionAppliedForCategory.name}}" stepKey="fillRuleName"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.description}}" userInput="{{CartPriceRuleConditionAppliedForCategory.description}}" stepKey="fillDescription"/>
@@ -94,7 +94,7 @@
         <!--Go to storefront page and verify created product-->
         <amOnPage url="{{StorefrontProductPage.url(_defaultProduct.urlKey)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="productName" value="_defaultProduct.name"/>
         </actionGroup>
 
@@ -110,7 +110,7 @@
         </actionGroup>
 
         <!--Click on view and edit cart link-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <waitForPageLoad stepKey="waitForViewAndEditToOpen"/>
         <!--Verify AssertCartPriceRuleConditionIsApplied if condition category id is matching-->
         <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssert">
@@ -119,6 +119,8 @@
             <argument name="shippingMethod" value="Flat Rate - Fixed"/>
             <argument name="total" value="$66.50"/>
         </actionGroup>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$61.50" stepKey="seeAssertDiscountAmountAppliedForMatchingCategory"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeAssertDiscountAmountAppliedForMatchingCategory">
+            <argument name="discount" value="61.50"/>
+        </actionGroup>
     </test>
 </tests>

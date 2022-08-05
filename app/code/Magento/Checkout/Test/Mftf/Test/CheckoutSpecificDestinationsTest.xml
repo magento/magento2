@@ -24,22 +24,22 @@
                 <requiredEntity createDataKey="defaultCategory"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!--Go to configuration general page-->
-        <actionGroup ref="NavigateToConfigurationGeneralPage" stepKey="navigateToConfigurationGeneralPage"/>
+        <actionGroup ref="NavigateToConfigurationGeneralPageActionGroup" stepKey="navigateToConfigurationGeneralPage"/>
 
         <!--Open country options section-->
         <conditionalClick selector="{{CountryOptionsSection.countryOptions}}" dependentSelector="{{CountryOptionsSection.countryOptionsOpen}}" visible="false" stepKey="clickOnStoreInformation"/>
 
         <!--Select top destinations country-->
-        <actionGroup ref="SelectTopDestinationsCountry" stepKey="selectTopDestinationsCountry">
+        <actionGroup ref="SelectTopDestinationsCountryActionGroup" stepKey="selectTopDestinationsCountry">
             <argument name="countries" value="Countries"/>
         </actionGroup>
 
         <!--Go to product page-->
-        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.name$$)}}" stepKey="amOnStorefrontProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <!--Add product to cart-->
@@ -48,36 +48,35 @@
         </actionGroup>
 
         <!--Go to shopping cart-->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
-
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart"/>
         <!--Verify country options in checkout top destination section-->
-        <actionGroup ref="VerifyTopDestinationsCountry" stepKey="verifyTopDestinationsCountry">
+        <actionGroup ref="VerifyTopDestinationsCountryActionGroup" stepKey="verifyTopDestinationsCountry">
             <argument name="country" value="Bahamas"/>
             <argument name="placeNumber" value="2"/>
         </actionGroup>
 
         <!--Go to configuration general page-->
-        <actionGroup ref="NavigateToConfigurationGeneralPage" stepKey="navigateToConfigurationGeneralPage2"/>
+        <actionGroup ref="NavigateToConfigurationGeneralPageActionGroup" stepKey="navigateToConfigurationGeneralPage2"/>
 
         <!--Open country options section-->
         <conditionalClick selector="{{CountryOptionsSection.countryOptions}}" dependentSelector="{{CountryOptionsSection.countryOptionsOpen}}" visible="false" stepKey="clickOnStoreInformation2"/>
 
         <!--Deselect top destinations country-->
-        <actionGroup ref="UnSelectTopDestinationsCountry" stepKey="unSelectTopDestinationsCountry">
+        <actionGroup ref="UnSelectTopDestinationsCountryActionGroup" stepKey="unSelectTopDestinationsCountry">
             <argument name="countries" value="Countries"/>
         </actionGroup>
 
         <!--Go to shopping cart-->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart2"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart2"/>
 
         <!--Verify country options is shown by default-->
-        <actionGroup ref="VerifyTopDestinationsCountry" stepKey="verifyTopDestinationsCountry2">
+        <actionGroup ref="VerifyTopDestinationsCountryActionGroup" stepKey="verifyTopDestinationsCountry2">
             <argument name="country" value="Afghanistan"/>
             <argument name="placeNumber" value="2"/>
         </actionGroup>
 
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>

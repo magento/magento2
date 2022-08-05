@@ -3,13 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Controller\Adminhtml\Index\InlineEdit;
+use Magento\Customer\Model\Address\Mapper;
 use Magento\Customer\Model\AddressRegistry;
 use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\DataObject;
-use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\Collection;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Unit tests for Inline customer edit
@@ -17,155 +38,196 @@ use Magento\Framework\Escaper;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InlineEditTest extends \PHPUnit\Framework\TestCase
+class InlineEditTest extends TestCase
 {
-    /** @var \Magento\Customer\Controller\Adminhtml\Index\InlineEdit */
+    /**
+     * @var InlineEdit
+     */
     private $controller;
 
-    /** @var \Magento\Backend\App\Action\Context */
+    /**
+     * @var Context
+     */
     private $context;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var RequestInterface|MockObject
+     */
     private $request;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var ManagerInterface|MockObject
+     */
     private $messageManager;
 
-    /** @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var CustomerInterface|MockObject
+     */
     protected $customerData;
 
-    /** @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var AddressInterface|MockObject
+     */
     private $address;
 
-    /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var JsonFactory|MockObject
+     */
     private $resultJsonFactory;
 
-    /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var Json|MockObject
+     */
     private $resultJson;
 
-    /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var CustomerRepositoryInterface|MockObject
+     */
     private $customerRepository;
 
-    /** @var \Magento\Customer\Model\Address\Mapper|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var Mapper|MockObject
+     */
     private $addressMapper;
 
-    /** @var \Magento\Customer\Model\Customer\Mapper|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var \Magento\Customer\Model\Customer\Mapper|MockObject
+     */
     private $customerMapper;
 
-    /** @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var DataObjectHelper|MockObject
+     */
     private $dataObjectHelper;
 
-    /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var AddressInterfaceFactory|MockObject
+     */
     private $addressDataFactory;
 
-    /** @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var AddressRepositoryInterface|MockObject
+     */
     private $addressRepository;
 
-    /** @var \Magento\Framework\Message\Collection|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var Collection|MockObject
+     */
     private $messageCollection;
 
-    /** @var \Magento\Framework\Message\MessageInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var MessageInterface|MockObject
+     */
     private $message;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /**
+     * @var LoggerInterface|MockObject
+     */
     private $logger;
 
-    /** @var EmailNotificationInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var EmailNotificationInterface|MockObject
+     */
     private $emailNotification;
 
-    /** @var AddressRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var AddressRegistry|MockObject
+     */
     private $addressRegistry;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $items;
 
-    /** @var \Magento\Framework\Escaper */
+    /**
+     * @var Escaper
+     */
     private $escaper;
 
     /**
-     * Sets up mocks
-     *
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->escaper = new Escaper();
         $this->request = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
+            RequestInterface::class,
             [],
             '',
             false
         );
         $this->messageManager = $this->getMockForAbstractClass(
-            \Magento\Framework\Message\ManagerInterface::class,
+            ManagerInterface::class,
             [],
             '',
             false
         );
         $this->customerData = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\CustomerInterface::class,
+            CustomerInterface::class,
             [],
             '',
             false
         );
         $this->address = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\AddressInterface::class,
+            AddressInterface::class,
             [],
             'address',
             false
         );
-        $this->addressMapper = $this->createMock(\Magento\Customer\Model\Address\Mapper::class);
+        $this->addressMapper = $this->createMock(Mapper::class);
         $this->customerMapper = $this->createMock(\Magento\Customer\Model\Customer\Mapper::class);
         $this->resultJsonFactory = $this->createPartialMock(
-            \Magento\Framework\Controller\Result\JsonFactory::class,
+            JsonFactory::class,
             ['create']
         );
-        $this->resultJson = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
+        $this->resultJson = $this->createMock(Json::class);
         $this->customerRepository = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\CustomerRepositoryInterface::class,
+            CustomerRepositoryInterface::class,
             [],
             '',
             false
         );
-        $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
+        $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
         $this->addressDataFactory = $this->createPartialMock(
-            \Magento\Customer\Api\Data\AddressInterfaceFactory::class,
+            AddressInterfaceFactory::class,
             ['create']
         );
         $this->addressRepository = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\AddressRepositoryInterface::class,
+            AddressRepositoryInterface::class,
             [],
             '',
             false
         );
-        $this->messageCollection = $this->createMock(\Magento\Framework\Message\Collection::class);
+        $this->messageCollection = $this->createMock(Collection::class);
         $this->message = $this->getMockForAbstractClass(
-            \Magento\Framework\Message\MessageInterface::class,
+            MessageInterface::class,
             [],
             '',
             false
         );
         $this->logger = $this->getMockForAbstractClass(
-            \Psr\Log\LoggerInterface::class,
+            LoggerInterface::class,
             [],
             '',
             false
         );
         $this->emailNotification = $this->getMockBuilder(EmailNotificationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->context = $objectManager->getObject(
-            \Magento\Backend\App\Action\Context::class,
+            Context::class,
             [
                 'request' => $this->request,
                 'messageManager' => $this->messageManager,
             ]
         );
-        $this->addressRegistry = $this->createMock(\Magento\Customer\Model\AddressRegistry::class);
+        $this->addressRegistry = $this->createMock(AddressRegistry::class);
         $this->controller = $objectManager->getObject(
-            \Magento\Customer\Controller\Adminhtml\Index\InlineEdit::class,
+            InlineEdit::class,
             [
                 'context' => $this->context,
                 'resultJsonFactory' => $this->resultJsonFactory,
@@ -177,7 +239,7 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
                 'addressRepository' => $this->addressRepository,
                 'logger' => $this->logger,
                 'addressRegistry' => $this->addressRegistry,
-                'escaper' => $this->escaper,
+                'escaper' => $this->escaper
             ]
         );
         $reflection = new \ReflectionClass(get_class($this->controller));
@@ -188,29 +250,25 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
         $this->items = [
             14 => [
                 'email' => 'test@test.ua',
-                'billing_postcode' => '07294',
+                'billing_postcode' => '07294'
             ]
         ];
     }
 
     /**
-     * Prepare mocks for tests
+     * Prepare mocks for tests.
      *
-     * @param int $populateSequence
+     * @return void
      */
-    protected function prepareMocksForTesting($populateSequence = 0)
+    protected function prepareMocksForTesting(): void
     {
         $this->resultJsonFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
-        $this->request->expects($this->at(0))
+        $this->request
             ->method('getParam')
-            ->with('items', [])
-            ->willReturn($this->items);
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('isAjax')
-            ->willReturn(true);
+            ->withConsecutive(['items', []], ['isAjax'])
+            ->willReturnOnConsecutiveCalls($this->items, true);
         $this->customerRepository->expects($this->once())
             ->method('getById')
             ->with(14)
@@ -219,32 +277,19 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->method('toFlatArray')
             ->with($this->customerData)
             ->willReturn(['name' => 'Firstname Lastname']);
-        $this->dataObjectHelper->expects($this->at($populateSequence))
-            ->method('populateWithArray')
-            ->with(
-                $this->customerData,
-                [
-                    'name' => 'Firstname Lastname',
-                    'email' => 'test@test.ua',
-                ],
-                \Magento\Customer\Api\Data\CustomerInterface::class
-            );
         $this->customerData->expects($this->any())
             ->method('getId')
             ->willReturn(12);
     }
 
     /**
-     * Prepare mocks for update customers default billing address use case
+     * Prepare mocks for update customers default billing address use case.
+     *
+     * @return void
      */
-    protected function prepareMocksForUpdateDefaultBilling()
+    protected function prepareMocksForUpdateDefaultBilling(): void
     {
         $this->prepareMocksForProcessAddressData();
-        $addressData = [
-            'postcode' => '07294',
-            'firstname' => 'Firstname',
-            'lastname' => 'Lastname',
-        ];
         $this->customerData->expects($this->exactly(2))
             ->method('getAddresses')
             ->willReturn([$this->address]);
@@ -254,19 +299,14 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
         $this->addressRegistry->expects($this->once())
             ->method('retrieve')
             ->willReturn(new DataObject());
-        $this->dataObjectHelper->expects($this->at(0))
-            ->method('populateWithArray')
-            ->with(
-                $this->address,
-                $addressData,
-                \Magento\Customer\Api\Data\AddressInterface::class
-            );
     }
 
     /**
-     * Prepare mocks for processing customers address data use case
+     * Prepare mocks for processing customers address data use case.
+     *
+     * @return void
      */
-    protected function prepareMocksForProcessAddressData()
+    protected function prepareMocksForProcessAddressData(): void
     {
         $this->customerData->expects($this->once())
             ->method('getFirstname')
@@ -277,9 +317,11 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Prepare mocks for error messages processing test
+     * Prepare mocks for error messages processing test.
+     *
+     * @return void
      */
-    protected function prepareMocksForErrorMessagesProcessing()
+    protected function prepareMocksForErrorMessagesProcessing(): void
     {
         $this->messageManager->expects($this->atLeastOnce())
             ->method('getMessages')
@@ -299,20 +341,44 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->with(
                 [
                     'messages' => [
-                        'Error text',
+                        'Error text'
                     ],
-                    'error' => true,
+                    'error' => true
                 ]
             )
             ->willReturnSelf();
     }
 
     /**
-     * Unit test for updating customers billing address use case
+     * Unit test for updating customers billing address use case.
+     *
+     * @return void
      */
-    public function testExecuteWithUpdateBilling()
+    public function testExecuteWithUpdateBilling(): void
     {
-        $this->prepareMocksForTesting(1);
+        $this->prepareMocksForTesting();
+        $this->dataObjectHelper
+            ->method('populateWithArray')
+            ->withConsecutive(
+                [
+                    $this->address,
+                    [
+                        'postcode' => '07294',
+                        'firstname' => 'Firstname',
+                        'lastname' => 'Lastname'
+                    ],
+                    AddressInterface::class
+                ],
+                [
+                    $this->customerData,
+                    [
+                        'name' => 'Firstname Lastname',
+                        'email' => 'test@test.ua'
+                    ],
+                    CustomerInterface::class
+                ]
+            );
+
         $this->customerData->expects($this->once())
             ->method('getDefaultBilling')
             ->willReturn(23);
@@ -331,30 +397,28 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Unit test for creating customer with empty data use case
+     * Unit test for creating customer with empty data use case.
+     *
+     * @return void
      */
-    public function testExecuteWithoutItems()
+    public function testExecuteWithoutItems(): void
     {
         $this->resultJsonFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
-        $this->request->expects($this->at(0))
+        $this->request
             ->method('getParam')
-            ->with('items', [])
-            ->willReturn([]);
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('isAjax')
-            ->willReturn(false);
+            ->withConsecutive(['items', []], ['isAjax'])
+            ->willReturnOnConsecutiveCalls([], false);
         $this->resultJson
             ->expects($this->once())
             ->method('setData')
             ->with(
                 [
                     'messages' => [
-                        __('Please correct the data sent.'),
+                        __('Please correct the data sent.')
                     ],
-                    'error' => true,
+                    'error' => true
                 ]
             )
             ->willReturnSelf();
@@ -362,12 +426,27 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Unit test for verifying Localized Exception during inline edit
+     * Unit test for verifying Localized Exception during inline edit.
+     *
+     * @return void
      */
-    public function testExecuteLocalizedException()
+    public function testExecuteLocalizedException(): void
     {
-        $exception = new \Magento\Framework\Exception\LocalizedException(__('Exception message'));
+        $exception = new LocalizedException(__('Exception message'));
         $this->prepareMocksForTesting();
+        $this->dataObjectHelper
+            ->method('populateWithArray')
+            ->withConsecutive(
+                [
+                    $this->customerData,
+                    [
+                        'name' => 'Firstname Lastname',
+                        'email' => 'test@test.ua'
+                    ],
+                    CustomerInterface::class
+                ]
+            );
+
         $this->customerData->expects($this->once())
             ->method('getDefaultBilling')
             ->willReturn(false);
@@ -391,12 +470,26 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Unit test for verifying Execute Exception during inline edit
+     * Unit test for verifying Execute Exception during inline edit.
+     *
+     * @return void
      */
-    public function testExecuteException()
+    public function testExecuteException(): void
     {
         $exception = new \Exception('Exception message');
         $this->prepareMocksForTesting();
+        $this->dataObjectHelper
+            ->method('populateWithArray')
+            ->withConsecutive(
+                [
+                    $this->customerData,
+                    [
+                        'name' => 'Firstname Lastname',
+                        'email' => 'test@test.ua'
+                    ],
+                    CustomerInterface::class
+                ]
+            );
         $this->customerData->expects($this->once())
             ->method('getDefaultBilling')
             ->willReturn(false);

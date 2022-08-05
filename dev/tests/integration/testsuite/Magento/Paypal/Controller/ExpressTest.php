@@ -16,7 +16,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Tests of Paypal Express actions
  *
- * @package Magento\Paypal\Controller
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
@@ -38,9 +37,9 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('paypal/express/review');
 
         $html = $this->getResponse()->getBody();
-        $this->assertContains('Simple Product', $html);
-        $this->assertContains('Review', $html);
-        $this->assertContains('/paypal/express/placeOrder/', $html);
+        $this->assertStringContainsString('Simple Product', $html);
+        $this->assertStringContainsString('Review', $html);
+        $this->assertStringContainsString('/paypal/express/placeOrder/', $html);
     }
 
     /**
@@ -64,8 +63,8 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         )->setQuoteId(
             $order->getQuoteId()
         );
-        /** @var $paypalSession Generic */
-        $paypalSession = $this->_objectManager->get(PaypalSession::class);
+        /** @var $paypalSession PaypalSession */
+        $paypalSession = $this->_objectManager->get(PaypalSession::class); // @phpstan-ignore-line
         $paypalSession->setExpressCheckoutToken('token');
 
         $this->dispatch('paypal/express/cancel');
@@ -216,12 +215,14 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         $sessionMock->method('getExpressCheckoutToken')
             ->willReturn(true);
 
+        // @phpstan-ignore-next-line
         $this->_objectManager->addSharedInstance($sessionMock, PaypalSession::class);
 
         $this->dispatch('paypal/express/returnAction');
         $this->assertRedirect($this->stringContains('checkout/onepage/success'));
 
         $this->_objectManager->removeSharedInstance(ApiFactory::class);
+        // @phpstan-ignore-next-line
         $this->_objectManager->removeSharedInstance(PaypalSession::class);
     }
 }

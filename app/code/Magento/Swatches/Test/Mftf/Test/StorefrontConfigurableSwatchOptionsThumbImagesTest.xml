@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableSwatchOptionsThumbImagesTest"
+          extends="StorefrontConfigurableOptionsThumbImagesTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Configurable product with swatch attribute"/>
+            <title value="Check thumbnail images and active image for Configurable Product with swatch attribute"/>
+            <description value="Login as admin, create attribute with two options, configurable product with two
+                associated simple products. Add few images for products, check the fotorama thumbnail images
+                (visible and active) for each selected option for the configurable product"/>
+            <severity value="MAJOR"/>
+            <group value="swatches"/>
+        </annotations>
+        <before>
+            <!-- Go to created attribute (attribute page) -->
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="navigateToSkuProductAttribute" after="createConfigProductOption">
+                <argument name="ProductAttribute" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+            </actionGroup>
+
+            <!-- Set 'swatch_visual' value for option "Catalog Input Type for Store Owner" -->
+            <actionGroup ref="AdminUpdateAttributeInputTypeActionGroup" stepKey="selectSwatchVisualInputType" after="navigateToSkuProductAttribute"/>
+
+            <!-- Set 'yes' value for option "Update Product Preview Image" -->
+            <actionGroup ref="AdminUpdateProductPreviewImageActionGroup" stepKey="setUpdateProductPreviewImage" after="selectSwatchVisualInputType"/>
+
+            <!-- Save Product Attribute -->
+            <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttribute" after="setUpdateProductPreviewImage"/>
+        </before>
+
+        <!-- Select first option -->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectFirstOptionValue">
+            <argument name="optionName" value="$$getConfigAttributeOption1.label$$"/>
+        </actionGroup>
+
+        <!-- Select second option -->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectSecondOptionValue">
+            <argument name="optionName" value="$$getConfigAttributeOption2.label$$"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -19,34 +19,39 @@
         </annotations>
         <before>
             <!--Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <!--Create Parent Inactive Category -->
             <createData entity="CatNotActive" stepKey="createCategory"/>
         </before>
         <after>
             <!--Delete created data-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open Category Page-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoaded"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <!--Create subcategory under parent category -->
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
-        <waitForPageLoad stepKey="waitForCategoryToLoad"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}" stepKey="selectCategory"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCategory">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.IncludeInMenu}}" stepKey="enableIncludeInMenu"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="addSubCategoryName"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
+            <argument name="message" value="You saved the category."/>
+        </actionGroup>
         <!-- Verify Parent Category and Sub category is not visible in navigation menu -->
-        <amOnPage url="$$createCategory.name_lwr$$/{{SimpleSubCategory.name_lwr}}.html" stepKey="openCategoryStoreFrontPage"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$/{{SimpleSubCategory.urlKey}}.html" stepKey="openCategoryStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForCategoryStoreFrontPageToLoad"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="dontSeeCategoryOnStoreNavigationBar"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="dontSeeSubCategoryOnStoreNavigation"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="dontSeeCategoryOnStoreNavigationBar">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="dontSeeSubCategoryOnStoreNavigation">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
     </test>
 </tests>

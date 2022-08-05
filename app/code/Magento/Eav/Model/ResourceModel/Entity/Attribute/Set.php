@@ -6,12 +6,15 @@
 
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
+/**
+ * Basic implementation for attribute sets
+ */
 class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * EAV cache id
      */
-    const ATTRIBUTES_CACHE_ID = 'EAV_ENTITY_ATTRIBUTES_BY_SET_ID';
+    public const ATTRIBUTES_CACHE_ID = 'EAV_ENTITY_ATTRIBUTES_BY_SET_ID';
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\GroupFactory
@@ -24,8 +27,6 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $eavConfig;
 
     /**
-     * Constructor
-     *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -54,7 +55,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Perform actions after object save
+     * Perform actions after object save.
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
@@ -120,7 +121,10 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function validate($object, $attributeSetName)
     {
         $connection = $this->getConnection();
-        $bind = ['attribute_set_name' => trim($attributeSetName), 'entity_type_id' => $object->getEntityTypeId()];
+        $bind = [
+            'attribute_set_name' => $attributeSetName === null ? '' : trim($attributeSetName),
+            'entity_type_id' => $object->getEntityTypeId()
+        ];
         $select = $connection->select()->from(
             $this->getMainTable()
         )->where(

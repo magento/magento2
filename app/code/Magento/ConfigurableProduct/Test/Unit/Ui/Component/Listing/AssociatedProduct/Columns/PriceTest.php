@@ -3,23 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\Component\Listing\AssociatedProduct\Columns;
 
 use Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Price as PriceColumn;
+use Magento\Directory\Model\Currency as CurrencyModel;
+use Magento\Framework\Currency;
+use Magento\Framework\Locale\CurrencyInterface as LocaleCurrency;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Framework\Locale\CurrencyInterface as LocaleCurrency;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\View\Element\UiComponent\Processor as UiElementProcessor;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Framework\Currency;
-use Magento\Directory\Model\Currency as CurrencyModel;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PriceTest extends \PHPUnit\Framework\TestCase
+class PriceTest extends TestCase
 {
     /**
      * @var PriceColumn
@@ -32,41 +36,41 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     private $contextMock;
 
     /**
-     * @var LocaleCurrency|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocaleCurrency|MockObject
      */
     private $localeCurrencyMock;
 
     /**
-     * @var UiElementProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiElementProcessor|MockObject
      */
     private $uiElementProcessorMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|MockObject
      */
     private $storeMock;
 
     /**
-     * @var Currency|\PHPUnit_Framework_MockObject_MockObject
+     * @var Currency|MockObject
      */
     private $currencyMock;
 
     /**
-     * @var CurrencyModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var CurrencyModel|MockObject
      */
     private $currencyModelMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->getMockForAbstractClass();

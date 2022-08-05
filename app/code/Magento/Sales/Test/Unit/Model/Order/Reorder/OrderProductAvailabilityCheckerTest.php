@@ -3,18 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Reorder;
 
 use Magento\ConfigurableProductSales\Model\Order\Reorder\OrderedProductAvailabilityChecker as ConfigurableChecker;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityChecker;
 use Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityCheckerInterface;
-use Magento\Sales\Api\Data\OrderItemInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class OrderProductAvailabilityCheckerTest
- */
-class OrderProductAvailabilityCheckerTest extends \PHPUnit\Framework\TestCase
+class OrderProductAvailabilityCheckerTest extends TestCase
 {
     /**
      * @var OrderedProductAvailabilityCheckerInterface[]
@@ -22,17 +24,17 @@ class OrderProductAvailabilityCheckerTest extends \PHPUnit\Framework\TestCase
     private $productAvailabilityChecks;
 
     /**
-     * @var Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|MockObject
      */
     private $orderItemMock;
 
     /**
-     * @var OrderItemInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderItemInterface|MockObject
      */
     private $orderItemInterfaceMock;
 
     /**
-     * @var ConfigurableChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigurableChecker|MockObject
      */
     private $configurableCheckerMock;
 
@@ -51,10 +53,12 @@ class OrderProductAvailabilityCheckerTest extends \PHPUnit\Framework\TestCase
      */
     private $checker;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->orderItemMock = $this->getMockBuilder(Item::class)->disableOriginalConstructor()->getMock();
+        $objectManager = new ObjectManager($this);
+        $this->orderItemMock = $this->getMockBuilder(Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->orderItemInterfaceMock = $this->getMockBuilder(OrderItemInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -90,11 +94,9 @@ class OrderProductAvailabilityCheckerTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->checker->isAvailable($this->orderItemMock));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
-     */
     public function testIsAvailableException()
     {
+        $this->expectException('Magento\Framework\Exception\ConfigurationMismatchException');
         $this->getProductType($this->productTypeSimple);
         $this->checker->isAvailable($this->orderItemMock);
     }

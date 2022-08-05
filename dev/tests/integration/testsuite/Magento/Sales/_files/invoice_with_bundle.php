@@ -5,16 +5,19 @@
  */
 declare(strict_types=1);
 
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Api\InvoiceItemRepositoryInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Model\Order\Invoice\ItemFactory;
 use Magento\Sales\Model\Service\InvoiceService;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'order_with_bundle_and_invoiced.php';
-/** @var \Magento\Sales\Model\Order $order */
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order_with_bundle_and_invoiced.php');
 
 $objectManager = ObjectManager::getInstance();
+/** @var \Magento\Sales\Model\Order $order */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 
 /** @var InvoiceService $invoiceService */
 $invoiceService = $objectManager->get(InvoiceService::class);

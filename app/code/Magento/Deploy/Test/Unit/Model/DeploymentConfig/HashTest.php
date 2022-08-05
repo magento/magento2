@@ -3,41 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 
 use Magento\Deploy\Model\DeploymentConfig\DataCollector;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Deploy\Model\DeploymentConfig\Hash\Generator;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Flag;
 use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\FlagFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class HashTest extends \PHPUnit\Framework\TestCase
+class HashTest extends TestCase
 {
     /**
-     * @var Generator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Generator|MockObject
      */
     private $configHashGeneratorMock;
 
     /**
-     * @var DataCollector|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataCollector|MockObject
      */
     private $dataConfigCollectorMock;
 
     /**
-     * @var FlagFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagFactory|MockObject
      */
     private $flagFactoryMock;
 
     /**
-     * @var FlagResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagResource|MockObject
      */
     private $flagResourceMock;
 
     /**
-     * @var Flag|\PHPUnit_Framework_MockObject_MockObject
+     * @var Flag|MockObject
      */
     private $flagMock;
 
@@ -49,7 +51,7 @@ class HashTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->flagResourceMock = $this->getMockBuilder(FlagResource::class)
             ->disableOriginalConstructor()
@@ -58,9 +60,6 @@ class HashTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->flagMock = $this->getMockBuilder(Flag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->configHashGeneratorMock = $this->getMockBuilder(Generator::class)
@@ -137,11 +136,11 @@ class HashTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The hash isn't saved.
      */
     public function testRegenerateWithException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('The hash isn\'t saved.');
         $section = 'section';
         $config = 'some config';
         $fullConfig = ['section' => $config];

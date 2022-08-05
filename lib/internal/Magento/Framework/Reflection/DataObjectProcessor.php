@@ -12,6 +12,7 @@ use Magento\Framework\Phrase;
  * Data object processor for array serialization using class reflection
  *
  * @api
+ * @since 100.0.2
  */
 class DataObjectProcessor
 {
@@ -76,6 +77,7 @@ class DataObjectProcessor
      * @param string $dataObjectType
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function buildOutputDataArray($dataObject, $dataObjectType)
     {
@@ -114,7 +116,7 @@ class DataObjectProcessor
                     $value = $this->buildOutputDataArray($value, $returnType);
                 } elseif (is_array($value)) {
                     $valueResult = [];
-                    $arrayElementType = substr($returnType, 0, -2);
+                    $arrayElementType = $returnType !== null ? substr($returnType, 0, -2) : '';
                     foreach ($value as $singleValue) {
                         if (is_object($singleValue) && !($singleValue instanceof Phrase)) {
                             $singleValue = $this->buildOutputDataArray($singleValue, $arrayElementType);

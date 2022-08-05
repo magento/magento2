@@ -14,6 +14,7 @@
     <type id="paypal_payflow_form" label="Paypal Payflow Form"/>
     <type id="transparent" label="Paypal Payflow TR Form"/>
     <type id="transparent_payment_response" label="Paypal Payflow TR Response"/>
+    <type id="transparent_payment_redirect" label="Paypal Payflow TR Redirect"/>
     <type id="paypal_payflow_returnurl" label="Paypal Payflow Return URL"/>
     <type id="paypal_payflowadvanced_cancelpayment" label="Paypal Payflow Advanced Cancel Payment"/>
     <type id="paypal_payflowadvanced_form" label="Paypal Payflow Advanced Form"/>

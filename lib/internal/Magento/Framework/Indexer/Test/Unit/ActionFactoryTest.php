@@ -3,33 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Indexer\Test\Unit;
 
-class ActionFactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Indexer\ActionFactory;
+use Magento\Framework\Indexer\ActionInterface;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ActionFactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Indexer\ActionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ActionFactory|MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->model = new \Magento\Framework\Indexer\ActionFactory($this->objectManagerMock);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->model = new ActionFactory($this->objectManagerMock);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage NotAction doesn't implement \Magento\Framework\Indexer\ActionInterface
-     */
     public function testGetWithException()
     {
-        $notActionInterfaceMock = $this->getMockBuilder('NotAction')->getMock();
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('NotAction doesn\'t implement \Magento\Framework\Indexer\ActionInterface');
+        $notActionInterfaceMock = $this->getMockBuilder('NotAction')
+            ->getMock();
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with('NotAction', [])
@@ -40,16 +47,16 @@ class ActionFactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreate()
     {
         $actionInterfaceMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\ActionInterface::class,
+            ActionInterface::class,
             [],
             '',
             false
         );
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with(\Magento\Framework\Indexer\ActionInterface::class, [])
+            ->with(ActionInterface::class, [])
             ->willReturn($actionInterfaceMock);
-        $this->model->create(\Magento\Framework\Indexer\ActionInterface::class);
-        $this->assertInstanceOf(\Magento\Framework\Indexer\ActionInterface::class, $actionInterfaceMock);
+        $this->model->create(ActionInterface::class);
+        $this->assertInstanceOf(ActionInterface::class, $actionInterfaceMock);
     }
 }

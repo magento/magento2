@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin\Category;
 
-use Magento\Catalog\Model\CategoryFactory;
-use Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move as CategoryMovePlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
-use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
-use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
+use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
+use Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move as CategoryMovePlugin;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MoveTest extends \PHPUnit\Framework\TestCase
+class MoveTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -21,27 +25,27 @@ class MoveTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ChildrenCategoriesProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ChildrenCategoriesProvider|MockObject
      */
     private $childrenCategoriesProviderMock;
 
     /**
-     * @var CategoryUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryUrlPathGenerator|MockObject
      */
     private $categoryUrlPathGeneratorMock;
 
     /**
-     * @var CategoryResourceModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryResourceModel|MockObject
      */
     private $subjectMock;
 
     /**
-     * @var Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var Category|MockObject
      */
     private $categoryMock;
 
     /**
-     * @var CategoryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryFactory|MockObject
      */
     private $categoryFactory;
 
@@ -50,7 +54,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
      */
     private $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->categoryUrlPathGeneratorMock = $this->getMockBuilder(CategoryUrlPathGenerator::class)
@@ -87,27 +91,26 @@ class MoveTest extends \PHPUnit\Framework\TestCase
     public function testAfterChangeParent()
     {
         $urlPath = 'test/path';
-        $storeIds = [1];
+        $storeIds = [0, 1];
         $originalCategory = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->categoryFactory->method('create')
             ->willReturn($originalCategory);
-
         $this->categoryMock->method('getResource')
             ->willReturn($this->subjectMock);
         $this->categoryMock->expects($this->once())
             ->method('getStoreIds')
             ->willReturn($storeIds);
-        $this->childrenCategoriesProviderMock->expects($this->once())
+        $this->childrenCategoriesProviderMock->expects($this->exactly(2))
             ->method('getChildren')
             ->with($this->categoryMock, true)
             ->willReturn([]);
-        $this->categoryUrlPathGeneratorMock->expects($this->once())
+        $this->categoryUrlPathGeneratorMock->expects($this->exactly(2))
             ->method('getUrlPath')
             ->with($this->categoryMock)
             ->willReturn($urlPath);
-        $this->categoryMock->expects($this->once())
+        $this->categoryMock->expects($this->exactly(2))
             ->method('setUrlPath')
             ->with($urlPath);
         $this->assertSame(

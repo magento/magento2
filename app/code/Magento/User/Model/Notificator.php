@@ -107,6 +107,7 @@ class Notificator implements NotificatorInterface
             $this->sendNotification(
                 'admin/emails/forgot_email_template',
                 [
+                    'username' => $user->getFirstName().' '.$user->getLastName(),
                     'user' => $user,
                     'store' => $this->storeManager->getStore(
                         Store::DEFAULT_STORE_ID

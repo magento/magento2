@@ -18,23 +18,24 @@
             <testCaseId value="MC-15794"/>
             <useCaseId value="MC-11050"/>
             <group value="email"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
 
         <before>
             <!--Login to Admin Area-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
         </before>
 
         <after>
             <!--Delete created Template-->
-            <actionGroup ref="DeleteEmailTemplate" stepKey="deleteTemplate"/>
-            <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilters"/>
+            <actionGroup ref="DeleteEmailTemplateActionGroup" stepKey="deleteTemplate"/>
+            <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clearFilters"/>
             <!--Logout from Admin Area-->
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
-        <actionGroup ref="CreateCustomTemplate" stepKey="createTemplate"/>
-        <actionGroup ref="PreviewEmailTemplate" stepKey="previewTemplate"/>
-        <actionGroup ref="AssertEmailTemplateContent" stepKey="assertContent"/>
+        <actionGroup ref="CreateCustomTemplateActionGroup" stepKey="createTemplate"/>
+        <actionGroup ref="PreviewEmailTemplateActionGroup" stepKey="previewTemplate"/>
+        <actionGroup ref="AssertEmailTemplateContentActionGroup" stepKey="assertContent"/>
     </test>
 </tests>

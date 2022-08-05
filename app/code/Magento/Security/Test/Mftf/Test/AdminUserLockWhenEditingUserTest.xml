@@ -18,20 +18,21 @@
             <testCaseId value="MC-14372" />
             <group value="security"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="NewAdminUser" stepKey="user" />
             <!-- Log in to Admin Panel -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Unlock Admin user -->
             <magentoCLI command="admin:user:unlock {{DefaultAdminUser.username}}" stepKey="unlockAdminUser"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminDeleteUserViaCurlActionGroup" stepKey="deleteUser">
                 <argument name="user" value="$$user$$" />
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminOpenUserEditPageActionGroup" stepKey="openEditUserPageFirstAttempt">
@@ -92,7 +93,7 @@
         </actionGroup>
 
         <!-- Try to login as admin and check error -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsLockedAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsLockedAdmin"/>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeLoginErrorMessage" />
     </test>
 </tests>

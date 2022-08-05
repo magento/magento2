@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <!-- Create Default Category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
 
@@ -63,15 +63,18 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct1"/>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData  createDataKey="createConfigChildProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Add Configurable Product to the cart -->
@@ -83,18 +86,18 @@
         </actionGroup>
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="seeProductInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="seeProductInMiniCart">
             <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>
 
         <!--Remove an item from the cart using minicart-->
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProductFromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProductFromMiniCart">
             <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>
         <reloadPage stepKey="reloadPage"/>
 
         <!--Check the minicart is empty and verify AssertProductAbsentInMiniShoppingCart-->
-        <actionGroup ref="assertMiniCartEmpty" stepKey="miniCartEnpty"/>
+        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="miniCartEnpty"/>
         <dontSee selector="{{StorefrontMinicartSection.productLinkByName($$createConfigProduct.name$$)}}" stepKey="verifyAssertProductAbsentInMiniShoppingCart"/>
     </test>
 </tests>

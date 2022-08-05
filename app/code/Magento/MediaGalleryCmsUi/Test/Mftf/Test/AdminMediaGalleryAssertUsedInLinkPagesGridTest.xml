@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryAssertUsedInLinkPagesGridTest" deprecated="Use AdminMediaGalleryAssertUsedInLinkedPagesGridTest instead">
+        <annotations>
+            <features value="AdminMediaGalleryUsedInBlocksFilter"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1168"/>
+            <title value="DEPRECATED. Used in pages link"/>
+            <stories value="Story 58: User sees entities where asset is used in" />
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4951848"/>
+            <description value="User filters assets used in pages"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminMediaGalleryAssertUsedInLinkedPagesGridTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultViewAgain"/>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder">
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
+            <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWasDeleted">
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
+        <actionGroup ref="FillOutCustomCMSPageContentActionGroup" stepKey="fillBasicPageDataForPageWithDefaultStore">
+            <argument name="title" value="Unique page title MediaGalleryUi"/>
+            <argument name="content" value="MediaGalleryUI content"/>
+            <argument name="identifier" value="test-page-1"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
+        <comment userInput="BIC workaround" stepKey="clearFilter"/>
+        <comment userInput="BIC workaround" stepKey="waitFilterReallyCleared"/>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForGridToLoadAfterNewFolderCreated"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+            <argument name="image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectContentImageInGrid">
+            <argument name="imageName" value="{{ImageMetadata.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
+        <waitForPageLoad stepKey="waitForPageLoad10" />
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="waitForSaveButtonVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="savePage"/>
+        <waitForPageLoad stepKey="waitForSaveToFinish"/>
+        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryClickEntityUsedInActionGroup" stepKey="clickUsedInPages">
+            <argument name="entityName" value="Pages"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertMediaGalleryFilterPlaceHolderGridActionGroup" stepKey="assertFilterApplied">
+            <argument name="filterPlaceholder" value="{{ImageMetadata.title}}"/>
+        </actionGroup>
+         <actionGroup ref="AdminDeleteCmsPageFromGridActionGroup" stepKey="deleteCmsPage">
+            <argument name="urlKey" value="test-page-1"/>
+        </actionGroup>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersInPageGrid"/>
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultViewAgain"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolderAgain">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetailsToVerifyEmptyUsedIn"/>
+        <actionGroup ref="AssertAdminEnhancedMediaGalleryUsedInSectionNotDisplayedActionGroup" stepKey="assertThereIsNoUsedInSection"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeDetails"/>
+   </test>
+</tests>

@@ -15,7 +15,7 @@
             <group value="Cms"/>
             <title value="Admin should be able to create a CMS page with widget type: Recently Compared Products"/>
             <description value="Admin should be able to create a CMS page with widget type: Recently Compared Products"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-83792"/>
         </annotations>
         <!--Main test-->
@@ -24,15 +24,14 @@
             <createData entity="_defaultProduct" stepKey="createPreReqProduct">
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
         </before>
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE"/>
         <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
         <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
         <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
@@ -52,19 +51,19 @@
         <selectOption selector="{{WidgetSection.ProductAttribute}}" userInput="Name" stepKey="selectProductAttributes" />
         <selectOption selector="{{WidgetSection.ButtonToShow}}" userInput="Add to Cart" stepKey="selectBtnToShow" />
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="Compared Products Grid Template" stepKey="selectTemplate" />
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoading"/>
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
-        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
-        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
-        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
-        <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="amOnProductPage" />
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandButtonMenu"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSplitButtonMenuVisible"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSavePage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessMessage"/>
+        <amOnPage url="$$createPreReqProduct.custom_attributes[url_key]$$.html" stepKey="amOnProductPage" />
         <waitForPageLoad stepKey="waitForPage" />
         <click selector="{{WidgetSection.CompareBtn}}" stepKey="clickCompareBtn" />
-        <amOnPage url="$$createPreReqCategory.name$$.html" stepKey="amOnCatalogPage" />
+        <amOnPage url="$$createPreReqCategory.custom_attributes[url_key]$$.html" stepKey="amOnCatalogPage" />
         <waitForPageLoad stepKey="waitForPage1" />
         <waitForPageLoad stepKey="waitForPage2" />
         <waitForElementVisible selector="{{WidgetSection.ClearCompare}}" stepKey="waitForClearBtn" />
@@ -82,8 +81,8 @@
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
             <deleteData createDataKey="createPreReqProduct" stepKey="deletePreReqProduct" />
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

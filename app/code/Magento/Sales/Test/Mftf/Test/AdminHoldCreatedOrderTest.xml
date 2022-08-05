@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Set default flat rate shipping method settings-->
             <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
@@ -40,33 +40,32 @@
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create new customer order-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
 
         <!--Add Simple product to order-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToTheOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 
         <!--Add second product to order-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSecondProductToTheOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSecondProductToTheOrder">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
 
         <!--Select FlatRate shipping method-->
         <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-
-        <!-- Submit order -->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
 
         <!-- Verify order information -->
-        <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
 
         <!-- Hold the Order -->
         <click selector="{{AdminOrderDetailsMainActionsSection.hold}}" stepKey="clickOnHoldButton"/>
@@ -91,6 +90,9 @@
         <!-- Assert OrderId and status in frontend order grid -->
         <click selector="{{StorefrontCustomerSidebarSection.sidebarCurrentTab('My Orders')}}" stepKey="clickOnMyOrders"/>
         <waitForPageLoad stepKey="waitForOrderDetailsToLoad"/>
-        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderStatusInGrid('$orderId', 'On Hold')}}" stepKey="seeOrderStatusInGrid"/>
+        <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
+            <argument name="orderId" value="$orderNumber"/>
+            <argument name="status" value="On Hold"/>
+        </actionGroup>
     </test>
 </tests>

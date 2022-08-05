@@ -35,29 +35,28 @@
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
         </after>
 
-        <!-- Perform reindex and flush cache -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Sign in as customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
             <argument name="Customer" value="$$customer$$"/>
         </actionGroup>
         <!-- Add product from first category to the wishlist -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$categoryFirst.name$$)}}" stepKey="navigateToCategoryFirstPage"/>
-        <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="browseAssertCategoryProduct1">
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryFirst.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryFirstPage"/>
+        <actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="browseAssertCategoryProduct1">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCustomerAddCategoryProductToWishlistActionGroup" stepKey="addSimpleProduct1ToWishlist">
             <argument name="productVar" value="$$simpleProduct1$$"/>
         </actionGroup>
         <!--Remove product from the Wishlist using the sidebar from the second category page-->
-        <amOnPage url="{{StorefrontCategoryPage.url($$categorySecond.name$$)}}" stepKey="navigateToCategorySecondPage"/>
-        <actionGroup ref="StorefrontSwitchCategoryViewToListMode" stepKey="switchCategoryViewToListMode"/>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSimpleProduct1InWishlistSidebar">
+        <amOnPage url="{{StorefrontCategoryPage.url($$categorySecond.custom_attributes[url_key]$$)}}" stepKey="navigateToCategorySecondPage"/>
+        <actionGroup ref="StorefrontSwitchCategoryViewToListModeActionGroup" stepKey="switchCategoryViewToListMode"/>
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" stepKey="checkSimpleProduct1InWishlistSidebar">
             <argument name="productVar" value="$$simpleProduct1$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerRemoveProductFromWishlistUsingSidebar" stepKey="removeProduct1FromWishlistUsingSidebar">
+        <actionGroup ref="StorefrontCustomerRemoveProductFromWishlistUsingSidebarActionGroup" stepKey="removeProduct1FromWishlistUsingSidebar">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
         <!--Check that a customer on the same page as before-->

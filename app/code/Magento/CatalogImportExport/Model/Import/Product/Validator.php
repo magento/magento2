@@ -10,7 +10,7 @@ use Magento\Framework\Validator\AbstractValidator;
 use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
 
 /**
- * Class Validator
+ * Product import model validator
  *
  * @api
  * @since 100.0.2
@@ -72,8 +72,12 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         $val = $this->string->cleanString($this->_rowData[$attrCode]);
         if ($type == 'text') {
             $valid = $this->string->strlen($val) < Product::DB_MAX_TEXT_LENGTH;
-        } else if ($attrCode == Product::COL_SKU) {
+        } elseif ($attrCode == Product::COL_SKU) {
             $valid = $this->string->strlen($val) <= SKU::SKU_MAX_LENGTH;
+            if ($this->string->strlen($val) !== $this->string->strlen(trim($val))) {
+                $this->_addMessages([RowValidatorInterface::ERROR_SKU_MARGINAL_WHITESPACES]);
+                return false;
+            }
         } else {
             $valid = $this->string->strlen($val) < Product::DB_MAX_VARCHAR_LENGTH;
         }
@@ -118,7 +122,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     protected function numericValidation($attrCode, $type)
     {
-        $val = trim($this->_rowData[$attrCode]);
+        $val = trim($this->_rowData[$attrCode] ?? '');
         if ($type == 'int') {
             $valid = (string)(int)$val === $val;
         } else {
@@ -201,7 +205,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             return $valid;
         }
 
-        if (!strlen(trim($rowData[$attrCode]))) {
+        if ($rowData[$attrCode] === null || trim($rowData[$attrCode]) === '') {
             return true;
         }
 
@@ -209,6 +213,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             return true;
         }
 
+        $valid = false;
         switch ($attrParams['type']) {
             case 'varchar':
             case 'text':
@@ -305,7 +310,9 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         if ($entityTypeModel) {
             foreach ($this->_rowData as $attrCode => $attrValue) {
                 $attrParams = $entityTypeModel->retrieveAttributeFromCache($attrCode);
-                if ($attrParams) {
+                if ($attrCode === Product::COL_CATEGORY && $attrValue) {
+                    $this->isCategoriesValid($attrValue);
+                } elseif ($attrParams) {
                     $this->isAttributeValid($attrCode, $attrParams, $this->_rowData);
                 }
             }
@@ -348,6 +355,30 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Validate category names
+     *
+     * @param string $value
+     * @return bool
+     */
+    private function isCategoriesValid(string $value) : bool
+    {
+        $result = true;
+        if ($value) {
+            $values = explode($this->context->getMultipleValueSeparator(), $value);
+            foreach ($values as $categoryName) {
+                if ($result === true) {
+                    $result = $this->string->strlen($categoryName) < Product::DB_MAX_VARCHAR_LENGTH;
+                }
+            }
+        }
+        if ($result === false) {
+            $this->_addMessages([RowValidatorInterface::ERROR_EXCEEDED_MAX_LENGTH]);
+            $this->setInvalidAttribute(Product::COL_CATEGORY);
+        }
+        return $result;
+    }
+
+    /**
      * Init
      *
      * @param \Magento\CatalogImportExport\Model\Import\Product $context
@@ -359,5 +390,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         foreach ($this->validators as $validator) {
             $validator->init($context);
         }
+
+        return $this;
     }
 }

@@ -7,13 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
-use Magento\Config\Model\Config;
 use Magento\Config\Model\ResourceModel\Config as ConfigResource;
-use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory;
+use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit\Framework\TestCase;
+use Magento\TestFramework\App\ApiMutableScopeConfig;
+use Magento\TestFramework\Config\Model\ConfigStorage;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @inheritDoc
@@ -21,167 +22,165 @@ use PHPUnit\Framework\TestCase;
 class ApiConfigFixture extends ConfigFixture
 {
     /**
-     * Original values for global configuration options that need to be restored
-     *
-     * @var array
-     */
-    private $_globalConfigValues = [];
-
-    /**
-     * Original values for store-scoped configuration options that need to be restored
-     *
-     * @var array
-     */
-    private $_storeConfigValues = [];
-
-    /**
      * Values need to be deleted form the database
      *
      * @var array
      */
-    private $_valuesToDeleteFromDatabase = [];
+    private $valuesToDeleteFromDatabase = [];
 
     /**
-     * Assign required config values and save original ones
-     *
-     * @param TestCase $test
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function _assignConfigData(TestCase $test)
+    protected function setStoreConfigValue(array $matches, $configPathAndValue): void
     {
-        $annotations = $test->getAnnotations();
-        if (!isset($annotations['method'][$this->annotation])) {
-            return;
+        $storeCode = $matches[0];
+        $parts = preg_split('/\s+/', $configPathAndValue, 3);
+        [$configScope, $configPath, $requiredValue] = $parts + ['', '', ''];
+        /** @var ConfigStorage $configStorage */
+        $configStorage = Bootstrap::getObjectManager()->get(ConfigStorage::class);
+        if (!$configStorage->checkIsRecordExist($configPath, ScopeInterface::SCOPE_STORES, $storeCode)) {
+            $this->valuesToDeleteFromDatabase[$storeCode][$configPath ?? ''] = $requiredValue ?? '';
         }
-        foreach ($annotations['method'][$this->annotation] as $configPathAndValue) {
-            if (preg_match('/^.+?(?=_store\s)/', $configPathAndValue, $matches)) {
-                /* Store-scoped config value */
-                $storeCode = $matches[0];
-                $parts = preg_split('/\s+/', $configPathAndValue, 3);
-                list($configScope, $configPath, $requiredValue) = $parts + ['', '', ''];
-                $originalValue = $this->_getConfigValue($configPath, $storeCode);
-                $this->_storeConfigValues[$storeCode][$configPath] = $originalValue;
-                if ($this->checkIfValueExist($configPath, $storeCode)) {
-                    $this->_valuesToDeleteFromDatabase[$storeCode][$configPath] = $requiredValue;
-                }
-                $this->_setConfigValue($configPath, $requiredValue, $storeCode);
-            } else {
-                /* Global config value */
-                list($configPath, $requiredValue) = preg_split('/\s+/', $configPathAndValue, 2);
 
-                $originalValue = $this->_getConfigValue($configPath);
-                $this->_globalConfigValues[$configPath] = $originalValue;
-                if ($this->checkIfValueExist($configPath)) {
-                    $this->_valuesToDeleteFromDatabase['global'][$configPath] = $requiredValue;
-                }
-
-                $this->_setConfigValue($configPath, $requiredValue);
-            }
-        }
+        parent::setStoreConfigValue($matches, $configPathAndValue);
     }
 
     /**
-     * Restore original values for changed config options
+     * @inheritdoc
+     */
+    protected function setGlobalConfigValue($configPathAndValue): void
+    {
+        [$configPath, $requiredValue] = preg_split('/\s+/', $configPathAndValue, 2);
+        $configPath = str_starts_with($configPath, 'default/') ? substr($configPath, 8) : $configPath;
+        /** @var ConfigStorage $configStorage */
+        $configStorage = Bootstrap::getObjectManager()->get(ConfigStorage::class);
+        if (!$configStorage->checkIsRecordExist($configPath)) {
+            $this->valuesToDeleteFromDatabase['global'][$configPath] = $requiredValue;
+        }
+
+        $originalValue = $this->getScopeConfigValue($configPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+        $this->globalConfigValues[$configPath] = $originalValue;
+        $this->_setConfigValue($configPath, $requiredValue);
+    }
+
+    /**
+     * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    protected function setWebsiteConfigValue(array $matches, $configPathAndValue): void
+    {
+        $websiteCode = $matches[0];
+        $parts = preg_split('/\s+/', $configPathAndValue, 3);
+        [$configScope, $configPath, $requiredValue] = $parts + ['', '', ''];
+        /** @var ConfigStorage $configStorage */
+        $configStorage = Bootstrap::getObjectManager()->get(ConfigStorage::class);
+        if (!$configStorage->checkIsRecordExist($configPath, ScopeInterface::SCOPE_WEBSITES, $websiteCode)) {
+            $this->valuesToDeleteFromDatabase[$websiteCode][$configPath ?? ''] = $requiredValue ?? '';
+        }
+
+        parent::setWebsiteConfigValue($matches, $configPathAndValue);
+    }
+
+    /**
+     * @inheritDoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _restoreConfigData()
     {
+        /** @var ConfigResource $configResource */
         $configResource = Bootstrap::getObjectManager()->get(ConfigResource::class);
-
         /* Restore global values */
-        foreach ($this->_globalConfigValues as $configPath => $originalValue) {
-            if (isset($this->_valuesToDeleteFromDatabase['global'][$configPath])) {
+        foreach ($this->globalConfigValues as $configPath => $originalValue) {
+            if (isset($this->valuesToDeleteFromDatabase['global'][$configPath])) {
                 $configResource->deleteConfig($configPath);
             } else {
                 $this->_setConfigValue($configPath, $originalValue);
             }
         }
-        $this->_globalConfigValues = [];
-
+        $this->globalConfigValues = [];
         /* Restore store-scoped values */
-        foreach ($this->_storeConfigValues as $storeCode => $originalData) {
+        foreach ($this->storeConfigValues as $storeCode => $originalData) {
             foreach ($originalData as $configPath => $originalValue) {
-                if (empty($storeCode)) {
-                    $storeCode = null;
-                }
-                if (isset($this->_valuesToDeleteFromDatabase[$storeCode][$configPath])) {
-                    $scopeId = $this->getStoreIdByCode($storeCode);
-                    $configResource->deleteConfig($configPath, 'stores', $scopeId);
+                $storeCode = $storeCode ?: null;
+                if (isset($this->valuesToDeleteFromDatabase[$storeCode][$configPath])) {
+                    $scopeId = $this->getIdByScopeType(ScopeInterface::SCOPE_STORES, $storeCode);
+                    $configResource->deleteConfig($configPath, ScopeInterface::SCOPE_STORES, $scopeId);
                 } else {
-                    $this->_setConfigValue($configPath, $originalValue, $storeCode);
+                    $this->setScopeConfigValue(
+                        $configPath,
+                        (string)$originalValue,
+                        ScopeInterface::SCOPE_STORES,
+                        $storeCode
+                    );
                 }
             }
         }
-        $this->_storeConfigValues = [];
+        $this->storeConfigValues = [];
+        /* Restore website-scoped values */
+        foreach ($this->websiteConfigValues as $websiteCode => $originalData) {
+            foreach ($originalData as $configPath => $originalValue) {
+                $websiteCode = $websiteCode ?: null;
+                if (isset($this->valuesToDeleteFromDatabase[$websiteCode][$configPath])) {
+                    $scopeId = $this->getIdByScopeType(ScopeInterface::SCOPE_WEBSITES, $websiteCode);
+                    $configResource->deleteConfig($configPath, ScopeInterface::SCOPE_WEBSITES, $scopeId);
+                } else {
+                    $this->setScopeConfigValue(
+                        $configPath,
+                        $originalValue,
+                        ScopeInterface::SCOPE_WEBSITES,
+                        $websiteCode
+                    );
+                }
+            }
+        }
+        $this->websiteConfigValues = [];
     }
 
     /**
-     * Load configs by path and scope
-     *
-     * @param string $configPath
-     * @param string $storeCode
-     * @return Config[]
+     * @inheritdoc
      */
-    private function loadConfigs(string $configPath, string $storeCode = null): array
+    protected function getMutableScopeConfig(): MutableScopeConfigInterface
     {
-        $configCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
-        $collection = $configCollectionFactory->create();
-        $scope = $storeCode ? 'stores' : 'default';
-        $scopeId = $storeCode ? $this->getStoreIdByCode($storeCode) : 0;
-
-        $collection->addScopeFilter($scope, $scopeId, $configPath);
-        return $collection->getItems();
+        return Bootstrap::getObjectManager()
+            ->get(ApiMutableScopeConfig::class);
     }
 
     /**
-     * Check if config exist in the database
-     *
-     * @param string        $configPath
-     * @param string|null   $storeCode
+     * @inheritdoc
      */
-    private function checkIfValueExist(string $configPath, string $storeCode = null): bool
+    protected function getScopeConfigValue(string $configPath, string $scopeType, string $scopeCode = null): ?string
     {
-        $configs = $this->loadConfigs($configPath, $storeCode);
+        /** @var ConfigStorage $configStorage */
+        $configStorage = Bootstrap::getObjectManager()->get(ConfigStorage::class);
+        $result = $configStorage->getValueFromDb($configPath, $scopeType, $scopeCode);
 
-        return !(bool)$configs;
+        return $result ?: null;
     }
 
     /**
-     * Returns the store ID by the store code
+     * Get id by code
      *
-     * @param  string $storeCode
+     * @param string $scopeType
+     * @param string|null $scopeId
      * @return int
      */
-    private function getStoreIdByCode(string $storeCode): int
+    private function getIdByScopeType(string $scopeType, ?string $scopeId): int
     {
+        $id = 0;
+        /** @var StoreManagerInterface $storeManager */
         $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
-        $store = $storeManager->getStore($storeCode);
-        return (int)$store->getId();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function _setConfigValue($configPath, $value, $storeCode = false)
-    {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        if ($storeCode === false) {
-            $objectManager->get(
-                \Magento\TestFramework\App\ApiMutableScopeConfig::class
-            )->setValue(
-                $configPath,
-                $value,
-                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-            );
-
-            return;
+        switch ($scopeType) {
+            case ScopeInterface::SCOPE_WEBSITES:
+                $id = (int)$storeManager->getWebsite($scopeId)->getId();
+                break;
+            case ScopeInterface::SCOPE_STORES:
+                $id = (int)$storeManager->getStore($scopeId)->getId();
+                break;
+            default:
+                break;
         }
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\TestFramework\App\ApiMutableScopeConfig::class
-        )->setValue(
-            $configPath,
-            $value,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeCode
-        );
+
+        return $id;
     }
 }

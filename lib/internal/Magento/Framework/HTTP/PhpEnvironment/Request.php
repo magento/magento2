@@ -5,13 +5,14 @@
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 use Magento\Framework\Stdlib\StringUtils;
-use Zend\Http\Header\HeaderInterface;
-use Zend\Stdlib\Parameters;
-use Zend\Stdlib\ParametersInterface;
-use Zend\Uri\UriFactory;
-use Zend\Uri\UriInterface;
+use Laminas\Http\Header\HeaderInterface;
+use Laminas\Stdlib\Parameters;
+use Laminas\Stdlib\ParametersInterface;
+use Laminas\Uri\UriFactory;
+use Laminas\Uri\UriInterface;
 
 /**
  * HTTP Request for current PHP environment.
@@ -19,17 +20,17 @@ use Zend\Uri\UriInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Request extends \Zend\Http\PhpEnvironment\Request
+class Request extends \Laminas\Http\PhpEnvironment\Request
 {
     /**#@+
      * Protocols
      */
-    const SCHEME_HTTP  = 'http';
-    const SCHEME_HTTPS = 'https';
+    public const SCHEME_HTTP  = 'http';
+    public const SCHEME_HTTPS = 'https';
     /**#@-*/
 
     // Configuration path for SSL Offload http header
-    const XML_PATH_OFFLOADER_HEADER = 'web/secure/offloader_header';
+    public const XML_PATH_OFFLOADER_HEADER = 'web/secure/offloader_header';
 
     /**
      * @var string
@@ -47,8 +48,6 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     protected $action;
 
     /**
-     * PATH_INFO
-     *
      * @var string
      */
     protected $pathInfo = '';
@@ -226,7 +225,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     public function setPathInfo($pathInfo = null)
     {
         if ($pathInfo === null) {
-            $requestUri = $this->getRequestUri();
+            $requestUri = $this->getRequestUri() ?? '';
             if ('/' == $requestUri) {
                 return $this;
             }
@@ -794,7 +793,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     public function getBaseUrl()
     {
         $url = urldecode(parent::getBaseUrl());
-        $url = str_replace('\\', '/', $url);
+        $url = str_replace(['\\', '/' . DirectoryList::PUB .'/'], '/', $url);
         return $url;
     }
 

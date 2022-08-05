@@ -40,8 +40,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_useLinkForAsLowAs = false;
 
     /**
-     * Customer id
-     *
      * @var null|int
      */
     protected $_customerId = null;
@@ -52,22 +50,16 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $httpContext;
 
     /**
-     * Customer visitor
-     *
      * @var \Magento\Customer\Model\Visitor
      */
     protected $_customerVisitor;
 
     /**
-     * Catalog product visibility
-     *
      * @var \Magento\Catalog\Model\Product\Visibility
      */
     protected $_catalogProductVisibility;
 
     /**
-     * Item collection factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory
      */
     protected $_itemCollectionFactory;
@@ -149,7 +141,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
             $this->_compareProduct->setAllowUsedFlat(false);
 
             $this->_items = $this->_itemCollectionFactory->create();
-            $this->_items->useProductItem(true)->setStoreId($this->_storeManager->getStore()->getId());
+            $this->_items->useProductItem()->setStoreId($this->_storeManager->getStore()->getId());
 
             if ($this->httpContext->getValue(Context::CONTEXT_AUTH)) {
                 $this->_items->setCustomerId($this->currentCustomer->getCustomerId());
@@ -205,6 +197,9 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
         } else {
             $value = $product->getData($attribute->getAttributeCode());
         }
+        if (is_array($value)) {
+            return __('N/A');
+        }
         return (string)$value == '' ? __('No') : $value;
     }
 
@@ -213,6 +208,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return bool
+     * @since 102.0.6
      */
     public function hasAttributeValueForProducts($attribute)
     {

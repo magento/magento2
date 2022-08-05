@@ -13,38 +13,34 @@
             <title value="Flat Catalog - Update Category Name and Description"/>
             <description value="Login as admin and update flat category name and description"/>
             <testCaseId value="MC-11010"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
             <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <!--Create category-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <!-- Create First StoreView  -->
-            <actionGroup ref="CreateStoreView" stepKey="createCustomStoreViewEn">
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewEn">
                 <argument name="storeView" value="customStoreEN"/>
             </actionGroup>
             <!-- Create Second StoreView -->
-            <actionGroup ref="CreateStoreView" stepKey="createCustomStoreViewFr">
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewFr">
                 <argument name="storeView" value="customStoreFR"/>
             </actionGroup>
-            <!--Run full reindex and clear caches -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <!--Enable Flat Catalog Category -->
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1"/>
             <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
             <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="schedule" />
-            <!-- Run cron twice -->
-            <magentoCLI command="cron:run" stepKey="runCron1"/>
-            <magentoCLI command="cron:run" stepKey="runCron2"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0 "/>
             <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="realtime" />
-            <magentoCLI stepKey="indexerReindex" command="indexer:reindex" />
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="indexerReindex"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory" />
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
                 <argument name="customStore" value="customStoreEN"/>
@@ -52,49 +48,66 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewFr">
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Select Created Category-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
-        <waitForPageLoad stepKey="waitForPageToLoaded"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCreatedCategory">
+            <argument name="category" value="_defaultCategory"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoaded"/>
         <!--Update Category Name and Description -->
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="addSubCategoryName"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="addSubCategoryName">
+                <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
         <scrollTo  selector="{{AdminCategoryContentSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToContent"/>
         <click selector="{{AdminCategoryContentSection.sectionHeader}}"  stepKey="selectContent"/>
         <fillField selector="{{AdminCategoryContentSection.description}}"  userInput="Updated category Description Fields" stepKey="fillUpdatedDescription"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
+            <argument name="message" value="You saved the category."/>
+        </actionGroup>
         <!--Run full reindex and clear caches -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
-        <!--Open Index Management Page -->
-        <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="openIndexManagementPage"/>
-        <waitForPageLoad stepKey="waitForIndexPageToLoad"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value="catalog_category_flat"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="openIndexManagementPage"/>
         <see stepKey="seeIndexStatus"  selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" userInput="READY"/>
         <!--Verify Category In Store Front-->
-        <amOnPage url="{{SimpleSubCategory.name}}.html" stepKey="goToStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goToStorefrontPage">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToBeLoaded"/>
         <!--Verify category is visible in First Store View -->
-        <click stepKey="selectStoreSwitcher" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>
-        <click stepKey="selectFirstStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreEN.name)}}"/>
-        <waitForPageLoad stepKey="waitForFirstStoreView"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="seeCategoryOnNavigation"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectStoreSwitcher"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="selectFirstStoreView">
+            <argument name="storeView" value="customStoreEN"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForFirstStoreView"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCategoryOnNavigation">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
         <!--Verify  category is visible in Second Store View -->
-        <click stepKey="selectStoreSwitcher1" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>
-        <click stepKey="selectSecondStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreFR.name)}}"/>
-        <waitForPageLoad stepKey="waitForSecondStoreView"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="seeCategoryOnNavigation1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectStoreSwitcher1"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="selectSecondStoreView">
+            <argument name="storeView" value="customStoreFR"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSecondStoreView"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCategoryOnNavigation1">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
         <!-- Verify Updated  Category Name and description on Category Page-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage1"/>
-        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="selectUpdatedCategory"/>
-        <waitForPageLoad stepKey="waitForUpdatedCategoryPageToLoad"/>
-        <seeInField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="seeUpdatedSubCategoryName"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree1"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectUpdatedCategory">
+            <argument name="category" value="SimpleSubCategory"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForUpdatedCategoryPageToLoad"/>
+        <actionGroup ref="AssertAdminCategoryPageTitleActionGroup" stepKey="seeUpdatedSubCategoryName">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
         <scrollTo  selector="{{AdminCategoryContentSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToContent1"/>
         <click selector="{{AdminCategoryContentSection.sectionHeader}}"  stepKey="selectContent1"/>
         <seeInField selector="{{AdminCategoryContentSection.description}}" userInput="Updated category Description Fields" stepKey="seeUpdatedDescription"/>

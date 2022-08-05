@@ -96,10 +96,11 @@ class ProductOptionRepositoryTest extends \Magento\TestFramework\TestCase\Webapi
 
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/product.php
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRemove()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $productSku = 'bundle-product';
 
         $optionId = $this->getList($productSku)[0]['option_id'];

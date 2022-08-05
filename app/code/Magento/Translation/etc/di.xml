@@ -43,10 +43,21 @@
         <arguments>
             <argument name="renderers" xsi:type="array">
                 <item name="translation" xsi:type="object">Magento\Framework\Phrase\Renderer\Translate</item>
-                <item name="messageFormatter" xsi:type="object">Magento\Framework\Phrase\Renderer\MessageFormatter</item>
                 <item name="placeholder" xsi:type="object">Magento\Framework\Phrase\Renderer\Placeholder</item>
                 <item name="inline" xsi:type="object">Magento\Framework\Phrase\Renderer\Inline</item>
             </argument>
+        </arguments>
+    </type>
+    <virtualType name="dataProviderCompositeRenderer" type="Magento\Framework\Phrase\Renderer\Composite">
+        <arguments>
+            <argument name="renderers" xsi:type="array">
+                <item name="inline" xsi:type="object">Magento\Translation\Model\Inline\Renderer</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Translation\Model\Js\DataProvider">
+        <arguments>
+            <argument name="translate" xsi:type="object">dataProviderCompositeRenderer</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Phrase\Renderer\Translate">
@@ -64,11 +75,11 @@
     <type name="Magento\Translation\Model\Js\Config">
         <arguments>
             <argument name="patterns" xsi:type="array">
-                <item name="i18n_translation" xsi:type="string"><![CDATA[~i18n\:\s*(["'])(.*?)(?<!\\)\1~]]></item>
+                <item name="i18n_translation" xsi:type="string"><![CDATA[~(?:i18n\:|_\.i18n\()\s*(["'])(.*?)(?<!\\)\1~]]></item>
                 <item name="translate_wrapping" xsi:type="string"><![CDATA[~translate\=("')([^\'].*?)\'\"~]]></item>
                 <item name="mage_translation_widget" xsi:type="string"><![CDATA[~(?s)(?:\$|jQuery)\.mage\.__\(\s*(['"])(?<translate>.+?)(?<!\\)\1\s*(*SKIP)\)\s*(?s)~]]></item>
                 <item name="mage_translation_static" xsi:type="string"><![CDATA[~(?s)\$t\(\s*(['"])(?<translate>.+?)(?<!\\)\1\s*(*SKIP)\)(?s)~]]></item>
-                <item name="translate_args" xsi:type="string"><![CDATA[~translate args\=("|'|"')([^\'].*?)('"|'|")~]]></item>
+                <item name="translate_args" xsi:type="string"><![CDATA[~translate args\=("|'|"'|\\"')([^\'].*?)('\\"|'"|'|")~]]></item>
             </argument>
         </arguments>
     </type>

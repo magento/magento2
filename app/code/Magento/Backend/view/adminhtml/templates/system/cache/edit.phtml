@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php
 /**
@@ -14,16 +16,19 @@
  */
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?= $block->getSaveButtonHtml() ?></div>
-<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
+<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="config-edit-form"
+      enctype="multipart/form-data">
     <?= $block->getBlockHtml('formkey') ?>
 
-    <script>
+    <?php $scriptString = <<<script
     window.setCacheAction = function(id, button) {
         document.getElementById(id).value = button.id;
 
         configForm.submit();
     }
-    </script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
 
     <input type="hidden" id="catalog_action" name="catalog_action" value="" />
     <input type="hidden" id="jscss_action" name="jscss_action" value="" />
@@ -36,7 +41,7 @@
         <fieldset id="catalog">
             <table class="form-list">
                 <tbody>
-                    <?php foreach ($block->getCatalogData() as $_item) : ?>
+                    <?php foreach ($block->getCatalogData() as $_item): ?>
                         <?php /* disable reindex buttons. functionality moved to index management*/?>
                         <?php
                         if ($_item['buttons'][0]['name'] != 'clear_images_cache') {
@@ -46,15 +51,31 @@
                     <tr>
                         <td class="label"><label><?= $block->escapeHtml($_item['label']) ?></label></td>
                         <td class="value">
-                            <?php foreach ($_item['buttons'] as $_button) : ?>
+                            <?php foreach ($_item['buttons'] as $_button): ?>
                                 <?php $clickAction = "setCacheAction('catalog_action',this)"; ?>
-                                <?php if (isset($_button['warning']) && $_button['warning']) : ?>
+                                <?php if (isset($_button['warning']) && $_button['warning']): ?>
                                     <?php //phpcs:disable ?>
-                                    <?php $clickAction = "if (confirm('" . addslashes($_button['warning']) . "')) {{$clickAction}}"; ?>
+                                    <?php $clickAction = "if (confirm('" . addslashes($_button['warning']) .
+                                        "')) {{$clickAction}}"; ?>
                                     <?php //phpcs:enable ?>
                                 <?php endif; ?>
-                                <button <?php if (!isset($_button['disabled']) || !$_button['disabled']) :?>onclick="<?=  /* @noEscape */ $clickAction ?>"<?php endif; ?> id="<?= $block->escapeHtmlAttr($_button['name']) ?>" type="button" class="scalable <?php if (isset($_button['disabled']) && $_button['disabled']) :?>disabled<?php endif; ?>" style=""><span><span><span><?= $block->escapeHtml($_button['action']) ?></span></span></span></button>
-                                <?php if (isset($_button['comment'])) : ?> <br /> <small><?= $block->escapeHtml($_button['comment']) ?></small> <?php endif; ?>
+                                <button
+                                    id="<?= $block->escapeHtmlAttr($_button['name']) ?>"
+                                    type="button"
+                                    class="scalable
+                                <?php if (isset($_button['disabled']) && $_button['disabled']):?>disabled<?php endif;?>"
+                                ><span><span><span><?= $block->escapeHtml($_button['action']) ?></span></span></span>
+                                </button>
+                                <?php if (!isset($_button['disabled']) || !$_button['disabled']):?>
+                                    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                                        'onclick',
+                                        /* @noEscape */ $clickAction,
+                                        '#' . $block->escapeJs($_button['name'])
+                                    ) ?>
+                                <?php endif; ?>
+                                <?php if (isset($_button['comment'])): ?> <br />
+                                    <small><?= $block->escapeHtml($_button['comment']) ?></small>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         </td>
                         <td><small>&nbsp;</small></td>
@@ -76,7 +97,16 @@
                     <tr>
                         <td class="label"><label><?= $block->escapeHtml(__('JavaScript/CSS Cache')) ?></label></td>
                         <td class="value">
-                            <button onclick="setCacheAction('jscss_action', this)" id='jscss_action' type="button" class="scalable"><span><span><span><?= $block->escapeHtml(__('Clear')) ?></span></span></span></button>
+                            <button id='jscss_action'
+                                    type="button"
+                                    class="scalable">
+                                <span><span><span><?= $block->escapeHtml(__('Clear')) ?></span></span></span>
+                            </button>
+                            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                                'onclick',
+                                "setCacheAction('jscss_action', this)",
+                                '#jscss_action'
+                            ) ?>
                         </td>
                     </tr>
                 </tbody>
@@ -84,8 +114,11 @@
         </fieldset>
     </div>
 </form>
-<script>
+<?php $scriptString = <<<script
     require(["jquery","mage/mage"],function($){
        $('#config-edit-form').mage('form').mage('validation');
     });
-</script>
+script;
+?>
+
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>

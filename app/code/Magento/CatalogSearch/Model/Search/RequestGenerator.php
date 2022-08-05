@@ -100,10 +100,7 @@ class RequestGenerator
                         ],
                     ];
                     $bucketName = $attribute->getAttributeCode() . self::BUCKET_SUFFIX;
-                    $generatorType = $attribute->getFrontendInput() === 'price'
-                        ? $attribute->getFrontendInput()
-                        : $attribute->getBackendType();
-                    $generator = $this->generatorResolver->getGeneratorForType($generatorType);
+                    $generator = $this->generatorResolver->getGeneratorForType($attribute->getBackendType());
                     $request['filters'][$filterName] = $generator->getFilterData($attribute, $filterName);
                     $request['aggregations'][$bucketName] = $generator->getAggregationData($attribute, $bucketName);
                 }
@@ -189,6 +186,7 @@ class RequestGenerator
                                 [
                                     'field' => $attribute->getAttributeCode(),
                                     'boost' => $attribute->getSearchWeight() ?: 1,
+                                    'matchCondition' => 'match_phrase_prefix',
                                 ],
                             ],
                         ];

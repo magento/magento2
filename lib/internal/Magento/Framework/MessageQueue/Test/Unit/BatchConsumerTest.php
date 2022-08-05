@@ -3,53 +3,73 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue\Test\Unit;
+
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\MessageQueue\BatchConsumer;
+use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
+use Magento\Framework\MessageQueue\Consumer\ConfigInterface;
+use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
+use Magento\Framework\MessageQueue\EnvelopeInterface;
+use Magento\Framework\MessageQueue\MergerFactory;
+use Magento\Framework\MessageQueue\MergerInterface;
+use Magento\Framework\MessageQueue\MessageController;
+use Magento\Framework\MessageQueue\MessageEncoder;
+use Magento\Framework\MessageQueue\MessageLockException;
+use Magento\Framework\MessageQueue\MessageProcessorInterface;
+use Magento\Framework\MessageQueue\MessageProcessorLoader;
+use Magento\Framework\MessageQueue\QueueInterface;
+use Magento\Framework\MessageQueue\QueueRepository;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for BatchConsumer class.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BatchConsumerTest extends \PHPUnit\Framework\TestCase
+class BatchConsumerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\ConsumerConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConsumerConfigurationInterface|MockObject
      */
     private $configuration;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MessageEncoder|\PHPUnit_Framework_MockObject_MockObject
+     * @var MessageEncoder|MockObject
      */
     private $messageEncoder;
 
     /**
-     * @var \Magento\Framework\MessageQueue\QueueRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueueRepository|MockObject
      */
     private $queueRepository;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MergerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MergerFactory|MockObject
      */
     private $mergerFactory;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Consumer\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     private $consumerConfig;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MessageController|\PHPUnit_Framework_MockObject_MockObject
+     * @var MessageController|MockObject
      */
     private $messageController;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resource;
 
     /**
-     * @var \Magento\Framework\MessageQueue\BatchConsumer
+     * @var BatchConsumer
      */
     private $batchConsumer;
 
@@ -59,7 +79,7 @@ class BatchConsumerTest extends \PHPUnit\Framework\TestCase
     private $batchSize = 10;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MessageProcessorLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var MessageProcessorLoader|MockObject
      */
     private $messageProcessorLoader;
 
@@ -68,28 +88,33 @@ class BatchConsumerTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configuration = $this
-            ->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerConfigurationInterface::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->messageEncoder = $this->getMockBuilder(\Magento\Framework\MessageQueue\MessageEncoder::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->queueRepository = $this->getMockBuilder(\Magento\Framework\MessageQueue\QueueRepository::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->mergerFactory = $this->getMockBuilder(\Magento\Framework\MessageQueue\MergerFactory::class)
+            ->getMockBuilder(ConsumerConfigurationInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->messageEncoder = $this->getMockBuilder(MessageEncoder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->queueRepository = $this->getMockBuilder(QueueRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->mergerFactory = $this->getMockBuilder(MergerFactory::class)
             ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
-        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resource = $this->getMockBuilder(ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageProcessorLoader = $this
-            ->getMockBuilder(\Magento\Framework\MessageQueue\MessageProcessorLoader::class)
+            ->getMockBuilder(MessageProcessorLoader::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->batchConsumer = $objectManager->getObject(
-            \Magento\Framework\MessageQueue\BatchConsumer::class,
+            BatchConsumer::class,
             [
                 'configuration' => $this->configuration,
                 'messageEncoder' => $this->messageEncoder,
@@ -101,15 +126,17 @@ class BatchConsumerTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->consumerConfig = $this->getMockBuilder(\Magento\Framework\MessageQueue\Consumer\ConfigInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->consumerConfig = $this->getMockBuilder(ConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $objectManager->setBackwardCompatibleProperty(
             $this->batchConsumer,
             'consumerConfig',
             $this->consumerConfig
         );
-        $this->messageController = $this->getMockBuilder(\Magento\Framework\MessageQueue\MessageController::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->messageController = $this->getMockBuilder(MessageController::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManager->setBackwardCompatibleProperty(
             $this->batchConsumer,
             'messageController',
@@ -134,20 +161,24 @@ class BatchConsumerTest extends \PHPUnit\Framework\TestCase
         $this->configuration->expects($this->once())->method('getQueueName')->willReturn($queueName);
         $this->configuration->expects($this->atLeastOnce())->method('getConsumerName')->willReturn($consumerName);
         $consumerConfigItem = $this
-            ->getMockBuilder(\Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->getMockBuilder(ConsumerConfigItemInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->consumerConfig->expects($this->once())
             ->method('getConsumer')->with($consumerName)->willReturn($consumerConfigItem);
         $consumerConfigItem->expects($this->once())->method('getConnection')->willReturn($connectionName);
-        $queue = $this->getMockBuilder(\Magento\Framework\MessageQueue\QueueInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $queue = $this->getMockBuilder(QueueInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->queueRepository->expects($this->once())
             ->method('get')->with($connectionName, $queueName)->willReturn($queue);
-        $merger = $this->getMockBuilder(\Magento\Framework\MessageQueue\MergerInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $merger = $this->getMockBuilder(MergerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->mergerFactory->expects($this->once())->method('create')->with($consumerName)->willReturn($merger);
-        $envelope = $this->getMockBuilder(\Magento\Framework\MessageQueue\EnvelopeInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $envelope = $this->getMockBuilder(EnvelopeInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $queue->expects($this->exactly($numberOfMessages))->method('dequeue')->willReturn($envelope);
         $this->messageController->expects($this->exactly($numberOfMessages))
             ->method('lock')->with($envelope, $consumerName);
@@ -157,7 +188,7 @@ class BatchConsumerTest extends \PHPUnit\Framework\TestCase
             ->method('getBody')->willReturn($messageBody);
         $this->messageEncoder->expects($this->exactly($numberOfMessages))
             ->method('decode')->with($topicName, $messageBody)->willReturn($message);
-        $messageProcessor = $this->getMockBuilder(\Magento\Framework\MessageQueue\MessageProcessorInterface::class)
+        $messageProcessor = $this->getMockBuilder(MessageProcessorInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->messageProcessorLoader->expects($this->atLeastOnce())->method('load')->willReturn($messageProcessor);
@@ -181,25 +212,29 @@ class BatchConsumerTest extends \PHPUnit\Framework\TestCase
         $this->configuration->expects($this->once())->method('getQueueName')->willReturn($queueName);
         $this->configuration->expects($this->atLeastOnce())->method('getConsumerName')->willReturn($consumerName);
         $consumerConfigItem = $this
-            ->getMockBuilder(\Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->getMockBuilder(ConsumerConfigItemInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->consumerConfig->expects($this->once())
             ->method('getConsumer')->with($consumerName)->willReturn($consumerConfigItem);
         $consumerConfigItem->expects($this->once())->method('getConnection')->willReturn($connectionName);
-        $queue = $this->getMockBuilder(\Magento\Framework\MessageQueue\QueueInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $queue = $this->getMockBuilder(QueueInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->queueRepository->expects($this->once())
             ->method('get')->with($connectionName, $queueName)->willReturn($queue);
-        $merger = $this->getMockBuilder(\Magento\Framework\MessageQueue\MergerInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $merger = $this->getMockBuilder(MergerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->mergerFactory->expects($this->once())->method('create')->with($consumerName)->willReturn($merger);
-        $envelope = $this->getMockBuilder(\Magento\Framework\MessageQueue\EnvelopeInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $envelope = $this->getMockBuilder(EnvelopeInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $queue->expects($this->exactly($numberOfMessages))->method('dequeue')->willReturn($envelope);
-        $exception = new \Magento\Framework\MessageQueue\MessageLockException(__('Exception Message'));
+        $exception = new MessageLockException(__('Exception Message'));
         $this->messageController->expects($this->atLeastOnce())
             ->method('lock')->with($envelope, $consumerName)->willThrowException($exception);
-        $messageProcessor = $this->getMockBuilder(\Magento\Framework\MessageQueue\MessageProcessorInterface::class)
+        $messageProcessor = $this->getMockBuilder(MessageProcessorInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->messageProcessorLoader->expects($this->atLeastOnce())->method('load')->willReturn($messageProcessor);

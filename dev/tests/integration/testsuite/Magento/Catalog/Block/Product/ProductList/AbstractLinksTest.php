@@ -66,10 +66,16 @@ abstract class AbstractLinksTest extends TestCase
     /** @var string */
     protected $linkType;
 
+    /** @var string */
+    protected $titleName;
+
+    /** @var string */
+    protected $titleXpath = "//strong[@id = 'block-%s-heading'][contains(text(), '%s')]";
+
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
@@ -297,7 +303,7 @@ abstract class AbstractLinksTest extends TestCase
      *
      * @return array
      */
-    protected function prepareWebsiteIdsProducts(): array
+    protected function prepareProductsWebsiteIds(): array
     {
         $websiteId = $this->storeManager->getWebsite('test')->getId();
         $defaultWebsiteId = $this->storeManager->getWebsite('base')->getId();

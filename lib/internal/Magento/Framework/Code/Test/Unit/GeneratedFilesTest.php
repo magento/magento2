@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Code\Test\Unit;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Code\GeneratedFiles;
 use Magento\Framework\Exception\FileSystemException;
@@ -14,33 +16,30 @@ use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Lock\Backend\FileLock;
 
-/**
- * Class GeneratedFilesTest
- */
-class GeneratedFilesTest extends \PHPUnit\Framework\TestCase
+class GeneratedFilesTest extends TestCase
 {
     /**
-     * @var DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryList|MockObject
      */
     private $directoryList;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|MockObject
      */
     private $writeInterface;
 
     /**
-     * @var WriteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteFactory|MockObject
      */
     private $writeFactory;
 
     /**
-     * @var FileLock|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileLock|MockObject
      */
     private $lockManager;
 
     /**
-     * @var \Magento\Framework\Code\GeneratedFiles
+     * @var GeneratedFiles
      */
     private $model;
 
@@ -64,7 +63,7 @@ class GeneratedFilesTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->directoryList = $this->createMock(DirectoryList::class);
         $this->writeFactory = $this->createMock(WriteFactory::class);
@@ -145,7 +144,7 @@ class GeneratedFilesTest extends \PHPUnit\Framework\TestCase
      * @param bool|null $processLocked
      * @return void
      */
-    private function expectProcessLocked(int $times, bool $processLocked = null): void
+    private function expectProcessLocked(int $times, bool $processLocked = false): void
     {
         $this->lockManager->expects($this->exactly($times))
             ->method('isLocked')

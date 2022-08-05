@@ -51,7 +51,7 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -89,6 +89,7 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 1
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
@@ -127,22 +128,50 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 0
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
+     *
+     * @dataProvider dataProviderSetPaymentOnCartWithExceptionWithDisabledInventoryCheck
+     * @param string $input
+     * @param string $message
+     * @throws \Exception
+     */
+    public function testSetPaymentOnCartWithExceptionWithDisabledInventoryCheck(string $input, string $message)
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $input = str_replace('cart_id_value', $maskedQuoteId, $input);
+
+        $query = <<<QUERY
+mutation {
+  setPaymentMethodAndPlaceOrder(
+    input: {
+      {$input}
+    }
+  ) {
+    order {
+      order_number
+    }
+  }
+}
+QUERY;
+
+        $this->expectExceptionMessage($message);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
      * @return array
      */
     public function dataProviderSetPaymentOnCartWithException(): array
     {
         return [
-            'missed_cart_id' => [
-                'payment_method: {
-                  code: "' . Checkmo::PAYMENT_METHOD_CHECKMO_CODE . '"
-                  }',
-                'Field SetPaymentMethodAndPlaceOrderInput.cart_id of required type String! was not provided.',
-            ],
-            'missed_payment_method' => [
-                'cart_id: "cart_id_value"',
-                'Field SetPaymentMethodAndPlaceOrderInput.payment_method of required type PaymentMethodInput!'
-                . ' was not provided.',
-            ],
             'place_order_with_out_of_stock_products' => [
                 'cart_id: "cart_id_value"
                   payment_method: {
@@ -154,16 +183,33 @@ QUERY;
     }
 
     /**
+     * @return array
+     */
+    public function dataProviderSetPaymentOnCartWithExceptionWithDisabledInventoryCheck(): array
+    {
+        return [
+            'place_order_with_out_of_stock_products' => [
+                'cart_id: "cart_id_value"
+                  payment_method: {
+                    code: "' . Checkmo::PAYMENT_METHOD_CHECKMO_CODE . '"
+                    }',
+                'Unable to place order: There are no source items with the in stock status',
+            ],
+        ];
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSetPaymentOnCartWithSimpleProductAndWithoutAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The shipping address is missing. Set the address and try again.');
+
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -203,11 +249,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage The requested Payment Method is not available.
      */
     public function testSetNonExistentPaymentMethod()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The requested Payment Method is not available.');
+
         $methodCode = 'noway';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -218,11 +265,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testSetPaymentOnNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $maskedQuoteId = 'non_existent_masked_id';
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
 
@@ -276,16 +324,61 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @expectedException Exception
-     * @expectedExceptionMessage The requested Payment Method is not available.
      */
     public function testSetDisabledPaymentOnCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The requested Payment Method is not available.');
+
         $methodCode = Purchaseorder::PAYMENT_METHOD_PURCHASEORDER_CODE;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = $this->getQuery($maskedQuoteId, $methodCode);
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     */
+    public function testPlaceOrderWitMissingCartId()
+    {
+        $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
+        $maskedQuoteId = "";
+
+        $query = $this->getQuery($maskedQuoteId, $methodCode);
+
+        $this->expectExceptionMessage(
+            "Required parameter \"cart_id\" is missing"
+        );
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     */
+    public function testPlaceOrderWithMissingPaymentMethod()
+    {
+        $methodCode = "";
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = $this->getQuery($maskedQuoteId, $methodCode);
+
+        $this->expectExceptionMessage(
+            "Required parameter \"code\" for \"payment_method\" is missing."
+        );
+        $this->graphQlMutation($query);
     }
 
     /**
@@ -341,7 +434,7 @@ QUERY;
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', true);

@@ -19,7 +19,7 @@
             <group value="GroupedProduct"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createProductOne">
                 <requiredEntity createDataKey="createCategory"/>
@@ -29,23 +29,23 @@
             </createData>
         </before>
         <after>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteGroupedProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteGroupedProduct">
                 <argument name="sku" value="{{GroupedProduct.sku}}"/>
             </actionGroup>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
 
         <!-- Create product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPage"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
-        <actionGroup ref="fillGroupedProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillGroupedProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
 
@@ -54,7 +54,7 @@
         <click selector="body" stepKey="clickBodyToCorrectFocusGrouped"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModal"/>
-        <actionGroup ref="filterProductGridBySku2" stepKey="filterGroupedProducts">
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterGroupedProducts">
             <argument name="sku" value="api-simple-product"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="checkFilterResult1"/>
@@ -63,21 +63,21 @@
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
 
         <!-- Add image to product -->
-        <actionGroup ref="addProductImage" stepKey="addImageForProduct">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProduct">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!-- Assert product image in admin product form -->
-        <actionGroup ref="assertProductImageAdminProductPage" stepKey="assertProductImageAdminProductPage"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
 
         <!-- Assert product image in storefront product page -->
-        <actionGroup ref="assertProductImageStorefrontProductPage" stepKey="assertProductImageStorefrontProductPage">
+        <actionGroup ref="AssertProductImageStorefrontProductPageActionGroup" stepKey="assertProductImageStorefrontProductPage">
             <argument name="product" value="GroupedProduct"/>
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>

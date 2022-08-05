@@ -18,16 +18,16 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComposerInformation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $composerInformationMock;
 
     /**
-     * @var ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentRegistrar|\PHPUnit\Framework\MockObject\MockObject
      */
     private $componentRegistrarMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->composerInformationMock = $this->getMockBuilder(ComposerInformation::class)
             ->disableOriginalConstructor()

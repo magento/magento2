@@ -8,7 +8,7 @@ namespace Magento\Framework\Json\Helper;
 /**
  * Json data helper
  *
- * @deprecated 100.2.0 @see \Magento\Framework\Serialize\Serializer\Json
+ * @deprecated 101.0.0 @see \Magento\Framework\Serialize\Serializer\Json
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

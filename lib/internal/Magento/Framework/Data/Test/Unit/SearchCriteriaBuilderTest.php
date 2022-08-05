@@ -3,18 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data\Test\Unit;
 
-class SearchCriteriaBuilderTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Api\CriteriaInterface;
+use Magento\Framework\Data\ObjectFactory;
+use Magento\Framework\Data\Test\Unit\Stub\SearchCriteriaBuilder;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class SearchCriteriaBuilderTest extends TestCase
 {
     public function testMake()
     {
-        $interface = \Magento\Framework\Api\CriteriaInterface::class;
+        $interface = CriteriaInterface::class;
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $factory = $this->createMock(\Magento\Framework\Data\ObjectFactory::class);
+        $objectManager = new ObjectManager($this);
+        $factory = $this->createMock(ObjectFactory::class);
         $builder = $objectManager->getObject(
-            \Magento\Framework\Data\Test\Unit\Stub\SearchCriteriaBuilder::class,
+            SearchCriteriaBuilder::class,
             ['objectFactory' => $factory]
         );
         $factory->expects($this->once())

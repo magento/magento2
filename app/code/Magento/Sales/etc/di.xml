@@ -117,6 +117,8 @@
     <preference for="Magento\Sales\Api\RefundInvoiceInterface" type="Magento\Sales\Model\RefundInvoice"/>
     <preference for="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider" />
     <preference for="Magento\Sales\Model\ConfigInterface" type="Magento\Sales\Model\Config" />
+    <preference for="Magento\Sales\Model\Order\Shipment\ShipmentItemsValidatorInterface" type="Magento\Sales\Model\Order\Shipment\ShipmentItemsValidator" />
+    <preference for="Magento\Sales\Model\OrderMutexInterface" type="Magento\Sales\Model\OrderMutex"/>
     <type name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
         <arguments>
             <argument name="providers" xsi:type="array">
@@ -213,6 +215,11 @@
             <argument name="dataProviders" xsi:type="array">
                 <item name="order_status" xsi:type="string">Magento\Sales\Model\Rss\OrderStatus</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\EmailSenderHandler">
+        <arguments>
+            <argument name="modifyStartFromDate" xsi:type="string">-1 day</argument>
         </arguments>
     </type>
     <virtualType name="SalesOrderIndexGridSyncRemove" type="Magento\Sales\Observer\GridSyncRemoveObserver">
@@ -819,14 +826,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
-        <arguments>
-            <argument name="appliers" xsi:type="array">
-                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
-                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
@@ -840,6 +839,12 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Invoice\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">sales_invoice_grid</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Invoice</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Sales\Model\Order\Config">
         <arguments>
             <argument name="state" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
@@ -943,6 +948,11 @@
             <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\CaptureCommand</argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Order\Payment\Operations\ProcessInvoiceOperation">
+        <arguments>
+            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\CaptureCommand</argument>
+        </arguments>
+    </type>
     <type name="Magento\Sales\Model\Order\Payment\Operations\OrderOperation">
         <arguments>
             <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\OrderCommand</argument>
@@ -1008,9 +1018,6 @@
                 <item name="sales_email/shipment/copy_to" xsi:type="string">1</item>
                 <item name="sales_email/shipment_comment/copy_to" xsi:type="string">1</item>
             </argument>
-            <argument name="environment" xsi:type="array">
-                <item name="customer/create_account/email_domain" xsi:type="string">1</item>
-            </argument>
         </arguments>
     </type>
     <preference
@@ -1019,6 +1026,16 @@
     <type name="Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityChecker">
         <arguments>
             <argument name="productAvailabilityChecks" xsi:type="array" />
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\StatusLabel">
+        <arguments>
+            <argument name="maskStatusesMapping" xsi:type="array">
+                <item name="frontend" xsi:type="array">
+                    <item name="fraud" xsi:type="const">Magento\Sales\Model\Order::STATUS_FRAUD</item>
+                    <item name="payment_review" xsi:type="const">Magento\Sales\Model\Order::STATE_PROCESSING</item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>

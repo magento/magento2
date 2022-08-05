@@ -3,70 +3,120 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing;
 
+use Magento\Customer\Model\Attribute;
+use Magento\Customer\Ui\Component\ColumnFactory;
+use Magento\Customer\Ui\Component\Listing\AttributeRepository;
+use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
 use Magento\Customer\Ui\Component\Listing\Columns;
+use Magento\Customer\Ui\Component\Listing\Filter\FilterConfigProviderInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
+use Magento\Ui\Component\Listing\Columns\ColumnInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ColumnsTest extends \PHPUnit\Framework\TestCase
+class ColumnsTest extends TestCase
 {
-    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ContextInterface|MockObject
+     */
     protected $context;
 
-    /** @var \Magento\Customer\Ui\Component\ColumnFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ColumnFactory|MockObject
+     */
     protected $columnFactory;
 
-    /** @var \Magento\Customer\Ui\Component\Listing\AttributeRepository|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var AttributeRepository|MockObject
+     */
     protected $attributeRepository;
 
-    /** @var \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Attribute|MockObject
+     */
     protected $attribute;
 
-    /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ColumnInterface|MockObject
+     */
     protected $column;
 
-    /** @var \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var InlineEditUpdater|MockObject
+     */
     protected $inlineEditUpdater;
 
-    /** @var Columns */
+    /**
+     * @var Columns
+     */
     protected $component;
 
-    protected function setUp()
+    /**
+     * @var FilterConfigProviderInterface|MockObject
+     */
+    private $textFilterConfigProvider;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
+        $this->context = $this->getMockBuilder(ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+        $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         $this->columnFactory = $this->createPartialMock(
-            \Magento\Customer\Ui\Component\ColumnFactory::class,
+            ColumnFactory::class,
             ['create']
         );
         $this->attributeRepository = $this->createMock(
-            \Magento\Customer\Ui\Component\Listing\AttributeRepository::class
+            AttributeRepository::class
         );
-        $this->attribute = $this->createMock(\Magento\Customer\Model\Attribute::class);
+        $this->attribute = $this->createMock(Attribute::class);
         $this->column = $this->getMockForAbstractClass(
-            \Magento\Ui\Component\Listing\Columns\ColumnInterface::class,
+            ColumnInterface::class,
             [],
             '',
             false
         );
 
         $this->inlineEditUpdater = $this->getMockBuilder(
-            \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater::class
+            InlineEditUpdater::class
         )->disableOriginalConstructor()
             ->getMock();
+
+        $this->textFilterConfigProvider = $this->getMockForAbstractClass(FilterConfigProviderInterface::class);
+        $this->textFilterConfigProvider->method('getConfig')
+            ->willReturn(
+                [
+                    'conditionType' => 'like'
+                ]
+            );
 
         $this->component = new Columns(
             $this->context,
             $this->columnFactory,
             $this->attributeRepository,
-            $this->inlineEditUpdater
+            $this->inlineEditUpdater,
+            [],
+            [],
+            [
+                'text' => $this->textFilterConfigProvider
+            ]
         );
     }
 
-    public function testPrepareWithAddColumn()
+    /**
+     * @return void
+     */
+    public function testPrepareWithAddColumn(): void
     {
         $attributeCode = 'attribute_code';
 
@@ -91,7 +141,7 @@ class ColumnsTest extends \PHPUnit\Framework\TestCase
                         'is_searchable_in_grid' => true,
                         'validation_rules' => [],
                         'required'=> false,
-                        'entity_type_code' => 'customer_address',
+                        'entity_type_code' => 'customer_address'
                     ]
                 ]
             );
@@ -104,7 +154,10 @@ class ColumnsTest extends \PHPUnit\Framework\TestCase
         $this->component->prepare();
     }
 
-    public function testPrepareWithUpdateColumn()
+    /**
+     * @return void
+     */
+    public function testPrepareWithUpdateColumn(): void
     {
         $attributeCode = 'billing_attribute_code';
         $backendType = 'backend-type';
@@ -125,7 +178,7 @@ class ColumnsTest extends \PHPUnit\Framework\TestCase
             'is_searchable_in_grid' => true,
             'validation_rules' => [],
             'required'=> false,
-            'entity_type_code' => 'customer',
+            'entity_type_code' => 'customer'
         ];
 
         $this->attributeRepository->expects($this->atLeastOnce())
@@ -140,28 +193,31 @@ class ColumnsTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->with('config')
             ->willReturn([]);
-        $this->column->expects($this->at(3))
+        $this->column
             ->method('setData')
-            ->with(
-                'config',
+            ->withConsecutive(
                 [
-                    'options' => [
-                        [
-                            'label' => 'Label',
-                            'value' => 'Value'
+                    'config',
+                    [
+                        'options' => [
+                            [
+                                'label' => 'Label',
+                                'value' => 'Value'
+                            ]
                         ]
                     ]
-                ]
-            );
-        $this->column->expects($this->at(5))
-            ->method('setData')
-            ->with(
-                'config',
+                ],
                 [
-                    'name' => $attributeCode,
-                    'dataType' => $backendType,
-                    'filter' => 'text',
-                    'visible' => true
+                    'config',
+                    [
+                        'name' => $attributeCode,
+                        'dataType' => $backendType,
+                        'filter' => [
+                            'filterType' => 'text',
+                            'conditionType' => 'like',
+                        ],
+                        'visible' => true
+                    ]
                 ]
             );
 
@@ -169,7 +225,10 @@ class ColumnsTest extends \PHPUnit\Framework\TestCase
         $this->component->prepare();
     }
 
-    public function testPrepareWithUpdateStaticColumn()
+    /**
+     * @return void
+     */
+    public function testPrepareWithUpdateStaticColumn(): void
     {
         $attributeCode = 'billing_attribute_code';
         $backendType = 'static';
@@ -190,7 +249,7 @@ class ColumnsTest extends \PHPUnit\Framework\TestCase
             'is_searchable_in_grid' => true,
             'validation_rules' => [],
             'required'=> false,
-            'entity_type_code' => 'customer',
+            'entity_type_code' => 'customer'
         ];
         $this->inlineEditUpdater->expects($this->once())
             ->method('applyEditing')
@@ -207,30 +266,28 @@ class ColumnsTest extends \PHPUnit\Framework\TestCase
         $this->column->expects($this->atLeastOnce())
             ->method('getData')
             ->with('config')
-            ->willReturn([
-                'editor' => 'text'
-            ]);
-        $this->column->expects($this->at(3))
+            ->willReturn(['editor' => 'text']);
+        $this->column
             ->method('setData')
-            ->with(
-                'config',
+            ->withConsecutive(
                 [
-                    'editor' => 'text',
-                    'options' => [
-                        [
-                            'label' => 'Label',
-                            'value' => 'Value'
+                    'config',
+                    [
+                        'editor' => 'text',
+                        'options' => [
+                            [
+                                'label' => 'Label',
+                                'value' => 'Value'
+                            ]
                         ]
                     ]
-                ]
-            );
-        $this->column->expects($this->at(6))
-            ->method('setData')
-            ->with(
-                'config',
+                ],
                 [
-                    'editor' => 'text',
-                    'visible' => true
+                    'config',
+                    [
+                        'editor' => 'text',
+                        'visible' => true
+                    ]
                 ]
             );
 

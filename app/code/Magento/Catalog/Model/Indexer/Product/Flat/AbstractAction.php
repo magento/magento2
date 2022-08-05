@@ -222,7 +222,7 @@ abstract class AbstractAction
                     ['t' => $this->_productIndexerHelper->getTable($relation->getTable())],
                     ['entity_table.entity_id', $relation->getChildFieldName(), new \Zend_Db_Expr('1')]
                 )->join(
-                    ['entity_table' => $this->_connection->getTableName('catalog_product_entity')],
+                    ['entity_table' => $this->_productIndexerHelper->getTable('catalog_product_entity')],
                     "entity_table.{$metadata->getLinkField()} = t.{$relation->getParentFieldName()}",
                     []
                 )->join(

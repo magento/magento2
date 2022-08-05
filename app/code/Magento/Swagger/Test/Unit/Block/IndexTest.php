@@ -10,20 +10,22 @@ namespace Magento\Swagger\Test\Unit\Block;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Swagger\Api\Data\SchemaTypeInterface;
 use Magento\Swagger\Block\Index;
-use Magento\SwaggerWebapi\Model\SchemaType\Rest;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IndexTest extends \PHPUnit\Framework\TestCase
+class IndexTest extends TestCase
 {
     /**
-     * @var SchemaTypeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SchemaTypeInterface|MockObject
      */
     private $schemaTypeMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
@@ -33,12 +35,21 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     private $index;
 
     /**
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)->getMock();
-        $this->schemaTypeMock = $this->getMockBuilder(SchemaTypeInterface::class)->getMock();
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->getMock();
+        $this->schemaTypeMock = $this->getMockBuilder(SchemaTypeInterface::class)
+            ->getMock();
+        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
+            ->getMock();
 
         $this->index = (new ObjectManager($this))->getObject(
             Index::class,
@@ -47,6 +58,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
                     Context::class,
                     [
                         'request' => $this->requestMock,
+                        'urlBuilder' => $this->urlBuilder
                     ]
                 ),
                 'data' => [
@@ -75,6 +87,10 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $this->schemaTypeMock->expects($this->once())
             ->method('getSchemaUrlPath')
             ->willReturn('/test');
+
+        $this->urlBuilder->expects($this->any())
+            ->method('getBaseUrl')
+            ->willReturn('');
 
         $this->assertEquals('/test', $this->index->getSchemaUrl());
     }

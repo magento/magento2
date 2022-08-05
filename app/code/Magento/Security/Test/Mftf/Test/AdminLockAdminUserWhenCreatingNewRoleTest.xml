@@ -18,10 +18,11 @@
             <testCaseId value="MC-14384" />
             <group value="security"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Log in to Admin Panel -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Unlock Admin user -->
@@ -39,7 +40,7 @@
             <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
             <argument name="messageType" value="error" />
         </actionGroup>
-        
+
         <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillFieldSecondAttempt">
             <argument name="role" value="roleAdministrator" />
             <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
@@ -90,7 +91,7 @@
         </actionGroup>
 
         <!-- Try to login as admin and check error message -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsLockedAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsLockedAdmin"/>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginMessage"/>
     </test>
 </tests>

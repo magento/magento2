@@ -16,19 +16,19 @@
         <data key="name" unique="suffix">configurable</data>
         <data key="price">123.00</data>
         <data key="weight">2</data>
-        <data key="urlKey" unique="suffix">configurableurlkey</data>
+        <data key="urlKey" unique="suffix">configurable</data>
         <data key="status">1</data>
         <data key="quantity">100</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
     <entity name="ApiConfigurableProduct" type="product">
+        <data key="name" unique="suffix">API Configurable Product</data>
         <data key="sku" unique="suffix">api-configurable-product</data>
+        <data key="urlKey" unique="suffix">api-configurable-product</data>
         <data key="type_id">configurable</data>
         <data key="attribute_set_id">4</data>
         <data key="visibility">4</data>
-        <data key="name" unique="suffix">API Configurable Product</data>
-        <data key="urlKey" unique="suffix">api-configurable-product</data>
         <data key="price">123.00</data>
         <data key="weight">2</data>
         <data key="status">1</data>

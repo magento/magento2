@@ -20,7 +20,7 @@ class CategoryAttributeRepositoryTest extends \Magento\TestFramework\TestCase\We
         $attributeCode = 'test_attribute_code_666';
         $attribute = $this->getAttribute($attributeCode);
 
-        $this->assertTrue(is_array($attribute));
+        $this->assertIsArray($attribute);
         $this->assertArrayHasKey('attribute_id', $attribute);
         $this->assertArrayHasKey('attribute_code', $attribute);
         $this->assertEquals($attributeCode, $attribute['attribute_code']);
@@ -69,7 +69,6 @@ class CategoryAttributeRepositoryTest extends \Magento\TestFramework\TestCase\We
         $this->assertTrue($response['total_count'] > 0);
         $this->assertTrue(count($response['items']) > 0);
 
-        $this->assertNotNull($response['items'][0]['default_frontend_label']);
         $this->assertNotNull($response['items'][0]['attribute_id']);
     }
 
