@@ -299,18 +299,18 @@ abstract class AbstractType
             }
         }
         $addedAttributes = [];
-        foreach ($absentKeys as $attributeSetName => $attributeIds) {
+        foreach ($absentKeys as $attributeIds) {
             $unknownAttributeIds = array_diff(
                 $attributeIds,
                 array_keys(self::$commonAttributesCache),
                 self::$invAttributesCache
             );
             if ($unknownAttributeIds) {
-                $addedAttributes[] = $this->attachAttributesByOnlyId($attributeSetName, $unknownAttributeIds);
+                $addedAttributes[] = $this->attachAttributesByOnlyId($unknownAttributeIds);
             }
-            if ($this->_forcedAttributesCodes) {
-                $addedAttributes[] = $this->attachAttributesByForcedCodes($attributeSetName);
-            }
+        }
+        if ($this->_forcedAttributesCodes) {
+            $addedAttributes[] = $this->attachAttributesByForcedCodes();
         }
         $addedAttributes = array_merge(...$addedAttributes);
         $attributesToLoadFromTable = [];
@@ -361,8 +361,9 @@ abstract class AbstractType
      * @param string $attributeSetName
      * @param array $attributeIds
      * @return void
-     * @deprecated use attachAttributesOnlyById and attachAttributesByForcedCodes
-     * @see attachAttributesOnlyById() and attachAttributesByForcedCodes()
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @deprecated use attachAttributesByOnlyId and attachAttributesByForcedCodes
+     * @see attachAttributesByOnlyId() and attachAttributesByForcedCodes()
      */
     protected function attachAttributesById($attributeSetName, $attributeIds)
     {
@@ -373,25 +374,24 @@ abstract class AbstractType
                 ['in' => $this->_forcedAttributesCodes]
             ]
         ) as $attribute) {
-            $this->attachAttribute($attributeSetName, $attribute);
+            $this->attachAttribute($attribute);
         }
     }
 
     /**
      * Attach Attributes By Id
      *
-     * @param string $attributeSetName
      * @param array $attributeIds
      * @return array
      */
-    private function attachAttributesByOnlyId(string $attributeSetName, array $attributeIds) : array
+    private function attachAttributesByOnlyId(array $attributeIds) : array
     {
         $addedAttributes = [];
         foreach ($this->_prodAttrColFac->create()->addFieldToFilter(
             ['main_table.attribute_id', 'main_table.attribute_code'],
             [['in' => $attributeIds]]
         ) as $attribute) {
-            $cachedAttribute = $this->attachAttribute($attributeSetName, $attribute);
+            $cachedAttribute = $this->attachAttribute($attribute);
             if (null !== $cachedAttribute) {
                 $addedAttributes[] = $cachedAttribute;
             }
@@ -402,17 +402,16 @@ abstract class AbstractType
     /**
      * Attach Attributes By _forcedAttributesCodes
      *
-     * @param string $attributeSetName
      * @return array
      */
-    private function attachAttributesByForcedCodes(string $attributeSetName) : array
+    private function attachAttributesByForcedCodes() : array
     {
         $addedAttributes = [];
         foreach ($this->_prodAttrColFac->create()->addFieldToFilter(
             ['main_table.attribute_code'],
             [['in' => $this->_forcedAttributesCodes]]
         ) as $attribute) {
-            $cachedAttribute = $this->attachAttribute($attributeSetName, $attribute);
+            $cachedAttribute = $this->attachAttribute($attribute);
             if (null !== $cachedAttribute) {
                 $addedAttributes[] = $cachedAttribute;
             }
@@ -423,11 +422,10 @@ abstract class AbstractType
     /**
      * Attach Attribute to self::$commonAttributesCache or self::$invAttributesCache
      *
-     * @param string $attributeSetName
      * @param ProductAttributeInterface $attribute
      * @return array|null
      */
-    private function attachAttribute(string $attributeSetName, ProductAttributeInterface $attribute)
+    private function attachAttribute(ProductAttributeInterface $attribute)
     {
         $cachedAttribute = null;
         $attributeCode = $attribute->getAttributeCode();
