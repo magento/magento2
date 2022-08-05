@@ -10,11 +10,11 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminProductGridCustomViewColumnDisplayTest">
         <annotations>
-            <stories value="The list of the visible columns didn't save for custom view when column position is changed"/>
+            <stories value="The list of the visible columns didn't save when column position is changed"/>
             <title value="The list of the visible columns didn't save for custom view"/>
-            <description value="Login as Admin, go to Product grid and move column position"/>
+            <description value="Login as Admin, go to Product grid and sort column position, click on Columns dropdown, check/uncheck any column name(not to checkbox)"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="ACP2E-1073"/>
+            <testCaseId value="AC-6229"/>
             <useCaseId value="ACP2E-1073"/>
             <group value="catalog"/>
         </annotations>
@@ -30,29 +30,35 @@
         </before>
         <!-- Log in as admin-->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-        <!-- Navigate to products list page and select created products -->
+        <!-- Navigate to products list page -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
-        <!-- Open the column dropdown to add the special price from the catalog product grid -->
-        <dragAndDrop selector1="{{AdminProductGridSection.columnHeader('SKU')}}" selector2="{{AdminProductGridSection.columnHeader('Name')}}" stepKey="moveCustomOptionRecord"/>
+        <!--Sort SKU and Name column position -->
+        <dragAndDrop selector1="{{AdminProductGridSection.columnHeader('SKU')}}" selector2="{{AdminProductGridSection.columnHeader('Name')}}" stepKey="dragAndDropColumnName"/>
         <waitForPageLoad stepKey="waitForDragAndDrop"/>
-        <!--Remove Price column-->
+        <!--check if price column is visible in grid-->
         <seeElement selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="seeProductPriceColumn"/>
+        <!--Click on columns, in dropdown uncheck price -->
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdownPrice"/>
-        <waitForElementVisible selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="waitForViewBookmarks"/>
-
-        <uncheckOption selector="{{AdminProductGridFilterSection.viewColumnOptionName('Price')}}" stepKey="hidePriceColumn"/>
+        <actionGroup ref="CheckAdminProductGridColumnNameActionGroup" stepKey="hidePriceColumn">
+            <argument name="optionName" value="Price"/>
+        </actionGroup>
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownPrice"/>
+        <!--price column is not visible in product grid-->
         <dontSeeElement selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="dontSeeProductPriceColumn"/>
-        <!--Add Weight column-->
+        <!--check weight column is not visible in product grid-->
         <dontSeeElement selector="{{AdminProductGridSection.columnHeader('Weight')}}" stepKey="dontSeeWeightColumn"/>
+        <!--Click on columns, in dropdown click on column name weight -->
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdownWeight"/>
-        <checkOption selector="{{AdminProductGridFilterSection.viewColumnOptionName('Weight')}}" stepKey="showWeightColumn"/>
+        <actionGroup ref="CheckAdminProductGridColumnNameActionGroup" stepKey="showWeightColumn">
+            <argument name="optionName" value="Weight"/>
+        </actionGroup>
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownWeight"/>
         <seeElement selector="{{AdminProductGridSection.columnHeader('Weight')}}" stepKey="seeWeightColumn"/>
         <after>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="beginWithLogout"/>
         </after>
 
