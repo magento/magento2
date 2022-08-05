@@ -12,6 +12,9 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\CatalogImportExport\Model\Export\Product\Type\Simple as SimpleProductType;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 
 /**
@@ -106,6 +109,41 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('text_attribute=!@#$%^&*()_+1234567890-=|\\:;""\'<,>.?/', $exportData);
         $occurrencesCount = substr_count($exportData, 'Hello "" &"" Bring the water bottle when you can!');
         $this->assertEquals(1, $occurrencesCount);
+    }
+
+    /**
+     * Verify successful export of product with stock data with 'use config max sale quantity is enabled
+     *
+     * @magentoDataFixture /Magento/Catalog/_files/product_without_options_with_stock_data.php
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testExportWithStock(): void
+    {
+        $maxSaleQty = '19187';
+        $minSaleQty = '179';
+        /** @var StockItemRepositoryInterface $stockRepository */
+        $stockRepository = $this->objectManager->get(StockItemRepositoryInterface::class);
+        /** @var StockConfigurationInterface $stockConfiguration */
+        $stockConfiguration = $this->objectManager->get(StockConfigurationInterface::class);
+
+        $product = $this->productRepository->get('simple');
+        /** @var Item $stockItem */
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $stockItem->setMaxSaleQty($maxSaleQty);
+        $stockItem->setMinSaleQty($minSaleQty);
+        $stockRepository->save($stockItem);
+
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+        $exportData = $this->model->export();
+        $this->assertStringContainsString((string)$stockConfiguration->getMaxSaleQty(), $exportData);
+        $this->assertStringNotContainsString($maxSaleQty, $exportData);
+        $this->assertStringNotContainsString($minSaleQty, $exportData);
+        $this->assertStringContainsString('Simple Product Without Custom Options', $exportData);
     }
 
     /**
