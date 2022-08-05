@@ -20,6 +20,9 @@
             <group value="checkout"/>
         </annotations>
         <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+
             <!--Enable Cash On Delivery payment method-->
             <actionGroup ref="CashOnDeliverySpecificCountryActionGroup" stepKey="enableCashOnDelivery">
                 <argument name="path" value="{{CashOnDeliveryEnableConfigData.path}}"/>
