@@ -158,7 +158,6 @@ class Suggestions implements SuggestedQueriesInterface
      * Get Suggestions
      *
      * @param QueryInterface $query
-     *
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -180,7 +179,7 @@ class Suggestions implements SuggestedQueriesInterface
                     }
                 }
             }
-            ksort($suggestions);
+            krsort($suggestions);
             $texts = array_unique(array_column($suggestions, 'text'));
             $suggestions = array_slice(
                 array_intersect_key(array_values($suggestions), $texts),
@@ -195,12 +194,11 @@ class Suggestions implements SuggestedQueriesInterface
     /**
      * Init Search Query
      *
-     * @param string $query
-     *
+     * @param QueryInterface $query
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function initQuery($query)
+    private function initQuery(QueryInterface $query): array
     {
         $searchQuery = [
             'index' => $this->searchIndexNameResolver->getIndexName(
@@ -235,7 +233,7 @@ class Suggestions implements SuggestedQueriesInterface
                     'field' => $field,
                     'analyzer' => 'standard',
                     'size' => $searchSuggestionsCount,
-                    'max_errors' => 1,
+                    'max_errors' => 0.9,
                     'direct_generator' => [
                         [
                             'field' => $field,
