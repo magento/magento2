@@ -51,22 +51,25 @@ define([
              */
             contents = function (elem) {
                 return $.map(elem, function (el) {
-                    var iframeHostName;
+                    let isIframe = $.nodeName(element, "iframe");
 
-                    // prevent cross origin iframe content reading
-                    if ($(el).prop('tagName') === 'IFRAME') {
-                        iframeHostName = $('<a>').prop('href', $(el).prop('src'))
-                            .prop('hostname');
+                    if (isIframe) {
+                        let iframeSource = $(element).prop('src');
 
-                        if (window.location.hostname !== iframeHostName) {
-                            return [];
+                        if (iframeSource.length) {
+                            let iframeDomain = (new URL(iframeSource));
+                            if (window.location.hostname !== iframeDomain.hostname) {
+                                return []; // src not origin
+                            }
+                        } else {
+                            return []; // src is emtpy
                         }
-                    }
+                    }  
 
                     try {
-                        return el.nodeName.toLowerCase() === 'iframe' ?
-                            el.contentDocument || (el.contentWindow ? el.contentWindow.document : []) :
-                            $.merge([], el.childNodes);
+                        return isIframe ?
+                                 el.contentDocument || (el.contentWindow ? el.contentWindow.document : []) :
+                                 $.merge([], el.childNodes);
                     } catch (e) {
                         console.error(e);
 
