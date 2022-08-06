@@ -372,7 +372,7 @@ class AdjustmentTest extends TestCase
         $this->assertEquals('basePrice', $this->model->getDataPriceType());
         $amountRender->expects($this->atLeastOnce())
             ->method('getPriceType')
-            ->willReturn('anythingElse');
+            ->willReturn(null);
         $this->model->render($amountRender, []);
         //no exception thrown
         $this->assertIsString($this->model->getDataPriceType());
