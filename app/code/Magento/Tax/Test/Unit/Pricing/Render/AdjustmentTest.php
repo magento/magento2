@@ -55,6 +55,11 @@ class AdjustmentTest extends TestCase
     protected $model;
 
     /**
+     * @var AmountRenderInterface
+     */
+    protected $amountRender;
+
+    /**
      * Init mocks and model
      */
     protected function setUp(): void
@@ -349,5 +354,27 @@ class AdjustmentTest extends TestCase
             ->method('setPriceWrapperCss');
 
         $this->model->render($amountRender, $arguments);
+    }
+
+    /**
+     * test for method getDataPriceType
+     */
+    public function testGetDataPriceType(): void
+    {
+        $amountRender = $this->getMockBuilder(Amount::class)
+            ->addMethods(['getPriceType'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $amountRender->expects($this->atLeastOnce())
+            ->method('getPriceType')
+            ->willReturn('finalPrice');
+        $this->model->render($amountRender, []);
+        $this->assertEquals('basePrice', $this->model->getDataPriceType());
+        $amountRender->expects($this->atLeastOnce())
+            ->method('getPriceType')
+            ->willReturn('anythingElse');
+        $this->model->render($amountRender, []);
+        //no exception thrown
+        $this->assertIsString($this->model->getDataPriceType());
     }
 }
