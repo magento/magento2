@@ -51,7 +51,7 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
     {
         $result = [];
 
-        if (empty(trim($phrase))) {
+        if ($phrase === null || empty(trim($phrase))) {
             return $result;
         }
 
@@ -71,7 +71,7 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
                 $pattern = $this->getSearchPattern(\array_slice($words, $offset));
                 $position = $this->findInArray($pattern, $synonymGroups);
                 if ($position !== null) {
-                    $synonyms = explode(',', $synonymGroups[$position]);
+                    $synonyms = explode(',', $synonymGroups[$position] ?? '');
                 }
             }
 
@@ -94,7 +94,7 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
     {
         $position = 0;
         foreach ($synonymGroupsToExamine as $synonymGroup) {
-            $matchingResultCode = preg_match($pattern, $synonymGroup);
+            $matchingResultCode = preg_match($pattern, $synonymGroup ?? '');
             if ($matchingResultCode === 1) {
                 return $position;
             }

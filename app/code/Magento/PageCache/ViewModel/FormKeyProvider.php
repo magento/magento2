@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\PageCache\ViewModel;
 
+use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\PageCache\Model\Config;
 
@@ -18,15 +20,23 @@ class FormKeyProvider implements ArgumentInterface
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
+
+    /**
+     * @var ScopeConfigInterface object
+     */
+    private ScopeConfigInterface $scopeConfig;
 
     /**
      * @param Config $config
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        Config $config
+        Config $config,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->config = $config;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -37,5 +47,15 @@ class FormKeyProvider implements ArgumentInterface
     public function isFullPageCacheEnabled(): bool
     {
         return $this->config->isEnabled();
+    }
+
+    /**
+     * Is category pagination cache enabled
+     *
+     * @return bool
+     */
+    public function isPaginationCacheEnabled(): bool
+    {
+        return $this->scopeConfig->isSetFlag(ToolbarMemorizer::XML_PATH_CATALOG_REMEMBER_PAGINATION);
     }
 }

@@ -18,8 +18,6 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
     protected $_file;
 
     /**
-     * Delimiter.
-     *
      * @var string
      */
     protected $_delimiter = ',';
@@ -96,7 +94,7 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
         $parsed = $this->_file->readCsv(0, $this->_delimiter, $this->_enclosure);
         if (is_array($parsed) && count($parsed) != $this->_colQty) {
             foreach ($parsed as $element) {
-                if (strpos($element, "'") !== false) {
+                if ($element && strpos($element, "'") !== false) {
                     $this->_foundWrongQuoteFlag = true;
                     break;
                 }
@@ -112,6 +110,7 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->_file->seek(0);

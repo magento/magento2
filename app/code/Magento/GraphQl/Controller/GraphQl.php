@@ -1,12 +1,16 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Controller;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\AreaList;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http;
@@ -102,6 +106,11 @@ class GraphQl implements FrontControllerInterface
     private $loggerPool;
 
     /**
+     * @var AreaList
+     */
+    private $areaList;
+
+    /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
@@ -112,9 +121,10 @@ class GraphQl implements FrontControllerInterface
      * @param QueryFields $queryFields
      * @param JsonFactory|null $jsonFactory
      * @param HttpResponse|null $httpResponse
-     * @param ContextFactoryInterface $contextFactory
-     * @param LogData $logDataHelper
-     * @param LoggerPool $loggerPool
+     * @param ContextFactoryInterface|null $contextFactory
+     * @param LogData|null $logDataHelper
+     * @param LoggerPool|null $loggerPool
+     * @param AreaList|null $areaList
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -130,7 +140,8 @@ class GraphQl implements FrontControllerInterface
         HttpResponse $httpResponse = null,
         ContextFactoryInterface $contextFactory = null,
         LogData $logDataHelper = null,
-        LoggerPool $loggerPool = null
+        LoggerPool $loggerPool = null,
+        AreaList $areaList = null
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
@@ -145,6 +156,7 @@ class GraphQl implements FrontControllerInterface
         $this->contextFactory = $contextFactory ?: ObjectManager::getInstance()->get(ContextFactoryInterface::class);
         $this->logDataHelper = $logDataHelper ?: ObjectManager::getInstance()->get(LogData::class);
         $this->loggerPool = $loggerPool ?: ObjectManager::getInstance()->get(LoggerPool::class);
+        $this->areaList = $areaList ?: ObjectManager::getInstance()->get(AreaList::class);
     }
 
     /**
@@ -156,6 +168,8 @@ class GraphQl implements FrontControllerInterface
      */
     public function dispatch(RequestInterface $request): ResponseInterface
     {
+        $this->areaList->getArea(Area::AREA_GRAPHQL)->load(Area::PART_TRANSLATE);
+
         $statusCode = 200;
         $jsonResult = $this->jsonFactory->create();
         $data = $this->getDataFromRequest($request);
@@ -191,7 +205,7 @@ class GraphQl implements FrontControllerInterface
         $jsonResult->renderResult($this->httpResponse);
 
         // log information about the query, unless it is an introspection query
-        if (strpos($data['query'], 'IntrospectionQuery') === false) {
+        if (!isset($data['query']) || strpos($data['query'], 'IntrospectionQuery') === false) {
             $queryInformation = $this->logDataHelper->getLogData($request, $data, $schema, $this->httpResponse);
             $this->loggerPool->execute($queryInformation);
         }
