@@ -115,7 +115,7 @@
             </actionGroup>
             <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForDeleteSuccessMessage"/>
             <see selector="{{AdminMessagesSection.success}}" userInput="A total of 4 record(s) have been deleted." stepKey="seeDeleteSuccessMessage"/>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilters"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductGridFilters"/>
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteProductVisualSwatchAttribute">
                 <argument name="ProductAttribute" value="$createVisualSwatchAttribute$"/>
             </actionGroup>
@@ -130,7 +130,10 @@
         </actionGroup>
 
         <!--CASE 0: Selected options = none; Expected media : C1, C2, C3-->
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase0"/>
+        <comment userInput="BIC workaround" stepKey="waitForThumbnailsAppearCase0"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase0"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase0"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase0"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase0"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case0">
             <expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
@@ -157,7 +160,13 @@
 
         <!--CASE 1: Selected options = B1; Expected media : D1, D2, D3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeFirstOption.option[store_labels][0][label]$)}}" stepKey="chooseFirstOptionCase1"/>
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase1"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('4')}}" stepKey="waitForFourthThumbnailCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('5')}}" stepKey="waitForFifthThumbnailCase1"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('6')}}" stepKey="waitForSixthThumbnailCase1"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase1"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case1">
             <expectedResult type="string">|{{MagentoLogo.filename}}.*.png|</expectedResult>
@@ -196,7 +205,10 @@
 
         <!--CASE 2: Selected options = B2; Expected media : C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeSecondOption.option[store_labels][0][label]$)}}" stepKey="chooseFirstOptionCase2"/>
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase2"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase2"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase2"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case2">
             <expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>
@@ -223,7 +235,13 @@
 
         <!--CASE 3: Selected options = B3; Expected media : E1, E2, E3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeThirdOption.option[store_labels][0][label]$)}}" stepKey="chooseFirstOptionCase3"/>
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase3"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('4')}}" stepKey="waitForFourthThumbnailCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('5')}}" stepKey="waitForFifthThumbnailCase3"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('6')}}" stepKey="waitForSixthThumbnailCase3"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase3"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case3">
             <expectedResult type="string">|{{Magento3.filename}}.*.jpg|</expectedResult>
@@ -262,7 +280,10 @@
 
         <!--CASE 4: Selected options = none; Expected media : C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeThirdOption.option[store_labels][0][label]$)}}" stepKey="unselectThirdOptionCase4"/>
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase4"/>
+        <waitForPageLoad stepKey="waitForThumbnailsAppearCase4"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('1')}}" stepKey="waitForFirstThumbnailCase4"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('2')}}" stepKey="waitForSecondThumbnailCase4"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('3')}}" stepKey="waitForThirdThumbnailCase4"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase4"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case4">
             <expectedResult type="string">|{{Magento2.filename}}.*.jpg|</expectedResult>

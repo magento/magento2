@@ -135,6 +135,68 @@ QUERY;
     }
 
     /**
+     * Tests setting the billing address on a guest's cart by providing new address input information.
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetNewBillingAddressOnGuest()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+         address: {
+          firstname: "test firstname"
+          lastname: "test lastname"
+          company: "test company"
+          street: ["test street 1", "test street 2"]
+          city: "test city"
+          region: "AZ"
+          postcode: "887766"
+          country_code: "US"
+          telephone: "88776655"
+          vat_id: "DE313215027"
+         }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        vat_id
+        country {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '');
+
+        self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
+        $cartResponse = $response['setBillingAddressOnCart']['cart'];
+        self::assertArrayHasKey('billing_address', $cartResponse);
+        $billingAddressResponse = $cartResponse['billing_address'];
+        self::assertArrayHasKey('vat_id', $billingAddressResponse);
+        $this->assertNewAddressFields($billingAddressResponse);
+    }
+
+    /**
      * Tests that the "use_for_shipping" option sets the provided billing address for shipping as well.
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
@@ -418,7 +480,7 @@ mutation {
 QUERY;
 
         self::expectExceptionMessage(
-           'The billing address must contain either "customer_address_id", "address", or "same_as_shipping".'
+            'The billing address must contain either "customer_address_id", "address", or "same_as_shipping".'
         );
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
@@ -1918,5 +1980,107 @@ QUERY;
     public function testSetBillingAddressAndPlaceOrderWithGuestCheckoutDisabled()
     {
         $this->testSetBillingAddressAndPlaceOrder();
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/attribute_telephone_not_required_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetNewBillingAddressWithoutTelephone()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+         address: {
+          firstname: "test firstname"
+          lastname: "test lastname"
+          company: "test company"
+          street: ["test street 1", "test street 2"]
+          city: "test city"
+          region: "AZ"
+          postcode: "887766"
+          country_code: "US"
+          telephone: ""
+         }
+         use_for_shipping: true
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+      shipping_addresses {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+
+        self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
+        $cartResponse = $response['setBillingAddressOnCart']['cart'];
+        self::assertArrayHasKey('billing_address', $cartResponse);
+        $billingAddressResponse = $cartResponse['billing_address'];
+        self::assertArrayHasKey('shipping_addresses', $cartResponse);
+        $shippingAddressResponse = current($cartResponse['shipping_addresses']);
+        $this->assertNewAddressWithoutTelephone($billingAddressResponse);
+        $this->assertNewAddressWithoutTelephone($shippingAddressResponse, 'ShippingCartAddress');
+    }
+
+    /**
+     * Verify the all the whitelisted fields for a New Address Object without telephone
+     *
+     * @param array $addressResponse
+     * @param string $addressType
+     */
+    private function assertNewAddressWithoutTelephone(
+        array $addressResponse,
+        string $addressType = 'BillingCartAddress'
+    ): void {
+        $assertionMap = [
+            ['response_field' => 'firstname', 'expected_value' => 'test firstname'],
+            ['response_field' => 'lastname', 'expected_value' => 'test lastname'],
+            ['response_field' => 'company', 'expected_value' => 'test company'],
+            ['response_field' => 'street', 'expected_value' => [0 => 'test street 1', 1 => 'test street 2']],
+            ['response_field' => 'city', 'expected_value' => 'test city'],
+            ['response_field' => 'postcode', 'expected_value' => '887766'],
+            ['response_field' => 'telephone', 'expected_value' => ''],
+            ['response_field' => 'country', 'expected_value' => ['code' => 'US', 'label' => 'US']],
+            ['response_field' => '__typename', 'expected_value' => $addressType]
+        ];
+
+        $this->assertResponseFields($addressResponse, $assertionMap);
     }
 }

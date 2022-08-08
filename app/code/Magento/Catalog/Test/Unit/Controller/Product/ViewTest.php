@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Product;
 
+use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Controller\Product\View;
 use Magento\Catalog\Helper\Product\View as ViewHelper;
@@ -16,6 +17,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\DataObject;
+use Magento\Framework\ObjectManager\ObjectManager;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\Store;
@@ -64,6 +66,21 @@ class ViewTest extends TestCase
     protected $storeManagerMock;
 
     /**
+     * @var \Magento\Catalog\Helper\Product|MockObject
+     */
+    protected $helperProduct;
+
+    /**
+     * @var Magento\Framework\Controller\Result\Redirect|MockObject
+     */
+    protected $redirectMock;
+
+    /**
+     * @var Magento\Framework\UrlInterface|MockObject
+     */
+    protected $urlBuilder;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -73,11 +90,36 @@ class ViewTest extends TestCase
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->addMethods(['isPost'])
+            ->setMethods(['isAjax', 'isPost', 'getParam'])
             ->getMockForAbstractClass();
         $contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
+        $objectManagerMock = $this->createMock(ObjectManager::class);
+        $this->helperProduct = $this->createMock(\Magento\Catalog\Helper\Product::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with(\Magento\Catalog\Helper\Product::class)
+            ->willReturn($this->helperProduct);
+        $contextMock->expects($this->any())
+            ->method('getObjectManager')
+            ->willReturn($objectManagerMock);
+        $resultRedirectFactoryMock = $this->createPartialMock(
+            RedirectFactory::class,
+            ['create']
+        );
+        $this->redirectMock = $this->createMock(\Magento\Framework\Controller\Result\Redirect::class);
+        $resultRedirectFactoryMock->method('create')->willReturn($this->redirectMock);
+        $contextMock->expects($this->any())
+            ->method('getResultRedirectFactory')
+            ->willReturn($resultRedirectFactoryMock);
+        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+            ->setMethods(['getUrl'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $contextMock->expects($this->any())
+            ->method('getUrl')
+            ->willReturn($this->urlBuilder);
         $viewHelperMock = $this->getMockBuilder(ViewHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -142,6 +184,32 @@ class ViewTest extends TestCase
             ->getMock();
         $this->resultPageFactoryMock->method('create')
             ->willReturn($viewResultPageMock);
+        $this->view->execute();
+    }
+
+    public function testExecuteRecentlyViewed(): void
+    {
+        $post = [
+            'category' => '1',
+            'id' => 1,
+            'options' => false,
+            View::PARAM_NAME_URL_ENCODED => 'some_param_url_encoded'
+        ];
+
+        // _initProduct
+        $this->helperProduct->method('initProduct')
+            ->willReturn('true');
+        $this->redirectMock->method('setUrl')->with('productUrl')->willReturnSelf();
+
+        $this->requestMock->method('isPost')
+            ->willReturn(true);
+        $this->requestMock->method('getParam')->willReturnCallback(
+            function ($key) use ($post) {
+                return $post[$key];
+            }
+        );
+
+        $this->urlBuilder->expects($this->any())->method('getCurrentUrl')->willReturn('productUrl');
         $this->view->execute();
     }
 }

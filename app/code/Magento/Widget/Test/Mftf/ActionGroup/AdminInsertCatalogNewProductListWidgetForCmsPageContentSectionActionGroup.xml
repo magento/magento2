@@ -19,7 +19,7 @@
             <argument name="template" type="string" defaultValue="New Products Grid Template"/>
             <argument name="cacheLifetime" type="string" defaultValue=""/>
         </arguments>
-        <click selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" stepKey="clickInsertWidgetButton"/>
+        <click selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="clickInsertWidgetButton"/>
         <waitForPageLoad stepKey="waitForSlideOut"/>
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog New Products List" stepKey="selectWidgetType"/>
         <waitForPageLoad stepKey="waitForWidgetOptions"/>

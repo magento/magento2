@@ -57,11 +57,11 @@
     <xs:simpleType name="classType">
         <xs:annotation>
             <xs:documentation>
-                Class name can contain only [a-zA-Z\].
+                Class name can contain only [a-zA-Z|\\]+[a-zA-Z0-9\\]+.
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z\\]+" />
+            <xs:pattern value="[a-zA-Z|\\]+[a-zA-Z0-9\\]+"/>
         </xs:restriction>
     </xs:simpleType>
 

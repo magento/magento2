@@ -13,6 +13,8 @@ use Magento\Quote\Model\Quote\Item\Option as SelectedOption;
 
 /**
  * Customizable Option Value Data provider
+ *
+ * @api
  */
 interface CustomizableOptionValueInterface
 {

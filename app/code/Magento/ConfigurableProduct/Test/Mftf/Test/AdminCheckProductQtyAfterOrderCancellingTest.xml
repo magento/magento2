@@ -19,6 +19,7 @@
             <testCaseId value="MAGETWO-97228"/>
             <useCaseId value="MAGETWO-82221"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud_smoke"/>
         </annotations>
 
         <before>
@@ -38,7 +39,7 @@
             </createData>
             <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
                 <requiredEntity createDataKey="createGuestCart"/>
-            </updateData> 
+            </updateData>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
@@ -46,25 +47,24 @@
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/> 
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$createGuestCart.return$"/>
+        <comment userInput="BIC workaround" stepKey="filterOrderGridById"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="$createGuestCart.return$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="openOrder"/>
-        
         <actionGroup ref="AdminInvoiceWithUpdatedProductQtyActionGroup" stepKey="createPartialInvoice">
            <argument name="qty" value="1"/>
-        </actionGroup>   
-       
-        <actionGroup ref="AdminCreateShipmentFromOrderPage" stepKey="createShipment">   
+        </actionGroup>
+
+        <actionGroup ref="AdminCreateShipmentFromOrderPage" stepKey="createShipment">
              <argument name="Qty" value="1"/>
              <argument name="Number" value="111"/>
-        </actionGroup>     
-       
+        </actionGroup>
+
         <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelOrder">
             <argument name="orderStatus" value="Complete"/>
         </actionGroup>

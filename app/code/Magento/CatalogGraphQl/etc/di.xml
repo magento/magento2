@@ -7,6 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface" type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CompositeCollectionProcessor"/>
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessorInterface" type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CompositeCollectionPostProcessor"/>
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessorInterface" type="Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CompositeCollectionProcessor"/>
     <type name="Magento\EavGraphQl\Model\Resolver\Query\Type">
         <arguments>
@@ -51,6 +52,13 @@
                 <item name="stock" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\StockProcessor</item>
                 <item name="visibility" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\VisibilityStatusProcessor</item>
                 <item name="mediaGallery" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\MediaGalleryProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CompositeCollectionPostProcessor">
+        <arguments>
+            <argument name="collectionPostProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessor</item>
             </argument>
         </arguments>
     </type>

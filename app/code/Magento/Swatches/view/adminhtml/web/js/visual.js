@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-/* global $break $ $$ FORM_KEY */
+/* global FORM_KEY */
 
 /**
  * @api
@@ -318,12 +318,12 @@ define([
                         display: 'none'
                     }).appendTo($('body'));
 
-                    this.iframe = $('<iframe />', {
+                    this.iframe = $('<iframe></iframe>', {
                         id:  'upload_iframe',
                         name: 'upload_iframe'
                     }).appendTo(this.wrapper);
 
-                    this.form = $('<form />', {
+                    this.form = $('<form></form>', {
                         id: 'swatch_form_image_upload',
                         name: 'swatch_form_image_upload',
                         target: 'upload_iframe',

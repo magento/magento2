@@ -17,15 +17,18 @@
         </arguments>
 
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="resetSearchFilter"/>
         <fillField userInput="{{storeGroupName}}" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="fillSearchStoreGroupField"/>
         <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
-        <see userInput="{{storeGroupName}}" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="verifyThatCorrectStoreGroupFound"/>
+        <waitForText userInput="{{storeGroupName}}" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="verifyThatCorrectStoreGroupFound"/>
         <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
         <waitForPageLoad stepKey="waitForStoreToLoad"/>
         <click selector="{{AdminStoresMainActionsSection.deleteButton}}" stepKey="clickDeleteStoreGroupButtonOnEditStorePage"/>
+        <waitForPageLoad stepKey="waitForDeletePageToLoad"/>
         <selectOption userInput="Yes" selector="{{AdminStoresDeleteStoreGroupSection.createDbBackup}}" stepKey="setCreateDbBackupToNo"/>
         <click selector="{{AdminStoresDeleteStoreGroupSection.deleteStoreGroupButton}}" stepKey="clickDeleteStoreGroupButtonOnDeleteStorePage"/>
+        <waitForPageLoad stepKey="waitForDelete"/>
+        <waitForElement selector="{{AdminStoresGridSection.successMessage}}" stepKey="waitForSuccessMessages"/>
         <see selector="{{AdminStoresGridSection.successMessage}}" userInput="The database was backed up." stepKey="seeAssertDatabaseBackedUpMessage"/>
         <see selector="{{AdminStoresGridSection.successMessage}}" userInput="You deleted the store." stepKey="seeAssertSuccessDeleteStoreGroupMessage"/>
     </actionGroup>

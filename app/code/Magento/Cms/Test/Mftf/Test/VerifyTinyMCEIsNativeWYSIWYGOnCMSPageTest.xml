@@ -21,9 +21,7 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE">
-                <argument name="TinyMCEValue" value="{{EnableTinyMCE.value}}"/>
-            </actionGroup>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE"/>
         </before>
         <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="amOnPagePagesGrid"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad1"/>
@@ -31,11 +29,11 @@
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
         <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{_defaultCmsPage.content_heading}}" stepKey="fillFieldContentHeading"/>
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE" />
         <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE"/>
         <actionGroup ref="VerifyMagentoEntityActionGroup" stepKey="verifyMagentoEntities"/>
         <executeJS function="tinyMCE.get('cms_page_form_content').setContent('Hello World!');" stepKey="executeJSFillContent"/>
-        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn" />
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn" />
         <waitForElementVisible selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="waitForInsertWidget" />
         <see selector="{{TinyMCESection.InsertImageBtn}}" userInput="Insert Image..." stepKey="assertInf17"/>
         <see selector="{{TinyMCESection.InsertWidgetBtn}}" userInput="Insert Widget..." stepKey="assertInfo18"/>

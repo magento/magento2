@@ -13,7 +13,7 @@
             <description>Enable Tiny MCE  by CLI command config:set</description>
         </annotations>
         <arguments>
-            <argument name="TinyMCEValue" type="string"/>
+            <argument name="TinyMCEValue" type="string" defaultValue="{{EnableTinyMCE.value}}"/>
         </arguments>
 
         <magentoCLI command="config:set {{EnableTinyMCE.path}} {{TinyMCEValue}}" stepKey="enableTinyMCE"/>

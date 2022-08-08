@@ -75,7 +75,6 @@ class Module implements
         // phpcs:disable
         $result = array_merge_recursive(
             include __DIR__ . '/../../../config/module.config.php',
-            include __DIR__ . '/../../../config/router.config.php',
             include __DIR__ . '/../../../config/di.config.php',
         );
         // phpcs:enable

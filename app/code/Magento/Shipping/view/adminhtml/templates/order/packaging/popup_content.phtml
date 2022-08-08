@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="admin__control-table-wrapper admin__page-subsection">
-            <table class="data-table admin__control-table">
+            <table class="data-table admin__control-table admin__control-table">
                 <thead>
                     <tr>
                         <th class="col-type"><?= $block->escapeHtml(__('Type')) ?></th>
@@ -46,9 +46,9 @@
                             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display: none', 'th.col-custom') ?>
                         <?php endif ?>
                         <th class="col-total-weight"><?= $block->escapeHtml(__('Total Weight')) ?></th>
-                        <th class="col-length"><?= $block->escapeHtml(__('Length')) ?></th>
-                        <th class="col-width"><?= $block->escapeHtml(__('Width')) ?></th>
-                        <th class="col-height"><?= $block->escapeHtml(__('Height')) ?></th>
+                        <th class="col-length _required"><span><?= $block->escapeHtml(__('Length')) ?></span></th>
+                        <th class="col-width _required"><span><?= $block->escapeHtml(__('Width')) ?></span></th>
+                        <th class="col-height _required"><span><?= $block->escapeHtml(__('Height')) ?></span></th>
                         <th>&nbsp;</th>
                         <?php if ($block->getDeliveryConfirmationTypes()): ?>
                         <th class="col-signature"><?= $block->escapeHtml(__('Signature Confirmation')) ?></th>

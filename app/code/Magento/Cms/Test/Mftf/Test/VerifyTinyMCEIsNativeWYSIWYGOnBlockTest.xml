@@ -22,20 +22,18 @@
             <createData entity="_defaultCmsPage" stepKey="createPreReqCMSPage" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" >
-                <argument name="TinyMCEValue" value="{{EnableTinyMCE.value}}"/>
-            </actionGroup>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
         </before>
         <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnNewBlockPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" stepKey="fillFieldTitle"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
         <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE" />
         <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE"/>
         <actionGroup ref="VerifyMagentoEntityActionGroup" stepKey="verifyMagentoEntities"/>
         <executeJS function="tinyMCE.get('cms_block_form_content').setContent('Hello Block Page!');" stepKey="executeJSFillContent"/>
-        <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn1" />
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn1" />
         <waitForElementVisible selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="waitForInsertWidget" />
         <see selector="{{TinyMCESection.InsertImageBtn}}" userInput="Insert Image..." stepKey="assertInf17"/>
         <see selector="{{TinyMCESection.InsertWidgetBtn}}" userInput="Insert Widget..." stepKey="assertInfo18"/>
@@ -59,8 +57,8 @@
         <waitForPageLoad stepKey="waitForPageLoad3" />
         <scrollTo selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" stepKey="scrollToPageTitle" />
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
-        <waitForElementVisible selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="waitforShowHideBtn" />
-        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn2"/>
+        <waitForElementVisible selector="{{TinyMCESection.ShowHideBtn}}" stepKey="waitforShowHideBtn" />
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn2"/>
         <waitForElementVisible selector="{{TinyMCESection.InsertWidgetBtn}}"  stepKey="waitForInsertInsertWidgetBtn" />
         <seeElement selector="{{TinyMCESection.InsertWidgetBtn}}"  stepKey="widgetBtn" />
         <click selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="clickInsertWidgetBtn"/>

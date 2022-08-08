@@ -14,6 +14,7 @@ use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\State;
@@ -25,7 +26,7 @@ use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
 use Magento\Framework\Filter\DirectiveProcessor\IfDirective;
 use Magento\Framework\Filter\DirectiveProcessor\LegacyDirective;
 use Magento\Framework\Filter\DirectiveProcessor\TemplateDirective;
-use Magento\Framework\Filter\VariableResolver\StrategyResolver;
+use Magento\Framework\Filter\VariableResolver\StrictResolver;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
@@ -35,12 +36,14 @@ use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\VariableFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Store\Model\Information as StoreInformation;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -134,19 +137,24 @@ class FilterTest extends TestCase
     private $pubDirectoryRead;
 
     /**
-     * @var MockObject|StrategyResolver
+     * @var MockObject|StrictResolver
      */
     private $variableResolver;
-
-    /**
-     * @var MockObject|VariableResolverInterface
-     */
-    private $variableResolverInterface;
 
     /**
      * @var array
      */
     private $directiveProcessors;
+
+    /**
+     * @var StoreInformation
+     */
+    private $storeInformation;
+
+    /**
+     * @var store
+     */
+    private $store;
 
     protected function setUp(): void
     {
@@ -214,7 +222,7 @@ class FilterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->variableResolver =
-            $this->getMockBuilder(StrategyResolver::class)
+            $this->getMockBuilder(StrictResolver::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -232,6 +240,14 @@ class FilterTest extends TestCase
                 ->disableOriginalConstructor()
                 ->getMock(),
         ];
+
+        $this->store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->storeInformation = $this->getMockBuilder(StoreInformation::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -260,7 +276,8 @@ class FilterTest extends TestCase
                     $this->pubDirectory,
                     $this->cssInliner,
                     [],
-                    $this->directiveProcessors
+                    $this->directiveProcessors,
+                    $this->storeInformation
                 ]
             )
             ->setMethods($mockedMethods)
@@ -417,23 +434,25 @@ class FilterTest extends TestCase
     public function testConfigDirectiveAvailable()
     {
         $path = "web/unsecure/base_url";
-        $availableConfigs = [['value' => $path]];
+        $availableConfigs = ['value' => $path];
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $scopeConfigValue = 'value';
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
-        $storeMock->expects($this->once())->method('getId')->willReturn(1);
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())->method('getId')->willReturn(1);
 
         $this->configVariables->expects($this->once())
-            ->method('getData')
+            ->method('getAvailableVars')
             ->willReturn($availableConfigs);
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->willReturn($scopeConfigValue);
+
+        $this->storeInformation->expects($this->once())
+            ->method('getStoreInformationObject')
+            ->willReturn(new DataObject([]));
 
         $this->assertEquals($scopeConfigValue, $this->getModel()->configDirective($construction));
     }
@@ -445,20 +464,75 @@ class FilterTest extends TestCase
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $scopeConfigValue = '';
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
-        $storeMock->expects($this->once())->method('getId')->willReturn(1);
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())->method('getId')->willReturn(1);
 
         $this->configVariables->expects($this->once())
-            ->method('getData')
+            ->method('getAvailableVars')
             ->willReturn($availableConfigs);
         $this->scopeConfig->expects($this->never())
             ->method('getValue')
             ->willReturn($scopeConfigValue);
 
+        $this->storeInformation->expects($this->once())
+            ->method('getStoreInformationObject')
+            ->willReturn(new DataObject([]));
+
         $this->assertEquals($scopeConfigValue, $this->getModel()->configDirective($construction));
+    }
+
+    /**
+     * @throws NoSuchEntityException
+     */
+    public function testConfigDirectiveGetCountry()
+    {
+        $path = "general/store_information/country_id";
+        $availableConfigs = ['value' => $path];
+        $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
+        $expectedCountry = 'United States';
+
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())->method('getId')->willReturn(1);
+
+        $this->configVariables->expects($this->once())
+            ->method('getAvailableVars')
+            ->willReturn($availableConfigs);
+
+        $this->storeInformation->expects($this->once())
+            ->method('getStoreInformationObject')
+            ->willReturn(new DataObject(['country_id' => 'US', 'country' => 'United States']));
+
+        $this->assertEquals($expectedCountry, $this->getModel()->configDirective($construction));
+    }
+
+    /**
+     * @throws NoSuchEntityException
+     */
+    public function testConfigDirectiveGetRegion()
+    {
+        $path = "general/store_information/region_id";
+        $availableConfigs = ['value' => $path];
+        $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
+        $expectedRegion = 'Texas';
+
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())->method('getId')->willReturn(1);
+
+        $this->configVariables->expects($this->once())
+            ->method('getAvailableVars')
+            ->willReturn($availableConfigs);
+
+        $this->storeInformation->expects($this->once())
+            ->method('getStoreInformationObject')
+            ->willReturn(new DataObject(['region_id' => '57', 'region' => 'Texas']));
+
+        $this->assertEquals($expectedRegion, $this->getModel()->configDirective($construction));
     }
 
     /**

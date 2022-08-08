@@ -30,6 +30,7 @@
             <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>

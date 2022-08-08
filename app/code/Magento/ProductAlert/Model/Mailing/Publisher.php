@@ -108,7 +108,7 @@ class Publisher
                 ]
             );
             $userId = $this->userContext->getUserId();
-            $this->bulkManagement->scheduleBulk($bulkUuid, [$operation], _('Mailing of Product Alerts'), $userId);
+            $this->bulkManagement->scheduleBulk($bulkUuid, [$operation], __('Mailing of Product Alerts'), $userId);
         }
     }
 }

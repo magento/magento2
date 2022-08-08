@@ -27,7 +27,7 @@
             <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions" after="waitForPageLoadAfterBundleProducts">
                 <argument name="product" value="SimpleProduct"/>
             </actionGroup>
-            <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow" after="filterBundleProductOptions"/>
+            <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectFirstGridRow" after="filterBundleProductOptions"/>
             <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts" after="selectFirstGridRow"/>
             <fillField selector="{{AdminProductFormBundleSection.firstProductQuantity}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty" after="clickAddSelectedBundleProducts"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveBundleProduct" after="fillProductDefaultQty"/>
@@ -40,5 +40,6 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundleProduct" after="cleanUpBundleProduct">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters" after="deleteBundleProduct"/>
         </test>
 </tests>

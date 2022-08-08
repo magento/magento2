@@ -18,7 +18,7 @@ class Shipping extends AbstractTotal
     protected $priceCurrency;
 
     /**
-     * Tax config
+     * Tax config from Tax model
      *
      * @var \Magento\Tax\Model\Config
      */
@@ -61,7 +61,7 @@ class Shipping extends AbstractTotal
         $baseAllowedAmountInclTax = $orderBaseShippingInclTax
             - $order->getBaseShippingRefunded()
             - $order->getBaseShippingTaxRefunded();
-
+        $baseAllowedAmountInclTax = max($baseAllowedAmountInclTax, 0);
         // Check if the desired shipping amount to refund was specified (from invoice or another source).
         if ($creditmemo->hasBaseShippingAmount()) {
             // For the conditional logic, we will either use amounts that always include tax -OR- never include tax.

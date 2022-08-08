@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use StorefrontAddressStateFieldForUKCustomerRemainOptionAfterRefreshTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>

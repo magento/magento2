@@ -20,6 +20,7 @@
             <group value="cookie"/>
             <group value="configuration"/>
             <group value="secure_storefront_url"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <amOnPage url="/" stepKey="goToHomePage"/>
@@ -43,6 +44,11 @@
         <executeJS function="return window.cookiesConfig.secure ? 'true' : 'false'" stepKey="isCookieSecure"/>
         <assertEquals stepKey="assertCookieIsSecure">
             <actualResult type="variable">isCookieSecure</actualResult>
+            <expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <executeJS function="return jQuery.mage.cookies.defaults.secure ? 'true' : 'false'" stepKey="isCookieSecure2"/>
+        <assertEquals stepKey="assertCookieIsSecure2">
+            <actualResult type="variable">isCookieSecure2</actualResult>
             <expectedResult type="string">true</expectedResult>
         </assertEquals>
     </test>
