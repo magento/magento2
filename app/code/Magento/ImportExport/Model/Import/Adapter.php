@@ -6,10 +6,12 @@
 namespace Magento\ImportExport\Model\Import;
 
 use Magento\Framework\Filesystem\Directory\Write;
+use Magento\ImportExport\Model\Import\Source\Factory;
 
 /**
  * Import adapter model
- *
+ * @Deprecated
+ * @see \Magento\ImportExport\Model\Import\Source\Factory
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Adapter
@@ -23,7 +25,7 @@ class Adapter
      * @param mixed $options OPTIONAL Adapter constructor options
      *
      * @return AbstractSource
-     *
+     * phpcs:disable Magento2.Functions.StaticFunction
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public static function factory($type, $directory, $source, $options = null)
@@ -56,11 +58,11 @@ class Adapter
      * @param string $source Source file path.
      * @param Write $directory
      * @param mixed $options OPTIONAL Adapter constructor options
-     *
+     * phpcs:disable Magento2.Functions.StaticFunction
      * @return AbstractSource
      */
     public static function findAdapterFor($source, $directory, $options = null)
     {
-        return self::factory(pathinfo($source, PATHINFO_EXTENSION), $directory, $source, $options);
+        return self::factory(pathinfo($source, PATHINFO_EXTENSION), $directory, $source, $options); // phpcs:ignore
     }
 }

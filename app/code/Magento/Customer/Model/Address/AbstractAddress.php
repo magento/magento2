@@ -121,6 +121,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     private $compositeValidator;
 
     /**
+     * @var array
+     */
+    private array $regionIdCountry = [];
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -398,7 +403,13 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         $region = $this->getData('region');
 
         if (!$regionId && is_numeric($region)) {
-            if ($this->getRegionModel($region)->getCountryId() == $this->getCountryId()) {
+            $regionId = $this->getRegionIdByCode(
+                (string)$region,
+                (string)$this->getCountryId()
+            );
+            if ($regionId) {
+                $this->setData('region_code', $region);
+            } elseif ($this->getRegionModel($region)->getCountryId() == $this->getCountryId()) {
                 $this->setData('region_code', $this->getRegionModel($region)->getCode());
             }
         } elseif ($regionId) {
@@ -419,20 +430,53 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     public function getRegionId()
     {
         $regionId = $this->getData('region_id');
+        if ($regionId) {
+            return $regionId;
+        }
+
         $region = $this->getData('region');
-        if (!$regionId) {
-            if (is_numeric($region)) {
-                $this->setData('region_id', $region);
+        if (is_numeric($region)) {
+            $regionId = $this->getRegionIdByCode(
+                (string)$region,
+                (string)$this->getCountryId()
+            );
+            if ($regionId) {
+                $this->setData('region_id', $regionId);
                 $this->unsRegion();
             } else {
-                $regionModel = $this->_createRegionInstance()->loadByCode(
-                    $this->getRegionCode(),
-                    $this->getCountryId()
-                );
-                $this->setData('region_id', $regionModel->getId());
+                $this->setData('region_id', $region);
             }
+        } else {
+            $regionId = $this->getRegionIdByCode(
+                (string)$this->getRegionCode(),
+                (string)$this->getCountryId()
+            );
+            $this->setData('region_id', $regionId);
         }
-        return $this->getData('region_id');
+
+        return $regionId;
+    }
+
+    /**
+     * Returns region id.
+     *
+     * @param string $regionCode
+     * @param string $countryId
+     * @return int|null
+     */
+    private function getRegionIdByCode(string $regionCode, string $countryId): ?int
+    {
+        $key = $countryId . '_' . $regionCode;
+        if (!array_key_exists($key, $this->regionIdCountry)) {
+            $regionModel = $this->_createRegionInstance()->loadByCode(
+                $regionCode,
+                $countryId
+            );
+
+            $this->regionIdCountry[$key] = $regionModel->getId() ? (int)$regionModel->getId() : null;
+        }
+
+        return $this->regionIdCountry[$key];
     }
 
     /**

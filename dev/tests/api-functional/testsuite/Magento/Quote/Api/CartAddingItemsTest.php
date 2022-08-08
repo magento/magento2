@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Api;
 
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Model\Quote;
@@ -305,6 +306,90 @@ class CartAddingItemsTest extends WebapiAbstract
                 'resourcePath' => '/V1/carts/mine/items',
                 'httpMethod' => Request::HTTP_METHOD_POST,
                 'token' => $token
+            ]
+        ];
+    }
+
+    /**
+     * Test for product name in different store view
+     *
+     * @magentoConfigFixture web/url/use_store 1
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_multistore.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
+     * @param string $expectedProductName
+     * @param string|null $storeCode
+     *
+     * @return void
+     * @dataProvider dataProviderForMultiStoreView
+     * @throws AuthenticationException
+     */
+    public function testForProductNameAsPerStoreView(string $expectedProductName, ?string $storeCode = null): void
+    {
+        $this->_markTestAsRestOnly();
+
+        // Get customer ID token
+        /** @var CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
+        $token = $customerTokenService->createCustomerAccessToken(
+            'customer@example.com',
+            'password'
+        );
+
+        // Creating empty cart for registered customer.
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts/mine',
+                'httpMethod' => Request::HTTP_METHOD_POST,
+                'token' => $token
+            ]
+        ];
+        $quoteId = $this->_webApiCall($serviceInfo);
+        $this->assertGreaterThan(0, $quoteId);
+
+        // Add product to cart
+        $requestData = [
+            'cartItem' => [
+                'quote_id' => $quoteId,
+                'sku' => 'simple',
+                'qty' => 1
+            ]
+        ];
+        $this->_webApiCall($this->getServiceInfoAddToCart($token), $requestData);
+
+        // Fetch Cart info
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts/mine',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'token' => $token
+            ]
+        ];
+        /** @var \Magento\Quote\Api\Data\CartInterface $cart */
+        $cart = $this->_webApiCall($serviceInfo, [], null, $storeCode);
+        $carts = $cart['items'];
+        $actualProductName = $carts[0]['name'] ?? '';
+
+        $this->assertEquals($expectedProductName, $actualProductName);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForMultiStoreView(): array
+    {
+        return [
+            'noStoreCodeInRequestPath' => [
+                'Simple Product One',
+                null
+            ],
+            'defaultStoreCodeInRequestPath' => [
+                'Simple Product One',
+                'default'
+            ],
+            'secondStoreCodeInRequestPath' => [
+                'StoreTitle',
+                'fixturestore'
             ]
         ];
     }
