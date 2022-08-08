@@ -61,6 +61,9 @@
         <plugin name="WindowsSmtpConfig" type="Magento\Email\Model\Plugin\WindowsSmtpConfig" />
         <plugin name="EmailDisable" type="Magento\Email\Model\Mail\TransportInterfacePlugin" />
     </type>
+    <type name="Magento\Email\Model\AbstractTemplate">
+        <plugin name="EmailTemplateLinkUrl" type="Magento\Email\Model\Plugin\GetUrl"/>
+    </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">
@@ -87,6 +90,13 @@
             <argument name="filters" xsi:type="array">
                 <item name="nl2br" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\Filter\NewlineToBreakFilter</item>
                 <item name="escape" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\Filter\EscapeFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="emailTemplateCheck" xsi:type="object">Magento\Email\Console\Command\DatabaseTemplateCompatibilityCommand</item>
             </argument>
         </arguments>
     </type>

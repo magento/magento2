@@ -11,5 +11,9 @@
     <section name="AdminOrderGiftSection">
         <element name="orderItemGiftOptionsLink" type="text" selector="//table[contains(@class, 'edit-order-table')]//tbody[contains(.,'{{productName}}')]//a[contains(@class, 'action-link')]" parameterized="true"/>
         <element name="orderItemGiftMessage" type="textarea" selector="#current_item_giftmessage_message" />
+        <element name="giftMessageOrderSection" type="block" selector=".giftmessage-whole-order-container"/>
+        <element name="giftMessageFromName" type="input" selector=".giftmessage-whole-order-container .admin__field:nth-of-type(1) input"/>
+        <element name="giftMessageToName" type="input" selector=".giftmessage-whole-order-container .admin__field:nth-of-type(2) input"/>
+        <element name="giftMessageMessage" type="input" selector=".giftmessage-whole-order-container .admin__field textarea"/>
     </section>
 </sections>

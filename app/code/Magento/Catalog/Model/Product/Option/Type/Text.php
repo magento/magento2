@@ -58,7 +58,7 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         parent::validateUserValue($values);
 
         $option = $this->getOption();
-        $value = trim($this->getUserValue());
+        $value = $this->getUserValue() !== null ? trim($this->getUserValue()) : '';
 
         // Check requires option to have some value
         if (strlen($value) == 0 && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {

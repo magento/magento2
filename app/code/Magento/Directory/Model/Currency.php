@@ -13,6 +13,7 @@ use Magento\Framework\Locale\Currency as LocaleCurrency;
 use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
 use Magento\Framework\NumberFormatterFactory;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Currency model
@@ -27,11 +28,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     /**
      * CONFIG path constants
      */
-    const XML_PATH_CURRENCY_ALLOW = 'currency/options/allow';
+    public const XML_PATH_CURRENCY_ALLOW = 'currency/options/allow';
 
-    const XML_PATH_CURRENCY_DEFAULT = 'currency/options/default';
+    public const XML_PATH_CURRENCY_DEFAULT = 'currency/options/default';
 
-    const XML_PATH_CURRENCY_BASE = 'currency/options/base';
+    public const XML_PATH_CURRENCY_BASE = 'currency/options/base';
 
     /**
      * @var Filter
@@ -39,8 +40,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     protected $_filter;
 
     /**
-     * Currency Rates
-     *
      * @var array
      */
     protected $_rates;
@@ -147,11 +146,14 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         $this->_localeCurrency = $localeCurrency;
         $this->currencyConfig = $currencyConfig ?: ObjectManager::getInstance()->get(CurrencyConfig::class);
         $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(LocalResolverInterface::class);
-        $this->numberFormatterFactory = $numberFormatterFactory ?: ObjectManager::getInstance()->get(NumberFormatterFactory::class);
+        $this->numberFormatterFactory = $numberFormatterFactory ?:
+            ObjectManager::getInstance()->get(NumberFormatterFactory::class);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
+     * Initializing Currency Resource model
+     *
      * @return void
      */
     protected function _construct()
@@ -253,10 +255,10 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     /**
      * Convert price to currency format
      *
-     * @param   float $price
-     * @param   mixed $toCurrency
-     * @return  float
-     * @throws \Exception
+     * @param float $price
+     * @param mixed $toCurrency
+     * @return float
+     * @throws LocalizedException
      */
     public function convert($price, $toCurrency = null)
     {
@@ -266,7 +268,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
             return (float)$price * (float)$rate;
         }
 
-        throw new \Exception(__(
+        throw new LocalizedException(__(
             'Undefined rate from "%1-%2".',
             $this->getCode(),
             $this->getCurrencyCodeFromToCurrency($toCurrency)
@@ -274,7 +276,10 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Return the currency code
+     *
      * @param mixed $toCurrency
+     *
      * @return string
      * @throws \Magento\Framework\Exception\InputException
      */
@@ -348,8 +353,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Return formatted currency
+     *
      * @param float $price
      * @param array $options
+     *
      * @return string
      */
     public function formatTxt($price, $options = [])
@@ -420,7 +428,8 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         $this->numberFormatter = $this->getNumberFormatter($options);
 
         $formattedCurrency = $this->numberFormatter->formatCurrency(
-            $price, $this->getCode() ?? $this->numberFormatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)
+            $price,
+            $this->getCode() ?? $this->numberFormatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)
         );
 
         if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_SYMBOL, $options)) {
@@ -429,7 +438,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         }
 
         if ((array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
-                && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
+            && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
             $formattedCurrency = str_replace(' ', '', $formattedCurrency);
         }
 
@@ -444,10 +453,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     private function getNumberFormatter(array $options): \Magento\Framework\NumberFormatter
     {
-        $key = 'currency_' . md5($this->localeResolver->getLocale() . $this->serializer->serialize($options));
+        $locale = $this->localeResolver->getLocale() . ($this->getCode() ? '@currency=' . $this->getCode() : '');
+        $key = 'currency_' . hash('sha256', $locale . $this->serializer->serialize($options));
         if (!isset($this->numberFormatterCache[$key])) {
             $this->numberFormatter = $this->numberFormatterFactory->create(
-                ['locale' => $this->localeResolver->getLocale(), 'style' => \NumberFormatter::CURRENCY]
+                ['locale' => $locale, 'style' => \NumberFormatter::CURRENCY]
             );
 
             $this->setOptions($options);
@@ -467,7 +477,8 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     {
         if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_SYMBOL, $options)) {
             $this->numberFormatter->setSymbol(
-                \NumberFormatter::CURRENCY_SYMBOL, $options[LocaleCurrency::CURRENCY_OPTION_SYMBOL]
+                \NumberFormatter::CURRENCY_SYMBOL,
+                $options[LocaleCurrency::CURRENCY_OPTION_SYMBOL]
             );
         }
         if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
@@ -490,13 +501,15 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Return the price format to be displayed to user
+     *
      * @return string
      */
     public function getOutputFormat()
     {
         $formatted = $this->formatTxt(0);
         $number = $this->formatTxt(0, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
-        return str_replace($this->trimUnicodeDirectionMark($number), '%s', $formatted);
+        return $formatted !== null ? str_replace($this->trimUnicodeDirectionMark($number), '%s', $formatted) : '';
     }
 
     /**
@@ -532,6 +545,8 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve base config currency data by config path.
+     *
      * @return array
      */
     public function getConfigBaseCurrencies()

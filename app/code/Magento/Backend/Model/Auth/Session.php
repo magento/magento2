@@ -26,7 +26,6 @@ use Magento\Framework\Message\ManagerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @todo implement solution that keeps is_first_visit flag in session during redirects
- * @api
  * @since 100.0.2
  */
 class Session extends \Magento\Framework\Session\SessionManager implements \Magento\Backend\Model\Auth\StorageInterface
@@ -34,11 +33,9 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     /**
      * Admin session lifetime config path
      */
-    const XML_PATH_SESSION_LIFETIME = 'admin/security/session_lifetime';
+    public const XML_PATH_SESSION_LIFETIME = 'admin/security/session_lifetime';
 
     /**
-     * Whether it is the first page after successful login
-     *
      * @var boolean
      */
     protected $_isFirstAfterLogin;
@@ -133,7 +130,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
         }
         if ($user->getReloadAclFlag()) {
             $user->unsetData('password');
-            $user->setReloadAclFlag('0')->save();
+            $user->setReloadAclFlag(0)->save();
         }
         return $this;
     }

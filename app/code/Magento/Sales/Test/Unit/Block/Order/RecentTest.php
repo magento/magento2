@@ -51,6 +51,9 @@ class RecentTest extends TestCase
      */
     protected $storeManagerMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
@@ -67,7 +70,10 @@ class RecentTest extends TestCase
             ->getMockForAbstractClass();
     }
 
-    public function testConstructMethod()
+    /**
+     * @return void
+     */
+    public function testConstructMethod(): void
     {
         $attribute = ['customer_id', 'store_id', 'status'];
         $customerId = 25;
@@ -103,28 +109,28 @@ class RecentTest extends TestCase
         $this->orderCollectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($orderCollection);
-        $orderCollection->expects($this->at(0))
+        $orderCollection
             ->method('addAttributeToSelect')
-            ->with('*')->willReturnSelf();
-        $orderCollection->expects($this->at(1))
-            ->method('addAttributeToFilter')
-            ->with($attribute[0], $customerId)
-            ->willReturnSelf();
-        $orderCollection->expects($this->at(2))
-            ->method('addAttributeToFilter')
-            ->with($attribute[1], $storeId)
-            ->willReturnSelf();
-        $orderCollection->expects($this->at(3))
-            ->method('addAttributeToFilter')
-            ->with($attribute[2], ['in' => $statuses])->willReturnSelf();
-        $orderCollection->expects($this->at(4))
-            ->method('addAttributeToSort')
-            ->with('created_at', 'desc')->willReturnSelf();
-        $orderCollection->expects($this->at(5))
+            ->with('*')
+            ->willReturn($orderCollection);
+        $orderCollection
+            ->method('load')
+            ->willReturn($orderCollection);
+        $orderCollection
             ->method('setPageSize')
-            ->with('5')->willReturnSelf();
-        $orderCollection->expects($this->at(6))
-            ->method('load')->willReturnSelf();
+            ->with('5')
+            ->willReturn($orderCollection);
+        $orderCollection
+            ->method('addAttributeToSort')
+            ->with('created_at', 'desc')
+            ->willReturn($orderCollection);
+        $orderCollection
+            ->method('addAttributeToFilter')
+            ->withConsecutive(
+                [$attribute[0], $customerId],
+                [$attribute[1], $storeId],
+                [$attribute[2], ['in' => $statuses]]
+            )->willReturnOnConsecutiveCalls($orderCollection, $orderCollection, $orderCollection);
         $this->block = new Recent(
             $this->context,
             $this->orderCollectionFactory,

@@ -30,6 +30,7 @@ use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\Entity\Factory;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\ImportExport\Model\Source\Upload;
 use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -43,15 +44,11 @@ class ImportTest extends AbstractImportTestCase
 {
 
     /**
-     * Entity adapter.
-     *
      * @var AbstractEntity|MockObject
      */
     protected $_entityAdapter;
 
     /**
-     * Import export data
-     *
      * @var Data|MockObject
      */
     protected $_importExportData = null;
@@ -135,6 +132,11 @@ class ImportTest extends AbstractImportTestCase
      * @var ProcessingErrorAggregatorInterface|MockObject
      */
     private $errorAggregatorMock;
+
+    /**
+     * @var Upload
+     */
+    private $upload;
 
     /**
      * Set up
@@ -229,6 +231,7 @@ class ImportTest extends AbstractImportTestCase
             ->expects($this->any())
             ->method('getDriver')
             ->willReturn($this->_driver);
+        $this->upload = $this->createMock(Upload::class);
         $this->import = $this->getMockBuilder(Import::class)
             ->setConstructorArgs(
                 [
@@ -245,7 +248,11 @@ class ImportTest extends AbstractImportTestCase
                     $this->_behaviorFactory,
                     $this->indexerRegistry,
                     $this->historyModel,
-                    $this->dateTime
+                    $this->dateTime,
+                    [],
+                    null,
+                    null,
+                    $this->upload
                 ]
             )
             ->setMethods(
@@ -559,7 +566,11 @@ class ImportTest extends AbstractImportTestCase
             $this->_behaviorFactory,
             $this->indexerRegistry,
             $this->historyModel,
-            $this->dateTime
+            $this->dateTime,
+            [],
+            null,
+            null,
+            $this->upload
         );
 
         $import->setEntity('test');
@@ -592,7 +603,11 @@ class ImportTest extends AbstractImportTestCase
             $this->_behaviorFactory,
             $this->indexerRegistry,
             $this->historyModel,
-            $this->dateTime
+            $this->dateTime,
+            [],
+            null,
+            null,
+            $this->upload
         );
 
         $import->setEntity('test');
@@ -622,7 +637,11 @@ class ImportTest extends AbstractImportTestCase
             $this->_behaviorFactory,
             $this->indexerRegistry,
             $this->historyModel,
-            $this->dateTime
+            $this->dateTime,
+            [],
+            null,
+            null,
+            $this->upload
         );
 
         $import->setEntity('test');
@@ -658,7 +677,11 @@ class ImportTest extends AbstractImportTestCase
             $this->_behaviorFactory,
             $this->indexerRegistry,
             $this->historyModel,
-            $this->dateTime
+            $this->dateTime,
+            [],
+            null,
+            null,
+            $this->upload
         );
 
         $import->setEntity($entity);
@@ -940,6 +963,7 @@ class ImportTest extends AbstractImportTestCase
             ->expects($this->never())
             ->method('getRelativePath');
         $phrase = $this->createMock(Phrase::class);
+        $phrase->method('render')->willReturn('');
         $this->_driver
             ->expects($this->any())
             ->method('fileGetContents')

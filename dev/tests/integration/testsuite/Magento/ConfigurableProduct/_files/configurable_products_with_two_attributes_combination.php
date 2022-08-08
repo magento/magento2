@@ -51,7 +51,6 @@ $filesystem = $objectManager->get(Filesystem::class);
 
 /** @var WriteInterface $mediaDirectory */
 $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-$mediaPath = $mediaDirectory->getAbsolutePath();
 $baseTmpMediaPath = $config->getBaseTmpMediaPath();
 $mediaDirectory->create($baseTmpMediaPath);
 
@@ -65,9 +64,10 @@ $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
 $associatedProductIds = [];
 $firstAttributeValues =  [];
 $secondAttributeValues = [];
+
 $testImagePath = __DIR__ . '/magento_image.jpg';
-$mediaImage = $mediaPath . '/' . $baseTmpMediaPath . '/magento_image.jpg';
-copy($testImagePath, $mediaImage);
+$mediaImage = $mediaDirectory->getAbsolutePath($baseTmpMediaPath . DIRECTORY_SEPARATOR . 'magento_image.jpg');
+$result = $mediaDirectory->getDriver()->filePutContents($mediaImage, file_get_contents($testImagePath));
 
 array_shift($firstAttributeOptions);
 array_shift($secondAttributeOptions);

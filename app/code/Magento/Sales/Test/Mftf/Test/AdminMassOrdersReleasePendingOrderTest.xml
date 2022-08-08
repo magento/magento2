@@ -41,9 +41,11 @@
             <argument name="product" value="$$createProduct$$"/>
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
-        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="getOrderId">
-			<actualResult type="const">$getOrderId</actualResult>
+        <comment userInput="BIC workaround" stepKey="getOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
+            <actualResult type="const">$orderNumber</actualResult>
         </assertNotEmpty>
 
         <!-- Navigate to backend: Go to Sales > Orders -->
@@ -53,16 +55,16 @@
         <!-- Select Mass Action according to dataset: Unhold -->
         <actionGroup ref="AdminOrderActionOnGridActionGroup" stepKey="actionUnhold">
             <argument name="action" value="Unhold"/>
-            <argument name="orderId" value="$getOrderId"/>
+            <argument name="orderId" value="$orderNumber"/>
         </actionGroup>
         <see userInput="No order(s) were released from on hold status." stepKey="assertOrderReleaseFailMessage"/>
 
         <!--Assert order in orders grid -->
         <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeFirstOrder">
-            <argument name="orderId" value="{$getOrderId}"/>
+            <argument name="orderId" value="{$orderNumber}"/>
             <argument name="orderStatus" value="Pending"/>
         </actionGroup>
-        <see userInput="{$getOrderId}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertOrderID"/>
+        <see userInput="{$orderNumber}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertOrderID"/>
         <see userInput="Pending" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertOrderStatus"/>
     </test>
 </tests>

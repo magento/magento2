@@ -146,7 +146,7 @@ class NotificationRenderer
             $content .= $this->escaper->escapeHtml($subHeading['title']);
             $content .= "</h3>";
             $content .= "<p>";
-            $content .= $this->formatContentWithLinks($subHeading['content']);
+            $content .= isset($subHeading['content']) ? $this->formatContentWithLinks($subHeading['content']) : '';
             $content .= "</p>";
             $content .= "</div>";
         }
@@ -170,6 +170,8 @@ class NotificationRenderer
     }
 
     /**
+     * Formats links in the content to a correct format.
+     *
      * Searches a given string for a URL, formats it to an HTML anchor tag, and returns the original string in the
      * correct HTML format.
      *

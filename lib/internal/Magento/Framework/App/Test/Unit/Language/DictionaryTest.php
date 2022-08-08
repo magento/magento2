@@ -38,18 +38,24 @@ class DictionaryTest extends TestCase
      */
     private $configFactory;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->readFactory = $this->createMock(ReadFactory::class);
         $this->componentRegistrar = $this->createMock(ComponentRegistrar::class);
         $this->configFactory = $this->getMockBuilder(ConfigFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new Dictionary($this->readFactory, $this->componentRegistrar, $this->configFactory);
     }
 
-    public function testDictionaryGetter()
+    /**
+     * @return void
+     */
+    public function testDictionaryGetter(): void
     {
         $csvFileName = 'abc.csv';
         $data = [['one', '1'], ['two', '2']];
@@ -59,10 +65,15 @@ class DictionaryTest extends TestCase
         }
 
         $file = $this->getMockForAbstractClass(ReadInterface::class);
+        $willReturnArgs = [];
+
         for ($i = 0, $count = count($data); $i < $count; $i++) {
-            $file->expects($this->at($i))->method('readCsv')->willReturn($data[$i]);
+            $willReturnArgs[] = $data[$i];
         }
-        $file->expects($this->at($i))->method('readCsv')->willReturn(false);
+        $willReturnArgs[] = false;
+        $file
+            ->method('readCsv')
+            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
 
         $readMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $readMock->expects($this->any())->method('readFile')->willReturnMap([

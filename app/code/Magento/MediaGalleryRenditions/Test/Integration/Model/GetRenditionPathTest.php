@@ -39,7 +39,7 @@ class GetRenditionPathTest extends TestCase
         $this->getRenditionPath = Bootstrap::getObjectManager()->get(GetRenditionPathInterface::class);
         $this->mediaDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
+        $this->driver = $this->mediaDirectory->getDriver();
     }
 
     /**
@@ -51,9 +51,10 @@ class GetRenditionPathTest extends TestCase
     {
         $imagePath = realpath(__DIR__ . '/../../_files' . $path);
         $modifiableFilePath = $this->mediaDirectory->getAbsolutePath($path);
-        $this->driver->copy(
-            $imagePath,
-            $modifiableFilePath
+        $this->mediaDirectory->create(dirname($path));
+        $this->driver->filePutContents(
+            $modifiableFilePath,
+            file_get_contents($imagePath)
         );
         $this->assertEquals($expectedRenditionPath, $this->getRenditionPath->execute($path));
     }

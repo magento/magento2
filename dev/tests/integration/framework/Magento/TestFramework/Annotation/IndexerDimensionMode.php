@@ -7,19 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
 use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher;
 use Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcherConfiguration;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Annotation\TestCaseAnnotation;
 use Magento\TestFramework\App\Config;
+use Magento\TestFramework\Fixture\ParserInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Implementation of the @magentoIndexerDimensionMode DocBlock annotation
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexerDimensionMode
 {
@@ -55,8 +59,12 @@ class IndexerDimensionMode
     }
 
     /**
+     * Tries to set a Dimension mode if it wasn't set.
+     *
      * @param string $mode
      * @param TestCase $test
+     *
+     * @return void
      * @throws \Exception
      */
     private function setDimensionMode(string $mode, TestCase $test)
@@ -75,7 +83,11 @@ class IndexerDimensionMode
             $this->modeSwitcher->switchMode($mode, $previousMode);
             $this->objectManager->get(Config::class)->clean();
         } else {
-            $this->fail('Dimensions mode for indexer has not been changed', $test);
+            ExceptionHandler::handle(
+                'Dimensions mode for indexer has not been changed',
+                get_class($test),
+                $test->getName(false)
+            );
         }
     }
 
@@ -88,29 +100,32 @@ class IndexerDimensionMode
      */
     public function startTest(TestCase $test)
     {
-        $source = $test->getAnnotations();
-
-        if (isset($source['method']['magentoIndexerDimensionMode'])) {
-            $annotations = $source['method']['magentoIndexerDimensionMode'];
-        } elseif (isset($source['class']['magentoIndexerDimensionMode'])) {
-            $annotations = $source['class']['magentoIndexerDimensionMode'];
-        } else {
-            return;
+        $values = [];
+        try {
+            $values = $this->parse($test);
+        } catch (\Throwable $exception) {
+            ExceptionHandler::handle(
+                'Unable to parse fixtures',
+                get_class($test),
+                $test->getName(false),
+                $exception
+            );
         }
 
-        $dbIsolation = $source['method']['magentoDbIsolation']
-            ?? $source['class']['magentoDbIsolation']
-            ?? ['disabled'];
+        if ($values) {
+            $dbIsolation = Bootstrap::getObjectManager()->get(DbIsolationState::class)->isEnabled($test);
+            if ($dbIsolation) {
+                ExceptionHandler::handle(
+                    '@magentoDbIsolation must be disabled when using @magentoIndexerDimensionMode',
+                    get_class($test),
+                    $test->getName(false)
+                );
+            }
 
-        if ($dbIsolation[0] != 'disabled') {
-            $this->fail("Invalid @magentoDbIsolation declaration: $dbIsolation[0]", $test);
-        }
-
-        list($indexerType, $indexerMode) = explode(' ', $annotations[0]);
-
-        if ($indexerType == Processor::INDEXER_ID) {
-            $this->isDimensionMode = true;
-            $this->setDimensionMode($indexerMode, $test);
+            if ($values[0]['indexer'] === Processor::INDEXER_ID) {
+                $this->isDimensionMode = true;
+                $this->setDimensionMode($values[0]['dimension'], $test);
+            }
         }
     }
 
@@ -128,14 +143,26 @@ class IndexerDimensionMode
     }
 
     /**
-     * Fails the test with specified error message
+     * Returns IndexerDimensionMode fixtures configuration
      *
-     * @param string $message
      * @param TestCase $test
-     * @throws \Exception
+     * @return array
+     * @throws LocalizedException
      */
-    private function fail($message, TestCase $test)
+    private function parse(TestCase $test): array
     {
-        $test->fail("{$message} in the test '{$test->toString()}'");
+        $objectManager = Bootstrap::getObjectManager();
+        $parsers = $objectManager
+            ->create(
+                \Magento\TestFramework\Annotation\Parser\Composite::class,
+                [
+                    'parsers' => [
+                        $objectManager->get(\Magento\TestFramework\Annotation\Parser\IndexerDimensionMode::class),
+                        $objectManager->get(\Magento\TestFramework\Fixture\Parser\IndexerDimensionMode::class)
+                    ]
+                ]
+            );
+        return $parsers->parse($test, ParserInterface::SCOPE_METHOD)
+            ?: $parsers->parse($test, ParserInterface::SCOPE_CLASS);
     }
 }
