@@ -5,7 +5,8 @@
  */
 namespace Magento\Framework\App;
 
-/** * Used as a container for list of routers.
+/**
+ * Used as a container for list of routers.
  */
 class RouterList implements RouterListInterface
 {
@@ -54,7 +55,9 @@ class RouterList implements RouterListInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
+     *
+     * @return RouterInterface
      */
     #[\ReturnTypeWillChange]
     public function current()
@@ -72,7 +75,9 @@ class RouterList implements RouterListInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
+     *
+     * @return string|int|null
      */
     #[\ReturnTypeWillChange]
     public function key()

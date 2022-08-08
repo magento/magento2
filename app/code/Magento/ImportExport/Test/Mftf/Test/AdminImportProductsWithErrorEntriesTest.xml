@@ -16,6 +16,7 @@
             <testCaseId value="MC-6358"/>
             <useCaseId value="MAGETWO-65066"/>
             <group value="importExport"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Login to Admin Page-->

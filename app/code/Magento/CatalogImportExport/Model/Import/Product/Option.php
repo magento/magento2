@@ -28,37 +28,60 @@ use Magento\Store\Model\Store;
  */
 class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
-    /**#@+
+    /**
      * Custom option column names
      */
-    const COLUMN_SKU = 'sku';
+    public const COLUMN_SKU = 'sku';
 
-    const COLUMN_PREFIX = '_custom_option_';
+    public const COLUMN_PREFIX = '_custom_option_';
 
-    const COLUMN_STORE = '_custom_option_store';
+    public const COLUMN_STORE = '_custom_option_store';
 
-    const COLUMN_TYPE = '_custom_option_type';
+    public const COLUMN_TYPE = '_custom_option_type';
 
-    const COLUMN_TITLE = '_custom_option_title';
+    public const COLUMN_TITLE = '_custom_option_title';
 
-    const COLUMN_IS_REQUIRED = '_custom_option_is_required';
+    public const COLUMN_IS_REQUIRED = '_custom_option_is_required';
 
-    const COLUMN_SORT_ORDER = '_custom_option_sort_order';
+    public const COLUMN_SORT_ORDER = '_custom_option_sort_order';
 
-    const COLUMN_ROW_TITLE = '_custom_option_row_title';
+    public const COLUMN_ROW_TITLE = '_custom_option_row_title';
 
-    const COLUMN_ROW_PRICE = '_custom_option_row_price';
+    public const COLUMN_ROW_PRICE = '_custom_option_row_price';
 
-    const COLUMN_ROW_SKU = '_custom_option_row_sku';
+    public const COLUMN_ROW_SKU = '_custom_option_row_sku';
 
-    const COLUMN_ROW_SORT = '_custom_option_row_sort';
+    public const COLUMN_ROW_SORT = '_custom_option_row_sort';
 
-    /**#@-*/
+    /**
+     * Error codes
+     */
+    public const ERROR_INVALID_STORE = 'optionInvalidStore';
+
+    public const ERROR_INVALID_TYPE = 'optionInvalidType';
+
+    public const ERROR_EMPTY_TITLE = 'optionEmptyTitle';
+
+    public const ERROR_INVALID_PRICE = 'optionInvalidPrice';
+
+    public const ERROR_INVALID_MAX_CHARACTERS = 'optionInvalidMaxCharacters';
+
+    public const ERROR_INVALID_SORT_ORDER = 'optionInvalidSortOrder';
+
+    public const ERROR_INVALID_ROW_PRICE = 'optionInvalidRowPrice';
+
+    public const ERROR_INVALID_ROW_SORT = 'optionInvalidRowSort';
+
+    public const ERROR_AMBIGUOUS_NEW_NAMES = 'optionAmbiguousNewNames';
+
+    public const ERROR_AMBIGUOUS_OLD_NAMES = 'optionAmbiguousOldNames';
+
+    public const ERROR_AMBIGUOUS_TYPES = 'optionAmbiguousTypes';
 
     /**
      * XML path to page size parameter
      */
-    const XML_PATH_PAGE_SIZE = 'import/format_v1/page_size';
+    public const XML_PATH_PAGE_SIZE = 'import/format_v1/page_size';
 
     /**
      * @var string
@@ -231,33 +254,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected $_optionCollection;
 
-    /**#@+
-     * Error codes
-     */
-    const ERROR_INVALID_STORE = 'optionInvalidStore';
-
-    const ERROR_INVALID_TYPE = 'optionInvalidType';
-
-    const ERROR_EMPTY_TITLE = 'optionEmptyTitle';
-
-    const ERROR_INVALID_PRICE = 'optionInvalidPrice';
-
-    const ERROR_INVALID_MAX_CHARACTERS = 'optionInvalidMaxCharacters';
-
-    const ERROR_INVALID_SORT_ORDER = 'optionInvalidSortOrder';
-
-    const ERROR_INVALID_ROW_PRICE = 'optionInvalidRowPrice';
-
-    const ERROR_INVALID_ROW_SORT = 'optionInvalidRowSort';
-
-    const ERROR_AMBIGUOUS_NEW_NAMES = 'optionAmbiguousNewNames';
-
-    const ERROR_AMBIGUOUS_OLD_NAMES = 'optionAmbiguousOldNames';
-
-    const ERROR_AMBIGUOUS_TYPES = 'optionAmbiguousTypes';
-
-    /**#@-*/
-
     /**
      * @var CollectionByPagesIterator
      */
@@ -271,8 +267,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_pageSize;
 
     /**
-     * Catalog data
-     *
      * @var \Magento\Catalog\Helper\Data
      */
     protected $_catalogData = null;
@@ -1287,6 +1281,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->_rowProductId = $this->_productsSkuToId[$rowData[self::COLUMN_SKU]];
                     if (array_key_exists('custom_options', $rowData)
                         && (
+                            $rowData['custom_options'] === null ||
                             trim($rowData['custom_options']) === '' ||
                             trim($rowData['custom_options']) === $this->_productEntity->getEmptyAttributeValueConstant()
                         )
@@ -2077,6 +2072,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $rowData
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _parseCustomOptions($rowData)
     {
@@ -2098,19 +2094,17 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $optionValueParams = explode($this->_productEntity->getMultipleValueSeparator(), $optionValue);
             foreach ($optionValueParams as $nameAndValue) {
                 $nameAndValue = explode('=', $nameAndValue);
-                if (!empty($nameAndValue)) {
-                    $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
-                    $value = trim($value);
-                    $fieldName = trim($nameAndValue[0]);
-                    if ($value && ($fieldName == 'name')) {
-                        if ($name != $value) {
-                            $name = $value;
-                            $k = 0;
-                        }
+                $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
+                $value = trim($value);
+                $fieldName = isset($nameAndValue[0]) ? trim($nameAndValue[0]) : '';
+                if ($value && ($fieldName === 'name')) {
+                    if ($name != $value) {
+                        $name = $value;
+                        $k = 0;
                     }
-                    if ($name) {
-                        $options[$name][$k][$fieldName] = $value;
-                    }
+                }
+                if ($name) {
+                    $options[$name][$k][$fieldName] = $value;
                 }
             }
             if (isset($rowData[Product::COL_STORE_VIEW_CODE])) {

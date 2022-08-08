@@ -72,7 +72,6 @@ class QueryResponse implements ResponseInterface
     /**
      * @inheritdoc
      */
-    #[\ReturnTypeWillChange]
     public function getAggregations()
     {
         return $this->aggregations;

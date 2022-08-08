@@ -34,7 +34,6 @@ class CompositeFileIterator extends FileIterator
     /**
      * @inheritDoc
      */
-    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->existingIterator->rewind();
@@ -44,7 +43,6 @@ class CompositeFileIterator extends FileIterator
     /**
      * @inheritDoc
      */
-    #[\ReturnTypeWillChange]
     public function current()
     {
         if ($this->existingIterator->valid()) {
@@ -57,7 +55,6 @@ class CompositeFileIterator extends FileIterator
     /**
      * @inheritDoc
      */
-    #[\ReturnTypeWillChange]
     public function key()
     {
         if ($this->existingIterator->valid()) {
@@ -70,7 +67,6 @@ class CompositeFileIterator extends FileIterator
     /**
      * @inheritDoc
      */
-    #[\ReturnTypeWillChange]
     public function next()
     {
         if ($this->existingIterator->valid()) {
@@ -83,7 +79,6 @@ class CompositeFileIterator extends FileIterator
     /**
      * @inheritDoc
      */
-    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->existingIterator->valid() || parent::valid();
@@ -100,7 +95,6 @@ class CompositeFileIterator extends FileIterator
     /**
      * @inheritDoc
      */
-    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->existingIterator->count() + parent::count();

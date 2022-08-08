@@ -16,6 +16,7 @@
                 Admin Product Edit page for created product to check that added image has selected image roles."/>
             <group value="catalog"/>
             <severity value="MAJOR"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>

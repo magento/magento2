@@ -89,8 +89,10 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Go to created Order -->
-        <amOnPage url="{{AdminOrderPage.url({$grabOrderId})}}" stepKey="goToAdminViewOrder"/>
-        <waitForPageLoad stepKey="waitForOrderPage"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="goToAdminViewOrder">
+            <argument name="entityId" value="{$grabOrderId}"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForOrderPage"/>
 
         <!-- Assert Coupon Code will shown in Shipping total description -->
         <actionGroup ref="AssertAdminShippingDescriptionInOrderViewActionGroup" stepKey="seeCouponInShippingDescription">

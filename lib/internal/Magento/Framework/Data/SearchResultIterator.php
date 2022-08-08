@@ -41,8 +41,6 @@ class SearchResultIterator implements \Iterator
 
     /**
      * @inheritdoc
-     *
-     * @return array|mixed
      */
     #[\ReturnTypeWillChange]
     public function current()
@@ -62,8 +60,6 @@ class SearchResultIterator implements \Iterator
 
     /**
      * @inheritdoc
-     *
-     * @return int|mixed
      */
     #[\ReturnTypeWillChange]
     public function key()

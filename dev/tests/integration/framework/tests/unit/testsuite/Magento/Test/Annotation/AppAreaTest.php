@@ -7,7 +7,11 @@
 namespace Magento\Test\Annotation;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Annotation\TestCaseAnnotation;
+use Magento\TestFramework\Fixture\Parser\AppArea;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionProperty;
 
 class AppAreaTest extends \PHPUnit\Framework\TestCase
@@ -37,6 +41,29 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
+        /** @var ObjectManagerInterface|MockObject $objectManager */
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->onlyMethods(['get', 'create'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $sharedInstances = [
+            AppArea::class => $this->createConfiguredMock(AppArea::class, ['parse' => []])
+        ];
+        $objectManager->method('get')
+            ->willReturnCallback(
+                function (string $type) use ($sharedInstances) {
+                    return $sharedInstances[$type] ?? new $type();
+                }
+            );
+        $objectManager->method('create')
+            ->willReturnCallback(
+                function (string $type, array $arguments = []) {
+                    return new $type(...array_values($arguments));
+                }
+            );
+
+        Bootstrap::setObjectManager($objectManager);
         $this->_testCaseMock = $this->createMock(\PHPUnit\Framework\TestCase::class);
         $this->testCaseAnnotationsMock = $this->createMock(TestCaseAnnotation::class);
         $this->_applicationMock = $this->createMock(\Magento\TestFramework\Application::class);
@@ -63,7 +90,7 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');
         $property->setAccessible(true);
         $property->setValue($this->testCaseAnnotationsMock);
-        $this->testCaseAnnotationsMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
+        $this->testCaseAnnotationsMock->method('getAnnotations')->willReturn($annotations);
         $this->_applicationMock->expects($this->any())->method('getArea')->willReturn(null);
         $this->_applicationMock->expects($this->once())->method('reinitialize');
         $this->_applicationMock->expects($this->once())->method('loadArea')->with($expectedArea);
@@ -90,7 +117,7 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTestAppAreaWithInvalidArea()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(\PHPUnit\Framework\Exception::class);
 
         $annotations = ['method' => ['magentoAppArea' => ['some_invalid_area']]];
         $property = new ReflectionProperty(TestCaseAnnotation::class, 'instance');

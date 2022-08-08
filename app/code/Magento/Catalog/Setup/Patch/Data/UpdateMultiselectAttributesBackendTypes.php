@@ -59,9 +59,10 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface
     public function apply()
     {
         $this->dataSetup->startSetup();
+        $setup = $this->dataSetup;
+        $connection = $setup->getConnection();
 
-        $connection = $this->dataSetup->getConnection();
-        $attributeTable = $connection->getTableName('eav_attribute');
+        $attributeTable = $setup->getTable('eav_attribute');
         /** @var EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create(['setup' => $this->dataSetup]);
         $entityTypeId = $eavSetup->getEntityTypeId(Product::ENTITY);
@@ -74,8 +75,8 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface
                 ->where('frontend_input = ?', 'multiselect')
         );
 
-        $varcharTable = $connection->getTableName('catalog_product_entity_varchar');
-        $textTable = $connection->getTableName('catalog_product_entity_text');
+        $varcharTable = $setup->getTable('catalog_product_entity_varchar');
+        $textTable = $setup->getTable('catalog_product_entity_text');
         $varcharTableDataSql = $connection
             ->select()
             ->from($varcharTable)

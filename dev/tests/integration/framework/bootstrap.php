@@ -13,7 +13,7 @@ use Magento\Framework\Autoload\AutoloaderRegistry;
 require_once __DIR__ . '/../../../../app/bootstrap.php';
 require_once __DIR__ . '/autoload.php';
 
-error_reporting(E_ALL & ~E_DEPRECATED);
+error_reporting(E_ALL);
 // phpcs:ignore Magento2.Functions.DiscouragedFunction
 $testsBaseDir = dirname(__DIR__);
 $fixtureBaseDir = $testsBaseDir. '/testsuite';
@@ -115,6 +115,9 @@ try {
     Magento\TestFramework\Workaround\Override\Config::setInstance($overrideConfig);
     Magento\TestFramework\Workaround\Override\Fixture\Resolver::setInstance(
         new  \Magento\TestFramework\Workaround\Override\Fixture\Resolver($overrideConfig)
+    );
+    Magento\TestFramework\Fixture\DataFixtureStorageManager::setStorage(
+        new Magento\TestFramework\Fixture\DataFixtureStorage()
     );
     /* Unset declared global variables to release the PHPUnit from maintaining their values between tests */
     unset($testsBaseDir, $settings, $shell, $application, $bootstrap, $overrideConfig);

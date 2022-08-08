@@ -18,6 +18,9 @@
             <useCaseId value="MC-42531"/>
             <severity value="MINOR"/>
             <group value="Sales"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontOrderCommentWithHTMLTagsDisplayTest instead</issueId>
+            </skip> 
         </annotations>
         <before>
             <!-- Create customer -->

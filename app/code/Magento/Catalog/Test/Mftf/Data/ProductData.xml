@@ -22,6 +22,20 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="SimpleProductQty100" type="product">
+        <data key="name" unique="suffix">testProductName</data>
+        <data key="sku" unique="suffix">testSku</data>
+        <data key="urlKey" unique="suffix">testproductname</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="price">123.00</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
     <entity name="ApiSimpleProduct" type="product">
         <data key="name" unique="suffix">Api Simple Product</data>
         <data key="sku" unique="suffix">api-simple-product</data>
@@ -417,6 +431,11 @@
         <data key="file">test_image.jpg</data>
         <data key="filename">test_image</data>
     </entity>
+    <entity name="TestImageWithDotInFilename" extends="MagentoLogo" type="image">
+        <data key="title" unique="suffix">TestImageWithDotInFilename</data>
+        <data key="file">m.agento-logo.png</data>
+        <data key="filename">m.agento-logo</data>
+    </entity>
     <entity name="ProductWithUnicode" type="product">
         <data key="name" unique="suffix">&#38657;&#20135;&#21697;</data>
         <data key="sku" unique="suffix">&#38657;&#20135;&#21697;</data>
@@ -810,7 +829,8 @@
     <entity name="virtualProductCustomImportOptions" type="product">
         <data key="name" unique="suffix">VirtualProduct</data>
         <data key="sku" unique="suffix">virtual_sku</data>
-        <data key="price">9,000.00</data>
+        <data key="price">9000.00</data>
+        <data key="formattedPrice">9,000.00</data>
         <data key="quantity">999</data>
         <data key="status">In Stock</data>
         <data key="visibility">Catalog, Search</data>
@@ -831,7 +851,8 @@
     <entity name="virtualProductOutOfStock" type="product">
         <data key="name" unique="suffix">VirtualProduct</data>
         <data key="sku" unique="suffix">virtual_sku</data>
-        <data key="price">9,000.00</data>
+        <data key="price">9000.00</data>
+        <data key="formattedPrice">9,000.00</data>
         <data key="quantity">999</data>
         <data key="status">Out of Stock</data>
         <data key="visibility">Catalog, Search</data>
@@ -1449,4 +1470,5 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+
 </entities>

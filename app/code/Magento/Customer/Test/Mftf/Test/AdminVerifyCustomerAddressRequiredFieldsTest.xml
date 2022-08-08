@@ -20,6 +20,7 @@
 
         <before>
             <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>

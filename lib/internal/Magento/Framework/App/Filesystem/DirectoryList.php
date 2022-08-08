@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Filesystem;
 
 use Magento\Framework\Code\Generator\Io;
 
 /**
  * A Magento application specific list of directories
+ *
+ * @api
  */
 class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
 {

@@ -17,6 +17,10 @@
             <description value="User switches between Views and checks if the folder is changed"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
+            <group value="pr_exclude"/>
+            <skip>
+                <issueId value="AC-5916">Skipped</issueId>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
