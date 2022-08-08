@@ -51,10 +51,12 @@ class Xml extends AbstractAdapter
 
         if ($xml) {
             $nodes = $xml->xpath('//*[@translate|@translatable]');
+
             /* To add title of all xml files in translation csv */
             if($xml->head){
                 $nodes['title'] =  $xml->head;
             }
+            
             unset($xml);
 
             return is_array($nodes) ? $nodes : [];
