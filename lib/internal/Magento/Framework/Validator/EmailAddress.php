@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Validator;
 
-use Laminas\Validator\EmailAddress as LaminasEmailAddress;
+use Laminas\Validator\EmailAddress as EmailAddressValidator;
 
-class EmailAddress extends LaminasEmailAddress implements ValidatorInterface
+class EmailAddress extends EmailAddressValidator implements ValidatorInterface
 {
     /**
      * Instantiates hostname validator for local use.
