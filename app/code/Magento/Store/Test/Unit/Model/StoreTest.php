@@ -7,8 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\Model;
 
+use Magento\Config\Model\ResourceModel\Config\Data;
 use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\CurrencyFactory;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -16,15 +20,19 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\ModifierInterface;
 use Magento\Framework\UrlInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Store\Api\Data\GroupInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Api\GroupRepositoryInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\Information;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -167,16 +175,84 @@ class StoreTest extends TestCase
      */
     public function testGetId()
     {
-        $testId = 1;
-        $websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $registryMock = $this->getMockBuilder(Registry::class)
+            ->getMock();
+        $extensionAttributesFactoryMock = $this->getMockBuilder(ExtensionAttributesFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customAttributeFactoryMock = $this->getMockBuilder(AttributeValueFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resourceMock = $this->getMockBuilder(\Magento\Store\Model\ResourceModel\Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $coreFileStorageDatabaseMock = $this->getMockBuilder(Database::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $configCacheTypeMock = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $urlMock = $this->getMockBuilder(UrlInterface::class)
+            ->getMock();
+        $requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->getMock();
+        $configDataResourceMock = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filesystemMock = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $configMock = $this->getMockBuilder(ReinitableConfigInterface::class)
+            ->getMock();
+        $storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMock();
+        $sidResolverMock = $this->getMockBuilder(SidResolverInterface::class)
+            ->getMock();
+        $httpContextMock = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
+            ->getMock();
+        $sessionMock = $this->getMockBuilder(SessionManagerInterface::class)
+            ->getMock();
+        $currencyFactoryMock = $this->getMockBuilder(CurrencyFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $informationMock = $this->getMockBuilder(Information::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $currencyInstalled = 'test';
+        $groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
+            ->getMock();
+        $websiteRepositoryMock = $this->getMockBuilder(WebsiteRepositoryInterface::class)
+            ->getMock();
 
         /** @var Store $model */
-        $model = $this->objectManagerHelper->getObject(
-            Store::class,
-            ['websiteRepository' => $websiteRepository]
+        $model = new Store(
+            $contextMock,
+            $registryMock,
+            $extensionAttributesFactoryMock,
+            $customAttributeFactoryMock,
+            $resourceMock,
+            $coreFileStorageDatabaseMock,
+            $configCacheTypeMock,
+            $urlMock,
+            $requestMock,
+            $configDataResourceMock,
+            $filesystemMock,
+            $configMock,
+            $storeManagerMock,
+            $sidResolverMock,
+            $httpContextMock,
+            $sessionMock,
+            $currencyFactoryMock,
+            $informationMock,
+            $currencyInstalled,
+            $groupRepositoryMock,
+            $websiteRepositoryMock
         );
 
+        $testId = 1;
         $model->setData(Store::STORE_ID, $testId);
         $this->assertEquals($testId, $model->getId());
     }
