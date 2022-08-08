@@ -61,6 +61,7 @@
         <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="navigateAndOpenCreatedCmsPage">
             <argument name="identifier" value="$createCmsPage.identifier$"/>
         </actionGroup>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.searchStore}}" stepKey="hoverSearchTextField"/>
         <actionGroup ref="AssertStorefrontProductControlsAreNotVisibleWithoutHoverActionGroup" stepKey="assertProductControlsAreNotVisibleWithoutHoverOnCmsPage"/>
         <seeElement selector="{{StorefrontCategoryMainSection.productLinkByHref($createFirstSimpleProduct.custom_attributes[url_key]$)}}" stepKey="assertProductName"/>
         <seeElement selector="{{StorefrontCategoryMainSection.productPriceByName($createFirstSimpleProduct.name$)}}" stepKey="assertProductPrice"/>
