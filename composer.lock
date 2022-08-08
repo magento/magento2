@@ -10160,16 +10160,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "3.10.0",
+            "version": "3.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "75ed840950a5e12b0b0237f8cb7137dd90dfa8f7"
+                "reference": "c0c3380fcf00fc02053aa09942388e8f4ae7d378"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/75ed840950a5e12b0b0237f8cb7137dd90dfa8f7",
-                "reference": "75ed840950a5e12b0b0237f8cb7137dd90dfa8f7",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/c0c3380fcf00fc02053aa09942388e8f4ae7d378",
+                "reference": "c0c3380fcf00fc02053aa09942388e8f4ae7d378",
                 "shasum": ""
             },
             "require": {
@@ -10179,7 +10179,7 @@
                 "codeception/module-asserts": "^1.1",
                 "codeception/module-sequence": "^1.0",
                 "codeception/module-webdriver": "^1.0",
-                "composer/composer": "^1.9||^2.0",
+                "composer/composer": "^1.9 || ^2.0, !=2.2.16",
                 "csharpru/vault-php": "^4.2.1",
                 "ext-curl": "*",
                 "ext-dom": "*",
@@ -10246,9 +10246,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.10.0"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.10.1"
             },
-            "time": "2022-06-23T15:18:17+00:00"
+            "time": "2022-08-02T14:40:39+00:00"
         },
         {
             "name": "mustache/mustache",
