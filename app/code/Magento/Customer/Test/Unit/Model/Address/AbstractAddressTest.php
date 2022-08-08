@@ -407,6 +407,7 @@ class AbstractAddressTest extends TestCase
             ["first line\nsecond line", ['first line', 'second line']],
             ['single line', ['single line']],
             ['single line', 'single line'],
+            ['single line', ['single line', null]],
         ];
     }
 
