@@ -230,10 +230,10 @@ class CreditmemoFactory
      * Calculate product options.
      *
      * @param Item $orderItem
-     * @param int $parentQty
-     * @return int
+     * @param int|float $parentQty
+     * @return int|float
      */
-    private function calculateProductOptions(Item $orderItem, int $parentQty): int
+    private function calculateProductOptions(Item $orderItem, int|float $parentQty): int|float
     {
         $qty = $parentQty;
         $productOptions = $orderItem->getProductOptions();
