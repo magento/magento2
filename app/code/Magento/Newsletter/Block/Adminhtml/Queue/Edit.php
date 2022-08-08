@@ -22,7 +22,7 @@ class Edit extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Newsletter::queue/edit.phtml';
 
     /**
-     * Core registry
+     * Magento Framework Core Registry
      *
      * @var \Magento\Framework\Registry
      */
@@ -43,6 +43,8 @@ class Edit extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Queue Edit constructor
+     *
      * @return void
      */
     protected function _construct()
