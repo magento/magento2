@@ -20,13 +20,17 @@ class Xml extends AbstractAdapter
      */
     protected function _parse()
     {
-        foreach ($this->_getNodes($this->_file) as $element) {
+        foreach ($this->_getNodes($this->_file) as $key => $element) {
             if (!$element instanceof \SimpleXMLElement) {
                 continue;
             }
-            $attributes = $element->attributes();
-            if ((string)$attributes['translate'] === 'true' || (string)$attributes['translatable'] === 'true') {
+
+            $attributes = (string)$key ==='title' ? $element : $element->attributes();
+
+            if ((string)$attributes['translate'] === 'true' || (string)$attributes['translatable'] === 'true' ) {
                 $this->_addPhrase((string)$element);
+            } else if (isset($attributes->title)) {
+                $this->_addPhrase((string)$element->title);
             } else {
                 $this->parseTranslatableNodes($attributes, $element);
             }
@@ -44,8 +48,13 @@ class Xml extends AbstractAdapter
         libxml_use_internal_errors(true);
         $xml = simplexml_load_file($file);
         libxml_use_internal_errors(false);
+
         if ($xml) {
             $nodes = $xml->xpath('//*[@translate|@translatable]');
+            /* To add title of all xml files in translation csv */
+            if($xml->head){
+                $nodes['title'] =  $xml->head;
+            }
             unset($xml);
 
             return is_array($nodes) ? $nodes : [];
