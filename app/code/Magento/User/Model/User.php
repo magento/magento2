@@ -120,12 +120,14 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
      * @deprecated 101.1.0
+     * @see \Magento\Framework\Mail\Template\TransportBuilder
      */
     protected $_transportBuilder;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      * @deprecated 101.1.0
+     * @see \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -147,6 +149,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * @var DeploymentConfig
      * @deprecated 101.1.0
+     * @see DeploymentConfig
      */
     private $deploymentConfig;
 
@@ -476,6 +479,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @throws NotificationExceptionInterface
      * @return $this
      * @deprecated 100.1.0
+     * @see Self::sendNotificationEmailsIfRequired()
      */
     public function sendPasswordResetNotificationEmail()
     {
