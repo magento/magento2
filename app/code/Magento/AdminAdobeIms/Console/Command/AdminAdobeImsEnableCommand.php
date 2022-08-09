@@ -9,11 +9,15 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Console\Command;
 
 use Magento\AdminAdobeIms\Model\ImsConnection;
-use Magento\AdminAdobeIms\Service\UpdateTokensService;
 use Magento\AdminAdobeIms\Service\ImsCommandOptionService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdminAdobeIms\Service\UpdateTokensService;
+use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory;
+use Magento\Authorization\Model\Role;
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\Exception\LocalizedException;
@@ -74,18 +78,32 @@ class AdminAdobeImsEnableCommand extends Command
     private UpdateTokensService $updateTokensService;
 
     /**
+     * @var Role|mixed
+     */
+    private Role $role;
+
+    /**
+     * @var CollectionFactory
+     */
+    private CollectionFactory $roleCollection;
+
+    /**
      * @param ImsConfig $adminImsConfig
      * @param ImsConnection $adminImsConnection
      * @param ImsCommandOptionService $imsCommandOptionService
      * @param TypeListInterface $cacheTypeList
      * @param UpdateTokensService $updateTokensService
+     * @param Role $role
+     * @param CollectionFactory $roleCollection
      */
     public function __construct(
         ImsConfig $adminImsConfig,
         ImsConnection $adminImsConnection,
         ImsCommandOptionService $imsCommandOptionService,
         TypeListInterface $cacheTypeList,
-        UpdateTokensService $updateTokensService
+        UpdateTokensService $updateTokensService,
+        Role $role = null,
+        CollectionFactory $roleCollection = null
     ) {
         parent::__construct();
         $this->adminImsConfig = $adminImsConfig;
@@ -93,6 +111,8 @@ class AdminAdobeImsEnableCommand extends Command
         $this->imsCommandOptionService = $imsCommandOptionService;
         $this->cacheTypeList = $cacheTypeList;
         $this->updateTokensService = $updateTokensService;
+        $this->role = $role ?: ObjectManager::getInstance()->get(Role::class);
+        $this->roleCollection = $roleCollection ?: ObjectManager::getInstance()->get(CollectionFactory::class);
 
         $this->setName('admin:adobe-ims:enable')
             ->setDescription('Enable Adobe IMS Module.')
@@ -164,6 +184,7 @@ class AdminAdobeImsEnableCommand extends Command
             if ($clientId && $clientSecret && $organizationId && $isTwoFactorAuthEnabled) {
                 $enabled = $this->enableModule($clientId, $clientSecret, $organizationId, $isTwoFactorAuthEnabled);
                 if ($enabled) {
+                    $this->saveIMSAuthorizationRole();
                     $output->writeln(__('Admin Adobe IMS integration is enabled'));
                     return Cli::RETURN_SUCCESS;
                 }
@@ -180,6 +201,22 @@ class AdminAdobeImsEnableCommand extends Command
             }
             return Cli::RETURN_FAILURE;
         }
+    }
+
+    private function saveIMSAuthorizationRole(): bool
+    {
+        $roleCollection = $this->roleCollection->create()->addFieldToFilter('role_name', 'AdobeImsRole');
+
+        if (!$roleCollection->getSize()) {
+            $this->role->setRoleName('AdobeImsRole')
+                ->setUserType((string)UserContextInterface::USER_TYPE_ADMIN)
+                ->setUserId(0)
+                ->setRoleType(\Magento\Authorization\Model\Acl\Role\Group::ROLE_TYPE)
+                ->setParentId(0)
+                ->save();
+            return true;
+        }
+        return true;
     }
 
     /**
