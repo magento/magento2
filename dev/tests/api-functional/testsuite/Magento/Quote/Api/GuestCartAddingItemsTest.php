@@ -117,4 +117,96 @@ class GuestCartAddingItemsTest extends WebapiAbstract
         $quote->load($quoteId);
         $quote->delete();
     }
+
+    /**
+     * Test add to product with custom option and test with updating custom options.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_options.php
+     * @return void
+     */
+    public function testAddtoCartWithCustomOptionsForCreatingQuoteFromEmptyCart()
+    {
+        // Creating empty cart
+        $serviceInfoForCreatingEmptyCart = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'CreateEmptyCart',
+            ],
+        ];
+        $quoteId = $this->_webApiCall($serviceInfoForCreatingEmptyCart);
+
+        // Adding item to the cart
+        $serviceInfoForAddingProduct = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $quoteId . '/items',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => GuestCartItemRepositoryTest::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => GuestCartItemRepositoryTest::SERVICE_NAME . 'Save',
+            ],
+        ];
+        $requestData = [
+            'cartItem' => [
+                'quote_id' => $quoteId,
+                'sku' => 'simple_with_custom_options',
+                'qty' => 1,
+                'product_option' => [
+                    'extension_attributes' => [
+                        'custom_options' => [
+                            ['option_id' => 1, 'option_value' => 1],
+                            ['option_id' => 2, 'option_value' => 1],
+                            ['option_id' => 3, 'option_value' => 'test']
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $item = $this->_webApiCall($serviceInfoForAddingProduct, $requestData);
+        $this->assertNotEmpty($item);
+
+        $requestData = [
+            'cartItem' => [
+                'quote_id' => $quoteId,
+                'sku' => 'simple_with_custom_options',
+                'qty' => 1,
+                'product_option' => [
+                    'extension_attributes' => [
+                        'custom_options' => [
+                            ['option_id' => 1, 'option_value' => 2],
+                            ['option_id' => 2, 'option_value' => 2],
+                            ['option_id' => 3, 'option_value' => 'test2']
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        // Delete the item for the cart
+        $serviceInfoForUpdateProduct = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $quoteId . '/items/' . $item['item_id'],
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => GuestCartItemRepositoryTest::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => GuestCartItemRepositoryTest::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $item = $this->_webApiCall($serviceInfoForUpdateProduct, $requestData);
+        $this->assertNotEmpty($item);
+
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
+        $quote->load($quoteId);
+        $quote->delete();
+    }
 }

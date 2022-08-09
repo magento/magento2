@@ -77,6 +77,8 @@ class CartItemPersister
                     /** Update item product options */
                     if ($currentItem->getQty() !== $buyRequestData->getQty()) {
                         $item = $quote->updateItem($itemId, $buyRequestData);
+                    } else {
+                        $item = $quote->updateItem($itemId, $buyRequestData);
                     }
                 } else {
                     if ($item->getQty() !== $currentItem->getQty()) {
