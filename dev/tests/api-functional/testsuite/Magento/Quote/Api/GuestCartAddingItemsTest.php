@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Api;
 
+use Magento\Framework\Webapi\Rest\Request;
+use Magento\Quote\Model\Quote;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -14,9 +16,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class GuestCartAddingItemsTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'quoteGuestCartManagementV1';
-    const RESOURCE_PATH = '/V1/guest-carts/';
+    private const SERVICE_VERSION = 'V1';
+    private const SERVICE_NAME = 'quoteGuestCartManagementV1';
+    private const RESOURCE_PATH = '/V1/guest-carts/';
 
     /**
      * @var \Magento\TestFramework\ObjectManager
@@ -29,96 +31,6 @@ class GuestCartAddingItemsTest extends WebapiAbstract
     }
 
     /**
-     * Test price for cart after deleting and adding product to.
-     *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_without_options_with_stock_data.php
-     * @return void
-     */
-    public function testPriceForCreatingQuoteFromEmptyCart()
-    {
-        // Creating empty cart
-        $serviceInfoForCreatingEmptyCart = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'CreateEmptyCart',
-            ],
-        ];
-        $quoteId = $this->_webApiCall($serviceInfoForCreatingEmptyCart);
-
-        // Adding item to the cart
-        $serviceInfoForAddingProduct = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $quoteId . '/items',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
-            ],
-            'soap' => [
-                'service' => GuestCartItemRepositoryTest::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => GuestCartItemRepositoryTest::SERVICE_NAME . 'Save',
-            ],
-        ];
-        $requestData = [
-            'cartItem' => [
-                'quote_id' => $quoteId,
-                'sku' => 'simple',
-                'qty' => 1
-            ]
-        ];
-        $item = $this->_webApiCall($serviceInfoForAddingProduct, $requestData);
-        $this->assertNotEmpty($item);
-
-        // Delete the item for the cart
-        $serviceInfoForDeleteProduct = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $quoteId . '/items/' . $item['item_id'],
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
-            ],
-            'soap' => [
-                'service' => GuestCartItemRepositoryTest::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => GuestCartItemRepositoryTest::SERVICE_NAME . 'deleteById',
-            ],
-        ];
-        $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ?
-            $this->_webApiCall($serviceInfoForDeleteProduct, ['cartId' => $quoteId, 'itemId' => $item['item_id']])
-            : $this->_webApiCall($serviceInfoForDeleteProduct);
-        $this->assertTrue($response);
-
-        // Add one more item and check price for this item
-        $serviceInfoForAddingProduct = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $quoteId . '/items',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
-            ],
-            'soap' => [
-                'service' => GuestCartItemRepositoryTest::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => GuestCartItemRepositoryTest::SERVICE_NAME . 'Save',
-            ],
-        ];
-        $requestData = [
-            'cartItem' => [
-                'quote_id' => $quoteId,
-                'sku' => 'simple',
-                'qty' => 1
-            ]
-        ];
-        $item = $this->_webApiCall($serviceInfoForAddingProduct, $requestData);
-        $this->assertNotEmpty($item);
-        $this->assertEquals($item['price'], 10);
-
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->load($quoteId);
-        $quote->delete();
-    }
-
-    /**
      * Test add to product with custom option and test with updating custom options.
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_options.php
@@ -126,17 +38,13 @@ class GuestCartAddingItemsTest extends WebapiAbstract
      */
     public function testAddtoCartWithCustomOptionsForCreatingQuoteFromEmptyCart()
     {
+        $this->_markTestAsRestOnly();
         // Creating empty cart
         $serviceInfoForCreatingEmptyCart = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'CreateEmptyCart',
-            ],
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ]
         ];
         $quoteId = $this->_webApiCall($serviceInfoForCreatingEmptyCart);
 
@@ -144,13 +52,8 @@ class GuestCartAddingItemsTest extends WebapiAbstract
         $serviceInfoForAddingProduct = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $quoteId . '/items',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
-            ],
-            'soap' => [
-                'service' => GuestCartItemRepositoryTest::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => GuestCartItemRepositoryTest::SERVICE_NAME . 'Save',
-            ],
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ]
         ];
         $requestData = [
             'cartItem' => [
@@ -192,7 +95,41 @@ class GuestCartAddingItemsTest extends WebapiAbstract
         $serviceInfoForUpdateProduct = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $quoteId . '/items/' . $item['item_id'],
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'httpMethod' => Request::HTTP_METHOD_PUT,
+            ]
+        ];
+
+        $item = $this->_webApiCall($serviceInfoForUpdateProduct, $requestData);
+        $this->assertNotEmpty($item);
+    }
+
+    /**
+     * Test price for cart after deleting and adding product to.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_without_options_with_stock_data.php
+     * @return void
+     */
+    public function testPriceForCreatingQuoteFromEmptyCart()
+    {
+        // Creating empty cart
+        $serviceInfoForCreatingEmptyCart = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'CreateEmptyCart',
+            ],
+        ];
+        $quoteId = $this->_webApiCall($serviceInfoForCreatingEmptyCart);
+
+        // Adding item to the cart
+        $serviceInfoForAddingProduct = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $quoteId . '/items',
+                'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => GuestCartItemRepositoryTest::SERVICE_NAME,
@@ -200,12 +137,58 @@ class GuestCartAddingItemsTest extends WebapiAbstract
                 'operation' => GuestCartItemRepositoryTest::SERVICE_NAME . 'Save',
             ],
         ];
-
-        $item = $this->_webApiCall($serviceInfoForUpdateProduct, $requestData);
+        $requestData = [
+            'cartItem' => [
+                'quote_id' => $quoteId,
+                'sku' => 'simple',
+                'qty' => 1
+            ]
+        ];
+        $item = $this->_webApiCall($serviceInfoForAddingProduct, $requestData);
         $this->assertNotEmpty($item);
 
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
+        // Delete the item for the cart
+        $serviceInfoForDeleteProduct = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $quoteId . '/items/' . $item['item_id'],
+                'httpMethod' => Request::HTTP_METHOD_DELETE,
+            ],
+            'soap' => [
+                'service' => GuestCartItemRepositoryTest::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => GuestCartItemRepositoryTest::SERVICE_NAME . 'deleteById',
+            ],
+        ];
+        $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ?
+            $this->_webApiCall($serviceInfoForDeleteProduct, ['cartId' => $quoteId, 'itemId' => $item['item_id']])
+            : $this->_webApiCall($serviceInfoForDeleteProduct);
+        $this->assertTrue($response);
+
+        // Add one more item and check price for this item
+        $serviceInfoForAddingProduct = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $quoteId . '/items',
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => GuestCartItemRepositoryTest::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => GuestCartItemRepositoryTest::SERVICE_NAME . 'Save',
+            ],
+        ];
+        $requestData = [
+            'cartItem' => [
+                'quote_id' => $quoteId,
+                'sku' => 'simple',
+                'qty' => 1
+            ]
+        ];
+        $item = $this->_webApiCall($serviceInfoForAddingProduct, $requestData);
+        $this->assertNotEmpty($item);
+        $this->assertEquals($item['price'], 10);
+
+        /** @var Quote $quote */
+        $quote = $this->objectManager->create(Quote::class);
         $quote->load($quoteId);
         $quote->delete();
     }
