@@ -10,8 +10,8 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminProductGridCustomViewColumnDisplayTest">
         <annotations>
-            <stories value="Columns are still visible by clicking on their names in the Columns dropdown menu of product grid in Admin, not only on their respective checkboxes."/>
-            <title value="Columns are visible by clicking on their names in the Columns dropdown menu of product grid in Admin"/>
+            <stories value="Product grid columns visibility can be toggled by clicking on their names in the Columns drop-down menu, not just on their respective checkboxes."/>
+            <title value="Product grid columns visibility can be toggled by clicking on their names in the Columns drop-down menu, not just on their respective checkboxes."/>
             <description value="Assert that after rearranging columns order on the product grid in Admin, it will still be possible to toggle the visibility of the columns by clicking on their names in the Columns dropdown menu, and not only on their respective checkboxes."/>
             <severity value="AVERAGE"/>
             <testCaseId value="AC-6229"/>
@@ -40,7 +40,7 @@
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownMenuAfterTogglePrice"/>
         <!-- Price column is not visible in product grid -->
         <dontSeeElement selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="dontSeeProductPriceColumn"/>
-        <!-- check weight column is not visible in product grid -->
+        <!-- Check weight column is not visible in product grid -->
         <dontSeeElement selector="{{AdminProductGridSection.columnHeader('Weight')}}" stepKey="dontSeeWeightColumn"/>
         <!-- Click on columns, in dropdown click on column name weight -->
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdownMenuToToggleWeight"/>
