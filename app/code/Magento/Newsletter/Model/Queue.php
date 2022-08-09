@@ -219,6 +219,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * @param int $count
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function sendPerSubscriber($count = 20)
     {
