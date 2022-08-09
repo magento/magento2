@@ -16,20 +16,21 @@ namespace Magento\Setup\Module\I18n\Parser\Adapter;
 class Xml extends AbstractAdapter
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _parse()
     {
         foreach ($this->_getNodes($this->_file) as $key => $element) {
+
             if (!$element instanceof \SimpleXMLElement) {
                 continue;
             }
 
-            $attributes = (string)$key ==='title' ? $element : $element->attributes();
+            $attributes = $element->attributes();
 
-            if ((string)$attributes['translate'] === 'true' || (string)$attributes['translatable'] === 'true' ) {
+            if ((string)$attributes['translate'] === 'true' || (string)$attributes['translatable'] === 'true') {
                 $this->_addPhrase((string)$element);
-            } else if (isset($attributes->title)) {
+            } elseif ($key ==='title') {
                 $this->_addPhrase((string)$element->title);
             } else {
                 $this->parseTranslatableNodes($attributes, $element);
@@ -53,10 +54,10 @@ class Xml extends AbstractAdapter
             $nodes = $xml->xpath('//*[@translate|@translatable]');
 
             /* To add title of all xml files in translation csv */
-            if($xml->head){
+            if ($xml->head) {
                 $nodes['title'] =  $xml->head;
             }
-            
+
             unset($xml);
 
             return is_array($nodes) ? $nodes : [];
