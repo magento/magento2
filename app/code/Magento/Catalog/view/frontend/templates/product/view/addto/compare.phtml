@@ -11,7 +11,7 @@
 ?>
 
 <?php $viewModel = $block->getData('addToCompareViewModel'); ?>
-<?php if ($viewModel->isAvailableForCompare($block->getProduct())) :?>
+<?php if ($viewModel->isAvailableForCompare($block->getProduct())):?>
 <a href="#" data-post='<?= /* @noEscape */ $block->getPostDataParams() ?>'
         data-role="add-to-links"
         class="action tocompare"><span><?= $escaper->escapeHtml(__('Add to Compare')) ?></span></a>

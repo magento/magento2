@@ -14,7 +14,7 @@
                 <tr>
                     <th class="col-draggable">&nbsp;</th>
                     <th class="col-name required"><?= $block->escapeHtml(__('Title')) ?><span class="required">*</span></th>
-                    <?php if ($block->getCanReadPrice() !== false) : ?>
+                    <?php if ($block->getCanReadPrice() !== false): ?>
                     <th class="col-price"><?= $block->escapeHtml(__('Price')) ?></th>
                     <th class="col-price-type"><?= $block->escapeHtml(__('Price Type')) ?></th>
                     <?php endif; ?>
@@ -45,21 +45,21 @@
             <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_is_delete" name="product[options][<%- data.id %>][values][<%- data.select_id %>][is_delete]" type="hidden" value="">
             <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_title" <% if (typeof data.scopeTitleDisabled != 'undefined' && data.scopeTitleDisabled != null) { %> disabled="disabled" <% } %> name="product[options][<%- data.id %>][values][<%- data.select_id %>][title]" class="required-entry input-text select-type-title <% if (typeof data.scopeTitleDisabled != 'undefined' && data.scopeTitleDisabled != null) { %> disabled <% } %>" type="text" value="<%- data.title %>" data-store-label="<%- data.title %>"><%- data.checkboxScopeTitle %>
         </td>
-        <?php if ($block->getCanReadPrice() !== false) : ?>
+        <?php if ($block->getCanReadPrice() !== false): ?>
         <td class="col-price select-opt-price">
             <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_price"
                    <% if (typeof data.scopePriceDisabled != 'undefined' && data.scopePriceDisabled != null) { %> disabled="disabled" <% } %>
                    name="product[options][<%- data.id %>][values][<%- data.select_id %>][price]"
                    class="input-text validate-number product-option-price"
                    type="text" value="<%- data.price %>" data-store-label="<%- data.price %>"
-                <?php if ($block->getCanEditPrice() === false) : ?>
+                <?php if ($block->getCanEditPrice() === false): ?>
                    disabled="disabled"
                 <?php endif; ?>>
         </td>
         <td class="col-price-type select-opt-price-type">
             <?= /* @noEscape */ $block->getPriceTypeSelectHtml('data-attr="price-type" <% if (typeof data.scopePriceDisabled != "undefined" && data.scopePriceDisabled != null) { %> disabled="disabled" <% } %>') ?><%- data.checkboxScopePrice %>
         </td>
-        <?php else : ?>
+        <?php else: ?>
         <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_price" name="product[options][<%- data.id %>][values][<%- data.select_id %>][price]" type="hidden">
         <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_price_type" name="product[options][<%- data.id %>][values][<%- data.select_id %>][price_type]" type="hidden">
         <?php endif; ?>

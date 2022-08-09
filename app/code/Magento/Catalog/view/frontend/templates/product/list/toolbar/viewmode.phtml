@@ -12,19 +12,19 @@
  * @var \Magento\Framework\Escaper $escaper
  */
 ?>
-<?php if ($block->isEnabledViewSwitcher()) :?>
+<?php if ($block->isEnabledViewSwitcher()):?>
     <div class="modes">
         <?php $_modes = $block->getModes(); ?>
-        <?php if ($_modes && count($_modes) > 1) :?>
+        <?php if ($_modes && count($_modes) > 1):?>
             <strong class="modes-label" id="modes-label"><?= $escaper->escapeHtml(__('View as')) ?></strong>
-            <?php foreach ($block->getModes() as $_code => $_label) :?>
-                <?php if ($block->isModeActive($_code)) :?>
+            <?php foreach ($block->getModes() as $_code => $_label):?>
+                <?php if ($block->isModeActive($_code)):?>
                     <strong title="<?= $escaper->escapeHtmlAttr($_label) ?>"
                             class="modes-mode active mode-<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>"
                             data-value="<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>">
                         <span><?= $escaper->escapeHtml($_label) ?></span>
                     </strong>
-                <?php else :?>
+                <?php else:?>
                     <a class="modes-mode mode-<?= $escaper->escapeHtmlAttr(strtolower($_code)) ?>"
                        title="<?= $escaper->escapeHtmlAttr($_label) ?>"
                        href="#"

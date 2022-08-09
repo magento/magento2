@@ -11,7 +11,7 @@
  * @var \Magento\Framework\Escaper $escaper
  */
 ?>
-<?php if (($_products = $block->getProductCollection()) && $_products->getSize()) :?>
+<?php if (($_products = $block->getProductCollection()) && $_products->getSize()):?>
     <div class="block widget block-new-products-list">
         <div class="block-title">
             <strong><?= $escaper->escapeHtml(__('New Products')) ?></strong>
@@ -19,7 +19,7 @@
         <div class="block-content">
             <?php $suffix = $block->getNameInLayout(); ?>
             <ol class="product-items" id="widget-new-products-<?= $escaper->escapeHtmlAttr($suffix) ?>">
-                <?php foreach ($_products->getItems() as $_product) :?>
+                <?php foreach ($_products->getItems() as $_product):?>
                     <li class="product-item">
                         <div class="product-item-info">
                             <a class="product-item-photo" href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"
@@ -37,14 +37,14 @@
                                 <?= $block->getProductPriceHtml($_product, '-widget-new-' . $suffix) ?>
                                 <div class="product-item-actions">
                                     <div class="actions-primary">
-                                        <?php if ($_product->isSaleable()) :?>
-                                            <?php if (!$_product->getTypeInstance()->isPossibleBuyFromList($_product)) :?>
+                                        <?php if ($_product->isSaleable()):?>
+                                            <?php if (!$_product->getTypeInstance()->isPossibleBuyFromList($_product)):?>
                                                 <button type="button" title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
                                                         class="action tocart primary"
                                                         data-mage-init='{"redirectUrl":{"url":"<?= $escaper->escapeUrl($block->getAddToCartUrl($_product)) ?>"}}'>
                                                     <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
                                                 </button>
-                                            <?php else :?>
+                                            <?php else:?>
                                                 <?php
                                                 $postDataHelper = $this->helper(Magento\Framework\Data\Helper\PostHelper::class);
                                                 $postData = $postDataHelper->getPostData($escaper->escapeUrl($block->getAddToCartUrl($_product)), ['product' => $_product->getEntityId()]);
@@ -55,12 +55,12 @@
                                                     <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
                                                 </button>
                                             <?php endif; ?>
-                                        <?php else :?>
-                                            <?php if ($_product->isAvailable()) :?>
+                                        <?php else:?>
+                                            <?php if ($_product->isAvailable()):?>
                                                 <div class="stock available" title="<?= $escaper->escapeHtmlAttr(__('Availability')) ?>">
                                                     <span><?= $escaper->escapeHtml(__('In stock')) ?></span>
                                                 </div>
-                                            <?php else :?>
+                                            <?php else:?>
                                                 <div class="stock unavailable" title="<?= $escaper->escapeHtmlAttr(__('Availability')) ?>">
                                                     <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span>
                                                 </div>

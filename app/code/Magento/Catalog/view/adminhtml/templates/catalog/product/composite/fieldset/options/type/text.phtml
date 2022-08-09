@@ -12,14 +12,14 @@
         <?= /* @noEscape */ $block->getFormattedPrice() ?>
     </label>
     <div class="control admin__field-control">
-        <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_FIELD) :?>
+        <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_FIELD):?>
             <input type="text"
                    id="options_<?= $block->escapeHtmlAttr($_option->getId()) ?>_text"
                    class="input-text admin__control-text <?= $_option->getIsRequire() ? ' required-entry' : '' ?> <?= $_option->getMaxCharacters() ? ' validate-length maximum-length-' . (int) $_option->getMaxCharacters() : '' ?> product-custom-option"
                    name="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                    value="<?= $block->escapeHtmlAttr($block->getDefaultValue()) ?>"
                    price="<?= $block->escapeHtmlAttr($block->getCurrencyPrice($_option->getPrice(true))) ?>" />
-        <?php elseif ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA) :?>
+        <?php elseif ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA):?>
             <textarea id="options_<?= $block->escapeHtmlAttr($_option->getId()) ?>_text"
                       class="admin__control-textarea <?= $_option->getIsRequire() ? ' required-entry' : '' ?> <?= $_option->getMaxCharacters() ? ' validate-length maximum-length-' . (int) $_option->getMaxCharacters() : '' ?> product-custom-option"
                       name="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
@@ -28,7 +28,7 @@
                       price="<?= $block->escapeHtmlAttr($block->getCurrencyPrice($_option->getPrice(true))) ?>"><?= $block->escapeHtml($block->getDefaultValue()) ?></textarea>
         <?php endif;?>
 
-        <?php if ($_option->getMaxCharacters()) :?>
+        <?php if ($_option->getMaxCharacters()):?>
             <p class="note"><?= $block->escapeHtml(__('Maximum number of characters:')) ?> <strong><?= (int) $_option->getMaxCharacters() ?></strong></p>
         <?php endif; ?>
     </div>

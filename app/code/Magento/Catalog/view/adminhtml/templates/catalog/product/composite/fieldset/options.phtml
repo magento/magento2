@@ -7,7 +7,7 @@
 
 <?php /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options */ ?>
 <?php $options = $block->decorateArray($block->getOptions()); ?>
-<?php if (count($options)) :?>
+<?php if (count($options)):?>
 
     <?= $block->getChildHtml('options_js') ?>
 
@@ -16,7 +16,7 @@
         <legend class="legend admin__legend">
             <span><?= $block->escapeHtml(__('Custom Options')) ?></span>
         </legend><br>
-        <?php foreach ($options as $option) :?>
+        <?php foreach ($options as $option):?>
             <?= $block->getOptionHtml($option) ?>
         <?php endforeach;?>
     </fieldset>

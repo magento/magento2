@@ -10,7 +10,7 @@
  * @var \Magento\Framework\Escaper $escaper
  */
 ?>
-<?php if (($_products = $block->getProductCollection()) && $_products->getSize()) :?>
+<?php if (($_products = $block->getProductCollection()) && $_products->getSize()):?>
     <div class="block widget block-new-products-names">
         <div class="block-title">
             <strong><?= $escaper->escapeHtml(__('New Products')) ?></strong>
@@ -19,7 +19,7 @@
             <?php $suffix = $block->getNameInLayout(); ?>
             <ol id="widget-new-products-<?= $escaper->escapeHtmlAttr($suffix) ?>"
                 class="product-items product-items-names">
-                <?php foreach ($_products->getItems() as $_product) :?>
+                <?php foreach ($_products->getItems() as $_product):?>
                     <li class="product-item">
                         <strong class="product-item-name">
                             <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"

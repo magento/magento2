@@ -9,7 +9,7 @@
  * @var \Magento\Framework\Escaper $escaper
  */
 ?>
-<?php if ($block->isRssAllowed() && $block->getLink() && $block->isTopCategory()) :?>
+<?php if ($block->isRssAllowed() && $block->getLink() && $block->isTopCategory()):?>
     <a href="<?= $escaper->escapeUrl($block->getLink()) ?>"
        class="action link rss"><span><?= $escaper->escapeHtml($block->getLabel()) ?></span></a>
 <?php endif; ?>

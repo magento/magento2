@@ -14,7 +14,7 @@
  */
 ?>
 <?php $total = $block->getItems()->getSize() ?>
-<?php if ($total) :?>
+<?php if ($total):?>
     <a href="#" class="action print hidden-print" title="<?= $escaper->escapeHtmlAttr(__('Print This Page')) ?>">
         <span><?= $escaper->escapeHtml(__('Print This Page')) ?></span>
     </a>
@@ -30,8 +30,8 @@
                 <thead>
                 <tr>
                     <?php $index = 0 ?>
-                    <?php foreach ($block->getItems() as $item) :?>
-                        <?php if ($index++ == 0) :?>
+                    <?php foreach ($block->getItems() as $item):?>
+                        <?php if ($index++ == 0):?>
                             <th scope="row" class="cell label remove"><span><?= $escaper->escapeHtml(__('Remove Product')) ?></span></th>
                         <?php endif; ?>
                         <td class="cell remove product hidden-print">
@@ -49,8 +49,8 @@
                     <?php $index = 0; ?>
                     <?php $helper = $this->helper(Magento\Catalog\Helper\Output::class); ?>
                     <?php /** @var $item \Magento\Catalog\Model\Product */ ?>
-                    <?php foreach ($block->getItems() as $item) :?>
-                        <?php if ($index++ == 0) :?>
+                    <?php foreach ($block->getItems() as $item):?>
+                        <?php if ($index++ == 0):?>
                             <th scope="row" class="cell label product">
                                 <span><?= $escaper->escapeHtml(__('Product')) ?></span>
                             </th>
@@ -71,7 +71,7 @@
                             <?= /* @noEscape */ $block->getProductPrice($item, '-compare-list-top') ?>
                             <div class="product-item-actions hidden-print">
                                 <div class="actions-primary">
-                                    <?php if ($item->isSaleable()) :?>
+                                    <?php if ($item->isSaleable()):?>
                                         <form data-role="tocart-form"
                                               action="<?= $escaper->escapeUrl($this->helper(Magento\Catalog\Helper\Product\Compare::class)->getAddToCartUrl($item)) ?>"
                                               method="post">
@@ -80,15 +80,15 @@
                                                 <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
                                             </button>
                                         </form>
-                                    <?php else :?>
-                                        <?php if ($item->isAvailable()) :?>
+                                    <?php else:?>
+                                        <?php if ($item->isAvailable()):?>
                                             <div class="stock available"><span><?= $escaper->escapeHtml(__('In stock')) ?></span></div>
-                                        <?php else :?>
+                                        <?php else:?>
                                             <div class="stock unavailable"><span><?= $escaper->escapeHtml(__('Out of stock')) ?></span></div>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
-                                <?php if ($this->helper(Magento\Wishlist\Helper\Data::class)->isAllow()) :?>
+                                <?php if ($this->helper(Magento\Wishlist\Helper\Data::class)->isAllow()):?>
                                     <div class="secondary-addto-links actions-secondary" data-role="add-to-links">
                                         <a href="#"
                                            data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($item) ?>'
@@ -104,12 +104,12 @@
                 </tr>
                 </tbody>
                 <tbody>
-                <?php foreach ($block->getAttributes() as $attribute) :?>
+                <?php foreach ($block->getAttributes() as $attribute):?>
                     <?php $index = 0; ?>
-                    <?php if ($block->hasAttributeValueForProducts($attribute)) :?>
+                    <?php if ($block->hasAttributeValueForProducts($attribute)):?>
                          <tr>
-                            <?php foreach ($block->getItems() as $item) :?>
-                                <?php if ($index++ == 0) :?>
+                            <?php foreach ($block->getItems() as $item):?>
+                                <?php if ($index++ == 0):?>
                                     <th scope="row" class="cell label">
                                         <span class="attribute label">
                                             <?= $escaper->escapeHtml($attribute->getStoreLabel() ? $attribute->getStoreLabel() : __($attribute->getFrontendLabel())) ?>
@@ -131,9 +131,9 @@
                                                 <?php $block->getImage($item, 'product_small_image')->toHtml(); ?>
                                                 <?php break;
                                             default :?>
-                                                <?php if (is_string($block->getProductAttributeValue($item, $attribute))) :?>
+                                                <?php if (is_string($block->getProductAttributeValue($item, $attribute))):?>
                                                     <?= /* @noEscape */ $helper->productAttribute($item, $block->getProductAttributeValue($item, $attribute), $attribute->getAttributeCode()) ?>
-                                                <?php else : ?>
+                                                <?php else: ?>
                                                     <?=  $escaper->escapeHtml($helper->productAttribute($item, $block->getProductAttributeValue($item, $attribute), $attribute->getAttributeCode())) ?>
                                                 <?php endif; ?>
                                                 <?php break;
@@ -154,6 +154,6 @@
             }
         }
         </script>
-<?php else :?>
+<?php else:?>
     <div class="message info empty"><div><?= $escaper->escapeHtml(__('You have no items to compare.')) ?></div></div>
 <?php endif; ?>

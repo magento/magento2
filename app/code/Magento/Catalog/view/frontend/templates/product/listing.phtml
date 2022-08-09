@@ -20,9 +20,9 @@
 $_productCollection = $block->getLoadedProductCollection();
 $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
 ?>
-<?php if (!$_productCollection->count()) :?>
+<?php if (!$_productCollection->count()):?>
     <p class="message note"><?= $escaper->escapeHtml(__('We can\'t find products matching the selection.')) ?></p>
-<?php else :?>
+<?php else:?>
     <?= $block->getToolbarHtml() ?>
     <?= $block->getAdditionalHtml() ?>
     <?php
@@ -40,7 +40,7 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
     ?>
     <div class="products wrapper <?= /* @noEscape */ $viewMode ?>">
         <ol class="products list items">
-            <?php foreach ($_productCollection as $_product) :?>
+            <?php foreach ($_productCollection as $_product):?>
                 <li class="item product">
                     <div class="product">
                         <?php // Product Image ?>

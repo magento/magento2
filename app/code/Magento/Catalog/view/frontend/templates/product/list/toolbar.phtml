@@ -11,9 +11,9 @@
  * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
  */
 ?>
-<?php if ($block->getCollection()->getSize()) :?>
-    <?php $widget = $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonDecode($block->getWidgetOptionsJson());
-        $widgetOptions = $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($widget['productListToolbarForm']);
+<?php if ($block->getCollection()->getSize()):?>
+    <?php $widget = $block->helper(\Magento\Framework\Json\Helper\Data::class)->jsonDecode($block->getWidgetOptionsJson());
+        $widgetOptions = $block->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($widget['productListToolbarForm']);
     ?>
     <div class="toolbar toolbar-products" data-mage-init='{"productListToolbarForm":<?= /* @noEscape */ $widgetOptions ?>}'>
         <?php if ($block->getIsBottom()): ?>

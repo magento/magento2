@@ -18,7 +18,7 @@ $finalPriceModel = $block->getPriceType('final_price');
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 $schema = ($block->getZone() == 'item_view') ? true : false;
 ?>
-<?php if ($block->hasSpecialPrice()) :?>
+<?php if ($block->hasSpecialPrice()):?>
     <span class="special-price">
         <?= /* @noEscape */ $block->renderAmount($finalPriceModel->getAmount(), [
             'display_label'     => __('Special Price'),
@@ -37,7 +37,7 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
             'skip_adjustments'  => true
         ]); ?>
     </span>
-<?php else :?>
+<?php else:?>
     <?= /* @noEscape */ $block->renderAmount($finalPriceModel->getAmount(), [
         'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
         'price_type'        => 'finalPrice',
@@ -46,12 +46,12 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
     ]); ?>
 <?php endif; ?>
 
-<?php if ($block->showMinimalPrice()) :?>
-    <?php if ($block->getUseLinkForAsLowAs()) :?>
+<?php if ($block->showMinimalPrice()):?>
+    <?php if ($block->getUseLinkForAsLowAs()):?>
         <a href="<?= $block->escapeUrl($block->getSaleableItem()->getProductUrl()) ?>" class="minimal-price-link">
             <?= /* @noEscape */ $block->renderAmountMinimal() ?>
         </a>
-    <?php else :?>
+    <?php else:?>
         <span class="minimal-price-link">
             <?= /* @noEscape */ $block->renderAmountMinimal() ?>
         </span>
