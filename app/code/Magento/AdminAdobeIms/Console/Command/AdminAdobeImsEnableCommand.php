@@ -184,7 +184,7 @@ class AdminAdobeImsEnableCommand extends Command
             if ($clientId && $clientSecret && $organizationId && $isTwoFactorAuthEnabled) {
                 $enabled = $this->enableModule($clientId, $clientSecret, $organizationId, $isTwoFactorAuthEnabled);
                 if ($enabled) {
-                    $this->saveIMSAuthorizationRole();
+                    $this->saveImsAuthorizationRole();
                     $output->writeln(__('Admin Adobe IMS integration is enabled'));
                     return Cli::RETURN_SUCCESS;
                 }
@@ -203,19 +203,24 @@ class AdminAdobeImsEnableCommand extends Command
         }
     }
 
-    private function saveIMSAuthorizationRole(): bool
+    /**
+     * Save new Adobe IMS role
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function saveImsAuthorizationRole(): bool
     {
-        $roleCollection = $this->roleCollection->create()->addFieldToFilter('role_name', 'AdobeImsRole');
-
+        $roleCollection = $this->roleCollection->create()->addFieldToFilter('role_name', 'Adobe Ims');
         if (!$roleCollection->getSize()) {
-            $this->role->setRoleName('AdobeImsRole')
+            $this->role->setRoleName('Adobe Ims')
                 ->setUserType((string)UserContextInterface::USER_TYPE_ADMIN)
                 ->setUserId(0)
                 ->setRoleType(\Magento\Authorization\Model\Acl\Role\Group::ROLE_TYPE)
                 ->setParentId(0)
                 ->save();
-            return true;
         }
+
         return true;
     }
 
