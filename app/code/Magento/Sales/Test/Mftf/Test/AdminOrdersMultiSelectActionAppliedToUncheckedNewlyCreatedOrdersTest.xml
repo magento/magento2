@@ -58,7 +58,7 @@
         <actionGroup ref="SelectCashOnDeliveryPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
         <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRate"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabTextFrom selector="{{OrdersGridSection.orderID}}" stepKey="orderNumber"/>
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage1"/>
         <click selector="{{AdminOrdersGridSection.allCheckbox}}" stepKey="clickSelectAll"/>
         <openNewTab stepKey="openNewTab"/>
@@ -81,10 +81,10 @@
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutReview"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="guestPlaceOrder" />
-        <grabTextFrom selector="//div[contains(@class, 'checkout-success')]//p/span" stepKey="grabOrderNumber2"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber2"/>
         <switchToPreviousTab stepKey="switchToPreviousTab"/>
         <click selector="{{AdminOrdersGridSection.orderActions}}" stepKey="clickOnActionsDropdown"/>
-        <click selector="//div[contains(concat(' ',normalize-space(@class),' '),' row-gutter ')]//span[text()='Cancel']" stepKey="clickStatus"/>
+        <click selector="{{AdminOrdersGridSection.changeOrderStatus('Cancel')}}" stepKey="clickOnCancel"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersFilters1"/>
         <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
