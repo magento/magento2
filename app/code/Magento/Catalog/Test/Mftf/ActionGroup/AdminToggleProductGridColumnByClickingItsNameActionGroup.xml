@@ -8,14 +8,13 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="CheckAdminProductGridColumnNameActionGroup">
+    <actionGroup name="AdminToggleProductGridColumnByClickingItsNameActionGroup">
         <annotations>
-            <description>Checks Admin Product Grid 'Columns' name.</description>
+            <description>Click on 'Columns' name from Columns dropdown menu in Admin Product Grid.</description>
         </annotations>
         <arguments>
             <argument name="optionName" type="string" defaultValue="Name"/>
         </arguments>
-        <click selector="{{AdminProductGridFilterSection.viewColumnOptionName(optionName)}}" stepKey="checkColumn"/>
-
+        <click selector="{{AdminProductGridFilterSection.viewColumnOptionName(optionName)}}" stepKey="clickOnTheColumnName"/>
     </actionGroup>
 </actionGroups>
