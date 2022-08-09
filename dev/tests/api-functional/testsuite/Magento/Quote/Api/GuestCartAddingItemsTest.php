@@ -188,7 +188,7 @@ class GuestCartAddingItemsTest extends WebapiAbstract
             ]
         ];
 
-        // Delete the item for the cart
+        // Update the item for the cart
         $serviceInfoForUpdateProduct = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $quoteId . '/items/' . $item['item_id'],
