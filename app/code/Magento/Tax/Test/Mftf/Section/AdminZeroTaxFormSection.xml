@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminZeroTaxFormSection">
-        <element name="systemValueCheckbox" type="button" selector="#tax_cart_display_zero_tax_inherit"/>
+        <element name="systemValueCheckbox" type="checkbox" selector="#tax_cart_display_zero_tax_inherit"/>
         <element name="optionvalue" type="select" selector="select#tax_cart_display_zero_tax"/>
         <element name="saveConfig" type="button" selector="#save" timeout="30"/>
         <element name="label" type="input" selector="#row_tax_cart_display_zero_tax"/>
