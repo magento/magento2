@@ -25,7 +25,7 @@ type Customer {
         filter: CustomerOrdersFilterInput @doc(description: "Defines the filter to use for searching customer orders."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. The default value is 20."),
-        scope: ScopeTypeEnum @doc(description: "Specifies the scope of the orders (global, website, store)"),
+        scope: ScopeTypeEnum @doc(description: "Specifies the scope to search for customer orders. The Store request header identifies the customer's store view code. The default value of STORE limits the search to the value specified in the header. Specify WEBSITE to expand the search to include all customer orders assigned to the website that defined in the header, or specify GLOBAL to include all customer orders across all websites and stores."),
     ): CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CustomerOrders") @cache(cacheable: false)
 }
 
