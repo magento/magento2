@@ -19,7 +19,7 @@ class Header extends \Magento\Framework\View\Element\Template
     /**
      * @var Escaper
      */
-    protected $escaper;
+    private $escaper;
 
     /**
      * Constructor
