@@ -31,6 +31,15 @@ define([
         initialize: function () {
             this._super();
             this.compareProducts = customerData.get('compare-products');
+            if (window.checkout &&
+                window.checkout.websiteId &&
+                window.checkout.websiteId !== this.compareProducts().websiteId
+                // TODO this code is only needed if websites share same domain (store code in url)
+            ) {
+                //set count to 0 to prevent "compared products" blocks and count to show with wrong count and items
+                this.compareProducts().count = 0;
+                customerData.reload(['compare-products'], false);
+            }
             initSidebar();
         }
     });
