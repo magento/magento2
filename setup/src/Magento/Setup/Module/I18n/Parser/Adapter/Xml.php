@@ -30,7 +30,7 @@ class Xml extends AbstractAdapter
 
             if ((string)$attributes['translate'] === 'true' || (string)$attributes['translatable'] === 'true') {
                 $this->_addPhrase((string)$element);
-            } elseif ($key ==='title') {
+            } elseif ($key === 'title') {
                 $this->_addPhrase((string)$element->title);
             } else {
                 $this->parseTranslatableNodes($attributes, $element);
