@@ -39,11 +39,6 @@ use PHPUnit\Framework\TestCase;
 class AfterImportDataObserverTest extends TestCase
 {
     /**
-     * @var string
-     */
-    private $categoryId = 10;
-
-    /**
      * @var UrlPersistInterface|MockObject
      */
     private $urlPersist;

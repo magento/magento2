@@ -151,6 +151,7 @@ class AfterImportDataObserver implements ObserverInterface
         'url_path',
         'name',
         'visibility',
+        'save_rewrites_history',
     ];
 
     /**
