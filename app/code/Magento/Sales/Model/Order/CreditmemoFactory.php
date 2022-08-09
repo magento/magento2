@@ -34,6 +34,7 @@ class CreditmemoFactory
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
      * @deprecated 101.0.0
+     * @see \Magento\Framework\Unserialize\Unserialize
      */
     protected $unserialize;
 
@@ -233,7 +234,7 @@ class CreditmemoFactory
      * @param int|float $parentQty
      * @return int|float
      */
-    private function calculateProductOptions(Item $orderItem, int|float $parentQty): int|float
+    private function calculateProductOptions(Item $orderItem, $parentQty)
     {
         $qty = $parentQty;
         $productOptions = $orderItem->getProductOptions();
