@@ -51,24 +51,28 @@ class AfterImportDataObserver implements ObserverInterface
     /**
      * @var StoreViewService
      * @deprecated No longer used.
+     * @see nothing
      */
     protected $storeViewService;
 
     /**
      * @var Product
      * @deprecated No longer used.
+     * @see nothing
      */
     protected $product;
 
     /**
      * @var array
      * @deprecated No longer used.
+     * @see nothing
      */
     protected $productsWithStores;
 
     /**
      * @var array
      * @deprecated No longer used.
+     * @see nothing
      */
     protected $products = [];
 
@@ -286,7 +290,7 @@ class AfterImportDataObserver implements ObserverInterface
      * Create product model from imported data for URL rewrite purposes.
      *
      * @param array $rowData
-     * @param Product[] &$products
+     * @param Product[] $products
      * @return void
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -370,7 +374,7 @@ class AfterImportDataObserver implements ObserverInterface
      *
      * @param Product $product
      * @param string $storeId
-     * @param Product[] &$products
+     * @param Product[] $products
      * @return void
      */
     private function addProductToImport(Product $product, string $storeId, array &$products) : void
@@ -385,7 +389,7 @@ class AfterImportDataObserver implements ObserverInterface
      * Populate global product
      *
      * @param Product $product
-     * @param Product[] &$products
+     * @param Product[] $products
      * @return void
      */
     private function populateGlobalProduct($product, array &$products) : void
