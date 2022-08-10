@@ -7,8 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Api;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Quote\Model\Quote;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -27,7 +31,8 @@ class GuestCartAddingItemsTest extends WebapiAbstract
 
     protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->productResource = $this->objectManager->get(ProductResource::class);
     }
 
     /**
@@ -39,6 +44,19 @@ class GuestCartAddingItemsTest extends WebapiAbstract
     public function testAddtoCartWithCustomOptionsForCreatingQuoteFromEmptyCart()
     {
         $this->_markTestAsRestOnly();
+
+        $productId = $this->productResource->getIdBySku('simple_with_custom_options');
+        $product = $this->objectManager->create(Product::class)->load($productId);
+        $customOptionCollection = $this->objectManager->get(Option::class)
+            ->getProductOptionCollection($product);
+        $customOptions = [];
+        foreach ($customOptionCollection as $option) {
+            $customOptions [] = [
+                'option_id' => $option->getId(),
+                'option_value' => $option->getType() !== 'field' ? 1 : 'test'
+            ];
+        }
+
         // Creating empty cart
         $serviceInfoForCreatingEmptyCart = [
             'rest' => [
@@ -55,24 +73,6 @@ class GuestCartAddingItemsTest extends WebapiAbstract
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ]
         ];
-        $requestData = [
-            'cartItem' => [
-                'quote_id' => $quoteId,
-                'sku' => 'simple_with_custom_options',
-                'qty' => 1,
-                'product_option' => [
-                    'extension_attributes' => [
-                        'custom_options' => [
-                            ['option_id' => 1, 'option_value' => 1],
-                            ['option_id' => 2, 'option_value' => 1],
-                            ['option_id' => 3, 'option_value' => 'test']
-                        ]
-                    ]
-                ]
-            ]
-        ];
-        $item = $this->_webApiCall($serviceInfoForAddingProduct, $requestData);
-        $this->assertNotEmpty($item);
 
         $requestData = [
             'cartItem' => [
@@ -81,11 +81,27 @@ class GuestCartAddingItemsTest extends WebapiAbstract
                 'qty' => 1,
                 'product_option' => [
                     'extension_attributes' => [
-                        'custom_options' => [
-                            ['option_id' => 1, 'option_value' => 2],
-                            ['option_id' => 2, 'option_value' => 2],
-                            ['option_id' => 3, 'option_value' => 'test2']
-                        ]
+                        'custom_options' => $customOptions
+                    ]
+                ]
+            ]
+        ];
+        $item = $this->_webApiCall($serviceInfoForAddingProduct, $requestData);
+        $this->assertNotEmpty($item);
+        foreach ($customOptionCollection as $option) {
+            $customOptions [] = [
+                'option_id' => $option->getId(),
+                'option_value' => $option->getType() != 'field' ? 2 : 'test2'
+            ];
+        }
+        $requestData = [
+            'cartItem' => [
+                'quote_id' => $quoteId,
+                'sku' => 'simple_with_custom_options',
+                'qty' => 1,
+                'product_option' => [
+                    'extension_attributes' => [
+                        'custom_options' => $customOptions
                     ]
                 ]
             ]
