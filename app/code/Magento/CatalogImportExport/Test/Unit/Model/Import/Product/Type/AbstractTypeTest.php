@@ -273,7 +273,7 @@ class AbstractTypeTest extends TestCase
     /**
      * Because AbstractType has static member variables,  we must clean them in between tests.
      * Luckily they are publicly accessible.
-     * 
+     *
      * @return void
      */
     protected function tearDown(): void
