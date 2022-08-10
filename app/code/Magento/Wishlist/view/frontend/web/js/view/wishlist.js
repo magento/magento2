@@ -5,8 +5,9 @@
 
 define([
     'uiComponent',
-    'Magento_Customer/js/customer-data'
-], function (Component, customerData) {
+    'Magento_Customer/js/customer-data',
+    'mage/translate'
+], function (Component, customerData, $t) {
     'use strict';
 
     return Component.extend({
@@ -15,6 +16,21 @@ define([
             this._super();
 
             this.wishlist = customerData.get('wishlist');
+        },
+
+        /**
+         * Get counter label
+         *
+         * @returns {String}
+         */
+        getCounterLabel: function () {
+            var counter = this.wishlist().counter;
+
+            if (counter === 1) {
+                return counter + ' ' + $t('item');
+            }
+
+            return $t('%1 items').replace('%1', counter);
         }
     });
 });

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\CustomerData;
@@ -30,10 +29,15 @@ class CompareProductsTest extends TestCase
     /**
      * @var Compare|MockObject
      */
-    private $helperMock;
+    private $objectManagerHelper;
 
     /**
      * @var Url|MockObject
+     */
+    private $helperMock;
+
+    /**
+     * @var Output|MockObject
      */
     private $productUrlMock;
 
@@ -41,11 +45,6 @@ class CompareProductsTest extends TestCase
      * @var Output|MockObject
      */
     private $outputHelperMock;
-
-    /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    private $objectManagerHelper;
 
     /**
      * @var ScopeConfigInterface|MockObject
@@ -115,7 +114,7 @@ class CompareProductsTest extends TestCase
      * @param array $dataSet
      * @return array
      */
-    private function prepareProductsWithCorrespondingMocks(array $dataSet) : array
+    private function prepareProductsWithCorrespondingMocks(array $dataSet):array
     {
         $items = [];
         $urlMap = [];
@@ -171,7 +170,10 @@ class CompareProductsTest extends TestCase
         return $product;
     }
 
-    public function testGetSectionData()
+    /**
+     * @return void
+     */
+    public function testGetSectionData():void
     {
         $dataSet = [
             ['id' => 1, 'name' => 'product#1'],
@@ -200,7 +202,6 @@ class CompareProductsTest extends TestCase
         $this->assertEquals(
             [
                 'count' => $count,
-                'countCaption' =>  __('%1 items', $count),
                 'listUrl' => 'http://list.url',
                 'items' => [
                     [
@@ -230,7 +231,10 @@ class CompareProductsTest extends TestCase
         );
     }
 
-    public function testGetSectionDataNoItems()
+    /**
+     * @return void
+     */
+    public function testGetSectionDataNoItems():void
     {
         $count = 0;
 
@@ -248,7 +252,6 @@ class CompareProductsTest extends TestCase
         $this->assertEquals(
             [
                 'count' => $count,
-                'countCaption' =>  __('%1 items', $count),
                 'listUrl' => 'http://list.url',
                 'items' => []
             ],
@@ -256,7 +259,10 @@ class CompareProductsTest extends TestCase
         );
     }
 
-    public function testGetSectionDataSingleItem()
+    /**
+     * @return void
+     */
+    public function testGetSectionDataSingleItem():void
     {
         $count = 1;
 
@@ -286,7 +292,6 @@ class CompareProductsTest extends TestCase
         $this->assertEquals(
             [
                 'count' => 1,
-                'countCaption' =>  __('1 item'),
                 'listUrl' => 'http://list.url',
                 'items' => [
                     [

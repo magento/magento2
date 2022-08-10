@@ -103,7 +103,7 @@ class WishlistTest extends TestCase
         $itemRemoveParams = ['remove_params'];
 
         $result = [
-            'counter' => __('1 item'),
+            'counter' => 1,
             'items' => [
                 [
                     'image' => [
@@ -289,7 +289,7 @@ class WishlistTest extends TestCase
         $items = [$itemMock, $itemMock];
 
         $result = [
-            'counter' =>  __('%1 items', count($items)),
+            'counter' =>  2,
             'items' => [
                 [
                     'image' => [
@@ -466,7 +466,7 @@ class WishlistTest extends TestCase
         $items = [];
 
         $result = [
-            'counter' =>  null,
+            'counter' =>  0,
             'items' => [],
         ];
 

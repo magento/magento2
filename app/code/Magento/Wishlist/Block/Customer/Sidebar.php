@@ -4,15 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Wishlist sidebar block
- */
 namespace Magento\Wishlist\Block\Customer;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Render;
 
 /**
+ * Wishlist Sidebar block
+ *
  * @api
  * @since 100.0.2
  */
