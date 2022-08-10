@@ -17,9 +17,6 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MC-25687"/>
             <group value="product"/>
-            <skip>
-                <issueId value="MQE-3515">Skipped</issueId>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

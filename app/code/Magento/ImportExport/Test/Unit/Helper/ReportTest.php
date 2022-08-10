@@ -27,6 +27,7 @@ use Magento\ImportExport\Model\History;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Config;
 use Magento\ImportExport\Model\Import\Entity\Factory;
+use Magento\ImportExport\Model\Source\Upload;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -202,6 +203,7 @@ class ReportTest extends TestCase
         $indexerRegistry = $this->createMock(IndexerRegistry::class);
         $importHistoryModel = $this->createMock(History::class);
         $localeDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
+        $upload = $this->createMock(Upload::class);
         $import = new Import(
             $logger,
             $filesystem,
@@ -216,7 +218,11 @@ class ReportTest extends TestCase
             $behaviorFactory,
             $indexerRegistry,
             $importHistoryModel,
-            $localeDate
+            $localeDate,
+            [],
+            null,
+            null,
+            $upload
         );
         $import->setData('entity', 'catalog_product');
         $message = $this->report->getSummaryStats($import);
