@@ -12,6 +12,7 @@ use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Service\ImsCommandOptionService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdminAdobeIms\Service\UpdateTokensService;
+use Magento\Authorization\Model\Acl\Role\Group;
 use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory;
 use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\UserContextInterface;
@@ -206,7 +207,7 @@ class AdminAdobeImsEnableCommand extends Command
     /**
      * Save new Adobe IMS role
      *
-     * @return void
+     * @return bool
      * @throws \Exception
      */
     private function saveImsAuthorizationRole(): bool
@@ -216,7 +217,7 @@ class AdminAdobeImsEnableCommand extends Command
             $this->role->setRoleName('Adobe Ims')
                 ->setUserType((string)UserContextInterface::USER_TYPE_ADMIN)
                 ->setUserId(0)
-                ->setRoleType(\Magento\Authorization\Model\Acl\Role\Group::ROLE_TYPE)
+                ->setRoleType(Group::ROLE_TYPE)
                 ->setParentId(0)
                 ->save();
         }
