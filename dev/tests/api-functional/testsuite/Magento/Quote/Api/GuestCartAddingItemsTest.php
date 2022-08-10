@@ -28,6 +28,11 @@ class GuestCartAddingItemsTest extends WebapiAbstract
      * @var \Magento\TestFramework\ObjectManager
      */
     protected $objectManager;
+    
+    /**
+     * @var ProductResource|mixed
+     */
+    private mixed $productResource;
 
     protected function setUp(): void
     {
