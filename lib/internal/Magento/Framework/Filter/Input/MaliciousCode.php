@@ -61,7 +61,7 @@ class MaliciousCode implements \Zend_Filter_Interface
     {
         $replaced = 0;
         do {
-            $value = preg_replace($this->_expressions, '', $value, -1, $replaced);
+            $value = preg_replace($this->_expressions, '', $value ?? '', -1, $replaced);
         } while ($replaced !== 0);
 
         return $this->purifier->purify($value);

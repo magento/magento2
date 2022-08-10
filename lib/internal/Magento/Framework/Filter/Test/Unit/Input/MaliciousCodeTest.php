@@ -146,6 +146,7 @@ class MaliciousCodeTest extends TestCase
                 '<?=$test?>',
                 '',
             ],
+            'Null Value' => [null, ''],
         ];
     }
 
