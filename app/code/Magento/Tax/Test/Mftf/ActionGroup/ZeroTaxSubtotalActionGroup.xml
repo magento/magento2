@@ -18,7 +18,6 @@
         <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="navigateToAdminStoreTaxConfiguration"/>
         <scrollTo selector="{{AdminZeroTaxFormSection.label}}" stepKey="scrollToDropdownSelection" />
         <selectOption selector="{{AdminZeroTaxFormSection.optionvalue}}" userInput="{{optionValue}}" stepKey="setSelectorValue"/>
-        <waitForElementVisible selector="{{AdminZeroTaxFormSection.label}}" stepKey="waitForElement"/>
         <click selector="{{AdminZeroTaxFormSection.saveConfig}}" stepKey="clickSave"/>
     </actionGroup>
 </actionGroups>
