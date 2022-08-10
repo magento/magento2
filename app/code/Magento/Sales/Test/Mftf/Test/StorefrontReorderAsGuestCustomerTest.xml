@@ -17,10 +17,12 @@
             <group value="sales"/>
         </annotations>
         <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
-            </createData> 
+            </createData>
             <createData entity="GuestCart" stepKey="createGuestCart"/>
                 <createData entity="SimpleCartItem" stepKey="addCartItem">
                 <requiredEntity createDataKey="createGuestCart"/>
@@ -35,6 +37,8 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
+            <!-- Disable shipping method for customer with default address -->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="LogoutAsAdmin"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
