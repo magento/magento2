@@ -84,7 +84,7 @@
         <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
 
         <!-- Check Ship to Multiple Address Page is opened-->
-        <wait time="10" stepKey="10"/>
+        <wait time="10" stepKey="waitForAddressPage"/>
         <seeInCurrentUrl url="{{MultishippingCheckoutAddressesPage.url}}" stepKey="seeShiptoMultipleAddressesPageIsOpened"/>
 
         <!-- Assert Simple product has address in Send To section-->
@@ -94,7 +94,7 @@
 
         <!--Virtual product has a message in Send To section : "A shipping selection is not applicable.-->
         <grabTextFrom selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.shippingnotapplicable($$createVirtualProduct.name$$)}}" stepKey="grabshippingtext"/>
-        <assertEquals message="Virtual product has a message in Send To section : 'A shipping selection is not applicable" stepKey="ssertEquals1">
+        <assertEquals message="Virtual product has a message in Send To section : 'A shipping selection is not applicable" stepKey="assertmessage">
             <expectedResult type="string">A shipping selection is not applicable.</expectedResult>
             <actualResult type="string">$grabshippingtext</actualResult>
         </assertEquals>
@@ -104,12 +104,12 @@
 
 
         <!-- See Shipping Method is opened -->
-        <wait time="10" stepKey="20"/>
+        <wait time="10" stepKey="waitForCheckoutShippingPageUrl"/>
         <seeInCurrentUrl url="{{MultishippingCheckoutShippingPage.url}}" stepKey="seeSelectShippingMethodPageIsOpened"/>
 
 
         <!-- Halt test execution for 10 seconds before continuing. -->
-        <wait time="10" stepKey="29"/>
+        <wait time="10" stepKey="waitForElement"/>
         <!-- See Shipping Method available ONLY for Simple product-->
         <seeElement selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.shippingmethods($$createSimpleProduct.name$$)}}" stepKey="ShippingMethodForSimpleProduct"/>
 
@@ -121,7 +121,7 @@
         <waitForPageLoad stepKey="waitForCheckoutShippingToolbarPageLoad"/>
 
         <!-- See Billing Information Page is opened-->
-        <wait time="10" stepKey="30"/>
+        <wait time="10" stepKey="waitForUrl"/>
         <seeInCurrentUrl url="{{MultishippingCheckoutBillingPage.url}}" stepKey="seeBillingPageIsOpened"/>
 
         <!-- Check Page contains customer's billing address-->
