@@ -4246,6 +4246,7 @@ return [
     ['Zend_Uri', 'Laminas\Uri\Uri'],
     ['Zend_Mime', 'Magento\Framework\HTTP\Mime'],
     ['Zend_Mail'],
+    ['Zend_Json'],
     ['Magento\Framework\Encryption\Crypt', 'Magento\Framework\Encryption\EncryptionAdapterInterface'],
     ['Magento\Wishlist\Setup\Patch\Schema\AddProductIdConstraint'],
     ['Magento\Elasticsearch\Block\Adminhtml\System\Config\TestConnection'],
