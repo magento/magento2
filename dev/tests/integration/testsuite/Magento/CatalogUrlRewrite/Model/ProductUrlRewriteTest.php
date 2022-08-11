@@ -28,6 +28,7 @@ use Psr\Log\LoggerInterface;
  * Class for product url rewrites tests
  *
  * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductUrlRewriteTest extends AbstractUrlRewriteTest
 {
@@ -343,10 +344,8 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
             $productUrlRewriteCollection = $this->getEntityRewriteCollection($product->getId());
             $rewriteExists = false;
             foreach ($productUrlRewriteCollection as $item) {
-                if (
-                    $item->getTargetPath() === $datum['target_path'] . $this->suffix &&
-                    $item->getRequestPath() === $datum['request_path'] . $this->suffix
-                ) {
+                if ($item->getTargetPath() === $datum['target_path'] . $this->suffix &&
+                    $item->getRequestPath() === $datum['request_path'] . $this->suffix) {
                     $rewriteExists = true;
                     break;
                 }
