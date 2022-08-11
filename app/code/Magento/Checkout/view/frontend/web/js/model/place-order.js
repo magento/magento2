@@ -18,8 +18,7 @@ define(
         'use strict';
 
         return function (serviceUrl, payload, messageContainer) {
-            var headers = {};
-            var redirectURL = '';
+            var headers = {}, redirectURL = '';
 
             fullScreenLoader.startLoader();
             _.each(hooks.requestModifiers, function (modifier) {
