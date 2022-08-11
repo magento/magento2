@@ -17,7 +17,6 @@
             <testCaseId value="MC-28376"/>
             <group value="analytics"/>
             <group value="mtf_migrated"/>
-            <group value="pr_exclude"/>
         </annotations>
 
         <before>
