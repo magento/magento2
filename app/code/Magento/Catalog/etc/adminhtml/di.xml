@@ -290,4 +290,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider">
+        <plugin name="add_show_total_records_to_catalog_product_data" type="Magento\Catalog\Plugin\Ui\DataProvider\Product\ProductDataProvider"/>
+    </type>
 </config>

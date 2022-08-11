@@ -17,7 +17,7 @@ class ProductCollection extends \Magento\Catalog\Model\ResourceModel\Product\Col
     /**
      * Limit to display/hide total number of products in grid
      */
-    private const RECORDS_LIMIT = 20000;
+    public const RECORDS_LIMIT = 20000;
 
     /**
      * Disables using of price index for grid rendering
@@ -38,31 +38,35 @@ class ProductCollection extends \Magento\Catalog\Model\ResourceModel\Product\Col
      */
     public function getSize()
     {
-        if ($this->_scopeConfig->getValue('admin/grid/show_approximate_total_number_of_products')) {
-            $sql = $this->getSelectCountSql();
-            $estimatedCount = $this->analyzeCount($sql);
+        if ($this->_totalRecords === null) {
+            if ($this->_scopeConfig->getValue('admin/grid/calculate_approximate_total_number_of_products')) {
+                $sql = $this->getSelectCountSql();
+                $estimatedCount = $this->analyzeCount($sql);
 
-            if ($estimatedCount < self::RECORDS_LIMIT) {
-                $columns = $sql->getPart(Select::COLUMNS);
-                $sql->reset(Select::COLUMNS);
+                if ($estimatedCount > self::RECORDS_LIMIT) {
+                    $columns = $sql->getPart(Select::COLUMNS);
+                    $sql->reset(Select::COLUMNS);
 
-                foreach ($columns as &$column) {
-                    if ($column[1] instanceof \Zend_Db_Expr && $column[1] == "COUNT(DISTINCT e.entity_id)") {
-                        $column[1] = new \Zend_Db_Expr('DISTINCT e.entity_id');
+                    foreach ($columns as &$column) {
+                        if ($column[1] instanceof \Zend_Db_Expr && $column[1] == "COUNT(DISTINCT e.entity_id)") {
+                            $column[1] = new \Zend_Db_Expr('e.entity_id');
+                        }
                     }
+                    $sql->setPart(Select::COLUMNS, $columns);
+                    $sql->limit(self::RECORDS_LIMIT);
+                    $query = new \Zend_Db_Expr('SELECT COUNT(*) FROM (' . $sql->assemble() . ') AS c');
+                    $this->_totalRecords = (int)$this->getConnection()->query($query)->fetchColumn();
+                    if ($this->_totalRecords === self::RECORDS_LIMIT) {
+                        $this->_totalRecords = $estimatedCount;
+                    }
+                } else {
+                    return parent::getSize();
                 }
-                $sql->setPart(Select::COLUMNS, $columns);
-                $sql->limit(self::RECORDS_LIMIT);
-
-                $query = new \Zend_Db_Expr('SELECT COUNT(*) FROM (' . $sql->assemble() . ') AS c');
-
-                return $this->getConnection()->query($query)->fetchColumn();
-            } else {
-                return self::RECORDS_LIMIT;
+                return $this->_totalRecords;
             }
+            return parent::getSize();
         }
-
-        return parent::getSize();
+        return $this->_totalRecords;
     }
 
     /**

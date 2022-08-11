@@ -78,7 +78,8 @@ define([
         clearData: function () {
             this.setData({
                 items: [],
-                totalRecords: 0
+                totalRecords: 0,
+                showTotalRecords: true,
             });
 
             return this;

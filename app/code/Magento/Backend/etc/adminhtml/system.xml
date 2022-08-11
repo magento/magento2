@@ -482,11 +482,11 @@
             </group>
             <group id="grid" translate="label" type="text" sortOrder="45" showInDefault="1">
                 <label>Admin Grids</label>
-                <field id="show_approximate_total_number_of_products" translate="label comment"
+                <field id="calculate_approximate_total_number_of_products" translate="label comment"
                        type="select" sortOrder="1" showInDefault="1" canRestore="1">
-                    <label>Show approximate total number of products</label>
+                    <label>Calculate approximate total number of products</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Show approximate total number of products in products grid header.</comment>
+                    <comment>Calculate approximate total number of products in products grid.</comment>
                 </field>
             </group>
         </section>

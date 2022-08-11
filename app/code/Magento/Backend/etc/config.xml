@@ -33,7 +33,7 @@
         </system>
         <admin>
             <grid>
-                <show_approximate_total_number_of_products>1</show_approximate_total_number_of_products>
+                <calculate_approximate_total_number_of_products>1</calculate_approximate_total_number_of_products>
             </grid>
         </admin>
         <general>

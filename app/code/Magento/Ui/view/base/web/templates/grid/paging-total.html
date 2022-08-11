@@ -5,7 +5,9 @@
  */
 -->
 <div class="admin__control-support-text">
+    <!-- ko if: showTotalRecords -->
     <text args="totalRecords"></text> <!-- ko i18n: 'records found' --><!-- /ko -->
+    <!-- /ko -->
     <!-- ko if: totalSelected -->
     (<text args="totalSelected"></text> <!-- ko i18n: 'selected' --><!-- /ko -->)
     <!-- /ko -->
