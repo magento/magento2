@@ -82,7 +82,7 @@ class CreditMemoGenerateIfConfigurableProductWithDecimalQuantityTest extends Web
                     'orderId' => $order->getEntityId()
                 ]
             );
-            $this->assertGreaterThan(0 , $creditMemoResult);
+            $this->assertGreaterThan(0 , (int) $creditMemoResult);
         } catch (NoSuchEntityException $e) {
             $this->fail('Failed asserting that Creditmemo was not created');
         }
