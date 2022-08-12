@@ -388,10 +388,13 @@ class QuoteManagement implements CartManagementInterface
     public function placeOrder($cartId, PaymentInterface $paymentMethod = null)
     {
         $quote = $this->quoteRepository->getActive($cartId);
-        $quote->setIsActive(false);
-        $this->quoteRepository->save($quote);
         $customer = $quote->getCustomer();
         $customerId = $customer ? $customer->getId() : null;
+
+        if (!$quote->isEmpty()) {
+            $quote->setIsActive(false);
+            $this->quoteRepository->save($quote);
+        }
 
         if ($paymentMethod) {
             $paymentMethod->setChecks(
@@ -613,8 +616,10 @@ class QuoteManagement implements CartManagementInterface
             );
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
-            $quote->setIsActive(1);
-            $this->quoteRepository->save($quote);
+            if (!$quote->isEmpty()) {
+                $quote->setIsActive(1);
+                $this->quoteRepository->save($quote);
+            }
             $this->rollbackAddresses($quote, $order, $e);
             throw $e;
         }
