@@ -28,7 +28,7 @@ use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\ConfigurableProduct\Test\Fixture\AddProductToCart as AddConfigurableProductToCartFixture;
 
 /**
- * Class CreditMemoGenerateIfConfigurableProductWithDecimalQuantityTest
+ * API test for credit memo generation with configurable product decimal quantity.
  */
 class CreditMemoGenerateIfConfigurableProductWithDecimalQuantityTest extends WebapiAbstract
 {
@@ -82,7 +82,7 @@ class CreditMemoGenerateIfConfigurableProductWithDecimalQuantityTest extends Web
                     'orderId' => $order->getEntityId()
                 ]
             );
-            $this->assertGreaterThan(0 , (int) $creditMemoResult);
+            $this->assertGreaterThan(0, (int) $creditMemoResult);
         } catch (NoSuchEntityException $e) {
             $this->fail('Failed asserting that Creditmemo was not created');
         }
