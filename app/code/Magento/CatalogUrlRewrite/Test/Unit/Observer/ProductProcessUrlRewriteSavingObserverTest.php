@@ -302,7 +302,9 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
      * @param array $origData
      * @param array $newData
      * @param int $expectedExecutionCount
-     * @param int $expectedStoresToAdd
+     * @param array $expectedStoresToAdd
+     * @param array $doesEntityHaveOverriddenVisibilityForStore
+     * @param array $expectedStoresToRemove
      * @throws \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
      * @dataProvider urlKeyDataProvider
      */
@@ -312,7 +314,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         int $expectedExecutionCount,
         array $expectedStoresToAdd = [],
         array $doesEntityHaveOverriddenVisibilityForStore = [],
-        array $expectedStoresToRemove = [],
+        array $expectedStoresToRemove = []
     ) {
         $this->product->setData($origData);
         $this->product->setOrigData();
