@@ -69,7 +69,7 @@ $regionProvider = $block->getRegionProvider();
                     </label>
                 </div>
                 <input type="text"
-                       name="street[]"
+                       name="street[0]"
                        value="<?= $escaper->escapeHtmlAttr($block->getStreetLine(1)) ?>"
                        title="<?= /* @noEscape */ $_street ?>"
                        id="street_1"
@@ -81,7 +81,7 @@ $regionProvider = $block->getRegionProvider();
                                 <span><?= $escaper->escapeHtml(__('Street Address: Line %1', $_i + 1)) ?></span>
                             </label>
                             <div class="control">
-                                <input type="text" name="street[]"
+                                <input type="text" name="street[<?= /* @noEscape */ $_i ?>]"
                                        value="<?= $escaper->escapeHtmlAttr($block->getStreetLine($_i + 1)) ?>"
                                        title="<?= $escaper->escapeHtmlAttr(__('Street Address %1', $_i + 1)) ?>"
                                        id="street_<?= /* @noEscape */ $_i + 1 ?>"

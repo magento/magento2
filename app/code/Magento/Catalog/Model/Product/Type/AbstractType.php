@@ -591,7 +591,10 @@ abstract class AbstractType
 
                     if ($product->getSkipCheckRequiredOption() !== true) {
                         $group->validateUserValue($optionsFromRequest);
-                    } elseif ($optionsFromRequest !== null && isset($optionsFromRequest[$option->getId()])) {
+                    } elseif ($optionsFromRequest !== null
+                        && isset($optionsFromRequest[$option->getId()])
+                        && $optionsFromRequest[$option->getId()] !== ''
+                    ) {
                         if (is_array($optionsFromRequest[$option->getId()])) {
                             $group->validateUserValue($optionsFromRequest);
                         } else {

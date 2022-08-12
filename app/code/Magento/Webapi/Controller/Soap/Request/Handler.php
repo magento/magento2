@@ -276,7 +276,7 @@ class Handler
             $result = $this->_dataObjectConverter
                 ->convertKeysToCamelCase($this->_dataObjectProcessor->buildOutputDataArray($data, $dataType));
         } elseif (is_array($data)) {
-            $dataType = substr($dataType, 0, -2);
+            $dataType = substr((string)$dataType, 0, -2);
             foreach ($data as $key => $value) {
                 if ($value instanceof $dataType
                     // the following two options are supported for backward compatibility
