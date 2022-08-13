@@ -16,6 +16,7 @@
             <argument name="selector"/>
             <argument name="value" type="string"/>
         </arguments>
+
         <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector="{{AdminGridFilterControls.clearAll}}" visible="true" stepKey="clearTheFiltersIfPresent"/>
         <waitForPageLoad stepKey="waitForPageLoad" time="5"/>
         <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters1"/>
