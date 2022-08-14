@@ -1327,4 +1327,14 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     {
         return (bool)$this->_scopeConfig->getValue('admin/grid/calculate_approximate_total_number_of_products');
     }
+
+    /**
+     * Get records threshold for approximate total number of products calculation.
+     *
+     * @return int
+     */
+    public function getRecordsThreshold(): int
+    {
+        return $this->_scopeConfig->getValue('admin/grid/records_threshold');
+    }
 }

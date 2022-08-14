@@ -73,9 +73,7 @@ $numColumns = count($block->getColumns());
                 <div class="admin__control-support-text">
                     <?php if (!$block->calculateApproximateProductsTotalNumber()
                         || !$block->getCollection() instanceof ProductCollection
-                        || ($block->calculateApproximateProductsTotalNumber()
-                            && $block->getCollection() instanceof ProductCollection
-                            && $countRecords < ProductCollection::RECORDS_LIMIT)): ?>
+                        || $countRecords < $block->getRecordsThreshold()): ?>
                         <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>-total-count"
                             <?= /* @noEscape */ $block->getUiId('total-count') ?>>
                             <?= /* @noEscape */ $countRecords ?>
@@ -135,9 +133,7 @@ $numColumns = count($block->getColumns());
                         <?php endif; ?>
                         <?php if (!$block->calculateApproximateProductsTotalNumber()
                             || !$block->getCollection() instanceof ProductCollection
-                            || ($block->calculateApproximateProductsTotalNumber()
-                                && $block->getCollection() instanceof ProductCollection
-                                && $countRecords < ProductCollection::RECORDS_LIMIT)): ?>
+                            || $countRecords < $block->getRecordsThreshold()): ?>
                             <input type="text"
                                    id="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-current"
                                    name="<?= $block->escapeHtmlAttr($block->getVarNamePage()) ?>"

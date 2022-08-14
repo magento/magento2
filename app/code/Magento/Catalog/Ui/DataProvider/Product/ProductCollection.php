@@ -15,11 +15,6 @@ use Magento\Framework\DB\Select;
 class ProductCollection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
-     * Limit to display/hide total number of products in grid
-     */
-    public const RECORDS_LIMIT = 20000;
-
-    /**
      * Disables using of price index for grid rendering
      *
      * Admin area shouldn't use price index and should rely on actual product data instead.
@@ -43,7 +38,7 @@ class ProductCollection extends \Magento\Catalog\Model\ResourceModel\Product\Col
                 $sql = $this->getSelectCountSql();
                 $estimatedCount = $this->analyzeCount($sql);
 
-                if ($estimatedCount > self::RECORDS_LIMIT) {
+                if ($estimatedCount > $this->_scopeConfig->getValue('admin/grid/records_threshold')) {
                     $columns = $sql->getPart(Select::COLUMNS);
                     $sql->reset(Select::COLUMNS);
 
@@ -53,10 +48,10 @@ class ProductCollection extends \Magento\Catalog\Model\ResourceModel\Product\Col
                         }
                     }
                     $sql->setPart(Select::COLUMNS, $columns);
-                    $sql->limit(self::RECORDS_LIMIT);
+                    $sql->limit($this->_scopeConfig->getValue('admin/grid/records_threshold'));
                     $query = new \Zend_Db_Expr('SELECT COUNT(*) FROM (' . $sql->assemble() . ') AS c');
                     $this->_totalRecords = (int)$this->getConnection()->query($query)->fetchColumn();
-                    if ($this->_totalRecords === self::RECORDS_LIMIT) {
+                    if ($this->_totalRecords === (int)$this->_scopeConfig->getValue('admin/grid/records_threshold')) {
                         $this->_totalRecords = $estimatedCount;
                     }
                 } else {

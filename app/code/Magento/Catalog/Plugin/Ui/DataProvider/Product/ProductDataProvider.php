@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Plugin\Ui\DataProvider\Product;
 
-use Magento\Catalog\Ui\DataProvider\Product\ProductCollection;
 use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider as CatalogProductDataProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
@@ -53,7 +52,7 @@ class ProductDataProvider
     {
         if (key_exists('totalRecords', $data)) {
             if ($this->scopeConfig->getValue('admin/grid/calculate_approximate_total_number_of_products')
-                && $data['totalRecords'] >= ProductCollection::RECORDS_LIMIT) {
+                && $data['totalRecords'] >= $this->scopeConfig->getValue('admin/grid/records_threshold')) {
                 $data['showTotalRecords'] = false;
             } else {
                 $data['showTotalRecords'] = true;
