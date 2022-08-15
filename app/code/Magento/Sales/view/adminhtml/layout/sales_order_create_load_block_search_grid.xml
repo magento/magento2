@@ -8,9 +8,9 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid" name="search.grid" as="grid"/>
+            <block class="Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid" name="serach.grid" as="grid"/>
         </referenceContainer>
-        <referenceBlock name="search.grid">
+        <referenceBlock name="serach.grid">
             <arguments>
                 <argument name="view_model" xsi:type="object">Magento\Backend\ViewModel\CalculateApproximateProductsNumber</argument>
             </arguments>
