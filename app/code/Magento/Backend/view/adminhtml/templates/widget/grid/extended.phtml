@@ -21,8 +21,10 @@ use Magento\Catalog\Ui\DataProvider\Product\ProductCollection;
 /**
  * @var \Magento\Backend\Block\Widget\Grid\Extended $block
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Backend\ViewModel\CalculateApproximateProductsNumber $viewModel
  */
 $numColumns = count($block->getColumns());
+$viewModel = $block->getViewModel();
 
 ?>
 <?php if ($block->getCollection()): ?>
@@ -71,9 +73,9 @@ $numColumns = count($block->getColumns());
                 <?php endif; ?>
                 <?php $countRecords = $block->getCollection()->getSize(); ?>
                 <div class="admin__control-support-text">
-                    <?php if (!$block->calculateApproximateProductsTotalNumber()
-                        || !$block->getCollection() instanceof ProductCollection
-                        || $countRecords < $block->getRecordsThreshold()): ?>
+                    <?php if (!$block->getCollection() instanceof ProductCollection
+                        || !$viewModel->calculateApproximateProductsTotalNumber()
+                        || $countRecords < $viewModel->getRecordsThreshold()): ?>
                         <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>-total-count"
                             <?= /* @noEscape */ $block->getUiId('total-count') ?>>
                             <?= /* @noEscape */ $countRecords ?>
@@ -131,9 +133,9 @@ $numColumns = count($block->getColumns());
                                 <span><?= $block->escapeHtml(__('Previous page')) ?></span>
                             </button>
                         <?php endif; ?>
-                        <?php if (!$block->calculateApproximateProductsTotalNumber()
-                            || !$block->getCollection() instanceof ProductCollection
-                            || $countRecords < $block->getRecordsThreshold()): ?>
+                        <?php if (!$block->getCollection() instanceof ProductCollection
+                            || !$viewModel->calculateApproximateProductsTotalNumber()
+                            || $countRecords < $viewModel->getRecordsThreshold()): ?>
                             <input type="text"
                                    id="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-current"
                                    name="<?= $block->escapeHtmlAttr($block->getVarNamePage()) ?>"

@@ -71,6 +71,11 @@
                         <block class="Magento\Sales\Block\Adminhtml\Order\Create\Search" template="Magento_Sales::order/create/abstract.phtml" name="search">
                             <block class="Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid" name="search_grid" as="grid"/>
                         </block>
+                        <referenceBlock name="search_grid">
+                            <arguments>
+                                <argument name="view_model" xsi:type="object">Magento\Backend\ViewModel\CalculateApproximateProductsNumber</argument>
+                            </arguments>
+                        </referenceBlock>
                         <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items" template="Magento_Sales::order/create/items.phtml" name="items">
                             <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid" template="Magento_Sales::order/create/items/grid.phtml" name="items_grid">
                                 <block class="Magento\Sales\Block\Adminhtml\Order\Create\Coupons" template="Magento_Sales::order/create/coupons/form.phtml" name="coupons">

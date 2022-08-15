@@ -1317,24 +1317,4 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
         }
         return $html;
     }
-
-    /**
-     * Check if configuration setting to calculate approximate total number of products in grid is enabled.
-     *
-     * @return bool
-     */
-    public function calculateApproximateProductsTotalNumber(): bool
-    {
-        return (bool)$this->_scopeConfig->getValue('admin/grid/calculate_approximate_total_number_of_products');
-    }
-
-    /**
-     * Get records threshold for approximate total number of products calculation.
-     *
-     * @return int
-     */
-    public function getRecordsThreshold(): int
-    {
-        return $this->_scopeConfig->getValue('admin/grid/records_threshold');
-    }
 }
