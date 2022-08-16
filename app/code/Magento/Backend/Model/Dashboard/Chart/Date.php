@@ -55,32 +55,39 @@ class Date
             true
         );
 
+        $timezoneLocal = $this->localeDate->getConfigTimezone();
+        $localStartDate = new \DateTime($dateStart->format('Y-m-d H:i:s'), new \DateTimeZone($timezoneLocal));
+        $localEndDate = new \DateTime($dateEnd->format('Y-m-d H:i:s'), new \DateTimeZone($timezoneLocal));
+
         if ($period === Period::PERIOD_24_HOURS) {
-            $dateEnd->modify('-1 hour');
+            $localEndDate = new \DateTime('now', new \DateTimeZone($timezoneLocal));
+            $localStartDate = clone $localEndDate;
+            $localStartDate->modify('-1 day');
+            $localStartDate->modify('+1 hour');
         } elseif ($period === Period::PERIOD_TODAY) {
-            $dateEnd->modify('now');
+            $localEndDate->modify('now');
         } else {
-            $dateEnd->setTime(23, 59, 59);
-            $dateStart->setTime(0, 0, 0);
+            $localEndDate->setTime(23, 59, 59);
+            $localStartDate->setTime(0, 0, 0);
         }
 
         $dates = [];
 
-        while ($dateStart <= $dateEnd) {
+        while ($localStartDate <= $localEndDate) {
             switch ($period) {
                 case Period::PERIOD_7_DAYS:
                 case Period::PERIOD_1_MONTH:
-                    $d = $dateStart->format('Y-m-d');
-                    $dateStart->modify('+1 day');
+                    $d = $localStartDate->format('Y-m-d');
+                    $localStartDate->modify('+1 day');
                     break;
                 case Period::PERIOD_1_YEAR:
                 case Period::PERIOD_2_YEARS:
-                    $d = $dateStart->format('Y-m');
-                    $dateStart->modify('first day of next month');
+                    $d = $localStartDate->format('Y-m');
+                    $localStartDate->modify('first day of next month');
                     break;
                 default:
-                    $d = $dateStart->format('Y-m-d H:00');
-                    $dateStart->modify('+1 hour');
+                    $d = $localStartDate->format('Y-m-d H:00');
+                    $localStartDate->modify('+1 hour');
             }
 
             $dates[] = $d;

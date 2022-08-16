@@ -410,10 +410,8 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      */
     public function getDateRange($range, $customStart, $customEnd, $returnObjects = false)
     {
-        $timezoneLocal = $this->_localeDate->getConfigTimezone();
-
-        $dateEnd = new \DateTime('now', new \DateTimeZone($timezoneLocal));
-        $dateStart = new \DateTime('now', new \DateTimeZone($timezoneLocal));
+        $dateEnd = new \DateTime();
+        $dateStart = new \DateTime();
 
         // go to the end of a day
         $dateEnd->setTime(23, 59, 59);
@@ -425,8 +423,8 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                 $dateEnd->modify('now');
                 break;
             case '24h':
-                $dateEnd = new \DateTime('now', new \DateTimeZone($timezoneLocal));
-                $dateEnd->modify('+1 hour');
+                $dateEnd = new \DateTime();
+                $dateStart = new \DateTime();$dateEnd->modify('+1 hour');
                 $dateStart = clone $dateEnd;
                 $dateStart->modify('-1 day');
                 break;
@@ -701,8 +699,8 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                     'invoiced' => 'SUM(main_table.base_total_paid)',
                     'refunded' => 'SUM(main_table.base_total_refunded)',
                     'profit' => "SUM({$baseSubtotalInvoiced}) " .
-                    "+ SUM({$baseDiscountRefunded}) - SUM({$baseSubtotalRefunded}) " .
-                    "- SUM({$baseDiscountInvoiced}) - SUM({$baseTotalInvocedCost})",
+                        "+ SUM({$baseDiscountRefunded}) - SUM({$baseSubtotalRefunded}) " .
+                        "- SUM({$baseDiscountInvoiced}) - SUM({$baseTotalInvocedCost})",
                 ]
             );
         } else {
@@ -716,10 +714,10 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                     'invoiced' => 'SUM(main_table.base_total_paid * main_table.base_to_global_rate)',
                     'refunded' => 'SUM(main_table.base_total_refunded * main_table.base_to_global_rate)',
                     'profit' => "SUM({$baseSubtotalInvoiced} *  main_table.base_to_global_rate) " .
-                    "+ SUM({$baseDiscountRefunded} * main_table.base_to_global_rate) " .
-                    "- SUM({$baseSubtotalRefunded} * main_table.base_to_global_rate) " .
-                    "- SUM({$baseDiscountInvoiced} * main_table.base_to_global_rate) " .
-                    "- SUM({$baseTotalInvocedCost} * main_table.base_to_global_rate)",
+                        "+ SUM({$baseDiscountRefunded} * main_table.base_to_global_rate) " .
+                        "- SUM({$baseSubtotalRefunded} * main_table.base_to_global_rate) " .
+                        "- SUM({$baseDiscountInvoiced} * main_table.base_to_global_rate) " .
+                        "- SUM({$baseTotalInvocedCost} * main_table.base_to_global_rate)",
                 ]
             );
         }
@@ -857,7 +855,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         $template = ($storeId != 0)
             ? '(main_table.base_subtotal - %2$s - %1$s - (ABS(main_table.base_discount_amount) - %3$s - %4$s))'
             : '((main_table.base_subtotal - %1$s - %2$s - (ABS(main_table.base_discount_amount) - %3$s - %4$s)) '
-                . ' * main_table.base_to_global_rate)';
+            . ' * main_table.base_to_global_rate)';
         return sprintf(
             $template,
             $baseSubtotalRefunded,

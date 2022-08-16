@@ -138,11 +138,6 @@ class CollectionTest extends TestCase
             ->getMock();
         $this->timezoneMock = $this->getMockBuilder(TimezoneInterface::class)
             ->getMock();
-        $this->timezoneMock
-            ->expects($this->any())
-            ->method('getConfigTimezone')
-            ->willReturn('America/Chicago');
-
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -286,8 +281,11 @@ class CollectionTest extends TestCase
      */
     public function testGetDateRangeFirstPart($range, $customStart, $customEnd, $expectedInterval): void
     {
+        $timeZoneToReturn = date_default_timezone_get();
+        date_default_timezone_set('UTC');
         $result = $this->collection->getDateRange($range, $customStart, $customEnd);
         $interval = $result['to']->diff($result['from']);
+        date_default_timezone_set($timeZoneToReturn);
         $intervalResult = $interval->format('%y %m %d %h:%i:%s');
         $this->assertEquals($expectedInterval, $intervalResult);
     }
