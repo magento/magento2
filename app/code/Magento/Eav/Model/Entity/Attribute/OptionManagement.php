@@ -135,7 +135,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         AttributeOptionInterface $option,
         $optionId
     ): AttributeOptionInterface {
-        $optionLabel = trim($option->getLabel());
+        $optionLabel = $option->getLabel() !== null ? trim($option->getLabel()) : '';
         $options = [];
         $options['value'][$optionId][0] = $optionLabel;
         $options['order'][$optionId] = $option->getSortOrder();
@@ -275,7 +275,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         EavAttributeInterface $attribute,
         AttributeOptionInterface $option
     ) : string {
-        $label = trim($option->getLabel());
+        $label = $option->getLabel() !== null ? trim($option->getLabel()) : '';
         $optionId = $attribute->getSource()->getOptionId($label);
         if ($optionId) {
             $option->setValue($optionId);
