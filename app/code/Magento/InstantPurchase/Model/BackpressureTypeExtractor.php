@@ -15,7 +15,7 @@ use Magento\InstantPurchase\Controller\Button\PlaceOrder;
 use Magento\Quote\Model\Backpressure\OrderLimitConfigManager;
 
 /**
- * Apply backpressure to instant purchase.
+ * Apply backpressure to instant purchase
  */
 class BackpressureTypeExtractor implements RequestTypeExtractorInterface
 {
