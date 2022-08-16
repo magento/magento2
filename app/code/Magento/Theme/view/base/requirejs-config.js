@@ -52,7 +52,6 @@ var config = {
         }
     },
     shim: {
-        'jquery/jquery-migrate': ['jquery'],
         'mage/adminhtml/backup': ['prototype'],
         'mage/captcha': ['prototype'],
         'mage/new-gallery': ['jquery'],
@@ -77,9 +76,6 @@ var config = {
         'tinycolor': 'jquery/spectrum/tinycolor',
         'jquery-ui-modules': 'jquery/ui-modules'
     },
-    deps: [
-        'jquery/jquery-migrate'
-    ],
     config: {
         text: {
             'headers': {
