@@ -47,7 +47,7 @@ class IdentityProvider implements IdentityProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
      * @throws RuntimeException
      */
@@ -66,7 +66,7 @@ class IdentityProvider implements IdentityProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
      * @throws RuntimeException
      */

@@ -30,7 +30,7 @@ class CompositeLimitConfigManager implements LimitConfigManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
      * @throws RuntimeException
      */
