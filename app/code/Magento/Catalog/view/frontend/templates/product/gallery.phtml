@@ -4,52 +4,54 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Catalog\Block\Product\Gallery $block */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Catalog\Block\Product\Gallery $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php $_width = $block->getImageWidth(); ?>
 <div class="product-image-popup">
     <div class="buttons-set"><a href="#" class="button" role="close-window">
-            <span><?= $block->escapeHtml(__('Close Window')) ?></span></a></div>
+            <span><?= $escaper->escapeHtml(__('Close Window')) ?></span></a></div>
     <?php if ($block->getPreviousImageUrl() || $block->getNextImageUrl()):?>
         <div class="nav">
             <?php if ($_prevUrl = $block->getPreviousImageUrl()):?>
-                <a href="<?= $block->escapeUrl($_prevUrl) ?>"
-                   class="prev">&laquo; <?= $block->escapeHtml(__('Prev')) ?></a>
+                <a href="<?= $escaper->escapeUrl($_prevUrl) ?>"
+                   class="prev">&laquo; <?= $escaper->escapeHtml(__('Prev')) ?></a>
             <?php endif; ?>
             <?php if ($_nextUrl = $block->getNextImageUrl()):?>
-                <a href="<?= $block->escapeUrl($_nextUrl) ?>"
-                   class="next"><?= $block->escapeHtml(__('Next')) ?> &raquo;</a>
+                <a href="<?= $escaper->escapeUrl($_nextUrl) ?>"
+                   class="next"><?= $escaper->escapeHtml(__('Next')) ?> &raquo;</a>
             <?php endif; ?>
         </div>
     <?php endif; ?>
-    <?php if ($_imageTitle = $block->escapeHtml($block->getCurrentImage()->getLabel())):?>
+    <?php if ($_imageTitle = $escaper->escapeHtml($block->getCurrentImage()->getLabel())):?>
         <h1 class="image-label"><?= /* @noEscape */ $_imageTitle ?></h1>
     <?php endif; ?>
     <?php
     $imageUrl = $block->getImageUrl();
     ?>
-    <img src="<?= $block->escapeUrl($imageUrl) ?>"
+    <img src="<?= $escaper->escapeUrl($imageUrl) ?>"
         <?php if ($_width):?>
             width="<?= /* @noEscape */ $_width ?>"
         <?php endif; ?>
-         alt="<?= $block->escapeHtmlAttr($block->getCurrentImage()->getLabel()) ?>"
-         title="<?= $block->escapeHtmlAttr($block->getCurrentImage()->getLabel()) ?>"
+         alt="<?= $escaper->escapeHtmlAttr($block->getCurrentImage()->getLabel()) ?>"
+         title="<?= $escaper->escapeHtmlAttr($block->getCurrentImage()->getLabel()) ?>"
          id="product-gallery-image"
          class="image"
          data-mage-init='{"catalogGallery":{}}'/>
     <div class="buttons-set"><
-        a href="#" class="button" role="close-window"><span><?= $block->escapeHtml(__('Close Window')) ?></span></a>
+        a href="#" class="button" role="close-window"><span><?= $escaper->escapeHtml(__('Close Window')) ?></span></a>
     </div>
     <?php if ($block->getPreviousImageUrl() || $block->getNextImageUrl()):?>
         <div class="nav">
             <?php if ($_prevUrl = $block->getPreviousImageUrl()):?>
-                <a href="<?= $block->escapeUrl($_prevUrl) ?>"
-                   class="prev">&laquo; <?= $block->escapeHtml(__('Prev')) ?></a>
+                <a href="<?= $escaper->escapeUrl($_prevUrl) ?>"
+                   class="prev">&laquo; <?= $escaper->escapeHtml(__('Prev')) ?></a>
             <?php endif; ?>
             <?php if ($_nextUrl = $block->getNextImageUrl()):?>
-                <a href="<?= $block->escapeUrl($_nextUrl) ?>"
-                   class="next"><?= $block->escapeHtml(__('Next')) ?> &raquo;</a>
+                <a href="<?= $escaper->escapeUrl($_nextUrl) ?>"
+                   class="next"><?= $escaper->escapeHtml(__('Next')) ?> &raquo;</a>
             <?php endif; ?>
         </div>
     <?php endif; ?>

@@ -4,13 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-/* @var $block \Magento\Catalog\Block\Product\View\Options\Type\File */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var $block \Magento\Catalog\Block\Product\View\Options\Type\File
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php $_option = $block->getOption(); ?>
 <?php $_fileInfo = $block->getFileInfo(); ?>
 <?php $_fileExists = $_fileInfo->hasData(); ?>
-<?php $_fileName = 'options_' . $block->escapeHtmlAttr($_option->getId()) . '_file'; ?>
+<?php $_fileName = 'options_' . $escaper->escapeHtmlAttr($_option->getId()) . '_file'; ?>
 <?php $_fieldNameAction = $_fileName . '_action'; ?>
 <?php $_fieldValueAction = $_fileExists ? 'save_old' : 'save_new'; ?>
 <?php $_fileNamed = $_fileName . '_name'; ?>
@@ -18,14 +21,14 @@
 
 <div class="field file<?= /* @noEscape */ $class ?>">
     <label class="label" for="<?= /* @noEscape */ $_fileName ?>" id="<?= /* @noEscape */ $_fileName ?>-label">
-        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+        <span><?= $escaper->escapeHtml($_option->getTitle()) ?></span>
         <?= /* @noEscape */ $block->getFormattedPrice() ?>
     </label>
     <?php if ($_fileExists):?>
     <div class="control">
-        <span class="<?= /* @noEscape */ $_fileNamed ?>"><?= $block->escapeHtml($_fileInfo->getTitle()) ?></span>
+        <span class="<?= /* @noEscape */ $_fileNamed ?>"><?= $escaper->escapeHtml($_fileInfo->getTitle()) ?></span>
         <a href="#" class="label" id="change-<?= /* @noEscape */ $_fileName ?>" >
-            <?= $block->escapeHtml(__('Change')) ?>
+            <?= $escaper->escapeHtml(__('Change')) ?>
         </a>
         <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
             'onclick',
@@ -34,7 +37,7 @@
         ) ?>
         <?php if (!$_option->getIsRequire()):?>
             <input type="checkbox" id="delete-<?= /* @noEscape */ $_fileName ?>" />
-            <span class="label"><?= $block->escapeHtml(__('Delete')) ?></span>
+            <span class="label"><?= $escaper->escapeHtml(__('Delete')) ?></span>
         <?php endif; ?>
     </div>
     <?php endif; ?>
@@ -55,20 +58,20 @@
                value="<?= /* @noEscape */ $_fieldValueAction ?>" />
         <?php if ($_option->getFileExtension()):?>
             <p class="note">
-                <?= $block->escapeHtml(__('Compatible file extensions to upload')) ?>:
-                <strong><?= $block->escapeHtml($_option->getFileExtension()) ?></strong>
+                <?= $escaper->escapeHtml(__('Compatible file extensions to upload')) ?>:
+                <strong><?= $escaper->escapeHtml($_option->getFileExtension()) ?></strong>
             </p>
         <?php endif; ?>
         <?php if ($_option->getImageSizeX() > 0):?>
             <p class="note">
-                <?= $block->escapeHtml(__('Maximum image width')) ?>: <strong><?= (int)$_option->getImageSizeX()
-                ?> <?= $block->escapeHtml(__('px.')) ?></strong>
+                <?= $escaper->escapeHtml(__('Maximum image width')) ?>: <strong><?= (int)$_option->getImageSizeX()
+                ?> <?= $escaper->escapeHtml(__('px.')) ?></strong>
             </p>
         <?php endif; ?>
         <?php if ($_option->getImageSizeY() > 0):?>
             <p class="note">
-                <?= $block->escapeHtml(__('Maximum image height')) ?>: <strong><?= (int)$_option->getImageSizeY()
-                ?> <?= $block->escapeHtml(__('px.')) ?></strong>
+                <?= $escaper->escapeHtml(__('Maximum image height')) ?>: <strong><?= (int)$_option->getImageSizeY()
+                ?> <?= $escaper->escapeHtml(__('px.')) ?></strong>
             </p>
         <?php endif; ?>
     </div>

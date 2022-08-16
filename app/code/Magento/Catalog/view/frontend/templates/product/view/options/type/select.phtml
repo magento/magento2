@@ -5,20 +5,25 @@
  */
 ?>
 
-<?php /* @var $block \Magento\Catalog\Block\Product\View\Options\Type\Select */ ?>
+<?php
+/**
+ * @var $block \Magento\Catalog\Block\Product\View\Options\Type\Select
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
 <?php
 $_option = $block->getOption();
 $class = ($_option->getIsRequire()) ? ' required' : '';
 ?>
 <div class="field<?= /* @noEscape */ $class ?>">
-    <label class="label" for="select_<?= $block->escapeHtmlAttr($_option->getId()) ?>">
-        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+    <label class="label" for="select_<?= $escaper->escapeHtmlAttr($_option->getId()) ?>">
+        <span><?= $escaper->escapeHtml($_option->getTitle()) ?></span>
     </label>
     <div class="control">
         <?= $block->getValuesHtml() ?>
-        <?php if ($_option->getIsRequire()) :?>
-            <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX) :?>
-                <span id="options-<?= $block->escapeHtmlAttr($_option->getId()) ?>-container"></span>
+        <?php if ($_option->getIsRequire()):?>
+            <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX):?>
+                <span id="options-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>-container"></span>
             <?php endif; ?>
         <?php endif;?>
     </div>

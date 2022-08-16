@@ -4,9 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Element\Template $block */
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
-<?= $block->escapeHtml(
+<?= $escaper->escapeHtml(
     __(
         'You added product %1 to the <a href="%2">comparison list</a>.',
         $block->getData('product_name'),

@@ -4,12 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block Magento\Catalog\Block\Product\View */
+/**
+ * @var $block Magento\Catalog\Block\Product\View
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php
 $required = '';
 if ($block->hasRequiredOptions()) {
-    $required = ' data-hasrequired="' . $block->escapeHtmlAttr(__('* Required Fields')) . '"';
+    $required = ' data-hasrequired="' . $escaper->escapeHtmlAttr(__('* Required Fields')) . '"';
 }
 ?>
 <div class="product-options-wrapper" id="product-options-wrapper"<?= /* @noEscape */ $required ?>>

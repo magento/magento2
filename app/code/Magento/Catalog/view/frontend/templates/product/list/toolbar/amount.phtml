@@ -10,11 +10,12 @@
  *
  * @var \Magento\Catalog\Block\Product\ProductList\Toolbar $block
  * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 <p class="toolbar-amount" id="toolbar-amount">
     <?php if ($block->getLastPageNum() > 1):?>
-        <?= $block->escapeHtml(
+        <?= $escaper->escapeHtml(
             __(
                 'Items %1-%2 of %3',
                 '<span class="toolbar-number">' . $localeFormatter->formatNumber($block->getFirstNum()) . '</span>',
@@ -24,7 +25,7 @@
             ['span']
         ) ?>
     <?php elseif ($block->getTotalNum() == 1):?>
-        <?= $block->escapeHtml(
+        <?= $escaper->escapeHtml(
             __(
                 '%1 Item',
                 '<span class="toolbar-number">' . $localeFormatter->formatNumber($block->getTotalNum()) . '</span>'
@@ -32,7 +33,7 @@
             ['span']
         ) ?>
     <?php else:?>
-        <?= $block->escapeHtml(
+        <?= $escaper->escapeHtml(
             __(
                 '%1 Items',
                 '<span class="toolbar-number">' . $localeFormatter->formatNumber($block->getTotalNum()) . '</span>'

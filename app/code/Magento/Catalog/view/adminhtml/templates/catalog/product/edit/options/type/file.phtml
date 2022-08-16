@@ -12,7 +12,7 @@
         <table class="data-table">
             <thead>
             <tr>
-                <?php if ($block->getCanReadPrice() !== false) : ?>
+                <?php if ($block->getCanReadPrice() !== false): ?>
                     <th><?= $block->escapeHtml(__('Price')) ?></th>
                     <th><?= $block->escapeHtml(__('Price Type')) ?></th>
                 <?php endif; ?>
@@ -22,16 +22,16 @@
             </tr>
             </thead>
             <tr>
-                <?php if ($block->getCanReadPrice() !== false) : ?>
+                <?php if ($block->getCanReadPrice() !== false): ?>
                     <td class="opt-price">
                         <input name="product[options][<%- data.option_id %>][price]" data-store-label="<%- data.price %>"
                                class="input-text validate-zero-or-greater" type="text" value="<%- data.price %>"
-                            <?php if ($block->getCanEditPrice() === false) : ?>
+                            <?php if ($block->getCanEditPrice() === false): ?>
                                 disabled="disabled"
                             <?php endif; ?>>
                     </td>
                     <td class="opt-price-type"><?= $block->getPriceTypeSelectHtml('data-attr="price-type"') ?><%- data.checkboxScopePrice %></td>
-                <?php else : ?>
+                <?php else: ?>
                     <input name="product[options][<%- data.option_id %>][price]" type="hidden">
                     <input id="product_option_<%- data.option_id %>_price_type" name="product[options][<%- data.option_id %>][price_type]" type="hidden">
                 <?php endif; ?>

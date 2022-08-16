@@ -10,23 +10,24 @@
  *
  * @var \Magento\Catalog\Block\Product\ProductList\Toolbar $block
  * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 <div class="field limiter">
     <label class="label" for="limiter">
-        <span><?= $block->escapeHtml(__('Show')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Show')) ?></span>
     </label>
     <div class="control">
         <select id="limiter" data-role="limiter" class="limiter-options">
             <?php foreach ($block->getAvailableLimit() as $_key => $_limit):?>
-                <option value="<?= $block->escapeHtmlAttr($_key) ?>"
+                <option value="<?= $escaper->escapeHtmlAttr($_key) ?>"
                     <?php if ($block->isLimitCurrent($_key)):?>
                         selected="selected"
                     <?php endif ?>>
-                    <?= $block->escapeHtml($localeFormatter->formatNumber((int) $_limit)) ?>
+                    <?= $escaper->escapeHtml($localeFormatter->formatNumber((int) $_limit)) ?>
                 </option>
             <?php endforeach; ?>
         </select>
     </div>
-    <span class="limiter-text"><?= $block->escapeHtml(__('per page')) ?></span>
+    <span class="limiter-text"><?= $escaper->escapeHtml(__('per page')) ?></span>
 </div>

@@ -3,8 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php $_option = $block->getOption() ?>
 <div class="field">
-    <label class="label"><span><?= $block->escapeHtml($_option->getTitle()) ?></span></label>
+    <label class="label"><span><?= $escaper->escapeHtml($_option->getTitle()) ?></span></label>
 </div>

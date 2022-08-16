@@ -9,6 +9,7 @@
  * Category view template
  *
  * @var $block \Magento\Catalog\Block\Category\View
+ * @var \Magento\Framework\Escaper $escaper
  */
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
@@ -20,11 +21,11 @@
     $_imgHtml   = '';
     if ($_imgUrl = $block->getImage()->getUrl($_category)) {
         $_imgHtml = '<div class="category-image"><img src="'
-            . $block->escapeUrl($_imgUrl)
+            . $escaper->escapeUrl($_imgUrl)
             . '" alt="'
-            . $block->escapeHtmlAttr($_category->getName())
+            . $escaper->escapeHtmlAttr($_category->getName())
             . '" title="'
-            . $block->escapeHtmlAttr($_category->getName())
+            . $escaper->escapeHtmlAttr($_category->getName())
             . '" class="image" /></div>';
         $_imgHtml = $block->getOutput()->categoryAttribute($_category, $_imgHtml, 'image');
         /* @noEscape */ echo $_imgHtml;
