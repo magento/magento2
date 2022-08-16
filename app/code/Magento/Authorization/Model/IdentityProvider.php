@@ -10,13 +10,22 @@ namespace Magento\Authorization\Model;
 
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\Backpressure\IdentityProviderInterface;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 /**
- * Utilizes UserContext for backpressure identity.
+ * Utilizes UserContext for backpressure identity
  */
 class IdentityProvider implements IdentityProviderInterface
 {
+    /**
+     * User context identity type map
+     */
+    private const USER_CONTEXT_IDENTITY_TYPE_MAP = [
+        UserContextInterface::USER_TYPE_CUSTOMER => ContextInterface::IDENTITY_TYPE_CUSTOMER,
+        UserContextInterface::USER_TYPE_ADMIN => ContextInterface::IDENTITY_TYPE_ADMIN
+    ];
+
     /**
      * @var UserContextInterface
      */
@@ -38,37 +47,41 @@ class IdentityProvider implements IdentityProviderInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @throws RuntimeException
      */
     public function fetchIdentityType(): int
     {
-        if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
-            && $this->userContext->getUserId()
-        ) {
-            return ContextInterface::IDENTITY_TYPE_CUSTOMER;
-        } elseif ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_ADMIN
-            && $this->userContext->getUserId()
-        ) {
-            return ContextInterface::IDENTITY_TYPE_ADMIN;
-        } else {
+        if (!$this->userContext->getUserId()) {
             return ContextInterface::IDENTITY_TYPE_IP;
         }
+
+        $userType = $this->userContext->getUserType();
+        if (isset(self::USER_CONTEXT_IDENTITY_TYPE_MAP[$userType])) {
+            return self::USER_CONTEXT_IDENTITY_TYPE_MAP[$userType];
+        }
+
+        throw new RuntimeException(__('User type not defined'));
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @throws RuntimeException
      */
     public function fetchIdentity(): string
     {
-        if ($this->userContext->getUserId()) {
-            return (string) $this->userContext->getUserId();
+        $userId = $this->userContext->getUserId();
+        if ($userId) {
+            return (string)$userId;
         }
 
-        $addr = $this->remoteAddress->getRemoteAddress();
-        if (!$addr) {
-            throw new \RuntimeException('Failed to extract remote address');
+        $address = $this->remoteAddress->getRemoteAddress();
+        if (!$address) {
+            throw new RuntimeException(__('Failed to extract remote address'));
         }
 
-        return $addr;
+        return $address;
     }
 }
