@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// phpcs:ignoreFile
 ?>
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
     <title><?= $this->pageTitle ?></title>
-    <base href="<?= $this->getViewFileUrl() ?>" />
+    <base href="<?= $this->escaper->escapeHtmlAttr($this->getViewFileUrl()) ?>" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="robots" content="*"/>
     <link rel="stylesheet" href="css/styles.css" type="text/css" />
