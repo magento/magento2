@@ -11,12 +11,12 @@ namespace Magento\Framework\App\Backpressure\SlidingWindow;
 use Magento\Framework\App\Backpressure\ContextInterface;
 
 /**
- * Provides limit configuration for request contexts.
+ * Provides limit configuration for request contexts
  */
 interface LimitConfigManagerInterface
 {
     /**
-     * Find limits for given context.
+     * Find limits for given context
      *
      * @param ContextInterface $context
      * @return LimitConfig

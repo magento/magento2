@@ -11,22 +11,22 @@ namespace Magento\Framework\App\Backpressure\SlidingWindow;
 use Magento\Framework\App\Backpressure\ContextInterface;
 
 /**
- * Logs requests.
+ * Logs requests
  */
 interface RequestLoggerInterface
 {
     /**
-     * Increase counter for requests coming inside given timeslot from given identity.
+     * Increase counter for requests coming inside given timeslot from given identity
      *
      * @param ContextInterface $context
-     * @param int $timeSlot Time slot to increase the counter for (timestamp).
-     * @param int $discardAfter Counter for the time slot can be discarded after given number of seconds.
-     * @return int Requests logged for the identity and the time slot.
+     * @param int $timeSlot Time slot to increase the counter for (timestamp)
+     * @param int $discardAfter Counter for the time slot can be discarded after given number of seconds
+     * @return int Requests logged for the identity and the time slot
      */
     public function incrAndGetFor(ContextInterface $context, int $timeSlot, int $discardAfter): int;
 
     /**
-     * Get counter for specific identity and time slot.
+     * Get counter for specific identity and time slot
      *
      * @param ContextInterface $context
      * @param int $timeSlot

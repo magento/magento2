@@ -14,7 +14,7 @@ use Magento\Framework\App\BackpressureEnforcerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
- * Uses Sliding Window approach to record request times and enforce limits.
+ * Uses Sliding Window approach to record request times and enforce limits
  */
 class SlidingWindowEnforcer implements BackpressureEnforcerInterface
 {

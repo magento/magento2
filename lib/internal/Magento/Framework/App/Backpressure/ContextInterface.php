@@ -11,7 +11,7 @@ namespace Magento\Framework\App\Backpressure;
 use Magento\Framework\App\RequestInterface;
 
 /**
- * Request context.
+ * Request context
  */
 interface ContextInterface
 {
@@ -22,30 +22,30 @@ interface ContextInterface
     public const IDENTITY_TYPE_ADMIN = 2;
 
     /**
-     * Current request.
+     * Current request
      *
      * @return RequestInterface
      */
     public function getRequest(): RequestInterface;
 
     /**
-     * Unique ID for request issuer.
+     * Unique ID for request issuer
      *
      * @return string
      */
     public function getIdentity(): string;
 
     /**
-     * Type of identity detected.
+     * Type of identity detected
      *
      * @return int
      */
     public function getIdentityType(): int;
 
     /**
-     * Request type ID.
+     * Request type ID
      *
-     * String ID of the functionality that requires backpressure enforcement.
+     * String ID of the functionality that requires backpressure enforcement
      *
      * @return string
      */

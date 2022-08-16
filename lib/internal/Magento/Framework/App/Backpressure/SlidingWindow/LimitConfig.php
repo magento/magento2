@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Backpressure\SlidingWindow;
 
 /**
- * Limit configuration.
+ * Limit configuration
  */
 class LimitConfig
 {
@@ -34,7 +34,7 @@ class LimitConfig
     }
 
     /**
-     * Requests per period.
+     * Requests per period
      *
      * @return int
      */
@@ -44,7 +44,7 @@ class LimitConfig
     }
 
     /**
-     * Period in seconds.
+     * Period in seconds
      *
      * @return int
      */

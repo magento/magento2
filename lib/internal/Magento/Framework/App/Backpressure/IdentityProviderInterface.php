@@ -14,14 +14,14 @@ namespace Magento\Framework\App\Backpressure;
 interface IdentityProviderInterface
 {
     /**
-     * One of ContextInterface constants.
+     * One of ContextInterface constants
      *
      * @return int
      */
     public function fetchIdentityType(): int;
 
     /**
-     * Identity string representation.
+     * Identity string representation
      *
      * @return string
      */

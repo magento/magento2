@@ -13,7 +13,7 @@ use Magento\Framework\Cache\Backend\Redis;
 use Magento\Framework\Cache\FrontendInterface;
 
 /**
- * Logging requests to cache.
+ * Logging requests to cache
  */
 class CacheRequestLogger implements RequestLoggerInterface
 {
@@ -43,13 +43,13 @@ class CacheRequestLogger implements RequestLoggerInterface
             $cache = $this->cache->getBackend();
 
             return $cache->updateByAndGet($id, 1, time() + $discardAfter);
-        } else {
-            //Non-atomic way
-            $n = (int) ($this->cache->load($id) ?? 0);
-            $this->cache->save((string) ++$n, $id, [], $discardAfter);
-
-            return $n;
         }
+
+        //Non-atomic way
+        $n = (int) ($this->cache->load($id) ?? 0);
+        $this->cache->save((string) ++$n, $id, [], $discardAfter);
+
+        return $n;
     }
 
     /**

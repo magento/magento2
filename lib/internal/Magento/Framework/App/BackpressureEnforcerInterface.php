@@ -12,12 +12,12 @@ use Magento\Framework\App\Backpressure\BackpressureExceededException;
 use Magento\Framework\App\Backpressure\ContextInterface;
 
 /**
- * Enforces certain backpressure.
+ * Enforces certain backpressure
  */
 interface BackpressureEnforcerInterface
 {
     /**
-     * Enforce the backpressure by throwing the exception when limit exceeded.
+     * Enforce the backpressure by throwing the exception when limit exceeded
      *
      * @param ContextInterface $context
      * @throws BackpressureExceededException

@@ -9,9 +9,10 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Backpressure\SlidingWindow;
 
 use Magento\Framework\App\Backpressure\ContextInterface;
+use Magento\Framework\Exception\RuntimeException;
 
 /**
- * Delegates finding configs for different requests types to other instances.
+ * Delegates finding configs for different requests types to other instances
  */
 class CompositeLimitConfigManager implements LimitConfigManagerInterface
 {
@@ -29,14 +30,21 @@ class CompositeLimitConfigManager implements LimitConfigManagerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
+     * @throws RuntimeException
      */
     public function readLimit(ContextInterface $context): LimitConfig
     {
-        if (!array_key_exists($context->getTypeId(), $this->configs)) {
-            throw new \RuntimeException(sprintf('Failed to find config manager for "%s".', $context->getTypeId()));
+        if (isset($this->configs[$context->getTypeId()])) {
+            return $this->configs[$context->getTypeId()]->readLimit($context);
         }
 
-        return $this->configs[$context->getTypeId()]->readLimit($context);
+        throw new RuntimeException(
+            __(
+                'Failed to find config manager for "%typeId".',
+                [ 'typeId' => $context->getTypeId()]
+            )
+        );
     }
 }
