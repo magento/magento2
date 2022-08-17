@@ -18,12 +18,7 @@
         <data key="name" unique="suffix">ApiCategory</data>
         <data key="is_active">true</data>
     </entity>
-    <entity name="CategoryB" type="category">
-        <data key="name" unique="suffix">CategoryB</data>
-        <data key="name_lwr" unique="suffix">CategoryB</data>
-        <data key="urlKey" unique="suffix">CategoryB</data>
-        <data key="is_active">true</data>
-    </entity>
+    
     <entity name="SimpleSubCategory" type="category">
         <data key="name" unique="suffix">SimpleSubCategory</data>
         <data key="name_lwr" unique="suffix">simplesubcategory</data>
