@@ -21,8 +21,8 @@
         <settings>
             <storageConfig>
                 <param name="cacheRequests" xsi:type="boolean">false</param>
-                <param name="requestConfig" xsi:type="object">
-                    <param name="method" xsi:type="string">POST</param>
+                <param name="requestConfig" xsi:type="array">
+                    <item name="method" xsi:type="string">POST</item>
                 </param>
             </storageConfig>
             <updateUrl path="mui/index/render"/>
