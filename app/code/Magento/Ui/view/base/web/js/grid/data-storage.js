@@ -21,7 +21,7 @@ define([
             indexField: 'entity_id',
             requestConfig: {
                 url: '${ $.updateUrl }',
-                method: 'POST',
+                method: 'GET',
                 dataType: 'json'
             },
             dataScope: '',
