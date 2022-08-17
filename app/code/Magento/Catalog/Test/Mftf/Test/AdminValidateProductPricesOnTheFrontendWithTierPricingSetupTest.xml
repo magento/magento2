@@ -14,8 +14,7 @@
             <title value="Create product and validate product tier prices on frontend"/>
             <description value="Create product and tax rule and validate product tier prices on frontend"/>
             <testCaseId value="MC-43283"/>
-            <severity value="CRITICAL"/>
-            <group value="mtf_migrated"/>
+            <severity value="AVERAGE"/>
         </annotations>
         <before>
             <!-- Create category -->
