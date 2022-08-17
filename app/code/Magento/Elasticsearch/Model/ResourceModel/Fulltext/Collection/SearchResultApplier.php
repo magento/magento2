@@ -239,7 +239,7 @@ class SearchResultApplier implements SearchResultApplierInterface
                 $query->joinLeft(
                     ['product_var' => $this->collection->getTable('catalog_product_entity_varchar')],
                     "product_var.{$linkField} = e.{$linkField} AND product_var.attribute_id =
-                    (SELECT attribute_id FROM eav_attribute WHERE entity_type_id={$entityTypeId}
+                    (SELECT attribute_id FROM {$this->collection->getTable('eav_attribute')} WHERE entity_type_id={$entityTypeId}
                     AND attribute_code='name')",
                     ['product_var.value AS name']
                 );
@@ -248,7 +248,7 @@ class SearchResultApplier implements SearchResultApplierInterface
                     ['price_index' => $this->collection->getTable('catalog_product_index_price')],
                     'price_index.entity_id = e.entity_id'
                     . ' AND price_index.customer_group_id = 0'
-                    . ' AND price_index.website_id = (Select website_id FROM store WHERE store_id = '
+                    . " AND price_index.website_id = (Select website_id FROM  {$this->collection->getTable('store')} WHERE store_id = "
                     . $storeId . ')',
                     ['price_index.max_price AS price']
                 );
