@@ -79,7 +79,7 @@ class AdminAdobeImsEnableCommand extends Command
     private UpdateTokensService $updateTokensService;
 
     /**
-     * @var Role|mixed
+     * @var Role
      */
     private Role $role;
 
@@ -94,8 +94,8 @@ class AdminAdobeImsEnableCommand extends Command
      * @param ImsCommandOptionService $imsCommandOptionService
      * @param TypeListInterface $cacheTypeList
      * @param UpdateTokensService $updateTokensService
-     * @param Role $role
-     * @param CollectionFactory $roleCollection
+     * @param Role|null $role
+     * @param CollectionFactory|null $roleCollection
      */
     public function __construct(
         ImsConfig $adminImsConfig,
