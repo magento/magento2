@@ -19,7 +19,7 @@ use Magento\Framework\App\State as AppState;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Enforces backpressure for non-webAPI requests.
+ * Enforces backpressure for non-webAPI requests
  */
 class BackpressureValidator implements ValidatorInterface
 {
@@ -55,20 +55,12 @@ class BackpressureValidator implements ValidatorInterface
 
     /**
      * @inheritDoc
+     * @throws LocalizedException
      */
     public function validate(RequestInterface $request, ActionInterface $action): void
     {
-        try {
-            $areaCode = $this->appState->getAreaCode();
-        } catch (LocalizedException $exception) {
-            $areaCode = null;
-        }
         if ($request instanceof HttpRequest
-            && in_array(
-                $areaCode,
-                [Area::AREA_FRONTEND, Area::AREA_ADMINHTML],
-                true
-            )
+            && in_array($this->getAreaCode(), [Area::AREA_FRONTEND, Area::AREA_ADMINHTML], true)
         ) {
             $context = $this->contextFactory->create($action);
             if ($context) {
@@ -78,6 +70,20 @@ class BackpressureValidator implements ValidatorInterface
                     throw new LocalizedException(__('Something went wrong, please try again later'), $exception);
                 }
             }
+        }
+    }
+
+    /**
+     * Returns area code
+     *
+     * @return string|null
+     */
+    private function getAreaCode(): ?string
+    {
+        try {
+            return $this->appState->getAreaCode();
+        } catch (LocalizedException $exception) {
+            return null;
         }
     }
 }
