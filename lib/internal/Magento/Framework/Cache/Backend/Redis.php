@@ -6,20 +6,22 @@
 
 namespace Magento\Framework\Cache\Backend;
 
+use InvalidArgumentException;
+
 /**
- * Redis wrapper to extend current implementation behaviour.
+ * Redis wrapper to extend current implementation behaviour
  */
 class Redis extends \Cm_Cache_Backend_Redis
 {
     /**
-     * Local state of preloaded keys.
+     * Local state of preloaded keys
      *
      * @var array
      */
     private $preloadedData = [];
 
     /**
-     * Array of keys to be preloaded.
+     * Array of keys to be preloaded
      *
      * @var array
      */
@@ -62,7 +64,7 @@ class Redis extends \Cm_Cache_Backend_Redis
     }
 
     /**
-     * Cover errors on save operations, which may occurs when Redis cannot evict keys, which is expected in some cases.
+     * Cover errors on save operations, which may occurs when Redis cannot evict keys, which is expected in some cases
      *
      * @param string $data
      * @param string $id
@@ -96,28 +98,31 @@ class Redis extends \Cm_Cache_Backend_Redis
     }
 
     /**
-     * Increment/decrement an item by given number (positive or negative for decrement).
+     * Increment/decrement an item by given number (positive or negative for decrement)
      *
      * @param string $id
      * @param int $update
-     * @param int|null $expireAt Expire item at ts.
+     * @param int|null $expireAt Expire item at ts
      * @return void
-     * @throws \InvalidArgumentException When increment is incorrect or the item is not a number.
+     * @throws InvalidArgumentException When increment is incorrect or the item is not a number
      */
     public function updateByAndGet(string $id, int $update, ?int $expireAt): int
     {
         if ($update === 0) {
-            throw new \InvalidArgumentException('Update must be != 0');
+            throw new InvalidArgumentException('Update must be != 0');
         }
+
         $method = 'incrBy';
         if ($update < 0) {
             $method = 'decrBy';
         }
+
         $redis = $this->_redis->pipeline();
         $redis->$method($id, abs($update));
         if ($expireAt) {
             $redis->expireAt($id, $expireAt);
         }
+
         $response = $redis->exec();
 
         return (int)$response[0];

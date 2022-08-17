@@ -11,6 +11,9 @@ namespace Magento\Framework\Webapi\Backpressure;
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * REST request context
+ */
 class RestContext implements ContextInterface
 {
     /**
@@ -108,7 +111,7 @@ class RestContext implements ContextInterface
     }
 
     /**
-     * Service class name.
+     * Service class name
      *
      * @return string
      */
@@ -118,7 +121,7 @@ class RestContext implements ContextInterface
     }
 
     /**
-     * Service method.
+     * Service method
      *
      * @return string
      */
@@ -128,7 +131,7 @@ class RestContext implements ContextInterface
     }
 
     /**
-     * Endpoint route.
+     * Endpoint route
      *
      * @return string
      */

@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Webapi\Backpressure;
 
 /**
- * Uses other extractors.
+ * Uses other extractors
  */
 class CompositeRequestTypeExtractor implements BackpressureRequestTypeExtractorInterface
 {

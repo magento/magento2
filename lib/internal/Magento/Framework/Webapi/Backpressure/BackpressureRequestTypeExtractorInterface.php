@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Webapi\Backpressure;
 
 /**
- * Extracts request type ID from endpoints.
+ * Extracts request type ID from endpoints
  */
 interface BackpressureRequestTypeExtractorInterface
 {
