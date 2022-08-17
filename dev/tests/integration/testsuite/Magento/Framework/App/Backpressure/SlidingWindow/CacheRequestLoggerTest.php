@@ -13,6 +13,9 @@ use Magento\Framework\App\RequestInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
+/**
+ *  Tests CacheRequestLogger class
+ */
 class CacheRequestLoggerTest extends TestCase
 {
     /**
