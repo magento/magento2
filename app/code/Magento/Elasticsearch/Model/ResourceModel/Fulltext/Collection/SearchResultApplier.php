@@ -64,13 +64,13 @@ class SearchResultApplier implements SearchResultApplierInterface
     private $stockStatusApplier;
 
     /**
-     * @param Collection $collection
-     * @param SearchResultInterface $searchResult
-     * @param int $size
-     * @param int $currentPage
-     * @param ScopeConfigInterface|null $scopeConfig
-     * @param MetadataPool|null $metadataPool
-     * @param StockStatusFilterInterface|null $stockStatusFilter
+     * @param Collection                       $collection
+     * @param SearchResultInterface            $searchResult
+     * @param int                              $size
+     * @param int                              $currentPage
+     * @param ScopeConfigInterface|null        $scopeConfig
+     * @param MetadataPool|null                $metadataPool
+     * @param StockStatusFilterInterface|null  $stockStatusFilter
      * @param StockStatusApplierInterface|null $stockStatusApplier
      */
     public function __construct(
@@ -82,8 +82,7 @@ class SearchResultApplier implements SearchResultApplierInterface
         ?MetadataPool                $metadataPool = null,
         ?StockStatusFilterInterface  $stockStatusFilter = null,
         ?StockStatusApplierInterface $stockStatusApplier = null
-    )
-    {
+    ) {
         $this->collection = $collection;
         $this->searchResult = $searchResult;
         $this->size = $size;
@@ -124,9 +123,9 @@ class SearchResultApplier implements SearchResultApplierInterface
     /**
      * Slice current items
      *
-     * @param array $items
-     * @param int $size
-     * @param int $currentPage
+     * @param  array $items
+     * @param  int   $size
+     * @param  int   $currentPage
      * @return array
      */
     private function sliceItems(array $items, int $size, int $currentPage): array
@@ -153,8 +152,8 @@ class SearchResultApplier implements SearchResultApplierInterface
     /**
      * Get offset for given page.
      *
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param  int $pageNumber
+     * @param  int $pageSize
      * @return int
      */
     private function getOffset(int $pageNumber, int $pageSize): int
@@ -176,7 +175,8 @@ class SearchResultApplier implements SearchResultApplierInterface
         }
 
         if ($this->collection->getFlag('has_stock_status_filter')
-            || $this->collection->getFlag('has_category_filter')) {
+            || $this->collection->getFlag('has_category_filter')
+        ) {
             $categoryId = null;
             $searchCriteria = $this->searchResult->getSearchCriteria();
             foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
@@ -202,7 +202,7 @@ class SearchResultApplier implements SearchResultApplierInterface
     /**
      * Fetch product resultset by custom sort orders
      *
-     * @param int $categoryId
+     * @param  int $categoryId
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Exception
