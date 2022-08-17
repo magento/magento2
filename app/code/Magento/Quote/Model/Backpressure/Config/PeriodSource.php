@@ -11,7 +11,7 @@ namespace Magento\Quote\Model\Backpressure\Config;
 use Magento\Framework\Data\OptionSourceInterface;
 
 /**
- * Provides selection of limited periods.
+ * Provides selection of limited periods
  */
 class PeriodSource implements OptionSourceInterface
 {

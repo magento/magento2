@@ -27,15 +27,24 @@
                 <field id="limit" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Requests limit per authenticated customer</label>
                     <backend_model>Magento\Quote\Model\Backpressure\Config\LimitValue</backend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
                 </field>
                 <field id="guest_limit" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Requests limit per guest</label>
                     <backend_model>Magento\Quote\Model\Backpressure\Config\LimitValue</backend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
                 </field>
                 <field id="period" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Counter resets in a ...</label>
                     <source_model>Magento\Quote\Model\Backpressure\Config\PeriodSource</source_model>
                     <backend_model>Magento\Quote\Model\Backpressure\Config\PeriodValue</backend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
                 </field>
             </group>
         </section>

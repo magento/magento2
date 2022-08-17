@@ -13,10 +13,12 @@ use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\GuestCartManagementInterface;
 
 /**
- * Identifies which checkout related functionality needs backpressure management.
+ * Identifies which checkout related functionality needs backpressure management
  */
 class WebapiRequestTypeExtractor implements BackpressureRequestTypeExtractorInterface
 {
+    private const METHOD = 'placeOrder';
+
     /**
      * @var OrderLimitConfigManager
      */
@@ -35,8 +37,8 @@ class WebapiRequestTypeExtractor implements BackpressureRequestTypeExtractorInte
      */
     public function extract(string $service, string $method, string $endpoint): ?string
     {
-        if (($service === CartManagementInterface::class || $service === GuestCartManagementInterface::class)
-            && $method === 'placeOrder'
+        if (in_array($service, [CartManagementInterface::class, GuestCartManagementInterface::class])
+            && $method === self::METHOD
             && $this->config->isEnforcementEnabled()
         ) {
             return OrderLimitConfigManager::REQUEST_TYPE_ID;

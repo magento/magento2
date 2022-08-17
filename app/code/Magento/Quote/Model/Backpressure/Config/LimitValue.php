@@ -12,12 +12,14 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Handles backpressure limit config value.
+ * Handles backpressure limit config value
  */
 class LimitValue extends Value
 {
     /**
      * @inheritDoc
+     *
+     * @throws LocalizedException
      */
     public function beforeSave()
     {
