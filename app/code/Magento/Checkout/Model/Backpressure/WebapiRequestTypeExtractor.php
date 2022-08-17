@@ -12,10 +12,12 @@ use Magento\Framework\Webapi\Backpressure\BackpressureRequestTypeExtractorInterf
 use Magento\Quote\Model\Backpressure\OrderLimitConfigManager;
 
 /**
- * Identifies which checkout related functionality needs backpressure management.
+ * Identifies which checkout related functionality needs backpressure management
  */
 class WebapiRequestTypeExtractor implements BackpressureRequestTypeExtractorInterface
 {
+    private const METHOD = 'savePaymentInformationAndPlaceOrder';
+
     /**
      * @var OrderLimitConfigManager
      */
@@ -34,10 +36,8 @@ class WebapiRequestTypeExtractor implements BackpressureRequestTypeExtractorInte
      */
     public function extract(string $service, string $method, string $endpoint): ?string
     {
-        if ($method === 'savePaymentInformationAndPlaceOrder' && $this->config->isEnforcementEnabled()) {
-            return OrderLimitConfigManager::REQUEST_TYPE_ID;
-        }
-
-        return null;
+        return self::METHOD === $method && $this->config->isEnforcementEnabled()
+            ? OrderLimitConfigManager::REQUEST_TYPE_ID
+            : null;
     }
 }
