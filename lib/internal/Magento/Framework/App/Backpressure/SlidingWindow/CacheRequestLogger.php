@@ -62,11 +62,12 @@ class CacheRequestLogger implements RequestLoggerInterface
         if (empty($value)) {
             return null;
         }
+
         return (int) $value;
     }
 
     /**
-     * Generate cache ID based on context.
+     * Generate cache ID based on context
      *
      * @param ContextInterface $context
      * @param int $timeSlot
