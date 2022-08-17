@@ -11,10 +11,14 @@ namespace Magento\Authorization\Test\Unit\Model;
 use Magento\Authorization\Model\IdentityProvider;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\Backpressure\ContextInterface;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+* Tests the IdentityProvider class
+*/
 class IdentityProviderTest extends TestCase
 {
     /**
@@ -101,5 +105,29 @@ class IdentityProviderTest extends TestCase
 
         $this->assertEquals($expectedType, $this->model->fetchIdentityType());
         $this->assertEquals($expectedIdentity, $this->model->fetchIdentity());
+    }
+
+    /**
+     * Tests fetching an identity type when user type can't be defined
+     */
+    public function testFetchIdentityTypeUserTypeNotDefined()
+    {
+        $this->userContext->method('getUserId')->willReturn(2);
+        $this->userContext->method('getUserType')->willReturn(null);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(__('User type not defined')->getText());
+        $this->model->fetchIdentityType();
+    }
+
+    /**
+     * Tests fetching an identity when user address can't be extracted
+     */
+    public function testFetchIdentityFailedToExtractRemoteAddress()
+    {
+        $this->userContext->method('getUserId')->willReturn(null);
+        $this->remoteAddress->method('getRemoteAddress')->willReturn(false);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(__('Failed to extract remote address')->getText());
+        $this->model->fetchIdentity();
     }
 }

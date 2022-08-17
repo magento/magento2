@@ -110,9 +110,9 @@ class Handler
      * @param DataObjectProcessor $dataObjectProcessor
      * @param MethodsMap $methodsMapProcessor
      * @param ParamsOverrider|null $paramsOverrider
+     * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      * @param BackpressureContextFactory|null $backpressureContextFactory
      * @param BackpressureEnforcerInterface|null $backpressureEnforcer
-     * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -125,9 +125,9 @@ class Handler
         DataObjectProcessor $dataObjectProcessor,
         MethodsMap $methodsMapProcessor,
         ?ParamsOverrider $paramsOverrider = null,
+        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null,
         ?BackpressureContextFactory $backpressureContextFactory = null,
-        ?BackpressureEnforcerInterface $backpressureEnforcer = null,
-        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
+        ?BackpressureEnforcerInterface $backpressureEnforcer = null
     ) {
         $this->_request = $request;
         $this->_objectManager = $objectManager;
@@ -138,12 +138,12 @@ class Handler
         $this->_dataObjectProcessor = $dataObjectProcessor;
         $this->methodsMapProcessor = $methodsMapProcessor;
         $this->paramsOverrider = $paramsOverrider ?? ObjectManager::getInstance()->get(ParamsOverrider::class);
+        $this->inputArraySizeLimitValue = $inputArraySizeLimitValue
+            ?? ObjectManager::getInstance()->get(InputArraySizeLimitValue::class);
         $this->backpressureContextFactory = $backpressureContextFactory
             ?? ObjectManager::getInstance()->get(BackpressureContextFactory::class);
         $this->backpressureEnforcer = $backpressureEnforcer
             ?? ObjectManager::getInstance()->get(BackpressureEnforcerInterface::class);
-        $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
-                ->get(InputArraySizeLimitValue::class);
     }
 
     /**
