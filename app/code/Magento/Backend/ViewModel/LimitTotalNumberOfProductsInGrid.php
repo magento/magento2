@@ -11,9 +11,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
- * Get configuration values related to approximate number of products calculation for grid.
+ * Get configuration values related to limit total number of products in grid collection.
  */
-class CalculateApproximateProductsNumber implements ArgumentInterface
+class LimitTotalNumberOfProductsInGrid implements ArgumentInterface
 {
     /**
      * @var ScopeConfigInterface
@@ -30,22 +30,22 @@ class CalculateApproximateProductsNumber implements ArgumentInterface
     }
 
     /**
-     * Check if configuration setting to calculate approximate total number of products in grid is enabled.
+     * Check if configuration setting to limit total number of products in grid is enabled.
      *
      * @return bool
      */
-    public function calculateApproximateProductsTotalNumber(): bool
+    public function limitTotalNumberOfProducts(): bool
     {
-        return (bool)$this->scopeConfig->getValue('admin/grid/calculate_approximate_total_number_of_products');
+        return (bool)$this->scopeConfig->getValue('admin/grid/limit_total_number_of_products');
     }
 
     /**
-     * Get records threshold for approximate total number of products calculation.
+     * Get records threshold for limit total number of products in collection.
      *
      * @return int
      */
-    public function getRecordsThreshold(): int
+    public function getRecordsLimit(): int
     {
-        return (int)$this->scopeConfig->getValue('admin/grid/records_threshold');
+        return (int)$this->scopeConfig->getValue('admin/grid/records_limit');
     }
 }

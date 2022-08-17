@@ -73,7 +73,7 @@
                         </block>
                         <referenceBlock name="search_grid">
                             <arguments>
-                                <argument name="view_model" xsi:type="object">Magento\Backend\ViewModel\CalculateApproximateProductsNumber</argument>
+                                <argument name="view_model" xsi:type="object">Magento\Backend\ViewModel\LimitTotalNumberOfProductsInGrid</argument>
                             </arguments>
                         </referenceBlock>
                         <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items" template="Magento_Sales::order/create/items.phtml" name="items">

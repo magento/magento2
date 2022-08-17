@@ -33,8 +33,8 @@
         </system>
         <admin>
             <grid>
-                <calculate_approximate_total_number_of_products>1</calculate_approximate_total_number_of_products>
-                <records_threshold>20000</records_threshold>
+                <limit_total_number_of_products>1</limit_total_number_of_products>
+                <records_limit>20000</records_limit>
             </grid>
         </admin>
         <general>

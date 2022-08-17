@@ -43,7 +43,7 @@ class ProductDataProvider
     }
 
     /**
-     * Add flag to display/hide total records found and pagination elements in product grid header.
+     * Add flag to display/hide total records found and pagination elements in products grid header.
      *
      * @param array $data
      * @return array
@@ -51,8 +51,8 @@ class ProductDataProvider
     private function addShowTotalRecords(array $data): array
     {
         if (key_exists('totalRecords', $data)) {
-            if ($this->scopeConfig->getValue('admin/grid/calculate_approximate_total_number_of_products')
-                && $data['totalRecords'] >= $this->scopeConfig->getValue('admin/grid/records_threshold')) {
+            if ($this->scopeConfig->getValue('admin/grid/limit_total_number_of_products')
+                && $data['totalRecords'] >= $this->scopeConfig->getValue('admin/grid/records_limit')) {
                 $data['showTotalRecords'] = false;
             } else {
                 $data['showTotalRecords'] = true;
