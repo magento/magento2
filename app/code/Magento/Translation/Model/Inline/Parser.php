@@ -719,7 +719,6 @@ class Parser implements ParserInterface
                 ],
                 JSON_HEX_QUOT
             );
-
             $spanHtml = $this->_getDataTranslateSpan(
                 '[' . $this->escaper->escapeHtmlAttr($translateProperties) . ']',
                 $matches[1][0]
