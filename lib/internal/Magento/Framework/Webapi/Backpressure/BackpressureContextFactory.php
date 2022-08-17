@@ -10,7 +10,6 @@ namespace Magento\Framework\Webapi\Backpressure;
 
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\Backpressure\IdentityProviderInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 
 /**
@@ -63,17 +62,14 @@ class BackpressureContextFactory
             return null;
         }
 
-        return ObjectManager::getInstance()->create(
-            RestContext::class,
-            [
-                $this->request,
-                $this->identityProvider->fetchIdentity(),
-                $this->identityProvider->fetchIdentityType(),
-                $typeId,
-                $service,
-                $method,
-                $endpoint
-            ]
+        return new RestContext(
+            $this->request,
+            $this->identityProvider->fetchIdentity(),
+            $this->identityProvider->fetchIdentityType(),
+            $typeId,
+            $service,
+            $method,
+            $endpoint
         );
     }
 }

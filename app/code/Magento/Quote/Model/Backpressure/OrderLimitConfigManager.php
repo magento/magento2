@@ -55,13 +55,7 @@ class OrderLimitConfigManager implements LimitConfigManagerInterface
                 throw new RuntimeException(__("Identity type not found"));
         }
 
-        return ObjectManager::getInstance()->create(
-            LimitConfig::class,
-            [
-                $limit,
-                $this->fetchPeriod()
-            ]
-        );
+        return new LimitConfig($limit, $this->fetchPeriod());
     }
 
     /**

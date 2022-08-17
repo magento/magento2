@@ -62,15 +62,12 @@ class ContextFactory
             return null;
         }
 
-        return ObjectManager::getInstance()->create(
-            ControllerContext::class,
-            [
-                $this->request,
-                $this->identityProvider->fetchIdentity(),
-                $this->identityProvider->fetchIdentityType(),
-                $typeId,
-                $action
-            ]
+        return new ControllerContext(
+            $this->request,
+            $this->identityProvider->fetchIdentity(),
+            $this->identityProvider->fetchIdentityType(),
+            $typeId,
+            $action
         );
     }
 }

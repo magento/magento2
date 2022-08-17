@@ -62,15 +62,12 @@ class BackpressureContextFactory
             return null;
         }
 
-        return ObjectManager::getInstance()->create(
-            GraphQlContext::class,
-            [
-                $this->request,
-                $this->identityProvider->fetchIdentity(),
-                $this->identityProvider->fetchIdentityType(),
-                $typeId,
-                $field->getResolver()
-            ]
+        return new GraphQlContext(
+            $this->request,
+            $this->identityProvider->fetchIdentity(),
+            $this->identityProvider->fetchIdentityType(),
+            $typeId,
+            $field->getResolver()
         );
     }
 }
