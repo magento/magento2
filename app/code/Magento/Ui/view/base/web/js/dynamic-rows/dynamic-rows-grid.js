@@ -259,6 +259,7 @@ define([
             }
 
             this.source.set(this.dataScope + '.' + this.index + '.' + this.recordData().length, obj);
+            obj.position=this.recordData().length-1
         },
 
         /**
