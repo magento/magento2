@@ -86,6 +86,23 @@
         <data key="default_billing">Yes</data>
         <requiredEntity type="region">RegionTX</requiredEntity>
     </entity>
+    <entity name="US_Address_TX_Default_Billing_With_Long_Line_Apartment" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West</item>
+            <item>Parmer Lane Apt</item>
+        </array>
+        <data key="city">Austin</data>
+        <data key="state">Texas</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">78729</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <requiredEntity type="region">RegionTX</requiredEntity>
+    </entity>
     <entity name="US_Address_NY" type="address">
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
@@ -391,5 +408,42 @@
         <data key="state">Greater London</data>
         <data key="default_billing">Yes</data>
         <data key="vatNumber">GB571903731</data>
+    </entity>
+    <entity name="USACustomerAddress" type="address">
+        <data key="id">0</data>
+        <data key="customer_id">15</data>
+        <requiredEntity type="region">CustomerRegionOne</requiredEntity>
+        <data key="region_id">0</data>
+        <data key="country_id">US</data>
+        <array key="street">
+            <item>2718 Pinchelone Street</item>
+            <item>Bld D</item>
+        </array>
+        <data key="company">Magento</data>
+        <data key="telephone">1234568910</data>
+        <data key="fax">1234568910</data>
+        <data key="postcode">23464</data>
+        <data key="city">Virginia</data>
+        <data key="state">Virginia</data>
+        <data key="firstname">Lasonya G </data>
+        <data key="lastname">Butler</data>
+        <data key="middlename">string</data>
+        <data key="prefix">Mr</data>
+        <data key="suffix">Sr</data>
+        <data key="vat_id">vatData</data>
+        <data key="default_shipping">true</data>
+        <data key="default_billing">true</data>
+        <data key="region_qty">66</data>
+    </entity>
+    <entity name="France_Address" type="address">
+        <array key="street">
+            <item>1234 Some France address</item>
+            <item>113</item>
+        </array>
+        <data key="city">City</data>
+        <data key="country_id">FR</data>
+        <data key="country">France</data>
+        <data key="postcode">12345</data>
+        <data key="telephone">512-345-6789</data>
     </entity>
 </entities>

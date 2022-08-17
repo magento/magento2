@@ -39,7 +39,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected $_nameInLayout = 'store_view_labels';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getTabClass()
@@ -48,7 +48,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getTabUrl()
@@ -57,7 +57,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function isAjaxLoaded()
@@ -66,7 +66,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getTabLabel()
@@ -75,7 +75,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function getTabTitle()
@@ -84,7 +84,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function canShowTab()
@@ -93,7 +93,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     public function isHidden()
@@ -180,7 +180,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
                             'required' => false,
                             'value' => isset($labels[$store->getId()]) ? $labels[$store->getId()] : '',
                             'fieldset_html_class' => 'store',
-                            'data-form-part' => 'sales_rule_form'
+                            'data-form-part' => $this->getData('target_form')
                         ]
                     );
                 }

@@ -4245,6 +4245,8 @@ return [
     ['Zend_Feed', 'Laminas\Feed'],
     ['Zend_Uri', 'Laminas\Uri\Uri'],
     ['Zend_Mime', 'Magento\Framework\HTTP\Mime'],
+    ['Zend_Mail'],
+    ['Zend_Json'],
     ['Magento\Framework\Encryption\Crypt', 'Magento\Framework\Encryption\EncryptionAdapterInterface'],
     ['Magento\Wishlist\Setup\Patch\Schema\AddProductIdConstraint'],
     ['Magento\Elasticsearch\Block\Adminhtml\System\Config\TestConnection'],
@@ -4325,5 +4327,20 @@ return [
     [
         'Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder\MatchTest',
         'Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder\MatchQueryTest'
-    ]
+    ],
+    [
+        'Magento\Elasticsearch6\Block\Adminhtml\System\Config\TestConnection',
+        'Magento\Elasticsearch7\Block\Adminhtml\System\Config\TestConnection'
+    ],
+    [
+        'Magento\Elasticsearch6\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver',
+        'Magento\Elasticsearch7\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver'
+    ],
+    [
+        'Magento\Elasticsearch6\Model\Client\Elasticsearch',
+        'Magento\Elasticsearch7\Model\Client\Elasticsearch'
+    ],
+    ['Magento\Elasticsearch\Test\Unit\Model\DataProvider\Base\SuggestionsTest'],
+    ['Magento\Elasticsearch6\Test\Unit\Model\Client\ElasticsearchTest'],
+    ['Magento\Elasticsearch6\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolverTest']
 ];
