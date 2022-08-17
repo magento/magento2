@@ -297,7 +297,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
             $this->_itemCollection->addAttributeToSelect('name')->addUrlRewrite()->load();
 
             /* update compare items count */
-            $this->_catalogSession->setCatalogCompareWebsiteId($this->_storeManager->getWebsite()->getId());
             $count = count($this->_itemCollection);
             $counts = $this->_catalogSession->getCatalogCompareItemsCountPerWebsite() ?: [];
             $counts[$this->_storeManager->getWebsite()->getId()] = $count;
