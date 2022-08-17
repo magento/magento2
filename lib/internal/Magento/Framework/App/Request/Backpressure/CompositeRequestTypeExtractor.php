@@ -12,7 +12,7 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 
 /**
- * Uses other extractors.
+ * Uses other extractors
  */
 class CompositeRequestTypeExtractor implements RequestTypeExtractorInterface
 {

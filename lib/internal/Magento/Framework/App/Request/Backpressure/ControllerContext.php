@@ -12,6 +12,9 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Controller request context
+ */
 class ControllerContext implements ContextInterface
 {
     /**
@@ -93,7 +96,7 @@ class ControllerContext implements ContextInterface
     }
 
     /**
-     * Controller instance.
+     * Controller instance
      *
      * @return ActionInterface
      */

@@ -12,12 +12,12 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 
 /**
- * Extracts type ID for backpressure context.
+ * Extracts type ID for backpressure context
  */
 interface RequestTypeExtractorInterface
 {
     /**
-     * Extract type ID if possible.
+     * Extract type ID if possible
      *
      * @param RequestInterface $request
      * @param ActionInterface $action

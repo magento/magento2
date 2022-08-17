@@ -11,10 +11,11 @@ namespace Magento\Framework\App\Request\Backpressure;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\Backpressure\IdentityProviderInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 
 /**
- * Creates context for current request.
+ * Creates context for current request
  */
 class ContextFactory
 {
@@ -49,7 +50,7 @@ class ContextFactory
     }
 
     /**
-     * Create context if possible.
+     * Create context if possible
      *
      * @param ActionInterface $action
      * @return ContextInterface|null
@@ -61,12 +62,15 @@ class ContextFactory
             return null;
         }
 
-        return new ControllerContext(
-            $this->request,
-            $this->identityProvider->fetchIdentity(),
-            $this->identityProvider->fetchIdentityType(),
-            $typeId,
-            $action
+        return ObjectManager::getInstance()->create(
+            ControllerContext::class,
+            [
+                $this->request,
+                $this->identityProvider->fetchIdentity(),
+                $this->identityProvider->fetchIdentityType(),
+                $typeId,
+                $action
+            ]
         );
     }
 }
