@@ -22,3 +22,4 @@ Message,Message
 "If empty, UTF-8 will be used.","If empty, UTF-8 will be used."
 "Web Services Configuration","Web Services Configuration"
 "REST and SOAP configurations, generated WSDL file","REST and SOAP configurations, generated WSDL file"
+"Something went wrong, please try again later","Something went wrong, please try again later"

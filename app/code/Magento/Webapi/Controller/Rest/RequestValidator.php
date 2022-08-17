@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Webapi\Controller\Rest;
 
@@ -15,9 +16,10 @@ use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Webapi\Backpressure\BackpressureContextFactory;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\Webapi\Controller\Rest\Router\Route;
 
 /**
- * This class is responsible for validating the request
+ * Validates a request
  */
 class RequestValidator
 {
@@ -52,8 +54,6 @@ class RequestValidator
     private BackpressureEnforcerInterface $backpressureEnforcer;
 
     /**
-     * Initialize dependencies
-     *
      * @param RestRequest $request
      * @param Router $router
      * @param StoreManagerInterface $storeManager
@@ -80,7 +80,7 @@ class RequestValidator
     }
 
     /**
-     * Validate request
+     * Validates the request
      *
      * @throws AuthorizationException
      * @throws WebapiException
@@ -88,12 +88,54 @@ class RequestValidator
      */
     public function validate()
     {
-        $this->checkPermissions();
         $route = $this->router->match($this->request);
+        $this->checkPermissions($route);
+        $this->onlyHttps($route);
+        $this->checkBackpressure($route);
+    }
+
+    /**
+     * Perform authentication and authorization
+     *
+     * @param Route $route
+     * @return void
+     * @throws AuthorizationException
+     */
+    private function checkPermissions(Route $route)
+    {
+        if ($this->authorization->isAllowed($route->getAclResources())) {
+            return;
+        }
+
+        throw new AuthorizationException(
+            __(
+                "The consumer isn't authorized to access %resources.",
+                ['resources' => implode(', ', $route->getAclResources())]
+            )
+        );
+    }
+
+    /**
+     * Checks if operation allowed only in HTTPS
+     *
+     * @param Route $route
+     * @throws WebapiException
+     */
+    private function onlyHttps(Route $route)
+    {
         if ($route->isSecure() && !$this->request->isSecure()) {
             throw new WebapiException(__('Operation allowed only in HTTPS'));
         }
+    }
 
+    /**
+     * Checks backpressure
+     *
+     * @param Route $route
+     * @throws WebapiException
+     */
+    private function checkBackpressure(Route $route)
+    {
         $context = $this->backpressureContextFactory->create(
             $route->getServiceClass(),
             $route->getServiceMethod(),
@@ -105,23 +147,6 @@ class RequestValidator
             } catch (BackpressureExceededException $exception) {
                 throw new WebapiException(__('Something went wrong, please try again later'));
             }
-        }
-    }
-
-    /**
-     * Perform authentication and authorization.
-     *
-     * @throws \Magento\Framework\Exception\AuthorizationException
-     * @return void
-     */
-    private function checkPermissions()
-    {
-        $route = $this->router->match($this->request);
-        if (!$this->authorization->isAllowed($route->getAclResources())) {
-            $params = ['resources' => implode(', ', $route->getAclResources())];
-            throw new AuthorizationException(
-                __("The consumer isn't authorized to access %resources.", $params)
-            );
         }
     }
 }

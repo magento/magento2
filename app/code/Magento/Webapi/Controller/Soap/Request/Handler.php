@@ -30,9 +30,9 @@ use Magento\Framework\Reflection\MethodsMap;
 use Magento\Webapi\Model\ServiceMetadata;
 
 /**
- * Handler of requests to SOAP server.
+ * Handler of requests to SOAP server
  *
- * The main responsibility is to instantiate proper action controller (service) and execute requested method on it.
+ * The main responsibility is to instantiate proper action controller (service) and execute requested method on it
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -101,8 +101,6 @@ class Handler
     private $inputArraySizeLimitValue;
 
     /**
-     * Initialize dependencies.
-     *
      * @param WebapiRequest $request
      * @param ObjectManagerInterface $objectManager
      * @param SoapConfig $apiConfig
@@ -149,7 +147,7 @@ class Handler
     }
 
     /**
-     * Handler for all SOAP operations.
+     * Handler for all SOAP operations
      *
      * @param string $operation
      * @param array $arguments
@@ -173,18 +171,7 @@ class Handler
         }
 
         //Backpressure enforcement
-        $context = $this->backpressureContextFactory->create(
-            $serviceMethodInfo['class'],
-            $serviceMethodInfo['method'],
-            $operation
-        );
-        if ($context) {
-            try {
-                $this->backpressureEnforcer->enforce($context);
-            } catch (BackpressureExceededException $exception) {
-                throw new WebapiException(__('Something went wrong, please try again later'));
-            }
-        }
+        $this->backpressureEnforcement($serviceMethodInfo['class'], $serviceMethodInfo['method'], $operation);
 
         if (!$this->authorization->isAllowed($serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])) {
             throw new AuthorizationException(
@@ -295,5 +282,25 @@ class Handler
             throw new InvalidArgumentException("Service returned result in invalid format.");
         }
         return [self::RESULT_NODE_NAME => $result];
+    }
+
+    /**
+     * Backpressure enforcement
+     *
+     * @param string $class
+     * @param string $method
+     * @param string $operation
+     * @throws WebapiException
+     */
+    private function backpressureEnforcement(string $class, string $method, string $operation)
+    {
+        $context = $this->backpressureContextFactory->create($class, $method, $operation);
+        if ($context) {
+            try {
+                $this->backpressureEnforcer->enforce($context);
+            } catch (BackpressureExceededException $exception) {
+                throw new WebapiException(__('Something went wrong, please try again later'));
+            }
+        }
     }
 }
