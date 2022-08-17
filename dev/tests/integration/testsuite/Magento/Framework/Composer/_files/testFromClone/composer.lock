@@ -2596,6 +2596,7 @@
                 "videlalvaro/php-amqplib": "~2.4"
             },
             "suggest": {
+                "psr/log": "For using the console logger",
                 "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
                 "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
                 "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
@@ -5307,7 +5308,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "~7.0.0||~8.1.0",
+        "php": "~8.1.0",
         "ext-ctype": "*",
         "ext-curl": "*",
         "ext-dom": "*",
@@ -5317,6 +5318,7 @@
         "ext-intl": "*",
         "ext-mcrypt": "*",
         "ext-simplexml": "*",
+        "ext-spl": "*",
         "lib-libxml": "*"
     },
     "platform-dev": [],
