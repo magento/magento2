@@ -11,12 +11,12 @@ namespace Magento\GraphQl\Model\Backpressure;
 use Magento\Framework\GraphQl\Config\Element\Field;
 
 /**
- * Extracts request type for fields.
+ * Extracts request type for fields
  */
 interface RequestTypeExtractorInterface
 {
     /**
-     * Extracts type ID if possible.
+     * Extracts type ID if possible
      *
      * @param Field $field
      * @return string|null

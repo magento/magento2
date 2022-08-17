@@ -15,7 +15,7 @@ use Magento\QuoteGraphQl\Model\Resolver\SetPaymentAndPlaceOrder;
 use ReflectionException;
 
 /**
- * Identifies which quote fields need backpressure management.
+ * Identifies which quote fields need backpressure management
  */
 class BackpressureRequestTypeExtractor implements RequestTypeExtractorInterface
 {
@@ -38,13 +38,10 @@ class BackpressureRequestTypeExtractor implements RequestTypeExtractorInterface
     public function extract(Field $field): ?string
     {
         $fieldResolver = $this->resolver($field->getResolver());
-
         $placeOrderName = $this->resolver(PlaceOrder::class);
-
         $setPaymentAndPlaceOrder = $this->resolver(SetPaymentAndPlaceOrder::class);
 
-        if (($field->getResolver() === $setPaymentAndPlaceOrder ||
-                $placeOrderName  ===  $fieldResolver)
+        if (($field->getResolver() === $setPaymentAndPlaceOrder || $placeOrderName  ===  $fieldResolver)
             && $this->config->isEnforcementEnabled()
         ) {
             return OrderLimitConfigManager::REQUEST_TYPE_ID;

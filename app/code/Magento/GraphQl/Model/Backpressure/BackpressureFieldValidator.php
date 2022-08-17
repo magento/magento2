@@ -15,7 +15,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\ValidatorInterface;
 
 /**
- * Enforces backpressure for queries/mutations.
+ * Enforces backpressure for queries/mutations
  */
 class BackpressureFieldValidator implements ValidatorInterface
 {
@@ -47,14 +47,16 @@ class BackpressureFieldValidator implements ValidatorInterface
     public function validate(Field $field, $args): void
     {
         $context = $this->backpressureContextFactory->create($field);
-        if ($context) {
-            try {
-                $this->backpressureEnforcer->enforce($context);
-            } catch (BackpressureExceededException $exception) {
-                throw new GraphQlInputException(
-                    __('Something went wrong while processing the request. Try again later')
-                );
-            }
+        if (!$context) {
+            return;
+        }
+
+        try {
+            $this->backpressureEnforcer->enforce($context);
+        } catch (BackpressureExceededException $exception) {
+            throw new GraphQlInputException(
+                __('Something went wrong while processing the request. Try again later')
+            );
         }
     }
 }

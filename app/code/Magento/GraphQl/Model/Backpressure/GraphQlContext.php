@@ -11,6 +11,9 @@ namespace Magento\GraphQl\Model\Backpressure;
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * GraphQl request context
+ */
 class GraphQlContext implements ContextInterface
 {
     /**
@@ -92,7 +95,7 @@ class GraphQlContext implements ContextInterface
     }
 
     /**
-     * Field's resolver class name.
+     * Field's resolver class name
      *
      * @return string
      */

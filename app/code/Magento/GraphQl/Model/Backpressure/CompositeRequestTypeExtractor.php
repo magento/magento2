@@ -11,7 +11,7 @@ namespace Magento\GraphQl\Model\Backpressure;
 use Magento\Framework\GraphQl\Config\Element\Field;
 
 /**
- * Extracts using other extractors.
+ * Extracts using other extractors
  */
 class CompositeRequestTypeExtractor implements RequestTypeExtractorInterface
 {

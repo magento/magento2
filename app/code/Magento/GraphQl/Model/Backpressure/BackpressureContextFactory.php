@@ -10,12 +10,12 @@ namespace Magento\GraphQl\Model\Backpressure;
 
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\Backpressure\IdentityProviderInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 /**
- * Creates context for fields.
+ * Creates context for fields
  */
 class BackpressureContextFactory
 {
@@ -50,7 +50,7 @@ class BackpressureContextFactory
     }
 
     /**
-     * Creates context if possible.
+     * Creates context if possible
      *
      * @param Field $field
      * @return ContextInterface|null
@@ -62,12 +62,15 @@ class BackpressureContextFactory
             return null;
         }
 
-        return new GraphQlContext(
-            $this->request,
-            $this->identityProvider->fetchIdentity(),
-            $this->identityProvider->fetchIdentityType(),
-            $typeId,
-            $field->getResolver()
+        return ObjectManager::getInstance()->create(
+            GraphQlContext::class,
+            [
+                $this->request,
+                $this->identityProvider->fetchIdentity(),
+                $this->identityProvider->fetchIdentityType(),
+                $typeId,
+                $field->getResolver()
+            ]
         );
     }
 }
