@@ -79,7 +79,7 @@ define([
             this.setData({
                 items: [],
                 totalRecords: 0,
-                showTotalRecords: true,
+                showTotalRecords: true
             });
 
             return this;
