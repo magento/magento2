@@ -9,12 +9,10 @@ namespace Magento\Bundle\Ui\DataProvider\Product\Modifier;
 
 use Magento\Bundle\Model\Product\Type;
 use Magento\Directory\Model\Currency as DirectoryCurrency;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Currency\Data\Currency as CurrencyData;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use NumberFormatter;
-use Zend_Currency;
-use Zend_Currency_Exception;
 
 /**
  * Modify product listing special price attributes
@@ -57,8 +55,6 @@ class SpecialPriceAttributes implements ModifierInterface
 
     /**
      * @inheritdoc
-     * @throws NoSuchEntityException
-     * @throws Zend_Currency_Exception
      */
     public function modifyData(array $data): array
     {
@@ -76,7 +72,7 @@ class SpecialPriceAttributes implements ModifierInterface
                     $item[$priceAttribute] =
                         $this->directoryCurrency->format(
                             $item[$priceAttribute],
-                            ['display' => Zend_Currency::NO_SYMBOL],
+                            ['display' => CurrencyData::NO_SYMBOL],
                             false
                         );
                     if (in_array($this->localeResolver->getLocale(), self::LOCALE_USING_DECIMAL_COMMA)) {
