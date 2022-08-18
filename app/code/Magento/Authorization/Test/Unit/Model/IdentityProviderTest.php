@@ -17,8 +17,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
-* Tests the IdentityProvider class
-*/
+ * Tests the IdentityProvider class
+ */
 class IdentityProviderTest extends TestCase
 {
     /**

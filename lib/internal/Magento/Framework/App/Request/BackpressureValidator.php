@@ -55,6 +55,7 @@ class BackpressureValidator implements ValidatorInterface
 
     /**
      * @inheritDoc
+     *
      * @throws LocalizedException
      */
     public function validate(RequestInterface $request, ActionInterface $action): void
