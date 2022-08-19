@@ -26,7 +26,7 @@
                 </if>
                 <if args="address.street">
                     <text args="address.street" if="_.isString(address.street)"></text>
-                    <text args="_.filter(_.values(address.street), function (value) { return _.isString(value)}).join(', ')"
+                    <text args="_.filter(_.values(_.compact(address.street)), function (value) { return _.isString(value)}).join(', ')"
                           ifnot="_.isString(address.street)"></text>
                     <br/>
                 </if>
