@@ -19,32 +19,32 @@
                 <text args="address.middlename" if="address.middlename"></text>
                 <text args="address.lastname"></text>
                 <text args="address.suffix" if="address.suffix"></text>
-                <br/>
+                <br>
                 <if args="address.company">
                     <text args="address.company"></text>
-                    <br/>
+                    <br>
                 </if>
                 <if args="address.street">
                     <text args="address.street" if="_.isString(address.street)"></text>
                     <text args="_.filter(_.values(_.compact(address.street)), function (value) { return _.isString(value)}).join(', ')"
                           ifnot="_.isString(address.street)"></text>
-                    <br/>
+                    <br>
                 </if>
                 <text args="address.city + ', '" if="address.city"></text>
                 <text args="address.region + ', '" if="address.region"></text>
                 <if args="address.postcode">
                     <text args="address.postcode"></text>
-                    <br/>
+                    <br>
                 </if>
                 <text args="address.country"></text>
                 <if args="address.telephone">
-                    <br/>T: <a attr="href: 'tel:' + address.telephone" text="address.telephone"></a>
+                    <br>T: <a attr="href: 'tel:' + address.telephone" text="address.telephone"></a>
                 </if>
                 <if args="address.fax">
-                    <br/>F: <text args="address.fax"></text>
+                    <br>F: <text args="address.fax"></text>
                 </if>
                 <if args="address.vat_id">
-                    <br/>VAT: <text args="address.vat_id"></text>
+                    <br>VAT: <text args="address.vat_id"></text>
                 </if>
             </div>
             <translate args="notExistsMessage" if="_.isEmpty($data.address)"></translate>
