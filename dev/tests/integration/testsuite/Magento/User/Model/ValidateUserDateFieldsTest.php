@@ -9,9 +9,7 @@ namespace Magento\User\Model;
 use Magento\Backend\Model\Auth as AuthModel;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Fixture\DataFixture;
-use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\User\Model\User as UserModel;
@@ -23,11 +21,6 @@ use PHPUnit\Framework\TestCase;
  */
 class ValidateUserDateFieldsTest extends TestCase
 {
-
-    /**
-     * @var DataFixtureStorage
-     */
-    private DataFixtureStorage $fixtures;
 
     /**
      * @var AuthModel
@@ -46,20 +39,20 @@ class ValidateUserDateFieldsTest extends TestCase
     {
         Bootstrap::getInstance()->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $objectManager = Bootstrap::getObjectManager();
-        $this->fixtures = DataFixtureStorageManager::getStorage();
         $this->authModel = $objectManager->create(AuthModel::class);
         $this->userModel = $objectManager->create(UserModel::class);
     }
 
     /**
      * @throws AuthenticationException
+     * @throws LocalizedException
      */
     #[
         DataFixture(UserDataFixture::class, ['role_id' => 1], 'user')
     ]
     public function testLogDate()
     {
-        $user = $this->fixtures->get('user');
+        $user = DataFixtureStorageManager::getStorage()->get('user');
         $userName = $user->getDataByKey('username');
         $this->authModel->login(
             $userName,
