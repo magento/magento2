@@ -4343,5 +4343,7 @@ return [
     ],
     ['Magento\Elasticsearch\Test\Unit\Model\DataProvider\Base\SuggestionsTest'],
     ['Magento\Elasticsearch6\Test\Unit\Model\Client\ElasticsearchTest'],
-    ['Magento\Elasticsearch6\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolverTest']
+    ['Magento\Elasticsearch6\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolverTest'],
+    ['Zend_Measure_Length', 'Magento\Framework\Measure\Length'],
+    ['Zend_Measure_Weight', 'Magento\Framework\Measure\Weight'],
 ];
