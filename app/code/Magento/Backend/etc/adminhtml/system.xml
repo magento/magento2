@@ -484,7 +484,7 @@
                 <label>Admin Grids</label>
                 <field id="limit_total_number_of_products" translate="label comment"
                        type="select" sortOrder="1" showInDefault="1" canRestore="1">
-                    <label>Limit number of products in grid</label>
+                    <label>Limit Number of Products in Grid</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Limit total number of products in grid collection.</comment>
                 </field>
