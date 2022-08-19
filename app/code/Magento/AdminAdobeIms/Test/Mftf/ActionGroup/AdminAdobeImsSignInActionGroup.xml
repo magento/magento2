@@ -24,7 +24,7 @@
         <click selector="{{AdminAdobeImsSignInSection.AdobeImsUsernameContinueButton}}" stepKey="clickUsernameContinue"/>
 
         <click selector="{{AdminAdobeImsSignInSection.AdobeImsProfileSelect}}" stepKey="clickProfile"/>
-
+        <wait time="10" stepKey="waitTenSeconds"/>
         <fillField selector="{{AdminAdobeImsSignInSection.password}}" userInput="{{password}}" stepKey="fillPassword"/>
         <click selector="{{AdminAdobeImsSignInSection.AdobeImsPasswordContinueButton}}" stepKey="clickPasswordContinue"/>
         <waitForPageLoad stepKey="waitForLoginToFinish"/>
