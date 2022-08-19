@@ -5,8 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Please read [our guidelines](https://developer.adobe.com/commerce/contributor/guides/code-contributions/#report-an-issue)
-        before submitting the issue.
+        Please read [our guidelines](https://developer.adobe.com/commerce/contributor/guides/code-contributions/#report-an-issue) before submitting the issue.
   - type: textarea
     attributes:
       label: Summary
@@ -19,8 +18,7 @@ body:
     attributes:
       label: Examples
       description: |
-        Provide code examples or a patch with a test (recommended) to clearly
-        indicate the problem.
+        Provide code examples or a patch with a test (recommended) to clearly indicate the problem.
     validations:
       required: true
   - type: textarea
