@@ -17,7 +17,7 @@
             <severity value="CRITICAL"/>
             <group value="login_as_customer"/>
             <skip>
-                <issueId value="ACQE-3906"/>
+                <issueId value="ACQE-3908"/>
             </skip>
         </annotations>
         <before>
