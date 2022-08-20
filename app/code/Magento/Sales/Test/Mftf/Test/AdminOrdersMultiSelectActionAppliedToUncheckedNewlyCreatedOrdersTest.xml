@@ -32,8 +32,11 @@
         </before>
 
         <after>
+<<<<<<< HEAD
             <!--Remove default flat rate shipping method settings-->
             <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+=======
+>>>>>>> 5f94f99e29f (MC-36889:Admin orders multi-select action applied to unchecked newly created orders)
             <!--Delete product-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!--Delete customer-->
@@ -58,7 +61,11 @@
         <actionGroup ref="SelectCashOnDeliveryPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
         <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRate"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+<<<<<<< HEAD
         <grabTextFrom selector="{{OrdersGridSection.orderID}}" stepKey="orderNumber"/>
+=======
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+>>>>>>> 5f94f99e29f (MC-36889:Admin orders multi-select action applied to unchecked newly created orders)
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage1"/>
         <click selector="{{AdminOrdersGridSection.allCheckbox}}" stepKey="clickSelectAll"/>
         <openNewTab stepKey="openNewTab"/>
