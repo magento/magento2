@@ -16,6 +16,9 @@
             <description value="Verify that UI elements are not shown if 'Login as customer' functionality is disabled"/>
             <severity value="CRITICAL"/>
             <group value="login_as_customer"/>
+            <skip>
+                <issueId value="ACQE-3906"/>
+            </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0" stepKey="disableLoginAsCustomer"/>
