@@ -5,8 +5,9 @@
 
 define([
     'Magento_Ui/js/form/element/website',
-    'uiRegistry'
-], function (Website, registry) {
+    'uiRegistry',
+    'underscore'
+], function (Website, registry, _) {
     'use strict';
 
     return Website.extend({
@@ -20,7 +21,19 @@ define([
                 sendEmailStoreIdFieldKey = 'sendemail_store_id',
                 groupId = registry.get('index = ' + groupIdFieldKey),
                 sendEmailStoreId = registry.get('index = ' + sendEmailStoreIdFieldKey),
+                customerAttributes = registry.filter('parentScope = data.customer'),
                 option = this.getOption(value);
+
+            customerAttributes.forEach(element => {
+                var requiredWebsites = element.validation['required-entry-website']
+                if (_.isArray(requiredWebsites) && requiredWebsites.includes(parseInt(value))) {
+                    element.validation['required-entry'] = true;
+                    element.required(true);
+                } else {
+                    element.validation['required-entry'] = false;
+                    element.required(false);
+                }
+            });
 
             if (groupId) {
                 groupId.value(option[groupIdFieldKey]);

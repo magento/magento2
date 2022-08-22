@@ -37,6 +37,7 @@ class AttributeMetadataResolver
         'notice' => 'note',
         'default' => 'default_value',
         'size' => 'multiline_count',
+        'attributeId' => 'attribute_id',
     ];
 
     /**
@@ -81,12 +82,18 @@ class AttributeMetadataResolver
     private $groupManagement;
 
     /**
+     * @var AttributeWebsiteRequired|null
+     */
+    private ?AttributeWebsiteRequired $attributeWebsiteRequired;
+
+    /**
      * @param CountryWithWebsites $countryWithWebsiteSource
      * @param EavValidationRules $eavValidationRules
      * @param FileUploaderDataResolver $fileUploaderDataResolver
      * @param ContextInterface $context
      * @param ShareConfig $shareConfig
      * @param GroupManagement|null $groupManagement
+     * @param AttributeWebsiteRequired|null $attributeWebsiteRequired
      */
     public function __construct(
         CountryWithWebsites $countryWithWebsiteSource,
@@ -94,7 +101,8 @@ class AttributeMetadataResolver
         FileUploaderDataResolver $fileUploaderDataResolver,
         ContextInterface $context,
         ShareConfig $shareConfig,
-        ?GroupManagement $groupManagement = null
+        ?GroupManagement $groupManagement = null,
+        ?AttributeWebsiteRequired $attributeWebsiteRequired = null
     ) {
         $this->countryWithWebsiteSource = $countryWithWebsiteSource;
         $this->eavValidationRules = $eavValidationRules;
@@ -102,6 +110,8 @@ class AttributeMetadataResolver
         $this->context = $context;
         $this->shareConfig = $shareConfig;
         $this->groupManagement = $groupManagement ?? ObjectManager::getInstance()->get(GroupManagement::class);
+        $this->attributeWebsiteRequired = $attributeWebsiteRequired ??
+            ObjectManager::getInstance()->get(AttributeWebsiteRequired::class);
     }
 
     /**
@@ -238,5 +248,48 @@ class AttributeMetadataResolver
                 'field' => 'website_ids'
             ];
         }
+
+        if (isset($meta[CustomerInterface::WEBSITE_ID])) {
+            $this->processWebsiteIsRequired($meta);
+        }
+    }
+
+    /**
+     * Adds attribute 'required' validation according to the scope.
+     *
+     * @param array $meta
+     * @return void
+     */
+    private function processWebsiteIsRequired(&$meta): void
+    {
+        $attributeIds = array_values(
+            array_map(
+                function ($attribute) {
+                    return $attribute['arguments']['data']['config']['attributeId'];
+                },
+                $meta
+            )
+        );
+        $websiteIds = array_values(
+            array_map(
+                function ($option) {
+                    return (int)$option['value'];
+                },
+                $meta[CustomerInterface::WEBSITE_ID]['arguments']['data']['config']['options']
+            )
+        );
+
+        $websiteRequired = $this->attributeWebsiteRequired->get($attributeIds, $websiteIds);
+        array_walk(
+            $meta,
+            function (&$attribute) use ($websiteRequired) {
+                $id = $attribute['arguments']['data']['config']['attributeId'];
+                unset($attribute['arguments']['data']['config']['attributeId']);
+                if (!empty($websiteRequired[$id])) {
+                    $attribute['arguments']['data']['config']
+                        ['validation']['required-entry-website'] = $websiteRequired[$id];
+                }
+            }
+        );
     }
 }

@@ -205,6 +205,12 @@ class CustomerRepository implements CustomerRepositoryInterface
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
             $prevCustomerDataArr = $prevCustomerData->__toArray();
+            if (isset($prevCustomerDataArr[CustomerInterface::CUSTOM_ATTRIBUTES])) {
+                foreach ($prevCustomerDataArr[CustomerInterface::CUSTOM_ATTRIBUTES] as $attribute) {
+                    $prevCustomerDataArr[$attribute['attribute_code']] = $attribute['value'];
+                }
+                unset($prevCustomerDataArr[CustomerInterface::CUSTOM_ATTRIBUTES]);
+            }
         }
         /** @var $customer \Magento\Customer\Model\Data\Customer */
         $customerArr = $customer->__toArray();
