@@ -41,8 +41,6 @@
                 <default_tax_group>2</default_tax_group>
             </product>
             <seo>
-                <product_url_suffix>.html</product_url_suffix>
-                <category_url_suffix>.html</category_url_suffix>
                 <product_use_categories>0</product_use_categories>
                 <save_rewrites_history>1</save_rewrites_history>
                 <title_separator>-</title_separator>
