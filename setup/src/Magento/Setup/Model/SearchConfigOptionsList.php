@@ -19,14 +19,14 @@ class SearchConfigOptionsList
     /**
      * Input key for the options
      */
-    const INPUT_KEY_SEARCH_ENGINE = 'search-engine';
-    const INPUT_KEY_ELASTICSEARCH_HOST = 'elasticsearch-host';
-    const INPUT_KEY_ELASTICSEARCH_PORT = 'elasticsearch-port';
-    const INPUT_KEY_ELASTICSEARCH_ENABLE_AUTH = 'elasticsearch-enable-auth';
-    const INPUT_KEY_ELASTICSEARCH_USERNAME = 'elasticsearch-username';
-    const INPUT_KEY_ELASTICSEARCH_PASSWORD = 'elasticsearch-password';
-    const INPUT_KEY_ELASTICSEARCH_INDEX_PREFIX = 'elasticsearch-index-prefix';
-    const INPUT_KEY_ELASTICSEARCH_TIMEOUT = 'elasticsearch-timeout';
+    public const INPUT_KEY_SEARCH_ENGINE = 'search-engine';
+    public const INPUT_KEY_ELASTICSEARCH_HOST = 'elasticsearch-host';
+    public const INPUT_KEY_ELASTICSEARCH_PORT = 'elasticsearch-port';
+    public const INPUT_KEY_ELASTICSEARCH_ENABLE_AUTH = 'elasticsearch-enable-auth';
+    public const INPUT_KEY_ELASTICSEARCH_USERNAME = 'elasticsearch-username';
+    public const INPUT_KEY_ELASTICSEARCH_PASSWORD = 'elasticsearch-password';
+    public const INPUT_KEY_ELASTICSEARCH_INDEX_PREFIX = 'elasticsearch-index-prefix';
+    public const INPUT_KEY_ELASTICSEARCH_TIMEOUT = 'elasticsearch-timeout';
 
     /**
      * Get options list for search engine configuration
@@ -97,7 +97,6 @@ class SearchConfigOptionsList
     {
         return [
             'elasticsearch5' => 'Elasticsearch 5.x (deprecated)',
-            'elasticsearch6' => 'Elasticsearch 6.x',
             'elasticsearch7' => 'Elasticsearch 7.x'
         ];
     }

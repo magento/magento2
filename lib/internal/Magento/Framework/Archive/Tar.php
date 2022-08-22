@@ -20,7 +20,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      *
      * @const int
      */
-    const TAR_BLOCK_SIZE = 512;
+    public const TAR_BLOCK_SIZE = 512;
 
     /**
      * Keep file or directory for packing.
@@ -180,7 +180,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      */
     protected function _setCurrentFile($file)
     {
-        $file = str_replace('\\', '/', $file);
+        $file = $file !== null ? str_replace('\\', '/', $file) : '';
         $this->_currentFile = $file . (!is_link($file) && is_dir($file) && substr($file, -1) != '/' ? '/' : '');
         return $this;
     }
@@ -215,7 +215,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      */
     protected function _setCurrentPath($path)
     {
-        $path = str_replace('\\', '/', $path);
+        $path = $path !== null ? str_replace('\\', '/', $path) : '';
         if ($this->_skipRoot && is_dir($path)) {
             $this->_currentPath = $path . (substr($path, -1) != '/' ? '/' : '');
         } else {
@@ -304,6 +304,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
 
     /**
      * Compose header for current file in TAR format.
+     *
      * If length of file's name greater 100 characters,
      * method breaks header into two pieces. First contains
      * header and data with long name. Second contain only header.
@@ -315,8 +316,8 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      */
     protected function _composeHeader($long = false)
     {
-        $file = $this->_getCurrentFile();
-        $path = $this->_getCurrentPath();
+        $file = $this->_getCurrentFile() ?? '';
+        $path = $this->_getCurrentPath() ?? '';
         $infoFile = stat($file);
         $nameFile = str_replace($path, '', $file);
         $nameFile = str_replace('\\', '/', $nameFile);
@@ -375,6 +376,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
 
     /**
      * Read TAR string from file, and unpacked it.
+     *
      * Create files and directories information about described
      * in the string.
      *

@@ -13,7 +13,6 @@ use Magento\Framework\Registry;
 use Magento\TestFramework\Fixture\DataFixtureFactory;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
-use PHPUnit\Framework\Exception;
 
 /**
  * Apply and revert data fixtures
@@ -47,27 +46,12 @@ class DataFixtureSetup
      *
      * @param array $fixture
      * @return DataObject|null
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function apply(array $fixture): ?DataObject
     {
         $data = $this->resolveVariables($fixture['data'] ?? []);
-        try {
-            $factory = $this->dataFixtureFactory->create($fixture['factory']);
-            $result = $factory->apply($data);
-        } catch (\Throwable $exception) {
-            throw new Exception(
-                sprintf(
-                    "Unable to apply fixture%s: %s.\n%s\n%s",
-                    $fixture['name'] ? ' "' . $fixture['name'] . '"' : '',
-                    $fixture['factory'],
-                    $exception->getMessage(),
-                    $exception->getTraceAsString()
-                ),
-                0,
-                $exception
-            );
-        }
+        $factory = $this->dataFixtureFactory->create($fixture['factory']);
+        $result = $factory->apply($data);
 
         if ($result !== null && !empty($fixture['name'])) {
             DataFixtureStorageManager::getStorage()->persist(
@@ -96,18 +80,6 @@ class DataFixtureSetup
             }
         } catch (NoSuchEntityException $exception) {
             //ignore
-        } catch (\Throwable $exception) {
-            throw new Exception(
-                sprintf(
-                    "Unable to revert fixture%s: %s.\n%s\n%s",
-                    $fixture['name'] ? '"' . $fixture['name'] . '"' : '',
-                    $fixture['factory'],
-                    $exception->getMessage(),
-                    $exception->getTraceAsString()
-                ),
-                0,
-                $exception
-            );
         } finally {
             $this->registry->unregister('isSecureArea');
             $this->registry->register('isSecureArea', $isSecureArea);
@@ -125,7 +97,7 @@ class DataFixtureSetup
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function resolveVariables(array $data): array
+    private function resolveVariables(array $data): array
     {
         foreach ($data as $key => $value) {
             if (is_array($value)) {

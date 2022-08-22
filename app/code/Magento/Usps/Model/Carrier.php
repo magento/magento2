@@ -12,6 +12,8 @@ use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\AsyncClient\HttpException;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
+use Magento\Framework\Measure\Length;
+use Magento\Framework\Measure\Weight;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
@@ -474,6 +476,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $r->setWeightPounds(floor($weight));
         $ounces = ($weight - floor($weight)) * self::OUNCES_POUND;
         $r->setWeightOunces(sprintf('%.' . self::$weightPrecision . 'f', $ounces));
+        $r->setPackages($this->createPackages((float)$r->getFreeMethodWeight(), []));
         $r->setService($freeMethod);
     }
 
@@ -643,7 +646,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected function _parseXmlResponse($response)
     {
         $r = $this->_rawRequest;
-        $allowedMethods = explode(',', $this->getConfigData('allowed_methods'));
+        $allowedMethods = explode(',', $this->getConfigData('allowed_methods') ?? '');
         $serviceCodeToActualNameMap = [];
         $isUS = $this->_isUSCountry($r->getDestCountryId());
         $costArr = [];
@@ -1235,7 +1238,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getAllowedMethods()
     {
-        $allowed = explode(',', $this->getConfigData('allowed_methods'));
+        $allowed = explode(',', $this->getConfigData('allowed_methods') ?? '');
         $arr = [];
         foreach ($allowed as $k) {
             $arr[$k] = $this->getCode('method', $k);
@@ -1522,12 +1525,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $packageParams = $request->getPackageParams();
 
         $packageWeight = $request->getPackageWeight();
-        if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
+        if ($packageParams->getWeightUnits() != Weight::OUNCE) {
             $packageWeight = round(
                 (float) $this->_carrierHelper->convertMeasureWeight(
                     (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
-                    \Zend_Measure_Weight::OUNCE
+                    Weight::OUNCE
                 )
             );
         }
@@ -1616,12 +1619,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
         $packageParams = $request->getPackageParams();
         $packageWeight = $request->getPackageWeight();
-        if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
+        if ($packageParams->getWeightUnits() != Weight::OUNCE) {
             $packageWeight = round(
                 (float) $this->_carrierHelper->convertMeasureWeight(
                     (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
-                    \Zend_Measure_Weight::OUNCE
+                    Weight::OUNCE
                 )
             );
         }
@@ -1702,42 +1705,42 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $length = $packageParams->getLength();
         $girth = $packageParams->getGirth();
         $packageWeight = $request->getPackageWeight();
-        if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::POUND) {
+        if ($packageParams->getWeightUnits() != Weight::POUND) {
             $packageWeight = $this->_carrierHelper->convertMeasureWeight(
                 (float)$request->getPackageWeight(),
                 $packageParams->getWeightUnits(),
-                \Zend_Measure_Weight::POUND
+                Weight::POUND
             );
         }
-        if ($packageParams->getDimensionUnits() != \Zend_Measure_Length::INCH) {
+        if ($packageParams->getDimensionUnits() != Length::INCH) {
             $length = round(
                 (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getLength(),
                     $packageParams->getDimensionUnits(),
-                    \Zend_Measure_Length::INCH
+                    Length::INCH
                 )
             );
             $width = round(
                 (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getWidth(),
                     $packageParams->getDimensionUnits(),
-                    \Zend_Measure_Length::INCH
+                    Length::INCH
                 )
             );
             $height = round(
                 (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getHeight(),
                     $packageParams->getDimensionUnits(),
-                    \Zend_Measure_Length::INCH
+                    Length::INCH
                 )
             );
         }
-        if ($packageParams->getGirthDimensionUnits() != \Zend_Measure_Length::INCH) {
+        if ($packageParams->getGirthDimensionUnits() != Length::INCH) {
             $girth = round(
                 (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getGirth(),
                     $packageParams->getGirthDimensionUnits(),
-                    \Zend_Measure_Length::INCH
+                    Length::INCH
                 )
             );
         }
@@ -1870,11 +1873,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $item->setData($itemShipment);
 
             $itemWeight = $item->getWeight() * $item->getQty();
-            if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::POUND) {
+            if ($packageParams->getWeightUnits() != Weight::POUND) {
                 $itemWeight = $this->_carrierHelper->convertMeasureWeight(
                     $itemWeight,
                     $packageParams->getWeightUnits(),
-                    \Zend_Measure_Weight::POUND
+                    Weight::POUND
                 );
             }
             if (!empty($countriesOfManufacture[$item->getProductId()])) {
@@ -1946,8 +1949,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @deprecated 100.2.1 This method must not be used anymore. Starting from 23.02.2018 USPS elimates API usage for
+     * @deprecated 100.2.1 This method must not be used anymore. Starting from 23.02.2018 USPS eliminates API usage for
      * free shipping labels generating.
+     * @see no alternatives
      */
     protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
     {
@@ -2135,14 +2139,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $zip4 = '';
         $zip5 = '';
         $zip = [$zipString];
-        if (preg_match('/[\\d\\w]{5}\\-[\\d\\w]{4}/', $zipString) != 0) {
+        if ($zipString !== null && preg_match('/[\\d\\w]{5}\\-[\\d\\w]{4}/', $zipString) != 0) {
             $zip = explode('-', $zipString);
         }
         $count = count($zip);
         for ($i = 0; $i < $count; ++$i) {
-            if (strlen($zip[$i]) == 5) {
+            if (strlen($zip[$i] ?? '') == 5) {
                 $zip5 = $zip[$i];
-            } elseif (strlen($zip[$i]) == 4) {
+            } elseif (strlen($zip[$i] ?? '') == 4) {
                 $zip4 = $zip[$i];
             }
         }

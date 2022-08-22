@@ -10,6 +10,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductRelatedProductsSection">
         <element name="relatedProductsActionsHeaderText" type="text" selector=".block.related .block-actions" />
+        <element name="relatedProductsActionsHeaderBtn" type="text" selector=".block.related .block-actions button" />
         <element name="relatedProductsListSectionText" type="text" selector=".block.related .products.wrapper.grid.products-grid.products-related" />
         <element name="relatedProductName" type="button" selector="//*[@class='block related']//a[contains(text(), '{{productName}}')]" parameterized="true"/>
         <element name="relatedProductCheckBoxButton" type="button" selector="//*[@class='block related']//a[contains(text(), '{{productName}}')]/parent::*/parent::*//input[@class='checkbox related']" parameterized="true"/>

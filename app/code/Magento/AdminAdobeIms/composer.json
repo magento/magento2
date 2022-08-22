@@ -33,7 +33,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\Backend\\": ""
+            "Magento\\AdminAdobeIms\\": ""
         }
     }
 }
