@@ -9,11 +9,10 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="SimplefreeshippingoptionsTest">
         <annotations>
-            <stories value="Create Sales Rule"/>
+            <features value="SalesRule"/>
+            <stories value="Creating Sales Rule"/>
             <title value="Test the simple free shipping options as default it should select Please select option"/>
-            <description value="Test the simple free shipping options as default it should select Please select option"/>
-            <testCaseId value="AC-2242"/>
-            <useCaseId value="AC-2242"/>
+            <description value="Test the simple free shipping options as default it should select Please select option  "/>
             <severity value="MAJOR"/>
             <group value="SalesRule"/>
         </annotations>
@@ -51,7 +50,7 @@
         <click selector="{{AdminCartPriceRulesFormSection.customerGroupsDoneBtn}}" stepKey="clickDone" after="clickSelectAll"/>
 
 
-        <wait time="10" stepKey="waitForUpdateStarts"/>
+
         <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.coupon_type}}" stepKey="selectCouponType"/>
         <scrollTo selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="scrollToActionsHeader"/>
         <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
