@@ -46,5 +46,8 @@
         <element name="textFieldAttrRequireMessage" type="text" selector="//input[@name='custom_attributes[{{attribute}}]']/ancestor::div[contains(@class, 'control')]/div/span" parameterized="true" timeout="30"/>
         <element name="textFieldAttribute" type="input" selector="[name*='custom_attributes[{{attribute}}]']" parameterized="true" timeout="30"/>
         <element name="shippingAddressRequiredField" type="text" selector="//div[@id='shipping-new-address-form']//div[contains(@class, 'field _required') and contains(@name, 'shippingAddress.{{fieldName}}')]" parameterized="true" timeout="30"/>
+        <element name="stateProvince" type="text" selector="//div[@name='shippingAddress.region_id']//span[contains(text(),'State/Province')]" timeout="30"/>
+        <element name="stateProvinceWithoutAsterisk" type="text" selector="//div[@class='field' and @name='shippingAddress.region_id']" timeout="30"/>
+        <element name="stateProvinceWithAsterisk" type="text" selector="//div[@class='field _required' and @name='shippingAddress.region_id']" timeout="30"/>
     </section>
 </sections>

@@ -78,7 +78,7 @@
             <argument name="productUrlKey" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductPageLoad"/>
-
+        
         <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
             <argument name="customerId" value="$createCustomer.id$"/>
         </actionGroup>
@@ -92,7 +92,7 @@
         </actionGroup>
         <actionGroup ref="AdminSelectDropdownOptionOnConfigureProductSlidingModalActionGroup" stepKey="selectProductOption">
             <argument name="optionName" value="$$createFirstProduct.name$$"/>
-        </actionGroup>    
+        </actionGroup>
 
         <actionGroup ref="AdminClickOkOnConfigureProductSlidingModalActionGroup" stepKey="clickOkBtn"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAddingConfigure"/>
