@@ -446,4 +446,19 @@
         <data key="postcode">12345</data>
         <data key="telephone">512-345-6789</data>
     </entity>
+    <entity name="US_Address_Empty_Street_Lines" type="address">
+        <array key="street">
+            <item>123 Street Line</item>
+            <item>empty</item>
+            <item>empty</item>
+            <item>Region Line</item>
+        </array>
+        <data key="city">New York</data>
+        <data key="state">New York</data>
+        <data key="postcode">10001</data>
+        <data key="telephone">512-345-6789</data>
+        <requiredEntity type="region">RegionNY</requiredEntity>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+    </entity>
 </entities>
