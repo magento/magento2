@@ -490,8 +490,8 @@
                 </field>
                 <field id="records_limit" translate="label comment" type="text" sortOrder="2" showInDefault="1" canRestore="1">
                     <label>Records Limit</label>
-                    <validate>validate-greater-than-zero validate-number</validate>
-                    <comment>Limit total number of products in grid collection if their number is greater than this value.</comment>
+                    <validate>validate-digits validate-digits-range digits-range-20000-</validate>
+                    <comment>Limit total number of products in grid collection if their number is greater than this value. Minimum value: 20000.</comment>
                     <depends>
                         <field id="limit_total_number_of_products">1</field>
                     </depends>
