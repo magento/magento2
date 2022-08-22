@@ -14,8 +14,6 @@
             <title value="Test the simple free shipping options as default it should select Please select option"/>
             <description value="Test the simple free shipping options as default it should select Please select option  "/>
             <severity value="MAJOR"/>
-            <testCaseId value="AC-2242"/>
-            <useCaseId value="AC-2242"/>
             <group value="SalesRule"/>
         </annotations>
 
