@@ -8,6 +8,7 @@ namespace Magento\Config\Controller\Adminhtml\System\Config;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * System Configuration Save Controller
@@ -220,6 +221,22 @@ class Save extends AbstractConfig implements HttpPostActionInterface
                 'groups' => $this->_getGroupsForSave(),
             ];
             $configData = $this->filterNodes($configData);
+
+            $europeanUnionCountriesSelectedValues = true;
+            $fields = $configData['groups']['country']['fields'];
+            if (isset($fields['eu_countries'])) {
+                if (empty($fields['eu_countries']['value']) &&
+                    !isset($fields['eu_countries']['inherit'])) {
+                    $europeanUnionCountriesSelectedValues = false;
+                }
+            } else {
+                $europeanUnionCountriesSelectedValues = false;
+            }
+            if (!$europeanUnionCountriesSelectedValues) {
+                throw new LocalizedException(
+                    __('Something went wrong while saving this configuration.')
+                );
+            }
 
             /** @var \Magento\Config\Model\Config $configModel */
             $configModel = $this->_configFactory->create(['data' => $configData]);
