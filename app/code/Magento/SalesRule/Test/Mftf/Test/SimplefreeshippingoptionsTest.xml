@@ -12,7 +12,7 @@
             <features value="SalesRule"/>
             <stories value="Creating Sales Rule"/>
             <title value="Test the simple free shipping options as default it should select Please select option"/>
-            <description value="Test the simple free shipping options as default it should select Please select option "/>
+            <description value="Test the simple free shipping options as default it should select Please select option  "/>
             <severity value="MAJOR"/>
             <group value="SalesRule"/>
         </annotations>
