@@ -236,7 +236,7 @@ define([
         },
 
         /**
-         * Updates number of pages.
+         * Updates show total records flag.
          */
         updateShowTotalRecords: function () {
             if (this.showTotalRecords === undefined) {
