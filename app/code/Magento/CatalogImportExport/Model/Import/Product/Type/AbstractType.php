@@ -320,9 +320,9 @@ abstract class AbstractType
                 unset(self::$commonAttributesCache[$addedAttribute['id']]['options_use_table']);
             }
         }
-        if (!empty($attributesToLoadFromTable)) {
+        foreach (array_chunk($attributesToLoadFromTable, 1000) as $attributesToLoadFromTableChunk) {
             $collection = $this->attributeOptionCollectionFactory->create();
-            $collection->setAttributeFilter(['in' => $attributesToLoadFromTable]);
+            $collection->setAttributeFilter(['in' => $attributesToLoadFromTableChunk]);
             $collection->setStoreFilter(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
             foreach ($collection as $option) {
                 $attributeId = $option->getAttributeId();
