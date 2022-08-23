@@ -15,7 +15,7 @@ class StockItemProcessor implements StockItemProcessorInterface
     private $stockItemImporter;
 
     /**
-     * @param StockItemImporterInterface
+     * @param StockItemImporterInterface $stockItemImporter
      */
     public function __construct(
         StockItemImporterInterface $stockItemImporter
