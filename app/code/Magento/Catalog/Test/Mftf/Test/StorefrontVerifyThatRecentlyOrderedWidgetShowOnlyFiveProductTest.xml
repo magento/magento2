@@ -52,8 +52,8 @@
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
-            <deleteData createDataKey="createProduct2" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="createProduct3" stepKey="deleteSimpleProduct3"/>
             <deleteData createDataKey="createProduct4" stepKey="deleteSimpleProduct4"/>
             <deleteData createDataKey="createProduct5" stepKey="deleteSimpleProduct5"/>
