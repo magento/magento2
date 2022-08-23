@@ -15,6 +15,8 @@ use Magento\Framework\HTTP\AsyncClient\HttpException;
 use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
+use Magento\Framework\Measure\Length;
+use Magento\Framework\Measure\Weight;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
@@ -604,18 +606,18 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             'dimensions' => ['HEIGHT' => __('Height'), 'DEPTH' => __('Depth'), 'WIDTH' => __('Width')],
             'size' => ['0' => __('Regular'), '1' => __('Specific')],
             'dimensions_variables' => [
-                'L' => \Zend_Measure_Weight::POUND,
-                'LB' => \Zend_Measure_Weight::POUND,
-                'POUND' => \Zend_Measure_Weight::POUND,
-                'K' => \Zend_Measure_Weight::KILOGRAM,
-                'KG' => \Zend_Measure_Weight::KILOGRAM,
-                'KILOGRAM' => \Zend_Measure_Weight::KILOGRAM,
-                'I' => \Zend_Measure_Length::INCH,
-                'IN' => \Zend_Measure_Length::INCH,
-                'INCH' => \Zend_Measure_Length::INCH,
-                'C' => \Zend_Measure_Length::CENTIMETER,
-                'CM' => \Zend_Measure_Length::CENTIMETER,
-                'CENTIMETER' => \Zend_Measure_Length::CENTIMETER,
+                'L' => Weight::POUND,
+                'LB' => Weight::POUND,
+                'POUND' => Weight::POUND,
+                'K' => Weight::KILOGRAM,
+                'KG' => Weight::KILOGRAM,
+                'KILOGRAM' => Weight::KILOGRAM,
+                'I' => Length::INCH,
+                'IN' => Length::INCH,
+                'INCH' => Length::INCH,
+                'C' => Length::CENTIMETER,
+                'CM' => Length::CENTIMETER,
+                'CENTIMETER' => Length::CENTIMETER,
             ],
         ];
 
@@ -719,7 +721,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected function _getWeight($weight, $maxWeight = false, $configWeightUnit = false)
     {
         if ($maxWeight) {
-            $configWeightUnit = \Zend_Measure_Weight::KILOGRAM;
+            $configWeightUnit = Weight::KILOGRAM;
         } elseif ($configWeightUnit) {
             $configWeightUnit = $this->getCode('dimensions_variables', $configWeightUnit);
         } else {
@@ -924,10 +926,10 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             $configWeightUnit = $this->getCode('dimensions_variables', $configWeightUnit);
         }
 
-        if ($configWeightUnit == \Zend_Measure_Weight::POUND) {
-            $configDimensionUnit = \Zend_Measure_Length::INCH;
+        if ($configWeightUnit == Weight::POUND) {
+            $configDimensionUnit = Length::INCH;
         } else {
-            $configDimensionUnit = \Zend_Measure_Length::CENTIMETER;
+            $configDimensionUnit = Length::CENTIMETER;
         }
 
         $countryDimensionUnit = $this->getCode('dimensions_variables', $this->_getDimensionUnit());
