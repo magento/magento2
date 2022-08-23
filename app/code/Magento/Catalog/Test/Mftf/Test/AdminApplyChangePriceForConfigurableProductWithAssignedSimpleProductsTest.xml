@@ -11,7 +11,7 @@
             <features value="Catalog"/>
             <stories value="Update price"/>
             <title value="Child Product price is updated according to updated prices from backend"/>
-            <description value="Child Product of Config product price is updated according to updated prices when changing product price from backend"/>
+            <description value="Update the simple product price that is under configurable and validate the updated price in the front end"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-2031"/>
             <group value="Catalog"/>
