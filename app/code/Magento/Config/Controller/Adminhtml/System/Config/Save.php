@@ -222,20 +222,23 @@ class Save extends AbstractConfig implements HttpPostActionInterface
             ];
             $configData = $this->filterNodes($configData);
 
+            $groups = $this->getRequest()->getParam('groups');
             $europeanUnionCountriesSelectedValues = true;
-            $fields = $configData['groups']['country']['fields'];
-            if (isset($fields['eu_countries'])) {
-                if (empty($fields['eu_countries']['value']) &&
-                    !isset($fields['eu_countries']['inherit'])) {
+            if (isset($groups['country']['fields'])) {
+                if(isset($groups['country']['fields']['eu_countries'])) {
+                    $countries = $groups['country']['fields']['eu_countries'];
+                    if (empty($countries['value']) &&
+                        !isset($countries['inherit'])) {
+                        $europeanUnionCountriesSelectedValues = false;
+                    }
+                } else {
                     $europeanUnionCountriesSelectedValues = false;
                 }
-            } else {
-                $europeanUnionCountriesSelectedValues = false;
-            }
-            if (!$europeanUnionCountriesSelectedValues) {
-                throw new LocalizedException(
-                    __('Something went wrong while saving this configuration.')
-                );
+                if (!$europeanUnionCountriesSelectedValues) {
+                    throw new LocalizedException(
+                        __('Something went wrong while saving this configuration.')
+                    );
+                }
             }
 
             /** @var \Magento\Config\Model\Config $configModel */
