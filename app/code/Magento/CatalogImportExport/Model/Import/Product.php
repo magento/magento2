@@ -1798,6 +1798,7 @@ class Product extends AbstractEntity
      * @param array $rowData
      * @param int $storeId
      * @param array $existingImages
+     * @param string $productMediaPath
      * @param array $uploadedImages
      * @param array $imagesForChangeVisibility
      * @param array $labelsForUpdate
@@ -1965,7 +1966,7 @@ class Product extends AbstractEntity
                 $productType = $previousType;
             }
             if ($productType === null) {
-                throw new Skip('Unknown Product Type');
+                throw new Skip(__('Unknown Product Type'));
             }
         }
         $productTypeModel = $this->_productTypeModels[$productType];
@@ -2041,13 +2042,12 @@ class Product extends AbstractEntity
      */
     private function getFileContent(string $path): string
     {
-        $content = '';
         if ($this->_mediaDirectory->isFile($path)
             && $this->_mediaDirectory->isReadable($path)
         ) {
-            $content = $this->_mediaDirectory->readFile($path);
+            return $this->_mediaDirectory->readFile($path);
         }
-        return $content;
+        return '';
     }
 
     /**
@@ -2058,7 +2058,9 @@ class Product extends AbstractEntity
      */
     private function getRemoteFileContent(string $filename): string
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $content = file_get_contents($filename);
+        // phpcs:enable Magento2.Functions.DiscouragedFunction
         return $content !== false ? $content : '';
     }
 
@@ -3319,40 +3321,67 @@ class Product extends AbstractEntity
         $content = filter_var($columnImage, FILTER_VALIDATE_URL)
             ? $this->getRemoteFileContent($columnImage)
             : $this->getFileContent($this->joinFilePaths($this->getUploader()->getTmpDir(), $columnImage));
-        $value = '';
-        if ($content) {
-            $useHash = $this->shouldUseHash($images);
-            if ($useHash) {
-                $hash = hash(self::HASH_ALGORITHM, $content);
-            }
-            foreach ($images as &$image) {
-                if ($useHash) {
-                    if (!isset($image['hash'])) {
-                        $imageContent = $this->getFileContent($this->joinFilePaths($productMediaPath, $image['value']));
-                        if (!$imageContent) {
-                            $image['hash'] = '';
-                            continue;
-                        }
-                        $image['hash'] = hash(self::HASH_ALGORITHM, $imageContent);
-                    }
-                    if (isset($image['hash']) && $image['hash'] === $hash) {
-                        $value = $image['value'];
-                        break;
-                    }
-                } else {
-                    if (!isset($image['content'])) {
-                        $image['content'] = $this->getFileContent(
-                            $this->joinFilePaths($productMediaPath, $image['value'])
-                        );
-                    }
-                    if ($content === $image['content']) {
-                        $value = $image['value'];
-                        break;
-                    }
+        if (!$content) {
+            return '';
+        }
+        if ($this->shouldUseHash($images)) {
+            return $this->findImageByColumnImageUsingHash($productMediaPath, $images, $content);
+        } else {
+            return $this->findImageByColumnImageUsingContent($productMediaPath, $images, $content);
+        }
+    }
+
+    /**
+     * Returns image that matches the provided image content using hash
+     *
+     * @param string $productMediaPath
+     * @param array $images
+     * @param string $content
+     * @return string
+     */
+    private function findImageByColumnImageUsingHash(string $productMediaPath, array &$images, string $content): string
+    {
+        $hash = hash(self::HASH_ALGORITHM, $content);
+        foreach ($images as &$image) {
+            if (!isset($image['hash'])) {
+                $imageContent = $this->getFileContent($this->joinFilePaths($productMediaPath, $image['value']));
+                if (!$imageContent) {
+                    $image['hash'] = '';
+                    continue;
                 }
+                $image['hash'] = hash(self::HASH_ALGORITHM, $imageContent);
+            }
+            if (isset($image['hash']) && $image['hash'] === $hash) {
+                return $image['value'];
             }
         }
-        return $value;
+        return '';
+    }
+
+    /**
+     * Returns image that matches the provided image content using content
+     *
+     * @param string $productMediaPath
+     * @param array $images
+     * @param string $content
+     * @return string
+     */
+    private function findImageByColumnImageUsingContent(
+        string $productMediaPath,
+        array &$images,
+        string $content
+    ): string {
+        foreach ($images as &$image) {
+            if (!isset($image['content'])) {
+                $image['content'] = $this->getFileContent(
+                    $this->joinFilePaths($productMediaPath, $image['value'])
+                );
+            }
+            if ($content === $image['content']) {
+                return $image['value'];
+            }
+        }
+        return '';
     }
 
     /**
