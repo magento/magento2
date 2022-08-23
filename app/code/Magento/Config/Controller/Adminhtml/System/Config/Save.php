@@ -225,7 +225,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
             $groups = $this->getRequest()->getParam('groups');
             $europeanUnionCountriesSelectedValues = true;
             if (isset($groups['country']['fields'])) {
-                if(isset($groups['country']['fields']['eu_countries'])) {
+                if (isset($groups['country']['fields']['eu_countries'])) {
                     $countries = $groups['country']['fields']['eu_countries'];
                     if (empty($countries['value']) &&
                         !isset($countries['inherit'])) {
