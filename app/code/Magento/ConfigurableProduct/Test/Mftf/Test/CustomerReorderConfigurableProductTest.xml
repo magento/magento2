@@ -15,7 +15,6 @@
             <description value="Customer Reorder Configurable Product"/>
             <testCaseId value="MC-26757"/>
             <severity value="MAJOR"/>
-            <group value="mtf_migrated"/>
         </annotations>
         <before>
             <!-- create category -->
@@ -49,7 +48,7 @@
                 <argument name="qty" value="1"/>
             </actionGroup>
 
-            <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+            <actionGroup ref="GoToCheckoutFromMiniCartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
 
             <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
                 <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
