@@ -13,7 +13,7 @@
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\View" name="sales_invoice_view">
                 <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\View\Form" name="form" template="Magento_Sales::order/invoice/view/form.phtml">
-                    <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\View\Form\Info" name="invoice_info" template="Magento_Sales::order/invoice/view/info.phtml"/>
+                    <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\View\Form\Info" name="invoice_info" template="Magento_Sales::order/invoice/view/form/info.phtml"/>
                     <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="Magento_Sales::order/view/info.phtml">
                         <container name="extra_customer_info"/>
                     </block>

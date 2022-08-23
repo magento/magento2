@@ -12,7 +12,7 @@
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\View" name="sales_creditmemo_view">
                 <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\View\Form" name="form" template="Magento_Sales::order/creditmemo/view/form.phtml">
-                    <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\View\Form\Info" name="creditmemo_info" template="Magento_Sales::order/creditmemo/view/info.phtml"/>
+                    <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\View\Form\Info" name="creditmemo_info" template="Magento_Sales::order/creditmemo/view/form/info.phtml"/>
                     <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="Magento_Sales::order/view/info.phtml">
                         <container name="extra_customer_info"/>
                     </block>
