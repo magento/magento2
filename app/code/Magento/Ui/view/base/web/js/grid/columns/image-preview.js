@@ -179,10 +179,11 @@ define([
                 this.updateHeight();
                 this.scrollToPreview();
             } else {
-                img.load(function () {
-                    this.updateHeight();
-                    this.scrollToPreview();
-                }.bind(this));
+                var self = this;
+                img.on('load', function () {
+                    self.updateHeight();
+                    self.scrollToPreview();
+                });
             }
         },
 
