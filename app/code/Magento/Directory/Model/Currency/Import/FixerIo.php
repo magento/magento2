@@ -17,12 +17,10 @@ class FixerIo extends AbstractImport
     /**
      * @var string
      */
-    const CURRENCY_CONVERTER_URL = 'https://api.apilayer.com/fixer/latest?apikey={{ACCESS_KEY}}'
+    private const CURRENCY_CONVERTER_URL = 'https://api.apilayer.com/fixer/latest?apikey={{ACCESS_KEY}}'
         . '&base={{CURRENCY_FROM}}&symbols={{CURRENCY_TO}}';
 
     /**
-     * Http Client Factory
-     *
      * @var \Magento\Framework\HTTP\ZendClientFactory
      */
     protected $httpClientFactory;
