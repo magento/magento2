@@ -89,7 +89,6 @@
         </actionGroup>
 
         <!-- Search default simple product in grid -->
-<!--        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>-->
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProductGrid"/>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct">
