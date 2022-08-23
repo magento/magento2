@@ -11,6 +11,7 @@
         <referenceContainer name="content">
             <block class="Magento\Shipping\Block\Adminhtml\View" name="sales_shipment_view">
                 <block class="Magento\Shipping\Block\Adminhtml\View\Form" name="form" template="Magento_Shipping::view/form.phtml">
+                    <block class="Magento\Shipping\Block\Adminhtml\View\Form\Info" name="shipment_info" template="Magento_Shipping::view/form/info.phtml"/>
                     <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="Magento_Sales::order/view/info.phtml">
                         <container name="extra_customer_info"/>
                     </block>

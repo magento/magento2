@@ -1,0 +1,44 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Shipping\Block\Adminhtml\View\Form\Info $block */
+
+$shipment = $block->getShipment();
+$shipmentDate = $this->formatDate(
+    $block->getCreatedAtAdminDate($shipment->getCreatedAt()),
+    \IntlDateFormatter::MEDIUM,
+    true
+);
+?>
+
+<div class="admin__page-section order-view-account-information">
+    <div class="admin__page-section-title">
+        <span class="title"><?= $block->escapeHtml(__('Shipment Information')) ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item shipment-information">
+            <div class="admin__page-section-item-title">
+                <?php $confirmationEmailStatusMessage = $shipment->getEmailSent()
+                    ? __('The shipment confirmation email was sent')
+                    : __('The shipment confirmation email is not sent');
+                ?>
+                <span class="title">
+                    <?= $block->escapeHtml(__('Shipment # %1', $shipment->getIncrementId())) ?>
+                    (<span><?= $block->escapeHtml($confirmationEmailStatusMessage) ?></span>)
+                </span>
+            </div>
+            <div class="admin__page-section-item-content">
+                <table class="admin__table-secondary shipment-information-table">
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('Shipment Date')) ?></th>
+                        <td><?= $escaper->escapeHtml($shipmentDate) ?></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

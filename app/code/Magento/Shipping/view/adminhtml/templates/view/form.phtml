@@ -15,6 +15,7 @@ $taxHelper = $block->getData('taxHelper');
 /** @var \Magento\Sales\Model\Order $order */
 $order = $block->getShipment()->getOrder();
 ?>
+<?= $block->getChildHtml('shipment_info'); ?>
 <?= $block->getChildHtml('order_info'); ?>
 <section class="admin__page-section order-shipment-billing-shipping">
     <div class="admin__page-section-title">

@@ -1,0 +1,53 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Sales\Block\Adminhtml\Order\Creditmemo\View\Form\Info $block */
+
+$creditMemo = $block->getCreditmemo();
+$creditMemoStatus = isset($creditMemo->getStates()[$creditMemo->getState()])
+    ? $creditMemo->getStates()[$creditMemo->getState()]
+    : null;
+$memoDate = $this->formatDate(
+    $block->getCreatedAtAdminDate($creditMemo->getCreatedAt()),
+    \IntlDateFormatter::MEDIUM,
+    true
+);
+?>
+
+<div class="admin__page-section order-view-account-information">
+    <div class="admin__page-section-title">
+        <span class="title"><?= $block->escapeHtml(__('Memo Information')) ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item creditmemo-information">
+            <div class="admin__page-section-item-title">
+                <?php $confirmationEmailStatusMessage = $creditMemo->getEmailSent()
+                    ? __('The credit memo confirmation email was sent')
+                    : __('The credit memo confirmation email is not sent');
+                ?>
+                <span class="title">
+                    <?= $block->escapeHtml(__('Memo # %1', $creditMemo->getIncrementId())) ?>
+                    (<span><?= $block->escapeHtml($confirmationEmailStatusMessage) ?></span>)
+                </span>
+            </div>
+            <div class="admin__page-section-item-content">
+                <table class="admin__table-secondary creditmemo-information-table">
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('Credit Memo Date')) ?></th>
+                        <td><?= $escaper->escapeHtml($memoDate) ?></td>
+                    </tr>
+                    <?php if ($creditMemoStatus): ?>
+                        <tr>
+                            <th><?= $escaper->escapeHtml(__('Status')) ?></th>
+                            <td><?= $escaper->escapeHtml($creditMemoStatus) ?></td>
+                        </tr>
+                    <?php endif; ?>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

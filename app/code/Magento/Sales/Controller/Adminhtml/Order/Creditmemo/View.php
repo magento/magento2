@@ -72,7 +72,7 @@ class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
                     __("View Memo for #%1", $creditmemo->getInvoice()->getIncrementId())
                 );
             } else {
-                $resultPage->getConfig()->getTitle()->prepend(__("View Memo"));
+                $resultPage->getConfig()->getTitle()->prepend(__("View Credit Memo"));
             }
             return $resultPage;
         } else {

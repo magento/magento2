@@ -9,6 +9,7 @@
 /* @var \Magento\Sales\Block\Adminhtml\Order\Creditmemo\View\Form $block */
 ?>
 <?php  $_order = $block->getCreditmemo()->getOrder() ?>
+<?= $block->getChildHtml('creditmemo_info') ?>
 <?= $block->getChildHtml('order_info') ?>
 <section class="admin__page-section">
     <div class="admin__page-section-title">

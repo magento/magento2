@@ -10,6 +10,7 @@
 ?>
 <?php $_invoice = $block->getInvoice() ?>
 <?php $_order = $_invoice->getOrder() ?>
+<?= $block->getChildHtml('invoice_info') ?>
 <?= $block->getChildHtml('order_info') ?>
 
 <section class="admin__page-section order-view-billing-shipping">

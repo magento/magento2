@@ -1,0 +1,50 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Sales\Block\Adminhtml\Order\Invoice\View\Form\Info $block */
+
+$invoice = $block->getInvoice();
+$invoiceDate = $this->formatDate(
+    $block->getCreatedAtAdminDate($invoice->getCreatedAt()),
+    \IntlDateFormatter::MEDIUM,
+    true
+);
+?>
+
+<div class="admin__page-section order-view-account-information">
+    <div class="admin__page-section-title">
+        <span class="title"><?= $block->escapeHtml(__('Invoice Information')) ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item invoice-information">
+            <div class="admin__page-section-item-title">
+                <?php $confirmationEmailStatusMessage = $invoice->getEmailSent()
+                    ? __('The invoice confirmation email was sent')
+                    : __('The invoice confirmation email is not sent');
+                ?>
+                <span class="title">
+                    <?= $block->escapeHtml(__('Invoice # %1', $invoice->getIncrementId())) ?>
+                    (<span><?= $block->escapeHtml($confirmationEmailStatusMessage) ?></span>)
+                </span>
+            </div>
+            <div class="admin__page-section-item-content">
+                <table class="admin__table-secondary invoice-information-table">
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('Invoice Date')) ?></th>
+                        <td><?= $escaper->escapeHtml($invoiceDate) ?></td>
+                    </tr>
+                    <?php if ($invoice->getTransactionId()): ?>
+                        <tr>
+                            <th><?= $escaper->escapeHtml(__('Transaction ID')) ?></th>
+                            <td><?= $escaper->escapeHtml($invoice->getTransactionId()) ?></td>
+                        </tr>
+                    <?php endif; ?>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
