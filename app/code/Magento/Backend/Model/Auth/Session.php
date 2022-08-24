@@ -130,7 +130,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
         }
         if ($user->getReloadAclFlag()) {
             $user->unsetData('password');
-            $user->setReloadAclFlag('0')->save();
+            $user->setReloadAclFlag(0)->save();
         }
         return $this;
     }

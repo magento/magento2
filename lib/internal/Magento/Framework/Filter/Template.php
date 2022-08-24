@@ -33,37 +33,39 @@ class Template implements \Zend_Filter_Interface
      *
      * @deprecated Use the new Directive processors
      */
-    const CONSTRUCTION_PATTERN = '/{{([a-z]{0,10})(.*?)}}(?:(.*?)(?:{{\/(?:\\1)}}))?/si';
+    public const CONSTRUCTION_PATTERN = '/{{([a-z]{0,10})(.*?)}}(?:(.*?)(?:{{\/(?:\\1)}}))?/si';
 
     /**
      * Construction `depend` regular expression
      *
      * @deprecated Use the new Directive processors
      */
-    const CONSTRUCTION_DEPEND_PATTERN = '/{{depend\s*(.*?)}}(.*?){{\\/depend\s*}}/si';
+    public const CONSTRUCTION_DEPEND_PATTERN = '/{{depend\s*(.*?)}}(.*?){{\\/depend\s*}}/si';
 
     /**
      * Construction `if` regular expression
      *
      * @deprecated Use the new Directive processors
      */
-    const CONSTRUCTION_IF_PATTERN = '/{{if\s*(.*?)}}(.*?)({{else}}(.*?))?{{\\/if\s*}}/si';
+    public const CONSTRUCTION_IF_PATTERN = '/{{if\s*(.*?)}}(.*?)({{else}}(.*?))?{{\\/if\s*}}/si';
 
     /**
      * Construction `template` regular expression
      *
      * @deprecated Use the new Directive processors
      */
-    const CONSTRUCTION_TEMPLATE_PATTERN = '/{{(template)(.*?)}}/si';
+    public const CONSTRUCTION_TEMPLATE_PATTERN = '/{{(template)(.*?)}}/si';
 
     /**
      * Construction `for` regular expression
      *
      * @deprecated Use the new Directive processors
      */
-    const LOOP_PATTERN = '/{{for(?P<loopItem>.*? )(in)(?P<loopData>.*?)}}(?P<loopBody>.*?){{\/for}}/si';
+    public const LOOP_PATTERN = '/{{for(?P<loopItem>.*? )(in)(?P<loopData>.*?)}}(?P<loopBody>.*?){{\/for}}/si';
 
-    /**#@-*/
+    /**
+     * @var array
+     */
     private $afterFilterCallbacks = [];
 
     /**
@@ -74,8 +76,6 @@ class Template implements \Zend_Filter_Interface
     protected $templateVars = [];
 
     /**
-     * Template processor
-     *
      * @var callable|null
      */
     protected $templateProcessor = null;
@@ -273,7 +273,7 @@ class Template implements \Zend_Filter_Interface
         $directive = $this->directiveProcessors['for'] ?? ObjectManager::getInstance()
             ->get(ForDirective::class);
 
-        preg_match($directive->getRegularExpression(), $construction[0], $specificConstruction);
+        preg_match($directive->getRegularExpression(), $construction[0] ?? '', $specificConstruction);
 
         return $directive->process($specificConstruction, $this, $this->templateVars);
     }
@@ -312,7 +312,7 @@ class Template implements \Zend_Filter_Interface
         $directive = $this->directiveProcessors['depend'] ?? ObjectManager::getInstance()
             ->get(DependDirective::class);
 
-        preg_match($directive->getRegularExpression(), $construction[0], $specificConstruction);
+        preg_match($directive->getRegularExpression(), $construction[0] ?? '', $specificConstruction);
 
         return $directive->process($specificConstruction, $this, $this->templateVars);
     }
@@ -329,7 +329,7 @@ class Template implements \Zend_Filter_Interface
         $directive = $this->directiveProcessors['if'] ?? ObjectManager::getInstance()
             ->get(IfDirective::class);
 
-        preg_match($directive->getRegularExpression(), $construction[0], $specificConstruction);
+        preg_match($directive->getRegularExpression(), $construction[0] ?? '', $specificConstruction);
 
         return $directive->process($specificConstruction, $this, $this->templateVars);
     }
@@ -347,7 +347,7 @@ class Template implements \Zend_Filter_Interface
         $tokenizer->setString($value);
         $params = $tokenizer->tokenize();
         foreach ($params as $key => $value) {
-            if (substr($value, 0, 1) === '$') {
+            if ($value !== null && substr($value, 0, 1) === '$') {
                 $params[$key] = $this->getVariable(substr($value, 1), null);
             }
         }
@@ -383,7 +383,7 @@ class Template implements \Zend_Filter_Interface
         foreach ($stack as $i => $value) {
             if (is_array($value)) {
                 $stack[$i] = $this->getStackArgs($value);
-            } elseif (substr($value, 0, 1) === '$') {
+            } elseif ($value !== null && substr($value, 0, 1) === '$') {
                 $stack[$i] = $this->getVariable(substr($value, 1), null);
             }
         }
@@ -404,6 +404,7 @@ class Template implements \Zend_Filter_Interface
      * @param bool $strictMode Enable strict parsing of directives
      * @return bool The previous mode from before the change
      * @since 102.0.4
+     * @deprecated The method is not in use anymore.
      */
     public function setStrictMode(bool $strictMode): bool
     {
@@ -418,6 +419,7 @@ class Template implements \Zend_Filter_Interface
      *
      * @return bool
      * @since 102.0.4
+     * @deprecated The method is not in use anymore.
      */
     public function isStrictMode(): bool
     {

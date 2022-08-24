@@ -66,6 +66,11 @@ class Suggestions implements SuggestedQueriesInterface
     private $logger;
 
     /**
+     * @var GetSuggestionFrequencyInterface
+     */
+    private $getSuggestionFrequency;
+
+    /**
      * Suggestions constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
@@ -76,6 +81,7 @@ class Suggestions implements SuggestedQueriesInterface
      * @param StoreManager $storeManager
      * @param FieldProviderInterface $fieldProvider
      * @param LoggerInterface|null $logger
+     * @param GetSuggestionFrequencyInterface|null $getSuggestionFrequency
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -85,7 +91,8 @@ class Suggestions implements SuggestedQueriesInterface
         SearchIndexNameResolver $searchIndexNameResolver,
         StoreManager $storeManager,
         FieldProviderInterface $fieldProvider,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        ?GetSuggestionFrequencyInterface $getSuggestionFrequency = null
     ) {
         $this->queryResultFactory = $queryResultFactory;
         $this->connectionManager = $connectionManager;
@@ -95,6 +102,8 @@ class Suggestions implements SuggestedQueriesInterface
         $this->storeManager = $storeManager;
         $this->fieldProvider = $fieldProvider;
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->getSuggestionFrequency = $getSuggestionFrequency ?:
+            ObjectManager::getInstance()->get(GetSuggestionFrequencyInterface::class);
     }
 
     /**
@@ -115,7 +124,12 @@ class Suggestions implements SuggestedQueriesInterface
             foreach ($suggestions as $suggestion) {
                 $count = null;
                 if ($isResultsCountEnabled) {
-                    $count = isset($suggestion['freq']) ? $suggestion['freq'] : null;
+                    try {
+                        $count = $this->getSuggestionFrequency->execute($suggestion['text']);
+                    } catch (\Exception $e) {
+                        $this->logger->critical($e);
+                    }
+
                 }
                 $result[] = $this->queryResultFactory->create(
                     [
@@ -144,7 +158,6 @@ class Suggestions implements SuggestedQueriesInterface
      * Get Suggestions
      *
      * @param QueryInterface $query
-     *
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -166,7 +179,7 @@ class Suggestions implements SuggestedQueriesInterface
                     }
                 }
             }
-            ksort($suggestions);
+            krsort($suggestions);
             $texts = array_unique(array_column($suggestions, 'text'));
             $suggestions = array_slice(
                 array_intersect_key(array_values($suggestions), $texts),
@@ -181,12 +194,11 @@ class Suggestions implements SuggestedQueriesInterface
     /**
      * Init Search Query
      *
-     * @param string $query
-     *
+     * @param QueryInterface $query
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function initQuery($query)
+    private function initQuery(QueryInterface $query): array
     {
         $searchQuery = [
             'index' => $this->searchIndexNameResolver->getIndexName(
@@ -221,7 +233,7 @@ class Suggestions implements SuggestedQueriesInterface
                     'field' => $field,
                     'analyzer' => 'standard',
                     'size' => $searchSuggestionsCount,
-                    'max_errors' => 1,
+                    'max_errors' => 0.9,
                     'direct_generator' => [
                         [
                             'field' => $field,

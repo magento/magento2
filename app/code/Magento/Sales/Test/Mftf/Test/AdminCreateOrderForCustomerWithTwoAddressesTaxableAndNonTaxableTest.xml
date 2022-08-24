@@ -74,6 +74,8 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <!--Disable free shipping method -->
             <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
+            <!-- Disable shipping method for customer with default address -->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
         </after>
     </test>
 </tests>

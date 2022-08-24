@@ -57,7 +57,7 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
         return array_filter(
             $result['products']['aggregations'],
             function ($a) {
-                return $a['attribute_code'] == 'category_id';
+                return $a['attribute_code'] == 'category_uid';
             }
         );
     }
@@ -89,7 +89,7 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
         $categoryAggregation = array_filter(
             $result['products']['aggregations'],
             function ($a) {
-                return $a['attribute_code'] == 'category_id';
+                return $a['attribute_code'] == 'category_uid';
             }
         );
         $this->assertNotEmpty($categoryAggregation);

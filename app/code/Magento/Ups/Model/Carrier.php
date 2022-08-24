@@ -23,12 +23,15 @@ use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\HTTP\ClientFactory;
 use Magento\Framework\Locale\FormatInterface;
+use Magento\Framework\Measure\Length;
+use Magento\Framework\Measure\Weight;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory as RateErrorFactory;
 use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory as RateMethodFactory;
 use Magento\Sales\Model\Order\Shipment as OrderShipment;
+use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Carrier\CarrierInterface;
 use Magento\Shipping\Model\Rate\Result;
@@ -248,7 +251,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      */
     public function collectRates(RateRequest $request)
     {
-        $this->setRequest($request);
         if (!$this->canCollectRates()) {
             return $this->getErrorMessage();
         }
@@ -395,15 +397,17 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             )
         );
 
-        $weight = $this->getTotalNumOfBoxes($request->getPackageWeight());
-
-        $weight = $this->_getCorrectWeight($weight);
-
-        $rowRequest->setWeight($weight);
         if ($request->getFreeMethodWeight() != $request->getPackageWeight()) {
             $rowRequest->setFreeMethodWeight($request->getFreeMethodWeight());
         }
 
+        $rowRequest->setPackages(
+            $this->createPackages(
+                (float) $request->getPackageWeight(),
+                (array) $request->getPackages()
+            )
+        );
+        $rowRequest->setWeight($this->_getCorrectWeight($request->getPackageWeight()));
         $rowRequest->setValue($request->getPackageValue());
         $rowRequest->setValueWithDiscount($request->getPackageValueWithDiscount());
 
@@ -521,6 +525,9 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $weight = $this->getTotalNumOfBoxes($r->getFreeMethodWeight());
         $weight = $this->_getCorrectWeight($weight);
         $r->setWeight($weight);
+        $r->setPackages(
+            $this->createPackages((float)$r->getFreeMethodWeight(), [])
+        );
         $r->setAction($this->configHelper->getCode('action', 'single'));
         $r->setProduct($freeMethod);
     }
@@ -534,7 +541,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     {
         $rowRequest = $this->_rawRequest;
         if (self::USA_COUNTRY_ID == $rowRequest->getDestCountry()) {
-            $destPostal = substr((string)$rowRequest->getDestPostal(), 0, 5);
+            $destPostal = substr((string) $rowRequest->getDestPostal(), 0, 5);
         } else {
             $destPostal = $rowRequest->getDestPostal();
         }
@@ -614,7 +621,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     {
         $costArr = [];
         $priceArr = [];
-        if (strlen(trim($response)) > 0) {
+        if ($response !== null && strlen(trim($response)) > 0) {
             $rRows = explode("\n", $response);
             $allowedMethods = explode(",", (string)$this->getConfigData('allowed_methods'));
             foreach ($rRows as $rRow) {
@@ -799,7 +806,10 @@ XMLRequest;
           <StateProvinceCode>{$params['origRegionCode']}</StateProvinceCode>
       </Address>
     </ShipFrom>
+XMLRequest;
 
+        foreach ($rowRequest->getPackages() as $package) {
+            $xmlParams .= <<<XMLRequest
     <Package>
       <PackagingType>
         <Code>{$params['48_container']}</Code>
@@ -808,10 +818,11 @@ XMLRequest;
         <UnitOfMeasurement>
           <Code>{$rowRequest->getUnitMeasure()}</Code>
         </UnitOfMeasurement>
-        <Weight>{$params['23_weight']}</Weight>
+        <Weight>{$this->_getCorrectWeight($package['weight'])}</Weight>
       </PackageWeight>
     </Package>
 XMLRequest;
+        }
 
         if ($this->getConfigFlag('negotiated_active')) {
             $xmlParams .= "<RateInformation><NegotiatedRatesIndicator/></RateInformation>";
@@ -904,7 +915,7 @@ XMLRequest;
     {
         $costArr = [];
         $priceArr = [];
-        if (strlen(trim($xmlResponse)) > 0) {
+        if ($xmlResponse !== null && strlen(trim($xmlResponse)) > 0) {
             $xml = new \Magento\Framework\Simplexml\Config();
             $xml->loadString($xmlResponse);
             $arr = $xml->getXpath("//RatingServiceSelectionResponse/Response/ResponseStatusCode/text()");
@@ -1063,6 +1074,40 @@ XMLRequest;
                 $priceArr[$code] = $this->getMethodPrice((float)$cost, $code);
             }
         }
+    }
+
+    /**
+     * Get final price for shipping method with handling fee per package
+     *
+     * @param float $cost
+     * @param string $handlingType
+     * @param float $handlingFee
+     * @return float
+     */
+    protected function _getPerpackagePrice($cost, $handlingType, $handlingFee)
+    {
+        if ($handlingType == AbstractCarrier::HANDLING_TYPE_PERCENT) {
+            return $cost + $cost * $this->_numBoxes * $handlingFee / 100;
+        }
+
+        return $cost + $this->_numBoxes * $handlingFee;
+    }
+
+    /**
+     * Get final price for shipping method with handling fee per order
+     *
+     * @param float $cost
+     * @param string $handlingType
+     * @param float $handlingFee
+     * @return float
+     */
+    protected function _getPerorderPrice($cost, $handlingType, $handlingFee)
+    {
+        if ($handlingType == self::HANDLING_TYPE_PERCENT) {
+            return $cost + $cost * $handlingFee / 100;
+        }
+
+        return $cost + $handlingFee;
     }
 
     /**
@@ -1421,7 +1466,7 @@ XMLAuth;
             $shipperPart->addChild('PhoneNumber', $request->getRecipientContactPhoneNumber());
 
             $addressPart = $shipperPart->addChild('Address');
-            $addressPart->addChild('AddressLine1', $request->getRecipientAddressStreet());
+            $addressPart->addChild('AddressLine1', $request->getRecipientAddressStreet1());
             $addressPart->addChild('AddressLine2', $request->getRecipientAddressStreet2());
             $addressPart->addChild('City', $request->getRecipientAddressCity());
             $addressPart->addChild('CountryCode', $request->getRecipientAddressCountryCode());
@@ -1518,8 +1563,8 @@ XMLAuth;
             $width = $packageParams->getWidth();
             $length = $packageParams->getLength();
             $weight = $packageParams->getWeight();
-            $weightUnits = $packageParams->getWeightUnits() == \Zend_Measure_Weight::POUND ? 'LBS' : 'KGS';
-            $dimensionsUnits = $packageParams->getDimensionUnits() == \Zend_Measure_Length::INCH ? 'IN' : 'CM';
+            $weightUnits = $packageParams->getWeightUnits() == Weight::POUND ? 'LBS' : 'KGS';
+            $dimensionsUnits = $packageParams->getDimensionUnits() == Length::INCH ? 'IN' : 'CM';
             $deliveryConfirmation = $packageParams->getDeliveryConfirmation();
             $customsTotal += $packageParams->getCustomsValue();
 
@@ -2094,5 +2139,25 @@ XMLAuth;
         }
 
         return self::DELIVERY_CONFIRMATION_SHIPMENT;
+    }
+
+    /**
+     * Creates packages for rate request.
+     *
+     * @param float $totalWeight
+     * @param array $packages
+     * @return array
+     */
+    private function createPackages(float $totalWeight, array $packages): array
+    {
+        if (empty($packages)) {
+            $dividedWeight = $this->getTotalNumOfBoxes($totalWeight);
+            for ($i=0; $i < $this->_numBoxes; $i++) {
+                $packages[$i]['weight'] = $this->_getCorrectWeight($dividedWeight);
+            }
+        }
+        $this->_numBoxes = count($packages);
+
+        return $packages;
     }
 }
