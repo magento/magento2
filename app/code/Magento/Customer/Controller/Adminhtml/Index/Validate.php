@@ -23,6 +23,8 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class for validation of customer
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Validate extends CustomerAction implements HttpPostActionInterface, HttpGetActionInterface
 {
@@ -124,6 +126,7 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
      *
      * @param \Magento\Framework\DataObject $response
      * @return CustomerInterface|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _validateCustomer($response)
     {
@@ -158,7 +161,7 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
                 $entity_id = $submittedData['entity_id'];
                 $customer->setId($entity_id);
             }
-            if (isset($data['website_id'])) {
+            if (isset($data['website_id']) && is_numeric($data['website_id'])) {
                 $website = $this->storeManager->getWebsite($data['website_id']);
                 $storeId = current($website->getStoreIds());
                 $this->storeManager->setCurrentStore($storeId);

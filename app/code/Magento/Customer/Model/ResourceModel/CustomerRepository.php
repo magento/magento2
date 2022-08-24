@@ -204,13 +204,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         $prevCustomerData = $prevCustomerDataArr = null;
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
-            $prevCustomerDataArr = $prevCustomerData->__toArray();
-            if (isset($prevCustomerDataArr[CustomerInterface::CUSTOM_ATTRIBUTES])) {
-                foreach ($prevCustomerDataArr[CustomerInterface::CUSTOM_ATTRIBUTES] as $attribute) {
-                    $prevCustomerDataArr[$attribute['attribute_code']] = $attribute['value'];
-                }
-                unset($prevCustomerDataArr[CustomerInterface::CUSTOM_ATTRIBUTES]);
-            }
+            $prevCustomerDataArr = $this->prepareCustomerData($prevCustomerData->__toArray());
         }
         /** @var $customer \Magento\Customer\Model\Data\Customer */
         $customerArr = $customer->__toArray();
@@ -491,6 +485,7 @@ class CustomerRepository implements CustomerRepositoryInterface
      * Helper function that adds a FilterGroup to the collection.
      *
      * @deprecated 101.0.0
+     * @see no alternative
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -533,5 +528,22 @@ class CustomerRepository implements CustomerRepositoryInterface
         if (!isset($customerArr['group_id']) && $prevCustomerDataArr && isset($prevCustomerDataArr['group_id'])) {
             $customerModel->setGroupId($prevCustomerDataArr['group_id']);
         }
+    }
+
+    /**
+     * Prepare customer data.
+     *
+     * @param array $customerData
+     * @return array
+     */
+    private function prepareCustomerData(array $customerData): array
+    {
+        if (isset($customerData[CustomerInterface::CUSTOM_ATTRIBUTES])) {
+            foreach ($customerData[CustomerInterface::CUSTOM_ATTRIBUTES] as $attribute) {
+                $customerData[$attribute['attribute_code']] = $attribute['value'];
+            }
+            unset($customerData[CustomerInterface::CUSTOM_ATTRIBUTES]);
+        }
+        return $customerData;
     }
 }

@@ -26,6 +26,8 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
  * Refactored version of Magento\Customer\Model\Customer\DataProvider with eliminated usage of addresses collection.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProviderWithDefaultAddresses extends AbstractDataProvider
 {
@@ -161,7 +163,6 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
                 array_flip(self::$forbiddenCustomerFields)
             );
             $this->prepareCustomAttributeValue($result['customer']);
-            unset($result['address']);
 
             $result['default_billing_address'] = $this->prepareDefaultAddress(
                 $customer->getDefaultBillingAddress()

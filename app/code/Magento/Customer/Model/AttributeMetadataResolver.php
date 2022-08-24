@@ -225,7 +225,7 @@ class AttributeMetadataResolver
     {
         if ($attribute->getAttributeCode() === 'group_id') {
             $defaultGroup = $this->groupManagement->getDefaultGroup();
-            $defaultGroupId = !empty($defaultGroup) ? $defaultGroup->getId() : null;
+            $defaultGroupId = $defaultGroup->getId();
             $attribute->setDataUsingMethod(self::$metaProperties['default'], $defaultGroupId);
         }
     }
