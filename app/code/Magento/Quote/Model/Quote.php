@@ -5,6 +5,7 @@
  */
 namespace Magento\Quote\Model;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Directory\Model\AllowedCountries;
@@ -874,7 +875,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Loading quote data by customer
      *
      * @param \Magento\Customer\Model\Customer|int $customer
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 Deprecated to handle external usages of customer methods
+     * @see https://jira.corp.magento.com/browse/MAGETWO-19935
      * @return $this
      */
     public function loadByCustomer($customer)
@@ -1427,12 +1429,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     public function getAllItems()
     {
         $items = [];
+        /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($this->getItemsCollection() as $item) {
-            /** @var \Magento\Quote\Model\Quote\Item $item */
-            if (!$item->isDeleted()) {
+            $product = $item->getProduct();
+            if (!$item->isDeleted() && ($product && (int)$product->getStatus() !== ProductStatus::STATUS_DISABLED)) {
                 $items[] = $item;
             }
         }
+
         return $items;
     }
 

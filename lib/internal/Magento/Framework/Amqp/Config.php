@@ -5,12 +5,12 @@
  */
 namespace Magento\Framework\Amqp;
 
+use Magento\Framework\Amqp\Connection\Factory as ConnectionFactory;
 use Magento\Framework\Amqp\Connection\FactoryOptions;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
-use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
-use Magento\Framework\Amqp\Connection\Factory as ConnectionFactory;
+use PhpAmqpLib\Connection\AbstractConnection;
 
 /**
  * Reads the Amqp config in the deployed environment configuration
@@ -140,7 +140,7 @@ class Config
      */
     private function createConnection(): AbstractConnection
     {
-        $sslEnabled = $this->getValue(self::SSL) && trim($this->getValue(self::SSL)) === 'true';
+        $sslEnabled = trim($this->getValue(self::SSL) ?? '') === 'true';
         $options = new FactoryOptions();
         $options->setHost($this->getValue(self::HOST));
         $options->setPort($this->getValue(self::PORT));
