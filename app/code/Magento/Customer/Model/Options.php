@@ -107,6 +107,6 @@ class Options
             $result = array_merge([' '], $result);
         }
 
-        return $result;
+        return array_combine($result, $result);
     }
 }
