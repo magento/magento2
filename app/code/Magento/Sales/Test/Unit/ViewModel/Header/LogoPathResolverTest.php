@@ -31,6 +31,11 @@ class LogoPathResolverTest extends TestCase
     private $model;
 
     /**
+     * @var Registry|MockObject
+     */
+    private $registry;
+
+    /**
      * Test for case when app in single store mode
      * and logo path is defined in config
      * @return void
