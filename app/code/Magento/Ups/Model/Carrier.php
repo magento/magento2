@@ -23,6 +23,8 @@ use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\HTTP\ClientFactory;
 use Magento\Framework\Locale\FormatInterface;
+use Magento\Framework\Measure\Length;
+use Magento\Framework\Measure\Weight;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
@@ -523,6 +525,9 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $weight = $this->getTotalNumOfBoxes($r->getFreeMethodWeight());
         $weight = $this->_getCorrectWeight($weight);
         $r->setWeight($weight);
+        $r->setPackages(
+            $this->createPackages((float)$r->getFreeMethodWeight(), [])
+        );
         $r->setAction($this->configHelper->getCode('action', 'single'));
         $r->setProduct($freeMethod);
     }
@@ -1558,8 +1563,8 @@ XMLAuth;
             $width = $packageParams->getWidth();
             $length = $packageParams->getLength();
             $weight = $packageParams->getWeight();
-            $weightUnits = $packageParams->getWeightUnits() == \Zend_Measure_Weight::POUND ? 'LBS' : 'KGS';
-            $dimensionsUnits = $packageParams->getDimensionUnits() == \Zend_Measure_Length::INCH ? 'IN' : 'CM';
+            $weightUnits = $packageParams->getWeightUnits() == Weight::POUND ? 'LBS' : 'KGS';
+            $dimensionsUnits = $packageParams->getDimensionUnits() == Length::INCH ? 'IN' : 'CM';
             $deliveryConfirmation = $packageParams->getDeliveryConfirmation();
             $customsTotal += $packageParams->getCustomsValue();
 
