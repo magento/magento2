@@ -210,8 +210,9 @@ class Websites extends AbstractModifier
                 $sortOrder++;
             }
         }
-
-        $children = $this->setDefaultWebsiteIdIfNoneAreSelected($children);
+        if ($isNewProduct) {
+            $children = $this->setDefaultWebsiteIdIfNoneAreSelected($children);
+        }
         return $children;
     }
 
