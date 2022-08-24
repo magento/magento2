@@ -6,6 +6,7 @@
 
 namespace Magento\Quote\Model;
 
+use Magento\Customer\Model\Config\Backend\Show\Customer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -95,6 +96,10 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
         $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
         $customerAddressId = $address->getCustomerAddressId();
+        if ($saveInAddressBook &&
+            !$this->scopeConfig->getValue(Customer::XML_PATH_CUSTOMER_ADDRESS_SHOW_COMPANY)) {
+            $address->setCompany(null);
+        }
         $this->addressValidator->validateForCart($quote, $address);
         $quote->setShippingAddress($address);
         $address = $quote->getShippingAddress();
