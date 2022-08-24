@@ -3,17 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Test\Unit\Command;
 
 use Exception;
 use Magento\AdminAdobeIms\Console\Command\AdminAdobeImsEnableCommand;
-use Magento\AdminAdobeIms\Model\ImsConnection;
-use Magento\AdminAdobeIms\Service\UpdateTokensService;
 use Magento\AdminAdobeIms\Service\ImsCommandOptionService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdminAdobeIms\Service\UpdateTokensService;
+use Magento\AdobeImsApi\Api\AuthorizationInterface;
 use Magento\Authorization\Model\ResourceModel\Role\Collection as RoleCollection;
 use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory;
 use Magento\Authorization\Model\Role;
@@ -43,9 +42,9 @@ class AdminAdobeImsEnableCommandTest extends TestCase
     private $adminImsConfigMock;
 
     /**
-     * @var ImsConnection
+     * @var AuthorizationInterface
      */
-    private $adminImsConnectionMock;
+    private $authorizationUrlMock;
 
     /**
      * @var ImsCommandOptionService
@@ -87,7 +86,7 @@ class AdminAdobeImsEnableCommandTest extends TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
-        $this->adminImsConnectionMock = $this->createMock(ImsConnection::class);
+        $this->authorizationUrlMock = $this->createMock(AuthorizationInterface::class);
         $this->imsCommandOptionService = $this->createMock(ImsCommandOptionService::class);
         $this->typeListInterface = $this->createMock(TypeListInterface::class);
         $this->updateTokensService = $this->createMock(UpdateTokensService::class);
@@ -122,10 +121,10 @@ class AdminAdobeImsEnableCommandTest extends TestCase
             AdminAdobeImsEnableCommand::class,
             [
                 'adminImsConfig' => $this->adminImsConfigMock,
-                'adminImsConnection' => $this->adminImsConnectionMock,
                 'imsCommandOptionService' => $this->imsCommandOptionService,
                 'cacheTypeList' => $this->typeListInterface,
                 'updateTokenService' => $this->updateTokensService,
+                'authorization' => $this->authorizationUrlMock,
                 'role'  => $this->role,
                 'roleCollection'  => $this->roleCollection
             ]
@@ -164,7 +163,7 @@ class AdminAdobeImsEnableCommandTest extends TestCase
         $this->imsCommandOptionService->method('getClientSecret')->willReturn('clientSecret');
         $this->imsCommandOptionService->method('isTwoFactorAuthEnabled')->willReturn($isTwoFactorAuthEnabled);
 
-        $this->adminImsConnectionMock->method('testAuth')
+        $this->authorizationUrlMock->method('testAuth')
             ->willReturn($testAuthMode);
 
         $this->adminImsConfigMock

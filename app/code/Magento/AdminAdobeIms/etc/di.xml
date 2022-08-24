@@ -65,9 +65,6 @@
                 type="Magento\AdminAdobeIms\Plugin\DisableAdminLoginAuthPlugin"/>
     </type>
 
-    <preference for="Magento\AdminAdobeIms\Api\TokenReaderInterface" type="Magento\AdminAdobeIms\Model\TokenReader"/>
-
-
     <type name="Magento\Integration\Model\AdminTokenService">
         <plugin name="admin_adobe_ims_admin_token_plugin"
                 type="Magento\AdminAdobeIms\Plugin\AdminTokenPlugin" />

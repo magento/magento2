@@ -3,15 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Console\Command;
 
-use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Service\ImsCommandOptionService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdminAdobeIms\Service\UpdateTokensService;
+use Magento\AdobeImsApi\Api\AuthorizationInterface;
 use Magento\Authorization\Model\Acl\Role\Group;
 use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory;
 use Magento\Authorization\Model\Role;
@@ -59,11 +58,6 @@ class AdminAdobeImsEnableCommand extends Command
     private ImsConfig $adminImsConfig;
 
     /**
-     * @var ImsConnection
-     */
-    private ImsConnection $adminImsConnection;
-
-    /**
      * @var ImsCommandOptionService
      */
     private ImsCommandOptionService $imsCommandOptionService;
@@ -89,29 +83,34 @@ class AdminAdobeImsEnableCommand extends Command
     private CollectionFactory $roleCollection;
 
     /**
+     * @var AuthorizationInterface
+     */
+    private AuthorizationInterface $authorization;
+
+    /**
      * @param ImsConfig $adminImsConfig
-     * @param ImsConnection $adminImsConnection
      * @param ImsCommandOptionService $imsCommandOptionService
      * @param TypeListInterface $cacheTypeList
      * @param UpdateTokensService $updateTokensService
+     * @param AuthorizationInterface $authorization
      * @param Role|null $role
      * @param CollectionFactory|null $roleCollection
      */
     public function __construct(
         ImsConfig $adminImsConfig,
-        ImsConnection $adminImsConnection,
         ImsCommandOptionService $imsCommandOptionService,
         TypeListInterface $cacheTypeList,
         UpdateTokensService $updateTokensService,
+        AuthorizationInterface $authorization,
         Role $role = null,
         CollectionFactory $roleCollection = null
     ) {
         parent::__construct();
         $this->adminImsConfig = $adminImsConfig;
-        $this->adminImsConnection = $adminImsConnection;
         $this->imsCommandOptionService = $imsCommandOptionService;
         $this->cacheTypeList = $cacheTypeList;
         $this->updateTokensService = $updateTokensService;
+        $this->authorization = $authorization;
         $this->role = $role ?: ObjectManager::getInstance()->get(Role::class);
         $this->roleCollection = $roleCollection ?: ObjectManager::getInstance()->get(CollectionFactory::class);
 
@@ -242,7 +241,7 @@ class AdminAdobeImsEnableCommand extends Command
         string $organizationId,
         bool $isTwoFactorAuthEnabled
     ): bool {
-        $testAuth = $this->adminImsConnection->testAuth($clientId);
+        $testAuth = $this->authorization->testAuth($clientId);
         if ($testAuth) {
             $this->adminImsConfig->enableModule($clientId, $clientSecret, $organizationId, $isTwoFactorAuthEnabled);
             $this->cacheTypeList->cleanType(Config::TYPE_IDENTIFIER);
