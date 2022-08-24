@@ -11,8 +11,8 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Checkout via Guest Checkout"/>
-            <title value="Guest Checkout - guest should be able to add new shipping / billing address through checkout process."/>
-            <description value="Should be able to place an order as a Guest"/>
+            <title value="Guest Checkout - guest should be able to add new shipping / billing address with blank lines through checkout process."/>
+            <description value="Should be able to place an order as a Guest while adding a new shipping / billing address by keeping the added blank lines."/>
             <severity value="AVERAGE"/>
             <useCaseId value="ACP2E-1105"/>
             <testCaseId value="AC-6439"/>
