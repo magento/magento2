@@ -267,7 +267,12 @@ class AttributeMetadataResolver
                 function ($attribute) {
                     return $attribute['arguments']['data']['config']['attributeId'];
                 },
-                $meta
+                array_filter(
+                    $meta,
+                    function ($attribute) {
+                        return isset($attribute['arguments']['data']['config']['attributeId']);
+                    }
+                )
             )
         );
         $websiteIds = array_values(

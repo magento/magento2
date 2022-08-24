@@ -26,10 +26,11 @@ define([
 
             customerAttributes.forEach(element => {
                 var requiredWebsites = element.validation['required-entry-website'];
+
                 if (!_.isArray(requiredWebsites)) {
                     return;
                 }
-                if (requiredWebsites.includes(parseInt(value))) {
+                if (requiredWebsites.includes(parseInt(value, 10))) {
                     element.validation['required-entry'] = true;
                     element.required(true);
                 } else {

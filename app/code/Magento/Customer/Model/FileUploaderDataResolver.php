@@ -164,6 +164,7 @@ class FileUploaderDataResolver
                 'required' => $this->getMetadataValue($config, 'required'),
                 'visible' => $this->getMetadataValue($config, 'visible'),
                 'validation' => $this->getMetadataValue($config, 'validation'),
+                'attributeId' => $this->getMetadataValue($config, 'attributeId'),
             ];
         }
     }
