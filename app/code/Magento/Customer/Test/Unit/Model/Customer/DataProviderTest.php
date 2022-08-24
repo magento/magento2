@@ -966,7 +966,8 @@ class DataProviderTest extends TestCase
                                         'max_file_size' => $maxFileSize,
                                         'file_extensions' => 'ext1, eXt2 '
                                     ],
-                                    'label' => __('frontend_label')
+                                    'label' => __('frontend_label'),
+                                    'attributeId' => null
                                 ]
                             ]
                         ]

@@ -100,7 +100,7 @@ class FileUploaderDataResolver
                 [
                     'file' => $file,
                     'size' => null !== $stat ? $stat['size'] : 0,
-                    'url' => $viewUrl ?? '',
+                    'url' => $viewUrl,
                     // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     'name' => basename($file),
                     'type' => $fileProcessor->getMimeType($file),
