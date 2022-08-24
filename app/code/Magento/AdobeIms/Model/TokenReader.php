@@ -5,26 +5,26 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdminAdobeIms\Model;
+namespace Magento\AdobeIms\Model;
 
-use Magento\AdminAdobeIms\Api\TokenReaderInterface;
-use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdobeImsApi\Api\ConfigInterface;
+use Magento\AdobeImsApi\Api\TokenReaderInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Jwt\Exception\JwtException;
 use Magento\Framework\Jwt\Jwk;
 use Magento\Framework\Jwt\JwkFactory;
 use Magento\Framework\Jwt\Jws\JwsSignatureJwks;
 use Magento\Framework\Jwt\JwtManagerInterface;
-use Magento\Framework\Jwt\Exception\JwtException;
 use Magento\Framework\Jwt\Payload\ClaimsPayloadInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Psr\Log\LoggerInterface;
 use Magento\Integration\Helper\Oauth\Data as OauthHelper;
+use Psr\Log\LoggerInterface;
 
 /**
  * Adobe Ims Token Reader
@@ -57,9 +57,9 @@ class TokenReader implements TokenReaderInterface
     private CacheInterface $cache;
 
     /**
-     * @var ImsConfig
+     * @var ConfigInterface
      */
-    private ImsConfig $adminImsConfig;
+    private ConfigInterface $imsConfig;
 
     /**
      * @var JwkFactory
@@ -94,7 +94,7 @@ class TokenReader implements TokenReaderInterface
     /**
      * @param JwtManagerInterface $jwtManager
      * @param CacheInterface $cache
-     * @param ImsConfig $adminImsConfig
+     * @param ConfigInterface $imsConfig
      * @param JwkFactory $jwkFactory
      * @param LoggerInterface $logger
      * @param DateTime $dateTime
@@ -105,7 +105,7 @@ class TokenReader implements TokenReaderInterface
     public function __construct(
         JwtManagerInterface $jwtManager,
         CacheInterface $cache,
-        ImsConfig $adminImsConfig,
+        ConfigInterface $imsConfig,
         JwkFactory $jwkFactory,
         LoggerInterface $logger,
         DateTime $dateTime,
@@ -115,7 +115,7 @@ class TokenReader implements TokenReaderInterface
     ) {
         $this->jwtManager = $jwtManager;
         $this->cache = $cache;
-        $this->adminImsConfig = $adminImsConfig;
+        $this->imsConfig = $imsConfig;
         $this->jwkFactory = $jwkFactory;
         $this->logger = $logger;
         $this->dateTime = $dateTime;
@@ -182,9 +182,9 @@ class TokenReader implements TokenReaderInterface
         [$header] = explode(".", (string)$token);
 
         $decodedAdobeImsHeader = $this->json->unserialize(
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
             base64_decode($header)
-            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
+        // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
         );
 
         if (!isset($decodedAdobeImsHeader[self::HEADER_ATTRIBUTE_X5U])) {
@@ -195,7 +195,7 @@ class TokenReader implements TokenReaderInterface
         $this->setCertificateCacheId($certificateFileName);
 
         if (!$certificateValue = $this->loadCertificateFromCache()) {
-            $certificateUrl = $this->adminImsConfig->getCertificateUrl($certificateFileName);
+            $certificateUrl = $this->imsConfig->getCertificateUrl($certificateFileName);
             try {
                 $certificateValue = $this->driver->fileGetContents($certificateUrl);
             } catch (FileSystemException $exception) {
