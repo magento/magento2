@@ -84,7 +84,9 @@
         <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
 
         <!-- Check Ship to Multiple Address Page is opened-->
-        <wait time="10" stepKey="waitForAddressPage"/>
+
+        <waitForPageLoad stepKey="waitForAddressPage"/>
+
         <seeInCurrentUrl url="{{MultishippingCheckoutAddressesPage.url}}" stepKey="seeShiptoMultipleAddressesPageIsOpened"/>
 
         <!-- Assert Simple product has address in Send To section-->
@@ -108,8 +110,9 @@
         <seeInCurrentUrl url="{{MultishippingCheckoutShippingPage.url}}" stepKey="seeSelectShippingMethodPageIsOpened"/>
 
 
-        <!-- Halt test execution for 10 seconds before continuing. -->
-        <wait time="10" stepKey="waitForElement"/>
+        <!-- wait for selector -->
+        <waitForElement selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.shippingmethods($$createSimpleProduct.name$$)}}" stepKey="waitForShippingMethodsVisible"/>
+
         <!-- See Shipping Method available ONLY for Simple product-->
         <seeElement selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.shippingmethods($$createSimpleProduct.name$$)}}" stepKey="ShippingMethodForSimpleProduct"/>
 
@@ -121,7 +124,6 @@
         <waitForPageLoad stepKey="waitForCheckoutShippingToolbarPageLoad"/>
 
         <!-- See Billing Information Page is opened-->
-        <wait time="10" stepKey="waitForUrl"/>
         <seeInCurrentUrl url="{{MultishippingCheckoutBillingPage.url}}" stepKey="seeBillingPageIsOpened"/>
 
         <!-- Check Page contains customer's billing address-->
@@ -135,7 +137,9 @@
         <conditionalClick selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.checkmoneyorder}}" dependentSelector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.checkmoneyorder}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
 
         <!--  Select Payment method e.g. "Check / Money Order" and click Go to Review Your Order -->
-        <wait time="10" stepKey="waitforReviewOrderButton"/>
+
+        <waitForElement selector="{{StorefrontMultishippingCheckoutBillingToolbarSection.goToReviewOrder}}" stepKey="waitForElementgoToReviewOrder"/>
+
         <click selector="{{StorefrontMultishippingCheckoutBillingToolbarSection.goToReviewOrder}}" stepKey="clickGoToReviewOrder"/>
 
 
@@ -178,4 +182,5 @@
 
     </test>
 </tests>
+
 
