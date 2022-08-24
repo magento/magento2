@@ -59,6 +59,6 @@
         </actionGroup>
         <reloadPage stepKey="realoadPageAfterConfigChanged"/>
         <see selector="{{StorefrontCustomerAddressSection.country}}" userInput="United States" stepKey="seeUnitedStatesCountry"/>
-        <dontSee selector="{{StorefrontCustomerAddressSection.country}}" userInput="Brazil" stepKey="seeBrazilCountry1"/>
+        <see selector="{{StorefrontCustomerAddressSection.country}}" userInput="Brazil" stepKey="seeBrazilCountry"/>
     </test>
 </tests>
