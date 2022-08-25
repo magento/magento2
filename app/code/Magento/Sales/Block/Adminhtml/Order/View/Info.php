@@ -286,10 +286,11 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      *
      * @param string $createdAt
      * @return \DateTime
+     * @throws \Exception
      */
     public function getOrderAdminDate($createdAt)
     {
-        return $this->_localeDate->date(new \DateTime($createdAt));
+        return $this->getCreatedAtAdminDate($createdAt);
     }
 
     /**

@@ -5,10 +5,6 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\View\Form;
 
-/**
- * Class Info
- * @package Magento\Shipping\Block\Adminhtml\View\Form
- */
 class Info extends \Magento\Shipping\Block\Adminhtml\View\Form
 {
 

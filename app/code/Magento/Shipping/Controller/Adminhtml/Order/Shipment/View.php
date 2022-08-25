@@ -69,7 +69,7 @@ class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
                 ->updateBackButtonUrl($this->getRequest()->getParam('come_from'));
             $resultPage->setActiveMenu('Magento_Sales::sales_shipment');
             $resultPage->getConfig()->getTitle()->prepend(__('Shipments'));
-            $resultPage->getConfig()->getTitle()->prepend(__('View Shipment'));
+            $resultPage->getConfig()->getTitle()->prepend(__('View Shipment #%1', $shipment->getIncrementId()));
             return $resultPage;
         } else {
             $resultRedirect = $this->resultRedirectFactory->create();
