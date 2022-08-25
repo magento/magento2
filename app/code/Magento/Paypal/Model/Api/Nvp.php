@@ -6,7 +6,9 @@
 
 namespace Magento\Paypal\Model\Api;
 
+use Laminas\Http\Request;
 use Magento\Framework\DataObject;
+use Magento\Framework\HTTP\Adapter\Curl;
 use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Model\Cart;
 use Magento\Payment\Model\Method\Logger;
@@ -1174,6 +1176,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         $debugData = ['url' => $this->getApiEndpoint(), $methodName => $request];
 
         try {
+            /** @var Curl $http */
             $http = $this->_curlFactory->create();
             $config = ['timeout' => 60, 'verifypeer' => $this->_config->getValue('verifyPeer')];
             if ($this->getUseProxy()) {
@@ -1182,9 +1185,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             if ($this->getUseCertAuthentication()) {
                 $config['ssl_cert'] = $this->getApiCertificate();
             }
-            $http->setConfig($config);
+            $http->setOptions($config);
             $http->write(
-                \Zend_Http_Client::POST,
+                Request::METHOD_POST,
                 $this->getApiEndpoint(),
                 '1.1',
                 $this->_headers,
