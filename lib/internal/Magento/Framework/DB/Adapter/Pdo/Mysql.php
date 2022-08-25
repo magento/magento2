@@ -2233,10 +2233,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function createTemporaryTableLike($temporaryTableName, $originTableName, $ifNotExists = false)
     {
-        $ifNotExistsSql = ($ifNotExists ? 'IF NOT EXISTS' : '');
+        $ifNotExistsSql = ($ifNotExists ? ' IF NOT EXISTS' : '');
         $temporaryTable = $this->quoteIdentifier($this->_getTableName($temporaryTableName));
         $originTable = $this->quoteIdentifier($this->_getTableName($originTableName));
-        $sql = sprintf('CREATE TEMPORARY TABLE %s %s LIKE %s', $ifNotExistsSql, $temporaryTable, $originTable);
+        $originCreate = $this->fetchPairs(sprintf('SHOW CREATE TABLE %s', $originTable));
+        $sql = str_replace('CREATE TABLE', 'CREATE TEMPORARY TABLE' . $ifNotExistsSql, reset($originCreate));
+        $sql = str_replace($originTable, $temporaryTable, $sql);
 
         return $this->query($sql);
     }
