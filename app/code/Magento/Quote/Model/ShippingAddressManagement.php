@@ -19,15 +19,11 @@ use Psr\Log\LoggerInterface as Logger;
 class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressManagementInterface
 {
     /**
-     * Quote repository.
-     *
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
     /**
-     * Logger.
-     *
      * @var Logger
      */
     protected $logger;
