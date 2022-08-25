@@ -17,7 +17,7 @@ $invoiceDate = $this->formatDate(
 
 <div class="admin__page-section order-view-account-information">
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Invoice Information')) ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Invoice Information')) ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__page-section-item invoice-information">
@@ -27,8 +27,8 @@ $invoiceDate = $this->formatDate(
                     : __('The invoice confirmation email is not sent');
                 ?>
                 <span class="title">
-                    <?= $block->escapeHtml(__('Invoice # %1', $invoice->getIncrementId())) ?>
-                    (<span><?= $block->escapeHtml($confirmationEmailStatusMessage) ?></span>)
+                    <?= $escaper->escapeHtml(__('Invoice # %1', $invoice->getIncrementId())) ?>
+                    (<span><?= $escaper->escapeHtml($confirmationEmailStatusMessage) ?></span>)
                 </span>
             </div>
             <div class="admin__page-section-item-content">

@@ -20,7 +20,7 @@ $memoDate = $this->formatDate(
 
 <div class="admin__page-section order-view-account-information">
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Credit Memo Information')) ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Credit Memo Information')) ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__page-section-item creditmemo-information">
@@ -30,8 +30,8 @@ $memoDate = $this->formatDate(
                     : __('The credit memo confirmation email is not sent');
                 ?>
                 <span class="title">
-                    <?= $block->escapeHtml(__('Memo # %1', $creditMemo->getIncrementId())) ?>
-                    (<span><?= $block->escapeHtml($confirmationEmailStatusMessage) ?></span>)
+                    <?= $escaper->escapeHtml(__('Memo # %1', $creditMemo->getIncrementId())) ?>
+                    (<span><?= $escaper->escapeHtml($confirmationEmailStatusMessage) ?></span>)
                 </span>
             </div>
             <div class="admin__page-section-item-content">
