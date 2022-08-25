@@ -3,20 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
-namespace Magento\AdminAdobeIms\Service;
+namespace Magento\AdobeIms\Model;
 
-use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
+use Magento\AdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
+use Magento\AdobeImsApi\Api\ConfigInterface;
+use Magento\AdobeImsApi\Api\OrganizationMembershipInterface;
 use Magento\Framework\HTTP\Client\CurlFactory;
 
-class ImsOrganizationService
+/**
+ * Check if user is a member of Adobe Organization
+ */
+class OrganizationMembership implements OrganizationMembershipInterface
 {
     /**
-     * @var ImsConfig
+     * @var ConfigInterface
      */
-    private ImsConfig $adminImsConfig;
+    private ConfigInterface $imsConfig;
 
     /**
      * @var CurlFactory
@@ -24,27 +28,23 @@ class ImsOrganizationService
     private CurlFactory $curlFactory;
 
     /**
-     * @param ImsConfig $adminImsConfig
+     * @param ConfigInterface $imsConfig
      * @param CurlFactory $curlFactory
      */
     public function __construct(
-        ImsConfig $adminImsConfig,
+        ConfigInterface $imsConfig,
         CurlFactory $curlFactory
     ) {
-        $this->adminImsConfig = $adminImsConfig;
+        $this->imsConfig = $imsConfig;
         $this->curlFactory = $curlFactory;
     }
 
     /**
-     * Check if user is a member of Adobe Organization
-     *
-     * @param string $access_token
-     * @return void
-     * @throws AdobeImsOrganizationAuthorizationException
+     * @inheritDoc
      */
     public function checkOrganizationMembership(string $access_token): void
     {
-        $configuredOrganizationId = $this->adminImsConfig->getOrganizationId();
+        $configuredOrganizationId = $this->imsConfig->getOrganizationId();
 
         if ($configuredOrganizationId === '' || !$access_token) {
             throw new AdobeImsOrganizationAuthorizationException(
@@ -59,9 +59,8 @@ class ImsOrganizationService
             $curl->addHeader('cache-control', 'no-cache');
             $curl->addHeader('Authorization', 'Bearer ' . $access_token);
 
-            $orgCheckUrl = $this->adminImsConfig->getOrganizationMembershipUrl($configuredOrganizationId);
+            $orgCheckUrl = $this->imsConfig->getOrganizationMembershipUrl($configuredOrganizationId);
             $curl->get($orgCheckUrl);
-
             if ($curl->getBody() === '') {
                 throw new AdobeImsOrganizationAuthorizationException(
                     __('Could not check Organization Membership. Response is empty.')
@@ -69,7 +68,6 @@ class ImsOrganizationService
             }
 
             $response = $curl->getBody();
-
             if ($response !== 'true') {
                 throw new AdobeImsOrganizationAuthorizationException(
                     __('User is not a member of configured Adobe Organization.')

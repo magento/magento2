@@ -17,4 +17,9 @@
     <preference for="Magento\AdobeImsApi\Api\LogOutInterface" type="Magento\AdobeIms\Model\LogOut"/>
     <preference for="Magento\AdobeImsApi\Api\GetAccessTokenInterface" type="Magento\AdobeIms\Model\GetAccessToken"/>
     <preference for="Magento\AdobeImsApi\Api\FlushUserTokensInterface" type="Magento\AdobeIms\Model\FlushUserTokens"/>
+    <preference for="Magento\AdobeImsApi\Api\OrganizationMembershipInterface" type="Magento\AdobeIms\Model\OrganizationMembership"/>
+    <preference for="Magento\AdobeImsApi\Api\TokenReaderInterface" type="Magento\AdobeIms\Model\TokenReader"/>
+    <preference for="Magento\AdobeImsApi\Api\AuthorizationInterface" type="Magento\AdobeIms\Model\Authorization"/>
+    <preference for="Magento\AdobeImsApi\Api\IsTokenValidInterface" type="Magento\AdobeIms\Model\IsTokenValid"/>
+    <preference for="Magento\AdobeImsApi\Api\GetProfileInterface" type="Magento\AdobeIms\Model\GetProfile" />
 </config>
