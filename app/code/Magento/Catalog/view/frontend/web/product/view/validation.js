@@ -10,7 +10,7 @@ define([
 ], function ($) {
     'use strict';
 
-    $.widget('mage.validation', $.mage.validation, {
+    $.widget('mage.catalogProductViewValidation', $.mage.validation, {
         options: {
             radioCheckboxClosest: 'ul, ol',
 
@@ -88,5 +88,5 @@ define([
         }
     });
 
-    return $.mage.validation;
+    return $.mage.catalogProductViewValidation;
 });

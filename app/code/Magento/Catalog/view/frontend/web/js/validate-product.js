@@ -24,7 +24,7 @@ define([
         _create: function () {
             var bindSubmit = this.options.bindSubmit;
 
-            this.element.validation({
+            this.element.catalogProductViewValidation({
                 radioCheckboxClosest: this.options.radioCheckboxClosest,
 
                 /**
