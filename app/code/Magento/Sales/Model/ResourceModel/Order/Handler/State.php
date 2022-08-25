@@ -43,7 +43,7 @@ class State
             ) {
                 $order->setState(Order::STATE_COMPLETE)
                     ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_COMPLETE));
-            }  elseif ($order->getIsVirtual() && $order->getStatus() === Order::STATE_CLOSED) {
+            } elseif ($order->getIsVirtual() && $order->getStatus() === Order::STATE_CLOSED) {
                 $order->setState(Order::STATE_CLOSED);
             }
         }
