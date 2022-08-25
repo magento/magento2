@@ -38,8 +38,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DataProviderTest extends TestCase
 {
-    const ATTRIBUTE_CODE = 'test-code';
-    const OPTIONS_RESULT = 'test-options';
+    private const ATTRIBUTE_CODE = 'test-code';
+    private const OPTIONS_RESULT = 'test-options';
 
     /**
      * @var Config|MockObject
