@@ -24,12 +24,12 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class WebsitesTest extends AbstractModifierTest
 {
-    const PRODUCT_ID = 1;
-    const WEBSITE_ID = 1;
-    const GROUP_ID = 1;
-    const STORE_VIEW_NAME = 'StoreView';
-    const STORE_VIEW_ID = 1;
-    const SECOND_WEBSITE_ID = 2;
+    public const PRODUCT_ID = 1;
+    public const WEBSITE_ID = 1;
+    public const GROUP_ID = 1;
+    public const STORE_VIEW_NAME = 'StoreView';
+    public const STORE_VIEW_ID = 1;
+    public const SECOND_WEBSITE_ID = 2;
 
     /**
      * @var WebsiteRepositoryInterface|MockObject
@@ -251,7 +251,8 @@ class WebsitesTest extends AbstractModifierTest
 
         $this->assertArrayHasKey(self::WEBSITE_ID, $meta['websites']['children']);
         $this->assertArrayHasKey('copy_to_stores.' . self::WEBSITE_ID, $meta['websites']['children']);
-        $this->assertEquals('0',
+        $this->assertEquals(
+            '0',
             $meta['websites']['children'][self::WEBSITE_ID]['arguments']['data']['config']['value']
         );
     }
@@ -269,7 +270,8 @@ class WebsitesTest extends AbstractModifierTest
         $meta = $this->getModel()->modifyMeta([]);
 
         $this->assertArrayHasKey(self::WEBSITE_ID, $meta['websites']['children']);
-        $this->assertEquals('1',
+        $this->assertEquals(
+            '1',
             $meta['websites']['children'][self::WEBSITE_ID]['arguments']['data']['config']['value']
         );
     }
