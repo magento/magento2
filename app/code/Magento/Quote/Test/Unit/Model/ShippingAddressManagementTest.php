@@ -155,7 +155,7 @@ class ShippingAddressManagementTest extends TestCase
     /**
      * @return array
      */
-    private function assignDataProvider(): array
+    public function assignDataProvider(): array
     {
         return [
             [true, true],

@@ -78,6 +78,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
     /**
      * @inheritDoc
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address)
     {
