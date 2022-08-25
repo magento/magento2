@@ -854,7 +854,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * get all refunded items number
+     * Get all refunded items number
      *
      * @return int
      */
@@ -870,7 +870,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * get all shipped items number
+     * Get all shipped items number
      *
      * @return int
      */

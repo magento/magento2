@@ -68,7 +68,6 @@ class StateTest extends TestCase
      * @param bool $isCanceled
      * @param bool $canUnhold
      * @param bool $isNotVirtual
-     * @param bool $isPartiallyRefundedOrderShipped
      * @dataProvider stateCheckDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -83,8 +82,7 @@ class StateTest extends TestCase
         int $callGetIsInProcessNum,
         bool $isCanceled,
         bool $canUnhold,
-        bool $isNotVirtual,
-        bool $isPartiallyRefundedOrderShipped
+        bool $isNotVirtual
     ) {
         $this->orderMock->setState($currentState);
         $this->orderMock->expects($this->any())
