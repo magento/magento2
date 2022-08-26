@@ -2236,8 +2236,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $ifNotExistsSql = ($ifNotExists ? ' IF NOT EXISTS' : '');
         $temporaryTable = $this->quoteIdentifier($this->_getTableName($temporaryTableName));
         $originTable = $this->quoteIdentifier($this->_getTableName($originTableName));
-        $originCreate = $this->fetchPairs(sprintf('SHOW CREATE TABLE %s', $originTable));
-        $sql = str_replace('CREATE TABLE', 'CREATE TEMPORARY TABLE' . $ifNotExistsSql, reset($originCreate));
+        $originCreate = $this->fetchPairs("SHOW CREATE TABLE {$originTable}");
+        $sql = reset($originCreate);
+        $sql = preg_replace('/\/\*!50100 TABLESPACE [^\s]+ \*\//', '', $sql);
+        $sql = str_replace('CREATE TABLE', 'CREATE TEMPORARY TABLE' . $ifNotExistsSql, $sql);
         $sql = str_replace($originTable, $temporaryTable, $sql);
 
         return $this->query($sql);
