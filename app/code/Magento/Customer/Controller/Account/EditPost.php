@@ -161,7 +161,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
         $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(Filesystem::class);
         $this->sessionCleaner = $sessionCleaner ?: ObjectManager::getInstance()->get(SessionCleanerInterface::class);
-        $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()->get(AccountConfirmation::class);
+        $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
+            ->get(AccountConfirmation::class);
         $this->customerUrl = $customerUrl ?: ObjectManager::getInstance()->get(Url::class);
     }
 
