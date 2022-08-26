@@ -8,6 +8,7 @@ namespace Magento\Sales\Model\Order\Pdf;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\File\Pdf\Image;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Sales\Model\RtlTextHandler;
 use Magento\Store\Model\ScopeInterface;
@@ -279,7 +280,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                 $this->fileStorageDatabase->saveFileToFilesystem($imagePath);
             }
             if ($this->_mediaDirectory->isFile($imagePath)) {
-                $image = \Zend_Pdf_Image::imageWithPath($this->_mediaDirectory->getAbsolutePath($imagePath));
+                $image = Image::imageWithPath($this->_mediaDirectory->getAbsolutePath($imagePath));
                 $top = 830;
                 //top border of the page
                 $widthLimit = 270;
