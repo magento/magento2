@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\Framework\File\Pdf;
 
@@ -28,7 +33,7 @@ class Image extends Zend_Pdf_Image
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Zend_Pdf_Exception
      */
-    public function imageWithPathAdvanced($filePath)
+    public function imageWithPathAdvanced(string $filePath)
     {
         return $this->imageFactory->factory($filePath);
     }

@@ -39,7 +39,7 @@ class ImageFactory
      * @throws \Zend_Pdf_Exception
      * @SuppressWarnings(PHPMD.LongVariable)
      */
-    public function factory($filename)
+    public function factory(string $filename)
     {
         $mediaReader = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         if (!$mediaReader->isFile($filename)) {
@@ -158,7 +158,7 @@ class ImageFactory
      * @param string $tempResourceFilePath
      * @return \Zend_Pdf_Resource_Image_Jpeg|\Zend_Pdf_Resource_Image_Png|\Zend_Pdf_Resource_Image_Tiff|object
      */
-    protected function getZendPdfImage($typeOfImage, $tempResourceFilePath)
+    protected function getZendPdfImage(string $typeOfImage, string $tempResourceFilePath)
     {
         $classToUseAsPdfImage = sprintf('Zend_Pdf_Resource_Image_%s', ucfirst($typeOfImage));
         return new $classToUseAsPdfImage($tempResourceFilePath);
