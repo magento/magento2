@@ -21,7 +21,7 @@
     </div>
     <div class="admin__page-section-content">
         <?php $additionalClass = $_order->getIsVirtual() ? 'order-payment-method-virtual' : '' ?>
-        <div class="admin__page-section-item order-payment-method <?= $additionalClass ?> admin__fieldset-wrapper">
+        <div class="admin__page-section-item order-payment-method <?= /* @noEscape */ $additionalClass ?> admin__fieldset-wrapper">
             <?php /*Billing Address */ ?>
             <div class="admin__page-section-item-title">
                 <span class="title"><?= $block->escapeHtml(__('Payment Information')) ?></span>
