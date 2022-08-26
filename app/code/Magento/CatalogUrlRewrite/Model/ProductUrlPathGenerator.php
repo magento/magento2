@@ -92,12 +92,13 @@ class ProductUrlPathGenerator
      *
      * @param Product $product
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function prepareProductDefaultUrlKey(Product $product)
     {
         $storedProduct = $this->productRepository->getById($product->getId());
         $storedUrlKey = $storedProduct->getUrlKey();
-        return $storedUrlKey ?: $product->formatUrlKey($storedProduct->getName());
+        return $storedUrlKey ?: $product->formatUrlKey($storedProduct->getName() ?: $storedProduct->getSku());
     }
 
     /**
@@ -149,7 +150,11 @@ class ProductUrlPathGenerator
         $urlKey = (string)$product->getUrlKey();
         $urlKey = trim(strtolower($urlKey));
 
-        return $product->formatUrlKey($urlKey ?: $product->getName());
+        if (!$urlKey) {
+            return $product->formatUrlKey($product->getName() ?: $product->getSku());
+        }
+
+        return $product->formatUrlKey($urlKey);
     }
 
     /**
