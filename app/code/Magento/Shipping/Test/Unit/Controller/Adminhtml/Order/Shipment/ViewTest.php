@@ -221,7 +221,7 @@ class ViewTest extends TestCase
             ->method('prepend')
             ->withConsecutive(
                 ['Shipments'],
-                ["#" . $incrementId]
+                ['View Shipment #' . $incrementId]
             )
             ->willReturnSelf();
 

@@ -161,8 +161,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     }
 
     /**
-     * Find sort order for account data
-     * Sort Order used as array key
+     * Find sort order for account data. Sort Order used as array key
      *
      * @param array $data
      * @param int $sortOrder
@@ -178,10 +177,10 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     }
 
     /**
-     * Return array of additional account data
-     * Value is option style array
+     * Return array of additional account data. Value is option style array
      *
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCustomerAccountData()
     {

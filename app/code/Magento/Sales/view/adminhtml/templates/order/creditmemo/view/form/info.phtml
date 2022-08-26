@@ -11,14 +11,14 @@ $creditMemo = $block->getCreditmemo();
 $creditMemoStatus = isset($creditMemo->getStates()[$creditMemo->getState()])
     ? $creditMemo->getStates()[$creditMemo->getState()]
     : null;
-$memoDate = $this->formatDate(
+$memoDate = $block->formatDate(
     $block->getCreatedAtAdminDate($creditMemo->getCreatedAt()),
     \IntlDateFormatter::MEDIUM,
     true
 );
 ?>
 
-<div class="admin__page-section order-view-account-information">
+<div class="admin__page-section creditmemo-view-information">
     <div class="admin__page-section-title">
         <span class="title"><?= $escaper->escapeHtml(__('Credit Memo Information')) ?></span>
     </div>

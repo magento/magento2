@@ -16,7 +16,7 @@ class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+    public const ADMIN_RESOURCE = 'Magento_Sales::shipment';
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
@@ -54,7 +54,7 @@ class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
     /**
      * Shipment information page
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface|\Magento\Framework\App\ResponseInterface
      */
     public function execute()
     {

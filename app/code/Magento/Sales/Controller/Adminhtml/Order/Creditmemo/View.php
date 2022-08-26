@@ -15,7 +15,7 @@ class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
+    public const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
 
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader

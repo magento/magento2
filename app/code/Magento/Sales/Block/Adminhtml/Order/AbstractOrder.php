@@ -20,15 +20,11 @@ use Magento\Tax\Helper\Data as TaxHelper;
 class AbstractOrder extends \Magento\Backend\Block\Widget
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Admin helper
-     *
      * @var \Magento\Sales\Helper\Admin
      */
     protected $_adminHelper;

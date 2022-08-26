@@ -8,19 +8,19 @@
 /** @var \Magento\Sales\Block\Adminhtml\Order\Invoice\View\Form\Info $block */
 
 $invoice = $block->getInvoice();
-$invoiceDate = $this->formatDate(
+$invoiceDate = $block->formatDate(
     $block->getCreatedAtAdminDate($invoice->getCreatedAt()),
     \IntlDateFormatter::MEDIUM,
     true
 );
 ?>
 
-<div class="admin__page-section order-view-account-information">
+<section class="admin__page-section invoice-view-information">
     <div class="admin__page-section-title">
         <span class="title"><?= $escaper->escapeHtml(__('Invoice Information')) ?></span>
     </div>
     <div class="admin__page-section-content">
-        <div class="admin__page-section-item invoice-information">
+        <div class="invoice-information">
             <div class="admin__page-section-item-title">
                 <?php $confirmationEmailStatusMessage = $invoice->getEmailSent()
                     ? __('The invoice confirmation email was sent')
@@ -47,4 +47,4 @@ $invoiceDate = $this->formatDate(
             </div>
         </div>
     </div>
-</div>
+</section>

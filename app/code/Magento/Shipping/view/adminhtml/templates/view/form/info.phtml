@@ -8,14 +8,14 @@
 /** @var \Magento\Shipping\Block\Adminhtml\View\Form\Info $block */
 
 $shipment = $block->getShipment();
-$shipmentDate = $this->formatDate(
+$shipmentDate = $block->formatDate(
     $block->getCreatedAtAdminDate($shipment->getCreatedAt()),
     \IntlDateFormatter::MEDIUM,
     true
 );
 ?>
 
-<div class="admin__page-section order-view-account-information">
+<div class="admin__page-section shipment-view-information">
     <div class="admin__page-section-title">
         <span class="title"><?= $escaper->escapeHtml(__('Shipment Information')) ?></span>
     </div>
