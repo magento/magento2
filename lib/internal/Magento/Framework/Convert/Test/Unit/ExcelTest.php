@@ -20,29 +20,37 @@ use PHPUnit\Framework\TestCase;
 class ExcelTest extends TestCase
 {
     /**
-     * Test data
+     * Test excel data
      *
      * @var array
      */
     private $_testData = [
         [
             'ID', 'Name', 'Email', 'Group', 'Telephone', '+Telephone', 'ZIP', '0ZIP', 'Country', 'State/Province',
-            'Symbol=', 'Symbol-', 'Symbol+'
+            'Symbol=', 'Symbol-', 'Symbol+', 'NumberWithSpace', 'NumberWithTabulation'
         ],
         [
             1, 'Jon Doe', 'jon.doe@magento.com', 'General', '310-111-1111', '+310-111-1111', 90232, '090232',
-            'United States', 'California', '=', '-', '+'
+            'United States', 'California', '=', '-', '+', ' 3111', '\t3111'
         ],
     ];
 
+    /**
+     * @var string[]
+     */
     protected $_testHeader = [
         'HeaderID', 'HeaderName', 'HeaderEmail', 'HeaderGroup', 'HeaderPhone', 'Header+Phone', 'HeaderZIP',
-        'Header0ZIP', 'HeaderCountry', 'HeaderRegion', 'HeaderSymbol=', 'HeaderSymbol-', 'HeaderSymbol+'
+        'Header0ZIP', 'HeaderCountry', 'HeaderRegion', 'HeaderSymbol=', 'HeaderSymbol-', 'HeaderSymbol+',
+        'HeaderNumberWithSpace', 'HeaderNumberWithTabulation'
     ];
 
+    /**
+     * @var string[]
+     */
     protected $_testFooter = [
         'FooterID', 'FooterName', 'FooterEmail', 'FooterGroup', 'FooterPhone', 'Footer+Phone', 'FooterZIP',
-        'Footer0ZIP', 'FooterCountry', 'FooterRegion', 'FooterSymbol=', 'FooterSymbol-', 'FooterSymbol+'
+        'Footer0ZIP', 'FooterCountry', 'FooterRegion', 'FooterSymbol=', 'FooterSymbol-', 'FooterSymbol+',
+        'FooterNumberWithSpace', 'FooterNumberWithTabulation'
     ];
 
     /**
