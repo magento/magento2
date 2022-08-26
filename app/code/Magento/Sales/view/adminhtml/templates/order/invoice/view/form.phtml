@@ -7,7 +7,9 @@
 // phpcs:disable Magento2.Templates.ThisInTemplate
 
 /* @var \Magento\Sales\Block\Adminhtml\Order\Invoice\View\Form $block */
+/* @var \Magento\Tax\Helper\Data $helper */
 ?>
+<?php $helper = $this->helper(\Magento\Tax\Helper\Data::class); ?>
 <?php $_invoice = $block->getInvoice() ?>
 <?php $_order = $_invoice->getOrder() ?>
 <?= $block->getChildHtml('invoice_info') ?>
@@ -18,7 +20,8 @@
         <span class="title"><?= $block->escapeHtml(__('Payment &amp; Shipping Method')) ?></span>
     </div>
     <div class="admin__page-section-content">
-        <div class="admin__page-section-item order-payment-method<?php if ($_order->getIsVirtual()) : ?> order-payment-method-virtual<?php endif; ?> admin__fieldset-wrapper">
+        <?php $additionalClass = $_order->getIsVirtual() ? 'order-payment-method-virtual' : '' ?>
+        <div class="admin__page-section-item order-payment-method <?= $additionalClass ?> admin__fieldset-wrapper">
             <?php /*Billing Address */ ?>
             <div class="admin__page-section-item-title">
                 <span class="title"><?= $block->escapeHtml(__('Payment Information')) ?></span>
@@ -32,7 +35,7 @@
             </div>
         </div>
 
-        <?php if (!$_order->getIsVirtual()) : ?>
+        <?php if (!$_order->getIsVirtual()): ?>
             <div class="admin__page-section-item order-shipping-address">
                 <?php /*Shipping Address */ ?>
                 <div class="admin__page-section-item-title">
@@ -45,15 +48,15 @@
                     <div class="shipping-description-content">
                         <?= $block->escapeHtml(__('Total Shipping Charges')) ?>:
 
-                        <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingPriceIncludingTax()) : ?>
+                        <?php if ($helper->displayShippingPriceIncludingTax()): ?>
                             <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
-                        <?php else : ?>
+                        <?php else: ?>
                             <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
                         <?php endif; ?>
                         <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
 
                         <?= /* @noEscape */ $_excl ?>
-                        <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingBothPrices() && $_incl != $_excl) : ?>
+                        <?php if ($helper->displayShippingBothPrices() && $_incl != $_excl): ?>
                             (<?= $block->escapeHtml(__('Incl. Tax')) ?> <?= /* @noEscape */ $_incl ?>)
                         <?php endif; ?>
                         <div><?= $block->getChildHtml('shipment_tracking') ?></div>

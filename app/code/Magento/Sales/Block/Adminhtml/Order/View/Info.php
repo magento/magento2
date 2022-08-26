@@ -31,8 +31,6 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     protected $groupRepository;
 
     /**
-     * Metadata element factory
-     *
      * @var \Magento\Customer\Model\Metadata\ElementFactory
      */
     protected $_metadataElementFactory;
