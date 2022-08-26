@@ -5,8 +5,21 @@ namespace Magento\Framework\File\Pdf;
 use Magento\Framework\File\Pdf\ImageResource\ImageFactory;
 use Zend_Pdf_Image;
 
-abstract class Image extends Zend_Pdf_Image
+class Image extends Zend_Pdf_Image
 {
+    /**
+     * @var \Magento\Framework\File\Pdf\ImageResource\ImageFactory
+     */
+    private ImageFactory $imageFactory;
+
+    /**
+     * @param \Magento\Framework\File\Pdf\ImageResource\ImageFactory $imageFactory
+     */
+    public function __construct(ImageFactory $imageFactory)
+    {
+        $this->imageFactory = $imageFactory;
+    }
+
     /**
      * Filepath of image file
      *
@@ -15,8 +28,8 @@ abstract class Image extends Zend_Pdf_Image
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Zend_Pdf_Exception
      */
-    public static function imageWithPath($filePath)
+    public function imageWithPathAdvanced($filePath)
     {
-        return ImageFactory::factory($filePath);
+        return $this->imageFactory->factory($filePath);
     }
 }

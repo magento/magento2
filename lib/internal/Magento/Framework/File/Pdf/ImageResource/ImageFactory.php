@@ -11,14 +11,25 @@ namespace Magento\Framework\File\Pdf\ImageResource;
 use Exception;
 use finfo;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Zend_Pdf_Exception;
-use Zend_Pdf_Resource_ImageFactory;
 
-class ImageFactory extends Zend_Pdf_Resource_ImageFactory
+class ImageFactory
 {
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
+    private Filesystem $filesystem;
+
+    /**
+     * @param \Magento\Framework\Filesystem $filesystem
+     */
+    public function __construct(Filesystem $filesystem)
+    {
+        $this->filesystem = $filesystem;
+    }
+
     /**
      * New zend image factory instance
      *
@@ -28,19 +39,18 @@ class ImageFactory extends Zend_Pdf_Resource_ImageFactory
      * @throws \Zend_Pdf_Exception
      * @SuppressWarnings(PHPMD.LongVariable)
      */
-    public static function factory($filename)
+    public function factory($filename)
     {
-        $filesystem = ObjectManager::getInstance()->get(Filesystem::class);
-        $mediaReader = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $mediaReader = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         if (!$mediaReader->isFile($filename)) {
             #require_once 'Zend/Pdf/Exception.php';
             throw new Zend_Pdf_Exception("Cannot create image resource. File not found.");
         }
-        $tempFilenameFromBucketOrDisk = self::createTemporaryFileAndPutContent($mediaReader, $filename);
-        $tempResourceFilePath = self::getFilePathOfTemporaryFile($tempFilenameFromBucketOrDisk);
-        $typeOfImage = self::getTypeOfImage($tempResourceFilePath, $filename);
-        $zendPdfImage = self::getZendPdfImage($typeOfImage, $tempResourceFilePath);
-        self::removeTemoraryFile($tempFilenameFromBucketOrDisk);
+        $tempFilenameFromBucketOrDisk = $this->createTemporaryFileAndPutContent($mediaReader, $filename);
+        $tempResourceFilePath = $this->getFilePathOfTemporaryFile($tempFilenameFromBucketOrDisk);
+        $typeOfImage = $this->getTypeOfImage($tempResourceFilePath, $filename);
+        $zendPdfImage = $this->getZendPdfImage($typeOfImage, $tempResourceFilePath);
+        $this->removeTemoraryFile($tempFilenameFromBucketOrDisk);
         return $zendPdfImage;
     }
 
@@ -54,7 +64,7 @@ class ImageFactory extends Zend_Pdf_Resource_ImageFactory
      * @throws \Zend_Pdf_Exception
      * @SuppressWarnings(PHPMD.LongVariable)
      */
-    protected static function createTemporaryFileAndPutContent(ReadInterface $mediaReader, string $filename)
+    protected function createTemporaryFileAndPutContent(ReadInterface $mediaReader, string $filename)
     {
         $tempFilenameFromBucketOrDisk = tmpfile();
         if ($tempFilenameFromBucketOrDisk === false) {
@@ -72,7 +82,7 @@ class ImageFactory extends Zend_Pdf_Resource_ImageFactory
      * @return string
      * @SuppressWarnings(PHPMD.LongVariable)
      */
-    protected static function getFilePathOfTemporaryFile($tempFilenameFromBucketOrDisk): string
+    protected function getFilePathOfTemporaryFile($tempFilenameFromBucketOrDisk): string
     {
         try {
             return stream_get_meta_data($tempFilenameFromBucketOrDisk)['uri'];
@@ -89,7 +99,7 @@ class ImageFactory extends Zend_Pdf_Resource_ImageFactory
      * @return mixed|string
      * @throws \Zend_Pdf_Exception
      */
-    protected static function getTypeOfImage(string $filepath, string $baseFileName)
+    protected function getTypeOfImage(string $filepath, string $baseFileName)
     {
         if (class_exists('finfo', false) && !empty($filepath)) {
             $finfo = new finfo(FILEINFO_MIME_TYPE);
@@ -97,7 +107,7 @@ class ImageFactory extends Zend_Pdf_Resource_ImageFactory
         } elseif (function_exists('mime_content_type') && !empty($filepath)) {
             $classicMimeType = mime_content_type($filepath);
         } else {
-            $classicMimeType = self::fetchFallbackMimeType($baseFileName);
+            $classicMimeType = $this->fetchFallbackMimeType($baseFileName);
         }
         if (!empty($classicMimeType)) {
             return explode("/", $classicMimeType)[1] ?? '';
@@ -113,7 +123,7 @@ class ImageFactory extends Zend_Pdf_Resource_ImageFactory
      * @return string
      * @throws \Zend_Pdf_Exception
      */
-    protected static function fetchFallbackMimeType(string $baseFileName): string
+    protected function fetchFallbackMimeType(string $baseFileName): string
     {
         $extension = pathinfo($baseFileName, PATHINFO_EXTENSION);
         switch (strtolower($extension)) {
@@ -148,7 +158,7 @@ class ImageFactory extends Zend_Pdf_Resource_ImageFactory
      * @param string $tempResourceFilePath
      * @return \Zend_Pdf_Resource_Image_Jpeg|\Zend_Pdf_Resource_Image_Png|\Zend_Pdf_Resource_Image_Tiff|object
      */
-    protected static function getZendPdfImage($typeOfImage, $tempResourceFilePath)
+    protected function getZendPdfImage($typeOfImage, $tempResourceFilePath)
     {
         $classToUseAsPdfImage = sprintf('Zend_Pdf_Resource_Image_%s', ucfirst($typeOfImage));
         return new $classToUseAsPdfImage($tempResourceFilePath);
@@ -161,7 +171,7 @@ class ImageFactory extends Zend_Pdf_Resource_ImageFactory
      * @return void
      * @SuppressWarnings(PHPMD.LongVariable)
      */
-    protected static function removeTemoraryFile($tempFilenameFromBucketOrDisk): void
+    protected function removeTemoraryFile($tempFilenameFromBucketOrDisk): void
     {
         fclose($tempFilenameFromBucketOrDisk);
     }

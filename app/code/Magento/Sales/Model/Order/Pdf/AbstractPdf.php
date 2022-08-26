@@ -63,6 +63,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     private $rtlTextHandler;
 
     /**
+     * @var \Magento\Framework\File\Pdf\Image|mixed
+     */
+    protected $image;
+
+    /**
      * Retrieve PDF
      *
      * @return \Zend_Pdf
@@ -150,6 +155,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param array $data
      * @param Database $fileStorageDatabase
      * @param RtlTextHandler|null $rtlTextHandler
+     * @param Image $image
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -165,7 +171,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         array $data = [],
         Database $fileStorageDatabase = null,
-        ?RtlTextHandler $rtlTextHandler = null
+        ?RtlTextHandler $rtlTextHandler = null,
+        ?Image $image = null
     ) {
         $this->addressRenderer = $addressRenderer;
         $this->_paymentData = $paymentData;
@@ -180,6 +187,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $this->inlineTranslation = $inlineTranslation;
         $this->fileStorageDatabase = $fileStorageDatabase ?: ObjectManager::getInstance()->get(Database::class);
         $this->rtlTextHandler = $rtlTextHandler ?: ObjectManager::getInstance()->get(RtlTextHandler::class);
+        $this->image = $image ?: ObjectManager::getInstance()->get(Image::class);
         parent::__construct($data);
     }
 
@@ -280,7 +288,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                 $this->fileStorageDatabase->saveFileToFilesystem($imagePath);
             }
             if ($this->_mediaDirectory->isFile($imagePath)) {
-                $image = Image::imageWithPath($this->_mediaDirectory->getAbsolutePath($imagePath));
+                $image = $this->image->imageWithPathAdvanced($this->_mediaDirectory->getAbsolutePath($imagePath));
                 $top = 830;
                 //top border of the page
                 $widthLimit = 270;
