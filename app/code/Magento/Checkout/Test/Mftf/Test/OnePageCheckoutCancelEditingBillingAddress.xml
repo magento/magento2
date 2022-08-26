@@ -22,6 +22,8 @@
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">160</field>
             </createData>
+            <!-- Flat Rate Shipping method default setup -->
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
         </before>
         <after>
             <!-- Delete created product -->
