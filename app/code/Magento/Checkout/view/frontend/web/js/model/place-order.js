@@ -18,7 +18,7 @@ define(
         'use strict';
 
         return function (serviceUrl, payload, messageContainer) {
-            var headers = {};
+            var headers = {}, redirectURL = '';
 
             fullScreenLoader.startLoader();
             _.each(hooks.requestModifiers, function (modifier) {
@@ -30,6 +30,13 @@ define(
             ).fail(
                 function (response) {
                     errorProcessor.process(response, messageContainer);
+                    redirectURL = response.getResponseHeader('errorRedirectAction');
+
+                    if (redirectURL) {
+                        setTimeout(function () {
+                            errorProcessor.redirectTo(redirectURL);
+                        }, 3000);
+                    }
                 }
             ).done(
                 function (response) {
