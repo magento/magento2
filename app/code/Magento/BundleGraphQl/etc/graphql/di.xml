@@ -114,4 +114,33 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\BundleGraphQl\Model\Resolver\Products\DataProvider\Product\Option"
+                 type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product">
+        <arguments>
+            <argument name="collectionFactory" xsi:type="object">
+                Magento\BundleGraphQl\Model\Resolver\Products\DataProvider\Product\Option\CollectionFactory
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\BundleGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product\Option"
+                 type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product">
+        <arguments>
+            <argument name="productDataProvider" xsi:type="object">
+                Magento\BundleGraphQl\Model\Resolver\Products\DataProvider\Product\Option
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\BundleGraphQl\Model\Resolver\Options\Label">
+        <arguments>
+            <argument name="product" xsi:type="object">Magento\BundleGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product\Option</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\BundleGraphQl\Model\Resolver\Options\Product"
+                 type="Magento\CatalogGraphQl\Model\Resolver\Product">
+        <arguments>
+            <argument name="productDataProvider" xsi:type="object">
+                Magento\BundleGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product\Option
+            </argument>
+        </arguments>
+    </virtualType>
 </config>
