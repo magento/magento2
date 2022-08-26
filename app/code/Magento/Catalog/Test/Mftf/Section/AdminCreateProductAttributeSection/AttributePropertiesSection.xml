@@ -17,6 +17,7 @@
         <element name="DefaultValue" type="input" selector="#default_value_text"/>
         <element name="Scope" type="select" selector="#is_global"/>
         <element name="Save" type="button" selector="#save" timeout="30"/>
+        <element name="System" type="select" selector="//*[@id='attributeGrid_filter_is_user_defined']"/>
         <element name="DeleteAttribute" type="button" selector="#delete" timeout="30"/>
         <element name="SaveAndEdit" type="button" selector="#save_and_edit_button" timeout="30"/>
         <element name="checkIfTabOpen" selector="//div[@id='advanced_fieldset-wrapper' and not(contains(@class,'opened'))]" type="button"/>
@@ -29,5 +30,6 @@
         <element name="dropdownNthOptionDefaultStoreView" type="textarea" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) td:nth-child(4) input" parameterized="true"/>
         <element name="dropdownNthOptionDelete" type="button" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) button[title='Delete']" parameterized="true"/>
         <element name="attributeLabelValidationError" type="text" selector=".field-attribute_label .mage-error"/>
+
     </section>
 </sections>
