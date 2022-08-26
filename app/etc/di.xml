@@ -1946,9 +1946,11 @@
             </argument>
         </arguments>
     </type>
+
+
     <type name="Magento\Framework\Webapi\Validator\EntityArrayValidator">
         <arguments>
-            <argument name="complexArrayItemLimit" xsi:type="number">20</argument>
+            <argument name="complexArrayItemLimit" xsi:type="number">999999</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Webapi\Validator\SearchCriteriaValidator">
@@ -1971,7 +1973,7 @@
     </type>
     <type name="Magento\Framework\Webapi\ServiceInputProcessor">
         <arguments>
-            <argument name="defaultPageSize" xsi:type="number">20</argument>
+            <argument name="defaultPageSize" xsi:type="number">999999</argument>
         </arguments>
     </type>
     <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>
