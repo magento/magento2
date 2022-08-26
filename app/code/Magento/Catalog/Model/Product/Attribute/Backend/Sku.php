@@ -29,7 +29,7 @@ class Sku extends AbstractBackend
      *
      * @var StringUtils
      */
-    protected $string;
+    protected StringUtils $string;
 
     /**
      * @param StringUtils $string
@@ -46,7 +46,7 @@ class Sku extends AbstractBackend
      * @return bool
      * @throws LocalizedException
      */
-    public function validate($object)
+    public function validate($object): bool
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
         $value = $object->getData($attrCode) ?? '';
@@ -95,8 +95,13 @@ class Sku extends AbstractBackend
      * @param Product $object
      * @return $this
      */
-    public function beforeSave($object)
+    public function beforeSave($object): Sku
     {
+
+        if ($object->getData($this->getAttribute()->getAttributeCode()) === null) {
+            $object->setData($this->getAttribute()->getAttributeCode(), '');
+        }
+
         $this->_generateUniqueSku($object);
         $this->trimValue($object);
         return parent::beforeSave($object);
@@ -109,7 +114,7 @@ class Sku extends AbstractBackend
      * @param Product $object
      * @return int
      */
-    protected function _getLastSimilarAttributeValueIncrement($attribute, $object)
+    protected function _getLastSimilarAttributeValueIncrement($attribute, $object): int
     {
         $connection = $this->getAttribute()->getEntity()->getConnection();
         $select = $connection->select();
@@ -136,7 +141,7 @@ class Sku extends AbstractBackend
      * @param Product $object
      * @return void
      */
-    private function trimValue($object)
+    private function trimValue(Product $object)
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
         $value = $object->getData($attrCode);

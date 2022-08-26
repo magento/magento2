@@ -60,6 +60,17 @@ class SkuTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param $product \Magento\Catalog\Model\Product
+     * @dataProvider uniqueSkuDataProvider
+     */
+    public function testGenerateNullSku($product)
+    {
+        $product->setSku(null);
+        $product->getResource()->getAttribute('sku')->getBackend()->beforeSave($product);
+        $this->assertEquals('', $product->getSku());
+    }
+
+    /**
      * Returns simple product
      *
      * @return array
