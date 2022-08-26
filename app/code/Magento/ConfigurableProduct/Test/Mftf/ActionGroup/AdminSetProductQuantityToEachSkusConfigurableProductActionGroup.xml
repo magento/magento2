@@ -21,5 +21,6 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+
     </actionGroup>
 </actionGroups>
