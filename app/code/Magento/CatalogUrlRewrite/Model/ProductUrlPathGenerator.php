@@ -98,7 +98,7 @@ class ProductUrlPathGenerator
     {
         $storedProduct = $this->productRepository->getById($product->getId());
         $storedUrlKey = $storedProduct->getUrlKey();
-        return $storedUrlKey ?: $product->formatUrlKey($storedProduct->getName() ?: $storedProduct->getSku());
+        return $storedUrlKey ?: $product->formatUrlKey($this->generateProductUrlKey($product));
     }
 
     /**
@@ -151,7 +151,7 @@ class ProductUrlPathGenerator
         $urlKey = trim(strtolower($urlKey));
 
         if (!$urlKey) {
-            return $product->formatUrlKey($product->getName() ?: $product->getSku());
+            return $product->formatUrlKey($this->generateProductUrlKey($product));
         }
 
         return $product->formatUrlKey($urlKey);
@@ -177,5 +177,15 @@ class ProductUrlPathGenerator
             );
         }
         return $this->productUrlSuffix[$storeId];
+    }
+
+    /**
+     * @param Product $product
+     * @return string
+     */
+    private function generateProductUrlKey($product)
+    {
+        $strToGenerate = $product->getName() ?: $product->getSku();
+        return $strToGenerate ?: hash('sha256', (string)time());
     }
 }
