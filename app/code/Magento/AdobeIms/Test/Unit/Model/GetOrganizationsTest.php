@@ -3,53 +3,52 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
-namespace Magento\AdminAdobeIms\Test\Unit\Service;
+namespace Magento\AdobeIms\Test\Unit\Model;
 
-use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
-use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdminAdobeIms\Service\ImsOrganizationService;
+use Magento\AdobeImsApi\Api\ConfigInterface;
+use Magento\AdobeIms\Model\OrganizationMembership;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
 
-class ImsOrganizationServiceTest extends TestCase
+class GetOrganizationsTest extends TestCase
 {
     private const VALID_ORGANIZATION_ID = '12121212ABCD1211AA11ABCD';
     private const INVALID_ORGANIZATION_ID = '12121212ABCD1211AA11XXXX';
 
     /**
-     * @var ImsOrganizationService
+     * @var OrganizationMembership
      */
     private $imsOrganizationService;
 
     /**
-     * @var ImsConfig
+     * @var ConfigInterface
      */
-    private $adminImsConfigMock;
+    private $imsConfigMock;
 
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
+        $this->imsConfigMock = $this->createMock(ConfigInterface::class);
 
         $this->imsOrganizationService = $objectManagerHelper->getObject(
-            ImsOrganizationService::class,
+            OrganizationMembership::class,
             [
-                'adminImsConfig' => $this->adminImsConfigMock
+                'imsConfig' => $this->imsConfigMock
             ]
         );
     }
 
     public function testCheckOrganizationMembershipThrowsExceptionWhenProfileNotAssignedToOrg()
     {
-        $this->adminImsConfigMock
+        $this->imsConfigMock
             ->method('getOrganizationId')
             ->willReturn('');
 
-        $this->expectException(AdobeImsOrganizationAuthorizationException::class);
+        $this->expectException(AuthorizationException::class);
         $this->expectExceptionMessage('Can\'t check user membership in organization.');
 
         $this->imsOrganizationService->checkOrganizationMembership('my_token');
