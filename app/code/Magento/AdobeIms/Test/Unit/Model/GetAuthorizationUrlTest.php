@@ -3,28 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
-namespace Magento\AdminAdobeIms\Test\Unit\Model;
+namespace Magento\AdobeIms\Test\Unit\Model;
 
-use Magento\AdminAdobeIms\Model\ImsConnection;
-use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdobeIms\Model\Authorization;
+use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
 
-class ImsConnectionTest extends TestCase
+class GetAuthorizationUrlTest extends TestCase
 {
     private const AUTH_URL = 'https://adobe-login-url.com/authorize' .
-        '?client_id=AdobeCommerceIMS' .
-        '&redirect_uri=https://magento-instance.local/imscallback/' .
-        '&locale=en_US' .
-        '&scope=openid,creative_sdk,email,profile,additional_info,additional_info.roles' .
-        '&response_type=code';
+    '?client_id=AdobeCommerceIMS' .
+    '&redirect_uri=https://magento-instance.local/imscallback/' .
+    '&locale=en_US' .
+    '&scope=openid,creative_sdk,email,profile,additional_info,additional_info.roles' .
+    '&response_type=code';
 
     private const AUTH_URL_ERROR = 'https://adobe-login-url.com/authorize?error=invalid_scope';
 
@@ -34,29 +32,25 @@ class ImsConnectionTest extends TestCase
     private $curlFactory;
 
     /**
-     * @var ImsConnection
+     * @var Authorization
      */
-    private $adminImsConnection;
+    private $authorizationUrl;
 
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $adminImsConfigMock = $this->createMock(ImsConfig::class);
-        $adminImsConfigMock
+        $imsConfigMock = $this->createMock(ConfigInterface::class);
+        $imsConfigMock
             ->method('getAuthUrl')
             ->willReturn(self::AUTH_URL);
-
         $this->curlFactory = $this->createMock(CurlFactory::class);
 
-        $json = $this->createMock(Json::class);
-
-        $this->adminImsConnection = $objectManagerHelper->getObject(
-            ImsConnection::class,
+        $this->authorizationUrl = $objectManagerHelper->getObject(
+            Authorization::class,
             [
                 'curlFactory' => $this->curlFactory,
-                'adminImsConfig' => $adminImsConfigMock,
-                'json' => $json,
+                'imsConfig' => $imsConfigMock
             ]
         );
     }
@@ -74,7 +68,7 @@ class ImsConnectionTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Could not get a valid response from Adobe IMS Service.');
-        $this->adminImsConnection->auth();
+        $this->authorizationUrl->getAuthUrl();
     }
 
     public function testAuthThrowsExceptionWhenResponseContainsError(): void
@@ -90,6 +84,6 @@ class ImsConnectionTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Could not connect to Adobe IMS Service: invalid_scope.');
-        $this->adminImsConnection->auth();
+        $this->authorizationUrl->getAuthUrl();
     }
 }

@@ -229,6 +229,8 @@ class Product extends AbstractEntity
      * @deprecated 101.1.0 use DI for LinkProcessor class if you want to add additional types
      * @see LinkProcessor
      *
+     * @see Magento_CatalogImportExport::etc/di.xml
+     *
      * @var array
      */
     protected $_linkNameToId = [
@@ -549,7 +551,7 @@ class Product extends AbstractEntity
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory
      * @deprecated 101.0.0 this variable isn't used anymore.
-     * @see nothing
+     * @see we don't recommend this approach anymore
      */
     protected $_stockResItemFac;
 
@@ -616,6 +618,8 @@ class Product extends AbstractEntity
      * @deprecated 100.0.3
      * @see nothing
      * @since 100.0.3
+     *
+     * @see we don't recommend this approach anymore
      */
     protected $productUrlKeys = [];
 
@@ -1283,7 +1287,7 @@ class Product extends AbstractEntity
      * Must be called after ALL products saving done.
      *
      * @deprecated 101.1.0 use linkProcessor Directly
-     * @see $this->linkProcessor
+     * @see linkProcessor
      * @return $this
      */
     protected function _saveLinks()
@@ -1488,7 +1492,7 @@ class Product extends AbstractEntity
      * @return void
      * @since 100.0.4
      * @deprecated 100.2.3
-     * @see MediaGalleryProcessor::initMediaGalleryResources()
+     * @see \Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor::initMediaGalleryResources
      */
     protected function initMediaGalleryResources()
     {
@@ -2563,7 +2567,6 @@ class Product extends AbstractEntity
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @throws \Zend_Validate_Exception
      */
     public function validateRow(array $rowData, $rowNum)
     {
