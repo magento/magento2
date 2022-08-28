@@ -48,7 +48,7 @@
                 <argument name="qty" value="1"/>
             </actionGroup>
 
-            <actionGroup ref="GoToCheckoutFromMiniCartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
+            <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
 
             <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
                 <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
