@@ -17,6 +17,9 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Session\Generic as WishlistSession;
+use Magento\Framework\Validator\EmailAddress;
+use Magento\Framework\Validator\ValidateException;
+use Magento\Framework\Validator\ValidatorChain;
 use Magento\Framework\View\Result\Layout as ResultLayout;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -149,8 +152,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
      * Share wishlist
      *
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @throws NotFoundException
-     * @throws \Zend_Validate_Exception
+     * @throws NotFoundException|ValidateException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -204,7 +206,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
                 } else {
                     foreach ($emails as $index => $email) {
                         $email = $email !== null ? trim($email) : '';
-                        if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
+                        if (!ValidatorChain::is($email, EmailAddress::class)) {
                             $error = __('Please enter a valid email address.');
                             break;
                         }

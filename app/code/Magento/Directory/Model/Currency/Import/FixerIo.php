@@ -7,7 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Directory\Model\Currency\Import;
 
+use Exception;
+use Laminas\Http\Request;
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\HTTP\LaminasClientFactory as HttpClientFactory;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\HTTP\LaminasClient;
 
 /**
  * Currency rate import model (From http://fixer.io/)
@@ -21,14 +27,14 @@ class FixerIo extends AbstractImport
         . '&base={{CURRENCY_FROM}}&symbols={{CURRENCY_TO}}';
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClientFactory
+     * @var HttpClientFactory
      */
     protected $httpClientFactory;
 
     /**
      * Core scope config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     private $scopeConfig;
 
@@ -40,14 +46,14 @@ class FixerIo extends AbstractImport
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+     * @param CurrencyFactory $currencyFactory
+     * @param ScopeConfigInterface $scopeConfig
+     * @param HttpClientFactory $httpClientFactory
      */
     public function __construct(
-        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+        CurrencyFactory $currencyFactory,
+        ScopeConfigInterface $scopeConfig,
+        HttpClientFactory $httpClientFactory
     ) {
         parent::__construct($currencyFactory);
         $this->scopeConfig = $scopeConfig;
@@ -144,25 +150,25 @@ class FixerIo extends AbstractImport
      */
     private function getServiceResponse(string $url, int $retry = 0): array
     {
-        /** @var \Magento\Framework\HTTP\ZendClient $httpClient */
+        /** @var LaminasClient $httpClient */
         $httpClient = $this->httpClientFactory->create();
         $response = [];
 
         try {
-            $jsonResponse = $httpClient->setUri($url)
-                ->setConfig(
-                    [
-                        'timeout' => $this->scopeConfig->getValue(
-                            'currency/fixerio/timeout',
-                            ScopeInterface::SCOPE_STORE
-                        ),
-                    ]
-                )
-                ->request('GET')
-                ->getBody();
+            $httpClient->setUri($url);
+            $httpClient->setOptions(
+                [
+                    'timeout' => $this->scopeConfig->getValue(
+                        'currency/fixerio/timeout',
+                        ScopeInterface::SCOPE_STORE
+                    ),
+                ]
+            );
+            $httpClient->setMethod(Request::METHOD_GET);
+            $jsonResponse = $httpClient->send()->getBody();
 
             $response = json_decode($jsonResponse, true);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if ($retry == 0) {
                 $response = $this->getServiceResponse($url, 1);
             }
