@@ -9,11 +9,12 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Model\Authorization;
 
 use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
-use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
-use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdminAdobeIms\Service\ImsOrganizationService;
+use Magento\AdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
+use Magento\AdobeImsApi\Api\GetProfileInterface;
+use Magento\AdobeImsApi\Api\GetTokenInterface;
+use Magento\AdobeImsApi\Api\OrganizationMembershipInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\AuthenticationException;
 
@@ -30,14 +31,19 @@ class AdobeImsAdminTokenUserService
     private ImsConfig $adminImsConfig;
 
     /**
-     * @var ImsConnection
+     * @var GetTokenInterface
      */
-    private ImsConnection $adminImsConnection;
+    private GetTokenInterface $token;
 
     /**
-     * @var ImsOrganizationService
+     * @var GetProfileInterface
      */
-    private ImsOrganizationService $adminOrganizationService;
+    private GetProfileInterface $profile;
+
+    /**
+     * @var OrganizationMembershipInterface
+     */
+    private OrganizationMembershipInterface $organizationMembership;
 
     /**
      * @var AdminLoginProcessService
@@ -51,31 +57,35 @@ class AdobeImsAdminTokenUserService
 
     /**
      * @param ImsConfig $adminImsConfig
-     * @param ImsConnection $adminImsConnection
-     * @param ImsOrganizationService $adminOrganizationService
+     * @param OrganizationMembershipInterface $organizationMembership
      * @param AdminLoginProcessService $adminLoginProcessService
      * @param RequestInterface $request
+     * @param GetTokenInterface $token
+     * @param GetProfileInterface $profile
      */
     public function __construct(
         ImsConfig $adminImsConfig,
-        ImsConnection $adminImsConnection,
-        ImsOrganizationService $adminOrganizationService,
+        OrganizationMembershipInterface $organizationMembership,
         AdminLoginProcessService $adminLoginProcessService,
-        RequestInterface $request
+        RequestInterface $request,
+        GetTokenInterface $token,
+        GetProfileInterface $profile
     ) {
         $this->adminImsConfig = $adminImsConfig;
-        $this->adminImsConnection = $adminImsConnection;
-        $this->adminOrganizationService = $adminOrganizationService;
+        $this->organizationMembership = $organizationMembership;
         $this->adminLoginProcessService = $adminLoginProcessService;
         $this->request = $request;
+        $this->token = $token;
+        $this->profile = $profile;
     }
 
     /**
      * Process login request to Admin Adobe IMS.
      *
      * @return void
-     * @throws AuthenticationException
      * @throws AdobeImsAuthorizationException
+     * @throws AdobeImsOrganizationAuthorizationException
+     * @throws AuthenticationException
      */
     public function processLoginRequest()
     {
@@ -85,17 +95,17 @@ class AdobeImsAdminTokenUserService
                 $code = $this->request->getParam('code');
 
                 //get token from response
-                $tokenResponse = $this->adminImsConnection->getTokenResponse($code);
+                $tokenResponse = $this->token->getTokenResponse($code);
                 $accessToken = $tokenResponse->getAccessToken();
 
                 //get profile info to check email
-                $profile = $this->adminImsConnection->getProfile($accessToken);
+                $profile = $this->profile->getProfile($accessToken);
                 if (empty($profile['email'])) {
                     throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
                 }
 
                 //check membership in organization
-                $this->adminOrganizationService->checkOrganizationMembership($accessToken);
+                $this->organizationMembership->checkOrganizationMembership($accessToken);
 
                 $this->adminLoginProcessService->execute($tokenResponse, $profile);
             } catch (AdobeImsAuthorizationException $e) {

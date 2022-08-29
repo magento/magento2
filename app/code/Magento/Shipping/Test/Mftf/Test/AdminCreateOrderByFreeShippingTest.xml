@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+     /**
+     * Copyright © Magento, Inc. All rights reserved.
+     * See COPYING.txt for license details.
+     */
+    -->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderByFreeShippingTest">
+        <annotations>
+            <stories value="AdminCreateOrderByFreeShipping"/>
+            <title value="AdminCreateOrderByFreeShipping"/>
+            <description value="Ability to place order with Free Shipping based on 'Minimum Order Amount' as existed Customer from Admin side"/>
+            <testCaseId value="MC-27206"/>
+            <severity value="MAJOR"/>
+        </annotations>
+
+        <before>
+            <!-- create category -->
+            <createData entity="_defaultCategory" stepKey="testCategory"/>
+            <!-- create SimpleProduct with price 100 -->
+            <createData entity="ApiSimplePrice100Qty100" stepKey="testProduct">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+            <!-- Assign Product to Category -->
+            <createData entity="AssignProductToCategory" stepKey="assignTestCategoryToTestProduct">
+                <requiredEntity createDataKey="testCategory"/>
+                <requiredEntity createDataKey="testProduct"/>
+            </createData>
+            <!-- create Customer -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+            <!-- Enable free shipping method and set MinimumOrder as 76-->
+            <magentoCLI command="config:set {{EnableFreeShippingConfigData.path}} {{EnableFreeShippingConfigData.value}}" stepKey="enableFreeShipping"/>
+            <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.seventysix}}" stepKey="setFreeShippingMethodMinimumOrderAmountAsSeventySix"/>
+            <!--Enable Bank Transfer Method -->
+            <magentoCLI command="config:set {{BankTransferEnableConfigData.path}} {{BankTransferEnableConfigData.value}}" stepKey="enableBankTransferMode"/>
+        </before>
+
+        <after>
+            <!-- delete category,product -->
+            <deleteData createDataKey="testProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="testCategory" stepKey="deleteSimpleCategory"/>
+            <!-- Free Shipping disabled -->
+            <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
+            <magentoCLI command="config:set {{AdminFreeshippingMinimumOrderAmountConfigData.path}} {{AdminFreeshippingMinimumOrderAmountConfigData.default}}" stepKey="setFreeShippingMethodMinimumOrderAmountAsDefault"/>
+            <!-- CBank Transfer Method disabled -->
+            <magentoCLI command="config:set {{BankTransferDisabledConfigData.path}} {{BankTransferDisabledConfigData.value}}" stepKey="disableBankTransferMode"/>
+        </after>
+
+        <!-- Login to Admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!--Open new order page from admin and add product-->
+        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPageNewCustomerActionGroup"/>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$testProduct$$"/>
+        </actionGroup>
+
+        <!--Fill customer details -->
+        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer_CA.email}}" stepKey="fillEmailField"/>
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerInformation">
+            <argument name="customer" value="Simple_US_Customer_CA"/>
+            <argument name="address" value="US_Address_CA"/>
+        </actionGroup>
+
+     <!--Check and Click on Free Shipping Method-->
+      <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="orderSelectFreeShippingMethod"/>
+
+        <!--Click *Get shipping methods and rates* and see that Free Shipping is absent-->
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickGetShippingMehods"/>
+        <seeElement selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="seeFreeShippingIsPresent"/>
+
+        <!--Select BankTransferPaymentMethod -->
+        <actionGroup ref="SelectBankTransferPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="grabOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+
+        <!--Assert Order Details-->
+        <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$100.00" stepKey="seeGrandTotal"/>
+        <see selector="{{AdminOrderTotalSection.subTotal}}" userInput="$100.00" stepKey="seeSubTotal"/>
+        <see selector="{{AdminOrderTotalSection.shippingAndHandling}}" userInput="$0.00" stepKey="seeShippingAndHandlingTotal"/>
+
+    </test>
+</tests>

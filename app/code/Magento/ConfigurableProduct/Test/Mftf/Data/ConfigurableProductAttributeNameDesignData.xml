@@ -12,7 +12,7 @@
         <data key="productName" unique="prefix">Shoes</data>
         <data key="price">60</data>
         <data key="weight">100</data>
-        <data key="defaultLabel">design</data>
+        <data key="defaultLabel">design123</data>
         <data key="adminFieldRed">red</data>
         <data key="defaultStoreViewFieldRed">red123</data>
         <data key="adminFieldBlue">blue</data>

@@ -89,7 +89,7 @@
         <arguments>
             <argument name="userContexts" xsi:type="array">
                 <item name="adobeImsTokenUserContext" xsi:type="array">
-                    <item name="type" xsi:type="object">Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserContext</item>
+                    <item name="type" xsi:type="object">Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserContext\Proxy</item>
                     <item name="sortOrder" xsi:type="string">20</item>
                 </item>
             </argument>

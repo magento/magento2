@@ -10,7 +10,7 @@ namespace Magento\AdminAdobeIms\Test\Unit\Model\Authorization;
 use Magento\AdminAdobeIms\Model\Auth;
 use Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserContext;
 use Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserService;
-use Magento\AdminAdobeIms\Model\ImsConnection;
+use Magento\AdobeImsApi\Api\IsTokenValidInterface;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\Model\Auth\Session;
@@ -50,9 +50,9 @@ class AdobeImsAdminTokenUserContextTest extends TestCase
     private $auth;
 
     /**
-     * @var ImsConnection
+     * @var IsTokenValidInterface
      */
-    private $adminImsConnectionMock;
+    private $isTokenValid;
 
     /**
      * @var AdobeImsAdminTokenUserService
@@ -70,7 +70,7 @@ class AdobeImsAdminTokenUserContextTest extends TestCase
 
         $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
         $this->auth = $this->createMock(Auth::class);
-        $this->adminImsConnectionMock = $this->createMock(ImsConnection::class);
+        $this->isTokenValid = $this->createMock(IsTokenValidInterface::class);
         $this->adminTokenUserService = $this->createMock(AdobeImsAdminTokenUserService::class);
         $this->auth
             ->method('getAuthStorage')
@@ -85,7 +85,7 @@ class AdobeImsAdminTokenUserContextTest extends TestCase
             [
                 'adminImsConfig' => $this->adminImsConfigMock,
                 'auth' => $this->auth,
-                'adminImsConnection' => $this->adminImsConnectionMock,
+                'isTokenValid' => $this->isTokenValid,
                 'adminTokenUserService' => $this->adminTokenUserService,
             ]
         );
@@ -110,7 +110,7 @@ class AdobeImsAdminTokenUserContextTest extends TestCase
             ->method('getAdobeAccessToken')
             ->willReturn('test');
 
-        $this->adminImsConnectionMock
+        $this->isTokenValid
             ->expects($this->once())
             ->method('validateToken')
             ->willReturn(false);

@@ -9,10 +9,11 @@ namespace Magento\AdminAdobeIms\Test\Unit\Model\Authorization;
 
 use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserService;
-use Magento\AdminAdobeIms\Model\ImsConnection;
+use Magento\AdobeImsApi\Api\GetProfileInterface;
+use Magento\AdobeImsApi\Api\GetTokenInterface;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdminAdobeIms\Service\ImsOrganizationService;
+use Magento\AdobeImsApi\Api\OrganizationMembershipInterface;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\AuthenticationException;
@@ -40,14 +41,19 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
     private $adminImsConfigMock;
 
     /**
-     * @var ImsConnection
+     * @var GetTokenInterface
      */
-    private $adminImsConnectionMock;
+    private $token;
 
     /**
-     * @var ImsOrganizationService
+     * @var GetProfileInterface
      */
-    private $adminOrganizationService;
+    private $profile;
+
+    /**
+     * @var OrganizationMembershipInterface
+     */
+    private $organizationMembership;
 
     /**
      * @var AdminLoginProcessService
@@ -64,8 +70,9 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
-        $this->adminImsConnectionMock = $this->createMock(ImsConnection::class);
-        $this->adminOrganizationService = $this->createMock(ImsOrganizationService::class);
+        $this->token = $this->createMock(GetTokenInterface::class);
+        $this->profile = $this->createMock(GetProfileInterface::class);
+        $this->organizationMembership = $this->createMock(OrganizationMembershipInterface::class);
         $this->adminLoginProcessService = $this->createMock(AdminLoginProcessService::class);
         $this->requestInterfaceMock = $this->createMock(RequestInterface::class);
 
@@ -77,10 +84,11 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
             AdobeImsAdminTokenUserService::class,
             [
                 'adminImsConfig' => $this->adminImsConfigMock,
-                'adminImsConnection' => $this->adminImsConnectionMock,
-                'adminOrganizationService' => $this->adminOrganizationService,
+                'organizationMembership' => $this->organizationMembership,
                 'adminLoginProcessService' => $this->adminLoginProcessService,
                 'request' => $this->requestInterfaceMock,
+                'token' => $this->token,
+                'profile' => $this->profile
             ]
         );
     }
@@ -106,17 +114,17 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
             ->method('getAccessToken')
             ->willReturn($responseData['access_token']);
 
-        $this->adminImsConnectionMock->expects($this->once())
+        $this->token->expects($this->once())
             ->method('getTokenResponse')
             ->with($code)
             ->willReturn($tokenResponse);
 
-        $this->adminImsConnectionMock->expects($this->once())
+        $this->profile->expects($this->once())
             ->method('getProfile')
             ->with($responseData['access_token'])
             ->willReturn($responseData);
 
-        $this->adminOrganizationService->expects($this->once())
+        $this->organizationMembership->expects($this->once())
             ->method('checkOrganizationMembership')
             ->with($responseData['access_token']);
 
@@ -165,12 +173,12 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
             ->method('getAccessToken')
             ->willReturn($responseData['access_token']);
 
-        $this->adminImsConnectionMock->expects($this->once())
+        $this->token->expects($this->once())
             ->method('getTokenResponse')
             ->with($code)
             ->willReturn($tokenResponse);
 
-        $this->adminImsConnectionMock->expects($this->once())
+        $this->profile->expects($this->once())
             ->method('getProfile')
             ->with($responseData['access_token'])
             ->willReturn('');
@@ -203,12 +211,12 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
             ->method('getAccessToken')
             ->willReturn($responseData['access_token']);
 
-        $this->adminImsConnectionMock->expects($this->once())
+        $this->token->expects($this->once())
             ->method('getTokenResponse')
             ->with($code)
             ->willReturn($tokenResponse);
 
-        $this->adminImsConnectionMock->expects($this->once())
+        $this->profile->expects($this->once())
             ->method('getProfile')
             ->with($responseData['access_token'])
             ->willReturn($responseData);

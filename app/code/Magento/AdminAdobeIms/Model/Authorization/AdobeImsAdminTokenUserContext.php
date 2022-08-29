@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Model\Authorization;
 
 use Magento\AdminAdobeIms\Model\Auth;
-use Magento\AdminAdobeIms\Model\ImsConnection;
+use Magento\AdobeImsApi\Api\IsTokenValidInterface;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\AuthenticationException;
@@ -40,9 +40,9 @@ class AdobeImsAdminTokenUserContext implements UserContextInterface
     protected Auth $auth;
 
     /**
-     * @var ImsConnection
+     * @var IsTokenValidInterface
      */
-    private ImsConnection $adminImsConnection;
+    private IsTokenValidInterface $isTokenValid;
 
     /**
      * @var AdobeImsAdminTokenUserService
@@ -52,18 +52,18 @@ class AdobeImsAdminTokenUserContext implements UserContextInterface
     /**
      * @param ImsConfig $adminImsConfig
      * @param Auth $auth
-     * @param ImsConnection $adminImsConnection
+     * @param IsTokenValidInterface $isTokenValid
      * @param AdobeImsAdminTokenUserService $adminTokenUserService
      */
     public function __construct(
         ImsConfig $adminImsConfig,
         Auth $auth,
-        ImsConnection $adminImsConnection,
+        IsTokenValidInterface $isTokenValid,
         AdobeImsAdminTokenUserService $adminTokenUserService
     ) {
         $this->adminImsConfig = $adminImsConfig;
         $this->auth = $auth;
-        $this->adminImsConnection = $adminImsConnection;
+        $this->isTokenValid = $isTokenValid;
         $this->adminTokenUserService = $adminTokenUserService;
     }
 
@@ -79,7 +79,7 @@ class AdobeImsAdminTokenUserContext implements UserContextInterface
         $session = $this->auth->getAuthStorage();
 
         if (!empty($session->getAdobeAccessToken())) {
-            $isTokenValid = $this->adminImsConnection->validateToken($session->getAdobeAccessToken());
+            $isTokenValid = $this->isTokenValid->validateToken($session->getAdobeAccessToken());
             if (!$isTokenValid) {
                 throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
             }
