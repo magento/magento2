@@ -264,6 +264,8 @@ class AlertProcessor
     }
 
     /**
+     * Save alert by type
+     *
      * @param string $alertType
      * @param Stock|Price $alert
      * @param ProductInterface $product
