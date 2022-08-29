@@ -5,12 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\BundleGraphQl\Model\Resolver\Products\DataProvider\Product\Option;
+namespace Magento\Catalog\Model\ResourceModel\Product;
 
 /**
- * Factory class bundle product option collection
+ * Factory class for child product collection
  */
-class CollectionFactory extends \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+class ChildCollectionFactory extends CollectionFactory
 {
     /**
      * Create class instance with specified parameters

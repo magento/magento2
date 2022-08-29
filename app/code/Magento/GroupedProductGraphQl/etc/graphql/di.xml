@@ -53,4 +53,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GroupedProductGraphQl\Model\Resolver\GroupedItems">
+        <arguments>
+            <argument name="productResolver" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ChildProduct</argument>
+        </arguments>
+    </type>
 </config>
