@@ -32,6 +32,7 @@
             <account_information>
                 <change_email_template>customer_account_information_change_email_template</change_email_template>
                 <change_email_and_password_template>customer_account_information_change_email_and_password_template</change_email_and_password_template>
+                <confirm>0</confirm>
             </account_information>
             <password>
                 <forgot_email_identity>support</forgot_email_identity>
