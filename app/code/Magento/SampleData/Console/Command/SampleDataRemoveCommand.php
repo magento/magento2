@@ -40,7 +40,7 @@ class SampleDataRemoveCommand extends Command
      * @var ArrayInputFactory
      * @deprecated 100.1.0
      */
-    private $arrayInputFactory;
+    private $arrayInputFactory; // phpcs:ignore Magento2.Commenting.ClassPropertyPHPDocFormatting
 
     /**
      * @var ApplicationFactory
@@ -107,8 +107,6 @@ class SampleDataRemoveCommand extends Command
             }
             return $result;
         }
-
-        $output->writeln('<info>' . 'There is no sample data for current set of modules.' . '</info>');
 
         return Cli::RETURN_SUCCESS;
     }

@@ -63,7 +63,8 @@ abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
         $types = $this->getRequestedTypes($input);
         $this->performAction($types);
         $output->writeln($this->getDisplayMessage());
-        $output->writeln(implode(PHP_EOL, $types));
+        $output->writeln(join(PHP_EOL, $types));
+
         return Cli::RETURN_SUCCESS;
     }
 }

@@ -6,17 +6,19 @@
 
 namespace Magento\Developer\Console\Command;
 
+use InvalidArgumentException;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\Profiler\Driver\Standard\Output\Csvfile;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 
 class ProfilerEnableCommand extends Command
 {
     /**
-     * Profiler flag file
+     * Profiler flag file path
      */
     public const PROFILER_FLAG_FILE = 'var/profiler.flag';
 
@@ -30,14 +32,8 @@ class ProfilerEnableCommand extends Command
      */
     public const BUILT_IN_TYPES = ['html', 'csvfile'];
 
-    /**
-     * Command name
-     */
     public const COMMAND_NAME = 'dev:profiler:enable';
 
-    /**
-     * Success message
-     */
     public const SUCCESS_MESSAGE = 'Profiler enabled with %s output.';
 
     /**
@@ -70,7 +66,8 @@ class ProfilerEnableCommand extends Command
 
     /**
      * @inheritdoc
-     * @throws \InvalidArgumentException
+     *
+     * @throws InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -95,7 +92,7 @@ class ProfilerEnableCommand extends Command
                 $output->write(
                     '<info> ' . sprintf(
                         'Output will be saved in %s',
-                        \Magento\Framework\Profiler\Driver\Standard\Output\Csvfile::DEFAULT_FILEPATH
+                        Csvfile::DEFAULT_FILEPATH
                     )
                     . '</info>'
                 );

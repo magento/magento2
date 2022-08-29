@@ -266,6 +266,24 @@ class LoadBlockTest extends AbstractBackendController
     }
 
     /**
+     * Check that specific store id is setting into the current stores.
+     *
+     * @return void
+     * @magentoDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     * @throws NoSuchEntityException
+     */
+    public function testSetSpecificStoreIdIntoCurrentStore()
+    {
+        $params = [];
+        $post = ['store_id' => $this->storeManager->getStore('fixture_second_store')->getId()];
+        $this->dispatchWitParams($params, $post);
+        $this->assertEquals('fixture_second_store', $this->storeManager->getStore()->getCode());
+    }
+
+    /**
      * Check customer quotes
      *
      * @param CartInterface $oldQuote

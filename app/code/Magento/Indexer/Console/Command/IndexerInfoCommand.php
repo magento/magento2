@@ -31,6 +31,7 @@ class IndexerInfoCommand extends AbstractIndexerCommand
         foreach ($indexers as $indexer) {
             $output->writeln(sprintf('%-40s %s', $indexer->getId(), $indexer->getTitle()));
         }
+
         return Cli::RETURN_SUCCESS;
     }
 }

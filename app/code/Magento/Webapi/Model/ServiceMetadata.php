@@ -8,10 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\Webapi\Model;
 
+use InvalidArgumentException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Webapi\Model\Cache\Type\Webapi as WebApiCache;
+use Magento\Webapi\Model\Config\ClassReflector;
 use Magento\Webapi\Model\Config\Converter;
+use RuntimeException;
 
 /**
  * Service Metadata Model
@@ -69,17 +73,17 @@ class ServiceMetadata
     protected $cache;
 
     /**
-     * @var \Magento\Webapi\Model\Config
+     * @var Config
      */
     protected $config;
 
     /**
-     * @var \Magento\Webapi\Model\Config\ClassReflector
+     * @var ClassReflector
      */
     protected $classReflector;
 
     /**
-     * @var \Magento\Framework\Reflection\TypeProcessor
+     * @var TypeProcessor
      */
     protected $typeProcessor;
 
@@ -91,17 +95,17 @@ class ServiceMetadata
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Webapi\Model\Config $config
+     * @param Config $config
      * @param WebApiCache $cache
-     * @param \Magento\Webapi\Model\Config\ClassReflector $classReflector
-     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+     * @param ClassReflector $classReflector
+     * @param TypeProcessor $typeProcessor
      * @param SerializerInterface|null $serializer
      */
     public function __construct(
-        \Magento\Webapi\Model\Config $config,
+        Config $config,
         WebApiCache $cache,
-        \Magento\Webapi\Model\Config\ClassReflector $classReflector,
-        \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
+        ClassReflector $classReflector,
+        TypeProcessor $typeProcessor,
         SerializerInterface $serializer = null
     ) {
         $this->config = $config;
@@ -191,13 +195,13 @@ class ServiceMetadata
      *
      * @param string $serviceName
      * @return array
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceMetadata($serviceName)
     {
         $servicesConfig = $this->getServicesConfig();
         if (!isset($servicesConfig[$serviceName]) || !is_array($servicesConfig[$serviceName])) {
-            throw new \RuntimeException(__('Requested service is not available: "%1"', $serviceName));
+            throw new RuntimeException(__('Requested service is not available: "%1"', $serviceName)->render());
         }
         return $servicesConfig[$serviceName];
     }
@@ -215,12 +219,12 @@ class ServiceMetadata
      * @param string $version
      * @param bool $preserveVersion Should version be preserved during interface name conversion into service name
      * @return string
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getServiceName($interfaceName, $version, $preserveVersion = true)
     {
-        if (!preg_match(\Magento\Webapi\Model\Config::SERVICE_CLASS_PATTERN, $interfaceName, $matches)) {
+        if ($interfaceName && !preg_match(Config::SERVICE_CLASS_PATTERN, $interfaceName, $matches)) {
             $apiClassPattern = "#^(.+?)\\\\(.+?)\\\\Api\\\\(.+?)(Interface)?$#";
             preg_match($apiClassPattern, $interfaceName, $matches);
         }
@@ -232,7 +236,7 @@ class ServiceMetadata
             if ($matches[4] === 'Interface') {
                 $matches[4] = $matches[3];
             }
-            $serviceNameParts = explode('\\', trim($matches[4], '\\'));
+            $serviceNameParts = explode('\\', trim($matches[4] ?? '', '\\'));
             if ($moduleName == $serviceNameParts[0]) {
                 /** Avoid duplication of words in service name */
                 $moduleName = '';
@@ -242,11 +246,11 @@ class ServiceMetadata
             if ($preserveVersion) {
                 $serviceNameParts[] = $version;
             }
-        } elseif (preg_match(\Magento\Webapi\Model\Config::API_PATTERN, $interfaceName, $matches)) {
+        } elseif ($interfaceName && preg_match(Config::API_PATTERN, $interfaceName, $matches)) {
             $moduleNamespace = $matches[1];
             $moduleName = $matches[2];
             $moduleNamespace = ($moduleNamespace == 'Magento') ? '' : $moduleNamespace;
-            $serviceNameParts = explode('\\', trim($matches[3], '\\'));
+            $serviceNameParts = explode('\\', trim($matches[3] ?? '', '\\'));
             if ($moduleName == $serviceNameParts[0]) {
                 /** Avoid duplication of words in service name */
                 $moduleName = '';
@@ -257,7 +261,7 @@ class ServiceMetadata
                 $serviceNameParts[] = $version;
             }
         } else {
-            throw new \InvalidArgumentException(sprintf('The service interface name "%s" is invalid.', $interfaceName));
+            throw new InvalidArgumentException(sprintf('The service interface name "%s" is invalid.', $interfaceName));
         }
         return lcfirst(implode('', $serviceNameParts));
     }
@@ -267,13 +271,13 @@ class ServiceMetadata
      *
      * @param string $serviceName
      * @return array
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getRouteMetadata($serviceName)
     {
         $routesConfig = $this->getRoutesConfig();
         if (!isset($routesConfig[$serviceName]) || !is_array($routesConfig[$serviceName])) {
-            throw new \RuntimeException(__('Requested service is not available: "%1"', $serviceName));
+            throw new RuntimeException(__('Requested service is not available: "%1"', $serviceName)->render());
         }
         return $routesConfig[$serviceName];
     }

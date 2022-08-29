@@ -162,7 +162,7 @@ mutation {
             company: "Magento"
             street: ["Via Solferino", "45"]
             city: "Ceriano Laghetto"
-            region: "1"
+            region: "58"
             postcode: "20816"
             country_code: "FR"
             telephone: "3273581975",
@@ -1898,7 +1898,7 @@ QUERY;
             ['response_field' => 'city', 'expected_value' => 'Ceriano Laghetto'],
             ['response_field' => 'postcode', 'expected_value' => '20816'],
             ['response_field' => 'telephone', 'expected_value' => '3273581975'],
-            ['response_field' => 'region', 'expected_value' => ['code' => '1', 'label' => 'Ain']],
+            ['response_field' => 'region', 'expected_value' => ['code' => '58', 'label' => 'Nièvre']],
             ['response_field' => 'country', 'expected_value' => ['code' => 'FR', 'label' => 'FR']]
         ];
 

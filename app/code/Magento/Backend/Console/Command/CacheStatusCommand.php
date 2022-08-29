@@ -37,6 +37,7 @@ class CacheStatusCommand extends AbstractCacheCommand
         foreach ($this->cacheManager->getStatus() as $cache => $status) {
             $output->writeln(sprintf('%30s: %d', $cache, $status));
         }
+
         return Cli::RETURN_SUCCESS;
     }
 }

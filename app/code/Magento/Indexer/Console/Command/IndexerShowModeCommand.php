@@ -36,6 +36,7 @@ class IndexerShowModeCommand extends AbstractIndexerManageCommand
             $status = $indexer->isScheduled() ? 'Update by Schedule' : 'Update on Save';
             $output->writeln(sprintf('%-50s ', $indexer->getTitle() . ':') . $status);
         }
+
         return Cli::RETURN_SUCCESS;
     }
 }

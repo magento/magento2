@@ -62,5 +62,7 @@
         <waitForAjaxLoad stepKey="ajaxLoad4"/>
         <waitForElement selector="{{PriceRuleConditionsSection.subcategory4level}}" stepKey="wait4"/>
         <click selector="{{PriceRuleConditionsSection.subcategory4level}}" stepKey="openLatestTreeNode4"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <dontSee stepKey="dontSeeErrorMessage" userInput="A technical problem with the server created an error. Try again to continue what you were doing. If the problem persists, try again later."/>
     </test>
 </tests>

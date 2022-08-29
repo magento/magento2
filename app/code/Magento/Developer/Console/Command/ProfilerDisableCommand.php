@@ -6,6 +6,8 @@
 
 namespace Magento\Developer\Console\Command;
 
+
+use InvalidArgumentException;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Filesystem\Io\File;
 use Symfony\Component\Console\Command\Command;
@@ -15,18 +17,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ProfilerDisableCommand extends Command
 {
     /**
-     * Profiler flag file
+     * Profiler flag file path
      */
     public const PROFILER_FLAG_FILE = 'var/profiler.flag';
 
-    /**
-     * Command name
-     */
     public const COMMAND_NAME = 'dev:profiler:disable';
 
-    /**
-     * Success message
-     */
     public const SUCCESS_MESSAGE = 'Profiler disabled.';
 
     /**
@@ -59,7 +55,8 @@ class ProfilerDisableCommand extends Command
 
     /**
      * @inheritdoc
-     * @throws \InvalidArgumentException
+     *
+     * @throws InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -69,6 +66,7 @@ class ProfilerDisableCommand extends Command
             return Cli::RETURN_SUCCESS;
         }
         $output->writeln('<error>Something went wrong while disabling the profiler.</error>');
+
         return Cli::RETURN_FAILURE;
     }
 }

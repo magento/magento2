@@ -45,6 +45,7 @@ abstract class AbstractCacheSetCommand extends AbstractCacheManageCommand
             $output->writeln('Cleaned cache types:');
             $output->writeln(implode(PHP_EOL, $changedTypes));
         }
+
         return Cli::RETURN_SUCCESS;
     }
 }

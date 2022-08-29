@@ -6,14 +6,15 @@
 
 namespace Magento\Developer\Console\Command;
 
+use InvalidArgumentException;
+use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\DB\Logger\LoggerProxy;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\Config\File\ConfigFilePool;
 
 class QueryLogEnableCommand extends Command
 {
@@ -44,7 +45,7 @@ class QueryLogEnableCommand extends Command
     /**
      * QueryLogEnableCommand constructor.
      * @param Writer $deployConfigWriter
-     * @param string|null $name
+     * @param ?string $name
      */
     public function __construct(
         Writer $deployConfigWriter,
@@ -92,7 +93,8 @@ class QueryLogEnableCommand extends Command
 
     /**
      * @inheritdoc
-     * @throws \InvalidArgumentException
+     *
+     * @throws InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -111,6 +113,7 @@ class QueryLogEnableCommand extends Command
         $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => $configGroup]);
 
         $output->writeln("<info>". self::SUCCESS_MESSAGE . "</info>");
+
         return Cli::RETURN_SUCCESS;
     }
 }
