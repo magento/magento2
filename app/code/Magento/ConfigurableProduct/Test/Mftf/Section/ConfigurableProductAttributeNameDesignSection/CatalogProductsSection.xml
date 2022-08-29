@@ -14,7 +14,7 @@
         <element name="searchDefaultLabelField" type="input" selector="//*[@id='attributeGrid_filter_frontend_label']"/>
         <element name="searchButton" type="button" selector="//div[@class='admin__filter-actions']//*[contains(text(), 'Search')]"/>
         <element name="storesProductItem" type="button" selector="//*[@data-ui-id='menu-magento-catalog-catalog-attributes-attributes']/a"/>
-        <element name="createdAttributeItem" type="button" selector="//td[contains(@class, 'col-label') and normalize-space()='design']"/>
+        <element name="createdAttributeItem" type="button" selector="//td[contains(@class, 'col-label') and normalize-space()='design123']"/>
         <element name="deleteAttributeItem" type="button" selector="//*[@id='delete']"/>
         <element name="okButton" type="button" selector="//footer[@class='modal-footer']//*[contains(text(),'OK')]"/>
         <element name="messageSuccessSavedProduct" type="button" selector="//div[@data-ui-id='messages-message-success']"/>

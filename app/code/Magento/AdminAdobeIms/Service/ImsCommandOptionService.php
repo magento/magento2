@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Service;
@@ -22,9 +21,9 @@ class ImsCommandOptionService
     private const OPTION_QUESTION = 'Please enter your %s:';
 
     /**
-     * Prompt for 2FA Auth CLI Command option
+     * Prompt for 2FA CLI Command option
      */
-    private const TWO_FACTOR_OPTION_QUESTION = 'Is 2FA enabled on AdobeIMS? (yes/no):';
+    private const TWO_FACTOR_OPTION_QUESTION = 'Is 2FA enabled for Organization in Adobe Admin Console? (yes/no):';
 
     /**
      * Human-readable name for Organization ID input option

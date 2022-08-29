@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Ups\Model;
 
+use Laminas\Http\Client;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\CountryFactory;
@@ -23,6 +24,8 @@ use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\HTTP\ClientFactory;
 use Magento\Framework\Locale\FormatInterface;
+use Magento\Framework\Measure\Length;
+use Magento\Framework\Measure\Weight;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
@@ -46,7 +49,6 @@ use Magento\Ups\Helper\Config;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Throwable;
-use Zend_Http_Client;
 
 /**
  * UPS shipping implementation.
@@ -523,6 +525,9 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $weight = $this->getTotalNumOfBoxes($r->getFreeMethodWeight());
         $weight = $this->_getCorrectWeight($weight);
         $r->setWeight($weight);
+        $r->setPackages(
+            $this->createPackages((float)$r->getFreeMethodWeight(), [])
+        );
         $r->setAction($this->configHelper->getCode('action', 'single'));
         $r->setProduct($freeMethod);
     }
@@ -536,7 +541,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     {
         $rowRequest = $this->_rawRequest;
         if (self::USA_COUNTRY_ID == $rowRequest->getDestCountry()) {
-            $destPostal = substr((string)$rowRequest->getDestPostal(), 0, 5);
+            $destPostal = substr((string) $rowRequest->getDestPostal(), 0, 5);
         } else {
             $destPostal = $rowRequest->getDestPostal();
         }
@@ -566,11 +571,11 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
                 if (!$url) {
                     $url = $this->_defaultCgiGatewayUrl;
                 }
-                $client = new Zend_Http_Client();
+                $client = new Client();
                 $client->setUri($url);
-                $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
+                $client->setOptions(['maxredirects' => 0, 'timeout' => 30]);
                 $client->setParameterGet($params);
-                $response = $client->request();
+                $response = $client->send();
                 $responseBody = $response->getBody();
 
                 $debugData['result'] = $responseBody;
@@ -616,7 +621,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     {
         $costArr = [];
         $priceArr = [];
-        if (strlen(trim($response)) > 0) {
+        if ($response !== null && strlen(trim($response)) > 0) {
             $rRows = explode("\n", $response);
             $allowedMethods = explode(",", (string)$this->getConfigData('allowed_methods'));
             foreach ($rRows as $rRow) {
@@ -910,7 +915,7 @@ XMLRequest;
     {
         $costArr = [];
         $priceArr = [];
-        if (strlen(trim($xmlResponse)) > 0) {
+        if ($xmlResponse !== null && strlen(trim($xmlResponse)) > 0) {
             $xml = new \Magento\Framework\Simplexml\Config();
             $xml->loadString($xmlResponse);
             $arr = $xml->getXpath("//RatingServiceSelectionResponse/Response/ResponseStatusCode/text()");
@@ -1558,8 +1563,8 @@ XMLAuth;
             $width = $packageParams->getWidth();
             $length = $packageParams->getLength();
             $weight = $packageParams->getWeight();
-            $weightUnits = $packageParams->getWeightUnits() == \Zend_Measure_Weight::POUND ? 'LBS' : 'KGS';
-            $dimensionsUnits = $packageParams->getDimensionUnits() == \Zend_Measure_Length::INCH ? 'IN' : 'CM';
+            $weightUnits = $packageParams->getWeightUnits() == Weight::POUND ? 'LBS' : 'KGS';
+            $dimensionsUnits = $packageParams->getDimensionUnits() == Length::INCH ? 'IN' : 'CM';
             $deliveryConfirmation = $packageParams->getDeliveryConfirmation();
             $customsTotal += $packageParams->getCustomsValue();
 

@@ -3,15 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Console\Command;
 
-use Magento\AdminAdobeIms\Model\ImsConnection;
-use Magento\AdminAdobeIms\Service\UpdateTokensService;
 use Magento\AdminAdobeIms\Service\ImsCommandOptionService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdminAdobeIms\Service\UpdateTokensService;
+use Magento\AdobeImsApi\Api\AuthorizationInterface;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\Console\Cli;
@@ -46,17 +45,12 @@ class AdminAdobeImsEnableCommand extends Command
     /**
      * Name of "two-factor-auth" input option
      */
-    private const TWO_FACTOR_AUTH_ARGUMENT = '2fa-auth';
+    private const TWO_FACTOR_AUTH_ARGUMENT = '2fa';
 
     /**
      * @var ImsConfig
      */
     private ImsConfig $adminImsConfig;
-
-    /**
-     * @var ImsConnection
-     */
-    private ImsConnection $adminImsConnection;
 
     /**
      * @var ImsCommandOptionService
@@ -74,25 +68,30 @@ class AdminAdobeImsEnableCommand extends Command
     private UpdateTokensService $updateTokensService;
 
     /**
+     * @var AuthorizationInterface
+     */
+    private AuthorizationInterface $authorization;
+
+    /**
      * @param ImsConfig $adminImsConfig
-     * @param ImsConnection $adminImsConnection
      * @param ImsCommandOptionService $imsCommandOptionService
      * @param TypeListInterface $cacheTypeList
      * @param UpdateTokensService $updateTokensService
+     * @param AuthorizationInterface $authorization
      */
     public function __construct(
         ImsConfig $adminImsConfig,
-        ImsConnection $adminImsConnection,
         ImsCommandOptionService $imsCommandOptionService,
         TypeListInterface $cacheTypeList,
-        UpdateTokensService $updateTokensService
+        UpdateTokensService $updateTokensService,
+        AuthorizationInterface $authorization
     ) {
         parent::__construct();
         $this->adminImsConfig = $adminImsConfig;
-        $this->adminImsConnection = $adminImsConnection;
         $this->imsCommandOptionService = $imsCommandOptionService;
         $this->cacheTypeList = $cacheTypeList;
         $this->updateTokensService = $updateTokensService;
+        $this->authorization = $authorization;
 
         $this->setName('admin:adobe-ims:enable')
             ->setDescription('Enable Adobe IMS Module.')
@@ -119,7 +118,8 @@ class AdminAdobeImsEnableCommand extends Command
                     self::TWO_FACTOR_AUTH_ARGUMENT,
                     't',
                     InputOption::VALUE_OPTIONAL,
-                    'Check if 2FA Auth is enabled on Adobe IMS Side. Enables or disables the Magento 2FA'
+                    'Check if 2FA is enabled for Organization in Adobe Admin Console. ' .
+                    'Required when enabling the module'
                 )
             ]);
     }
@@ -169,7 +169,7 @@ class AdminAdobeImsEnableCommand extends Command
             }
 
             throw new LocalizedException(
-                __('The Client ID, Client Secret, Organization ID and 2FA Auth are required ' .
+                __('The Client ID, Client Secret, Organization ID and 2FA are required ' .
                     'when enabling the Admin Adobe IMS Module')
             );
         } catch (\Exception $e) {
@@ -198,7 +198,7 @@ class AdminAdobeImsEnableCommand extends Command
         string $organizationId,
         bool $isTwoFactorAuthEnabled
     ): bool {
-        $testAuth = $this->adminImsConnection->testAuth($clientId);
+        $testAuth = $this->authorization->testAuth($clientId);
         if ($testAuth) {
             $this->adminImsConfig->enableModule($clientId, $clientSecret, $organizationId, $isTwoFactorAuthEnabled);
             $this->cacheTypeList->cleanType(Config::TYPE_IDENTIFIER);
