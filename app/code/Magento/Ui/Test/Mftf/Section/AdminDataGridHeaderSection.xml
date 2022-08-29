@@ -16,6 +16,7 @@
         <element name="filters" type="button" selector="button[data-action='grid-filter-expand']" timeout="30"/>
         <element name="filterFieldInput" type="input" selector=".admin__data-grid-filters input[name='{{name}}']" parameterized="true"/>
         <element name="filterFieldSelect" type="select" selector=".admin__data-grid-filters select[name='{{name}}']" parameterized="true"/>
+        <element name="filterFieldSelect1" type="select" selector=".admin__data-grid-filters select[name='status']" parameterized="true"/>
         <element name="cancelFilters" type="button" selector="button[data-action='grid-filter-cancel']" timeout="30"/>
         <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
         <element name="clearFilters" type="button" selector=".admin__data-grid-header [data-action='grid-filter-reset']" timeout="30"/>
