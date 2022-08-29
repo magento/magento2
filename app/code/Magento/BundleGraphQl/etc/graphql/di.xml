@@ -135,6 +135,11 @@
             <argument name="product" xsi:type="object">Magento\BundleGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product\Option</argument>
         </arguments>
     </type>
+    <type name="Magento\BundleGraphQl\Model\Resolver\PriceRange">
+        <arguments>
+            <argument name="productDataProvider" xsi:type="object">Magento\BundleGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product\Option</argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\BundleGraphQl\Model\Resolver\Options\Product"
                  type="Magento\CatalogGraphQl\Model\Resolver\Product">
         <arguments>
