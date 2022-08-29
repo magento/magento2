@@ -8,6 +8,7 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Filter\FilterInput;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
@@ -21,7 +22,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
      * @var TimezoneInterface
      */
     private $timezone;
-    
+
     /**
      * @var DataPersistorInterface
      */
@@ -78,7 +79,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                 if ($this->getRequest()->getParam('to_date')) {
                     $filterValues['to_date'] = $this->_dateFilter;
                 }
-                $inputFilter = new \Zend_Filter_Input(
+                $inputFilter = new FilterInput(
                     $filterValues,
                     [],
                     $data
