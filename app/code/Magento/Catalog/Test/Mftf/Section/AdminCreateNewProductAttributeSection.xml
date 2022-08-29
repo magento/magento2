@@ -45,5 +45,6 @@
         <element name="usedInFormsDisabled" type="select" selector="//select[contains(@id, 'used_in_forms') and contains(@disabled, 'disabled')]"/>
         <element name="usedIsDefaultAdminDisabled" type="select" selector="//input[@name='option[value][][0]' and @disabled='disabled']"/>
         <element name="usedIsDefaultStoreViewDisabled" type="select" selector="//input[@name='option[value][][1]' and @disabled='disabled']"/>
+        <element name="usedIsAttributeCodeDisabled" type="select" selector="//*[@id='attribute_code' and @disabled='disabled']"/>
     </section>
 </sections>

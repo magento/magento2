@@ -36,6 +36,7 @@
         <!-- Set advanced attribute properties -->
         <click selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="clickAdvancedAttributePropertiesSection"/>
         <wait stepKey="waitForAdvancedAttributeProperties" time="10"/>
+        <seeElement selector="{{AdminCreateNewProductAttributeSection.usedIsAttributeCodeDisabled}}" stepKey="assertCreatedInAttributecode"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPages"/>
         <click selector="{{AdminCreateNewProductAttributeSection.storefrontProperties}}" stepKey="clickOnStorefrontProperties"/>
         <waitForPageLoad stepKey="waitForStoreFrontToLoad"/>

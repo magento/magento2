@@ -30,6 +30,5 @@
         <element name="dropdownNthOptionDefaultStoreView" type="textarea" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) td:nth-child(4) input" parameterized="true"/>
         <element name="dropdownNthOptionDelete" type="button" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) button[title='Delete']" parameterized="true"/>
         <element name="attributeLabelValidationError" type="text" selector=".field-attribute_label .mage-error"/>
-
     </section>
 </sections>
