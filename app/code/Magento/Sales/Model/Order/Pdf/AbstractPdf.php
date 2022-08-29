@@ -63,9 +63,9 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     private $rtlTextHandler;
 
     /**
-     * @var \Magento\Framework\File\Pdf\Image|mixed
+     * @var \Magento\Framework\File\Pdf\Image
      */
-    protected $image;
+    private $image;
 
     /**
      * Retrieve PDF
