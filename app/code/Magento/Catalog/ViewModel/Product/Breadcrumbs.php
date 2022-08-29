@@ -97,7 +97,7 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
     public function getProductName(): string
     {
         return $this->catalogData->getProduct() !== null
-            ? $this->catalogData->getProduct()->getName()
+            ? $this->catalogData->getProduct()->getName() ?: ''
             : '';
     }
 

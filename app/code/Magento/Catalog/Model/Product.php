@@ -575,7 +575,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getName()
     {
-        return $this->_getData(self::NAME) ?: '';
+        return $this->_getData(self::NAME);
     }
 
     //@codeCoverageIgnoreEnd
