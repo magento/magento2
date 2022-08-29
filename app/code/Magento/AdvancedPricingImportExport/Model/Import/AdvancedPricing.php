@@ -76,8 +76,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $needColumnCheck = true;
 
     /**
-     * Valid column names.
-     *
      * @var array
      */
     protected $validColumnNames = [
@@ -268,7 +266,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $rowData
      * @param int $rowNum
      * @return bool
-     * @throws \Zend_Validate_Exception
      */
     public function validateRow(array $rowData, $rowNum)
     {
