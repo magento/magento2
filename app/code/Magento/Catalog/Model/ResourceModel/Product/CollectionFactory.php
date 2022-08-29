@@ -34,7 +34,7 @@ class CollectionFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = Magento\Catalog\Model\ResourceModel\Product\Collection::class
+        $instanceName = Collection::class
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
