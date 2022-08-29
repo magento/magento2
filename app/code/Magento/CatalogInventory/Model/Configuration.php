@@ -88,6 +88,11 @@ class Configuration implements StockConfigurationInterface
     const XML_PATH_SHOW_OUT_OF_STOCK = 'cataloginventory/options/show_out_of_stock';
 
     /**
+     * Out of stock products at the end of catalog config path
+     */
+    const XML_PATH_SHOW_OUT_OF_STOCK_AT_END_CATALOG= 'cataloginventory/options/show_out_of_stock_at_end_catalog';
+
+    /**
      * Auto return config path
      */
     const XML_PATH_ITEM_AUTO_RETURN = 'cataloginventory/item_options/auto_return';

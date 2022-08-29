@@ -210,8 +210,9 @@ class SearchResultApplier implements SearchResultApplierInterface
         $storeId = $this->collection->getStoreId();
         $searchCriteria = $this->searchResult->getSearchCriteria();
         $sortOrders = $searchCriteria->getSortOrders() ?? [];
-        $sortOrders = array_merge(['is_salable' => \Magento\Framework\DB\Select::SQL_DESC], $sortOrders);
-
+        if ($this->hasShowOutOfStockProductsAtEndOfCatalog()) {
+            $sortOrders = array_merge(['is_salable' => \Magento\Framework\DB\Select::SQL_DESC], $sortOrders);
+        }
         $connection = $this->collection->getConnection();
         $query = clone $connection->select()
             ->reset(\Magento\Framework\DB\Select::ORDER)
@@ -280,6 +281,19 @@ class SearchResultApplier implements SearchResultApplierInterface
     {
         return (bool) $this->scopeConfig->getValue(
             \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Returns if show out of stock products at end of catalog
+     *
+     * @return bool
+     */
+    private function hasShowOutOfStockProductsAtEndOfCatalog(): bool
+    {
+        return (bool) $this->scopeConfig->getValue(
+            \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK_AT_END_CATALOG,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
