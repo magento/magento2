@@ -19,34 +19,34 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class ProductUrlPathGenerator
 {
-    const XML_PATH_PRODUCT_URL_SUFFIX = 'catalog/seo/product_url_suffix';
+    public const XML_PATH_PRODUCT_URL_SUFFIX = 'catalog/seo/product_url_suffix';
 
     /**
      * Cache for product rewrite suffix
      *
      * @var array
      */
-    protected $productUrlSuffix = [];
+    protected array $productUrlSuffix = [];
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    protected StoreManagerInterface $storeManager;
 
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    protected ScopeConfigInterface $scopeConfig;
 
     /**
      * @var CategoryUrlPathGenerator
      */
-    protected $categoryUrlPathGenerator;
+    protected CategoryUrlPathGenerator $categoryUrlPathGenerator;
 
     /**
      * @var ProductRepositoryInterface
      */
-    protected $productRepository;
+    protected ProductRepositoryInterface $productRepository;
 
     /**
      * @param StoreManagerInterface $storeManager
@@ -70,11 +70,12 @@ class ProductUrlPathGenerator
      * Retrieve Product Url path (with category if exists)
      *
      * @param Product $product
-     * @param Category $category
+     * @param Category|null $category
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getUrlPath($product, $category = null)
+    public function getUrlPath(Product $product, Category $category = null): string
     {
         $path = $product->getData('url_path');
         if ($path === null) {
@@ -94,7 +95,7 @@ class ProductUrlPathGenerator
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function prepareProductDefaultUrlKey(Product $product)
+    protected function prepareProductDefaultUrlKey(Product $product): string
     {
         $storedProduct = $this->productRepository->getById($product->getId());
         $storedUrlKey = $storedProduct->getUrlKey();
@@ -106,10 +107,11 @@ class ProductUrlPathGenerator
      *
      * @param Product $product
      * @param int $storeId
-     * @param Category $category
+     * @param Category|null $category
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getUrlPathWithSuffix($product, $storeId, $category = null)
+    public function getUrlPathWithSuffix(Product $product, int $storeId, Category $category = null): string
     {
         return $this->getUrlPath($product, $category) . $this->getProductUrlSuffix($storeId);
     }
@@ -121,7 +123,7 @@ class ProductUrlPathGenerator
      * @param Category|null $category
      * @return string
      */
-    public function getCanonicalUrlPath($product, $category = null)
+    public function getCanonicalUrlPath(Product $product, Category $category = null): string
     {
         $path =  'catalog/product/view/id/' . $product->getId();
         return $category ? $path . '/category/' . $category->getId() : $path;
@@ -133,10 +135,9 @@ class ProductUrlPathGenerator
      * @param Product $product
      * @return string|null
      */
-    public function getUrlKey($product)
+    public function getUrlKey(Product $product): ?string
     {
-        $generatedProductUrlKey = $this->prepareProductUrlKey($product);
-        return ($product->getUrlKey() === false || empty($generatedProductUrlKey)) ? null : $generatedProductUrlKey;
+        return $this->prepareProductUrlKey($product);
     }
 
     /**
@@ -145,9 +146,9 @@ class ProductUrlPathGenerator
      * @param Product $product
      * @return string
      */
-    protected function prepareProductUrlKey(Product $product)
+    protected function prepareProductUrlKey(Product $product): string
     {
-        $urlKey = (string)$product->getUrlKey();
+        $urlKey = $product->getUrlKey();
         $urlKey = trim(strtolower($urlKey));
 
         if (!$urlKey) {
@@ -160,10 +161,11 @@ class ProductUrlPathGenerator
     /**
      * Retrieve product rewrite suffix for store
      *
-     * @param int $storeId
+     * @param int|null $storeId
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getProductUrlSuffix($storeId = null)
+    protected function getProductUrlSuffix(int $storeId = null): string
     {
         if ($storeId === null) {
             $storeId = $this->storeManager->getStore()->getId();
@@ -180,12 +182,14 @@ class ProductUrlPathGenerator
     }
 
     /**
+     * Generate product url key based on name/sku or generate randomly
+     *
      * @param Product $product
      * @return string
      */
-    private function generateProductUrlKey($product)
+    private function generateProductUrlKey(Product $product): string
     {
-        $strToGenerate = $product->getName() ?: $product->getSku();
-        return $strToGenerate ?: hash('sha256', (string)time());
+        $strToFormat = $product->getName() ?: $product->getSku();
+        return $strToFormat ?: hash('sha256', (string)time());
     }
 }
