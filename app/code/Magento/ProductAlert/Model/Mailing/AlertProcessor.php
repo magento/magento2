@@ -142,10 +142,6 @@ class AlertProcessor
      */
     private function processAlerts(string $alertType, array $customerIds, int $websiteId): array
     {
-        /** @var Email $email */
-        $email = $this->emailFactory->create();
-        $email->setType($alertType);
-        $email->setWebsiteId($websiteId);
         $errors = [];
 
         try {
@@ -155,47 +151,84 @@ class AlertProcessor
             return $errors;
         }
 
-        /** @var CustomerInterface $customer */
-        $customer = null;
         /** @var Website $website */
         $website = $this->storeManager->getWebsite($websiteId);
         $defaultStoreId = $website->getDefaultStore()->getId();
+
         $groupedByStore = $this->groupAlertsByStore($collection, (int)$defaultStoreId);
 
         foreach ($groupedByStore as $storeId => $alerts) {
-            $email->setStoreId($storeId);
+            $errors = array_merge($errors, $this->processAlertsByStore($alertType, $website, (int)$storeId, $alerts));
+        }
 
-            /** @var Price|Stock $alert */
-            foreach ($alerts as $alert) {
-                try {
-                    if ($customer === null) {
-                        $customer = $this->customerRepository->getById($alert->getCustomerId());
-                    } elseif ((int)$customer->getId() !== (int)$alert->getCustomerId()) {
-                        $this->sendEmail($customer, $email);
-                        $customer = $this->customerRepository->getById($alert->getCustomerId());
-                    }
+        return $errors;
+    }
 
-                    $product = $this->productRepository->getById($alert->getProductId(), false, $defaultStoreId);
+    /**
+     * Process product alerts by store
+     *
+     * @param string $alertType
+     * @param \Magento\Store\Api\Data\WebsiteInterface $website
+     * @param int $storeId
+     * @param array $alerts
+     * @return array
+     */
+    private function processAlertsByStore(
+        string $alertType,
+        \Magento\Store\Api\Data\WebsiteInterface $website,
+        int $storeId,
+        array $alerts
+    ): array {
+        $errors = [];
 
-                    switch ($alertType) {
-                        case self::ALERT_TYPE_STOCK:
-                            $this->saveStockAlert($alert, $product, $website, $email);
-                            break;
-                        case self::ALERT_TYPE_PRICE:
-                            $this->savePriceAlert($alert, $product, $customer, $email);
-                            break;
-                    }
-                } catch (\Exception $e) {
-                    $errors[] = $e->getMessage();
-                }
-            }
+        /** @var Email $email */
+        $email = $this->emailFactory->create();
+        $email->setType($alertType);
+        try {
+            $email->setWebsiteId($website->getWebsiteId());
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $errors[] = $e->getMessage();
+            return $errors;
+        }
+        $email->setStoreId($storeId);
 
-            if ($customer !== null) {
-                try {
+        /** @var CustomerInterface $customer */
+        $customer = null;
+
+        /** @var Price|Stock $alert */
+        foreach ($alerts as $alert) {
+            try {
+                if ($customer === null) {
+                    $customer = $this->customerRepository->getById($alert->getCustomerId());
+                } elseif ((int)$customer->getId() !== (int)$alert->getCustomerId()) {
                     $this->sendEmail($customer, $email);
-                } catch (\Exception $e) {
-                    $errors[] = $e->getMessage();
+                    $customer = $this->customerRepository->getById($alert->getCustomerId());
                 }
+
+                $product = $this->productRepository->getById(
+                    $alert->getProductId(),
+                    false,
+                    $website->getDefaultStore()->getId()
+                );
+
+                switch ($alertType) {
+                    case self::ALERT_TYPE_STOCK:
+                        $this->saveStockAlert($alert, $product, $website, $email);
+                        break;
+                    case self::ALERT_TYPE_PRICE:
+                        $this->savePriceAlert($alert, $product, $customer, $email);
+                        break;
+                }
+            } catch (\Exception $e) {
+                $errors[] = $e->getMessage();
+            }
+        }
+
+        if ($customer !== null) {
+            try {
+                $this->sendEmail($customer, $email);
+            } catch (\Exception $e) {
+                $errors[] = $e->getMessage();
             }
         }
 
