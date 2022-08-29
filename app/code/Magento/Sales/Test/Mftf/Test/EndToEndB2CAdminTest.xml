@@ -226,13 +226,13 @@
         <!--Filter order grid by status-->
         <comment userInput="Admin filters order grid by 'Status'" stepKey="filterOrderGridByStatusComment" after="dontSeeSecondOrderInGrid"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterBeforeStatusFilter" after="filterOrderGridByStatusComment"/>
-        <actionGroup ref="FilterOrderGridByStatusActionGroup" stepKey="filterOrderGridByPendingStatus" after="clearFilterBeforeStatusFilter">
-            <argument name="status" value="status.pending"/>
+        <actionGroup ref="FilterAdminOrderGridByStatusActionGroup" stepKey="filterOrderGridByPendingStatus" after="clearFilterBeforeStatusFilter">
+            <argument name="orderStatus" value="OrderStatus.pending"/>
         </actionGroup>
         <dontSee selector="{{AdminDataGridTableSection.column('Status')}}" userInput="{{OrderStatus.closed}}" stepKey="dontSeeClosedStatusInOrderGrid" after="filterOrderGridByPendingStatus"/>
         <see selector="{{AdminDataGridTableSection.column('Status')}}" userInput="{{OrderStatus.pending}}" stepKey="seePendingStatusInOrderGrid" after="dontSeeClosedStatusInOrderGrid"/>
-        <actionGroup ref="FilterOrderGridByStatusActionGroup" stepKey="filterOrderGridByClosedStatus" after="seePendingStatusInOrderGrid">
-            <argument name="status" value="status.closed"/>
+        <actionGroup ref="FilterAdminOrderGridByStatusActionGroup" stepKey="filterOrderGridByClosedStatus" after="seePendingStatusInOrderGrid">
+            <argument name="orderStatus" value="OrderStatus.closed"/>
         </actionGroup>
         <see selector="{{AdminDataGridTableSection.column('Status')}}" userInput="{{OrderStatus.closed}}" stepKey="seeClosedStatusInOrderGrid" after="filterOrderGridByClosedStatus"/>
         <dontSee selector="{{AdminDataGridTableSection.column('Status')}}" userInput="{{OrderStatus.pending}}" stepKey="dontSeePendingStatusInOrderGrid" after="seeClosedStatusInOrderGrid"/>
