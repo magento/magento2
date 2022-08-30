@@ -85,4 +85,12 @@
     <type name="Magento\Quote\Model\Quote">
         <plugin name="update_customized_options" type="Magento\ConfigurableProductGraphQl\Plugin\Quote\UpdateCustomizedOptions"/>
     </type>
+    <virtualType name="Magento\ConfigurableProductGraphQl\Model\Resolver\Variant\Product"
+                 type="Magento\CatalogGraphQl\Model\Resolver\Product">
+        <arguments>
+            <argument name="productDataProvider" xsi:type="object">
+                Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ChildProduct
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

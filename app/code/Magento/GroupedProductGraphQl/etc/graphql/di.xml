@@ -58,7 +58,7 @@
             <argument name="productResolver" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ChildProduct</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\GroupedProductGraphQl\Model\Resolver\GroupedItems\Product"
+    <virtualType name="Magento\GroupedProductGraphQl\Model\Resolver\GroupedItem\Product"
                  type="Magento\CatalogGraphQl\Model\Resolver\Product">
         <arguments>
             <argument name="productDataProvider" xsi:type="object">
