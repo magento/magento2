@@ -17,6 +17,9 @@ use Magento\Backend\Controller\Adminhtml\Auth;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 
+/**
+ * Callback for handling redirect from Adobe IMS
+ */
 class ImsCallback extends Auth implements HttpGetActionInterface
 {
     public const ACTION_NAME = 'imscallback';

@@ -9,12 +9,12 @@ namespace Magento\AdminAdobeIms\Test\Unit\Model\Authorization;
 
 use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserService;
-use Magento\AdobeImsApi\Api\GetProfileInterface;
-use Magento\AdobeImsApi\Api\GetTokenInterface;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdobeImsApi\Api\OrganizationMembershipInterface;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
+use Magento\AdobeImsApi\Api\GetProfileInterface;
+use Magento\AdobeImsApi\Api\GetTokenInterface;
+use Magento\AdobeImsApi\Api\OrganizationMembershipInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -132,6 +132,8 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
     }
 
     /**
+     * Test exception when tried to access from other module
+     *
      * @return void
      * @param string $code
      * @dataProvider responseDataProvider
@@ -152,6 +154,8 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
     }
 
     /**
+     * Test exception when profile not found
+     *
      * @return void
      * @param string $code
      * @param array $responseData
@@ -190,6 +194,8 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
     }
 
     /**
+     * Test exception when admin login provided with wrong info
+     *
      * @return void
      * @param string $code
      * @param array $responseData

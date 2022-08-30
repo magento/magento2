@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model\Authorization;
@@ -84,7 +83,11 @@ class AdobeImsAdminTokenUserContext implements UserContextInterface
                 throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
             }
         } else {
-            $this->adminTokenUserService->processLoginRequest();
+            try {
+                $this->adminTokenUserService->processLoginRequest();
+            } catch (\Exception $e) {
+                throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
+            }
         }
 
         $this->userId = (int) $session->getUser()->getUserId();

@@ -10,6 +10,7 @@ namespace Magento\AdminAdobeIms\Model\Authorization;
 
 use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
+use Magento\AdminAdobeIms\Service\AdminReauthProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdobeImsApi\Api\GetProfileInterface;
@@ -19,6 +20,8 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\AuthenticationException;
 
 /**
+ * Adobe IMS Auth Model for getting Admin Token
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdobeImsAdminTokenUserService
@@ -51,6 +54,11 @@ class AdobeImsAdminTokenUserService
     private AdminLoginProcessService $adminLoginProcessService;
 
     /**
+     * @var AdminReauthProcessService
+     */
+    private AdminReauthProcessService $adminReauthProcessService;
+
+    /**
      * @var RequestInterface
      */
     private RequestInterface $request;
@@ -59,6 +67,7 @@ class AdobeImsAdminTokenUserService
      * @param ImsConfig $adminImsConfig
      * @param OrganizationMembershipInterface $organizationMembership
      * @param AdminLoginProcessService $adminLoginProcessService
+     * @param AdminReauthProcessService $adminReauthProcessService
      * @param RequestInterface $request
      * @param GetTokenInterface $token
      * @param GetProfileInterface $profile
@@ -67,6 +76,7 @@ class AdobeImsAdminTokenUserService
         ImsConfig $adminImsConfig,
         OrganizationMembershipInterface $organizationMembership,
         AdminLoginProcessService $adminLoginProcessService,
+        AdminReauthProcessService $adminReauthProcessService,
         RequestInterface $request,
         GetTokenInterface $token,
         GetProfileInterface $profile
@@ -74,6 +84,7 @@ class AdobeImsAdminTokenUserService
         $this->adminImsConfig = $adminImsConfig;
         $this->organizationMembership = $organizationMembership;
         $this->adminLoginProcessService = $adminLoginProcessService;
+        $this->adminReauthProcessService = $adminReauthProcessService;
         $this->request = $request;
         $this->token = $token;
         $this->profile = $profile;
@@ -82,12 +93,13 @@ class AdobeImsAdminTokenUserService
     /**
      * Process login request to Admin Adobe IMS.
      *
+     * @param bool $isReauthorize
      * @return void
      * @throws AdobeImsAuthorizationException
      * @throws AdobeImsOrganizationAuthorizationException
      * @throws AuthenticationException
      */
-    public function processLoginRequest()
+    public function processLoginRequest(bool $isReauthorize = false): void
     {
         if ($this->adminImsConfig->enabled() && $this->request->getParam('code')
             && $this->request->getModuleName() === self::ADOBE_IMS_MODULE_NAME) {
@@ -107,7 +119,11 @@ class AdobeImsAdminTokenUserService
                 //check membership in organization
                 $this->organizationMembership->checkOrganizationMembership($accessToken);
 
-                $this->adminLoginProcessService->execute($tokenResponse, $profile);
+                if ($isReauthorize) {
+                    $this->adminReauthProcessService->execute($tokenResponse);
+                } else {
+                    $this->adminLoginProcessService->execute($tokenResponse, $profile);
+                }
             } catch (AdobeImsAuthorizationException $e) {
                 throw new AdobeImsAuthorizationException(
                     __('You don\'t have access to this Commerce instance')

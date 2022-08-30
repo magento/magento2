@@ -10,8 +10,8 @@ namespace Magento\AdminAdobeIms\Test\Unit\Model\Authorization;
 use Magento\AdminAdobeIms\Model\Auth;
 use Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserContext;
 use Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserService;
-use Magento\AdobeImsApi\Api\IsTokenValidInterface;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdobeImsApi\Api\IsTokenValidInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\Exception\AuthenticationException;
@@ -101,6 +101,8 @@ class AdobeImsAdminTokenUserContextTest extends TestCase
     }
 
     /**
+     * Test exception with invalid access token
+     *
      * @return void
      * @throws AuthenticationException
      */
@@ -127,6 +129,8 @@ class AdobeImsAdminTokenUserContextTest extends TestCase
     }
 
     /**
+     * Setting up User Id
+     *
      * @param int|null $userId
      * @return void
      */
