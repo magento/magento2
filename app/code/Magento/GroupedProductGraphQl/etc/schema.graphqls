@@ -8,7 +8,7 @@ type GroupedProduct implements ProductInterface, RoutableInterface, PhysicalProd
 type GroupedProductItem @doc(description: "Contains information about an individual grouped product item."){
     qty: Float @doc(description: "The quantity of this grouped product item.")
     position: Int @doc(description: "The relative position of this item compared to the other group items.")
-    product: ProductInterface @doc(description: "Details about this product option.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product")
+    product: ProductInterface @doc(description: "Details about this product option.") @resolver(class: "Magento\\GroupedProductGraphQl\\Model\\Resolver\\GroupedItems\\Product")
 }
 
 type GroupedProductWishlistItem implements WishlistItemInterface @doc(description: "A grouped product wish list item.") {
