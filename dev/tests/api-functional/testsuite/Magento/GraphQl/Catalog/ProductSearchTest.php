@@ -16,6 +16,8 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Indexer\Product\Category\Processor;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\Config as eavConfig;
@@ -24,6 +26,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Catalog\Model\GetCategoryByName;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -87,6 +92,11 @@ class ProductSearchTest extends GraphQlAbstract
     private $objectManager;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixture;
+
+    /**
      * Setup
      */
     protected function setUp(): void
@@ -101,6 +111,7 @@ class ProductSearchTest extends GraphQlAbstract
         $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
         $this->config = $this->objectManager->get(Config::class);
         $this->cache = $this->objectManager->get(Cache::class);
+        $this->fixture = DataFixtureStorageManager::getStorage();
     }
 
     /**
@@ -1274,6 +1285,112 @@ QUERY;
         $productsDesc = array_column($resultDesc['products']['items'], 'sku');
         // position NOT equal and oldest entity first
         $this->assertEquals(array_reverse($expectedProductsAsc), $productsDesc);
+    }
+
+    /**
+     * @dataProvider sortByPositionWithMultipleCategoriesDataProvider
+     */
+    #[
+        DataFixture(ProductFixture::class, as: 'prod1'),
+        DataFixture(ProductFixture::class, as: 'prod2'),
+        DataFixture(ProductFixture::class, as: 'prod3'),
+        DataFixture(ProductFixture::class, as: 'prod4'),
+        DataFixture(ProductFixture::class, as: 'prod5'),
+        DataFixture(ProductFixture::class, as: 'prod6'),
+        DataFixture(ProductFixture::class, as: 'prod7'),
+        DataFixture(ProductFixture::class, as: 'prod8'),
+        DataFixture(ProductFixture::class, as: 'prod9'),
+        DataFixture(CategoryFixture::class, as: 'cat1'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$cat1.id$'], 'cat11'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$cat1.id$'], 'cat12'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$cat1.id$'], 'cat13'),
+    ]
+    public function testSortByPositionWithMultipleCategories(
+        array $config,
+        array $filterBy,
+        array $expectedOrder
+    ): void {
+        $expectedOrderSku = [];
+        $categoryIds  = [];
+
+        foreach ($expectedOrder as $productName) {
+            $expectedOrderSku[] = $this->fixture->get($productName)->getSku();
+        }
+
+        foreach ($filterBy as $categoryName) {
+            $categoryIds[] = $this->fixture->get($categoryName)->getId();
+        }
+        $filter = json_encode($categoryIds);
+
+        foreach ($config as $categoryName => $products) {
+            $categoryId = $this->fixture->get($categoryName)->getId();
+            $category = $this->categoryRepository->get($categoryId);
+            $productPositions = [];
+            foreach ($products as $position => $productName) {
+                $product = $this->fixture->get($productName);
+                $productPositions[$product->getId()] = $position;
+            }
+            $category->setPostedProducts($productPositions);
+            $category->save();
+        }
+
+        $this->indexer->reindexAll();
+
+        $query = <<<QUERY
+{
+  products(filter: {category_id: {in: $filter}}, sort: {position: ASC}) {
+    total_count
+    items {
+      sku
+    }
+  }
+}
+QUERY;
+        $resultDesc = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $resultDesc);
+        $this->assertEquals($expectedOrderSku, array_column($resultDesc['products']['items'], 'sku'));
+    }
+
+    /**
+     * @return array
+     */
+    public function sortByPositionWithMultipleCategoriesDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'cat11' => ['prod9', 'prod8', 'prod7'],
+                    'cat12' => ['prod2', 'prod5', 'prod3', 'prod4', 'prod1', 'prod8'],
+                    'cat13' => ['prod1', 'prod4', 'prod9', 'prod6'],
+                ],
+                [
+                    'cat11', 'cat12'
+                ],
+                ['prod9', 'prod2', 'prod8', 'prod5', 'prod7', 'prod3', 'prod4', 'prod1']
+            ],
+            [
+                [
+                    'cat11' => ['prod9', 'prod8', 'prod7'],
+                    'cat12' => ['prod2', 'prod5', 'prod3', 'prod4', 'prod1', 'prod8'],
+                    'cat13' => ['prod1', 'prod4', 'prod9', 'prod6'],
+                ],
+                [
+                    'cat11', 'cat12', 'cat13'
+                ],
+                ['prod9', 'prod2', 'prod1', 'prod8', 'prod5', 'prod4', 'prod7', 'prod3', 'prod6']
+            ],
+            [
+                [
+                    'cat11' => ['prod9', 'prod8', 'prod7'],
+                    'cat12' => ['prod2', 'prod5', 'prod3', 'prod4', 'prod1', 'prod8'],
+                    'cat13' => ['prod1', 'prod4', 'prod9', 'prod6'],
+                ],
+                [
+                    'cat1'
+                ],
+                ['prod9', 'prod2', 'prod1', 'prod8', 'prod5', 'prod4', 'prod7', 'prod3', 'prod6']
+            ],
+        ];
     }
 
     /**
