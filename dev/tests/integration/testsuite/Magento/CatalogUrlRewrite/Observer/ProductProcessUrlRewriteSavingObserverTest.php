@@ -9,9 +9,16 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Test\Fixture\Group as GroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
@@ -39,6 +46,11 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     private $productRepository;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * Set up
      */
     protected function setUp(): void
@@ -46,6 +58,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -632,6 +645,46 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         $actual = $this->getActualResults($productFilter);
         foreach ($expected as $row) {
             $this->assertContainsEquals($row, $actual);
+        }
+    }
+
+    #[
+        DataFixture(WebsiteFixture::class, as: 'website'),
+        DataFixture(GroupFixture::class, ['website_id' => '$website.id$'], 'store_group'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group.id$'], 'store'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple1', 'website_ids' => [1,'$website.id$'], 'product']),
+    ]
+    public function testRemoveProductFromAllWebsites(): void
+    {
+        $testStore1 = $this->storeManager->getStore('default');
+        $testStore2 = $this->fixtures->get('store');
+
+        $productFilter = [UrlRewrite::ENTITY_TYPE => 'product'];
+
+        /** @var Product $product*/
+        $product = $this->productRepository->get('simple1');
+        $product->setWebsiteIds([])
+            ->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
+        $this->productRepository->save($product);
+        $unexpected = [
+            [
+                'request_path' => 'simple1.html',
+                'target_path' => 'catalog/product/view/id/' . $product->getId(),
+                'is_auto_generated' => 1,
+                'redirect_type' => 0,
+                'store_id' => $testStore1->getId(),
+            ],
+            [
+                'request_path' => 'simple1.html',
+                'target_path' => 'catalog/product/view/id/' . $product->getId(),
+                'is_auto_generated' => 1,
+                'redirect_type' => 0,
+                'store_id' => $testStore2->getId(),
+            ],
+        ];
+        $actual = $this->getActualResults($productFilter);
+        foreach ($unexpected as $row) {
+            $this->assertNotContains($row, $actual);
         }
     }
 }
