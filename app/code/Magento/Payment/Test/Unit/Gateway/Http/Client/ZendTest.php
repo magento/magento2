@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Payment\Test\Unit\Gateway\Http\Client;
 
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
+use Laminas\Http\Exception\RuntimeException;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Payment\Gateway\Http\Client\Zend;
 use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ConverterException;
@@ -29,12 +32,12 @@ class ZendTest extends TestCase
     protected $converterMock;
 
     /**
-     * @var ZendClientFactory|MockObject
+     * @var LaminasClientFactory|MockObject
      */
-    protected $zendClientFactoryMock;
+    protected $clientFactoryMock;
 
     /**
-     * @var ZendClient|MockObject
+     * @var LaminasClient|MockObject
      */
     protected $clientMock;
 
@@ -53,12 +56,12 @@ class ZendTest extends TestCase
         $this->converterMock = $this->getMockBuilder(ConverterInterface::class)
             ->getMockForAbstractClass();
 
-        $this->zendClientFactoryMock = $this->getMockBuilder(ZendClientFactory::class)
+        $this->clientFactoryMock = $this->getMockBuilder(LaminasClientFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->clientMock = $this->getMockBuilder(ZendClient::class)
+        $this->clientMock = $this->getMockBuilder(LaminasClient::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -70,7 +73,7 @@ class ZendTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->model = new Zend(
-            $this->zendClientFactoryMock,
+            $this->clientFactoryMock,
             $this->loggerMock,
             $this->converterMock
         );
@@ -81,15 +84,15 @@ class ZendTest extends TestCase
         $this->setClientTransferObjects();
         $responseBody = 'Response body content';
 
-        $zendHttpResponseMock = $this->getMockBuilder(
-            \Zend_Http_Response::class
+        $httpResponseMock = $this->getMockBuilder(
+            Response::class
         )->disableOriginalConstructor()
             ->getMock();
-        $zendHttpResponseMock->expects($this->once())->method('getBody')->willReturn($responseBody);
+        $httpResponseMock->expects($this->once())->method('getBody')->willReturn($responseBody);
 
-        $this->clientMock->expects($this->once())->method('request')->willReturn($zendHttpResponseMock);
+        $this->clientMock->expects($this->once())->method('send')->willReturn($httpResponseMock);
         $this->converterMock->expects($this->once())->method('convert')->with($responseBody);
-        $this->zendClientFactoryMock->expects($this->once())
+        $this->clientFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->clientMock);
 
@@ -105,12 +108,12 @@ class ZendTest extends TestCase
         $this->setClientTransferObjects();
 
         $this->clientMock->expects($this->once())
-            ->method('request')
-            ->willThrowException(new \Zend_Http_Client_Exception());
+            ->method('send')
+            ->willThrowException(new RuntimeException());
 
         $this->converterMock->expects($this->never())->method('convert');
 
-        $this->zendClientFactoryMock->expects($this->once())
+        $this->clientFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->clientMock);
 
@@ -126,19 +129,19 @@ class ZendTest extends TestCase
         $this->setClientTransferObjects();
         $responseBody = 'Response body content';
 
-        $zendHttpResponseMock = $this->getMockBuilder(
-            \Zend_Http_Response::class
+        $httpResponseMock = $this->getMockBuilder(
+            Response::class
         )->disableOriginalConstructor()
             ->getMock();
-        $zendHttpResponseMock->expects($this->once())->method('getBody')->willReturn($responseBody);
+        $httpResponseMock->expects($this->once())->method('getBody')->willReturn($responseBody);
 
-        $this->clientMock->expects($this->once())->method('request')->willReturn($zendHttpResponseMock);
+        $this->clientMock->expects($this->once())->method('send')->willReturn($httpResponseMock);
         $this->converterMock->expects($this->once())
             ->method('convert')
             ->with($responseBody)
             ->willThrowException(new ConverterException(__()));
 
-        $this->zendClientFactoryMock->expects($this->once())
+        $this->clientFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->clientMock);
 
@@ -148,7 +151,7 @@ class ZendTest extends TestCase
     private function setClientTransferObjects()
     {
         $config = ['key1' => 'value1', 'key2' => 'value2'];
-        $method = \Zend_Http_Client::POST;
+        $method = Request::METHOD_POST;
         $headers = ['key1' => 'value1', 'key2' => 'value2'];
         $body = 'Body content';
         $uri = 'https://example.com/listener';
@@ -161,9 +164,9 @@ class ZendTest extends TestCase
         $this->transferObjectMock->expects($this->once())->method('shouldEncode')->willReturn($shouldEncode);
         $this->transferObjectMock->expects(static::atLeastOnce())->method('getUri')->willReturn($uri);
 
-        $this->clientMock->expects($this->once())->method('setConfig')->with($config)->willReturnSelf();
+        $this->clientMock->expects($this->once())->method('setOptions')->with($config)->willReturnSelf();
         $this->clientMock->expects($this->once())->method('setMethod')->with($method)->willReturnSelf();
-        $this->clientMock->expects($this->once())->method('setParameterPost')->with($body)->willReturnSelf();
+        $this->clientMock->expects($this->once())->method('setParameterPost')->with([$body])->willReturnSelf();
         $this->clientMock->expects($this->once())->method('setHeaders')->with($headers)->willReturnSelf();
         $this->clientMock->expects($this->once())->method('setUrlEncodeBody')->with($shouldEncode)->willReturnSelf();
         $this->clientMock->expects($this->once())->method('setUri')->with($uri)->willReturnSelf();
