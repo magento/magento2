@@ -6,12 +6,14 @@
 
 namespace Magento\User\Model;
 
+use Laminas\Validator\ValidatorInterface;
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Validator\DataObject;
 use Magento\User\Api\Data\UserInterface;
 use Magento\User\Model\Spi\NotificationExceptionInterface;
 use Magento\User\Model\Spi\NotificatorInterface;
@@ -120,12 +122,14 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
      * @deprecated 101.1.0
+     * @see we don't recommend this approach anymore
      */
     protected $_transportBuilder;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      * @deprecated 101.1.0
+     * @see we don't recommend this approach anymore
      */
     protected $_storeManager;
 
@@ -147,6 +151,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * @var DeploymentConfig
      * @deprecated 101.1.0
+     * @see we don't recommend this approach anymore
      */
     private $deploymentConfig;
 
@@ -311,11 +316,11 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * Add validation rules for particular fields
      *
-     * @return \Zend_Validate_Interface
+     * @return ValidatorInterface
      */
     protected function _getValidationRulesBeforeSave()
     {
-        /** @var $validator \Magento\Framework\Validator\DataObject */
+        /** @var $validator DataObject */
         $validator = $this->_validatorObject->create();
         $this->validationRules->addUserInfoRules($validator);
 
@@ -339,7 +344,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function validate()
     {
-        /** @var $validator \Magento\Framework\Validator\DataObject */
+        /** @var $validator DataObject */
         $validator = $this->_validatorObject->create();
         $this->validationRules->addUserInfoRules($validator);
 
@@ -476,6 +481,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @throws NotificationExceptionInterface
      * @return $this
      * @deprecated 100.1.0
+     * @see we don't recommend this approach anymore
      */
     public function sendPasswordResetNotificationEmail()
     {
