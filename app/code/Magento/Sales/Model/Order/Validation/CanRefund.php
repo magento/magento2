@@ -5,10 +5,12 @@
  */
 namespace Magento\Sales\Model\Order\Validation;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ValidatorInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class CanRefund
@@ -21,13 +23,22 @@ class CanRefund implements ValidatorInterface
     private $priceCurrency;
 
     /**
+     * @var ScopeConfigInterface;
+     */
+    private $scopeConfig;
+
+    /**
      * CanRefund constructor.
      *
      * @param PriceCurrencyInterface $priceCurrency
+     * @param ScopeConfigInterface|null $scopeConfig
      */
-    public function __construct(PriceCurrencyInterface $priceCurrency)
-    {
+    public function __construct(
+        PriceCurrencyInterface $priceCurrency,
+        ?ScopeConfigInterface $scopeConfig = null
+    ) {
         $this->priceCurrency = $priceCurrency;
+        $this->scopeConfig = $scopeConfig ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -62,6 +73,22 @@ class CanRefund implements ValidatorInterface
      */
     private function isTotalPaidEnoughForRefund(OrderInterface $order)
     {
-        return !abs($this->priceCurrency->round($order->getTotalPaid()) - $order->getTotalRefunded()) < .0001;
+        return !abs($this->priceCurrency->round($order->getTotalPaid()) - $order->getTotalRefunded()) < .0001 ||
+            $order->getTotalPaid() == 0 &&
+            $this->isAllowZeroGrandTotal();
+    }
+
+    /**
+     * Return Zero GrandTotal availability.
+     *
+     * @return bool
+     */
+    private function isAllowZeroGrandTotal()
+    {
+        $isAllowed = $this->scopeConfig->getValue(
+            'sales/zerograndtotal_creditmemo/allow_zero_grandtotal',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return $isAllowed;
     }
 }
