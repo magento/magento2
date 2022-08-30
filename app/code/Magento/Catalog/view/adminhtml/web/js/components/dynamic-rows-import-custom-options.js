@@ -40,10 +40,6 @@ define([
                 _.each(item.options, function (option) {
                     currentOption = utils.copy(option);
 
-                    if (currentOption.hasOwnProperty('sort_order')) {
-                        delete currentOption['sort_order'];
-                    }
-
                     if (currentOption.hasOwnProperty('option_id')) {
                         delete currentOption['option_id'];
                     }
