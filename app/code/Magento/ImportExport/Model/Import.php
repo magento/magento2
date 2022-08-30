@@ -18,6 +18,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Math\Random;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\ImportExport\Helper\Data as DataHelper;
 use Magento\ImportExport\Model\Export\Adapter\CsvFactory;
@@ -29,11 +30,10 @@ use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\Entity\Factory;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Framework\Message\ManagerInterface;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Magento\ImportExport\Model\Source\Import\AbstractBehavior;
 use Magento\ImportExport\Model\Source\Import\Behavior\Factory as BehaviorFactory;
-use Magento\MediaStorage\Model\File\Uploader;
+use Magento\ImportExport\Model\Source\Upload;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Psr\Log\LoggerInterface;
 
@@ -122,6 +122,7 @@ class Import extends AbstractModel
     protected $_entityAdapter;
 
     /**
+     * @Deprecated Property isn't used
      * @var DataHelper
      */
     protected $_importExportData = null;
@@ -152,6 +153,7 @@ class Import extends AbstractModel
     protected $_csvFactory;
 
     /**
+     * @Deprecated Property isn't used
      * @var FileTransferFactory
      */
     protected $_httpFactory;
@@ -192,9 +194,15 @@ class Import extends AbstractModel
     private $messageManager;
 
     /**
+     * @Deprecated Property isn't used
      * @var Random
      */
     private $random;
+
+    /**
+     * @var Upload
+     */
+    private $upload;
 
     /**
      * @param LoggerInterface $logger
@@ -214,6 +222,7 @@ class Import extends AbstractModel
      * @param array $data
      * @param ManagerInterface|null $messageManager
      * @param Random|null $random
+     * @param Upload|null $upload
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -233,7 +242,8 @@ class Import extends AbstractModel
         DateTime $localeDate,
         array $data = [],
         ManagerInterface $messageManager = null,
-        Random $random = null
+        Random $random = null,
+        Upload $upload = null
     ) {
         $this->_importExportData = $importExportData;
         $this->_coreConfig = $coreConfig;
@@ -252,6 +262,8 @@ class Import extends AbstractModel
             ->get(ManagerInterface::class);
         $this->random = $random ?: ObjectManager::getInstance()
             ->get(Random::class);
+        $this->upload = $upload ?: ObjectManager::getInstance()
+            ->get(Upload::class);
         parent::__construct($logger, $filesystem, $data);
     }
 
@@ -303,6 +315,8 @@ class Import extends AbstractModel
     /**
      * Returns source adapter object.
      *
+     * @Deprecated
+     * @see \Magento\ImportExport\Model\Import\Source\Factory::create()
      * @param string $sourceFile Full path to source file
      * @return AbstractSource
      * @throws FileSystemException
@@ -550,61 +564,12 @@ class Import extends AbstractModel
      */
     public function uploadSource()
     {
-        /** @var $adapter \Zend_File_Transfer_Adapter_Http */
-        $adapter = $this->_httpFactory->create();
-        if (!$adapter->isValid(self::FIELD_NAME_SOURCE_FILE)) {
-            $errors = $adapter->getErrors();
-            if ($errors[0] == \Zend_Validate_File_Upload::INI_SIZE) {
-                $errorMessage = $this->_importExportData->getMaxUploadSizeMessage();
-            } else {
-                $errorMessage = __('The file was not uploaded.');
-            }
-            throw new LocalizedException($errorMessage);
-        }
-
         $entity = $this->getEntity();
-        /** @var $uploader Uploader */
-        $uploader = $this->_uploaderFactory->create(['fileId' => self::FIELD_NAME_SOURCE_FILE]);
-        $uploader->setAllowedExtensions(['csv', 'zip']);
-        $uploader->skipDbProcessing(true);
-        $fileName = $this->random->getRandomString(32) . '.' . $uploader->getFileExtension();
-        try {
-            $result = $uploader->save($this->getWorkingDir(), $fileName);
-        } catch (\Exception $e) {
-            throw new LocalizedException(__('The file cannot be uploaded.'));
-        }
-
-        $extension = '';
-        $uploadedFile = '';
-        if ($result !== false) {
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
-            $uploadedFile = $result['path'] . $result['file'];
-        }
-
-        if (!$extension) {
-            $this->_varDirectory->delete($uploadedFile);
-            throw new LocalizedException(__('The file you uploaded has no extension.'));
-        }
-        $sourceFile = $this->getWorkingDir() . $entity;
-
-        $sourceFile .= '.' . $extension;
+        $result = $this->upload->uploadSource($entity);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
+        $sourceFile = $this->getWorkingDir() . $entity . '.' . $extension;
         $sourceFileRelative = $this->_varDirectory->getRelativePath($sourceFile);
-
-        if (strtolower($uploadedFile) != strtolower($sourceFile)) {
-            if ($this->_varDirectory->isExist($sourceFileRelative)) {
-                $this->_varDirectory->delete($sourceFileRelative);
-            }
-
-            try {
-                $this->_varDirectory->renameFile(
-                    $this->_varDirectory->getRelativePath($uploadedFile),
-                    $sourceFileRelative
-                );
-            } catch (FileSystemException $e) {
-                throw new LocalizedException(__('The source file moving process failed.'));
-            }
-        }
         $this->_removeBom($sourceFile);
         $this->createHistoryReport($sourceFileRelative, $entity, $extension, $result);
         return $sourceFile;
