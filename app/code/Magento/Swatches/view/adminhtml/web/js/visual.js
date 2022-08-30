@@ -362,6 +362,7 @@ define([
                      * @this {iframe}
                      */
                     iframeHandler = function () {
+                        console.log($(this).contents().find('body').html());
                         var imageParams = $.parseJSON($(this).contents().find('body').html()),
                             fullMediaUrl = imageParams['swatch_path'] + imageParams['file_path'];
 
@@ -374,7 +375,7 @@ define([
                     };
 
                 swatchComponents.iframe.off('load');
-                swatchComponents.iframe.load(iframeHandler);
+                swatchComponents.iframe.on('load', iframeHandler);
                 swatchComponents.form.submit();
                 $(this).val('');
             });
