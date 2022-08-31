@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Validation;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -15,6 +17,7 @@ use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Creditmemo\Validation\QuantityValidator;
 use Magento\Sales\Model\Order\Item;
+use Magento\Store\Api\Data\StoreConfigInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -154,6 +157,30 @@ class QuantityValidatorTest extends TestCase
         );
     }
 
+    private function getCreditMemoMockParams()
+    {
+        return [
+            $this->createMock(\Magento\Framework\Model\Context::class),
+            $this->createMock(\Magento\Framework\Registry::class),
+            $this->createMock(\Magento\Framework\Api\ExtensionAttributesFactory::class),
+            $this->createMock(\Magento\Framework\Api\AttributeValueFactory::class),
+            $this->createMock(\Magento\Sales\Model\Order\Creditmemo\Config::class),
+            $this->createMock(\Magento\Sales\Model\OrderFactory::class),
+            $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory::class),
+            $this->createMock(\Magento\Framework\Math\CalculatorFactory::class),
+            $this->createMock(\Magento\Store\Model\StoreManagerInterface::class),
+            $this->createMock( \Magento\Sales\Model\Order\Creditmemo\CommentFactory::class),
+            $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory::class),
+            $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class),
+            $this->createMock(\Magento\Framework\Model\ResourceModel\AbstractResource::class),
+            $this->createMock(\Magento\Framework\Data\Collection\AbstractDb::class),
+            [],
+            $this->createMock(\Magento\Sales\Model\Order\InvoiceFactory::class),
+            $this->createMock(ScopeConfigInterface::class),
+            $this->createMock(\Magento\Sales\Api\OrderRepositoryInterface::class)
+        ];
+    }
+
     /**
      * @param int $orderId
      * @param int $orderItemId
@@ -163,6 +190,7 @@ class QuantityValidatorTest extends TestCase
      * @param int $total
      * @param array $expected
      * @param bool $isQtyDecimalAllowed
+     * @param bool $isAllowZeroGrandTotal
      * @dataProvider dataProviderForValidateQty
      */
     public function testValidate(
@@ -174,16 +202,23 @@ class QuantityValidatorTest extends TestCase
         $total,
         array $expected,
         bool $isQtyDecimalAllowed,
-        bool $isValidGrandTotal
+        bool $isAllowZeroGrandTotal
     ) {
-        $creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['isValidGrandTotal'])
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfig->expects($this->any())->method('getValue')->willReturn($isAllowZeroGrandTotal);
+        $creditMemoConstructorParams = $this->getCreditMemoMockParams();
+        $creditMemoConstructorParams[16] = $scopeConfig;
+
+        $creditmemoMock = $this->getMockBuilder(Creditmemo::class)
+            ->setConstructorArgs($creditMemoConstructorParams)
+            ->onlyMethods(['getOrderId', 'getItems', 'getGrandTotal', '_construct'])
             ->getMockForAbstractClass();
+
         $creditmemoMock->expects($this->exactly(2))->method('getOrderId')
             ->willReturn($orderId);
-        $creditmemoMock->expects($this->once())->method('isValidGrandTotal')
-            ->willReturn($isValidGrandTotal);
+        $creditmemoMock->expects($this->once())->method('getGrandTotal')
+            ->willReturn($total);
+
         $creditmemoItemMock = $this->getMockBuilder(
             CreditmemoItemInterface::class
         )->disableOriginalConstructor()
@@ -244,7 +279,7 @@ class QuantityValidatorTest extends TestCase
                 'total' => 15,
                 'expected' => [],
                 'isQtyDecimalAllowed' => false,
-                'isValidGrandTotal' => true
+                'isAllowZeroGrandTotal' => true
             ],
             [
                 'orderId' => 1,
@@ -255,7 +290,7 @@ class QuantityValidatorTest extends TestCase
                 'total' => 15,
                 'expected' => [],
                 'isQtyDecimalAllowed' => false,
-                'isValidGrandTotal' => true
+                'isAllowZeroGrandTotal' => true
             ],
             [
                 'orderId' => 1,
@@ -271,7 +306,7 @@ class QuantityValidatorTest extends TestCase
                     )
                 ],
                 'isQtyDecimalAllowed' => false,
-                'isValidGrandTotal' => true
+                'isAllowZeroGrandTotal' => true
             ],
             [
                 'orderId' => 1,
@@ -300,7 +335,7 @@ class QuantityValidatorTest extends TestCase
                 'total' => 0,
                 'expected' => [],
                 'isQtyDecimalAllowed' => false,
-                'isValidGrandTotal' => true
+                'isAllowZeroGrandTotal' => true
             ]
         ];
     }
