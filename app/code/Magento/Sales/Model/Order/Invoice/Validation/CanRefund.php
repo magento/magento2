@@ -12,6 +12,7 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ValidatorInterface;
+use Magento\Framework\App\ObjectManager;
 
 class CanRefund implements ValidatorInterface
 {
@@ -28,6 +29,11 @@ class CanRefund implements ValidatorInterface
     private $orderRepository;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * CanRefund constructor.
      *
      * @param OrderPaymentRepositoryInterface $paymentRepository
@@ -37,6 +43,7 @@ class CanRefund implements ValidatorInterface
         OrderPaymentRepositoryInterface $paymentRepository,
         OrderRepositoryInterface $orderRepository
     ) {
+        $this->objectManager = ObjectManager::getInstance();
         $this->paymentRepository = $paymentRepository;
         $this->orderRepository = $orderRepository;
     }
@@ -103,7 +110,7 @@ class CanRefund implements ValidatorInterface
     }
 
     /**
-     * validate if full refund is possible
+     * Validate if full refund is possible
      *
      * @param InvoiceInterface $invoice
      * @param MethodInterface $method

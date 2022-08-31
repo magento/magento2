@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model\Order\Validation;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
@@ -20,6 +21,11 @@ class CanRefund implements ValidatorInterface
     private $priceCurrency;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * CanRefund constructor.
      *
      * @param PriceCurrencyInterface $priceCurrency
@@ -27,6 +33,7 @@ class CanRefund implements ValidatorInterface
     public function __construct(
         PriceCurrencyInterface $priceCurrency
     ) {
+        $this->objectManager = ObjectManager::getInstance();
         $this->priceCurrency = $priceCurrency;
     }
 
