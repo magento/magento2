@@ -21,22 +21,22 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  */
 class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
-    const VALUE_ALL_GROUPS = 'ALL GROUPS';
-    const VALUE_ALL_WEBSITES = 'All Websites';
-    const COL_SKU = 'sku';
-    const COL_TIER_PRICE_WEBSITE = 'tier_price_website';
-    const COL_TIER_PRICE_CUSTOMER_GROUP = 'tier_price_customer_group';
-    const COL_TIER_PRICE_QTY = 'tier_price_qty';
-    const COL_TIER_PRICE = 'tier_price';
-    const COL_TIER_PRICE_PERCENTAGE_VALUE = 'percentage_value';
-    const COL_TIER_PRICE_TYPE = 'tier_price_value_type';
-    const TIER_PRICE_TYPE_FIXED = 'Fixed';
-    const TIER_PRICE_TYPE_PERCENT = 'Discount';
-    const TABLE_TIER_PRICE = 'catalog_product_entity_tier_price';
-    const DEFAULT_ALL_GROUPS_GROUPED_PRICE_VALUE = '0';
-    const ENTITY_TYPE_CODE = 'advanced_pricing';
-    const VALIDATOR_MAIN = 'validator';
-    const VALIDATOR_WEBSITE = 'validator_website';
+    public const VALUE_ALL_GROUPS = 'ALL GROUPS';
+    public const VALUE_ALL_WEBSITES = 'All Websites';
+    public const COL_SKU = 'sku';
+    public const COL_TIER_PRICE_WEBSITE = 'tier_price_website';
+    public const COL_TIER_PRICE_CUSTOMER_GROUP = 'tier_price_customer_group';
+    public const COL_TIER_PRICE_QTY = 'tier_price_qty';
+    public const COL_TIER_PRICE = 'tier_price';
+    public const COL_TIER_PRICE_PERCENTAGE_VALUE = 'percentage_value';
+    public const COL_TIER_PRICE_TYPE = 'tier_price_value_type';
+    public const TIER_PRICE_TYPE_FIXED = 'Fixed';
+    public const TIER_PRICE_TYPE_PERCENT = 'Discount';
+    public const TABLE_TIER_PRICE = 'catalog_product_entity_tier_price';
+    public const DEFAULT_ALL_GROUPS_GROUPED_PRICE_VALUE = '0';
+    public const ENTITY_TYPE_CODE = 'advanced_pricing';
+    public const VALIDATOR_MAIN = 'validator';
+    public const VALIDATOR_WEBSITE = 'validator_website';
 
     /**
      * @deprecated
@@ -76,9 +76,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $needColumnCheck = true;
 
     /**
-     * Valid column names.
-     *
-     * @array
+     * @var array
      */
     protected $validColumnNames = [
         self::COL_SKU,
@@ -144,8 +142,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $_permanentAttributes = [self::COL_SKU];
 
     /**
-     * Catalog product entity
-     *
      * @var string
      */
     protected $_catalogProductEntity;
@@ -156,8 +152,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $dateTime;
 
     /**
-     * Product entity link field
-     *
      * @var string
      */
     private $productEntityLinkField;
@@ -272,7 +266,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $rowData
      * @param int $rowNum
      * @return bool
-     * @throws \Zend_Validate_Exception
      */
     public function validateRow(array $rowData, $rowNum)
     {

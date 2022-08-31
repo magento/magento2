@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Translate\Test\Unit;
 
+use Laminas\I18n\Translator\Translator;
 use Magento\Framework\Translate\Adapter;
 use PHPUnit\Framework\TestCase;
 
@@ -15,14 +16,13 @@ class AdapterTest extends TestCase
     /**
      * Check that translate calls are passed to given translator
      *
-     * @param string $method
      * @param string $strToTranslate
      * @param string $translatedStr
      * @dataProvider translateDataProvider
      */
-    public function testTranslate($method, $strToTranslate, $translatedStr)
+    public function testTranslate($strToTranslate, $translatedStr)
     {
-        $translatorMock = $this->getMockBuilder('stdClass')
+        $translatorMock = $this->getMockBuilder(Translator::class)
             ->setMethods(['translate'])->getMock();
         $translatorMock->expects(
             $this->once()
@@ -33,11 +33,10 @@ class AdapterTest extends TestCase
         )->willReturn(
             $translatedStr
         );
-        $translator = new Adapter(
-            ['translator' => [$translatorMock, 'translate']]
-        );
+        $translator = new Adapter();
+        $translator->setTranslator($translatorMock);
 
-        $this->assertEquals($translatedStr, $translator->{$method}($strToTranslate));
+        $this->assertEquals($translatedStr, $translator->translate($strToTranslate));
     }
 
     /**
@@ -45,7 +44,7 @@ class AdapterTest extends TestCase
      */
     public function translateDataProvider()
     {
-        return [['translate', 'Translate me!', 'Translated string']];
+        return [['Translate me!', 'Translated string']];
     }
 
     /**
