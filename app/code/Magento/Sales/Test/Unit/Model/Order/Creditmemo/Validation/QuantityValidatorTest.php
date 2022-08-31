@@ -21,6 +21,9 @@ use Magento\Store\Api\Data\StoreConfigInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class QuantityValidatorTest extends TestCase
 {
     /**
@@ -169,7 +172,7 @@ class QuantityValidatorTest extends TestCase
             $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory::class),
             $this->createMock(\Magento\Framework\Math\CalculatorFactory::class),
             $this->createMock(\Magento\Store\Model\StoreManagerInterface::class),
-            $this->createMock( \Magento\Sales\Model\Order\Creditmemo\CommentFactory::class),
+            $this->createMock(\Magento\Sales\Model\Order\Creditmemo\CommentFactory::class),
             $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory::class),
             $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class),
             $this->createMock(\Magento\Framework\Model\ResourceModel\AbstractResource::class),
