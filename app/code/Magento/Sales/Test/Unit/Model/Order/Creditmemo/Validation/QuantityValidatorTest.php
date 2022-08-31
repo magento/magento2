@@ -68,6 +68,7 @@ class QuantityValidatorTest extends TestCase
     {
         $creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
             ->disableOriginalConstructor()
+            ->addMethods(['isValidGrandTotal'])
             ->getMockForAbstractClass();
         $creditmemoMock->expects($this->exactly(2))->method('getOrderId')
             ->willReturn(1);
@@ -83,8 +84,8 @@ class QuantityValidatorTest extends TestCase
             ->method('get')
             ->with(1)
             ->willReturn($orderMock);
-        $creditmemoMock->expects($this->once())->method('getGrandTotal')
-            ->willReturn(0);
+        $creditmemoMock->expects($this->once())->method('isValidGrandTotal')
+            ->willReturn(false);
         $this->assertEquals(
             [
                 __('The credit memo\'s total must be positive.')
@@ -113,7 +114,10 @@ class QuantityValidatorTest extends TestCase
         $orderItemId = 1;
         $creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
             ->disableOriginalConstructor()
+            ->addMethods(['isValidGrandTotal'])
             ->getMockForAbstractClass();
+        $creditmemoMock->expects($this->once())->method('isValidGrandTotal')
+            ->willReturn(true);
         $creditmemoMock->expects($this->exactly(2))->method('getOrderId')
             ->willReturn($orderId);
         $creditmemoItemMock = $this->getMockBuilder(
@@ -138,8 +142,6 @@ class QuantityValidatorTest extends TestCase
             ->method('get')
             ->with($orderId)
             ->willReturn($orderMock);
-        $creditmemoMock->expects($this->once())->method('getGrandTotal')
-            ->willReturn(12);
 
         $this->assertEquals(
             [
@@ -171,15 +173,17 @@ class QuantityValidatorTest extends TestCase
         $sku,
         $total,
         array $expected,
-        bool $isQtyDecimalAllowed
+        bool $isQtyDecimalAllowed,
+        bool $isValidGrandTotal
     ) {
         $creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
             ->disableOriginalConstructor()
+            ->addMethods(['isValidGrandTotal'])
             ->getMockForAbstractClass();
         $creditmemoMock->expects($this->exactly(2))->method('getOrderId')
             ->willReturn($orderId);
-        $creditmemoMock->expects($this->once())->method('getGrandTotal')
-            ->willReturn($total);
+        $creditmemoMock->expects($this->once())->method('isValidGrandTotal')
+            ->willReturn($isValidGrandTotal);
         $creditmemoItemMock = $this->getMockBuilder(
             CreditmemoItemInterface::class
         )->disableOriginalConstructor()
@@ -239,7 +243,8 @@ class QuantityValidatorTest extends TestCase
                 'sku',
                 'total' => 15,
                 'expected' => [],
-                'isQtyDecimalAllowed' => false
+                'isQtyDecimalAllowed' => false,
+                'isValidGrandTotal' => true
             ],
             [
                 'orderId' => 1,
@@ -249,7 +254,8 @@ class QuantityValidatorTest extends TestCase
                 'sku',
                 'total' => 15,
                 'expected' => [],
-                'isQtyDecimalAllowed' => false
+                'isQtyDecimalAllowed' => false,
+                'isValidGrandTotal' => true
             ],
             [
                 'orderId' => 1,
@@ -264,7 +270,8 @@ class QuantityValidatorTest extends TestCase
                         $sku
                     )
                 ],
-                'isQtyDecimalAllowed' => false
+                'isQtyDecimalAllowed' => false,
+                'isValidGrandTotal' => true
             ],
             [
                 'orderId' => 1,
@@ -281,8 +288,20 @@ class QuantityValidatorTest extends TestCase
                     ),
                     __('The credit memo\'s total must be positive.')
                 ],
-                'isQtyDecimalAllowed' => false
+                'isQtyDecimalAllowed' => false,
+                'isValidGrandTotal' => false
             ],
+            [
+                'orderId' => 1,
+                'orderItemId' => 1,
+                'qtyToRequest' => 1,
+                'qtyToRefund' => 1,
+                'sku',
+                'total' => 0,
+                'expected' => [],
+                'isQtyDecimalAllowed' => false,
+                'isValidGrandTotal' => true
+            ]
         ];
     }
 }
