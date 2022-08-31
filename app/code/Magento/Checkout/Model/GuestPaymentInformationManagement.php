@@ -176,7 +176,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         }
         $this->limitShippingCarrier($quote);
 
-        if (!(int)$quote->getItemsQty()) {
+        if (!(float)$quote->getItemsQty()) {
             throw new CouldNotSaveException(__('Some of the products are disabled.'));
         }
 
