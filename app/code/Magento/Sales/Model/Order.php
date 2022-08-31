@@ -5,7 +5,6 @@
  */
 namespace Magento\Sales\Model;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Config\Model\Config\Source\Nooptreq;
 use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\RegionFactory;
@@ -197,9 +196,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     protected $_orderConfig;
 
     /**
-     * @var ProductRepositoryInterface
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @deprecated 100.1.0 Remove unused dependency.
      */
-    protected ProductRepositoryInterface $productRepository;
+    protected $productRepository;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
@@ -339,7 +339,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Order\Config $orderConfig
-     * @param ProductRepositoryInterface $productRepository
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory $orderItemCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Sales\Api\InvoiceManagementInterface $invoiceManagement
@@ -378,7 +378,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Config $orderConfig,
-        ProductRepositoryInterface $productRepository,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory $orderItemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Sales\Api\InvoiceManagementInterface $invoiceManagement,
@@ -750,11 +750,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $hasDueAmount = $this->canInvoice() && ($checkAmtTotalPaid);
         //case when paid amount is refunded and order has creditmemo created
         $creditmemos = ($this->getCreditmemosCollection() === false) ?
-            true : ($this->_memoCollectionFactory->create()->setOrderFilter($this)->getTotalCount() > 0);
+             true : ($this->_memoCollectionFactory->create()->setOrderFilter($this)->getTotalCount() > 0);
         $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
         if (($hasDueAmount || $paidAmtIsRefunded) ||
             (!$checkAmtTotalPaid &&
-                abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)) {
+            abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)) {
             return false;
         }
         return true;
@@ -839,49 +839,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         return false;
     }
 
-    /**
-     * Check if all items are remaining items after partially refunded are shipped
-     *
-     * @return bool
-     */
-    public function isPartiallyRefundedOrderShipped(): bool
-    {
-        if ($this->getShippedItems() > 0
-            && $this->getTotalQtyOrdered() <= $this->getRefundedItems() + $this->getShippedItems()) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Get all refunded items number
-     *
-     * @return int
-     */
-    private function getRefundedItems(): int
-    {
-        $num_of_refunded_items = 0;
-        foreach ($this->getAllItems() as $item) {
-            if ($item->getProductType() == 'simple') {
-                $num_of_refunded_items += (int)$item->getQtyRefunded();
-            }
-        }
-        return $num_of_refunded_items;
-    }
-
-    /**
-     * Get all shipped items number
-     *
-     * @return int
-     */
-    private function getShippedItems(): int
-    {
-        $num_of_shipped_items= 0;
-        foreach ($this->getAllItems() as $item) {
-            $num_of_shipped_items += (int)$item->getQtyShipped();
-        }
-        return $num_of_shipped_items;
-    }
     /**
      * Check if item is refunded.
      *

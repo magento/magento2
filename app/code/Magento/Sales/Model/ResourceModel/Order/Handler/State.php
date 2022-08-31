@@ -39,7 +39,7 @@ class State
                 $order->setState(Order::STATE_CLOSED)
                     ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_CLOSED));
             } elseif ($currentState === Order::STATE_PROCESSING
-                && (!$order->canShip() || $order->isPartiallyRefundedOrderShipped())
+                && (!$order->canShip() || $this->isPartiallyRefundedOrderShipped($order))
             ) {
                 $order->setState(Order::STATE_COMPLETE)
                     ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_COMPLETE));
@@ -48,5 +48,52 @@ class State
             }
         }
         return $this;
+    }
+
+    /**
+     * Check if all items are remaining items after partially refunded are shipped
+     *  @param Order $order
+     *
+     * @return bool
+     */
+    public function isPartiallyRefundedOrderShipped(Order $order): bool
+    {
+        if ($this->getShippedItems($order) > 0
+            && $order->getTotalQtyOrdered() <= $this->getRefundedItems($order) + $this->getShippedItems($order)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get all refunded items number
+     *  @param Order $order
+     *
+     * @return int
+     */
+    private function getRefundedItems(Order $order): int
+    {
+        $num_of_refunded_items = 0;
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getProductType() == 'simple') {
+                $num_of_refunded_items += (int)$item->getQtyRefunded();
+            }
+        }
+        return $num_of_refunded_items;
+    }
+
+    /**
+     * Get all shipped items number
+     * @param Order $order
+     *
+     * @return int
+     */
+    private function getShippedItems(Order $order): int
+    {
+        $num_of_shipped_items= 0;
+        foreach ($order->getAllItems() as $item) {
+            $num_of_shipped_items += (int)$item->getQtyShipped();
+        }
+        return $num_of_shipped_items;
     }
 }
