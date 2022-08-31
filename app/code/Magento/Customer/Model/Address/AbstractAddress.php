@@ -285,10 +285,12 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         } elseif (is_array($value) && $this->isAddressMultilineAttribute($key)) {
             $value = $this->_implodeArrayValues($value);
         } elseif (self::CUSTOM_ATTRIBUTES === $key && is_array($value)) {
-            foreach ($value as &$attribute) {
+            $newValue = [];
+            foreach ($value as $attribute) {
                 $attribute = is_array($attribute) ? $attribute : $attribute->__toArray();
-                $attribute = $this->processCustomAttribute($attribute);
+                $newValue[] = $this->processCustomAttribute($attribute);
             }
+            $value = $newValue;
         }
 
         return parent::setData($key, $value);
