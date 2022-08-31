@@ -20,7 +20,7 @@ class ChildCollectionFactory extends CollectionFactory
      */
     public function create(array $data = [])
     {
-        $collection = $this->_objectManager->create($this->_instanceName, $data);
+        $collection = parent::create($data);
         $collection->setFlag('product_children', true);
         return $collection;
     }

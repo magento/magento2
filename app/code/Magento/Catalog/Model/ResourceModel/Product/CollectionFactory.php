@@ -17,14 +17,14 @@ class CollectionFactory
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager = null;
+    private $objectManager = null;
 
     /**
      * Instance name to create
      *
      * @var string
      */
-    protected $_instanceName = null;
+    private $instanceName = null;
 
     /**
      * Factory constructor
@@ -36,8 +36,8 @@ class CollectionFactory
         \Magento\Framework\ObjectManagerInterface $objectManager,
         $instanceName = Collection::class
     ) {
-        $this->_objectManager = $objectManager;
-        $this->_instanceName = $instanceName;
+        $this->objectManager = $objectManager;
+        $this->instanceName = $instanceName;
     }
 
     /**
@@ -48,6 +48,6 @@ class CollectionFactory
      */
     public function create(array $data = [])
     {
-        return $this->_objectManager->create($this->_instanceName, $data);
+        return $this->objectManager->create($this->instanceName, $data);
     }
 }
