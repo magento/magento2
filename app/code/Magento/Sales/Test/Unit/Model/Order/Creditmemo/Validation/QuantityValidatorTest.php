@@ -324,7 +324,7 @@ class QuantityValidatorTest extends TestCase
                     __('The credit memo\'s total must be positive.')
                 ],
                 'isQtyDecimalAllowed' => false,
-                'isValidGrandTotal' => false
+                'isAllowZeroGrandTotal' => false
             ],
             [
                 'orderId' => 1,
