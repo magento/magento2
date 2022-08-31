@@ -42,7 +42,7 @@ class InputValidatorTest extends TestCase
     protected $localeValidator;
 
     /**
-     * @throws \Zend_Validate_Exception
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -76,9 +76,6 @@ class InputValidatorTest extends TestCase
         );
     }
 
-    /**
-     * @throws \Zend_Validate_Exception
-     */
     public function testValidate()
     {
         $input = $this->getMockBuilder(ArrayInput::class)

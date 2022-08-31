@@ -26,7 +26,9 @@
  */
 namespace Magento\MediaStorage\Model\File\Validator;
 
-class AvailablePath extends \Zend_Validate_Abstract
+use Laminas\Validator\AbstractValidator;
+
+class AvailablePath extends AbstractValidator
 {
     public const PROTECTED_PATH = 'protectedPath';
 
@@ -39,7 +41,7 @@ class AvailablePath extends \Zend_Validate_Abstract
      *
      * @var string
      */
-    protected $_value;
+    protected $value;
 
     /**
      * @var string[]
@@ -59,11 +61,17 @@ class AvailablePath extends \Zend_Validate_Abstract
     protected $_pathsData;
 
     /**
+     * @var array
+     */
+    protected $messageTemplates;
+
+    /**
      * Construct
      */
     public function __construct()
     {
         $this->_initMessageTemplates();
+        parent::__construct();
     }
 
     /**
@@ -73,8 +81,8 @@ class AvailablePath extends \Zend_Validate_Abstract
      */
     protected function _initMessageTemplates()
     {
-        if (!$this->_messageTemplates) {
-            $this->_messageTemplates = [
+        if (!$this->messageTemplates) {
+            $this->messageTemplates = [
                 self::PROTECTED_PATH => __('Path "%value%" is protected and cannot be used.'),
                 self::NOT_AVAILABLE_PATH => __('Path "%value%" is not available and cannot be used.'),
                 self::PROTECTED_LFI => __('Path "%value%" may not include parent directory traversal ("../", "..\\").'),
@@ -193,20 +201,20 @@ class AvailablePath extends \Zend_Validate_Abstract
     public function isValid($value)
     {
         $value = $value !== null ? trim($value) : '';
-        $this->_setValue($value);
+        $this->setValue($value);
 
         if (!$this->_availablePaths && !$this->_protectedPaths) {
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(__('Please set available and/or protected paths list(s) before validation.'));
         }
 
-        if ($this->_value && preg_match('#\.\.[\\\/]#', $this->_value)) {
-            $this->_error(self::PROTECTED_LFI, $this->_value);
+        if ($this->value && preg_match('#\.\.[\\\/]#', $this->value)) {
+            $this->error(self::PROTECTED_LFI, $this->value);
             return false;
         }
 
         //validation
-        $value = str_replace('\\', '/', $this->_value ?? '');
+        $value = str_replace('\\', '/', $this->value ?? '');
         // phpcs:disable Magento2.Functions.DiscouragedFunction
         $valuePathInfo = pathinfo(ltrim($value, '\\/'));
         if ($valuePathInfo['dirname'] == '.' || $valuePathInfo['dirname'] == '/') {
@@ -214,11 +222,11 @@ class AvailablePath extends \Zend_Validate_Abstract
         }
 
         if ($this->_protectedPaths && !$this->_isValidByPaths($valuePathInfo, $this->_protectedPaths, true)) {
-            $this->_error(self::PROTECTED_PATH, $this->_value);
+            $this->error(self::PROTECTED_PATH, $this->value);
             return false;
         }
         if ($this->_availablePaths && !$this->_isValidByPaths($valuePathInfo, $this->_availablePaths, false)) {
-            $this->_error(self::NOT_AVAILABLE_PATH, $this->_value);
+            $this->error(self::NOT_AVAILABLE_PATH, $this->value);
             return false;
         }
 
