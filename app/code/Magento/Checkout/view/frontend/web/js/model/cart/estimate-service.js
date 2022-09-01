@@ -78,6 +78,7 @@ define([
         };
 
     quote.shippingAddress.subscribe(estimateTotalsAndUpdateRates);
+    quote.shippingAddress.subscribe(estimateTotalsShipping);
     quote.shippingMethod.subscribe(estimateTotalsShipping);
     quote.billingAddress.subscribe(estimateTotalsBilling);
 });
