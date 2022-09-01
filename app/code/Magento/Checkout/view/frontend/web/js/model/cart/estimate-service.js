@@ -77,8 +77,10 @@ define([
             }
         };
 
-    quote.shippingAddress.subscribe(estimateTotalsAndUpdateRates);
+    if(!quote.isVirtual()) {
+        quote.shippingAddress.subscribe(estimateTotalsAndUpdateRates);
+        quote.shippingMethod.subscribe(estimateTotalsShipping);
+    }
     quote.shippingAddress.subscribe(estimateTotalsShipping);
-    quote.shippingMethod.subscribe(estimateTotalsShipping);
     quote.billingAddress.subscribe(estimateTotalsBilling);
 });
