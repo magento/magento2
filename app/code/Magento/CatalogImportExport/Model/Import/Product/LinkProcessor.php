@@ -103,7 +103,7 @@ class LinkProcessor
             $bind = [':link_id' => $linkId, ':position' => 'position'];
             $positionAttrId[$linkId] = $importEntity->getConnection()->fetchOne($select, $bind);
         }
-        while ($bunch = $dataSourceModel->getNextBunch($ids)) {
+        while ($bunch = $dataSourceModel->getNextUniqueBunch($ids)) {
             $nextLinkId = $this->resourceHelper->getNextAutoincrement($mainTable);
             $this->processLinkBunches($importEntity, $linkField, $bunch, $resource, $nextLinkId, $positionAttrId);
         }

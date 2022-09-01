@@ -342,7 +342,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     {
         $this->_cachedSkuToDelete = null;
         $listSku = [];
-        while ($bunch = $this->_dataSourceModel->getNextBunch($this->ids)) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             foreach ($bunch as $rowNum => $rowData) {
                 $this->validateRow($rowData, $rowNum);
                 if (!$this->getErrorAggregator()->isRowInvalid($rowNum)) {
@@ -389,7 +389,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         }
         $listSku = [];
         $tierPrices = [];
-        while ($bunch = $this->_dataSourceModel->getNextBunch($this->ids)) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->validateRow($rowData, $rowNum)) {
                     $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);

@@ -144,7 +144,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      */
     public function getBehavior($ids = null)
     {
-        return $this->getUniqueColumnData('behavior', $ids);
+        return $this->getUniqueColumnDataWithIds('behavior', $ids);
     }
 
     /**
@@ -155,18 +155,30 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      */
     public function getEntityTypeCode($ids = null)
     {
-        return $this->getUniqueColumnData('entity', $ids);
+        return $this->getUniqueColumnDataWithIds('entity', $ids);
     }
 
     /**
      * Return request data from import data table
      *
      * @param string $code parameter name
-     * @param array|null $ids
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getUniqueColumnData($code, $ids = null)
+    public function getUniqueColumnData($code)
+    {
+        $connection = $this->getConnection();
+        $values = array_unique($connection->fetchCol($connection->select()->from($this->getMainTable(), [$code])));
+
+        if (count($values) != 1) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Error in data structure: %1 values are mixed', $code)
+            );
+        }
+        return $values[0];
+    }
+
+    public function getUniqueColumnDataWithIds($code, $ids = null)
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from($this->getMainTable(), [$code]);
@@ -186,10 +198,35 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     /**
      * Get next bunch of validated rows.
      *
+     * @return array|null
+     */
+    public function getNextBunch()
+    {
+        if (null === $this->_iterator) {
+            $this->_iterator = $this->getIterator();
+            $this->_iterator->rewind();
+        }
+        $dataRow = null;
+        if ($this->_iterator->valid()) {
+            $encodedData = $this->_iterator->current();
+            if (array_key_exists(0, $encodedData) && $encodedData[0]) {
+                $dataRow = $this->jsonHelper->jsonDecode($encodedData[0]);
+                $this->_iterator->next();
+            }
+        }
+        if (!$dataRow) {
+            $this->_iterator = null;
+        }
+        return $dataRow;
+    }
+
+    /**
+     * Get next bunch of validated rows.
+     *
      * @param array|null $ids
      * @return array|null
      */
-    public function getNextBunch($ids = null)
+    public function getNextUniqueBunch($ids = null)
     {
         if (null === $this->_iterator) {
             $this->_iterator = $this->getIteratorForCustomQuery($ids);

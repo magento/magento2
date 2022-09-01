@@ -1052,7 +1052,7 @@ class Product extends AbstractEntity
     {
         $productEntityTable = $this->_resourceFactory->create()->getEntityTable();
 
-        while ($bunch = $this->_dataSourceModel->getNextBunch($this->ids)) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $idsToDelete = [];
 
             foreach ($bunch as $rowNum => $rowData) {
@@ -1148,7 +1148,7 @@ class Product extends AbstractEntity
         foreach ($this->_productTypeModels as $productTypeModel) {
             $productTypeModel->saveData();
         }
-        $this->linkProcessor->saveLinks($this, $this->_dataSourceModel, $this->getProductEntityLinkField(), $this->ids);
+        $this->linkProcessor->saveLinks($this, $this->_dataSourceModel, $this->getProductEntityLinkField(), $this->getIds());
         $this->_saveStockItem();
         if ($this->_replaceFlag) {
             $this->getOptionEntity()->clearProductsSkuToId();
@@ -1575,7 +1575,7 @@ class Product extends AbstractEntity
         $productsQty = null;
         $entityLinkField = $this->getProductEntityLinkField();
 
-        while ($bunch = $this->_dataSourceModel->getNextBunch($this->ids)) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $entityRowsIn = [];
             $entityRowsUp = [];
             $attributes = [];
@@ -2325,7 +2325,7 @@ class Product extends AbstractEntity
      */
     protected function _saveStockItem()
     {
-        while ($bunch = $this->_dataSourceModel->getNextBunch($this->ids)) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $stockData = [];
             $productIdsToReindex = [];
             $stockChangedProductIds = [];
@@ -2462,7 +2462,7 @@ class Product extends AbstractEntity
      */
     public function getNextBunch()
     {
-        return $this->_dataSourceModel->getNextBunch($this->ids);
+        return $this->_dataSourceModel->getNextUniqueBunch($this->getIds());
     }
 
     /**

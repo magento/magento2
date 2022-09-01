@@ -55,7 +55,7 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
      */
     public function getNextBunch($ids = null)
     {
-        $bunchRows = parent::getNextBunch($ids);
+        $bunchRows = parent::getNextUniqueBunch($ids);
         if ($bunchRows != null) {
             $rows = [];
             foreach ($bunchRows as $rowNumber => $rowData) {
