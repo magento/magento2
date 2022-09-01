@@ -78,7 +78,7 @@ class AuthorizationTest extends TestCase
         $this->uriMock->expects($this->any())
             ->method('getQuery')
             ->willReturnCallback(
-                function () use (&$urlParts) {
+                function () {
                     return 'callback=' . self::REDIRECT_URL;
                 }
             );
