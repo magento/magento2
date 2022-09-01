@@ -512,7 +512,7 @@ class Address extends AbstractCustomer
     {
         //Preparing data for mass validation/import.
         $rows = [];
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $rows[] = $bunch;
         }
 
@@ -521,7 +521,7 @@ class Address extends AbstractCustomer
         $this->_dataSourceModel->getIterator()->rewind();
 
         //Importing
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $newRows = [];
             $updateRows = [];
             $attributes = [];

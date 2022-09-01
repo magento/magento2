@@ -53,7 +53,7 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
      * @param array|null $ids
      * @return array|null
      */
-    public function getNextBunch($ids = null)
+    public function getNextUniqueBunch($ids = null)
     {
         $bunchRows = parent::getNextUniqueBunch($ids);
         if ($bunchRows != null) {
