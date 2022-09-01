@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Model\Quote;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Guest payment information management model.
@@ -54,7 +55,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     protected $cartRepository;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var Logger
      */
     private $logger;
 
@@ -80,6 +81,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      * @param \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param CartRepositoryInterface $cartRepository
+     * @param Logger $logger
      * @param PaymentProcessingRateLimiterInterface|null $paymentsRateLimiter
      * @param PaymentSavingRateLimiterInterface|null $savingRateLimiter
      * @codeCoverageIgnore
@@ -91,6 +93,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
         CartRepositoryInterface $cartRepository,
+        Logger $logger,
         ?PaymentProcessingRateLimiterInterface $paymentsRateLimiter = null,
         ?PaymentSavingRateLimiterInterface $savingRateLimiter = null
     ) {
@@ -104,6 +107,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
             ?? ObjectManager::getInstance()->get(PaymentProcessingRateLimiterInterface::class);
         $this->savingRateLimiter = $savingRateLimiter
             ?? ObjectManager::getInstance()->get(PaymentSavingRateLimiterInterface::class);
+        $this->logger = $logger;
     }
 
     /**
@@ -126,7 +130,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         try {
             $orderId = $this->cartManagement->placeOrder($cartId);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->getLogger()->critical(
+            $this->logger->critical(
                 'Placing an order with quote_id ' . $cartId . ' is failed: ' . $e->getMessage()
             );
             throw new CouldNotSaveException(
@@ -134,7 +138,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
                 $e
             );
         } catch (\Exception $e) {
-            $this->getLogger()->critical($e);
+            $this->logger->critical($e);
             throw new CouldNotSaveException(
                 __('An error occurred on the server. Please try to place the order again.'),
                 $e
@@ -191,20 +195,6 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     {
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->paymentInformationManagement->getPaymentInformation($quoteIdMask->getQuoteId());
-    }
-
-    /**
-     * Get logger instance
-     *
-     * @return \Psr\Log\LoggerInterface
-     * @deprecated 100.1.8
-     */
-    private function getLogger()
-    {
-        if (!$this->logger) {
-            $this->logger = \Magento\Framework\App\ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
-        }
-        return $this->logger;
     }
 
     /**
