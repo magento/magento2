@@ -1148,7 +1148,12 @@ class Product extends AbstractEntity
         foreach ($this->_productTypeModels as $productTypeModel) {
             $productTypeModel->saveData();
         }
-        $this->linkProcessor->saveLinks($this, $this->_dataSourceModel, $this->getProductEntityLinkField(), $this->getIds());
+        $this->linkProcessor->saveLinks(
+            $this,
+            $this->_dataSourceModel,
+            $this->getProductEntityLinkField(),
+            $this->getIds()
+        );
         $this->_saveStockItem();
         if ($this->_replaceFlag) {
             $this->getOptionEntity()->clearProductsSkuToId();
@@ -1836,7 +1841,6 @@ class Product extends AbstractEntity
                                 $mediaGalleryStoreData['disabled'] = 0;
                                 $mediaGallery[Store::DEFAULT_STORE_ID][$rowSku][$uploadedFile] = $mediaGalleryStoreData;
                             }
-
                         }
                     }
                 }

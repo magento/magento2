@@ -178,6 +178,14 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
         return $values[0];
     }
 
+    /**
+     * Retrieve Unique Column Data for specific Ids
+     *
+     * @param $code
+     * @param $ids
+     * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function getUniqueColumnDataWithIds($code, $ids = null)
     {
         $connection = $this->getConnection();
@@ -221,7 +229,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     }
 
     /**
-     * Get next bunch of validated rows.
+     * Get next unique bunch of validated rows.
      *
      * @param array|null $ids
      * @return array|null

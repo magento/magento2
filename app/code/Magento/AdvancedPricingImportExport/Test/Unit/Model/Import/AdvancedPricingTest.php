@@ -328,7 +328,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
             ]
         ];
         $this->dataSourceModel
-            ->method('getNextBunch')
+            ->method('getNextUniqueBunch')
             ->willReturnOnConsecutiveCalls($testBunch);
         $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(false);
         $this->advancedPricing->method('saveProductPrices')->willReturnSelf();
@@ -400,7 +400,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
             ->method('getBehavior')
             ->willReturn(Import::BEHAVIOR_APPEND);
         $this->dataSourceModel
-            ->method('getNextBunch')
+            ->method('getNextUniqueBunch')
             ->willReturnOnConsecutiveCalls($data);
         $advancedPricing->method('validateRow')->willReturn(true);
 
@@ -524,7 +524,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
             Import::BEHAVIOR_REPLACE
         );
         $this->dataSourceModel
-            ->method('getNextBunch')
+            ->method('getNextUniqueBunch')
             ->willReturnOnConsecutiveCalls($data);
         $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(true);
 
@@ -577,7 +577,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
         ];
 
         $this->dataSourceModel
-            ->method('getNextBunch')
+            ->method('getNextUniqueBunch')
             ->willReturnOnConsecutiveCalls($data);
         $this->advancedPricing->method('validateRow')->willReturn(true);
         $expectedSkuList = ['sku value'];
