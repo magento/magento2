@@ -51,6 +51,7 @@ Inventory,Inventory
 "Decrease Stock When Order is Placed","Decrease Stock When Order is Placed"
 "Set Items' Status to be In Stock When Order is Cancelled","Set Items' Status to be In Stock When Order is Cancelled"
 "Display Out of Stock Products","Display Out of Stock Products"
+"Display Out of Stock Products at the end of the catalog","Display Out of Stock Products at the end of the catalog"
 "Products will still be shown by direct product URLs.","Products will still be shown by direct product URLs."
 "Only X left Threshold","Only X left Threshold"
 "Display Products Availability in Stock on Storefront","Display Products Availability in Stock on Storefront"
