@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <group value="SalesRule"/>
         </annotations>
+
         <before>
             <!-- Login to admin panel -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -36,11 +37,7 @@
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.name}}" stepKey="fillRuleName"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.description}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.description}}" stepKey="fillDescription"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.websites}}" stepKey="selectWebsites"/>
-
-        <click selector="{{AdminCartPriceRulesFormSection.customerGroups}}" stepKey="expandCustomerGroups" after="selectWebsites"/>
-        <click selector="{{AdminCartPriceRulesFormSection.customerGroupsSelectAll}}" stepKey="clickSelectAll" after="expandCustomerGroups"/>
-        <click selector="{{AdminCartPriceRulesFormSection.customerGroupsDoneBtn}}" stepKey="clickDone" after="clickSelectAll"/>
-
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.coupon_type}}" stepKey="selectCouponType"/>
         <scrollTo selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="scrollToActionsHeader"/>
         <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
@@ -60,6 +57,7 @@
         <conditionalClick selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.actionsHeader}}" visible="true" stepKey="clickExpandActions"/>
         <see selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.simple_action}}" stepKey="seeActionApplyType"/>
         <seeInField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.discount_amount}}" stepKey="seeDiscountAmount"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="Please Select" stepKey="selectFreeShippingType"/>
+        <seeOptionIsSelected selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="Please Select" stepKey="selectFreeShippingType"/>
 </test>
 </tests>
+
