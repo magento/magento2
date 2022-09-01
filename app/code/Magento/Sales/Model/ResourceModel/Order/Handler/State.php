@@ -52,8 +52,8 @@ class State
 
     /**
      * Check if all items are remaining items after partially refunded are shipped
-     *  @param Order $order
      *
+     * @param Order $order
      * @return bool
      */
     public function isPartiallyRefundedOrderShipped(Order $order): bool
@@ -67,8 +67,8 @@ class State
 
     /**
      * Get all refunded items number
-     *  @param Order $order
      *
+     * @param Order $order
      * @return int
      */
     private function getRefundedItems(Order $order): int
@@ -84,8 +84,8 @@ class State
 
     /**
      * Get all shipped items number
-     * @param Order $order
      *
+     * @param Order $order
      * @return int
      */
     private function getShippedItems(Order $order): int
