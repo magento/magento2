@@ -58,6 +58,5 @@
         <see selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.simple_action}}" stepKey="seeActionApplyType"/>
         <seeInField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.discount_amount}}" stepKey="seeDiscountAmount"/>
         <seeOptionIsSelected selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="Please Select" stepKey="selectFreeShippingType"/>
-</test>
+    </test>
 </tests>
-
