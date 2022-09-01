@@ -135,8 +135,8 @@ define([
             drEl.instanceCtx = this.getRecord(originRecord[0]);
             drEl.eventMousedownY = this.getPageY(event);
             drEl.minYpos =
-                $table.offset().top - originRecord.offset().top + $table.children('thead').outerHeight();
-            drEl.maxYpos = drEl.minYpos + $table.children('tbody').outerHeight() - originRecord.outerHeight();
+                $table.offset().top - originRecord.offset().top + ($table.children('thead').outerHeight() || 0);
+            drEl.maxYpos = drEl.minYpos + ($table.children('tbody').outerHeight() || 0) - originRecord.outerHeight();
             $tableWrapper.append(recordNode);
             this.body.on('mousemove touchmove', this.mousemoveHandler);
             this.body.on('mouseup touchend', this.mouseupHandler);
