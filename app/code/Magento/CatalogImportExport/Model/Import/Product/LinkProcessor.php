@@ -78,13 +78,15 @@ class LinkProcessor
      * @param Product $importEntity
      * @param Data $dataSourceModel
      * @param string $linkField
+     * @param array $ids
      * @return void
      * @throws LocalizedException
      */
     public function saveLinks(
         Product $importEntity,
         Data $dataSourceModel,
-        string $linkField
+        string $linkField,
+        array $ids
     ): void {
         $resource = $this->linkFactory->create();
         $mainTable = $resource->getMainTable();
@@ -101,7 +103,7 @@ class LinkProcessor
             $bind = [':link_id' => $linkId, ':position' => 'position'];
             $positionAttrId[$linkId] = $importEntity->getConnection()->fetchOne($select, $bind);
         }
-        while ($bunch = $dataSourceModel->getNextBunch()) {
+        while ($bunch = $dataSourceModel->getNextBunch($ids)) {
             $nextLinkId = $this->resourceHelper->getNextAutoincrement($mainTable);
             $this->processLinkBunches($importEntity, $linkField, $bunch, $resource, $nextLinkId, $positionAttrId);
         }
@@ -111,6 +113,7 @@ class LinkProcessor
      * Add link types (exists for backwards compatibility)
      *
      * @deprecated 101.1.0 Use DI to inject to the constructor
+     * @see Nothing
      * @param array $nameToIds
      */
     public function addNameToIds(array $nameToIds): void

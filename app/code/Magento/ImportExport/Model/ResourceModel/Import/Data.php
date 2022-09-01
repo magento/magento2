@@ -54,6 +54,8 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     /**
      * Retrieve an external iterator
      *
+     * @Deprecated
+     * @see getIteratorForCustomQuery
      * @return \Iterator
      */
     #[\ReturnTypeWillChange]
@@ -76,8 +78,38 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     }
 
     /**
-     * Clean all bunches from table.
+     * Retrieve an external iterator for Custom Query
      *
+     * @param array $ids
+     * @return \Iterator
+     */
+    #[\ReturnTypeWillChange]
+    public function getIteratorForCustomQuery($ids)
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()
+            ->from($this->getMainTable(), ['data'])->order('id ASC');
+        if ($ids) {
+            $select = $select->where('ID IN (?)', $ids);
+        }
+        $stmt = $connection->query($select);
+
+        $stmt->setFetchMode(\Zend_Db::FETCH_NUM);
+        if ($stmt instanceof \IteratorAggregate) {
+            $iterator = $stmt->getIterator();
+        } else {
+            // Statement doesn't support iterating, so fetch all records and create iterator ourself
+            $rows = $stmt->fetchAll();
+            $iterator = new \ArrayIterator($rows);
+        }
+
+        return $iterator;
+    }
+
+    /**
+     * Clean all bunches from table.
+     * @Deprecated
+     * @see cleanBunchesWithId
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     public function cleanBunches()
@@ -86,36 +118,63 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     }
 
     /**
+     * Clean bunches with specific Ids
+     *
+     * @param array $ids
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function cleanBunchesWithId($ids)
+    {
+        if (!$ids) {
+            return $this->cleanBunches();
+        } else {
+            return $this->getConnection()->delete(
+                $this->getMainTable(),
+                [
+                    'ID IN (?)' => $ids,
+                ]
+            );
+        }
+    }
+
+    /**
      * Return behavior from import data table.
      *
+     * @param array $ids
      * @return string
      */
-    public function getBehavior()
+    public function getBehavior($ids)
     {
-        return $this->getUniqueColumnData('behavior');
+        return $this->getUniqueColumnData('behavior', $ids);
     }
 
     /**
      * Return entity type code from import data table.
      *
+     * @param array $ids
      * @return string
      */
-    public function getEntityTypeCode()
+    public function getEntityTypeCode($ids)
     {
-        return $this->getUniqueColumnData('entity');
+        return $this->getUniqueColumnData('entity', $ids);
     }
 
     /**
      * Return request data from import data table
      *
      * @param string $code parameter name
+     * @param array|null $ids
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getUniqueColumnData($code)
+    public function getUniqueColumnData($code, $ids = null)
     {
         $connection = $this->getConnection();
-        $values = array_unique($connection->fetchCol($connection->select()->from($this->getMainTable(), [$code])));
+        $select = $connection->select()->from($this->getMainTable(), [$code]);
+        if ($ids) {
+            $select = $select->where('ID in (?)', $ids);
+        }
+        $values = array_unique($connection->fetchCol($select));
 
         if (count($values) != 1) {
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -128,12 +187,13 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     /**
      * Get next bunch of validated rows.
      *
+     * @param array|null $ids
      * @return array|null
      */
-    public function getNextBunch()
+    public function getNextBunch($ids = null)
     {
         if (null === $this->_iterator) {
-            $this->_iterator = $this->getIterator();
+            $this->_iterator = $this->getIteratorForCustomQuery($ids);
             $this->_iterator->rewind();
         }
         $dataRow = null;
@@ -168,9 +228,10 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
             );
         }
 
-        return $this->getConnection()->insert(
+        $this->getConnection()->insert(
             $this->getMainTable(),
             ['behavior' => $behavior, 'entity' => $entity, 'data' => $encodedData]
         );
+        return $this->getConnection()->lastInsertId($this->getMainTable());
     }
 }

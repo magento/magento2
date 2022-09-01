@@ -507,7 +507,7 @@ class Customer extends AbstractCustomer
      */
     protected function _importData()
     {
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextBunch($this->ids)) {
             $this->prepareCustomerData($bunch);
             $entitiesToCreate = [];
             $entitiesToUpdate = [];

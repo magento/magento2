@@ -292,6 +292,13 @@ abstract class AbstractEntity
     private $serializer;
 
     /**
+     * Ids of saved data in DB
+     *
+     * @var array
+     */
+    protected array $ids=[];
+
+    /**
      * @param StringUtils $string
      * @param ScopeConfigInterface $scopeConfig
      * @param ImportFactory $importFactory
@@ -425,7 +432,8 @@ abstract class AbstractEntity
                     }
                     unset($entityGroup);
                 }
-                $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
+                $this->ids[] =
+                    $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
                 $bunchRows = [];
                 $startNewBunch = false;
@@ -896,5 +904,15 @@ abstract class AbstractEntity
     public function getValidColumnNames()
     {
         return $this->validColumnNames;
+    }
+
+    /**
+     * Retrieve Ids of Validated Rows
+     *
+     * @return array
+     */
+    public function getIds()
+    {
+        return $this->ids;
     }
 }

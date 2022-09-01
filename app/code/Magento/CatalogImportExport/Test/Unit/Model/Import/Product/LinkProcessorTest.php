@@ -121,7 +121,7 @@ class LinkProcessorTest extends TestCase
 
         $dataSourceModel = $this->createMock(Data::class);
 
-        $this->linkProcessor->saveLinks($importEntity, $dataSourceModel, '_related_');
+        $this->linkProcessor->saveLinks($importEntity, $dataSourceModel, '_related_', []);
     }
 
     /**

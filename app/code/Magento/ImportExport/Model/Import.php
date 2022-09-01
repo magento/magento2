@@ -474,8 +474,10 @@ class Import extends AbstractModel
      */
     public function importSource()
     {
-        $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode());
-        $this->setData('behavior', $this->getDataSourceModel()->getBehavior());
+        $ids = $this->_getEntityAdapter()->getIds();
+        $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode($ids));
+        $this->setData('behavior', $this->getDataSourceModel()->getBehavior($ids));
+
         //Validating images temporary directory path if the constraint has been provided
         if ($this->hasData('images_base_directory')
             && $this->getData('images_base_directory') instanceof Filesystem\Directory\ReadInterface
@@ -519,6 +521,8 @@ class Import extends AbstractModel
         } else {
             $this->importHistoryModel->invalidateReport($this);
         }
+
+        $this->getDataSourceModel()->cleanBunchesWithId($ids);
 
         return $result;
     }
