@@ -34,7 +34,7 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-                                                          $connectionName = null,
+        $connectionName = null,
         array $arguments = []
     ) {
         parent::__construct($context, $jsonHelper, $connectionName);

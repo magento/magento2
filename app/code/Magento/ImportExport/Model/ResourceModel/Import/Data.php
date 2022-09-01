@@ -108,8 +108,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
 
     /**
      * Clean all bunches from table.
-     * @Deprecated
-     * @see cleanBunchesWithId
+     *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     public function cleanBunches()
@@ -140,10 +139,10 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     /**
      * Return behavior from import data table.
      *
-     * @param array $ids
+     * @param array|null $ids
      * @return string
      */
-    public function getBehavior($ids)
+    public function getBehavior($ids = null)
     {
         return $this->getUniqueColumnData('behavior', $ids);
     }
@@ -154,7 +153,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * @param array $ids
      * @return string
      */
-    public function getEntityTypeCode($ids)
+    public function getEntityTypeCode($ids = null)
     {
         return $this->getUniqueColumnData('entity', $ids);
     }
