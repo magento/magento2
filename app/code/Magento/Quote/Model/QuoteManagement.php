@@ -622,12 +622,13 @@ class QuoteManagement implements CartManagementInterface
      *
      * @param Quote $quote
      * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _prepareCustomerQuote($quote)
+    protected function _prepareCustomerQuote(Quote $quote): void
     {
-        /** @var Quote $quote */
         $billing = $quote->getBillingAddress();
         $shipping = $quote->isVirtual() ? null : $quote->getShippingAddress();
 
@@ -710,6 +711,11 @@ class QuoteManagement implements CartManagementInterface
             && $billing->getSaveInAddressBook() === null) {
             $billing->setCustomerAddressId($shippingAddress->getId());
             $shipping->setSameAsBilling(1);
+        }
+        if (!empty($billingAddress)
+            && !$shipping->getCustomerAddressId()
+            && $shipping->getSameAsBilling()) {
+            $shipping->setCustomerAddressId($billingAddress->getId());
         }
     }
 

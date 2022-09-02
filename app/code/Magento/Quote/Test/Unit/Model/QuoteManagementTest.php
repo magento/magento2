@@ -1314,7 +1314,7 @@ class QuoteManagementTest extends TestCase
         $this->addressRepositoryMock->expects($this->once())->method('save')->with($customerAddressMock);
         $quote->expects($this->any())->method('addCustomerAddress')->with($customerAddressMock);
         $billingAddress->expects($this->once())->method('getCustomerId')->willReturn(2);
-        $billingAddress->expects($this->once())->method('getSaveInAddressBook')->willReturn(false);
+        $billingAddress->expects($this->atLeastOnce())->method('getSaveInAddressBook')->willReturn(false);
         $billingAddress->expects($this->once())->method('getId')->willReturn(4);
         $convertedBilling->expects($this->once())->method('setData')->with('quote_address_id', 4);
         $this->orderManagement->expects($this->once())
