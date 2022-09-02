@@ -58,11 +58,13 @@ class State
      */
     public function isPartiallyRefundedOrderShipped(Order $order): bool
     {
+        $isPartiallyRefundedOrderShipped = false;
         if ($this->getShippedItems($order) > 0
             && $order->getTotalQtyOrdered() <= $this->getRefundedItems($order) + $this->getShippedItems($order)) {
-            return true;
+            $isPartiallyRefundedOrderShipped = true;
         }
-        return false;
+
+        return $isPartiallyRefundedOrderShipped;
     }
 
     /**
@@ -76,10 +78,10 @@ class State
         $num_of_refunded_items = 0;
         foreach ($order->getAllItems() as $item) {
             if ($item->getProductType() == 'simple') {
-                $num_of_refunded_items += (int)$item->getQtyRefunded();
+                $numOfRefundedItems += (int)$item->getQtyRefunded();
             }
         }
-        return $num_of_refunded_items;
+        return $numOfRefundedItems;
     }
 
     /**
@@ -92,8 +94,8 @@ class State
     {
         $num_of_shipped_items= 0;
         foreach ($order->getAllItems() as $item) {
-            $num_of_shipped_items += (int)$item->getQtyShipped();
+            $numOfShippedItems += (int)$item->getQtyShipped();
         }
-        return $num_of_shipped_items;
+        return $numOfShippedItems;
     }
 }
