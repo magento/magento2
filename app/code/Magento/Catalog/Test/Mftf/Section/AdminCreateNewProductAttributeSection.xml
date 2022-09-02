@@ -36,6 +36,7 @@
         <element name="adminOptionTextSwatch" type="input" selector="input[name='optiontext[value][option_{{var}}][0]']" parameterized="true"/>
         <element name="defaultStoreViewTextSwatch" type="input" selector="input[name='swatchtext[value][option_{{var}}][1]']" parameterized="true"/>
         <element name="defaultStoreViewTextOption" type="input" selector="input[name='optiontext[value][option_{{var}}][1]']" parameterized="true"/>
+
         <!-- Enable/disable Storefront Properties -->
         <element name="isVisibleEnabled" type="select" selector="//select[contains(@id, 'is_visible') and not(contains(@disabled, 'disabled'))]"/>
         <element name="isVisibleDisabled" type="select" selector="//select[contains(@id, 'is_visible') and contains(@disabled, 'disabled')]"/>

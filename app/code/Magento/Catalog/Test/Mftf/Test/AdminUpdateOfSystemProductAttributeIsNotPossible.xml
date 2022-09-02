@@ -39,7 +39,7 @@
         <seeElement selector="{{AdminCreateNewProductAttributeSection.usedIsAttributeCodeDisabled}}" stepKey="assertCreatedInAttributecode"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPages"/>
         <click selector="{{AdminCreateNewProductAttributeSection.storefrontProperties}}" stepKey="clickOnStorefrontProperties"/>
-        <waitForPageLoad stepKey="waitForStoreFrontToLoad"/>
+        <waitForPageLoad stepKey="waitForStoreFrontToPageLoad"/>
     </test>
 </tests>
 
