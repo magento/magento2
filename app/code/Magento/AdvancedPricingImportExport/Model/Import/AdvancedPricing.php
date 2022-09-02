@@ -76,8 +76,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $needColumnCheck = true;
 
     /**
-     * Valid column names array
-     *
      * @var array
      */
     protected $validColumnNames = [
@@ -144,8 +142,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $_permanentAttributes = [self::COL_SKU];
 
     /**
-     * Catalog product entity table name
-     *
      * @var string
      */
     protected $_catalogProductEntity;
@@ -156,8 +152,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $dateTime;
 
     /**
-     * Product entity link field name
-     *
      * @var string
      */
     private $productEntityLinkField;
@@ -272,7 +266,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param array $rowData
      * @param int $rowNum
      * @return bool
-     * @throws \Zend_Validate_Exception
      */
     public function validateRow(array $rowData, $rowNum)
     {

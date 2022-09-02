@@ -5,6 +5,7 @@
  */
 namespace Magento\AdminNotification\Model;
 
+use Laminas\Http\Request;
 use Magento\AdminNotification\Model\InboxFactory;
 use Magento\Backend\App\ConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
@@ -227,7 +228,7 @@ class Feed extends AbstractModel
     {
         /** @var Curl $curl */
         $curl = $this->curlFactory->create();
-        $curl->setConfig(
+        $curl->setOptions(
             [
                 'timeout'   => 2,
                 'useragent' => $this->productMetadata->getName()
@@ -236,7 +237,7 @@ class Feed extends AbstractModel
                 'referer'   => $this->urlBuilder->getUrl('*/*/*')
             ]
         );
-        $curl->write(\Zend_Http_Client::GET, $this->getFeedUrl(), '1.0');
+        $curl->write(Request::METHOD_GET, $this->getFeedUrl(), '1.0');
         $data = $curl->read();
         $data = preg_split('/^\r?$/m', $data, 2);
         $data = trim($data[1] ?? '');

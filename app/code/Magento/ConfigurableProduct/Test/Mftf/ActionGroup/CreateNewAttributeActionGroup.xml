@@ -49,6 +49,7 @@
         <!--Click Save Attribute button-->
         <click selector="{{NewProduct.saveAttributeButton}}" stepKey="clickSaveAttributeButton"/>
         <waitForPageLoad stepKey="waitForSavingSettings"/>
+        <switchToIFrame stepKey="switchOutOfIFrame"/>
 
         <!--Select created Attribute -->
         <click selector="{{ConfigurableProductSection.selectCreatedAttribute}}" stepKey="selectCreatedAttribute"/>

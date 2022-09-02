@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Model\ResourceModel;
 
+use Laminas\Validator\Callback;
 use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\RoleFactory;
 use Magento\Framework\Acl\Data\CacheInterface;
@@ -376,7 +377,7 @@ class UserTest extends TestCase
 
     public function testGetValidationBeforeSave()
     {
-        $this->assertInstanceOf('\Zend_Validate_Callback', $this->model->getValidationRulesBeforeSave());
+        $this->assertInstanceOf(Callback::class, $this->model->getValidationRulesBeforeSave());
     }
 
     public function testUpdateFailure()
