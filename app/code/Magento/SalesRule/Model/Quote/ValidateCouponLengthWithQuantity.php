@@ -9,31 +9,12 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Model\Quote;
 
 use Magento\SalesRule\Model\Coupon\Massgenerator;
-use Magento\SalesRule\Helper\Coupon;
 
 /**
  * Validate the coupon code length and quantity.
  */
-class ValidateCouponLengthWithQuantity implements ValidateCouponLengthWithQuantityInterface
+class ValidateCouponLengthWithQuantity extends Massgenerator implements ValidateCouponLengthWithQuantityInterface
 {
-    /**
-     * Initialize Sales rule coupon property
-     *
-     * @var Coupon
-     */
-    protected Coupon $salesRuleCoupon;
-
-    /**
-     * Generate constructor.
-     *
-     * @param Coupon $salesRuleCoupon
-     */
-    public function __construct(
-        Coupon $salesRuleCoupon
-    ) {
-        $this->salesRuleCoupon = $salesRuleCoupon;
-    }
-
     /**
      * Validate coupon code length with quantity
      *
@@ -42,20 +23,8 @@ class ValidateCouponLengthWithQuantity implements ValidateCouponLengthWithQuanti
      */
     public function validateCouponCodeLengthWithQuantity(array $couponCodeDataArray): int
     {
-        $maxProbability = Massgenerator::MAX_PROBABILITY_OF_GUESSING;
-        $chars = count($this->salesRuleCoupon->getCharset($couponCodeDataArray['format']));
-        $size = $couponCodeDataArray['qty'];
-        $length = (int)$couponCodeDataArray['length'];
-        $maxCodes = pow($chars, $length);
-        $probability = $size / $maxCodes;
-
-        if ($probability > $maxProbability) {
-            do {
-                $length++;
-                $maxCodes = pow($chars, $length);
-                $probability = $size / $maxCodes;
-            } while ($probability > $maxProbability);
-        }
-        return $length;
+        $this->setData($couponCodeDataArray);
+        $this->increaseLength();
+        return $this->getLength();
     }
 }
