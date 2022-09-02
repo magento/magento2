@@ -15,6 +15,7 @@
             <description value="Add Existing Product Attribute From Product Page to new products"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-26780"/>
+            <group value="Catalog"/>
         </annotations>
 
         <before>
