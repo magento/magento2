@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -38,7 +40,7 @@ class ShipmentFactory
     protected $instanceName;
 
     /**
-     * Serializer
+     * Json Serializer
      *
      * @var Json
      */
@@ -165,7 +167,7 @@ class ShipmentFactory
 
         // Remove from shipment items without qty or with qty=0
         if (!$orderItem->isDummy(true)
-            && (!isset($items[$orderItem->getId()]) || (int) $items[$orderItem->getId()] <= 0)
+            && (!isset($items[$orderItem->getId()]) || (float) $items[$orderItem->getId()] <= 0)
         ) {
             return false;
         }
