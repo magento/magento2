@@ -15,7 +15,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-14796"/>
             <group value="CatalogSearch"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
