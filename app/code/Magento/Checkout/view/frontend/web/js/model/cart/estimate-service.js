@@ -52,6 +52,9 @@ define([
                 shippingService.getShippingRates().subscribe(function (rates) {
                     cartCache.set('rates', rates);
                 });
+
+                // update totals based on shipping address / rates changes
+                totalsDefaultProvider.estimateTotals(quote.shippingAddress());
             }
         },
 
@@ -77,10 +80,8 @@ define([
             }
         };
 
-    if(!quote.isVirtual()) {
-        quote.shippingAddress.subscribe(estimateTotalsAndUpdateRates);
-        quote.shippingMethod.subscribe(estimateTotalsShipping);
-    }
-    quote.shippingAddress.subscribe(estimateTotalsShipping);
+
+    quote.shippingAddress.subscribe(estimateTotalsAndUpdateRates);
+    quote.shippingMethod.subscribe(estimateTotalsShipping);
     quote.billingAddress.subscribe(estimateTotalsBilling);
 });
