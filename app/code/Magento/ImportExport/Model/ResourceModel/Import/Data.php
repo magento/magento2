@@ -181,8 +181,8 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     /**
      * Retrieve Unique Column Data for specific Ids
      *
-     * @param $code
-     * @param $ids
+     * @param string $code
+     * @param array $ids
      * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
      */

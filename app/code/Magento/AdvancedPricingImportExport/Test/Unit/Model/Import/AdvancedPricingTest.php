@@ -39,8 +39,8 @@ class AdvancedPricingTest extends AbstractImportTestCase
     /**
      * DB Table data
      */
-    const TABLE_NAME = 'tableName';
-    const LINK_FIELD = 'linkField';
+    private const TABLE_NAME = 'tableName';
+    private const LINK_FIELD = 'linkField';
 
     /**
      * @var ResourceFactory|MockObject

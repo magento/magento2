@@ -160,6 +160,7 @@ class Address extends AbstractCustomer
      *
      * @var array
      * @deprecated 100.3.4 field not in use
+     * @see Nothing
      */
     protected $_regionParameters;
 
@@ -190,18 +191,21 @@ class Address extends AbstractCustomer
     /**
      * @var \Magento\Eav\Model\Config
      * @deprecated 100.3.4 field not-in use
+     * @see Nothing
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Customer\Model\AddressFactory
      * @deprecated 100.3.4 not utilized anymore
+     * @see Nothing
      */
     protected $_addressFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
      * @deprecated 100.3.4 the property isn't used
+     * @see Nothing
      */
     protected $dateTime;
 
