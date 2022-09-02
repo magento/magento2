@@ -75,7 +75,7 @@ class State
      */
     private function getRefundedItems(Order $order): int
     {
-        $num_of_refunded_items = 0;
+        $numOfRefundedItems = 0;
         foreach ($order->getAllItems() as $item) {
             if ($item->getProductType() == 'simple') {
                 $numOfRefundedItems += (int)$item->getQtyRefunded();
@@ -92,7 +92,7 @@ class State
      */
     private function getShippedItems(Order $order): int
     {
-        $num_of_shipped_items= 0;
+        $numOfShippedItems = 0;
         foreach ($order->getAllItems() as $item) {
             $numOfShippedItems += (int)$item->getQtyShipped();
         }
