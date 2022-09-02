@@ -86,7 +86,7 @@ class AdobeImsAdminTokenUserContext implements UserContextInterface
             try {
                 $this->adminTokenUserService->processLoginRequest();
             } catch (\Exception $e) {
-                throw new AuthenticationException(__('Login request error  %1', $e->getMessage()), $e, 0);
+                throw new AuthenticationException(__('Login request error %1', $e->getMessage()), $e, 0);
             }
         }
 
