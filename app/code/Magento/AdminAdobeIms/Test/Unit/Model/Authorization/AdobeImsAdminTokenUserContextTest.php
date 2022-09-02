@@ -118,7 +118,7 @@ class AdobeImsAdminTokenUserContextTest extends TestCase
             ->willReturn(false);
 
         $this->expectException(AuthenticationException::class);
-        $this->expectExceptionMessage('An authentication error occurred. Verify and try again.');
+        $this->expectExceptionMessage('Session Access Token is not valid');
 
         $this->adobeImsAdminTokenUserContext->getUserId();
     }

@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Model\Authorization;
 
 use Magento\AdminAdobeIms\Model\Auth;
-use Magento\AdobeImsApi\Api\IsTokenValidInterface;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdobeImsApi\Api\IsTokenValidInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\AuthenticationException;
 
@@ -80,13 +80,13 @@ class AdobeImsAdminTokenUserContext implements UserContextInterface
         if (!empty($session->getAdobeAccessToken())) {
             $isTokenValid = $this->isTokenValid->validateToken($session->getAdobeAccessToken());
             if (!$isTokenValid) {
-                throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
+                throw new AuthenticationException(__('Session Access Token is not valid'));
             }
         } else {
             try {
                 $this->adminTokenUserService->processLoginRequest();
             } catch (\Exception $e) {
-                throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
+                throw new AuthenticationException(__('Login request error. ') . $e->getMessage(), 0, $e);
             }
         }
 
