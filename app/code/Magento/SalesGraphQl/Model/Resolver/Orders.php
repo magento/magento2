@@ -61,6 +61,7 @@ class Orders implements ResolverInterface
                 'created_at' => $order->getCreatedAt(),
                 'grand_total' => $order->getGrandTotal(),
                 'status' => $order->getStatus(),
+                'model' => $order
             ];
         }
         return ['items' => $items];
