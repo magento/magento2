@@ -23,7 +23,8 @@ class FixerIo extends AbstractImport
     /**
      * @var string
      */
-    public const CURRENCY_CONVERTER_URL = 'https://api.apilayer.com/fixer/latest?symbols{{CURRENCY_TO}}&base={{CURRENCY_FROM}}';
+    public const CURRENCY_CONVERTER_URL = 'https://api.apilayer.com/fixer/latest?symbols{{CURRENCY_TO}}' .
+                                          '&base={{CURRENCY_FROM}}';
     
     /**
      * @var string
