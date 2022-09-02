@@ -17,14 +17,16 @@ use Magento\SalesRule\Helper\Coupon;
 class ValidateCouponLengthWithQuantity implements ValidateCouponLengthWithQuantityInterface
 {
     /**
-     * Sales rule coupon
+     * Initialize Sales rule coupon property
      *
      * @var Coupon
      */
     protected Coupon $salesRuleCoupon;
 
     /**
-    * @param Coupon $salesRuleCoupon
+     * Generate constructor.
+     *
+     * @param Coupon $salesRuleCoupon
      */
     public function __construct(
         Coupon $salesRuleCoupon
@@ -32,6 +34,12 @@ class ValidateCouponLengthWithQuantity implements ValidateCouponLengthWithQuanti
         $this->salesRuleCoupon = $salesRuleCoupon;
     }
 
+    /**
+     * Validate coupon code length with quantity
+     *
+     * @param array $couponCodeDataArray
+     * @return int
+     */
     public function validateCouponCodeLengthWithQuantity(array $couponCodeDataArray): int
     {
         $maxProbability = Massgenerator::MAX_PROBABILITY_OF_GUESSING;

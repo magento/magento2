@@ -98,8 +98,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote imple
             && !$rule->getUseAutoGeneration()) {
             $result['error'] =
                 __('The rule coupon settings changed. Please save the rule before using auto-generation.');
-        } elseif (
-            (int)$this->getRequest()->getParams()['length'] !==
+        } elseif ((int)$this->getRequest()->getParams()['length'] !==
             $this->validateCouponLengthWithQuantity->validateCouponCodeLengthWithQuantity(
                 $this->getRequest()->getParams()
             )
