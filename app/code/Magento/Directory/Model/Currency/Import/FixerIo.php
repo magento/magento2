@@ -23,8 +23,12 @@ class FixerIo extends AbstractImport
     /**
      * @var string
      */
-    public const CURRENCY_CONVERTER_URL = 'http://data.fixer.io/api/latest?access_key={{ACCESS_KEY}}'
-        . '&base={{CURRENCY_FROM}}&symbols={{CURRENCY_TO}}';
+    public const CURRENCY_CONVERTER_URL = 'https://api.apilayer.com/fixer/latest?symbols{{CURRENCY_TO}}&base={{CURRENCY_FROM}}';
+    
+    /**
+     * @var string
+     */
+    public const API_KEY_CONFIG_PATH = 'currency/fixerio/api_key';
 
     /**
      * @var HttpClientFactory
@@ -97,7 +101,7 @@ class FixerIo extends AbstractImport
      */
     private function convertBatch(array $data, string $currencyFrom, array $currenciesTo): array
     {
-        $accessKey = $this->scopeConfig->getValue('currency/fixerio/api_key', ScopeInterface::SCOPE_STORE);
+        $accessKey = $this->scopeConfig->getValue(self::API_KEY_CONFIG_PATH, ScopeInterface::SCOPE_STORE);
         if (empty($accessKey)) {
             $this->_messages[] = __('No API Key was specified or an invalid API Key was specified.');
             $data[$currencyFrom] = $this->makeEmptyResponse($currenciesTo);
@@ -150,6 +154,8 @@ class FixerIo extends AbstractImport
      */
     private function getServiceResponse(string $url, int $retry = 0): array
     {
+        $accessKey = $this->scopeConfig->getValue(self::API_KEY_CONFIG_PATH, ScopeInterface::SCOPE_STORE);
+        
         /** @var LaminasClient $httpClient */
         $httpClient = $this->httpClientFactory->create();
         $response = [];
@@ -165,6 +171,12 @@ class FixerIo extends AbstractImport
                 ]
             );
             $httpClient->setMethod(Request::METHOD_GET);
+            
+            $httpClient->getHeaders()->addHeaders([
+                'Content-Type' => 'text/plain',
+                'apikey' => $accessKey,
+            ]);
+            
             $jsonResponse = $httpClient->send()->getBody();
 
             $response = json_decode($jsonResponse, true);
