@@ -97,8 +97,8 @@ define([
                 }
             });
             expect(mocks['Magento_Checkout/js/model/shipping-service'].setShippingRates).toHaveBeenCalledWith(rates);
-            expect(mocks['Magento_Checkout/js/model/cart/totals-processor/default'].estimateTotals).not
-                .toHaveBeenCalled();
+            expect(mocks['Magento_Checkout/js/model/cart/totals-processor/default'].estimateTotals)
+                .not.toHaveBeenCalled();
             expect(mocks['Magento_Checkout/js/model/shipping-rate-processor/new-address'].getRates)
                 .not.toHaveBeenCalled();
         });
@@ -133,6 +133,8 @@ define([
                 .not.toHaveBeenCalledWith(rates);
             expect(mocks['Magento_Checkout/js/model/cart/cache'].set).not.toHaveBeenCalled();
             expect(mocks['Magento_Checkout/js/model/shipping-rate-processor/new-address'].getRates).toHaveBeenCalled();
+            expect(mocks['Magento_Checkout/js/model/cart/totals-processor/default'].estimateTotals)
+                .toHaveBeenCalled();
         });
 
         it('test subscribe when shipping method was changed', function () {
