@@ -14,6 +14,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\AdobeImsApi\Api\LogOutInterface;
 
 class FlushUserTokens implements FlushUserTokensInterface
 {
@@ -28,9 +29,9 @@ class FlushUserTokens implements FlushUserTokensInterface
     private UserContextInterface $userContext;
 
     /**
-     * @var LogOut
+     * @var LogOutInterface
      */
-    private LogOut $logOut;
+    private LogOutInterface $logOut;
 
     /**
      * @var Encryptor
@@ -42,13 +43,13 @@ class FlushUserTokens implements FlushUserTokensInterface
      *
      * @param ImsWebapiRepositoryInterface $imsWebapiRepository
      * @param UserContextInterface $userContext
-     * @param LogOut $logOut
+     * @param LogOutInterface $logOut
      * @param Encryptor $encryptor
      */
     public function __construct(
         ImsWebapiRepositoryInterface $imsWebapiRepository,
         UserContextInterface $userContext,
-        LogOut $logOut,
+        LogOutInterface $logOut,
         Encryptor $encryptor
     ) {
         $this->imsWebapiRepository = $imsWebapiRepository;

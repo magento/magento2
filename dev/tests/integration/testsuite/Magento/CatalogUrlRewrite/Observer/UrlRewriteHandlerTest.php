@@ -88,6 +88,7 @@ class UrlRewriteHandlerTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/category_with_products.php
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      */
     public function testGenerateProductUrlRewrites2()
     {

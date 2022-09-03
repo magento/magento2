@@ -13,7 +13,8 @@
         "magento/module-quote": "*",
         "magento/module-sales": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*"
+        "magento/module-ui": "*",
+        "magento/module-vault": "*"
     },
     "type": "magento2-module",
     "license": [

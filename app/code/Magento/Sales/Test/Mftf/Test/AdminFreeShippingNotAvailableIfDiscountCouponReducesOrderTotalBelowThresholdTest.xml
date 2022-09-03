@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminFreeShippingNotAvailableIfDiscountCouponReducesOrderTotalBelowThresholdTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Admin create order"/>
+            <title value="Free Shipping is not available in Admin if order total is less than Minimum order-amount eligible for free shipping"/>
+            <description value="Admin should not be able see Free Shipping method if order total is less than Minimum order-amount eligible for free shipping"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-937"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">102</field>
+            </createData>
+
+            <createData entity="ActiveSalesRuleCoupon50" stepKey="createCartPriceRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="DisableFlatRateShippingMethodConfig" stepKey="disableFlatRate"/>
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShippingMethod"/>
+            <createData entity="setFreeShippingSubtotal" stepKey="setFreeShippingSubtotal"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+            <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
+            <createData entity="setFreeShippingSubtotalToDefault" stepKey="setFreeShippingSubtotalToDefault"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </after>
+        <!--Create new order with existing customer-->
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!--Add product to order-->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="focusout"/>
+        <waitForPageLoad stepKey="waitForJavascriptToFinish"/>
+
+        <actionGroup ref="AdminApplyCouponToOrderActionGroup" stepKey="applyCoupon">
+            <argument name="couponCode" value="$$createCouponForCartPriceRule.code$$"/>
+        </actionGroup>
+        <!--Click *Get shipping methods and rates* and see that Free Shipping is absent-->
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickGetShippingMethods1"/>
+        <dontSeeElement selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="seeFreeShippingAbsent"/>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfPages"/>
+
+        <actionGroup ref="AdminRemoveCouponFromOrderActionGroup" stepKey="removeCoupon"/>
+        <!--Click *Get shipping methods and rates* and see that Free Shipping is present-->
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickGetShippingMethods2"/>
+        <seeElement selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="seeFreeShippingPresent"/>
+    </test>
+</tests>
