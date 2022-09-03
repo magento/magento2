@@ -547,7 +547,7 @@ class TypeProcessor
             return strpos($paramType, '[]') !== false ? $paramType : "{$paramType}[]";
         }
 
-        return $this->resolveFullyQualifiedClassName($param->getDeclaringClass(), $type);
+        return $this->resolveFullyQualifiedClassName($param->getDeclaringClass(), $type ?? '');
     }
 
     /**

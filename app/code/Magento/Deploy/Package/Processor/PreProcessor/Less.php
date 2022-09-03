@@ -95,7 +95,7 @@ class Less implements ProcessorInterface
                 if ($packageFile && $packageFile->getOrigPackage() === $package) {
                     continue;
                 }
-                $deployFileName = $this->fileNameResolver->resolve($file->getFileName());
+                $deployFileName = $this->fileNameResolver->resolve($file->getFileName() ?? '');
                 if ($deployFileName !== $file->getFileName()) {
                     if ($this->hasOverrides($file, $package)) {
                         $file = clone $file;
