@@ -54,13 +54,14 @@ class DataFixture implements ParserInterface
         foreach ($attributes as $attribute) {
             $args = $attribute->getArguments();
             $alias = $args['as'] ?? $args[2] ?? null;
-            $count = $args['count'] ?? $args[3] ?? 1;
+            $count = $args['count'] ?? $args[4] ?? 1;
             $id = $count > 1 ? 1 : '';
             do {
                 $fixtures[] = [
                     'name' => $alias !== null ? ($alias.($id++)) : null,
                     'factory' => $args[0],
-                    'data' => $args[1] ?? []
+                    'data' => $args[1] ?? [],
+                    'scope' => $args['scope'] ?? $args[3] ?? null,
                 ];
             } while (--$count > 0);
 

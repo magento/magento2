@@ -24,6 +24,7 @@ use Magento\TestFramework\Fixture\DataFixtureFactory;
 use Magento\TestFramework\Fixture\LegacyDataFixture;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ScopeSwitcherInterface;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -99,11 +100,16 @@ class DataFixtureTest extends TestCase
         $dataFixtureFactory = new DataFixtureFactory($objectManager);
         $annotationParser = new \Magento\TestFramework\Annotation\Parser\DataFixture('magentoDataFixture');
 
+        $dataFixtureSetup = new DataFixtureSetup(
+            new Registry(),
+            $dataFixtureFactory,
+            $this->createMock(ScopeSwitcherInterface::class)
+        );
         $sharedInstances = [
             TestsIsolation::class => $this->testsIsolationMock,
             \Magento\TestFramework\Annotation\Parser\DataFixture::class => $annotationParser,
             DataFixtureFactory::class => $dataFixtureFactory,
-            DataFixtureSetup::class => new DataFixtureSetup(new Registry(), $dataFixtureFactory),
+            DataFixtureSetup::class => $dataFixtureSetup,
             'MockFixture1' => $this->fixture1,
             'MockFixture2' => $this->fixture2,
             'MockFixture3' => $this->fixture3,
