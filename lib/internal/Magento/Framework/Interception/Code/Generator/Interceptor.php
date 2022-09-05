@@ -212,10 +212,21 @@ METHOD_BODY
         $returnTypeValue = null;
         $returnType = $method->getReturnType();
         if ($returnType) {
-            $returnTypeValue = ($returnType->allowsNull() && $returnType->getName() !== 'mixed' ? '?' : '');
-            $returnTypeValue .= ($returnType->getName() === 'self')
-                ? $this->_getFullyQualifiedClassName($method->getDeclaringClass()->getName())
-                : $returnType->getName();
+
+            if ($returnType instanceof \ReflectionUnionType) {
+                $returnTypeValue = [];
+                foreach ($method->getReturnType()->getTypes() as $type) {
+                    $returnTypeValue[] =  $type->getName();
+                }
+
+                $returnTypeValue = implode('|', $returnTypeValue);
+
+            } else {
+                $returnTypeValue = ($returnType->allowsNull() && $returnType->getName() !== 'mixed' ? '?' : '');
+                $returnTypeValue .= ($returnType->getName() === 'self')
+                    ? $this->_getFullyQualifiedClassName($method->getDeclaringClass()->getName())
+                    : $returnType->getName();
+            }
         }
 
         return $returnTypeValue;

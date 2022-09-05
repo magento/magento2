@@ -96,6 +96,11 @@ class InterceptorTest extends TestCase
                 \Magento\Framework\Interception\Code\Generator\SampleBackendMenu\Interceptor::class,
                 'SampleBackendMenuInterceptor',
             ],
+            [
+                \Magento\Framework\Interception\Code\Generator\ReflectionUnionTypeSample::class,
+                \Magento\Framework\Interception\Code\Generator\ReflectionUnionTypeSample\Interceptor::class,
+                'ReflectionUnionTypeSampleInterceptor',
+            ],
         ];
     }
 }

@@ -750,6 +750,17 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     private function getTypeHintText($type)
     {
-        return $type instanceof \ReflectionType ? $type->getName() : $type;
+        $returnTypeValue = $type instanceof \ReflectionType ? $type->getName() : $type;
+
+        if ($type instanceof \ReflectionUnionType) {
+            $returnTypeValue = [];
+            foreach ($type->getTypes() as $type) {
+                $returnTypeValue[] =  $type->getName();
+            }
+
+            $returnTypeValue = implode('|', $returnTypeValue);
+        }
+
+        return $returnTypeValue;
     }
 }

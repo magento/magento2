@@ -5,13 +5,13 @@
  */
 namespace Magento\Framework\MessageQueue\Code\Generator;
 
+use Laminas\Code\Reflection\MethodReflection;
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\Communication\Config\ReflectionGenerator;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication as RemoteServiceReader;
 use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
-use Laminas\Code\Reflection\MethodReflection;
 
 /**
  * Code generator for remote services.
@@ -173,7 +173,18 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
      */
     private function convertMethodType($type)
     {
-        return $type instanceof \ReflectionNamedType ? $type->getName() : $type;
+        $returnTypeValue = $type instanceof \ReflectionNamedType ? $type->getName() : $type;
+
+        if ($type instanceof \ReflectionUnionType) {
+            $returnTypeValue = [];
+            foreach ($type->getTypes() as $type) {
+                $returnTypeValue[] =  $type->getName();
+            }
+
+            $returnTypeValue = implode('|', $returnTypeValue);
+        }
+
+        return $returnTypeValue;
     }
 
     /**
