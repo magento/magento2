@@ -12,8 +12,8 @@ use Magento\Directory\Model\Currency\Import\CurrencyConverterApi;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -34,7 +34,7 @@ class CurrencyConverterApiTest extends TestCase
     private $currencyFactory;
 
     /**
-     * @var ZendClientFactory|MockObject
+     * @var LaminasClientFactory|MockObject
      */
     private $httpClientFactory;
 
@@ -52,7 +52,7 @@ class CurrencyConverterApiTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
+        $this->httpClientFactory = $this->getMockBuilder(LaminasClientFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -106,8 +106,8 @@ class CurrencyConverterApiTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls('api_key', 100);
 
-        /** @var ZendClient|MockObject $httpClient */
-        $httpClient = $this->getMockBuilder(ZendClient::class)
+        /** @var LaminasClient|MockObject $httpClient */
+        $httpClient = $this->getMockBuilder(LaminasClient::class)
             ->disableOriginalConstructor()
             ->getMock();
         /** @var DataObject|MockObject $currencyMock */
@@ -118,8 +118,9 @@ class CurrencyConverterApiTest extends TestCase
 
         $this->httpClientFactory->expects($this->once())->method('create')->willReturn($httpClient);
         $httpClient->expects($this->once())->method('setUri')->willReturnSelf();
-        $httpClient->expects($this->once())->method('setConfig')->willReturnSelf();
-        $httpClient->expects($this->once())->method('request')->willReturn($httpResponse);
+        $httpClient->expects($this->once())->method('setOptions')->willReturnSelf();
+        $httpClient->expects($this->once())->method('setMethod')->willReturnSelf();
+        $httpClient->expects($this->once())->method('send')->willReturn($httpResponse);
         $httpResponse->expects($this->once())->method('getBody')->willReturn($responseBody);
     }
 

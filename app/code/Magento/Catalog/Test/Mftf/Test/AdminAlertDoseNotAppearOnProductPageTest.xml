@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAlertDoseNotAppearOnProductPageTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Page"/>
+            <title value="Admin Observe alert does not appear on Products page"/>
+            <description value="Admin should be able to create multiple products"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-28810"/>
+
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
+        <actionGroup ref="CreateCategoryActionGroup" stepKey="createCategory">
+            <argument name="categoryEntity" value="_defaultCategory"/>
+        </actionGroup>
+
+       <actionGroup ref="AdminCreateSimpleProductActionGroup" stepKey="createProduct1">
+           <argument name="category" value="_defaultCategory"/>
+           <argument name="simpleProduct" value="SimpleProduct"/>
+       </actionGroup>
+
+        <actionGroup ref="AdminCreateSimpleProductActionGroup" stepKey="createProduct2">
+            <argument name="category" value="_defaultCategory"/>
+            <argument name="simpleProduct" value="SimpleProduct2"/>
+        </actionGroup>
+
+        <dontSeeElement selector="{{AdminCategoryBasicFieldSection.urlExistsErrorMessage}}" stepKey="validateSameErrorMessages"/>
+
+        <after>
+            <actionGroup ref="DeleteProductActionGroup" stepKey="deleteSimpleProduct">
+                <argument name="productName" value="SimpleProduct.name"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductActionGroup" stepKey="deleteSimpleProduct2">
+                <argument name="productName" value="SimpleProduct2.name"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
+                <argument name="categoryEntity" value="_defaultCategory"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>
