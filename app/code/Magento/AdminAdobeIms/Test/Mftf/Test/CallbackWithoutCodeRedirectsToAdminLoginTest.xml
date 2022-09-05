@@ -22,15 +22,16 @@
         </annotations>
         <before>
             <actionGroup ref="AdminEnableAdobeImsActionGroup" stepKey="enableIms" />
-            <amOnPage url="{{AdminAdobeImsCallbackPage.url}}" stepKey="openCallbackUrl"/>
         </before>
         <after>
             <actionGroup ref="AdminDisableAdobeImsActionGroup" stepKey="disableAdminAdobeImsModule" />
         </after>
 
+        <!-- Open admin login page using callback URL with no code -->
+        <amOnPage url="{{AdminAdobeImsCallbackPage.url}}" stepKey="openCallbackUrl"/>
         <waitForPageLoad stepKey="waitForAdminLoginPageLoad"/>
 
-        <!-- Check for Sign in with error message -->
+        <!-- Check for the error message on login page -->
         <actionGroup ref="AssertAdminSignInEmptyCodeErrorMessageTestActionGroup"
                      stepKey="assertAdminLoginShowsErrorMessage"/>
     </test>
