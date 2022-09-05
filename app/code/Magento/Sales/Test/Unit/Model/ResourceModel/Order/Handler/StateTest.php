@@ -42,7 +42,9 @@ class StateTest extends TestCase
                     'canCreditmemo',
                     'getTotalRefunded',
                     'getConfig',
-                    'getIsNotVirtual'
+                    'getIsVirtual',
+                    'getIsNotVirtual',
+                    'getStatus',
                 ]
             )
             ->disableOriginalConstructor()
@@ -102,6 +104,12 @@ class StateTest extends TestCase
             ->willReturn($isInProcess);
         $this->orderMock->method('getIsNotVirtual')
             ->willReturn($isNotVirtual);
+        if (!$isNotVirtual) {
+            $this->orderMock->method('getIsVirtual')
+                ->willReturn(!$isNotVirtual);
+            $this->orderMock->method('getStatus')
+                ->willReturn($expectedState);
+        }
         $this->state->check($this->orderMock);
         $this->assertEquals($expectedState, $this->orderMock->getState());
     }
@@ -322,6 +330,19 @@ class StateTest extends TestCase
                 'is_canceled' => false,
                 'can_unhold' => false,
                 'is_not_virtual' => false
+            ],
+            'complete - !canCreditmemo, !canShip - closed(virtual product)' => [
+                'can_credit_memo' => false,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => false,
+                'call_can_skip_num' => 1,
+                'current_state' => Order::STATE_COMPLETE,
+                'expected_state' => Order::STATE_CLOSED,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => false,
             ],
         ];
     }

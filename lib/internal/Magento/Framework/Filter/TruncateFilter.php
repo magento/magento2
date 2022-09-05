@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Filter;
 
+use Laminas\Filter\FilterInterface;
 use Magento\Framework\Filter\TruncateFilter\Result;
 use Magento\Framework\Filter\TruncateFilter\ResultFactory;
 
@@ -16,7 +17,7 @@ use Magento\Framework\Filter\TruncateFilter\ResultFactory;
  * Truncate a string to a certain length if necessary, appending the $etc string.
  * $remainder will contain the string that has been replaced with $etc.
  */
-class TruncateFilter implements \Zend_Filter_Interface
+class TruncateFilter implements FilterInterface
 {
     /**
      * @var int
