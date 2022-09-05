@@ -8,6 +8,7 @@ declare(strict_types=1);
 /**
  * Test for view Messages model
  */
+
 namespace Magento\Framework\View\Test\Unit\Element\UiComponent;
 
 use Magento\Framework\App\Request\Http;
@@ -27,6 +28,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.LongVariableName)
  */
 class ContextTest extends TestCase
 {
@@ -121,15 +123,15 @@ class ContextTest extends TestCase
         $this->context = $objectManagerHelper->getObject(
             Context::class,
             [
-                'pageLayout'            => $this->pageLayout,
-                'request'               => $request,
+                'pageLayout' => $this->pageLayout,
+                'request' => $request,
                 'buttonProviderFactory' => $this->buttonProviderFactory,
-                'actionPoolFactory'     => $this->actionPoolFactory,
-                'contentTypeFactory'    => $this->contentTypeFactory,
-                'urlBuilder'            => $this->urlBuilder,
-                'processor'             => $this->processor,
-                'uiComponentFactory'    => $this->uiComponentFactory,
-                'authorization'         => $this->authorization,
+                'actionPoolFactory' => $this->actionPoolFactory,
+                'contentTypeFactory' => $this->contentTypeFactory,
+                'urlBuilder' => $this->urlBuilder,
+                'processor' => $this->processor,
+                'uiComponentFactory' => $this->uiComponentFactory,
+                'authorization' => $this->authorization,
             ]
         );
     }

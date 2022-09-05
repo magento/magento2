@@ -9,13 +9,15 @@ namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface as UiContext;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Date;
 use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
+use Magento\Ui\View\Element\BookmarkContextInterface;
+use Magento\Ui\View\Element\BookmarkContextProviderInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,7 +27,7 @@ use PHPUnit\Framework\TestCase;
 class DateTest extends TestCase
 {
     /**
-     * @var ContextInterface|MockObject
+     * @var UiContext|MockObject
      */
     private $contextMock;
 
@@ -50,11 +52,21 @@ class DateTest extends TestCase
     private $dataProviderMock;
 
     /**
+     * @var BookmarkContextInterface|MockObject
+     */
+    private $bookmarkContextMock;
+
+    /**
+     * @var BookmarkContextProviderInterface|MockObject
+     */
+    private $bookmarkContextProviderMock;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
+        $this->contextMock = $this->getMockForAbstractClass(UiContext::class);
         $this->uiComponentFactory = $this->getMockBuilder(UiComponentFactory::class)
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
@@ -69,6 +81,16 @@ class DateTest extends TestCase
             ->getMock();
 
         $this->dataProviderMock = $this->getMockForAbstractClass(DataProviderInterface::class);
+
+        $this->bookmarkContextProviderMock = $this->getMockForAbstractClass(
+            BookmarkContextProviderInterface::class
+        );
+        $this->bookmarkContextMock = $this->getMockForAbstractClass(
+            BookmarkContextInterface::class
+        );
+        $this->bookmarkContextProviderMock->expects($this->once())
+            ->method('getByUiContext')
+            ->willReturn($this->bookmarkContextMock);
     }
 
     /**
@@ -79,12 +101,16 @@ class DateTest extends TestCase
     public function testGetComponentName(): void
     {
         $this->contextMock->expects(static::never())->method('getProcessor');
+        $this->bookmarkContextMock->expects($this->once())
+            ->method('getFilterData');
         $date = new Date(
             $this->contextMock,
             $this->uiComponentFactory,
             $this->filterBuilderMock,
             $this->filterModifierMock,
-            []
+            [],
+            [],
+            $this->bookmarkContextProviderMock
         );
 
         static::assertSame(Date::NAME, $date->getComponentName());
@@ -124,12 +150,16 @@ class DateTest extends TestCase
             ->with(Date::NAME, ['extends' => Date::NAME]);
 
         $this->contextMock->expects($this->any())
-            ->method('getFiltersParams')
-            ->willReturn($filterData);
-
-        $this->contextMock->expects($this->any())
             ->method('getDataProvider')
             ->willReturn($this->dataProviderMock);
+
+        $this->bookmarkContextMock->expects($this->once())
+            ->method('getFilterData')
+            ->willReturn($filterData);
+        $this->contextMock->expects($this->any())
+            ->method('getRequestParam')
+            ->with(UiContext::FILTER_VAR)
+            ->willReturn($filterData);
 
         if ($expectedCondition !== null) {
             $this->processFilters($name, $showsTime, $filterData, $expectedCondition, $uiComponent);
@@ -149,7 +179,8 @@ class DateTest extends TestCase
             [
                 'name' => $name,
                 'config' => ['options' => ['showsTime' => $showsTime]],
-            ]
+            ],
+            $this->bookmarkContextProviderMock
         );
         $date->prepare();
     }
@@ -157,7 +188,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function getPrepareDataProvider(): array
+    public function getPrepareDataProvider()
     {
         return [
             [
@@ -177,8 +208,10 @@ class DateTest extends TestCase
                 'showsTime' => false,
                 'filterData' => ['test_date' => ['from' => '11-05-2015', 'to' => '11-05-2015']],
                 'expectedCondition' => [
-                    'date_from' => '2015-05-11 00:00:00', 'type_from' => 'gteq',
-                    'date_to' => '2015-05-11 23:59:59', 'type_to' => 'lteq'
+                    'date_from' => '2015-05-11 00:00:00',
+                    'type_from' => 'gteq',
+                    'date_to' => '2015-05-11 23:59:59',
+                    'type_to' => 'lteq'
                 ]
             ],
             [
@@ -198,8 +231,10 @@ class DateTest extends TestCase
                 'showsTime' => true,
                 'filterData' => ['test_date' => ['from' => '11-05-2015 10:20:00', 'to' => '11-05-2015 18:25:00']],
                 'expectedCondition' => [
-                    'date_from' => '2015-05-11 10:20:00', 'type_from' => 'gteq',
-                    'date_to' => '2015-05-11 18:25:00', 'type_to' => 'lteq'
+                    'date_from' => '2015-05-11 10:20:00',
+                    'type_from' => 'gteq',
+                    'date_to' => '2015-05-11 18:25:00',
+                    'type_to' => 'lteq'
                 ]
             ]
         ];

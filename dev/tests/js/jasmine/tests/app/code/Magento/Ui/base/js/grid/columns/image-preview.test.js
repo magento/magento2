@@ -20,6 +20,10 @@ define([
             recordMock = {
                 _rowIndex: 2
             },
+            firstRecordMock = {
+                _rowIndex: 0,
+                rowNumber: 0
+            },
             secondRecordMock = {
                 _rowIndex: 1,
                 rowNumber: 1
@@ -29,9 +33,7 @@ define([
             },
             masonryMock = {
                 shows: jasmine.createSpy().and.returnValue([]),
-                rows: jasmine.createSpy().and.returnValue({
-                    1: secondRecordMock
-                })
+                rows: [firstRecordMock, secondRecordMock]
             };
 
         beforeEach(function () {

@@ -3,6 +3,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @deprecated Unused file. Filters don't store and share between customers
+ */
 define([
     'Magento_Ui/js/grid/filters/chips'
 ], function (Chips) {

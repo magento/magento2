@@ -61,20 +61,20 @@ define([
 
         describe('check initComponent', function () {
             it('verify setLayoutstyles called and grid iniztilized', function () {
-                var setlayoutStyles = spyOn(Component, 'setLayoutStyles');
+                var setlayoutStyles = spyOn(Component, 'setLayoutStylesWhenLoaded');
 
                 Object.defineProperty(Component.container, 'clientWidth', {value: '', configurable: true});
                 expect(Component).toBeDefined();
                 Component.containerId = 'masonry_grid';
                 Component.initComponent(rows);
-                Component.rows().forEach(function (image) {
+                Component.rows.forEach(function (image) {
                     expect(image.styles).toBeDefined();
                     expect(image.css).toBeDefined();
                 });
                 expect(setlayoutStyles).toHaveBeenCalled();
             });
             it('verify events triggered', function () {
-                var setLayoutStyles = spyOn(Component, 'setLayoutStyles');
+                var setLayoutStyles = spyOn(Component, 'setLayoutStylesWhenLoaded');
 
                 Component.initComponent(rows);
                 Component.container = {};

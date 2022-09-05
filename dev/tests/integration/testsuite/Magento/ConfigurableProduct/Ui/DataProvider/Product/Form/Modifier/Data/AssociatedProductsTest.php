@@ -103,7 +103,10 @@ class AssociatedProductsTest extends TestCase
                 'test_configurable'
             ],
         ]);
-        $context = $this->objectManager->create(ContextInterface::class, ['request' => $request]);
+        $context = $this->objectManager->create(ContextInterface::class, [
+            'request' => $request,
+            'namespace' => ConfigurablePanel::ASSOCIATED_PRODUCT_LISTING
+        ]);
         /** @var UiComponentFactory $uiComponentFactory */
         $uiComponentFactory = $this->objectManager->get(UiComponentFactory::class);
         $uiComponent = $uiComponentFactory->create(

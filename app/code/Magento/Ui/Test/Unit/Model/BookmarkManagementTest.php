@@ -146,10 +146,8 @@ class BookmarkManagementTest extends TestCase
                 Filter::KEY_CONDITION_TYPE => 'eq'
             ]
         );
-        $bookmarkId = 1;
         $bookmark = $this->getMockBuilder(BookmarkInterface::class)
             ->getMockForAbstractClass();
-        $bookmark->expects($this->once())->method('getId')->willReturn($bookmarkId);
         $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->getMockForAbstractClass();
         $this->filterBuilder
@@ -169,10 +167,6 @@ class BookmarkManagementTest extends TestCase
             ->method('getList')
             ->with($searchCriteria)
             ->willReturn($searchResult);
-        $this->bookmarkRepository->expects($this->once())
-            ->method('getById')
-            ->with($bookmarkId)
-            ->willReturn($bookmark);
         $this->assertEquals(
             $bookmark,
             $this->bookmarkManagement->getByIdentifierNamespace($identifier, $namespace)
