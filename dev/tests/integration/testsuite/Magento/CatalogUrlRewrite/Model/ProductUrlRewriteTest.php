@@ -28,7 +28,7 @@ use Psr\Log\LoggerInterface;
  * Class for product url rewrites tests
  *
  * @magentoDbIsolation enabled
- * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductUrlRewriteTest extends AbstractUrlRewriteTest
 {
@@ -61,6 +61,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @dataProvider productDataProvider
      * @param array $data
      * @return void
@@ -140,6 +141,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_simple.php
      * @dataProvider productEditProvider
      * @param array $expectedData
@@ -184,6 +186,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/category_with_products.php
      * @dataProvider existingUrlKeyProvider
      * @param array $data
@@ -242,6 +245,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      */
@@ -257,6 +261,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
@@ -282,6 +287,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * Check if redirects are generated correctly while product urls are changed during import process.
      *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
@@ -338,10 +344,8 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
             $productUrlRewriteCollection = $this->getEntityRewriteCollection($product->getId());
             $rewriteExists = false;
             foreach ($productUrlRewriteCollection as $item) {
-                if (
-                    $item->getTargetPath() === $datum['target_path'] . $this->suffix &&
-                    $item->getRequestPath() === $datum['request_path'] . $this->suffix
-                ) {
+                if ($item->getTargetPath() === $datum['target_path'] . $this->suffix &&
+                    $item->getRequestPath() === $datum['request_path'] . $this->suffix) {
                     $rewriteExists = true;
                     break;
                 }
