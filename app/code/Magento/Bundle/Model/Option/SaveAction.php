@@ -50,6 +50,7 @@ class SaveAction
      * @param Type $type
      * @param ProductLinkManagementInterface $linkManagement
      * @param StoreManagerInterface|null $storeManager
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Option $optionResource,
@@ -84,11 +85,10 @@ class SaveAction
         $optionId = $option->getOptionId();
         $linksToAdd = [];
         $optionCollection = $this->type->getOptionsCollection($bundleProduct);
-        $optionCollection->setIdFilter($option->getOptionId());
-        $optionCollection->setProductLinkFilter($parentId);
 
         /** @var \Magento\Bundle\Model\Option $existingOption */
-        $existingOption = $optionCollection->getFirstItem();
+        $existingOption = $optionCollection->getItemById($option->getOptionId())
+            ?? $optionCollection->getNewEmptyItem();
         if (!$optionId || $existingOption->getParentId() != $parentId) {
             //If option ID is empty or existing option's parent ID is different
             //we'd need a new ID for the option.
