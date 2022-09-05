@@ -9,6 +9,9 @@ namespace Magento\Framework\Interception\Code\Generator;
 
 class ReflectionUnionTypeSample
 {
+    /**
+     * @var int|string
+     */
     private int|string $attribute;
 
     public function getValue(): int|string

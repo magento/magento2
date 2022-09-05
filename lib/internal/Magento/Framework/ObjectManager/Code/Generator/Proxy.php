@@ -7,8 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Framework\ObjectManager\Code\Generator;
 
+use Magento\Framework\GetReflectionMethodReturnTypeValueTrait;
+
 class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
 {
+    use GetReflectionMethodReturnTypeValueTrait;
+
     /**
      * Entity type
      */
@@ -267,35 +271,5 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         }
 
         return $result;
-    }
-
-    /**
-     * Returns return type
-     *
-     * @param \ReflectionMethod $method
-     * @return null|string
-     */
-    private function getReturnTypeValue(\ReflectionMethod $method): ?string
-    {
-        $returnTypeValue = null;
-        $returnType = $method->getReturnType();
-        if ($returnType) {
-            if ($returnType instanceof \ReflectionUnionType) {
-                $returnTypeValue = [];
-                foreach ($method->getReturnType()->getTypes() as $type) {
-                    $returnTypeValue[] =  $type->getName();
-                }
-
-                $returnTypeValue = implode('|', $returnTypeValue);
-
-            } else {
-                $returnTypeValue = ($returnType->allowsNull() && $returnType->getName() !== 'mixed' ? '?' : '');
-                $returnTypeValue .= ($returnType->getName() === 'self')
-                    ? $this->_getFullyQualifiedClassName($method->getDeclaringClass()->getName())
-                    : $returnType->getName();
-            }
-        }
-
-        return $returnTypeValue;
     }
 }

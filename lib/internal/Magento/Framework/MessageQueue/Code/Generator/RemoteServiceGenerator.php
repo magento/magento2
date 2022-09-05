@@ -20,8 +20,8 @@ use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
  */
 class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbstract
 {
-    const ENTITY_TYPE = 'remote';
-    const REMOTE_SERVICE_SUFFIX = 'Remote';
+    public const ENTITY_TYPE = 'remote';
+    public const REMOTE_SERVICE_SUFFIX = 'Remote';
 
     /**
      * @var CommunicationConfig
@@ -241,6 +241,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
      * @return ReflectionGenerator
      *
      * @deprecated 103.0.0
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-56305
      */
     private function getReflectionGenerator()
     {

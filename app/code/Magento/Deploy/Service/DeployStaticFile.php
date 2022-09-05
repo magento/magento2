@@ -82,6 +82,8 @@ class DeployStaticFile
     }
 
     /**
+     * Deploy static file
+     *
      * @param string $fileName
      * @param array $params ['area' =>, 'theme' =>, 'locale' =>, 'module' =>]
      * @return string
@@ -98,6 +100,8 @@ class DeployStaticFile
     }
 
     /**
+     * Delete static file
+     *
      * @param string $path
      * @return void
      * @throws FileSystemException
@@ -138,6 +142,8 @@ class DeployStaticFile
     }
 
     /**
+     * Open static file
+     *
      * @param string $fileName
      * @param string $filePath
      * @return WriteInterface

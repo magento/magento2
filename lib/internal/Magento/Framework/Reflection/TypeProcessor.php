@@ -59,7 +59,8 @@ class TypeProcessor
      *
      * @return NameFinder
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     private function getNameFinder()
     {
@@ -254,7 +255,8 @@ class TypeProcessor
      * @param string $getterName
      * @return string
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     public function dataObjectGetterNameToFieldName($getterName)
     {
@@ -267,7 +269,8 @@ class TypeProcessor
      * @param string $shortDescription
      * @return string
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     protected function dataObjectGetterDescriptionToFieldDescription($shortDescription)
     {
@@ -701,7 +704,8 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding getter method
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     public function findGetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -739,7 +743,8 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     public function findSetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -756,7 +761,8 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     protected function findAccessorMethodName(
         ClassReflection $class,
@@ -777,7 +783,8 @@ class TypeProcessor
      * @param string $methodName
      * @return bool
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     protected function classHasMethod(ClassReflection $class, $methodName)
     {
