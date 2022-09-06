@@ -10399,16 +10399,16 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "23",
+            "version": "25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "dba4d2b4ba78d3dbe3e4d7100bda6fce4aaacbf9"
+                "reference": "7be8305949f6683ff08534fbc22e5d42a1c4eba7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/dba4d2b4ba78d3dbe3e4d7100bda6fce4aaacbf9",
-                "reference": "dba4d2b4ba78d3dbe3e4d7100bda6fce4aaacbf9",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/7be8305949f6683ff08534fbc22e5d42a1c4eba7",
+                "reference": "7be8305949f6683ff08534fbc22e5d42a1c4eba7",
                 "shasum": ""
             },
             "require": {
@@ -10439,11 +10439,7 @@
                 "AFL-3.0"
             ],
             "description": "A set of Magento specific PHP CodeSniffer rules.",
-            "support": {
-                "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/v23"
-            },
-            "time": "2022-06-01T09:03:27+00:00"
+            "time": "2022-06-21T10:23:58+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
