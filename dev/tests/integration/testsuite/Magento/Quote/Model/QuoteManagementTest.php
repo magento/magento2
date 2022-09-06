@@ -132,7 +132,7 @@ class QuoteManagementTest extends TestCase
         $quote = $this->getQuoteByReservedOrderId->execute('guest_quote');
         $this->cartManagement->placeOrder($quote->getId());
         $quoteAfterOrderPlaced = $this->getQuoteByReservedOrderId->execute('guest_quote');
-        self::assertEquals(2, $quoteAfterOrderPlaced->getCustomerGroupId());
+        self::assertEquals(0, $quoteAfterOrderPlaced->getCustomerGroupId());
         self::assertEquals(3, $quoteAfterOrderPlaced->getCustomerTaxClassId());
     }
 
