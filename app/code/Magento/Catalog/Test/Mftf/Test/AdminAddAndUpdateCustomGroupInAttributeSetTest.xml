@@ -52,7 +52,7 @@
 
         <!-- Fill 'name' for new group and click 'Ok': Name = Custom group -->
         <fillField userInput="{{customGroup.name}}" selector="{{AdminProductAttributeSetEditSection.newGroupName}}" stepKey="fillCustomGroupName"/>
-        <click selector="{{AdminProductAttributeSetEditSection.buttonOk}}" stepKey="clickButtonOk"/>
+        <click selector="{{AdminProductAttributeSetEditSection.buttonOk}}" stepKey="clickButtonOk1"/>
 
         <!-- Group is created and displayed in 'Groups' block -->
         <seeElement selector="{{AdminProductAttributeSetEditSection.attributeGroup(customGroup.name)}}" stepKey="assertCustomGroup"/>
