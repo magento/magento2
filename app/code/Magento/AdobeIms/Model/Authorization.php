@@ -35,7 +35,7 @@ class Authorization implements AuthorizationInterface
     /**
      * @var string|null
      */
-    private $redirecrHost = null;
+    private $redirectHost = null;
 
     /**
      * @var Parameters
@@ -177,14 +177,14 @@ class Authorization implements AuthorizationInterface
             foreach ($urlParams as $param => $value) {
                 if ($param === 'callback' || $param === 'uc_callback') {
                     $this->getRedirectUrlHost($value);
-                } elseif ($this->redirecrHost) {
+                } elseif ($this->redirectHost) {
                     break;
                 }
             }
         } elseif (isset($urlParams['redirect_uri'])) {
             $this->uri->parse($urlParams['redirect_uri']);
-            $this->redirecrHost = $this->uri->getHost();
+            $this->redirectHost = $this->uri->getHost();
         }
-        return $this->redirecrHost;
+        return $this->redirectHost;
     }
 }
