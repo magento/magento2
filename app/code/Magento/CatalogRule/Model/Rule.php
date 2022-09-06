@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogRule\Model;
 
 use Magento\Catalog\Model\Product;
@@ -13,6 +15,7 @@ use Magento\CatalogRule\Api\Data\RuleInterface;
 use Magento\CatalogRule\Helper\Data;
 use Magento\CatalogRule\Model\Data\Condition\Converter;
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
+use Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier;
 use Magento\CatalogRule\Model\ResourceModel\Rule as RuleResourceModel;
 use Magento\CatalogRule\Model\Rule\Action\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule\Condition\CombineFactory;
@@ -33,7 +36,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier;
 
 /**
  * Catalog Rule data model
@@ -95,7 +97,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     protected static $_priceRulesData = [];
 
     /**
-     * Catalog rule data
+     * Catalog rule data class
      *
      * @var \Magento\CatalogRule\Helper\Data
      */
@@ -348,6 +350,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
             if ($this->getWebsiteIds()) {
                 /** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
                 $productCollection = $this->_productCollectionFactory->create();
+                $productCollection->setStoreId($this->_storeManager->getDefaultStoreView()->getId());
                 $productCollection->addWebsiteFilter($this->getWebsiteIds());
                 if ($this->_productsFilter) {
                     $productCollection->addIdFilter($this->_productsFilter);
@@ -879,6 +882,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      *
      * @return Data\Condition\Converter
      * @deprecated 100.1.0
+     * @see getRuleCondition, setRuleCondition
      */
     private function getRuleConditionConverter()
     {
