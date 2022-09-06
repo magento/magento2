@@ -384,6 +384,9 @@ class Application
      */
     public function initialize($overriddenParams = [])
     {
+        $area = $overriddenParams['area'] ?? null;
+        unset($overriddenParams);
+
         $overriddenParams[\Magento\Framework\App\State::PARAM_MODE] = $this->_appMode;
         $overriddenParams = $this->_customizeParams($overriddenParams);
         $directories = isset($overriddenParams[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])
@@ -452,7 +455,7 @@ class Application
         );
 
         if ($this->canLoadArea) {
-            $this->loadArea(TestFramework\Application::DEFAULT_APP_AREA);
+            $this->loadArea($area ?? TestFramework\Application::DEFAULT_APP_AREA);
         }
 
         TestFramework\Helper\Bootstrap::getObjectManager()->configure(

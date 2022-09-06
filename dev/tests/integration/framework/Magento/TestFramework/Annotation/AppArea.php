@@ -97,7 +97,7 @@ class AppArea
         $area = $values[0]['area'] ?? Application::DEFAULT_APP_AREA;
 
         if ($this->_application->getArea() !== $area) {
-            $this->_application->reinitialize();
+            $this->_application->reinitialize(['area' => $area]);
 
             if ($this->_application->getArea() !== $area) {
                 $this->_application->loadArea($area);
