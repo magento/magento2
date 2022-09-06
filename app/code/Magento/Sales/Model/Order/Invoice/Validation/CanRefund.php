@@ -12,6 +12,7 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ValidatorInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 
 class CanRefund implements ValidatorInterface
@@ -27,23 +28,25 @@ class CanRefund implements ValidatorInterface
     private $orderRepository;
 
     /**
-     * @var ObjectManager
+     * @var ScopeConfigInterface
      */
-    private $objectManager;
+    private $scopeConfig;
 
     /**
      * CanRefund constructor.
      *
      * @param OrderPaymentRepositoryInterface $paymentRepository
      * @param OrderRepositoryInterface $orderRepository
+     * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         OrderPaymentRepositoryInterface $paymentRepository,
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
-        $this->objectManager = ObjectManager::getInstance();
         $this->paymentRepository = $paymentRepository;
         $this->orderRepository = $orderRepository;
+        $this->scopeConfig = $scopeConfig ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -89,7 +92,7 @@ class CanRefund implements ValidatorInterface
      */
     private function isGrandTotalEnoughToRefund(InvoiceInterface $entity)
     {
-        $isAllowedZeroGrandTotal = $this->objectManager->get(ScopeConfigInterface::class)->getValue(
+        $isAllowedZeroGrandTotal = $this->scopeConfig->getValue(
             'sales/zerograndtotal_creditmemo/allow_zero_grandtotal',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

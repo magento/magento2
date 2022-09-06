@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model\Order\Validation;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -19,20 +20,22 @@ class CanRefund implements ValidatorInterface
     private $priceCurrency;
 
     /**
-     * @var ObjectManager
+     * @var ScopeConfigInterface
      */
-    private $objectManager;
+    private $scopeConfig;
 
     /**
      * CanRefund constructor.
      *
      * @param PriceCurrencyInterface $priceCurrency
+     * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
-        PriceCurrencyInterface $priceCurrency
+        PriceCurrencyInterface $priceCurrency,
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
-        $this->objectManager = ObjectManager::getInstance();
         $this->priceCurrency = $priceCurrency;
+        $this->scopeConfig = $scopeConfig ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -67,7 +70,7 @@ class CanRefund implements ValidatorInterface
      */
     private function isTotalPaidEnoughForRefund(OrderInterface $order)
     {
-        $isAllowedZeroGrandTotal = $this->objectManager->get(ScopeConfigInterface::class)->getValue(
+        $isAllowedZeroGrandTotal = $this->scopeConfig->getValue(
             'sales/zerograndtotal_creditmemo/allow_zero_grandtotal',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
