@@ -25,6 +25,6 @@ class ValidateCouponLengthWithQuantity extends Massgenerator implements Validate
     {
         $this->setData($couponCodeDataArray);
         $this->increaseLength();
-        return $this->getLength();
+        return (int)$this->getLength();
     }
 }
