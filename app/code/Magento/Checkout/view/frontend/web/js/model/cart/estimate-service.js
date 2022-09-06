@@ -38,7 +38,7 @@ define([
                     cartCache.get('rates')
                 ) {
                     shippingService.setShippingRates(cartCache.get('rates'));
-
+                    quote.setTotals(cartCache.get('cart-data').totals);
                     return;
                 }
 

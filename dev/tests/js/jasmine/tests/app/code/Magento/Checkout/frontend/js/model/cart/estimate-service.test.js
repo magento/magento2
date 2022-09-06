@@ -20,13 +20,21 @@ define([
 
     var injector = new Squire(),
         rates = 'flatrate',
+        totals = {
+            tax: 0.1,
+            totals: 10
+        },
+        cartData = {
+            totals: totals,
+            rates: null
+        },
         mocks = {
             'Magento_Checkout/js/model/quote': {
                 shippingAddress: ko.observable(),
                 isVirtual: function () {},
                 billingAddress: ko.observable(),
-                shippingMethod: ko.observable()
-
+                shippingMethod: ko.observable(),
+                setTotals: function () {}
             },
             'Magento_Checkout/js/model/shipping-rate-processor/new-address': {
                 getRates: jasmine.createSpy()
@@ -42,7 +50,7 @@ define([
             },
             'Magento_Checkout/js/model/cart/cache': {
                 isChanged: function () {},
-                get: jasmine.createSpy().and.returnValue(rates),
+                get: jasmine.createSpy().and.returnValues(rates, cartData),
                 set: jasmine.createSpy()
             },
             'Magento_Customer/js/customer-data': {
@@ -90,13 +98,16 @@ define([
             spyOn(mocks['Magento_Checkout/js/model/quote'], 'isVirtual').and.returnValue(false);
             spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'isChanged').and.returnValue(false);
             spyOn(mocks['Magento_Checkout/js/model/shipping-service'], 'setShippingRates');
+            spyOn(mocks['Magento_Checkout/js/model/quote'], 'setTotals');
             mocks['Magento_Checkout/js/model/quote'].shippingAddress({
                 id: 2,
                 getType: function () {
                     return 'address_type_test';
                 }
             });
+            expect(mocks['Magento_Checkout/js/model/cart/cache'].get('cart-data')).toBe(cartData);
             expect(mocks['Magento_Checkout/js/model/shipping-service'].setShippingRates).toHaveBeenCalledWith(rates);
+            expect(mocks['Magento_Checkout/js/model/quote'].setTotals).toHaveBeenCalledWith(cartData.totals);
             expect(mocks['Magento_Checkout/js/model/cart/totals-processor/default'].estimateTotals)
                 .not.toHaveBeenCalled();
             expect(mocks['Magento_Checkout/js/model/shipping-rate-processor/new-address'].getRates)
