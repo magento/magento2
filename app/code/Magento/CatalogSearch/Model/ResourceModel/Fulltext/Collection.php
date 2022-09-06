@@ -548,7 +548,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             [
                 'collection' => $this,
                 'searchResult' => $searchResult,
-                /** This variable sets by serOrder method, but doesn't have a getter method. */
+                /** This variable sets by setOrder method, but doesn't have a getter method. */
                 'orders' => $this->_orders,
                 'size' => $this->getPageSize(),
                 'currentPage' => (int)$this->_curPage,
