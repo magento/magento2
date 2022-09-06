@@ -16,8 +16,6 @@ use Magento\Framework\App\ObjectManager;
 
 class CanRefund implements ValidatorInterface
 {
-    use \Magento\Sales\Model\Order\Validation\CanRefundTrait;
-
     /**
      * @var OrderPaymentRepositoryInterface
      */
@@ -91,8 +89,13 @@ class CanRefund implements ValidatorInterface
      */
     private function isGrandTotalEnoughToRefund(InvoiceInterface $entity)
     {
+        $isAllowedZeroGrandTotal = $this->objectManager->get(ScopeConfigInterface::class)->getValue(
+            'sales/zerograndtotal_creditmemo/allow_zero_grandtotal',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
         return abs($entity->getBaseGrandTotal() - $entity->getBaseTotalRefunded()) >= .0001 ||
-            $this->isAllowZeroGrandTotal();
+            $isAllowedZeroGrandTotal;
     }
 
     /**

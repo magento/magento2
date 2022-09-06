@@ -13,8 +13,6 @@ use Magento\Sales\Model\ValidatorInterface;
 
 class CanRefund implements ValidatorInterface
 {
-    use \Magento\Sales\Model\Order\Validation\CanRefundTrait;
-
     /**
      * @var PriceCurrencyInterface
      */
@@ -69,8 +67,13 @@ class CanRefund implements ValidatorInterface
      */
     private function isTotalPaidEnoughForRefund(OrderInterface $order)
     {
+        $isAllowedZeroGrandTotal = $this->objectManager->get(ScopeConfigInterface::class)->getValue(
+            'sales/zerograndtotal_creditmemo/allow_zero_grandtotal',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
         return !abs($this->priceCurrency->round($order->getTotalPaid()) - $order->getTotalRefunded()) < .0001 ||
             $order->getTotalPaid() == 0 &&
-            $this->isAllowZeroGrandTotal();
+            $isAllowedZeroGrandTotal;
     }
 }
