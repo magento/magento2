@@ -46,5 +46,6 @@
         <element name="productImage" type="text" selector="//ol[@id='mini-cart']//img[@class='product-image-photo']"/>
         <element name="productSubTotal" type="text" selector="//div[@class='subtotal']//span/span[@class='price']"/>
         <element name="productCountLabel" type="text" selector="//*[@id='minicart-content-wrapper']/div[2]/div[1]/span[2]"/>
+        <element name="productCartName" type="text" selector="//tbody[@class='cart item']//strong[@class='product-item-name']//a[contains(text(),'{{var}}')]" parameterized="true"/>
     </section>
 </sections>
