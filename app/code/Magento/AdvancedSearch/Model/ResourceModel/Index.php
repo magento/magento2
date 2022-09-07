@@ -3,20 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AdvancedSearch\Model\ResourceModel;
 
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Framework\Search\Request\IndexScopeResolverInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Search\Request\Dimension;
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
-use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolver;
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolver;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @api
@@ -148,6 +150,63 @@ class Index extends AbstractDb
         }
 
         return $priceProductsIndexData[$websiteId];
+    }
+
+    /**
+     * Return array of inventory data products
+     *
+     * @param null|array $productIds
+     * @return array
+     * @since 100.1.0
+     */
+    protected function _getCatalogProductInventoryData($productIds = null)
+    {
+        $connection = $this->getConnection();
+        $catalogProductIndexInventorySelect = [];
+
+        foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
+            if (!isset($dimensions[WebsiteDimensionProvider::DIMENSION_NAME]) ||
+                $this->websiteId === null ||
+                $dimensions[WebsiteDimensionProvider::DIMENSION_NAME]->getValue() === $this->websiteId) {
+                $select = $connection->select()->from(
+                    $this->tableResolver->resolve('cataloginventory_stock_status', $dimensions),
+                    ['product_id', 'website_id', 'stock_status']
+                );
+                if ($productIds) {
+                    $select->where('product_id IN (?)', $productIds);
+                }
+                $catalogProductIndexInventorySelect[] = $select;
+            }
+        }
+
+        $catalogProductIndexInventoryUnionSelect = $connection->select()->union($catalogProductIndexInventorySelect);
+
+        $result = [];
+        foreach ($connection->fetchAll($catalogProductIndexInventoryUnionSelect) as $row) {
+            $result[$row['website_id']][$row['product_id']] = (int) $row['stock_status'];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Retrieve inventory data for product
+     *
+     * @param null|array $productIds
+     * @param int $websiteId
+     * @return array
+     */
+    public function getInventoryIndexData($productIds, $websiteId = null)
+    {
+        $this->websiteId = $websiteId;
+        $inventoryProductsIndexData = $this->_getCatalogProductInventoryData($productIds);
+        $this->websiteId = null;
+
+        if (!isset($inventoryProductsIndexData[(int) $websiteId])) {
+            return [];
+        }
+
+        return $inventoryProductsIndexData[(int) $websiteId];
     }
 
     /**

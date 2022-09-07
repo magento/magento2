@@ -148,6 +148,7 @@
             <argument name="fieldsProviders" xsi:type="array">
                 <item name="categories" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy</item>
                 <item name="prices" xsi:type="object">Magento\Elasticsearch\Model\Adapter\BatchDataMapper\PriceFieldsProvider</item>
+                <item name="inventory" xsi:type="object">Magento\Elasticsearch\Model\Adapter\BatchDataMapper\InventoryFieldsProvider</item>
             </argument>
         </arguments>
     </virtualType>
