@@ -39,6 +39,8 @@
             <argument name="username" value="{{activeAdmin.username}}"/>
             <argument name="password" value="{{activeAdmin.password}}"/>
         </actionGroup>
+        <wait time = "40" stepKey = "forty"></wait>
+
         <amOnPage url="{{AdminUsersPage.url}}" stepKey="navigateToAdminUsersGrid"/>
         <actionGroup ref="AssertAdminUserIsInGridActionGroup" stepKey="assertAdminIsInGrid">
             <argument name="user" value="activeAdmin"/>
