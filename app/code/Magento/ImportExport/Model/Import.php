@@ -522,7 +522,7 @@ class Import extends AbstractModel
             $this->importHistoryModel->invalidateReport($this);
         }
 
-        $this->getDataSourceModel()->cleanBunchesWithId($ids);
+        //$this->getDataSourceModel()->cleanBunchesWithId($ids);
 
         return $result;
     }
