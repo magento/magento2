@@ -24,10 +24,6 @@ define([
             tax: 0.1,
             totals: 10
         },
-        cartData = {
-            totals: totals,
-            rates: null
-        },
         mocks = {
             'Magento_Checkout/js/model/quote': {
                 shippingAddress: ko.observable(),
@@ -50,7 +46,7 @@ define([
             },
             'Magento_Checkout/js/model/cart/cache': {
                 isChanged: function () {},
-                get: jasmine.createSpy().and.returnValues(rates, cartData),
+                get: jasmine.createSpy().and.returnValues(rates, totals, rates, totals),
                 set: jasmine.createSpy()
             },
             'Magento_Customer/js/customer-data': {
@@ -105,13 +101,12 @@ define([
                     return 'address_type_test';
                 }
             });
-            expect(mocks['Magento_Checkout/js/model/cart/cache'].get('cart-data')).toBe(cartData);
             expect(mocks['Magento_Checkout/js/model/shipping-service'].setShippingRates).toHaveBeenCalledWith(rates);
-            expect(mocks['Magento_Checkout/js/model/quote'].setTotals).toHaveBeenCalledWith(cartData.totals);
+            expect(mocks['Magento_Checkout/js/model/quote'].setTotals).toHaveBeenCalledWith(totals);
             expect(mocks['Magento_Checkout/js/model/cart/totals-processor/default'].estimateTotals)
-                .not.toHaveBeenCalled();
+                .toHaveBeenCalled();
             expect(mocks['Magento_Checkout/js/model/shipping-rate-processor/new-address'].getRates)
-                .not.toHaveBeenCalled();
+                .toHaveBeenCalled();
         });
 
         it('test subscribe when shipping address was changed for virtual quote', function () {
@@ -125,7 +120,7 @@ define([
             expect(mocks['Magento_Checkout/js/model/cart/totals-processor/default'].estimateTotals)
                 .toHaveBeenCalled();
             expect(mocks['Magento_Checkout/js/model/shipping-rate-processor/new-address'].getRates)
-                .not.toHaveBeenCalled();
+                .toHaveBeenCalled();
         });
 
         it('test subscribe when shipping address was changed for not virtual quote', function () {
