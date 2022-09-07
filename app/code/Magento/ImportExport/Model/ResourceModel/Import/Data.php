@@ -124,16 +124,12 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      */
     public function cleanBunchesWithId($ids)
     {
-        if (!$ids) {
-            return $this->cleanBunches();
-        } else {
-            return $this->getConnection()->delete(
-                $this->getMainTable(),
-                [
-                    'ID IN (?)' => $ids,
-                ]
-            );
-        }
+        return $this->getConnection()->delete(
+            $this->getMainTable(),
+            [
+                'ID IN (?)' => $ids,
+            ]
+        );
     }
 
     /**
