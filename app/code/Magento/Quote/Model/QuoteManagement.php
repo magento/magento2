@@ -713,6 +713,7 @@ class QuoteManagement implements CartManagementInterface
             $shipping->setSameAsBilling(1);
         }
         if (!empty($billingAddress)
+            && !empty($shipping)
             && !$shipping->getCustomerAddressId()
             && $shipping->getSameAsBilling()) {
             $shipping->setCustomerAddressId($billingAddress->getId());

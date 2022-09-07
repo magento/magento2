@@ -368,4 +368,32 @@ class QuoteManagementTest extends TestCase
         $this->objectManager->removeSharedInstance(Vat::class);
         $this->objectManager->addSharedInstance($vatMock, Vat::class);
     }
+
+    /**
+     * Creates order with purchase_order payment method
+     *
+     * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
+     * @magentoDbIsolation disabled
+     * @return void
+     * @throws CouldNotSaveException
+     */
+    public function testCustomerAddressIdAfterPlacingOrder(): void
+    {
+        $quote = $this->getQuoteByReservedOrderId->execute('test01');
+        $quote->getShippingAddress()
+            ->setShippingMethod('flatrate_flatrate')
+            ->setCollectShippingRates(true);
+        $quote->getShippingAddress()->setSameAsBilling(0);
+        $quote->getShippingAddress()->setSaveInAddressBook(1);
+        $quote->getBillingAddress()->setSaveInAddressBook(null);
+        $quote->getBillingAddress()->setCustomerAddressId(null);
+        $quote->save();
+        $orderId = $this->cartManagement->placeOrder($quote->getId());
+        $order = $this->orderRepository->get($orderId);
+        $billingAddress = $order->getBillingAddress();
+        $shippingAddress = $order->getShippingAddress();
+        $this->assertNotNull($billingAddress->getCustomerAddressId());
+        $this->assertNotNull($shippingAddress->getCustomerAddressId());
+        $this->assertEquals($billingAddress->getCustomerAddressId(), $shippingAddress->getCustomerAddressId());
+    }
 }
