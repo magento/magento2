@@ -23,13 +23,16 @@ trait GetReflectionMethodReturnTypeValueTrait
         $returnTypeValue = null;
         $returnType = $method->getReturnType();
         if ($returnType) {
-            if ($returnType instanceof \ReflectionUnionType) {
+            if ($returnType instanceof \ReflectionUnionType || $returnType instanceof \ReflectionIntersectionType) {
                 $returnTypeValue = [];
                 foreach ($method->getReturnType()->getTypes() as $type) {
                     $returnTypeValue[] =  $type->getName();
                 }
 
-                $returnTypeValue = implode('|', $returnTypeValue);
+                $returnTypeValue = implode(
+                    $returnType instanceof \ReflectionUnionType ? '|' : '&',
+                    $returnTypeValue
+                );
             } else {
                 $className = $method->getDeclaringClass()->getName();
                 $returnTypeValue = ($returnType->allowsNull() && $returnType->getName() !== 'mixed' ? '?' : '');

@@ -10,6 +10,8 @@ namespace Magento\Framework\Interception\Code\Generator;
 class ReflectionUnionTypeSample
 {
     /**
+     * Union type attribute
+     *
      * @var int|string
      */
     private int|string $attribute;

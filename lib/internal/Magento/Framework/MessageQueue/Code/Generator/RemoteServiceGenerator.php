@@ -175,13 +175,16 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     {
         $returnTypeValue = $type instanceof \ReflectionNamedType ? $type->getName() : $type;
 
-        if ($type instanceof \ReflectionUnionType) {
+        if ($type instanceof \ReflectionUnionType || $type instanceof \ReflectionIntersectionType) {
             $returnTypeValue = [];
             foreach ($type->getTypes() as $type) {
                 $returnTypeValue[] =  $type->getName();
             }
 
-            $returnTypeValue = implode('|', $returnTypeValue);
+            $returnTypeValue = implode(
+                $type instanceof \ReflectionUnionType ? '|' : '&',
+                $returnTypeValue
+            );
         }
 
         return $returnTypeValue;

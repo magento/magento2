@@ -23,6 +23,8 @@ class Sample
     private $config = [];
 
     /**
+     * Union type attribute
+     *
      * @var int|string
      */
     private int|string $attribute;

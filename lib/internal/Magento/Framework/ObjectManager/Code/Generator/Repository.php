@@ -753,13 +753,16 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     {
         $returnTypeValue = $type instanceof \ReflectionType ? $type->getName() : $type;
 
-        if ($type instanceof \ReflectionUnionType) {
+        if ($type instanceof \ReflectionUnionType || $type instanceof \ReflectionIntersectionType) {
             $returnTypeValue = [];
             foreach ($type->getTypes() as $type) {
                 $returnTypeValue[] =  $type->getName();
             }
 
-            $returnTypeValue = implode('|', $returnTypeValue);
+            $returnTypeValue = implode(
+                $type instanceof \ReflectionUnionType ? '|' : '&',
+                $returnTypeValue
+            );
         }
 
         return $returnTypeValue;
