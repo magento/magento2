@@ -29,7 +29,7 @@ class FixerIo extends AbstractImport
     /**
      * @var string
      */
-    public const API_KEY_CONFIG_PATH = 'currency/fixerio/api_key';
+    private const API_KEY_CONFIG_PATH = 'currency/fixerio/api_key';
 
     /**
      * @var HttpClientFactory
