@@ -117,6 +117,22 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     }
 
     /**
+     * Clean bunches with specific Ids
+     *
+     * @param array $ids
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function cleanBunchesWithId($ids)
+    {
+        return $this->getConnection()->delete(
+            $this->getMainTable(),
+            [
+                'ID IN (?)' => $ids,
+            ]
+        );
+    }
+
+    /**
      * Return behavior from import data table.
      *
      * @param array|null $ids
