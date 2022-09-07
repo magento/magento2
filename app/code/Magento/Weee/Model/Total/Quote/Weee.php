@@ -242,6 +242,7 @@ class Weee extends AbstractTotal
             ->setBaseWeeeTaxAppliedAmountInclTax($baseTotalValueInclTax)
             ->setWeeeTaxAppliedRowAmountInclTax($totalRowValueInclTax)
             ->setBaseWeeeTaxAppliedRowAmntInclTax($baseTotalRowValueInclTax);
+        $address->setBaseSubtotalTotalInclTax($address->getBaseSubtotalTotalInclTax() + $baseTotalRowValueInclTax);
 
         $this->processTotalAmount(
             $total,
