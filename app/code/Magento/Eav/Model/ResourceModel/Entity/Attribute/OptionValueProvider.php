@@ -32,14 +32,14 @@ class OptionValueProvider
     /**
      * Get EAV attribute option value by option id
      *
-     * @param int $valueId
+     * @param int $optionId
      * @return string|null
      */
-    public function get(int $valueId): ?string
+    public function get(int $optionId): ?string
     {
         $select = $this->connection->select()
             ->from($this->connection->getTableName('eav_attribute_option_value'), 'value')
-            ->where('value_id = ?', $valueId);
+            ->where('option_id = ?', $optionId);
 
         $result = $this->connection->fetchOne($select);
 
