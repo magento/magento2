@@ -522,7 +522,6 @@ class Import extends AbstractModel
             $this->importHistoryModel->invalidateReport($this);
         }
 
-
         return $result;
     }
 
