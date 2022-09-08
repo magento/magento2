@@ -470,6 +470,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     {
         $collection = $this->_categoryColFactory->create()->addNameToResult();
         /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
+        $collection->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
         foreach ($collection as $category) {
             $structure = preg_split('#/+#', $category->getPath());
             $pathSize = count($structure);
