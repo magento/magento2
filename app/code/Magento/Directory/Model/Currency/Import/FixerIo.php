@@ -111,8 +111,8 @@ class FixerIo extends AbstractImport
 
         $currenciesStr = implode(',', $currenciesTo);
         $url = str_replace(
-            ['{{ACCESS_KEY}}', '{{CURRENCY_FROM}}', '{{CURRENCY_TO}}'],
-            [$accessKey, $currencyFrom, $currenciesStr],
+            ['{{CURRENCY_FROM}}', '{{CURRENCY_TO}}'],
+            [$currencyFrom, $currenciesStr],
             self::CURRENCY_CONVERTER_URL
         );
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
