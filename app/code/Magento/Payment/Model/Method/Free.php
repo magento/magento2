@@ -29,11 +29,11 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * XML Paths for configuration constants
      */
-    protected const XML_PATH_PAYMENT_FREE_ACTIVE = 'payment/free/active';
+    public const XML_PATH_PAYMENT_FREE_ACTIVE = 'payment/free/active';
 
-    protected const XML_PATH_PAYMENT_FREE_ORDER_STATUS = 'payment/free/order_status';
+    public const XML_PATH_PAYMENT_FREE_ORDER_STATUS = 'payment/free/order_status';
 
-    protected const XML_PATH_PAYMENT_FREE_PAYMENT_ACTION = 'payment/free/payment_action';
+    public const XML_PATH_PAYMENT_FREE_PAYMENT_ACTION = 'payment/free/payment_action';
 
     /**
      * Payment Method features
