@@ -38,7 +38,7 @@
         "colinmollenhour/cache-backend-redis": "1.14.2",
         "colinmollenhour/credis": "1.13.0",
         "colinmollenhour/php-redis-session-abstract": "~1.4.5",
-        "composer/composer": "^1.9 || ^2.0, !=2.2.16",
+        "composer/composer": "^2.0, !=2.2.16",
         "elasticsearch/elasticsearch": "~7.17.0",
         "ezyang/htmlpurifier": "^4.14",
         "guzzlehttp/guzzle": "^7.4.2",
