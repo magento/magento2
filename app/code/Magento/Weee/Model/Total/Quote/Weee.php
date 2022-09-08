@@ -25,11 +25,11 @@ class Weee extends AbstractTotal
     /**
      * Constant for weee item code prefix
      */
-    const ITEM_CODE_WEEE_PREFIX = 'weee';
+    public const ITEM_CODE_WEEE_PREFIX = 'weee';
     /**
      * Constant for weee item type
      */
-    const ITEM_TYPE = 'weee';
+    public const ITEM_TYPE = 'weee';
 
     /**
      * @var WeeHelper
@@ -42,7 +42,7 @@ class Weee extends AbstractTotal
     protected $_store;
 
     /**
-     * Counter
+     * Counter to keep track of count for weee
      *
      * @var int
      */
