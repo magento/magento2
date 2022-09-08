@@ -521,7 +521,7 @@ class Import extends AbstractModel
         } else {
             $this->importHistoryModel->invalidateReport($this);
         }
-        if ($ids) {
+        if ($ids!==[]) {
             $this->getDataSourceModel()->cleanBunchesWithId($ids);
         }
         return $result;
