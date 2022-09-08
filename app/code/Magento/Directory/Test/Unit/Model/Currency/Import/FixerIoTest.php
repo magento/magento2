@@ -72,14 +72,15 @@ class FixerIoTest extends TestCase
         $responseBody = '{"success":"true","base":"USD","date":"2015-10-07","rates":{"EUR":0.9022}}';
         $expectedCurrencyRateList = ['USD' => ['EUR' => 0.9022, 'UAH' => null]];
         $message = "We can't retrieve a rate from "
-            . "http://data.fixer.io for UAH.";
+            ."https://api.apilayer.com for UAH.";
 
         $this->scopeConfig->method('getValue')
             ->withConsecutive(
                 ['currency/fixerio/api_key', 'store'],
+                ['currency/fixerio/api_key', 'store'],
                 ['currency/fixerio/timeout', 'store']
             )
-            ->willReturnOnConsecutiveCalls('api_key', 100);
+            ->willReturnOnConsecutiveCalls('api_key', 'api_key', 100);
 
         /** @var Currency|MockObject $currency */
         $currency = $this->getMockBuilder(Currency::class)
@@ -93,6 +94,11 @@ class FixerIoTest extends TestCase
         $httpResponse = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBody'])
+            ->getMock();
+        /** @var DataObject|MockObject $headerMock */
+        $headerMock = $this->getMockBuilder(DataObject::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['addHeaders'])
             ->getMock();
 
         $this->currencyFactory->method('create')
@@ -110,6 +116,8 @@ class FixerIoTest extends TestCase
             ->willReturnSelf();
         $httpClient->method('setMethod')
             ->willReturnSelf();
+        $httpClient->method('getHeaders')
+            ->willReturn($headerMock);
         $httpClient->method('send')
             ->willReturn($httpResponse);
         $httpResponse->method('getBody')
