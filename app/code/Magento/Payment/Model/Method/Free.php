@@ -24,7 +24,7 @@ use Magento\Sales\Model\Order\Status;
  */
 class Free extends \Magento\Payment\Model\Method\AbstractMethod
 {
-    protected const PAYMENT_METHOD_FREE_CODE = 'free';
+    public const PAYMENT_METHOD_FREE_CODE = 'free';
 
     /**
      * XML Paths for configuration constants
