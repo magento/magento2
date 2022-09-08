@@ -5,16 +5,8 @@
  */
 namespace Magento\Payment\Model\Method;
 
-use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\Model\Context;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Framework\Registry;
-use Magento\Payment\Helper\Data;
 use Magento\Sales\Model\Order\Config;
 use Magento\Sales\Model\Order\Status;
 
@@ -26,21 +18,22 @@ use Magento\Sales\Model\Order\Status;
  * Magento contains special flow for handling this payment method.
  * Inheritance is allowed to modify it behavior.
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
  */
 class Free extends \Magento\Payment\Model\Method\AbstractMethod
 {
-    const PAYMENT_METHOD_FREE_CODE = 'free';
+    protected const PAYMENT_METHOD_FREE_CODE = 'free';
 
     /**
      * XML Paths for configuration constants
      */
-    const XML_PATH_PAYMENT_FREE_ACTIVE = 'payment/free/active';
+    protected const XML_PATH_PAYMENT_FREE_ACTIVE = 'payment/free/active';
 
-    const XML_PATH_PAYMENT_FREE_ORDER_STATUS = 'payment/free/order_status';
+    protected const XML_PATH_PAYMENT_FREE_ORDER_STATUS = 'payment/free/order_status';
 
-    const XML_PATH_PAYMENT_FREE_PAYMENT_ACTION = 'payment/free/payment_action';
+    protected const XML_PATH_PAYMENT_FREE_PAYMENT_ACTION = 'payment/free/payment_action';
 
     /**
      * Payment Method features
@@ -146,6 +139,9 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     {
         $newStateStatuses = $this->config->getStateStatuses('new');
         $configNewOrderStatus = $this->getConfigData('order_status');
-        return $configNewOrderStatus == 'pending' || array_key_exists($configNewOrderStatus, $newStateStatuses) ? null : parent::getConfigPaymentAction();
+        return
+            $configNewOrderStatus == 'pending' ||
+            array_key_exists($configNewOrderStatus, $newStateStatuses) ?
+                null : parent::getConfigPaymentAction();
     }
 }
