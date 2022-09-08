@@ -34,17 +34,19 @@
             <argument name="role" value="roleDefaultAdministrator"/>
         </actionGroup>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMainAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin1"/>
 
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToNewAdmin">
-            <argument name="username" value="{{activeAdmin.username}}"/>
-            <argument name="password" value="{{activeAdmin.password}}"/>
-        </actionGroup>
-        <wait time = "40" stepKey = "forty"></wait>
+        <!--        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToNewAdmin">-->
+<!--            <argument name="username" value="{{activeAdmin.username}}"/>-->
+<!--            <argument name="password" value="{{activeAdmin.password}}"/>-->
+<!--        </actionGroup>-->
 
         <amOnPage url="{{AdminUsersPage.url}}" stepKey="navigateToAdminUsersGrid"/>
-        <actionGroup ref="AssertAdminUserIsInGridActionGroup" stepKey="assertAdminIsInGrid">
-            <argument name="user" value="activeAdmin"/>
-        </actionGroup>
-        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutCreatedUser"/>
+        <click selector="button[title='Reset Filters']" stepKey="resetGridFilter"/>
+
+<!--        <actionGroup ref="AssertAdminUserIsInGridActionGroup" stepKey="assertAdminIsInGrid">-->
+<!--            <argument name="user" value="activeAdmin"/>-->
+<!--        </actionGroup>-->
+<!--        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutCreatedUser"/>-->
     </test>
 </tests>
