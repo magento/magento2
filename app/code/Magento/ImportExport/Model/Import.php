@@ -30,6 +30,7 @@ use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\Entity\Factory;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\Import\Source\Base64EncodedCsvData;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Magento\ImportExport\Model\Source\Import\AbstractBehavior;
 use Magento\ImportExport\Model\Source\Import\Behavior\Factory as BehaviorFactory;
@@ -521,8 +522,12 @@ class Import extends AbstractModel
         } else {
             $this->importHistoryModel->invalidateReport($this);
         }
-        if ($ids!==[]) {
-            $this->getDataSourceModel()->cleanBunchesWithId($ids);
+        try {
+            if ($this->_getEntityAdapter()->getSource() instanceof Base64EncodedCsvData) {
+                $this->getDataSourceModel()->cleanBunchesWithId($ids);
+            }
+        } catch (LocalizedException $e) {
+            //Do nothing if Source is not set
         }
         return $result;
     }
