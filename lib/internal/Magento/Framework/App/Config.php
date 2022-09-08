@@ -5,6 +5,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Config\ConfigTypeInterface;
@@ -12,14 +14,14 @@ use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Class Config
+ * Application config
  */
 class Config implements ScopeConfigInterface
 {
     /**
      * Config cache tag
      */
-    const CACHE_TAG = 'CONFIG';
+    public const CACHE_TAG = 'CONFIG';
 
     /**
      * @var ScopeCodeResolver
@@ -132,6 +134,6 @@ class Config implements ScopeConfigInterface
             $result = $this->types[$configType]->get($path);
         }
 
-        return $result !== null ? $result : $default;
+        return $result !== null ? $result : ($default !== null ? $default : '');
     }
 }
