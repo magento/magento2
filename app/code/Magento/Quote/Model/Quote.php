@@ -628,7 +628,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
-     * @inheritdoc
+     * Sets whether the cart is virtual cart.
+     *
+     * @param bool $isVirtual
+     * @return $this
      */
     public function setIsVirtual($isVirtual)
     {
