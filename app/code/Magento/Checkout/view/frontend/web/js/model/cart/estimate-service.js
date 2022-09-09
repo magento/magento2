@@ -9,8 +9,10 @@ define([
     'Magento_Checkout/js/model/cart/totals-processor/default',
     'Magento_Checkout/js/model/shipping-service',
     'Magento_Checkout/js/model/cart/cache',
-    'Magento_Customer/js/customer-data'
-], function (quote, defaultProcessor, totalsDefaultProvider, shippingService, cartCache, customerData) {
+    'Magento_Customer/js/customer-data',
+    'Magento_Checkout/js/checkout-data',
+    'Magento_Checkout/js/action/select-shipping-method'
+], function (quote, defaultProcessor, totalsDefaultProvider, shippingService, cartCache, customerData, checkoutData, selectShippingMethodAction) {
     'use strict';
 
     var rateProcessors = {},
@@ -35,8 +37,9 @@ define([
                 // check if user data not changed -> load rates from cache
                 if (!cartCache.isChanged('address', quote.shippingAddress()) &&
                     !cartCache.isChanged('cartVersion', customerData.get('cart')()['data_id']) &&
-                    cartCache.get('rates') && cartCache.get('totals')
+                    cartCache.get('rates') //&& cartCache.get('totals')
                 ) {
+
                     shippingService.setShippingRates(cartCache.get('rates'));
                     quote.setTotals(cartCache.get('totals'));
                     return;
@@ -53,8 +56,12 @@ define([
                     cartCache.set('rates', rates);
                 });
 
-                // update totals based on shipping address / rates changes
-                totalsDefaultProvider.estimateTotals(quote.shippingAddress());
+                // update totals based on updated shipping address / rates changes
+                if (cartCache.get('address') &&
+                    (!quote.shippingMethod() || !quote.shippingMethod()['method_code'])
+                ) {
+                    totalsDefaultProvider.estimateTotals(quote.shippingAddress());
+                }
             }
         },
 
@@ -80,7 +87,9 @@ define([
             }
         };
 
-
+    /*if (!quote.shippingMethod() && cartCache.get('rates')) {
+        selectShippingMethodAction(cartCache.get('rates')[0]);
+    }*/
     quote.shippingAddress.subscribe(estimateTotalsAndUpdateRates);
     quote.shippingMethod.subscribe(estimateTotalsShipping);
     quote.billingAddress.subscribe(estimateTotalsBilling);
