@@ -95,11 +95,6 @@ class FixerIoTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getBody'])
             ->getMock();
-        /** @var DataObject|MockObject $headerMock */
-        $headerMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['addHeaders'])
-            ->getMock();
 
         $this->currencyFactory->method('create')
             ->willReturn($currency);
@@ -116,8 +111,6 @@ class FixerIoTest extends TestCase
             ->willReturnSelf();
         $httpClient->method('setMethod')
             ->willReturnSelf();
-        $httpClient->method('getHeaders')
-            ->willReturn($headerMock);
         $httpClient->method('send')
             ->willReturn($httpResponse);
         $httpResponse->method('getBody')
