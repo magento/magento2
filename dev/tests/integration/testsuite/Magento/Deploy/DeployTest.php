@@ -240,7 +240,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
     private function assertBundleSize($theme)
     {
         $expectedSize = $this->bundleConfig->getBundleFileMaxSize('frontend', $theme);
-        $expectedSize *= 1.15;
+        $expectedSize *= 1.2;
 
         $iterator = $this->getDirectoryIterator("frontend/{$theme}/en_US/js/bundle");
         /** @var \SplFileInfo $file */
