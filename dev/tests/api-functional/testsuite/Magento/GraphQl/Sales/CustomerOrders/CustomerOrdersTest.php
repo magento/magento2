@@ -99,20 +99,20 @@ QUERY;
 
     /**
      */
-    public function testOrdersQueryNotAuthorized()
+    public function testCustomerOrdersQueryNotAuthorized()
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('The current customer isn\'t authorized.');
 
         $query = <<<QUERY
-{
-  customerOrders {
-    items {
-      increment_id
-      grand_total
-    }
-  }
-}
+            {
+                customerOrders {
+                    items {
+                    increment_id
+                    grand_total
+                    }
+                }
+            }
 QUERY;
         $this->graphQlQuery($query);
     }
