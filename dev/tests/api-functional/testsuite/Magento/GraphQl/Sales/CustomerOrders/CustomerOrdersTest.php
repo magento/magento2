@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Sales;
+namespace Magento\GraphQl\Sales\CustomerOrders;
 
 use Exception;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -52,7 +52,6 @@ class CustomerOrdersTest extends GraphQlAbstract
                 }
             }
 QUERY;
-
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
