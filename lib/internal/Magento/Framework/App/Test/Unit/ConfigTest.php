@@ -78,6 +78,21 @@ class ConfigTest extends TestCase
     }
 
     /**
+     * @param $default
+     * @param $result
+     * @dataProvider getDataProvider
+     * @return void
+     */
+    public function testGet($default, $result)
+    {
+        $path = 'path';
+        $this->configType->expects($this->any())
+            ->method('get')
+            ->willReturn($default);
+        $this->assertSame($result, $this->appConfig->get('system', $path, $default));
+    }
+
+    /**
      * @return array
      */
     public function getValueDataProvider()
@@ -85,6 +100,18 @@ class ConfigTest extends TestCase
         return [
             ['store', 1],
             ['website'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataProvider()
+    {
+        return [
+            [1, 1],
+            [[1,2,3], [1,2,3]],
+            [null, ''],
         ];
     }
 }
