@@ -14,6 +14,9 @@ use Magento\Framework\App\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Application configuration test
+ */
 class ConfigTest extends TestCase
 {
     /**
@@ -36,6 +39,9 @@ class ConfigTest extends TestCase
      */
     private $appConfig;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->scopeCodeResolver = $this->getMockBuilder(ScopeCodeResolver::class)

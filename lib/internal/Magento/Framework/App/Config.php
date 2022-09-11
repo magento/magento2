@@ -1,7 +1,5 @@
 <?php
 /**
- * Application configuration object. Used to access configuration when application is initialized and installed.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -14,7 +12,7 @@ use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Application config
+ * Application configuration object. Used to access configuration when application is initialized and installed.
  */
 class Config implements ScopeConfigInterface
 {
