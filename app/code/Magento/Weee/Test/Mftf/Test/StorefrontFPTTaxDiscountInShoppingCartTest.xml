@@ -17,10 +17,10 @@
             <severity value="CRITICAL"/>
             <useCaseId value="ACP2E-1076"/>
             <testCaseId value="AC-6663"/>
+            <group value="SalesRule"/>
             <group value="checkout"/>
             <group value="tax"/>
             <group value="weee"/>
-            <group value="SalesRule"/>
         </annotations>
 
         <before>
@@ -64,9 +64,9 @@
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{_defaultCoupon.code}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="[{{'NOT LOGGED IN','General','Wholesale','Retailer'}}]" stepKey="selectSpecifiedCustomerGroups"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
         <click selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="expandConditions"/>
-        <!-- Scroll down to fix some flaky behavior... -->
+        <!-- Scroll down -->
         <scrollTo selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="scrollToConditionsTab"/>
         <click selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="clickNewRule"/>
         <selectOption selector="{{PriceRuleConditionsSection.rulesDropdown}}" userInput="Subtotal (Incl. Tax)" stepKey="selectProductAttributes"/>
