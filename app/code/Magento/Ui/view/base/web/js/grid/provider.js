@@ -24,6 +24,7 @@ define([
             initialized: false,
             firstLoad: true,
             lastError: false,
+            cachedRequestDelay: 200,
             storageConfig: {
                 component: 'Magento_Ui/js/grid/data-storage',
                 provider: '${ $.storageConfig.name }',
@@ -31,7 +32,6 @@ define([
                 updateUrl: '${ $.update_url }'
             },
             listens: {
-                params: 'onParamsChange',
                 requestConfig: 'updateRequestConfig',
                 lastError: 'showAlert'
             },
@@ -77,6 +77,14 @@ define([
 
             this.initialized = true;
             this.trigger('reloaded');
+
+            // Let's wait before binding params listener
+            // for first page load with predefined data
+            _.delay(() => {
+                this.setListeners({
+                    params: 'onParamsChange'
+                });
+            }, this.cachedRequestDelay, this);
         },
 
         /**
