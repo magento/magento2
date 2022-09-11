@@ -94,7 +94,7 @@ if (!is_numeric($defaultMinSaleQty)) {
                     <div class="field">
                         <input type="text" class="input-text required-entry validate-number" id="inventory_qty"
                                name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[qty]"
-                               value="<?= $block->getDefaultConfigValue('qty') * 1 ?>" disabled="disabled"/>
+                               value="<?= (float) $block->getDefaultConfigValue('qty') * 1 ?>" disabled="disabled"/>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_qty_checkbox" data-role="toggle-editability-all"/>
@@ -116,7 +116,7 @@ if (!is_numeric($defaultMinSaleQty)) {
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_min_qty"
                                name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[min_qty]"
-                               value="<?= $block->getDefaultConfigValue('min_qty') * 1 ?>" disabled="disabled"/>
+                               value="<?= (float) $block->getDefaultConfigValue('min_qty') * 1 ?>" disabled="disabled"/>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_use_config_min_qty"
@@ -179,7 +179,7 @@ if (!is_numeric($defaultMinSaleQty)) {
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_max_sale_qty"
                                name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[max_sale_qty]"
-                               value="<?= $block->getDefaultConfigValue('max_sale_qty') * 1 ?>"
+                               value="<?= (float) $block->getDefaultConfigValue('max_sale_qty') * 1 ?>"
                                disabled="disabled"/>
                     </div>
                     <div class="field choice">
@@ -287,7 +287,7 @@ if (!is_numeric($defaultMinSaleQty)) {
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_notify_stock_qty"
                                name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[notify_stock_qty]"
-                               value="<?= $block->getDefaultConfigValue('notify_stock_qty') * 1 ?>"
+                               value="<?= (float) $block->getDefaultConfigValue('notify_stock_qty') * 1 ?>"
                                disabled="disabled"/>
                     </div>
                     <div class="field choice">
@@ -364,7 +364,7 @@ if (!is_numeric($defaultMinSaleQty)) {
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_qty_increments"
                                name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[qty_increments]"
-                               value="<?= $block->getDefaultConfigValue('qty_increments') * 1 ?>"
+                               value="<?= (float) $block->getDefaultConfigValue('qty_increments') * 1 ?>"
                                disabled="disabled"/>
                     </div>
                     <div class="field choice">
