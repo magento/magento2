@@ -64,9 +64,7 @@
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{_defaultCoupon.code}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
-         <generateDate date="-1 day" format="m/d/Y" stepKey="yesterdayDate"/>
-         <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$yesterdayDate}" stepKey="fillFromDate"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="[{{'NOT LOGGED IN','General','Wholesale','Retailer'}}]" stepKey="selectSpecifiedCustomerGroups"/>
         <click selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="expandConditions"/>
         <!-- Scroll down to fix some flaky behavior... -->
         <scrollTo selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="scrollToConditionsTab"/>
