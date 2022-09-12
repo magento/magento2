@@ -30,6 +30,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--  Step 3: Store>Configuration; Sales>Tax FPT Enable -->
             <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
+            <!--  update display price and display subtotal with 'Including and Excluding Tax' -->
             <magentoCLI command="config:set tax/cart_display/price 3"  stepKey="setPrice"/>
             <magentoCLI command="config:set tax/cart_display/subtotal 3"  stepKey="setSubtotal"/>
             <!--  Step 4: Fixed Product Tax attribute is created and added to default attribute set -->
