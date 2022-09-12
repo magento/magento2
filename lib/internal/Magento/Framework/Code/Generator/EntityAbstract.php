@@ -10,6 +10,8 @@ use Magento\Framework\GetParameterClassTrait;
 
 /**
  * Abstract entity
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class EntityAbstract
 {
@@ -18,7 +20,7 @@ abstract class EntityAbstract
     /**
      * Entity type abstract
      */
-    const ENTITY_TYPE = 'abstract';
+    public const ENTITY_TYPE = 'abstract';
 
     /**
      * @var string[]
@@ -332,17 +334,25 @@ abstract class EntityAbstract
         /** @var string|null $typeName */
         $typeName = null;
         $parameterType = $parameter->getType();
-        if ($parameterType->getName() === 'array') {
+
+        if ($parameterType instanceof \ReflectionUnionType) {
+            $parameterType = $parameterType->getTypes();
+            $parameterType = implode('|', $parameterType);
+        } else {
+            $parameterType = $parameterType->getName();
+        }
+
+        if ($parameterType === 'array') {
             $typeName = 'array';
         } elseif ($parameterClass = $this->getParameterClass($parameter)) {
             $typeName = $this->_getFullyQualifiedClassName($parameterClass->getName());
-        } elseif ($parameterType->getName() === 'callable') {
+        } elseif ($parameterType === 'callable') {
             $typeName = 'callable';
         } else {
-            $typeName = $parameterType->getName();
+            $typeName = $parameterType;
         }
 
-        if ($parameter->allowsNull()) {
+        if ($parameter->allowsNull() && $typeName !== 'mixed') {
             $typeName = '?' . $typeName;
         }
 
