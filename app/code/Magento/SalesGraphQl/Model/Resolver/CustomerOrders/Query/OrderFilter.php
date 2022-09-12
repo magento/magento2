@@ -107,7 +107,7 @@ class OrderFilter
                     }
                    
                 }
-            }    
+            }
         }
         return $filterGroups;
     }
