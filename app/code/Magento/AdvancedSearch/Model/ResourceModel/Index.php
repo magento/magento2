@@ -159,7 +159,7 @@ class Index extends AbstractDb
      * @return array
      * @since 100.1.0
      */
-    protected function _getCatalogProductInventoryData($productIds = null)
+    private function getCatalogProductInventoryData($productIds = null)
     {
         $connection = $this->getConnection();
         $catalogProductIndexInventorySelect = [];
@@ -199,7 +199,7 @@ class Index extends AbstractDb
     public function getInventoryIndexData($productIds, $websiteId = null)
     {
         $this->websiteId = $websiteId;
-        $inventoryProductsIndexData = $this->_getCatalogProductInventoryData($productIds);
+        $inventoryProductsIndexData = $this->getCatalogProductInventoryData($productIds);
         $this->websiteId = null;
 
         if (!isset($inventoryProductsIndexData[(int) $websiteId])) {

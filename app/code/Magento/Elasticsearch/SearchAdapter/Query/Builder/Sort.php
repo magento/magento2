@@ -8,11 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
+use Magento\Elasticsearch\Model\Adapter\BatchDataMapper\InventoryFieldsProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
     as FieldNameResolver;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection;
 use Magento\Framework\Search\RequestInterface;
 
 /**
@@ -62,22 +65,22 @@ class Sort
     /**
      * @param AttributeProvider $attributeAdapterProvider
      * @param FieldNameResolver $fieldNameResolver
-     * @param ScopeConfigInterface $scopeConfig
      * @param array $skippedFields
      * @param array $map
+     * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         AttributeProvider $attributeAdapterProvider,
         FieldNameResolver $fieldNameResolver,
-        ScopeConfigInterface $scopeConfig,
         array $skippedFields = [],
-        array $map = []
+        array $map = [],
+        ScopeConfigInterface  $scopeConfig = null
     ) {
         $this->attributeAdapterProvider = $attributeAdapterProvider;
         $this->fieldNameResolver = $fieldNameResolver;
-        $this->scopeConfig = $scopeConfig;
         $this->skippedFields = array_merge(self::DEFAULT_SKIPPED_FIELDS, $skippedFields);
         $this->map = array_merge(self::DEFAULT_MAP, $map);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -142,16 +145,16 @@ class Sort
      *
      * @return array
      */
-    public function getSortBySaleability()
+    private function getSortBySaleability()
     {
         $sorts = [];
 
         if ($this->hasShowOutOfStockStatus()) {
-            $attribute = $this->attributeAdapterProvider->getByAttributeCode('is_salable');
+            $attribute = $this->attributeAdapterProvider->getByAttributeCode(InventoryFieldsProvider::IS_SALABLE);
             $fieldName = $this->fieldNameResolver->getFieldName($attribute);
             $sorts[] = [
                 $fieldName => [
-                    'order' => 'desc'
+                    'order' => Collection::SORT_ORDER_DESC
                 ]
             ];
         }
