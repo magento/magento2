@@ -38,11 +38,7 @@ class CustomerOrdersTest extends GraphQlAbstract
             <<<QUERY
             query {
                 customer {
-                    orders(filter: { 
-                        created_at: { 
-                            from: "2022-09-04"
-                            to: "2022-09-09"
-                        }}) { 
+                    orders(filter: {}) { 
                         items { 
                             number  
                             status 
