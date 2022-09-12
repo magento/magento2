@@ -7,10 +7,10 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Filter\FilterInput;
-use Magento\SalesRule\Model\CouponGenerator;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\SalesRule\Api\Data\CouponGenerationSpecInterfaceFactory;
-use Magento\SalesRule\Model\Quote\ValidateCouponLengthWithQuantityInterface;
+use Magento\SalesRule\Model\CouponGenerator;
+use Magento\SalesRule\Model\Quote\GetCouponCodeLengthInterface;
 
 /**
  * Generate promo quote
@@ -35,9 +35,9 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote imple
     private $generationSpecFactory;
 
     /**
-     * @var ValidateCouponLengthWithQuantityInterface
+     * @var GetCouponCodeLengthInterface
      */
-    private $validateCouponLengthWithQuantity;
+    private $getCouponCodeLength;
 
     /**
      * Generate constructor.
@@ -48,7 +48,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote imple
      * @param CouponGenerator|null $couponGenerator
      * @param PublisherInterface|null $publisher
      * @param CouponGenerationSpecInterfaceFactory|null $generationSpecFactory
-     * @param ValidateCouponLengthWithQuantityInterface|null $validateCouponLengthWithQuantity
+     * @param GetCouponCodeLengthInterface|null $getCouponCodeLength
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -58,7 +58,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote imple
         CouponGenerator $couponGenerator = null,
         PublisherInterface $publisher = null,
         CouponGenerationSpecInterfaceFactory $generationSpecFactory = null,
-        ValidateCouponLengthWithQuantityInterface $validateCouponLengthWithQuantity = null
+        GetCouponCodeLengthInterface $getCouponCodeLength = null
     ) {
         parent::__construct($context, $coreRegistry, $fileFactory, $dateFilter);
         $this->couponGenerator = $couponGenerator ?:
@@ -69,9 +69,9 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote imple
             \Magento\Framework\App\ObjectManager::getInstance()->get(
                 CouponGenerationSpecInterfaceFactory::class
             );
-        $this->validateCouponLengthWithQuantity = $validateCouponLengthWithQuantity ?:
+        $this->getCouponCodeLength = $getCouponCodeLength ?:
             \Magento\Framework\App\ObjectManager::getInstance()->get(
-                ValidateCouponLengthWithQuantityInterface::class
+                GetCouponCodeLengthInterface::class
             );
     }
 
@@ -92,33 +92,41 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote imple
 
         $rule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
 
+        $data = $this->getRequest()->getParams();
+
         if (!$rule->getId()) {
             $result['error'] = __('Rule is not defined');
         } elseif ((int) $rule->getCouponType() !== \Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO
             && !$rule->getUseAutoGeneration()) {
             $result['error'] =
                 __('The rule coupon settings changed. Please save the rule before using auto-generation.');
-        } elseif ((int)$this->getRequest()->getParams()['length'] !==
-            $this->validateCouponLengthWithQuantity->validateCouponCodeLengthWithQuantity(
-                $this->getRequest()->getParams()
+        } elseif ((int)$data['length'] !==
+            $this->getCouponCodeLength->fetchCouponCodeLength(
+                $data
             )
         ) {
-            $minimumLength = $this->validateCouponLengthWithQuantity->validateCouponCodeLengthWithQuantity(
-                $this->getRequest()->getParams()
-            );
-            $quantity = $this->getRequest()->getParams()['qty'];
-            $this->messageManager->addErrorMessage(
-                __(
-                    'When coupon quantity exceeds %1, the coupon code length must be minimum %2',
-                    $quantity,
-                    $minimumLength
-                )
-            );
-            $this->_view->getLayout()->initMessages();
-            $result['messages'] = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
+            try {
+                $minimumLength = $this->getCouponCodeLength->fetchCouponCodeLength(
+                    $data
+                );
+                $quantity = $data['qty'];
+                $this->messageManager->addErrorMessage(
+                    __(
+                        'When coupon quantity exceeds %1, the coupon code length must be minimum %2',
+                        $quantity,
+                        $minimumLength
+                    )
+                );
+                $this->_view->getLayout()->initMessages();
+                $result['messages'] = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
+            } catch (\Exception $e) {
+                $result['error'] = __(
+                    'Something went wrong while validating coupon code length. Please review the log and try again.'
+                );
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            }
         } else {
             try {
-                $data = $this->getRequest()->getParams();
                 if (!empty($data['to_date'])) {
                     $inputFilter = new FilterInput(['to_date' => $this->_dateFilter], [], $data);
                     $data = $inputFilter->getUnescaped();

@@ -9,15 +9,15 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Model\Quote;
 
 /**
- * Validate the coupon code length and quantity.
+ * The class to get the coupon code length.
  */
-interface ValidateCouponLengthWithQuantityInterface
+interface GetCouponCodeLengthInterface
 {
     /**
-     * Validate coupon code length with quantity
+     * Fetch the coupon code length.
      *
      * @param array $couponCodeDataArray
      * @return int
      */
-    public function validateCouponCodeLengthWithQuantity(array $couponCodeDataArray): int;
+    public function fetchCouponCodeLength(array $couponCodeDataArray): int;
 }

@@ -18,32 +18,19 @@
             <group value="SalesRule"/>
         </annotations>
         <before>
+            <createData entity="SalesRuleSpecificCoupon" stepKey="createSalesRule"/>
             <!--Login to backend-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="AdminDeleteCartPriceRuleActionGroup" stepKey="deleteCartPriceRule">
-                <argument name="ruleName" value="ApiSalesRule"/>
-            </actionGroup>
+            <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
-        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ApiSalesRule.name}}" stepKey="fillRuleName"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsite"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="[{{'NOT LOGGED IN','General','Wholesale','Retailer'}}]" stepKey="selectSpecifiedCustomerGroups"/>
-        <!-- Choose coupon type specific coupon and tick auto generation checkbox -->
-        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
-        <checkOption selector="{{AdminCartPriceRulesFormSection.useAutoGeneration}}" stepKey="tickAutoGeneration"/>
-        <!-- Navigate to action tab section to fill the apply and discount amount -->
-        <conditionalClick selector="{{AdminCartPriceRulesFormSection.actionsTab}}"
-                          dependentSelector="{{AdminCartPriceRulesFormSection.actionsTab}}" visible="true"
-                          stepKey="clickActionsTab"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Percent of product price discount" stepKey="selectActionType"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="10" stepKey="fillDiscountAmount"/>
-        <click selector="{{AdminCartPriceRulesFormSection.saveAndContinue}}" stepKey="ClickSaveAndContinue"/>
-        <waitForPageLoad stepKey="WaitForRuleSaved"/>
-        <see userInput="You saved the rule." stepKey="verifyRuleSaved"/>
+        <!-- Search and go to cart price rule page -->
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="goToCartPriceRulePage"/>
+        <actionGroup ref="AdminFilterCartPriceRuleActionGroup" stepKey="filterCartPriceRule">
+            <argument name="ruleName" value="$$createSalesRule.name$$"/>
+        </actionGroup>
         <!-- Navigate to Manage Coupon Codes section to validate coupon code length and quantity -->
         <conditionalClick selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}"
                           dependentSelector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}" visible="true"

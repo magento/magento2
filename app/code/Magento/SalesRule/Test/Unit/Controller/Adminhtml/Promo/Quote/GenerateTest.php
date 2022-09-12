@@ -22,10 +22,10 @@ use Magento\Framework\View\Layout;
 use Magento\SalesRule\Api\Data\CouponGenerationSpecInterfaceFactory;
 use Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Generate;
 use Magento\SalesRule\Model\CouponGenerator;
+use Magento\SalesRule\Model\Quote\GetCouponCodeLengthInterface;
 use Magento\SalesRule\Model\Rule;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\SalesRule\Model\Quote\ValidateCouponLengthWithQuantityInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -72,9 +72,9 @@ class GenerateTest extends TestCase
     private $couponGenerationSpec;
 
     /**
-     * @var ValidateCouponLengthWithQuantityInterface|MockObject
+     * @var GetCouponCodeLengthInterface|MockObject
      */
-    private $validateCouponLengthWithQuantity;
+    private $getCouponCodeLength;
 
     /**
      * Test setup
@@ -127,8 +127,8 @@ class GenerateTest extends TestCase
         $this->couponGenerationSpec = $this->getMockBuilder(CouponGenerationSpecInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->validateCouponLengthWithQuantity = $this->getMockBuilder(
-            ValidateCouponLengthWithQuantityInterface::class
+        $this->getCouponCodeLength = $this->getMockBuilder(
+            GetCouponCodeLengthInterface::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -143,7 +143,7 @@ class GenerateTest extends TestCase
                 'dateFilter' => $this->dateMock,
                 'couponGenerator' => $this->couponGenerator,
                 'generationSpecFactory' => $this->couponGenerationSpec,
-                'validateCouponLengthWithQuantity' => $this->validateCouponLengthWithQuantity
+                'getCouponCodeLength' => $this->getCouponCodeLength
             ]
         );
     }
@@ -182,7 +182,7 @@ class GenerateTest extends TestCase
         $ruleMock->expects($this->once())
             ->method('getCouponType')
             ->willReturn(\Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO);
-        $this->requestMock->expects($this->exactly(3))
+        $this->requestMock->expects($this->once())
             ->method('getParams')
             ->willReturn($requestData);
         $requestData['quantity'] = isset($requestData['qty']) ? $requestData['qty'] : null;
@@ -190,8 +190,8 @@ class GenerateTest extends TestCase
             ->method('create')
             ->with(['data' => $requestData])
             ->willReturn(['some_data', 'some_data_2']);
-        $this->validateCouponLengthWithQuantity->expects($this->once())
-            ->method('validateCouponCodeLengthWithQuantity')
+        $this->getCouponCodeLength->expects($this->once())
+            ->method('fetchCouponCodeLength')
             ->willReturn(10);
         $this->messageManager->expects($this->once())
             ->method('addSuccessMessage');
@@ -257,10 +257,10 @@ class GenerateTest extends TestCase
         $ruleMock->expects($this->once())
             ->method('getUseAutoGeneration')
             ->willReturn(1);
-        $this->validateCouponLengthWithQuantity->expects($this->once())
-            ->method('validateCouponCodeLengthWithQuantity')
+        $this->getCouponCodeLength->expects($this->once())
+            ->method('fetchCouponCodeLength')
             ->willReturn(10);
-        $this->requestMock->expects($this->exactly(3))
+        $this->requestMock->expects($this->once())
             ->method('getParams')
             ->willReturn($requestData);
         $requestData['quantity'] = isset($requestData['qty']) ? $requestData['qty'] : null;
@@ -336,8 +336,7 @@ class GenerateTest extends TestCase
         $helperData->expects($this->once())
             ->method('jsonEncode')
             ->with([
-                'error' =>
-                    __('The rule coupon settings changed. Please save the rule before using auto-generation.')
+                'error' => __('The rule coupon settings changed. Please save the rule before using auto-generation.')
             ]);
         $this->model->execute();
     }

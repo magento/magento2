@@ -11,17 +11,17 @@ namespace Magento\SalesRule\Model\Quote;
 use Magento\SalesRule\Model\Coupon\Massgenerator;
 
 /**
- * Validate the coupon code length and quantity.
+ * The class to get the coupon code length.
  */
-class ValidateCouponLengthWithQuantity extends Massgenerator implements ValidateCouponLengthWithQuantityInterface
+class GetCouponCodeLength extends Massgenerator implements GetCouponCodeLengthInterface
 {
     /**
-     * Validate coupon code length with quantity
+     * Fetch the coupon code length.
      *
      * @param array $couponCodeDataArray
      * @return int
      */
-    public function validateCouponCodeLengthWithQuantity(array $couponCodeDataArray): int
+    public function fetchCouponCodeLength(array $couponCodeDataArray): int
     {
         $this->setData($couponCodeDataArray);
         $this->increaseLength();
