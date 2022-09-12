@@ -369,6 +369,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     private $allowedCountriesReader;
 
     /**
+     * @var Quote\Item[]
+     */
+    private $allItemsCache;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -1428,16 +1433,17 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getAllItems()
     {
-        $items = [];
+        if (!empty($this->allItemsCache)) {
+            return $this->allItemsCache;
+        }
         /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($this->getItemsCollection() as $item) {
             $product = $item->getProduct();
             if (!$item->isDeleted() && ($product && (int)$product->getStatus() !== ProductStatus::STATUS_DISABLED)) {
-                $items[] = $item;
+                $this->allItemsCache[$product->getSku()] = $item;
             }
         }
-
-        return $items;
+        return $this->allItemsCache;
     }
 
     /**
@@ -1572,7 +1578,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             if ($parent) {
                 $parent->isDeleted(true);
             }
-
+            unset($this->allItemsCache[$item->getSku()]);
             $this->_eventManager->dispatch('sales_quote_remove_item', ['quote_item' => $item]);
         }
 
@@ -1843,10 +1849,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getItemByProduct($product)
     {
-        foreach ($this->getAllItems() as $item) {
-            if ($item->representProduct($product)) {
-                return $item;
-            }
+        $item = $this->getAllItems()[$product->getSku()] ?? null;
+        if ($item && $item->representProduct($product)) {
+            return $item;
         }
         return false;
     }
