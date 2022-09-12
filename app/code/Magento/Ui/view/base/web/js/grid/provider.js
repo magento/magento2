@@ -24,7 +24,7 @@ define([
             initialized: false,
             firstLoad: true,
             lastError: false,
-            cachedRequestDelay: 200,
+            bindListensDelay: 200,
             storageConfig: {
                 component: 'Magento_Ui/js/grid/data-storage',
                 provider: '${ $.storageConfig.name }',
@@ -34,6 +34,9 @@ define([
             listens: {
                 requestConfig: 'updateRequestConfig',
                 lastError: 'showAlert'
+            },
+            delayedListens: {
+                params: 'onParamsChange'
             },
             ignoreTmpls: {
                 data: true
@@ -62,6 +65,8 @@ define([
                 resolver(this.triggerReloaded, this);
             }
 
+            this.delayedBindListens();
+
             return this;
         },
 
@@ -77,14 +82,17 @@ define([
 
             this.initialized = true;
             this.trigger('reloaded');
+        },
 
+        /**
+         * Delayed listens binding
+         */
+        delayedBindListens: function () {
             // Let's wait before binding params listener
-            // for first page load with predefined data
+            // for first page load due to params export from child components
             _.delay(() => {
-                this.setListeners({
-                    params: 'onParamsChange'
-                });
-            }, this.cachedRequestDelay, this);
+                this.setListeners(this.delayedListens);
+            }, this.bindListensDelay, this);
         },
 
         /**
