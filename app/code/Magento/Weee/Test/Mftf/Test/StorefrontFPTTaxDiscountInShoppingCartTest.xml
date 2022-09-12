@@ -22,12 +22,17 @@
         <before>
             <!--  Step 1: Simple product is created -->
             <createData entity="_defaultProduct" stepKey="createSimpleProduct"/>
+            <!-- Step 2: Create a cart price rule for $10 Fixed amount discount -->
+            <createData entity="ActiveSalesRuleCoupon50" stepKey="createCartPriceRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <!--  Step 2: Store>Configuration; Sales>Tax FPT Enable -->
+            <!--  Step 3: Store>Configuration; Sales>Tax FPT Enable -->
             <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
             <magentoCLI command="config:set tax/cart_display/price 3"  stepKey="setPrice"/>
             <magentoCLI command="config:set tax/cart_display/subtotal 3"  stepKey="setSubtotal"/>
-            <!--  Step 3: Fixed Product Tax attribute is created and added to default attribute set -->
+            <!--  Step 4: Fixed Product Tax attribute is created and added to default attribute set -->
             <createData entity="FPTProductAttribute" stepKey="createProductFPTAttribute"/>
             <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet">
                 <requiredEntity createDataKey="createProductFPTAttribute"/>
@@ -35,7 +40,7 @@
             <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
                 <argument name="productId" value="$$createSimpleProduct.id$$"/>
             </actionGroup>
-            <!-- Step 4: FPT United States/California/100 -->
+            <!-- Step 5: FPT United States/California/100 -->
             <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValue1">
                 <argument name="FPTAttributeCode" value="$createProductFPTAttribute.attribute_code$"/>
                 <argument name="stateForFPT" value="California"/>
@@ -48,6 +53,7 @@
         <after>
             <magentoCLI command="config:set tax/cart_display/price 1"  stepKey="setPrice"/>
             <magentoCLI command="config:set tax/cart_display/subtotal 1"  stepKey="setSubtotal"/>
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteSalesRule"/>
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <createData entity="WeeeConfigDisable" stepKey="disableFPT"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
@@ -55,12 +61,11 @@
             <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
         </after>
 
-        <!-- Step 5: Create a cart price rule for $10 Fixed amount discount -->
-        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
-        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{_defaultCoupon.code}}" stepKey="fillRuleName"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="[{{'NOT LOGGED IN','General','Wholesale','Retailer'}}]" stepKey="selectSpecifiedCustomerGroups"/>
+        <!-- Search and update cart price rule page -->
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="goToCartPriceRulePage"/>
+        <actionGroup ref="AdminFilterCartPriceRuleActionGroup" stepKey="filterCartPriceRule">
+            <argument name="ruleName" value="$$createCartPriceRule.name$$"/>
+        </actionGroup>
         <click selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="expandConditions"/>
         <!-- Scroll down -->
         <scrollTo selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="scrollToConditionsTab"/>
@@ -71,9 +76,6 @@
         <selectOption selector="{{PriceRuleConditionsSection.operatorByIndex('1', '1')}}" userInput="equals or less than" stepKey="fillOperator"/>
         <click selector="{{PriceRuleConditionsSection.ruleParamLink('1', '1', '2')}}" stepKey="startEditValue"/>
         <fillField selector="{{PriceRuleConditionsSection.valueByIndex('1', '1')}}" userInput="2000" stepKey="fillValue"/>
-        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount" stepKey="selectActionType"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="10" stepKey="fillDiscountAmount"/>
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
         <!-- Step 6: Add the product to the cart -->
