@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder;
 
+use Magento\Elasticsearch\Model\Adapter\BatchDataMapper\InventoryFieldsProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
     as FieldNameResolver;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -35,6 +37,11 @@ class SortTest extends TestCase
     private $sortBuilder;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -48,11 +55,15 @@ class SortTest extends TestCase
             ->setMethods(['getFieldName'])
             ->getMock();
 
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->getMock();
+
         $this->sortBuilder = (new ObjectManager($this))->getObject(
             Sort::class,
             [
                 'attributeAdapterProvider' => $this->attributeAdapterProvider,
                 'fieldNameResolver' => $this->fieldNameResolver,
+                'scopeConfig' => $this->scopeConfig,
             ]
         );
     }
@@ -66,6 +77,7 @@ class SortTest extends TestCase
      * @param $isFloatType
      * @param $isIntegerType
      * @param $fieldName
+     * @param $showOutStock
      * @param array $expected
      */
     public function testGetSort(
@@ -75,6 +87,7 @@ class SortTest extends TestCase
         $isIntegerType,
         $isComplexType,
         $fieldName,
+        $showOutStock,
         array $expected
     ) {
         /** @var MockObject|RequestInterface $request */
@@ -87,7 +100,7 @@ class SortTest extends TestCase
             ->willReturn($sortItems);
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isSortable', 'isFloatType', 'isIntegerType', 'isComplexType'])
+            ->setMethods(['isSortable', 'isFloatType', 'isIntegerType', 'isComplexType', 'getAttributeCode'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('isSortable')
@@ -101,22 +114,55 @@ class SortTest extends TestCase
         $attributeMock->expects($this->any())
             ->method('isComplexType')
             ->willReturn($isComplexType);
+        $attributeMock->expects($this->any())
+            ->method('getAttributeCode')
+            ->willReturn((string) $fieldName);
+
+        $salesAttributeMock = $this->getMockBuilder(AttributeAdapter::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAttributeCode'])
+            ->getMock();
+        $salesAttributeMock->expects($this->any())
+            ->method('getAttributeCode')
+            ->willReturn(InventoryFieldsProvider::IS_SALABLE);
+
+        $maps = [
+            [null, $attributeMock],
+            [ InventoryFieldsProvider::IS_SALABLE, $salesAttributeMock ],
+            [ $fieldName, $attributeMock ],
+        ];
+        foreach ($sortItems as $item) {
+            $maps[] = [$item['field'], $attributeMock];
+        }
         $this->attributeAdapterProvider->expects($this->any())
             ->method('getByAttributeCode')
-            ->with($this->anything())
-            ->willReturn($attributeMock);
+            ->will(
+                $this->returnValueMap(
+                    $maps
+                )
+            );
+
         $this->fieldNameResolver->expects($this->any())
             ->method('getFieldName')
             ->with($this->anything())
             ->willReturnCallback(
                 function ($attribute, $context) use ($fieldName) {
-                    if (empty($context)) {
-                        return $fieldName;
-                    } elseif ($context['type'] === 'sort') {
-                        return 'sort_' . $fieldName;
+                    if ($attribute->getAttributeCode() === InventoryFieldsProvider::IS_SALABLE) {
+                        return InventoryFieldsProvider::IS_SALABLE;
+                    }
+                    if ($attribute->getAttributeCode() === $fieldName) {
+                        if (empty($context)) {
+                            return $fieldName;
+                        } elseif ($context['type'] === 'sort') {
+                            return 'sort_' . $fieldName;
+                        }
                     }
                 }
             );
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->with($this->anything())
+            ->willReturn($showOutStock);
 
         $this->assertEquals(
             $expected,
@@ -143,6 +189,7 @@ class SortTest extends TestCase
                 false,
                 false,
                 null,
+                false,
                 []
             ],
             [
@@ -161,6 +208,7 @@ class SortTest extends TestCase
                 false,
                 false,
                 'price',
+                false,
                 [
                     [
                         'price' => [
@@ -185,6 +233,7 @@ class SortTest extends TestCase
                 true,
                 false,
                 'price',
+                false,
                 [
                     [
                         'price' => [
@@ -209,6 +258,7 @@ class SortTest extends TestCase
                 false,
                 false,
                 'name',
+                false,
                 [
                     [
                         'name.sort_name' => [
@@ -233,6 +283,7 @@ class SortTest extends TestCase
                 false,
                 false,
                 'not_eav_attribute',
+                false,
                 [
                     [
                         'not_eav_attribute' => [
@@ -257,6 +308,7 @@ class SortTest extends TestCase
                 false,
                 true,
                 'color',
+                false,
                 [
                     [
                         'color_value.sort_color' => [
@@ -264,7 +316,178 @@ class SortTest extends TestCase
                         ]
                     ]
                 ]
-            ]
+            ],
+            [
+                [
+                    [
+                        'field' => 'entity_id',
+                        'direction' => 'DESC'
+                    ]
+                ],
+                false,
+                false,
+                false,
+                false,
+                null,
+                true,
+                [
+                    [
+                        InventoryFieldsProvider::IS_SALABLE => [
+                            'order' => 'DESC'
+                        ]
+                    ]
+                ]
+            ],
+            [
+                [
+                    [
+                        'field' => 'entity_id',
+                        'direction' => 'DESC'
+                    ],
+                    [
+                        'field' => 'price',
+                        'direction' => 'DESC'
+                    ],
+                ],
+                false,
+                false,
+                false,
+                false,
+                'price',
+                true,
+                [
+                    [
+                        InventoryFieldsProvider::IS_SALABLE => [
+                            'order' => 'DESC'
+                        ]
+                    ],
+                    [
+                        'price' => [
+                            'order' => 'desc'
+                        ]
+                    ]
+                ]
+            ],
+            [
+                [
+                    [
+                        'field' => 'entity_id',
+                        'direction' => 'DESC'
+                    ],
+                    [
+                        'field' => 'price',
+                        'direction' => 'DESC'
+                    ],
+                ],
+                true,
+                true,
+                true,
+                false,
+                'price',
+                true,
+                [
+                    [
+                        InventoryFieldsProvider::IS_SALABLE => [
+                            'order' => 'DESC'
+                        ]
+                    ],
+                    [
+                        'price' => [
+                            'order' => 'desc'
+                        ]
+                    ]
+                ]
+            ],
+            [
+                [
+                    [
+                        'field' => 'entity_id',
+                        'direction' => 'DESC'
+                    ],
+                    [
+                        'field' => 'name',
+                        'direction' => 'DESC'
+                    ],
+                ],
+                true,
+                false,
+                false,
+                false,
+                'name',
+                true,
+                [
+                    [
+                        InventoryFieldsProvider::IS_SALABLE => [
+                            'order' => 'DESC'
+                        ]
+                    ],
+                    [
+                        'name.sort_name' => [
+                            'order' => 'desc'
+                        ]
+                    ]
+                ]
+            ],
+            [
+                [
+                    [
+                        'field' => 'entity_id',
+                        'direction' => 'DESC'
+                    ],
+                    [
+                        'field' => 'not_eav_attribute',
+                        'direction' => 'DESC'
+                    ],
+                ],
+                false,
+                false,
+                false,
+                false,
+                'not_eav_attribute',
+                true,
+                [
+                    [
+                        InventoryFieldsProvider::IS_SALABLE => [
+                            'order' => 'DESC'
+                        ]
+                    ],
+                    [
+                        'not_eav_attribute' => [
+                            'order' => 'desc'
+                        ]
+                    ]
+                ]
+            ],
+            [
+                [
+                    [
+                        'field' => 'entity_id',
+                        'direction' => 'DESC'
+                    ],
+                    [
+                        'field' => 'color',
+                        'direction' => 'DESC'
+                    ],
+                ],
+                true,
+                false,
+                false,
+                true,
+                'color',
+                true,
+                [
+                    [
+                        InventoryFieldsProvider::IS_SALABLE => [
+                            'order' => 'DESC'
+                        ]
+                    ],
+                    [
+                        'color_value.sort_color' => [
+                            'order' => 'desc'
+                        ]
+                    ]
+                ]
+            ],
         ];
     }
 }

@@ -75,10 +75,9 @@ class InventoryFieldsProvider implements AdditionalFieldsProviderInterface
         $fields = [];
 
         if ($this->hasShowOutOfStockStatus()) {
-            $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
             $inventoryData = $this->resourceIndex->getInventoryIndexData($productIds);
             foreach ($productIds as $productId) {
-                $fields[$productId] = $this->getProductInventoryData($productId, $websiteId, $inventoryData);
+                $fields[$productId] = $this->getProductInventoryData($productId, $inventoryData);
             }
         }
         return $fields;
@@ -88,19 +87,15 @@ class InventoryFieldsProvider implements AdditionalFieldsProviderInterface
      * Prepare inventory index for product.
      *
      * @param int $productId
-     * @param int $websiteId
      * @param array $inventoryData
      * @return array
      */
-    private function getProductInventoryData($productId, $websiteId, array $inventoryData)
+    private function getProductInventoryData($productId, array $inventoryData)
     {
         $result = [];
         if (array_key_exists($productId, $inventoryData)) {
             $inStockAttribute = $this->attributeAdapterProvider->getByAttributeCode(self::IS_SALABLE);
-            $fieldName = $this->fieldNameResolver->getFieldName(
-                $inStockAttribute,
-                ['websiteId' => $websiteId]
-            );
+            $fieldName = $this->fieldNameResolver->getFieldName($inStockAttribute);
             $result[$fieldName] = $inventoryData[$productId];
         }
 
