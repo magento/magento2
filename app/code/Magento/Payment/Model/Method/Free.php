@@ -139,9 +139,12 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     {
         $newStateStatuses = $this->config->getStateStatuses('new');
         $configNewOrderStatus = $this->getConfigData('order_status');
+        $paymentAction = parent::getConfigPaymentAction();
+
         return
-            $configNewOrderStatus == 'pending' ||
-            array_key_exists($configNewOrderStatus, $newStateStatuses) ?
-                null : parent::getConfigPaymentAction();
+            array_key_exists($configNewOrderStatus, $newStateStatuses) &&
+            $configNewOrderStatus != 'processing' &&
+            empty($paymentAction)
+                ? null : $paymentAction;
     }
 }

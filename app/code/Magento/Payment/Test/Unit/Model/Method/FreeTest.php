@@ -105,7 +105,8 @@ class FreeTest extends TestCase
             ->willReturn($stateStatuses);
         $this->scopeConfig
             ->method('getValue')
-            ->willReturnOnConsecutiveCalls($orderStatus, $paymentAction);
+            ->withConsecutive(['payment/free/order_status'], ['payment/free/'.$paymentAction])
+            ->willReturnOnConsecutiveCalls($orderStatus, $result);
         $this->assertEquals($result, $this->methodFree->getConfigPaymentAction());
     }
 
@@ -164,10 +165,12 @@ class FreeTest extends TestCase
     public function getConfigPaymentActionProvider(): array
     {
         return [
-            ['pending', 'action', null, ['pending' => 'Pending']],
-            ['new', 'action', null, ['pending' => 'Pending', 'new' => 'New']],
+            ['pending', 'payment_action', null, ['pending' => 'Pending']],
+            ['new', 'payment_action', null, ['pending' => 'Pending', 'new' => 'New']],
             ['new', 'payment_action', 'payment_action', ['pending' => 'Pending']],
-            ['processing', 'payment_action', 'payment_action', ['pending' => 'Pending']]
+            ['processing', 'payment_action', 'payment_action', ['pending' => 'Pending']],
+            ['processing', 'payment_action', null, ['pending' => 'Pending', 'processing' => 'Processing']],
+            ['processing', 'payment_action', 'payment_action', ['pending' => 'Pending', 'processing' => 'Processing']]
         ];
     }
 }
