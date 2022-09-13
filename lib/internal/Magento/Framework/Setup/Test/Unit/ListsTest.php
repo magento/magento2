@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Test\Unit;
 
-use DateTimeImmutable;
 use Magento\Framework\Locale\ConfigInterface;
 use Magento\Framework\Setup\Lists;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -72,12 +71,9 @@ class ListsTest extends TestCase
 
     public function testGetTimezoneList()
     {
-        $kyiv = "Europe/Kiev";
         $resultTimezone = array_keys($this->lists->getTimezoneList());
-        if (in_array("Europe/Kyiv", $resultTimezone)) {
-            $kyiv = "Europe/Kyiv";
-        }
-        $expectedTimezones = $this->getExpectedTimezones($kyiv);
+        $timeZone = in_array("Europe/Kyiv", $resultTimezone) ? "Europe/Kyiv" : "Europe/Kiev";
+        $expectedTimezones = $this->getExpectedTimezones($timeZone);
         $timezones = array_intersect($expectedTimezones, $resultTimezone);
         $this->assertEquals($expectedTimezones, $timezones);
     }
