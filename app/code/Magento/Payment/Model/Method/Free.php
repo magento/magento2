@@ -143,8 +143,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
 
         return
             array_key_exists($configNewOrderStatus, $newStateStatuses) &&
-            $configNewOrderStatus != 'processing' &&
-            empty($paymentAction)
+            $configNewOrderStatus != 'processing'
                 ? null : $paymentAction;
     }
 }
