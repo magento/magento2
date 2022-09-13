@@ -1433,17 +1433,16 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getAllItems()
     {
-        if (!empty($this->allItemsCache)) {
-            return $this->allItemsCache;
-        }
+        $items = [];
         /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($this->getItemsCollection() as $item) {
             $product = $item->getProduct();
             if (!$item->isDeleted() && ($product && (int)$product->getStatus() !== ProductStatus::STATUS_DISABLED)) {
-                $this->allItemsCache[$product->getSku()] = $item;
+                $items[] = $item;
             }
         }
-        return $this->allItemsCache;
+
+        return $items;
     }
 
     /**
@@ -1578,7 +1577,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             if ($parent) {
                 $parent->isDeleted(true);
             }
-            unset($this->allItemsCache[$item->getSku()]);
+
             $this->_eventManager->dispatch('sales_quote_remove_item', ['quote_item' => $item]);
         }
 
@@ -1849,8 +1848,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getItemByProduct($product)
     {
-        $item = $this->getAllItems()[$product->getSku()] ?? null;
-        if ($item && $item->representProduct($product)) {
+        /** @var \Magento\Quote\Model\Quote\Item $item */
+        $item = $this->getItemsCollection()->getItemByColumnValue('product_id', $product->getId()) ?? null;
+        if ($item
+            && !$item->isDeleted()
+            && $item->getProduct()
+            && $product->getStatus() !== ProductStatus::STATUS_DISABLED
+            && $item->representProduct($product)
+        ) {
             return $item;
         }
         return false;
