@@ -81,6 +81,7 @@ class OrderFilter
         $filterGroups[] = $this->filterGroupBuilder->create();
 
         if (isset($args['filter'])) {
+            $filters = [];
             foreach ($args['filter'] as $field => $cond) {
                 if (isset($this->fieldTranslatorArray[$field])) {
                     $field = $this->fieldTranslatorArray[$field];
@@ -91,23 +92,21 @@ class OrderFilter
                             throw new InputException(__('Invalid match filter'));
                         }
                         $searchValue = $value !== null ? str_replace('%', '', $value) : '';
-                        $filters = $this->filterBuilder->setField($field)
+                        $filters[] = $this->filterBuilder->setField($field)
                             ->setValue("%{$searchValue}%")
                             ->setConditionType('like')
                             ->create();
-                        $this->filterGroupBuilder->setFilters([$filters]);
-                        $filterGroups[] = $this->filterGroupBuilder->create();
                     } else {
-                        $filters = $this->filterBuilder->setField($field)
+                        $filters[] = $this->filterBuilder->setField($field)
                             ->setValue($value)
                             ->setConditionType($condType)
                             ->create();
-                        $this->filterGroupBuilder->setFilters([$filters]);
-                        $filterGroups[] = $this->filterGroupBuilder->create();
                     }
-                   
                 }
             }
+
+            $this->filterGroupBuilder->setFilters($filters);
+            $filterGroups[] = $this->filterGroupBuilder->create();
         }
         return $filterGroups;
     }
