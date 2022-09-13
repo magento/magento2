@@ -15,7 +15,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * Class Label
+ * Bundle product option label resolver
  */
 class Label implements ResolverInterface
 {
