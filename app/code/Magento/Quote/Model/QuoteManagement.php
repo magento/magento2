@@ -670,6 +670,14 @@ class QuoteManagement implements CartManagementInterface
                 $shipping->setCustomerAddressData($shippingAddress);
                 $this->addressesToSync[] = $shippingAddress->getId();
                 $shipping->setCustomerAddressId($shippingAddress->getId());
+
+                // Storefront Checkout: `My billing and shipping address are the same`-
+                // when new shipping address save in address book
+                if (!$billing->getCustomerAddressId()
+                    && $billing->getSaveInAddressBook() === null) {
+                    $billing->setCustomerAddressId($shippingAddress->getId());
+                    $shipping->setSameAsBilling(1);
+                }
             }
         }
 
@@ -702,22 +710,17 @@ class QuoteManagement implements CartManagementInterface
                 $billing->setCustomerAddressData($billingAddress);
                 $this->addressesToSync[] = $billingAddress->getId();
                 $billing->setCustomerAddressId($billingAddress->getId());
+
+                // Admin order: `Same As Billing Address`- when new billing address saved in address book
+                if (!empty($shipping)
+                    && !$shipping->getCustomerAddressId()
+                    && $shipping->getSameAsBilling()) {
+                    $shipping->setCustomerAddressId($billingAddress->getId());
+                }
             }
         }
         if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {
             $shipping->setIsDefaultBilling(true);
-        }
-        if (!empty($shippingAddress)
-            && !$billing->getCustomerAddressId()
-            && $billing->getSaveInAddressBook() === null) {
-            $billing->setCustomerAddressId($shippingAddress->getId());
-            $shipping->setSameAsBilling(1);
-        }
-        if (!empty($billingAddress)
-            && !empty($shipping)
-            && !$shipping->getCustomerAddressId()
-            && $shipping->getSameAsBilling()) {
-            $shipping->setCustomerAddressId($billingAddress->getId());
         }
     }
 
