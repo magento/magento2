@@ -18,7 +18,6 @@ use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Method\Free;
 use Magento\Payment\Model\Method\Logger;
 use Magento\Quote\Model\Quote;
-use Magento\Sales\Model\Order\Config;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -44,11 +43,6 @@ class FreeTest extends TestCase
     protected $currencyPrice;
 
     /**
-     * @var MockObject
-     */
-    protected $configMock;
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -70,8 +64,6 @@ class FreeTest extends TestCase
             ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
             ->getMock();
 
-        $this->configMock = $this->createMock(Config::class);
-
         $this->methodFree = new Free(
             $context,
             $registry,
@@ -80,11 +72,7 @@ class FreeTest extends TestCase
             $paymentData,
             $this->scopeConfig,
             $loggerMock,
-            $this->currencyPrice,
-            null,
-            null,
-            [],
-            $this->configMock
+            $this->currencyPrice
         );
     }
 
@@ -92,21 +80,18 @@ class FreeTest extends TestCase
      * @param string $orderStatus
      * @param string $paymentAction
      * @param mixed $result
-     * @param array $stateStatuses
      *
      * @return void
      * @dataProvider getConfigPaymentActionProvider
      */
     public function testGetConfigPaymentAction($orderStatus, $paymentAction, $result, $stateStatuses): void
     {
-        $this->configMock
-            ->method('getStateStatuses')
-            ->with('new')
-            ->willReturn($stateStatuses);
-        $this->scopeConfig
-            ->method('getValue')
-            ->withConsecutive(['payment/free/order_status'], ['payment/free/'.$paymentAction])
-            ->willReturnOnConsecutiveCalls($orderStatus, $result);
+
+        if ($orderStatus != 'pending') {
+            $this->scopeConfig
+                ->method('getValue')
+                ->willReturnOnConsecutiveCalls($orderStatus, $result);
+        }
         $this->assertEquals($result, $this->methodFree->getConfigPaymentAction());
     }
 
@@ -165,12 +150,10 @@ class FreeTest extends TestCase
     public function getConfigPaymentActionProvider(): array
     {
         return [
-            ['pending', 'payment_action', null, ['pending' => 'Pending']],
-            ['new', 'payment_action', null, ['pending' => 'Pending', 'new' => 'New']],
-            ['new', 'payment_action', 'payment_action', ['pending' => 'Pending']],
-            ['processing', 'payment_action', 'payment_action', ['pending' => 'Pending']],
-            ['processing', 'payment_action', null, ['pending' => 'Pending', 'processing' => 'Processing']],
-            ['processing', 'payment_action', 'payment_action', ['pending' => 'Pending', 'processing' => 'Processing']]
+            ['pending', 'payment_action', null],
+            ['new', 'payment_action', null],
+            ['processing', 'payment_action', null],
+            ['processing', 'payment_action', 'payment_action']
         ];
     }
 }

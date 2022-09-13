@@ -101,10 +101,10 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return parent::isAvailable(
-                $quote
-            ) && null !== $quote && $this->priceCurrency->round(
-                $quote->getGrandTotal()
-            ) == 0;
+            $quote
+        ) && null !== $quote && $this->priceCurrency->round(
+            $quote->getGrandTotal()
+        ) == 0;
     }
 
     /**
