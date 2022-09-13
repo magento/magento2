@@ -1025,7 +1025,7 @@ class QuoteTest extends TestCase
 
         $productMock = $this->getMockBuilder(Product::class)
             ->addMethods(['getParentProductId', 'setStickWithinParent'])
-            ->onlyMethods(['__wakeup'])
+            ->onlyMethods(['__wakeup', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -1042,6 +1042,15 @@ class QuoteTest extends TestCase
         $collectionMock->expects($this->any())
             ->method('getIterator')
             ->willReturn($iterator);
+
+        $productMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(123);
+
+        $collectionMock->expects($this->any())
+            ->method('getItemByColumnValue')
+            ->with('product_id', 123)
+            ->willReturn($itemMock);
 
         $this->quoteItemCollectionFactoryMock->expects($this->once())
             ->method('create')
