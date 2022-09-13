@@ -23,12 +23,12 @@ use Magento\Framework\Mview\View\SubscriptionInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class View extends DataObject implements ViewInterface
+class View extends DataObject implements ViewInterface, ViewSubscriptionInterface
 {
     /**
      * Default batch size for partial reindex
      */
-    const DEFAULT_BATCH_SIZE = 1000;
+    public const DEFAULT_BATCH_SIZE = 1000;
 
     /**
      * @var string
@@ -465,7 +465,7 @@ class View extends DataObject implements ViewInterface
      * @param array $subscriptionConfig
      * @return SubscriptionInterface
      */
-    private function initSubscriptionInstance(array $subscriptionConfig): SubscriptionInterface
+    public function initSubscriptionInstance(array $subscriptionConfig): SubscriptionInterface
     {
         return $this->subscriptionFactory->create(
             [
