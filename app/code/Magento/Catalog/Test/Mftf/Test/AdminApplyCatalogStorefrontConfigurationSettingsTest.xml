@@ -17,7 +17,6 @@
             <testCaseId value="MC-27444"/>
             </annotations>
             <before>
-
                 <!-- create category -->
                 <createData entity="_defaultCategory" stepKey="createCategory"/>
 
