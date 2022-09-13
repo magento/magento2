@@ -103,11 +103,12 @@ class Product
      * Get product from result set.
      *
      * @param string $sku
+     * @param null|ContextInterface $context
      * @return array
      */
-    public function getProductBySku(string $sku) : array
+    public function getProductBySku(string $sku, ContextInterface $context = null) : array
     {
-        $products = $this->fetch();
+        $products = $this->fetch($context);
 
         if (!isset($products[$sku])) {
             return [];
@@ -119,9 +120,10 @@ class Product
     /**
      * Fetch product data and return in array format. Keys for products will be their skus.
      *
+     * @param null|ContextInterface $context
      * @return array
      */
-    private function fetch() : array
+    private function fetch(ContextInterface $context = null) : array
     {
         if (empty($this->productSkus) || !empty($this->productList)) {
             return $this->productList;
@@ -132,7 +134,8 @@ class Product
             $this->searchCriteriaBuilder->create(),
             $this->attributeCodes,
             false,
-            false
+            true,
+            $context
         );
 
         /** @var \Magento\Catalog\Model\Product $product */
