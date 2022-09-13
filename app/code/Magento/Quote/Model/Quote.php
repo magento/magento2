@@ -369,11 +369,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     private $allowedCountriesReader;
 
     /**
-     * @var Quote\Item[]
-     */
-    private $allItemsCache;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory

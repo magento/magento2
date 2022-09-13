@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Model\Cart;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Quote\Model\Quote\Config;
 
@@ -32,6 +33,11 @@ class ProductReader implements ProductReaderInterface
     private $quoteConfig;
 
     /**
+     * @var Collection
+     */
+    private $productCollection;
+
+    /**
      * @param ProductCollectionFactory $productCollectionFactory
      * @param Config $quoteConfig
      */
@@ -44,7 +50,7 @@ class ProductReader implements ProductReaderInterface
     }
 
     /**
-     * @inheirtdoc
+     * @inheirtDoc
      */
     public function loadProducts(array $skus, int $storeId): void
     {
@@ -66,6 +72,6 @@ class ProductReader implements ProductReaderInterface
      */
     public function getProductBySku(string $sku) : ?ProductInterface
     {
-        return $this->productsBySku[$sku] ?: null;
+        return $this->productsBySku[$sku] ?? null;
     }
 }

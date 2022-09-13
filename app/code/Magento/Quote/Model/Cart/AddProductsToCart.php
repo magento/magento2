@@ -47,11 +47,6 @@ class AddProductsToCart
     ];
 
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @var CartRepositoryInterface
      */
     private $cartRepository;
