@@ -69,7 +69,7 @@ QUERY;
         self::assertTrue($response['storeConfig']['zero_subtotal_enabled']);
         self::assertEquals('No Payment Information Required', $response['storeConfig']['zero_subtotal_title']);
         self::assertEquals('pending', $response['storeConfig']['zero_subtotal_new_order_status']);
-        self::assertEquals('authorize_capture', $response['storeConfig']['zero_subtotal_payment_action']);
+        self::assertEmpty($response['storeConfig']['zero_subtotal_payment_action']);
         self::assertFalse($response['storeConfig']['zero_subtotal_enable_for_specific_countries']);
         self::assertNull($response['storeConfig']['zero_subtotal_payment_from_specific_countries']);
         self::assertEquals(1, $response['storeConfig']['zero_subtotal_sort_order']);
@@ -117,7 +117,7 @@ QUERY;
         self::assertFalse($response['storeConfig']['zero_subtotal_enabled']);
         self::assertEquals('No Payment Information Required', $response['storeConfig']['zero_subtotal_title']);
         self::assertEquals('pending', $response['storeConfig']['zero_subtotal_new_order_status']);
-        self::assertEquals('authorize_capture', $response['storeConfig']['zero_subtotal_payment_action']);
+        self::assertEmpty($response['storeConfig']['zero_subtotal_payment_action']);
         self::assertFalse($response['storeConfig']['zero_subtotal_enable_for_specific_countries']);
         self::assertNull($response['storeConfig']['zero_subtotal_payment_from_specific_countries']);
         self::assertEquals(1, $response['storeConfig']['zero_subtotal_sort_order']);
@@ -138,6 +138,7 @@ QUERY;
      *
      * @magentoConfigFixture default/payment/free/title Test Zero Subtotal Title
      * @magentoConfigFixture default/payment/free/order_status processing
+     * @magentoConfigFixture default/payment/free/payment_action authorize_capture
      * @magentoConfigFixture default/payment/free/allowspecific 1
      * @magentoConfigFixture default/payment/free/specificcountry DZ
      * @magentoConfigFixture default/payment/free/sort_order 5

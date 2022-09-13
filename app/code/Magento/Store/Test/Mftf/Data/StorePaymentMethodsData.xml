@@ -10,12 +10,16 @@
     <entity name="PaymentMethodsSettingConfig" type="zero_subtotal_checkout_config_state">
         <requiredEntity type="active">active</requiredEntity>
         <requiredEntity type="order_status">orderStatus</requiredEntity>
+        <requiredEntity type="payment_action">paymentAction</requiredEntity>
     </entity>
     <entity name="active" type="active">
         <data key="value">1</data>
     </entity>
     <entity name="orderStatus" type="order_status">
         <data key="value">processing</data>
+    </entity>
+    <entity name="paymentAction" type="payment_action">
+        <data key="value">authorize_capture</data>
     </entity>
 
     <entity name="DisablePaymentMethodsSettingConfig" type="use_system_value_config_state">
