@@ -82,7 +82,7 @@
         "wikimedia/less.php": "^3.0.0"
     },
     "require-dev": {
-        "allure-framework/allure-phpunit": "~1.5.0",
+        "allure-framework/allure-phpunit": "^2",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
         "friendsofphp/php-cs-fixer": "~3.8.0",
         "lusitanian/oauth": "~0.8.10",
