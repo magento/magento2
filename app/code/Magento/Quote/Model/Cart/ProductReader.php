@@ -50,7 +50,7 @@ class ProductReader implements ProductReaderInterface
     }
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     public function loadProducts(array $skus, int $storeId): void
     {
@@ -68,7 +68,7 @@ class ProductReader implements ProductReaderInterface
     }
 
     /**
-     * @inheirtdoc
+     * @inheritDoc
      */
     public function getProductBySku(string $sku) : ?ProductInterface
     {

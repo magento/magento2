@@ -191,14 +191,15 @@ class AddProductsToCart
                     __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
                     $cartItemPosition
                 );
-            }
-            try {
-                $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
-            } catch (\Throwable $e) {
-                $errors[] = $this->createError(
-                    __($e->getMessage())->render(),
-                    $cartItemPosition
-                );
+            } else {
+                try {
+                    $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
+                } catch (\Throwable $e) {
+                    $errors[] = $this->createError(
+                        __($e->getMessage())->render(),
+                        $cartItemPosition
+                    );
+                }
             }
 
             if (is_string($result)) {
