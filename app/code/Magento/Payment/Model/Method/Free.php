@@ -5,10 +5,7 @@
  */
 namespace Magento\Payment\Model\Method;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Sales\Model\Order\Config;
-use Magento\Sales\Model\Order\Status;
 
 /**
  * Free payment method
@@ -18,22 +15,21 @@ use Magento\Sales\Model\Order\Status;
  * Magento contains special flow for handling this payment method.
  * Inheritance is allowed to modify it behavior.
  *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
  */
 class Free extends \Magento\Payment\Model\Method\AbstractMethod
 {
-    public const PAYMENT_METHOD_FREE_CODE = 'free';
+    const PAYMENT_METHOD_FREE_CODE = 'free';
 
     /**
      * XML Paths for configuration constants
      */
-    public const XML_PATH_PAYMENT_FREE_ACTIVE = 'payment/free/active';
+    const XML_PATH_PAYMENT_FREE_ACTIVE = 'payment/free/active';
 
-    public const XML_PATH_PAYMENT_FREE_ORDER_STATUS = 'payment/free/order_status';
+    const XML_PATH_PAYMENT_FREE_ORDER_STATUS = 'payment/free/order_status';
 
-    public const XML_PATH_PAYMENT_FREE_PAYMENT_ACTION = 'payment/free/payment_action';
+    const XML_PATH_PAYMENT_FREE_PAYMENT_ACTION = 'payment/free/payment_action';
 
     /**
      * Payment Method features
@@ -55,11 +51,6 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     protected $priceCurrency;
 
     /**
-     * @var Config|null
-     */
-    private $config;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -71,7 +62,6 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param Config|null $config
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -85,8 +75,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = [],
-        Config $config = null
+        array $data = []
     ) {
         parent::__construct(
             $context,
@@ -101,7 +90,6 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
             $data
         );
         $this->priceCurrency = $priceCurrency;
-        $this->config = $config ?: ObjectManager::getInstance()->create(Config::class);
     }
 
     /**
@@ -113,10 +101,10 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return parent::isAvailable(
-            $quote
-        ) && null !== $quote && $this->priceCurrency->round(
-            $quote->getGrandTotal()
-        ) == 0;
+                $quote
+            ) && null !== $quote && $this->priceCurrency->round(
+                $quote->getGrandTotal()
+            ) == 0;
     }
 
     /**
@@ -131,19 +119,12 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     }
 
     /**
-     * Get config payment action, do nothing if status is pending or status is assigned to new[Pending] state
+     * Get config payment action, do nothing if status is pending
      *
      * @return string|null
      */
     public function getConfigPaymentAction()
     {
-        $newStateStatuses = $this->config->getStateStatuses('new');
-        $configNewOrderStatus = $this->getConfigData('order_status');
-        $paymentAction = parent::getConfigPaymentAction();
-
-        return
-            array_key_exists($configNewOrderStatus, $newStateStatuses) &&
-            $configNewOrderStatus != 'processing'
-                ? null : $paymentAction;
+        return $this->getConfigData('order_status') == 'pending' ? null : parent::getConfigPaymentAction();
     }
 }
