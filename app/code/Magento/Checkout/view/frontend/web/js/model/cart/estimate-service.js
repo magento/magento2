@@ -53,14 +53,24 @@ define([
                 // save rates to cache after load
                 shippingService.getShippingRates().subscribe(function (rates) {
                     cartCache.set('rates', rates);
+                    setShippingAddress();
                 });
 
                 // update totals based on updated shipping address / rates changes
-                if (customerData.get('cart')()['data_id'] &&
+                if (cartCache.get('shipping-address') && cartCache.get('shipping-address').countryId &&
+                    cartCache.isChanged('shipping-address',  quote.shippingAddress()) &&
                     (!quote.shippingMethod() || !quote.shippingMethod()['method_code'])) {
                     totalsDefaultProvider.estimateTotals(quote.shippingAddress());
                 }
             }
+        },
+
+        /**
+         * Cache shipping address until changed
+         */
+        setShippingAddress = function () {
+            var shippingAddress  = _.pick(quote.shippingAddress(), cartCache.requiredFields);
+            cartCache.set('shipping-address', shippingAddress);
         },
 
         /**
