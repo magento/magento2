@@ -10,14 +10,15 @@ namespace Magento\AdminAdobeIms\Test\Unit\Model\Authorization;
 use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserService;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
+use Magento\AdminAdobeIms\Service\AdminReauthProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
+use Magento\AdobeImsApi\Api\Data\TokenResponseInterfaceFactory;
 use Magento\AdobeImsApi\Api\GetProfileInterface;
 use Magento\AdobeImsApi\Api\GetTokenInterface;
 use Magento\AdobeImsApi\Api\OrganizationMembershipInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -25,10 +26,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AdobeImsAdminTokenUserServiceTest extends TestCase
 {
-    /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
+    private const CODE = 'Test Code';
 
     /**
      * @var AdobeImsAdminTokenUserService
@@ -65,31 +63,43 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
      */
     private $requestInterfaceMock;
 
+    /**
+     * @var AdminReauthProcessService
+     */
+    private $adminReauthProcessService;
+
+    /**
+     * @var TokenResponseInterfaceFactory
+     */
+    private $tokenResponseFactoryMock;
+
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-
         $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
         $this->token = $this->createMock(GetTokenInterface::class);
         $this->profile = $this->createMock(GetProfileInterface::class);
         $this->organizationMembership = $this->createMock(OrganizationMembershipInterface::class);
         $this->adminLoginProcessService = $this->createMock(AdminLoginProcessService::class);
-        $this->requestInterfaceMock = $this->createMock(RequestInterface::class);
+        $this->requestInterfaceMock = $this->getMockBuilder(RequestInterface::class)
+            ->setMethods(['getHeader','getParam'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->adminReauthProcessService = $this->createMock(AdminReauthProcessService::class);
+        $this->tokenResponseFactoryMock = $this->createMock(TokenResponseInterfaceFactory::class);
 
         $this->adminImsConfigMock->expects($this->any())
             ->method('enabled')
             ->willReturn(true);
 
-        $this->adobeImsAdminTokenUserService = $this->objectManager->getObject(
-            AdobeImsAdminTokenUserService::class,
-            [
-                'adminImsConfig' => $this->adminImsConfigMock,
-                'organizationMembership' => $this->organizationMembership,
-                'adminLoginProcessService' => $this->adminLoginProcessService,
-                'request' => $this->requestInterfaceMock,
-                'token' => $this->token,
-                'profile' => $this->profile
-            ]
+        $this->adobeImsAdminTokenUserService = new AdobeImsAdminTokenUserService(
+            $this->adminImsConfigMock,
+            $this->organizationMembership,
+            $this->adminLoginProcessService,
+            $this->adminReauthProcessService,
+            $this->requestInterfaceMock,
+            $this->token,
+            $this->profile,
+            $this->tokenResponseFactoryMock
         );
     }
 
@@ -97,14 +107,13 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
      * Test Process Login Request
      *
      * @return void
-     * @param string $code
      * @param array $responseData
      * @dataProvider responseDataProvider
      */
-    public function testProcessLoginRequest(string $code, array $responseData)
+    public function testProcessLoginRequest(array $responseData): void
     {
         $this->requestInterfaceMock->expects($this->exactly(2))
-            ->method('getParam')->with('code')->willReturn($code);
+            ->method('getParam')->with('code')->willReturn(self::CODE);
 
         $this->requestInterfaceMock->expects($this->once())
             ->method('getModuleName')->willReturn('adobe_ims_auth');
@@ -116,7 +125,7 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
 
         $this->token->expects($this->once())
             ->method('getTokenResponse')
-            ->with($code)
+            ->with(self::CODE)
             ->willReturn($tokenResponse);
 
         $this->profile->expects($this->once())
@@ -128,6 +137,55 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
             ->method('checkOrganizationMembership')
             ->with($responseData['access_token']);
 
+        $this->adminLoginProcessService->expects($this->once())
+            ->method('execute')
+            ->with($tokenResponse, $responseData);
+
+        $this->adobeImsAdminTokenUserService->processLoginRequest();
+    }
+
+    /**
+     * Test Process Login Request
+     *
+     * @return void
+     * @param array $responseData
+     * @dataProvider responseDataProvider
+     */
+    public function testProcessLoginRequestWithAuthorizationHeader(array $responseData): void
+    {
+        $this->requestInterfaceMock->expects($this->once())
+            ->method('getModuleName')->willReturn('adobe_ims_auth');
+
+        $this->requestInterfaceMock->expects($this->exactly(2))
+            ->method('getHeader')
+            ->with('Authorization')
+            ->willReturn('Bearer kladjflakdjf3423rfzddsf');
+
+        $data = ['access_token' => 'kladjflakdjf3423rfzddsf'];
+
+        $tokenResponse = $this->createMock(TokenResponseInterface::class);
+        $this->tokenResponseFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['data' => $data])
+            ->willReturn($tokenResponse);
+
+        $tokenResponse->expects($this->any())
+            ->method('getAccessToken')
+            ->willReturn($responseData['access_token']);
+
+        $this->profile->expects($this->once())
+            ->method('getProfile')
+            ->with($data['access_token'])
+            ->willReturn($responseData);
+
+        $this->organizationMembership->expects($this->once())
+            ->method('checkOrganizationMembership')
+            ->with($responseData['access_token']);
+
+        $this->adminLoginProcessService->expects($this->once())
+            ->method('execute')
+            ->with($tokenResponse, $responseData);
+
         $this->adobeImsAdminTokenUserService->processLoginRequest();
     }
 
@@ -135,15 +193,10 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
      * Test exception when tried to access from other module
      *
      * @return void
-     * @param string $code
-     * @dataProvider responseDataProvider
      * @throws AuthenticationException
      */
-    public function testExceptionWhenTriedToAccessFromOtherModule(string $code): void
+    public function testExceptionWhenTriedToAccessFromOtherModule(): void
     {
-        $this->requestInterfaceMock->expects($this->once())
-            ->method('getParam')->with('code')->willReturn($code);
-
         $this->requestInterfaceMock->expects($this->once())
             ->method('getModuleName')->willReturn('Test Module');
 
@@ -157,17 +210,14 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
      * Test exception when profile not found
      *
      * @return void
-     * @param string $code
      * @param array $responseData
      * @dataProvider responseDataProvider
      * @throws AuthenticationException
      */
-    public function testExceptionWhenProfileNotFoundBasedOnAccessToken(
-        string $code,
-        array $responseData
-    ): void {
+    public function testExceptionWhenProfileNotFoundBasedOnAccessToken(array $responseData): void
+    {
         $this->requestInterfaceMock->expects($this->exactly(2))
-            ->method('getParam')->with('code')->willReturn($code);
+            ->method('getParam')->with('code')->willReturn(self::CODE);
 
         $this->requestInterfaceMock->expects($this->once())
             ->method('getModuleName')->willReturn('adobe_ims_auth');
@@ -179,7 +229,7 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
 
         $this->token->expects($this->once())
             ->method('getTokenResponse')
-            ->with($code)
+            ->with(self::CODE)
             ->willReturn($tokenResponse);
 
         $this->profile->expects($this->once())
@@ -197,17 +247,14 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
      * Test exception when admin login provided with wrong info
      *
      * @return void
-     * @param string $code
      * @param array $responseData
      * @dataProvider responseDataProvider
      * @throws AdobeImsAuthorizationException
      */
-    public function testExceptionWhenAdminLoginProcessCalledWithWrongInfo(
-        string $code,
-        array $responseData
-    ): void {
+    public function testExceptionWhenAdminLoginProcessCalledWithWrongInfo(array $responseData): void
+    {
         $this->requestInterfaceMock->expects($this->exactly(2))
-            ->method('getParam')->with('code')->willReturn($code);
+            ->method('getParam')->with('code')->willReturn(self::CODE);
 
         $this->requestInterfaceMock->expects($this->once())
             ->method('getModuleName')->willReturn('adobe_ims_auth');
@@ -219,7 +266,7 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
 
         $this->token->expects($this->once())
             ->method('getTokenResponse')
-            ->with($code)
+            ->with(self::CODE)
             ->willReturn($tokenResponse);
 
         $this->profile->expects($this->once())
@@ -250,7 +297,6 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
         return
             [
                 [
-                    'code' => 'Test Code',
                     'tokenResponse' => [
                         'name' => 'Test User',
                         'email' => 'user@test.com',
