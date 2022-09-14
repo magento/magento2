@@ -24,6 +24,8 @@ use Magento\AdminAdobeIms\Api\SaveImsUserAndRoleInterface;
 
 /**
  * Tests Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserService
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdobeImsAdminTokenUserServiceTest extends TestCase
 {
