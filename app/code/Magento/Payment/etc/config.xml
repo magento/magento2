@@ -12,6 +12,7 @@
                 <active>1</active>
                 <model>Magento\Payment\Model\Method\Free</model>
                 <order_status>pending</order_status>
+                <payment_action>authorize_capture</payment_action>
                 <title>No Payment Information Required</title>
                 <allowspecific>0</allowspecific>
                 <sort_order>1</sort_order>

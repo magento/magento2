@@ -84,7 +84,7 @@ class FreeTest extends TestCase
      * @return void
      * @dataProvider getConfigPaymentActionProvider
      */
-    public function testGetConfigPaymentAction($orderStatus, $paymentAction, $result, $stateStatuses): void
+    public function testGetConfigPaymentAction($orderStatus, $paymentAction, $result): void
     {
 
         if ($orderStatus != 'pending') {
