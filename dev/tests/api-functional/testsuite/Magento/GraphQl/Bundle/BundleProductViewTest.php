@@ -294,7 +294,6 @@ QUERY;
         } else {
             $this->assertNull($actualResponse['items'][0]['options'][0]['product']);
         }
-
     }
 
     /**
