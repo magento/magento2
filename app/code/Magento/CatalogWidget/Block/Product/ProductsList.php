@@ -223,6 +223,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
             $this->_storeManager->getStore()->getId(),
             $this->_design->getDesignTheme()->getId(),
             $this->httpContext->getValue(\Magento\Customer\Model\Context::CONTEXT_GROUP),
+            $this->json->serialize($this->httpContext->getValue('tax_rates')),
             (int)$this->getRequest()->getParam($this->getData('page_var_name'), 1),
             $this->getProductsPerPage(),
             $this->getProductsCount(),
