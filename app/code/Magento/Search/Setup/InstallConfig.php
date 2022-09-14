@@ -5,14 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Elasticsearch\Setup;
+namespace Magento\Search\Setup;
 
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Setup\Model\SearchConfigOptionsList;
-use Magento\Search\Setup\InstallConfigInterface;
 
 /**
- * Configure Elasticsearch search engine based on installation input
+ * Configure Search engine based on installation input
  */
 class InstallConfig implements InstallConfigInterface
 {
