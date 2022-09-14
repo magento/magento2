@@ -58,6 +58,7 @@ class ProductReader implements ProductReaderInterface
 
         $this->productCollection->addAttributeToSelect($this->quoteConfig->getProductAttributes());
         $this->productCollection->setStoreId($storeId);
+        $this->productCollection->addStoreFilter($storeId);
         $this->productCollection->addFieldToFilter(ProductInterface::SKU, ['in' => $skus]);
         $this->productCollection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $this->productCollection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');

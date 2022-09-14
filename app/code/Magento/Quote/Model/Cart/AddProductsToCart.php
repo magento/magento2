@@ -71,7 +71,9 @@ class AddProductsToCart
      * @param CartRepositoryInterface $cartRepository
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param BuyRequestBuilder $requestBuilder
-     * @param ProductReaderInterface $productReader
+     * @param ProductReaderInterface|null $productReader
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
@@ -80,7 +82,6 @@ class AddProductsToCart
         BuyRequestBuilder $requestBuilder,
         ProductReaderInterface $productReader = null
     ) {
-        $this->productRepository = $productRepository;
         $this->cartRepository = $cartRepository;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->requestBuilder = $requestBuilder;
