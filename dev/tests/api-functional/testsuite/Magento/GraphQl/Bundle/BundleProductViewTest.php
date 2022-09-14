@@ -206,7 +206,7 @@ QUERY;
         }
         $this->assertBundleBaseFields($bundleProduct, $response['products']['items'][0]);
 
-        $this->assertBundleProductOptions($bundleProduct, $response['products']['items'][0]);
+        $this->assertBundleProductOptions($bundleProduct, $response['products']['items'][0], false);
         $this->assertNotEmpty(
             $response['products']['items'][0]['items'],
             "Precondition failed: 'items' must not be empty"
@@ -236,8 +236,9 @@ QUERY;
     /**
      * @param ProductInterface $product
      * @param  array $actualResponse
+     * @param bool $isChildVisible
      */
-    private function assertBundleProductOptions($product, $actualResponse)
+    private function assertBundleProductOptions($product, $actualResponse, $isChildVisible = true)
     {
         $this->assertNotEmpty(
             $actualResponse['items'],
@@ -273,19 +274,27 @@ QUERY;
                 'position' => $bundleProductLink->getPosition(),
                 'is_default' => (bool)$bundleProductLink->getIsDefault(),
                  'price_type' => self::KEY_PRICE_TYPE_FIXED,
-                'can_change_quantity' => $bundleProductLink->getCanChangeQuantity(),
-                'label' => $childProduct->getName()
+                'can_change_quantity' => $bundleProductLink->getCanChangeQuantity()
             ]
         );
-        $this->assertResponseFields(
-            $actualResponse['items'][0]['options'][0]['product'],
-            [
-                'id' => $childProduct->getId(),
-                'name' => $childProduct->getName(),
-                'type_id' => $childProduct->getTypeId(),
-                'sku' => $bundleProductLink->getSku()
-            ]
+        $this->assertEquals(
+            $isChildVisible ? $childProduct->getName() : null,
+            $actualResponse['items'][0]['options'][0]['label']
         );
+        if ($isChildVisible) {
+            $this->assertResponseFields(
+                $actualResponse['items'][0]['options'][0]['product'],
+                [
+                    'id' => $childProduct->getId(),
+                    'name' => $childProduct->getName(),
+                    'type_id' => $childProduct->getTypeId(),
+                    'sku' => $childProduct->getSku()
+                ]
+            );
+        } else {
+            $this->assertNull($actualResponse['items'][0]['options'][0]['product']);
+        }
+
     }
 
     /**
