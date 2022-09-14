@@ -4,19 +4,26 @@
  */
 
 define([
+    'underscore',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/shipping-rate-processor/new-address',
     'Magento_Checkout/js/model/cart/totals-processor/default',
     'Magento_Checkout/js/model/shipping-service',
     'Magento_Checkout/js/model/cart/cache',
-    'Magento_Customer/js/customer-data',
-    'Magento_Checkout/js/checkout-data',
-    'Magento_Checkout/js/action/select-shipping-method'
-], function (quote, defaultProcessor, totalsDefaultProvider, shippingService, cartCache, customerData, checkoutData, selectShippingMethodAction) {
+    'Magento_Customer/js/customer-data'
+], function (_, quote, defaultProcessor, totalsDefaultProvider, shippingService, cartCache, customerData) {
     'use strict';
 
     var rateProcessors = {},
         totalsProcessors = {},
+
+        /**
+         * Cache shipping address until changed
+         */
+        setShippingAddress = function () {
+            var shippingAddress = _.pick(quote.shippingAddress(), cartCache.requiredFields);
+            cartCache.set('shipping-address', shippingAddress);
+        },
 
         /**
          * Estimate totals for shipping address and update shipping rates.
@@ -63,14 +70,6 @@ define([
                     totalsDefaultProvider.estimateTotals(quote.shippingAddress());
                 }
             }
-        },
-
-        /**
-         * Cache shipping address until changed
-         */
-        setShippingAddress = function () {
-            var shippingAddress  = _.pick(quote.shippingAddress(), cartCache.requiredFields);
-            cartCache.set('shipping-address', shippingAddress);
         },
 
         /**
