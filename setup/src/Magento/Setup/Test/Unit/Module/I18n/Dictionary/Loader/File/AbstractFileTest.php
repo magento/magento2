@@ -84,9 +84,7 @@ class AbstractFileTest extends TestCase
 
         $this->_factoryMock->expects($this->once())
             ->method('createDictionary')
-            ->willReturn(
-            $this->_dictionaryMock
-        );
+            ->willReturn($this->_dictionaryMock);
         $this->_factoryMock
             ->method('createPhrase')
             ->withConsecutive(

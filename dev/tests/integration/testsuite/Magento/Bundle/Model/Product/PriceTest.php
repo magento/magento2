@@ -7,15 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Product;
 
+use Magento\Bundle\Test\Fixture\Link as BundleSelectionFixture;
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\TierPriceInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Customer\Model\Group;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Catalog\Model\GetCategoryByName;
 use Magento\TestFramework\Catalog\Model\Product\Price\GetPriceIndexDataByProductId;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -143,14 +148,27 @@ class PriceTest extends TestCase
 
     /**
      * Fixed Bundle Product without discounts
-     * @magentoDataFixture Magento/Bundle/_files/fixed_bundle_product_without_discounts.php
      *
      * @return void
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple1', 'price' => 10], 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple2', 'price' => 20], 'p2'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple3', 'price' => 30], 'p3'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p1.sku$', 'price' => 10, 'price_type' => 0], 'link1'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p2.sku$', 'price' => 25, 'price_type' => 1], 'link2'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p3.sku$', 'price' => 25, 'price_type' => 0], 'link3'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$link1$', '$link2$', '$link3$']], 'opt1'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['sku' => 'bundle1','price' => 50,'price_type' => 1,'_options' => ['$opt1$']],
+            'bundle1'
+        ),
+    ]
     public function testFixedBundleProductPriceWithoutDiscounts(): void
     {
         $this->checkBundlePrices(
-            'fixed_bundle_product_without_discounts',
+            'bundle1',
             ['price' => 50, 'final_price' => 50, 'min_price' => 60, 'max_price' => 75, 'tier_price' => null],
             ['simple1' => 60, 'simple2' => 62.5, 'simple3' => 75]
         );
@@ -188,14 +206,23 @@ class PriceTest extends TestCase
 
     /**
      * Dynamic Bundle Product without discount + options without discounts
-     * @magentoDataFixture Magento/Bundle/_files/dynamic_bundle_product_without_discounts.php
      *
      * @return void
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple1000', 'price' => 10], 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple1001', 'price' => 20], 'p2'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$p1$', '$p2$']], 'opt1'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['sku' => 'bundle1', '_options' => ['$opt1$']],
+            'bundle1'
+        ),
+    ]
     public function testDynamicBundleProductWithoutDiscountAndOptionsWithoutDiscounts(): void
     {
         $this->checkBundlePrices(
-            'dynamic_bundle_product_without_discounts',
+            'bundle1',
             ['price' => 0, 'final_price' => 0, 'min_price' => 10, 'max_price' => 20, 'tier_price' => null],
             ['simple1000' => 10, 'simple1001' => 20]
         );
@@ -488,8 +515,8 @@ class PriceTest extends TestCase
             $bundle->addCustomOption('bundle_selection_ids', $this->json->serialize([$productLink->getId()]));
             $bundle->addCustomOption('selection_qty_' . $productLink->getId(), 1);
             $this->assertEquals(
-                round($expectedPrices[$productLink->getSku()], 2),
-                round($this->priceModel->getFinalPrice(1, $bundle), 2)
+                round((float) $expectedPrices[$productLink->getSku()], 2),
+                round((float) $this->priceModel->getFinalPrice(1, $bundle), 2)
             );
         }
     }

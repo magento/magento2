@@ -21,8 +21,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * UpdateItemQty ajax request
- *
- * @package Magento\Checkout\Controller\Cart
  */
 class UpdateItemQty extends Action implements HttpPostActionInterface
 {
@@ -97,17 +95,23 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
             $cartData = $this->quantityProcessor->process($cartData);
             $quote = $this->checkoutSession->getQuote();
 
+            $response = [];
             foreach ($cartData as $itemId => $itemInfo) {
                 $item = $quote->getItemById($itemId);
                 $qty = isset($itemInfo['qty']) ? (double) $itemInfo['qty'] : 0;
                 if ($item) {
-                    $this->updateItemQuantity($item, $qty);
+                    try {
+                        $this->updateItemQuantity($item, $qty);
+                    } catch (LocalizedException $e) {
+                        $response[] = [
+                            'error' => $e->getMessage(),
+                            'itemId' => $itemId
+                        ];
+                    }
                 }
             }
 
-            $this->jsonResponse();
-        } catch (LocalizedException $e) {
-            $this->jsonResponse($e->getMessage());
+            $this->jsonResponse(count($response)? json_encode($response) : '');
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
             $this->jsonResponse('Something went wrong while saving the page. Please refresh the page and try again.');
@@ -126,6 +130,7 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
     {
         if ($qty > 0) {
             $item->clearMessage();
+            $item->setHasError(false);
             $item->setQty($qty);
 
             if ($item->getHasError()) {

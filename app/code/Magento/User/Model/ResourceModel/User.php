@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\User\Model\ResourceModel;
 
+use Laminas\Validator\Callback;
+use Laminas\Validator\ValidatorInterface;
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\Acl\Role\User as RoleUser;
 use Magento\Authorization\Model\UserContextInterface;
@@ -17,6 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\User\Model\Backend\Config\ObserverConfig;
 use Magento\User\Model\User as ModelUser;
+use Magento\Framework\Encryption\EncryptorInterface;
 
 /**
  * ACL user resource
@@ -50,6 +53,11 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $observerConfig;
 
     /**
+     * @var EncryptorInterface|null
+     */
+    private $encryptor;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -58,6 +66,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $connectionName
      * @param CacheInterface $aclDataCache
      * @param ObserverConfig|null $observerConfig
+     * @param EncryptorInterface|null $encryptor
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -65,13 +74,15 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null,
         CacheInterface $aclDataCache = null,
-        ObserverConfig $observerConfig = null
+        ObserverConfig $observerConfig = null,
+        EncryptorInterface $encryptor = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_roleFactory = $roleFactory;
         $this->dateTime = $dateTime;
         $this->aclDataCache = $aclDataCache ?: ObjectManager::getInstance()->get(CacheInterface::class);
         $this->observerConfig = $observerConfig ?: ObjectManager::getInstance()->get(ObserverConfig::class);
+        $this->encryptor = $encryptor ?? ObjectManager::getInstance()->get(EncryptorInterface::class);
     }
 
     /**
@@ -180,6 +191,10 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($user->hasRoleId()) {
             $user->setReloadAclFlag(1);
         }
+        if ($user->getData('rp_token')) {
+            $rpToken = $user->getData('rp_token');
+            $user->setRpToken($this->encryptor->encrypt($rpToken));
+        }
 
         return parent::_beforeSave($user);
     }
@@ -196,6 +211,10 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($user->hasRoleId()) {
             $this->_clearUserRoles($user);
             $this->_createUserRole($user->getRoleId(), $user);
+        }
+        if ($user->getData('rp_token')) {
+            $rpToken = $user->getData('rp_token');
+            $user->setRpToken($this->encryptor->decrypt($rpToken));
         }
         return $this;
     }
@@ -254,6 +273,10 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         if (is_string($user->getExtra())) {
             $user->setExtra($this->getSerializer()->unserialize($user->getExtra()));
+        }
+        if ($user->getData('rp_token')) {
+            $rpToken = $user->getData('rp_token');
+            $user->setRpToken($this->encryptor->decrypt($rpToken));
         }
         return parent::_afterLoad($user);
     }
@@ -467,14 +490,14 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Add validation rules to be applied before saving an entity
      *
-     * @return \Zend_Validate_Interface $validator
+     * @return ValidatorInterface $validator
      */
     public function getValidationRulesBeforeSave()
     {
-        $userIdentity = new \Zend_Validate_Callback([$this, 'isUserUnique']);
+        $userIdentity = new Callback([$this, 'isUserUnique']);
         $userIdentity->setMessage(
             __('A user with the same user name or email already exists.'),
-            \Zend_Validate_Callback::INVALID_VALUE
+            Callback::INVALID_VALUE
         );
 
         return $userIdentity;

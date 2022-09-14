@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewrite\Test\Unit\Controller;
 
+use Laminas\Stdlib\Parameters;
 use Laminas\Stdlib\ParametersInterface;
 use Magento\Framework\App\Action\Forward;
 use Magento\Framework\App\Action\Redirect;
@@ -89,7 +90,9 @@ class RouterTest extends TestCase
             ->addMethods(['setRedirect'])
             ->onlyMethods(['sendResponse'])
             ->getMockForAbstractClass();
-        $this->requestQuery = $this->createMock(ParametersInterface::class);
+        $this->requestQuery = $this->getMockBuilder(Parameters::class)
+            ->onlyMethods(['__serialize', '__unserialize'])
+            ->getMock();
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();

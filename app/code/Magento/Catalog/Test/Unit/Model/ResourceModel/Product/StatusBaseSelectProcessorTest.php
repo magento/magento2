@@ -79,8 +79,8 @@ class StatusBaseSelectProcessorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testProcess(): void
     {
         $linkField = 'link_field';

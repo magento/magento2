@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontElasticSearchForChineseLocaleTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Search for Chinese"/>
+            <title value="Storefront Search for Chinese locale"/>
+            <description value="Storefront Search for Chinese locale"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-6310"/>
+            <useCaseId value="MAGETWO-91625"/>
+            <group value="elasticsearch"/>
+            <group value="SearchEngine"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Set search engine to Elastic, set Locale to China, create category and product, then go to Storefront -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <magentoCLI command="config:set --scope={{GeneralLocalCodeConfigsForChina.scope}} --scope-code={{GeneralLocalCodeConfigsForChina.scope_code}} {{GeneralLocalCodeConfigsForChina.path}} {{GeneralLocalCodeConfigsForChina.value}}" stepKey="setLocaleToChina"/>
+            <comment userInput="Moved to appropriate test suite" stepKey="enableElasticsearch6"/>
+            <comment userInput="Moved to appropriate test suite" stepKey="checkConnection"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
+        </before>
+        <after>
+            <!-- Delete created data and reset initial configuration -->
+            <magentoCLI command="config:set --scope={{GeneralLocalCodeConfigsForUS.scope}} --scope-code={{GeneralLocalCodeConfigsForUS.scope_code}} {{GeneralLocalCodeConfigsForUS.path}} {{GeneralLocalCodeConfigsForUS.value}}" stepKey="setLocaleToUS"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <comment userInput="Moved to appropriate test suite" stepKey="resetSearchEnginePreviousState"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+        <!-- Search for product by name -->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName">
+            <argument name="phrase" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <!-- Check if searched product is displayed -->
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createProduct.name$$" stepKey="seeProductNameInCategoryPage"/>
+    </test>
+</tests>

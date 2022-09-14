@@ -10,9 +10,6 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 use Magento\CatalogGraphQl\Model\Category\Hydrator;
 use Magento\Catalog\Api\Data\CategoryInterface;
 
-/**
- * Extract data from category tree
- */
 class ExtractDataFromCategoryTree
 {
     /**
@@ -55,7 +52,8 @@ class ExtractDataFromCategoryTree
             $currentCategory = $iterator->current();
             $iterator->next();
             if ($this->areParentsActive($currentCategory, $rootCategory, (array)$iterator)) {
-                $pathElements = explode("/", $currentCategory->getPath());
+                $pathElements = $currentCategory->getPath() !== null ?
+                    explode("/", $currentCategory->getPath()) : [''];
                 if (empty($tree)) {
                     $this->startCategoryFetchLevel = count($pathElements) - 1;
                 }
@@ -154,7 +152,7 @@ class ExtractDataFromCategoryTree
         foreach ($tree as &$node) {
             if ($node['children']) {
                 uasort($node['children'], function ($element1, $element2) {
-                    return $element1['position'] > $element2['position'];
+                    return ($element1['position'] <=> $element2['position']);
                 });
                 $node['children'] = $this->sortTree($node['children']);
                 if (isset($node['children_count'])) {

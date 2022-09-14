@@ -12,7 +12,6 @@ use Magento\Directory\Model\CountryFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\ClientFactory;
 use Magento\Framework\HTTP\ClientInterface;
-use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Address\RateRequest;
@@ -33,6 +32,7 @@ use Psr\Log\LoggerInterface;
  * Unit tests for \Magento\Ups\Model\Carrier class.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class CarrierTest extends TestCase
 {
@@ -41,8 +41,6 @@ class CarrierTest extends TestCase
     const PAID_METHOD_NAME = 'paid_method';
 
     /**
-     * Model under test
-     *
      * @var Error|MockObject
      */
     private $error;
@@ -53,8 +51,6 @@ class CarrierTest extends TestCase
     private $helper;
 
     /**
-     * Model under test
-     *
      * @var Carrier|MockObject
      */
     private $model;
@@ -78,11 +74,6 @@ class CarrierTest extends TestCase
      * @var Country|MockObject
      */
     private $country;
-
-    /**
-     * @var AbstractModel
-     */
-    private $abstractModel;
 
     /**
      * @var Result
@@ -135,13 +126,8 @@ class CarrierTest extends TestCase
             ->onlyMethods(['load', 'getData'])
             ->getMock();
 
-        $this->abstractModel = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getData'])
-            ->getMock();
-
         $this->country->method('load')
-            ->willReturn($this->abstractModel);
+            ->willReturnCallback([$this, 'getCountryById']);
 
         $this->countryFactory = $this->getMockBuilder(CountryFactory::class)
             ->disableOriginalConstructor()
@@ -363,49 +349,200 @@ class CarrierTest extends TestCase
     }
 
     /**
-     * @param string $countryCode
-     * @param string $foundCountryCode
+     * @param array $requestData
+     * @param array $rawRequestData
      *
      * @return void
      * @dataProvider countryDataProvider
      */
-    public function testSetRequest($countryCode, $foundCountryCode): void
+    public function testSetRequest(array $requestData, array $rawRequestData): void
     {
         /** @var RateRequest $request */
         $request = $this->helper->getObject(RateRequest::class);
-        $request->setData(
-            [
-                'orig_country' => 'USA',
-                'orig_region_code' => 'CA',
-                'orig_post_code' => 90230,
-                'orig_city' => 'Culver City',
-                'dest_country_id' => $countryCode
-            ]
-        );
-
-        $this->country
-            ->method('load')
-            ->withConsecutive([], [$countryCode])
-            ->willReturnSelf();
-
-        $this->country->method('getData')
-            ->with('iso2_code')
-            ->willReturn($foundCountryCode);
-
+        $request->setData($requestData);
         $this->model->setRequest($request);
+        $property = new \ReflectionProperty($this->model, '_rawRequest');
+        $property->setAccessible(true);
+        $rawRequest = $property->getValue($this->model);
+        $this->assertEquals($rawRequestData, array_intersect_key($rawRequest->getData(), $rawRequestData));
     }
 
     /**
-     * Get list of country variations.
+     * Get list of request variations for setRequest.
      *
      * @return array
      */
     public function countryDataProvider(): array
     {
         return [
-            ['countryCode' => 'PR', 'foundCountryCode' => null],
-            ['countryCode' => 'US', 'foundCountryCode' => 'US']
+            [
+                [
+                    'orig_region_code' => 'CA',
+                    'orig_postcode' => '90230',
+                    'orig_country' => 'US',
+                    'dest_region_code' => 'NY',
+                    'dest_postcode' => '11236',
+                    'dest_country_id' => 'US',
+                ],
+                [
+                    'orig_region_code' => 'CA',
+                    'orig_postal' => '90230',
+                    'orig_country' => 'US',
+                    'dest_region_code' => 'NY',
+                    'dest_postal' => '11236',
+                    'dest_country' => 'US',
+                ]
+            ],
+            [
+                [
+                    'orig_region_code' => 'CA',
+                    'orig_postcode' => '90230',
+                    'orig_country' => 'US',
+                    'dest_region_code' => 'PR',
+                    'dest_postcode' => '00968',
+                    'dest_country_id' => 'US',
+                ],
+                [
+                    'orig_region_code' => 'CA',
+                    'orig_postal' => '90230',
+                    'orig_country' => 'US',
+                    'dest_region_code' => 'PR',
+                    'dest_postal' => '00968',
+                    'dest_country' => 'PR',
+                ]
+            ],
+            [
+                [
+                    'orig_region_code' => 'PR',
+                    'orig_postcode' => '00968',
+                    'orig_country' => 'US',
+                    'dest_region_code' => 'CA',
+                    'dest_postcode' => '90230',
+                    'dest_country_id' => 'US',
+                ],
+                [
+                    'orig_region_code' => 'PR',
+                    'orig_postal' => '00968',
+                    'orig_country' => 'PR',
+                    'dest_region_code' => 'CA',
+                    'dest_postal' => '90230',
+                    'dest_country' => 'US',
+                ]
+            ],
         ];
+    }
+
+    /**
+     * @param array $requestData
+     * @param array $expectedRequestData
+     * @dataProvider requestToShipmentDataProvider
+     */
+    public function testRequestToShipment(array $requestData, array $expectedRequestData): void
+    {
+        /** @var \Magento\Shipping\Model\Shipment\Request $request */
+        $request = $this->helper->getObject(\Magento\Shipping\Model\Shipment\Request::class);
+        $shipmentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getOrder'])
+            ->getMock();
+        $orderMock =  $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getIncrementId'])
+            ->getMock();
+
+        $shipmentMock->expects($this->any())
+            ->method('getOrder')
+            ->willReturn($orderMock);
+        $orderMock->expects($this->any())
+            ->method('getIncrementId')
+            ->willReturn('100000001');
+
+        $requestData['order_shipment'] = $shipmentMock;
+        $request->setData($requestData);
+        $request->setPackages([['items' => [], 'params' => ['container' => '']]]);
+        $this->model->requestToShipment($request);
+        $this->assertEquals($expectedRequestData, array_intersect_key($request->getData(), $expectedRequestData));
+    }
+
+    /**
+     * Get list of request variations for requestToShipment.
+     *
+     * @return array
+     */
+    public function requestToShipmentDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'recipient_address_state_or_province_code' => 'CA',
+                    'recipient_address_postal_code' => '90230',
+                    'recipient_address_country_code' => 'US',
+                    'shipper_address_state_or_province_code' => 'NY',
+                    'shipper_address_postal_code' => '11236',
+                    'shipper_address_country_code' => 'US',
+                ],
+                [
+                    'recipient_address_state_or_province_code' => 'CA',
+                    'recipient_address_postal_code' => '90230',
+                    'recipient_address_country_code' => 'US',
+                    'shipper_address_state_or_province_code' => 'NY',
+                    'shipper_address_postal_code' => '11236',
+                    'shipper_address_country_code' => 'US',
+                ]
+            ],
+            [
+                [
+                    'recipient_address_state_or_province_code' => 'CA',
+                    'recipient_address_postal_code' => '90230',
+                    'recipient_address_country_code' => 'US',
+                    'shipper_address_state_or_province_code' => 'PR',
+                    'shipper_address_postal_code' => '00968',
+                    'shipper_address_country_code' => 'US',
+                ],
+                [
+                    'recipient_address_state_or_province_code' => 'CA',
+                    'recipient_address_postal_code' => '90230',
+                    'recipient_address_country_code' => 'US',
+                    'shipper_address_state_or_province_code' => 'PR',
+                    'shipper_address_postal_code' => '00968',
+                    'shipper_address_country_code' => 'PR',
+                ]
+            ],
+            [
+                [
+                    'recipient_address_state_or_province_code' => 'PR',
+                    'recipient_address_postal_code' => '00968',
+                    'recipient_address_country_code' => 'US',
+                    'shipper_address_state_or_province_code' => 'CA',
+                    'shipper_address_postal_code' => '90230',
+                    'shipper_address_country_code' => 'US',
+                ],
+                [
+                    'recipient_address_state_or_province_code' => 'PR',
+                    'recipient_address_postal_code' => '00968',
+                    'recipient_address_country_code' => 'PR',
+                    'shipper_address_state_or_province_code' => 'CA',
+                    'shipper_address_postal_code' => '90230',
+                    'shipper_address_country_code' => 'US',
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @param string|null $id
+     * @return Country
+     */
+    public function getCountryById(?string $id): Country
+    {
+        $countries = [
+            'US' => 'US'
+        ];
+        $countryMock = $this->getMockBuilder(Country::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $countryMock->setData('iso2_code', $countries[$id] ?? null);
+        return $countryMock;
     }
 
     /**
@@ -505,6 +642,10 @@ class CarrierTest extends TestCase
             ->willReturnCallback(
                 function ($data) {
                     $helper = new ObjectManager($this);
+
+                    if (empty($data['data'])) {
+                        $data['data'] = '<?xml version = "1.0" ?><ShipmentAcceptRequest/>';
+                    }
 
                     return $helper->getObject(
                         Element::class,

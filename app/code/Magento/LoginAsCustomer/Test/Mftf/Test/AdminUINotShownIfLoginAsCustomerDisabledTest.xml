@@ -16,6 +16,9 @@
             <description value="Verify that UI elements are not shown if 'Login as customer' functionality is disabled"/>
             <severity value="CRITICAL"/>
             <group value="login_as_customer"/>
+            <skip>
+                <issueId value="ACQE-3908"/>
+            </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0" stepKey="disableLoginAsCustomer"/>
@@ -44,7 +47,7 @@
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderId"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
         <!-- Verify Login as Customer Login action is absent on Order page -->
         <actionGroup ref="AdminLoginAsCustomerAbsentOnOrderPageActionGroup" stepKey="verifyLoginAsCustomerAbsentOnOrderPage">

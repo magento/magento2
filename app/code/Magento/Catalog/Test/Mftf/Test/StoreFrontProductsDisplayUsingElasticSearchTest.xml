@@ -16,7 +16,8 @@
             <testCaseId value="MC-30209"/>
             <severity value="CRITICAL"/>
             <group value="Catalog"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

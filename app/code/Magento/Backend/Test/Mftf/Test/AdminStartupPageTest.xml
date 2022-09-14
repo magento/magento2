@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminStartupPageTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Admin should see selected Startup Page after login."/>
+            <title value="Admin should see selected Startup Page after login."/>
+            <description value="Admin should see selected Startup Page after login."/>
+            <severity value="MINOR"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set admin/startup/menu_item_id Magento_Sales::sales_order" stepKey="selectSalesOrderStartupPage"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set admin/startup/menu_item_id Magento_Backend::dashboard" stepKey="selectDashboardStartupPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="checkPageTitle">
+            <argument name="value" value="Orders"/>
+        </actionGroup>
+    </test>
+</tests>

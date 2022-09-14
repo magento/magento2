@@ -16,17 +16,28 @@ use Magento\Framework\Setup\Option\TextConfigOption;
  */
 class SearchConfigOptionsList
 {
+    public const INPUT_KEY_SEARCH_ENGINE = 'search-engine';
+
     /**
-     * Input key for the options
+     * Input key for the Elasticsearch options
      */
-    const INPUT_KEY_SEARCH_ENGINE = 'search-engine';
-    const INPUT_KEY_ELASTICSEARCH_HOST = 'elasticsearch-host';
-    const INPUT_KEY_ELASTICSEARCH_PORT = 'elasticsearch-port';
-    const INPUT_KEY_ELASTICSEARCH_ENABLE_AUTH = 'elasticsearch-enable-auth';
-    const INPUT_KEY_ELASTICSEARCH_USERNAME = 'elasticsearch-username';
-    const INPUT_KEY_ELASTICSEARCH_PASSWORD = 'elasticsearch-password';
-    const INPUT_KEY_ELASTICSEARCH_INDEX_PREFIX = 'elasticsearch-index-prefix';
-    const INPUT_KEY_ELASTICSEARCH_TIMEOUT = 'elasticsearch-timeout';
+    public const INPUT_KEY_ELASTICSEARCH_HOST = 'elasticsearch-host';
+    public const INPUT_KEY_ELASTICSEARCH_PORT = 'elasticsearch-port';
+    public const INPUT_KEY_ELASTICSEARCH_ENABLE_AUTH = 'elasticsearch-enable-auth';
+    public const INPUT_KEY_ELASTICSEARCH_USERNAME = 'elasticsearch-username';
+    public const INPUT_KEY_ELASTICSEARCH_PASSWORD = 'elasticsearch-password';
+    public const INPUT_KEY_ELASTICSEARCH_INDEX_PREFIX = 'elasticsearch-index-prefix';
+    public const INPUT_KEY_ELASTICSEARCH_TIMEOUT = 'elasticsearch-timeout';
+    /**
+     * Input key for the OpenSearch options
+     */
+    public const INPUT_KEY_OPENSEARCH_HOST = 'opensearch-host';
+    public const INPUT_KEY_OPENSEARCH_PORT = 'opensearch-port';
+    public const INPUT_KEY_OPENSEARCH_ENABLE_AUTH = 'opensearch-enable-auth';
+    public const INPUT_KEY_OPENSEARCH_USERNAME = 'opensearch-username';
+    public const INPUT_KEY_OPENSEARCH_PASSWORD = 'opensearch-password';
+    public const INPUT_KEY_OPENSEARCH_INDEX_PREFIX = 'opensearch-index-prefix';
+    public const INPUT_KEY_OPENSEARCH_TIMEOUT = 'opensearch-timeout';
 
     /**
      * Get options list for search engine configuration
@@ -84,6 +95,48 @@ class SearchConfigOptionsList
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 '',
                 'Elasticsearch server timeout.'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_OPENSEARCH_HOST,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                '',
+                'OpenSearch server host.'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_OPENSEARCH_PORT,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                '',
+                'OpenSearch server port.'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_OPENSEARCH_ENABLE_AUTH,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                '',
+                'Set to 1 to enable authentication. (default is 0, disabled)'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_OPENSEARCH_USERNAME,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                '',
+                'OpenSearch username. Only applicable if HTTP auth is enabled'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_OPENSEARCH_PASSWORD,
+                TextConfigOption::FRONTEND_WIZARD_PASSWORD,
+                '',
+                'OpenSearch password. Only applicable if HTTP auth is enabled'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_OPENSEARCH_INDEX_PREFIX,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                '',
+                'OpenSearch index prefix.'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_OPENSEARCH_TIMEOUT,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                '',
+                'OpenSearch server timeout.'
             )
         ];
     }
@@ -97,8 +150,8 @@ class SearchConfigOptionsList
     {
         return [
             'elasticsearch5' => 'Elasticsearch 5.x (deprecated)',
-            'elasticsearch6' => 'Elasticsearch 6.x',
-            'elasticsearch7' => 'Elasticsearch 7.x'
+            'elasticsearch7' => 'Elasticsearch 7.x',
+            'opensearch' => 'OpenSearch'
         ];
     }
 }

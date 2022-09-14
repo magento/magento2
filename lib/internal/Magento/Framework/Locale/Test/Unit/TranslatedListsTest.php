@@ -82,7 +82,7 @@ class TranslatedListsTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->mockConfig->method('getAllowedLocales')
-            ->willReturn(array_keys($this->expectedLocales));
+            ->willReturn($this->expectedLocales);
         $this->mockConfig->method('getAllowedCurrencies')
             ->willReturn($this->expectedCurrencies);
 

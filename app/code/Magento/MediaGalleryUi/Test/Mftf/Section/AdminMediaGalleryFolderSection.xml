@@ -17,7 +17,7 @@
         <element name="folderConfirmDeleteButton" type="button" selector="//footer//button/span[contains(text(), 'OK')]" timeout="30"/>
         <element name="folderCancelDeleteButton" type="button" selector="//footer//button/span[contains(text(), 'Cancel')]"/>
         <element name="folderNameField" type="button" selector="[name=folder_name]"/>
-        <element name="folderConfirmCreateButton" type="button" selector="//button/span[contains(text(),'Confirm')]" timeout="30"/>
+        <element name="folderConfirmCreateButton" type="button" selector="//aside[contains(@class,'_show')]//button/span[contains(text(),'Confirm')]" timeout="30"/>
         <element name="folderNameValidationMessage" type="block" selector="label.mage-error"/>
         <element name="folderArrow" type="button" selector="#{{id}} &gt; .jstree-icon" parameterized="true"/>
         <element name="checkIfFolderArrowExpand" type="button" selector="//li[@id='{{id}}' and contains(@class,'jstree-closed')]" parameterized="true"/>

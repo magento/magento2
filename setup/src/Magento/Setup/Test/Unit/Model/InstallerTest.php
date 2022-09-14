@@ -29,6 +29,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\Model\ResourceModel\Db\Context;
     use Magento\Framework\Module\ModuleList\Loader;
     use Magento\Framework\Module\ModuleListInterface;
+    use Magento\Framework\Module\ModuleResource;
     use Magento\Framework\ObjectManagerInterface;
     use Magento\Framework\Registry;
     use Magento\Framework\Setup\FilePermissions;
@@ -77,7 +78,7 @@ namespace Magento\Setup\Test\Unit\Model {
         ];
 
         /**
-         * @var Installer
+         * @var Installer|MockObject
          */
         private $object;
 
@@ -230,9 +231,6 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->config = $this->createMock(DeploymentConfig::class);
 
             $this->moduleList = $this->getMockForAbstractClass(ModuleListInterface::class);
-            $this->moduleList->expects($this->any())->method('getOne')->willReturn(
-                ['setup_version' => '2.0.0']
-            );
             $this->moduleList->expects($this->any())->method('getNames')->willReturn(
                 ['Foo_One', 'Bar_Two']
             );
@@ -282,29 +280,35 @@ namespace Magento\Setup\Test\Unit\Model {
                 $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
             }
 
-            return new Installer(
-                $this->filePermissions,
-                $this->configWriter,
-                $this->configReader,
-                $this->config,
-                $this->moduleList,
-                $this->moduleLoader,
-                $this->adminFactory,
-                $this->logger,
-                $connectionFactory,
-                $this->maintenanceMode,
-                $this->filesystem,
-                $objectManagerProvider,
-                $this->contextMock,
-                $this->configModel,
-                $this->cleanupFiles,
-                $this->dbValidator,
-                $this->setupFactory,
-                $this->dataSetupFactory,
-                $this->sampleDataState,
-                $this->componentRegistrar,
-                $this->phpReadinessCheck
-            );
+            $installer = $this->getMockBuilder(Installer::class)
+                ->enableOriginalConstructor()
+                ->onlyMethods(['getModuleResource'])
+                ->setConstructorArgs([
+                    'filePermissions' => $this->filePermissions,
+                    'deploymentConfigWriter' => $this->configWriter,
+                    'deploymentConfigReader' => $this->configReader,
+                    'deploymentConfig' => $this->config,
+                    'moduleList' => $this->moduleList,
+                    'moduleLoader' => $this->moduleLoader,
+                    'adminAccountFactory' => $this->adminFactory,
+                    'log' => $this->logger,
+                    'connectionFactory' => $connectionFactory,
+                    'maintenanceMode' => $this->maintenanceMode,
+                    'filesystem' => $this->filesystem,
+                    'objectManagerProvider' => $objectManagerProvider,
+                    'context' => $this->contextMock,
+                    'setupConfigModel' => $this->configModel,
+                    'cleanupFiles' => $this->cleanupFiles,
+                    'dbValidator' => $this->dbValidator,
+                    'setupFactory' => $this->setupFactory,
+                    'dataSetupFactory' => $this->dataSetupFactory,
+                    'sampleDataState' => $this->sampleDataState,
+                    'componentRegistrar' => $this->componentRegistrar,
+                    'phpReadinessCheck' => $this->phpReadinessCheck,
+                ])
+                ->getMock();
+
+            return $installer;
         }
 
         /**
@@ -315,6 +319,14 @@ namespace Magento\Setup\Test\Unit\Model {
          */
         public function testInstall(array $request, array $logMessages)
         {
+            $this->moduleList->method('getOne')
+                ->willReturnMap(
+                    [
+                        ['Foo_One', ['setup_version' => '2.0.0']],
+                        ['Bar_Two', ['setup_version' => null]]
+                    ]
+                );
+
             $this->config->expects($this->atLeastOnce())
                 ->method('get')
                 ->willReturnMap(
@@ -344,6 +356,16 @@ namespace Magento\Setup\Test\Unit\Model {
             $resource = $this->createMock(ResourceConnection::class);
             $this->contextMock->expects($this->any())->method('getResources')->willReturn($resource);
             $resource->expects($this->any())->method('getConnection')->willReturn($connection);
+
+            $moduleResource = $this->getMockBuilder(ModuleResource::class)
+                ->enableOriginalConstructor()
+                ->onlyMethods(['getDbVersion', 'getDataVersion'])
+                ->setConstructorArgs(['context' => $this->contextMock])
+                ->getMock();
+            $moduleResource->method('getDbVersion')->willReturnOnConsecutiveCalls(false, '2.1.0');
+            $moduleResource->method('getDataVersion')->willReturn(false);
+            $this->object->method('getModuleResource')->willReturn($moduleResource);
+
             $dataSetup = $this->createMock(DataSetup::class);
             $dataSetup->expects($this->any())->method('getConnection')->willReturn($connection);
             $cacheManager = $this->createMock(Manager::class);
@@ -549,6 +571,7 @@ namespace Magento\Setup\Test\Unit\Model {
          * @throws \Magento\Framework\Exception\FileSystemException
          * @throws \Magento\Framework\Exception\LocalizedException
          * @throws \Magento\Framework\Exception\RuntimeException
+         * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
         public function testInstallWithInvalidRemoteStorageConfiguration(bool $isDeploymentConfigWritable)
         {
@@ -580,6 +603,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['modules/Magento_User', null, '1']
                     ]
                 );
+            $this->moduleList->method('getOne')->willReturn(['setup_version' => '2.0.0']);
             $allModules = ['Foo_One' => [], 'Bar_Two' => []];
 
             $this->declarationInstallerMock->expects(static::once())->method('installSchema');
@@ -602,6 +626,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $resource->expects(static::any())->method('getConnection')->willReturn($connection);
 
             $this->contextMock->expects(static::exactly(2))->method('getResources')->willReturn($resource);
+            $this->setModuleResource();
 
             $dataSetup = $this->createMock(DataSetup::class);
             $dataSetup->expects(static::never())->method('getConnection');
@@ -732,6 +757,7 @@ namespace Magento\Setup\Test\Unit\Model {
          * @throws \Magento\Framework\Exception\FileSystemException
          * @throws \Magento\Framework\Exception\LocalizedException
          * @throws \Magento\Framework\Exception\RuntimeException
+         * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
         public function testInstallWithUnresolvableRemoteStorageValidator()
         {
@@ -750,6 +776,7 @@ namespace Magento\Setup\Test\Unit\Model {
                     ]
                 );
             $allModules = ['Foo_One' => [], 'Bar_Two' => []];
+            $this->moduleList->method('getOne')->willReturn(['setup_version' => '2.0.0']);
 
             $this->declarationInstallerMock->expects(static::once())->method('installSchema');
             $this->moduleLoader->expects(static::any())->method('load')->willReturn($allModules);
@@ -769,6 +796,8 @@ namespace Magento\Setup\Test\Unit\Model {
             $resource = $this->createMock(ResourceConnection::class);
             $this->contextMock->expects(static::any())->method('getResources')->willReturn($resource);
             $resource->expects(static::any())->method('getConnection')->willReturn($connection);
+            $this->setModuleResource();
+
             $dataSetup = $this->createMock(DataSetup::class);
             $dataSetup->expects(static::any())->method('getConnection')->willReturn($connection);
             $cacheManager = $this->createMock(Manager::class);
@@ -911,6 +940,7 @@ namespace Magento\Setup\Test\Unit\Model {
          * @throws \Magento\Framework\Exception\FileSystemException
          * @throws \Magento\Framework\Exception\LocalizedException
          * @throws \Magento\Framework\Exception\RuntimeException
+         * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
         public function testInstallWithInvalidRemoteStorageConfigurationWithEarlyException(\Exception $exception)
         {
@@ -936,6 +966,7 @@ namespace Magento\Setup\Test\Unit\Model {
                     ]
                 );
             $allModules = ['Foo_One' => [], 'Bar_Two' => []];
+            $this->moduleList->method('getOne')->willReturn(['setup_version' => '2.0.0']);
 
             $this->declarationInstallerMock
                 ->expects(static::once())
@@ -1051,6 +1082,8 @@ namespace Magento\Setup\Test\Unit\Model {
          */
         public function testInstallDataFixtures(bool $keepCache, array $expectedToEnableCacheTypes): void
         {
+            $this->moduleList->method('getOne')->willReturn(['setup_version' => '2.0.0']);
+
             $cacheManagerMock = $this->createMock(Manager::class);
             //simulate disabled layout cache type
             $cacheManagerMock->expects($this->atLeastOnce())
@@ -1105,6 +1138,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->contextMock->expects($this->once())
                 ->method('getResources')
                 ->willReturn($resource);
+            $this->setModuleResource();
 
             $dataSetup = $this->createMock(DataSetup::class);
             $dataSetup->expects($this->once())
@@ -1314,7 +1348,6 @@ namespace Magento\Setup\Test\Unit\Model {
                     ['CREATE DATABASE IF NOT EXISTS `magento`']
                 );
 
-
             $this->logger->expects($this->once())->method('log')->with('Cleaning up database `magento`');
             $this->object->cleanupDb();
         }
@@ -1364,6 +1397,17 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->configWriter->expects($this->once())->method('saveConfig')->with($expectedModules);
 
             return $newObject;
+        }
+
+        /**
+         * Sets a new ModuleResource object to the installer
+         *
+         * @return void
+         */
+        private function setModuleResource(): void
+        {
+            $moduleResource = new ModuleResource($this->contextMock);
+            $this->object->method('getModuleResource')->willReturn($moduleResource);
         }
     }
 }

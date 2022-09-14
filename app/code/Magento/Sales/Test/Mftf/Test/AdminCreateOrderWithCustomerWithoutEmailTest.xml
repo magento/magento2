@@ -57,5 +57,6 @@
         <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
             <argument name="email" value="$generatedCustomerEmail"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
     </test>
 </tests>

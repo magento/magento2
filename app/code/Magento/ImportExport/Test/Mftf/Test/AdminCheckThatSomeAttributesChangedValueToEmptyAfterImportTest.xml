@@ -58,7 +58,10 @@
             <argument name="attributeCode" value="$$productAttribute.attribute_code$$"/>
         </actionGroup>
         <!--Check that attribute value is selected-->
-        <scrollTo selector="{{AdminProductFormSection.attributeTab}}" stepKey="scrollToAttributeTitle1"/>
+        <waitForElement selector="{{AdminProductFormSection.attributeTab}}" stepKey="waitForSection1"/>
+        <executeJS function="return document.evaluate(&quot;{{AdminProductFormSection.attributeTab}}&quot;, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.getBoundingClientRect().y" stepKey="sectionPosition1"/>
+        <executeJS function="return document.querySelector(&quot;{{AdminHeaderSection.pageMainActions}}&quot;).getBoundingClientRect().height" stepKey="floatingHeaderHeight1"/>
+        <executeJS function="window.scrollTo({top: {$sectionPosition1}-{$floatingHeaderHeight1}})" stepKey="scrollToAttributeTitle1"/>
         <conditionalClick selector="{{AdminProductFormSection.attributeTab}}" dependentSelector="{{AdminProductAttributeSection.dropDownAttribute($$productAttribute.attribute_code$$)}}" visible="false" stepKey="expandAttributeTab1"/>
         <seeOptionIsSelected selector="{{AdminProductAttributeSection.dropDownAttribute($$productAttribute.attribute_code$$)}}" userInput="option2" stepKey="seeAttributeValueIsSelected1"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
@@ -72,7 +75,10 @@
         <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct2">
             <argument name="productSku" value="{{simpleProductWithShortNameAndSku.sku}}"/>
         </actionGroup>
-        <scrollTo selector="{{AdminProductFormSection.attributeTab}}" stepKey="scrollToAttributeTitle2"/>
+        <waitForElement selector="{{AdminProductFormSection.attributeTab}}" stepKey="waitForSection2"/>
+        <executeJS function="return document.evaluate(&quot;{{AdminProductFormSection.attributeTab}}&quot;, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.getBoundingClientRect().y" stepKey="sectionPosition2"/>
+        <executeJS function="return document.querySelector(&quot;{{AdminHeaderSection.pageMainActions}}&quot;).getBoundingClientRect().height" stepKey="floatingHeaderHeight2"/>
+        <executeJS function="window.scrollTo({top: {$sectionPosition2}-{$floatingHeaderHeight2}})" stepKey="scrollToAttributeTitle2"/>
         <conditionalClick selector="{{AdminProductFormSection.attributeTab}}" dependentSelector="{{AdminProductAttributeSection.dropDownAttribute($$productAttribute.attribute_code$$)}}" visible="false" stepKey="expandAttributeTab2"/>
         <seeOptionIsSelected selector="{{AdminProductAttributeSection.dropDownAttribute($$productAttribute.attribute_code$$)}}" userInput="" stepKey="seeAttributeValueIsSelected2"/>
     </test>

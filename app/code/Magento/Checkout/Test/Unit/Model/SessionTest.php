@@ -276,8 +276,8 @@ class SessionTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testHasQuote(): void
     {
         $quote = $this->getMockBuilder(Quote::class)
@@ -288,8 +288,8 @@ class SessionTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testReplaceQuote(): void
     {
         $replaceQuoteId = 3;
@@ -354,8 +354,8 @@ class SessionTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testClearStorage(): void
     {
         $storage = $this->getMockBuilder(Storage::class)
@@ -377,8 +377,8 @@ class SessionTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testResetCheckout(): void
     {
         /** @var $session \Magento\Checkout\Model\Session */
@@ -391,8 +391,8 @@ class SessionTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetStepData(): void
     {
         $stepData = [
@@ -477,8 +477,8 @@ class SessionTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSetStepData(): void
     {
         $stepData = [

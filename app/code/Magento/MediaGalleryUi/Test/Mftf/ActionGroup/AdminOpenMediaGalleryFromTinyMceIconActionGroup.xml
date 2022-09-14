@@ -9,7 +9,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenMediaGalleryTinyMceActionGroup">
         <annotations>
-            <description>Opens Enhanced MediaGallery from category page  by tyniMce4 image icon</description>
+            <description>Opens Enhanced MediaGallery from category page by tinyMCE image button</description>
         </annotations>
 
         <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="clickExpandContent"/>

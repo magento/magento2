@@ -7,8 +7,11 @@
 /**
  * Pager template
  *
- * @see \Magento\Theme\Block\Html\Pager
+ * @var \Magento\Theme\Block\Html\Pager $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
  */
+
 ?>
 <?php if ($block->getCollection()->getSize()): ?>
 
@@ -21,12 +24,17 @@
             <span class="toolbar-number">
             <?php if ($block->getLastPageNum()>1): ?>
                 <?= $block->escapeHtml(
-                    __('Items %1 to %2 of %3 total', $block->getFirstNum(), $block->getLastNum(), $block->getTotalNum())
+                    __(
+                        'Items %1 to %2 of %3 total',
+                        $localeFormatter->formatNumber($block->getFirstNum()),
+                        $localeFormatter->formatNumber($block->getLastNum()),
+                        $localeFormatter->formatNumber($block->getTotalNum())
+                    )
                 ) ?>
             <?php elseif ($block->getTotalNum() == 1): ?>
-                <?= $block->escapeHtml(__('%1 Item', $block->getTotalNum())) ?>
+                <?= $block->escapeHtml(__('%1 Item', $localeFormatter->formatNumber($block->getTotalNum()))) ?>
             <?php else: ?>
-                <?= $block->escapeHtml(__('%1 Item(s)', $block->getTotalNum())) ?>
+                <?= $block->escapeHtml(__('%1 Item(s)', $localeFormatter->formatNumber($block->getTotalNum()))) ?>
             <?php endif; ?>
             </span>
         </p>
@@ -52,7 +60,7 @@
                 <li class="item">
                     <a class="page first" href="<?= $block->escapeUrl($block->getFirstPageUrl()) ?>">
                         <span class="label"><?= $block->escapeHtml(__('Page')) ?></span>
-                        <span>1</span>
+                        <span><?= $block->escapeHtml($localeFormatter->formatNumber(1)) ?></span>
                     </a>
                 </li>
             <?php endif;?>
@@ -61,6 +69,10 @@
                 <li class="item">
                     <a class="page previous jump"
                        title=""
+                       aria-label="<?= $escaper->escapeHtmlAttr(__(
+                           'Skip to page %1',
+                           $localeFormatter->formatNumber($block->getPreviousJumpPage())
+                       )) ?>"
                        href="<?= $block->escapeUrl($block->getPreviousJumpUrl()) ?>">
                         <span>...</span>
                     </a>
@@ -72,14 +84,14 @@
                     <li class="item current">
                         <strong class="page">
                             <span class="label"><?= $block->escapeHtml(__('You\'re currently reading page')) ?></span>
-                            <span><?= $block->escapeHtml($_page) ?></span>
+                            <span><?= $block->escapeHtml($localeFormatter->formatNumber($_page)) ?></span>
                         </strong>
                     </li>
                 <?php else: ?>
                     <li class="item">
                         <a href="<?= $block->escapeUrl($block->getPageUrl($_page)) ?>" class="page">
                             <span class="label"><?= $block->escapeHtml(__('Page')) ?></span>
-                            <span><?= $block->escapeHtml($_page) ?></span>
+                            <span><?= $block->escapeHtml($localeFormatter->formatNumber($_page)) ?></span>
                         </a>
                     </li>
                 <?php endif;?>
@@ -87,7 +99,13 @@
 
             <?php if ($block->canShowNextJump()): ?>
                 <li class="item">
-                    <a class="page next jump" title="" href="<?= $block->escapeUrl($block->getNextJumpUrl()) ?>">
+                    <a class="page next jump"
+                       title=""
+                       aria-label="<?= $escaper->escapeHtmlAttr(__(
+                           'Skip to page %1',
+                           $localeFormatter->formatNumber($block->getNextJumpPage())
+                       )) ?>"
+                       href="<?= $block->escapeUrl($block->getNextJumpUrl()) ?>">
                         <span>...</span>
                     </a>
                 </li>
@@ -97,7 +115,7 @@
               <li class="item">
                   <a class="page last" href="<?= $block->escapeUrl($block->getLastPageUrl()) ?>">
                       <span class="label"><?= $block->escapeHtml(__('Page')) ?></span>
-                      <span><?= $block->escapeHtml($block->getLastPageNum()) ?></span>
+                      <span><?= $block->escapeHtml($localeFormatter->formatNumber($block->getLastPageNum())) ?></span>
                   </a>
               </li>
             <?php endif;?>
@@ -125,7 +143,7 @@
                     <option value="<?= $block->escapeUrl($block->getLimitUrl($_key)) ?>"
                         <?php if ($block->isLimitCurrent($_key)): ?>
                         selected="selected"<?php endif ?>>
-                        <?= $block->escapeHtml($_limit) ?>
+                        <?= $block->escapeHtml($localeFormatter->formatNumber((int) $_limit)) ?>
                     </option>
                 <?php endforeach; ?>
             </select>

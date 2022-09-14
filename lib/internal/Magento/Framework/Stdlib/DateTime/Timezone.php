@@ -200,7 +200,7 @@ class Timezone implements TimezoneInterface
                 break;
         }
 
-        return (new \DateTime(null, new \DateTimeZone($timezone)))->setTimestamp($date);
+        return (new \DateTime('now', new \DateTimeZone($timezone)))->setTimestamp($date);
     }
 
     /**
@@ -239,8 +239,9 @@ class Timezone implements TimezoneInterface
     {
         $formatTime = $showTime ? $format : \IntlDateFormatter::NONE;
 
-        if (!($date instanceof \DateTimeInterface)) {
-            $date = new \DateTime($date);
+        if (!$date instanceof \DateTimeInterface) {
+            /** @phpstan-ignore-next-line */
+            $date = new \DateTime($date ?? 'now');
         }
 
         return $this->formatDateTime($date, $format, $formatTime);
@@ -264,6 +265,8 @@ class Timezone implements TimezoneInterface
      */
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null)
     {
+        $dateFrom = $dateFrom ?? '';
+        $dateTo = $dateTo ?? '';
         if (!$scope instanceof ScopeInterface) {
             $scope = $this->_scopeResolver->getScope($scope);
         }
@@ -282,6 +285,9 @@ class Timezone implements TimezoneInterface
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function formatDateTime(
         $date,
@@ -305,9 +311,11 @@ class Timezone implements TimezoneInterface
         }
 
         $formatter = $this->dateFormatterFactory->create(
-            (string)($locale ?: $this->_localeResolver->getLocale()),
-            (int)($dateType ?? \IntlDateFormatter::SHORT),
-            (int)($timeType ?? \IntlDateFormatter::SHORT),
+            (string) ($locale ?: $this->_localeResolver->getLocale()),
+            // @phpstan-ignore-next-line
+            (int) ($dateType ?? \IntlDateFormatter::SHORT),
+            // @phpstan-ignore-next-line
+            (int) ($timeType ?? \IntlDateFormatter::SHORT),
             null,
             false
         );

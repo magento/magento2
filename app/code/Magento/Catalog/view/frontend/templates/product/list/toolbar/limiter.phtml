@@ -8,7 +8,8 @@
 /**
  * Product list toolbar
  *
- * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
+ * @var \Magento\Catalog\Block\Product\ProductList\Toolbar $block
+ * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
  */
 ?>
 <div class="field limiter">
@@ -17,12 +18,14 @@
     </label>
     <div class="control">
         <select id="limiter" data-role="limiter" class="limiter-options">
-            <?php foreach ($block->getAvailableLimit() as $_key => $_limit) :?>
+            <?php foreach ($block->getAvailableLimit() as $_key => $_limit):?>
                 <option value="<?= $block->escapeHtmlAttr($_key) ?>"
-                    <?php if ($block->isLimitCurrent($_key)) :?>
+                    <?php if ($block->isLimitCurrent($_key)):?>
                         selected="selected"
                     <?php endif ?>>
-                    <?= $block->escapeHtml($_limit) ?>
+                    <?= $block->escapeHtml(
+                        is_numeric($_limit) ? $localeFormatter->formatNumber((int) $_limit) : $_limit
+                    ) ?>
                 </option>
             <?php endforeach; ?>
         </select>

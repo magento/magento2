@@ -89,9 +89,9 @@
 
         <!-- Assert notification banner before place order -->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-        <waitForElementVisible selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext"/>
+        <comment userInput="BIC workaround" stepKey="waitForNextButton"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <comment userInput="BIC workaround" stepKey="waitForLoadingMaskAfterClickNext"/>
         <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerBeforePlaceOrder">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
         </actionGroup>
