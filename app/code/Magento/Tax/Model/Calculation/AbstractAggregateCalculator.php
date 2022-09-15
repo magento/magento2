@@ -158,6 +158,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
 
         if (!$applyTaxAfterDiscount) {
             $rowTotalInclTax = $rowTotal + $rowTaxBeforeDiscount;
+            $rowTax = $rowTaxBeforeDiscount;
         }
 
         $priceInclTax = $rowTotalInclTax / $quantity;
