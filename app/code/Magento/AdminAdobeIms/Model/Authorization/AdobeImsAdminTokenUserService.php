@@ -18,7 +18,7 @@ use Magento\AdobeImsApi\Api\GetTokenInterface;
 use Magento\AdobeImsApi\Api\OrganizationMembershipInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\AdminAdobeIms\Api\SaveImsUserAndRoleInterface;
+use Magento\AdminAdobeIms\Api\SaveImsUserInterface;
 
 /**
  * Adobe IMS Auth Model for getting Admin Token
@@ -65,9 +65,9 @@ class AdobeImsAdminTokenUserService
     private RequestInterface $request;
 
     /**
-     * @var SaveImsUserAndRoleInterface
+     * @var SaveImsUserInterface
      */
-    private SaveImsUserAndRoleInterface $saveImsUserAndRole;
+    private SaveImsUserInterface $saveImsUser;
 
     /**
      * @param ImsConfig $adminImsConfig
@@ -77,7 +77,7 @@ class AdobeImsAdminTokenUserService
      * @param RequestInterface $request
      * @param GetTokenInterface $token
      * @param GetProfileInterface $profile
-     * @param SaveImsUserAndRoleInterface $saveImsUserAndRole
+     * @param SaveImsUserInterface $saveImsUser
      */
     public function __construct(
         ImsConfig $adminImsConfig,
@@ -87,7 +87,7 @@ class AdobeImsAdminTokenUserService
         RequestInterface $request,
         GetTokenInterface $token,
         GetProfileInterface $profile,
-        SaveImsUserAndRoleInterface $saveImsUserAndRole
+        SaveImsUserInterface $saveImsUser
     ) {
         $this->adminImsConfig = $adminImsConfig;
         $this->organizationMembership = $organizationMembership;
@@ -96,7 +96,7 @@ class AdobeImsAdminTokenUserService
         $this->request = $request;
         $this->token = $token;
         $this->profile = $profile;
-        $this->saveImsUserAndRole = $saveImsUserAndRole;
+        $this->saveImsUser = $saveImsUser;
     }
 
     /**
@@ -131,7 +131,7 @@ class AdobeImsAdminTokenUserService
                 if ($isReauthorize) {
                     $this->adminReauthProcessService->execute($tokenResponse);
                 } else {
-                    $this->saveImsUserAndRole->save($profile);
+                    $this->saveImsUser->save($profile);
                     $this->adminLoginProcessService->execute($tokenResponse, $profile);
                 }
             } catch (AdobeImsAuthorizationException $e) {

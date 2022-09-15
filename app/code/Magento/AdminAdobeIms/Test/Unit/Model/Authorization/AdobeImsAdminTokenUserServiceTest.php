@@ -20,7 +20,7 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use Magento\AdminAdobeIms\Service\AdminReauthProcessService;
-use Magento\AdminAdobeIms\Api\SaveImsUserAndRoleInterface;
+use Magento\AdminAdobeIms\Api\SaveImsUserInterface;
 
 /**
  * Tests Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserService
@@ -75,9 +75,9 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
     private $adminReauthProcessService;
 
     /**
-     * @var SaveImsUserAndRoleInterface
+     * @var SaveImsUserInterface
      */
-    private $saveImsUserAndRole;
+    private $saveImsUser;
 
     protected function setUp(): void
     {
@@ -90,7 +90,7 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
         $this->adminLoginProcessService = $this->createMock(AdminLoginProcessService::class);
         $this->requestInterfaceMock = $this->createMock(RequestInterface::class);
         $this->adminReauthProcessService = $this->createMock(AdminReauthProcessService::class);
-        $this->saveImsUserAndRole = $this->createMock(SaveImsUserAndRoleInterface::class);
+        $this->saveImsUser = $this->createMock(SaveImsUserInterface::class);
 
         $this->adminImsConfigMock->expects($this->any())
             ->method('enabled')
@@ -106,7 +106,7 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
                 'request' => $this->requestInterfaceMock,
                 'token' => $this->token,
                 'profile' => $this->profile,
-                'saveImsUserAndRole' => $this->saveImsUserAndRole
+                'saveImsUser' => $this->saveImsUser
             ]
         );
     }
@@ -146,7 +146,7 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
             ->method('checkOrganizationMembership')
             ->with($responseData['access_token']);
 
-        $this->saveImsUserAndRole->expects($this->once())
+        $this->saveImsUser->expects($this->once())
             ->method('save')
             ->with($responseData);
 

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model;
 
-use Magento\AdminAdobeIms\Api\SaveImsUserAndRoleInterface;
+use Magento\AdminAdobeIms\Api\SaveImsUserInterface;
 use Magento\User\Model\User;
 use Magento\User\Model\ResourceModel\User\CollectionFactory as UserCollectionFactory;
 use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory as RoleCollectionFactory;
@@ -17,10 +17,10 @@ use Exception;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
- * Class SaveImsUserAndRole
+ * Class SaveImsUser
  * Save Adobe IMS User with Default Role i.e "Adobe Ims" & No Permissions
  */
-class SaveImsUserAndRole implements SaveImsUserAndRoleInterface
+class SaveImsUser implements SaveImsUserInterface
 {
     private const ADMIN_IMS_ROLE = 'Adobe Ims';
 

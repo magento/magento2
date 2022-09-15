@@ -20,15 +20,15 @@ use Magento\Framework\App\Area;
 use Magento\User\Model\User as AdminUser;
 use Magento\Authorization\Model\Role;
 use Magento\Backend\Model\Auth\Session;
-use Magento\AdminAdobeIms\Model\SaveImsUserAndRole;
+use Magento\AdminAdobeIms\Model\SaveImsUser;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
- * Test class for adding Admin User with default "Adobe Ims" Role & Auto Login to Magento Dashboard
+ * Test class for adding Admin IMS User with default "Adobe Ims" Role
  *
  * @magentoDbIsolation disabled
  */
-class SaveImsUserAndRoleTest extends TestCase
+class SaveImsUserTest extends TestCase
 {
     private const ADMIN_IMS_ROLE = 'Adobe Ims';
 
@@ -63,9 +63,9 @@ class SaveImsUserAndRoleTest extends TestCase
     private $authSession;
 
     /**
-     * @var SaveImsUserAndRole
+     * @var SaveImsUser
      */
-    private $saveImsUserAndRole;
+    private $saveImsUser;
 
     /**
      * @return void
@@ -79,8 +79,8 @@ class SaveImsUserAndRoleTest extends TestCase
         $this->roleCollectionFactory    = $this->objectManager->create(RoleCollectionFactory::class);
         $this->logger                   = $this->createMock(AdminAdobeImsLogger::class);
         $this->authSession              = $this->objectManager->create(Session::class);
-        $this->saveImsUserAndRole       = $this->objectManager->create(
-            SaveImsUserAndRole::class,
+        $this->saveImsUser              = $this->objectManager->create(
+            SaveImsUser::class,
             [
                 'user'                  => $this->user,
                 'userCollectionFactory' => $this->userCollectionFactory,
@@ -114,7 +114,7 @@ class SaveImsUserAndRoleTest extends TestCase
             'email'                 => 'imsuser1@admin.com',
         ];
 
-        $this->saveImsUserAndRole->save($profile);
+        $this->saveImsUser->save($profile);
 
         $savedUserId = $this->user->getUserId();
         //Check whether Adobe Ims User is saved
@@ -142,7 +142,7 @@ class SaveImsUserAndRoleTest extends TestCase
         AppArea(Area::AREA_ADMINHTML),
         DataFixture(RoleFixture::class, ['role_name' => self::ADMIN_IMS_ROLE]),
     ]
-    public function testExceptionWhenSaveImsUserAndRoleFails(): void
+    public function testExceptionWhenSaveImsUserFails(): void
     {
         $profile = [
             'email' => 'imsuser2@admin.com',
@@ -150,6 +150,6 @@ class SaveImsUserAndRoleTest extends TestCase
         $this->expectException(CouldNotSaveException::class);
         $this->expectExceptionMessage('Could not save ims user.');
 
-        $this->saveImsUserAndRole->save($profile);
+        $this->saveImsUser->save($profile);
     }
 }
