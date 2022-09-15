@@ -89,18 +89,11 @@ class FixerIoTest extends TestCase
         /** @var LaminasClient|MockObject $httpClient */
         $httpClient = $this->getMockBuilder(LaminasClient::class)
             ->disableOriginalConstructor()
-            ->setMethods(array_merge(get_class_methods(LaminasClient::class), ['getHeaders']))
             ->getMock();
         /** @var DataObject|MockObject $currencyMock */
         $httpResponse = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBody'])
-            ->getMock();
-            
-        /** @var DataObject|MockObject $headerMock */
-        $headerMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['addHeaders'])
             ->getMock();
 
         $this->currencyFactory->method('create')
@@ -119,7 +112,7 @@ class FixerIoTest extends TestCase
         $httpClient->method('setMethod')
             ->willReturnSelf();
         $httpClient->method('getHeaders')
-            ->willReturn($headerMock);
+            ->willReturnSelf();
         $httpClient->method('send')
             ->willReturn($httpResponse);
         $httpResponse->method('getBody')
