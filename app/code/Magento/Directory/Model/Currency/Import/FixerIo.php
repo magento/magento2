@@ -173,7 +173,7 @@ class FixerIo extends AbstractImport
             );
             $httpClient->setMethod(Request::METHOD_GET);
             
-            $httpClient->getHeaders()->addHeaders([
+            $httpClient->setHeaders([
                 'Content-Type' => 'text/plain',
                 'apikey' => $accessKey,
             ]);
