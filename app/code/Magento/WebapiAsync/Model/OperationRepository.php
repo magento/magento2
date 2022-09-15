@@ -10,9 +10,12 @@ namespace Magento\WebapiAsync\Model;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 use Magento\AsynchronousOperations\Model\OperationRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\MessageQueue\MessageValidator;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\WebapiAsync\Controller\Rest\Asynchronous\InputParamsResolver;
 
 /**
@@ -45,6 +48,11 @@ class OperationRepository implements OperationRepositoryInterface
     private $inputParamsResolver;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Initialize dependencies.
      *
      * @param OperationInterfaceFactory $operationFactory
@@ -52,19 +60,22 @@ class OperationRepository implements OperationRepositoryInterface
      * @param MessageValidator $messageValidator
      * @param Json $jsonSerializer
      * @param InputParamsResolver $inputParamsResolver
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         OperationInterfaceFactory $operationFactory,
         EntityManager $entityManager,
         MessageValidator $messageValidator,
         Json $jsonSerializer,
-        InputParamsResolver $inputParamsResolver
+        InputParamsResolver $inputParamsResolver,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->operationFactory = $operationFactory;
         $this->jsonSerializer = $jsonSerializer;
         $this->messageValidator = $messageValidator;
         $this->entityManager = $entityManager;
         $this->inputParamsResolver = $inputParamsResolver;
+        $this->storeManager = $storeManager?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -87,6 +98,15 @@ class OperationRepository implements OperationRepositoryInterface
             'entity_link'      => '',
             'meta_information' => $encodedMessage,
         ];
+
+        try {
+            $storeId = $this->storeManager->getStore()->getId();
+            $serializedData['store_id'] = $storeId;
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+        } catch (NoSuchEntityException $e) {
+            // skip setting store id in the serialized data if store doesn't exist
+        }
+
         $data = [
             'data' => [
                 OperationInterface::ID => $operationId,

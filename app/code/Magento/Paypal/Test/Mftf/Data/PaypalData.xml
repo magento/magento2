@@ -216,4 +216,11 @@
         <data key="cardNumberEnding">1111</data>
         <data key="cardExpire">01/2030</data>
     </entity>
+    <entity name="SamplePaypalExpressConfig2" type="paypal_express_config">
+        <data key="paypal_express_email">rlus_1349181941_biz@ebay.com</data>
+        <data key="paypal_express_api_username">rlus_1349181941_biz_api1.ebay.com</data>
+        <data key="paypal_express_api_password">MDNAZYSJBDYNA6BN</data>
+        <data key="paypal_express_api_signature">AFcWxV21C7fd0v3bYYYRCpSSRl31AqoP3QLd.JUUpDPuPpQIgT0-m401</data>
+        <data key="paypal_express_merchantID">54Z2EE6T7PRB4</data>
+    </entity>
 </entities>
