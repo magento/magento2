@@ -11,8 +11,9 @@ use Magento\AdminAdobeIms\Api\SaveImsUserInterface;
 use Magento\User\Model\User;
 use Magento\User\Model\ResourceModel\User\CollectionFactory as UserCollectionFactory;
 use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory as RoleCollectionFactory;
-use Magento\Authorization\Model\Acl\Role\User as UserRoleType;
 use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
+use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\Authorization\Model\Acl\Role\User as UserRoleType;
 use Exception;
 use Magento\Framework\Exception\CouldNotSaveException;
 
@@ -45,22 +46,30 @@ class SaveImsUser implements SaveImsUserInterface
     private AdminAdobeImsLogger $logger;
 
     /**
+     * @var ImsConfig
+     */
+    private ImsConfig $adminImsConfig;
+
+    /**
      * SaveImsUserAndRole constructor.
      * @param User $user
      * @param UserCollectionFactory $userCollectionFactory
      * @param RoleCollectionFactory $roleCollectionFactory
      * @param AdminAdobeImsLogger $logger
+     * @param ImsConfig $adminImsConfig
      */
     public function __construct(
         User $user,
         UserCollectionFactory $userCollectionFactory,
         RoleCollectionFactory $roleCollectionFactory,
-        AdminAdobeImsLogger $logger
+        AdminAdobeImsLogger $logger,
+        ImsConfig $adminImsConfig
     ) {
         $this->user = $user;
         $this->userCollectionFactory = $userCollectionFactory;
         $this->roleCollectionFactory = $roleCollectionFactory;
         $this->logger = $logger;
+        $this->adminImsConfig = $adminImsConfig;
     }
 
     /**
@@ -68,6 +77,10 @@ class SaveImsUser implements SaveImsUserInterface
      */
     public function save(array $profile): void
     {
+        if (!$this->adminImsConfig->enabled() || empty($profile['email'])) {
+            throw new CouldNotSaveException(__('Could not save ims user.'));
+        }
+
         $username = strtolower(strstr($profile['email'], '@', true));
         $userCollection = $this->userCollectionFactory->create()
             ->addFieldToFilter('email', ['eq' => $profile['email']])
