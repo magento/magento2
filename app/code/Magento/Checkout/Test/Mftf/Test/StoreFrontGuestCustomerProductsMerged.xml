@@ -14,7 +14,7 @@
             <title value="Products are merged when Guest Customer Login"/>
             <description value="Products in cart are merged if Guest with cart logging in as Customer "/>
             <stories value="Guest Checkout"/>
-            <testCaseId value="MC-26777"/>
+            <testCaseId value="AC-4604"/>
             <severity value="MAJOR"/>
         </annotations>
         <before>
