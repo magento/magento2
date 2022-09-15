@@ -40,6 +40,9 @@
                 <allowspecific>0</allowspecific>
                 <group>offline</group>
             </cashondelivery>
+            <free>
+                <group>offline</group>
+            </free>
         </payment>
     </default>
 </config>

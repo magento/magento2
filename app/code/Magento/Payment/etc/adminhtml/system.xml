@@ -24,7 +24,7 @@
                 <field id="payment_action" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Automatically Invoice All Items</label>
                     <source_model>Magento\Payment\Model\Source\Invoice</source_model>
-                    <comment>If 'Automatically Invoice All Items' is set to 'Yes', the order is placed with the status 'Processing'.</comment>
+                    <comment>If 'Automatically Invoice All Items' is set to 'Yes', the order is placed in 'Processing' state.</comment>
                 </field>
                 <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Sort Order</label>
