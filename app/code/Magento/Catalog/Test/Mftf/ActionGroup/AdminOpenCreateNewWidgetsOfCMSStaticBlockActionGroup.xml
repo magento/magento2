@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenCreateNewWidgetsOfCMSStaticBlockActionGroup">
+        <annotations>
+            <description>Open create new Widgets.</description>
+        </annotations>
+        <arguments>
+            <argument name="WidgetType" type="string" defaultValue="Catalog Product Link"/>
+            <argument name="WidgetTheme" type="string" defaultValue="Magento Luma"/>
+            <argument name="WidgetDisplayOn" type="string"/>
+        </arguments>
+        <amOnPage url="{{CmsNewWidgetsPage.url}}" stepKey="navigateToCreateWidgetsPage"/>
+        <waitForPageLoad stepKey="waitForWidgetPageToLoad"/>
+        <selectOption selector="{{CmsNewWidgetsSettingSection.WidgetType}}" userInput="{{WidgetType}}" stepKey="selectCMSStaticBlock" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear1"/>
+        <selectOption selector="{{CmsNewWidgetsSettingSection.WidgetTheme}}" userInput="{{WidgetTheme}}" stepKey="selectTemplate" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear2"/>
+        <click selector="{{CmsNewWidgetsSettingSection.ContinueButton}}" stepKey="clickContinueButton"/>
+        <waitForPageLoad stepKey="waitForStorefrontPropertiesSectionToLoad"/>
+        <click selector="{{CmsNewWidgetStorefrontPropertiesSection.AddLayout}}" stepKey="clickAddLayoutButton" />
+        <scrollTo selector="{{CmsNewWidgetStorefrontPropertiesSection.AddLayout}}" stepKey="scrollToAddLayoutTab" />
+        <waitForPageLoad stepKey="waitForAddLayoutTabToLoad"/>
+        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.DisplayOn}}" userInput="{{WidgetDisplayOn}}" stepKey="selectDisplay"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3" />
+        <selectOption selector="//input[@id='specific_anchor_categories_0']" userInput="Specific Categories" stepKey="selectSpecificCategoryRadioButton"/>
+        <click selector="//*[@id='anchor_categories_ids_0']/p/a[1]/img" stepKey="clickCategoryChooserButton"/>
+        <waitForPageLoad stepKey="waitForRootCategoryToLoad"/>
+        <click selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" stepKey="clickRootCat"/>
+        <waitForPageLoad stepKey="waitForRootCategoryToExpand"/>
+        <click selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" stepKey="clickFirstSubCat"/>
+        <waitForPageLoad stepKey="waitForFirstSubCatToExpand"/>
+        <click selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" stepKey="expandSecondSubCat"/>
+        <waitForPageLoad stepKey="waitForSecondSubCatToExpand"/>
+        <click selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" stepKey="expandThirdFirstSubCat"/>
+        <waitForPageLoad stepKey="waitForThirdSubCatToExpand"/>
+        <click selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" stepKey="expandFourthSubCat"/>
+        <waitForPageLoad stepKey="waitForFourthSubCatToExpand"/>
+        <click selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" stepKey="expandFifthSubCat"/>
+        <waitForPageLoad stepKey="waitForFifthSubCatToExpand"/>
+        <grabMultiple selector="//*[@class='x-tree-ec-icon x-tree-elbow-end-minus' or @class='x-tree-ec-icon x-tree-elbow-end']" stepKey="countNestedCategory"/>
+        <assertCount stepKey="check">
+            <expectedResult type="int">7</expectedResult>
+            <actualResult type="variable">countNestedCategory</actualResult>
+        </assertCount>
+    </actionGroup>
+</actionGroups>
