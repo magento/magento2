@@ -113,5 +113,16 @@
         <element name="userDefinedQuantity" type="checkbox" selector="[name='bundle_options[bundle_options][{{option}}][bundle_selections][{{product}}][selection_can_change_qty]'][type='checkbox']" parameterized="true"/>
         <element name="bundleItemsOptionTableRows" type="button" selector=".admin__dynamic-rows[data-index='bundle_selections'] tr.data-row" timeout="30"/>
         <element name="isDefault" type="button" selector="//table[@class='admin__dynamic-rows admin__control-table']//span[contains(text(),'{{var1}}')]/../../../../..//input[@type='radio']" parameterized="true"/>
+        <!--Customizable Options -->
+        <element name="customizableOptionsToggle" type="button" selector="//span[text()='Customizable Options']"/>
+        <element name="addButtonOption" type="button" selector="button[data-index='button_add']"/>
+        <element name="customOptionXTitle" type="input" selector="[name='product[options][0][title]']"/>
+        <element name="customOptionSelectType" type="select" selector="[data-index='container_common'] .admin__action-multiselect-text"/>
+        <element name="customOptionSelectField" type="select" selector="//label[contains(text(),'Field')]" />
+        <element name="uncheckRequired" type="checkbox" selector="//span[contains(text(),'Required')]"/>
+        <element name="addButton" type="button" selector="//span[contains(text(),'Add Value')]"/>
+        <element name="customizableOptionPrice" type="input" selector=".//*[@name='product[options][0][price]']" />
+        <element name="priceType" type="select" selector="[name='product[options][0][price_type]']" />
+        <element name="priceTypeSelectPercent" type="select" selector="//*[@name='product[options][0][price_type]']/option[2]" />
     </section>
 </sections>
