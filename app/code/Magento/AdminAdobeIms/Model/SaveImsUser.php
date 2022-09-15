@@ -51,7 +51,7 @@ class SaveImsUser implements SaveImsUserInterface
     private ImsConfig $adminImsConfig;
 
     /**
-     * SaveImsUserAndRole constructor.
+     * SaveImsUser constructor.
      * @param User $user
      * @param UserCollectionFactory $userCollectionFactory
      * @param RoleCollectionFactory $roleCollectionFactory
