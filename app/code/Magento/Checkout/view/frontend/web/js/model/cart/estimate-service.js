@@ -22,6 +22,7 @@ define([
          */
         setShippingAddress = function () {
             var shippingAddress = _.pick(quote.shippingAddress(), cartCache.requiredFields);
+
             cartCache.set('shipping-address', shippingAddress);
         },
 
