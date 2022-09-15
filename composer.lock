@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df33bcfb264888cdbde343d14a9d772b",
+    "content-hash": "f99c7be4011f66a81ef50074c45e3f52",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4730,16 +4730,16 @@
         },
         {
             "name": "opensearch-project/opensearch-php",
-            "version": "1.0.2",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opensearch-project/opensearch-php.git",
-                "reference": "d54af5ff2167bee3eb68d02e210283314ef74712"
+                "reference": "565c17e0ac1e062f4a6edfeb9745e9deb93ffbeb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opensearch-project/opensearch-php/zipball/d54af5ff2167bee3eb68d02e210283314ef74712",
-                "reference": "d54af5ff2167bee3eb68d02e210283314ef74712",
+                "url": "https://api.github.com/repos/opensearch-project/opensearch-php/zipball/565c17e0ac1e062f4a6edfeb9745e9deb93ffbeb",
+                "reference": "565c17e0ac1e062f4a6edfeb9745e9deb93ffbeb",
                 "shasum": ""
             },
             "require": {
@@ -4788,9 +4788,9 @@
             ],
             "support": {
                 "issues": "https://github.com/opensearch-project/opensearch-php/issues",
-                "source": "https://github.com/opensearch-project/opensearch-php/tree/1.0.2"
+                "source": "https://github.com/opensearch-project/opensearch-php/tree/2.0.0"
             },
-            "time": "2022-02-08T08:37:31+00:00"
+            "time": "2022-05-26T19:17:49+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -13573,5 +13573,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }

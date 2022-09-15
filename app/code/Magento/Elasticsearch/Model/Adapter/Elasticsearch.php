@@ -19,6 +19,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Stdlib\ArrayManager;
 use Psr\Log\LoggerInterface;
+use Magento\AdvancedSearch\Helper\Data;
 
 /**
  * Elasticsearch adapter
@@ -111,6 +112,11 @@ class Elasticsearch
     private $arrayManager;
 
     /**
+     * @var Data
+     */
+    protected $helper;
+
+    /**
      * @var array
      */
     private $responseErrorExceptionList = [
@@ -125,6 +131,7 @@ class Elasticsearch
      * @param LoggerInterface $logger
      * @param Index\IndexNameResolver $indexNameResolver
      * @param BatchDataMapperInterface $batchDocumentDataMapper
+     * @param Data $helper
      * @param array $options
      * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
      * @param StaticField|null $staticFieldProvider
@@ -141,6 +148,7 @@ class Elasticsearch
         LoggerInterface $logger,
         IndexNameResolver $indexNameResolver,
         BatchDataMapperInterface $batchDocumentDataMapper,
+        Data $helper,
         $options = [],
         ProductAttributeRepositoryInterface $productAttributeRepository = null,
         StaticField $staticFieldProvider = null,
@@ -154,6 +162,7 @@ class Elasticsearch
         $this->logger = $logger;
         $this->indexNameResolver = $indexNameResolver;
         $this->batchDocumentDataMapper = $batchDocumentDataMapper;
+        $this->helper = $helper;
         $this->productAttributeRepository = $productAttributeRepository ?:
             ObjectManager::getInstance()->get(ProductAttributeRepositoryInterface::class);
         $this->staticFieldProvider = $staticFieldProvider ?:
@@ -329,18 +338,30 @@ class Elasticsearch
         ];
 
         foreach ($documents as $id => $document) {
-            $bulkArray['body'][] = [
-                $action => [
-                    '_id' => $id,
-                    '_type' => $this->clientConfig->getEntityType(),
-                    '_index' => $indexName
-                ]
-            ];
+            if ($this->helper->isClientOpenSearchV2()) {
+                $bulkArray['body'][] = [
+                    $action => [
+                        '_id' => $id,
+                        '_index' => $indexName
+                    ]
+                ];
+            } else {
+                $bulkArray['body'][] = [
+                    $action => [
+                        '_id' => $id,
+                        '_type' => $this->clientConfig->getEntityType(),
+                        '_index' => $indexName
+                    ]
+                ];
+            }
             if ($action == self::BULK_ACTION_INDEX) {
                 $bulkArray['body'][] = $document;
             }
         }
 
+        if ($this->helper->isClientOpenSearchV2()) {
+            unset($bulkArray['type']);
+        }
         return $bulkArray;
     }
 

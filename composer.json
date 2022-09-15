@@ -72,7 +72,7 @@
         "magento/magento-composer-installer": ">=0.4.0-beta1",
         "magento/zendframework1": "~1.15.0",
         "monolog/monolog": "^2.7",
-        "opensearch-project/opensearch-php": "~1.0.0",
+        "opensearch-project/opensearch-php": "~1.0.0 || ^2.0.0",
         "pelago/emogrifier": "^6.0.0",
         "php-amqplib/php-amqplib": "~3.2.0",
         "phpseclib/mcrypt_compat": "~2.0.2",

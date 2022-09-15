@@ -6,6 +6,7 @@
 namespace Magento\AdvancedSearch\Model\Client;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\AdvancedSearch\Helper\Data;
 
 class ClientFactory implements ClientFactoryInterface
 {
@@ -22,13 +23,31 @@ class ClientFactory implements ClientFactoryInterface
     private $clientClass;
 
     /**
-     * @param ObjectManagerInterface $objectManager
-     * @param string $clientClass
+     * @var string
      */
-    public function __construct(ObjectManagerInterface $objectManager, $clientClass)
-    {
+    private $openSearch;
+
+    /**
+     * @var Data
+     */
+    protected $helper;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param $clientClass
+     * @param Data $helper
+     * @param $openSearch
+     */
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        $clientClass,
+        Data $helper,
+        $openSearch = null
+    ) {
         $this->objectManager = $objectManager;
         $this->clientClass = $clientClass;
+        $this->openSearch = $openSearch;
+        $this->helper = $helper;
     }
 
     /**
@@ -39,8 +58,13 @@ class ClientFactory implements ClientFactoryInterface
      */
     public function create(array $options = [])
     {
+        $class = $this->clientClass;
+        if ($this->helper->isClientOpenSearchV2()) {
+            $class = $this->openSearch;
+        }
+
         return $this->objectManager->create(
-            $this->clientClass,
+            $class,
             ['options' => $options]
         );
     }
