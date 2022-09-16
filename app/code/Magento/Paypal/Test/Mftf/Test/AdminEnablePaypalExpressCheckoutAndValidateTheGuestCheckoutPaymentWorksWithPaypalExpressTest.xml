@@ -26,7 +26,7 @@
             <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
                 <argument name="credentials" value="SamplePaypalExpressConfig2"/>
             </actionGroup>
-            <click selector="{{PayPalEx pressCheckoutConfigSection.configureBtn('us')}}" stepKey="clickPayPalConfigureBtn"/>
+            <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn('us')}}" stepKey="clickPayPalConfigureBtn"/>
             <click selector="{{PayPalAdvancedSettingConfigSection.advancedSettingTab('us')}}" stepKey="clickPayPalConfigureBtn1"/>
 
             <!--Enable Display on shopping cart-->
