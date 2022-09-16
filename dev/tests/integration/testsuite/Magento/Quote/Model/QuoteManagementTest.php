@@ -383,7 +383,7 @@ class QuoteManagementTest extends TestCase
         $quote->getShippingAddress()
             ->setShippingMethod('flatrate_flatrate')
             ->setCollectShippingRates(true);
-        $quote->getShippingAddress()->setSameAsBilling(0);
+        $quote->getShippingAddress()->setSameAsBilling(1);
         $quote->getShippingAddress()->setSaveInAddressBook(1);
         $quote->getBillingAddress()->setSaveInAddressBook(null);
         $quote->getBillingAddress()->setCustomerAddressId(null);
