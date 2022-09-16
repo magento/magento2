@@ -42,7 +42,7 @@ class SearchClient implements ClientInterface
     /**
      * @var DynamicTemplatesProvider|null
      */
-    private $dynamicTemplatesProvider;
+    protected $dynamicTemplatesProvider;
 
     /**
      * Initialize Client

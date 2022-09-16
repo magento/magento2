@@ -11,29 +11,8 @@ namespace Magento\OpenSearch\Model;
  * The purpose of this class is adding the support for opensearch version 2
  */
 
-use Magento\Framework\App\ObjectManager;
-use Magento\OpenSearch\Model\Adapter\DynamicTemplatesProvider;
-
 class OpenSearch extends SearchClient
 {
-    /**
-     * @var DynamicTemplatesProvider|null
-     */
-    private $dynamicTemplatesProvider;
-
-    /**
-     * @param $options
-     * @param $openSearchClient
-     * @param $fieldsMappingPreprocessors
-     * @param DynamicTemplatesProvider|null $dynamicTemplatesProvider
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function __construct($options = [], $openSearchClient = null, $fieldsMappingPreprocessors = [], ?DynamicTemplatesProvider $dynamicTemplatesProvider = null)
-    {
-        $this->dynamicTemplatesProvider = $dynamicTemplatesProvider ?: ObjectManager::getInstance()
-            ->get(DynamicTemplatesProvider::class);
-        parent::__construct($options, $openSearchClient, $fieldsMappingPreprocessors, $dynamicTemplatesProvider);
-    }
 
     /**
      * Add mapping to OpenSearch index
