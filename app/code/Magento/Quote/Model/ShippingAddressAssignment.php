@@ -32,6 +32,8 @@ class ShippingAddressAssignment
     }
 
     /**
+     * Setting up shipping address in sync of submitted address details
+     *
      * @param \Magento\Quote\Api\Data\CartInterface $quote
      * @param \Magento\Quote\Api\Data\AddressInterface $address
      * @param bool $useForShipping

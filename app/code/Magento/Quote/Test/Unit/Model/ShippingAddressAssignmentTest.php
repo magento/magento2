@@ -102,10 +102,7 @@ class ShippingAddressAssignmentTest extends TestCase
     {
         $addressId = 1;
         $addressMock = $this->getMockForAbstractClass(AddressInterface::class);
-        $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($addressMock);
-        $addressMock->expects($this->once())->method('getId')->willReturn($addressId);
         $this->addressMock->expects($this->once())->method('setSameAsBilling')->with(1);
-        $this->quoteMock->expects($this->once())->method('removeAddress')->with($addressId);
         $this->quoteMock->expects($this->once())->method('setShippingAddress')->with($this->addressMock);
         $this->model->setAddress($this->quoteMock, $this->addressMock, true);
     }
@@ -131,7 +128,7 @@ class ShippingAddressAssignmentTest extends TestCase
     {
         $mockBuilder = $this->getMockBuilder(CartExtension::class);
         try {
-            $mockBuilder->addMethods(['setShippingAssignments']);
+            $mockBuilder->onlyMethods(['setShippingAssignments']);
         } catch (RuntimeException $e) {
             // CartExtension already generated.
         }
