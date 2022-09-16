@@ -15,6 +15,7 @@
             <title value="Zero Subtotal Orders should have invoice generated when setting 'Automatically Invoice All Items' to Yes." />
             <description value="Created order should have invoice generated."/>
             <testCaseId value="ACP2E-1120"/>
+            <severity value="AVERAGE"/>
             <group value="checkout"/>
         </annotations>
         <before>

@@ -14,7 +14,7 @@
             <stories value="ENGCOM-5443: Zero Subtotal Order with automatically invoice generated."/>
             <title value="Zero Subtotal Order should have invoice generated when setting 'Automatically Invoice All Items' to Yes." />
             <description value="Created order with automatically invoice generated."/>
-            <severity value="MAJOR"/>
+            <severity value="AVERAGE"/>
             <testCaseId value="ENGCOM-5443"/>
             <group value="checkout"/>
         </annotations>
