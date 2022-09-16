@@ -24,8 +24,8 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear2"/>
         <click selector="{{CmsNewWidgetsSettingSection.ContinueButton}}" stepKey="clickContinueButton"/>
         <waitForPageLoad stepKey="waitForStorefrontPropertiesSectionToLoad"/>
-        <click selector="{{CmsNewWidgetStorefrontPropertiesSection.AddLayout}}" stepKey="clickAddLayoutButton" />
-        <scrollTo selector="{{CmsNewWidgetStorefrontPropertiesSection.AddLayout}}" stepKey="scrollToAddLayoutTab" />
+        <click selector="{{CmsNewWidgetStoreforntPropertiesSection.AddLayout}}" stepKey="clickAddLayoutButton" />
+        <scrollTo selector="{{CmsNewWidgetStoreforntPropertiesSection.AddLayout}}" stepKey="scrollToAddLayoutTab" />
         <waitForPageLoad stepKey="waitForAddLayoutTabToLoad"/>
         <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.DisplayOn}}" userInput="{{WidgetDisplayOn}}" stepKey="selectDisplay"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3" />

@@ -8,9 +8,9 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="CmsNewWidgetStorefrontPropertiesSection">
+    <section name="CmsNewWidgetStoreforntPropertiesSection">
         <element name="WidgetTitle" type="text" selector="#title"/>
-        <element name="AssignToStoreViews" type="button" selector="#store_ids"/>
+        <element name="AssigntoStoreViews" type="button" selector="#store_ids"/>
         <element name="AddLayout" type="button" selector="//span[contains(text(),'Add Layout Update')]"/>
     </section>
 </sections>
