@@ -19,7 +19,7 @@ define([
             quote.shippingAddress().getCacheKey()
         ) {
             address = $.extend(true, {}, billingAddress);
-            address.saveInAddressBook = null;
+            address.saveInAddressBook = quote.shippingAddress().saveInAddressBook;
         } else {
             address = billingAddress;
         }

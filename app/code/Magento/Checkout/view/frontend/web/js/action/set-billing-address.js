@@ -47,7 +47,8 @@ define(
                 serviceUrl = urlBuilder.createUrl('/carts/mine/billing-address', {});
                 payload = {
                     cartId: quote.getQuoteId(),
-                    address: quote.billingAddress()
+                    address: quote.billingAddress(),
+                    useForShipping: $('#billing-address-same-as-shipping-checkmo:checkbox:checked').length > 0
                 };
             }
 
