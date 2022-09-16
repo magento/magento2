@@ -62,20 +62,20 @@
 
         <!-- Fill the form and validate message -->
         <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
-            <argument name="status" value="{{defaultOrderStatus.status}}"/>
-            <argument name="label" value="{{defaultOrderStatus.label}}"/>
+            <argument name="status" value="{{EnableFreeOrderStatusCustom.value}}"/>
+            <argument name="label" value="{{EnableFreeOrderStatusCustom.label}}"/>
         </actionGroup>
         <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeFormSaveSuccess"/>
 
         <!-- Verify the order status grid page shows the order status we just created -->
         <actionGroup ref="AssertOrderStatusExistsInGrid" stepKey="searchCreatedOrderStatus">
-            <argument name="status" value="{{defaultOrderStatus.status}}"/>
-            <argument name="label" value="{{defaultOrderStatus.label}}"/>
+            <argument name="status" value="{{EnableFreeOrderStatusCustom.value}}"/>
+            <argument name="label" value="{{EnableFreeOrderStatusCustom.label}}"/>
         </actionGroup>
 
         <!-- Assign status to state -->
         <click selector="{{AdminOrderStatusGridSection.assignStatusToStateBtn}}" stepKey="clickAssignStatusBtn"/>
-        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderStatus}}" userInput="{{defaultOrderStatus.status}}" stepKey="selectOrderStatus"/>
+        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderStatus}}" userInput="{{EnableFreeOrderStatusCustom.value}}" stepKey="selectOrderStatus"/>
         <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderState}}" userInput="{{OrderState.new}}" stepKey="selectOrderState"/>
         <checkOption selector="{{AdminAssignOrderStatusToStateSection.orderStatusAsDefault}}" stepKey="orderStatusAsDefault"/>
         <uncheckOption selector="{{AdminAssignOrderStatusToStateSection.visibleOnStorefront}}" stepKey="visibleOnStorefront"/>
@@ -83,7 +83,8 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="You assigned the order status." stepKey="seeSuccess"/>
 
         <!-- Prepare data for constraints -->
-        <magentoCLI command="config:set {{EnableCheckmoOrderStatusPending.path}} {{defaultOrderStatus.label}}" stepKey="enableNewOrderStatus"/>
+        <magentoCLI command="config:set {{EnableFreeOrderStatusCustom.path}} {{EnableFreeOrderStatusCustom.value}}" stepKey="enableNewOrderStatus"/>
+        <magentoCLI command="config:set {{EnableFreeOrderPaymentAction.path}} {{EnableFreeOrderPaymentAction.value}}" stepKey="enableNewOrderPaymentAction"/>
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
             <argument name="tags" value="config full_page"/>
         </actionGroup>
@@ -110,22 +111,14 @@
 
         <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
             <argument name="orderId" value="$grabOrderNumber"/>
-            <argument name="status" value="Processing"/>
+            <argument name="status" value="{{EnableFreeOrderStatusCustom.label}}"/>
         </actionGroup>
 
-        <!-- Assert invoice in invoices grid -->
-        <actionGroup ref="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" stepKey="filterInvoiceGridByOrderId">
-            <argument name="orderId" value="$orderNumber"/>
-        </actionGroup>
-        <click selector="{{AdminInvoicesGridSection.firstRow}}" stepKey="opeCreatedInvoice"/>
-        <waitForPageLoad stepKey="waitForInvoiceDetailsPageToLoad"/>
-        <grabFromCurrentUrl regex="~/invoice_id/(\d+)/~" stepKey="grabInvoiceId"/>
-
-        <!-- Assert no invoice button -->
+        <!-- Assert invoice button -->
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder2">
             <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
-        <dontSeeElement selector="{{AdminOrderDetailsMainActionsSection.invoiceBtn}}" stepKey="dontSeeInvoiceBtn"/>
+        <seeElement selector="{{AdminOrderDetailsMainActionsSection.invoiceBtn}}" stepKey="seeInvoiceBtn"/>
 
     </test>
 </tests>
