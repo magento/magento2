@@ -11,5 +11,6 @@
         <element name="advancedSettingTab" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_settings_ec_advanced-head" parameterized="true"/>
         <element name="frontendExperienceSettingsTab" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_settings_ec_advanced_express_checkout_frontend-head" parameterized="true"/>
         <element name="checkoutPageTab" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_settings_ec_advanced_express_checkout_frontend_checkout_page_button-head" parameterized="true"/>
-       </section>
+        <element name="displayonshoppingcart" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_settings_ec_advanced_visible_on_cart" parameterized="true"/>
+    </section>
 </sections>
