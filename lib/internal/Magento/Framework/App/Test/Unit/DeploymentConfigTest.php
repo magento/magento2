@@ -234,31 +234,31 @@ class DeploymentConfigTest extends TestCase
         $this->assertEquals($defaultValue, $result);
     }
 
-    public function testNoEnvVariables()
+    public function testNoEnvVariables(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn(['a'=>'b']);
-        $this->assertSame('b', $this->_deploymentConfig->get('a'));
+        $this->readerMock->expects($this->once())->method('load')->willReturn(['a'=>'b']);
+        $this->assertSame('b', $this->deploymentConfig->get('a'));
     }
 
-    public function testEnvVariables()
+    public function testEnvVariables(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn([]);
+        $this->readerMock->expects($this->once())->method('load')->willReturn([]);
         putenv('MAGENTO_DC__OVERRIDE={"a": "c"}');
-        $this->assertSame('c', $this->_deploymentConfig->get('a'));
+        $this->assertSame('c', $this->deploymentConfig->get('a'));
     }
 
-    public function testEnvVariablesWithNoBaseConfig()
+    public function testEnvVariablesWithNoBaseConfig(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn(['a'=>'b']);
+        $this->readerMock->expects($this->once())->method('load')->willReturn(['a'=>'b']);
         putenv('MAGENTO_DC_A=c');
         putenv('MAGENTO_DC_B__B__B=D');
-        $this->assertSame('c', $this->_deploymentConfig->get('a'));
-        $this->assertSame('D', $this->_deploymentConfig->get('b/b/b'));
+        $this->assertSame('c', $this->deploymentConfig->get('a'));
+        $this->assertSame('D', $this->deploymentConfig->get('b/b/b'));
     }
 
-    public function testEnvVariablesSubstitution()
+    public function testEnvVariablesSubstitution(): void
     {
-        $this->reader->expects($this->once())
+        $this->readerMock->expects($this->once())
             ->method('load')
             ->willReturn(
                 [
@@ -269,8 +269,8 @@ class DeploymentConfigTest extends TestCase
             );
         putenv('MAGENTO_DC____A=c');
         putenv('MAGENTO_DC____B=D');
-        $this->assertSame('c', $this->_deploymentConfig->get('a'));
-        $this->assertSame('D', $this->_deploymentConfig->get('b'), 'return value from env');
-        $this->assertSame('e$%^&', $this->_deploymentConfig->get('c'), 'return default value');
+        $this->assertSame('c', $this->deploymentConfig->get('a'));
+        $this->assertSame('D', $this->deploymentConfig->get('b'), 'return value from env');
+        $this->assertSame('e$%^&', $this->deploymentConfig->get('c'), 'return default value');
     }
 }
