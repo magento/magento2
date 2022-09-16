@@ -87,6 +87,18 @@ class DeploymentConfig
     }
 
     /**
+     * Checks if data available
+     *
+     * @return bool
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    public function isAvailable()
+    {
+        return $this->get(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE) !== null;
+    }
+
+    /**
      * Gets a value specified key from config data
      *
      * @param string|null $key
@@ -111,15 +123,14 @@ class DeploymentConfig
     }
 
     /**
-     * Checks if data available
+     * Resets config data
      *
-     * @return bool
-     * @throws FileSystemException
-     * @throws RuntimeException
+     * @return void
      */
-    public function isAvailable()
+    public function resetData()
     {
-        return $this->get(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE) !== null;
+        $this->data = [];
+        $this->flatData = [];
     }
 
     /**
@@ -133,17 +144,6 @@ class DeploymentConfig
     public function isDbAvailable()
     {
         return $this->getConfigData('db') !== null;
-    }
-
-    /**
-     * Resets config data
-     *
-     * @return void
-     */
-    public function resetData()
-    {
-        $this->data = [];
-        $this->flatData = [];
     }
 
     /**
