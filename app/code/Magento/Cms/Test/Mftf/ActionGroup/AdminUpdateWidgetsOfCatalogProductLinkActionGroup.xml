@@ -16,8 +16,8 @@
         </arguments>
         <click selector="{{CmsNewWidgetOptionsSection.FirstWidget}}" stepKey="clickFirstWidgetSelect"/>
         <waitForPageLoad stepKey="wait2"/>
-        <clearField selector="{{CmsNewWidgetStorefrontPropertiesSection.WidgetTitle}}" stepKey="clearWidgetTitle"/>
-        <fillField selector="{{CmsNewWidgetStorefrontPropertiesSection.WidgetTitle}}" userInput="{{WidgetTitle}}" stepKey="fillFieldTitle"/>
+        <clearField selector="{{CmsNewWidgetStoreforntPropertiesSection.WidgetTitle}}" stepKey="clearWidgetTitle"/>
+        <fillField selector="{{CmsNewWidgetStoreforntPropertiesSection.WidgetTitle}}" userInput="{{WidgetTitle}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewWidgetOptionsSection.WidgetOptions}}" stepKey="clickButton23"/>
         <waitForPageLoad stepKey="wait3"/>
         <click selector="{{CmsNewWidgetOptionsSection.SelectProduct}}" stepKey="clickSelectProductButton1"/>

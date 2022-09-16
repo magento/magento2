@@ -15,7 +15,7 @@
             <argument name="WidgetType" type="string" defaultValue="Catalog Product Link"/>
             <argument name="WidgetTheme" type="string" defaultValue="Magento Luma"/>
             <argument name="WidgetTitle" type="string" defaultValue="NewWidget"/>
-            <argument name="AssignToStoreViews" type="string" defaultValue="All Store Views"/>
+            <argument name="AssigntoStoreViews" type="string" defaultValue="All Store Views"/>
             <argument name="WidgetDisplayOn" type="string" defaultValue="All Pages"/>
             <argument name="Container" type="string" defaultValue="Main Content Area"/>
             <argument name="Template" type="string" defaultValue="Product Link Block Template"/>
@@ -31,10 +31,10 @@
         <click selector="{{CmsNewWidgetsSettingSection.ContinueButton}}" stepKey="clickContinueButton"/>
         <waitForPageLoad stepKey="wait2"/>
 
-        <fillField selector="{{CmsNewWidgetStorefrontPropertiesSection.WidgetTitle}}" userInput="{{WidgetTitle}}" stepKey="fillFieldTitle"/>
-        <selectOption selector="{{CmsNewWidgetStorefrontPropertiesSection.AssignToStoreViews}}" userInput="{{AssignToStoreViews}}" stepKey="selectView"/>
-        <click selector="{{CmsNewWidgetStorefrontPropertiesSection.AddLayout}}" stepKey="clickAddLayoutButton"/>
-        <scrollTo selector="{{CmsNewWidgetStorefrontPropertiesSection.AddLayout}}" stepKey="scrollToAddLayoutTab"/>
+        <fillField selector="{{CmsNewWidgetStoreforntPropertiesSection.WidgetTitle}}" userInput="{{WidgetTitle}}" stepKey="fillFieldTitle"/>
+        <selectOption selector="{{CmsNewWidgetStoreforntPropertiesSection.AssigntoStoreViews}}" userInput="{{AssigntoStoreViews}}" stepKey="selectView"/>
+        <click selector="{{CmsNewWidgetStoreforntPropertiesSection.AddLayout}}" stepKey="clickAddLayoutButton"/>
+        <scrollTo selector="{{CmsNewWidgetStoreforntPropertiesSection.AddLayout}}" stepKey="scrollToAddLayoutTab"/>
         <waitForPageLoad stepKey="wait3"/>
 
         <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.DisplayOn}}" userInput="{{WidgetDisplayOn}}" stepKey="selectDispaly"/>
