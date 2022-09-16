@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateAttributeTextSwatchNthValueActionGroup" >
+        <annotations>
+            <description>Fills in the Text swatch Field.</description>
+        </annotations>
+        <arguments>
+            <argument name="row" type="string"/>
+            <argument name="swatchNameStore" type="string"/>
+            <argument name="storeName" type="string"/>
+            <argument name="swatchNameAdmin" type="string"/>
+            <argument name="adminName" type="string"/>
+        </arguments>
+
+        <scrollTo selector="{{AdminCreateNewProductAttributeSection.addValue}}" stepKey="scrollToOption"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.addValue}}" stepKey="clickOnAddSwatch"/>
+        <waitForPageLoad stepKey="waitForNewTextSwatch"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.adminOptionTextSwatch(row)}}" userInput="{{swatchNameAdmin}}" stepKey="fillAdminSwatchField"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.adminOptionTextOption(row)}}" userInput="{{adminName}}" stepKey="fillAdminOptionField"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.defaultStoreViewTextSwatch(row)}}" userInput="{{swatchNameStore}}" stepKey="fillDefaultStoreViewSwatchField"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.defaultStoreViewTextOption(row)}}" userInput="{{storeName}}" stepKey="fillDefaultStoreViewOptionField"/>
+    </actionGroup>
+</actionGroups>
+
+

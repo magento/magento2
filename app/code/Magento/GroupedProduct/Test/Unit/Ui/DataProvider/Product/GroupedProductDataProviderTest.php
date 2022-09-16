@@ -112,9 +112,9 @@ class GroupedProductDataProviderTest extends TestCase
         $this->collectionMock->expects($this->once())
             ->method('isLoaded')
             ->willReturn(false);
-        $this->collectionMock->expects($this->once())
+        $this->collectionMock->expects($this->any())
             ->method('addAttributeToFilter')
-            ->with('type_id', [self::ALLOWED_TYPE]);
+            ->withConsecutive(['type_id', [self::ALLOWED_TYPE]], ['required_options', '0']);
         $this->collectionMock->expects($this->once())
             ->method('toArray')
             ->willReturn($items);

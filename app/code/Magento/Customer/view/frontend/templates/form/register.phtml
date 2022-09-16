@@ -14,7 +14,11 @@ use Magento\Customer\Helper\Address;
 $addressHelper = $block->getData('addressHelper');
 /** @var \Magento\Directory\Helper\Data $directoryHelper */
 $directoryHelper = $block->getData('directoryHelper');
+/** @var \Magento\Customer\ViewModel\Address\RegionProvider $regionProvider */
+$regionProvider = $block->getRegionProvider();
 $formData = $block->getFormData();
+/** @var \Magento\Customer\ViewModel\CreateAccountButton $createAccountButtonViewModel */
+$createAccountButtonViewModel = $block->getData('create_account_button_view_model');
 ?>
 <?php $displayAll = $block->getConfig('general/region/display_all'); ?>
 <?= $block->getChildHtml('form_fields_before') ?>
@@ -102,14 +106,15 @@ $formData = $block->getFormData();
                 </label>
                 <div class="control">
                     <input type="text"
-                           name="street[]"
+                           name="street[0]"
                            value="<?= $escaper->escapeHtmlAttr($formData->getStreet(0)) ?>"
                            title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('street') ?>"
                            id="street_1"
                            class="input-text <?= $escaper->escapeHtmlAttr($_streetValidationClass) ?>">
                     <div class="nested">
                         <?php
-                            $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass));
+                            $_streetValidationClass = $_streetValidationClass !== null ?
+                                trim(str_replace('required-entry', '', $_streetValidationClass)) : '';
                             $streetLines = $addressHelper->getStreetLines();
                         ?>
                         <?php for ($_i = 2, $_n = $streetLines; $_i <= $_n; $_i++): ?>
@@ -119,7 +124,7 @@ $formData = $block->getFormData();
                                 </label>
                                 <div class="control">
                                     <input type="text"
-                                           name="street[]"
+                                           name="street[<?= /* @noEscape */ $_i ?>]"
                                            value="<?= $escaper->escapeHtml($formData->getStreetLine($_i - 1)) ?>"
                                            title="<?= $escaper->escapeHtmlAttr(__('Street Address %1', $_i)) ?>"
                                            id="street_<?= /* @noEscape */ $_i ?>"
@@ -289,7 +294,9 @@ $formData = $block->getFormData();
         <div class="primary">
             <button type="submit"
                     class="action submit primary"
-                    title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>">
+                    title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>"
+                    id="send2"
+                    <?php if ($createAccountButtonViewModel->disabled()): ?> disabled="disabled" <?php endif; ?>>
                 <span><?= $escaper->escapeHtml(__('Create an Account')) ?></span>
             </button>
         </div>
@@ -342,28 +349,29 @@ script;
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php if ($block->getShowAddressFields()): ?>
     <?php
-    $regionJson = /* @noEscape */ $directoryHelper->getRegionJson();
+    $regionJson = /* @noEscape */ $regionProvider->getRegionJson();
     $regionId = (int) $formData->getRegionId();
     $countriesWithOptionalZip = /* @noEscape */ $directoryHelper->getCountriesWithOptionalZip(true);
     ?>
+<?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
 <script type="text/x-magento-init">
     {
         "#country": {
-            "regionUpdater": {
+            "directoryRegionUpdater": {
                 "optionalRegionAllowed": <?= /* @noEscape */ $displayAll ? 'true' : 'false' ?>,
                 "regionListId": "#region_id",
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
                 "form": "#form-validate",
-                "regionJson": <?= $regionJson ?>,
-                "defaultRegion": <?= $regionId ?>,
-                "countriesWithOptionalZip": <?= $countriesWithOptionalZip ?>
+                "regionJson": <?= /* @noEscape */ $regionJson ?>,
+                "defaultRegion": <?= /* @noEscape */ $regionId ?>,
+                "countriesWithOptionalZip": <?=  /* @noEscape */ $countriesWithOptionalZip ?>
             }
         }
     }
 </script>
 <?php endif; ?>
-
+<?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
 <script type="text/x-magento-init">
     {
         ".field.password": {

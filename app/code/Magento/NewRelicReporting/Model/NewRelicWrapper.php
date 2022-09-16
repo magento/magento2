@@ -5,7 +5,7 @@
  */
 namespace Magento\NewRelicReporting\Model;
 
-use Exception;
+use Throwable;
 
 /**
  * Wrapper for New Relic functions
@@ -33,10 +33,10 @@ class NewRelicWrapper
     /**
      * Wrapper for 'newrelic_notice_error' function
      *
-     * @param  Exception $exception
+     * @param Throwable $exception
      * @return void
      */
-    public function reportError(Exception $exception)
+    public function reportError(Throwable $exception)
     {
         if ($this->isExtensionInstalled()) {
             newrelic_notice_error($exception->getMessage(), $exception);

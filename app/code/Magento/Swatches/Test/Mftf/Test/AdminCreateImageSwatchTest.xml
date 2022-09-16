@@ -27,7 +27,12 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
                 <argument name="sku" value="{{BaseConfigurableProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute"/>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="NavigateToAndResetProductAttributeGridToDefaultViewActionGroup" stepKey="resetProductAttributeFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
@@ -51,6 +56,7 @@
         </actionGroup>
         <click selector="{{AdminManageSwatchSection.nthUploadFile('1')}}" stepKey="clickUploadFile1"/>
         <attachFile selector="input[name='datafile']" userInput="adobe-thumb.jpg" stepKey="attachFile1"/>
+        <waitForElementNotVisible selector="{{AdminManageSwatchSection.swatchWindowUnavailable('0')}}" stepKey="waitForImageUploaded"/>
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}" userInput="adobe-thumb" stepKey="fillAdmin1"/>
         <click selector="{{AdminManageSwatchSection.swatchWindow('0')}}" stepKey="clicksWatchWindow1"/>
 
@@ -61,6 +67,7 @@
         </actionGroup>
         <click selector="{{AdminManageSwatchSection.nthUploadFile('2')}}" stepKey="clickUploadFile2"/>
         <attachFile selector="input[name='datafile']" userInput="adobe-small.jpg" stepKey="attachFile2"/>
+        <waitForElementNotVisible selector="{{AdminManageSwatchSection.swatchWindowUnavailable('1')}}" stepKey="waitForImageUploaded2"/>
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('1')}}" userInput="adobe-small" stepKey="fillAdmin2"/>
         <click selector="{{AdminManageSwatchSection.swatchWindow('1')}}" stepKey="clicksWatchWindow2"/>
 
@@ -71,6 +78,7 @@
         </actionGroup>
         <click selector="{{AdminManageSwatchSection.nthUploadFile('3')}}" stepKey="clickUploadFile3"/>
         <attachFile selector="input[name='datafile']" userInput="adobe-base.jpg" stepKey="attachFile3"/>
+        <waitForElementNotVisible selector="{{AdminManageSwatchSection.swatchWindowUnavailable('2')}}" stepKey="waitForImageUploaded3"/>
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('2')}}" userInput="adobe-base" stepKey="fillAdmin3"/>
 
         <!-- Set scope -->
@@ -104,7 +112,10 @@
         </assertStringContainsString>
 
         <!-- Create a configurable product to verify the storefront with -->
-        <amOnPage url="{{AdminProductCreatePage.url(BaseConfigurableProduct.attribute_set_id, BaseConfigurableProduct.type_id)}}" stepKey="goToCreateConfigurableProduct"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateConfigurableProduct">
+            <argument name="attributeSetId" value="{{BaseConfigurableProduct.attribute_set_id}}"/>
+            <argument name="productType" value="{{BaseConfigurableProduct.type_id}}"/>
+        </actionGroup>
         <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>

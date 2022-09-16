@@ -55,19 +55,22 @@ class BuilderTest extends TestCase
      */
     private $cleaner;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
         $this->config = $this->getMockBuilder(Config::class)
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->requestMapper = $this->getMockBuilder(Mapper::class)
-            ->setMethods(['getRootQuery', 'getBuckets'])
+            ->onlyMethods(['getRootQuery', 'getBuckets'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -76,12 +79,12 @@ class BuilderTest extends TestCase
             ->getMock();
 
         $this->binder = $this->getMockBuilder(Binder::class)
-            ->setMethods(['bind'])
+            ->onlyMethods(['bind'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->cleaner = $this->getMockBuilder(Cleaner::class)
-            ->setMethods(['clean'])
+            ->onlyMethods(['clean'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -96,13 +99,19 @@ class BuilderTest extends TestCase
         );
     }
 
-    public function testCreateInvalidArgumentExceptionNotDefined()
+    /**
+     * @return void
+     */
+    public function testCreateInvalidArgumentExceptionNotDefined(): void
     {
         $this->expectException('InvalidArgumentException');
         $this->requestBuilder->create();
     }
 
-    public function testCreateInvalidArgumentException()
+    /**
+     * @return void
+     */
+    public function testCreateInvalidArgumentException(): void
     {
         $this->expectException('Magento\Framework\Search\Request\NonExistingRequestNameException');
         $this->expectExceptionMessage('Request name \'rn\' doesn\'t exist.');
@@ -115,15 +124,17 @@ class BuilderTest extends TestCase
     }
 
     /**
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $data = [
             'dimensions' => [
                 'scope' => [
                     'name' => 'scope',
-                    'value' => 'default',
+                    'value' => 'default'
                 ],
             ],
             'queries' => [
@@ -133,14 +144,14 @@ class BuilderTest extends TestCase
                     'queryReference' => [
                         [
                             'clause' => 'must',
-                            'ref' => 'fulltext_search_query',
+                            'ref' => 'fulltext_search_query'
                         ],
                         [
                             'clause' => 'must',
-                            'ref' => 'fulltext_search_query2',
+                            'ref' => 'fulltext_search_query2'
                         ],
                     ],
-                    'type' => 'boolQuery',
+                    'type' => 'boolQuery'
                 ],
                 'fulltext_search_query' => [
                     'name' => 'fulltext_search_query',
@@ -149,20 +160,20 @@ class BuilderTest extends TestCase
                     'match' => [
                         [
                             'field' => 'data_index',
-                            'boost' => '2',
+                            'boost' => '2'
                         ],
                     ],
-                    'type' => 'matchQuery',
+                    'type' => 'matchQuery'
                 ],
                 'fulltext_search_query2' => [
                     'name' => 'fulltext_search_query2',
                     'filterReference' => [
                         [
-                            'ref' => 'pid',
-                        ],
+                            'ref' => 'pid'
+                        ]
                     ],
-                    'type' => 'filteredQuery',
-                ],
+                    'type' => 'filteredQuery'
+                ]
             ],
             'filters' => [
                 'pid' => [
@@ -170,34 +181,34 @@ class BuilderTest extends TestCase
                     'filterReference' => [
                         [
                             'clause' => 'should',
-                            'ref' => 'pidm',
+                            'ref' => 'pidm'
                         ],
                         [
                             'clause' => 'should',
-                            'ref' => 'pidsh',
+                            'ref' => 'pidsh'
                         ],
                     ],
-                    'type' => 'boolFilter',
+                    'type' => 'boolFilter'
                 ],
                 'pidm' => [
                     'name' => 'pidm',
                     'field' => 'product_id',
                     'type' => 'rangeFilter',
                     'from' => '$pidm_from$',
-                    'to' => '$pidm_to$',
+                    'to' => '$pidm_to$'
                 ],
                 'pidsh' => [
                     'name' => 'pidsh',
                     'field' => 'product_id',
                     'type' => 'termFilter',
-                    'value' => '$pidsh$',
+                    'value' => '$pidsh$'
                 ],
             ],
             'from' => '10',
             'size' => '10',
             'query' => 'one_match_filters',
             'index' => 'catalogsearch_fulltext',
-            'aggregations' => [],
+            'aggregations' => []
         ];
         $requestName = 'rn';
         $this->requestBuilder->bind('fulltext_search_query', 'socks');
@@ -211,8 +222,9 @@ class BuilderTest extends TestCase
         $this->binder->expects($this->once())->method('bind')->willReturn($data);
         $this->cleaner->expects($this->once())->method('clean')->willReturn($data);
         $this->requestMapper->expects($this->once())->method('getRootQuery')->willReturn([]);
-        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->requestMapper);
-        $this->objectManager->expects($this->at(2))->method('create')->willReturn($this->request);
+        $this->objectManager
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($this->requestMapper, null, $this->request);
         $this->config->expects($this->once())->method('get')->with($requestName)->willReturn($data);
         $result = $this->requestBuilder->create();
         $this->assertInstanceOf(Request::class, $result);

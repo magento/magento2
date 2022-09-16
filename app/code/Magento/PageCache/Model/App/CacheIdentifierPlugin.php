@@ -55,7 +55,7 @@ class CacheIdentifierPlugin
      */
     public function afterGetValue(\Magento\Framework\App\PageCache\Identifier $identifier, $result)
     {
-        if ($this->config->getType() == \Magento\PageCache\Model\Config::BUILT_IN && $this->config->isEnabled()) {
+        if ($this->config->getType() === \Magento\PageCache\Model\Config::BUILT_IN && $this->config->isEnabled()) {
             $identifierPrefix = '';
 
             $ruleDesignException = $this->designExceptions->getThemeByRequest($this->request);

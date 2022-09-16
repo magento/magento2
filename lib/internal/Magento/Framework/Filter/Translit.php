@@ -5,12 +5,14 @@
  */
 namespace Magento\Framework\Filter;
 
+use Laminas\Filter\FilterInterface;
+
 /**
  * Translit filter
  *
  * Process string based on convertation table
  */
-class Translit implements \Zend_Filter_Interface
+class Translit implements FilterInterface
 {
     /**
      * Symbol convert table
@@ -497,7 +499,9 @@ class Translit implements \Zend_Filter_Interface
         '্' => 'h',
         'ং' => 'ng',
         'ৢ' => 'n',
-        'ৣ' => 'nn'
+        'ৣ' => 'nn',
+        'ñ' => 'n',
+        'Ñ' => 'n',
     ];
 
     /**
@@ -531,7 +535,7 @@ class Translit implements \Zend_Filter_Interface
      */
     public function filter($string)
     {
-        $string = strtr($string, $this->getConvertTable());
+        $string = $string !== null ? strtr($string, $this->getConvertTable()) : '';
         return '"libiconv"' == ICONV_IMPL ? iconv(
             \Magento\Framework\Stdlib\StringUtils::ICONV_CHARSET,
             'ascii//ignore//translit',

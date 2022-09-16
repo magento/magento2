@@ -22,9 +22,11 @@
         <!-- Selector for Admin Description input where the index is zero-based -->
         <element name="swatchAdminDescriptionByIndex" type="input" selector="input[name='optiontext[value][option_{{index}}][0]']" parameterized="true"/>
         <element name="swatchWindow" type="button" selector="#swatch_window_option_option_{{var}}" parameterized="true"/>
+        <element name="swatchWindowUnavailable" type="button" selector="//div[@id='swatch_window_option_option_{{var}}']//ancestor::td[contains(@class,'swatches-visual-col') and contains(@class,'col-default') and contains(@class,'unavailable')]" parameterized="true"/>
         <element name="nthChooseColor" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) .swatch_row_name.colorpicker_handler" parameterized="true"/>
         <element name="nthUploadFile" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) .swatch_row_name.btn_choose_file_upload" parameterized="true"/>
         <element name="nthDelete" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) button.delete-option" parameterized="true"/>
         <element name="deleteBtn" type="button" selector="#manage-options-panel:nth-of-type({{var}}) button.delete-option" parameterized="true"/>
+        <element name="manageSwatchSection" type="block" selector='//legend/span[contains(text(),"Manage Swatch (Values of Your Attribute)")]'/>
     </section>
 </sections>

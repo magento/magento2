@@ -17,7 +17,7 @@
             <testCaseId value="MC-28538"/>
             <group value="Catalog"/>
             <group value="Product Attributes"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -35,6 +35,7 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <!--Create a Simple Product 1 -->
             <actionGroup ref="CreateSimpleProductAndAddToWebsiteActionGroup" stepKey="createSimpleProduct1">
@@ -53,6 +54,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
 
             <!--Delete Products -->
@@ -62,11 +64,12 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct2">
                 <argument name="sku" value="{{simpleProductForMassUpdate2.sku}}"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilter"/>
         </after>
 
         <!-- Search and select products -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
         <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">
             <argument name="keyword" value="{{simpleProductForMassUpdate.keyword}}"/>
         </actionGroup>
@@ -78,7 +81,7 @@
         </actionGroup>
 
         <!-- Select Product 2 -->
-        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckbox2"/>
+        <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckbox2"/>
 
         <!-- Mass update attributes -->
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
@@ -119,8 +122,8 @@
 
         <!--Enable the product in Default store view-->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex2"/>
-        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckboxDefaultStoreView"/>
-        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckboxDefaultStoreView2"/>
+        <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckboxDefaultStoreView"/>
+        <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckboxDefaultStoreView2"/>
 
         <!-- Mass update attributes -->
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdownDefaultStoreView"/>

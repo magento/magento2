@@ -150,7 +150,7 @@
                 </group>
             </group>
             <group id="paypal_payflow_advertise_paylater"  translate="label" showInDefault="1" showInWebsite="1" sortOrder="60">
-                <label>Advertise PayPal Paylater</label>
+                <label>Advertise PayPal Pay Later</label>
                 <field id="paylater_enabled" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/paylater_enabled" />
                 <depends>
                     <field id="enable_paypal_paylater_experience">1</field>

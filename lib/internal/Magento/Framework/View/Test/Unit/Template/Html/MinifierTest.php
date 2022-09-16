@@ -52,7 +52,7 @@ class MinifierTest extends TestCase
     protected $filesystemMock;
 
     /**
-     * Initialize testable object
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -93,10 +93,12 @@ class MinifierTest extends TestCase
     }
 
     /**
-     * Covered method getPathToMinified
+     * Covered method getPathToMinified.
+     *
+     * @return void
      * @test
      */
-    public function testGetPathToMinified()
+    public function testGetPathToMinified(): void
     {
         $file = '/absolute/path/to/phtml/template/file';
         $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
@@ -113,12 +115,13 @@ class MinifierTest extends TestCase
     // @codingStandardsIgnoreStart
 
     /**
-     * Covered method minify and test regular expressions
+     * Covered method minify and test regular expressions.
      * @test
      *
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testMinify()
+    public function testMinify(): void
     {
         $file = '/absolute/path/to/phtml/template/file';
         $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
@@ -130,6 +133,8 @@ class MinifierTest extends TestCase
  */
 ?>
 <?php //one line comment ?>
+<span><?php // foo ?><?php // bar ?></span>
+
 <html>
     <head>
         <title>Test title</title>
@@ -183,7 +188,7 @@ SOMETEXT;
 TEXT;
 
         $expectedContent = <<<TEXT
-<?php /** * Copyright © Magento, Inc. All rights reserved. * See COPYING.txt for license details. */ ?> <?php ?> <html><head><title>Test title</title></head><link rel="stylesheet" href='https://www.example.com/2' type="text/css" /><link rel="stylesheet" type="text/css" media="all" href="https://www.example.com/1" type="text/css" /><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?> <img src="data:image/gif;base64,P///yH5BAEAAAA" data-component="main-image"><?= \$block->someMethod(); ?> <div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-component="main-image"><script>
+<?php /** * Copyright © Magento, Inc. All rights reserved. * See COPYING.txt for license details. */ ?> <?php ?> <span><?php ?><?php ?></span> <html><head><title>Test title</title></head><link rel="stylesheet" href='https://www.example.com/2' type="text/css" /><link rel="stylesheet" type="text/css" media="all" href="https://www.example.com/1" type="text/css" /><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?> <img src="data:image/gif;base64,P///yH5BAEAAAA" data-component="main-image"><?= \$block->someMethod(); ?> <div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-component="main-image"><script>
             var i = 1;
             var j = 1;
 
@@ -227,10 +232,12 @@ TEXT;
     // @codingStandardsIgnoreEnd
 
     /**
-     * Contain method modify and getPathToModified
+     * Contain method modify and getPathToModified.
+     *
+     * @return void
      * @test
      */
-    public function testGetMinified()
+    public function testGetMinified(): void
     {
         $file = '/absolute/path/to/phtml/template/file';
         $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
@@ -242,10 +249,9 @@ TEXT;
             ->willReturn($file);
 
         $this->htmlDirectoryMock
-            ->expects($this->at(1))
             ->method('isExist')
-            ->with($relativeGeneratedPath)
-            ->willReturn(false);
+            ->withConsecutive([$relativeGeneratedPath])
+            ->willReturnOnConsecutiveCalls(false);
 
         $this->htmlDirectoryMock
             ->expects($this->once())

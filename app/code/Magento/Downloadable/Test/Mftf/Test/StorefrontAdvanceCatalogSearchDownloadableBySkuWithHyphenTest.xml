@@ -17,8 +17,9 @@
              <severity value="MAJOR"/>
              <testCaseId value="MC-28818"/>
              <group value="Downloadable"/>
-             <group value="SearchEngineElasticsearch"/>
-         </annotations>
+             <group value="SearchEngine"/>
+            <group value="pr_exclude"/>
+        </annotations>
          <before>
              <magentoCLI command="downloadable:domains:add example.com static.magento.com" before="product" stepKey="addDownloadableDomain"/>
              <createData entity="ApiDownloadableProduct" stepKey="product"/>

@@ -21,6 +21,6 @@ class Regex extends \Magento\Framework\Event\Observer
      */
     public function isValidFor(\Magento\Framework\Event $event)
     {
-        return preg_match($this->getEventRegex(), $event->getName());
+        return $event->getName() !== null ? preg_match($this->getEventRegex(), $event->getName()) : false;
     }
 }

@@ -16,7 +16,8 @@
             <description value="Support quick search with Partial word search using ES"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-34205"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Create subcategory -->
@@ -30,6 +31,7 @@
             <createData entity="ApiSimpleProductWithNoSpace" stepKey="product3">
                 <requiredEntity createDataKey="newCategory"/>
             </createData>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <deleteData createDataKey="product1" stepKey="deleteProduct1"/>

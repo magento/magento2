@@ -16,7 +16,8 @@
             <description value="User browses catalog, searches for product, adds product to cart, adds product to wishlist, compares products, uses coupon code and checks out."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-87435"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>

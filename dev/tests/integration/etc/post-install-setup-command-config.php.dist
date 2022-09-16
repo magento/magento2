@@ -10,10 +10,15 @@ return [
     [
         'command' => 'setup:config:set',
         'config' => [
+            '--queue-default-connection' => 'db',
             '--remote-storage-driver' => 'aws-s3',
             '--remote-storage-bucket' => 'myBucket',
-            '--remote-storage-region' => 'us-east-1',
+            '--remote-storage-region' => 'us-east-1'
         ]
+    ],
+    [
+        'command' => 'setup:upgrade',
+        'config' => []
     ]
     */
 ];

@@ -36,17 +36,17 @@ class Select extends \Zend_Db_Select
     /**
      * Condition type
      */
-    const TYPE_CONDITION = 'TYPE_CONDITION';
+    public const TYPE_CONDITION = 'TYPE_CONDITION';
 
     /**
      * Straight join key
      */
-    const STRAIGHT_JOIN = 'straightjoin';
+    public const STRAIGHT_JOIN = 'straightjoin';
 
     /**
      * Straight join SQL directive.
      */
-    const SQL_STRAIGHT_JOIN = 'STRAIGHT_JOIN';
+    public const SQL_STRAIGHT_JOIN = 'STRAIGHT_JOIN';
 
     /**
      * @var Select\SelectRenderer
@@ -248,7 +248,8 @@ class Select extends \Zend_Db_Select
     protected function _findTableInCond($table, $cond)
     {
         $quote = $this->_adapter->getQuoteIdentifierSymbol();
-
+        $cond = (string)$cond;
+        $table = (string)$table;
         if (strpos($cond, $quote . $table . $quote . '.') !== false) {
             return true;
         }
@@ -385,7 +386,7 @@ class Select extends \Zend_Db_Select
      */
     public function setPart($part, $value)
     {
-        $part = strtolower($part);
+        $part = $part !== null ? strtolower($part) : '';
         if (!array_key_exists($part, $this->_parts)) {
             throw new \Zend_Db_Select_Exception("Invalid Select part '{$part}'");
         }

@@ -5,10 +5,9 @@
  */
 namespace Magento\Framework\Filter;
 
-/**
- * Split words
- */
-class SplitWords implements \Zend_Filter_Interface
+use Laminas\Filter\FilterInterface;
+
+class SplitWords implements FilterInterface
 {
     /**
      * @var bool
@@ -46,7 +45,7 @@ class SplitWords implements \Zend_Filter_Interface
     public function filter($str)
     {
         $result = [];
-        $split = preg_split('#' . $this->wordSeparatorRegexp . '#siu', $str, null, PREG_SPLIT_NO_EMPTY);
+        $split = preg_split('#' . $this->wordSeparatorRegexp . '#siu', (string)$str, -1, PREG_SPLIT_NO_EMPTY);
         foreach ($split as $word) {
             if ($this->uniqueOnly) {
                 $result[$word] = $word;

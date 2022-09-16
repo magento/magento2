@@ -38,5 +38,6 @@
         <element name="shippingMethodElementId" type="radio" selector="#s_method_{{carrierCode}}_{{methodCode}}" parameterized="true" timeout="30"/>
         <element name="estimateShippingAndTaxForm" type="block" selector="#shipping-zip-form"/>
         <element name="proceedToCheckoutDisabled" type="button" selector=".action.primary.checkout.disabled" timeout="60"/>
+        <element name="checkoutWithMultipleAddresses" type="button" selector=".cart-summary .action.multicheckout"/>
     </section>
 </sections>

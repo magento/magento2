@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDisableShipmentCommentsTest">
+        <annotations>
+            <stories value="There is no Notify Customer by Email checkbox when shipment comments are disabled"/>
+            <title value="Admin user can disable shipment comments"/>
+            <description value="Disabling Shipment comments"/>
+            <severity value="MAJOR"/>
+            <group value="shipping"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
+            <createData entity="Shipment" stepKey="shipOrder">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <magentoCLI command="config:set sales_email/shipment_comment/enabled 0" stepKey="disableShipmentComments"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <magentoCLI command="config:set sales_email/shipment_comment/enabled 1" stepKey="disableShipmentComments"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="openOrdersGrid"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createCustomerCart.return$)}}" stepKey="orderId"/>
+        <actionGroup ref="FilterShipmentGridByOrderIdActionGroup" stepKey="filterForNewlyCreatedShipment">
+            <argument name="orderId" value="$orderId"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="selectShipmentFromGrid"/>
+        <actionGroup ref="AssertAdminThereIsNoNotifyCustomerByEmailCheckboxActionGroup" stepKey="doNotSeeNotifyCustomerCheckbox"/>
+    </test>
+</tests>

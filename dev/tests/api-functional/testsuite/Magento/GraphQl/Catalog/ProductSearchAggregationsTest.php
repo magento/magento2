@@ -16,9 +16,7 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
      */
     public function testAggregationBooleanAttribute()
     {
-        $this->markTestSkipped('MC-22184: Elasticsearch returns incorrect aggregation options for booleans');
-
-        $query = $this->getGraphQlQuery(
+        $query = $this->getGraphQlQueryWithItems(
             '"search_product_1", "search_product_2", "search_product_3", "search_product_4" ,"search_product_5"'
         );
 
@@ -111,6 +109,41 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
         $this->assertEquals($expectedOptions, $priceAggregation['options']);
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_for_search_with_custom_price_attribute.php
+     */
+    public function testAggregationCustomPriceAttribute()
+    {
+        $query = $this->getGraphQlQuery(
+            '"search_product_1", "search_product_2", "search_product_3", "search_product_4" ,"search_product_5"'
+        );
+        $result = $this->graphQlQuery($query);
+
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertArrayHasKey('aggregations', $result['products']);
+
+        $priceAggregation = array_filter(
+            $result['products']['aggregations'],
+            function ($a) {
+                return $a['attribute_code'] == 'product_price_attribute_bucket';
+            }
+        );
+        $this->assertNotEmpty($priceAggregation);
+        $priceAggregation = reset($priceAggregation);
+        $this->assertEquals(2, $priceAggregation['count']);
+        $expectedOptions = [
+            ['label' => '0_1000', 'value'=> '0_1000', 'count' => '3'],
+            ['label' => '1000_2000', 'value'=> '1000_2000', 'count' => '2']
+        ];
+        $this->assertEquals($expectedOptions, $priceAggregation['options']);
+    }
+
+    /**
+     * Get GraphQl products query with aggregations
+     *
+     * @param string $skus
+     * @return string
+     */
     private function getGraphQlQuery(string $skus)
     {
         return <<<QUERY
@@ -125,6 +158,35 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
         value
         count
       }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * Get GraphQl products query with aggregations and items
+     *
+     * @param string $skus
+     * @return string
+     */
+    private function getGraphQlQueryWithItems(string $skus): string
+    {
+        return <<<QUERY
+{
+    products(filter: {sku: {in: [{$skus}]}}){
+    aggregations{
+      label
+      attribute_code
+      count
+      options{
+        label
+        value
+        count
+      }
+    },
+    items{
+      id
     }
   }
 }

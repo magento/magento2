@@ -8,9 +8,15 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -36,6 +42,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
+     * @var \Magento\TestFramework\Fixture\DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
@@ -52,6 +63,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->productRepository = Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
+        $this->fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -143,20 +155,30 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $collectionStoreFilterAfter->getItems());
     }
 
-    /**
-     * @magentoDataFixture Magento/Catalog/_files/categories.php
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation disabled
-     */
+    #[
+        AppIsolation(true),
+        DbIsolation(false),
+        DataFixture(CategoryFixture::class, as: 'c1'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$c1.id$', 'is_anchor' => 0], 'c11'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$c1.id$', 'is_anchor' => 0], 'c12'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$c11.id$'], 'c111'),
+        DataFixture(CategoryFixture::class, as: 'c2'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c1.id$']], 'p1'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c111.id$']], 'p2'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c12.id$']], 'p3'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c2.id$']], 'p4'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$c2.id$']], 'p5'),
+    ]
     public function testSetCategoryFilter()
     {
+        $categoryId = $this->fixtures->get('c1')->getId();
         $appState = Bootstrap::getObjectManager()
             ->create(State::class);
         $appState->setAreaCode(Area::AREA_CRONTAB);
 
         $category = \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\Category::class
-        )->load(3);
+        )->load($categoryId);
         $this->collection->addCategoryFilter($category);
         $this->collection->load();
         $this->assertEquals($this->collection->getSize(), 3);

@@ -7,53 +7,77 @@ declare(strict_types=1);
 
 return [
     [
-        'attr' => [
+        'id' => 'Magento_Webapi',
+        'li_attr' =>  [
             'data-id' => 'Magento_Webapi',
         ],
-        'data' => 'Magento Webapi',
+        'text' => __('Magento Webapi'),
         'children' => [
             [
-                'attr' => [
+                'id' => 'customer',
+                'li_attr' =>  [
                     'data-id' => 'customer',
                 ],
-                'data' => 'Manage Customers',
+                'text' => __('Manage Customers'),
                 'children' => [
                     [
-                        'attr' => [
+                        'id' => 'customer/create',
+                        'li_attr' =>  [
                             'data-id' => 'customer/create',
                         ],
-                        'data' => 'Create Customer',
+                        'text' => __('Create Customer'),
                         'children' => [],
-                        'state' => 'open',
+                        'state' => [
+                            'selected' => false,
+                            'opened' => true,
+                        ],
                     ],
                     [
-                        'attr' => [
+                        'id' => 'customer/update',
+                        'li_attr' =>  [
                             'data-id' => 'customer/update',
                         ],
-                        'data' => 'Edit Customer',
+                        'text' => __('Edit Customer'),
                         'children' => [],
-                        'state' => 'open',
+                        'state' => [
+                            'selected' => false,
+                            'opened' => true,
+                        ],
                     ],
                     [
-                        'attr' => [
+                        'id' => 'customer/get',
+                        'li_attr' =>  [
                             'data-id' => 'customer/get',
                         ],
-                        'data' => 'Get Customer',
+                        'text' => __('Get Customer'),
                         'children' => [],
-                        'state' => 'open',
+                        'state' => [
+                            'selected' => false,
+                            'opened' => true,
+                        ],
                     ],
                     [
-                        'attr' => [
+                        'id' => 'customer/delete',
+                        'li_attr' =>  [
                             'data-id' => 'customer/delete',
                         ],
-                        'data' => 'Delete Customer',
+                        'text' => __('Delete Customer'),
                         'children' => [],
-                        'state' => 'open',
+                        'state' => [
+                            'selected' => false,
+                            'opened' => true,
+                        ],
                     ],
                 ],
-                'state' => 'open',
+                'state' => [
+                    'selected' => false,
+                    'opened' => true,
+                ],
             ],
         ],
-        'state' => 'open',
+        'state' => [
+            'selected' => false,
+            'opened' => true,
+        ],
     ]
 ];

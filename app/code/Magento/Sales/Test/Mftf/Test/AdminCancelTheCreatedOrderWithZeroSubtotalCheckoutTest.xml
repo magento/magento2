@@ -20,6 +20,8 @@
         </annotations>
 
         <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- Enable Zero Subtotal Checkout -->
             <magentoCLI command="config:set {{EnableZeroSubtotalCheckoutConfigData.path}} {{EnableZeroSubtotalCheckoutConfigData.value}}" stepKey="enableZeroSubtotalCheckout"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -39,6 +41,8 @@
             <createData entity="SalesRuleNoCouponWithFixedDiscount" stepKey="createSalesRule"/>
         </before>
         <after>
+            <!-- Disable shipping method for customer with default address -->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <!-- Disable Free Shipping -->
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
@@ -70,7 +74,8 @@
         <!--Verify order information-->
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
         <reloadPage stepKey="refreshPage"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <comment userInput="BIC workaround" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
 
         <!-- Refresh the page -->
         <reloadPage stepKey="refreshPageAgain"/>
@@ -86,6 +91,9 @@
         <!-- Assert Order status in frontend grid -->
         <click selector="{{StorefrontCustomerSidebarSection.sidebarCurrentTab('My Orders')}}" stepKey="clickOnMyOrders"/>
         <waitForPageLoad stepKey="waitForOrderDetailsToLoad"/>
-        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderStatusInGrid('$orderId', 'Canceled')}}" stepKey="seeOrderStatusInGrid"/>
+        <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
+            <argument name="orderId" value="$orderNumber"/>
+            <argument name="status" value="Canceled"/>
+        </actionGroup>
     </test>
 </tests>

@@ -72,7 +72,7 @@ class Interceptor extends EntityAbstract
         $reflectionClass = new \ReflectionClass($this->getSourceClassName());
         $publicMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
         foreach ($publicMethods as $method) {
-            if ($this->isInterceptedMethod($method)) {
+            if (!$method->isInternal() && $this->isInterceptedMethod($method)) {
                 $methods[] = $this->_getMethodInfo($method);
             }
         }
@@ -142,7 +142,7 @@ METHOD_BODY
             array_map(
                 function ($item) {
                     $output = '';
-                    if ($item['variadic']) {
+                    if (!empty($item['variadic'])) {
                         $output .= '... ';
                     }
 
@@ -212,7 +212,7 @@ METHOD_BODY
         $returnTypeValue = null;
         $returnType = $method->getReturnType();
         if ($returnType) {
-            $returnTypeValue = ($returnType->allowsNull() ? '?' : '');
+            $returnTypeValue = ($returnType->allowsNull() && $returnType->getName() !== 'mixed' ? '?' : '');
             $returnTypeValue .= ($returnType->getName() === 'self')
                 ? $this->_getFullyQualifiedClassName($method->getDeclaringClass()->getName())
                 : $returnType->getName();

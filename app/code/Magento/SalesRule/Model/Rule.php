@@ -70,26 +70,26 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * Coupon types
      */
-    const COUPON_TYPE_NO_COUPON = 1;
+    public const COUPON_TYPE_NO_COUPON = 1;
 
-    const COUPON_TYPE_SPECIFIC = 2;
+    public const COUPON_TYPE_SPECIFIC = 2;
 
-    const COUPON_TYPE_AUTO = 3;
+    public const COUPON_TYPE_AUTO = 3;
 
     /**
      * Rule type actions
      */
-    const TO_PERCENT_ACTION = 'to_percent';
+    public const TO_PERCENT_ACTION = 'to_percent';
 
-    const BY_PERCENT_ACTION = 'by_percent';
+    public const BY_PERCENT_ACTION = 'by_percent';
 
-    const TO_FIXED_ACTION = 'to_fixed';
+    public const TO_FIXED_ACTION = 'to_fixed';
 
-    const BY_FIXED_ACTION = 'by_fixed';
+    public const BY_FIXED_ACTION = 'by_fixed';
 
-    const CART_FIXED_ACTION = 'cart_fixed';
+    public const CART_FIXED_ACTION = 'cart_fixed';
 
-    const BUY_X_GET_Y_ACTION = 'buy_x_get_y';
+    public const BUY_X_GET_Y_ACTION = 'buy_x_get_y';
 
     /**
      * Store coupon code generator instance
@@ -285,7 +285,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      */
     public function afterSave()
     {
-        $couponCode = trim($this->getCouponCode());
+        $couponCode = is_string($this->getCouponCode()) ? trim($this->getCouponCode()) : '';
         if (strlen(
             $couponCode
         ) && $this->getCouponType() == self::COUPON_TYPE_SPECIFIC && !$this->getUseAutoGeneration()
@@ -423,7 +423,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function getStoreLabels()
     {
         if (!$this->hasStoreLabels()) {
-            $labels = $this->_getResource()->getStoreLabels($this->getId());
+            $linkedField = $this->_getResource()->getLinkField();
+            $labels = $this->_getResource()->getStoreLabels($this->getData($linkedField));
             $this->setStoreLabels($labels);
         }
 

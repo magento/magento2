@@ -92,6 +92,7 @@ class Group
         AbstractModel $group
     ) {
         if (!$group->isObjectNew()
+            && $group->getStoreIds()
             && ($group->dataHasChangedFor('website_id')
                 || $group->dataHasChangedFor('root_category_id'))
         ) {
