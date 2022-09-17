@@ -242,6 +242,8 @@ class DeploymentConfig
     }
 
     /**
+     * Returns flat data by key
+     *
      * @param string|null $key
      * @return mixed|null
      */
