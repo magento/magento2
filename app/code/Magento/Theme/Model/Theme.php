@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Model;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
@@ -244,7 +247,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getParentTheme()
     {
@@ -261,19 +264,26 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getArea()
     {
-        // In order to support environment emulation of area, if area is set, return it
-        if ($this->getData('area') && !$this->_appState->isAreaCodeEmulated()) {
-            return $this->getData('area');
-        }
-        return $this->_appState->getAreaCode();
+        return $this->getData(Area::PARAM_AREA);
+    }
+    
+    /**
+     * Set area
+     *
+     * @param string $area
+     * @return $this
+     */
+    public function setArea($area)
+    {
+        return $this->setData(Area::PARAM_AREA, $area);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getThemePath()
     {
@@ -294,7 +304,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCode()
     {
