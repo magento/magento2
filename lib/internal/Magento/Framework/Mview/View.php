@@ -302,15 +302,9 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
             ? (int) $this->changelogBatchSize[$this->getChangelog()->getViewId()]
             : self::DEFAULT_BATCH_SIZE;
 
-        $vsFrom = $lastVersionId;
-        while ($vsFrom < $currentVersionId) {
-            $walker = $this->getWalker();
-            $ids = $walker->walk($this->getChangelog(), $vsFrom, $currentVersionId, $batchSize);
+        $batches = $this->getWalker()->walk($this->getChangelog(), $lastVersionId, $currentVersionId, $batchSize);
 
-            if (empty($ids)) {
-                break;
-            }
-            $vsFrom += $batchSize;
+        foreach ($batches as $ids) {
             $action->execute($ids);
         }
     }
