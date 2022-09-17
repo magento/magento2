@@ -16,6 +16,8 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Indexer\Product\Category\Processor;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\Config as eavConfig;
@@ -24,6 +26,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Catalog\Model\GetCategoryByName;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -1285,21 +1288,23 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod1
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod2
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod3
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod4
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod5
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod6
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod7
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod8
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:prod9
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:cat1
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"parent_id":"$cat1.id$"} as:cat11
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"parent_id":"$cat1.id$"} as:cat12
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"parent_id":"$cat1.id$"} as:cat13
      * @dataProvider sortByPositionWithMultipleCategoriesDataProvider
      */
+    #[
+        DataFixture(ProductFixture::class, as: 'prod1'),
+        DataFixture(ProductFixture::class, as: 'prod2'),
+        DataFixture(ProductFixture::class, as: 'prod3'),
+        DataFixture(ProductFixture::class, as: 'prod4'),
+        DataFixture(ProductFixture::class, as: 'prod5'),
+        DataFixture(ProductFixture::class, as: 'prod6'),
+        DataFixture(ProductFixture::class, as: 'prod7'),
+        DataFixture(ProductFixture::class, as: 'prod8'),
+        DataFixture(ProductFixture::class, as: 'prod9'),
+        DataFixture(CategoryFixture::class, as: 'cat1'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$cat1.id$'], 'cat11'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$cat1.id$'], 'cat12'),
+        DataFixture(CategoryFixture::class, ['parent_id' => '$cat1.id$'], 'cat13'),
+    ]
     public function testSortByPositionWithMultipleCategories(
         array $config,
         array $filterBy,
@@ -1675,7 +1680,7 @@ QUERY;
                 'options' => [
                     [
                         'label' => 'Colorful Category',
-                        'value' => '330',
+                        'value' => 'MzMw',
                         'count' => 2,
                     ],
                 ],

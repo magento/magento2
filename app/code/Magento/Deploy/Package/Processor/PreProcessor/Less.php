@@ -175,7 +175,7 @@ class Less implements ProcessorInterface
     {
         $content = $this->deployStaticFile->readTmpFile($filePath, $packagePath);
         $replaceCallback = function ($matchedContent) use ($filePath, $packagePath, $contentType) {
-            $matchedFileId = $matchedContent['path'];
+            $matchedFileId = $matchedContent['path'] ?? '';
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             if (!pathinfo($matchedContent['path'], PATHINFO_EXTENSION)) {
                 $matchedFileId .= '.' . $contentType;
@@ -212,7 +212,7 @@ class Less implements ProcessorInterface
      */
     private function normalizePath($path)
     {
-        if (strpos($path, '/../') === false) {
+        if ($path === null || strpos($path, '/../') === false) {
             return $path;
         }
         $pathParts = explode('/', $path);

@@ -18,5 +18,6 @@
         <element name="attributeValue" type="text" selector=".col.data"/>
         <!-- The tab transform to an accordion when window resize -->
         <element name="moreInformationSectionToggleState" type="button" selector="//*[@id='tab-label-additional-title']/ancestor::div[@aria-selected='{{boolean}}'][@aria-expanded='{{boolean}}']" parameterized="true"/>
+        <element name="customAttributeValueCheck" type="text" selector="//table[@class='data table additional-attributes']//td[@class='col data' and contains(text(),'{{var1}}')]" parameterized="true"/>
     </section>
 </sections>
