@@ -257,6 +257,8 @@ class DeploymentConfig
     }
 
     /**
+     * Returns data by key
+     *
      * @param string|null $key
      * @return mixed|null
      */
