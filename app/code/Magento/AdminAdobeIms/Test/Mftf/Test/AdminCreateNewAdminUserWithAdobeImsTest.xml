@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateNewAdminUserWithAdobeImsTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Create a new admin user with enabled Adobe IMS integration"/>
+            <title value="Create a new admin user with enabled Adobe IMS integration"/>
+            <description value="Create a new admin user when AdminAdobeImsModule is enabled"/>
+            <severity value="CRITICAL"/>
+            <group value="admin_ims"/>
+            <testCaseId value="CABPI-227"/>
+            <skip>
+                <issueId value="AC-3153">Skipped</issueId>
+            </skip>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminEnableAdobeImsActionGroup" stepKey="enableAdminAdobeImsModule" />
+        </before>
+        <after>
+            <actionGroup ref="AdminDisableAdobeImsActionGroup" stepKey="disableAdminAdobeImsModule" />
+        </after>
+
+        <actionGroup ref="AdminAdobeImsSignInActionGroup" stepKey="adminLogin"/>
+
+        <actionGroup ref="AdminCreateUserWithoutPasswordActionGroup" stepKey="createAdminUser">
+            <argument name="user" value="activeAdmin"/>
+            <argument name="role" value="roleDefaultAdministrator"/>
+        </actionGroup>
+
+        <see userInput="You saved the user." stepKey="seeSuccessMessage"/>
+    </test>
+</tests>

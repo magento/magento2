@@ -3,27 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Observer;
 
-use Magento\AdminAdobeIms\Model\LogOut;
+use Magento\AdobeImsApi\Api\LogOutInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 class AdminLogoutObserver implements ObserverInterface
 {
     /**
-     * @var LogOut
+     * @var LogOutInterface
      */
-    private LogOut $logOut;
+    private LogOutInterface $logOut;
 
     /**
-     * @param LogOut $logOut
+     * @param LogOutInterface $logOut
      */
     public function __construct(
-        LogOut $logOut
+        LogOutInterface $logOut
     ) {
         $this->logOut = $logOut;
     }
