@@ -51,20 +51,21 @@ define([
              */
             contents = function (elem) {
                 return $.map(elem, function (el) {
-                    let isIframe = $.nodeName(element, "iframe");
+                    let isIframe = $.nodeName(element, 'iframe');
 
                     if (isIframe) {
                         let iframeSource = $(element).prop('src');
 
                         if (iframeSource.length) {
-                            let iframeDomain = (new URL(iframeSource));
-                            if (window.location.hostname !== iframeDomain.hostname) {
+                            let iframeDomain = new URL(iframeSource);
+
+                            if (window.location.hostname !== iframeDomain.hostname) {//eslint-disable-line max-depth
                                 return []; // src not origin
                             }
                         } else {
                             return []; // src is emtpy
                         }
-                    }  
+                    }
 
                     try {
                         return isIframe ?
