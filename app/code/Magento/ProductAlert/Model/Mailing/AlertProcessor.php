@@ -27,6 +27,8 @@ use Magento\Store\Model\Website;
 
 /**
  * Class for mailing Product Alerts
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AlertProcessor
 {
