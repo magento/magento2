@@ -9,18 +9,14 @@ namespace Magento\AdminAdobeIms\Controller\Adminhtml\OAuth;
 
 use Exception;
 use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
-use Magento\AdminAdobeIms\Service\AdminReauthProcessService;
+use Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdobeImsApi\Api\OrganizationMembershipInterface;
-use Magento\AdobeImsApi\Api\GetProfileInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Controller\Adminhtml\Auth;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\AdobeImsApi\Api\GetTokenInterface;
-use Magento\Framework\Exception\AuthenticationException;
 
 class ImsReauthCallback extends Auth implements HttpGetActionInterface
 {
@@ -43,55 +39,31 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
     private ImsConfig $adminImsConfig;
 
     /**
-     * @var OrganizationMembershipInterface
-     */
-    private OrganizationMembershipInterface $organizationMembership;
-
-    /**
-     * @var AdminReauthProcessService
-     */
-    private AdminReauthProcessService $adminReauthProcessService;
-
-    /**
      * @var AdminAdobeImsLogger
      */
     private AdminAdobeImsLogger $logger;
 
     /**
-     * @var GetTokenInterface
+     * @var AdobeImsAdminTokenUserService
      */
-    private GetTokenInterface $token;
-
-    /**
-     * @var GetProfileInterface
-     */
-    private GetProfileInterface $profile;
+    private AdobeImsAdminTokenUserService $adminTokenUserService;
 
     /**
      * @param Context $context
-     * @param GetProfileInterface $profile
      * @param ImsConfig $adminImsConfig
-     * @param OrganizationMembershipInterface $organizationMembership
-     * @param AdminReauthProcessService $adminReauthProcessService
+     * @param AdobeImsAdminTokenUserService $adminTokenUserService
      * @param AdminAdobeImsLogger $logger
-     * @param GetTokenInterface $token
      */
     public function __construct(
         Context                         $context,
-        GetProfileInterface             $profile,
         ImsConfig                       $adminImsConfig,
-        OrganizationMembershipInterface $organizationMembership,
-        AdminReauthProcessService       $adminReauthProcessService,
-        AdminAdobeImsLogger             $logger,
-        GetTokenInterface               $token
+        AdobeImsAdminTokenUserService $adminTokenUserService,
+        AdminAdobeImsLogger             $logger
     ) {
         parent::__construct($context);
-        $this->profile = $profile;
         $this->adminImsConfig = $adminImsConfig;
-        $this->organizationMembership = $organizationMembership;
-        $this->adminReauthProcessService = $adminReauthProcessService;
+        $this->adminTokenUserService = $adminTokenUserService;
         $this->logger = $logger;
-        $this->token = $token;
     }
 
     /**
@@ -119,24 +91,7 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
         }
 
         try {
-            $code = $this->getRequest()->getParam('code');
-
-            if ($code === null) {
-                throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
-            }
-
-            $tokenResponse = $this->token->getTokenResponse($code);
-            $accessToken = $tokenResponse->getAccessToken();
-
-            $profile = $this->profile->getProfile($accessToken);
-            if (empty($profile['email'])) {
-                throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
-            }
-
-            //check membership in organization
-            $this->organizationMembership->checkOrganizationMembership($accessToken);
-
-            $this->adminReauthProcessService->execute($tokenResponse);
+            $this->adminTokenUserService->processLoginRequest(true);
 
             $response = sprintf(
                 self::RESPONSE_TEMPLATE,
