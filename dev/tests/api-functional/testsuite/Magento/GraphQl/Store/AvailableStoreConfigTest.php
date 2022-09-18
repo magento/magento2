@@ -287,7 +287,7 @@ QUERY;
     is_default_store_group,
     website_id,
     website_code,
-    website_name,,
+    website_name,
     locale,
     base_currency_code,
     default_display_currency_code,

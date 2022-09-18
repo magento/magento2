@@ -16,7 +16,7 @@
             <description value="Support quick search with Partial word search using ES"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-34205"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
             <group value="pr_exclude"/>
         </annotations>
         <before>
