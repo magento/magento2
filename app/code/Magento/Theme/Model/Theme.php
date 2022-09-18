@@ -268,7 +268,11 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     public function getArea()
     {
-        return $this->getData(Area::PARAM_AREA);
+        // In order to support environment emulation of area, if area is set, return it
+        if ($this->getData(Area::PARAM_AREA) && !$this->_appState->isAreaCodeEmulated()) {
+            return $this->getData(Area::PARAM_AREA);
+        }
+        return $this->_appState->getAreaCode();
     }
 
     /**
