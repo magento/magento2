@@ -106,12 +106,13 @@ class ProductUrlPathGenerator
      * Retrieve Product Url path with suffix
      *
      * @param Product $product
-     * @param int $storeId
+     * @param int|null $storeId
      * @param Category|null $category
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getUrlPathWithSuffix(Product $product, int $storeId, Category $category = null): string
+    public function getUrlPathWithSuffix(Product $product, int $storeId = null, Category $category = null): string
     {
         return $this->getUrlPath($product, $category) . $this->getProductUrlSuffix($storeId);
     }
