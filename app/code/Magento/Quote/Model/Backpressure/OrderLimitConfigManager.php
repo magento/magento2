@@ -11,8 +11,10 @@ namespace Magento\Quote\Model\Backpressure;
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\Backpressure\SlidingWindow\LimitConfig;
 use Magento\Framework\App\Backpressure\SlidingWindow\LimitConfigManagerInterface;
+use Magento\Framework\App\Backpressure\SlidingWindow\RequestLoggerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Store\Model\ScopeInterface;
 
@@ -29,11 +31,20 @@ class OrderLimitConfigManager implements LimitConfigManagerInterface
     private ScopeConfigInterface $config;
 
     /**
-     * @param ScopeConfigInterface $config
+     * @var DeploymentConfig
      */
-    public function __construct(ScopeConfigInterface $config)
-    {
+    private DeploymentConfig $deploymentConfig;
+
+    /**
+     * @param ScopeConfigInterface $config
+     * @param DeploymentConfig $deploymentConfig
+     */
+    public function __construct(
+        ScopeConfigInterface $config,
+        DeploymentConfig $deploymentConfig
+    ) {
         $this->config = $config;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -62,73 +73,50 @@ class OrderLimitConfigManager implements LimitConfigManagerInterface
      * Checks if enforcement enabled for the current store
      *
      * @return bool
+     * @throws RuntimeException
+     * @throws FileSystemException
      */
     public function isEnforcementEnabled(): bool
     {
+        $loggerType = $this->deploymentConfig->get(RequestLoggerInterface::CONFIG_PATH_BACKPRESSURE_LOGGER);
         $enabled = $this->config->isSetFlag('sales/backpressure/enabled', ScopeInterface::SCOPE_STORE);
-        if (!$enabled) {
-            return false;
+        if ($loggerType && $enabled) {
+            return true;
         }
 
-        try {
-            $this->fetchPeriod();
-            $this->fetchAuthenticatedLimit();
-            $this->fetchGuestLimit();
-        } catch (RuntimeException $ex) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
     /**
      * Limit for authenticated customers
      *
      * @return int
-     * @throws RuntimeException
      */
     private function fetchAuthenticatedLimit(): int
     {
-        $value = (int)$this->config->getValue('sales/backpressure/limit', ScopeInterface::SCOPE_STORE);
-        if ($value <= 0) {
-            throw new RuntimeException(__("Invalid order backpressure limit config"));
-        }
-
-        return $value;
+        return (int)$this->config->getValue('sales/backpressure/limit', ScopeInterface::SCOPE_STORE);
     }
 
     /**
      * Limit for guests
      *
      * @return int
-     * @throws RuntimeException
      */
     private function fetchGuestLimit(): int
     {
-        $value = (int)$this->config->getValue(
+        return (int)$this->config->getValue(
             'sales/backpressure/guest_limit',
             ScopeInterface::SCOPE_STORE
         );
-        if ($value <= 0) {
-            throw new RuntimeException(__("Invalid order backpressure guest limit config"));
-        }
-
-        return $value;
     }
 
     /**
      * Counter reset period
      *
      * @return int
-     * @throws RuntimeException
      */
     private function fetchPeriod(): int
     {
-        $value = (int)$this->config->getValue('sales/backpressure/period', ScopeInterface::SCOPE_STORE);
-        if ($value <= 0) {
-            throw new RuntimeException(__("Invalid order backpressure counter reset period config"));
-        }
-
-        return $value;
+       return (int)$this->config->getValue('sales/backpressure/period', ScopeInterface::SCOPE_STORE);
     }
 }

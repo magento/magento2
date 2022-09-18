@@ -1980,8 +1980,8 @@
     </type>
     <preference for="Magento\Framework\App\BackpressureEnforcerInterface"
                 type="Magento\Framework\App\Backpressure\SlidingWindow\SlidingWindowEnforcer"/>
-    <preference for="Magento\Framework\App\Backpressure\SlidingWindow\RequestLoggerInterface"
-                type="Magento\Framework\App\Backpressure\SlidingWindow\CacheRequestLogger"/>
+    <preference for="Magento\Framework\App\Backpressure\SlidingWindow\RequestLoggerFactoryInterface"
+                type="Magento\Framework\App\Backpressure\SlidingWindow\RequestLoggerFactory"/>
     <preference for="Magento\Framework\App\Backpressure\SlidingWindow\LimitConfigManagerInterface"
                 type="Magento\Framework\App\Backpressure\SlidingWindow\CompositeLimitConfigManager"/>
     <preference for="Magento\Framework\App\Request\Backpressure\RequestTypeExtractorInterface"
@@ -1993,9 +1993,11 @@
             <argument name="extractors" xsi:type="array" />
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Backpressure\SlidingWindow\CacheRequestLogger">
+    <type name="Magento\Framework\App\Backpressure\SlidingWindow\RequestLoggerFactory">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+            <argument name="types" xsi:type="array">
+                <item name="redis" xsi:type="string">\Magento\Framework\App\Backpressure\SlidingWindow\RedisRequestLogger</item>
+            </argument>
         </arguments>
     </type>
     <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>

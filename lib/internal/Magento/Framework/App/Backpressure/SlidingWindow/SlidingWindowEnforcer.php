@@ -11,7 +11,11 @@ namespace Magento\Framework\App\Backpressure\SlidingWindow;
 use Magento\Framework\App\Backpressure\BackpressureExceededException;
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\BackpressureEnforcerInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Psr\Log\LoggerInterface;
 
 /**
  * Uses Sliding Window approach to record request times and enforce limits
@@ -19,9 +23,9 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 class SlidingWindowEnforcer implements BackpressureEnforcerInterface
 {
     /**
-     * @var RequestLoggerInterface
+     * @var RequestLoggerFactoryInterface
      */
-    private RequestLoggerInterface $logger;
+    private RequestLoggerFactoryInterface $requestLoggerFactory;
 
     /**
      * @var LimitConfigManagerInterface
@@ -34,46 +38,70 @@ class SlidingWindowEnforcer implements BackpressureEnforcerInterface
     private DateTime $dateTime;
 
     /**
-     * @param RequestLoggerInterface $logger
+     * @var DeploymentConfig
+     */
+    private DeploymentConfig $deploymentConfig;
+
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
+     * @param RequestLoggerFactoryInterface $requestLoggerFactory
      * @param LimitConfigManagerInterface $configManager
      * @param DateTime $dateTime
+     * @param DeploymentConfig $deploymentConfig
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        RequestLoggerInterface $logger,
+        RequestLoggerFactoryInterface $requestLoggerFactory,
         LimitConfigManagerInterface $configManager,
-        DateTime $dateTime
+        DateTime $dateTime,
+        DeploymentConfig $deploymentConfig,
+        LoggerInterface $logger
     ) {
-        $this->logger = $logger;
+        $this->requestLoggerFactory = $requestLoggerFactory;
         $this->configManager = $configManager;
         $this->dateTime = $dateTime;
+        $this->deploymentConfig = $deploymentConfig;
+        $this->logger = $logger;
     }
 
     /**
      * @inheritDoc
+     *
+     * @throws FileSystemException|RuntimeException
      */
     public function enforce(ContextInterface $context): void
     {
-        $limit = $this->configManager->readLimit($context);
-        $time = $this->dateTime->gmtTimestamp();
-        $remainder = $time % $limit->getPeriod();
-        //Time slot is the ts of the beginning of the period
-        $timeSlot = $time - $remainder;
+        $requestLoggerType = $this->deploymentConfig->get(RequestLoggerInterface::CONFIG_PATH_BACKPRESSURE_LOGGER);
+        try {
+            $requestLogger = $this->requestLoggerFactory->create($requestLoggerType);
+            $limit = $this->configManager->readLimit($context);
+            $time = $this->dateTime->gmtTimestamp();
+            $remainder = $time % $limit->getPeriod();
+            //Time slot is the ts of the beginning of the period
+            $timeSlot = $time - $remainder;
 
-        $count = $this->logger->incrAndGetFor(
-            $context,
-            $timeSlot,
-            $limit->getPeriod() * 3//keep data for at least last 3 time slots
-        );
+            $count = $requestLogger->incrAndGetFor(
+                $context,
+                $timeSlot,
+                $limit->getPeriod() * 3//keep data for at least last 3 time slots
+            );
 
-        if ($count <= $limit->getLimit()) {
-            //Try to compare to a % of requests from previous time slot
-            $prevCount = $this->logger->getFor($context, $timeSlot - $limit->getPeriod());
-            if ($prevCount != null) {
-                $count += $prevCount * (1 - ($remainder / $limit->getPeriod()));
+            if ($count <= $limit->getLimit()) {
+                //Try to compare to a % of requests from previous time slot
+                $prevCount = $requestLogger->getFor($context, $timeSlot - $limit->getPeriod());
+                if ($prevCount != null) {
+                    $count += $prevCount * (1 - ($remainder / $limit->getPeriod()));
+                }
             }
-        }
-        if ($count > $limit->getLimit()) {
-            throw new BackpressureExceededException();
+            if ($count > $limit->getLimit()) {
+                throw new BackpressureExceededException();
+            }
+        } catch (RuntimeException $e) {
+            $this->logger->error($e->getMessage());
         }
     }
 }

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Framework\App\Backpressure\SlidingWindow;
@@ -15,6 +14,11 @@ use Magento\Framework\App\Backpressure\ContextInterface;
  */
 interface RequestLoggerInterface
 {
+    /**
+     * Configuration path to logger type
+     */
+    public const CONFIG_PATH_BACKPRESSURE_LOGGER = 'backpressure/logger/type';
+
     /**
      * Increase counter for requests coming inside given timeslot from given identity
      *

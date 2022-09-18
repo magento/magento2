@@ -6,22 +6,20 @@
 
 namespace Magento\Framework\Cache\Backend;
 
-use InvalidArgumentException;
-
 /**
- * Redis wrapper to extend current implementation behaviour
+ * Redis wrapper to extend current implementation behaviour.
  */
 class Redis extends \Cm_Cache_Backend_Redis
 {
     /**
-     * Local state of preloaded keys
+     * Local state of preloaded keys.
      *
      * @var array
      */
     private $preloadedData = [];
 
     /**
-     * Array of keys to be preloaded
+     * Array of keys to be preloaded.
      *
      * @var array
      */
@@ -39,14 +37,14 @@ class Redis extends \Cm_Cache_Backend_Redis
     /**
      * Load value with given id from cache
      *
-     * @param string $id Cache id
-     * @param boolean $doNotTestCacheValidity If set to true, the cache validity won't be tested
+     * @param  string  $id                     Cache id
+     * @param  boolean $doNotTestCacheValidity If set to true, the cache validity won't be tested
      * @return bool|string
      */
     public function load($id, $doNotTestCacheValidity = false)
     {
         if (!empty($this->preloadKeys) && empty($this->preloadedData)) {
-            $redis = $this->_slave ?? $this->_redis;
+            $redis =  $this->_slave ?? $this->_redis;
             $redis = $redis->pipeline();
 
             foreach ($this->preloadKeys as $key) {
@@ -64,7 +62,7 @@ class Redis extends \Cm_Cache_Backend_Redis
     }
 
     /**
-     * Cover errors on save operations, which may occurs when Redis cannot evict keys, which is expected in some cases
+     * Cover errors on save operations, which may occurs when Redis cannot evict keys, which is expected in some cases.
      *
      * @param string $data
      * @param string $id
@@ -95,36 +93,5 @@ class Redis extends \Cm_Cache_Backend_Redis
         }
 
         return $result;
-    }
-
-    /**
-     * Increment/decrement an item by given number (positive or negative for decrement)
-     *
-     * @param string $id
-     * @param int $update
-     * @param int|null $expireAt Expire item at ts
-     * @return void
-     * @throws InvalidArgumentException When increment is incorrect or the item is not a number
-     */
-    public function updateByAndGet(string $id, int $update, ?int $expireAt): int
-    {
-        if ($update === 0) {
-            throw new InvalidArgumentException('Update must be != 0');
-        }
-
-        $method = 'incrBy';
-        if ($update < 0) {
-            $method = 'decrBy';
-        }
-
-        $redis = $this->_redis->pipeline();
-        $redis->$method($id, abs($update));
-        if ($expireAt) {
-            $redis->expireAt($id, $expireAt);
-        }
-
-        $response = $redis->exec();
-
-        return (int)$response[0];
     }
 }

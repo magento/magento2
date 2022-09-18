@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 class CacheRequestLoggerTest extends TestCase
 {
     /**
-     * @var CacheRequestLogger
+     * @var RedisRequestLogger
      */
     private $model;
 
@@ -35,7 +35,7 @@ class CacheRequestLoggerTest extends TestCase
     {
         parent::setUp();
 
-        $this->model = Bootstrap::getObjectManager()->get(CacheRequestLogger::class);
+        $this->model = Bootstrap::getObjectManager()->get(RedisRequestLogger::class);
     }
 
     /**
