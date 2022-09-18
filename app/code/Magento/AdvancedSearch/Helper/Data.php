@@ -15,9 +15,8 @@ use OpenSearch\Client;
 class Data extends AbstractHelper
 {
 
-    const OPENSEARCH = 'opensearch';
-    const MAJOR_VERSION = '2';
-
+    public const OPENSEARCH = 'opensearch';
+    public const MAJOR_VERSION = '2';
 
     /**
      * @var EngineResolverInterface
@@ -37,6 +36,8 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Check if opensearch v2.x
+     *
      * @return bool
      */
     public function isClientOpenSearchV2(): bool

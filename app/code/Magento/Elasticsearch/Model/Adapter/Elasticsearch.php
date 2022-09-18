@@ -23,6 +23,7 @@ use Magento\AdvancedSearch\Helper\Data;
 
 /**
  * Elasticsearch adapter
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Elasticsearch
