@@ -50,20 +50,4 @@ class OpenSearch extends SearchClient
         unset($query['type']);
         return $this->getOpenSearchClient()->search($query);
     }
-
-
-    /**
-     * Delete mapping in OpenSearch index
-     *
-     * @param string $index
-     * @return void
-     */
-    public function deleteMapping(string $index, string $entityType)
-    {
-        $this->getOpenSearchClient()->indices()->deleteMapping(
-            [
-                'index' => $index
-            ]
-        );
-    }
 }
