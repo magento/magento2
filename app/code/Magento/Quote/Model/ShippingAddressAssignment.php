@@ -47,6 +47,7 @@ class ShippingAddressAssignment
         if ($useForShipping) {
             $address->setShippingMethod($quote->getShippingAddress()->getShippingMethod());
             $address->setShippingDescription($quote->getShippingAddress()->getShippingDescription());
+            $address->setSaveInAddressBook($quote->getShippingAddress()->getSaveInAddressBook());
 
             $quote->removeAddress($quote->getShippingAddress()->getId());
             $address->setSameAsBilling(1);

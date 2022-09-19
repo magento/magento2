@@ -659,6 +659,7 @@ class QuoteManagement implements CartManagementInterface
                     if (!$hasDefaultBilling && !$billing->getSaveInAddressBook()) {
                         $shippingAddress->setIsDefaultBilling(true);
                         $hasDefaultBilling = true;
+                        $shipping->setSameAsBilling(1);
                     }
                 }
                 //save here new customer address
