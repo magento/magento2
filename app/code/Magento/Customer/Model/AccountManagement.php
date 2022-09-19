@@ -726,6 +726,9 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
+        $customerSecure->setFailuresNum(0);
+        $customerSecure->setFirstFailure(null);
+        $customerSecure->setLockExpires(null);
         $this->sessionCleaner->clearFor((int)$customer->getId());
         $this->customerRepository->save($customer);
 
@@ -1216,6 +1219,7 @@ class AccountManagement implements AccountManagementInterface
      * @return $this
      * @throws LocalizedException
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected function sendNewAccountEmail(
         $customer,
@@ -1259,6 +1263,7 @@ class AccountManagement implements AccountManagementInterface
      * @throws LocalizedException
      * @throws NoSuchEntityException
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected function sendPasswordResetNotificationEmail($customer)
     {
@@ -1272,6 +1277,7 @@ class AccountManagement implements AccountManagementInterface
      * @param int|string|null $defaultStoreId
      * @return int
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      * @throws LocalizedException
      */
     protected function getWebsiteStoreId($customer, $defaultStoreId = null)
@@ -1289,6 +1295,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @return array
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected function getTemplateTypes()
     {
@@ -1322,6 +1329,7 @@ class AccountManagement implements AccountManagementInterface
      * @return $this
      * @throws MailException
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected function sendEmailTemplate(
         $customer,
@@ -1476,6 +1484,7 @@ class AccountManagement implements AccountManagementInterface
      * @throws LocalizedException
      * @throws NoSuchEntityException
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     public function sendPasswordReminderEmail($customer)
     {
@@ -1505,6 +1514,7 @@ class AccountManagement implements AccountManagementInterface
      * @throws LocalizedException
      * @throws NoSuchEntityException
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     public function sendPasswordResetConfirmationEmail($customer)
     {
@@ -1550,6 +1560,7 @@ class AccountManagement implements AccountManagementInterface
      * @return Data\CustomerSecure
      * @throws NoSuchEntityException
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected function getFullCustomerObject($customer)
     {
@@ -1595,6 +1606,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @return EmailNotificationInterface
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     private function getEmailNotification()
     {

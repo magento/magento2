@@ -7,9 +7,9 @@
     "require": {
         "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
-        "magento/framework-message-queue": "*",
         "magento/module-webapi": "*",
-        "magento/module-asynchronous-operations": "*"
+        "magento/module-asynchronous-operations": "*",
+        "magento/module-store": "*"
     },
     "suggest": {
         "magento/module-user": "*",
