@@ -95,6 +95,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * URL Model instance
      *
      * @var \Magento\Framework\UrlInterface
+     * @deprecated Not used anymore after the category URL generation fix.
+     * @see \Magento\Framework\UrlInterface
      */
     protected $_url;
 
@@ -340,6 +342,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve URL instance
      *
      * @return \Magento\Framework\UrlInterface
+     * @deprecated because \Magento\Framework\UrlInterface should be used directly when needed.
+     * @see \Magento\Framework\UrlInterface
      */
     public function getUrlInstance()
     {
@@ -601,33 +605,40 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getUrl()
     {
-        $url = $this->_getData('url');
-        if ($url === null) {
+        if (!$this->hasData('url')) {
             Profiler::start('REWRITE: ' . __METHOD__, ['group' => 'REWRITE', 'method' => __METHOD__]);
-            if ($this->hasData('request_path') && $this->getRequestPath() != '') {
-                $this->setData('url', $this->getUrlInstance()->getDirectUrl($this->getRequestPath()));
-                Profiler::stop('REWRITE: ' . __METHOD__);
-                return $this->getData('url');
-            }
-
-            $rewrite = $this->urlFinder->findOneByData(
-                [
-                    UrlRewrite::ENTITY_ID => $this->getId(),
-                    UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
-                    UrlRewrite::STORE_ID => $this->getStoreId(),
-                ]
-            );
-            if ($rewrite) {
-                $this->setData('url', $this->getUrlInstance()->getDirectUrl($rewrite->getRequestPath()));
-                Profiler::stop('REWRITE: ' . __METHOD__);
-                return $this->getData('url');
-            }
-
-            $this->setData('url', $this->getCategoryIdUrl());
+            $this->setData('url', $this->resolveCategoryUrl());
             Profiler::stop('REWRITE: ' . __METHOD__);
-            return $this->getData('url');
         }
-        return $url;
+
+        return $this->_getData('url');
+    }
+
+    private function resolveCategoryUrl(): string
+    {
+        $requestPath = $this->getRequestPath() ?: $this->resolveRewriteRequestPath();
+        if ($requestPath) {
+            try {
+                return $this->getStore()->getUrl('', ['_direct' => $requestPath]);
+            } catch (NoSuchEntityException $e) {
+                $this->_logger->error($e->getMessage(), $e->getTrace());
+            }
+        }
+
+        return $this->getCategoryIdUrl();
+    }
+
+    private function resolveRewriteRequestPath(): ?string
+    {
+        $rewrite = $this->urlFinder->findOneByData(
+            [
+                UrlRewrite::ENTITY_ID => $this->getId(),
+                UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
+                UrlRewrite::STORE_ID => $this->getStoreId(),
+            ]
+        );
+
+        return $rewrite ? $rewrite->getRequestPath() : null;
     }
 
     /**
@@ -638,9 +649,15 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function getCategoryIdUrl()
     {
         Profiler::start('REGULAR: ' . __METHOD__, ['group' => 'REGULAR', 'method' => __METHOD__]);
-        $urlKey = $this->getUrlKey() ? $this->getUrlKey() : $this->formatUrlKey($this->getName());
-        $url = $this->getUrlInstance()->getUrl('catalog/category/view', ['s' => $urlKey, 'id' => $this->getId()]);
+        $urlKey = $this->getUrlKey() ?: $this->formatUrlKey($this->getName());
+        $url = $urlKey;
+        try {
+            $url = $this->getStore()->getUrl('catalog/category/view', ['s' => $urlKey, 'id' => $this->getId()]);
+        } catch (NoSuchEntityException $e) {
+            $this->_logger->error($e->getMessage(), $e->getTrace());
+        }
         Profiler::stop('REGULAR: ' . __METHOD__);
+
         return $url;
     }
 
