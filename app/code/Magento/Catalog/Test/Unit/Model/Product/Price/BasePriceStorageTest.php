@@ -202,6 +202,9 @@ class BasePriceStorageTest extends TestCase
     /**
      * Test update method.
      *
+     * @param bool $isScopeWebsite
+     * @param bool $isScopeGlobal
+     * @param array $formattedPrices
      * @return void
      * @dataProvider updateProvider
      */
