@@ -33,6 +33,6 @@
         <data key="path">payment/free/payment_action</data>
         <data key="scope">default</data>
         <data key="scope_id">1</data>
-        <data key="value">null</data>
+        <data key="value">0</data>
     </entity>
 </entities>
