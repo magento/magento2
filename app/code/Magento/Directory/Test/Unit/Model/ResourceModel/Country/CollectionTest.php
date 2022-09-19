@@ -45,6 +45,9 @@ class CollectionTest extends TestCase
      */
     protected $storeManagerMock;
 
+    /**
+     * Setup the test
+     */
     protected function setUp(): void
     {
         $connection = $this->createMock(Mysql::class);
@@ -117,6 +120,39 @@ class CollectionTest extends TestCase
         $this->_model->setForegroundCountries($foregroundCountries);
         $result = $this->_model->toOptionArray($emptyLabel);
         $this->assertCount(count($optionsArray) + (int)(!empty($emptyLabel)), $result);
+        foreach ($expectedResults as $index => $expectedResult) {
+            $this->assertEquals($expectedResult, $result[$index]['label']);
+        }
+    }
+
+    /**
+     * Test for toOptionArray with no argument
+     */
+    public function testToOptionArrayNoArgument()
+    {
+        $optionsArray = [
+            ['iso2_code' => 'AD', 'country_id' => 'AD', 'name' => ''],
+            ['iso2_code' => 'US', 'country_id' => 'US', 'name' => ''],
+            ['iso2_code' => 'ES', 'country_id' => 'ES', 'name' => ''],
+            ['iso2_code' => 'BZ', 'country_id' => 'BZ', 'name' => ''],
+        ];
+        $foregroundCountries = [];
+        $expectedResults = ['', 'AD', 'US', 'ES', 'BZ'];
+        $website1 = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $website1->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn(1);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getWebsites')
+            ->willReturn([$website1]);
+
+        foreach ($optionsArray as $itemData) {
+            $this->_model->addItem(new DataObject($itemData));
+        }
+
+        $this->_model->setForegroundCountries($foregroundCountries);
+        $result = $this->_model->toOptionArray();
+        $this->assertCount(count($optionsArray) + 1, $result);
         foreach ($expectedResults as $index => $expectedResult) {
             $this->assertEquals($expectedResult, $result[$index]['label']);
         }

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Directory\Model\ResourceModel\Country;
 
@@ -88,6 +89,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
+     * @param AllowedCountries|null $allowedCountriesReader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -104,7 +106,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         array $countriesWithNotRequiredStates = [],
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null,
+        AllowedCountries $allowedCountriesReader = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_scopeConfig = $scopeConfig;
@@ -117,10 +120,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(
             \Magento\Store\Model\StoreManagerInterface::class
         );
+        $this->allowedCountriesReader = $allowedCountriesReader ?: ObjectManager::getInstance()->get(
+            AllowedCountries::class
+        );
     }
 
     /**
-     * Foreground countries
+     * Foreground countries array
      *
      * @var array
      */
@@ -137,21 +143,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Return Allowed Countries reader
-     *
-     * @deprecated 100.1.2
-     * @return \Magento\Directory\Model\AllowedCountries
-     */
-    private function getAllowedCountriesReader()
-    {
-        if (!$this->allowedCountriesReader) {
-            $this->allowedCountriesReader = ObjectManager::getInstance()->get(AllowedCountries::class);
-        }
-
-        return $this->allowedCountriesReader;
-    }
-
-    /**
      * Load allowed countries for current store
      *
      * @param null|int|string|\Magento\Store\Model\Store $store
@@ -159,7 +150,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function loadByStore($store = null)
     {
-        $allowedCountries = $this->getAllowedCountriesReader()
+        $allowedCountries = $this->allowedCountriesReader
             ->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store);
 
         if (!empty($allowedCountries)) {
@@ -203,7 +194,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 if (is_array($iso)) {
                     $whereOr = [];
                     foreach ($iso as $iso_curr) {
-                        $whereOr[] .= $this->_getConditionSql("{$iso_curr}_code", ['in' => $countryCode]);
+                        $whereOr[] = $this->_getConditionSql("{$iso_curr}_code", ['in' => $countryCode]);
                     }
                     $this->_select->where('(' . implode(') OR (', $whereOr) . ')');
                 } else {
@@ -213,7 +204,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 if (is_array($iso)) {
                     $whereOr = [];
                     foreach ($iso as $iso_curr) {
-                        $whereOr[] .= $this->_getConditionSql("{$iso_curr}_code", $countryCode);
+                        $whereOr[] = $this->_getConditionSql("{$iso_curr}_code", $countryCode);
                     }
                     $this->_select->where('(' . implode(') OR (', $whereOr) . ')');
                 } else {
@@ -248,7 +239,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string|boolean $emptyLabel
      * @return array
      */
-    public function toOptionArray($emptyLabel = ' ')
+    public function toOptionArray($emptyLabel = '')
     {
         $options = $this->_toOptionArray('country_id', 'name', ['title' => 'iso2_code']);
         $sort = $this->getSort($options);
