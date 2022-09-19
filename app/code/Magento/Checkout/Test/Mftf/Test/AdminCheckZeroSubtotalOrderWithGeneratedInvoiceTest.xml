@@ -89,11 +89,5 @@
         <waitForPageLoad stepKey="waitForInvoiceDetailsPageToLoad"/>
         <grabFromCurrentUrl regex="~/invoice_id/(\d+)/~" stepKey="grabInvoiceId"/>
 
-        <!-- Assert no invoice button -->
-        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder2">
-            <argument name="entityId" value="{$orderId}"/>
-        </actionGroup>
-        <dontSeeElement selector="{{AdminOrderDetailsMainActionsSection.invoiceBtn}}" stepKey="dontSeeInvoiceBtn"/>
-
     </test>
 </tests>

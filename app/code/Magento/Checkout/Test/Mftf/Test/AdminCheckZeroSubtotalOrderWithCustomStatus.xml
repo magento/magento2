@@ -114,10 +114,12 @@
             <argument name="status" value="{{EnableFreeOrderStatusCustom.label}}"/>
         </actionGroup>
 
-        <!-- Assert invoice button -->
-        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder2">
-            <argument name="entityId" value="{$orderId}"/>
+        <!-- Open create order -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
+
+        <!-- Assert invoice button -->
         <seeElement selector="{{AdminOrderDetailsMainActionsSection.invoiceBtn}}" stepKey="seeInvoiceBtn"/>
 
     </test>
