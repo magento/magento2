@@ -1843,15 +1843,16 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getItemByProduct($product)
     {
-        /** @var \Magento\Quote\Model\Quote\Item $item */
-        $item = $this->getItemsCollection()->getItemByColumnValue('product_id', $product->getId()) ?? null;
-        if ($item
-            && !$item->isDeleted()
-            && $item->getProduct()
-            && $product->getStatus() !== ProductStatus::STATUS_DISABLED
-            && $item->representProduct($product)
-        ) {
-            return $item;
+        /** @var \Magento\Quote\Model\Quote\Item[] $items */
+        $items = $this->getItemsCollection()->getItemsByColumnValue('product_id', $product->getId()) ?? null;
+        foreach ($items as $item) {
+            if (!$item->isDeleted()
+                && $item->getProduct()
+                && $item->getProduct()->getStatus() !== ProductStatus::STATUS_DISABLED
+                && $item->representProduct($product)
+            ) {
+                return $item;
+            }
         }
         return false;
     }
