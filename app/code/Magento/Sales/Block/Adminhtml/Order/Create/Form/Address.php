@@ -326,6 +326,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * Retrieve Directory Countries collection
      *
      * @deprecated 100.1.3
+     * @see MAGETWO-711174: Introduce deprecated and since doc blocks.
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     private function getCountriesCollection()
@@ -342,6 +343,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * Retrieve Backend Quote Session
      *
      * @deprecated 100.1.3
+     * @see MAGETWO-711174: Introduce deprecated and since doc blocks.
      * @return Quote
      */
     private function getBackendQuoteSession()
