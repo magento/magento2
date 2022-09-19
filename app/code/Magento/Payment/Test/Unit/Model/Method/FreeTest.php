@@ -79,11 +79,12 @@ class FreeTest extends TestCase
     /**
      * @param string $orderStatus
      * @param string $paymentAction
+     * @param mixed $result
      *
      * @return void
      * @dataProvider getConfigPaymentActionProvider
      */
-    public function testGetConfigPaymentAction($orderStatus, $paymentAction): void
+    public function testGetConfigPaymentAction($orderStatus, $paymentAction, $result): void
     {
 
         if ($orderStatus != 'pending') {
@@ -91,7 +92,7 @@ class FreeTest extends TestCase
                 ->method('getValue')
                 ->willReturnOnConsecutiveCalls($orderStatus, $paymentAction);
         }
-        $this->assertEquals($paymentAction, $this->methodFree->getConfigPaymentAction());
+        $this->assertEquals($result, $this->methodFree->getConfigPaymentAction());
     }
 
     /**
@@ -149,10 +150,8 @@ class FreeTest extends TestCase
     public function getConfigPaymentActionProvider(): array
     {
         return [
-            ['pending', null],
-            ['new', null],
-            ['processing', null],
-            ['processing', 'payment_action']
+            ['pending', 'action', null],
+            ['processing', 'payment_action', 'payment_action']
         ];
     }
 }

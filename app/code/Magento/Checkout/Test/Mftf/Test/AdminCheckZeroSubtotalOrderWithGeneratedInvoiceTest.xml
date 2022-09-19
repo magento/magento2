@@ -83,7 +83,7 @@
 
         <!-- Assert invoice in invoices grid -->
         <actionGroup ref="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" stepKey="filterInvoiceGridByOrderId">
-            <argument name="orderId" value="$orderNumber"/>
+            <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
         <click selector="{{AdminInvoicesGridSection.firstRow}}" stepKey="opeCreatedInvoice"/>
         <waitForPageLoad stepKey="waitForInvoiceDetailsPageToLoad"/>
