@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
-    <topic name="import_export.export" request="Magento\ImportExport\Api\Data\ExtendedExportInfoInterface">
+    <topic name="import_export.export" request="Magento\ImportExport\Api\Data\LocalizedExportInfoInterface">
         <handler name="exportProcessor" type="Magento\ImportExport\Model\Export\Consumer" method="process" />
     </topic>
 </config>
