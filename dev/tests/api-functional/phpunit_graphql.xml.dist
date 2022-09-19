@@ -62,12 +62,16 @@
         <listener class="Magento\TestFramework\Event\PhpUnit"/>
     </listeners>
     <extensions>
-            <extension class="Qameta\Allure\PHPUnit\AllureExtension">
-                <!-- Optional arguments block; omit it if you want to use default values -->
-                <arguments>
-                    <!-- Path to config file (default is config/allure.config.php) -->
-                    <string>../config/config.php</string>
-                </arguments>
-            </extension>
-        </extensions>
+        <extension class="Qameta\Allure\PHPUnit\AllureExtension">
+            <!-- Optional arguments block; omit it if you want to use default values -->
+            <arguments>
+                <!-- Path to config file (default is config/allure.config.php) -->
+                <array>
+                    <element key="outputDirectory">
+                        <string>var/allure-results</string>
+                    </element>
+                </array>
+            </arguments>
+        </extension>
+    </extensions>
 </phpunit>
