@@ -522,14 +522,6 @@ class Import extends AbstractModel
         } else {
             $this->importHistoryModel->invalidateReport($this);
         }
-        try {
-            if ($this->_getEntityAdapter()->getSource() instanceof Base64EncodedCsvData) {
-                $this->getDataSourceModel()->cleanBunchesWithId($ids);
-            }
-            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-        } catch (LocalizedException $e) {
-            //Do nothing if Source is not set
-        }
         return $result;
     }
 

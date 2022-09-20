@@ -117,18 +117,33 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     }
 
     /**
-     * Clean bunches with specific Ids
+     * Clean all bunches from table.
      *
-     * @param array $ids
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @return void
      */
-    public function cleanBunchesWithId($ids)
+    public function cleanProcessedBunches()
     {
-        return $this->getConnection()->delete(
+        $this->getConnection()->delete(
             $this->getMainTable(),
             [
-                'id IN (?)' => $ids,
+                'is_processed' => true
             ]
+        );
+    }
+
+    /**
+     * Set Flag for Imported Rows
+     *
+     * @param array $ids
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function markProcessedBunches(array $ids): void
+    {
+        $this->getConnection()->update(
+            $this->getMainTable(),
+            ['is_processed' => true],
+            ['id IN (?)' => $ids]
         );
     }
 

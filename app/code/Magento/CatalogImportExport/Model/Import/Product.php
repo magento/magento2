@@ -1111,6 +1111,7 @@ class Product extends AbstractEntity
         } else {
             $this->_saveProductsData();
         }
+        $this->_dataSourceModel->markProcessedBunches($this->getIds());
         $this->_eventManager->dispatch('catalog_product_import_finish_before', ['adapter' => $this]);
         return true;
     }
@@ -1159,7 +1160,6 @@ class Product extends AbstractEntity
             $this->getOptionEntity()->clearProductsSkuToId();
         }
         $this->getOptionEntity()->importData();
-
         return $this;
     }
 

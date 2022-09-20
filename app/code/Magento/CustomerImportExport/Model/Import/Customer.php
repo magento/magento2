@@ -502,6 +502,7 @@ class Customer extends AbstractCustomer
      * Import data rows
      *
      * @return bool
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -561,6 +562,7 @@ class Customer extends AbstractCustomer
                 $this->_deleteCustomerEntities($entitiesToDelete);
             }
         }
+        $this->_dataSourceModel->markProcessedBunches($this->getIds());
         $this->indexerProcessor->markIndexerAsInvalid();
         return true;
     }
