@@ -161,7 +161,7 @@ class ShippingAddressAssignmentTest extends TestCase
     {
         $mockBuilder = $this->getMockBuilder(CartExtension::class);
         try {
-            $mockBuilder->onlyMethods(['setShippingAssignments']);
+            $mockBuilder->addMethods(['setShippingAssignments']);
         } catch (RuntimeException $e) {
             // CartExtension already generated.
         }

@@ -20,6 +20,7 @@ define([
         ) {
             address = $.extend(true, {}, billingAddress);
             address.saveInAddressBook = null;
+            quote.shippingAddress().same_as_billing = 1;
         } else {
             address = billingAddress;
         }
