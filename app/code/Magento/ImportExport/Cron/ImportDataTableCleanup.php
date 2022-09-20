@@ -13,7 +13,7 @@ class ImportDataTableCleanup
      *
      * @var \Magento\ImportExport\Model\ResourceModel\Import\Data
      */
-    protected $_dataSourceModel;
+    private $dataSourceModel;
 
     /**
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -21,7 +21,7 @@ class ImportDataTableCleanup
     public function __construct(
         \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
     ) {
-        $this->_dataSourceModel = $importData;
+        $this->dataSourceModel = $importData;
     }
 
     /**
@@ -31,6 +31,6 @@ class ImportDataTableCleanup
      */
     public function execute()
     {
-        $this->_dataSourceModel->cleanProcessedBunches();
+        $this->dataSourceModel->cleanProcessedBunches();
     }
 }
