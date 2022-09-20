@@ -11,10 +11,11 @@
     <test name="AdminCheckZeroSubtotalOrderWithCustomStatus">
         <annotations>
             <features value="Checkout"/>
-            <stories value="ACP2E-1120: Zero Subtotal Orders should have invoice generated."/>
-            <title value="Zero Subtotal Orders should have invoice generated when setting 'Automatically Invoice All Items' to Yes." />
-            <description value="Created order should have invoice generated."/>
-            <testCaseId value="ACP2E-1120"/>
+            <stories value="Zero Subtotal Checkout Order"/>
+            <title value="Zero Subtotal Checkout Order must have the new order status set in configuration." />
+            <description value="Order placed with Zero Subtotal Checkout payment must have the new order status set in configuration."/>
+            <testCaseId value="AC-6723"/>
+            <useCaseId value="ACP2E-1120"/>
             <severity value="AVERAGE"/>
             <group value="checkout"/>
         </annotations>
