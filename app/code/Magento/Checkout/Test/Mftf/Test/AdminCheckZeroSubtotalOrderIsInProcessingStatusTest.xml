@@ -11,11 +11,12 @@
     <test name="AdminCheckZeroSubtotalOrderIsInProcessingStatusTest">
         <annotations>
             <features value="Checkout"/>
-            <stories value="MAGETWO-71375: Zero Subtotal Orders have incorrect status"/>
+            <stories value="Zero Subtotal Orders have incorrect status"/>
             <title value="Zero Subtotal Orders should have the 'Processing' status on creating"/>
             <description value="Created order should be in Processing status"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94178"/>
+            <useCaseId value="MAGETWO-71375" />
             <group value="checkout"/>
         </annotations>
         <before>
