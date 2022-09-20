@@ -39,8 +39,6 @@ class RedisRequestLogger implements RequestLoggerInterface
     public const CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_DB = 'backpressure/logger/options/db';
     public const CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_PASSWORD = 'backpressure/logger/options/password';
     public const CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_USER = 'backpressure/logger/options/user';
-    public const CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_COMPRESS_DATA = 'backpressure/logger/options/compress-data';
-    public const CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_COMPRESSION_LIB = 'backpressure/logger/options/compression-lib';
     public const CONFIG_PATH_BACKPRESSURE_LOGGER_ID_PREFIX = 'backpressure/logger/id-prefix';
 
     /**
@@ -59,8 +57,6 @@ class RedisRequestLogger implements RequestLoggerInterface
         self::CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_DB => 3,
         self::CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_PASSWORD => null,
         self::CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_USER => null,
-        self::CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_COMPRESS_DATA => 0,
-        self::CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_COMPRESSION_LIB => null,
     ];
 
     /**
@@ -75,11 +71,6 @@ class RedisRequestLogger implements RequestLoggerInterface
         self::KEY_PASSWORD => self::CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_PASSWORD,
         self::KEY_USER => self::CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_USER,
     ];
-
-    /**
-     * Valid compression libs
-     */
-    public const VALID_COMPRESSION_LIBS = ['gzip', 'lzf', 'lz4', 'snappy'];
 
     /**
      * @var Credis_Client

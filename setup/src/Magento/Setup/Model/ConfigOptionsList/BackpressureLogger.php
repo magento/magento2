@@ -18,6 +18,7 @@ use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Validator\RedisConnectionValidator;
+use phpDocumentor\Reflection\Utils;
 
 /**
  * Deployment configuration options needed to configure backpressure logger
@@ -35,8 +36,6 @@ class BackpressureLogger implements ConfigOptionsListInterface
     private const INPUT_KEY_BACKPRESSURE_LOGGER_REDIS_DB = 'backpressure-logger-redis-db';
     private const INPUT_KEY_BACKPRESSURE_LOGGER_REDIS_PASSWORD = 'backpressure-logger-redis-password';
     private const INPUT_KEY_BACKPRESSURE_LOGGER_REDIS_USER = 'backpressure-logger-redis-user';
-    private const INPUT_KEY_BACKPRESSURE_LOGGER_REDIS_COMPRESS_DATA = 'backpressure-logger-redis-compress-data';
-    private const INPUT_KEY_BACKPRESSURE_LOGGER_REDIS_COMPRESSION_LIB = 'backpressure-logger-redis-compression-lib';
     private const INPUT_KEY_BACKPRESSURE_LOGGER_ID_PREFIX = 'backpressure-logger-id-prefix';
 
     /**
@@ -66,10 +65,6 @@ class BackpressureLogger implements ConfigOptionsListInterface
             self::INPUT_KEY_BACKPRESSURE_LOGGER_REDIS_PASSWORD,
         RedisRequestLogger::CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_USER =>
             self::INPUT_KEY_BACKPRESSURE_LOGGER_REDIS_USER,
-        RedisRequestLogger::CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_COMPRESS_DATA =>
-            self::INPUT_KEY_BACKPRESSURE_LOGGER_REDIS_COMPRESS_DATA,
-        RedisRequestLogger::CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_COMPRESSION_LIB =>
-            self::INPUT_KEY_BACKPRESSURE_LOGGER_REDIS_COMPRESSION_LIB,
         RedisRequestLogger::CONFIG_PATH_BACKPRESSURE_LOGGER_ID_PREFIX =>
             self::INPUT_KEY_BACKPRESSURE_LOGGER_ID_PREFIX,
     ];
@@ -143,22 +138,6 @@ class BackpressureLogger implements ConfigOptionsListInterface
                 'Redis server user'
             ),
             new TextConfigOption(
-                self::INPUT_KEY_BACKPRESSURE_LOGGER_REDIS_COMPRESS_DATA,
-                TextConfigOption::FRONTEND_WIZARD_TEXT,
-                RedisRequestLogger::CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_COMPRESS_DATA,
-                'Redis compress dara level'
-            ),
-            new SelectConfigOption(
-                self::INPUT_KEY_BACKPRESSURE_LOGGER_REDIS_COMPRESSION_LIB,
-                SelectConfigOption::FRONTEND_WIZARD_SELECT,
-                RedisRequestLogger::VALID_COMPRESSION_LIBS,
-                RedisRequestLogger::CONFIG_PATH_BACKPRESSURE_LOGGER_REDIS_COMPRESSION_LIB,
-                sprintf(
-                    'Redis compression library to use [%s] (leave blank to determine automatically)',
-                    implode(', ', RedisRequestLogger::VALID_COMPRESSION_LIBS)
-                ),
-            ),
-            new TextConfigOption(
                 self::INPUT_KEY_BACKPRESSURE_LOGGER_ID_PREFIX,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 RedisRequestLogger::CONFIG_PATH_BACKPRESSURE_LOGGER_ID_PREFIX,
@@ -179,10 +158,10 @@ class BackpressureLogger implements ConfigOptionsListInterface
         foreach (self::CONFIG_PATH_TO_INPUT_KEY_MAP as $configPath => $inputKey) {
             switch ($inputKey) {
                 case self::INPUT_KEY_BACKPRESSURE_LOGGER:
-                    $this->createConfigLogger($options, $configData, $deploymentConfig);
+                    $this->configureRequestLogger($options, $configData, $deploymentConfig);
                     break;
                 case self::INPUT_KEY_BACKPRESSURE_LOGGER_ID_PREFIX:
-                    $this->createConfigIdPrefix($options, $configData, $deploymentConfig);
+                    $this->configureIdPrefix($options, $configData, $deploymentConfig);
                     break;
                 default:
                     if (isset($options[$inputKey])) {
@@ -195,16 +174,18 @@ class BackpressureLogger implements ConfigOptionsListInterface
     }
 
     /**
+     * Configures the request logger
+     *
      * @param array $options
      * @param ConfigData $configData
      * @param DeploymentConfig $deploymentConfig
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    private function createConfigLogger(array $options, ConfigData $configData, DeploymentConfig $deploymentConfig)
+    private function configureRequestLogger(array $options, ConfigData $configData, DeploymentConfig $deploymentConfig)
     {
         if (!isset($options[self::INPUT_KEY_BACKPRESSURE_LOGGER])
-            or RedisRequestLogger::VALUE_BACKPRESSURE_LOGGER_REDIS !== $options[self::INPUT_KEY_BACKPRESSURE_LOGGER]) {
+            || RedisRequestLogger::VALUE_BACKPRESSURE_LOGGER_REDIS !== $options[self::INPUT_KEY_BACKPRESSURE_LOGGER]) {
             return;
         }
 
@@ -221,13 +202,15 @@ class BackpressureLogger implements ConfigOptionsListInterface
     }
 
     /**
+     * Configures the id prefix
+     *
      * @param array $options
      * @param ConfigData $configData
      * @param DeploymentConfig $deploymentConfig
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    private function createConfigIdPrefix(array $options, ConfigData $configData, DeploymentConfig $deploymentConfig)
+    private function configureIdPrefix(array $options, ConfigData $configData, DeploymentConfig $deploymentConfig)
     {
         if (isset($options[self::INPUT_KEY_BACKPRESSURE_LOGGER_ID_PREFIX])) {
             $configData->set(
@@ -247,28 +230,17 @@ class BackpressureLogger implements ConfigOptionsListInterface
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
-        $backpressureLogger = $deploymentConfig->get(
-            RequestLoggerInterface::CONFIG_PATH_BACKPRESSURE_LOGGER,
-            $options[self::INPUT_KEY_BACKPRESSURE_LOGGER] ?? null
-        );
+        $loggerType = $options[self::INPUT_KEY_BACKPRESSURE_LOGGER]
+            ?? $deploymentConfig->get(RequestLoggerInterface::CONFIG_PATH_BACKPRESSURE_LOGGER);
 
-        if (!in_array($backpressureLogger, self::VALID_BACKPRESSURE_LOGGER_OPTIONS)) {
-            return ["Invalid cache handler: '{$backpressureLogger}'"];
-        }
+        if ($loggerType) {
+            if (RedisRequestLogger::VALUE_BACKPRESSURE_LOGGER_REDIS === $loggerType) {
+                return !$this->validateRedisConfig($options, $deploymentConfig)
+                    ? ['Invalid Redis configuration. Could not connect to Redis server.']
+                    : [];
+            }
 
-        if (RedisRequestLogger::VALUE_BACKPRESSURE_LOGGER_REDIS === $backpressureLogger
-            && !$this->validateRedisConfig($options, $deploymentConfig)) {
-            return ['Invalid Redis configuration. Could not connect to Redis server.'];
-        }
-
-        if (isset($options[self::INPUT_KEY_BACKPRESSURE_LOGGER_REDIS_COMPRESSION_LIB])
-            && !in_array(
-                $options[self::INPUT_KEY_BACKPRESSURE_LOGGER_REDIS_COMPRESSION_LIB],
-                RedisRequestLogger::VALID_COMPRESSION_LIBS
-            )
-        ) {
-            return ["Invalid Redis compression library: "
-                . "{$options[self::INPUT_KEY_BACKPRESSURE_LOGGER_REDIS_COMPRESSION_LIB]}"];
+            return ["Invalid backpressure request logger type: '{$loggerType}'"];
         }
 
         return [];

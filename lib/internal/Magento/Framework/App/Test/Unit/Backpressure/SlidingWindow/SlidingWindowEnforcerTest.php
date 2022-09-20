@@ -12,34 +12,49 @@ use Magento\Framework\App\Backpressure\BackpressureExceededException;
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\Backpressure\SlidingWindow\LimitConfig;
 use Magento\Framework\App\Backpressure\SlidingWindow\LimitConfigManagerInterface;
+use Magento\Framework\App\Backpressure\SlidingWindow\RequestLoggerFactoryInterface;
 use Magento\Framework\App\Backpressure\SlidingWindow\RequestLoggerInterface;
 use Magento\Framework\App\Backpressure\SlidingWindow\SlidingWindowEnforcer;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class SlidingWindowEnforcerTest extends TestCase
 {
     /**
+     * @var RequestLoggerFactoryInterface|MockObject
+     */
+    private RequestLoggerFactoryInterface $requestLoggerFactoryMock;
+
+    /**
      * @var RequestLoggerInterface|MockObject
      */
-    private $logger;
+    private $requestLoggerMock;
 
     /**
      * @var LimitConfigManagerInterface|MockObject
      */
-    private $config;
+    private $limitConfigManagerMock;
 
     /**
      * @var DateTime|MockObject
      */
-    private $dateTime;
+    private $dateTimeMock;
+
+    /**
+     * @var LoggerInterface|MockObject
+     */
+    private LoggerInterface $loggerMock;
 
     /**
      * @var SlidingWindowEnforcer
      */
-    private $model;
+    private SlidingWindowEnforcer $model;
 
     /**
      * @inheritDoc
@@ -48,11 +63,27 @@ class SlidingWindowEnforcerTest extends TestCase
     {
         parent::setUp();
 
-        $this->logger = $this->createMock(RequestLoggerInterface::class);
-        $this->config = $this->createMock(LimitConfigManagerInterface::class);
-        $this->dateTime = $this->createMock(DateTime::class);
+        $this->requestLoggerMock = $this->createMock(RequestLoggerInterface::class);
+        $this->requestLoggerFactoryMock = $this->createMock(RequestLoggerFactoryInterface::class);
+        $this->limitConfigManagerMock = $this->createMock(LimitConfigManagerInterface::class);
+        $this->dateTimeMock = $this->createMock(DateTime::class);
+        $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->model = new SlidingWindowEnforcer($this->logger, $this->config, $this->dateTime);
+        $deploymentConfigMock->method('get')
+            ->with('backpressure/logger/type')
+            ->willReturn('someRequestType');
+        $this->requestLoggerFactoryMock->method('create')
+            ->with('someRequestType')
+            ->willReturn($this->requestLoggerMock);
+
+        $this->model = new SlidingWindowEnforcer(
+            $this->requestLoggerFactoryMock,
+            $this->limitConfigManagerMock,
+            $this->dateTimeMock,
+            $deploymentConfigMock,
+            $this->loggerMock
+        );
     }
 
     /**
@@ -68,20 +99,20 @@ class SlidingWindowEnforcerTest extends TestCase
         $curSlot = $time - ($time % $limitPeriod);
         $prevSlot = $curSlot - $limitPeriod;
 
-        $this->dateTime->method('gmtTimestamp')->willReturn($time);
+        $this->dateTimeMock->method('gmtTimestamp')->willReturn($time);
 
         $this->initConfigMock($limit, $limitPeriod);
 
-        $this->logger->method('incrAndGetFor')
+        $this->requestLoggerMock->method('incrAndGetFor')
             ->willReturnCallback(
                 function (...$args) use ($curSlot, $limitPeriod, $limit) {
                     $this->assertEquals($curSlot, $args[1]);
                     $this->assertGreaterThan($limitPeriod, $args[2]);
 
-                    return ((int) $limit / 2);
+                    return ((int)$limit / 2);
                 }
             );
-        $this->logger->method('getFor')
+        $this->requestLoggerMock->method('getFor')
             ->willReturnCallback(
                 function (...$args) use ($prevSlot) {
                     $this->assertEquals($prevSlot, $args[1]);
@@ -113,6 +144,8 @@ class SlidingWindowEnforcerTest extends TestCase
      * @param int $prevCounter
      * @param bool $expectException
      * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
      * @dataProvider getSlidingCases
      */
     public function testEnforcingSlided(int $prevCounter, bool $expectException): void
@@ -123,18 +156,18 @@ class SlidingWindowEnforcerTest extends TestCase
         $curSlot = $time - ($time % $limitPeriod);
         $prevSlot = $curSlot - $limitPeriod;
         //50% of the period passed
-        $time = $curSlot + ((int) ($limitPeriod / 2));
-        $this->dateTime->method('gmtTimestamp')->willReturn($time);
+        $time = $curSlot + ((int)($limitPeriod / 2));
+        $this->dateTimeMock->method('gmtTimestamp')->willReturn($time);
 
         $this->initConfigMock($limit, $limitPeriod);
 
-        $this->logger->method('incrAndGetFor')
+        $this->requestLoggerMock->method('incrAndGetFor')
             ->willReturnCallback(
                 function () use ($limit) {
-                    return ((int) $limit / 2);
+                    return ((int)$limit / 2);
                 }
             );
-        $this->logger->method('getFor')
+        $this->requestLoggerMock->method('getFor')
             ->willReturnCallback(
                 function (...$args) use ($prevCounter, $prevSlot) {
                     $this->assertEquals($prevSlot, $args[1]);
@@ -178,6 +211,18 @@ class SlidingWindowEnforcerTest extends TestCase
         $configMock = $this->createMock(LimitConfig::class);
         $configMock->method('getPeriod')->willReturn($limitPeriod);
         $configMock->method('getLimit')->willReturn($limit);
-        $this->config->method('readLimit')->willReturn($configMock);
+        $this->limitConfigManagerMock->method('readLimit')->willReturn($configMock);
+    }
+
+    /**
+     * Invalid type of request logger
+     */
+    public function testRequestLoggerTypeIsInvalid()
+    {
+        $this->requestLoggerFactoryMock->method('create')
+            ->with('wrong-type')
+            ->willThrowException(new RuntimeException(__('Invalid request logger type: %1', 'wrong-type')));
+        $this->loggerMock->method('error')
+            ->with('Invalid request logger type: %1', 'wrong-type');
     }
 }

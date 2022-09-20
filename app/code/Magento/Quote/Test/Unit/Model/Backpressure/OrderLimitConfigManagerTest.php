@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Backpressure;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Quote\Model\Backpressure\OrderLimitConfigManager;
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -19,12 +22,17 @@ class OrderLimitConfigManagerTest extends TestCase
     /**
      * @var ScopeConfigInterface|MockObject
      */
-    private $config;
+    private $scopeConfigMock;
+
+    /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfigMock;
 
     /**
      * @var OrderLimitConfigManager
      */
-    private $model;
+    private OrderLimitConfigManager $model;
 
     /**
      * @inheritDoc
@@ -33,9 +41,13 @@ class OrderLimitConfigManagerTest extends TestCase
     {
         parent::setUp();
 
-        $this->config = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
-        $this->model = new OrderLimitConfigManager($this->config);
+        $this->model = new OrderLimitConfigManager(
+            $this->scopeConfigMock,
+            $this->deploymentConfigMock
+        );
     }
 
     /**
@@ -62,6 +74,7 @@ class OrderLimitConfigManagerTest extends TestCase
      * @param int $expectedPeriod
      * @return void
      * @dataProvider getConfigCases
+     * @throws RuntimeException
      */
     public function testReadLimit(
         int $identityType,
@@ -71,12 +84,47 @@ class OrderLimitConfigManagerTest extends TestCase
         int $expectedLimit,
         int $expectedPeriod
     ): void {
-        $this->initConfig($guestLimit, $authLimit, $period, true);
-        $context = $this->createContext($identityType);
+        $context = $this->createMock(ContextInterface::class);
+        $context->method('getIdentityType')->willReturn($identityType);
+
+        $this->scopeConfigMock->method('getValue')
+            ->willReturnMap(
+                [
+                    ['sales/backpressure/limit', 'store', null, $authLimit],
+                    ['sales/backpressure/guest_limit', 'store', null, $guestLimit],
+                    ['sales/backpressure/period', 'store', null, $period],
+                ]
+            );
 
         $limit = $this->model->readLimit($context);
         $this->assertEquals($expectedLimit, $limit->getLimit());
         $this->assertEquals($expectedPeriod, $limit->getPeriod());
+    }
+
+    /**
+     * Verify logic behind enabled check
+     *
+     * @param bool $enabled
+     * @param bool $expected
+     * @param string|null $requestLoggerType
+     * @return void
+     * @throws RuntimeException
+     * @throws FileSystemException
+     * @dataProvider getEnabledCases
+     */
+    public function testIsEnforcementEnabled(
+        bool    $enabled,
+        bool    $expected,
+        ?string $requestLoggerType
+    ): void {
+        $this->deploymentConfigMock->method('get')
+            ->with('backpressure/logger/type')
+            ->willReturn($requestLoggerType);
+        $this->scopeConfigMock->method('isSetFlag')
+            ->with('sales/backpressure/enabled')
+            ->willReturn($enabled);
+
+        $this->assertEquals($expected, $this->model->isEnforcementEnabled());
     }
 
     /**
@@ -87,86 +135,10 @@ class OrderLimitConfigManagerTest extends TestCase
     public function getEnabledCases(): array
     {
         return [
-            'disabled' => [100, 100, 60, false, false],
-            'guest-misconfigured-1' => [0, 100, 60, true, false],
-            'auth-misconfigured-1' => [10, -1, 60, true, false],
-            'period-misconfigured-1' => [10, 111, 0, true, false],
-            'enabled' => [10, 111, 60, true, true]
+            'disabled' => [false, false, null],
+            'disabled-request-logger-type-exists' => [false, false, 'requestLoggerType'],
+            'enabled-request-logger-type-not-exist' => [true, false, null],
+            'enabled' => [true, true, 'requestLoggerType'],
         ];
-    }
-
-    /**
-     * Verify logic behind enabled check.
-     *
-     * @param int $guestLimit
-     * @param int $authLimit
-     * @param int $period
-     * @param bool $enabled
-     * @param bool $expected
-     * @return void
-     * @dataProvider getEnabledCases
-     */
-    public function testIsEnforcementEnabled(
-        int $guestLimit,
-        int $authLimit,
-        int $period,
-        bool $enabled,
-        bool $expected
-    ): void {
-        $this->initConfig($guestLimit, $authLimit, $period, $enabled);
-
-        $this->assertEquals($expected, $this->model->isEnforcementEnabled());
-    }
-
-    /**
-     * Initialize config mock.
-     *
-     * @param int $guest
-     * @param int $auth
-     * @param int $period
-     * @param bool $enabled
-     * @return void
-     */
-    private function initConfig(int $guest, int $auth, int $period, bool $enabled): void
-    {
-        $this->config->method('getValue')
-            ->willReturnCallback(
-                function (string $path) use ($auth, $guest, $period): ?string {
-                    switch ($path) {
-                        case 'sales/backpressure/limit':
-                            return (string) $auth;
-                        case 'sales/backpressure/guest_limit':
-                            return (string) $guest;
-                        case 'sales/backpressure/period':
-                            return (string) $period;
-                    }
-
-                    return null;
-                }
-            );
-        $this->config->method('isSetFlag')
-            ->willReturnCallback(
-                function (string $path) use ($enabled): bool {
-                    if ($path === 'sales/backpressure/enabled') {
-                        return $enabled;
-                    }
-
-                    return false;
-                }
-            );
-    }
-
-    /**
-     * Create backpressure context.
-     *
-     * @param int $identityType
-     * @return ContextInterface
-     */
-    private function createContext(int $identityType): ContextInterface
-    {
-        $context = $this->createMock(ContextInterface::class);
-        $context->method('getIdentityType')->willReturn($identityType);
-
-        return $context;
     }
 }

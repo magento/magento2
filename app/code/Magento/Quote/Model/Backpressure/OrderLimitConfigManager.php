@@ -79,12 +79,16 @@ class OrderLimitConfigManager implements LimitConfigManagerInterface
     public function isEnforcementEnabled(): bool
     {
         $loggerType = $this->deploymentConfig->get(RequestLoggerInterface::CONFIG_PATH_BACKPRESSURE_LOGGER);
-        $enabled = $this->config->isSetFlag('sales/backpressure/enabled', ScopeInterface::SCOPE_STORE);
-        if ($loggerType && $enabled) {
-            return true;
+        if (!$loggerType) {
+            return false;
         }
 
-        return false;
+        $enabled = $this->config->isSetFlag('sales/backpressure/enabled', ScopeInterface::SCOPE_STORE);
+        if (!$enabled) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -117,6 +121,6 @@ class OrderLimitConfigManager implements LimitConfigManagerInterface
      */
     private function fetchPeriod(): int
     {
-       return (int)$this->config->getValue('sales/backpressure/period', ScopeInterface::SCOPE_STORE);
+        return (int)$this->config->getValue('sales/backpressure/period', ScopeInterface::SCOPE_STORE);
     }
 }
