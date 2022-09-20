@@ -24,6 +24,16 @@ define([
             if (value) {
                 this.source.set(this.countryScope, this.indexedOptions[value].label);
             }
+        },
+
+        /**
+         * Add empty value for options
+         */
+        setOptions: function () {
+            this._super();
+            if (!this.caption()) {
+                this.caption(' ');
+            }
         }
     });
 });
