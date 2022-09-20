@@ -199,7 +199,11 @@ class FixerIo extends AbstractImport
      */
     private function validateResponse(array $response, string $baseCurrency): bool
     {
-        if ($response['success']) {
+        if (
+            is_array($response) && 
+            array_key_exists('success', $response) && 
+            $response['success']
+        ) {
             return true;
         }
 
