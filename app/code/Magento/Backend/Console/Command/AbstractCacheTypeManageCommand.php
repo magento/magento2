@@ -6,11 +6,11 @@
 
 namespace Magento\Backend\Console\Command;
 
+use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\Cache\Manager;
 
 /**
  * phpcs:disable Magento2.Classes.AbstractApi
@@ -64,6 +64,10 @@ abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
         $this->performAction($types);
         $output->writeln($this->getDisplayMessage());
         $output->writeln(join(PHP_EOL, $types));
+        if ($input->getOption(self::EXCLUDE_KEY_TYPES)) {
+            $output->writeln('Excluded Cache Type');
+            $output->writeln($input->getOption(self::EXCLUDE_KEY_TYPES));
+        }
 
         return Cli::RETURN_SUCCESS;
     }
