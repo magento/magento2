@@ -297,7 +297,7 @@ abstract class AbstractEntity
      *
      * @var array
      */
-    private array $ids=[];
+    private array $ids = [];
 
     /**
      * @param StringUtils $string

@@ -263,7 +263,7 @@ abstract class AbstractEntity
      *
      * @var array
      */
-    private array $ids=[];
+    private array $ids = [];
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper

@@ -90,7 +90,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
         $select = $connection->select()
             ->from($this->getMainTable(), ['data'])->order('id ASC');
         if ($ids) {
-            $select = $select->where('ID IN (?)', $ids);
+            $select = $select->where('id IN (?)', $ids);
         }
         $stmt = $connection->query($select);
 
@@ -127,7 +127,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
         return $this->getConnection()->delete(
             $this->getMainTable(),
             [
-                'ID IN (?)' => $ids,
+                'id IN (?)' => $ids,
             ]
         );
     }
@@ -187,7 +187,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
         $connection = $this->getConnection();
         $select = $connection->select()->from($this->getMainTable(), [$code]);
         if ($ids) {
-            $select = $select->where('ID in (?)', $ids);
+            $select = $select->where('id IN (?)', $ids);
         }
         $values = array_unique($connection->fetchCol($select));
 
@@ -239,7 +239,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
         $dataRow = null;
         if ($this->_iterator->valid()) {
             $encodedData = $this->_iterator->current();
-            if (array_key_exists(0, $encodedData) && $encodedData[0]) {
+            if (!empty($encodedData[0])) {
                 $dataRow = $this->jsonHelper->jsonDecode($encodedData[0]);
                 $this->_iterator->next();
             }
