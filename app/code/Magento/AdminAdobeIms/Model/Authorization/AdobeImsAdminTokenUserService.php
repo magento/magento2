@@ -19,6 +19,7 @@ use Magento\AdobeImsApi\Api\GetTokenInterface;
 use Magento\AdobeImsApi\Api\OrganizationMembershipInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\AuthorizationException;
 
 /**
  * Adobe IMS Auth Model for getting Admin Token
@@ -68,7 +69,7 @@ class AdobeImsAdminTokenUserService
     /**
      * @var TokenResponseInterfaceFactory
      */
-    private $tokenResponseFactory;
+    private TokenResponseInterfaceFactory $tokenResponseFactory;
 
     /**
      * @param ImsConfig $adminImsConfig
@@ -107,7 +108,7 @@ class AdobeImsAdminTokenUserService
      * @return void
      * @throws AdobeImsAuthorizationException
      * @throws AdobeImsOrganizationAuthorizationException
-     * @throws AuthenticationException
+     * @throws AuthenticationException|AuthorizationException
      */
     public function processLoginRequest(bool $isReauthorize = false): void
     {
@@ -141,10 +142,10 @@ class AdobeImsAdminTokenUserService
     /**
      * Get requested token using Authorization header
      *
-     * @return \Magento\AdobeImsApi\Api\Data\TokenResponseInterface
+     * @return TokenResponseInterface
      * @throws AuthenticationException
      */
-    private function getRequestedToken()
+    private function getRequestedToken(): TokenResponseInterface
     {
         $authorizationHeaderValue = $this->request->getHeader('Authorization');
         if (!$authorizationHeaderValue) {
@@ -171,9 +172,11 @@ class AdobeImsAdminTokenUserService
      * @param bool $isReauthorize
      * @param TokenResponseInterface $tokenResponse
      * @return void
+     * @throws AdobeImsAuthorizationException
      * @throws AuthenticationException
+     * @throws AuthorizationException
      */
-    private function getLoggedIn(bool $isReauthorize, TokenResponseInterface $tokenResponse)
+    private function getLoggedIn(bool $isReauthorize, TokenResponseInterface $tokenResponse): void
     {
         $profile = $this->profile->getProfile($tokenResponse->getAccessToken());
         if (empty($profile['email'])) {
