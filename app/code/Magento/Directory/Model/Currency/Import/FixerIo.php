@@ -214,7 +214,8 @@ class FixerIo extends AbstractImport
             201 => __('An invalid base currency has been entered.'),
         ];
 
-        $this->_messages[] = $errorCodes[$response['error']['code']] ?? __('Currency rates can\'t be retrieved.');
+        $this->_messages[] = var_export($response, true);
+        //$this->_messages[] = $errorCodes[$response['error']['code']] ?? __('Currency rates can\'t be retrieved.');
 
         return false;
     }
