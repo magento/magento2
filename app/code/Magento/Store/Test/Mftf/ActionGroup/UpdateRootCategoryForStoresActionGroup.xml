@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="UpdateRootCategoryForStoresActionGroup">
+        <annotations>
+            <description>Update Root Category for Stores</description>
+        </annotations>
+        <arguments>
+            <argument name="rootCategoryName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
+        <click selector="{{AdminStoresMainActionsSection.mainWebsiteStore}}" stepKey="selectTheStoreToResetToAnchorCategory"/>
+        <waitForPageLoad stepKey="waitForStoresInformationResult"/>
+        <selectOption selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="{{rootCategoryName}}" stepKey="chooseAnchorCategory"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="saveTheStoresCategory"/>
+        <click selector="{{AttributeDeleteModalSection.confirm}}" stepKey="clickOkToConfirmAnchorCategoryAsMainWebsiteStoreCategory" />
+        <waitForPageLoad stepKey="waitForStorePageToSave"/>
+    </actionGroup>
+</actionGroups>
