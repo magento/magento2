@@ -702,7 +702,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * @inheritdoc
      */
-    public function getCustomerIsGuest(): bool
+    public function getCustomerIsGuest()
     {
         return $this->_getData(self::KEY_CUSTOMER_IS_GUEST);
     }
