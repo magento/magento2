@@ -286,7 +286,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
 
         $this->getConnection()->insert(
             $this->getMainTable(),
-            ['behavior' => $behavior, 'entity' => $entity, 'data' => $encodedData]
+            ['behavior' => $behavior, 'entity' => $entity, 'data' => $encodedData, 'is_processed' => false]
         );
         return $this->getConnection()->lastInsertId($this->getMainTable());
     }
