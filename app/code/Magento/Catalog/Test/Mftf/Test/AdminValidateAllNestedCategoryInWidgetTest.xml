@@ -55,12 +55,6 @@
             <argument name="WidgetType" value="CMS Static Block"/>
             <argument name="WidgetTheme" value="Magento Luma"/>
             <argument name="WidgetDisplayOn" value="Anchor Categories"/>
-            <argument name="RootCat" value="Default Category"/>
-            <argument name="FirstSubCat" value="$createDefaultCategory.name$"/>
-            <argument name="SecondSubCat" value="$createTwoLevelNestedCategories.name$"/>
-            <argument name="ThirdSubCat" value="$createThreeLevelNestedCategories.name$"/>
-            <argument name="FourthSubCat" value="$createFourLevelNestedCategories.name$"/>
-            <argument name="FifthSubCat" value="$createFiveLevelNestedCategories.name$"/>
         </actionGroup>
     </test>
 </tests>
