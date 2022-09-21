@@ -12,7 +12,7 @@
         <column xsi:type="varchar" name="entity" nullable="false" length="50" comment="Entity"/>
         <column xsi:type="varchar" name="behavior" nullable="false" length="10" default="append" comment="Behavior"/>
         <column xsi:type="longtext" name="data" nullable="true" comment="Data"/>
-        <column xsi:type="boolean" name="is_processed" nullable="false" comment="Is Row Processed"/>
+        <column xsi:type="boolean" name="is_processed" nullable="false" default="true" comment="Is Row Processed"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
