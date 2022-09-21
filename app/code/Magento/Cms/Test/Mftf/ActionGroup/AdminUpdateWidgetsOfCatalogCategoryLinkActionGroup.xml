@@ -22,7 +22,7 @@
         <click selector="{{CmsNewWidgetOptionsSection.SelectCategory}}" stepKey="clickSelectCategoryButton1"/>
         <waitForPageLoad stepKey="waitToLoadRootCategory"/>
         <click selector="{{CmsNewWidgetOptionsSection.ExpandRootCategory}}" stepKey="clickToExpandRootCat"/>
-        <click selector="//Span[contains(text(),'CategoryB')]" stepKey="clickSecondCategoryToSelect"/>
+        <click selector="{{CmsNewWidgetOptionsSection.SecondCategory}}" stepKey="clickSecondCategoryToSelect"/>
         <waitForPageLoad stepKey="waitToSelectSecondCategory"/>
         <click selector="{{CmsNewWidgetOptionsSection.SaveWidget}}" stepKey="clickSaveWidgetButton"/>
         <waitForPageLoad stepKey="waitToSaveConfig"/>
