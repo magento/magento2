@@ -72,11 +72,7 @@
             <!-- Optional arguments block; omit it if you want to use default values -->
             <arguments>
                 <!-- Path to config file (default is config/allure.config.php) -->
-                <array>
-                    <element key="outputDirectory">
-                        <string>var/allure-results</string>
-                    </element>
-                </array>
+                <string>../config/config.php</string>
             </arguments>
         </extension>
     </extensions>
