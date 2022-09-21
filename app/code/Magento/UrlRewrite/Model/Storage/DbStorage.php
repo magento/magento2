@@ -48,23 +48,31 @@ class DbStorage extends AbstractStorage
      */
     private $logger;
 
+
+    /**
+     * @var int
+     */
+    private $maxRetryCount;
+
     /**
      * @param UrlRewriteFactory    $urlRewriteFactory
      * @param DataObjectHelper     $dataObjectHelper
      * @param ResourceConnection   $resource
      * @param LoggerInterface|null $logger
+     * @param int $maxRetryCount
      */
     public function __construct(
         UrlRewriteFactory $urlRewriteFactory,
         DataObjectHelper $dataObjectHelper,
         ResourceConnection $resource,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        int $maxRetryCount = 3
     ) {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;
         $this->logger = $logger ?: ObjectManager::getInstance()
             ->get(LoggerInterface::class);
-
+        $this->maxRetryCount = $maxRetryCount;
         parent::__construct($urlRewriteFactory, $dataObjectHelper);
     }
 
@@ -275,52 +283,49 @@ class DbStorage extends AbstractStorage
      */
     protected function doReplace(array $urls): array
     {
-        $this->connection->beginTransaction();
-
-        try {
-            $this->deleteOldUrls($urls);
-
-            $data = [];
-            foreach ($urls as $url) {
-                $data[] = $url->toArray();
-            }
-
-            $this->insertMultiple($data);
-
-            $this->connection->commit();
-            // @codingStandardsIgnoreStart
-        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-            // @codingStandardsIgnoreEnd
-            $this->connection->rollBack();
-
-            /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urlConflicted */
-            $urlConflicted = [];
-            foreach ($urls as $url) {
-                $urlFound = $this->doFindOneByData(
-                    [
-                        UrlRewrite::REQUEST_PATH => $url->getRequestPath(),
-                        UrlRewrite::STORE_ID => $url->getStoreId(),
-                    ]
-                );
-                if (isset($urlFound[UrlRewrite::URL_REWRITE_ID])) {
-                    $urlConflicted[$urlFound[UrlRewrite::URL_REWRITE_ID]] = $url->toArray();
+        for ($tries = 0; $tries < $this->maxRetryCount; $tries++) {
+            $this->connection->beginTransaction();
+            try {
+                $this->deleteOldUrls($urls);
+                $data = [];
+                foreach ($urls as $url) {
+                    $data[] = $url->toArray();
                 }
+                $this->insertMultiple($data);
+                $this->connection->commit();
+            } catch (\Magento\Framework\DB\Adapter\DeadlockException $deadlockException) {
+                continue;
+            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+                $this->connection->rollBack();
+                /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urlConflicted */
+                $urlConflicted = [];
+                foreach ($urls as $url) {
+                    $urlFound = $this->doFindOneByData(
+                        [
+                            UrlRewrite::REQUEST_PATH => $url->getRequestPath(),
+                            UrlRewrite::STORE_ID => $url->getStoreId(),
+                        ]
+                    );
+                    if (isset($urlFound[UrlRewrite::URL_REWRITE_ID])) {
+                        $urlConflicted[$urlFound[UrlRewrite::URL_REWRITE_ID]] = $url->toArray();
+                    }
+                }
+                if ($urlConflicted) {
+                    throw new \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException(
+                        __('URL key for specified store already exists.'),
+                        $e,
+                        $e->getCode(),
+                        $urlConflicted
+                    );
+                } else {
+                    throw $e->getPrevious() ?: $e;
+                }
+            } catch (\Exception $e) {
+                $this->connection->rollBack();
+                throw $e;
             }
-            if ($urlConflicted) {
-                throw new \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException(
-                    __('URL key for specified store already exists.'),
-                    $e,
-                    $e->getCode(),
-                    $urlConflicted
-                );
-            } else {
-                throw $e->getPrevious() ?: $e;
-            }
-        } catch (\Exception $e) {
-            $this->connection->rollBack();
-            throw $e;
+            break;
         }
-
         return $urls;
     }
 
