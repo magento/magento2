@@ -16,7 +16,7 @@
             <description value="Created order should be in Processing status"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94178"/>
-            <useCaseId value="MAGETWO-71375" />
+            <useCaseId value="MAGETWO-71375"/>
             <group value="checkout"/>
         </annotations>
         <before>
@@ -38,7 +38,6 @@
             </createData>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-
         </before>
 
         <after>

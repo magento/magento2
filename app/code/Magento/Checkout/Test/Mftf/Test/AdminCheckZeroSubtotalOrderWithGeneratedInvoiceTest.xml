@@ -16,7 +16,7 @@
             <description value="Created order with automatically invoice generated."/>
             <severity value="AVERAGE"/>
             <testCaseId value="AC-6722"/>
-            <useCaseId value="ENGCOM-5443" />
+            <useCaseId value="ENGCOM-5443"/>
             <group value="checkout"/>
         </annotations>
         <before>
