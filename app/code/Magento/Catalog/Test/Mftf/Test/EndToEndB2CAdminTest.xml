@@ -16,9 +16,6 @@
             <description value="Admin creates products, creates and manages categories, creates promotions, creates an order, processes an order, processes a return, uses admin grids"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-87014"/>
-            <skip>
-                <issueId value="MQE-891"/>
-            </skip>
             <group value="pr_exclude"/>
         </annotations>
         <after>
@@ -64,7 +61,9 @@
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{VirtualProduct.sku}}" stepKey="fillVirtualName"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{VirtualProduct.name}}" stepKey="fillVirtualSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{VirtualProduct.price}}" stepKey="fillVirtualPrice"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{VirtualProduct.quantity}}" stepKey="fillVirtualQty"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillVirtualQty">
+            <argument name="productQty" value="{{VirtualProduct.quantity}}"/>
+        </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveVirtualProduct"/>
         <actionGroup ref="ViewProductInAdminGridActionGroup" stepKey="viewVirtualProductInGrid">
             <argument name="product" value="VirtualProduct"/>

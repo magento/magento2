@@ -704,8 +704,8 @@ class AccountManagement implements AccountManagementInterface
     public function resetPassword($email, $resetToken, $newPassword)
     {
         if (!$email) {
-            $customer = $this->getByToken->execute($resetToken);
-            $email = $customer->getEmail();
+            $params = ['fieldName' => 'email'];
+            throw new InputException(__('"%fieldName" is required. Enter and try again.', $params));
         } else {
             $customer = $this->customerRepository->get($email);
         }
@@ -726,6 +726,9 @@ class AccountManagement implements AccountManagementInterface
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
+        $customerSecure->setFailuresNum(0);
+        $customerSecure->setFirstFailure(null);
+        $customerSecure->setLockExpires(null);
         $this->sessionCleaner->clearFor((int)$customer->getId());
         $this->customerRepository->save($customer);
 
@@ -759,7 +762,8 @@ class AccountManagement implements AccountManagementInterface
                 )
             );
         }
-        if ($this->stringHelper->strlen(trim($password)) != $length) {
+        $trimmedPassLength = $this->stringHelper->strlen($password === null ? '' : trim($password));
+        if ($trimmedPassLength != $length) {
             throw new InputException(
                 __("The password can't begin or end with a space. Verify the password and try again.")
             );
@@ -789,17 +793,19 @@ class AccountManagement implements AccountManagementInterface
         $requiredNumber = $this->scopeConfig->getValue(self::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
         $return = 0;
 
-        if (preg_match('/[0-9]+/', $password)) {
-            $counter++;
-        }
-        if (preg_match('/[A-Z]+/', $password)) {
-            $counter++;
-        }
-        if (preg_match('/[a-z]+/', $password)) {
-            $counter++;
-        }
-        if (preg_match('/[^a-zA-Z0-9]+/', $password)) {
-            $counter++;
+        if ($password !== null) {
+            if (preg_match('/[0-9]+/', $password)) {
+                $counter++;
+            }
+            if (preg_match('/[A-Z]+/', $password)) {
+                $counter++;
+            }
+            if (preg_match('/[a-z]+/', $password)) {
+                $counter++;
+            }
+            if (preg_match('/[^a-zA-Z0-9]+/', $password)) {
+                $counter++;
+            }
         }
 
         if ($counter < $requiredNumber) {
@@ -1163,9 +1169,9 @@ class AccountManagement implements AccountManagementInterface
      * @throws NoSuchEntityException If customer doesn't exist
      * @SuppressWarnings(PHPMD.LongVariable)
      */
-    private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
+    private function validateResetPasswordToken(int $customerId, string $resetPasswordLinkToken): bool
     {
-        if ($customerId !== null && $customerId <= 0) {
+        if (!$customerId) {
             throw new InputException(
                 __(
                     'Invalid value of "%value" provided for the %fieldName field.',
@@ -1173,14 +1179,7 @@ class AccountManagement implements AccountManagementInterface
                 )
             );
         }
-
-        if ($customerId === null) {
-            //Looking for the customer.
-            $customerId = $this->getByToken
-                ->execute($resetPasswordLinkToken)
-                ->getId();
-        }
-        if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
+        if (!$resetPasswordLinkToken) {
             $params = ['fieldName' => 'resetPasswordLinkToken'];
             throw new InputException(__('"%fieldName" is required. Enter and try again.', $params));
         }
@@ -1220,6 +1219,7 @@ class AccountManagement implements AccountManagementInterface
      * @return $this
      * @throws LocalizedException
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected function sendNewAccountEmail(
         $customer,
@@ -1263,6 +1263,7 @@ class AccountManagement implements AccountManagementInterface
      * @throws LocalizedException
      * @throws NoSuchEntityException
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected function sendPasswordResetNotificationEmail($customer)
     {
@@ -1276,6 +1277,7 @@ class AccountManagement implements AccountManagementInterface
      * @param int|string|null $defaultStoreId
      * @return int
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      * @throws LocalizedException
      */
     protected function getWebsiteStoreId($customer, $defaultStoreId = null)
@@ -1293,6 +1295,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @return array
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected function getTemplateTypes()
     {
@@ -1326,6 +1329,7 @@ class AccountManagement implements AccountManagementInterface
      * @return $this
      * @throws MailException
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected function sendEmailTemplate(
         $customer,
@@ -1394,7 +1398,7 @@ class AccountManagement implements AccountManagementInterface
      */
     protected function canSkipConfirmation($customer)
     {
-        if (!$customer->getId()) {
+        if (!$customer->getId() || $customer->getEmail() === null) {
             return false;
         }
 
@@ -1451,7 +1455,7 @@ class AccountManagement implements AccountManagementInterface
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function changeResetPasswordLinkToken($customer, $passwordLinkToken)
+    public function changeResetPasswordLinkToken(CustomerInterface $customer, string $passwordLinkToken): bool
     {
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
             throw new InputException(
@@ -1460,15 +1464,15 @@ class AccountManagement implements AccountManagementInterface
                     ['value' => $passwordLinkToken, 'fieldName' => 'password reset token']
                 )
             );
+        } else {
+            $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
+            $customerSecure->setRpToken($passwordLinkToken);
+            $customerSecure->setRpTokenCreatedAt(
+                $this->dateTimeFactory->create()->format(DateTime::DATETIME_PHP_FORMAT)
+            );
+            $this->setIgnoreValidationFlag($customer);
+            $this->customerRepository->save($customer);
         }
-        $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-        $customerSecure->setRpToken($passwordLinkToken);
-        $customerSecure->setRpTokenCreatedAt(
-            $this->dateTimeFactory->create()->format(DateTime::DATETIME_PHP_FORMAT)
-        );
-        $this->setIgnoreValidationFlag($customer);
-        $this->customerRepository->save($customer);
-
         return true;
     }
 
@@ -1480,6 +1484,7 @@ class AccountManagement implements AccountManagementInterface
      * @throws LocalizedException
      * @throws NoSuchEntityException
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     public function sendPasswordReminderEmail($customer)
     {
@@ -1509,6 +1514,7 @@ class AccountManagement implements AccountManagementInterface
      * @throws LocalizedException
      * @throws NoSuchEntityException
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     public function sendPasswordResetConfirmationEmail($customer)
     {
@@ -1554,6 +1560,7 @@ class AccountManagement implements AccountManagementInterface
      * @return Data\CustomerSecure
      * @throws NoSuchEntityException
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     protected function getFullCustomerObject($customer)
     {
@@ -1599,6 +1606,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @return EmailNotificationInterface
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     private function getEmailNotification()
     {

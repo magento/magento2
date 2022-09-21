@@ -123,6 +123,7 @@ input CartAddressInput @doc(description: "Defines the billing or shipping addres
     postcode: String @doc(description: "The ZIP or postal code of the billing or shipping address.")
     country_code: String! @doc(description: "The country code and label for the billing or shipping address.")
     telephone: String @doc(description: "The telephone number for the billing or shipping address.")
+    vat_id: String @doc(description: "The VAT company number for billing or shipping address.")
     save_in_address_book: Boolean @doc(description: "Determines whether to save the address in the customer's address book. The default value is true.")
 }
 
@@ -167,7 +168,7 @@ type CartPrices  @doc(description: "Contains details about the final price of it
     discount: CartDiscount @deprecated(reason: "Use discounts instead.")
     subtotal_with_discount_excluding_tax: Money  @doc(description: "The subtotal with any discounts applied, but not taxes.")
     applied_taxes: [CartTaxItem]  @doc(description: "An array containing the names and amounts of taxes applied to each item in the cart.")
-    discounts: [Discount] @doc(description:"An array containing all discounts applied to the cart.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Discounts")
+    discounts: [Discount] @doc(description:"An array containing cart rule discounts, store credit and gift cards applied to the cart.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Discounts")
 }
 
 type CartTaxItem  @doc(description: "Contains tax information about an item in the cart.") {
@@ -229,6 +230,7 @@ interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Mo
     postcode: String @doc(description: "The ZIP or postal code of the billing or shipping address.")
     country: CartAddressCountry! @doc(description: "An object containing the country label and code.")
     telephone: String @doc(description: "The telephone number for the billing or shipping address.")
+    vat_id: String @doc(description: "The VAT company number for billing or shipping address.")
 }
 
 type ShippingCartAddress implements CartAddressInterface @doc(description: "Contains shipping addresses and methods.") {
@@ -267,6 +269,8 @@ type SelectedShippingMethod @doc(description: "Contains details about the select
     method_title: String! @doc(description: "The label for the method code.")
     amount: Money! @doc(description: "The cost of shipping using this shipping method.")
     base_amount: Money @deprecated(reason: "The field should not be used on the storefront.")
+    price_excl_tax: Money! @doc(description: "The cost of shipping using this shipping method, excluding tax.")
+    price_incl_tax: Money! @doc(description: "The cost of shipping using this shipping method, including tax.")
 }
 
 type AvailableShippingMethod @doc(description: "Contains details about the possible shipping methods and carriers.") {
@@ -360,6 +364,7 @@ type Discount @doc(description:"Defines an individual discount. A discount can b
 
 type CartItemPrices @doc(description: "Contains details about the price of the item, including taxes and discounts.") {
     price: Money! @doc(description: "The price of the item before any discounts were applied. The price that might include tax, depending on the configured display settings for cart.")
+    price_including_tax:  Money! @doc(description: "The price of the item before any discounts were applied. The price that might include tax, depending on the configured display settings for cart.")
     row_total: Money! @doc(description: "The value of the price multiplied by the quantity of the item.")
     row_total_including_tax: Money! @doc(description: "The value of `row_total` plus the tax applied to the item.")
     discounts: [Discount] @doc(description: "An array of discounts to be applied to the cart item.")

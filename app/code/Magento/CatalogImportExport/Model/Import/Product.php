@@ -228,6 +228,8 @@ class Product extends AbstractEntity
      *
      * @deprecated 101.1.0 use DI for LinkProcessor class if you want to add additional types
      *
+     * @see Magento_CatalogImportExport::etc/di.xml
+     *
      * @var array
      */
     protected $_linkNameToId = [
@@ -548,6 +550,7 @@ class Product extends AbstractEntity
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory
      * @deprecated 101.0.0 this variable isn't used anymore.
+     * @see we don't recommend this approach anymore
      */
     protected $_stockResItemFac;
 
@@ -613,6 +616,8 @@ class Product extends AbstractEntity
      * @var array
      * @deprecated 100.0.3
      * @since 100.0.3
+     *
+     * @see we don't recommend this approach anymore
      */
     protected $productUrlKeys = [];
 
@@ -1280,7 +1285,7 @@ class Product extends AbstractEntity
      * Must be called after ALL products saving done.
      *
      * @deprecated 101.1.0 use linkProcessor Directly
-     *
+     * @see linkProcessor
      * @return $this
      */
     protected function _saveLinks()
@@ -1489,6 +1494,7 @@ class Product extends AbstractEntity
      * @return void
      * @since 100.0.4
      * @deprecated 100.2.3
+     * @see \Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor::initMediaGalleryResources
      */
     protected function initMediaGalleryResources()
     {
@@ -2506,7 +2512,6 @@ class Product extends AbstractEntity
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @throws \Zend_Validate_Exception
      */
     public function validateRow(array $rowData, $rowNum)
     {
@@ -2748,7 +2753,7 @@ class Product extends AbstractEntity
         $code = '';
         foreach ($attributeNameValuePairs as $attributeData) {
             //process case when attribute has ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR inside its value
-            if (strpos($attributeData, self::PAIR_NAME_VALUE_SEPARATOR) === false) {
+            if ($attributeData === null || strpos($attributeData, self::PAIR_NAME_VALUE_SEPARATOR) === false) {
                 if (!$code) {
                     continue;
                 }
@@ -2813,7 +2818,7 @@ class Product extends AbstractEntity
                 $delimiter = $this->getMultipleValueSeparator();
             }
 
-            return explode($delimiter, $values);
+            return $values !== null ? explode($delimiter, $values) : [];
         }
         if (preg_match_all('~"((?:[^"]|"")*)"~', $values, $matches)) {
             return $values = array_map(
@@ -2944,7 +2949,7 @@ class Product extends AbstractEntity
                 )->joinLeft(
                     ['cpe' => $resource->getTable('catalog_product_entity')],
                     "cpe.entity_id = url_rewrite.entity_id"
-                )->where('request_path IN (?)', array_keys($urlKeys))
+                )->where('request_path IN (?)', array_map('strval', array_keys($urlKeys)))
                     ->where('store_id IN (?)', $storeId)
                     ->where('cpe.sku not in (?)', array_values($urlKeys))
             );
@@ -3307,7 +3312,8 @@ class Product extends AbstractEntity
     {
         $result = '';
         if ($paths) {
-            $result = rtrim(array_shift($paths), DIRECTORY_SEPARATOR);
+            $firstPath = array_shift($paths);
+            $result = $firstPath !== null ? rtrim($firstPath, DIRECTORY_SEPARATOR) : '';
             foreach ($paths as $path) {
                 $result .= DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
             }

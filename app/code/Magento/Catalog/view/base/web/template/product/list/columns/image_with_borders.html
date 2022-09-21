@@ -13,6 +13,7 @@
             <span class="product-image-wrapper"
                   data-bind="style: {'padding-bottom': getHeight($row())/getWidth($row()) * 100 + '%'}">
                 <img class="product-image-photo"
+                     loading="lazy"
                      data-bind="attr: {src: getImageUrl($row()),
                                        alt: getLabel($row()), title: getLabel($row())}" />
             </span>

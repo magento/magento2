@@ -12,6 +12,7 @@ use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Validator\Exception as ValidatorException;
+use Magento\Framework\Encryption\EncryptorInterface;
 
 /**
  * Customer entity resource model
@@ -55,6 +56,11 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     private $notificationStorage;
 
     /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
      * Customer constructor.
      *
      * @param \Magento\Eav\Model\Entity\Context $context
@@ -66,6 +72,8 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      * @param AccountConfirmation $accountConfirmation
+     * @param EncryptorInterface|null $encryptor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -76,7 +84,8 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         $data = [],
-        AccountConfirmation $accountConfirmation = null
+        AccountConfirmation $accountConfirmation = null,
+        EncryptorInterface $encryptor = null
     ) {
         parent::__construct($context, $entitySnapshot, $entityRelationComposite, $data);
 
@@ -88,6 +97,8 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         $this->setType('customer');
         $this->setConnection('customer_read');
         $this->storeManager = $storeManager;
+        $this->encryptor = $encryptor ?? ObjectManager::getInstance()
+                ->get(EncryptorInterface::class);
     }
 
     /**
@@ -176,6 +187,11 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             $this->_validate($customer);
         }
 
+        if ($customer->getData('rp_token')) {
+            $rpToken = $customer->getData('rp_token');
+            $customer->setRpToken($this->encryptor->encrypt($rpToken));
+        }
+
         return $this;
     }
 
@@ -224,6 +240,10 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             NotificationStorage::UPDATE_CUSTOMER_SESSION,
             $customer->getId()
         );
+        if ($customer->getData('rp_token')) {
+            $rpToken = $customer->getData('rp_token');
+            $customer->setRpToken($this->encryptor->decrypt($rpToken));
+        }
         return parent::_afterSave($customer);
     }
 
@@ -444,5 +464,17 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
             ['session_cutoff' => $this->dateTime->formatDate($timestamp)],
             $this->getConnection()->quoteInto('entity_id = ?', $customerId)
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _afterLoad(\Magento\Framework\DataObject $customer)
+    {
+        if ($customer->getData('rp_token')) {
+            $rpToken = $customer->getData('rp_token');
+            $customer->setRpToken($this->encryptor->decrypt($rpToken));
+        }
+        return parent::_afterLoad($customer); //
     }
 }

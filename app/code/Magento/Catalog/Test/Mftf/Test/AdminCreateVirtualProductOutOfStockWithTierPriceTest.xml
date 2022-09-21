@@ -54,7 +54,9 @@
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('1')}}" userInput="{{tierPriceOnDefault.qty_1}}" stepKey="fillProductTierPriceQuantityInput1"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceFixedPriceInput('1')}}" userInput="{{tierPriceOnDefault.price_1}}" stepKey="selectProductTierPriceFixedPrice1"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductOutOfStock.quantity}}" stepKey="fillVirtualProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillVirtualProductQuantity">
+            <argument name="productQty" value="{{virtualProductOutOfStock.quantity}}"/>
+        </actionGroup>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{virtualProductOutOfStock.status}}" stepKey="selectStockStatusOutOfStock"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
@@ -84,11 +86,8 @@
             <expectedResult type="string">Buy {{tierPriceOnDefault.qty_0}} for ${{tierPriceOnDefault.price_0}} each and save 100%</expectedResult>
             <actualResult type="variable">firstTierPriceText</actualResult>
         </assertEquals>
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('2', tierPriceOnDefault.qty_1)}}" stepKey="secondTierPriceText"/>
-        <assertEquals stepKey="assertTierPriceTextOnProductPage2">
-            <expectedResult type="string">Buy {{tierPriceOnDefault.qty_1}} for ${{tierPriceOnDefault.price_1}} each and save 100%</expectedResult>
-            <actualResult type="variable">secondTierPriceText</actualResult>
-        </assertEquals>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('2', tierPriceOnDefault.qty_1)}}" stepKey="secondTierPriceText"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertTierPriceTextOnProductPage2"/>
 
         <!--  Verify customer see product out of stock status on product page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
@@ -98,7 +97,7 @@
         </assertEquals>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="productPriceAmount"/>
         <assertEquals stepKey="assertOldPriceTextOnProductPage">
-            <expectedResult type="string">${{virtualProductOutOfStock.price}}</expectedResult>
+            <expectedResult type="string">${{virtualProductOutOfStock.formattedPrice}}</expectedResult>
             <actualResult type="variable">productPriceAmount</actualResult>
         </assertEquals>
     </test>

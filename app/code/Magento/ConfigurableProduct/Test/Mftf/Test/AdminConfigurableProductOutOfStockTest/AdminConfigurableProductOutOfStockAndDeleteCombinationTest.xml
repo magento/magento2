@@ -120,7 +120,9 @@
         <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage2"/>
 
         <!-- Edit the quantity of the second simple product as 0 -->
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="0" stepKey="fillProductQuantity2"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQuantity2">
+            <argument name="productQty" value="0"/>
+        </actionGroup>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveProduct2"/>
 
         <!-- Check to make sure that the configurable product shows up as out of stock -->
