@@ -23,7 +23,7 @@ use Magento\Ui\Component\Form;
  */
 class Websites extends AbstractModifier
 {
-    const SORT_ORDER = 40;
+    public const SORT_ORDER = 40;
 
     /**
      * @var LocatorInterface
@@ -210,8 +210,9 @@ class Websites extends AbstractModifier
                 $sortOrder++;
             }
         }
-
-        $children = $this->setDefaultWebsiteIdIfNoneAreSelected($children);
+        if ($isNewProduct) {
+            $children = $this->setDefaultWebsiteIdIfNoneAreSelected($children);
+        }
         return $children;
     }
 
