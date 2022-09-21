@@ -376,4 +376,101 @@ QUERY;
 
         $this->graphQlMutation($query);
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Bundle/_files/product_with_multiple_options_multiselect_checkbox.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddBundleToCartWithEmptyMultiselectOptionValue()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Please select all required options.');
+
+        $this->quoteResource->load(
+            $this->quote,
+            'test_order_1',
+            'reserved_order_id'
+        );
+        $sku = 'bundle-product-multiselect-checkbox-options';
+        $product = $this->productRepository->get($sku);
+
+        /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
+        $typeInstance = $product->getTypeInstance();
+        $typeInstance->setStoreFilter($product->getStoreId(), $product);
+        /** @var $option \Magento\Bundle\Model\Option */
+        $options = $typeInstance->getOptionsCollection($product);
+
+        $selectionIds = [];
+        $optionIds = [];
+        foreach ($options as $option) {
+            $type = $option->getType();
+
+            /** @var \Magento\Catalog\Model\Product $selection */
+            $selections = $typeInstance->getSelectionsCollection([$option->getId()], $product);
+            $optionIds[$type] = $option->getId();
+
+            foreach ($selections->getItems() as $selection) {
+                $selectionIds[$type][] = $selection->getSelectionId();
+            }
+        }
+
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+
+        $query = <<<QUERY
+mutation {
+  addBundleProductsToCart(input:{
+    cart_id: "{$maskedQuoteId}"
+    cart_items: [
+      {
+        data: {
+          sku: "{$sku}"
+          quantity: 1
+        }
+        bundle_options: [
+          {
+            id: {$optionIds['multi']}
+            quantity: 1
+            value: [
+              ""
+            ]
+          },
+          {
+            id: {$optionIds['checkbox']}
+            quantity: 1
+            value: [
+               "{$selectionIds['checkbox'][0]}"
+             ]
+          }
+        ]
+      }
+    ]
+  }) {
+    cart {
+      items {
+        id
+        quantity
+        product {
+          sku
+        }
+        ... on BundleCartItem {
+          bundle_options {
+            id
+            label
+            type
+            values {
+              id
+              label
+              price
+              quantity
+            }
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation($query);
+    }
 }
