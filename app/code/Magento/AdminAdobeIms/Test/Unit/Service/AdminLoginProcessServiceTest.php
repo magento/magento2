@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Test\Unit\Service;
@@ -11,9 +10,9 @@ namespace Magento\AdminAdobeIms\Test\Unit\Service;
 use Exception;
 use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Model\Auth;
-use Magento\AdminAdobeIms\Model\LogOut;
 use Magento\AdminAdobeIms\Model\User;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
+use Magento\AdobeIms\Model\LogOut;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\Backend\Model\Auth\StorageInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
@@ -70,8 +69,7 @@ class AdminLoginProcessServiceTest extends TestCase
 
         $session = $this->getMockBuilder(StorageInterface::class)
             ->addMethods(['setAdobeAccessToken', 'setTokenLastCheckTime'])
-            ->getMockForAbstractClass()
-        ;
+            ->getMockForAbstractClass();
         $session
             ->method('setAdobeAccessToken')
             ->willReturnSelf();
