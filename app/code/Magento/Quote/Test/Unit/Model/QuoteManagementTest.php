@@ -242,12 +242,13 @@ class QuoteManagementTest extends TestCase
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->addMethods(
                 [
+                    'getCustomerEmail',
                     'setCustomerEmail',
                     'setCustomerGroupId',
+                    'getCustomerId',
                     'setCustomerId',
                     'setRemoteIp',
                     'setXForwardedFor',
-                    'getCustomerEmail'
                 ]
             )
             ->onlyMethods(
@@ -869,6 +870,7 @@ class QuoteManagementTest extends TestCase
         $this->quoteMock->expects($this->any())->method('getBillingAddress')->with()->willReturn($addressMock);
 
         $this->quoteMock->expects($this->once())->method('setCustomerIsGuest')->with(true)->willReturnSelf();
+        $this->quoteMock->expects($this->once())->method('getCustomerId')->willReturn(null);
         $this->quoteMock->expects($this->once())
             ->method('setCustomerGroupId')
             ->with(GroupInterface::NOT_LOGGED_IN_ID);
