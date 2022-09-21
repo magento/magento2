@@ -8,14 +8,13 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminValidateAllNestedCategoryInWidget">
+    <test name="AdminValidateAllNestedCategoryInWidgetTest">
         <annotations>
             <features value="Catalog"/>
             <stories value="All sub cat should shown"/>
             <title value="Category Selector limit category upto 5 from the root"/>
             <description value="Category Selector limit category more than 5 from the root"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-40114"/>
             <testCaseId value="AC-4948"/>
         </annotations>
         <before>

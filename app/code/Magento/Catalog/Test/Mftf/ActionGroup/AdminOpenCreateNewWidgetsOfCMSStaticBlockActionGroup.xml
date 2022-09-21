@@ -29,22 +29,22 @@
         <waitForPageLoad stepKey="waitForAddLayoutTabToLoad"/>
         <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.DisplayOn}}" userInput="{{WidgetDisplayOn}}" stepKey="selectDisplay"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3" />
-        <selectOption selector="//input[@id='specific_anchor_categories_0']" userInput="Specific Categories" stepKey="selectSpecificCategoryRadioButton"/>
-        <click selector="//*[@id='anchor_categories_ids_0']/p/a[1]/img" stepKey="clickCategoryChooserButton"/>
+        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.SpecificCategories}}" userInput="Specific Categories" stepKey="selectSpecificCategoryRadioButton"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.CategoryChooserButton}}" stepKey="clickCategoryChooserButton"/>
         <waitForPageLoad stepKey="waitForRootCategoryToLoad"/>
-        <click selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" stepKey="clickRootCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.RootCat}}" stepKey="clickRootCat"/>
         <waitForPageLoad stepKey="waitForRootCategoryToExpand"/>
-        <click selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" stepKey="clickFirstSubCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.FirstSubCat}}" stepKey="clickFirstSubCat"/>
         <waitForPageLoad stepKey="waitForFirstSubCatToExpand"/>
-        <click selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" stepKey="expandSecondSubCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.SecondSubCat}}" stepKey="expandSecondSubCat"/>
         <waitForPageLoad stepKey="waitForSecondSubCatToExpand"/>
-        <click selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" stepKey="expandThirdFirstSubCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.ThirdSubCat}}" stepKey="expandThirdFirstSubCat"/>
         <waitForPageLoad stepKey="waitForThirdSubCatToExpand"/>
-        <click selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" stepKey="expandFourthSubCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.FourthSubCat}}" stepKey="expandFourthSubCat"/>
         <waitForPageLoad stepKey="waitForFourthSubCatToExpand"/>
-        <click selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" stepKey="expandFifthSubCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.FifthSubCat}}" stepKey="expandFifthSubCat"/>
         <waitForPageLoad stepKey="waitForFifthSubCatToExpand"/>
-        <grabMultiple selector="//*[@class='x-tree-ec-icon x-tree-elbow-end-minus' or @class='x-tree-ec-icon x-tree-elbow-end']" stepKey="countNestedCategory"/>
+        <grabMultiple selector="{{CmsNewWidgetUpdateLayoutSection.CountAllNestedCat}}" stepKey="countNestedCategory"/>
         <assertCount stepKey="check">
             <expectedResult type="int">7</expectedResult>
             <actualResult type="variable">countNestedCategory</actualResult>
