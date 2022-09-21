@@ -102,7 +102,7 @@ class CanRefundTest extends TestCase
         $this->orderMock->expects($this->any())
             ->method('getState')
             ->willReturn(Order::STATE_PROCESSING);
-        $this->orderMock->expects($this->once())
+        $this->orderMock->expects($this->any())
             ->method('getTotalPaid')
             ->willReturn(15);
         $this->orderMock->expects($this->once())
