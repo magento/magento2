@@ -20,7 +20,6 @@ use Magento\TestFramework\Fixture\AppArea;
 use Magento\Framework\App\Area;
 use Magento\User\Model\User as AdminUser;
 use Magento\Authorization\Model\Role;
-use Magento\Backend\Model\Auth\Session;
 use Magento\AdminAdobeIms\Model\SaveImsUser;
 use Magento\Framework\Exception\CouldNotSaveException;
 
@@ -64,11 +63,6 @@ class SaveImsUserTest extends TestCase
     private $adminImsConfig;
 
     /**
-     * @var Session
-     */
-    private $authSession;
-
-    /**
      * @var SaveImsUser
      */
     private $saveImsUser;
@@ -85,7 +79,6 @@ class SaveImsUserTest extends TestCase
         $this->roleCollectionFactory    = $this->objectManager->create(RoleCollectionFactory::class);
         $this->logger                   = $this->createMock(AdminAdobeImsLogger::class);
         $this->adminImsConfig           = $this->createMock(ImsConfig::class);
-        $this->authSession              = $this->objectManager->create(Session::class);
         $this->saveImsUser              = $this->objectManager->create(
             SaveImsUser::class,
             [
