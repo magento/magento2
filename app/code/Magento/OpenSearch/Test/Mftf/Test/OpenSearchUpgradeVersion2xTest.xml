@@ -34,7 +34,7 @@
                 <requiredEntity createDataKey="createProduct01"/>
                 <requiredEntity createDataKey="createProduct02"/>
             </createData>
-            <magentoCLI stepKey="reindex" command="indexer:reindex catalogsearch_fulltext"/>
+            <magentoCLI stepKey="reindex" command="indexer:reindex"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
