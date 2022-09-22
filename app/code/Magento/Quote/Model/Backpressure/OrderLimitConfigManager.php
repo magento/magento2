@@ -11,10 +11,7 @@ namespace Magento\Quote\Model\Backpressure;
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\Backpressure\SlidingWindow\LimitConfig;
 use Magento\Framework\App\Backpressure\SlidingWindow\LimitConfigManagerInterface;
-use Magento\Framework\App\Backpressure\SlidingWindow\RequestLoggerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Store\Model\ScopeInterface;
 
@@ -31,20 +28,10 @@ class OrderLimitConfigManager implements LimitConfigManagerInterface
     private ScopeConfigInterface $config;
 
     /**
-     * @var DeploymentConfig
-     */
-    private DeploymentConfig $deploymentConfig;
-
-    /**
      * @param ScopeConfigInterface $config
-     * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(
-        ScopeConfigInterface $config,
-        DeploymentConfig $deploymentConfig
-    ) {
+    public function __construct(ScopeConfigInterface $config) {
         $this->config = $config;
-        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -73,22 +60,10 @@ class OrderLimitConfigManager implements LimitConfigManagerInterface
      * Checks if enforcement enabled for the current store
      *
      * @return bool
-     * @throws RuntimeException
-     * @throws FileSystemException
      */
     public function isEnforcementEnabled(): bool
     {
-        $loggerType = $this->deploymentConfig->get(RequestLoggerInterface::CONFIG_PATH_BACKPRESSURE_LOGGER);
-        if (!$loggerType) {
-            return false;
-        }
-
-        $enabled = $this->config->isSetFlag('sales/backpressure/enabled', ScopeInterface::SCOPE_STORE);
-        if (!$enabled) {
-            return false;
-        }
-
-        return true;
+        return $this->config->isSetFlag('sales/backpressure/enabled', ScopeInterface::SCOPE_STORE);
     }
 
     /**

@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 /**
  *  Tests CacheRequestLogger class
  */
-class CacheRequestLoggerTest extends TestCase
+class RedisRequestLoggerTest extends TestCase
 {
     /**
      * @var RedisRequestLogger

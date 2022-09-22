@@ -71,13 +71,12 @@ class SlidingWindowEnforcer implements BackpressureEnforcerInterface
     /**
      * @inheritDoc
      *
-     * @throws FileSystemException|RuntimeException
+     * @throws FileSystemException
      */
     public function enforce(ContextInterface $context): void
     {
-        $requestLoggerType = $this->deploymentConfig->get(RequestLoggerInterface::CONFIG_PATH_BACKPRESSURE_LOGGER);
         try {
-            $requestLogger = $this->requestLoggerFactory->create($requestLoggerType);
+            $requestLogger = $this->getRequestLogger();
             $limit = $this->configManager->readLimit($context);
             $time = $this->dateTime->gmtTimestamp();
             $remainder = $time % $limit->getPeriod();
@@ -101,7 +100,21 @@ class SlidingWindowEnforcer implements BackpressureEnforcerInterface
                 throw new BackpressureExceededException();
             }
         } catch (RuntimeException $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->error('Backpressure sliding window not applied. ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Returns request logger
+     *
+     * @return RequestLoggerInterface
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    private function getRequestLogger(): RequestLoggerInterface
+    {
+        return $this->requestLoggerFactory->create(
+            (string)$this->deploymentConfig->get(RequestLoggerInterface::CONFIG_PATH_BACKPRESSURE_LOGGER)
+        );
     }
 }

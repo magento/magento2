@@ -37,7 +37,7 @@ class RequestLoggerFactory implements RequestLoggerFactoryInterface
 
     /**
      * @inheritDoc
-     * 
+     *
      * @param string $type
      * @return RequestLoggerInterface
      * @throws RuntimeException
