@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Backpressure;
 
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Quote\Model\Backpressure\OrderLimitConfigManager;
 use Magento\Framework\App\Backpressure\ContextInterface;
@@ -25,11 +23,6 @@ class OrderLimitConfigManagerTest extends TestCase
     private $scopeConfigMock;
 
     /**
-     * @var DeploymentConfig|MockObject
-     */
-    private $deploymentConfigMock;
-
-    /**
      * @var OrderLimitConfigManager
      */
     private OrderLimitConfigManager $model;
@@ -42,12 +35,8 @@ class OrderLimitConfigManagerTest extends TestCase
         parent::setUp();
 
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
-        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
-        $this->model = new OrderLimitConfigManager(
-            $this->scopeConfigMock,
-            $this->deploymentConfigMock
-        );
+        $this->model = new OrderLimitConfigManager($this->scopeConfigMock);
     }
 
     /**
@@ -106,20 +95,13 @@ class OrderLimitConfigManagerTest extends TestCase
      *
      * @param bool $enabled
      * @param bool $expected
-     * @param string|null $requestLoggerType
      * @return void
-     * @throws RuntimeException
-     * @throws FileSystemException
      * @dataProvider getEnabledCases
      */
     public function testIsEnforcementEnabled(
         bool    $enabled,
-        bool    $expected,
-        ?string $requestLoggerType
+        bool    $expected
     ): void {
-        $this->deploymentConfigMock->method('get')
-            ->with('backpressure/logger/type')
-            ->willReturn($requestLoggerType);
         $this->scopeConfigMock->method('isSetFlag')
             ->with('sales/backpressure/enabled')
             ->willReturn($enabled);
@@ -135,10 +117,8 @@ class OrderLimitConfigManagerTest extends TestCase
     public function getEnabledCases(): array
     {
         return [
-            'disabled' => [false, false, null],
-            'disabled-request-logger-type-exists' => [false, false, 'requestLoggerType'],
-            'enabled-request-logger-type-not-exist' => [true, false, null],
-            'enabled' => [true, true, 'requestLoggerType'],
+            'disabled' => [false, false],
+            'enabled' => [true, true],
         ];
     }
 }

@@ -68,7 +68,7 @@ class RedisClient
     /**
      * @var Credis_Client
      */
-    private Credis_Client $pipeline;
+    private $pipeline;
 
     /**
      * @param DeploymentConfig $config
@@ -95,13 +95,12 @@ class RedisClient
      *
      * @param string $key
      * @param int $decrement
-     * @return $this
+     * @return Credis_Client|int
      */
-    public function incrBy(string $key, int $decrement): RedisClient
+    public function incrBy(string $key, int $decrement)
     {
-        $this->pipeline->incrBy($key, $decrement);
+        return $this->pipeline->incrBy($key, $decrement);
 
-        return $this;
     }
 
     /**
@@ -109,26 +108,22 @@ class RedisClient
      *
      * @param string $key
      * @param int $timestamp
-     * @return $this
+     * @return Credis_Client|int
      */
-    public function expireAt(string $key, int $timestamp): RedisClient
+    public function expireAt(string $key, int $timestamp)
     {
-        $this->pipeline->expireAt($key, $timestamp);
-
-        return $this;
+        return $this->pipeline->expireAt($key, $timestamp);
     }
 
     /**
      * Returns value by key
      *
      * @param string $key
-     * @return bool|RedisClient|string
+     * @return bool|Credis_Client|string
      */
     public function get(string $key)
     {
-        $value = $this->pipeline->get($key);
-
-        return $value instanceof Credis_Client ? $this : $value;
+        return $this->pipeline->get($key);
     }
 
     /**

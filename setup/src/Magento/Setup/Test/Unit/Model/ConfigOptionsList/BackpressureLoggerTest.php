@@ -97,6 +97,10 @@ class BackpressureLoggerTest extends TestCase
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
+    /**
+     * @return array[]
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function dataProviderCreateConfigCacheRedis(): array
     {
         return [
