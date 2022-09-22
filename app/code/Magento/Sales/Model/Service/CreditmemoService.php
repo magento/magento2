@@ -3,11 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Model\Service;
 
 /**
- * Class CreditmemoService
+ * Service model for Creditmemo
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterface
@@ -192,6 +193,12 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
             );
         }
 
+        if (!$creditmemo->getOrderId()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We found an invalid order to refund.')
+            );
+        }
+
         $baseOrderRefund = $this->priceCurrency->round(
             $creditmemo->getOrder()->getBaseTotalRefunded() + $creditmemo->getBaseGrandTotal()
         );
@@ -214,6 +221,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      *
      * @return \Magento\Sales\Model\Order\RefundAdapterInterface
      * @deprecated 100.1.3
+     * @see no alternatives
      */
     private function getRefundAdapter()
     {
@@ -229,6 +237,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      *
      * @return \Magento\Framework\App\ResourceConnection|mixed
      * @deprecated 100.1.3
+     * @see no alternatives
      */
     private function getResource()
     {
@@ -244,6 +253,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      *
      * @return \Magento\Sales\Api\OrderRepositoryInterface
      * @deprecated 100.1.3
+     * @see no alternatives
      */
     private function getOrderRepository()
     {
@@ -259,6 +269,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      *
      * @return \Magento\Sales\Api\InvoiceRepositoryInterface
      * @deprecated 100.1.3
+     * @see no alternatives
      */
     private function getInvoiceRepository()
     {

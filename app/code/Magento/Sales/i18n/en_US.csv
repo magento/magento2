@@ -458,6 +458,7 @@ State/Province,State/Province
 "Order # %1 Notification(s)","Order # %1 Notification(s)"
 "You can not cancel Credit Memo","You can not cancel Credit Memo"
 "Could not cancel creditmemo","Could not cancel creditmemo"
+"We found an invalid order to refund.","We found an invalid order to refund."
 "We cannot register an existing credit memo.","We cannot register an existing credit memo."
 "We found an invalid quantity to invoice item ""%1"".","We found an invalid quantity to invoice item ""%1""."
 "The Order State ""%1"" must not be set manually.","The Order State ""%1"" must not be set manually."
