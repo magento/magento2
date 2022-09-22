@@ -13,7 +13,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
 
 /**
- * Redis client
+ * Redis client for request logger
  */
 class RedisClient
 {
@@ -71,6 +71,7 @@ class RedisClient
     private Credis_Client $pipeline;
 
     /**
+     * @param DeploymentConfig $config
      * @throws FileSystemException
      * @throws RuntimeException
      */

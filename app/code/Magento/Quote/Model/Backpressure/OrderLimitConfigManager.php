@@ -30,7 +30,8 @@ class OrderLimitConfigManager implements LimitConfigManagerInterface
     /**
      * @param ScopeConfigInterface $config
      */
-    public function __construct(ScopeConfigInterface $config) {
+    public function __construct(ScopeConfigInterface $config)
+    {
         $this->config = $config;
     }
 

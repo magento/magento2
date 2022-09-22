@@ -166,7 +166,7 @@ class BackpressureLogger implements ConfigOptionsListInterface
                 default:
                     if (isset($options[$inputKey])) {
                         $configData->set($configPath, $options[$inputKey]);
-                    }elseif ($deploymentConfig->get($configPath)) {
+                    } elseif ($deploymentConfig->get($configPath)) {
                         $configData->set($configPath, $deploymentConfig->get($configPath));
                     }
             }

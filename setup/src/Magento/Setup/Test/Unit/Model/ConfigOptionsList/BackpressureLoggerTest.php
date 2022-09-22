@@ -87,8 +87,11 @@ class BackpressureLoggerTest extends TestCase
      * testCreateConfigCacheRedis
      * @dataProvider dataProviderCreateConfigCacheRedis
      */
-    public function testCreateConfigCacheRedis(array $options, array $deploymentConfigReturnMap, array $expectedConfigData)
-    {
+    public function testCreateConfigCacheRedis(
+        array $options,
+        array $deploymentConfigReturnMap,
+        array $expectedConfigData
+    ) {
         $this->deploymentConfigMock->method('get')->willReturnMap($deploymentConfigReturnMap);
         $configData = $this->configList->createConfig($options, $this->deploymentConfigMock);
         $this->assertEquals($expectedConfigData, $configData->getData());

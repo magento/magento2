@@ -103,7 +103,8 @@ class RedisRequestLogger implements RequestLoggerInterface
         try {
             return (string)$this->deploymentConfig->get(
                 self::CONFIG_PATH_BACKPRESSURE_LOGGER_ID_PREFIX,
-                self::DEFAULT_PREFIX_ID);
+                self::DEFAULT_PREFIX_ID
+            );
         } catch (RuntimeException | FileSystemException $e) {
             return self::DEFAULT_PREFIX_ID;
         }
