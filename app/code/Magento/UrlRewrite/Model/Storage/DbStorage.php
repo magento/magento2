@@ -222,30 +222,26 @@ class DbStorage extends AbstractStorage
         $oldUrlsSelect->from(
             $this->resource->getTableName(self::TABLE_NAME)
         );
-
         $uniqueEntities = $this->prepareUniqueEntities($urls);
         foreach ($uniqueEntities as $storeId => $entityTypes) {
             foreach ($entityTypes as $entityType => $entities) {
                 $oldUrlsSelect->orWhere(
-                    $this->connection->quoteIdentifier(
-                        UrlRewrite::STORE_ID
-                    ) . ' = ' . $this->connection->quote($storeId, 'INTEGER') .
-                    ' AND ' . $this->connection->quoteIdentifier(
-                        UrlRewrite::ENTITY_ID
-                    ) . ' IN (' . $this->connection->quote($entities, 'INTEGER') . ')' .
-                    ' AND ' . $this->connection->quoteIdentifier(
-                        UrlRewrite::ENTITY_TYPE
-                    ) . ' = ' . $this->connection->quote($entityType)
+                    $this->connection->quoteIdentifier(UrlRewrite::STORE_ID)
+                    . ' = ' . $this->connection->quote($storeId, 'INTEGER') .
+                    ' AND ' . $this->connection->quoteIdentifier(UrlRewrite::ENTITY_ID)
+                    . ' IN (' . $this->connection->quote(array_keys($entities), 'INTEGER') . ')' .
+                    ' AND ' . $this->connection->quoteIdentifier(UrlRewrite::ENTITY_TYPE)
+                    . ' = ' . $this->connection->quote($entityType) .
+                    ' AND ' . $this->connection->quoteIdentifier(UrlRewrite::REQUEST_PATH)
+                    . ' NOT IN (' . $this->connection->quote(array_merge(...$entities)) . ')'
                 );
             }
         }
-
         // prevent query locking in a case when nothing to delete
         $checkOldUrlsSelect = clone $oldUrlsSelect;
         $checkOldUrlsSelect->reset(Select::COLUMNS);
         $checkOldUrlsSelect->columns('count(*)');
         $hasOldUrls = (bool)$this->connection->fetchOne($checkOldUrlsSelect);
-
         if ($hasOldUrls) {
             $this->connection->query(
                 $oldUrlsSelect->deleteFromSelect(
@@ -264,17 +260,9 @@ class DbStorage extends AbstractStorage
     private function prepareUniqueEntities(array $urls): array
     {
         $uniqueEntities = [];
-        /** @var UrlRewrite $url */
         foreach ($urls as $url) {
-            $entityIds = (!empty($uniqueEntities[$url->getStoreId()][$url->getEntityType()])) ?
-                $uniqueEntities[$url->getStoreId()][$url->getEntityType()] : [];
-
-            if (!\in_array($url->getEntityId(), $entityIds)) {
-                $entityIds[] = $url->getEntityId();
-            }
-            $uniqueEntities[$url->getStoreId()][$url->getEntityType()] = $entityIds;
+            $uniqueEntities[$url->getStoreId()][$url->getEntityType()][$url->getEntityId()][] = $url->getRequestPath();
         }
-
         return $uniqueEntities;
     }
 
@@ -291,7 +279,7 @@ class DbStorage extends AbstractStorage
                 foreach ($urls as $url) {
                     $data[] = $url->toArray();
                 }
-                $this->insertMultiple($data);
+                $this->upsertMultiple($data);
                 $this->connection->commit();
             } catch (\Magento\Framework\DB\Adapter\DeadlockException $deadlockException) {
                 continue;
@@ -336,6 +324,8 @@ class DbStorage extends AbstractStorage
      * @return void
      * @throws \Magento\Framework\Exception\AlreadyExistsException|\Exception
      * @throws \Exception
+     * @deprecated Not used anymore.
+     * @see upsertMultiple
      */
     protected function insertMultiple($data): void
     {
@@ -352,6 +342,17 @@ class DbStorage extends AbstractStorage
             }
             throw $e;
         }
+    }
+
+    /**
+     * Upsert multiple
+     *
+     * @param  array $data
+     * @return void
+     */
+    private function upsertMultiple(array $data): void
+    {
+        $this->connection->insertOnDuplicate($this->resource->getTableName(self::TABLE_NAME), $data);
     }
 
     /**
