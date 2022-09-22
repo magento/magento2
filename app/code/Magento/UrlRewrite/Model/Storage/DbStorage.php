@@ -213,16 +213,15 @@ class DbStorage extends AbstractStorage
     /**
      * Delete old URLs from DB.
      *
-     * @param  UrlRewrite[] $urls
+     * @param  array $uniqueEntities
      * @return void
      */
-    private function deleteOldUrls(array $urls): void
+    private function deleteOldUrls(array $uniqueEntities): void
     {
         $oldUrlsSelect = $this->connection->select();
         $oldUrlsSelect->from(
             $this->resource->getTableName(self::TABLE_NAME)
         );
-        $uniqueEntities = $this->prepareUniqueEntities($urls);
         foreach ($uniqueEntities as $storeId => $entityTypes) {
             foreach ($entityTypes as $entityType => $entities) {
                 $oldUrlsSelect->orWhere(
@@ -271,14 +270,15 @@ class DbStorage extends AbstractStorage
      */
     protected function doReplace(array $urls): array
     {
+        $uniqueEntities = $this->prepareUniqueEntities($urls);
+        $data = [];
+        foreach ($urls as $url) {
+            $data[] = $url->toArray();
+        }
         for ($tries = 0; $tries < $this->maxRetryCount; $tries++) {
             $this->connection->beginTransaction();
             try {
-                $this->deleteOldUrls($urls);
-                $data = [];
-                foreach ($urls as $url) {
-                    $data[] = $url->toArray();
-                }
+                $this->deleteOldUrls($uniqueEntities);
                 $this->upsertMultiple($data);
                 $this->connection->commit();
             } catch (\Magento\Framework\DB\Adapter\DeadlockException $deadlockException) {
