@@ -11,7 +11,6 @@ namespace Magento\OpenSearch\Test\Unit\Model;
 use OpenSearch\Client;
 use OpenSearch\Namespaces\IndicesNamespace;
 
-#use Magento\AdvancedSearch\Model\Client\ClientInterface as OpenSearchClient;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\AddDefaultSearchField;
 use Magento\OpenSearch\Model\Adapter\DynamicTemplates\IntegerMapper;
 use Magento\OpenSearch\Model\Adapter\DynamicTemplates\PositionMapper;
@@ -19,26 +18,25 @@ use Magento\OpenSearch\Model\Adapter\DynamicTemplates\PriceMapper;
 use Magento\OpenSearch\Model\Adapter\DynamicTemplates\StringMapper;
 use Magento\OpenSearch\Model\Adapter\DynamicTemplatesProvider;
 use Magento\OpenSearch\Model\OpenSearch;
-use Magento\OpenSearch\Model\SearchClient;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ElasticsearchTest to test Elasticsearch 7
+ * Class OpensearchTest to test OpensearchTest2x
  */
 class OpenSearchTest extends TestCase
 {
     /**
-     * @var OpenSearchClient
+     * @var OpenSearch
      */
     private $model;
 
     /**
      * @var Client|MockObject
      */
-    private $opensearchClientMock;
+    private $opensearchV2ClientMock;
 
     /**
      * @var IndicesNamespace|MockObject
@@ -57,19 +55,11 @@ class OpenSearchTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->opensearchClientMock = $this->getMockBuilder(Client::class)
+        $this->opensearchV2ClientMock = $this->getMockBuilder(Client::class)
             ->setMethods(
                 [
+                    'indices',
                     'search'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->searchClientMock = $this->getMockBuilder(OpenSearch::class)
-            ->setMethods(
-                [
-                    'getOpenSearchClient',
                 ]
             )
             ->disableOriginalConstructor()
@@ -84,6 +74,10 @@ class OpenSearchTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->opensearchV2ClientMock->expects($this->any())
+            ->method('indices')
+            ->willReturn($this->indicesMock);
+
         $this->objectManager = new ObjectManagerHelper($this);
         $dynamicTemplatesProvider = new DynamicTemplatesProvider(
             [ new PriceMapper(), new PositionMapper(), new StringMapper(), new IntegerMapper()]
@@ -92,16 +86,11 @@ class OpenSearchTest extends TestCase
             OpenSearch::class,
             [
                 'options' => $this->getOptions(),
-                'opensearchClient' => $this->opensearchClientMock,
+                'openSearchClient' => $this->opensearchV2ClientMock,
                 'fieldsMappingPreprocessors' => [new AddDefaultSearchField()],
                 'dynamicTemplatesProvider' => $dynamicTemplatesProvider,
             ]
         );
-    }
-
-    public function testPrint()
-    {
-        $this->assertTrue(true, "This is it.");
     }
 
     /**
@@ -112,19 +101,14 @@ class OpenSearchTest extends TestCase
     public function testQuery()
     {
         $query = ['test phrase query'];
-        $this->opensearchClientMock->expects($this->once())
+        $this->opensearchV2ClientMock->expects($this->once())
             ->method('search')
             ->with($query)
             ->willReturn([]);
-
-        $this->searchClientMock->expects($this->once())
-            ->method('getOpenSearchClient')
-            ->willReturn($this->opensearchClientMock);
-
         $this->assertEquals([], $this->model->query($query));
     }
     /**
-     * Get elasticsearch client options
+     * Get client options
      *
      * @return array
      */
@@ -151,10 +135,7 @@ class OpenSearchTest extends TestCase
             ->with(
                 [
                     'index' => 'indexName',
-                    'type' => 'product',
-                    'include_type_name' => true,
                     'body' => [
-                        'product' => [
                             'properties' => [
                                 '_search' => [
                                     'type' => 'text',
@@ -204,7 +185,6 @@ class OpenSearchTest extends TestCase
                                     ],
                                 ],
                             ],
-                        ],
                     ],
                 ]
             );
