@@ -30,11 +30,14 @@ define(
 
         return function (messageContainer) {
             var serviceUrl,
-                payload;
+                payload,
+                useForShipping;
 
             /**
              * Checkout for guest and registered customer.
              */
+            useForShipping = $(`#billing-address-same-as-shipping-${quote.paymentMethod().method}:checkbox:checked`)
+                .length > 0;
             if (!customer.isLoggedIn()) {
                 serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/billing-address', {
                     cartId: quote.getQuoteId()
@@ -42,14 +45,14 @@ define(
                 payload = {
                     cartId: quote.getQuoteId(),
                     address: quote.billingAddress(),
-                    useForShipping: $('#billing-address-same-as-shipping-checkmo:checkbox:checked').length > 0
+                    useForShipping: useForShipping
                 };
             } else {
                 serviceUrl = urlBuilder.createUrl('/carts/mine/billing-address', {});
                 payload = {
                     cartId: quote.getQuoteId(),
                     address: quote.billingAddress(),
-                    useForShipping: $('#billing-address-same-as-shipping-checkmo:checkbox:checked').length > 0
+                    useForShipping: useForShipping
                 };
             }
 
