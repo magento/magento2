@@ -11,7 +11,7 @@ use Magento\AdvancedSearch\Helper\Data;
 class ClientFactory implements ClientFactoryInterface
 {
     /**
-     * Object manager
+     * Object var
      *
      * @var ObjectManagerInterface
      */
@@ -34,9 +34,9 @@ class ClientFactory implements ClientFactoryInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param $clientClass
+     * @param string $clientClass
      * @param Data $helper
-     * @param $openSearch
+     * @param string|null $openSearch
      */
     public function __construct(
         ObjectManagerInterface $objectManager,

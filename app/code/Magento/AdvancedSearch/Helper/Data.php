@@ -21,7 +21,7 @@ class Data extends AbstractHelper
     /**
      * @var EngineResolverInterface
      */
-    protected $engineResolver;
+    public $engineResolver;
 
     /**
      * @param Context $context
