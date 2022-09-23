@@ -143,7 +143,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
         $where = $ids ? ['id IN (?)' => $ids] : '';
         $this->getConnection()->update(
             $this->getMainTable(),
-            ['is_processed' => true],
+            ['is_processed' => 1],
             $where
         );
     }
@@ -286,7 +286,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
 
         $this->getConnection()->insert(
             $this->getMainTable(),
-            ['behavior' => $behavior, 'entity' => $entity, 'data' => $encodedData, 'is_processed' => false]
+            ['behavior' => $behavior, 'entity' => $entity, 'data' => $encodedData, 'is_processed' => 0]
         );
         return $this->getConnection()->lastInsertId($this->getMainTable());
     }
