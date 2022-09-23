@@ -140,6 +140,8 @@ class SampleDataDeployCommand extends Command
                 return Cli::RETURN_FAILURE;
             }
 
+            $output->writeln('<info>' . 'Sample data modules have been added via composer. Please run bin/magento setup:upgrade' . '</info>');
+
             return Cli::RETURN_SUCCESS;
         } else {
             $output->writeln('<info>' . 'There is no sample data for current set of modules.' . '</info>');
