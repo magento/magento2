@@ -34,31 +34,23 @@ class SampleDataDeployCommand extends Command
 {
     public const OPTION_NO_UPDATE = 'no-update';
 
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
+    /** @var Filesystem */
+    private Filesystem $filesystem;
 
-    /**
-     * @var Dependency
-     */
-    private $sampleDataDependency;
+    /** @var Dependency */
+    private Dependency $sampleDataDependency;
 
     /**
      * @var ArrayInputFactory
      * @deprecated 100.1.0
      */
-    private $arrayInputFactory;
+    private ArrayInputFactory $arrayInputFactory;
 
-    /**
-     * @var ApplicationFactory
-     */
-    private $applicationFactory;
+    /** @var ApplicationFactory */
+    private ApplicationFactory $applicationFactory;
 
-    /**
-     * @var Json
-     */
-    private $serializer;
+    /** @var Json */
+    private Json $serializer;
 
     /**
      * @param Filesystem $filesystem
