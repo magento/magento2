@@ -32,7 +32,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class SampleDataDeployCommand extends Command
 {
-    const OPTION_NO_UPDATE = 'no-update';
+    public const OPTION_NO_UPDATE = 'no-update';
 
     /**
      * @var Filesystem
@@ -140,7 +140,11 @@ class SampleDataDeployCommand extends Command
                 return Cli::RETURN_FAILURE;
             }
 
-            $output->writeln('<info>' . 'Sample data modules have been added via composer. Please run bin/magento setup:upgrade' . '</info>');
+            $output->writeln(
+                '<info>'
+                . 'Sample data modules have been added via composer. Please run bin/magento setup:upgrade'
+                . '</info>'
+            );
 
             return Cli::RETURN_SUCCESS;
         } else {

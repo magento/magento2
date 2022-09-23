@@ -163,7 +163,8 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
                 'composerJsonContent' => [
                     'require' => ["magento/product-community-edition" => "0.0.1"],
                 ],
-                'expectedMsg' => 'Sample data modules have been added via composer. Please run bin/magento setup:upgrade'
+                'expectedMsg' => 'Sample data modules have been added via composer.'
+                    . ' Please run bin/magento setup:upgrade'
                     . PHP_EOL,
                 'authExist' => true,
             ],
