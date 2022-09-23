@@ -6,7 +6,6 @@
 
 namespace Magento\SampleData\Console\Command;
 
-use Composer\Console\Application;
 use Composer\Console\ApplicationFactory;
 use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -15,12 +14,10 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\SampleData\Model\Dependency;
 use Magento\Setup\Model\PackagesAuth;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\ArrayInputFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -40,37 +37,23 @@ class SampleDataDeployCommand extends Command
     /** @var Dependency */
     private Dependency $sampleDataDependency;
 
-    /**
-     * @var ArrayInputFactory
-     * @deprecated 100.1.0
-     */
-    private ArrayInputFactory $arrayInputFactory;
-
     /** @var ApplicationFactory */
     private ApplicationFactory $applicationFactory;
-
-    /** @var Json */
-    private Json $serializer;
 
     /**
      * @param Filesystem $filesystem
      * @param Dependency $sampleDataDependency
-     * @param ArrayInputFactory $arrayInputFactory
      * @param ApplicationFactory $applicationFactory
-     * @param Json $serializer
      */
     public function __construct(
         Filesystem $filesystem,
         Dependency $sampleDataDependency,
-        ArrayInputFactory $arrayInputFactory,
-        ApplicationFactory $applicationFactory,
-        Json $serializer
+        ApplicationFactory $applicationFactory
     ) {
         $this->filesystem = $filesystem;
         $this->sampleDataDependency = $sampleDataDependency;
-        $this->arrayInputFactory = $arrayInputFactory;
         $this->applicationFactory = $applicationFactory;
-        $this->serializer = $serializer;
+
         parent::__construct();
     }
 
@@ -118,7 +101,6 @@ class SampleDataDeployCommand extends Command
             $arguments = array_merge(['command' => 'require'], $commonArgs);
             $commandInput = new ArrayInput($arguments);
 
-            /** @var Application $application */
             $application = $this->applicationFactory->create();
             $application->setAutoExit(false);
             $result = $application->run($commandInput, $output);

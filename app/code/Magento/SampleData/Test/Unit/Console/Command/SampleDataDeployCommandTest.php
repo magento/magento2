@@ -9,37 +9,12 @@ namespace Magento\SampleData\Test\Unit\Console\Command;
 
 use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\SampleData\Console\Command\SampleDataDeployCommand;
 use Magento\Setup\Model\PackagesAuth;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
 {
-    /**
-     * @var Json|MockObject
-     */
-    private $serializerMock;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->serializerMock = $this->createMock(Json::class);
-    }
-
-    /**
-     * Sets mock for unserialization composer content
-     * @param array $composerJsonContent
-     * @return void
-     */
-    protected function setupMockForSerializer(array $composerJsonContent): void
-    {
-        $this->serializerMock->expects($this->any())
-            ->method('unserialize')
-            ->will($this->returnValue($composerJsonContent));
-    }
-
     /**
      * Sets mocks for auth file
      *
@@ -85,7 +60,6 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
             $composerJsonContent
         );
         $this->setupMocksForAuthFile($authExist);
-        $this->setupMockForSerializer($composerJsonContent);
         $commandTester = $this->createCommandTester();
         $commandTester->execute([]);
 
@@ -117,7 +91,6 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
             ['--no-update' => 1]
         );
         $this->setupMocksForAuthFile($authExist);
-        $this->setupMockForSerializer($composerJsonContent);
         $commandInput = ['--no-update' => 1];
 
         $commandTester = $this->createCommandTester();
@@ -210,9 +183,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
             new SampleDataDeployCommand(
                 $this->filesystemMock,
                 $this->sampleDataDependencyMock,
-                $this->arrayInputFactoryMock,
-                $this->applicationFactoryMock,
-                $this->serializerMock
+                $this->applicationFactoryMock
             )
         );
     }
