@@ -15,6 +15,6 @@
 
         <switchToNextTab stepKey="switchToNewTab"/>
         <waitForPageLoad stepKey="waitForAdvancedReportingPageLoad"/>
-        <seeInCurrentUrl url="report" stepKey="seeAssertAdvancedReportingPageUrl"/>
+        <seeInCurrentUrl url="report"  stepKey="seeAssertAdvancedReportingPageUrl"/>
     </actionGroup>
 </actionGroups>
