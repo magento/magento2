@@ -107,7 +107,7 @@ class SampleDataDeployCommand extends Command
      * @throws FileSystemException
      * @throws LocalizedException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->updateMemoryLimit();
         $this->createAuthFile();
@@ -162,7 +162,7 @@ class SampleDataDeployCommand extends Command
      * @return void
      * @throws LocalizedException
      */
-    private function createAuthFile()
+    private function createAuthFile(): void
     {
         $directory = $this->filesystem->getDirectoryWrite(DirectoryList::COMPOSER_HOME);
 
@@ -184,7 +184,7 @@ class SampleDataDeployCommand extends Command
      * @throws InvalidArgumentException
      * @return void
      */
-    private function updateMemoryLimit()
+    private function updateMemoryLimit(): void
     {
         if (function_exists('ini_set')) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -217,7 +217,7 @@ class SampleDataDeployCommand extends Command
      * @param string $value
      * @return int
      */
-    private function getMemoryInBytes($value)
+    private function getMemoryInBytes(string $value): int
     {
         $unit = strtolower(substr($value, -1, 1));
         $value = (int) $value;
