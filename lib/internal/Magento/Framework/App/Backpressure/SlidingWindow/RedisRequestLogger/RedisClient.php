@@ -100,7 +100,6 @@ class RedisClient
     public function incrBy(string $key, int $decrement)
     {
         return $this->pipeline->incrBy($key, $decrement);
-
     }
 
     /**

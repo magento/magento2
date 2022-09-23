@@ -24,6 +24,4 @@ return [
     'amqp-user' => 'guest',
     'amqp-password' => 'guest',
     'consumers-wait-for-messages' => '0',
-    'backpressure-logger' => 'redis',
-    'backpressure-logger-redis-timeout'=>10,
 ];
