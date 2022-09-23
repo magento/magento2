@@ -4,7 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-function getAllureConfig($outputDirectory): array
+/**
+ * Return the allure config details
+ *
+ * @param string $outputDirectory
+ * @return array
+ */
+function getAllureConfig(string $outputDirectory): array
 {
     if (!file_exists($outputDirectory)) {
         mkdir($outputDirectory, 0755, true);
