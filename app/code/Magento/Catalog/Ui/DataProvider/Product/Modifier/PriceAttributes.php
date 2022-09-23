@@ -10,7 +10,9 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Modifier;
 use Magento\Framework\Currency;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\CurrencyInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 
@@ -35,13 +37,20 @@ class PriceAttributes implements ModifierInterface
     private $localeCurrency;
 
     /**
+     * @var ContextInterface
+     */
+    private ContextInterface $context;
+
+    /**
      * PriceAttributes constructor.
      *
+     * @param ContextInterface $context
      * @param StoreManagerInterface $storeManager
      * @param CurrencyInterface $localeCurrency
      * @param array $priceAttributeList
      */
     public function __construct(
+        ContextInterface $context,
         StoreManagerInterface $storeManager,
         CurrencyInterface $localeCurrency,
         array $priceAttributeList = []
@@ -49,10 +58,13 @@ class PriceAttributes implements ModifierInterface
         $this->storeManager = $storeManager;
         $this->localeCurrency = $localeCurrency;
         $this->priceAttributeList = $priceAttributeList;
+        $this->context = $context;
     }
 
     /**
      * @inheritdoc
+     * @throws NoSuchEntityException
+     * @throws \Zend_Currency_Exception
      */
     public function modifyData(array $data): array
     {
@@ -87,7 +99,9 @@ class PriceAttributes implements ModifierInterface
      */
     private function getStore(): StoreInterface
     {
-        return $this->storeManager->getStore();
+        return $this->storeManager->getStore(
+            $this->context->getFilterParam('store_id', Store::DEFAULT_STORE_ID)
+        );
     }
 
     /**

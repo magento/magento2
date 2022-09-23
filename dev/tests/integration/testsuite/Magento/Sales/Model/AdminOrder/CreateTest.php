@@ -17,8 +17,10 @@ use Magento\Sales\Api\Data\OrderAddressExtensionInterface;
 use Magento\Sales\Api\Data\OrderAddressExtensionInterfaceFactory;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\AdminOrder\EmailSender;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,6 +40,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     private $messageManager;
 
     /**
+     * @var EmailSender|MockObject
+     */
+    private $emailSenderMock;
+
+    /**
      * @var ObjectManager
      */
     private $objectManager;
@@ -46,7 +53,13 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->messageManager = $this->objectManager->get(ManagerInterface::class);
-        $this->model =$this->objectManager->create(Create::class, ['messageManager' => $this->messageManager]);
+        $this->emailSenderMock = $this->getMockBuilder(EmailSender::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->model =$this->objectManager->create(
+            Create::class,
+            ['messageManager' => $this->messageManager, 'emailSender' => $this->emailSenderMock]
+        );
     }
 
     /**
@@ -631,6 +644,13 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $this->model->getQuote()->setCustomer($customerMock);
         $order = $this->model->createOrder();
+        if ($this->model->getSendConfirmation() && !$order->getEmailSent()) {
+            $this->emailSenderMock->expects($this->once())
+                ->method('send')
+                ->willReturn(true);
+        } else {
+            $this->emailSenderMock->expects($this->never())->method('send');
+        }
         $this->verifyCreatedOrder($order, $shippingMethod);
     }
 
