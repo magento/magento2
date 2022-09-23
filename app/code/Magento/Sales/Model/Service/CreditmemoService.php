@@ -8,7 +8,8 @@ declare(strict_types=1);
 namespace Magento\Sales\Model\Service;
 
 /**
- * Service model for Creditmemo
+ * Class CreditmemoService
+ * Provides functionality to work with Creditmemo
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterface
@@ -194,7 +195,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
         }
 
         if (!$creditmemo->getOrderId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new \Magento\Framework\Exception\NoSuchEntityException(
                 __('We found an invalid order to refund.')
             );
         }

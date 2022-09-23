@@ -207,7 +207,7 @@ class CreditmemoServiceTest extends TestCase
             ->getMock();
 
         $creditMemoMock->expects($this->atLeastOnce())->method('getOrder')->willReturn($orderMock);
-        $creditMemoMock->expects($this->atLeastOnce())->method('getOrderId')->willReturn(true);
+        $creditMemoMock->expects($this->atLeastOnce())->method('getOrderId')->willReturn(1);
         $orderMock->expects($this->once())->method('getBaseTotalRefunded')->willReturn(0);
         $orderMock->expects($this->once())->method('getBaseTotalPaid')->willReturn(10);
         $creditMemoMock->expects($this->once())->method('getBaseGrandTotal')->willReturn(10);
@@ -278,7 +278,7 @@ class CreditmemoServiceTest extends TestCase
         $creditMemoMock->expects($this->once())->method('getState')
             ->willReturn(Creditmemo::STATE_OPEN);
         $creditMemoMock->expects($this->once())->method('getOrderId')
-            ->willReturn(true);
+            ->willReturn(1);
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -364,7 +364,7 @@ class CreditmemoServiceTest extends TestCase
         $creditMemo->method('getOrder')
             ->willReturn($order);
         $creditMemo->method('getOrderId')
-            ->willReturn(true);
+            ->willReturn(1);
         $creditMemo->method('getBaseGrandTotal')
             ->willReturn($baseGrandTotal);
         $order->method('getBaseTotalRefunded')
@@ -433,7 +433,7 @@ class CreditmemoServiceTest extends TestCase
         $creditMemo->method('getOrder')
             ->willReturn($order);
         $creditMemo->method('getOrderId')
-            ->willReturn(true);
+            ->willReturn(1);
         $creditMemo->method('getBaseGrandTotal')
             ->willReturn($baseGrandTotal);
         $creditMemo->method('getGrandTotal')
