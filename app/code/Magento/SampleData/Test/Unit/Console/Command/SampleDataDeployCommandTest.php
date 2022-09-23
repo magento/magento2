@@ -149,7 +149,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
      */
     public function testExecuteWithException(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage(
             'Error in writing Auth file path/to/auth.json. Please check permissions for writing.'
         );
@@ -189,8 +189,8 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
     }
 
     /**
-     * @param $sampleDataPackages
-     * @param $pathToComposerJson
+     * @param array $sampleDataPackages
+     * @param string $pathToComposerJson
      * @return array
      */
     protected function expectedComposerArgumentsSampleDataCommands(
@@ -211,7 +211,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
      */
     private function packageVersionStrings(array $sampleDataPackages): array
     {
-        array_walk($sampleDataPackages, function (&$v, $k) {
+        array_walk($sampleDataPackages, static function (&$v, $k) {
             $v = "$k:$v";
         });
 

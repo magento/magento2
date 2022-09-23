@@ -121,11 +121,11 @@ class SampleDataDeployCommand extends Command
             );
 
             return Cli::RETURN_SUCCESS;
-        } else {
-            $output->writeln('<info>' . 'There is no sample data for current set of modules.' . '</info>');
-
-            return Cli::RETURN_FAILURE;
         }
+
+        $output->writeln('<info>' . 'There is no sample data for current set of modules.' . '</info>');
+
+        return Cli::RETURN_FAILURE;
     }
 
     /**
