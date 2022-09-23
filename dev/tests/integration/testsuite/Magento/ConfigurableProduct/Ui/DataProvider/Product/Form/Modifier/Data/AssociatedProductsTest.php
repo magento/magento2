@@ -127,6 +127,45 @@ class AssociatedProductsTest extends TestCase
     }
 
     /**
+     * Test that ASSOCIATED_PRODUCT_LISTING component uses POST to retrieve data
+     *
+     * @return void
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoAppArea adminhtml
+     */
+    public function testUiComponentAssociatedProductListingConfig()
+    {
+        /** @var RequestInterface $request */
+        $request = $this->objectManager->get(RequestInterface::class);
+        $request->setParams([
+            FilterModifier::FILTER_MODIFIER => [
+                'test_configurable' => [
+                    'condition_type' => 'notnull',
+                ],
+            ],
+            'attributes_codes' => [
+                'test_configurable'
+            ],
+        ]);
+        $context = $this->objectManager->create(ContextInterface::class, ['request' => $request]);
+        /** @var UiComponentFactory $uiComponentFactory */
+        $uiComponentFactory = $this->objectManager->get(UiComponentFactory::class);
+        $uiComponent = $uiComponentFactory->create(
+            ConfigurablePanel::ASSOCIATED_PRODUCT_LISTING,
+            null,
+            ['context' => $context]
+        );
+
+        foreach ($uiComponent->getChildComponents() as $childUiComponent) {
+            $childUiComponent->prepare();
+        }
+        $dataSourceConfig = $uiComponent->getContext()->getDataProvider()->getConfigData();
+        $dataSourceRequestConfig = $dataSourceConfig['storageConfig']['requestConfig'];
+        $this->assertIsArray($dataSourceRequestConfig);
+        $this->assertEquals('POST', $dataSourceRequestConfig['method']);
+    }
+
+    /**
      * @return array
      */
     public function getProductMatrixDataProvider()

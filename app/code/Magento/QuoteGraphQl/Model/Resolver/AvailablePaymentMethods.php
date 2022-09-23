@@ -81,12 +81,13 @@ class AvailablePaymentMethods implements ResolverInterface
              */
             if ((int)$grandTotal === 0 && $carrierCode === self::FREE_SHIPPING_METHOD
                 && $paymentMethod->getCode() === self::FREE_PAYMENT_METHOD_CODE) {
-                $paymentMethodsData[] = [
-                    'title' => $paymentMethod->getTitle(),
-                    'code' => $paymentMethod->getCode(),
+                return [
+                    [
+                        'title' => $paymentMethod->getTitle(),
+                        'code' => $paymentMethod->getCode(),
+                    ]
                 ];
-            } elseif ((int)$grandTotal >= 0
-                && $carrierCode !== self::FREE_SHIPPING_METHOD) {
+            } elseif ((int)$grandTotal >= 0) {
                 $paymentMethodsData[] = [
                     'title' => $paymentMethod->getTitle(),
                     'code' => $paymentMethod->getCode(),
