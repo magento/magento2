@@ -8,4 +8,4 @@ declare(strict_types=1);
 require "../../config/AllureConfig.php";
 
 $outputDirectory = __DIR__ . '/../var/allure-results';
-return AllureConfig::getAllureConfig($outputDirectory);
+return getAllureConfig($outputDirectory);
