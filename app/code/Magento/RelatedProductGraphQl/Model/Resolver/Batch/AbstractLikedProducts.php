@@ -80,10 +80,15 @@ abstract class AbstractLikedProducts implements BatchResolverInterface
      * @param \Magento\Catalog\Api\Data\ProductInterface[] $products
      * @param string[] $loadAttributes
      * @param int $linkType
+     * @param ContextInterface $context
      * @return \Magento\Catalog\Api\Data\ProductInterface[][]
      */
-    private function findRelations(array $products, array $loadAttributes, int $linkType): array
-    {
+    private function findRelations(
+        array $products,
+        array $loadAttributes,
+        int $linkType,
+        ContextInterface $context
+    ): array {
         //Loading relations
         $relations = $this->relatedProductDataProvider->getRelations($products, $linkType);
         if (!$relations) {
@@ -96,7 +101,8 @@ abstract class AbstractLikedProducts implements BatchResolverInterface
             $this->searchCriteriaBuilder->create(),
             $loadAttributes,
             false,
-            true
+            true,
+            $context
         );
         //Filling related products map.
         /** @var \Magento\Catalog\Api\Data\ProductInterface[] $relatedProducts */
@@ -144,7 +150,7 @@ abstract class AbstractLikedProducts implements BatchResolverInterface
         $fields = array_unique(array_merge([], ...$fields));
 
         //Finding relations.
-        $related = $this->findRelations($products, $fields, $this->getLinkType());
+        $related = $this->findRelations($products, $fields, $this->getLinkType(), $context);
 
         //Matching requests with responses.
         $response = new BatchResponse();
