@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigTest extends TestCase
 {
-
+    private const XML_CONFIG_PATH = 'adobe_ims/integration/';
     /**
      * API key constants
      */
@@ -43,6 +43,7 @@ class ConfigTest extends TestCase
      */
     private const LOCALE_CODE = 'en_US';
     private const XML_PATH_AUTH_URL_PATTERN = 'adobe_ims/integration/auth_url_pattern';
+    private const AUTH_URL = 'https://auth-url.com/pattern';
     private const AUTH_URL_PATTERN = 'https://auth-url.com/pattern' .
     '?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}';
 
@@ -55,6 +56,7 @@ class ConfigTest extends TestCase
      * Logout URL constants
      */
     private const XML_PATH_LOGOUT_URL_PATTERN = 'adobe_ims/integration/logout_url';
+    private const LOGOUT_URL = 'https://logout-url.com/pattern';
     private const LOGOUT_URL_PATTERN = 'https://logout-url.com/pattern' .
     '?access_token=#{access_token}&redirect_uri=#{redirect_uri}';
     private const REDIRECT_URI = 'REDIRECT_URI';
@@ -65,12 +67,15 @@ class ConfigTest extends TestCase
      */
     private const XML_PATH_IMAGE_URL_PATTERN = 'adobe_ims/integration/image_url';
     private const IMAGE_URL_PATTERN = 'https://image-url.com/pattern?api_key=#{api_key}';
+    private const IMAGE_URL = 'https://image-url.com/pattern';
 
     /**
      * Default profile image URL constants
      */
     private const XML_PATH_DEFAULT_PROFILE_IMAGE = 'adobe_ims/integration/default_profile_image';
     private const IMAGE_URL_DEFAULT = 'https://image-url.com/default';
+
+    private const XML_PATH_ADOBE_IMS_SCOPES = 'adobe_ims/integration/scopes';
 
     /**
      * @var Config
@@ -128,8 +133,16 @@ class ConfigTest extends TestCase
     public function testGetTokenUrl(): void
     {
         $this->scopeConfigMock->method('getValue')
-            ->with(self::XML_PATH_TOKEN_URL)
-            ->willReturn(self::TOKEN_URL);
+            ->willReturnMap([
+                [
+                    self::XML_PATH_TOKEN_URL, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
+                    self::TOKEN_URL
+                ],
+                [
+                    self::XML_CONFIG_PATH . 'imsUrl', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
+                    self::TOKEN_URL
+                ],
+            ]);
 
         $this->assertEquals(self::TOKEN_URL, $this->config->getTokenUrl());
     }
@@ -142,8 +155,16 @@ class ConfigTest extends TestCase
         $this->scopeConfigMock->method('getValue')
             ->willReturnMap([
                 [
+                    self::XML_CONFIG_PATH . 'imsUrl', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
+                    self::AUTH_URL
+                ],
+                [
                     self::XML_PATH_API_KEY, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
                     self::API_KEY
+                ],
+                [
+                    self::XML_PATH_ADOBE_IMS_SCOPES , ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
+                    ['openid']
                 ],
                 [
                     Custom::XML_PATH_GENERAL_LOCALE_CODE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
@@ -183,8 +204,16 @@ class ConfigTest extends TestCase
     public function testGetLogoutUrl(): void
     {
         $this->scopeConfigMock->method('getValue')
-            ->with(self::XML_PATH_LOGOUT_URL_PATTERN)
-            ->willReturn(self::LOGOUT_URL_PATTERN);
+            ->willReturnMap([
+                [
+                    self::XML_PATH_LOGOUT_URL_PATTERN, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
+                    self::LOGOUT_URL_PATTERN
+                ],
+                [
+                    self::XML_CONFIG_PATH . 'imsUrl', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
+                    self::LOGOUT_URL
+                ],
+            ]);
 
         $this->assertEquals(
             'https://logout-url.com/pattern?access_token=' . self::ACCCESS_TOKEN .
@@ -200,6 +229,10 @@ class ConfigTest extends TestCase
     {
         $this->scopeConfigMock->method('getValue')
             ->willReturnMap([
+                [
+                    self::XML_CONFIG_PATH . 'imageUrl', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
+                    self::IMAGE_URL
+                ],
                 [
                     self::XML_PATH_IMAGE_URL_PATTERN, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
                     self::IMAGE_URL_PATTERN
