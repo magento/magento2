@@ -10,8 +10,8 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateOrderWithConfigurableProductPressKeyEnterTest">
         <annotations>
-            <title value="Create Order in Admin with configurable product"/>
-            <description value="Create order with configurable product."/>
+            <title value="Create Order in Admin with configurable product with pressing enter key in option select modal."/>
+            <description value="Create order with configurable product with pressing enter key in option select modal."/>
             <features value="Sales"/>
             <severity value="MAJOR"/>
             <group value="Sales"/>
