@@ -19,8 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class Cron extends \Magento\Framework\App\Config\Value
 {
-    const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';
-    const CONFIG_FIELD = 'path';
+    public const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';
     /**
      * @var \Magento\Framework\App\Config\ValueFactory
      */
@@ -93,7 +92,7 @@ class Cron extends \Magento\Framework\App\Config\Value
         try {
             /** @var $configValue \Magento\Framework\App\Config\ValueInterface */
             $configValue = $this->_configValueFactory->create();
-            $configValue->load(self::CRON_STRING_PATH, self::CONFIG_FIELD);
+            $configValue->load(self::CRON_STRING_PATH, 'path');
             $configValue->setValue($cronExprString)->setPath(self::CRON_STRING_PATH)->save();
         } catch (\Exception $e) {
             throw new LocalizedException(__('We can\'t save the Cron expression.'));

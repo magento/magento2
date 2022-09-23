@@ -394,8 +394,8 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
         );
         $this->runConfigImportCommand($commandTester, 'System config was processed');
 
-        $configValue->load(Cron::CRON_STRING_PATH, Cron::CONFIG_FIELD);
-        $configValue->getFieldsetDataValue(Cron::CONFIG_FIELD);
+        $configValue->load(Cron::CRON_STRING_PATH, 'path');
+        $configValue->getFieldsetDataValue('path');
         $time = $configValue->getValue();
         $this->assertSame($time, "$min $hour * * *");
     }
