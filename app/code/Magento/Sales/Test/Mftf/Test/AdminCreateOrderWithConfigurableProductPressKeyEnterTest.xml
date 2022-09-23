@@ -9,6 +9,13 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateOrderWithConfigurableProductPressKeyEnterTest">
+        <annotations>
+            <title value="Create Order in Admin with configurable product"/>
+            <description value="Create order with configurable product."/>
+            <features value="Sales"/>
+            <severity value="MAJOR"/>
+            <group value="Sales"/>
+        </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
