@@ -139,7 +139,6 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
                 'appRunResult' => 1,
                 'composerJsonContent' => [
                     'require' => ["magento/product-community-edition" => "0.0.1"],
-                    'version' => '0.0.1'
                 ],
                 'expectedMsg' => 'There is no sample data for current set of modules.' . PHP_EOL,
                 'authExist' => true,
@@ -151,24 +150,10 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
                 'appRunResult' => 1,
                 'composerJsonContent' => [
                     'require' => ["magento/product-community-edition" => "0.0.1"],
-                    'version' => '0.0.1'
                 ],
                 'expectedMsg' => 'There is an error during sample data deployment. Composer file will be reverted.'
                     . PHP_EOL,
                 'authExist' => false,
-            ],
-            'Successful sample data installation without field "version"' => [
-                'sampleDataPackages' => [
-                    'magento/module-cms-sample-data' => '1.0.0-beta',
-                ],
-                'appRunResult' => 0,
-                'composerJsonContent' => [
-                    'require' => ["magento/product-community-edition" => "0.0.1"]
-                ],
-                // @codingStandardsIgnoreLine
-                'expectedMsg' => 'We don\'t recommend to remove the "version" field from your composer.json; see https://getcomposer.org/doc/02-libraries.md#library-versioning for more information.'
-                    . PHP_EOL . 'The field "version" has been restored.' . PHP_EOL,
-                'authExist' => true,
             ],
             'Successful sample data installation' => [
                 'sampleDataPackages' => [
@@ -177,7 +162,6 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
                 'appRunResult' => 0,
                 'composerJsonContent' => [
                     'require' => ["magento/product-community-edition" => "0.0.1"],
-                    'version' => '0.0.1'
                 ],
                 'expectedMsg' => '',
                 'authExist' => true,
@@ -194,20 +178,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
         $this->expectExceptionMessage(
             'Error in writing Auth file path/to/auth.json. Please check permissions for writing.'
         );
-        $this->directoryReadMock->expects($this->once())
-            ->method('readFile')
-            ->with('composer.json')
-            ->willReturn('{"require": {"magento/product-community-edition": "0.0.1"}, "version": "0.0.1"}');
-        $this->serializerMock->expects($this->any())
-            ->method('unserialize')
-            ->will($this->returnValue([
-                'require' => ["magento/product-community-edition" => "0.0.1"],
-                'version' => '0.0.1'
-            ]));
-        $this->filesystemMock->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::ROOT)
-            ->willReturn($this->directoryReadMock);
+
         $this->directoryWriteMock->expects($this->once())
             ->method('isExist')
             ->with(PackagesAuth::PATH_TO_AUTH_FILE)

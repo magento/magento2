@@ -109,33 +109,6 @@ class SampleDataDeployCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $rootJson = $this->serializer->unserialize(
-            $this->filesystem->getDirectoryRead(
-                DirectoryList::ROOT
-            )->readFile("composer.json")
-        );
-        if (!isset($rootJson['version'])) {
-            $magentoProductPackage = array_filter(
-                $rootJson['require'],
-                function ($package) {
-                    return false !== strpos($package, 'magento/product-');
-                },
-                ARRAY_FILTER_USE_KEY
-            );
-            $version = reset($magentoProductPackage);
-            $output->writeln(
-                '<info>' .
-                // @codingStandardsIgnoreLine
-                'We don\'t recommend to remove the "version" field from your composer.json; see https://getcomposer.org/doc/02-libraries.md#library-versioning for more information.' .
-                '</info>'
-            );
-            $restoreVersion = new ArrayInput([
-                'command' => 'config',
-                'setting-key' => 'version',
-                'setting-value' => [$version],
-                '--quiet' => 1
-            ]);
-        }
         $this->updateMemoryLimit();
         $this->createAuthFile();
         $sampleDataPackages = $this->sampleDataDependency->getSampleDataPackages();
@@ -156,12 +129,6 @@ class SampleDataDeployCommand extends Command
             /** @var Application $application */
             $application = $this->applicationFactory->create();
             $application->setAutoExit(false);
-            if (!empty($restoreVersion)) {
-                $result = $application->run($restoreVersion, clone $output);
-                if ($result === 0) {
-                    $output->writeln('<info>The field "version" has been restored.</info>');
-                }
-            }
             $result = $application->run($commandInput, $output);
             if ($result !== 0) {
                 $output->writeln(
