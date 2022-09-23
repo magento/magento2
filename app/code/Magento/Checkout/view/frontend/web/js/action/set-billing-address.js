@@ -16,7 +16,7 @@ define(
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Checkout/js/action/get-payment-information',
-        'Magento_Checkout/js/checkout-data',
+        'Magento_Checkout/js/checkout-data'
     ],
     function ($,
               quote,
