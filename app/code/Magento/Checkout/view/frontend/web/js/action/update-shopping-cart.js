@@ -156,8 +156,9 @@ define([
                 elm,
                 responseData = [];
 
-            if (response['error_message'] === undefined) {
+            try {
                 responseData = JSON.parse(response['error_message']);
+            } catch (error) {
             }
 
             if (response['error_message']) {
