@@ -56,6 +56,6 @@
             <argument name="quantity" value="{{MaximumQtyAllowed2ForShippingToMultipleAddressesConfigData.value}}"/>
         </actionGroup>
         <actionGroup ref="StorefrontNavigateToShippingInformationPageActionGroup" stepKey="navigateToShippingInformation"/>
-        <see selector=".modals-wrapper .modal-content div" userInput="Maximum qty allowed for Shipping to multiple addresses is {{MaximumQtyAllowed2ForShippingToMultipleAddressesConfigData.value}}" stepKey="seeAddedToCartSuccessMessage"/>
+        <see selector=".modals-wrapper .modal-content div" userInput="Maximum qty allowed for Shipping to multiple addresses is {{MaximumQtyAllowed2ForShippingToMultipleAddressesConfigData.value}}" stepKey="seeErrorMessage"/>
     </test>
 </tests>
