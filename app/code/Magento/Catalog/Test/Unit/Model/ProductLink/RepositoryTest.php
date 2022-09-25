@@ -185,7 +185,7 @@ class RepositoryTest extends TestCase
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $this->expectExceptionMessage('The linked products sku is invalid. Verify the data and try again.');
         $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
-        $entityMock->expects($this->any())->method('getLinkedProductSku')->willReturn(false);
+        $entityMock->expects($this->any())->method('getLinkedProductSku')->willReturn('');
         $this->model->save($entityMock);
     }
 
