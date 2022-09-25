@@ -126,7 +126,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
         $this->getConnection()->delete(
             $this->getMainTable(),
             [
-                'is_processed' => true
+                'is_processed' => '1'
             ]
         );
     }
@@ -140,11 +140,10 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      */
     public function markProcessedBunches(array $ids): void
     {
-        $where = $ids ? ['id IN (?)' => $ids] : '';
         $this->getConnection()->update(
             $this->getMainTable(),
-            ['is_processed' => 1],
-            $where
+            ['is_processed' => '1'],
+            ['id IN (?)' => $ids]
         );
     }
 
@@ -286,7 +285,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
 
         $this->getConnection()->insert(
             $this->getMainTable(),
-            ['behavior' => $behavior, 'entity' => $entity, 'data' => $encodedData, 'is_processed' => 0]
+            ['behavior' => $behavior, 'entity' => $entity, 'data' => $encodedData, 'is_processed' => '0']
         );
         return $this->getConnection()->lastInsertId($this->getMainTable());
     }
