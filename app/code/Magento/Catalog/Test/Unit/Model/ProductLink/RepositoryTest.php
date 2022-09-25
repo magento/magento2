@@ -131,7 +131,7 @@ class RepositoryTest extends TestCase
             ['product', false, null, false, $productMock],
             ['linkedProduct', false, null, false, $linkedProductMock],
         ]);
-        $entityMock->expects($this->once())->method('getLinkedProductSku')->willReturn('linkedProduct');
+        $entityMock->expects($this->any())->method('getLinkedProductSku')->willReturn('linkedProduct');
         $entityMock->expects($this->once())->method('getSku')->willReturn('product');
         $entityMock->expects($this->exactly(1))->method('getLinkType')->willReturn('linkType');
         $this->linkTypeProvider->expects($this->once())->method('getLinkTypes')->willReturn(['linkType' => $typeId]);
@@ -163,7 +163,7 @@ class RepositoryTest extends TestCase
             ['product', false, null, false, $productMock],
             ['linkedProduct', false, null, false, $linkedProductMock],
         ]);
-        $entityMock->expects($this->once())->method('getLinkedProductSku')->willReturn('linkedProduct');
+        $entityMock->expects($this->any())->method('getLinkedProductSku')->willReturn('linkedProduct');
         $entityMock->expects($this->once())->method('getSku')->willReturn('product');
         $entityMock->expects($this->exactly(1))->method('getLinkType')->willReturn('linkType');
         $this->linkTypeProvider->expects($this->once())->method('getLinkTypes')->willReturn(['linkType' => $typeId]);
@@ -177,6 +177,15 @@ class RepositoryTest extends TestCase
         ], $typeId)->willThrowException(new \Exception());
         $entityMock->expects($this->once())->method('__toArray')->willReturn([]);
         $linkedProductMock->expects($this->exactly(2))->method('getId')->willReturn($linkedProductId);
+        $this->model->save($entityMock);
+    }
+
+    public function testSaveWithoutLinkedProductSku()
+    {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectExceptionMessage('The linked products sku is invalid. Verify the data and try again.');
+        $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
+        $entityMock->expects($this->any())->method('getLinkedProductSku')->willReturn(false);
         $this->model->save($entityMock);
     }
 
