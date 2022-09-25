@@ -11,7 +11,10 @@ define([
     'use strict';
 
     var injector = new Squire(),
-        checkoutData = jasmine.createSpyObj('checkoutData', ['setNewCustomerBillingAddress']),
+        checkoutData = jasmine.createSpyObj('checkoutData',[
+            'setNewCustomerBillingAddress',
+            'getSelectedPaymentMethod'
+        ]),
         mocks = {
             'Magento_Checkout/js/checkout-data': checkoutData,
             'Magento_Customer/js/customer-data': {
@@ -87,6 +90,7 @@ define([
                 billingAddress.updateAddress();
                 billingAddress.needCancelBillingAddressChanges();
                 expect(billingAddress.cancelAddressEdit).not.toHaveBeenCalled();
+                expect(checkoutData.getSelectedPaymentMethod).toHaveBeenCalled();
             });
 
             it('Test that billing address editing was canceled automatically', function () {

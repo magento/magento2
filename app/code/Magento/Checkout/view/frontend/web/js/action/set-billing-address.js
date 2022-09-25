@@ -15,7 +15,8 @@ define(
         'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/full-screen-loader',
-        'Magento_Checkout/js/action/get-payment-information'
+        'Magento_Checkout/js/action/get-payment-information',
+        'Magento_Checkout/js/checkout-data'
     ],
     function ($,
               quote,
@@ -24,7 +25,8 @@ define(
               errorProcessor,
               customer,
               fullScreenLoader,
-              getPaymentInformationAction
+              getPaymentInformationAction,
+              checkoutData
     ) {
         'use strict';
 
@@ -37,7 +39,7 @@ define(
              * Checkout for guest and registered customer.
              */
             useForShipping = $(
-                `#billing-address-same-as-shipping-${quote.paymentMethod().method}:checkbox:checked`
+                `#billing-address-same-as-shipping-${checkoutData.getSelectedPaymentMethod()}:checkbox:checked`
             ).length > 0;
 
             if (!customer.isLoggedIn()) {
