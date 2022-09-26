@@ -22,7 +22,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Custom Store View -->
-            <actionGroup ref="git branch" stepKey="createCustomStoreView">
+            <actionGroup ref="StoreViewDisabledErrorSaveMessageActionGroup" stepKey="createCustomStoreView">
                 <argument name="customStore" value="NewStoreViewData"/>
             </actionGroup>
 
