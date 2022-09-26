@@ -105,6 +105,7 @@ class DeployStaticFile
      * @param string $path
      * @return void
      * @throws FileSystemException
+     * phpcs:disable
      */
     public function deleteFile(string $path)
     {
@@ -129,6 +130,7 @@ class DeployStaticFile
      * @param string $filePath
      * @return string|false
      * @throws FileSystemException
+     * phpcs:enable
      */
     public function readFile(string $fileName, string $filePath): bool|string
     {

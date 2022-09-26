@@ -29,17 +29,17 @@ trait GetReflectionMethodReturnTypeValueTrait
                     $returnTypeValue[] =  $type->getName();
                 }
 
-                $returnTypeValue = implode(
+                return implode(
                     $returnType instanceof \ReflectionUnionType ? '|' : '&',
                     $returnTypeValue
                 );
-            } else {
-                $className = $method->getDeclaringClass()->getName();
-                $returnTypeValue = ($returnType->allowsNull() && $returnType->getName() !== 'mixed' ? '?' : '');
-                $returnTypeValue .= ($returnType->getName() === 'self')
-                    ? $className ? '\\' . ltrim($className, '\\') : ''
-                    : $returnType->getName();
             }
+
+            $className = $method->getDeclaringClass()->getName();
+            $returnTypeValue = ($returnType->allowsNull() && $returnType->getName() !== 'mixed' ? '?' : '');
+            $returnTypeValue .= ($returnType->getName() === 'self')
+                ? $className ? '\\' . ltrim($className, '\\') : ''
+                : $returnType->getName();
         }
 
         return $returnTypeValue;
