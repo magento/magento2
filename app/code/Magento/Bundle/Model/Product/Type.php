@@ -1422,6 +1422,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Get prepared options with selection ids
      *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @param array $options
      * @return array
      */
