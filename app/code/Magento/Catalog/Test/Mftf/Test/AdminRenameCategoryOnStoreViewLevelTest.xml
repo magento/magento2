@@ -22,7 +22,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Custom Store View -->
-            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+            <actionGroup ref="git branch" stepKey="createCustomStoreView">
                 <argument name="customStore" value="NewStoreViewData"/>
             </actionGroup>
 
@@ -81,7 +81,6 @@
         <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="$$simpleSubCategoryWithParent.name$$" stepKey="assertParentCategoryOnStorefront"/>
         <seeElement stepKey="seeParentCategory" selector="{{StorefrontCategoryMainSection.CategoryTitle($$simpleSubCategoryOne.name$$)}}"/>
         <seeInTitle userInput="$$simpleSubCategoryWithParent.name$$" stepKey="seeParentCategoryNameInTitle"/>
-
 
         <after>
             <deleteData createDataKey="simpleSubCategoryWithParent" stepKey="deleteSubcategoryWithParent"/>
