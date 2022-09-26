@@ -816,6 +816,6 @@ Details,Details
 "Are you sure you want to delete this category?","Are you sure you want to delete this category?"
 "Attribute Set Information","Attribute Set Information"
 "Failed to retrieve product links for ""%1""","Failed to retrieve product links for ""%1"""
-"The linked products sku is invalid. Verify the data and try again.","The linked products sku is invalid. Verify the data and try again."
+"The linked product SKU is invalid. Verify the data and try again.","The linked product SKU is invalid. Verify the data and try again."
 "The linked products data is invalid. Verify the data and try again.","The linked products data is invalid. Verify the data and try again."
 

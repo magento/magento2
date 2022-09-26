@@ -60,6 +60,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     /**
      * @var LinksInitializer
      * @deprecated 103.0.4 Not used.
+     * @see \Magento\Catalog\Model\ResourceModel\Product\Link::saveProductLinks()
      */
     protected $linkInitializer;
 
@@ -133,7 +134,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     public function save(\Magento\Catalog\Api\Data\ProductLinkInterface $entity)
     {
         if (!$entity->getLinkedProductSku()) {
-            throw new NoSuchEntityException(__('The linked products sku is invalid. Verify the data and try again.'));
+            throw new NoSuchEntityException(__('The linked product SKU is invalid. Verify the data and try again.'));
         }
         $linkedProduct = $this->productRepository->get($entity->getLinkedProductSku());
         $product = $this->productRepository->get($entity->getSku());
