@@ -505,7 +505,7 @@ class Import extends AbstractModel
 
         $result = $this->processImport();
         $this->getDataSourceModel()->markProcessedBunches($ids);
-        $this->getDataSourceModel()->cleanProcessedBunches();
+        $this->getDataSourceModel()->cleanBunchesWithId($ids);
         if ($result) {
             $this->addLogComment(
                 [
