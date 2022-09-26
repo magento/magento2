@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyStateProvinceRequiredOnAddingNewAddressPageTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Verification of required fields on new address page"/>
+            <title value="Admin verifies State/Province should be required fields on add new address page"/>
+            <description value="Admin verifies State/Province should be required fields on add new address page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-3912"/>
+            <group value="configuration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Go to the general configuration and make sure the locale dropdown is available and enabled -->
+        <actionGroup ref="AdminOpenStoreConfigPageActionGroup" stepKey="openStoreConfigPage" />
+        <scrollTo selector="{{LocaleOptionsSection.sectionHeader}}" stepKey="scrollToLocaleSection" x="0" y="-80" />
+        <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.locale}}" visible="false" stepKey="openLocaleSection"/>
+        <seeElement selector="{{LocaleOptionsSection.localeEnabled}}" stepKey="seeEnabledLocaleDropdown"/>
+
+        <!--Set Locale for "United Kingdom" and save configuration -->
+        <grabValueFrom selector="{{LocaleOptionsSection.locale}}" stepKey="originalLocale"/>
+        <selectOption selector="{{LocaleOptionsSection.locale}}" userInput="English (United Kingdom)" stepKey="setLocale"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
+
+        <!--"Choose United Kingdom" as State Option Required and save configuration -->
+        <conditionalClick selector="{{StateOptionsSection.stateOptions}}" dependentSelector="{{StateOptionsSection.countriesWithRequiredRegions}}" visible="false" stepKey="expandStateOptionsTab"/>
+        <waitForAjaxLoad stepKey="waitForAjax"/>
+        <scrollTo selector="{{StateOptionsSection.countriesWithRequiredRegions}}" stepKey="scrollToForm"/>
+        <selectOption selector="{{StateOptionsSection.countriesWithRequiredRegions}}" userInput="United Kingdom" stepKey="selectCountriesWithRequiredRegion"/>
+        <click selector="#save" stepKey="saveStateOptionsConfig"/>
+        <waitForPageLoad stepKey="waitForSavingConfig"/>
+
+        <!--Create new customer on storefront -->
+        <actionGroup ref="StorefrontCreateCustomerSignedUpNewsletterActionGroup" stepKey="createCustomer">
+            <argument name="customer" value="CustomerEntityOne" />
+        </actionGroup>
+
+        <!-- Open AddressBook and set Country as "United Kingdom" -->
+        <click selector="//a[text()='Address Book']" stepKey="clickAddressBook"/>
+        <selectOption selector="#country" userInput="United Kingdom" stepKey="setCountry"/>
+        <click selector="//span[text()='Save Address']" stepKey="saveAddress"/>
+
+        <!-- Assert the error message -->
+        <seeElement selector="{{StorefrontCustomerMessagesSection.assertErrorMessage}}" stepKey="assetErrorMessage"/>
+
+    </test>
+</tests>
