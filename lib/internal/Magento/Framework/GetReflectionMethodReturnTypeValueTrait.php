@@ -13,7 +13,7 @@ namespace Magento\Framework;
 trait GetReflectionMethodReturnTypeValueTrait
 {
     /**
-     * Returns return type
+     * Get return type
      *
      * @param \ReflectionMethod $method
      * @return string|null
@@ -24,15 +24,7 @@ trait GetReflectionMethodReturnTypeValueTrait
         $returnType = $method->getReturnType();
         if ($returnType) {
             if ($returnType instanceof \ReflectionUnionType || $returnType instanceof \ReflectionIntersectionType) {
-                $returnTypeValue = [];
-                foreach ($method->getReturnType()->getTypes() as $type) {
-                    $returnTypeValue[] =  $type->getName();
-                }
-
-                return implode(
-                    $returnType instanceof \ReflectionUnionType ? '|' : '&',
-                    $returnTypeValue
-                );
+                return $this->getReturnTypeValues($returnType, $method);
             }
 
             $className = $method->getDeclaringClass()->getName();
@@ -43,5 +35,25 @@ trait GetReflectionMethodReturnTypeValueTrait
         }
 
         return $returnTypeValue;
+    }
+
+    /**
+     * @param \ReflectionIntersectionType|\ReflectionUnionType $returnType
+     * @param \ReflectionMethod $method
+     * @return string|null
+     */
+    private function getReturnTypeValues(
+        \ReflectionIntersectionType|\ReflectionUnionType $returnType,
+        \ReflectionMethod $method
+    ): ?string {
+        $returnTypeValue = [];
+        foreach ($method->getReturnType()->getTypes() as $type) {
+            $returnTypeValue[] =  $type->getName();
+        }
+
+        return implode(
+            $returnType instanceof \ReflectionUnionType ? '|' : '&',
+            $returnTypeValue
+        );
     }
 }
