@@ -55,9 +55,9 @@ class DbStorage extends AbstractStorage
     private $maxRetryCount;
 
     /**
-     * @param UrlRewriteFactory    $urlRewriteFactory
-     * @param DataObjectHelper     $dataObjectHelper
-     * @param ResourceConnection   $resource
+     * @param UrlRewriteFactory $urlRewriteFactory
+     * @param DataObjectHelper $dataObjectHelper
+     * @param ResourceConnection $resource
      * @param LoggerInterface|null $logger
      * @param int $maxRetryCount
      */
@@ -66,7 +66,7 @@ class DbStorage extends AbstractStorage
         DataObjectHelper $dataObjectHelper,
         ResourceConnection $resource,
         LoggerInterface $logger = null,
-        int $maxRetryCount = 3
+        int $maxRetryCount = 5
     ) {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;
@@ -111,7 +111,6 @@ class DbStorage extends AbstractStorage
             && is_string($data[UrlRewrite::REQUEST_PATH])
         ) {
             $result = null;
-
             $requestPath = $data[UrlRewrite::REQUEST_PATH];
             $decodedRequestPath = urldecode($requestPath);
             $data[UrlRewrite::REQUEST_PATH] = array_unique(
@@ -122,16 +121,13 @@ class DbStorage extends AbstractStorage
                 rtrim($decodedRequestPath, '/') . '/',
                 ]
             );
-
             $resultsFromDb = $this->connection->fetchAll($this->prepareSelect($data));
             if ($resultsFromDb) {
                 $urlRewrite = $this->extractMostRelevantUrlRewrite($requestPath, $resultsFromDb);
                 $result = $this->prepareUrlRewrite($requestPath, $urlRewrite);
             }
-
             return $result;
         }
-
         return $this->connection->fetchRow($this->prepareSelect($data));
     }
 
@@ -224,29 +220,89 @@ class DbStorage extends AbstractStorage
         );
         foreach ($uniqueEntities as $storeId => $entityTypes) {
             foreach ($entityTypes as $entityType => $entities) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                $requestPaths = array_merge(...$entities);
+                $requestPathFilter = '';
+                if (!empty($requestPaths)) {
+                    $requestPathFilter = ' AND ' . $this->connection->quoteIdentifier(UrlRewrite::REQUEST_PATH)
+                    . ' NOT IN (' . $this->connection->quote($requestPaths) . ')';
+                }
                 $oldUrlsSelect->orWhere(
                     $this->connection->quoteIdentifier(UrlRewrite::STORE_ID)
-                    . ' = ' . $this->connection->quote($storeId, 'INTEGER') .
-                    ' AND ' . $this->connection->quoteIdentifier(UrlRewrite::ENTITY_ID)
-                    . ' IN (' . $this->connection->quote(array_keys($entities), 'INTEGER') . ')' .
-                    ' AND ' . $this->connection->quoteIdentifier(UrlRewrite::ENTITY_TYPE)
-                    . ' = ' . $this->connection->quote($entityType) .
-                    ' AND ' . $this->connection->quoteIdentifier(UrlRewrite::REQUEST_PATH)
-                    . ' NOT IN (' . $this->connection->quote(array_merge(...$entities)) . ')'
+                    . ' = ' . $this->connection->quote($storeId, 'INTEGER')
+                    . ' AND ' . $this->connection->quoteIdentifier(UrlRewrite::ENTITY_ID)
+                    . ' IN (' . $this->connection->quote(array_keys($entities), 'INTEGER') . ')'
+                    . ' AND ' . $this->connection->quoteIdentifier(UrlRewrite::ENTITY_TYPE)
+                    . ' = ' . $this->connection->quote($entityType)
+                    . $requestPathFilter
                 );
             }
         }
         // prevent query locking in a case when nothing to delete
         $checkOldUrlsSelect = clone $oldUrlsSelect;
         $checkOldUrlsSelect->reset(Select::COLUMNS);
-        $checkOldUrlsSelect->columns('count(*)');
-        $hasOldUrls = (bool)$this->connection->fetchOne($checkOldUrlsSelect);
+        $checkOldUrlsSelect->columns([new \Zend_Db_Expr('1')]);
+        $checkOldUrlsSelect->limit(1);
+        $hasOldUrls = false !== $this->connection->fetchOne($checkOldUrlsSelect);
         if ($hasOldUrls) {
             $this->connection->query(
                 $oldUrlsSelect->deleteFromSelect(
                     $this->resource->getTableName(self::TABLE_NAME)
                 )
             );
+        }
+    }
+
+    /**
+     * Checks for duplicates both inside the new urls,  and outside.
+     * Because we are using INSERT ON DUPLICATE UPDATE,  the insert won't give us an error.
+     * So,  we have to check for existing requestPaths in database with different entity_id.
+     * And also,  we need to check to make sure we don't have same requestPath more than once in our new rewrites.
+     *
+     * @param  array $uniqueEntities
+     * @return void
+     */
+    private function checkDuplicates(array $uniqueEntities): void
+    {
+        $oldUrlsSelect = $this->connection->select();
+        $oldUrlsSelect->from(
+            $this->resource->getTableName(self::TABLE_NAME),
+            [new \Zend_Db_Expr('1')]
+        );
+        $allEmpty = true;
+        foreach ($uniqueEntities as $storeId => $entityTypes) {
+            $newRequestPaths = [];
+            foreach ($entityTypes as $entityType => $entities) {
+                $requestPaths = array_merge(...$entities);
+                $requestPathFilter = '';
+                if (empty($requestPaths)) {
+                    continue;
+                }
+                $allEmpty = false;
+                $oldUrlsSelect->orWhere(
+                    $this->connection->quoteIdentifier(UrlRewrite::STORE_ID)
+                    . ' = ' . $this->connection->quote($storeId, 'INTEGER')
+                    . ' AND (' . $this->connection->quoteIdentifier(UrlRewrite::ENTITY_ID)
+                    . ' NOT IN (' . $this->connection->quote(array_keys($entities), 'INTEGER') . ')'
+                    . ' OR ' . $this->connection->quoteIdentifier(UrlRewrite::ENTITY_TYPE)
+                    . ' != ' . $this->connection->quote($entityType)
+                    . ') AND ' . $this->connection->quoteIdentifier(UrlRewrite::REQUEST_PATH)
+                    . ' IN (' . $this->connection->quote($requestPaths) . ')'
+                );
+                foreach($requestPaths as $requestPath) {
+                    if (isset($newRequestPaths[$requestPath])) {
+                        throw new \Magento\Framework\Exception\AlreadyExistsException();
+                    }
+                    $newRequestPaths[$requestPath] = true;
+                }
+            }
+        }
+        if ($allEmpty) {
+            return;
+        }
+        $oldUrlsSelect->limit(1);
+        if (false !== $this->connection->fetchOne($oldUrlsSelect)) {
+            throw new \Magento\Framework\Exception\AlreadyExistsException();
         }
     }
 
@@ -260,7 +316,16 @@ class DbStorage extends AbstractStorage
     {
         $uniqueEntities = [];
         foreach ($urls as $url) {
-            $uniqueEntities[$url->getStoreId()][$url->getEntityType()][$url->getEntityId()][] = $url->getRequestPath();
+            $storeId = $url->getStoreId();
+            $entityType = $url->getEntityType();
+            $entityId = $url->getEntityId();
+            $requestPath = $url->getRequestPath();
+            if (null === $requestPath) {  // Note: because SQL unique keys allow multiple nulls,  we skip it.
+                if (!isset($uniqueEntities[$storeId][$entityType][$entityId])) {
+                    $uniqueEntities[$storeId][$entityType][$entityId] = [];
+                }
+            }
+            $uniqueEntities[$storeId][$entityType][$entityId][] = $requestPath;
         }
         return $uniqueEntities;
     }
@@ -275,13 +340,18 @@ class DbStorage extends AbstractStorage
         foreach ($urls as $url) {
             $data[] = $url->toArray();
         }
-        for ($tries = 0; $tries < $this->maxRetryCount; $tries++) {
+        for ($tries = 0; ; $tries++) {
             $this->connection->beginTransaction();
             try {
                 $this->deleteOldUrls($uniqueEntities);
+                $this->checkDuplicates($uniqueEntities);
                 $this->upsertMultiple($data);
                 $this->connection->commit();
             } catch (\Magento\Framework\DB\Adapter\DeadlockException $deadlockException) {
+                $this->connection->rollBack();
+                if ($tries >= $this->maxRetryCount) {
+                    throw $deadlockException;
+                }
                 continue;
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
                 $this->connection->rollBack();
@@ -295,6 +365,13 @@ class DbStorage extends AbstractStorage
                         ]
                     );
                     if (isset($urlFound[UrlRewrite::URL_REWRITE_ID])) {
+                        if (isset($uniqueEntities
+                            [$urlFound[UrlRewrite::STORE_ID]]
+                            [$urlFound[UrlRewrite::ENTITY_TYPE]]
+                            [$urlFound[UrlRewrite::ENTITY_ID]
+                        ])) {
+                            continue; // Note: If it's one of the entities we are updating, then it is okay.
+                        }
                         $urlConflicted[$urlFound[UrlRewrite::URL_REWRITE_ID]] = $url->toArray();
                     }
                 }
@@ -312,15 +389,14 @@ class DbStorage extends AbstractStorage
                 $this->connection->rollBack();
                 throw $e;
             }
-            break;
+            return $urls;
         }
-        return $urls;
     }
 
     /**
      * Insert multiple
      *
-     * @param  array $data
+     * @param array $data
      * @return void
      * @throws \Magento\Framework\Exception\AlreadyExistsException|\Exception
      * @throws \Exception
@@ -352,15 +428,17 @@ class DbStorage extends AbstractStorage
      */
     private function upsertMultiple(array $data): void
     {
+
         $this->connection->insertOnDuplicate($this->resource->getTableName(self::TABLE_NAME), $data);
     }
 
     /**
      * Get filter for url rows deletion due to provided urls
      *
-     * @param      UrlRewrite[] $urls
-     * @return     array
+     * @param UrlRewrite[] $urls
+     * @return array
      * @deprecated 101.0.3 Not used anymore.
+     * @see nothing
      */
     protected function createFilterDataBasedOnUrls($urls): array
     {
