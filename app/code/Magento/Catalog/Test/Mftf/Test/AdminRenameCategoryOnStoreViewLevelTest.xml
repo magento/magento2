@@ -22,7 +22,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Custom Store View -->
-            <actionGroup ref="StoreViewDisabledErrorSaveMessageActionGroup" stepKey="createCustomStoreView">
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
                 <argument name="customStore" value="NewStoreViewData"/>
             </actionGroup>
 
