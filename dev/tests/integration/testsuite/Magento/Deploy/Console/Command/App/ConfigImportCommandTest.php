@@ -25,6 +25,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable
  */
 class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
 {

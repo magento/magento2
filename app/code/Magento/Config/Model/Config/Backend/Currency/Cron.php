@@ -59,7 +59,6 @@ class Cron extends \Magento\Framework\App\Config\Value
     {
         $time = $this->getData('groups/import/fields/time/value');
         if (empty($time)) {
-
             $time = explode(
                 ',',
                 $this->_config->getValue(
