@@ -7,12 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Bundle;
 
+use Magento\Bundle\Test\Fixture\Link as BundleSelectionFixture;
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\TestFramework\Fixture\DataFixture;
 
 /**
  * Test adding bundled products to cart
@@ -378,9 +383,25 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Bundle/_files/product_with_multiple_options_multiselect_checkbox.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple-1', 'price' => 10], 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple2', 'price' => 20], 'p2'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p1.sku$', 'price' => 10, 'price_type' => 0,
+            'title' => 'Checkbox Options','default_title' => 'Checkbox Options', 'type' => 'checkbox',
+            'required' => 1, 'delete' => ''], 'link1'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p2.sku$', 'price' => 25, 'price_type' => 1,
+            'title' => 'Multiselect Options','default_title' => 'Multiselect Options', 'type' => 'multi',
+            'required' => 1, 'delete' => ''], 'link2'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$link1$', '$link2$']], 'opt1'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['sku' => 'bundle-product-multiselect-checkbox-options','price' => 50,'price_type' => 1,
+                '_options' => ['$opt1$']],
+            'bundle-product-multiselect-checkbox-options'
+        ),
+    ]
     public function testAddBundleToCartWithEmptyMultiselectOptionValue()
     {
         $this->expectException(\Exception::class);

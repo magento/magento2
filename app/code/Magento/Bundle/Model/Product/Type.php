@@ -31,7 +31,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Product type
      */
-    const TYPE_CODE = 'bundle';
+    public const TYPE_CODE = 'bundle';
 
     /**
      * Product is composite
@@ -52,6 +52,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @var string
      * @deprecated 100.2.0
+     * @see MAGETWO-71174
      */
     protected $_keySelectionsCollection = '_cache_instance_selections_collection';
 
@@ -91,14 +92,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_canConfigure = true;
 
     /**
-     * Catalog data
+     * Catalog data helper
      *
      * @var \Magento\Catalog\Helper\Data
      */
     protected $_catalogData = null;
 
     /**
-     * Catalog product
+     * Catalog product helper
      *
      * @var \Magento\Catalog\Helper\Product
      */
