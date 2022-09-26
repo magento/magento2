@@ -562,7 +562,6 @@ class Customer extends AbstractCustomer
                 $this->_deleteCustomerEntities($entitiesToDelete);
             }
         }
-        $this->_dataSourceModel->markProcessedBunches($this->getIds());
         $this->indexerProcessor->markIndexerAsInvalid();
         return true;
     }

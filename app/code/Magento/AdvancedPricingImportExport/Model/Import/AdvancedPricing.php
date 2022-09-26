@@ -316,7 +316,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND == $this->getBehavior()) {
             $this->saveAdvancedPricing();
         }
-        $this->_dataSourceModel->markProcessedBunches($this->getIds());
         return true;
     }
 

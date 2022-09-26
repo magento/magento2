@@ -504,7 +504,8 @@ class Import extends AbstractModel
         $this->addLogComment(__('Begin import of "%1" with "%2" behavior', $this->getEntity(), $this->getBehavior()));
 
         $result = $this->processImport();
-
+        $this->getDataSourceModel()->markProcessedBunches($ids);
+        $this->getDataSourceModel()->cleanProcessedBunches();
         if ($result) {
             $this->addLogComment(
                 [
