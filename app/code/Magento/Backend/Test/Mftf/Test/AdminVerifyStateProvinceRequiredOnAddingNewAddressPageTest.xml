@@ -28,7 +28,7 @@
         <!-- Go to the general configuration and make sure the locale dropdown is available and enabled -->
         <actionGroup ref="AdminOpenStoreConfigPageActionGroup" stepKey="openStoreConfigPage" />
         <scrollTo selector="{{LocaleOptionsSection.sectionHeader}}" stepKey="scrollToLocaleSection" x="0" y="-80" />
-        <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.locale}}" visible="false" stepKey="openLocaleSection"/>
+        <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSection"/>
         <seeElement selector="{{LocaleOptionsSection.localeEnabled}}" stepKey="seeEnabledLocaleDropdown"/>
 
         <!--Set Locale for "United Kingdom" and save configuration -->
