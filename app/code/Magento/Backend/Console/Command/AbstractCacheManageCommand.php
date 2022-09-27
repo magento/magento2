@@ -21,14 +21,12 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
      */
     const INPUT_KEY_TYPES = 'types';
 
-    const EXCLUDE_KEY_TYPES = 'exclude';
-
     /**
      * @inheritdoc
      */
     protected function configure()
     {
-        $this->addOption(self::EXCLUDE_KEY_TYPES, '-e', InputOption::VALUE_OPTIONAL);
+        $this->addOption('exclude', '-e', InputOption::VALUE_OPTIONAL);
         $this->addArgument(
             self::INPUT_KEY_TYPES,
             InputArgument::IS_ARRAY,
@@ -52,8 +50,8 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
         }
         if (empty($requestedTypes)) {
             $cacheTypes = $this->cacheManager->getAvailableTypes();
-            if ($input->getOption(self::EXCLUDE_KEY_TYPES)) {
-                unset($cacheTypes[array_search($input->getOption(self::EXCLUDE_KEY_TYPES), $cacheTypes)]);
+            if ($input->getOption('exclude')) {
+                unset($cacheTypes[array_search($input->getOption('exclude'), $cacheTypes)]);
                 $cacheTypes = array_values($cacheTypes);
             }
             return $cacheTypes;
@@ -66,8 +64,8 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
                     . "'." . PHP_EOL . 'Supported types: ' . join(", ", $availableTypes)
                 );
             }
-            if ($input->getOption(self::EXCLUDE_KEY_TYPES)) {
-                unset($availableTypes[array_search($input->getOption(self::EXCLUDE_KEY_TYPES), $availableTypes)]);
+            if ($input->getOption('exclude')) {
+                unset($availableTypes[array_search($input->getOption('exclude'), $availableTypes)]);
                 $availableTypes = array_values($availableTypes);
             }
             return array_values(array_intersect($availableTypes, $requestedTypes));
