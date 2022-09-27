@@ -116,21 +116,6 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
         return $this->getConnection()->delete($this->getMainTable());
     }
 
-    /**
-     * Clean bunches with specific Ids
-     *
-     * @param array $ids
-     * @return void
-     */
-    public function cleanBunchesWithId(array $ids)
-    {
-        $this->getConnection()->delete(
-            $this->getMainTable(),
-            [
-                'id IN (?)' => $ids,
-            ]
-        );
-    }
 
     /**
      * Clean all bunches from table.

@@ -14,7 +14,6 @@ use Magento\Framework\Stdlib\StringUtils;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\ImportExport\Model\Import\Source\Base64EncodedCsvData;
 use Magento\ImportExport\Model\ImportFactory;
 use Magento\ImportExport\Model\ResourceModel\Helper;
 use Magento\Store\Model\ScopeInterface;
@@ -421,9 +420,7 @@ abstract class AbstractEntity
         $startNewBunch = false;
 
         $source->rewind();
-        if (!$source instanceof Base64EncodedCsvData) {
-            $this->_dataSourceModel->cleanBunches();
-        }
+        $this->_dataSourceModel->cleanProcessedBunches();
         $mainAttributeCode = $this->getMasterAttributeCode();
 
         while ($source->valid() || count($bunchRows) || isset($entityGroup)) {
