@@ -5,9 +5,9 @@
  */
 namespace Magento\Backend\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Url\HostChecker;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class \Magento\Backend\Model\UrlInterface
@@ -24,7 +24,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      *
      * @bug Currently, this constant is slightly misleading: it says "form key", but in fact it is used by URLs, too
      */
-    const XML_PATH_USE_SECURE_KEY = 'admin/security/use_form_key';
+    public const XML_PATH_USE_SECURE_KEY = 'admin/security/use_form_key';
 
     /**
      * Authentication session
@@ -51,7 +51,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
     protected $_backendHelper;
 
     /**
-     * Menu config
+     * Menu config model
      *
      * @var \Magento\Backend\Model\Menu\Config
      */
@@ -202,6 +202,8 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
             return $routePath;
         }
 
+        $this->isAdminPath($routePath);
+
         $cacheSecretKey = false;
         if (isset($routeParams['_cache_secret_key'])) {
             unset($routeParams['_cache_secret_key']);
@@ -234,6 +236,20 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         }
 
         return parent::getUrl("{$routeName}/{$controllerName}/{$actionName}", $routeParams);
+    }
+
+    /**
+     * Check path is admin path
+     *
+     * @param string $routePath
+     * @return void
+     */
+    private function isAdminPath($routePath)
+    {
+        $routePaths = explode('/', $routePath);
+        if ($routePaths[0] && $routePaths[0] === \Magento\Store\Model\Store::ADMIN_CODE) {
+            $this->_scope = null;
+        }
     }
 
     /**
@@ -423,7 +439,6 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      */
     protected function _getActionPath()
     {
-
         $path = parent::_getActionPath();
         if ($path) {
             if ($this->getAreaFrontName()) {
