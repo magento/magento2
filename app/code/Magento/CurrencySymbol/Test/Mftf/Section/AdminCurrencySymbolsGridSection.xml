@@ -10,5 +10,7 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCurrencySymbolsGridSection">
         <element name="currencyElement" type="input" selector="#currency-symbols-form #custom_currency_symbol{{currency}}" parameterized="true"/>
+        <element name="currencyCheckElement" type="checkbox" selector="#currency-symbols-form #custom_currency_symbol_inherit{{currency}}" parameterized="true"/>
+        <element name="saveCurrencySymbols" type="button" selector="//button[@title='Save Currency Symbols']"/>
     </section>
 </sections>
