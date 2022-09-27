@@ -143,6 +143,14 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
                     ->setLastOrderStatus($order->getStatus());
 
                 $this->_eventManager->dispatch(
+                    'checkout_submit_all_after',
+                    [
+                        'order' => $order,
+                        'quote' => $quote
+                    ]
+                );
+
+                $this->_eventManager->dispatch(
                     'paypal_express_place_order_success',
                     [
                         'order' => $order,
