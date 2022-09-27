@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
 /**
+ * @api
  * @since 100.0.2
  */
 abstract class AbstractCacheManageCommand extends AbstractCacheCommand
@@ -18,9 +19,9 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
     /**
      * Input argument types
      */
-    protected const INPUT_KEY_TYPES = 'types';
+    const INPUT_KEY_TYPES = 'types';
 
-    protected const EXCLUDE_KEY_TYPES = 'exclude';
+    const EXCLUDE_KEY_TYPES = 'exclude';
 
     /**
      * @inheritdoc
