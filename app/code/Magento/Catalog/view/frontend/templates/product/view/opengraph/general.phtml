@@ -33,9 +33,9 @@ if ($block->getProduct()->getTypeId() === Grouped::TYPE_CODE):
         ->getPrice(FinalPrice::PRICE_CODE)
         ->getMinProduct();
 
-    $priceAmount = $minProduct->getPriceInfo()
+    $priceAmount = ($minProduct !== null) ? $minProduct->getPriceInfo()
         ->getPrice(FinalPrice::PRICE_CODE)
-        ->getAmount();
+        ->getAmount() : $minProduct;
 else:
     $priceAmount = $block->getProduct()
         ->getPriceInfo()

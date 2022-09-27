@@ -82,40 +82,42 @@ class Price implements ProductRenderCollectorInterface
                 ->getMinProduct();
         }
 
-        $priceInfo->setFinalPrice(
-            $product
-                ->getPriceInfo()
-                ->getPrice(FinalPrice::PRICE_CODE)
-                ->getAmount()
-                ->getValue()
-        );
-        $priceInfo->setMinimalPrice(
-            $product
-                ->getPriceInfo()
-                ->getPrice(FinalPrice::PRICE_CODE)
-                ->getMinimalPrice()
-                ->getValue()
-        );
-        $priceInfo->setRegularPrice(
-            $product
-                ->getPriceInfo()
-                ->getPrice(RegularPrice::PRICE_CODE)
-                ->getAmount()
-                ->getValue()
-        );
-        $priceInfo->setMaxPrice(
-            $product
-                ->getPriceInfo()
-                ->getPrice(FinalPrice::PRICE_CODE)
-                ->getMaximalPrice()
-                ->getValue()
-        );
+        if ($product !== null) {
+            $priceInfo->setFinalPrice(
+                $product
+                    ->getPriceInfo()
+                    ->getPrice(FinalPrice::PRICE_CODE)
+                    ->getAmount()
+                    ->getValue()
+            );
+            $priceInfo->setMinimalPrice(
+                $product
+                    ->getPriceInfo()
+                    ->getPrice(FinalPrice::PRICE_CODE)
+                    ->getMinimalPrice()
+                    ->getValue()
+            );
+            $priceInfo->setRegularPrice(
+                $product
+                    ->getPriceInfo()
+                    ->getPrice(RegularPrice::PRICE_CODE)
+                    ->getAmount()
+                    ->getValue()
+            );
+            $priceInfo->setMaxPrice(
+                $product
+                    ->getPriceInfo()
+                    ->getPrice(FinalPrice::PRICE_CODE)
+                    ->getMaximalPrice()
+                    ->getValue()
+            );
 
-        $this->formattedPriceInfoBuilder->build(
-            $priceInfo,
-            $productRender->getStoreId(),
-            $productRender->getCurrencyCode()
-        );
+            $this->formattedPriceInfoBuilder->build(
+                $priceInfo,
+                $productRender->getStoreId(),
+                $productRender->getCurrencyCode()
+            );
+        }
 
         $productRender->setPriceInfo($priceInfo);
     }
