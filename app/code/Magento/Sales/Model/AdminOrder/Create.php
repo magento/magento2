@@ -1175,6 +1175,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @deprecated 101.0.0
+     * @see not in use anymore
      */
     protected function _parseOptions(\Magento\Quote\Model\Quote\Item $item, $additionalOptions)
     {
@@ -1245,6 +1246,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @return $this
      *
      * @deprecated 101.0.0
+     * @see not in use anymore
      */
     protected function _assignOptionsToItem(\Magento\Quote\Model\Quote\Item $item, $options)
     {
@@ -2008,7 +2010,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $this->orderManagement->cancel($oldOrder->getEntityId());
             $order->save();
         }
-        if ($this->getSendConfirmation()) {
+        if ($this->getSendConfirmation() && !$order->getEmailSent()) {
             $this->emailSender->send($order);
         }
 
