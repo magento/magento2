@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model\Authorization;
 
+use Magento\AdminAdobeIms\Api\SaveImsUserInterface;
 use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
 use Magento\AdminAdobeIms\Service\AdminReauthProcessService;
@@ -72,6 +73,11 @@ class AdobeImsAdminTokenUserService
     private TokenResponseInterfaceFactory $tokenResponseFactory;
 
     /**
+     * @var SaveImsUserInterface
+     */
+    private SaveImsUserInterface $saveImsUser;
+
+    /**
      * @param ImsConfig $adminImsConfig
      * @param OrganizationMembershipInterface $organizationMembership
      * @param AdminLoginProcessService $adminLoginProcessService
@@ -80,6 +86,7 @@ class AdobeImsAdminTokenUserService
      * @param GetTokenInterface $token
      * @param GetProfileInterface $profile
      * @param TokenResponseInterfaceFactory $tokenResponseFactory
+     * @param SaveImsUserInterface $saveImsUser
      */
     public function __construct(
         ImsConfig $adminImsConfig,
@@ -89,7 +96,8 @@ class AdobeImsAdminTokenUserService
         RequestInterface $request,
         GetTokenInterface $token,
         GetProfileInterface $profile,
-        TokenResponseInterfaceFactory $tokenResponseFactory
+        TokenResponseInterfaceFactory $tokenResponseFactory,
+        SaveImsUserInterface $saveImsUser
     ) {
         $this->adminImsConfig = $adminImsConfig;
         $this->organizationMembership = $organizationMembership;
@@ -99,6 +107,7 @@ class AdobeImsAdminTokenUserService
         $this->token = $token;
         $this->profile = $profile;
         $this->tokenResponseFactory = $tokenResponseFactory;
+        $this->saveImsUser = $saveImsUser;
     }
 
     /**
@@ -108,7 +117,8 @@ class AdobeImsAdminTokenUserService
      * @return void
      * @throws AdobeImsAuthorizationException
      * @throws AdobeImsOrganizationAuthorizationException
-     * @throws AuthenticationException|AuthorizationException
+     * @throws AuthenticationException
+     * @throws AuthorizationException
      */
     public function processLoginRequest(bool $isReauthorize = false): void
     {
@@ -188,6 +198,7 @@ class AdobeImsAdminTokenUserService
         if ($isReauthorize) {
             $this->adminReauthProcessService->execute($tokenResponse);
         } else {
+            $this->saveImsUser->save($profile);
             $this->adminLoginProcessService->execute($tokenResponse, $profile);
         }
     }

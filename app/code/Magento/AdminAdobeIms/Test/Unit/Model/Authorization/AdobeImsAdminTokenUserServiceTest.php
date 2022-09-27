@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Test\Unit\Model\Authorization;
 
+use Magento\AdminAdobeIms\Api\SaveImsUserInterface;
 use Magento\AdminAdobeIms\Exception\AdobeImsAuthorizationException;
 use Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserService;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserService
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdobeImsAdminTokenUserServiceTest extends TestCase
 {
@@ -73,6 +76,11 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
      */
     private $tokenResponseFactoryMock;
 
+    /**
+     * @var SaveImsUserInterface
+     */
+    private $saveImsUser;
+
     protected function setUp(): void
     {
         $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
@@ -86,7 +94,7 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
             ->getMockForAbstractClass();
         $this->adminReauthProcessService = $this->createMock(AdminReauthProcessService::class);
         $this->tokenResponseFactoryMock = $this->createMock(TokenResponseInterfaceFactory::class);
-
+        $this->saveImsUser = $this->createMock(SaveImsUserInterface::class);
         $this->adminImsConfigMock->expects($this->any())
             ->method('enabled')
             ->willReturn(true);
@@ -99,7 +107,8 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
             $this->requestInterfaceMock,
             $this->token,
             $this->profile,
-            $this->tokenResponseFactoryMock
+            $this->tokenResponseFactoryMock,
+            $this->saveImsUser
         );
     }
 
@@ -136,6 +145,10 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
         $this->organizationMembership->expects($this->once())
             ->method('checkOrganizationMembership')
             ->with($responseData['access_token']);
+
+        $this->saveImsUser->expects($this->once())
+            ->method('save')
+            ->with($responseData);
 
         $this->adminLoginProcessService->expects($this->once())
             ->method('execute')
@@ -181,6 +194,10 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
         $this->organizationMembership->expects($this->once())
             ->method('checkOrganizationMembership')
             ->with($responseData['access_token']);
+
+        $this->saveImsUser->expects($this->once())
+            ->method('save')
+            ->with($responseData);
 
         $this->adminLoginProcessService->expects($this->once())
             ->method('execute')
@@ -302,7 +319,9 @@ class AdobeImsAdminTokenUserServiceTest extends TestCase
                         'email' => 'user@test.com',
                         'access_token' => 'kladjflakdjf3423rfzddsf',
                         'refresh_token' => 'kladjflakdjf3423rfzddsf',
-                        'expires_in' => 1642259230998
+                        'expires_in' => 1642259230998,
+                        'first_name' => 'Test',
+                        'last_name' => 'User'
                     ]
                 ]
             ];
