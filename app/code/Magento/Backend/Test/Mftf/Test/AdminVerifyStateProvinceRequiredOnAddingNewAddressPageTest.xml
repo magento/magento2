@@ -25,16 +25,25 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <!-- Go to the general configuration and make sure the locale dropdown is available and enabled -->
+        <!-- Go to the general configuration and make sure the timezone dropdown is available and enabled -->
         <actionGroup ref="AdminOpenStoreConfigPageActionGroup" stepKey="openStoreConfigPage" />
+        <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}"
+                          dependentSelector="{{LocaleOptionsSection.timezone}}"
+                          visible="false"
+                          stepKey="openLocaleSection"/>
+        <grabValueFrom selector="{{LocaleOptionsSection.timezone}}" stepKey="originalTimezone"/>
+        <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="America/Chicago" stepKey="setTimezone"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
+
+        <!-- Go to the general configuration and make sure the locale dropdown is available and enabled -->
         <scrollTo selector="{{LocaleOptionsSection.sectionHeader}}" stepKey="scrollToLocaleSection" x="0" y="-80" />
-        <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSection"/>
+        <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSectionAgain"/>
         <seeElement selector="{{LocaleOptionsSection.localeEnabled}}" stepKey="seeEnabledLocaleDropdown"/>
 
         <!--Set Locale for "United Kingdom" and save configuration -->
         <grabValueFrom selector="{{LocaleOptionsSection.locale}}" stepKey="originalLocale"/>
         <selectOption selector="{{LocaleOptionsSection.locale}}" userInput="English (United Kingdom)" stepKey="setLocale"/>
-        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigAgain"/>
 
         <!--"Choose United Kingdom" as State Option Required and save configuration -->
         <conditionalClick selector="{{StateOptionsSection.stateOptions}}" dependentSelector="{{StateOptionsSection.countriesWithRequiredRegions}}" visible="false" stepKey="expandStateOptionsTab"/>
