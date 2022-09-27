@@ -74,8 +74,8 @@
             <selectOption stepKey="selectDisplayTaxSummarySales" selector="{{AdminConfigureTaxSection.dropdownDisplayTaxSummarySales}}" userInput="Yes"/>
             <!-- Enable fixed product taxes and change configurations -->
             <!-- conditionalClick twice to fix some flaky behavior -->
-            <conditionalClick stepKey="clickFixedProductTaxes" selector="{{AdminConfigureTaxSection.fixedProductTaxes}}" dependentSelector="#tax_sales_display" visible="false"/>
-            <conditionalClick stepKey="fixedProductTaxesAgain" selector="{{AdminConfigureTaxSection.fixedProductTaxes}}" dependentSelector="#tax_sales_display" visible="false"/>
+            <scrollTo selector="#tax_weee-head" x="0" y="-80" stepKey="scrollToFPT"/>
+            <click selector="{{AdminConfigureTaxSection.fixedProductTaxes}}" stepKey="clickFixedProductTaxes"/>
             <uncheckOption stepKey="clickEnableFpt" selector="{{AdminConfigureTaxSection.systemValueEnableFpt}}"/>
             <selectOption stepKey="selectEnableFpt" selector="{{AdminConfigureTaxSection.dropdownFptYes}}" userInput="Yes"/>
             <uncheckOption stepKey="clickDisplayPricesInProductLists" selector="{{AdminConfigureTaxSection.systemValueDisplayPricesProducts}}"/>
