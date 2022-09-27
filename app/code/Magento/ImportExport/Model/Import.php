@@ -525,7 +525,7 @@ class Import extends AbstractModel
         }
         try {
             if ($this->_getEntityAdapter()->getSource() instanceof Base64EncodedCsvData) {
-                $this->getDataSourceModel()->cleanBunchesWithId($ids);
+                //$this->getDataSourceModel()->cleanBunchesWithId($ids);
             }
             // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (LocalizedException $e) {
