@@ -11,39 +11,24 @@
     <test name="AdminVerifyStateProvinceRequiredOnAddingNewAddressPageTest">
         <annotations>
             <features value="Backend"/>
-            <stories value="Verification of required fields on new address page"/>
-            <title value="Admin verifies State/Province should be required fields on add new address page"/>
-            <description value="Admin verifies State/Province should be required fields on add new address page"/>
+            <stories value="Verification of required fields on new address page test"/>
+            <title value="Admin verifies State/Province should be required fields on add new address page test"/>
+            <description value="Admin verifies State/Province should be required fields on add new address page test"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-3912"/>
             <group value="configuration"/>
         </annotations>
         <before>
+            <!-- Set locale options to United Kingdom-->
+            <magentoCLI stepKey="localeUK" command="config:set general/locale/code en_GB"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <!-- Go to the general configuration and make sure the timezone dropdown is available and enabled -->
+        <!-- Open Admin Store Configuration Page -->
         <actionGroup ref="AdminOpenStoreConfigPageActionGroup" stepKey="openStoreConfigPage" />
-        <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}"
-                          dependentSelector="{{LocaleOptionsSection.timezone}}"
-                          visible="false"
-                          stepKey="openLocaleSection"/>
-        <grabValueFrom selector="{{LocaleOptionsSection.timezone}}" stepKey="originalTimezone"/>
-        <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="America/Chicago" stepKey="setTimezone"/>
-        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
-
-        <!-- Go to the general configuration and make sure the locale dropdown is available and enabled -->
-        <scrollTo selector="{{LocaleOptionsSection.sectionHeader}}" stepKey="scrollToLocaleSection" x="0" y="-80" />
-        <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSectionAgain"/>
-        <seeElement selector="{{LocaleOptionsSection.localeEnabled}}" stepKey="seeEnabledLocaleDropdown"/>
-
-        <!--Set Locale for "United Kingdom" and save configuration -->
-        <grabValueFrom selector="{{LocaleOptionsSection.locale}}" stepKey="originalLocale"/>
-        <selectOption selector="{{LocaleOptionsSection.locale}}" userInput="English (United Kingdom)" stepKey="setLocale"/>
-        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigAgain"/>
 
         <!--"Choose United Kingdom" as State Option Required and save configuration -->
         <conditionalClick selector="{{StateOptionsSection.stateOptions}}" dependentSelector="{{StateOptionsSection.countriesWithRequiredRegions}}" visible="false" stepKey="expandStateOptionsTab"/>
@@ -59,12 +44,18 @@
         </actionGroup>
 
         <!-- Open AddressBook and set Country as "United Kingdom" -->
-        <click selector="//a[text()='Address Book']" stepKey="clickAddressBook"/>
-        <selectOption selector="#country" userInput="United Kingdom" stepKey="setCountry"/>
-        <click selector="//span[text()='Save Address']" stepKey="saveAddress"/>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBookPage">
+            <argument name="menu" value="Address Book"/>
+        </actionGroup>
+
+        <!-- Choose Country as "United Kingdom" -->
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="United Kingdom" stepKey="selectCountry"/>
+        <click selector="{{StorefrontCustomerAddressFormSection.saveAddress}}" stepKey="saveCustomerAddress"/>
 
         <!-- Assert the error message -->
         <seeElement selector="{{StorefrontCustomerMessagesSection.assertErrorMessage}}" stepKey="assetErrorMessage"/>
 
     </test>
 </tests>
+
+
