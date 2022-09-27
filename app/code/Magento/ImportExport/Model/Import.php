@@ -505,7 +505,7 @@ class Import extends AbstractModel
 
         $result = $this->processImport();
         $this->getDataSourceModel()->markProcessedBunches($ids);
-        $this->getDataSourceModel()->cleanBunchesWithId($ids);
+
         if ($result) {
             $this->addLogComment(
                 [
@@ -522,6 +522,14 @@ class Import extends AbstractModel
             $this->importHistoryModel->updateReport($this, true);
         } else {
             $this->importHistoryModel->invalidateReport($this);
+        }
+        try {
+            if ($this->_getEntityAdapter()->getSource() instanceof Base64EncodedCsvData) {
+                $this->getDataSourceModel()->cleanBunchesWithId($ids);
+            }
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+        } catch (LocalizedException $e) {
+            //Do nothing if Source is not set
         }
         return $result;
     }
