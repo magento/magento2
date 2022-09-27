@@ -43,7 +43,7 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
      * @param InputInterface $input
      * @return array
      */
-    protected function getRequestedTypes(InputInterface $input): array
+    protected function getRequestedTypes(InputInterface $input)
     {
         $requestedTypes = [];
         if ($input->getArgument(self::INPUT_KEY_TYPES)) {
