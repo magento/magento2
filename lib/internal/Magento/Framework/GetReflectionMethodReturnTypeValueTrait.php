@@ -38,6 +38,8 @@ trait GetReflectionMethodReturnTypeValueTrait
     }
 
     /**
+     * Get return type values for Intersection|Union types
+     *
      * @param \ReflectionIntersectionType|\ReflectionUnionType $returnType
      * @param \ReflectionMethod $method
      * @return string|null
