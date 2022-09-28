@@ -482,9 +482,11 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      */
     protected function isAdminPath($routePath)
     {
-        $routePaths = explode('/', $routePath);
-        if ($this->_scope && $routePaths[0] && $routePaths[0] === \Magento\Store\Model\Store::ADMIN_CODE) {
-            $this->_scope = null;
+        if ($this->_scope && $routePath) {
+            $paths = explode('/', $routePath);
+            if ($paths[0] && $paths[0] === \Magento\Store\Model\Store::ADMIN_CODE) {
+                $this->_scope = null;
+            }
         }
     }
 }
