@@ -119,7 +119,6 @@
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
 
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
-
         <see selector="{{StorefrontProductPageSection.errorMsg}}" userInput="Some of the products are out of stock." stepKey="verifyErrorMessage"/>
 
     </test>
