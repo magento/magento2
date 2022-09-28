@@ -1994,7 +1994,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 if (array_diff($cols, array_keys($row))) {
                     throw new \Zend_Db_Exception('Invalid data for insert');
                 }
-                $values[] = $this->_prepareInsertData($row, $bind);
+                $line = [];
+                foreach ($cols as $field) {
+                    $line[] = $row[$field];
+                }
+                $values[] = $this->_prepareInsertData($line, $bind);
             }
             unset($row);
         } else { // Column-value pairs
