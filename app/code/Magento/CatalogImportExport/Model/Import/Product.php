@@ -1688,7 +1688,6 @@ class Product extends AbstractEntity
     private function saveProductEntityPhase(array $rowData, array &$entityRowsUp, array &$entityRowsIn) : void
     {
         $rowSku = $rowData[self::COL_SKU];
-        // 1. Entity phase
         if ($this->isSkuExist($rowSku)) {
             // existing row
             if (isset($rowData['attribute_set_code'])) {
