@@ -378,6 +378,7 @@ class DbStorage extends AbstractStorage
      * Searches existing rewrites with same requestPath & store,  but ignores ones to be updated.
      *
      * @param array $urls
+     * @param array $uniqueEntities
      * @return array
      */
     private function findUrlConflicted(array $urls, array $uniqueEntities): array
@@ -447,7 +448,7 @@ class DbStorage extends AbstractStorage
      * Get filter for url rows deletion due to provided urls
      *
      * @param UrlRewrite[] $urls
-     * @return array~/tmp/system.log
+     * @return array
      * @deprecated 101.0.3 Not used anymore.
      * @see nothing
      */
