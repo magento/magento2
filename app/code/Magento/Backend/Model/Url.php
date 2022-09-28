@@ -480,7 +480,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * @param string $routePath
      * @return void
      */
-    protected function isAdminPath($routePath)
+    private function isAdminPath($routePath)
     {
         if ($this->_scope && $routePath) {
             $paths = explode('/', $routePath);
