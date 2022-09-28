@@ -52,8 +52,9 @@ class GetSpecifiedShippingAddressTest extends GraphQlAbstract
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
         self::assertArrayHasKey('cart', $response);
         self::assertArrayHasKey('shipping_addresses', $response['cart']);
-
+        $uid=$response['cart']['shipping_addresses'][0]['uid'];
         $expectedShippingAddressData = [
+            'uid' =>$uid,
             'firstname' => 'John',
             'lastname' => 'Smith',
             'company' => 'CompanyName',
