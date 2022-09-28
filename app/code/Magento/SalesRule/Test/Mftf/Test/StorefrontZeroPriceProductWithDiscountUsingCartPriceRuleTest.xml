@@ -19,6 +19,7 @@
             <group value="SalesRule"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- Log in -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!-- Create 2 simple products -->
