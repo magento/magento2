@@ -49,7 +49,6 @@ class Product extends AbstractEntity
 {
     private const DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR = ',';
     public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
-    private const HASH_ALGORITHM = 'sha256';
 
     /**
      * Size of bunch - part of products to save in one step.
@@ -263,6 +262,11 @@ class Product extends AbstractEntity
      * @var array
      */
     protected $_mediaGalleryAttributeId = null;
+
+    /**
+     * @var string
+     */
+    private $hashAlgorithm = 'crc32c';
 
     /**
      * @var array
@@ -904,7 +908,7 @@ class Product extends AbstractEntity
         $this->linkProcessor = $linkProcessor ?? ObjectManager::getInstance()
                 ->get(LinkProcessor::class);
         $this->linkProcessor->addNameToIds($this->_linkNameToId);
-
+        $this->hashAlgorithm = (version_compare(PHP_VERSION, '8.1.0') >= 0) ? 'xxh128' : 'crc32c';
         parent::__construct(
             $jsonHelper,
             $importExportData,
@@ -3344,7 +3348,7 @@ class Product extends AbstractEntity
      */
     private function findImageByColumnImageUsingHash(string $productMediaPath, array &$images, string $content): string
     {
-        $hash = hash(self::HASH_ALGORITHM, $content);
+        $hash = hash($this->hashAlgorithm, $content);
         foreach ($images as &$image) {
             if (!isset($image['hash'])) {
                 $imageContent = $this->getFileContent($this->joinFilePaths($productMediaPath, $image['value']));
@@ -3352,9 +3356,9 @@ class Product extends AbstractEntity
                     $image['hash'] = '';
                     continue;
                 }
-                $image['hash'] = hash(self::HASH_ALGORITHM, $imageContent);
+                $image['hash'] = hash($this->hashAlgorithm, $imageContent);
             }
-            if (isset($image['hash']) && $image['hash'] === $hash) {
+            if (!empty($image['hash']) && $image['hash'] === $hash) {
                 return $image['value'];
             }
         }
