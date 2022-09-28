@@ -23,7 +23,7 @@
         <element name="scope" type="select" selector="//*[@class='admin__fieldset-wrapper-content admin__collapsible-content _show']//select[@name='is_global']" timeout="30"/>
         <element name="defaultValue" type="input" selector="//*[@class='admin__fieldset-wrapper-content admin__collapsible-content _show']//input[@name='default_value_text']"/>
         <element name="isUnique" type="checkbox" selector="//input[contains(@name, 'is_unique')]/..//label"/>
-        <element name="storefrontProperties" type="text" selector="//*[@id='product_attribute_tabs_front']/span[1]"/>
+        <element name="storefrontProperties" type="text" selector="//div[contains(@data-index,'front_fieldset')]"/>
         <element name="inSearch" type="checkbox" selector="//input[contains(@name, 'is_searchable')]/..//label"/>
         <element name="advancedSearch" type="checkbox" selector="//input[contains(@name, 'is_visible_in_advanced_search')]/..//label"/>
         <element name="isComparable" type="checkbox" selector="//input[contains(@name, 'is_comparable')]/..//label"/>
