@@ -19,8 +19,6 @@
             <group value="configuration"/>
         </annotations>
         <before>
-            <!-- create new customer -->
-            <createData stepKey="customer" entity="Simple_US_Customer"/>
             <!-- Set locale options to United Kingdom-->
             <magentoCLI stepKey="localeUK" command="config:set general/locale/code en_GB"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -40,10 +38,12 @@
         <click selector="#save" stepKey="saveStateOptionsConfig"/>
         <waitForPageLoad stepKey="waitForSavingConfig"/>
 
-        <!--Login to storefront as created customer-->
-        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
-            <argument name="Customer" value="$$customer$$"/>
+        <!-- create customer on storefront -->
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
 
         <!-- Open AddressBook and set Country as "United Kingdom" -->
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBookPage">
