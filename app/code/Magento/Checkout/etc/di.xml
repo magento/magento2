@@ -56,4 +56,10 @@
     <type name="Magento\Customer\Model\ResourceModel\Customer">
         <plugin name="recollect_quote_on_customer_group_change" type="Magento\Checkout\Model\Plugin\RecollectQuoteOnCustomerGroupChange"/>
     </type>
+    <type name="Magento\Checkout\Api\PaymentInformationManagementInterface">
+        <plugin name="same-as-billing" type="Magento\Checkout\Plugin\Model\PaymentInformationManagementPlugin"/>
+    </type>
+    <type name="Magento\Checkout\Api\GuestPaymentInformationManagementInterface">
+        <plugin name="guest-same-as-billing" type="Magento\Checkout\Plugin\Model\GuestPaymentInformationManagementPlugin"/>
+    </type>
 </config>

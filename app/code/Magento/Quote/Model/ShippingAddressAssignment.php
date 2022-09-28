@@ -32,8 +32,6 @@ class ShippingAddressAssignment
     }
 
     /**
-     * Setting up shipping address in sync of submitted address details
-     *
      * @param \Magento\Quote\Api\Data\CartInterface $quote
      * @param \Magento\Quote\Api\Data\AddressInterface $address
      * @param bool $useForShipping
@@ -45,10 +43,6 @@ class ShippingAddressAssignment
         $useForShipping = false
     ) {
         if ($useForShipping) {
-            $address->setShippingMethod($quote->getShippingAddress()->getShippingMethod());
-            $address->setShippingDescription($quote->getShippingAddress()->getShippingDescription());
-            $address->setSaveInAddressBook($quote->getShippingAddress()->getSaveInAddressBook());
-
             $quote->removeAddress($quote->getShippingAddress()->getId());
             $address->setSameAsBilling(1);
             $address->setCollectShippingRates(true);

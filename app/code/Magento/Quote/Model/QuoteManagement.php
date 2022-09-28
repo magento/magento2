@@ -628,7 +628,7 @@ class QuoteManagement implements CartManagementInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _prepareCustomerQuote(Quote $quote): void
+    protected function _prepareCustomerQuote(Quote $quote)
     {
         $billing = $quote->getBillingAddress();
         $shipping = $quote->isVirtual() ? null : $quote->getShippingAddress();
@@ -637,7 +637,9 @@ class QuoteManagement implements CartManagementInterface
         $hasDefaultBilling = (bool)$customer->getDefaultBilling();
         $hasDefaultShipping = (bool)$customer->getDefaultShipping();
 
-        if ($shipping && (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())) {
+        if ($shipping && !$shipping->getSameAsBilling()
+            && (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())
+        ) {
             if ($shipping->getQuoteId()) {
                 $shippingAddress = $shipping->exportCustomerAddress();
             } else {
@@ -659,7 +661,6 @@ class QuoteManagement implements CartManagementInterface
                     if (!$hasDefaultBilling && !$billing->getSaveInAddressBook()) {
                         $shippingAddress->setIsDefaultBilling(true);
                         $hasDefaultBilling = true;
-                        $shipping->setSameAsBilling(1);
                     }
                 }
                 //save here new customer address
@@ -669,16 +670,10 @@ class QuoteManagement implements CartManagementInterface
                 $shipping->setCustomerAddressData($shippingAddress);
                 $this->addressesToSync[] = $shippingAddress->getId();
                 $shipping->setCustomerAddressId($shippingAddress->getId());
-
-                // Storefront Checkout: `My billing and shipping address are the same`-
-                // when new shipping address save in address book
-                if ($shipping->getSameAsBilling()) {
-                    $billing->setCustomerAddressId($shippingAddress->getId());
-                }
             }
         }
 
-        if (!$billing->getCustomerAddressId() && (!$billing->getCustomerId() || $billing->getSaveInAddressBook())) {
+        if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
             if ($billing->getQuoteId()) {
                 $billingAddress = $billing->exportCustomerAddress();
             } else {
@@ -715,6 +710,9 @@ class QuoteManagement implements CartManagementInterface
                     $shipping->setCustomerAddressId($billingAddress->getId());
                 }
             }
+        }
+        if (!empty($shipping) && $shipping->getSameAsBilling() && !$billing->getCustomerAddressId()) {
+            $billing->setCustomerAddressId($shipping->getCustomerAddressId());
         }
         if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {
             $shipping->setIsDefaultBilling(true);

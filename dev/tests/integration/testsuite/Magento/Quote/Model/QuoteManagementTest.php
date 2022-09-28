@@ -9,6 +9,7 @@ namespace Magento\Quote\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type;
+use Magento\Checkout\Api\PaymentInformationManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Vat;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -18,6 +19,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver;
 use Magento\Quote\Observer\Frontend\Quote\Address\VatValidator;
 use Magento\Sales\Api\OrderManagementInterface;
@@ -75,6 +78,21 @@ class QuoteManagementTest extends TestCase
     private $storeManager;
 
     /**
+     * @var PaymentInformationManagementInterface
+     */
+    private $paymentManagement;
+
+    /**
+     * @var PaymentInterface
+     */
+    private $payment;
+
+    /**
+     * @var AddressInterface
+     */
+    private $address;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -89,6 +107,9 @@ class QuoteManagementTest extends TestCase
         $this->productRepository->cleanCache();
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->paymentManagement = $this->objectManager->get(PaymentInformationManagementInterface::class);
+        $this->payment = $this->objectManager->get(PaymentInterface::class);
+        $this->address = $this->objectManager->get(AddressInterface::class);
     }
 
     /**
@@ -380,15 +401,35 @@ class QuoteManagementTest extends TestCase
     public function testCustomerAddressIdAfterPlacingOrder(): void
     {
         $quote = $this->getQuoteByReservedOrderId->execute('test01');
+        $quote->getBillingAddress()->setSaveInAddressBook(null);
+        $quote->getBillingAddress()->setCustomerAddressId(null);
+
+        $this->address->setFirstname($quote->getBillingAddress()->getFirstname());
+        $this->address->setLastname($quote->getBillingAddress()->getLastname());
+        $this->address->setCity($quote->getBillingAddress()->getCity());
+        $this->address->setCompany($quote->getBillingAddress()->getCompany());
+        $this->address->setCountryId($quote->getBillingAddress()->getCountryId());
+        $this->address->setRegionId($quote->getBillingAddress()->getRegionId());
+        $this->address->setCustomerId($quote->getBillingAddress()->getCustomerId());
+        $this->address->setPostcode($quote->getBillingAddress()->getPostcode());
+        $this->address->setTelephone($quote->getBillingAddress()->getTelephone());
+        $this->address->setStreet($quote->getBillingAddress()->getStreet());
+        $this->address->setSameAsBilling($quote->getBillingAddress()->getSameAsBilling());
+        $this->address->setCustomerAddressId($quote->getBillingAddress()->getCustomerAddressId());
+        $this->address->setSaveInAddressBook($quote->getBillingAddress()->getSaveInAddressBook());
+
         $quote->getShippingAddress()
             ->setShippingMethod('flatrate_flatrate')
             ->setCollectShippingRates(true);
         $quote->getShippingAddress()->setSameAsBilling(1);
         $quote->getShippingAddress()->setSaveInAddressBook(1);
-        $quote->getBillingAddress()->setSaveInAddressBook(null);
-        $quote->getBillingAddress()->setCustomerAddressId(null);
+        $this->payment->setMethod('checkmo');
         $quote->save();
-        $orderId = $this->cartManagement->placeOrder($quote->getId());
+        $orderId = $this->paymentManagement->savePaymentInformationAndPlaceOrder(
+            $quote->getId(),
+            $this->payment,
+            $this->address
+        );
         $order = $this->orderRepository->get($orderId);
         $billingAddress = $order->getBillingAddress();
         $shippingAddress = $order->getShippingAddress();

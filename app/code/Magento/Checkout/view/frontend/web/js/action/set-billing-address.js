@@ -15,8 +15,7 @@ define(
         'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/full-screen-loader',
-        'Magento_Checkout/js/action/get-payment-information',
-        'Magento_Checkout/js/checkout-data'
+        'Magento_Checkout/js/action/get-payment-information'
     ],
     function ($,
               quote,
@@ -25,38 +24,30 @@ define(
               errorProcessor,
               customer,
               fullScreenLoader,
-              getPaymentInformationAction,
-              checkoutData
+              getPaymentInformationAction
     ) {
         'use strict';
 
         return function (messageContainer) {
             var serviceUrl,
-                payload,
-                useForShipping;
+                payload;
 
             /**
              * Checkout for guest and registered customer.
              */
-            useForShipping = $(
-                `#billing-address-same-as-shipping-${checkoutData.getSelectedPaymentMethod()}:checkbox:checked`
-            ).length > 0;
-
             if (!customer.isLoggedIn()) {
                 serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/billing-address', {
                     cartId: quote.getQuoteId()
                 });
                 payload = {
                     cartId: quote.getQuoteId(),
-                    address: quote.billingAddress(),
-                    useForShipping: useForShipping
+                    address: quote.billingAddress()
                 };
             } else {
                 serviceUrl = urlBuilder.createUrl('/carts/mine/billing-address', {});
                 payload = {
                     cartId: quote.getQuoteId(),
-                    address: quote.billingAddress(),
-                    useForShipping: useForShipping
+                    address: quote.billingAddress()
                 };
             }
 
