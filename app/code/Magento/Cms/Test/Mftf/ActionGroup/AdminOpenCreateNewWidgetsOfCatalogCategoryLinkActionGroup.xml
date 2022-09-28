@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenCreateNewWidgetsOfCatalogCategoryLinkActionGroup">
+        <annotations>
+            <description>Open create new Widgets of Catalog Category Link Type.</description>
+        </annotations>
+        <arguments>
+            <argument name="WidgetType" type="string" defaultValue="Catalog Category Link"/>
+            <argument name="WidgetTheme" type="string" defaultValue="Magento Luma"/>
+            <argument name="WidgetTitle" type="string" defaultValue="NewWidget"/>
+            <argument name="AssignToStoreViews" type="string" defaultValue="All Store Views"/>
+            <argument name="WidgetDisplayOn" type="string" defaultValue="All Pages"/>
+            <argument name="Container" type="string" defaultValue="Main Content Area"/>
+            <argument name="Template" type="string" defaultValue="Category Link Block Template"/>
+        </arguments>
+        <amOnPage url="{{CmsNewWidgetsPage.url}}" stepKey="navigateToCreateWidgetsPage"/>
+        <waitForPageLoad stepKey="waitToLoadWidgetGridPage"/>
+        <selectOption selector="{{CmsNewWidgetsSettingSection.WidgetType}}" userInput="{{WidgetType}}" stepKey="selectCMSStaticBlock"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear1"/>
+        <selectOption selector="{{CmsNewWidgetsSettingSection.WidgetTheme}}" userInput="{{WidgetTheme}}" stepKey="selectTemplate"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear2"/>
+        <click selector="{{CmsNewWidgetsSettingSection.ContinueButton}}" stepKey="clickContinueButton"/>
+        <waitForPageLoad stepKey="waitToLoadStorefrontPropertiesSection"/>
+        <fillField selector="{{CmsNewWidgetStoreforntPropertiesSection.WidgetTitle}}" userInput="{{WidgetTitle}}" stepKey="fillFieldTitle"/>
+        <selectOption selector="{{CmsNewWidgetStoreforntPropertiesSection.AssigntoStoreViews}}" userInput="{{AssignToStoreViews}}" stepKey="selectView"/>
+        <click selector="{{CmsNewWidgetStoreforntPropertiesSection.AddLayout}}" stepKey="clickAddLayoutButton"/>
+        <scrollTo selector="{{CmsNewWidgetStoreforntPropertiesSection.AddLayout}}" stepKey="scrollToAddLayoutTab"/>
+        <waitForPageLoad stepKey="waitToLoadSection"/>
+        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.DisplayOn}}" userInput="{{WidgetDisplayOn}}" stepKey="selectDisplay"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3"/>
+        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.Container}}" userInput="{{Container}}" stepKey="selectContainer"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear4"/>
+        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.Template}}" userInput="{{Template}}" stepKey="selectTemplate2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear5"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <waitForPageLoad stepKey="waitToReachTopOfPage"/>
+        <click selector="{{CmsNewWidgetOptionsSection.WidgetOptions}}" stepKey="clickWidgetOptionsSection"/>
+        <click selector="{{CmsNewWidgetOptionsSection.SelectCategory}}" stepKey="clickSelectCategoryButton"/>
+        <waitForPageLoad stepKey="waitToLoadRootCategory"/>
+        <click selector="{{CmsNewWidgetOptionsSection.ExpandRootCategory}}" stepKey="clickToExpandRootCat"/>
+        <click selector="{{CmsNewWidgetOptionsSection.FirstCategory}}" stepKey="clickFirstCategoryToSelect"/>
+        <waitForPageLoad stepKey="waitToSelectFirstCategory"/>
+        <click selector="{{CmsNewWidgetOptionsSection.SaveWidget}}" stepKey="clickSaveWidgetButton"/>
+        <waitForPageLoad stepKey="waitToSaveConfig"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+    </actionGroup>
+</actionGroups>
