@@ -420,7 +420,11 @@ abstract class AbstractEntity
         $startNewBunch = false;
 
         $source->rewind();
-        $this->_dataSourceModel->cleanProcessedBunches();
+        if ($this->ids) {
+            $this->_dataSourceModel->cleanProcessedBunches();
+        } else {
+            $this->_dataSourceModel->cleanBunches();
+        }
         $mainAttributeCode = $this->getMasterAttributeCode();
 
         while ($source->valid() || count($bunchRows) || isset($entityGroup)) {

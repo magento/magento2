@@ -394,7 +394,11 @@ abstract class AbstractEntity
         $skuSet = [];
 
         $source->rewind();
-        $this->_dataSourceModel->cleanProcessedBunches();
+        if ($this->ids) {
+            $this->_dataSourceModel->cleanProcessedBunches();
+        } else {
+            $this->_dataSourceModel->cleanBunches();
+        }
 
         while ($source->valid() || $bunchRows) {
             if ($startNewBunch || !$source->valid()) {

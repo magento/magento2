@@ -116,7 +116,6 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
         return $this->getConnection()->delete($this->getMainTable());
     }
 
-
     /**
      * Clean all bunches from table.
      *
@@ -141,10 +140,11 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      */
     public function markProcessedBunches(array $ids): void
     {
+        $where = $ids ? ['id IN (?)' => $ids] : '';
         $this->getConnection()->update(
             $this->getMainTable(),
             ['is_processed' => '1'],
-            ['id IN (?)' => $ids]
+            $where
         );
     }
 
