@@ -1,26 +1,27 @@
 {
     "name": "magento/module-captcha",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/framework": "*",
-        "magento/module-backend": "*",
-        "magento/module-checkout": "*",
-        "magento/module-customer": "*",
-        "magento/module-sales": "*",
-        "magento/module-store": "*",
-        "magento/module-authorization": "*",
-        "laminas/laminas-captcha": "^2.12",
-        "laminas/laminas-db": "^2.13.4"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.4.5",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "103.0.*",
+        "magento/module-backend": "102.0.*",
+        "magento/module-checkout": "100.4.*",
+        "magento/module-customer": "103.0.*",
+        "magento/module-sales": "103.0.*",
+        "magento/module-store": "101.1.*",
+        "magento/module-authorization": "100.4.*",
+        "laminas/laminas-captcha": "^2.12",
+        "laminas/laminas-db": "^2.13.4"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -30,3 +31,4 @@
         }
     }
 }
+
