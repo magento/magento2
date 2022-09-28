@@ -112,6 +112,7 @@ class IdListBuilder
             )
                 ->where($table . '.entity_id IS NULL');
         }
+        $this->additionalGridTables = [];
         return $select;
     }
 }
