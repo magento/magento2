@@ -40,6 +40,7 @@
 
         <!-- create customer on storefront -->
         <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
         <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
             <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>
