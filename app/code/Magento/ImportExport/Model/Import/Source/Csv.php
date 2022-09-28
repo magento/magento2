@@ -5,7 +5,8 @@
  */
 namespace Magento\ImportExport\Model\Import\Source;
 
-use Magento\Framework\Filesystem\Directory\Read;
+use Magento\Framework\Filesystem\Directory\Read as DirectoryRead;
+use Magento\Framework\Filesystem\File\ReadInterface as FileReadInterface;
 
 /**
  * CSV import adapter
@@ -13,7 +14,7 @@ use Magento\Framework\Filesystem\Directory\Read;
 class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
 {
     /**
-     * @var \Magento\Framework\Filesystem\File\Write
+     * @var FileReadInterface
      */
     protected $_file;
 
@@ -42,27 +43,33 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      *
      * There must be column names in the first line
      *
-     * @param string $file
-     * @param Read $directory
+     * @param string|FileReadInterface $file
+     * @param DirectoryRead $directory
      * @param string $delimiter
      * @param string $enclosure
      * @throws \LogicException
      */
     public function __construct(
         $file,
-        Read $directory,
+        DirectoryRead $directory,
         $delimiter = ',',
         $enclosure = '"'
     ) {
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         register_shutdown_function([$this, 'destruct']);
-        try {
-            $this->filePath = $directory->getRelativePath($file);
-            $this->_file = $directory->openFile($this->filePath, 'r');
+        if ($file instanceof FileReadInterface) {
+            $this->filePath = '';
+            $this->_file = $file;
             $this->_file->seek(0);
-            self::$openFiles[$this->filePath] = true;
-        } catch (\Magento\Framework\Exception\FileSystemException $e) {
-            throw new \LogicException("Unable to open file: '{$file}'");
+        } else {
+            try {
+                $this->filePath = $directory->getRelativePath($file);
+                $this->_file = $directory->openFile($this->filePath, 'r');
+                $this->_file->seek(0);
+                self::$openFiles[$this->filePath] = true;
+            } catch (\Magento\Framework\Exception\FileSystemException $e) {
+                throw new \LogicException("Unable to open file: '{$file}'");
+            }
         }
         if ($delimiter) {
             $this->_delimiter = $delimiter;
