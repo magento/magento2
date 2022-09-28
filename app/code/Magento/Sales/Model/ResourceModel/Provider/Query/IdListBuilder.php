@@ -55,6 +55,18 @@ class IdListBuilder
     }
 
     /**
+     * Reset added additional grid table where entities may already exist.
+     *
+     * @return $this
+     */
+    public function resetAdditionalGridTable(): IdListBuilder
+    {
+        $this->additionalGridTables = [];
+
+        return $this;
+    }
+
+    /**
      * Returns connection.
      *
      * @return AdapterInterface
@@ -112,7 +124,6 @@ class IdListBuilder
             )
                 ->where($table . '.entity_id IS NULL');
         }
-        $this->additionalGridTables = [];
         return $select;
     }
 }
