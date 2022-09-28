@@ -239,20 +239,6 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
     }
 
     /**
-     * Check path is admin path
-     *
-     * @param string $routePath
-     * @return void
-     */
-    private function isAdminPath($routePath)
-    {
-        $routePaths = explode('/', $routePath);
-        if ($routePaths[0] && $routePaths[0] === \Magento\Store\Model\Store::ADMIN_CODE) {
-            $this->_scope = null;
-        }
-    }
-
-    /**
      * Generate secret key for controller and action based on form key
      *
      * @param string $routeName
@@ -486,5 +472,19 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
     protected function _getConfig($path)
     {
         return $this->_scopeConfig->getValue($path);
+    }
+
+    /**
+     * Reset scope when path is admin path
+     *
+     * @param string $routePath
+     * @return void
+     */
+    protected function isAdminPath($routePath)
+    {
+        $routePaths = explode('/', $routePath);
+        if ($this->_scope && $routePaths[0] && $routePaths[0] === \Magento\Store\Model\Store::ADMIN_CODE) {
+            $this->_scope = null;
+        }
     }
 }
