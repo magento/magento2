@@ -48,7 +48,6 @@ class DbStorage extends AbstractStorage
      */
     private $logger;
 
-
     /**
      * @var int
      */
@@ -273,8 +272,8 @@ class DbStorage extends AbstractStorage
         foreach ($uniqueEntities as $storeId => $entityTypes) {
             $newRequestPaths = [];
             foreach ($entityTypes as $entityType => $entities) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $requestPaths = array_merge(...$entities);
-                $requestPathFilter = '';
                 if (empty($requestPaths)) {
                     continue;
                 }
@@ -289,7 +288,7 @@ class DbStorage extends AbstractStorage
                     . ') AND ' . $this->connection->quoteIdentifier(UrlRewrite::REQUEST_PATH)
                     . ' IN (' . $this->connection->quote($requestPaths) . ')'
                 );
-                foreach($requestPaths as $requestPath) {
+                foreach ($requestPaths as $requestPath) {
                     if (isset($newRequestPaths[$requestPath])) {
                         throw new \Magento\Framework\Exception\AlreadyExistsException();
                     }
@@ -340,7 +339,7 @@ class DbStorage extends AbstractStorage
         foreach ($urls as $url) {
             $data[] = $url->toArray();
         }
-        for ($tries = 0; ; $tries++) {
+        for ($tries = 0;; $tries++) {
             $this->connection->beginTransaction();
             try {
                 $this->deleteOldUrls($uniqueEntities);
@@ -355,26 +354,7 @@ class DbStorage extends AbstractStorage
                 continue;
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
                 $this->connection->rollBack();
-                /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urlConflicted */
-                $urlConflicted = [];
-                foreach ($urls as $url) {
-                    $urlFound = $this->doFindOneByData(
-                        [
-                            UrlRewrite::REQUEST_PATH => $url->getRequestPath(),
-                            UrlRewrite::STORE_ID => $url->getStoreId(),
-                        ]
-                    );
-                    if (isset($urlFound[UrlRewrite::URL_REWRITE_ID])) {
-                        if (isset($uniqueEntities
-                            [$urlFound[UrlRewrite::STORE_ID]]
-                            [$urlFound[UrlRewrite::ENTITY_TYPE]]
-                            [$urlFound[UrlRewrite::ENTITY_ID]
-                        ])) {
-                            continue; // Note: If it's one of the entities we are updating, then it is okay.
-                        }
-                        $urlConflicted[$urlFound[UrlRewrite::URL_REWRITE_ID]] = $url->toArray();
-                    }
-                }
+                $urlConflicted = $this->findUrlConflicted($urls, $uniqueEntities);
                 if ($urlConflicted) {
                     throw new \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException(
                         __('URL key for specified store already exists.'),
@@ -389,8 +369,39 @@ class DbStorage extends AbstractStorage
                 $this->connection->rollBack();
                 throw $e;
             }
-            return $urls;
+            break;
         }
+        return $urls;
+    }
+
+    /**
+     * Searches existing rewrites with same requestPath & store,  but ignores ones to be updated.
+     *
+     * @param array $urls
+     * @return array
+     */
+    private function findUrlConflicted(array $urls, array $uniqueEntities): array
+    {
+        $urlConflicted = [];
+        foreach ($urls as $url) {
+            $urlFound = $this->doFindOneByData(
+                [
+                    UrlRewrite::REQUEST_PATH => $url->getRequestPath(),
+                    UrlRewrite::STORE_ID => $url->getStoreId(),
+                ]
+            );
+            if (isset($urlFound[UrlRewrite::URL_REWRITE_ID])) {
+                if (isset($uniqueEntities
+                    [$urlFound[UrlRewrite::STORE_ID]]
+                    [$urlFound[UrlRewrite::ENTITY_TYPE]]
+                    [$urlFound[UrlRewrite::ENTITY_ID]
+                    ])) {
+                    continue; // Note: If it's one of the entities we are updating, then it is okay.
+                }
+                $urlConflicted[$urlFound[UrlRewrite::URL_REWRITE_ID]] = $url->toArray();
+            }
+        }
+        return $urlConflicted;
     }
 
     /**
@@ -436,7 +447,7 @@ class DbStorage extends AbstractStorage
      * Get filter for url rows deletion due to provided urls
      *
      * @param UrlRewrite[] $urls
-     * @return array
+     * @return array~/tmp/system.log
      * @deprecated 101.0.3 Not used anymore.
      * @see nothing
      */
