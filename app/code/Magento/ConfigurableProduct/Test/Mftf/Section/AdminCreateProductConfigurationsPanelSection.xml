@@ -60,5 +60,6 @@
         <element name="attributeCheckboxByName" type="input" selector="//*[contains(@data-attribute-option-title,'{{arg}}')]//input[@type='checkbox']" parameterized="true"/>
         <element name="attributeColorCheckbox" type="select" selector="//div[contains(text(),'color') and @class='data-grid-cell-content']/../preceding-sibling::td/label/input"/>
         <element name="attributeRowByAttributeCode" type="block" selector="//td[count(../../..//th[./*[.='Attribute Code']]/preceding-sibling::th) + 1][./*[.='{{attribute_code}}']]/../td//input[@data-action='select-row']" parameterized="true"/>
+        <element name="qtyForColorAttribute" type="text" selector="//span[text()='{{var1}}']/../..//input[@type='text']" parameterized="true"/>
     </section>
 </sections>
