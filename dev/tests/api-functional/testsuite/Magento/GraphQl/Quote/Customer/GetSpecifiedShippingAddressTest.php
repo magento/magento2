@@ -160,18 +160,19 @@ class GetSpecifiedShippingAddressTest extends GraphQlAbstract
 {
   cart(cart_id: "$maskedQuoteId") {
     shipping_addresses {
+      uid
       firstname
       lastname
       company
       street
       city
-      region 
+      region
       {
         code
         label
       }
       postcode
-      country 
+      country
       {
         code
         label
