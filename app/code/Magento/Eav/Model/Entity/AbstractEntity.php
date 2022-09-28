@@ -12,6 +12,7 @@ use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
+use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\App\Config\Element;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
@@ -1022,6 +1023,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param array|null $attributes
      * @return $this
      * @since 100.1.0
+     * @see not in use anymore
      */
     protected function loadAttributesMetadata($attributes)
     {
@@ -1259,6 +1261,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @return  array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _collectSaveData($newObject)
     {
@@ -1289,6 +1292,11 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
              * not needed after introduction of partial entity loading
              */
             foreach ($origData as $k => $v) {
+                if ($k === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
+                    foreach ($v as $custom_attribute => $data) {
+                        $origData[$custom_attribute] = $data['value'] ?: '';
+                    }
+                }
                 if (!array_key_exists($k, $newData)) {
                     unset($origData[$k]);
                 }
@@ -1927,6 +1935,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @deprecated 100.1.0
      * @since 100.1.0
+     * @see not in use anymore
      */
     protected function getAttributeLoader()
     {
