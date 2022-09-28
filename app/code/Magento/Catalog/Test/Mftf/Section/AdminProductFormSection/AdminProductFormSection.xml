@@ -73,7 +73,7 @@
         <element name="selectCategory" type="input" selector="//*[@data-index='category_ids']//label[contains(., '{{categoryName}}')]" parameterized="true" timeout="30"/>
         <element name="done" type="button" selector="//*[@data-index='category_ids']//button[@data-action='close-advanced-select']" timeout="30"/>
         <element name="selectMultipleCategories" type="input" selector="//*[@data-index='container_category_ids']//*[contains(@class, '_selected')]"/>
-        <element name="countryOfManufacture" type="select" selector="//*[@id='attributeGrid_table']/tbody/tr[2]/td[2]"/>
+        <element name="countryOfManufacture" type="select" selector="select[name='product[country_of_manufacture]']"/>
         <element name="newAddedAttribute" type="text" selector="//fieldset[@class='admin__fieldset']//div[contains(@data-index,'{{attributeCode}}')]" parameterized="true"/>
         <element name="newAddedAttributeInput" type="text" selector="//fieldset[@class='admin__fieldset']//div[contains(@data-index,'{{attributeCode}}')]//input" parameterized="true"/>
         <element name="newCategoryButton" type="button" selector="button[data-index='create_category_button']" timeout="30"/>
