@@ -62,6 +62,7 @@
         <element name="systemValueDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax input[type='checkbox']"/>
         <element name="dropdownDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax select"/>
         <element name="fixedProductTaxes" type="block" selector="#tax_weee-head" timeout="30"/>
+        <element name="fixedProductTaxesOpened" type="block" selector="#tax_weee-head.open" timeout="30"/>
         <element name="systemValueEnableFpt" type="checkbox" selector="#row_tax_weee_enable input[type='checkbox']"/>
         <element name="dropdownFptYes" type="checkbox" selector="#row_tax_weee_enable select"/>
         <element name="systemValueDisplayPricesProducts" type="checkbox" selector="#row_tax_weee_display_list input[type='checkbox']"/>
