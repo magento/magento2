@@ -13,6 +13,7 @@ use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import as ImportExport;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\Import\Source\Base64EncodedCsvData;
 
 /**
  * Import entity abstract model
@@ -394,7 +395,7 @@ abstract class AbstractEntity
         $skuSet = [];
 
         $source->rewind();
-        if ($this->ids) {
+        if ($source instanceof Base64EncodedCsvData) {
             $this->_dataSourceModel->cleanProcessedBunches();
         } else {
             $this->_dataSourceModel->cleanBunches();
