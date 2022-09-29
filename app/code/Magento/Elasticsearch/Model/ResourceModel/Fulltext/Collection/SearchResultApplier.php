@@ -236,13 +236,27 @@ class SearchResultApplier implements SearchResultApplierInterface
                 $entityTypeId = $this->collection->getEntity()->getTypeId();
                 $entityMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
                 $linkField = $entityMetadata->getLinkField();
-                $query->joinLeft(
+                $query->joinInner(
                     ['product_var' => $this->collection->getTable('catalog_product_entity_varchar')],
                     "product_var.{$linkField} = e.{$linkField} AND product_var.attribute_id =
                     (SELECT attribute_id FROM eav_attribute WHERE entity_type_id={$entityTypeId}
-                    AND attribute_code='name')",
+                    AND attribute_code='name') AND product_var.store_id='0'",
                     ['product_var.value AS name']
                 );
+
+                $query->joinLeft(
+                    ['product_var_store' => $this->collection->getTable('catalog_product_entity_varchar')],
+                    "product_var_store.{$linkField} = e.{$linkField} AND product_var_store.attribute_id =
+                    (SELECT attribute_id FROM eav_attribute WHERE entity_type_id={$entityTypeId}
+                    AND attribute_code='name') AND product_var_store.store_id='$storeId'",
+                    ['product_var_store.value AS name_store']
+                );
+
+                $query->columns([
+                    'name' => new \Zend_Db_Expr(
+                        $connection->getIfNullSql('product_var_store.value', 'product_var.value')
+                    ),
+                ]);
             } elseif ($field === 'price') {
                 $query->joinLeft(
                     ['price_index' => $this->collection->getTable('catalog_product_index_price')],
