@@ -49,7 +49,6 @@ class Product extends AbstractEntity
 {
     private const DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR = ',';
     public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
-    private const HASH_ALGORITHM = 'sha256';
 
     /**
      * Size of bunch - part of products to save in one step.
@@ -263,6 +262,11 @@ class Product extends AbstractEntity
      * @var array
      */
     protected $_mediaGalleryAttributeId = null;
+
+    /**
+     * @var string
+     */
+    private $hashAlgorithm = 'crc32c';
 
     /**
      * @var array
@@ -904,7 +908,7 @@ class Product extends AbstractEntity
         $this->linkProcessor = $linkProcessor ?? ObjectManager::getInstance()
                 ->get(LinkProcessor::class);
         $this->linkProcessor->addNameToIds($this->_linkNameToId);
-
+        $this->hashAlgorithm = (version_compare(PHP_VERSION, '8.1.0') >= 0) ? 'xxh128' : 'crc32c';
         parent::__construct(
             $jsonHelper,
             $importExportData,
@@ -1572,6 +1576,7 @@ class Product extends AbstractEntity
         $priceIsGlobal = $this->_catalogData->isPriceGlobal();
         $previousType = null;
         $prevAttributeSet = null;
+        $productMediaPath = $this->getProductMediaPath();
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $entityRowsIn = [];
             $entityRowsUp = [];
@@ -1583,7 +1588,6 @@ class Product extends AbstractEntity
             $imagesForChangeVisibility = [];
             $uploadedImages = [];
             $existingImages = $this->getExistingImages($bunch);
-            $this->addImageHashes($existingImages);
             $attributes = [];
             foreach ($bunch as $rowNum => $rowData) {
                 try {
@@ -1630,6 +1634,7 @@ class Product extends AbstractEntity
                         $rowData,
                         $storeId,
                         $existingImages,
+                        $productMediaPath,
                         $uploadedImages,
                         $imagesForChangeVisibility,
                         $labelsForUpdate,
@@ -1683,7 +1688,6 @@ class Product extends AbstractEntity
     private function saveProductEntityPhase(array $rowData, array &$entityRowsUp, array &$entityRowsIn) : void
     {
         $rowSku = $rowData[self::COL_SKU];
-        // 1. Entity phase
         if ($this->isSkuExist($rowSku)) {
             // existing row
             if (isset($rowData['attribute_set_code'])) {
@@ -1801,6 +1805,7 @@ class Product extends AbstractEntity
      * @param array $rowData
      * @param int $storeId
      * @param array $existingImages
+     * @param string $productMediaPath
      * @param array $uploadedImages
      * @param array $imagesForChangeVisibility
      * @param array $labelsForUpdate
@@ -1815,6 +1820,7 @@ class Product extends AbstractEntity
         array &$rowData,
         int $storeId,
         array $existingImages,
+        string $productMediaPath,
         array &$uploadedImages,
         array &$imagesForChangeVisibility,
         array &$labelsForUpdate,
@@ -1848,10 +1854,11 @@ class Product extends AbstractEntity
         $position = 0;
         foreach ($rowImages as $column => $columnImages) {
             foreach ($columnImages as $columnImageKey => $columnImage) {
-                $hash = filter_var($columnImage, FILTER_VALIDATE_URL)
-                    ? $this->getRemoteFileHash($columnImage)
-                    : $this->getFileHash($this->joinFilePaths($this->getUploader()->getTmpDir(), $columnImage));
-                $uploadedFile = $this->findImageByHash($rowExistingImages, $hash);
+                $uploadedFile = $this->findImageByColumnImage(
+                    $productMediaPath,
+                    $rowExistingImages,
+                    $columnImage
+                );
                 if (!$uploadedFile && !isset($uploadedImages[$columnImage])) {
                     $uploadedFile = $this->uploadMediaFiles($columnImage);
                     $uploadedFile = $uploadedFile ?: $this->getSystemFile($columnImage);
@@ -1966,7 +1973,7 @@ class Product extends AbstractEntity
                 $productType = $previousType;
             }
             if ($productType === null) {
-                throw new Skip('Unknown Product Type');
+                throw new Skip(__('Unknown Product Type'));
             }
         }
         $productTypeModel = $this->_productTypeModels[$productType];
@@ -2034,54 +2041,34 @@ class Product extends AbstractEntity
     }
 
     /**
-     * Returns image hash by path
+     * Returns image content by path
      *
      * @param string $path
      * @return string
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    private function getFileHash(string $path): string
+    private function getFileContent(string $path): string
     {
-        $content = '';
         if ($this->_mediaDirectory->isFile($path)
             && $this->_mediaDirectory->isReadable($path)
         ) {
-            $content = $this->_mediaDirectory->readFile($path);
+            return $this->_mediaDirectory->readFile($path);
         }
-        return $content ? hash(self::HASH_ALGORITHM, $content) : '';
+        return '';
     }
 
     /**
-     * Returns hash for remote file
+     * Returns content for remote file
      *
      * @param string $filename
      * @return string
      */
-    private function getRemoteFileHash(string $filename): string
+    private function getRemoteFileContent(string $filename): string
     {
-        $hash = hash_file(self::HASH_ALGORITHM, $filename);
-        return $hash !== false ? $hash : '';
-    }
-
-    /**
-     * Generate hashes for existing images for comparison with newly uploaded images.
-     *
-     * @param array $images
-     * @return void
-     */
-    private function addImageHashes(array &$images): void
-    {
-        $productMediaPath = $this->getProductMediaPath();
-        foreach ($images as $storeId => $skus) {
-            foreach ($skus as $sku => $files) {
-                foreach ($files as $path => $file) {
-                    $hash = $this->getFileHash($this->joinFilePaths($productMediaPath, $file['value']));
-                    if ($hash) {
-                        $images[$storeId][$sku][$path]['hash'] = $hash;
-                    }
-                }
-            }
-        }
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
+        $content = file_get_contents($filename);
+        // phpcs:enable Magento2.Functions.DiscouragedFunction
+        return $content !== false ? $content : '';
     }
 
     /**
@@ -3328,24 +3315,93 @@ class Product extends AbstractEntity
     }
 
     /**
-     * Returns image that matches the provided hash
+     * Returns image that matches the provided image content
      *
+     * @param string $productMediaPath
      * @param array $images
-     * @param string $hash
+     * @param string $columnImage
      * @return string
      */
-    private function findImageByHash(array $images, string $hash): string
+    private function findImageByColumnImage(string $productMediaPath, array &$images, string $columnImage): string
     {
-        $value = '';
-        if ($hash) {
-            foreach ($images as $image) {
-                if (isset($image['hash']) && $image['hash'] === $hash) {
-                    $value = $image['value'];
-                    break;
+        $content = filter_var($columnImage, FILTER_VALIDATE_URL)
+            ? $this->getRemoteFileContent($columnImage)
+            : $this->getFileContent($this->joinFilePaths($this->getUploader()->getTmpDir(), $columnImage));
+        if (!$content) {
+            return '';
+        }
+        if ($this->shouldUseHash($images)) {
+            return $this->findImageByColumnImageUsingHash($productMediaPath, $images, $content);
+        } else {
+            return $this->findImageByColumnImageUsingContent($productMediaPath, $images, $content);
+        }
+    }
+
+    /**
+     * Returns image that matches the provided image content using hash
+     *
+     * @param string $productMediaPath
+     * @param array $images
+     * @param string $content
+     * @return string
+     */
+    private function findImageByColumnImageUsingHash(string $productMediaPath, array &$images, string $content): string
+    {
+        $hash = hash($this->hashAlgorithm, $content);
+        foreach ($images as &$image) {
+            if (!isset($image['hash'])) {
+                $imageContent = $this->getFileContent($this->joinFilePaths($productMediaPath, $image['value']));
+                if (!$imageContent) {
+                    $image['hash'] = '';
+                    continue;
                 }
+                $image['hash'] = hash($this->hashAlgorithm, $imageContent);
+            }
+            if (!empty($image['hash']) && $image['hash'] === $hash) {
+                return $image['value'];
             }
         }
-        return $value;
+        return '';
+    }
+
+    /**
+     * Returns image that matches the provided image content using content
+     *
+     * @param string $productMediaPath
+     * @param array $images
+     * @param string $content
+     * @return string
+     */
+    private function findImageByColumnImageUsingContent(
+        string $productMediaPath,
+        array &$images,
+        string $content
+    ): string {
+        foreach ($images as &$image) {
+            if (!isset($image['content'])) {
+                $image['content'] = $this->getFileContent(
+                    $this->joinFilePaths($productMediaPath, $image['value'])
+                );
+            }
+            if ($content === $image['content']) {
+                return $image['value'];
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Returns true if we should use hash instead of just comparing content
+     *
+     * @param array $images
+     * @return bool
+     */
+    private function shouldUseHash(array $images): bool
+    {
+        if (count($images) > 100) {
+            return true;
+        }
+        return false;
     }
 
     /**
