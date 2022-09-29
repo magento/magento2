@@ -29,11 +29,14 @@ class ExtractQuoteAddressData
     /** @var Uid */
     private $uidEncoder;
 
+    /**
+     * @param ExtensibleDataObjectConverter $dataObjectConverter
+     * @param Uid $uidEncoder
+     */
     public function __construct(
         ExtensibleDataObjectConverter $dataObjectConverter,
         Uid $uidEncoder
-    )
-    {
+    ) {
         $this->dataObjectConverter = $dataObjectConverter;
         $this->uidEncoder = $uidEncoder;
     }
