@@ -502,4 +502,56 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEmpty($response['products']['items']);
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_with_sku_as_next_entity_id.php
+     */
+    public function testBundleProductHavingSKUAsNextBundleProductId()
+    {
+
+        $productSku = '4bundle-product';
+        $query
+            = <<<QUERY
+{
+   products(filter: {sku: {eq: "{$productSku}"}})
+   {
+       items{
+            id
+           type_id
+           name
+           sku
+           ... on BundleProduct {
+            items {
+              option_id
+              title
+              required
+              type
+              position
+              sku
+              options {
+                id
+                quantity
+                position
+                is_default
+                price
+                price_type
+                can_change_quantity
+                label
+                product {
+                  id
+                  name
+                  sku
+                  type_id
+                   }
+                }
+            }
+           }
+       }
+   }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertNotEmpty($response['products']['items']);
+    }
 }
