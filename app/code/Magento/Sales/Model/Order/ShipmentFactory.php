@@ -165,7 +165,7 @@ class ShipmentFactory
 
         // Remove from shipment items without qty or with qty=0
         if (!$orderItem->isDummy(true)
-            && (!isset($items[$orderItem->getId()]) || (int) $items[$orderItem->getId()] <= 0)
+            && (!isset($items[$orderItem->getId()]) || (float) $items[$orderItem->getId()] <= 0)
         ) {
             return false;
         }
