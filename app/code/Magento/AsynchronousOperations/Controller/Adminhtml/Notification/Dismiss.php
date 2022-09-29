@@ -58,6 +58,10 @@ class Dismiss extends Action
         $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         if (!$isAcknowledged) {
             $result->setHttpResponseCode(400);
+        } else {
+            $response = new \Magento\Framework\DataObject();
+            $response->setError(0);
+            $result->setData($response);
         }
 
         return $result;
