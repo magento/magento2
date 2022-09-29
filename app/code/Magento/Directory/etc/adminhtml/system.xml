@@ -35,10 +35,23 @@
                 </field>
             </group>
             <group id="fixerio" translate="label" sortOrder="35" showInDefault="1">
-                <label>Fixer.io</label>
+                <label>Fixer.io (legacy)</label>
                 <field id="api_key" translate="label" type="obscure" sortOrder="5" showInDefault="1">
                     <label>API Key</label>
                     <config_path>currency/fixerio/api_key</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <comment>Use this field if your API Key was generated at Fixer.io. If your key was generated via ApiLayer then use "Setting > General > Currency setup > Fixer Api via APILayer" configuration.</comment>
+                </field>
+                <field id="timeout" translate="label" type="text" sortOrder="10" showInDefault="1">
+                    <label>Connection Timeout in Seconds</label>
+                    <validate>validate-zero-or-greater validate-number</validate>
+                </field>
+            </group>
+            <group id="apilayer" translate="label" sortOrder="35" showInDefault="1">
+                <label>Fixer Api via APILayer</label>
+                <field id="api_key" translate="label" type="obscure" sortOrder="5" showInDefault="1">
+                    <label>API Key</label>
+                    <config_path>currency/apilayer/api_key</config_path>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
                 <field id="timeout" translate="label" type="text" sortOrder="10" showInDefault="1">
