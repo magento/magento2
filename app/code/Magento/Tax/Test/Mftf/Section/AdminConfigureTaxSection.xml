@@ -38,7 +38,6 @@
         <element name="systemValueDefaultCountry" type="checkbox" selector="#row_tax_defaults_country input[type='checkbox']"/>
         <element name="dropdownDefaultCountry" type="select" selector="#row_tax_defaults_country select"/>
 
-
         <element name="taxPriceDisplaySettings" type="block" selector="#tax_display-head" timeout="30"/>
         <element name="taxPriceDisplaySettingsOpened" type="block" selector="#tax_display-head.open" timeout="30"/>
         <element name="taxDisplayProductPrices" type="select" selector="#tax_display_type"/>
