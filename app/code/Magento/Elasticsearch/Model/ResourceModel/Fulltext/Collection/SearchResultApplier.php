@@ -240,8 +240,16 @@ class SearchResultApplier implements SearchResultApplierInterface
                     ['product_var' => $this->collection->getTable('catalog_product_entity_varchar')],
                     "product_var.{$linkField} = e.{$linkField} AND product_var.attribute_id =
                     (SELECT attribute_id FROM eav_attribute WHERE entity_type_id={$entityTypeId}
-                    AND attribute_code='name')",
+                    AND attribute_code='name') AND (product_var.store_id=0 OR product_var.store_id={$storeId})",
                     ['product_var.value AS name']
+                );
+                $query->join(
+                    ['name_filter' => new \Zend_Db_Expr("(SELECT {$linkField}, MAX(store_id) as store_id
+                    from catalog_product_entity_varchar WHERE store_id IN (0,{$storeId})
+                    AND attribute_id = (SELECT attribute_id FROM eav_attribute WHERE entity_type_id={$entityTypeId} AND attribute_code='name')
+                    GROUP BY {$linkField})")],
+                    "product_var.{$linkField} = name_filter.{$linkField} and product_var.store_id = name_filter.store_id",
+                    [""]
                 );
             } elseif ($field === 'price') {
                 $query->joinLeft(
