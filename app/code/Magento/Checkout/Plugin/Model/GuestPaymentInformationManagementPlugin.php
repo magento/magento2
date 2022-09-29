@@ -85,8 +85,10 @@ class GuestPaymentInformationManagementPlugin
      * @param AddressInterface $billingAddress
      * @return bool
      */
-    private function checkIfShippingAddressMatchesWithBillingAddress(Quote $quote, AddressInterface $billingAddress): bool
-    {
+    private function checkIfShippingAddressMatchesWithBillingAddress(
+        Quote $quote,
+        AddressInterface $billingAddress
+    ): bool {
         $quoteShippingAddressData = $quote->getShippingAddress()->getData();
         $billingData = $this->convertAddressValueToFlatArray($billingAddress->getData());
         $billingKeys = array_flip(array_keys($billingData));

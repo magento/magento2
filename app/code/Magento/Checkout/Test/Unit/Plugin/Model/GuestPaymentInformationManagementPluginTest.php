@@ -132,7 +132,8 @@ class GuestPaymentInformationManagementPluginTest extends TestCase
             ->expects($this->any())
             ->method('create')
             ->willReturn($this->quoteIdMaskMock);
-        $this->quoteIdMaskMock->expects($this->once())->method('load')->with(self::CART_ID, 'masked_id')->willReturnSelf();
+        $this->quoteIdMaskMock->expects($this->once())->method('load')
+            ->with(self::CART_ID, 'masked_id')->willReturnSelf();
         $this->quoteIdMaskMock->expects($this->once())->method('getQuoteId')->willReturn(self::CART_ID);
         $this->cartRepository
             ->expects($this->any())

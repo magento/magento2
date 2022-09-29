@@ -57,9 +57,9 @@
         <plugin name="recollect_quote_on_customer_group_change" type="Magento\Checkout\Model\Plugin\RecollectQuoteOnCustomerGroupChange"/>
     </type>
     <type name="Magento\Checkout\Api\PaymentInformationManagementInterface">
-        <plugin name="same-as-billing" type="Magento\Checkout\Plugin\Model\PaymentInformationManagementPlugin"/>
+        <plugin name="same-as-billing" type="Magento\Checkout\Plugin\Model\PaymentInformationManagementPlugin" sortOrder="20"/>
     </type>
     <type name="Magento\Checkout\Api\GuestPaymentInformationManagementInterface">
-        <plugin name="guest-same-as-billing" type="Magento\Checkout\Plugin\Model\GuestPaymentInformationManagementPlugin"/>
+        <plugin name="guest-same-as-billing" type="Magento\Checkout\Plugin\Model\GuestPaymentInformationManagementPlugin" sortOrder="20"/>
     </type>
 </config>
