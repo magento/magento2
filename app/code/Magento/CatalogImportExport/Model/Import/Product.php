@@ -1852,12 +1852,14 @@ class Product extends AbstractEntity
          * must be unique in scope of one product.
          */
         $position = 0;
+        $imagesByHash = [];
         foreach ($rowImages as $column => $columnImages) {
             foreach ($columnImages as $columnImageKey => $columnImage) {
                 $uploadedFile = $this->findImageByColumnImage(
                     $productMediaPath,
                     $rowExistingImages,
-                    $columnImage
+                    $columnImage,
+                    $imagesByHash
                 );
                 if (!$uploadedFile && !isset($uploadedImages[$columnImage])) {
                     $uploadedFile = $this->uploadMediaFiles($columnImage);
@@ -3320,21 +3322,22 @@ class Product extends AbstractEntity
      * @param string $productMediaPath
      * @param array $images
      * @param string $columnImage
+     * @param array $imagesByHash
      * @return string
      */
-    private function findImageByColumnImage(string $productMediaPath, array &$images, string $columnImage): string
-    {
+    private function findImageByColumnImage(
+        string $productMediaPath,
+        array &$images,
+        string $columnImage,
+        array &$imagesByHash
+    ): string {
         $content = filter_var($columnImage, FILTER_VALIDATE_URL)
             ? $this->getRemoteFileContent($columnImage)
             : $this->getFileContent($this->joinFilePaths($this->getUploader()->getTmpDir(), $columnImage));
         if (!$content) {
             return '';
         }
-        if ($this->shouldUseHash($images)) {
-            return $this->findImageByColumnImageUsingHash($productMediaPath, $images, $content);
-        } else {
-            return $this->findImageByColumnImageUsingContent($productMediaPath, $images, $content);
-        }
+        return $this->findImageByColumnImageUsingHash($productMediaPath, $images, $content, $imagesByHash);
     }
 
     /**
@@ -3343,11 +3346,19 @@ class Product extends AbstractEntity
      * @param string $productMediaPath
      * @param array $images
      * @param string $content
+     * @param array $imagesByHash
      * @return string
      */
-    private function findImageByColumnImageUsingHash(string $productMediaPath, array &$images, string $content): string
-    {
+    private function findImageByColumnImageUsingHash(
+        string $productMediaPath,
+        array &$images,
+        string $content,
+        array &$imagesByHash
+    ): string {
         $hash = hash($this->hashAlgorithm, $content);
+        if (!empty($imagesByHash[$hash])) {
+            return $imagesByHash[$hash];
+        }
         foreach ($images as &$image) {
             if (!isset($image['hash'])) {
                 $imageContent = $this->getFileContent($this->joinFilePaths($productMediaPath, $image['value']));
@@ -3356,52 +3367,13 @@ class Product extends AbstractEntity
                     continue;
                 }
                 $image['hash'] = hash($this->hashAlgorithm, $imageContent);
+                $imagesByHash[$image['hash']] = $image['value'];
             }
             if (!empty($image['hash']) && $image['hash'] === $hash) {
                 return $image['value'];
             }
         }
         return '';
-    }
-
-    /**
-     * Returns image that matches the provided image content using content
-     *
-     * @param string $productMediaPath
-     * @param array $images
-     * @param string $content
-     * @return string
-     */
-    private function findImageByColumnImageUsingContent(
-        string $productMediaPath,
-        array &$images,
-        string $content
-    ): string {
-        foreach ($images as &$image) {
-            if (!isset($image['content'])) {
-                $image['content'] = $this->getFileContent(
-                    $this->joinFilePaths($productMediaPath, $image['value'])
-                );
-            }
-            if ($content === $image['content']) {
-                return $image['value'];
-            }
-        }
-        return '';
-    }
-
-    /**
-     * Returns true if we should use hash instead of just comparing content
-     *
-     * @param array $images
-     * @return bool
-     */
-    private function shouldUseHash(array $images): bool
-    {
-        if (count($images) > 100) {
-            return true;
-        }
-        return false;
     }
 
     /**
