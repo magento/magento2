@@ -21,6 +21,8 @@
         <before>
             <!-- Set locale options to United Kingdom-->
             <magentoCLI stepKey="localeUK" command="config:set general/locale/code en_GB"/>
+            <!-- Deploy static content with United Kingdom locale-->
+            <magentoCLI command="setup:static-content:deploy en_GB" stepKey="deployStaticContentWithUnitedKingdomLocale"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
