@@ -8,21 +8,22 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AddProductImageActionGroup">
+    <actionGroup name="AdminAddAllProductsToCategoryActionGroup">
         <annotations>
-            <description>Adds the provided Product Image on the Admin Products creation/edit page.</description>
+            <description>Admin Add All Catalog Multiple Product to Category</description>
         </annotations>
-        <arguments>
-            <argument name="image" defaultValue="ProductImage"/>
-        </arguments>
 
-        <waitForElementVisible selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="waitForImagesSection"/>
-        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
-        <waitForPageLoad stepKey="waitForPageRefresh"/>
-        <waitForElementVisible selector="{{AdminProductImagesSection.imageUploadButton}}" stepKey="seeImageSectionIsReady"/>
-        <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="{{image.file}}" stepKey="uploadFile"/>
-        <waitForPageLoad stepKey="waitForImageUpload"/>
-        <waitForElementNotVisible selector="{{AdminProductImagesSection.uploadProgressBar}}" stepKey="waitForUpload"/>
-        <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="waitForThumbnail"/>
+        <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
+        <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
+        <click selector="{{AdminCategoryProductsSection.addProducts}}" stepKey="clickOnAddProducts"/>
+        <click selector="{{AdminCategoryProductsSection.filtersButton}}" stepKey="clickOnFiltersButton"/>
+        <click selector="{{AdminCategoryProductsSection.filtersButton}}" stepKey="clickOnFiltersButtonAgain"/>
+        <click selector="{{AdminCategoryProductsSection.saveAndClose}}" stepKey="clickSaveAndCloseButton"/>
+        <click selector="{{AdminCategoryProductsSection.addProducts}}" stepKey="clickOnAddProductsAgain"/>
+        <click selector="{{AdminCategoryProductsSection.downArrow}}" stepKey="clickOnDownArrow"/>
+        <click selector="{{AdminCategoryProductsSection.selectAllOnThisPage}}" stepKey="selectAllProducts"/>
+        <click selector="{{AdminCategoryProductsSection.saveAndClose}}" stepKey="clickSaveAndCloseButtonAgain"/>
+        <waitForPageLoad time="20" stepKey="waitForPageLoad1"/>
+
     </actionGroup>
 </actionGroups>
