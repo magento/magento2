@@ -240,7 +240,7 @@ define([
                     };
 
                 swatchComponents.iframe.off('load');
-                swatchComponents.iframe.load(iframeHandler);
+                swatchComponents.iframe.on('load', iframeHandler);
                 swatchComponents.form.submit();
                 $(this).val('');
             });
