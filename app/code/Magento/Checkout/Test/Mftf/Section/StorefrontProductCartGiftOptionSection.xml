@@ -15,5 +15,6 @@
         <element name="message" type="textarea" selector=".gift-options-content .field.text .input-text"/>
         <element name="update" type="button" selector=".action-update"/>
         <element name="cancel" type="button" selector=".action-cancel"/>
+        <element name="viewGiftOptions" type="button" selector="//tbody[@class='cart item']//a[text()='{{product_name}}']/../../../../..//tr[@class='item-actions']//button[@class='action action-gift']" parameterized="true"/>
     </section>
 </sections>

@@ -37,5 +37,8 @@
         <element name="selectRowBasedOnName" type="input" selector="//td/div[text()='{{var1}}']" parameterized="true"/>
         <element name="changeStatus" type="button" selector="//div[contains(@class,'admin__data-grid-header-row') and contains(@class, 'row')]//div[contains(@class, 'action-menu-item')]//ul/li/span[text() = '{{status}}']" parameterized="true"/>
         <element name="productRowByTypeAndName" type="block" selector="//div[@data-role='grid-wrapper']//table[contains(@class, 'data-grid')]//td[count(../../..//th[./*[.='Type']]/preceding-sibling::th) + 1][./*[.='{{type}}']]/../td[contains(.,'{{name}}')]" parameterized="true" />
+        <element name="productCollapsibleColumns" type="button" selector="//div[@data-state-collapsible='{{state}}']//strong[@class='admin__collapsible-title']//span[text()='{{expandTitle}}']" parameterized="true"/>
+        <element name="allowGiftMessageCheckbox" type="checkbox" selector="//input[@type='checkbox' and @name='product[use_config_gift_message_available]']" />
+        <element name="allowGiftMessageToggle" type="button" selector="//input[@type='checkbox' and @name='product[gift_message_available]' and @value='{{var1}}']/..//label[@class='admin__actions-switch-label']" parameterized="true"/>
     </section>
 </sections>
