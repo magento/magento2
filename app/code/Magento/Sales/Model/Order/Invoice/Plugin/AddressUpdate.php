@@ -42,6 +42,8 @@ class AddressUpdate
     }
 
     /**
+     * Attach addresses to invoices
+     *
      * @param \Magento\Sales\Model\ResourceModel\Order\Handler\Address $subject
      * @param \Magento\Sales\Model\ResourceModel\Order\Handler\Address $result
      * @param \Magento\Sales\Model\Order $order
@@ -78,10 +80,8 @@ class AddressUpdate
                     $this->attribute->saveAttribute($invoice, $invoiceAttributesForSave);
                 }
             }
-            if ($orderInvoiceHasChanges) {
-                if (!$this->globalConfig->getValue('dev/grid/async_indexing')) {
-                    $this->gridPool->refreshByOrderId($order->getId());
-                }
+            if ($orderInvoiceHasChanges && !$this->globalConfig->getValue('dev/grid/async_indexing')) {
+                $this->gridPool->refreshByOrderId($order->getId());
             }
         }
     }
