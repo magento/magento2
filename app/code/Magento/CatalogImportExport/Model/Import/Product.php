@@ -1053,7 +1053,7 @@ class Product extends AbstractEntity
     {
         $productEntityTable = $this->_resourceFactory->create()->getEntityTable();
 
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->getNextBunch()) {
             $idsToDelete = [];
 
             foreach ($bunch as $rowNum => $rowData) {
@@ -1576,7 +1576,7 @@ class Product extends AbstractEntity
         $productsQty = null;
         $entityLinkField = $this->getProductEntityLinkField();
 
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->getNextBunch()) {
             $entityRowsIn = [];
             $entityRowsUp = [];
             $attributes = [];
@@ -2326,7 +2326,7 @@ class Product extends AbstractEntity
      */
     protected function _saveStockItem()
     {
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->getNextBunch()) {
             $stockData = [];
             $productIdsToReindex = [];
             $stockChangedProductIds = [];
