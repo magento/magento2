@@ -1337,9 +1337,9 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Gets the store ID for the order.
      *
-     * @return int|null Store ID.
+     * @return ?int Store ID.
      */
-    public function getStoreId();
+    public function getStoreId(): ?int;
 
     /**
      * Gets the store name for the order.
@@ -1626,7 +1626,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param int $id
      * @return $this
      */
-    public function setStoreId($id);
+    public function setStoreId(int $id);
 
     /**
      * Sets the customer ID for the order.
