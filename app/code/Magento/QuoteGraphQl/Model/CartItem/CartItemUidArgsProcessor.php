@@ -21,7 +21,7 @@ class CartItemUidArgsProcessor implements ArgumentsProcessorInterface
     private const UID = 'cart_item_uid';
 
     /** @var Uid */
-    private $uidEncoder;
+    private Uid $uidEncoder;
 
     /**
      * @param Uid $uidEncoder

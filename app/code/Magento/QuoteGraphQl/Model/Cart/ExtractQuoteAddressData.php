@@ -9,8 +9,8 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Quote\Api\Data\AddressInterface;
-use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Magento\Framework\GraphQl\Query\Uid;
 
 /**
  * Extract address fields from an Quote Address model
@@ -32,6 +32,7 @@ class ExtractQuoteAddressData
     /**
      * @param ExtensibleDataObjectConverter $dataObjectConverter
      * @param Uid $uidEncoder
+     * @type object
      */
     public function __construct(
         ExtensibleDataObjectConverter $dataObjectConverter,
@@ -64,7 +65,7 @@ class ExtractQuoteAddressData
                     'label' => $address->getRegion(),
                     'region_id'=> $address->getRegionId()
                 ],
-                'uid'=>$this->uidEncoder->encode((string) $address->getAddressId()) ,
+                'uid' => $this->uidEncoder->encode((string)$address->getAddressId()) ,
                 'street' => $address->getStreet(),
                 'items_weight' => $address->getWeight(),
                 'customer_notes' => $address->getCustomerNotes()
