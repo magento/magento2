@@ -28,7 +28,7 @@ use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 class Customer implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
-        'password' => null,
+        'password' => 'password',
         CustomerInterface::ID => null,
         CustomerInterface::CONFIRMATION => null,
         CustomerInterface::CREATED_AT => null,
