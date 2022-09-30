@@ -673,7 +673,8 @@ class QuoteManagement implements CartManagementInterface
             }
         }
 
-        if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
+        if ((!$billing->getCustomerId() || $billing->getSaveInAddressBook())
+            && ($shipping && (!$shipping->getSameAsBilling() || !$shipping->getCustomerAddressId()))) {
             if ($billing->getQuoteId()) {
                 $billingAddress = $billing->exportCustomerAddress();
             } else {
