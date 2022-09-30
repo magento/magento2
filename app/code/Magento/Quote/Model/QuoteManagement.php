@@ -674,7 +674,10 @@ class QuoteManagement implements CartManagementInterface
         }
 
         if ((!$billing->getCustomerId() || $billing->getSaveInAddressBook())
-            && ($shipping && (!$shipping->getSameAsBilling() || !$shipping->getCustomerAddressId()))) {
+            && (
+                $shipping === null
+                || ($shipping && (!$shipping->getSameAsBilling() || !$shipping->getCustomerAddressId()))
+            )) {
             if ($billing->getQuoteId()) {
                 $billingAddress = $billing->exportCustomerAddress();
             } else {
@@ -705,14 +708,14 @@ class QuoteManagement implements CartManagementInterface
                 $billing->setCustomerAddressId($billingAddress->getId());
 
                 // Admin order: `Same As Billing Address`- when new billing address saved in address book
-                if (!empty($shipping)
+                if ($shipping !== null
                     && !$shipping->getCustomerAddressId()
                     && $shipping->getSameAsBilling()) {
                     $shipping->setCustomerAddressId($billingAddress->getId());
                 }
             }
         }
-        if (!empty($shipping) && $shipping->getSameAsBilling() && !$billing->getCustomerAddressId()) {
+        if ($shipping !== null && $shipping->getSameAsBilling() && !$billing->getCustomerAddressId()) {
             $billing->setCustomerAddressId($shipping->getCustomerAddressId());
         }
         if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {
