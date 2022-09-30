@@ -6,7 +6,7 @@
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
 
-<?php /* @var $block \Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped */ ?>
+<?php /* @var \Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped $block */ ?>
 <?php $_skipSaleableCheck = $this->helper(Magento\Catalog\Helper\Product::class)->getSkipSaleableCheck(); ?>
 <div id="catalog_product_composite_configure_fields_grouped" class="<?= $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
     <h4><?= $block->escapeHtml(__('Associated Products')) ?></h4>

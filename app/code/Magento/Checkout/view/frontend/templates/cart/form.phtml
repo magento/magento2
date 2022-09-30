@@ -6,7 +6,7 @@
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
 
-/**  @var $block \Magento\Checkout\Block\Cart\Grid */
+/**  @var \Magento\Checkout\Block\Cart\Grid $block */
 ?>
 <?php $mergedCells = ($this->helper(Magento\Tax\Helper\Data::class)->displayCartBothPrices() ? 2 : 1); ?>
 <?= $block->getChildHtml('form_before') ?>

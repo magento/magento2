@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Checkout\Block\Onepage\Failure */
+/** @var \Magento\Checkout\Block\Onepage\Failure $block */
 ?>
 <?php if ($block->getRealOrderId()) :?>
     <p><?= $block->escapeHtml(__('Order #') . $block->getRealOrderId()) ?></p>

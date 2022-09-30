@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $block \Magento\Checkout\Block\Onepage\Success */ ?>
+<?php /** @var \Magento\Checkout\Block\Onepage\Success $block */ ?>
 
 <?php if ($block->getCanViewOrder() && $block->getCanPrintOrder()) :?>
     <a href="<?= $block->escapeUrl($block->getPrintUrl()) ?>"

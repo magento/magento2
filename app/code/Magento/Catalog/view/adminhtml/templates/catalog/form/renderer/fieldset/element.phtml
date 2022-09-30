@@ -5,11 +5,11 @@
  */
 ?>
 <?php
-/** @var $block \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element */
+/** @var \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element $block */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php
-/* @var $block \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element */
+/* @var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element $block */
 $element = $block->getElement();
 $note = $element->getNote() ?
     '<div class="note admin__field-note">' . $block->escapeHtml($element->getNote()) . '</div>' : '';

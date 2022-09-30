@@ -5,12 +5,12 @@
  */
 
 /**
- * @var $block \Magento\Weee\Block\Item\Price\Renderer
+ * @var \Magento\Weee\Block\Item\Price\Renderer $block
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 
 $_item = $block->getItem();
-/** @var $_weeeHelper \Magento\Weee\Helper\Data */
+/** @var \Magento\Weee\Helper\Data $_weeeHelper */
 $_weeeHelper = $block->getData('weeeHelper');
 ?>
 <?php $_incl = $_item->getRowTotalInclTax(); ?>

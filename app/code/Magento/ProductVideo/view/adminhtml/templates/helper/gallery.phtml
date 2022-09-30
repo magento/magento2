@@ -6,7 +6,7 @@
 
 // phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
 /**
- * @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content
+ * @var \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content $block
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 $elementNameEscaped = $block->escapeHtmlAttr($block->getElement()->getName()) . '[images]';
@@ -30,7 +30,7 @@ $jsonHelper = $block->getData('jsonHelper');
 </div>
 
 <?php
-/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
+/** @var \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content $block */
 $element = $block->getElement();
 $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
     'toggleValueElements(this, this.parentNode.parentNode.parentNode)';

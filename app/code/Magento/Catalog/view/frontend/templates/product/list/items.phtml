@@ -7,7 +7,7 @@
 use Magento\Catalog\ViewModel\Product\Listing\PreparePostData;
 use Magento\Framework\App\ActionInterface;
 
-/* @var $block \Magento\Catalog\Block\Product\AbstractProduct */
+/* @var \Magento\Catalog\Block\Product\AbstractProduct $block */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
@@ -261,7 +261,7 @@ $_item = null;
                                                         </button>
                                                     <?php else :?>
                                                         <?php
-                                                        /** @var $viewModel PreparePostData */
+                                                        /** @var PreparePostData $viewModel */
                                                         $viewModel = $block->getViewModel();
                                                         $postArray = $viewModel->getPostData(
                                                             $block->escapeUrl($block->getAddToCartUrl($_item)),

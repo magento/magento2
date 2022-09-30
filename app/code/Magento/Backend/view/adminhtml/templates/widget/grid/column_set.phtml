@@ -7,7 +7,7 @@
 <?php
 /**
  * Template for \Magento\Backend\Block\Widget\Grid\ColumnSet
- * @var $block \Magento\Backend\Block\Widget\Grid\ColumnSet
+ * @var \Magento\Backend\Block\Widget\Grid\ColumnSet $block
  */
 $numColumns = count($block->getColumns());
 ?>
@@ -22,7 +22,7 @@ $numColumns = count($block->getColumns());
             <?php if ($block->isHeaderVisible() || $block->getFilterVisibility()) : ?>
                 <tr>
                 <?php foreach ($block->getColumns() as $_column) : ?>
-                    <?php /* @var $_column \Magento\Backend\Block\Widget\Grid\Column */ ?>
+                    <?php /* @var \Magento\Backend\Block\Widget\Grid\Column $_column */ ?>
                     <?php if ($_column->getHeaderHtml() == '&nbsp;') :?>
                         <th class="data-grid-th" data-column="<?= $block->escapeHtmlAttr($_column->getId()) ?>"
                             <?= $_column->getHeaderHtmlProperty() ?>>&nbsp;</th>

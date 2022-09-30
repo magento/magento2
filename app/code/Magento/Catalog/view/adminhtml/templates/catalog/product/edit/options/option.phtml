@@ -7,7 +7,7 @@
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
 
-/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option */
+/** @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option $block */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?= $block->getTemplatesHtml() ?>
@@ -143,7 +143,7 @@ jQuery(function ($) {
     fieldSet.customOptions({$customOptions});
     //adding data to templates
 script;
-/** @var $_value \Magento\Framework\DataObject */
+/** @var \Magento\Framework\DataObject $_value */
 foreach ($block->getOptionValues() as $_value):
     $scriptString .= " fieldSet.customOptions('addOption', " . /* @noEscape */ $_value->toJson() . ');' . PHP_EOL;
 endforeach;

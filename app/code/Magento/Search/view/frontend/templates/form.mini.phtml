@@ -6,13 +6,13 @@
 
 ?>
 <?php
-/** @var $block \Magento\Framework\View\Element\Template */
-/** @var $escaper \Magento\Framework\Escaper */
-/** @var $configProvider \Magento\Search\ViewModel\ConfigProvider */
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Search\ViewModel\ConfigProvider $configProvider */
 $configProvider = $block->getData('configProvider');
-/** @var $versionManager \Magento\Search\ViewModel\AdditionalSearchFormData */
+/** @var \Magento\Search\ViewModel\AdditionalSearchFormData $versionManager */
 $additionalSearchFormData = $block->getData('additionalSearchFormData');
-/** @var $helper \Magento\Search\Helper\Data */
+/** @var \Magento\Search\Helper\Data $helper */
 $helper = $configProvider->getSearchHelperData();
 $allowedSuggestion = $configProvider->isSuggestionsAllowed();
 $quickSearchUrl = $allowedSuggestion ? $escaper->escapeUrl($helper->getSuggestUrl()) : '';
