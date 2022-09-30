@@ -522,10 +522,10 @@
                 <dataScope>customer_address_listing</dataScope>
                 <ns>customer_address_listing</ns>
                 <exports>
-                    <link name="parent_id">${ $.externalProvider }:params.parent_id</link>
+                    <link name="params.parent_id">${ $.externalProvider }:params.parent_id</link>
                 </exports>
                 <imports>
-                    <link name="parent_id">${ $.provider }:data.customer.entity_id</link>
+                    <link name="params.parent_id">${ $.provider }:data.customer.entity_id</link>
                     <link name="onAction">ns = ${ $.ns }, index = actions:action</link>
                     <link name="onMassAction">ns = ${ $.ns }, index = listing_massaction:massaction</link>
                 </imports>

@@ -110,8 +110,8 @@ define([
             },
             imports: {
                 onColumnsUpdate: '${ $.columnsProvider }:elems',
-                onBackendError: '${ $.provider }:lastError',
-                bookmarksActiveIndex: '${ $.bookmarksProvider }:activeIndex'
+                bookmarksActiveIndex: '${ $.bookmarksProvider }:activeIndex',
+                onBackendError: '${ $.provider }:lastError'
             },
             modules: {
                 columns: '${ $.columnsProvider }',
@@ -246,8 +246,8 @@ define([
          * @returns {Filters} Chainable.
          */
         addFilter: function (column) {
-            var index       = column.index,
-                processed   = this._processed,
+            var index = column.index,
+                processed = this._processed,
                 filter;
 
             if (!column.filter || _.contains(processed, index)) {
@@ -271,8 +271,8 @@ define([
          */
         buildFilter: function (column) {
             var filters = this.templates.filters,
-                filter  = column.filter,
-                type    = filters[filter.filterType];
+                filter = column.filter,
+                type = filters[filter.filterType];
 
             if (_.isObject(filter) && type) {
                 filter = utils.extend({}, type, filter);
@@ -405,8 +405,8 @@ define([
          */
         onBackendError: function (isError) {
             var defaultMessage = 'Something went wrong with processing the default view and we have restored the ' +
-                    'filter to its original state.',
-                customMessage  = 'Something went wrong with processing current custom view and filters have been ' +
+                'filter to its original state.',
+                customMessage = 'Something went wrong with processing current custom view and filters have been ' +
                     'reset to its original state. Please edit filters then click apply.';
 
             if (isError) {

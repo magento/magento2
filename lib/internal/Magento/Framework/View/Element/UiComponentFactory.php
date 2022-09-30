@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Element;
 
@@ -19,26 +20,24 @@ use Magento\Framework\Phrase;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\Sanitizer;
 use Magento\Framework\View\Element\UiComponent\Factory\ComponentFactoryInterface;
+use Magento\Ui\Config\Reader\Definition\Data;
 
 /**
  * Factory that creates UI component descriptor based on configuration provided.
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.LongVariableName)
  * @since 100.0.2
  */
 class UiComponentFactory extends DataObject
 {
     /**
-     * Object manager
-     *
      * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * Argument interpreter
-     *
      * @var InterpreterInterface
      */
     protected $argumentInterpreter;
@@ -50,11 +49,14 @@ class UiComponentFactory extends DataObject
 
     /**
      * UI component manager
+     * TODO: Add deprecated description
      *
      * @deprecated 101.0.0
      * @var ManagerInterface
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting.InvalidDeprecatedTagUsage
      */
     protected $componentManager;
+    //phpcs:enable Magento2.Commenting.ClassPropertyPHPDocFormatting.InvalidDeprecatedTagUsage
 
     /**
      * @var ComponentFactoryInterface[]
@@ -67,7 +69,7 @@ class UiComponentFactory extends DataObject
     private $configFactory;
 
     /**
-     * @var \Magento\Ui\Config\Reader\Definition\Data
+     * @var Data
      */
     private $definitionData;
 
@@ -83,8 +85,8 @@ class UiComponentFactory extends DataObject
      * @param ContextFactory $contextFactory
      * @param array $data
      * @param array $componentChildFactories
-     * @param DataInterface $definitionData
-     * @param DataInterfaceFactory $configFactory
+     * @param DataInterface|null $definitionData
+     * @param DataInterfaceFactory|null $configFactory
      * @param Sanitizer|null $sanitizer
      */
     public function __construct(
@@ -159,9 +161,9 @@ class UiComponentFactory extends DataObject
         $components = array_filter($components);
         $componentArguments['components'] = $components;
 
-       /**
-        * Prevent passing ACL restricted blocks to htmlContent constructor
-        */
+        /**
+         * Prevent passing ACL restricted blocks to htmlContent constructor
+         */
         if (isset($componentArguments['block']) && !$componentArguments['block']) {
             return null;
         }
@@ -235,7 +237,7 @@ class UiComponentFactory extends DataObject
             list($className, $componentArguments) = $this->argumentsResolver($identifier, $rawComponentData);
             $componentArguments = array_replace_recursive($componentArguments, $arguments);
             $children = isset($componentArguments['data']['config']['children']) ?
-                        $componentArguments['data']['config']['children'] : [];
+                $componentArguments['data']['config']['children'] : [];
             $children = $this->getBundleChildren($children);
         }
 
@@ -280,17 +282,9 @@ class UiComponentFactory extends DataObject
         foreach ($children as $identifier => $config) {
             if (!isset($config['componentType'])) {
                 throw new LocalizedException(
-                    new Phrase(
+                    __(
                         'The "componentType" configuration parameter is required for the "%1" component.',
                         $identifier
-                    )
-                );
-            }
-
-            if (!isset($componentArguments['context'])) {
-                throw new LocalizedException(
-                    new \Magento\Framework\Phrase(
-                        'An error occurred with the UI component. Each component needs context. Verify and try again.'
                     )
                 );
             }
@@ -327,6 +321,12 @@ class UiComponentFactory extends DataObject
         $dataProvider = $this->getDataProvider($identifier, $bundleComponents);
         if ($dataProvider instanceof DataProviderInterface) {
             //Dynamic meta from data providers should not contain templates.
+            $dataProvider->setConfigData($this->sanitizer->sanitize(array_merge(
+                $dataProvider->getConfigData(),
+                [
+                    'namespace' => $identifier
+                ]
+            )));
             $metadata = $dataProvider->getMeta();
             $metadata = [
                 $identifier => $this->sanitizer->sanitizeComponentMetadata(['children' => $metadata])

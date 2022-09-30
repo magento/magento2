@@ -4,14 +4,14 @@
  */
 
 define([
-    'Magento_Ui/js/grid/filters/filters'
-], function (Filters) {
+    'Magento_Ui/js/grid/search/search'
+], function (Search) {
     'use strict';
 
-    return Filters.extend({
+    return Search.extend({
         defaults: {
             statefull: {
-                applied: false
+                value: false
             }
         }
     });

@@ -38,13 +38,9 @@
     <listingToolbar name="listing_top">
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
-        <filterSearch name="fulltext"/>
+        <filterSearch name="fulltext" component="Magento_Customer/js/grid/search/search"/>
         <filters name="listing_filters" component="Magento_Customer/js/grid/filters/filters">
             <settings>
-                <storageConfig>
-                    <param name="provider" xsi:type="string">customer_address_listing.customer_address_listing.listing_top.bookmarks</param>
-                    <param name="namespace" xsi:type="string">current.filters</param>
-                </storageConfig>
                 <childDefaults>
                     <param name="provider" xsi:type="string">customer_address_listing.customer_address_listing.listing_top.listing_filters</param>
                     <param name="imports" xsi:type="array">

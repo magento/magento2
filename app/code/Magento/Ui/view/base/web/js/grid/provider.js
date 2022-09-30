@@ -21,8 +21,10 @@ define([
 
     return Element.extend({
         defaults: {
+            initialized: false,
             firstLoad: true,
             lastError: false,
+            bindListensDelay: 200,
             storageConfig: {
                 component: 'Magento_Ui/js/grid/data-storage',
                 provider: '${ $.storageConfig.name }',
@@ -30,13 +32,15 @@ define([
                 updateUrl: '${ $.update_url }'
             },
             listens: {
-                params: 'onParamsChange',
-                requestConfig: 'updateRequestConfig'
+                requestConfig: 'updateRequestConfig',
+                lastError: 'showAlert'
+            },
+            delayedListens: {
+                params: 'onParamsChange'
             },
             ignoreTmpls: {
                 data: true
-            },
-            triggerDataReload: false
+            }
         },
 
         /**
@@ -50,13 +54,45 @@ define([
 
             this._super()
                 .initStorage()
-                .clearData();
+                // Invoke showAlert if error on page load
+                .showAlert(this.lastError);
 
-            // Load data when there will
-            // be no more pending assets.
-            resolver(this.reload, this);
+            if (this.firstLoad) {
+                this.clearData();
+                resolver(this.reload, this);
+            } else {
+                this.processData(this.data);
+                resolver(this.triggerReloaded, this);
+            }
+
+            this.delayedBindListens();
 
             return this;
+        },
+
+        /**
+         * Trigger reloaded event on first load with predefined data
+         */
+        triggerReloaded: function () {
+            var diff;
+
+            // Invoke subscribers for predefined data
+            diff = utils.compare({}, this.data, 'data');
+            this._notifyChanges(diff);
+
+            this.initialized = true;
+            this.trigger('reloaded');
+        },
+
+        /**
+         * Delayed listens binding
+         */
+        delayedBindListens: function () {
+            // Let's wait before binding params listener
+            // for first page load due to params export from child components
+            _.delay(() => {
+                this.setListeners(this.delayedListens);
+            }, this.bindListensDelay, this);
         },
 
         /**
@@ -138,10 +174,8 @@ define([
         onParamsChange: function () {
             // It's necessary to make a reload only
             // after the initial loading has been made.
-            if (!this.firstLoad) {
+            if (this.initialized) {
                 this.reload();
-            } else {
-                this.triggerDataReload = true;
             }
         },
 
@@ -152,15 +186,8 @@ define([
             if (xhr.statusText === 'abort') {
                 return;
             }
-
             this.set('lastError', true);
-
-            this.firstLoad = false;
-            this.triggerDataReload = false;
-
-            alert({
-                content: $t('Something went wrong.')
-            });
+            this.initialized = true;
         },
 
         /**
@@ -169,15 +196,10 @@ define([
          * @param {Object} data - Retrieved data object.
          */
         onReload: function (data) {
-            this.firstLoad = false;
+            this.initialized = true;
             this.set('lastError', false);
             this.setData(data)
                 .trigger('reloaded');
-
-            if (this.triggerDataReload) {
-                this.triggerDataReload = false;
-                this.reload();
-            }
         },
 
         /**
@@ -188,6 +210,19 @@ define([
         updateRequestConfig: function (requestConfig) {
             if (this.storage()) {
                 _.extend(this.storage().requestConfig, requestConfig);
+            }
+        },
+
+        /**
+         * Show alert notification
+         *
+         * @param {Boolean} isError
+         */
+        showAlert: function (isError) {
+            if (isError) {
+                alert({
+                    content: $t('Something went wrong.')
+                });
             }
         }
     });
