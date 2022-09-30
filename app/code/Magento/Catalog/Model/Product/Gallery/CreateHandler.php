@@ -107,6 +107,7 @@ class CreateHandler implements ExtensionInterface
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
+     * @param array $additionalMediaAttributesWithLabels
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
@@ -117,7 +118,8 @@ class CreateHandler implements ExtensionInterface
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null,
+        array $additionalMediaAttributesWithLabels = []
     ) {
         $this->metadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $this->attributeRepository = $attributeRepository;
@@ -127,6 +129,10 @@ class CreateHandler implements ExtensionInterface
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->fileStorageDb = $fileStorageDb;
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->mediaAttributesWithLabels = array_merge(
+            $this->mediaAttributesWithLabels,
+            $additionalMediaAttributesWithLabels
+        );
     }
 
     /**
