@@ -15,8 +15,8 @@
         <arguments>
             <argument name="allowGiftMsgOnOrderLevel" type="string"/>
             <argument name="allowGiftMsgOnOrderItems" type="string"/>
-            <argument name="allowGiftWrappingOnOrderLevel" type="string"/>
-            <argument name="allowGiftWrappingOnItemLevel" type="string"/>
+            <argument name="allowWrappingGiftOnOrderLevel" type="string"/>
+            <argument name="allowWrappingGiftOnItemLevel" type="string"/>
             <argument name="allowGiftReceipt" type="string"/>
             <argument name="allowPrintedCard" type="string"/>
 
@@ -28,8 +28,8 @@
         <uncheckOption selector="{{AdminSalesConfigSection.chkAllowGiftMessagesOnOrderItem}}" stepKey="uncheckGiftMessagesOnOrderItem"/>
         <selectOption userInput="{{allowGiftMsgOnOrderLevel}}" selector="{{AdminSalesConfigSection.selectAllowGiftMessagesOnOrderLevel}}" stepKey="selectAllowGiftMsgOnOrderLevel"/>
         <selectOption userInput="{{allowGiftMsgOnOrderItems}}" selector="{{AdminSalesConfigSection.selectAllowGiftMessagesOnOrderItem}}" stepKey="selectAllowGiftMsgOnOrderItems"/>
-        <selectOption userInput="{{allowGiftWrappingOnOrderLevel}}" selector="{{AdminSalesConfigSection.selectAllowGiftWrappingOnOrderLevel}}" stepKey="selectAllowGiftWrappingOnOrderLevel"/>
-        <selectOption userInput="{{allowGiftWrappingOnItemLevel}}" selector="{{AdminSalesConfigSection.selectAllowGiftMessagesOnOrderItem}}" stepKey="selectAllowGiftWrappingOnItemLevel"/>
+        <selectOption userInput="{{allowWrappingGiftOnOrderLevel}}" selector="{{AdminSalesConfigSection.selectAllowWrappingGiftOnOrderLevel}}" stepKey="selectAllowWrappingGiftOnOrderLevel"/>
+        <selectOption userInput="{{allowWrappingGiftOnItemLevel}}" selector="{{AdminSalesConfigSection.selectAllowWrappingGiftOnItemLevel}}" stepKey="selectAllowWrappingGiftOnItemLevel"/>
         <selectOption userInput="{{allowGiftReceipt}}" selector="{{AdminSalesConfigSection.selectAllowGiftReceipt}}" stepKey="selectAllowGiftReceipt"/>
         <selectOption userInput="{{allowPrintedCard}}" selector="{{AdminSalesConfigSection.selectAllowPrintedCard}}" stepKey="selectAllowPrintedCard"/>
         <conditionalClick selector="{{AdminSalesConfigSection.expandGiftOptions('open')}}" dependentSelector="{{AdminSalesConfigSection.giftOptions('open')}}" visible="true" stepKey="collapseGiftOptions"/>
