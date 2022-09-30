@@ -395,9 +395,7 @@ abstract class AbstractEntity
         $skuSet = [];
 
         $source->rewind();
-        if ($source instanceof Base64EncodedCsvData) {
-            $this->_dataSourceModel->cleanProcessedBunches();
-        } else {
+        if (!$source instanceof Base64EncodedCsvData) {
             $this->_dataSourceModel->cleanBunches();
         }
 
@@ -910,5 +908,10 @@ abstract class AbstractEntity
     public function getIds()
     {
         return $this->ids;
+    }
+
+    public function setIds($ids)
+    {
+        $this->ids = $ids;
     }
 }

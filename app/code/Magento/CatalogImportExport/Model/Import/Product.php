@@ -1158,6 +1158,7 @@ class Product extends AbstractEntity
         if ($this->_replaceFlag) {
             $this->getOptionEntity()->clearProductsSkuToId();
         }
+        $this->getOptionEntity()->setIds($this->getIds());
         $this->getOptionEntity()->importData();
         return $this;
     }

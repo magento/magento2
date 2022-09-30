@@ -1256,7 +1256,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $prevOptionId = 0;
         $optionId = null;
         $valueId = null;
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $products = [];
             $options = [];
             $titles = [];
