@@ -18,6 +18,8 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
  * Test adding bundled products to cart
@@ -45,6 +47,11 @@ class AddBundleProductToCartTest extends GraphQlAbstract
     private $productRepository;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -54,6 +61,7 @@ class AddBundleProductToCartTest extends GraphQlAbstract
         $this->quote = $objectManager->create(Quote::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
+        $this->fixtures = $objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -413,7 +421,8 @@ QUERY;
             'reserved_order_id'
         );
         $sku = 'bundle-product-multiselect-checkbox-options';
-        $product = $this->productRepository->get($sku);
+
+        $product = $this->fixtures->get($sku);
 
         /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
         $typeInstance = $product->getTypeInstance();
