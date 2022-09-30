@@ -23,7 +23,7 @@ class AddressUpdate
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $globalConfig;
+    private $globalConfig;
 
     /**
      * AddressUpdate constructor.
@@ -49,6 +49,7 @@ class AddressUpdate
      * @param \Magento\Sales\Model\Order $order
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function afterProcess(
         \Magento\Sales\Model\ResourceModel\Order\Handler\Address $subject,
