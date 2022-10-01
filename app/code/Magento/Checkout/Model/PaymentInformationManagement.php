@@ -23,6 +23,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     /**
      * @var \Magento\Quote\Api\BillingAddressManagementInterface
      * @deprecated 100.1.0 This call was substituted to eliminate extra quote::save call
+     * @see not in use anymore
      */
     protected $billingAddressManagement;
 
@@ -208,6 +209,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      *
      * @return \Psr\Log\LoggerInterface
      * @deprecated 100.1.8
+     * @see not in use anymore
      */
     private function getLogger()
     {

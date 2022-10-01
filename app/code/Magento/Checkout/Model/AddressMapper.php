@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\Checkout\Model;
 
@@ -51,7 +51,9 @@ class AddressMapper implements AddressMapperInterface
 
     /**
      * @inheritDoc
+     *
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function customerCheckoutAddressMapper(
         int $cartId,
@@ -96,8 +98,8 @@ class AddressMapper implements AddressMapperInterface
      * @inheritDoc
      */
     public function guestCheckoutAddressMapper(
-        string $cartId,
-        string $email,
+        int|string       $cartId,
+        string           $email,
         PaymentInterface $paymentMethod,
         AddressInterface $billingAddress = null
     ): void {
@@ -107,7 +109,10 @@ class AddressMapper implements AddressMapperInterface
         $shippingAddress = $quote->getShippingAddress();
 
         if (!empty($billingAddress)) {
-            $sameAsBillingFlag = $this->checkIfShippingAddressMatchesWithBillingAddress($shippingAddress, $billingAddress);
+            $sameAsBillingFlag = $this->checkIfShippingAddressMatchesWithBillingAddress(
+                $shippingAddress,
+                $billingAddress
+            );
         } else {
             $sameAsBillingFlag = 0;
         }
