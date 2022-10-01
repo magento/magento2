@@ -117,7 +117,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     }
 
     /**
-     * Clean all bunches from table.
+     * Clean all processed bunches from table.
      *
      * @return void
      */
