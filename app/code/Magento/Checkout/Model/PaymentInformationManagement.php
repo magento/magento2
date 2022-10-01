@@ -72,6 +72,11 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     private $saveRateLimiterDisabled = false;
 
     /**
+     * @var AddressMapperInterface
+     */
+    private $addressMapper;
+
+    /**
      * @param \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
@@ -80,6 +85,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * @param PaymentProcessingRateLimiterInterface|null $paymentRateLimiter
      * @param PaymentSavingRateLimiterInterface|null $saveRateLimiter
      * @param CartRepositoryInterface|null $cartRepository
+     * @param AddressMapperInterface|null $addressMapper
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -90,7 +96,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository,
         ?PaymentProcessingRateLimiterInterface $paymentRateLimiter = null,
         ?PaymentSavingRateLimiterInterface $saveRateLimiter = null,
-        ?CartRepositoryInterface $cartRepository = null
+        ?CartRepositoryInterface $cartRepository = null,
+        ?AddressMapperInterface $addressMapper = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -103,6 +110,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             ?? ObjectManager::getInstance()->get(PaymentSavingRateLimiterInterface::class);
         $this->cartRepository = $cartRepository
             ?? ObjectManager::getInstance()->get(CartRepositoryInterface::class);
+        $this->addressMapper = $addressMapper ?? ObjectManager::getInstance()->get(AddressMapperInterface::class);
     }
 
     /**
@@ -113,6 +121,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
+        $this->addressMapper->customerCheckoutAddressMapper($cartId, $paymentMethod, $billingAddress);
         $this->paymentRateLimiter->limit();
         try {
             //Have to do this hack because of plugins for savePaymentInformation()

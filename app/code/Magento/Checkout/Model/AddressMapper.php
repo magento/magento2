@@ -3,27 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
-namespace Magento\Checkout\Plugin\Model;
+namespace Magento\Checkout\Model;
 
-use Magento\Checkout\Api\PaymentInformationManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 
-/**
- * Class PaymentInformationManagement
- */
-class PaymentInformationManagementPlugin
+class AddressMapper implements AddressMapperInterface
 {
     /**
      * @var CartRepositoryInterface
      */
-    private $quoteRepository;
+    private $cartRepository;
 
     /**
      * @var AddressRepositoryInterface
@@ -31,42 +28,41 @@ class PaymentInformationManagementPlugin
     private $addressRepository;
 
     /**
-     * PaymentInformationManagement constructor
+     * @var QuoteIdMaskFactory
+     */
+    private $quoteIdMaskFactory;
+
+    /**
+     * AddressMapper constructor
      *
-     * @param CartRepositoryInterface $quoteRepository
+     * @param CartRepositoryInterface $cartRepository
      * @param AddressRepositoryInterface $addressRepository
+     * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        CartRepositoryInterface $quoteRepository,
-        AddressRepositoryInterface $addressRepository
+        CartRepositoryInterface    $cartRepository,
+        AddressRepositoryInterface $addressRepository,
+        QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
-        $this->quoteRepository = $quoteRepository;
+        $this->cartRepository = $cartRepository;
         $this->addressRepository = $addressRepository;
+        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
 
     /**
-     * Disable order submitting for preview
-     *
-     * @param PaymentInformationManagementInterface $subject
-     * @param int $cartId
-     * @param PaymentInterface $paymentMethod
-     * @param AddressInterface|null $billingAddress
-     * @return void
+     * @inheritDoc
      * @throws LocalizedException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function beforeSavePaymentInformationAndPlaceOrder(
-        PaymentInformationManagementInterface $subject,
+    public function customerCheckoutAddressMapper(
         int $cartId,
         PaymentInterface $paymentMethod,
         AddressInterface $billingAddress = null
     ): void {
         /** @var Quote $quote */
-        $quote = $this->quoteRepository->getActive($cartId);
+        $quote = $this->cartRepository->getActive($cartId);
         $shippingAddress = $quote->getShippingAddress();
         $quoteShippingAddressData = $shippingAddress->getData();
-        $quoteSameAsBilling = (int) $shippingAddress->getSameAsBilling();
+        $quoteSameAsBilling = (int)$shippingAddress->getSameAsBilling();
         $customer = $quote->getCustomer();
         $customerId = $customer->getId();
         $hasDefaultBilling = $customer->getDefaultBilling();
@@ -76,7 +72,7 @@ class PaymentInformationManagementPlugin
             $sameAsBillingFlag = 1;
         } elseif (!empty($quoteShippingAddressData) && !empty($billingAddress)) {
             $sameAsBillingFlag = $quote->getCustomerId() &&
-                $this->checkIfShippingNullOrNotSameAsBillingAddress($shippingAddress, $billingAddress);
+                $this->checkIfShippingAddressMatchesWithBillingAddress($shippingAddress, $billingAddress);
         } else {
             $sameAsBillingFlag = 0;
         }
@@ -97,13 +93,74 @@ class PaymentInformationManagementPlugin
     }
 
     /**
-     * Returns true if shipping address is same as billing or it is undefined
+     * @inheritDoc
+     */
+    public function guestCheckoutAddressMapper(
+        string $cartId,
+        string $email,
+        PaymentInterface $paymentMethod,
+        AddressInterface $billingAddress = null
+    ): void {
+        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        /** @var Quote $quote */
+        $quote = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
+        $shippingAddress = $quote->getShippingAddress();
+
+        if (!empty($billingAddress)) {
+            $sameAsBillingFlag = $this->checkIfShippingAddressMatchesWithBillingAddress($shippingAddress, $billingAddress);
+        } else {
+            $sameAsBillingFlag = 0;
+        }
+
+        if ($sameAsBillingFlag) {
+            $shippingAddress->setSameAsBilling(1);
+        }
+    }
+
+    /**
+     * Process customer shipping address
+     *
+     * @param Quote $quote
+     * @return void
+     * @throws LocalizedException
+     */
+    private function processCustomerShippingAddress(Quote $quote): void
+    {
+        $shippingAddress = $quote->getShippingAddress();
+        $billingAddress = $quote->getBillingAddress();
+
+        $customer = $quote->getCustomer();
+        $hasDefaultBilling = $customer->getDefaultBilling();
+        $hasDefaultShipping = $customer->getDefaultShipping();
+
+        if ($shippingAddress->getQuoteId()) {
+            $shippingAddressData = $shippingAddress->exportCustomerAddress();
+        }
+        if (isset($shippingAddressData)) {
+            if (!$hasDefaultShipping) {
+                //Make provided address as default shipping address
+                $shippingAddressData->setIsDefaultShipping(true);
+                if (!$hasDefaultBilling && !$billingAddress->getSaveInAddressBook()) {
+                    $shippingAddressData->setIsDefaultBilling(true);
+                }
+            }
+            //save here new customer address
+            $shippingAddressData->setCustomerId($quote->getCustomerId());
+            $this->addressRepository->save($shippingAddressData);
+            $quote->addCustomerAddress($shippingAddressData);
+            $shippingAddress->setCustomerAddressData($shippingAddressData);
+            $shippingAddress->setCustomerAddressId($shippingAddressData->getId());
+        }
+    }
+
+    /**
+     * Returns true if shipping address is same as billing, or it is undefined
      *
      * @param AddressInterface $shippingAddress
      * @param AddressInterface $billingAddress
      * @return bool
      */
-    private function checkIfShippingNullOrNotSameAsBillingAddress(
+    private function checkIfShippingAddressMatchesWithBillingAddress(
         AddressInterface $shippingAddress,
         AddressInterface $billingAddress
     ): bool {
@@ -141,7 +198,7 @@ class PaymentInformationManagementPlugin
     {
         array_walk(
             $address,
-            function (&$value) {
+            static function (&$value) {
                 if (is_array($value) && isset($value['value'])) {
                     if (!is_array($value['value'])) {
                         $value = (string)$value['value'];
@@ -152,41 +209,5 @@ class PaymentInformationManagementPlugin
             }
         );
         return $address;
-    }
-
-    /**
-     * Process customer shipping address
-     *
-     * @param Quote $quote
-     * @return void
-     * @throws LocalizedException
-     */
-    private function processCustomerShippingAddress(Quote $quote): void
-    {
-        $shippingAddress = $quote->getShippingAddress();
-        $billingAddress = $quote->getBillingAddress();
-
-        $customer = $quote->getCustomer();
-        $hasDefaultBilling = $customer->getDefaultBilling();
-        $hasDefaultShipping = $customer->getDefaultShipping();
-
-        if ($shippingAddress->getQuoteId()) {
-            $shippingAddressData = $shippingAddress->exportCustomerAddress();
-        }
-        if (isset($shippingAddressData)) {
-            if (!$hasDefaultShipping) {
-                //Make provided address as default shipping address
-                $shippingAddressData->setIsDefaultShipping(true);
-                if (!$hasDefaultBilling && !$billingAddress->getSaveInAddressBook()) {
-                    $shippingAddressData->setIsDefaultBilling(true);
-                }
-            }
-            //save here new customer address
-            $shippingAddressData->setCustomerId($quote->getCustomerId());
-            $this->addressRepository->save($shippingAddressData);
-            $quote->addCustomerAddress($shippingAddressData);
-            $shippingAddress->setCustomerAddressData($shippingAddressData);
-            $shippingAddress->setCustomerAddressId($shippingAddressData->getId());
-        }
     }
 }

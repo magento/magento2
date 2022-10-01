@@ -74,6 +74,11 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     private $saveRateLimitDisabled = false;
 
     /**
+     * @var AddressMapperInterface
+     */
+    private $addressMapper;
+
+    /**
      * @param \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\GuestCartManagementInterface $cartManagement
@@ -82,6 +87,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      * @param CartRepositoryInterface $cartRepository
      * @param PaymentProcessingRateLimiterInterface|null $paymentsRateLimiter
      * @param PaymentSavingRateLimiterInterface|null $savingRateLimiter
+     * @param AddressMapperInterface|null $addressMapper
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -92,7 +98,8 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
         CartRepositoryInterface $cartRepository,
         ?PaymentProcessingRateLimiterInterface $paymentsRateLimiter = null,
-        ?PaymentSavingRateLimiterInterface $savingRateLimiter = null
+        ?PaymentSavingRateLimiterInterface $savingRateLimiter = null,
+        ?AddressMapperInterface $addressMapper = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -104,6 +111,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
             ?? ObjectManager::getInstance()->get(PaymentProcessingRateLimiterInterface::class);
         $this->savingRateLimiter = $savingRateLimiter
             ?? ObjectManager::getInstance()->get(PaymentSavingRateLimiterInterface::class);
+        $this->addressMapper = $addressMapper ?? ObjectManager::getInstance()->get(AddressMapperInterface::class);
     }
 
     /**
@@ -115,6 +123,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
+        $this->addressMapper->guestCheckoutAddressMapper($cartId, $email, $paymentMethod, $billingAddress);
         $this->paymentsRateLimiter->limit();
         try {
             //Have to do this hack because of savePaymentInformation() plugins.
