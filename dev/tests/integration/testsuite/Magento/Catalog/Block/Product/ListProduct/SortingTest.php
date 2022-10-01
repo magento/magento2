@@ -399,7 +399,6 @@ class SortingTest extends TestCase
         string $direction,
         array $expected
     ): void {
-        $this->markTestSkipped('MC-40449: ListProduct\SortingTest failure on 2.4-develop');
         $this->assertProductListSortOrderWithConfig($sortBy, $direction, $expected);
     }
 
@@ -421,7 +420,6 @@ class SortingTest extends TestCase
         string $direction,
         array $expected
     ): void {
-        $this->markTestSkipped('MC-40449: ListProduct\SortingTest failure on 2.4-develop');
         $this->assertProductListSortOrderWithConfig($sortBy, $direction, $expected);
     }
 
@@ -441,7 +439,7 @@ class SortingTest extends TestCase
             'default_order_price_desc' => [
                 'sort' => 'price',
                 'direction' => Collection::SORT_ORDER_DESC,
-                'expectation' => ['configurable', 'simple3', 'simple2', 'simple1'],
+                'expectation' => ['simple3', 'simple2', 'simple1', 'configurable'],
             ],
         ];
     }

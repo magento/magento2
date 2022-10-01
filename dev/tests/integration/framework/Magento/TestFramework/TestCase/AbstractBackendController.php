@@ -5,6 +5,9 @@
  */
 namespace Magento\TestFramework\TestCase;
 
+use Magento\Framework\Acl\Builder as AclBuilder;
+use Magento\TestFramework\Bootstrap;
+
 /**
  * A parent class for backend controllers - contains directives for admin user creation and authentication.
  *
@@ -125,9 +128,9 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         if ($this->httpMethod) {
             $this->getRequest()->setMethod($this->httpMethod);
         }
-        $this->_objectManager->get(\Magento\Framework\Acl\Builder::class)
-            ->getAcl()
-            ->deny(null, $this->resource);
+
+        $acl = $this->_objectManager->get(AclBuilder::class)->getAcl();
+        $acl->deny($this->_auth->getUser()->getRoles(), $this->resource);
         $this->dispatch($this->uri);
         $this->assertSame($this->expectedNoAccessResponseCode, $this->getResponse()->getHttpResponseCode());
     }

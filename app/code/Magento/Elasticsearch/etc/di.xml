@@ -254,12 +254,6 @@
             <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Elasticsearch\Elasticsearch5\SearchAdapter\ConnectionManager" type="Magento\Elasticsearch\SearchAdapter\ConnectionManager">
-        <arguments>
-            <argument name="clientFactory" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Client\ClientFactoryProxy</argument>
-            <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
-        </arguments>
-    </virtualType>
     <virtualType name="Magento\Elasticsearch\Elasticsearch5\Model\Client\ElasticsearchFactory" type="Magento\AdvancedSearch\Model\Client\ClientFactory">
         <arguments>
             <argument name="clientClass" xsi:type="string">Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch</argument>
@@ -274,7 +268,7 @@
     </type>
     <type name="Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Adapter">
         <arguments>
-            <argument name="connectionManager" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\SearchAdapter\ConnectionManager</argument>
+            <argument name="connectionManager" xsi:type="object">Magento\Elasticsearch\SearchAdapter\ConnectionManager</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Search\Dynamic\IntervalFactory">
@@ -518,7 +512,8 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Elasticsearch\Setup\InstallConfig">
+
+    <virtualType name="Magento\Elasticsearch\Setup\InstallConfig" type="Magento\Search\Setup\InstallConfig">
         <arguments>
             <argument name="searchConfigMapping" xsi:type="array">
                 <item name="elasticsearch-host" xsi:type="string">elasticsearch5_server_hostname</item>
@@ -530,7 +525,7 @@
                 <item name="elasticsearch-password" xsi:type="string">elasticsearch5_password</item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
     <type name="Magento\Search\Setup\CompositeInstallConfig">
         <arguments>
             <argument name="installConfigList" xsi:type="array">

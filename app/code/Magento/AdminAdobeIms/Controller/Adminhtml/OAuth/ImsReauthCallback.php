@@ -3,24 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Controller\Adminhtml\OAuth;
 
 use Exception;
 use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
-use Magento\AdminAdobeIms\Service\AdminReauthProcessService;
+use Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdminAdobeIms\Service\ImsOrganizationService;
 use Magento\Backend\App\Action\Context;
-use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\Backend\Controller\Adminhtml\Auth;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Controller\ResultInterface;
 
 class ImsReauthCallback extends Auth implements HttpGetActionInterface
 {
@@ -38,24 +34,9 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
     private const RESPONSE_ERROR_CODE = 'error';
 
     /**
-     * @var ImsConnection
-     */
-    private ImsConnection $adminImsConnection;
-
-    /**
      * @var ImsConfig
      */
     private ImsConfig $adminImsConfig;
-
-    /**
-     * @var ImsOrganizationService
-     */
-    private ImsOrganizationService $adminOrganizationService;
-
-    /**
-     * @var AdminReauthProcessService
-     */
-    private AdminReauthProcessService $adminReauthProcessService;
 
     /**
      * @var AdminAdobeImsLogger
@@ -63,26 +44,25 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
     private AdminAdobeImsLogger $logger;
 
     /**
+     * @var AdobeImsAdminTokenUserService
+     */
+    private AdobeImsAdminTokenUserService $adminTokenUserService;
+
+    /**
      * @param Context $context
-     * @param ImsConnection $adminImsConnection
      * @param ImsConfig $adminImsConfig
-     * @param ImsOrganizationService $adminOrganizationService
-     * @param AdminReauthProcessService $adminReauthProcessService
+     * @param AdobeImsAdminTokenUserService $adminTokenUserService
      * @param AdminAdobeImsLogger $logger
      */
     public function __construct(
-        Context $context,
-        ImsConnection $adminImsConnection,
-        ImsConfig $adminImsConfig,
-        ImsOrganizationService $adminOrganizationService,
-        AdminReauthProcessService $adminReauthProcessService,
-        AdminAdobeImsLogger $logger
+        Context                         $context,
+        ImsConfig                       $adminImsConfig,
+        AdobeImsAdminTokenUserService $adminTokenUserService,
+        AdminAdobeImsLogger             $logger
     ) {
         parent::__construct($context);
-        $this->adminImsConnection = $adminImsConnection;
         $this->adminImsConfig = $adminImsConfig;
-        $this->adminOrganizationService = $adminOrganizationService;
-        $this->adminReauthProcessService = $adminReauthProcessService;
+        $this->adminTokenUserService = $adminTokenUserService;
         $this->logger = $logger;
     }
 
@@ -111,24 +91,7 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
         }
 
         try {
-            $code = $this->getRequest()->getParam('code');
-
-            if ($code === null) {
-                throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
-            }
-
-            $tokenResponse = $this->adminImsConnection->getTokenResponse($code);
-            $accessToken = $tokenResponse->getAccessToken();
-
-            $profile = $this->adminImsConnection->getProfile($accessToken);
-            if (empty($profile['email'])) {
-                throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
-            }
-
-            //check membership in organization
-            $this->adminOrganizationService->checkOrganizationMembership($accessToken);
-
-            $this->adminReauthProcessService->execute($tokenResponse);
+            $this->adminTokenUserService->processLoginRequest(true);
 
             $response = sprintf(
                 self::RESPONSE_TEMPLATE,
