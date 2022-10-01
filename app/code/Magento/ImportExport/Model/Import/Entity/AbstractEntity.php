@@ -913,10 +913,10 @@ abstract class AbstractEntity
     /**
      * Set Ids of Validated Rows
      *
-     * @param $ids
+     * @param array $ids
      * @return void
      */
-    public function setIds($ids)
+    public function setIds(array $ids)
     {
         $this->ids = $ids;
     }

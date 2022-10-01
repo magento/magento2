@@ -40,7 +40,7 @@ class OptionTest extends AbstractImportTestCase
     /**
      * Path to csv file to import
      */
-    const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
+    public const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
 
     /**
      * Parameters for Test stores.
