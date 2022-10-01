@@ -157,6 +157,7 @@ QUERY;
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
+        // phpcs:ignore
         $summaryFactory = ObjectManager::getInstance()->get(SummaryFactory::class);
         $storeId = ObjectManager::getInstance()->get(StoreManagerInterface::class)->getStore()->getId();
         $summary = $summaryFactory->create()->setStoreId($storeId)->load($product->getId());
