@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test  name="SampleTest">
+        <annotations>
+            <stories value="Admin Can Alter Category Anchor setting"/>
+            <title value="Alter Category Anchor setting"/>
+            <description value="Admin Can Alter Category Anchor setting and it should work perfectly"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-4114"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
+            <createData entity="Two_nested_categories" stepKey="createTwoLevelNestedCategories">
+                <requiredEntity createDataKey="createDefaultCategory"/>
+            </createData>
+            <createData entity="SimpleProductQty100" stepKey="createFirstSimpleProduct">
+                <requiredEntity createDataKey="createDefaultCategory"/>
+                <field key="name">Simple1</field>
+                <field key="price">90</field>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createSecondSimpleProduct">
+                <requiredEntity createDataKey="createTwoLevelNestedCategories"/>
+                <field key="name">Simple2</field>
+                <field key="price">10</field>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createTwoLevelNestedCategories" stepKey="deleteSubCategory"/>
+            <deleteData createDataKey="createDefaultCategory" stepKey="deleteMainCategory"/>
+        </after>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage">
+            <argument name="categoryName" value="$$createDefaultCategory.name$$"/>
+        </actionGroup>
+        <see userInput="2" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCountFirstTime"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeFirstSimpleProductNameOnCategoryPage">
+            <argument name="productName" value="$$createFirstSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeSecondSimpleProductNameOnCategoryPage">
+            <argument name="productName" value="$$createSecondSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontLayeredNavigationCategoryAndPriceActionGroup" stepKey="checkCategoryAndPriceLayeredNavigationIsPresent">
+            <argument name="minPrice" value="$10.00"/>
+            <argument name="maxPrice" value="$19.99"/>
+            <argument name="count" value="1"/>
+            <argument name="minPrice2" value="$90.00"/>
+        </actionGroup>
+        <!--Goto Category in admin side and do validation for single Product visibility validation-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openAdminCategoryPage"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFilters"/>
+        <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryItem">
+            <argument name="categoryName" value="$createDefaultCategory.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCategoryPageOpenProductsInCategorySectionActionGroup" stepKey="clickAdminCategoryProductSection"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSectionHeaderToLoad"/>
+        <see userInput="$$createFirstSimpleProduct.name$$" selector="{{AdminCategoryBasicFieldSection.presenceProductsInCategory}}" stepKey="seeSingleProduct"/>
+        <dontSee selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createSecondSimpleProduct.name$$)}}"
+                 userInput="$$createSecondSimpleProduct.name$$" stepKey="doNotSeeSecondProduct"/>
+        <!--Disable anchor Category and do validation for Product and Layered Navigation on StoreFront-->
+        <actionGroup ref="AdminToggleAnchorSwitchActionGroup" stepKey="disableAnchorSwitch"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSuccessMessage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createDefaultCategory.name$$)}}" stepKey="cartClickCategory"/>
+        <seeInTitle userInput="$$createDefaultCategory.name$$" stepKey="assertCategoryNameInTitle"/>
+        <see userInput="$$createDefaultCategory.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
+        <see userInput="1" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCount"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.listedProduct('1')}}" stepKey="assertSimpleProductPresence"/>
+        <see userInput="$$createFirstSimpleProduct.name$$" selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" stepKey="checkTitle"/>
+        <see userInput="$90.00" selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" stepKey="checkPrice"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.shopByCategoryLinkButton($$createTwoLevelNestedCategories.name$$)}}" stepKey="verifyShopByCatLayeredNavigation"/>
+        <!--Enable anchor Category and do validation for Product and Layered Navigation on StoreFront-->
+        <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openAdminCategoryPage1"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFilters1"/>
+        <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryItem1">
+            <argument name="categoryName" value="$createDefaultCategory.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminToggleAnchorSwitchActionGroup" stepKey="enableAnchorSwitch"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSuccessMessage1"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage1">
+            <argument name="categoryName" value="$$createDefaultCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeFirstSimpleProductNameOnCategoryPage1">
+            <argument name="productName" value="$$createFirstSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeSecondSimpleProductNameOnCategoryPage1">
+            <argument name="productName" value="$$createSecondSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontLayeredNavigationCategoryAndPriceActionGroup" stepKey="checkCategoryAndPriceFilterIsPresent1">
+            <argument name="minPrice" value="$10.00"/>
+            <argument name="maxPrice" value="$19.99"/>
+            <argument name="count" value="1"/>
+            <argument name="minPrice2" value="$90.00"/>
+        </actionGroup>
+        <!-- Drag drop Category and do Validation for Category and Products on StoreFront-->
+        <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openAdminCategoryPage2"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFilters2"/>
+        <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryItem2">
+            <argument name="categoryName" value="$createTwoLevelNestedCategories.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandCategoryTree"/>
+        <actionGroup ref="AdminAssertParentChildCategoryTreeElementsActionGroup" stepKey="assertParentChildCategoryTreeElements">
+            <argument name="parentCategoryName" value="$createDefaultCategory.name$"/>
+            <argument name="childCategoryName" value="$createTwoLevelNestedCategories.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertParentChildCategoryTreeElementsActionGroup" stepKey="assertParentChildCategoryTreeElements2">
+            <argument name="parentCategoryName" value="Default Category"/>
+            <argument name="childCategoryName" value="$createDefaultCategory.name$"/>
+        </actionGroup>
+        <dragAndDrop selector1="{{AdminCategoryBasicFieldSection.dragSubCategory($createTwoLevelNestedCategories.name$)}}" selector2="//div[@class='x-tree-node-el folder active-category x-tree-node-expanded']//a/span[contains(text(),'Default Category')]" stepKey="dragAndDrop"/>
+        <wait time="10" stepKey="waitForPopUpToLoad"/>
+        <grabTextFrom selector="{{AdminCategoryBasicFieldSection.grabPopUpText}}" stepKey="grabTextPopUp"/>
+        <assertStringContainsString stepKey="assertDropDownTierPriceTextProduct1">
+            <expectedResult type="string">This operation can take a long time</expectedResult>
+            <actualResult type="variable">$grabTextPopUp</actualResult>
+        </assertStringContainsString>
+        <click selector="{{AdminCategoryBasicFieldSection.acceptPopUp}}" stepKey="acceptPopUp"/>
+        <wait time="10" stepKey="waitCategoryTreeToLoad"/>
+        <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        <actionGroup ref="AdminAssertParentChildCategoryTreeElementsActionGroup" stepKey="assertParentChildCategoryTreeElements3">
+            <argument name="parentCategoryName" value="Default Category"/>
+            <argument name="childCategoryName" value="$createTwoLevelNestedCategories.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertParentChildCategoryTreeElementsActionGroup" stepKey="assertParentChildCategoryTreeElements4">
+            <argument name="parentCategoryName" value="Default Category"/>
+            <argument name="childCategoryName" value="$createDefaultCategory.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage2">
+            <argument name="categoryName" value="$$createDefaultCategory.name$$"/>
+        </actionGroup>
+        <see userInput="1" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCount2"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeFirstSimpleProductNameOnCategoryPage2">
+            <argument name="productName" value="$$createFirstSimpleProduct.name$$"/>
+        </actionGroup>
+        <dontSee selector="{{StorefrontCategorySidebarSection.shopByCategoryLinkButton($$createTwoLevelNestedCategories.name$$)}}" stepKey="verifyShopByCatLayeredNavigation2"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage3">
+            <argument name="categoryName" value="$$createTwoLevelNestedCategories.name$$"/>
+        </actionGroup>
+        <see userInput="1" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCount3"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeSecondSimpleProductNameOnCategoryPage2">
+            <argument name="productName" value="$$createSecondSimpleProduct.name$$"/>
+        </actionGroup>
+        <dontSee selector="{{StorefrontCategorySidebarSection.shopByCategoryLinkButton($$createTwoLevelNestedCategories.name$$)}}" stepKey="verifyShopByCatLayeredNavigation3"/>
+    </test>
+</tests>
+
