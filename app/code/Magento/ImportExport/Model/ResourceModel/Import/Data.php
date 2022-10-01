@@ -229,7 +229,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
         $dataRow = null;
         if ($this->_iterator->valid()) {
             $encodedData = $this->_iterator->current();
-            if (array_key_exists(0, $encodedData) && $encodedData[0]) {
+            if (!empty($encodedData[0])) {
                 $dataRow = $this->jsonHelper->jsonDecode($encodedData[0]);
                 $this->_iterator->next();
             }

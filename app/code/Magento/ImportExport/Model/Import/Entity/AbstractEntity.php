@@ -910,6 +910,12 @@ abstract class AbstractEntity
         return $this->ids;
     }
 
+    /**
+     * Set Ids of Validated Rows
+     *
+     * @param $ids
+     * @return void
+     */
     public function setIds($ids)
     {
         $this->ids = $ids;
