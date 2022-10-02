@@ -64,19 +64,15 @@ class AddressMapper implements AddressMapperInterface
         $quote = $this->cartRepository->getActive($cartId);
         $shippingAddress = $quote->getShippingAddress();
         $quoteShippingAddressData = $shippingAddress->getData();
-        $quoteSameAsBilling = (int)$shippingAddress->getSameAsBilling();
+        $sameAsBillingFlag = (int)$shippingAddress->getSameAsBilling();
         $customer = $quote->getCustomer();
         $customerId = $customer->getId();
         $hasDefaultBilling = $customer->getDefaultBilling();
         $hasDefaultShipping = $customer->getDefaultShipping();
 
-        if ($quoteSameAsBilling === 1) {
-            $sameAsBillingFlag = 1;
-        } elseif (!empty($quoteShippingAddressData) && !empty($billingAddress)) {
+        if ($sameAsBillingFlag !== 1 && !empty($quoteShippingAddressData) && !empty($billingAddress)) {
             $sameAsBillingFlag = $quote->getCustomerId() &&
                 $this->checkIfShippingAddressMatchesWithBillingAddress($shippingAddress, $billingAddress);
-        } else {
-            $sameAsBillingFlag = 0;
         }
 
         if ($sameAsBillingFlag) {
