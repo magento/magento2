@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Filter\Test\Unit;
 
+use Laminas\Filter\FilterInterface;
 use Magento\Framework\Filter\ArrayFilter;
 use PHPUnit\Framework\TestCase;
 
@@ -16,9 +17,9 @@ class ArrayFilterTest extends TestCase
     {
         $arrayFilter = new ArrayFilter();
 
-        /** @var \Zend_Filter_Interface $filterMock */
+        /** @var FilterInterface $filterMock */
         /** This filter should be applied to all fields values */
-        $filterMock = $this->createMock(\Zend_Filter_Interface::class);
+        $filterMock = $this->createMock(FilterInterface::class);
         $filterMock->expects($this->exactly(3))->method('filter')->willReturnCallback(
             function ($input) {
                 return '(' . $input . ')';
@@ -26,9 +27,9 @@ class ArrayFilterTest extends TestCase
         );
         $arrayFilter->addFilter($filterMock);
 
-        /** @var \Zend_Filter_Interface $fieldFilterMock */
+        /** @var FilterInterface $fieldFilterMock */
         /** This filter should be applied to 'field2' field value only */
-        $fieldFilterMock = $this->createMock(\Zend_Filter_Interface::class);
+        $fieldFilterMock = $this->createMock(FilterInterface::class);
         $fieldFilterMock->expects($this->exactly(1))->method('filter')->willReturnCallback(
             function ($input) {
                 return '[' . $input . ']';

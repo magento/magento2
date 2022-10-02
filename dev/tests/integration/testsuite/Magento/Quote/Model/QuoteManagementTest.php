@@ -34,6 +34,7 @@ use Psr\Log\LoggerInterface;
  *
  * @see \Magento\Quote\Model\QuoteManagement
  * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QuoteManagementTest extends TestCase
@@ -131,7 +132,7 @@ class QuoteManagementTest extends TestCase
         $quote = $this->getQuoteByReservedOrderId->execute('guest_quote');
         $this->cartManagement->placeOrder($quote->getId());
         $quoteAfterOrderPlaced = $this->getQuoteByReservedOrderId->execute('guest_quote');
-        self::assertEquals(2, $quoteAfterOrderPlaced->getCustomerGroupId());
+        self::assertEquals(0, $quoteAfterOrderPlaced->getCustomerGroupId());
         self::assertEquals(3, $quoteAfterOrderPlaced->getCustomerTaxClassId());
     }
 
@@ -196,7 +197,6 @@ class QuoteManagementTest extends TestCase
         $this->cartManagement->placeOrder($quote->getId());
     }
 
-
     /**
      * Tries to create order with product that has child items and one of them
      * was deleted when item data check is disabled on quote load.
@@ -237,7 +237,11 @@ class QuoteManagementTest extends TestCase
     {
         $this->makeProductOutOfStock('simple');
         $quote = $this->getQuoteByReservedOrderId->execute('test01');
-        $this->expectExceptionObject(new LocalizedException(__('The shipping method is missing. Select the shipping method and try again.')));
+        $this->expectExceptionObject(
+            new LocalizedException(
+                __('The shipping method is missing. Select the shipping method and try again.')
+            )
+        );
         $this->cartManagement->placeOrder($quote->getId());
     }
 

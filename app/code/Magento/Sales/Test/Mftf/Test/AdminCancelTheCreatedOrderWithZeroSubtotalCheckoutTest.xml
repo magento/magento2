@@ -20,6 +20,8 @@
         </annotations>
 
         <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- Enable Zero Subtotal Checkout -->
             <magentoCLI command="config:set {{EnableZeroSubtotalCheckoutConfigData.path}} {{EnableZeroSubtotalCheckoutConfigData.value}}" stepKey="enableZeroSubtotalCheckout"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -39,6 +41,8 @@
             <createData entity="SalesRuleNoCouponWithFixedDiscount" stepKey="createSalesRule"/>
         </before>
         <after>
+            <!-- Disable shipping method for customer with default address -->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <!-- Disable Free Shipping -->
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>

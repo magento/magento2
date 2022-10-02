@@ -42,7 +42,10 @@ class StateTest extends TestCase
                     'canCreditmemo',
                     'getTotalRefunded',
                     'getConfig',
-                    'getIsNotVirtual'
+                    'getIsVirtual',
+                    'getIsNotVirtual',
+                    'getStatus',
+                    'getAllItems'
                 ]
             )
             ->disableOriginalConstructor()
@@ -102,6 +105,14 @@ class StateTest extends TestCase
             ->willReturn($isInProcess);
         $this->orderMock->method('getIsNotVirtual')
             ->willReturn($isNotVirtual);
+        $this->orderMock->method('getAllItems')
+            ->willReturn([]);
+        if (!$isNotVirtual) {
+            $this->orderMock->method('getIsVirtual')
+                ->willReturn(!$isNotVirtual);
+            $this->orderMock->method('getStatus')
+                ->willReturn($expectedState);
+        }
         $this->state->check($this->orderMock);
         $this->assertEquals($expectedState, $this->orderMock->getState());
     }
@@ -126,7 +137,8 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 0,
                 'is_canceled' => false,
                 'can_unhold' => false,
-                'is_not_virtual' => true
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
             ],
             'complete - !canCreditmemo,!canShip -> closed' => [
                 'can_credit_memo' => false,
@@ -139,7 +151,8 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 0,
                 'is_canceled' => false,
                 'can_unhold' => false,
-                'is_not_virtual' => true
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
             ],
             'processing - !canCreditmemo,canShip -> processing' => [
                 'can_credit_memo' => false,
@@ -152,7 +165,8 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 0,
                 'is_canceled' => false,
                 'can_unhold' => false,
-                'is_not_virtual' => true
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
             ],
             'complete - !canCreditmemo,canShip -> complete' => [
                 'can_credit_memo' => false,
@@ -165,7 +179,8 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 0,
                 'is_canceled' => false,
                 'can_unhold' => false,
-                'is_not_virtual' => true
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
             ],
             'processing - canCreditmemo,!canShip -> complete' => [
                 'can_credit_memo' => true,
@@ -178,7 +193,8 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 0,
                 'is_canceled' => false,
                 'can_unhold' => false,
-                'is_not_virtual' => true
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
             ],
             'complete - canCreditmemo,!canShip -> complete' => [
                 'can_credit_memo' => true,
@@ -191,7 +207,8 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 0,
                 'is_canceled' => false,
                 'can_unhold' => false,
-                'is_not_virtual' => true
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
             ],
             'processing - canCreditmemo, canShip -> processing' => [
                 'can_credit_memo' => true,
@@ -204,7 +221,8 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 0,
                 'is_canceled' => false,
                 'can_unhold' => false,
-                'is_not_virtual' => true
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
             ],
             'complete - canCreditmemo, canShip -> complete' => [
                 'can_credit_memo' => true,
@@ -217,7 +235,8 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 0,
                 'is_canceled' => false,
                 'can_unhold' => false,
-                'is_not_virtual' => true
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
             ],
             'new - canCreditmemo, canShip, IsInProcess -> processing' => [
                 'can_credit_memo' => true,
@@ -230,7 +249,8 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 1,
                 'is_canceled' => false,
                 'can_unhold' => false,
-                'is_not_virtual' => true
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
             ],
             'new - canCreditmemo, !canShip, IsInProcess -> processing' => [
                 'can_credit_memo' => true,
@@ -243,7 +263,8 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 1,
                 'is_canceled' => false,
                 'can_unhold' => false,
-                'is_not_virtual' => true
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
             ],
             'new - canCreditmemo, canShip, !IsInProcess -> new' => [
                 'can_credit_memo' => true,
@@ -256,7 +277,8 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 1,
                 'is_canceled' => false,
                 'can_unhold' => false,
-                'is_not_virtual' => true
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
             ],
             'hold - canUnhold -> hold' => [
                 'can_credit_memo' => true,
@@ -269,7 +291,8 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 0,
                 'is_canceled' => false,
                 'can_unhold' => true,
-                'is_not_virtual' => true
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
             ],
             'payment_review - canUnhold -> payment_review' => [
                 'can_credit_memo' => true,
@@ -282,7 +305,8 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 0,
                 'is_canceled' => false,
                 'can_unhold' => true,
-                'is_not_virtual' => true
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
             ],
             'pending_payment - canUnhold -> pending_payment' => [
                 'can_credit_memo' => true,
@@ -295,7 +319,8 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 0,
                 'is_canceled' => false,
                 'can_unhold' => true,
-                'is_not_virtual' => true
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
             ],
             'cancelled - isCanceled -> cancelled' => [
                 'can_credit_memo' => true,
@@ -308,7 +333,8 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 0,
                 'is_canceled' => true,
                 'can_unhold' => false,
-                'is_not_virtual' => true
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
             ],
             'processing - !canCreditmemo!canShip -> complete(virtual product)' => [
                 'can_credit_memo' => false,
@@ -321,7 +347,50 @@ class StateTest extends TestCase
                 'get_is_in_process_invoke_count' => 0,
                 'is_canceled' => false,
                 'can_unhold' => false,
-                'is_not_virtual' => false
+                'is_not_virtual' => false,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'complete - !canCreditmemo, !canShip - closed(virtual product)' => [
+                'can_credit_memo' => false,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => false,
+                'call_can_skip_num' => 1,
+                'current_state' => Order::STATE_COMPLETE,
+                'expected_state' => Order::STATE_CLOSED,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => false,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'processing - canCreditmemo, !canShip, !isPartiallyRefundedOrderShipped -> processing' => [
+                'can_credit_memo' => true,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => true,
+                'call_can_skip_num' => 1,
+                'current_state' => Order::STATE_PROCESSING,
+                'expected_state' => Order::STATE_PROCESSING,
+                'is_in_process' => true,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'processing - canCreditmemo, !canShip, isPartiallyRefundedOrderShipped -> complete' => [
+                'can_credit_memo' => true,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => false,
+                'call_can_skip_num' => 1,
+                'current_state' => Order::STATE_PROCESSING,
+                'expected_state' => Order::STATE_COMPLETE,
+                'is_in_process' => true,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => true
             ],
         ];
     }

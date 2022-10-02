@@ -3,15 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Plugin;
 
-use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\AdobeImsApi\Api\IsTokenValidInterface;
 
 class BackendAuthSessionPlugin
 {
@@ -21,9 +20,9 @@ class BackendAuthSessionPlugin
     public const ACCESS_TOKEN_INTERVAL_CHECK = 600;
 
     /**
-     * @var ImsConnection
+     * @var IsTokenValidInterface
      */
-    private ImsConnection $adminImsConnection;
+    private IsTokenValidInterface $isTokenValid;
 
     /**
      * @var DateTime
@@ -36,16 +35,16 @@ class BackendAuthSessionPlugin
     private ImsConfig $adminImsConfig;
 
     /**
-     * @param ImsConnection $adminImsConnection
+     * @param IsTokenValidInterface $isTokenValid
      * @param DateTime $dateTime
      * @param ImsConfig $adminImsConfig
      */
     public function __construct(
-        ImsConnection $adminImsConnection,
+        IsTokenValidInterface $isTokenValid,
         DateTime $dateTime,
         ImsConfig $adminImsConfig
     ) {
-        $this->adminImsConnection = $adminImsConnection;
+        $this->isTokenValid = $isTokenValid;
         $this->dateTime = $dateTime;
         $this->adminImsConfig = $adminImsConfig;
     }
@@ -64,7 +63,7 @@ class BackendAuthSessionPlugin
             $lastCheckTime = $subject->getTokenLastCheckTime();
             if ($lastCheckTime + self::ACCESS_TOKEN_INTERVAL_CHECK <= $this->dateTime->gmtTimestamp()) {
                 $accessToken = $subject->getAdobeAccessToken();
-                if ($this->adminImsConnection->validateToken($accessToken)) {
+                if ($this->isTokenValid->validateToken($accessToken)) {
                     $subject->setTokenLastCheckTime($this->dateTime->gmtTimestamp());
                 } else {
                     $subject->destroy();
