@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\User\Model\ResourceModel;
 
+use Laminas\Validator\Callback;
+use Laminas\Validator\ValidatorInterface;
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\Acl\Role\User as RoleUser;
 use Magento\Authorization\Model\UserContextInterface;
@@ -121,6 +123,9 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'logdate' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
             'lognum' => $user->getLognum() + 1,
         ];
+        
+        $user->setLogdate($data['logdate']);
+        $user->setLognum($data['lognum']);
 
         $condition = ['user_id = ?' => (int)$user->getUserId()];
 
@@ -488,14 +493,14 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Add validation rules to be applied before saving an entity
      *
-     * @return \Zend_Validate_Interface $validator
+     * @return ValidatorInterface $validator
      */
     public function getValidationRulesBeforeSave()
     {
-        $userIdentity = new \Zend_Validate_Callback([$this, 'isUserUnique']);
+        $userIdentity = new Callback([$this, 'isUserUnique']);
         $userIdentity->setMessage(
             __('A user with the same user name or email already exists.'),
-            \Zend_Validate_Callback::INVALID_VALUE
+            Callback::INVALID_VALUE
         );
 
         return $userIdentity;

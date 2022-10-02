@@ -20,7 +20,7 @@
         <element name="firstProductRow" type="text" selector="table.data-grid tr.data-row:first-of-type"/>
         <element name="firstProductRowName" type="text" selector="table.data-grid tr.data-row:first-of-type > td:nth-of-type(4)"/>
         <element name="firstProductRowEditButton" type="button" selector="table.data-grid tr.data-row td .action-menu-item:first-of-type"/>
-        <element name="productThumbnail" type="text" selector="table.data-grid tr:nth-child({{row}}) td.data-grid-thumbnail-cell > img" parameterized="true"/>
+        <element name="productThumbnail" type="text" selector="table.data-grid tr:nth-child({{row}}) td.data-grid-thumbnail-cell > span > span > img" parameterized="true"/>
         <element name="productThumbnailBySrc" type="text" selector="img.admin__control-thumbnail[src*='{{pattern}}']" parameterized="true"/>
         <element name="productGridCell" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[normalize-space(.)='{{column}}']/preceding-sibling::th) +1 ]" parameterized="true"/>
         <element name="productGridHeaderCell" type="text" selector="//div[@data-role='grid-wrapper']//tr//th[contains(., '{{column}}')]" parameterized="true"/>

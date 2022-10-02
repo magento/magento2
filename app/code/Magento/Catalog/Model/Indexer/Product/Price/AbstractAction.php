@@ -164,13 +164,15 @@ abstract class AbstractAction
      */
     abstract public function execute($ids);
 
+    // phpcs:disable
     /**
      * Synchronize data between index storage and original storage
      *
      * @param array $processIds
      * @return AbstractAction
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated 102.0.6 Used only for backward compatibility for indexer, which not support indexation by dimensions
+     * @deprecated 102.0.6
+     * @see Used only for backward compatibility for indexer, which not support indexation by dimensions
      */
     protected function _syncData(array $processIds = [])
     {
@@ -195,6 +197,7 @@ abstract class AbstractAction
         return $this;
     }
 
+    // phpcs:enable
     /**
      * Prepare website current dates table
      *
@@ -386,31 +389,33 @@ abstract class AbstractAction
         $changedIds = array_unique(array_merge($changedIds, ...array_values($parentProductsTypes)));
         $productsTypes = array_merge_recursive($productsTypes, $parentProductsTypes);
 
-        if ($changedIds) {
+        $typeIndexers = array_filter(
+            $this->getTypeIndexers(),
+            function ($type) use ($productsTypes) {
+                return isset($productsTypes[$type]) && !empty($productsTypes[$type]);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+        if (empty($typeIndexers)) {
             $this->deleteIndexData($changedIds);
+            return $changedIds;
         }
 
-        $typeIndexers = $this->getTypeIndexers();
         foreach ($typeIndexers as $productType => $indexer) {
-            $entityIds = $productsTypes[$productType] ?? [];
-            if (empty($entityIds)) {
-                continue;
-            }
-
+            $entityIds = $productsTypes[$productType];
             if ($indexer instanceof DimensionalIndexerInterface) {
                 foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
                     $this->tableMaintainer->createMainTmpTable($dimensions);
                     $temporaryTable = $this->tableMaintainer->getMainTmpTable($dimensions);
                     $this->_emptyTable($temporaryTable);
                     $indexer->executeByDimensions($dimensions, \SplFixedArray::fromArray($entityIds, false));
-                    // copy to index
-                    $this->_insertFromTable(
-                        $temporaryTable,
-                        $this->tableMaintainer->getMainTableByDimensions($dimensions)
-                    );
+                    $mainTable = $this->tableMaintainer->getMainTableByDimensions($dimensions);
+                    $this->_insertFromTable($temporaryTable, $mainTable);
+                    $this->deleteOutdatedData($entityIds, $temporaryTable, $mainTable);
                 }
             } else {
                 // handle 3d-party indexers for backward compatibility
+                $this->deleteIndexData($changedIds);
                 $this->_emptyTable($this->_defaultIndexerResource->getIdxTable());
                 $this->_copyRelationIndexData($entityIds);
                 $indexer->reindexEntity($entityIds);
@@ -422,6 +427,30 @@ abstract class AbstractAction
     }
 
     /**
+     * Delete records that do not exist anymore
+     *
+     * @param array $entityIds
+     * @param string $temporaryTable
+     * @param string $mainTable
+     * @return void
+     */
+    private function deleteOutdatedData(array $entityIds, string $temporaryTable, string $mainTable): void
+    {
+        $joinCondition = [
+            'tmp_table.entity_id = main_table.entity_id',
+            'tmp_table.customer_group_id = main_table.customer_group_id',
+            'tmp_table.website_id = main_table.website_id',
+        ];
+        $select = $this->getConnection()->select()
+            ->from(['main_table' => $mainTable], null)
+            ->joinLeft(['tmp_table' => $temporaryTable], implode(' AND ', $joinCondition), null)
+            ->where('tmp_table.entity_id IS NULL')
+            ->where('main_table.entity_id IN (?)', $entityIds, \Zend_Db::INT_TYPE);
+        $query = $select->deleteFromSelect('main_table');
+        $this->getConnection()->query($query);
+    }
+
+    /**
      * Delete Index data index for list of entities
      *
      * @param array $entityIds
@@ -429,6 +458,7 @@ abstract class AbstractAction
      */
     private function deleteIndexData(array $entityIds)
     {
+        $entityIds = array_unique(array_map('intval', $entityIds));
         foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
             $select = $this->getConnection()->select()->from(
                 ['index_price' => $this->tableMaintainer->getMainTableByDimensions($dimensions)],
@@ -439,13 +469,15 @@ abstract class AbstractAction
         }
     }
 
+    // phpcs:disable
     /**
      * Copy relations product index from primary index to temporary index table by parent entity
      *
      * @param null|array $parentIds
      * @param array $excludeIds
      * @return \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
-     * @deprecated 102.0.6 Used only for backward compatibility for do not broke custom indexer implementation
+     * @deprecated 102.0.6
+     * @see Used only for backward compatibility for do not broke custom indexer implementation
      * which do not work by dimensions.
      * For indexers, which support dimensions all composite products read data directly from main price indexer table
      * or replica table for partial or full reindex correspondingly.
@@ -488,6 +520,7 @@ abstract class AbstractAction
         return $this;
     }
 
+    // phpcs:enable
     /**
      * Retrieve index table by dimension that will be used for write operations.
      *
