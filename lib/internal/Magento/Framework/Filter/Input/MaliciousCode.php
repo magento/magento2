@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Filter\Input;
 
+use Laminas\Filter\FilterInterface;
 use Magento\Framework\App\ObjectManager;
 
-class MaliciousCode implements \Zend_Filter_Interface
+class MaliciousCode implements FilterInterface
 {
     /**
      * @var PurifierInterface|null $purifier
@@ -41,7 +42,7 @@ class MaliciousCode implements \Zend_Filter_Interface
         //js in the style attribute
         '/style=[^<]*((expression\s*?\([^<]*?\))|(behavior\s*:))[^<]*(?=\/*\>)/Uis',
         //js attributes
-        '/(ondblclick|onclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|'.
+        '/(ondblclick|onclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|' .
         'onload|onunload|onerror)=[^<]*(?=\/*\>)/Uis',
         //tags
         '/<\/?(script|meta|link|frame|iframe|object).*>/Uis',

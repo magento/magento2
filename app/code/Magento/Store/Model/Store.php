@@ -6,6 +6,7 @@
 namespace Magento\Store\Model;
 
 use Laminas\Uri\UriFactory;
+use Laminas\Validator\ValidatorInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -197,6 +198,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @var boolean|null
      * @deprecated 101.0.0 unused protected property
+     * @see we don't recommend this approach anymore
      */
     protected $_isAdminSecure = null;
 
@@ -265,6 +267,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * @var \Magento\Framework\Session\SidResolverInterface
      * @deprecated 101.0.5 Not used anymore.
+     * @see we don't recommend this approach anymore
      */
     protected $_sidResolver;
 
@@ -471,8 +474,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Validation rules for store
      *
-     * @return \Zend_Validate_Interface|null
-     * @throws \Zend_Validate_Exception
+     * @return ValidatorInterface|null
      */
     protected function _getValidationRulesBeforeSave()
     {
@@ -1058,6 +1060,7 @@ class Store extends AbstractExtensibleModel implements
      * @throws \Exception
      * @since 100.1.3
      * @deprecated 100.1.3
+     * @see we don't recommend this approach anymore
      */
     public function afterSave()
     {
