@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -45,7 +47,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         $pAttributes = [];
         $iAttributes = [];
         foreach ($productAttributes as $code => $label) {
-            if (strpos($code, 'quote_item_') === 0) {
+            if (strpos($code, 'quote_item_') === 0 || strpos($code, 'parent::quote_item_') === 0) {
                 $iAttributes[] = [
                     'value' => \Magento\SalesRule\Model\Rule\Condition\Product::class . '|' . $code,
                     'label' => $label,
