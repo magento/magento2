@@ -11,6 +11,7 @@
     <preference for="Magento\AdminAdobeIms\Api\Data\ImsWebapiInterface" type="Magento\AdminAdobeIms\Model\ImsWebapi"/>
     <preference for="Magento\AdobeImsApi\Api\GetAccessTokenInterface" type="Magento\AdminAdobeIms\Model\GetAccessTokenProxy"/>
     <preference for="Magento\AdobeImsApi\Api\UserAuthorizedInterface" type="Magento\AdminAdobeIms\Model\UserAuthorizedProxy"/>
+    <preference for="Magento\AdminAdobeIms\Api\SaveImsUserInterface" type="Magento\AdminAdobeIms\Model\SaveImsUser"/>
 
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
@@ -64,9 +65,6 @@
         <plugin name="disable_admin_login_auth"
                 type="Magento\AdminAdobeIms\Plugin\DisableAdminLoginAuthPlugin"/>
     </type>
-
-    <preference for="Magento\AdminAdobeIms\Api\TokenReaderInterface" type="Magento\AdminAdobeIms\Model\TokenReader"/>
-
 
     <type name="Magento\Integration\Model\AdminTokenService">
         <plugin name="admin_adobe_ims_admin_token_plugin"

@@ -76,9 +76,10 @@ class FilterManagerTest extends TestCase
     public function testGetFilterFactoriesWrongInstance()
     {
         $this->expectException('UnexpectedValueException');
-        $this->expectExceptionMessage(
-            'Filter factory must implement FilterFactoryInterface interface, stdClass was given.'
-        );
+        $this->expectExceptionMessage(sprintf(
+            'Filter factory must implement %s interface, stdClass was given.',
+            \Magento\Framework\Filter\FactoryInterface::class
+        ));
         $factoryName = Factory::class;
         $this->_factoryMock = new \stdClass();
         $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);

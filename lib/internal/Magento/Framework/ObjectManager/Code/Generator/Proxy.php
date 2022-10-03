@@ -1,7 +1,5 @@
 <?php
 /**
- * Proxy generator
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,22 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\Framework\ObjectManager\Code\Generator;
 
-/**
- * Class Proxy
- *
- * @package Magento\Framework\ObjectManager\Code\Generator
- */
 class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     /**
      * Entity type
      */
-    const ENTITY_TYPE = 'proxy';
+    public const ENTITY_TYPE = 'proxy';
 
     /**
      * Marker interface
      */
-    const NON_INTERCEPTABLE_INTERFACE = \Magento\Framework\ObjectManager\NoninterceptableInterface::class;
+    public const NON_INTERCEPTABLE_INTERFACE = \Magento\Framework\ObjectManager\NoninterceptableInterface::class;
 
     /**
      * Returns default result class name
@@ -287,7 +280,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $returnTypeValue = null;
         $returnType = $method->getReturnType();
         if ($returnType) {
-            $returnTypeValue = ($returnType->allowsNull() ? '?' : '');
+            $returnTypeValue = ($returnType->allowsNull() && $returnType->getName() !== 'mixed' ? '?' : '');
             $returnTypeValue .= ($returnType->getName() === 'self')
                 ? $this->_getFullyQualifiedClassName($method->getDeclaringClass()->getName())
                 : $returnType->getName();

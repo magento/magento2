@@ -10,5 +10,13 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontMultishippingCheckoutAddressesToolbarSection">
         <element name="goToShippingInformation" type="button" selector="button.action.primary.continue"/>
+        <element name="shippingnotapplicable" type="text" selector="//td[@class='col product']//a[contains(text(),'{{var}}')]/../../..//td[@class='col address']//div" parameterized="true" />
+        <element name="shippingmethods" type="text" selector="//div[@class='block block-shipping']//div[@class='box box-items']//td[@data-th='Product Name']//a[contains(text(),'{{var}}')]" parameterized="true" />
+        <element name="otheritems" type="text" selector="//div[@class='block block-other']//div[@class='block-content']//p[contains(text(),'Shipping is not applicable.')]/..//td[@data-th='Product Name']//a[contains(text(),'{{var}}')]" parameterized="true" />
+        <element name="checkmoneyorder" type="radio" selector="//input[@id='p_method_checkmo']" />
+        <element name="checkmoneyorderonOverViewPage" type="text" selector="//dt[contains(text() , 'Check / Money order')]"/>
+        <element name="othershippingitems" type="text" selector="//div[@class='block block-other']//div/strong[contains(text(),'Other items in your order')]/../..//div[2]//td/strong/a[contains(text(),'{{var}}')]"  parameterized="true" />
+        <element name="shippingaddresstext" type="text" selector="//div[@class='box box-order-shipping-address']//span[contains(text(),'Shipping Address')]" />
     </section>
 </sections>
+
