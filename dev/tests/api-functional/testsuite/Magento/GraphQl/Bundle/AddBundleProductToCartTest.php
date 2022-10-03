@@ -397,9 +397,9 @@ QUERY;
         DataFixture(ProductFixture::class, ['sku' => 'simple-1', 'price' => 10], 'p1'),
         DataFixture(ProductFixture::class, ['sku' => 'simple2', 'price' => 20], 'p2'),
         DataFixture(BundleSelectionFixture::class, ['sku' => '$p1.sku$', 'price' => 10, 'price_type' => 0,
-            'type' => 'checkbox','required' => 1, 'delete' => ''], 'link1'),
+            'required' => 1, 'delete' => ''], 'link1'),
         DataFixture(BundleSelectionFixture::class, ['sku' => '$p2.sku$', 'price' => 25, 'price_type' => 1,
-            'type' => 'multi','required' => 1, 'delete' => ''], 'link2'),
+            'required' => 1, 'delete' => ''], 'link2'),
         DataFixture(BundleOptionFixture::class, ['product_links' => ['$link1$', '$link2$']], 'opt1'),
         DataFixture(
             BundleProductFixture::class,
