@@ -53,7 +53,6 @@ class AddressMapper implements AddressMapperInterface
      * @inheritDoc
      *
      * @throws LocalizedException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function customerCheckoutAddressMapper(
         int $cartId,
