@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
 /**
@@ -113,6 +115,7 @@ class CategoryProcessor
         if (!($parentCategory = $this->getCategoryById($parentId))) {
             $parentCategory = $this->categoryFactory->create()->load($parentId);
         }
+        $category->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
         $category->setPath($parentCategory->getPath());
         $category->setParentId($parentId);
         $category->setName($this->unquoteDelimiter($name));
