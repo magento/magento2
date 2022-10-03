@@ -1,8 +1,8 @@
 {
     "http-basic": {
         "repo.magento.com": {
-            "username": "<public-key>",
-            "password": "<private-key>"
+            "username": "engcom-Delta",
+            "password": "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"
         }
     }
 }
