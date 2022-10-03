@@ -15,6 +15,13 @@
             <argument name="WidgetType" type="string" defaultValue="Catalog Product Link"/>
             <argument name="WidgetTheme" type="string" defaultValue="Magento Luma"/>
             <argument name="WidgetDisplayOn" type="string"/>
+
+            <argument name="RootCat" type="string" defaultValue="Default Category"/>
+            <argument name="FirstSubCat" type="string"/>
+            <argument name="SecondSubCat" type="string"/>
+            <argument name="ThirdSubCat" type="string"/>
+            <argument name="FourthSubCat" type="string"/>
+            <argument name="FifthSubCat" type="string"/>
         </arguments>
         <amOnPage url="{{CmsNewWidgetsPage.url}}" stepKey="navigateToCreateWidgetsPage"/>
         <waitForPageLoad stepKey="waitForWidgetPageToLoad"/>
@@ -32,17 +39,17 @@
         <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.SpecificCategories}}" userInput="Specific Categories" stepKey="selectSpecificCategoryRadioButton"/>
         <click selector="{{CmsNewWidgetUpdateLayoutSection.CategoryChooserButton}}" stepKey="clickCategoryChooserButton"/>
         <waitForPageLoad stepKey="waitForRootCategoryToLoad"/>
-        <click selector="{{CmsNewWidgetUpdateLayoutSection.RootCat}}" stepKey="clickRootCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.RootCat(RootCat)}}" stepKey="clickRootCat"/>
         <waitForPageLoad stepKey="waitForRootCategoryToExpand"/>
-        <click selector="{{CmsNewWidgetUpdateLayoutSection.FirstSubCat}}" stepKey="clickFirstSubCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.FirstSubCat(FirstSubCat)}}" stepKey="clickFirstSubCat"/>
         <waitForPageLoad stepKey="waitForFirstSubCatToExpand"/>
-        <click selector="{{CmsNewWidgetUpdateLayoutSection.SecondSubCat}}" stepKey="expandSecondSubCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.SecondSubCat(SecondSubCat)}}" stepKey="expandSecondSubCat"/>
         <waitForPageLoad stepKey="waitForSecondSubCatToExpand"/>
-        <click selector="{{CmsNewWidgetUpdateLayoutSection.ThirdSubCat}}" stepKey="expandThirdFirstSubCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.ThirdSubCat(ThirdSubCat)}}" stepKey="expandThirdFirstSubCat"/>
         <waitForPageLoad stepKey="waitForThirdSubCatToExpand"/>
-        <click selector="{{CmsNewWidgetUpdateLayoutSection.FourthSubCat}}" stepKey="expandFourthSubCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.FourthSubCat(FourthSubCat)}}" stepKey="expandFourthSubCat"/>
         <waitForPageLoad stepKey="waitForFourthSubCatToExpand"/>
-        <click selector="{{CmsNewWidgetUpdateLayoutSection.FifthSubCat}}" stepKey="expandFifthSubCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.FifthSubCat(FifthSubCat)}}" stepKey="expandFifthSubCat"/>
         <waitForPageLoad stepKey="waitForFifthSubCatToExpand"/>
         <grabMultiple selector="{{CmsNewWidgetUpdateLayoutSection.CountAllNestedCat}}" stepKey="countNestedCategory"/>
         <assertCount stepKey="check">

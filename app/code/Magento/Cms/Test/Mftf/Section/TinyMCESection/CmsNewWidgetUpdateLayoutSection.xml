@@ -14,12 +14,12 @@
         <element name="Template" type="button" selector="#all_pages_0 > table > tbody > tr > td:nth-child(2) > div > div > select"/>
         <element name="SpecificCategories" type="button" selector="//input[@id='specific_anchor_categories_0']"/>
         <element name="CategoryChooserButton" type="button" selector="//*[@id='anchor_categories_ids_0']/p/a[1]/img"/>
-        <element name="RootCat" type="button" selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']"/>
-        <element name="FirstSubCat" type="button" selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']"/>
-        <element name="SecondSubCat" type="button" selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']"/>
-        <element name="ThirdSubCat" type="button" selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']"/>
-        <element name="FourthSubCat" type="button" selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']"/>
-        <element name="FifthSubCat" type="button" selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']"/>
+        <element name="RootCat" type="button" selector="//a/span[contains(text(),'{{var}}')]/../..//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" parameterized="true"/>
+        <element name="FirstSubCat" type="button" selector="//a/span[contains(text(),'{{var1}}')]/../..//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" parameterized="true"/>
+        <element name="SecondSubCat" type="button" selector="//a/span[contains(text(),'{{var2}}')]/../..//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" parameterized="true"/>
+        <element name="ThirdSubCat" type="button" selector="//a/span[contains(text(),'{{var3}}')]/../..//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" parameterized="true"/>
+        <element name="FourthSubCat" type="button" selector="//a/span[contains(text(),'{{var4}}')]/../..//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" parameterized="true"/>
+        <element name="FifthSubCat" type="button" selector="//a/span[contains(text(),'{{var5}}')]/../..//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" parameterized="true"/>
         <element name="CountAllNestedCat" type="button" selector="//*[@class='x-tree-ec-icon x-tree-elbow-end-minus' or @class='x-tree-ec-icon x-tree-elbow-end']"/>
     </section>
 </sections>
