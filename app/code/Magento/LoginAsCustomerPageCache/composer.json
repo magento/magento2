@@ -2,7 +2,7 @@
     "name": "magento/module-login-as-customer-page-cache",
     "description": "",
     "require": {
-        "php": "~7.4.0||~8.1.0",
+        "php": "^7.4||^8.1",
         "magento/framework": "*",
         "magento/module-store": "*",
         "magento/module-login-as-customer-api": "*"

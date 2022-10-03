@@ -3,7 +3,7 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~7.4.0||~8.1.0",
+        "php": "^7.4||^8.1",
         "magento/module-store": "*",
         "magento/module-catalog": "*",
         "magento/module-downloadable": "*",

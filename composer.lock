@@ -4310,7 +4310,7 @@
             },
             "require": {
                 "composer/composer": "^1.9 || ^2.0",
-                "php": "~7.4.0||~8.1.0",
+                "php": "^7.4||^8.1",
                 "symfony/console": "~4.4.0||~5.4.0"
             },
             "require-dev": {
