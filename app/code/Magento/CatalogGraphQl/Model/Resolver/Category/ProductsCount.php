@@ -71,6 +71,11 @@ class ProductsCount implements ResolverInterface
         }
         /** @var Category $category */
         $category = $value['model'];
+        $isAnchored = $category->getIsAnchor();
+        if (!empty($value['id']) && !$isAnchored) {
+            $isAnchored = $this->categoryRepository->get($value['id'])->getIsAnchor();
+        }
+        $category->setIsAnchor($isAnchored);
         $productsCollection = $category->getProductCollection();
         $productsCollection->setVisibility($this->catalogProductVisibility->getVisibleInSiteIds());
         $productsCollection = $this->collectionProcessor->process(
