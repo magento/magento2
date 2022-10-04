@@ -9,6 +9,7 @@
     "config": {
         "sort-packages": true
     },
+    "version": "103.0.4-p2",
     "require": {
         "php": "~7.4.0||~8.1.0",
         "ext-bcmath": "*",
@@ -35,7 +36,7 @@
         "laminas/laminas-uri": "^2.9.1",
         "laminas/laminas-validator": "^2.15.0",
         "magento/zendframework1": "~1.15.0",
-        "monolog/monolog": "^2.3",
+        "monolog/monolog": "^2.7",
         "ramsey/uuid": "~4.2.0",
         "symfony/console": "~4.4.0",
         "symfony/process": "~4.4.0",
@@ -55,11 +56,12 @@
         "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"
     },
     "autoload": {
-        "psr-4": {
-            "Magento\\Framework\\": ""
-        },
         "files": [
             "registration.php"
-        ]
+        ],
+        "psr-4": {
+            "Magento\\Framework\\": ""
+        }
     }
 }
+

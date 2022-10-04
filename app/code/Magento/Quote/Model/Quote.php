@@ -5,6 +5,7 @@
  */
 namespace Magento\Quote\Model;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Directory\Model\AllowedCountries;
@@ -112,7 +113,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Checkout login method key
      */
-    const CHECKOUT_METHOD_LOGIN_IN = 'login_in';
+    public const CHECKOUT_METHOD_LOGIN_IN = 'login_in';
 
     /**
      * @var string
@@ -172,15 +173,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $_preventSaving = false;
 
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $_catalogProduct;
 
     /**
-     * Quote validator
-     *
      * @var \Magento\Quote\Model\QuoteValidator
      */
     protected $quoteValidator;
@@ -213,8 +210,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $_customerFactory;
 
     /**
-     * Group repository
-     *
      * @var \Magento\Customer\Api\GroupRepositoryInterface
      */
     protected $groupRepository;
@@ -260,22 +255,16 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $_objectCopyService;
 
     /**
-     * Address repository
-     *
      * @var \Magento\Customer\Api\AddressRepositoryInterface
      */
     protected $addressRepository;
 
     /**
-     * Search criteria builder
-     *
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * Filter builder
-     *
      * @var \Magento\Framework\Api\FilterBuilder
      */
     protected $filterBuilder;
@@ -874,7 +863,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Loading quote data by customer
      *
      * @param \Magento\Customer\Model\Customer|int $customer
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 Deprecated to handle external usages of customer methods
+     * @see https://jira.corp.magento.com/browse/MAGETWO-19935
      * @return $this
      */
     public function loadByCustomer($customer)
@@ -1356,7 +1346,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $old = $this->getAddressesCollection()->getItemById($address->getId())
             ?? $this->getBillingAddress();
-        if (!empty($old)) {
+        if ($old) {
             $old->addData($address->getData());
         } else {
             $this->addAddress($address->setAddressType(Address::TYPE_BILLING));
@@ -1378,7 +1368,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         } else {
             $old = $this->getAddressesCollection()->getItemById($address->getId())
                 ?? $this->getShippingAddress();
-            if (!empty($old)) {
+            if ($old) {
                 $old->addData($address->getData());
             } else {
                 $this->addAddress($address->setAddressType(Address::TYPE_SHIPPING));
@@ -1427,12 +1417,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     public function getAllItems()
     {
         $items = [];
+        /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($this->getItemsCollection() as $item) {
-            /** @var \Magento\Quote\Model\Quote\Item $item */
-            if (!$item->isDeleted()) {
+            $product = $item->getProduct();
+            if (!$item->isDeleted() && ($product && (int)$product->getStatus() !== ProductStatus::STATUS_DISABLED)) {
                 $items[] = $item;
             }
         }
+
         return $items;
     }
 

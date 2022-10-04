@@ -9,8 +9,11 @@ namespace Magento\Framework\Filter\Test\Unit;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Filter\Template;
+use Magento\Framework\Filter\Template\SignatureProvider;
+use Magento\Framework\Filter\Template\FilteringDepthMeter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,11 +31,43 @@ class TemplateTest extends TestCase
      */
     private $store;
 
+    /**
+     * @var SignatureProvider|MockObject
+     */
+    protected $signatureProvider;
+
+    /**
+     * @var FilteringDepthMeter|MockObject
+     */
+    protected $filteringDepthMeter;
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->templateFilter = $objectManager->getObject(Template::class);
+
         $this->store = $objectManager->getObject(Store::class);
+
+        $this->signatureProvider = $this->createPartialMock(
+            SignatureProvider::class,
+            ['get']
+        );
+
+        $this->signatureProvider->expects($this->any())
+            ->method('get')
+            ->willReturn('Z0FFbeCU2R8bsVGJuTdkXyiiZBzsaceV');
+
+        $this->filteringDepthMeter = $this->createPartialMock(
+            FilteringDepthMeter::class,
+            ['showMark']
+        );
+
+        $this->templateFilter = $objectManager->getObject(
+            Template::class,
+            [
+                'signatureProvider' => $this->signatureProvider,
+                'filteringDepthMeter' => $this->filteringDepthMeter
+            ]
+        );
     }
 
     /**
@@ -43,6 +78,10 @@ class TemplateTest extends TestCase
     {
         $value = 'test string';
         $expectedResult = 'TEST STRING';
+
+        $this->filteringDepthMeter->expects($this->any())
+            ->method('showMark')
+            ->willReturn(1);
 
         // Build arbitrary object to pass into the addAfterFilterCallback method
         $callbackObject = $this->getMockBuilder('stdObject')
@@ -71,6 +110,10 @@ class TemplateTest extends TestCase
     {
         $value = 'test string';
         $expectedResult = 'TEST STRING';
+
+        $this->filteringDepthMeter->expects($this->any())
+            ->method('showMark')
+            ->willReturn(1);
 
         // Build arbitrary object to pass into the addAfterFilterCallback method
         $callbackObject = $this->getMockBuilder('stdObject')
@@ -127,7 +170,7 @@ TEMPLATE;
 <ul>
 {{for in order.all_visible_items}}
     <li>
-         name: , lastname: , age: 
+         name: , lastname: , age:
     </li>
 {{/for}}
 </ul>
@@ -137,14 +180,14 @@ TEMPLATE;
                 $template = <<<TEMPLATE
 <ul>
 {{for in order.all_visible_items}}
-    
+
 {{/for}}
 </ul>
 TEMPLATE;
                 $expected = <<<TEMPLATE
 <ul>
 {{for in order.all_visible_items}}
-    
+
 {{/for}}
 </ul>
 TEMPLATE;
@@ -153,14 +196,14 @@ TEMPLATE;
                 $template = <<<TEMPLATE
 <ul>
 {{for in }}
-    
+
 {{/for}}
 </ul>
 TEMPLATE;
                 $expected = <<<TEMPLATE
 <ul>
 {{for in }}
-    
+
 {{/for}}
 </ul>
 TEMPLATE;
@@ -178,17 +221,17 @@ TEMPLATE;
 TEMPLATE;
                 $expected = <<<TEMPLATE
 <ul>
-    
+
     <li>
         index: 0 sku: ABC123
         name: Product ABC price: 123 quantity: 2
     </li>
-    
+
     <li>
         index: 1 sku: DOREMI
         name: Product DOREMI price: 456 quantity: 1
     </li>
-    
+
 </ul>
 TEMPLATE;
         }
