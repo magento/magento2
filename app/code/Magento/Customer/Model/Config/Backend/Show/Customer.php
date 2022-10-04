@@ -20,6 +20,8 @@ use Magento\Framework\App\ObjectManager;
  */
 class Customer extends \Magento\Framework\App\Config\Value
 {
+    public const XML_PATH_CUSTOMER_ADDRESS_SHOW_COMPANY = 'customer/address/company_show';
+
     /**
      * @var \Magento\Eav\Model\Config
      */
