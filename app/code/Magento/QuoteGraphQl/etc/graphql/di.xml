@@ -12,8 +12,6 @@
                 type="Magento\QuoteGraphQl\Model\Cart\SetShippingMethodsOnCart"/>
     <preference for="Magento\QuoteGraphQl\Model\Cart\MergeCarts\CartQuantityValidatorInterface"
                 type="Magento\QuoteGraphQl\Model\Cart\MergeCarts\CartQuantityValidator"/>
-    <preference for="Magento\QuoteGraphQl\Model\Cart\PlaceOrderMutexInterface"
-                type="Magento\QuoteGraphQl\Model\Cart\PlaceOrderMutex" />
     <type name="Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder">
         <arguments>
             <argument name="providers" xsi:type="array">
