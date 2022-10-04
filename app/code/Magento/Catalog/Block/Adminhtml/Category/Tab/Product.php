@@ -9,8 +9,6 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-declare(strict_types=1);
-
 namespace Magento\Catalog\Block\Adminhtml\Category\Tab;
 
 use Magento\Backend\Block\Widget\Grid;
