@@ -8,14 +8,18 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\ProductRepository;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Gallery\DeleteValidator;
 use Magento\Catalog\Model\Product\Gallery\Processor;
 use Magento\Catalog\Model\Product\Media\Config;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
+use Magento\Store\Model\Store;
 
 /**
  * Process Media gallery data for ProductRepository before save product.
@@ -37,25 +41,31 @@ class MediaGalleryProcessor
     private $contentFactory;
 
     /**
-     * Image processor.
-     *
      * @var ImageProcessorInterface
      */
     private $imageProcessor;
 
     /**
+     * @var DeleteValidator
+     */
+    private $deleteValidator;
+
+    /**
      * @param Processor $processor
      * @param ImageContentInterfaceFactory $contentFactory
      * @param ImageProcessorInterface $imageProcessor
+     * @param DeleteValidator|null $deleteValidator
      */
     public function __construct(
         Processor $processor,
         ImageContentInterfaceFactory $contentFactory,
-        ImageProcessorInterface $imageProcessor
+        ImageProcessorInterface $imageProcessor,
+        ?DeleteValidator $deleteValidator = null
     ) {
         $this->processor = $processor;
         $this->contentFactory = $contentFactory;
         $this->imageProcessor = $imageProcessor;
+        $this->deleteValidator = $deleteValidator ?? ObjectManager::getInstance()->get(DeleteValidator::class);
     }
 
     /**
@@ -103,7 +113,7 @@ class MediaGalleryProcessor
                         // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
                     }
-                } else {
+                } elseif ($this->canRemoveImage($product, $existingEntry)) {
                     //set the removed flag
                     $existingEntry['removed'] = true;
                 }
@@ -253,5 +263,18 @@ class MediaGalleryProcessor
                 $this->processor->setMediaAttribute($product, $image['types'], $image['file']);
             }
         }
+    }
+
+    /**
+     * Check whether the image can be removed
+     *
+     * @param ProductInterface $product
+     * @param array $image
+     * @return bool
+     */
+    private function canRemoveImage(ProductInterface $product, array $image): bool
+    {
+        return !isset($image['file'])
+            || !$this->deleteValidator->validate($product, $image['file']);
     }
 }
