@@ -20,11 +20,6 @@ class PrecursorComposite implements PrecursorInterface
     private $precursors = [];
 
     /**
-     * @var array
-     */
-    private $errors = [];
-
-    /**
      * @param array $precursors
      */
     public function __construct(array $precursors)
@@ -33,19 +28,18 @@ class PrecursorComposite implements PrecursorInterface
     }
 
     /**
-     * @inheirtdoc
+     * @inheritdoc
      */
     public function process(array $cartItemData, ContextInterface $context): array
     {
         foreach ($this->precursors as $precursor) {
             $cartItemData = $precursor->process($cartItemData, $context);
-            array_merge($this->errors, $precursor->getErrors());
         }
         return $cartItemData;
     }
 
     /**
-     * @inheirtdoc
+     * @inheritdoc
      */
     public function getErrors(): array
     {

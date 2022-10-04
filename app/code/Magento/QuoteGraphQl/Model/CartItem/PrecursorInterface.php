@@ -19,8 +19,9 @@ interface PrecursorInterface extends ItemDataProcessorInterface
     /**
      * Preprocess cart items for Graphql request.
      *
-     * @param ContextInterface $context
      * @param array $cartItemData
+     * @param ContextInterface $context
+     *
      * @return array
      */
     public function process(array $cartItemData, ContextInterface $context): array;
