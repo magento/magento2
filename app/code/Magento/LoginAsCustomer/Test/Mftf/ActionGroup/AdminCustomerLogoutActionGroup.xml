@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCustomerLogoutActionGroup">
+        <annotations>
+            <description>>Admin Customer Logout from the page.</description>
+        </annotations>
+        <click selector="{{AdminLoginAsCustomerConfirmationModalSection.onArrow}}" stepKey="clickOnArrow"/>
+        <click selector="{{AdminLoginAsCustomerConfirmationModalSection.onSignOut}}" stepKey="clickOnSignOut"/>
+    </actionGroup>
+</actionGroups>

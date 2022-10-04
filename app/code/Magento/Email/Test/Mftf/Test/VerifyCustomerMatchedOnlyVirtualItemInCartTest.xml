@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyCustomerMatchedOnlyVirtualItemInCartTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Verify that customer is matched only if cart has virtual item, Email Remainde"/>
+            <title value="Verify that customer is matched only if cart has virtual item, Email Remainde"/>
+            <description value="Verify that customer is matched only if cart has virtual item, Email Remainde"/>
+            <severity value="MAJOR"></severity>
+            <testCaseId value="AC-5811"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Customer John.Doe@example.com is created.-->
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+
+            <!--Customer Jane.Doe@example.com is created.-->
+            <createData entity="Simple_GB_Customer" stepKey="customer2"/>
+
+            <!--Simple product is created.-->
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+
+            <!--Virtual product is created.-->
+            <createData entity="VirtualProduct" stepKey="virtualProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+
+            <!-- johndoe has 1 virtual prduct in cart-->
+            <!-- Login as customer -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+                <argument name="Customer" value="$$customer$$"/>
+            </actionGroup>
+
+            <!-- Add product to shopping cart -->
+            <amOnPage url="{{StorefrontProductPage.url($$virtualProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToToPDP"/>
+            <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addVirtualProductToCart">
+                <argument name="productQty" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminCustomerLogoutActionGroup" stepKey="clickOnSignOut"/>
+
+            <!--JaneDoe has 1 simple product in cart-->
+            <!-- Login as customer -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontWithNewCustomer">
+                <argument name="Customer" value="$$customer2$$"/>
+            </actionGroup>
+
+            <!-- Add product to shopping cart -->
+            <amOnPage url="{{StorefrontProductPage.url($$product.custom_attributes[url_key]$$)}}" stepKey="navigateToToPDPAgain"/>
+            <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addSimpleProductToCart">
+                <argument name="productQty" value="1"/>
+            </actionGroup>
+        </before>
+
+        <!-- Create new rule, condition and clicking on run now -->
+        <amOnPage url="{{AdminEmailReminderPage.url}}" stepKey="navigateToDesignConfigPage" />
+        <waitForPageLoad stepKey="waitForPageLoadToViewDesignConfigPage"/>
+        <actionGroup ref="AdminEmailReminderRuleActionGroup" stepKey="createNewRule"/>
+        <actionGroup ref="AdminEmailReminderConditionsActionGroup" stepKey="createConditions"/>
+        <actionGroup ref="AdminEmailReminderRunNowActionGroup" stepKey="clickonRunNow"/>
+
+        <!-- Match the customer in grid/>-->
+        <actionGroup ref="AdminEmailReminderMatchedCustomersActionGroup" stepKey="validateEmailid">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <after>
+            <actionGroup ref="AdminDeleteEmailReminderRuleActionGroup" stepKey="deleteTheRule"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="virtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

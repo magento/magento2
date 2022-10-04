@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEmailReminderRunNowActionGroup">
+        <annotations>
+            <description>click on Run now and goto Matched Customers options.</description>
+        </annotations>
+        <click selector="{{AdminEmailReminderSection.runNow}}" stepKey="clickOnRunNow"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{AdminEmailReminderSection.ok}}" stepKey="clickOnPlusButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <click selector="{{AdminEmailReminderSection.matchedCustomers}}" stepKey="clickOnMatchedCustomers"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+    </actionGroup>
+</actionGroups>

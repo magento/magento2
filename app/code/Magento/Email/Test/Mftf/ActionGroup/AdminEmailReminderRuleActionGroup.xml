@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEmailReminderRuleActionGroup">
+    <annotations>
+        <description>Create an New Rule, and click on save And Continue Edit it</description>
+    </annotations>
+        <click selector="{{AdminEmailReminderSection.addNewRule}}" stepKey="clickAddNewRule"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <fillField selector="{{AdminEmailReminderSection.ruleName}}" userInput="Test Rule" stepKey="enterRuleName"/>
+        <click selector="{{AdminEmailReminderSection.saveAndContinueEdit}}" stepKey="clickOnSaveAndContinueEdit"/>
+        <see userInput="You saved the reminder rule." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEmailReminderConditionsActionGroup">
+        <annotations>
+            <description>Create Conditions and click save And Continue Edit it.</description>
+        </annotations>
+        <click selector="{{AdminEmailReminderSection.conditions}}" stepKey="clickOnConditions"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{AdminEmailReminderSection.clickAdd}}" stepKey="clickOnPlusButton"/>
+        <click selector="{{AdminEmailReminderSection.chooseCart}}" stepKey="clickOnchooseCartOption"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <click selector="{{AdminEmailReminderSection.clickOnPlus}}"  stepKey="clickOnPlusAgain"/>
+        <click selector="{{AdminEmailReminderSection.chooseVirtualOnly}}"  stepKey="clickOnChooseVirtualOnly"/>
+        <click selector="{{AdminEmailReminderSection.saveAndContinueEdit}}" stepKey="clickOnSaveAndContinueEdit"/>
+        <see userInput="You saved the reminder rule." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEmailReminderMatchedCustomersActionGroup">
+        <annotations>
+            <description>Validatte custimer email id .</description>
+        </annotations>
+        <arguments>
+            <argument name="Customer"/>
+        </arguments>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{Customer.email}}" selector="{{AdminEmailReminderSection.emailCustomer}}" stepKey="fillSearchEmailField"/>
+        <click selector="{{AdminDataGridHeaderSection.searchButton}}" stepKey="clickSearchButton"/>
+        <seeElement selector="{{AdminEmailReminderSection.emailId(Customer.email)}}" stepKey="seeExistingCustomerId"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <see userInput="You matched the reminder rule." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>
