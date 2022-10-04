@@ -11,7 +11,7 @@ Before installing this module, note that the Magento_GroupedProductGraphQl is de
 - Magento_Store
 - Magento_CatalogGraphQlr
 
-For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about a module installation in Magento 2, see [Enable or disable modules](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
 
 ## Additional information
 

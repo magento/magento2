@@ -4,19 +4,19 @@ This module allows the Customer to place the order in seconds without going thro
 
 ## Installation
 
-For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about a module installation in Magento 2, see [Enable or disable modules](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
 
 ## Structure
 
 `PaymentMethodsIntegration` - directory contains interfaces and basic implementation of integration vault payment method to the instant purchase.
 
-For information about a typical file structure of a module in Magento 2, see [Module file structure](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+For information about a typical file structure of a module in Magento 2, see [Module file structure](https://developer.adobe.com/commerce/php/development/build/component-file-structure/#module-file-structure).
 
 ## Extensibility
 
-Extension developers can interact with the Magento_InstantPurchase module. For more information about the Magento extension mechanism, see [Magento plugins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+Extension developers can interact with the Magento_InstantPurchase module. For more information about the Magento extension mechanism, see [Magento plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_InstantPurchase module.
+[The Magento dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_InstantPurchase module.
 
 ### Public APIs
 
@@ -47,7 +47,7 @@ Extension developers can interact with the Magento_InstantPurchase module. For m
 - `\Magento\InstantPurchase\PaymentMethodIntegration\PaymentTokenFormatterInterface`
     - provides mechanism to create string presentation of token for payment method
 
-For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
+For information about a public API in Magento 2, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
 ## Additional information
 
@@ -59,7 +59,7 @@ All payments created for instant purchase also have `'instant-purchase' => true`
 
 ### Payment method integration
 
-Instant purchase support may be implemented for any payment method with [vault support](https://devdocs.magento.com/guides/v2.4/payments-integrations/vault/vault-intro.html).
+Instant purchase support may be implemented for any payment method with [vault support](https://developer.adobe.com/commerce/php/development/payments-integrations/vault/).
 Basic implementation provided in `Magento\InstantPurchase\PaymentMethodIntegration` should be enough in most cases. It is not enabled by default to avoid issues on production sites and authors of vault payment method should verify correct work for instant purchase manually.
 To enable basic implementation just add single option to configuration of payemnt method in `config.xml`:
 

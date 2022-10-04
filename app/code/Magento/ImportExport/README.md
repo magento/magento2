@@ -11,19 +11,19 @@ The Magento_ImportExport module creates the following tables in the database:
 
 All database schema changes made by this module are rolled back when the module gets disabled and setup:upgrade command is run.
 
-For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about a module installation in Magento 2, see [Enable or disable modules](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
 
 ## Structure
 
 `Files/` - the directory that contains sample import files.
 
-For information about a typical file structure of a module in Magento 2, see [Module file structure](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+For information about a typical file structure of a module in Magento 2, see [Module file structure](https://developer.adobe.com/commerce/php/development/build/component-file-structure/#module-file-structure).
 
 ## Extensibility
 
-Extension developers can interact with the Magento_ImportExport module. For more information about the Magento extension mechanism, see [Magento plugins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+Extension developers can interact with the Magento_ImportExport module. For more information about the Magento extension mechanism, see [Magento plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_ImportExport module.
+[The Magento dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_ImportExport module.
 
 ### Layouts
 
@@ -38,7 +38,7 @@ This module introduces the following layout handles in the `view/frontend/layout
 - `adminhtml_import_start`
 - `adminhtml_import_validate`
 
-For more information about a layout in Magento 2, see the [Layout documentation](http://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
+For more information about a layout in Magento 2, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
 
 ### UI components
 
@@ -46,7 +46,7 @@ You can extend an export updates using the configuration files located in the `v
 
 - `export_grid` 
 
-For information about a UI component in Magento 2, see [Overview of UI components](http://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component in Magento 2, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
 
 ### Public APIs
 
@@ -59,7 +59,7 @@ For information about a UI component in Magento 2, see [Overview of UI component
 - `\Magento\ImportExport\Api\ExportManagementInterface`
     - Executing actual export and returns export data
 
-For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
+For information about a public API in Magento 2, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
 ## Additional information
 
@@ -67,7 +67,7 @@ For information about a public API in Magento 2, see [Public interfaces & APIs](
 
 - `exportProcessor` - consumer to run export process
 
-[Learn how to manage Message Queues](https://devdocs.magento.com/guides/v2.4/config-guide/mq/manage-message-queues.html).
+[Learn how to manage Message Queues](https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/message-queues/manage-message-queues.html).
 
 #### Create custom import entity
 
@@ -80,6 +80,6 @@ For information about a public API in Magento 2, see [Public interfaces & APIs](
 2. Create an export model
 
 You can get more information about import/export processes in magento at the articles:
-- [Create custom import entity](https://devdocs.magento.com/guides/v2.4/ext-best-practices/tutorials/custom-import-entity.html)
+- [Create custom import entity](https://developer.adobe.com/commerce/php/tutorials/backend/create-custom-import-entity/)
 - [Import](https://docs.magento.com/user-guide/system/data-import.html)
 - [Export](https://docs.magento.com/user-guide/system/data-export.html)

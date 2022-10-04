@@ -19,7 +19,7 @@ because they use models and blocks from Magento_Msrp module:
 - `\Magento\Msrp\Model\Product\Attribute\Source\Type\Price`
 - `\Magento\Msrp\Block\Adminhtml\Product\Helper\Form\Type\Price`
 
-For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about a module installation in Magento 2, see [Enable or disable modules](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
 
 ## Structure
 `Pricing\` - directory contains interfaces and implementation for msrp pricing calculations
@@ -31,7 +31,7 @@ For information about a module installation in Magento 2, see [Enable or disable
 `Pricing\Renderer\` - contains price renderers implementations.
 
 For information about a typical file structure of a module in Magento 2,
- see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+ see [Module file structure](https://developer.adobe.com/commerce/php/development/build/component-file-structure/#module-file-structure).
  
 ## Extensibility
  
@@ -50,11 +50,11 @@ For information about a typical file structure of a module in Magento 2,
        </arguments>
    </type>
 ``` 
- More information about [type configuration](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/di-xml-file.html).
+ More information about [type configuration](https://developer.adobe.com/commerce/php/development/build/dependency-injection-file/).
  
- Extension developers can interact with the Magento_Msrp module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+ Extension developers can interact with the Magento_Msrp module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_Msrp module.
+[The Magento dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_Msrp module.
 
 ### Events
 
@@ -70,7 +70,7 @@ This module observes the following event:
 `etc/webapi_soap`
  - `sales_quote_collect_totals_after` in the `Magento\Msrp\Observer\Frontend\Quote\SetCanApplyMsrpObserver` file. 
 
-For information about an event in Magento 2, see [Events and observers](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
+For information about an event in Magento 2, see [Events and observers](https://developer.adobe.com/commerce/php/development/components/events-and-observers/).
 
 ### Layouts
 

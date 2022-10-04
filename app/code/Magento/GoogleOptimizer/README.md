@@ -11,13 +11,13 @@ Before installing this module, note that the Magento_GoogleOptimizer is dependen
 - `Magento_Cms`
 - `Magento_Ui`
 
-For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about a module installation in Magento 2, see [Enable or disable modules](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
 
 ## Extensibility
 
-Extension developers can interact with the Magento_GoogleOptimizer module. For more information about the Magento extension mechanism, see [Magento plugins](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+Extension developers can interact with the Magento_GoogleOptimizer module. For more information about the Magento extension mechanism, see [Magento plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_GoogleOptimizer module.
+[The Magento dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_GoogleOptimizer module.
 
 ### Layouts
 
@@ -30,7 +30,7 @@ This module introduces the following layouts in the `view/frontend/layout` and `
     - `catalog_product_view`
     - `cms_page_view`
 
-For more information about a layout in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
+For more information about a layout in Magento 2, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
 
 ### UI components
 
@@ -39,7 +39,7 @@ This module extends following ui components located in the `view/adminhtml/ui_co
 - `cms_page_form`
 - `new_category_form`
 
-For information about a UI component in Magento 2, see [Overview of UI components](http://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component in Magento 2, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
 
 ## Additional information 
 
@@ -51,4 +51,4 @@ This allows to save different codes for products and categories on different sto
 This functionality can be switched on and off on the configuration page (`Stores -> Configuration -> General -> Google Api -> Google Analytics`).
 Also this functionality depends on Google Analytics module and configuration options.
 
-[Learn how to configure Google Content Experiments](https://docs.magento.com/user-guide/marketing/google-content-experiments.html).
+[Learn how to configure Google Content Experiments](https://experienceleague.adobe.com/docs/commerce-admin/marketing/google-tools/google-content-experiments.html).

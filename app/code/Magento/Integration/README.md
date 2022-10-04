@@ -21,13 +21,13 @@ The Magento_Integration module creates the following tables in the database:
 - `integration`
 - `oauth_token_request_log`
 
-For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about a module installation in Magento 2, see [Enable or disable modules](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
 
 ## Extensibility
 
-Extension developers can interact with the Magento_Integration module. For more information about the Magento extension mechanism, see [Magento plugins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+Extension developers can interact with the Magento_Integration module. For more information about the Magento extension mechanism, see [Magento plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_Integration module.
+[The Magento dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_Integration module.
 
 ### Events
 
@@ -37,7 +37,7 @@ The module dispatches the following events:
 - `customer_login` event in the `\Magento\Integration\Model\CustomerTokenService::createCustomerAccessToken` method. Parameters:
     - `customer` is an object (`\Magento\Customer\Api\Data\CustomerInterface` class)
 
-For information about an event in Magento 2, see [Events and observers](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
+For information about an event in Magento 2, see [Events and observers](https://developer.adobe.com/commerce/php/development/components/events-and-observers/).
 
 ### Layouts
 
@@ -51,7 +51,7 @@ This module introduces the following layout handles in the `view/adminhtml/layou
 - `adminhtml_integration_tokensdialog`
 - `adminhtml_integration_tokensexchange`
 
-For more information about a layout in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
+For more information about a layout in Magento 2, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
 
 ### Public APIs
 
@@ -88,7 +88,7 @@ For more information about a layout in Magento 2, see the [Layout documentation]
     - delete the consumer data associated with the integration including its token and nonce
     - remove token associated with provided consumer
 
-For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
+For information about a public API in Magento 2, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
 ## Additional information
 
@@ -98,8 +98,8 @@ Cron group configuration can be set at `etc/crontab.xml`:
 - `outdated_authentication_failures_cleanup` - clearing log of outdated token request authentication failures
 - `expired_tokens_cleanups` - delete expired customer and admin tokens
 
-[Learn how to configure and run cron in Magento.](http://devdocs.magento.com/guides/v2.4/config-guide/cli/config-cli-subcommands-cron.html).
+[Learn how to configure and run cron in Magento.](https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/cli/configure-cron-jobs.html).
 
 More information can get at articles:
 - [Learn more about an Integration](https://docs.magento.com/user-guide/system/integrations.html)
-- [Lear how to create an Integration](https://devdocs.magento.com/guides/v2.4/get-started/create-integration.html)
+- [Lear how to create an Integration](https://developer.adobe.com/commerce/webapi/get-started/create-integration/)

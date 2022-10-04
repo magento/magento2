@@ -4,7 +4,7 @@ Magento_EavGraphQl module extends Magento_GraphQl and Magento_Eav modules to pro
 
 ## Installation details
 
-For information about enabling or disabling a module in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about enabling or disabling a module in Magento 2, see [Enable or disable modules](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
 
 ## Additional information
 

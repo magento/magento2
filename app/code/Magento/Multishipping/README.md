@@ -5,12 +5,12 @@ using different carriers. The module provides alternative to standard checkout f
 
 ## Installation
 
-For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about a module installation in Magento 2, see [Enable or disable modules](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
 
 ## Structure
 
 For information about a typical file structure of a module in Magento 2,
- see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+ see [Module file structure](https://developer.adobe.com/commerce/php/development/build/component-file-structure/#module-file-structure).
  
  ## Extensibility
 
@@ -29,12 +29,12 @@ For example:
 ```
 Yo can check this configuration and find more examples in the `etc/frontend/di.xml` file.
  
-More information about [type configuration](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/di-xml-file.html).
+More information about [type configuration](https://developer.adobe.com/commerce/php/development/build/dependency-injection-file/).
 
 
-Extension developers can interact with the Magento_Multishipping module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+Extension developers can interact with the Magento_Multishipping module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_Msrp module.
+[The Magento dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_Msrp module.
 
 ### Events
 
@@ -69,7 +69,7 @@ The module dispatches the following events:
   class `\Magento\Multishipping\Model\Checkout\Type\Multishipping::createOrders()` method. Parameters:
     - `orders` is order object array `\Magento\Sales\Model\Order`  that was created.
 
-For information about an event in Magento 2, see [Events and observers](http://devdocs.magento.com/guides/v2.3/extension-dev-guide/events-and-observers.html#events).
+For information about an event in Magento 2, see [Events and observers](https://developer.adobe.com/commerce/php/development/components/events-and-observers/).
 
 ### Layouts
 
@@ -109,7 +109,7 @@ Module introduces the following resources:
 
 - `Magento_Multishipping::config_multishipping` - Multishipping Settings Section
 
-More information about [Access Control List rule](https://devdocs.magento.com/guides/v2.4/ext-best-practices/tutorials/create-access-control-list-rule.html).
+More information about [Access Control List rule](https://developer.adobe.com/commerce/php/tutorials/backend/create-access-control-list-rule/).
 
 ### Page Types
 
@@ -133,7 +133,7 @@ Module introduces the new pages:
 - `checkout_cart_multishipping_shipping` - Multishipping Checkout Shipping Information Step
 - `checkout_cart_multishipping_success` - Multishipping Checkout Success
 
-More information about [layout types](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-types.html).
+More information about [layout types](https://developer.adobe.com/commerce/frontend-core/guide/layouts/types/).
 
 
-For information about significant changes in patch releases, see [2.3.x Release information](http://devdocs.magento.com/guides/v2.3/release-notes/bk-release-notes.html).
+For information about significant changes in patch releases, see [2.4.x Release information](https://devdocs.magento.com/guides/v2.4/release-notes/bk-release-notes.html).
