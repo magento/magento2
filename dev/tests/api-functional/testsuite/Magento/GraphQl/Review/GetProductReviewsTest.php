@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
+declare( strict_types=1 );
 
 namespace Magento\GraphQl\Review;
 
@@ -19,6 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
  * Test coverage for product reviews queries
@@ -56,8 +57,7 @@ class GetProductReviewsTest extends GraphQlAbstract
      */
     public function testProductReviewRatingsMetadata()
     {
-        $query
-            = <<<QUERY
+        $query = <<<QUERY
 {
   productReviewRatingsMetadata {
     items {
@@ -72,10 +72,10 @@ class GetProductReviewsTest extends GraphQlAbstract
 }
 QUERY;
         $expectedRatingItems = [
-            [
-                'id' => 'Mw==',
-                'name' => 'Price',
-                'values' => [
+        [
+        'id' => 'Mw==',
+        'name' => 'Price',
+        'values' => [
                     [
                         'value_id' => 'MTE=',
                         'value' => "1"
@@ -92,11 +92,11 @@ QUERY;
                         'value_id' => 'MTU=',
                         'value' => "5"
                     ]
-                ]
-            ], [
-                'id' => 'MQ==',
-                'name' => 'Quality',
-                'values' => [
+        ]
+        ], [
+        'id' => 'MQ==',
+        'name' => 'Quality',
+        'values' => [
                     [
                         'value_id' => 'MQ==',
                         'value' => "1"
@@ -113,11 +113,11 @@ QUERY;
                         'value_id' => 'NQ==',
                         'value' => "5"
                     ]
-                ]
-            ], [
-                'id' => 'Mg==',
-                'name' => 'Value',
-                'values' => [
+        ]
+        ], [
+        'id' => 'Mg==',
+        'name' => 'Value',
+        'values' => [
                     [
                         'value_id' => 'Ng==',
                         'value' => "1"
@@ -134,8 +134,8 @@ QUERY;
                         'value_id' => 'MTA=',
                         'value' => "5"
                     ]
-                ]
-            ]
+        ]
+        ]
         ];
         $response = $this->graphQlQuery($query);
         self::assertArrayHasKey('productReviewRatingsMetadata', $response);
@@ -150,14 +150,15 @@ QUERY;
     public function testProductReviewRatings()
     {
         $productSku = 'simple';
-        /** @var ProductRepositoryInterface $productRepository */
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
         $summaryFactory = ObjectManager::getInstance()->get(SummaryFactory::class);
         $storeId = ObjectManager::getInstance()->get(StoreManagerInterface::class)->getStore()->getId();
         $summary = $summaryFactory->create()->setStoreId($storeId)->load($product->getId());
-        $query
-            = <<<QUERY
+        $query = <<<QUERY
 {
   products(filter: {
       sku: {
@@ -200,6 +201,65 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     * @magentoApiDataFixture Magento/Review/_files/different_reviews_different_stores.php
+     */
+    public function testProductReviewRatingsPerSpecificStore()
+    {
+        $productSku = 'simple';
+        $headerMapSecondStore['Store'] = 'fixture_second_store';
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($productSku, false, null, true);
+        $summaryFactory = ObjectManager::getInstance()->get(SummaryFactory::class);
+        $storeRepository = ObjectManager::getInstance()->get(StoreRepositoryInterface::class);
+        $storeId = $storeRepository->get($headerMapSecondStore['Store'])->getId();
+        $summary = $summaryFactory->create()->setStoreId($storeId)->load($product->getId());
+        $query = <<<QUERY
+{
+  products(filter: {
+      sku: {
+          eq: "$productSku"
+      }
+  }) {
+    items {
+      rating_summary
+      review_count
+      reviews {
+        items {
+          nickname
+          summary
+          text
+          average_rating
+          product {
+            sku
+            name
+          }
+          ratings_breakdown {
+            name
+            value
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query, [], '', $headerMapSecondStore);
+        self::assertArrayHasKey('products', $response);
+        self::assertArrayHasKey('items', $response['products']);
+        self::assertNotEmpty($response['products']['items']);
+
+        $items = $response['products']['items'];
+        self::assertEquals($summary->getData('rating_summary'), $items[0]['rating_summary']);
+        self::assertEquals($summary->getData('reviews_count'), $items[0]['review_count']);
+        self::assertArrayHasKey('items', $items[0]['reviews']);
+        self::assertNotEmpty($items[0]['reviews']['items']);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Review/_files/customer_review_with_rating.php
      */
     public function testCustomerReviewsAddedToProduct()
@@ -223,19 +283,19 @@ QUERY;
 }
 QUERY;
         $expectedFirstItem = [
-            'nickname' => 'Nickname',
-            'summary' => 'Review Summary',
-            'text' => 'Review text',
-            'average_rating' => 40,
-            'ratings_breakdown' => [
-                [
+        'nickname' => 'Nickname',
+        'summary' => 'Review Summary',
+        'text' => 'Review text',
+        'average_rating' => 40,
+        'ratings_breakdown' => [
+        [
                     'name' => 'Quality',
                     'value' => 2
-                ],[
+        ],[
                     'name' => 'Value',
                     'value' => 2
-                ]
-            ]
+        ]
+        ]
         ];
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
@@ -254,10 +314,14 @@ QUERY;
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', true);
         $productId = 1;
-        /** @var Collection $reviewsCollection */
+        /**
+         * @var Collection $reviewsCollection
+         */
         $reviewsCollection = $this->reviewCollectionFactory->create();
         $reviewsCollection->addEntityFilter(Review::ENTITY_PRODUCT_CODE, $productId);
-        /** @var Review $review */
+        /**
+         * @var Review $review
+         */
         foreach ($reviewsCollection as $review) {
             $review->delete();
         }
@@ -279,6 +343,6 @@ QUERY;
     {
         $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
 
-        return ['Authorization' => 'Bearer ' . $customerToken];
+        return [ 'Authorization' => 'Bearer ' . $customerToken ];
     }
 }
