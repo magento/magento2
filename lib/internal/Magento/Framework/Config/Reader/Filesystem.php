@@ -161,9 +161,28 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
                 );
             }
         }
+
         if ($this->validationState->isValidationRequired()) {
             $errors = [];
             if ($configMerger && !$configMerger->validate($this->_schemaFile, $errors)) {
+                // The merged XML is invalid, but each XML document is
+                // individually valid. (If they had errors, we've have thrown an
+                // exception in the loop above.) Let's work out which document
+                // is causing us a problem.
+                $configMerger = null;
+                foreach ($fileList as $key => $content) {
+                    if (!$configMerger) {
+                        $configMerger = $this->_createConfigMerger($this->_domDocumentClass, $content);
+                    } else {
+                        $configMerger->merge($content);
+                    }
+
+                    if (!$configMerger->validate($this->_schemaFile)) {
+                        array_unshift($errors, "Error in merged XML after reading $key");
+                        break;
+                    }
+                }
+
                 $message = "Invalid Document \n";
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase($message . implode("\n", $errors))
