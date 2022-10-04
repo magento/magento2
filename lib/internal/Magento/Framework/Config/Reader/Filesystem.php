@@ -7,8 +7,8 @@
 namespace Magento\Framework\Config\Reader;
 
 /**
-* Filesystem configuration loader. Loads configuration from XML files, split by scopes
-*
+ * Filesystem configuration loader. Loads configuration from XML files, split by scopes
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api
  * @since 100.0.2
@@ -139,6 +139,7 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      * @param array $fileList
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _readFiles($fileList)
     {
