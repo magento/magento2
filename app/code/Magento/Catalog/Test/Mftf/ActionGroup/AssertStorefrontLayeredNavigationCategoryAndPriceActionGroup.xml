@@ -16,17 +16,15 @@
              <argument name="maxPrice" type="string"/>
              <argument name="count" type="string"/>
              <argument name="minPrice2" type="string"/>
+             <argument name="maxPrice2" type="string"/>
          </arguments>
-         <!-- Verify category  and filter item is present -->
-         <see selector="{{StorefrontCategorySidebarSection.layeredFilterBlock}}" userInput="Category" stepKey="seeCategoryFilterInLayeredNav"/>
-         <click selector="{{StorefrontCategorySidebarSection.expandCategoryLayeredNavigationButton}}" stepKey="expandCategoryLayeredNavigation"/>
-         <seeElement selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationCategory}}" stepKey="verifyCat"/>
+         <!-- Verify category  and price layered navigation item is present -->
+        <see selector="{{StorefrontCategorySidebarSection.layeredFilterBlock}}" userInput="Category" stepKey="seeCategoryFilterInLayeredNav"/>
+        <click selector="{{StorefrontCategorySidebarSection.expandCategoryLayeredNavigationButton}}" stepKey="expandCategoryLayeredNavigation"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationCategory}}" stepKey="verifyCat"/>
         <seeElement selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationCategoryProductQty}}" stepKey="verifyQuantity"/>
-         <click selector="{{StorefrontCategorySidebarSection.expandPriceLayeredNavigationButton}}" stepKey="expandPriceLayeredNavigation"/>
-        <!-- <seeElement selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationFirstPriceRange(minPrice maxPrice count)}}" stepKey="verifyPriceRange1"/>
-         <seeElement selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationSecondPriceRange(minPrice2 count)}}" stepKey="verifyPriceRange2"/>
--->
-        <seeElement selector="//a//span[@class='price' and text()='{{minPrice}}']/..//span[@class='price' and text()='{{maxPrice}}']/..//span[@class='count' and text()=( {{count}})]" stepKey="verifyPriceRange1"/>
-        <seeElement selector="//a//span[@class='price' and text()='{{minPrice2}}']/../..//a[text()=' and above']/..//span[@class='count' and text()=( {{count}})]" stepKey="verifyPriceRange2"/>
+        <click selector="{{StorefrontCategorySidebarSection.expandPriceLayeredNavigationButton}}" stepKey="expandPriceLayeredNavigation"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationFirstPriceRange(minPrice, maxPrice, count)}}" stepKey="verifyPriceRange1"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationSecondPriceRange(minPrice2,maxPrice2,count)}}" stepKey="verifyPriceRange2"/>
     </actionGroup>
 </actionGroups>

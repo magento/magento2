@@ -8,12 +8,12 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test  name="SampleTest">
+    <test  name="AlterAnchorCategoryTest">
         <annotations>
             <stories value="Admin Can Alter Category Anchor setting"/>
             <title value="Alter Category Anchor setting"/>
             <description value="Admin Can Alter Category Anchor setting and it should work perfectly"/>
-            <severity value="CRITICAL"/>
+            <severity value="MAJOR"/>
             <testCaseId value="AC-4114"/>
         </annotations>
         <before>
@@ -49,10 +49,11 @@
             <argument name="productName" value="$$createSecondSimpleProduct.name$$"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontLayeredNavigationCategoryAndPriceActionGroup" stepKey="checkCategoryAndPriceLayeredNavigationIsPresent">
-            <argument name="minPrice" value="$10.00"/>
-            <argument name="maxPrice" value="$19.99"/>
+            <argument name="minPrice" value="10.00"/>
+            <argument name="maxPrice" value="19.99"/>
             <argument name="count" value="1"/>
-            <argument name="minPrice2" value="$90.00"/>
+            <argument name="minPrice2" value="90.00"/>
+            <argument name="maxPrice2" value=" and above"/>
         </actionGroup>
         <!--Goto Category in admin side and do validation for single Product visibility validation-->
         <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
@@ -96,10 +97,11 @@
             <argument name="productName" value="$$createSecondSimpleProduct.name$$"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontLayeredNavigationCategoryAndPriceActionGroup" stepKey="checkCategoryAndPriceFilterIsPresent1">
-            <argument name="minPrice" value="$10.00"/>
-            <argument name="maxPrice" value="$19.99"/>
+            <argument name="minPrice" value="10.00"/>
+            <argument name="maxPrice" value="19.99"/>
             <argument name="count" value="1"/>
-            <argument name="minPrice2" value="$90.00"/>
+            <argument name="minPrice2" value="90.00"/>
+            <argument name="maxPrice2" value=" and above"/>
         </actionGroup>
         <!-- Drag drop Category and do Validation for Category and Products on StoreFront-->
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openAdminCategoryPage2"/>
