@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\ImportExport\Model\Export\Entity;
 
-use Magento\ImportExport\Api\Data\ExtendedExportInfoInterface;
+use Magento\ImportExport\Api\Data\LocalizedExportInfoInterface;
 
 /**
  * Class ExportInfo implementation for ExportInfoInterface.
  */
-class ExportInfo implements ExtendedExportInfoInterface
+class ExportInfo implements LocalizedExportInfoInterface
 {
     /**
      * @var string
@@ -43,6 +43,11 @@ class ExportInfo implements ExtendedExportInfoInterface
      * @var mixed
      */
     private $skipAttr;
+
+    /**
+     * @var string
+     */
+    private $locale;
 
     /**
      * @inheritdoc
@@ -133,10 +138,29 @@ class ExportInfo implements ExtendedExportInfoInterface
     }
 
     /**
-     * @inheritdoc
+     * Set skipped attributes
+     *
+     * @param string $skipAttr
+     * @return void
      */
     public function setSkipAttr($skipAttr)
     {
         $this->skipAttr = $skipAttr;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLocale(): ?string
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setLocale(string $locale): void
+    {
+        $this->locale = $locale;
     }
 }
