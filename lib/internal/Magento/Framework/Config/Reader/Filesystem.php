@@ -1,15 +1,14 @@
 <?php
 /**
- * Filesystem configuration loader. Loads configuration from XML files, split by scopes
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- *
  */
 
 namespace Magento\Framework\Config\Reader;
 
 /**
+* Filesystem configuration loader. Loads configuration from XML files, split by scopes
+*
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api
  * @since 100.0.2
