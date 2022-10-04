@@ -29,7 +29,7 @@
             <!-- Set locale options to en_US-->
             <magentoCLI stepKey="localeUS" command="config:set general/locale/code en_US"/>
             <!-- Change Admin locale to default -->
-            <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminAccountToFrance">
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminAccountToUnitedStates">
                 <argument name="InterfaceLocaleByValue" value="en_US" />
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
