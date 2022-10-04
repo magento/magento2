@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Declaration\Schema\FileSystem;
 
@@ -18,7 +19,10 @@ class XmlReader extends Filesystem
     /**
      * Create and return a config merger instance that takes into account types of arguments
      *
-     * {@inheritdoc}
+     * @param string $mergerClass
+     * @param string $initialContents
+     * @return \Magento\Framework\Config\Dom
+     * @throws \UnexpectedValueException
      */
     protected function _createConfigMerger($mergerClass, $initialContents)
     {
