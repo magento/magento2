@@ -1544,7 +1544,7 @@
             <argument name="realPath" xsi:type="string">urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Framework\Setup\Declaration\Schema\FileSystem\XmlReader" type="Magento\Framework\Config\Reader\Filesystem">
+    <type name="Magento\Framework\Setup\Declaration\Schema\FileSystem\XmlReader">
         <arguments>
             <argument name="fileResolver" xsi:type="object">Magento\Framework\Config\FileResolverByModule</argument>
             <argument name="converter" xsi:type="object">Magento\Framework\Setup\Declaration\Schema\Config\Converter</argument>
@@ -1559,7 +1559,7 @@
                 <item name="/schema/table/constraint/column" xsi:type="string">name</item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
     <type name="Magento\Framework\Setup\Declaration\Schema\OperationsExecutor">
         <arguments>
             <argument name="operations" xsi:type="array">
