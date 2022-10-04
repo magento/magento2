@@ -26,5 +26,4 @@
         <element name="emailId" type="text" selector= "//td[contains(@class,'a-left col-grid_email')]//a[text()='{{email}}']" parameterized="true"/>
         <element name="selectFirstRow" type="text" selector="//td[normalize-space()='Test Rule']" timeout="30"/>
     </section>
-
 </sections>
