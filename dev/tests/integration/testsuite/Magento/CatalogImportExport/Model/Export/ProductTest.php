@@ -21,6 +21,7 @@ use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -818,7 +819,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     #[
-        DbIsolation(true),
+        AppArea('adminhtml'),
+        DbIsolation(false),
         DataFixture(StoreFixture::class, as: 'store2'),
         DataFixture(CategoryFixture::class, as: 'c1'),
         DataFixture(ProductFixture::class, ['category_ids' => ['$c1.id$']], 'p1'),
