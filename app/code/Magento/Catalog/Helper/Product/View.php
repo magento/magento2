@@ -190,11 +190,13 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
 
         $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], null, false);
         $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
+        $resultPage->addPageLayoutHandles(['attribute_set' => $product->getAttributeSetId()], null, false);
 
         if ($params && $params->getAfterHandles()) {
             foreach ($params->getAfterHandles() as $handle) {
                 $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
                 $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
+                $resultPage->addPageLayoutHandles(['attribute_set' => $product->getAttributeSetId()], $handle, false);
             }
         }
 
