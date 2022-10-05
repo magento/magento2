@@ -8,10 +8,18 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Media\Config;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Json\Helper\Data;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -90,6 +98,11 @@ class CreateHandler implements ExtensionInterface
     private $storeManager;
 
     /**
+     * @var DeleteValidator
+     */
+    private $deleteValidator;
+
+    /**
      * @var string[]
      */
     private $mediaAttributesWithLabels = [
@@ -99,25 +112,27 @@ class CreateHandler implements ExtensionInterface
     ];
 
     /**
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
-     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @param MetadataPool $metadataPool
+     * @param ProductAttributeRepositoryInterface $attributeRepository
+     * @param Gallery $resourceModel
+     * @param Data $jsonHelper
+     * @param Config $mediaConfig
+     * @param Filesystem $filesystem
+     * @param Database $fileStorageDb
+     * @param StoreManagerInterface|null $storeManager
+     * @param DeleteValidator|null $deleteValidator
+     * @throws FileSystemException
      */
     public function __construct(
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
-        \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null
+        MetadataPool $metadataPool,
+        ProductAttributeRepositoryInterface $attributeRepository,
+        Gallery $resourceModel,
+        Data $jsonHelper,
+        Config $mediaConfig,
+        Filesystem $filesystem,
+        Database $fileStorageDb,
+        StoreManagerInterface $storeManager = null,
+        ?DeleteValidator $deleteValidator = null
     ) {
         $this->metadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $this->attributeRepository = $attributeRepository;
@@ -127,6 +142,7 @@ class CreateHandler implements ExtensionInterface
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->fileStorageDb = $fileStorageDb;
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->deleteValidator = $deleteValidator ?: ObjectManager::getInstance()->get(DeleteValidator::class);
     }
 
     /**
@@ -165,7 +181,7 @@ class CreateHandler implements ExtensionInterface
 
         if ($product->getIsDuplicate() != true) {
             foreach ($value['images'] as &$image) {
-                if (!empty($image['removed']) && !$this->canRemoveImage($product, $image['file'])) {
+                if (!empty($image['removed']) && $this->deleteValidator->validate($product, $image['file'])) {
                     $image['removed'] = '';
                 }
 
@@ -184,7 +200,7 @@ class CreateHandler implements ExtensionInterface
             // For duplicating we need copy original images.
             $duplicate = [];
             foreach ($value['images'] as &$image) {
-                if (!empty($image['removed']) && !$this->canRemoveImage($product, $image['file'])) {
+                if (!empty($image['removed']) && $this->deleteValidator->validate($product, $image['file'])) {
                     $image['removed'] = '';
                 }
 
@@ -606,41 +622,6 @@ class CreateHandler implements ExtensionInterface
         }
 
         return $this->imagesGallery;
-    }
-
-    /**
-     * Check possibility to remove image
-     *
-     * @param ProductInterface $product
-     * @param string $imageFile
-     * @return bool
-     */
-    private function canRemoveImage(ProductInterface $product, string $imageFile) :bool
-    {
-        $canRemoveImage = true;
-        $gallery = $this->getImagesForAllStores($product);
-        $storeId = $product->getStoreId();
-        $storeIds = [];
-        $storeIds[] = 0;
-        $websiteIds = array_map('intval', $product->getWebsiteIds() ?? []);
-        foreach ($this->storeManager->getStores() as $store) {
-            if (in_array((int) $store->getWebsiteId(), $websiteIds, true)) {
-                $storeIds[] = (int) $store->getId();
-            }
-        }
-
-        if (!empty($gallery)) {
-            foreach ($gallery as $image) {
-                if (in_array((int) $image['store_id'], $storeIds)
-                    && $image['filepath'] === $imageFile
-                    && (int) $image['store_id'] !== $storeId
-                ) {
-                    $canRemoveImage = false;
-                }
-            }
-        }
-
-        return $canRemoveImage;
     }
 
     /**
