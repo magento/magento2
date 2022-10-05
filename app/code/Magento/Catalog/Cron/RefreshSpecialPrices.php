@@ -164,7 +164,7 @@ class RefreshSpecialPrices
             $attrConditionValue
         );
 
-        $selectData = $connection->fetchCol($select, $identifierField);
+        $selectData = $connection->fetchCol($select);
 
         if (!empty($selectData)) {
             $this->_processor->getIndexer()->reindexList($selectData);
