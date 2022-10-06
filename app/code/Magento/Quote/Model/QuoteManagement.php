@@ -412,7 +412,9 @@ class QuoteManagement implements CartManagementInterface
         if ($quote->getCheckoutMethod() === self::METHOD_GUEST || !$customerId) {
             $quote->setCustomerId(null);
             $billingAddress = $quote->getBillingAddress();
-            $quote->setCustomerEmail($billingAddress ? $billingAddress->getEmail() : null);
+            if (!$quote->getCustomerEmail()) {
+                $quote->setCustomerEmail($billingAddress ? $billingAddress->getEmail() : null);
+            }
             if ($quote->getCustomerFirstname() === null
                 && $quote->getCustomerLastname() === null
                 && $billingAddress
