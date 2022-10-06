@@ -46,11 +46,11 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
     ) {
         parent::__construct($context, $coreRegistry, $fileFactory, $dateFilter);
         $this->timezone =  $timezone ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            TimezoneInterface::class
-        );
+                TimezoneInterface::class
+            );
         $this->dataPersistor = $dataPersistor ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            DataPersistorInterface::class
-        );
+                DataPersistorInterface::class
+            );
     }
 
     /**
@@ -64,6 +64,9 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
     {
         $data = $this->getRequest()->getPostValue();
         if ($data) {
+            $data['simple_free_shipping'] = ($data['simple_free_shipping'] === '')
+                ? null : $data['simple_free_shipping'];
+
             try {
                 /** @var $model \Magento\SalesRule\Model\Rule */
                 $model = $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class);
@@ -103,10 +106,10 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                 }
 
                 if (isset(
-                    $data['simple_action']
-                ) && $data['simple_action'] == 'by_percent' && isset(
-                    $data['discount_amount']
-                )
+                        $data['simple_action']
+                    ) && $data['simple_action'] == 'by_percent' && isset(
+                        $data['discount_amount']
+                    )
                 ) {
                     $data['discount_amount'] = min(100, $data['discount_amount']);
                 }

@@ -69,4 +69,11 @@
     <type name="Magento\Framework\Data\Form\Element\Fieldset">
         <plugin name="Bundle" type="Magento\Bundle\Plugin\Framework\Data\Form\Element\FieldsetPlugin"/>
     </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Modifier\PriceAttributes">
+        <arguments>
+            <argument name="excludeProductTypes" xsi:type="array">
+                <item name="bundle" xsi:type="const">Magento\Bundle\Model\Product\Type::TYPE_CODE</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
