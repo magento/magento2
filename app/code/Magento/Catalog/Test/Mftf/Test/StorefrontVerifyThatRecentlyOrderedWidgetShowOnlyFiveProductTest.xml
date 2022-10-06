@@ -16,7 +16,6 @@
             <testCaseId value="MC-26846"/>
             <severity value="MAJOR"/>
         </annotations>
-
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
