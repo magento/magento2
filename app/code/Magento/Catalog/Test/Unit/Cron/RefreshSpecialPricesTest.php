@@ -82,7 +82,7 @@ class RefreshSpecialPricesTest extends TestCase
         $this->_localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->_eavConfigMock = $this->createMock(Config::class);
         $this->_priceProcessorMock = $this->createMock(Processor::class);
-
+        $this->metadataPool = $this->createMock(MetadataPool::class);
         $this->metadataMock = $this->createMock(EntityMetadata::class);
 
         $this->_model = new RefreshSpecialPrices(
@@ -91,15 +91,9 @@ class RefreshSpecialPricesTest extends TestCase
             $this->_dateTimeMock,
             $this->_localeDateMock,
             $this->_eavConfigMock,
-            $this->_priceProcessorMock
+            $this->_priceProcessorMock,
+            $this->metadataPool
         );
-
-        $this->metadataPool = $this->createMock(MetadataPool::class);
-
-        $reflection = new \ReflectionClass(get_class($this->_model));
-        $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->_model, $this->metadataPool);
     }
 
     public function testRefreshSpecialPrices()
