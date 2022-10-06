@@ -85,4 +85,12 @@
         <data key="label">Yes</data>
         <data key="value">2</data>
     </entity>
+    <entity name="EnableDisplayFullTaxSummarySales">
+        <data key="path">tax/sales_display/full_summary</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableDisplayFullTaxSummarySales">
+        <data key="path">tax/sales_display/full_summary</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

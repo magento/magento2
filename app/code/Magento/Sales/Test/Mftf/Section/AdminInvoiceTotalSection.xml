@@ -16,5 +16,6 @@
         <element name="itemQty" type="text" selector="td.col-qty"/>
         <element name="itemName" type="text" selector=".col-product .product-title"/>
         <element name="itemTotalPrice" type="text" selector=".col-total .price"/>
+        <element name="totalTax" type="text" selector=".summary-total .price"/>
     </section>
 </sections>
