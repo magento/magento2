@@ -913,8 +913,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     public function addCategoryFilter(\Magento\Catalog\Model\Category $category)
     {
         $this->_productLimitationFilters['category_id'] = $category->getId();
-        if (!$category->getIsAnchor()) {
-            //unset($this->_productLimitationFilters['category_is_anchor']);
+        if ($category->getIsAnchor()) {
+            $this->_productLimitationFilters['category_is_anchor'] = 0;
         } else {
             $this->_productLimitationFilters['category_is_anchor'] = 1;
         }
