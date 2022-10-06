@@ -30,7 +30,8 @@ define([
                 isVirtual: function () {},
                 billingAddress: ko.observable(),
                 shippingMethod: ko.observable(),
-                setTotals: function () {}
+                setTotals: function () {},
+                getTotals: function () {}
             },
             'Magento_Checkout/js/model/shipping-rate-processor/new-address': {
                 getRates: jasmine.createSpy()
@@ -92,7 +93,8 @@ define([
 
         it('test subscribe when shipping address wasn\'t changed for not virtual quote', function () {
             spyOn(mocks['Magento_Checkout/js/model/quote'], 'isVirtual').and.returnValue(false);
-            spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'isChanged').and.returnValue(false);
+            spyOn(mocks['Magento_Checkout/js/model/quote'], 'getTotals').and.returnValue(false);
+            spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'isChanged').and.returnValues(false, false);
             spyOn(mocks['Magento_Checkout/js/model/shipping-service'], 'setShippingRates');
             spyOn(mocks['Magento_Checkout/js/model/quote'], 'setTotals');
             mocks['Magento_Checkout/js/model/quote'].shippingAddress({
