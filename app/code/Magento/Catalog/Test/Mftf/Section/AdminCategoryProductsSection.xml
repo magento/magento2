@@ -11,5 +11,13 @@
     <section name="AdminCategoryProductsSection">
         <element name="sectionHeader" type="button" selector="div[data-index='assign_products'] .fieldset-wrapper-title" timeout="30"/>
         <element name="sectionBody" type="button" selector="div[data-index='assign_products'] .admin__fieldset-wrapper-content" timeout="30"/>
+        <element name="addProducts" type="button" selector="//button[@class='action-default scalable secondary add-products']"/>
+        <element name="filtersButton" type="button" selector="//div[@class='data-grid-filters-actions-wrap']//button"/>
+        <element name="clearAllButton" type="button" selector="//button[contains(text(),'Clear all')]"/>
+        <element name="downArrow" type="button" selector="//button[@class='action-multicheck-toggle']"/>
+        <element name="selectAllOnThisPage" type="select" selector="//span[contains(text(),'Select All on This Page')]"/>
+        <element name="saveAndClose" type="button" selector="//button[@name='add_products_save_button']"/>
+        <element name="subCategoryProductCount" type="text" selector="//div[@class='tree-holder']//span[contains(text(),'SimpleSubCategory') and contains(text(),'({{productCount}})')]" parameterized="true"/>
+        <element name="defaultCategoryProductCount" type="text" selector="//div[@class='tree-holder']//span[contains(text(),'Default Category') and contains(text(),'({{productCount}})')]" parameterized="true"/>
     </section>
 </sections>

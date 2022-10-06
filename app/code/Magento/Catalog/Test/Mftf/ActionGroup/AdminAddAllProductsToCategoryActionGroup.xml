@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddAllProductsToCategoryActionGroup">
+        <annotations>
+            <description>Admin Add All Catalog Multiple Product to Category</description>
+        </annotations>
+
+        <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
+        <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
+        <click selector="{{AdminCategoryProductsSection.addProducts}}" stepKey="clickOnAddProducts"/>
+        <click selector="{{AdminCategoryProductsSection.filtersButton}}" stepKey="clickOnFiltersButton"/>
+        <click selector="{{AdminCategoryProductsSection.filtersButton}}" stepKey="clickOnFiltersButtonAgain"/>
+        <click selector="{{AdminCategoryProductsSection.saveAndClose}}" stepKey="clickSaveAndCloseButton"/>
+        <click selector="{{AdminCategoryProductsSection.addProducts}}" stepKey="clickOnAddProductsAgain"/>
+        <click selector="{{AdminCategoryProductsSection.downArrow}}" stepKey="clickOnDownArrow"/>
+        <click selector="{{AdminCategoryProductsSection.selectAllOnThisPage}}" stepKey="selectAllProducts"/>
+        <click selector="{{AdminCategoryProductsSection.saveAndClose}}" stepKey="clickSaveAndCloseButtonAgain"/>
+        <waitForPageLoad time="20" stepKey="waitForPageLoad1"/>
+
+    </actionGroup>
+</actionGroups>
