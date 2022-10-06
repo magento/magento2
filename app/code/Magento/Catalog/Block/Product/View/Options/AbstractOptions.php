@@ -180,7 +180,7 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
      */
     protected function _formatPrice($value, $flag = true)
     {
-        if ($value['pricing_value'] == 0) {
+        if (!is_numeric($value['pricing_value']) || $value['pricing_value'] == 0) {
             return '';
         }
 
