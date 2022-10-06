@@ -8,7 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Api;
 
+use Magento\Catalog\Test\Fixture\Product;
 use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
@@ -54,6 +59,11 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
     private $objectManager;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -96,6 +106,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
         ];
 
         $this->testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -626,6 +637,33 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
         ];
 
         $this->_webApiCall($this->deleteServiceInfo, $requestData);
+    }
+
+    #[
+        DataFixture(StoreFixture::class, as: 'store2'),
+        DataFixture(Product::class, ['media_gallery_entries' => [[], []]], as: 'product')
+    ]
+    public function testDeleteThrowsExceptionIfTheImageCannotBeRemoved(): void
+    {
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
+        $product = $this->fixtures->get('product');
+        $mediaGalleryEntries = $product->getMediaGalleryEntries();
+        $this->assertCount(2, $mediaGalleryEntries);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The image cannot be removed as it has been assigned to the other image role');
+
+        $entry = array_shift($mediaGalleryEntries);
+        $requestData = [
+            'sku' => $product->getSku(),
+            'entryId' => $entry->getId(),
+        ];
+        $this->deleteServiceInfo['rest']['resourcePath'] = strtr('/V1/products/sku/media/entryId', $requestData);
+
+        $this->_webApiCall($this->deleteServiceInfo, $requestData);
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $product = $productRepository->get($product->getSku(), forceReload: true);
+        $mediaGalleryEntries = $product->getMediaGalleryEntries();
+        $this->assertCount(2, $mediaGalleryEntries);
     }
 
     /**
