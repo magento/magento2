@@ -12,7 +12,7 @@
         <annotations>
             <features value="Backend"/>
             <stories value="Modal window for Sign In is shown if Guest checkout is disabled. Flow from mini cart."/>
-            <title value="Modal window for Sign In is shown if Guest checkout is disabled. Flow from mini cart."/>
+            <title value="Modal window for Sign In is shown if Guest checkout is disabled. Flow from mini cart"/>
             <description value="Modal window for Sign In is shown if Guest checkout is disabled. Flow from mini cart."/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-4130"/>
