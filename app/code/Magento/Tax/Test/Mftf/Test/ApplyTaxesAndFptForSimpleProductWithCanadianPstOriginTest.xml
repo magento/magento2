@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ApplyTaxesAndFptForSimpleProductWithCanadianPstOriginTest">
+        <annotations>
+            <features value="Tax"/>
+            <stories value="Apply tax and fpt for simple product"/>
+            <title value="Apply tax and fpt for simple product with canadian pst origin test"/>
+            <description value="Apply tax and fpt for simple product with canadian pst origin test"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4061"/>
+        </annotations>
+        <before>
+             <!-- Create a new user with canadian address -->
+            <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+            <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+                <argument name="customer" value="Simple_CA_Customer"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+            <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+                <argument name="messageType" value="success"/>
+                <argument name="message" value="Thank you for registering with Main Website Store."/>
+            </actionGroup>
+            <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddressInfo">
+                <argument name="Address" value="Canada_Address"/>
+            </actionGroup>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- change tax classes configuration -->
+            <actionGroup ref="SetTaxClassForShippingActionGroup" stepKey="setTaxClass"/>
+            <actionGroup ref="AdminChangeTaxAndFptConfigActionGroup" stepKey="changeTaxConfigs"/>
+            <!--Set Shipping settings origin data-->
+            <actionGroup ref="AdminSetShippingOriginConfigActionGroup" stepKey="setShippingOriginConfigurationData"/>
+            <!-- Create two new tax rates -->
+            <!-- first tax rate -->
+            <!-- Go to tax rule page and create a tax rule -->
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulePage"/>
+            <click stepKey="addNewTaxRate" selector="{{AdminGridMainControls.add}}"/>
+            <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="Canada-GST-5%"/>
+            <!-- Go to the tax rate page -->
+            <click stepKey="addNewTaxRate1" selector="{{AdminTaxRulesSection.addNewTaxRate}}"/>
+            <fillField stepKey="fillTaxIdentifier" selector="{{AdminTaxRulesSection.taxIdentifier}}" userInput="Canada-GST-5%"/>
+            <fillField stepKey="fillZipCode" selector="{{AdminTaxRulesSection.zipCode}}" userInput="*"/>
+            <selectOption stepKey="selectState" selector="{{AdminTaxRulesSection.state}}" userInput="*"/>
+            <selectOption stepKey="selectCountry" selector="{{AdminTaxRulesSection.country}}" userInput="Canada"/>
+            <fillField stepKey="fillRate" selector="{{AdminTaxRulesSection.rate}}" userInput="5"/>
+            <!-- Save the tax rate -->
+            <click stepKey="saveTaxRate" selector="{{AdminTaxRulesSection.save}}"/>
+            <click selector="{{AdminTaxRuleFormSection.additionalSettings}}" stepKey="clickAdditionalSettings"/>
+            <scrollTo selector="{{AdminTaxRuleFormSection.additionalSettings}}" x="0" y="-80" stepKey="scrollToAdvancedSettings"/>
+            <wait stepKey="waitForAdditionalSettings" time="5" />
+            <conditionalClick selector="{{AdminTaxRuleFormSection.customerTaxClassOption(retailCustomerTaxClass.class_name)}}" dependentSelector="{{AdminTaxRuleFormSection.customerTaxClassSelected(retailCustomerTaxClass.class_name)}}" visible="false" stepKey="checkRetailCustomerTaxClass" />
+            <conditionalClick selector="{{AdminTaxRuleFormSection.productTaxClassOption(taxableGoodsTaxClass.class_name)}}" dependentSelector="{{AdminTaxRuleFormSection.productTaxClassSelected(taxableGoodsTaxClass.class_name)}}" visible="false" stepKey="checkTaxableGoodsTaxClass" />
+            <fillField selector="{{AdminTaxRuleFormSection.priority}}" userInput="0" stepKey="fillPriority"/>
+            <click selector="{{AdminTaxRuleFormSection.calculateSubtotal}}" stepKey="SelectSubTotal"/>
+            <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+
+            <!-- second tax rate-->
+            <click stepKey="addSecondTaxRate" selector="{{AdminGridMainControls.add}}"/>
+            <fillField stepKey="fillSecondRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="Canada-GST-PST-5%"/>
+            <!-- Go to the tax rate page -->
+            <click stepKey="addSecondTaxRate2" selector="{{AdminTaxRulesSection.addNewTaxRate}}"/>
+            <fillField stepKey="fillSecondTaxIdentifier" selector="{{AdminTaxRulesSection.taxIdentifier}}" userInput="Canada-GST-PST-5%"/>
+            <fillField stepKey="fillSecondZipCode" selector="{{AdminTaxRulesSection.zipCode}}" userInput="*"/>
+            <selectOption stepKey="selectStateAgain" selector="{{AdminTaxRulesSection.state}}" userInput="*"/>
+            <selectOption stepKey="selectCountryAgain" selector="{{AdminTaxRulesSection.country}}" userInput="Canada"/>
+            <fillField stepKey="fillRateAgain" selector="{{AdminTaxRulesSection.rate}}" userInput="5"/>
+            <!-- Save the tax rate -->
+            <click stepKey="saveTaxRate1" selector="{{AdminTaxRulesSection.save}}"/>
+            <click selector="{{AdminTaxRuleFormSection.additionalSettings}}" stepKey="clickSecondAdditionalSettings"/>
+            <scrollTo selector="{{AdminTaxRuleFormSection.additionalSettings}}" x="0" y="-80" stepKey="scrollToSecondAdvancedSettings"/>
+            <wait stepKey="waitForSecondAdditionalSettings" time="5" />
+            <conditionalClick selector="{{AdminTaxRuleFormSection.customerTaxClassOption(retailCustomerTaxClass.class_name)}}" dependentSelector="{{AdminTaxRuleFormSection.customerTaxClassSelected(retailCustomerTaxClass.class_name)}}" visible="false" stepKey="checkSecondRetailCustomerTaxClass" />
+            <conditionalClick selector="{{AdminTaxRuleFormSection.productTaxClassOption(taxableGoodsTaxClass.class_name)}}" dependentSelector="{{AdminTaxRuleFormSection.productTaxClassSelected(taxableGoodsTaxClass.class_name)}}" visible="false" stepKey="checkSecondTaxableGoodsTaxClass" />
+            <fillField selector="{{AdminTaxRuleFormSection.priority}}" userInput="1" stepKey="fillSecondPriority"/>
+            <click selector="{{AdminTaxRuleFormSection.calculateSubtotal}}" stepKey="SelectSecondSubTotal"/>
+            <click stepKey="clickSecondSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+
+            <!-- enable flat rate with default price -->
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttribute"/>
+            <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet">
+                <requiredEntity createDataKey="createProductFPTAttribute"/>
+            </createData>
+
+            <!-- Create Simple Product and category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="simpleProduct">
+                <field key="price">100.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+                <argument name="productId" value="$simpleProduct.id$"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValue1">
+                <argument name="FPTAttributeCode" value="$createProductFPTAttribute.attribute_code$"/>
+                <argument name="countryForFPT" value="Canada"/>
+                <argument name="stateForFPT" value="*"/>
+                <argument name="valueForFPT" value="10"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Reset shipping class -->
+            <actionGroup ref="ResetTaxClassForShippingActionGroup" stepKey="resetTaxClassForShipping"/>
+            <actionGroup ref="AdminResetTaxAndFptActionGroup" stepKey="resetTaxConfigs"/>
+            <!-- delete created Two Tax Rates & Rules -->
+            <!-- delete first tax rule and rate -->
+            <!--Go to the tax rule page and delete the row created-->
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteFirstRule">
+                <argument name="name" value="Canada-GST-5%"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <!-- Go to the tax rate page -->
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
+            <!-- Delete the tax rate that was created -->
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteTaxRate">
+                <argument name="name" value="Canada-GST-5%"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <!-- delete second tax rule and rate -->
+            <!--Go to the tax rule page and delete the row created-->
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToSecondTaxRulesPage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteSecondRule">
+                <argument name="name" value="Canada-GST-PST-5%"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <!-- Go to the tax rate page -->
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToSecondTaxRatesPage"/>
+            <!-- Delete the tax rate that was created -->
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteSecondTaxRate">
+                <argument name="name" value="Canada-GST-PST-5%"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <!-- Reset shipping origin -->
+            <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="ResetCaliforniaShippingOrigin"/>
+            <!-- delete created attribute category and simple product -->
+            <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="Simple_CA_Customer.email"/>
+            </actionGroup>
+            <!-- Logout from admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <!-- reindex -->
+            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
+        </after>
+        <!-- Navigate to the product -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProduct2Page">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <!-- assert product prices -->
+        <waitForPageLoad stepKey="waitForProductPageToOpen"/>
+        <see userInput="$110.00" selector="{{StorefrontProductInfoMainSection.price}}" stepKey="seePrice"/>
+        <see userInput="$10.00" selector="{{StorefrontProductInfoMainSection.fptPrice}}" stepKey="seeFptPrice"/>
+        <!--Add to cart -->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="product2AddToCart"/>
+        <!--Click on mini cart-->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <!--Click on view and edit cart link-->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMiniCart"/>
+        <waitForPageLoad stepKey="waitForViewAndEditCartToOpen"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.tax}}" stepKey="waitForOverviewVisible1" />
+        <!-- Assert tax and flatRate amount -->
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$11.50" stepKey="assertTaxAmount"/>
+        <see selector="{{CheckoutCartSummarySection.fptAmount}}" userInput="$10.00" stepKey="assertFptAmount"/>
+        <click selector="{{CheckoutCartSummarySection.taxAmount}}" stepKey="clickTaxAmount"/>
+        <see selector="{{CheckoutCartSummarySection.canadaTaxAmount}}" userInput="$5.75" stepKey="assertGstAmount"/>
+        <see selector="{{CheckoutCartSummarySection.canadaPstTaxAmount}}" userInput="$5.75" stepKey="assertPstAmount"/>
+        <!--Assert Shopping Cart Summary-->
+        <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary" >
+            <argument name="subtotal" value="$100.00"/>
+            <argument name="shipping" value="$5.00"/>
+            <argument name="total" value="$126.50"/>
+        </actionGroup>
+
+        <!-- Navigate to payment page -->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForOverviewVisible2"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextOnShippingStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <!-- Place order -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlacePurchaseOrder"/>
+        <!-- Navigate to order details page -->
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontOpenOrderFromSuccessPageActionGroup" stepKey="openOrderFromSuccessPage">
+            <argument name="orderNumber" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!-- Verify tax on order view page -->
+        <see selector="{{StorefrontCustomerOrderViewSection.totalsTax}}" userInput="$11.50" stepKey="verifyTaxOnOrderViewPage"/>
+        <see selector="{{StorefrontCustomerOrderViewSection.subTotal}}" userInput="$100.00" stepKey="verifySubTotalOnOrderViewPage"/>
+        <see selector="{{StorefrontCustomerOrderViewSection.shipping}}" userInput="$5.00" stepKey="verifyShippingOnOrderViewPage"/>
+        <see selector="{{StorefrontCustomerOrderViewSection.taxRule}}" userInput="$5.75" stepKey="verifyCanGstOnOrderViewPage"/>
+        <see selector="{{StorefrontCustomerOrderViewSection.taxRule1}}" userInput="$5.75" stepKey="verifyCanGstPstOnOrderViewPage"/>
+        <see selector="{{StorefrontCustomerOrderViewSection.FPT}}" userInput="$10.00" stepKey="verifyFPTOnOrderViewPage"/>
+        <see selector="{{StorefrontCustomerOrderViewSection.grandTotal}}" userInput="$126.50" stepKey="verifyTotalOnOrderViewPage"/>
+
+        <!--Assert order in orders grid -->
+        <!-- Go to order page -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openFirstOrderPage">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!-- Check status -->
+        <!-- assert prices on order page -->
+        <scrollTo selector="{{AdminOrderTotalSection.subTotal}}" stepKey="scrollToOrderTotalSection"/>
+        <see selector="{{AdminOrderTotalSection.subTotal}}"  userInput="$100.00" stepKey="checkSubtotal"/>
+        <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$126.50" stepKey="checkOrderTotalSection"/>
+        <see selector="{{AdminOrderTotalSection.shippingAndHandling}}" userInput="$5.00" stepKey="checkShippingHandling"/>
+        <see selector="{{AdminOrderTotalSection.totalTax}}" userInput="$11.50" stepKey="checkTax"/>
+        <see selector="{{AdminOrderTotalSection.fpt}}" userInput="$10.00" stepKey="checkFptAmount"/>
+        <click selector="{{AdminOrderTotalSection.totalTax}}" stepKey="clickTax"/>
+        <see selector="{{AdminOrderTotalSection.taxRule1}}" userInput="$5.75" stepKey="checkCanGstPer"/>
+        <see selector="{{AdminOrderTotalSection.taxRule2}}" userInput="$5.75" stepKey="checkCanGstPstPer"/>
+    </test>
+</tests>
