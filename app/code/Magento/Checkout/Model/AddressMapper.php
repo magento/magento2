@@ -74,7 +74,7 @@ class AddressMapper implements AddressMapperInterface
             $sameAsBillingFlag = 1;
         } elseif (!empty($quoteShippingAddressData) && !empty($billingAddress)) {
             $sameAsBillingFlag = $quote->getCustomerId() &&
-                    $this->checkIfShippingAddressMatchesWithBillingAddress($shippingAddress, $billingAddress);
+                $this->checkIfShippingAddressMatchesWithBillingAddress($shippingAddress, $billingAddress);
         } else {
             $sameAsBillingFlag = 0;
         }

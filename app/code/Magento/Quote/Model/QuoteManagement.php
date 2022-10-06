@@ -630,7 +630,7 @@ class QuoteManagement implements CartManagementInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _prepareCustomerQuote(Quote $quote)
+    protected function _prepareCustomerQuote($quote)
     {
         $billing = $quote->getBillingAddress();
         $shipping = $quote->isVirtual() ? null : $quote->getShippingAddress();
