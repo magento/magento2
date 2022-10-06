@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Helper\Oauth;
 
-use Magento\Framework\HTTP\ZendClient;
+use Magento\Framework\HTTP\LaminasClient;
 use Magento\Framework\Oauth\Helper\Oauth;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Integration\Api\OauthServiceInterface;
@@ -39,7 +39,7 @@ class ConsumerTest extends TestCase
     /** @var Consumer */
     protected $_consumerMock;
 
-    /** @var ZendClient */
+    /** @var LaminasClient */
     protected $_httpClientMock;
 
     /** @var TokenFactory */
@@ -120,7 +120,7 @@ class ConsumerTest extends TestCase
             ->getMock();
 
         $this->_httpClientMock = $this->getMockBuilder(
-            ZendClient::class
+            LaminasClient::class
         )->disableOriginalConstructor()
             ->getMock();
         $this->_loggerMock = $this->getMockBuilder(
