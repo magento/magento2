@@ -9,6 +9,8 @@ namespace Magento\PageCache\Controller;
 
 use Magento\Framework\Serialize\Serializer\Base64Json;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Validator\RegexFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
 
 abstract class Block extends \Magento\Framework\App\Action\Action
@@ -41,6 +43,11 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     private $layoutCacheKeyName = 'mage_pagecache';
 
     /**
+     * @var RegexFactory
+     */
+    private $regexValidatorFactory;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param Json $jsonSerializer
@@ -57,11 +64,12 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         parent::__construct($context);
         $this->translateInline = $translateInline;
         $this->jsonSerializer = $jsonSerializer
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+            ?: ObjectManager::getInstance()->get(Json::class);
         $this->base64jsonSerializer = $base64jsonSerializer
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Base64Json::class);
+            ?: ObjectManager::getInstance()->get(Base64Json::class);
         $this->layoutCacheKey = $layoutCacheKey
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(LayoutCacheKeyInterface::class);
+            ?: ObjectManager::getInstance()->get(LayoutCacheKeyInterface::class);
+        $this->regexValidatorFactory = ObjectManager::getInstance()->get(RegexFactory::class);
     }
 
     /**
@@ -79,6 +87,9 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         }
         $blocks = $this->jsonSerializer->unserialize($blocks);
         $handles = $this->base64jsonSerializer->unserialize($handles);
+        if (!$this->validateHandleParam($handles)) {
+            return [];
+        }
 
         $layout = $this->_view->getLayout();
         $this->layoutCacheKey->addCacheKeys($this->layoutCacheKeyName);
@@ -94,5 +105,22 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         }
 
         return $data;
+    }
+
+    /**
+     * Validates handles parameter
+     *
+     * @param $handles array
+     * @return bool
+     */
+    private function validateHandleParam($handles) {
+        $validator = $this->regexValidatorFactory->create(['pattern' => '/^[a-z]+[a-z0-9_]*$/i']);
+        foreach ($handles as $handle) {
+            if (!$validator->isValid($handle)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
