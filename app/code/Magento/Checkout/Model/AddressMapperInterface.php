@@ -29,14 +29,14 @@ interface AddressMapperInterface
     /**
      * Process guest address information for same as billing
      *
-     * @param int|string $cartId
+     * @param string $cartId
      * @param string $email
      * @param PaymentInterface $paymentMethod
      * @param AddressInterface|null $billingAddress
      * @return void
      */
     public function guestCheckoutAddressMapper(
-        int|string $cartId,
+        $cartId,
         string $email,
         PaymentInterface $paymentMethod,
         AddressInterface $billingAddress = null

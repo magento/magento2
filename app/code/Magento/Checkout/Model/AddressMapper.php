@@ -40,7 +40,7 @@ class AddressMapper implements AddressMapperInterface
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        CartRepositoryInterface    $cartRepository,
+        CartRepositoryInterface $cartRepository,
         AddressRepositoryInterface $addressRepository,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
@@ -98,8 +98,8 @@ class AddressMapper implements AddressMapperInterface
      * @inheritDoc
      */
     public function guestCheckoutAddressMapper(
-        int|string       $cartId,
-        string           $email,
+        $cartId,
+        string $email,
         PaymentInterface $paymentMethod,
         AddressInterface $billingAddress = null
     ): void {
