@@ -11,7 +11,7 @@ use Composer\Composer;
 use Composer\Package\CompletePackageInterface;
 use Composer\Package\Locker;
 use Composer\Package\RootPackageInterface;
-use Composer\Repository\RepositoryInterface;
+use Composer\Repository\LockArrayRepository;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
@@ -36,7 +36,7 @@ class ComposerInformationTest extends TestCase
     private $lockerMock;
 
     /**
-     * @var RepositoryInterface|InvocationMocker
+     * @var LockArrayRepository|InvocationMocker
      */
     private $lockerRepositoryMock;
 
@@ -53,7 +53,10 @@ class ComposerInformationTest extends TestCase
         $this->lockerMock = $this->getMockBuilder(Locker::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->lockerRepositoryMock = $this->getMockForAbstractClass(RepositoryInterface::class);
+        $this->lockerRepositoryMock = $this->getMockBuilder(LockArrayRepository::class)
+            ->setMethods(['getLockedRepository','getPackages'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->packageMock = $this->getMockForAbstractClass(CompletePackageInterface::class);
         $this->lockerMock->method('getLockedRepository')->willReturn($this->lockerRepositoryMock);
         $this->packageMock->method('getType')->willReturn('metapackage');
