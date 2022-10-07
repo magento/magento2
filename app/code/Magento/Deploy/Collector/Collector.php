@@ -96,6 +96,10 @@ class Collector implements CollectorInterface
 
                 $fileName = $file->getFileName() == null ? '' : $this->fileNameResolver->resolve($file->getFileName());
                 $file->setDeployedFileName($fileName);
+                if (!$file->getFileName()) {
+                    continue;
+                }
+                $file->setDeployedFileName($this->fileNameResolver->resolve($file->getFileName()));
                 $params = $this->getParams($file);
                 $packagePath = "{$params['area']}/{$params['theme']}/{$params['locale']}";
                 if (!isset($packages[$packagePath])) {

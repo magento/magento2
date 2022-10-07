@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df33bcfb264888cdbde343d14a9d772b",
+    "content-hash": "7c5de353744428a3f2b69433a5ce8f7c",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -376,16 +376,16 @@
         },
         {
             "name": "colinmollenhour/php-redis-session-abstract",
-            "version": "v1.4.5",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/php-redis-session-abstract.git",
-                "reference": "77ad0c1637ae6ea059f1f8e9fbdac6469242a16d"
+                "reference": "b70508a9b2183d4fc13871cf9138a52fbef776f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/php-redis-session-abstract/zipball/77ad0c1637ae6ea059f1f8e9fbdac6469242a16d",
-                "reference": "77ad0c1637ae6ea059f1f8e9fbdac6469242a16d",
+                "url": "https://api.github.com/repos/colinmollenhour/php-redis-session-abstract/zipball/b70508a9b2183d4fc13871cf9138a52fbef776f3",
+                "reference": "b70508a9b2183d4fc13871cf9138a52fbef776f3",
                 "shasum": ""
             },
             "require": {
@@ -414,9 +414,9 @@
             "homepage": "https://github.com/colinmollenhour/php-redis-session-abstract",
             "support": {
                 "issues": "https://github.com/colinmollenhour/php-redis-session-abstract/issues",
-                "source": "https://github.com/colinmollenhour/php-redis-session-abstract/tree/v1.4.5"
+                "source": "https://github.com/colinmollenhour/php-redis-session-abstract/tree/v1.5.0"
             },
-            "time": "2021-12-01T21:16:01+00:00"
+            "time": "2022-06-20T23:17:36+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -13573,5 +13573,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
