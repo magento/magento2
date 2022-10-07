@@ -69,6 +69,7 @@ define([
                     cartCache.isChanged('shipping-address',  quote.shippingAddress()) &&
                     (!quote.shippingMethod() || !quote.shippingMethod()['method_code'])) {
                     totalsDefaultProvider.estimateTotals(quote.shippingAddress());
+                    cartCache.set('totals', quote.getTotals());
                 }
             }
         },
