@@ -71,6 +71,5 @@
 
         <!-- Assert the error message -->
         <seeElement selector="{{StorefrontCustomerMessagesSection.assertErrorMessage}}" stepKey="assetErrorMessage"/>
-
     </test>
 </tests>
