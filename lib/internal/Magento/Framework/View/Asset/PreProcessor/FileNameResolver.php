@@ -38,6 +38,7 @@ class FileNameResolver
      */
     public function resolve($fileName)
     {
+        $fileName = (string) $fileName;
         $compiledFile = $fileName;
         $extension = pathinfo($fileName, PATHINFO_EXTENSION);
         foreach ($this->alternativeSources as $name => $alternative) {
@@ -50,6 +51,7 @@ class FileNameResolver
                 $compiledFile = $compiledFile . '.' . $name;
             }
         }
+
         return $compiledFile;
     }
 }
