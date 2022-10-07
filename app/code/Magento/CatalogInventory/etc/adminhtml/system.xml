@@ -27,6 +27,10 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\CatalogInventory\Model\Config\Backend\ShowOutOfStock</backend_model>
                 </field>
+                <field id="show_out_of_stock_at_end_catalog" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Display Out of Stock Products at the end of the catalog</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="stock_threshold_qty" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Only X left Threshold</label>
                     <validate>validate-number</validate>
