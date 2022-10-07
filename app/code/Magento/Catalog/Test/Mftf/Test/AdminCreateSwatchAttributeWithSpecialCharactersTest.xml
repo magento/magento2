@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSwatchAttributeWithSpecialCharactersTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create Product Attributes"/>
+            <title value="Admin should be able to Create Swatch Attribute with special characters"/>
+            <description value="Create Swatch Attribute with special characters"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4529"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Navigate to Product attribute page-->
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="navigateToNewProductAttributePage"/>
+        <fillField userInput="test_label" selector="{{AttributePropertiesSection.DefaultLabel}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="Text Swatch" stepKey="selectInputType"/>
+        <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddSwatch"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <!-- Fill Swatch and Description fields for Admin -->
+        <fillField selector="{{AttributeManageSwatchSection.swatchField('Admin')}}" userInput="test" stepKey="fillSwatchForAdmin"/>
+        <fillField selector="{{AttributeManageSwatchSection.descriptionField('Admin')}}" userInput="test" stepKey="fillDescriptionForAdmin"/>
+        <!-- Grab value Swatch and Description fields for Admin -->
+        <grabValueFrom selector="{{AttributeManageSwatchSection.swatchField('Admin')}}" stepKey="grabSwatchForAdmin"/>
+        <grabValueFrom selector="{{AttributeManageSwatchSection.descriptionField('Admin')}}" stepKey="grabDescriptionForAdmin"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="clickOnSaveAttribute"/>
+        <waitForPageLoad stepKey="waitForAttributeToSave"/>
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
+            <argument name="ProductAttribute" value="test_label"/>
+        </actionGroup>
+        <!-- Grab a value from the page using any grab action -->
+        <grabTextFrom selector="//*[@id='attribute_label']" stepKey="stepKeyOfGrab"/>
+        <!-- Ensure that the value we grabbed matches our expectation -->
+        <assertEquals message="This is an optional human readable hint that will be shown in the logs if this assert fails." stepKey="assertEquals1">
+            <expectedResult type="string">test_label</expectedResult>
+            <actualResult type="string">test_label</actualResult>
+        </assertEquals>
+    </test>
+</tests>
+
+
+
