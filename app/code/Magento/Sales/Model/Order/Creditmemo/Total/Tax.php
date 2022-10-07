@@ -9,6 +9,9 @@ use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Invoice as ResourceInvoice;
+use Magento\Tax\Model\Config as TaxConfig;
+use Magento\Tax\Model\Calculation as TaxCalculation;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Collects credit memo taxes.
@@ -21,12 +24,21 @@ class Tax extends AbstractTotal
     private $resourceInvoice;
 
     /**
+     * Tax config from Tax model
+     *
+     * @var TaxConfig
+     */
+    private $taxConfig;
+
+    /**
      * @param ResourceInvoice $resourceInvoice
      * @param array $data
+     * @param TaxConfig|null $taxConfig
      */
-    public function __construct(ResourceInvoice $resourceInvoice, array $data = [])
+    public function __construct(ResourceInvoice $resourceInvoice, array $data = [], ?TaxConfig $taxConfig = null)
     {
         $this->resourceInvoice = $resourceInvoice;
+        $this->taxConfig = $taxConfig ?: ObjectManager::getInstance()->get(TaxConfig::class);
         parent::__construct($data);
     }
 
@@ -122,7 +134,8 @@ class Tax extends AbstractTotal
             $baseShippingDiscountTaxCompensationAmount = 0;
             $shippingDelta = $baseOrderShippingAmount - $baseOrderShippingRefundedAmount;
 
-            if ($shippingDelta > $creditmemo->getBaseShippingAmount()) {
+            if ($shippingDelta > $creditmemo->getBaseShippingAmount() ||
+                $this->isShippingIncludeTaxWithTaxAfterDiscountOnExcl($order->getStoreId())) {
                 $part = $creditmemo->getShippingAmount() / $orderShippingAmount;
                 $basePart = $creditmemo->getBaseShippingAmount() / $baseOrderShippingAmount;
                 $shippingTaxAmount = $order->getShippingTaxAmount() * $part;
@@ -192,6 +205,18 @@ class Tax extends AbstractTotal
             $creditmemo->getBaseGrandTotal() + $baseTotalTax + $baseTotalDiscountTaxCompensation
         );
         return $this;
+    }
+
+    /**
+     * Checks if shipping provided incl tax, tax applied after discount, and discount applied on shipping excl tax
+     *
+     * @param int|null $storeId
+     * @return bool
+     */
+    private function isShippingIncludeTaxWithTaxAfterDiscountOnExcl(?int $storeId): bool
+    {
+        return $this->taxConfig->getCalculationSequence($storeId) === TaxCalculation::CALC_TAX_AFTER_DISCOUNT_ON_EXCL &&
+            $this->taxConfig->displaySalesShippingInclTax($storeId);
     }
 
     /**
