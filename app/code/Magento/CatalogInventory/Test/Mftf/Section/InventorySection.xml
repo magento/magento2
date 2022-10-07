@@ -11,5 +11,8 @@
         <element name="CheckIfProductStockOptionsTabExpanded" type="button" selector="#cataloginventory_options-head:not(.open)"/>
         <element name="DisplayOutOfStockSystemValue" type="checkbox" selector="#cataloginventory_options_show_out_of_stock_inherit"/>
         <element name="DisplayOutOfStockDropdown" type="select" selector="#cataloginventory_options_show_out_of_stock"/>
+        <element name="GoogleDistanceProvidedTab" type="button" selector="#cataloginventory_source_selection_distance_based_google-head"/>
+        <element name="GoogleDistanceProvidedTabExpanded" type="button" selector="#cataloginventory_source_selection_distance_based_google-head:not(.open)"/>
+        <element name="GoogleDistanceProvided" type="button" selector="#cataloginventory_source_selection_distance_based_google_api_key"/>
     </section>
 </sections>
