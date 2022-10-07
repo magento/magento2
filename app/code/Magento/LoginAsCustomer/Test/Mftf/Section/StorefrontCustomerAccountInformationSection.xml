@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerAccountInformationSection">
-        <element name="allowAssistance" type="checkbox" selector=".form-edit-account input[name='assistance_allowed_checkbox']"/
+        <element name="allowAssistance" type="checkbox" selector=".form-edit-account input[name='assistance_allowed_checkbox']"/>
     </section>
 </sections>
