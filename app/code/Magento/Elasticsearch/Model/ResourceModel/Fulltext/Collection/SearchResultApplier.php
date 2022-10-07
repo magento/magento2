@@ -211,7 +211,6 @@ class SearchResultApplier implements SearchResultApplierInterface
         $searchCriteria = $this->searchResult->getSearchCriteria();
         $sortOrders = $searchCriteria->getSortOrders() ?? [];
         $sortOrders = array_merge(['is_salable' => \Magento\Framework\DB\Select::SQL_DESC], $sortOrders);
-
         $connection = $this->collection->getConnection();
         $query = clone $connection->select()
             ->reset(\Magento\Framework\DB\Select::ORDER)
@@ -231,6 +230,14 @@ class SearchResultApplier implements SearchResultApplierInterface
             . ' AND cat_index.store_id = ' . $storeId,
             ['cat_index.position']
         );
+
+        $productIds = [];
+        foreach ($this->searchResult->getItems() as $item) {
+            $productIds[] = $item->getId();
+        }
+
+        $query->where('e.entity_id IN(?)', $productIds);
+
         foreach ($sortOrders as $field => $dir) {
             if ($field === 'name') {
                 $entityTypeId = $this->collection->getEntity()->getTypeId();
