@@ -9,8 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerAccountInformationSection">
-        <element name="allowAssistance" type="checkbox" selector=".form-edit-account input[name='assistance_allowed_checkbox']"/>
-        <element name="onArrow" type="button" selector="//div[@class='panel header']//button[@type='button']"/>
-        <element name="onSignOut" type="button" selector="//div[@aria-hidden='false']//a[contains(text(),'Sign Out')]"/>
+        <element name="allowAssistance" type="checkbox" selector=".form-edit-account input[name='assistance_allowed_checkbox']"/
     </section>
 </sections>
