@@ -914,7 +914,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     {
         $this->_productLimitationFilters['category_id'] = $category->getId();
         if ($category->getIsAnchor()) {
-            $this->_productLimitationFilters['category_is_anchor'] = 0;
+            unset($this->_productLimitationFilters['category_is_anchor']);
         } else {
             $this->_productLimitationFilters['category_is_anchor'] = 1;
         }
