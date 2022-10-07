@@ -154,7 +154,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'required' => true,
                     'disabled' => true,
                     'value' => 10,
-                    'class' => $behaviorCode . ' validate-number validate-greater-than-zero input-text',
+                    'class' => $behaviorCode . ' validate-number validate-zero-or-greater input-text',
                     'note' => __(
                         'Please specify number of errors to halt import process'
                     ),
