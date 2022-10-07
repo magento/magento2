@@ -10,7 +10,5 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminLoginAsCustomerConfirmationModalSection">
         <element name="store" type="select" selector="//select[@id='lac-confirmation-popup-store-id']"/>
-        <element name="onArrow" type="button" selector="//div[@class='panel header']//button[@type='button']"/>
-        <element name="onSignOut" type="button" selector="//div[@aria-hidden='false']//a[contains(text(),'Sign Out')]"/>
     </section>
 </sections>

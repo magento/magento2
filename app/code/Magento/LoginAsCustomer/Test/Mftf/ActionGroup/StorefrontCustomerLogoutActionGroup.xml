@@ -8,11 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCustomerLogoutActionGroup">
+    <actionGroup name="StorefrontCustomerLogoutActionGroup">
         <annotations>
             <description>>Admin Customer Logout from the page.</description>
         </annotations>
-        <click selector="{{AdminLoginAsCustomerConfirmationModalSection.onArrow}}" stepKey="clickOnArrow"/>
-        <click selector="{{AdminLoginAsCustomerConfirmationModalSection.onSignOut}}" stepKey="clickOnSignOut"/>
+        <click selector="{{StorefrontCustomerAccountInformationSection.onArrow}}" stepKey="clickOnArrow"/>
+        <click selector="{{StorefrontCustomerAccountInformationSection.onSignOut}}" stepKey="clickOnSignOut"/>
     </actionGroup>
 </actionGroups>
