@@ -3,17 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model\Authorization;
 
 use Magento\AdminAdobeIms\Api\Data\ImsWebapiInterface;
-use Magento\AdminAdobeIms\Api\ImsWebapiRepositoryInterface;
-use Magento\AdminAdobeIms\Api\TokenReaderInterface;
-use Magento\AdminAdobeIms\Model\ImsConnection;
-use Magento\AdminAdobeIms\Model\User;
 use Magento\AdminAdobeIms\Api\Data\ImsWebapiInterfaceFactory;
+use Magento\AdminAdobeIms\Api\ImsWebapiRepositoryInterface;
+use Magento\AdminAdobeIms\Model\User;
+use Magento\AdobeImsApi\Api\TokenReaderInterface;
+use Magento\AdobeImsApi\Api\GetProfileInterface;
+use Magento\AdobeImsApi\Api\IsTokenValidInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
@@ -46,9 +46,9 @@ class AdobeImsTokenUserService
     private User $adminUser;
 
     /**
-     * @var ImsConnection
+     * @var IsTokenValidInterface
      */
-    private ImsConnection $adminImsConnection;
+    private IsTokenValidInterface $isTokenValid;
 
     /**
      * @var ImsWebapiRepositoryInterface
@@ -66,30 +66,38 @@ class AdobeImsTokenUserService
     private DateTime $dateTime;
 
     /**
+     * @var GetProfileInterface
+     */
+    private GetProfileInterface $profile;
+
+    /**
      * @param TokenReaderInterface $tokenReader
      * @param ImsWebapiRepositoryInterface $imsWebapiRepository
      * @param ImsWebapiInterfaceFactory $imsWebapiFactory
      * @param User $adminUser
-     * @param ImsConnection $adminImsConnection
+     * @param IsTokenValidInterface $isTokenValid
      * @param EncryptorInterface $encryptor
      * @param DateTime $dateTime
+     * @param GetProfileInterface $profile
      */
     public function __construct(
         TokenReaderInterface $tokenReader,
         ImsWebapiRepositoryInterface $imsWebapiRepository,
         ImsWebapiInterfaceFactory $imsWebapiFactory,
         User $adminUser,
-        ImsConnection $adminImsConnection,
+        IsTokenValidInterface $isTokenValid,
         EncryptorInterface $encryptor,
-        DateTime $dateTime
+        DateTime $dateTime,
+        GetProfileInterface $profile
     ) {
         $this->tokenReader = $tokenReader;
         $this->imsWebapiFactory = $imsWebapiFactory;
         $this->adminUser = $adminUser;
-        $this->adminImsConnection = $adminImsConnection;
+        $this->isTokenValid = $isTokenValid;
         $this->imsWebapiRepository = $imsWebapiRepository;
         $this->encryptor = $encryptor;
         $this->dateTime = $dateTime;
+        $this->profile = $profile;
     }
 
     /**
@@ -151,12 +159,12 @@ class AdobeImsTokenUserService
         if ($imsWebapiEntity->getId()) {
             $lastCheckTimestamp = $this->dateTime->gmtTimestamp($imsWebapiEntity->getLastCheckTime());
             if (($lastCheckTimestamp + self::ACCESS_TOKEN_INTERVAL_CHECK) <= $this->dateTime->gmtTimestamp()) {
-                $isTokenValid = $this->adminImsConnection->validateToken($token);
+                $isTokenValid = $this->isTokenValid->validateToken($token);
                 $imsWebapiEntity->setLastCheckTime($this->dateTime->gmtDate(self::DATE_FORMAT));
                 $this->imsWebapiRepository->save($imsWebapiEntity);
             }
         } else {
-            $isTokenValid = $this->adminImsConnection->validateToken($token);
+            $isTokenValid = $this->isTokenValid->validateToken($token);
         }
 
         if (!$isTokenValid) {
@@ -174,7 +182,7 @@ class AdobeImsTokenUserService
     private function getUserProfile(string $bearerToken): array
     {
         try {
-            return $this->adminImsConnection->getProfile($bearerToken);
+            return $this->profile->getProfile($bearerToken);
         } catch (\Exception $exception) {
             throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
         }

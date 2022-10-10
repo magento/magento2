@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Template constructions filter
- */
 namespace Magento\Framework\Filter;
 
 use InvalidArgumentException;
+use Laminas\Filter\FilterInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
 use Magento\Framework\Filter\DirectiveProcessor\ForDirective;
@@ -20,13 +18,13 @@ use Magento\Framework\Filter\DirectiveProcessor\VarDirective;
 use Magento\Framework\Stdlib\StringUtils;
 
 /**
- * Template filter
+ * Template constructions filter
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Template implements \Zend_Filter_Interface
+class Template implements FilterInterface
 {
     /**
      * Construction regular expression
@@ -251,6 +249,7 @@ class Template implements \Zend_Filter_Interface
      * @param string[] $construction
      * @return string
      * @deprecated 102.0.4 Use the directive interfaces instead
+     * @see \Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\DirectiveInterface
      */
     public function varDirective($construction)
     {
@@ -266,7 +265,7 @@ class Template implements \Zend_Filter_Interface
      * @param string[] $construction
      * @return string
      * @deprecated 102.0.4 Use the directive interfaces instead
-     * @since 102.0.4
+     * @see \Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\DirectiveInterface
      */
     public function forDirective($construction)
     {
@@ -291,6 +290,7 @@ class Template implements \Zend_Filter_Interface
      * @param string[] $construction
      * @return mixed
      * @deprecated 102.0.4 Use the directive interfaces instead
+     * @see \Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\DirectiveInterface
      */
     public function templateDirective($construction)
     {
@@ -306,6 +306,7 @@ class Template implements \Zend_Filter_Interface
      * @param string[] $construction
      * @return string
      * @deprecated 102.0.4 Use the directive interfaces instead
+     * @see \Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\DirectiveInterface
      */
     public function dependDirective($construction)
     {
@@ -323,6 +324,7 @@ class Template implements \Zend_Filter_Interface
      * @param string[] $construction
      * @return string
      * @deprecated 102.0.4 Use the directive interfaces instead
+     * @see \Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\DirectiveInterface
      */
     public function ifDirective($construction)
     {
@@ -340,6 +342,7 @@ class Template implements \Zend_Filter_Interface
      * @param string $value raw parameters
      * @return array
      * @deprecated 102.0.4 Use the directive interfaces instead
+     * @see \Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\DirectiveInterface
      */
     protected function getParameters($value)
     {
@@ -361,6 +364,7 @@ class Template implements \Zend_Filter_Interface
      * @param string $default default value
      * @return string
      * @deprecated 102.0.4 Use \Magento\Framework\Filter\VariableResolverInterface instead
+     * @see \Magento\Framework\Filter\VariableResolverInterface
      */
     protected function getVariable($value, $default = '{no_value_defined}')
     {
@@ -377,6 +381,7 @@ class Template implements \Zend_Filter_Interface
      * @param array $stack
      * @return array
      * @deprecated 102.0.4 Use new directive processor interfaces
+     * @see \Magento\Framework\Filter\DirectiveProcessorInterface
      */
     protected function getStackArgs($stack)
     {
@@ -405,6 +410,7 @@ class Template implements \Zend_Filter_Interface
      * @return bool The previous mode from before the change
      * @since 102.0.4
      * @deprecated The method is not in use anymore.
+     * @see no alternatives
      */
     public function setStrictMode(bool $strictMode): bool
     {
@@ -419,7 +425,8 @@ class Template implements \Zend_Filter_Interface
      *
      * @return bool
      * @since 102.0.4
-     * @deprecated The method is not in use anymore.
+     * @deprecated
+     * @see no alternatives
      */
     public function isStrictMode(): bool
     {

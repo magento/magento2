@@ -6,6 +6,7 @@
 
 namespace Magento\Dhl\Model;
 
+use Laminas\Http\Request as HttpRequest;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Dhl\Model\Validator\XmlValidator;
 use Magento\Framework\App\ObjectManager;
@@ -15,6 +16,7 @@ use Magento\Framework\HTTP\AsyncClient\HttpException;
 use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
+use Magento\Framework\HTTP\LaminasClient;
 use Magento\Framework\Measure\Length;
 use Magento\Framework\Measure\Weight;
 use Magento\Framework\Module\Dir;
@@ -203,7 +205,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected $_dateTime;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClientFactory
+     * @var \Magento\Framework\HTTP\LaminasClientFactory
+     * phpcs:ignore Magento2.Commenting.ClassAndInterfacePHPDocFormatting
      * @deprecated Use asynchronous client.
      * @see $httpClient
      */
@@ -262,7 +265,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \Magento\Framework\Math\Division $mathDivision
      * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+     * @param \Magento\Framework\HTTP\LaminasClientFactory $httpClientFactory
      * @param array $data
      * @param \Magento\Dhl\Model\Validator\XmlValidator|null $xmlValidator
      * @param ProductMetadataInterface|null $productMetadata
@@ -294,7 +297,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         \Magento\Framework\Math\Division $mathDivision,
         \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
+        \Magento\Framework\HTTP\LaminasClientFactory $httpClientFactory,
         array $data = [],
         \Magento\Dhl\Model\Validator\XmlValidator $xmlValidator = null,
         ProductMetadataInterface $productMetadata = null,
@@ -1098,12 +1101,14 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      */
     protected function _getQuotesFromServer($request)
     {
+        /** @var LaminasClient $client */
         $client = $this->_httpClientFactory->create();
         $client->setUri($this->getGatewayURL());
-        $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
-        $client->setRawData(utf8_encode($request));
+        $client->setOptions(['maxredirects' => 0, 'timeout' => 30]);
+        $client->setRawBody(utf8_encode($request));
+        $client->setMethod(HttpRequest::METHOD_POST);
 
-        return $client->request(\Zend_Http_Client::POST)->getBody();
+        return $client->send()->getBody();
     }
 
     /**
@@ -1405,6 +1410,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \Magento\Framework\DataObject $request
      * @return $this|\Magento\Framework\DataObject|boolean
+     * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
      * @deprecated 100.2.3
      * @see use processAdditionalValidation method instead
      */
