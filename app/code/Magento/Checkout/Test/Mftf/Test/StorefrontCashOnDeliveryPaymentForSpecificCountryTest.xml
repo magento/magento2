@@ -22,7 +22,6 @@
         <before>
             <!--Enable flat rate shipping-->
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
-
             <!--Enable Cash On Delivery payment method-->
             <actionGroup ref="CashOnDeliverySpecificCountryActionGroup" stepKey="enableCashOnDelivery">
                 <argument name="path" value="{{CashOnDeliveryEnableConfigData.path}}"/>
@@ -37,6 +36,8 @@
             <createData entity="Simple_US_Customer_US_UK_Addresses" stepKey="createCustomer"/>
         </before>
         <after>
+            <!-- Disable shipping method for customer with default address -->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <!--Disable Cash On Delivery method-->
             <actionGroup ref="CashOnDeliverySpecificCountryActionGroup" stepKey="disableCashOnDelivery"/>
             <!--Customer log out-->

@@ -102,6 +102,7 @@ class OperationRepository implements OperationRepositoryInterface
         try {
             $storeId = $this->storeManager->getStore()->getId();
             $serializedData['store_id'] = $storeId;
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (NoSuchEntityException $e) {
             // skip setting store id in the serialized data if store doesn't exist
         }
