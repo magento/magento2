@@ -398,11 +398,14 @@ QUERY;
         DataFixture(ProductFixture::class, ['sku' => 'simple2', 'price' => 20], 'p2'),
         DataFixture(BundleSelectionFixture::class, ['sku' => '$p1.sku$', 'price' => 10, 'price_type' => 0], 'link1'),
         DataFixture(BundleSelectionFixture::class, ['sku' => '$p2.sku$', 'price' => 25, 'price_type' => 1], 'link2'),
-        DataFixture(BundleOptionFixture::class, ['product_links' => ['$link1$', '$link2$']], 'opt1'),
+        DataFixture(BundleOptionFixture::class, ['title' => 'Checkbox Options', 'type' => 'checkbox',
+            'required' => 1,'product_links' => ['$link1$', '$link2$']], 'opt1'),
+        DataFixture(BundleOptionFixture::class, ['title' => 'Multiselect Options', 'type' => 'multi',
+            'required' => 1,'product_links' => ['$link1$', '$link2$']], 'opt2'),
         DataFixture(
             BundleProductFixture::class,
             ['sku' => 'bundle-product-multiselect-checkbox-options','price' => 50,'price_type' => 1,
-                '_options' => ['$opt1$']],
+                '_options' => ['$opt1$', '$opt2$']],
             'bundle-product-multiselect-checkbox-options'
         ),
     ]
