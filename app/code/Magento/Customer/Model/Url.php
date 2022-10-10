@@ -17,23 +17,24 @@ use Magento\Store\Model\ScopeInterface;
  * Class Customer url model
  *
  * @api
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Url
 {
     /**
      * Route for customer account login page
      */
-    const ROUTE_ACCOUNT_LOGIN = 'customer/account/login';
+    public const ROUTE_ACCOUNT_LOGIN = 'customer/account/login';
 
     /**
      * Config name for Redirect Customer to Account Dashboard after Logging in setting
      */
-    const XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD = 'customer/startup/redirect_dashboard';
+    public const XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD = 'customer/startup/redirect_dashboard';
 
     /**
      * Query param name for last url visited
      */
-    const REFERER_QUERY_PARAM_NAME = 'referer';
+    public const REFERER_QUERY_PARAM_NAME = 'referer';
 
     /**
      * @var UrlInterface
@@ -127,7 +128,7 @@ class Url
             && $this->request->isGet()
         ) {
             $refererUrl = $this->urlBuilder->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
-            if(!$this->isNoRouteUrl($refererUrl)) {
+            if (!$this->isNoRouteUrl($refererUrl)) {
                 $referer = $this->urlEncoder->encode($refererUrl);
             }
         }
@@ -248,6 +249,8 @@ class Url
     }
 
     /**
+     * Getting request referrer
+     *
      * @return mixed|null
      */
     private function getRequestReferrer()
@@ -259,6 +262,12 @@ class Url
         return null;
     }
 
+    /**
+     *  Check if Referrer url is no route url
+     *
+     * @param string $url
+     * @return bool
+     */
     private function isNoRouteUrl($url)
     {
         $defaultNoRouteUrl = $this->scopeConfig->getValue(
@@ -268,7 +277,7 @@ class Url
         $noRouteUrl = $this->urlBuilder->getUrl($defaultNoRouteUrl);
         if (strpos($url, $noRouteUrl) !== false) {
             return true;
-        };
+        }
         return false;
     }
 }
