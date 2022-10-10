@@ -21,8 +21,10 @@ use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -127,6 +129,16 @@ class ConfigurableTest extends TestCase
         $context = $this->getContextMock();
         $context->method('getRequest')->willReturn($this->request);
 
+        $deploymentConfig = $this->createPartialMock(
+            DeploymentConfig::class,
+            ['get']
+        );
+
+        $deploymentConfig->expects($this->any())
+            ->method('get')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY)
+            ->willReturn('448198e08af35844a42d3c93c1ef4e03');
+
         $objectManagerHelper = new ObjectManager($this);
         $this->configurable = $objectManagerHelper->getObject(
             ConfigurableRenderer::class,
@@ -147,6 +159,7 @@ class ConfigurableTest extends TestCase
                 'data' => [],
                 'variationPrices' => $this->variationPricesMock,
                 'customerSession' => $customerSession,
+                'deploymentConfig' => $deploymentConfig,
             ]
         );
     }

@@ -523,6 +523,9 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $weight = $this->getTotalNumOfBoxes($r->getFreeMethodWeight());
         $weight = $this->_getCorrectWeight($weight);
         $r->setWeight($weight);
+        $r->setPackages(
+            $this->createPackages((float)$r->getFreeMethodWeight(), [])
+        );
         $r->setAction($this->configHelper->getCode('action', 'single'));
         $r->setProduct($freeMethod);
     }

@@ -9,7 +9,9 @@ namespace Magento\Framework\View\Test\Unit\Element;
 
 use Magento\Framework\App\Cache\StateInterface as CacheStateInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Cache\LockGuardedCacheLoader;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\View;
 use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
@@ -70,6 +72,11 @@ class AbstractBlockTest extends TestCase
     private $lockQuery;
 
     /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfig;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -108,11 +115,23 @@ class AbstractBlockTest extends TestCase
         $contextMock->expects($this->once())
             ->method('getLockGuardedCacheLoader')
             ->willReturn($this->lockQuery);
+
+        $this->deploymentConfig = $this->createPartialMock(
+            DeploymentConfig::class,
+            ['get']
+        );
+
+        $this->deploymentConfig->expects($this->any())
+            ->method('get')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY)
+            ->willReturn('448198e08af35844a42d3c93c1ef4e03');
+
         $this->block = $this->getMockForAbstractClass(
             AbstractBlock::class,
             [
                 'context' => $contextMock,
                 'data' => [],
+                'deploymentConfig' => $this->deploymentConfig,
             ]
         );
     }
@@ -226,7 +245,8 @@ class AbstractBlockTest extends TestCase
     {
         $nameInLayout = 'testBlock';
         $this->block->setNameInLayout($nameInLayout);
-        $cacheKey = sha1($nameInLayout);
+        $encryptionKey = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
+        $cacheKey = sha1($nameInLayout . '|' . $encryptionKey);
         $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . $cacheKey, $this->block->getCacheKey());
     }
 

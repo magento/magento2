@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\View\Element;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Cache\LockGuardedCacheLoader;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\DataObject\IdentityInterface;
 
 /**
@@ -167,6 +170,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected $_cache;
 
     /**
+     * @var DeploymentConfig
+     */
+    protected $deploymentConfig;
+
+    /**
      * @var LockGuardedCacheLoader
      */
     private $lockQuery;
@@ -176,10 +184,12 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param \Magento\Framework\View\Element\Context $context
      * @param array $data
+     * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
-        array $data = []
+        array $data = [],
+        DeploymentConfig $deploymentConfig = null
     ) {
         $this->_request = $context->getRequest();
         $this->_layout = $context->getLayout();
@@ -199,6 +209,10 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $this->_localeDate = $context->getLocaleDate();
         $this->inlineTranslation = $context->getInlineTranslation();
         $this->lockQuery = $context->getLockGuardedCacheLoader();
+
+        $this->deploymentConfig = $deploymentConfig ?? ObjectManager::getInstance()
+            ->get(DeploymentConfig::class);
+
         if (isset($data['jsLayout'])) {
             $this->jsLayout = $data['jsLayout'];
             unset($data['jsLayout']);
@@ -1034,6 +1048,8 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $key = $this->getCacheKeyInfo();
 
         $key = array_values($key);  // ignore array keys
+
+        $key[] = (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
 
         $key = implode('|', $key);
         $key = sha1($key); // use hashing to hide potentially private data

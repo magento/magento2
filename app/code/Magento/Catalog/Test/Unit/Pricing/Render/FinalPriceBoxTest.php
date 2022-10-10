@@ -15,7 +15,9 @@ use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Catalog\Pricing\Render\FinalPriceBox;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Event\Test\Unit\ManagerStub;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
@@ -183,6 +185,16 @@ class FinalPriceBoxTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $deploymentConfig = $this->createPartialMock(
+            DeploymentConfig::class,
+            ['get']
+        );
+
+        $deploymentConfig->expects($this->any())
+            ->method('get')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY)
+            ->willReturn('448198e08af35844a42d3c93c1ef4e03');
+
         $this->minimalPriceCalculator = $this->getMockForAbstractClass(MinimalPriceCalculatorInterface::class);
         $this->object = $objectManager->getObject(
             FinalPriceBox::class,
@@ -193,7 +205,8 @@ class FinalPriceBoxTest extends TestCase
                 'price' => $this->price,
                 'data' => ['zone' => 'test_zone', 'list_category_page' => true],
                 'salableResolver' => $this->salableResolverMock,
-                'minimalPriceCalculator' => $this->minimalPriceCalculator
+                'minimalPriceCalculator' => $this->minimalPriceCalculator,
+                'deploymentConfig' => $deploymentConfig,
             ]
         );
     }
