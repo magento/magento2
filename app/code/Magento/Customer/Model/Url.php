@@ -126,8 +126,10 @@ class Url
             && !$this->customerSession->getNoReferer()
             && $this->request->isGet()
         ) {
-            $referer = $this->urlBuilder->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
-            $referer = $this->urlEncoder->encode($referer);
+            $refererUrl = $this->urlBuilder->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
+            if(!$this->isNoRouteUrl($refererUrl)) {
+                $referer = $this->urlEncoder->encode($refererUrl);
+            }
         }
 
         if ($referer) {
@@ -255,5 +257,18 @@ class Url
             return $referer;
         }
         return null;
+    }
+
+    private function isNoRouteUrl($url)
+    {
+        $defaultNoRouteUrl = $this->scopeConfig->getValue(
+            'web/default/no_route',
+            ScopeInterface::SCOPE_STORE
+        );
+        $noRouteUrl = $this->urlBuilder->getUrl($defaultNoRouteUrl);
+        if (strpos($url, $noRouteUrl) !== false) {
+            return true;
+        };
+        return false;
     }
 }
