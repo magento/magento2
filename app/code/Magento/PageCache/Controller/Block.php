@@ -58,13 +58,15 @@ abstract class Block extends \Magento\Framework\App\Action\Action
      * @param Json $jsonSerializer
      * @param Base64Json $base64jsonSerializer
      * @param LayoutCacheKeyInterface $layoutCacheKey
+     * @param RegexFactory|null $regexValidatorFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Translate\InlineInterface $translateInline,
         Json $jsonSerializer = null,
         Base64Json $base64jsonSerializer = null,
-        LayoutCacheKeyInterface $layoutCacheKey = null
+        LayoutCacheKeyInterface $layoutCacheKey = null,
+        ?RegexFactory $regexValidatorFactory = null
     ) {
         parent::__construct($context);
         $this->translateInline = $translateInline;
@@ -115,10 +117,11 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     /**
      * Validates handles parameter
      *
-     * @param $handles array
+     * @param array $handles
      * @return bool
      */
-    private function validateHandleParam($handles): bool {
+    private function validateHandleParam($handles): bool
+    {
         $validator = $this->regexValidatorFactory->create(['pattern' => self::VALIDATION_RULE_PATTERN]);
         foreach ($handles as $handle) {
             if (!$validator->isValid($handle)) {
