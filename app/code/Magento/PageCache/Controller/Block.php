@@ -125,7 +125,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     {
         $validator = $this->regexValidatorFactory->create(['pattern' => self::VALIDATION_RULE_PATTERN]);
         foreach ($handles as $handle) {
-            if (!$validator->isValid($handle)) {
+            if ($handle && !$validator->isValid($handle)) {
                 return false;
             }
         }
