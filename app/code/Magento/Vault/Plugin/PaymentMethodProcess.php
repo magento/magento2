@@ -39,7 +39,7 @@ class PaymentMethodProcess
     {
         $methods = [];
         foreach ($results as $result) {
-            if ($result instanceOf VaultPaymentInterface &&
+            if ($result instanceof VaultPaymentInterface &&
                 empty($this->tokensConfigProvider->getTokensComponents($result->getCode()))) {
                 continue;
             }
