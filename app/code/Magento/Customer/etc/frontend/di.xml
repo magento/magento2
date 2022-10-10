@@ -127,4 +127,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\Session">
+        <plugin name="afterLogout" type="Magento\Customer\Model\Plugin\ClearSessionsAfterLogoutPlugin"/>
+    </type>
 </config>
