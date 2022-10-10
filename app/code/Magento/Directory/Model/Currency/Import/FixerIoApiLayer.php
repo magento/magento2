@@ -82,7 +82,7 @@ class FixerIoApiLayer extends AbstractImport
      */
     private function convertBatch(array $data, string $currencyFrom, array $currenciesTo): array
     {
-        $accessKey = $this->scopeConfig->getValue('currency/apilayer/api_key', ScopeInterface::SCOPE_STORE);
+        $accessKey = $this->scopeConfig->getValue('currency/fixerio_apilayer/api_key', ScopeInterface::SCOPE_STORE);
         if (empty($accessKey)) {
             $this->_messages[] = __('No API Key was specified or an invalid API Key was specified.');
             $data[$currencyFrom] = $this->makeEmptyResponse($currenciesTo);
@@ -152,7 +152,7 @@ class FixerIoApiLayer extends AbstractImport
             $httpClient->setOptions(
                 [
                     'timeout' => $this->scopeConfig->getValue(
-                        'currency/apilayer/timeout',
+                        'currency/fixerio_apilayer/timeout',
                         ScopeInterface::SCOPE_STORE
                     ),
                 ]

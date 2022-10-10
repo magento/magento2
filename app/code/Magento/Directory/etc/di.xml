@@ -14,8 +14,8 @@
                     <item name="label" xsi:type="string" translatable="true">Fixer.io (legacy)</item>
                     <item name="class" xsi:type="string">Magento\Directory\Model\Currency\Import\FixerIo</item>
                 </item>
-                <item name="apilayer" xsi:type="array">
-                    <item name="label" xsi:type="string" translatable="true">Fixer Api via APILayer</item>
+                <item name="fixerio_apilayer" xsi:type="array">
+                    <item name="label" xsi:type="string" translatable="true">Fixer Api (APILayer)</item>
                     <item name="class" xsi:type="string">Magento\Directory\Model\Currency\Import\FixerIoApiLayer</item>
                 </item>
                 <item name="currencyconverterapi" xsi:type="array">

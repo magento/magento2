@@ -22,10 +22,10 @@
                 <timeout>100</timeout>
                 <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
             </fixerio>
-            <apilayer>
+            <fixerio_apilayer>
                 <timeout>100</timeout>
                 <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-            </apilayer>
+            </fixerio_apilayer>
             <currencyconverterapi>
                 <timeout>100</timeout>
                 <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />

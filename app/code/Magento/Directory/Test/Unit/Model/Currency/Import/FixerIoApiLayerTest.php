@@ -76,8 +76,8 @@ class FixerIoApiLayerTest extends TestCase
 
         $this->scopeConfig->method('getValue')
             ->withConsecutive(
-                ['currency/apilayer/api_key', 'store'],
-                ['currency/apilayer/timeout', 'store']
+                ['currency/fixerio_apilayer/api_key', 'store'],
+                ['currency/fixerio_apilayer/timeout', 'store']
             )
             ->willReturnOnConsecutiveCalls('api_key', 100);
 
