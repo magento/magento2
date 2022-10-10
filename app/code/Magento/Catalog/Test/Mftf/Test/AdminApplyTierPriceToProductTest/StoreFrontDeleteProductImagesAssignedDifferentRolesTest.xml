@@ -36,7 +36,7 @@
                 <argument name="productId" value="$simpleProductOne.id$"/>
             </actionGroup>
             <!-- Halt test execution for 10 seconds before continuing. -->
-            <wait time="10" stepKey="waitTenSeconds"/>
+            <wait time="10" stepKey="waitForAddImageSectionToOpen"/>
 
             <!-- Add Image Base-->
             <actionGroup ref="AddProductImageActionGroup" stepKey="addBaseImage">
@@ -79,7 +79,7 @@
             <seeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seeBaseImageOnProductPage"/>
             <!-- Go to the category page and see the Small image -->
             <amOnPage url="{{StorefrontCategoryPage.url($testCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
-            <waitForPageLoad stepKey="waitForPageLoading"/>
+            <waitForPageLoad stepKey="waitForPageLoadingToFinish"/>
             <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-small')}}" stepKey="seeSmallImageOnCategoryPage"/>
         </before>
         <after>
@@ -116,11 +116,11 @@
         <waitForPageLoad stepKey="waitForPageRefresh"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.nthRemoveImageBtn('2')}}" stepKey="waitForRemoveImageButtonVisiblesmall"/>
         <click selector="{{AdminProductImagesSection.nthRemoveImageBtn('2')}}" stepKey="removeImagesmall"/>
-        <actionGroup ref="SaveProductFormActionGroup" stepKey="save2"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAfterSmallImageDelete"/>
         <dontSeeElement selector="{{AdminProductImagesSection.imageFile(AdobeSmallImage)}}" stepKey="seeImageSmallIsAbsentAfterSave"/>
         <!-- Go to the category page and see Small image is not present , placeholder image is present-->
         <amOnPage url="{{StorefrontCategoryPage.url($testCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPageOnStoreFront"/>
-        <waitForPageLoad stepKey="waitforPage"/>
+        <waitForPageLoad stepKey="waitforElementStorefrontCategoryProductSectionProductImageToOpen"/>
         <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-small')}}" stepKey="dontSeeSmallImageOnCategoryPage"/>
         <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('placeholder/small_image')}}" stepKey="seePlaceholderSmallInstead"/>
 
@@ -131,14 +131,14 @@
         <!--Delete Base Image and Check Base Image is Absent after save-->
         <waitForElementVisible selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="waitForImagesSectionButton"/>
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImageSection"/>
-        <waitForPageLoad stepKey="wait"/>
+        <waitForPageLoad stepKey="waitForPageLoadAdminProductImagesSection"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.nthRemoveImageBtn('1')}}" stepKey="waitForRemoveBaseImageButtonVisible"/>
         <click selector="{{AdminProductImagesSection.nthRemoveImageBtn('1')}}" stepKey="removeBaseImage"/>
-        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAfterBaseImageDelete"/>
         <dontSeeElement selector="{{AdminProductImagesSection.imageFile(TestImageAdobe)}}" stepKey="dontSeeBaseImageAfterSave"/>
         <!-- Go to the product page on StoreFront and Dont see the Base image -->
         <amOnPage url="{{StorefrontProductPage.url($simpleProductOne.custom_attributes[url_key]$)}}" stepKey="goToProductPageOnStoreFront"/>
-        <waitForPageLoad stepKey="waitForPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontProductMediaSection"/>
         <dontSeeElement selector="{{StorefrontProductMediaSection.imageFile('TestImageAdobe')}}" stepKey="dontseeBaseImageOnProductPage"/>
         <seeElement selector="{{StorefrontProductMediaSection.imageFile('placeholder/image')}}" stepKey="seePlaceholderBaseInstead"/>
 
