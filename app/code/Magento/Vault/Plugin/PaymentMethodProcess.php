@@ -5,38 +5,26 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Payment\Plugin;
+namespace Magento\Vault\Plugin;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Payment\Block\Form\Container;
 use Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider;
+use Magento\Vault\Model\VaultPaymentInterface;
 
-/**
- * @SuppressWarnings(PHPMD)
- */
 class PaymentMethodProcess
 {
-    /**
-     * @var string
-     */
-    private string $braintreeCCVault;
-
     /**
      * @var TokensConfigProvider
      */
     private TokensConfigProvider $tokensConfigProvider;
 
     /**
-     * @param string $braintreeCCVault
-     * @param TokensConfigProvider|null $tokensConfigProvider
+     * @param TokensConfigProvider $tokensConfigProvider
      */
     public function __construct(
-        string $braintreeCCVault = '',
-        TokensConfigProvider $tokensConfigProvider = null
+        TokensConfigProvider $tokensConfigProvider
     ) {
-        $this->braintreeCCVault = $braintreeCCVault;
-        $this->tokensConfigProvider = $tokensConfigProvider ??
-            ObjectManager::getInstance()->get(TokensConfigProvider::class);
+        $this->tokensConfigProvider = $tokensConfigProvider;
     }
 
     /**
@@ -51,9 +39,8 @@ class PaymentMethodProcess
     {
         $methods = [];
         foreach ($results as $result) {
-            if ($result->getCode() === $this->braintreeCCVault
-                && empty($this->tokensConfigProvider->getTokensComponents($result->getCode()))) {
-
+            if ($result instanceOf VaultPaymentInterface &&
+                empty($this->tokensConfigProvider->getTokensComponents($result->getCode()))) {
                 continue;
             }
             $methods[] = $result;
