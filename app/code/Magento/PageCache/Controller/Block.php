@@ -48,6 +48,11 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     private $regexValidatorFactory;
 
     /**
+     * Validation pattern for handles array
+     */
+    public const VALIDATION_RULE_PATTERN = '/^[a-z]+[a-z0-9_]*$/i';
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param Json $jsonSerializer
@@ -113,8 +118,8 @@ abstract class Block extends \Magento\Framework\App\Action\Action
      * @param $handles array
      * @return bool
      */
-    private function validateHandleParam($handles) {
-        $validator = $this->regexValidatorFactory->create(['pattern' => '/^[a-z]+[a-z0-9_]*$/i']);
+    private function validateHandleParam($handles): bool {
+        $validator = $this->regexValidatorFactory->create(['pattern' => self::VALIDATION_RULE_PATTERN]);
         foreach ($handles as $handle) {
             if (!$validator->isValid($handle)) {
                 return false;
