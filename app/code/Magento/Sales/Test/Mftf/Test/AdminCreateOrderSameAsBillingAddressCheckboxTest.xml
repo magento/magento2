@@ -26,6 +26,11 @@
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+        </after>
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
@@ -95,10 +100,5 @@
             <argument name="fax" value=""/>
             <argument name="vatNumber" value=""/>
         </actionGroup>
-        <after>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
-            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
-        </after>
     </test>
 </tests>
