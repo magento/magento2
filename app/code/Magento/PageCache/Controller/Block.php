@@ -49,7 +49,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     /**
      * Validation pattern for handles array
      */
-    private const VALIDATION_RULE_PATTERN = '/^[a-z]+[a-z0-9_]*$/i';
+    private const VALIDATION_RULE_PATTERN = '/^[a-z0-9]+[a-z0-9_]*$/i';
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
