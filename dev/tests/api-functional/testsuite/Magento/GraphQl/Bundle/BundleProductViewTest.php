@@ -8,13 +8,19 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Bundle;
 
 use Magento\Bundle\Model\Product\OptionList;
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
  * Test querying Bundle products
@@ -506,6 +512,22 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_with_sku_as_next_entity_id.php
      */
+    #[
+        DataFixture(ProductFixture::class, ['price' => 10], 'p1'),
+        DataFixture(ProductFixture::class, ['price' => 20], 'p2'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$p1$']], 'opt1'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$p2$']], 'opt2'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['id' => 3, 'sku' => '4bundle-product','_options' => ['$opt1$', '$opt2$']],
+            '4bundle-product'
+        ),
+        DataFixture(
+            BundleProductFixture::class,
+            ['id' => 4, 'sku' => '5bundle-product','_options' => ['$opt1$', '$opt2$']],
+            '5bundle-product'
+        ),
+    ]
     public function testBundleProductHavingSKUAsNextBundleProductId()
     {
 
