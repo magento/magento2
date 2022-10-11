@@ -34,5 +34,4 @@ class AdminProductPage extends Helper
             $this->fail($e->getMessage());
         }
     }
-
 }

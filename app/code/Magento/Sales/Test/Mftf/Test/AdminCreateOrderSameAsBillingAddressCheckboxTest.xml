@@ -37,7 +37,22 @@
         <actionGroup ref="AssertAdminBillingAddressFieldsOnOrderCreateFormActionGroup" stepKey="assertBillingAddressFieldsFilled">
             <argument name="vatNumber" value=""/>
         </actionGroup>
-        <actionGroup ref="AssertAdminShippingAddressFieldsOnOrderCreateFormActionGroup" stepKey="assertShippingAddresFieldsFilled">
+        <actionGroup ref="AssertAdminCreateOrderFormShippingAddressActionGroup" stepKey="assertShippingAddresFieldsFilled">
+            <argument name="prefix" value=""/>
+            <argument name="firstName" value="{{US_Address_CA.firstname}}"/>
+            <argument name="middleName" value=""/>
+            <argument name="lastName" value="{{US_Address_CA.lastname}}"/>
+            <argument name="suffix" value=""/>
+            <argument name="company" value="{{US_Address_CA.company}}"/>
+            <argument name="streetLine1" value="{{US_Address_CA.street[0]}}"/>
+            <argument name="streetLine2" value="{{US_Address_CA.street[1]}}"/>
+            <argument name="countryId" value="{{US_Address_CA.country_id}}"/>
+            <argument name="state" value="{{US_Address_CA.state}}"/>
+            <argument name="province" value=""/>
+            <argument name="city" value="{{US_Address_CA.city}}"/>
+            <argument name="postcode" value="{{US_Address_CA.postcode}}"/>
+            <argument name="telephone" value="{{US_Address_CA.telephone}}"/>
+            <argument name="fax" value=""/>
             <argument name="vatNumber" value=""/>
         </actionGroup>
         <seeCheckboxIsChecked selector="{{AdminOrderFormShippingAddressSection.SameAsBilling}}" stepKey="seeSameAsBillingCheckboxChecked"/>
@@ -62,20 +77,21 @@
             <argument name="context">{{AdminOrderFormShippingAddressSection.SameAsBilling}}</argument>
             <argument name="count">5</argument>
         </helper>
-        <actionGroup ref="AssertAdminShippingAddressFieldsOnOrderCreateFormActionGroup" stepKey="assertShippingAddresFieldsAfterRaidChecks">
-            <argument name="namePrefix" value=""/>
+        <actionGroup ref="AssertAdminCreateOrderFormShippingAddressActionGroup" stepKey="assertShippingAddresFieldsAfterRaidChecks">
+            <argument name="prefix" value=""/>
             <argument name="firstName" value="{{US_Address_NY_Not_Default_Address.firstname}}"/>
             <argument name="middleName" value=""/>
             <argument name="lastName" value="{{US_Address_NY_Not_Default_Address.lastname}}"/>
+            <argument name="suffix" value=""/>
             <argument name="company" value=""/>
             <argument name="streetLine1" value="{{US_Address_NY_Not_Default_Address.street[0]}}"/>
             <argument name="streetLine2" value="{{US_Address_NY_Not_Default_Address.street[1]}}"/>
-            <argument name="country" value="{{US_Address_NY_Not_Default_Address.country}}"/>
+            <argument name="countryId" value="{{US_Address_NY_Not_Default_Address.country_id}}"/>
             <argument name="state" value="{{US_Address_NY_Not_Default_Address.state}}"/>
             <argument name="province" value=""/>
             <argument name="city" value="{{US_Address_NY_Not_Default_Address.city}}"/>
             <argument name="postcode" value="{{US_Address_NY_Not_Default_Address.postcode}}"/>
-            <argument name="phone" value="{{US_Address_NY_Not_Default_Address.telephone}}"/>
+            <argument name="telephone" value="{{US_Address_NY_Not_Default_Address.telephone}}"/>
             <argument name="fax" value=""/>
             <argument name="vatNumber" value=""/>
         </actionGroup>
