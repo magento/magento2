@@ -133,8 +133,8 @@ class DbStorage extends AbstractStorage
     /**
      * Extract most relevant url rewrite from url rewrites list
      *
-     * @param  string $requestPath
-     * @param  array  $urlRewrites
+     * @param string $requestPath
+     * @param array $urlRewrites
      * @return array|null
      */
     private function extractMostRelevantUrlRewrite(string $requestPath, array $urlRewrites): ?array
@@ -177,8 +177,8 @@ class DbStorage extends AbstractStorage
      * If request path matches the DB value or it's redirect - we can return result from DB
      * Otherwise return 301 redirect to request path from DB results
      *
-     * @param  string $requestPath
-     * @param  array  $urlRewrite
+     * @param string $requestPath
+     * @param array $urlRewrite
      * @return array
      */
     private function prepareUrlRewrite(string $requestPath, array $urlRewrite): array
@@ -208,7 +208,7 @@ class DbStorage extends AbstractStorage
     /**
      * Delete old URLs from DB.
      *
-     * @param  array $uniqueEntities
+     * @param array $uniqueEntities
      * @return void
      */
     private function deleteOldUrls(array $uniqueEntities): void
@@ -253,12 +253,12 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * Checks for duplicates both inside the new urls,  and outside.
-     * Because we are using INSERT ON DUPLICATE UPDATE,  the insert won't give us an error.
-     * So,  we have to check for existing requestPaths in database with different entity_id.
-     * And also,  we need to check to make sure we don't have same requestPath more than once in our new rewrites.
+     * Checks for duplicates both inside the new urls, and outside.
+     * Because we are using INSERT ON DUPLICATE UPDATE, the insert won't give us an error.
+     * So, we have to check for existing requestPaths in database with different entity_id.
+     * And also, we need to check to make sure we don't have same requestPath more than once in our new rewrites.
      *
-     * @param  array $uniqueEntities
+     * @param array $uniqueEntities
      * @return void
      */
     private function checkDuplicates(array $uniqueEntities): void
@@ -308,7 +308,7 @@ class DbStorage extends AbstractStorage
     /**
      * Prepare array with unique entities
      *
-     * @param  UrlRewrite[] $urls
+     * @param UrlRewrite[] $urls
      * @return array
      */
     private function prepareUniqueEntities(array $urls): array
@@ -319,7 +319,7 @@ class DbStorage extends AbstractStorage
             $entityType = $url->getEntityType();
             $entityId = $url->getEntityId();
             $requestPath = $url->getRequestPath();
-            if (null === $requestPath) {  // Note: because SQL unique keys allow multiple nulls,  we skip it.
+            if (null === $requestPath) {  // Note: because SQL unique keys allow multiple nulls, we skip it.
                 if (!isset($uniqueEntities[$storeId][$entityType][$entityId])) {
                     $uniqueEntities[$storeId][$entityType][$entityId] = [];
                 }
@@ -375,7 +375,7 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * Searches existing rewrites with same requestPath & store,  but ignores ones to be updated.
+     * Searches existing rewrites with same requestPath & store, but ignores ones to be updated.
      *
      * @param array $urls
      * @param array $uniqueEntities
