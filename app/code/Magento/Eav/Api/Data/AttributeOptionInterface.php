@@ -17,15 +17,15 @@ interface AttributeOptionInterface
     /**
      * Constants used as data array keys
      */
-    const LABEL = 'label';
+    public const LABEL = 'label';
 
-    const VALUE = 'value';
+    public const VALUE = 'value';
 
-    const SORT_ORDER = 'sort_order';
+    public const SORT_ORDER = 'sort_order';
 
-    const STORE_LABELS = 'store_labels';
+    public const STORE_LABELS = 'store_labels';
 
-    const IS_DEFAULT = 'is_default';
+    public const IS_DEFAULT = 'is_default';
 
     /**
      * Get option label
@@ -73,14 +73,14 @@ interface AttributeOptionInterface
     public function setSortOrder($sortOrder);
 
     /**
-     * is default
+     * Is default
      *
      * @return bool|null
      */
     public function getIsDefault();
 
     /**
-     * set is default
+     * Set is default
      *
      * @param bool $isDefault
      * @return $this
