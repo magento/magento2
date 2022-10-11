@@ -137,7 +137,7 @@ class Creditmemo extends AbstractItems
                 foreach ($this->string->split($item->getSku(), 17) as $part) {
                     $text[] = $part;
                 }
-                $line[] = ['text' => $text, 'feed' => $x];
+                $line[] = ['text' => $text, 'feed' => $x, 'align' => 'right'];
             }
 
             $x += 100;
