@@ -42,9 +42,9 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     private $layoutCacheKeyName = 'mage_pagecache';
 
     /**
-     * @var private RegexFactory
+     * @var RegexFactory
      */
-    private $regexValidatorFactory;
+    private RegexFactory $regexValidatorFactory;
 
     /**
      * Validation pattern for handles array
