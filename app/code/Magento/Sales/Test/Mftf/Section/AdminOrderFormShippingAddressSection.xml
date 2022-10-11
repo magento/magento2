@@ -21,9 +21,7 @@
         <element name="StreetLine2" type="input" selector="#order-shipping_address_street1"/>
         <element name="City" type="input" selector="#order-shipping_address_city"/>
         <element name="Country" type="select" selector="#order-shipping_address_country_id"/>
-        <element name="countrySelectedOption" type="select" selector="#order-shipping_address_country_id option:checked"/>
         <element name="State" type="select" selector="#order-shipping_address_region_id"/>
-        <element name="stateSelectedOption" type="select" selector="#order-shipping_address_region_id option:checked"/>
         <element name="Province" type="input" selector="#order-shipping_address_region"/>
         <element name="PostalCode" type="input" selector="#order-shipping_address_postcode"/>
         <element name="Phone" type="input" selector="#order-shipping_address_telephone"/>
