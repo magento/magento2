@@ -38,17 +38,17 @@
         <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.SpecificCategories}}" userInput="Specific Categories" stepKey="selectSpecificCategoryRadioButton"/>
         <click selector="{{CmsNewWidgetUpdateLayoutSection.CategoryChooserButton}}" stepKey="clickCategoryChooserButton"/>
         <waitForPageLoad stepKey="waitForRootCategoryToLoad"/>
-        <click selector="{{CmsNewWidgetUpdateLayoutSection.RootCat(RootCat)}}" stepKey="clickRootCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.BranchCat(RootCat)}}" stepKey="clickRootCat"/>
         <waitForPageLoad stepKey="waitForRootCategoryToExpand"/>
-        <click selector="{{CmsNewWidgetUpdateLayoutSection.FirstSubCat(FirstSubCat)}}" stepKey="clickFirstSubCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.BranchCat(FirstSubCat)}}" stepKey="clickFirstSubCat"/>
         <waitForPageLoad stepKey="waitForFirstSubCatToExpand"/>
-        <click selector="{{CmsNewWidgetUpdateLayoutSection.SecondSubCat(SecondSubCat)}}" stepKey="expandSecondSubCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.BranchCat(SecondSubCat)}}" stepKey="expandSecondSubCat"/>
         <waitForPageLoad stepKey="waitForSecondSubCatToExpand"/>
-        <click selector="{{CmsNewWidgetUpdateLayoutSection.ThirdSubCat(ThirdSubCat)}}" stepKey="expandThirdFirstSubCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.BranchCat(ThirdSubCat)}}" stepKey="expandThirdFirstSubCat"/>
         <waitForPageLoad stepKey="waitForThirdSubCatToExpand"/>
-        <click selector="{{CmsNewWidgetUpdateLayoutSection.FourthSubCat(FourthSubCat)}}" stepKey="expandFourthSubCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.BranchCat(FourthSubCat)}}" stepKey="expandFourthSubCat"/>
         <waitForPageLoad stepKey="waitForFourthSubCatToExpand"/>
-        <click selector="{{CmsNewWidgetUpdateLayoutSection.FifthSubCat(FifthSubCat)}}" stepKey="expandFifthSubCat"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.BranchCat(FifthSubCat)}}" stepKey="expandFifthSubCat"/>
         <waitForPageLoad stepKey="waitForFifthSubCatToExpand"/>
         <grabMultiple selector="{{CmsNewWidgetUpdateLayoutSection.CountAllNestedCat}}" stepKey="countNestedCategory"/>
         <assertCount stepKey="check">
