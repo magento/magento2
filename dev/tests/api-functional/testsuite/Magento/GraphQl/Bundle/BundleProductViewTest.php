@@ -509,9 +509,6 @@ QUERY;
         $this->assertEmpty($response['products']['items']);
     }
 
-    /**
-     * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_with_sku_as_next_entity_id.php
-     */
     #[
         DataFixture(ProductFixture::class, ['price' => 10], 'p1'),
         DataFixture(ProductFixture::class, ['price' => 20], 'p2'),
