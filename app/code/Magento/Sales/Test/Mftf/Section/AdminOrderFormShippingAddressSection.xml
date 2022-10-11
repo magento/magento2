@@ -21,7 +21,9 @@
         <element name="StreetLine2" type="input" selector="#order-shipping_address_street1"/>
         <element name="City" type="input" selector="#order-shipping_address_city"/>
         <element name="Country" type="select" selector="#order-shipping_address_country_id"/>
+        <element name="countrySelectedOption" type="select" selector="#order-shipping_address_country_id option:checked"/>
         <element name="State" type="select" selector="#order-shipping_address_region_id"/>
+        <element name="stateSelectedOption" type="select" selector="#order-shipping_address_region_id option:checked"/>
         <element name="Province" type="input" selector="#order-shipping_address_region"/>
         <element name="PostalCode" type="input" selector="#order-shipping_address_postcode"/>
         <element name="Phone" type="input" selector="#order-shipping_address_telephone"/>
@@ -29,7 +31,6 @@
         <element name="VatNumber" type="input" selector="#order-shipping_address_vat_id"/>
         <element name="ValidateVatNumber" type="button" selector="#order-shipping_address_vat_id + .actions>button.action-default"/>
         <element name="SaveAddress" type="checkbox" selector="#order-shipping_address_save_in_address_book"/>
-        
         <element name="firstNameError" type="text" selector="#order-shipping_address_firstname-error"/>
         <element name="lastNameError" type="text" selector="#order-shipping_address_lastname-error"/>
         <element name="streetAddressError" type="text" selector="#order-shipping_address_street0-error"/>
