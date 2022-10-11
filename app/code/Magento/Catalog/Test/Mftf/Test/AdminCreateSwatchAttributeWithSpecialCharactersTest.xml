@@ -41,13 +41,13 @@
         <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
             <argument name="ProductAttribute" value="test_label"/>
         </actionGroup>
-        <!-- Grab a value from the page using any grab action -->
-        <grabTextFrom selector="//*[@id='attribute_label']" stepKey="stepKeyOfGrab"/>
-        <!-- Ensure that the value we grabbed matches our expectation -->
-        <assertEquals message="This is an optional human readable hint that will be shown in the logs if this assert fails." stepKey="assertEquals1">
-            <expectedResult type="string">test_label</expectedResult>
-            <actualResult type="string">test_label</actualResult>
-        </assertEquals>
+        <!-- Check that Swatch and Description fields for Admin are not empty-->
+        <assertNotEmpty stepKey="checkSwatchFieldForAdmin">
+            <actualResult type="const">$grabSwatchForAdmin</actualResult>
+        </assertNotEmpty>
+        <assertNotEmpty stepKey="checkDescriptionFieldForAdmin">
+            <actualResult type="const">$grabDescriptionForAdmin</actualResult>
+        </assertNotEmpty>
     </test>
 </tests>
 
