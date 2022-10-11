@@ -72,6 +72,11 @@ class RenderTest extends TestCase
     protected $layoutCacheKeyMock;
 
     /**
+     * Validation pattern for handles array
+     */
+    private const VALIDATION_RULE_PATTERN = '/^[a-z]+[a-z0-9_]*$/i';
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -118,7 +123,7 @@ class RenderTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $regexObject = new Regex('/^[a-z]+[a-z0-9_]*$/i');
+        $regexObject = new Regex(self::VALIDATION_RULE_PATTERN);
 
         $regexFactoryMock->expects($this->any())->method('create')
             ->willReturn($regexObject);

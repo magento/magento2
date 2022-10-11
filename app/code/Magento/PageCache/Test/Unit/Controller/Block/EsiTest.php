@@ -67,6 +67,11 @@ class EsiTest extends TestCase
     protected $translateInline;
 
     /**
+     * Validation pattern for handles array
+     */
+    private const VALIDATION_RULE_PATTERN = '/^[a-z]+[a-z0-9_]*$/i';
+
+    /**
      * Set up before test
      */
     protected function setUp(): void
@@ -105,7 +110,7 @@ class EsiTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $regexObject = new Regex('/^[a-z]+[a-z0-9_]*$/i');
+        $regexObject = new Regex(self::VALIDATION_RULE_PATTERN);
 
         $regexFactoryMock->expects($this->any())->method('create')
             ->willReturn($regexObject);
