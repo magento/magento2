@@ -21,7 +21,7 @@ class ProductRuleIndexer extends AbstractIndexer
     /**
      * {@inheritdoc}
      */
-    protected function doExecuteRow($id)
+    protected function doExecuteRow(int $id)
     {
         $this->indexBuilder->reindexById($id);
     }
