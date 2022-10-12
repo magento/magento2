@@ -27,6 +27,9 @@ class SearchEngineVersionReader
     public function getFullVersion(): string
     {
         $version = $this->getVersion();
+        if (strtolower($this->getDistribution()) == 'opensearch') {
+            $version = 1;
+        }
         return $this->getDistribution() . ($version === 1 ? '' : $version);
     }
 
